@@ -16,13 +16,13 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/api/account',
     'io.ox/mail/accounts/model',
     'io.ox/mail/accounts/view-form',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/core/a11y',
     'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, mailSettings, gt) {
+], function (ext, api, AccountModel, AccountDetailView, ModalDialog, notifications, a11y, mailSettings, gt) {
 
     'use strict';
 
@@ -36,23 +36,28 @@ define('io.ox/mail/accounts/settings', [
             apiModel.set(model.attributes);
         });
 
-        myView.dialog = new dialogs.ModalDialog({
+        myView.dialog = new ModalDialog({
             width: 700,
-            async: true
+            maximize: 500,
+            async: true,
+            point: 'io.ox/settings/accounts/mail/settings/detail/dialog',
+            title: myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'),
+            view: myView
         });
-        //TOOD: hack to avoid horizontal scrollbar
-        myView.dialog.getBody().css('padding-right', '15px');
 
-        myView.dialog.header(
-            $('<h2>').text(myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'))
-        ).append(
-            myView.render().el
-        )
-        .addPrimaryButton('save', gt('Save'), 'save')
-        .addButton('cancel', gt('Cancel'), 'cancel')
-        .show(function () {
-            a11y.getTabbable(this).first().focus();
-        });
+        myView.dialog.extend({
+            text: function () {
+                this.$body.append(
+                    this.options.view.render().el
+                );
+            }
+        })
+        .addCancelButton()
+        .addButton({
+            action: 'save',
+            label: gt('Save')
+        })
+        .open();
 
         //show errors
         myModel.on('validated', function (valid, model, error) {
@@ -85,7 +90,7 @@ define('io.ox/mail/accounts/settings', [
             ignoreValidationErrors = false;
             myModel.validate();
             if (myModel.isValid()) {
-                myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
+                myView.dialog.$body.find('.settings-detail-pane').trigger('save');
             } else {
                 notifications.yell('error', gt('Account settings could not be saved. Please take a look at the annotations in the form. '));
                 myView.dialog.idle();
@@ -366,7 +371,7 @@ define('io.ox/mail/accounts/settings', [
         },
 
         configureManuallyDialog = function (args, newMailaddress) {
-            new dialogs.ModalDialog({ width: 400 })
+            new ModalDialog({ width: 400 })
                 .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
                 .addPrimaryButton('yes', gt('Yes'), 'yes')
                 .addButton('no', gt('No'), 'no')
@@ -404,7 +409,7 @@ define('io.ox/mail/accounts/settings', [
                     } });
 
                 } else if (forceSecure) {
-                    new dialogs.ModalDialog({ async: true, width: 400 })
+                    new ModalDialog({ async: true, width: 400 })
                         .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
                         .addPrimaryButton('yes', gt('Yes'), 'yes')
                         .addButton('no', gt('No'), 'no')

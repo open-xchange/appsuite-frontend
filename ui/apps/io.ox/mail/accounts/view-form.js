@@ -346,6 +346,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                             .css('margin', '10px')
                                             .text(warn.error);
                                 });
+                                self.dialog.pause();
 
                                 new dialogs.ModalDialog()
                                     .header(
@@ -358,6 +359,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                     .addButton('cancel', gt('Cancel'))
                                     .show()
                                     .done(function (action) {
+                                        self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
                                         } else {
@@ -378,7 +380,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             onFolderSelect: function (e) {
 
-                this.dialog.getPopup().hide();
+                this.dialog.pause();
 
                 var accountId = 'default' + this.model.get('id'),
                     property = $(e.currentTarget).attr('data-property'),
@@ -392,7 +394,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         self.$el.find('input[name="' + property + '"]').val(target);
                     },
                     close: function () {
-                        self.dialog.getPopup().show();
+                        self.dialog.resume();
                     },
                     folder: id,
                     module: 'mail',
