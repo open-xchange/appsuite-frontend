@@ -36,7 +36,13 @@ define('plugins/notifications/mail/register', [
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
         type = _.device('!windows && !macos && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
-        settingsModel = settings;
+        settingsModel = settings,
+        soundList = [
+            { label: gt('Bell'), value: 'bell' },
+            { label: gt('Marimba'), value: 'marimba' },
+            { label: gt('Wood'), value: 'wood' },
+            { label: gt('Chimes'), value: 'chimes' }
+        ];
 
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
@@ -59,6 +65,8 @@ define('plugins/notifications/mail/register', [
     // load a soundfile
     function loadSound(sound) {
         var d = $.Deferred();
+        // make sure, that sound is one of the values in sound list (see Bug 51473)
+        sound = _(soundList).find({ value: sound }) ? sound : 'bell';
         sound = new Audio(path + sound + type);
         sound.volume = SOUND_VOLUME;
         sound.addEventListener('canplaythrough', function () {
@@ -131,12 +139,7 @@ define('plugins/notifications/mail/register', [
             if (_.device('smartphone') || !cap.has('websocket') || !Modernizr.websockets) return;
             // use this array to customize the sounds
             // copy new/other sounds to themefolder->sounds
-            var sounds, list = [
-                { label: gt('Bell'), value: 'bell' },
-                { label: gt('Marimba'), value: 'marimba' },
-                { label: gt('Wood'), value: 'wood' },
-                { label: gt('Chimes'), value: 'chimes' }
-                ];
+            var sounds;
 
             this.append(fieldset(
                     //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
@@ -148,7 +151,7 @@ define('plugins/notifications/mail/register', [
                     $('<div class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
                             $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Sound')),
-                            sounds = new miniViews.SelectView({ list: list, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
 
                         )
                     )
