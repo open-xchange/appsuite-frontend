@@ -45,11 +45,35 @@
             height: 64px;
             font-size: 64px; //font awesome icons
             background-size: cover;
-
-            &.logo-google   { background-image: url(apps/themes/default/google-letter_logo.png); }
-            &.logo-boxcom   { background-image: url(apps/themes/default/box_logo128.png);         }
-            &.logo-onedrive { background-image: url(apps/themes/default/onedrive_logo128.png);    }
-            &.logo-dropbox  { background-image: url(apps/themes/default/dropbox_logo128.png);     }
         }
     }
 }
+
+.modal.oauth-account {
+    .modal-header {
+        .modal-title { display: inline-block; }
+        .account-identity {
+            font-size: 14px;
+        }
+
+        .service-icon {
+            background-size: cover;
+            float: right;
+            height: 32px;
+            width: 32px;
+        }
+    }
+
+    .account-icon.service-icon {
+        background-size: cover;
+        margin-left: 6px;
+    }
+}
+
+.service-icon.logo-google { background-image: url(apps/themes/default/google-letter_logo.png); }
+.service-icon.logo-gmail { background-image: url(apps/themes/default/gmail_logo128.png); }
+.service-icon.logo-googledrive { background-image: url(apps/themes/default/googledrive_logo128.png); }
+.service-icon.logo-boxcom { background-image: url(apps/themes/default/box_logo128.png); }
+.service-icon.logo-onedrive { background-image: url(apps/themes/default/onedrive_logo128.png); }
+.service-icon.logo-dropbox { background-image: url(apps/themes/default/dropbox_logo128.png); }
+.service-icon.logo-twitter { background-image: url(apps/themes/default/twitter_logo_blue.png); }

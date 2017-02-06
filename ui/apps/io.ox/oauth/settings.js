@@ -24,6 +24,17 @@ define('io.ox/oauth/settings', [
 
     'use strict';
 
+    function addIconInfo(account) {
+        var oauthAccount = oauthKeychain.accounts.get(account.transport_oauth);
+        if (account.filestorageService) {
+            account.icon = 'service-icon logo-' + account.filestorageService;
+        } else if (oauthAccount && oauthAccount.get('serviceId').indexOf('google') > 0 && account.accountType === 'mail') {
+            account.icon = 'service-icon logo-gmail';
+        }
+
+        return account;
+    }
+
     function OAuthAccountDetailExtension(serviceId) {
         this.id = serviceId;
 
@@ -32,7 +43,7 @@ define('io.ox/oauth/settings', [
                 collection = new Backbone.Collection();
 
             account.fetchRelatedAccounts().then(function (accounts) {
-                collection.push(accounts);
+                collection.push(accounts.map(addIconInfo));
             });
 
             new ModalDialog({
@@ -41,9 +52,24 @@ define('io.ox/oauth/settings', [
                 point: 'io.ox/settings/accounts/' + serviceId + '/settings/detail/dialog',
                 relatedAccountsCollection: collection,
                 account: account,
+                service: oauthKeychain.services.withShortId(serviceId),
                 parentAccount: args.data.model
             })
             .extend({
+                title: function () {
+                    var header = this.$el.find('.modal-header');
+                    this.$el.addClass('oauth-account');
+                    if (this.options.account.has('identity')) {
+                        header.find('.modal-title').append(
+                            $('<div class="account-identity">').text(this.options.account.get('identity'))
+                        );
+                    }
+                    if (this.options.service && this.options.service.has('icon')) {
+                        header.append(
+                            $('<div class="service-icon">').addClass(this.options.service.get('icon'))
+                        );
+                    }
+                },
                 text: function () {
                     var guid,
                         relatedAccountsView = new ListView({

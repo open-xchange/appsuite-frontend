@@ -42,22 +42,14 @@ define('io.ox/settings/accounts/views', [
                 msliveconnect: 'fa-windows',
                 fileStorage: 'fa-folder'
             };
-            return function (type) {
-                var icon = $('<i class="account-icon fa" aria-hidden="true">');
-                if (type === 'boxcom') {
-                    // there is no fitting icon for box in fontawesome
-                    return icon
-                        .removeClass('fa')
-                        .css({
-                            'background-image': 'url(apps/themes/default/box_logo36.png)',
-                            'background-size': 'cover',
-                            height: '14px',
-                            width: '14px',
-                            margin: '13px 0 13px 13px',
-                            padding: 0
-                        });
+            return function (model) {
+                var type = model.get('accountType'),
+                    icon = $('<i class="account-icon" aria-hidden="true">');
+                if (model.has('icon')) {
+                    // model knows better about the icon
+                    return icon.addClass(model.get('icon'));
                 }
-                icon.addClass(icons[type] || 'fa-circle');
+                icon.addClass('fa ' + (icons[type] || 'fa-circle'));
                 return icon;
             };
         })(),
@@ -111,7 +103,7 @@ define('io.ox/settings/accounts/views', [
                 });
 
                 self.$el.empty().append(
-                    drawIcon(self.model.get('accountType')),
+                    drawIcon(self.model),
                     listUtils.makeTitle(title),
                     getAccountState(this), // show a possible account error
                     listUtils.makeControls().append(

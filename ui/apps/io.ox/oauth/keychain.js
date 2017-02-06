@@ -30,6 +30,13 @@ define.async('io.ox/oauth/keychain', [
     var moduleDeferred = $.Deferred(),
         accounts = new OAuth.Account.Collection(),
         point = ext.point('io.ox/keychain/api'),
+        servicesIconsFor = {
+            'com.openexchange.oauth.google': 'logo-google',
+            'com.openexchange.oauth.dropbox': 'logo-dropbox',
+            'com.openexchange.oauth.boxcom': 'logo-boxcom',
+            'com.openexchange.oauth.msliveconnect': 'logo-onedrive',
+            'com.openexchange.oauth.twitter': 'logo-twitter',
+        },
         ServiceModel = Backbone.Model.extend({
             initialize: function () {
                 var keychainAPI = new OAuthKeychainAPI(this.toJSON());
@@ -45,6 +52,7 @@ define.async('io.ox/oauth/keychain', [
                 point.extend(keychainAPI);
 
                 this.keychainAPI = keychainAPI;
+                this.set('icon', servicesIconsFor[this.get('id')]);
             }
         }),
         ServiceCollection = Backbone.Collection.extend({
