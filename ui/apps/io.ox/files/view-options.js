@@ -15,8 +15,9 @@ define('io.ox/files/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/breadcrumb',
+    'io.ox/core/folder/api',
     'gettext!io.ox/files'
-], function (ext, Dropdown, BreadcrumbView, gt) {
+], function (ext, Dropdown, BreadcrumbView, FolderAPI, gt) {
 
     'use strict';
 
@@ -200,17 +201,19 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
-
+            var node = this;
             if (_.device('smartphone')) return;
 
-            var view = new BreadcrumbView({ app: baton.app, rootAlwaysVisible: true, linkReadOnly: true }).render().$el.addClass('toolbar-item'),
-                results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
+            FolderAPI.get('9').then(function (drivePath) {
+                var view = new BreadcrumbView({ app: baton.app, rootAlwaysVisible: true, linkReadOnly: true, defaultRootPath: drivePath }).render().$el.addClass('toolbar-item'),
+                    results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
 
-            this.append(view, results);
+                node.append(view, results);
 
-            baton.app.props.on('change:find-result', function (model, value) {
-                view.toggle(!value);
-                results.toggle(value);
+                baton.app.props.on('change:find-result', function (model, value) {
+                    view.toggle(!value);
+                    results.toggle(value);
+                });
             });
         }
     });
