@@ -3,7 +3,7 @@
 msgid ""
 msgstr "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-07 12:47+0100\n"
+"PO-Revision-Date: 2017-01-18 12:42+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -3690,6 +3690,10 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "利用可能なアクションはありません"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "フォルダオプション"
 
@@ -3906,6 +3910,12 @@ msgstr "バージョン情報"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "サインアウト"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr "前回、作業終了後にサインアウトを忘れたようです。作業終了後にかならずサインアウトボタンを使ってください。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4426,14 +4436,20 @@ msgstr "無効"
 msgid "Automatic opening of notification area"
 msgstr "通知エリアを自動的に表示"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "デスクトップ通知を表示"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "今権限を管理する"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr "ブラウザ設定をチェックして、このドメイン用のデスクトップ通知を有効にしてください"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "デスクトップ通知を表示"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5562,6 +5578,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "アカウントが正しく追加されました。"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "アカウントを追加できませんでした。"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6667,6 +6688,16 @@ msgstr "このメールをインポートするには、ここにドロップし
 msgid "Synchronize with Outlook"
 msgstr "タブレットまたはスマートフォンに同期"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "件名なし"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "このメールをポータルに追加しました。"
@@ -7126,15 +7157,6 @@ msgstr "作成"
 msgid "Mail"
 msgstr "メール"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "件名なし"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "カスタム名を使用"
@@ -7578,9 +7600,8 @@ msgstr[0] "%1$d 件のメッセージが選択されています。"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr "このフォルダにメッセージが %1$d 通あります；メッセージがすべてリストに表示されるわけではありません。すべてのメッセージを移動または削除したい場合は、フォルダのコンテキストメニューで対応するアクションを選んでください。"
+"the list currently."
+msgstr "このフォルダにメッセージが %1$d 通あります；現在メッセージがすべてリストに表示されるわけではありません。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -7999,10 +8020,6 @@ msgstr "表示できるプレビューがありません。"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "新規通知"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "アカウントを追加できませんでした。"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10396,6 +10413,15 @@ msgstr "%s に出席依頼"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s に追加"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "このフォルダにメッセージが %1$d 通あります；メッセージがすべてリストに表示"
+#~ "されるわけではありません。すべてのメッセージを移動または削除したい場合は、"
+#~ "フォルダのコンテキストメニューで対応するアクションを選んでください。"
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

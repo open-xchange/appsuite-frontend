@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-08 16:59+0100\n"
+"PO-Revision-Date: 2017-01-20 20:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian <hu@bureau-cornavin.com>\n"
 "Language: hu_HU\n"
@@ -3714,6 +3714,10 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Nincs elérhető művelet"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Mappa beállításai"
 
@@ -3931,6 +3935,12 @@ msgstr "Névjegy"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Kijelentkezés"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr "Legutóbb elfelejtett kijelentkezni. A munka befejeztével mindig használja a kilépés gombot."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4453,14 +4463,20 @@ msgstr "letiltás"
 msgid "Automatic opening of notification area"
 msgstr "Értesítési terület automatikus megnyitása"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Asztali értesítések megjelenítése"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Jogosultság kezelése"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr "Ellenőrizze a böngészőbeállításokat és engedélyezze az asztali értesítéseket ehhez a tartományhoz"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Asztali értesítések megjelenítése"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5593,6 +5609,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "A fiók sikeresen hozzáadva"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Felhasználói fiók nem adható hozzá"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6712,6 +6733,16 @@ msgstr "Ejtse ide a levél importálásához"
 msgid "Synchronize with Outlook"
 msgstr "Szinkronizáció Outlook-kal"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Nincs tárgy"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "A levél hozzáadva a portálhoz"
@@ -7176,15 +7207,6 @@ msgstr "Levélírás"
 msgid "Mail"
 msgstr "Levelek"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Nincs tárgy"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Egyéni név használata"
@@ -7629,9 +7651,8 @@ msgstr[1] "%1$d üzenet kijelölve"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr "%1$d üzenet van ebben a mappában; nem az összes üzenet látszik a listában. Az összes üzenet törléséhez vagy mozgatásához szükséges műveleteket megtalálja a mappa menüjében."
+"the list currently."
+msgstr "%1$d üzenet van ebben a mappában; jelenleg nem jelenik meg az összes üzenet a listában."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8051,10 +8072,6 @@ msgstr "Az előkép nem érhető el"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Új megjegyzés"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Felhasználói fiók nem adható hozzá"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10454,6 +10471,15 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "%1$d üzenet van ebben a mappában; nem az összes üzenet látszik a "
+#~ "listában. Az összes üzenet törléséhez vagy mozgatásához szükséges "
+#~ "műveleteket megtalálja a mappa menüjében."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

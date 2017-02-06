@@ -236,7 +236,8 @@ define('plugins/portal/flickr/register', [
             });
 
         dialog.on('cancel', function () {
-            if (model.has('candidate')) {
+            // if it's a new widget delete it, otherwise not
+            if (model.has('candidate') && _.isEmpty(model.get('props'))) {
                 view.removeWidget();
             }
         });

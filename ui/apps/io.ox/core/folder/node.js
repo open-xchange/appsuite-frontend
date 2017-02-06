@@ -527,11 +527,18 @@ define('io.ox/core/folder/node', [
             // don't overwrite custom title
             if (this.options.title) return;
             if (!this.model.has('title')) return;
-            var data = this.model.toJSON(), summary = [];
-            if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
-            if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
-            summary = summary.join(', ');
-            if (summary) summary = ' (' + summary + ')';
+            var summary = [];
+
+            if (this.model.supports('count_total')) {
+                var data = this.model.toJSON();
+                // wrong counts for unifiedroot folder
+                if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
+                if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
+                if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
+                summary = summary.join(', ');
+                if (summary) summary = ' (' + summary + ')';
+            }
+
             this.$el.attr({
                 'title': this.model.get('title') + summary
             });

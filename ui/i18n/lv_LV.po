@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-09 15:11+0200\n"
+"PO-Revision-Date: 2017-01-25 12:12+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -3848,6 +3848,10 @@ msgid "Ok"
 msgstr "Labi"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Darbības nav pieejamas"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Mapes opcijas"
 
@@ -4071,6 +4075,14 @@ msgstr "Par"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Atslēgties"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Iepriekšējā reizē jūs aizmirsāt izrakstīties. Kad beidzat darbu, vienmēr "
+"izrakstieties, piespiežot izrakstīšanās taustiņu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4616,14 +4628,22 @@ msgstr "atspējot"
 msgid "Automatic opening of notification area"
 msgstr "Automātiski atvērt paziņojuma apgabalu"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Rādīt darbvirsmas paziņojumus"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Pārvaldīt ziņojumu darbības"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Lūdzu pārbaudiet pārlūkprogrammas iestatījumus un šai vietnei iespējojiet "
+"darbvirsmas paziņojumus"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Rādīt darbvirsmas paziņojumus"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5797,6 +5817,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "Konts ir veiksmīgi pievienots"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Konts nevar tikt pievienots"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6962,6 +6987,16 @@ msgstr "Lai importētu pastu, pārvelciet šeit"
 msgid "Synchronize with Outlook"
 msgstr "Sinhronizēt ar Outlook"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Nav temata"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "Šī vēstule ir pievienota portālam"
@@ -7460,15 +7495,6 @@ msgstr "Sastādīšana"
 msgid "Mail"
 msgstr "Pasts"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Nav temata"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Lietot pielāgotu vārdu"
@@ -7920,12 +7946,9 @@ msgstr[2] "Izvēlēti %1$d ziņojumi"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Šajā mapē ir %1$d ziņojumi. Sarakstā nav parādīti visi ziņojumi. Ja vēlaties "
-"pārvietot vai izdzēst visus ziņojumus, atbilstošās darbības var tikt "
-"izpildītas, izmantojot mapes konteksta saīsnes."
+"Mapē ir %1$d ziņojumi; pašlaik parādītajā sarakstā tie visi nav uzrādīti."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8351,10 +8374,6 @@ msgstr "Apskats nav iespējams"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Jauna piezīme"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Konts nevar tikt pievienots"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10818,6 +10837,15 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Šajā mapē ir %1$d ziņojumi. Sarakstā nav parādīti visi ziņojumi. Ja "
+#~ "vēlaties pārvietot vai izdzēst visus ziņojumus, atbilstošās darbības var "
+#~ "tikt izpildītas, izmantojot mapes konteksta saīsnes."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-08 19:46+0000\n"
+"PO-Revision-Date: 2017-01-20 17:55+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -3768,6 +3768,10 @@ msgid "Ok"
 msgstr "確定"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "無可用行為"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "資料夾選項"
 
@@ -3986,6 +3990,12 @@ msgstr "關於"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "登出"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr "您上次忘記登出，完成修改後請務必記得點擊「登出」按鈕。"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4518,14 +4528,20 @@ msgstr "停用"
 msgid "Automatic opening of notification area"
 msgstr "自動開啟通知區域"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "顯示桌面通知"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "立刻管理權限"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr "請檢查瀏覽器設定，開啟來自此網域的桌面通知。"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "顯示桌面通知"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5665,6 +5681,11 @@ msgstr "OneDrive"
 msgid "Account added successfully"
 msgstr "成功新增帳號"
 
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "無法新增帳號"
+
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
@@ -6788,6 +6809,16 @@ msgstr "放到這裡以匯入此郵件"
 msgid "Synchronize with Outlook"
 msgstr "與 Outlook 同步"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "無主題"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "此郵件已被加入入口畫面"
@@ -7256,15 +7287,6 @@ msgstr "撰寫"
 msgid "Mail"
 msgstr "郵件"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "無主題"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "使用自訂名稱"
@@ -7711,11 +7733,8 @@ msgstr[1] "已選擇 %1$d 封訊息"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
-msgstr ""
-"此信件匣中有 %1$d 封訊息，不是所有訊息都顯示於清單中，若您想要移動或刪除所有"
-"訊息，您可在信件匣內容選單中找到對應的操作。"
+"the list currently."
+msgstr "此信件匣中有 %1$d 封訊息，目前並未顯示所有訊息。"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8135,10 +8154,6 @@ msgstr "無法預覽"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "新增筆記"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "無法新增帳號"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10554,6 +10569,14 @@ msgstr "邀請至 %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "新增至 %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "此信件匣中有 %1$d 封訊息，不是所有訊息都顯示於清單中，若您想要移動或刪除所"
+#~ "有訊息，您可在信件匣內容選單中找到對應的操作。"
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

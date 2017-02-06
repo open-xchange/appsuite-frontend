@@ -553,7 +553,7 @@ define('io.ox/files/actions', [
                         type: type,
                         label: label,
                         success: success,
-                        successCallback: function (response) {
+                        successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] };
                                 if (_.isObject(response)) {
@@ -562,16 +562,17 @@ define('io.ox/files/actions', [
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
                                 _(response).each(function (error) {
                                     if (error.error) {
-                                        if (error.error.categories === 'CONFLICT' && (error.error.code === 'FILE_STORAGE-0045' || error.error.code === 'FLD-1038')) {
+                                        if (error.error.categories === 'CONFLICT' && (error.error.code.indexOf('FILE_STORAGE') === 0 || error.error.code === 'FLD-1038')) {
                                             if (!conflicts.title) {
                                                 conflicts.title = error.error.error;
                                             }
-                                            if (_.isObject(error.error.warnings)) {
-                                                conflicts.warnings.push(error.error.warnings.error);
-                                            } else {
+
+                                            if (_.isArray(error.error.warnings)) {
                                                 _(error.error.warnings).each(function (warning) {
                                                     conflicts.warnings.push(warning.error);
                                                 });
+                                            } else {
+                                                conflicts.warnings.push(error.error.warnings.error);
                                             }
                                         }
                                     }
@@ -580,7 +581,13 @@ define('io.ox/files/actions', [
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
-                                                api[type](list, baton.target, true);
+                                                // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
+                                                api[type](list, baton.target || apiInput.target, true);
+                                            },
+                                            callbackCancel: function () {
+                                                if (baton.data[0].folder_id) {
+                                                    folderAPI.reload(baton.data[0].folder_id);
+                                                }
                                             }
                                         });
                                     });

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2016-11-11 09:03-0300\n"
+"PO-Revision-Date: 2017-01-19 18:02-0200\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -3833,6 +3833,10 @@ msgid "Ok"
 msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
+msgid "No action available"
+msgstr "Nenhuma ação disponível"
+
+#: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
 msgstr "Opções de pasta"
 
@@ -4055,6 +4059,14 @@ msgstr "Sobre"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out"
 msgstr "Encerrar sessão"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"You forgot to sign out last time. Always use the sign-out button when you "
+"finished your work."
+msgstr ""
+"Você se esqueceu de encerrar a sessão da última vez. Sempre use o botão de "
+"Encerrar sessão quando terminar de trabalhar."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4363,9 +4375,9 @@ msgid ""
 "updates. You can download the updates from within the Updater."
 msgstr ""
 "Ao executar o arquivo baixado, um assistente de instalação será iniciado."
-"Siga as instruções e instale o atualizador. Instale versões mais recentes "
-"do software cliente do Windows®. O Updater informa automaticamente sobre "
-"novas atualizações. Você pode baixar as atualizações a partir do Updater."
+"Siga as instruções e instale o atualizador. Instale versões mais recentes do "
+"software cliente do Windows®. O Updater informa automaticamente sobre novas "
+"atualizações. Você pode baixar as atualizações a partir do Updater."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "Connector for Microsoft Outlook®"
@@ -4598,14 +4610,22 @@ msgstr "desativar"
 msgid "Automatic opening of notification area"
 msgstr "Abertura automática da área de notificação"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Show desktop notifications"
-msgstr "Exibir notificações de área de trabalho"
-
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Manage permission now"
 msgstr "Gerencie permissão agora"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid ""
+"Please check your browser settings and enable desktop notifications for this "
+"domain"
+msgstr ""
+"Verifique as configurações do navegador e habilite as notificações da área "
+"de trabalho para este domínio."
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Show desktop notifications"
+msgstr "Exibir notificações de área de trabalho"
 
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
@@ -5380,11 +5400,11 @@ msgstr "Visualizar detalhes"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out"
-msgstr "Mostrar"
+msgstr "Exibir"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Pop out standalone viewer"
-msgstr "Mostrar visualizador independente"
+msgstr "Exibir visualizador independente"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -5775,6 +5795,11 @@ msgstr "OneDrive"
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "Account added successfully"
 msgstr "Conta adicionada com sucesso"
+
+#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
+#: apps/io.ox/oauth/keychain.js module:io.ox/core
+msgid "Account could not be added"
+msgstr "Conta não pode ser adicionada"
 
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
@@ -6930,6 +6955,16 @@ msgstr "Solte aqui para importar este e-mail"
 msgid "Synchronize with Outlook"
 msgstr "Sincronizar com Outlook"
 
+#. %1$s mail sender
+#. %2$s mail subject
+#: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/plugins/portal/mail/register.js module:plugins/portal
+#, c-format
+msgid "No subject"
+msgstr "Sem assunto"
+
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
 msgid "This mail has been added to the portal"
 msgstr "O e-mail foi adicionado ao portal"
@@ -7425,15 +7460,6 @@ msgstr "Escrever"
 msgid "Mail"
 msgstr "E-mail"
 
-#. %1$s mail sender
-#. %2$s mail subject
-#: apps/io.ox/mail/compose/model.js module:io.ox/mail apps/io.ox/mail/util.js
-#: module:io.ox/core apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
-#, c-format
-msgid "No subject"
-msgstr "Sem assunto"
-
 #: apps/io.ox/mail/compose/names.js module:io.ox/mail
 msgid "Use custom name"
 msgstr "Usar nome personalizado"
@@ -7567,7 +7593,7 @@ msgstr "Tarefas"
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
 #: apps/io.ox/mail/detail/view.js
 msgid "Show entire message"
-msgstr "Mostrar mensagem completa"
+msgstr "Exibir mensagem completa"
 
 #. %1$s: Mail sender
 #. %2$s: Mail subject
@@ -7885,12 +7911,10 @@ msgstr[1] "%1$d mensagens selecionadas"
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
-"the list. If you want to move or delete all messages, you find corresponding "
-"actions in the folder context menu."
+"the list currently."
 msgstr ""
-"Existe %1$d mensagens nesta pasta; nem todas as mensagens estão exibidas na "
-"lista. Se deseja mover ou excluir todas as mensagens, irá encontrar as ações "
-"correspondentes no menu de contexto da pasta."
+"Existem %1$d mensagens nesta pasta, nem todas as mensagens estão exibidas na "
+"lista atual."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8316,10 +8340,6 @@ msgstr "Pré-visualização não disponível"
 #: apps/io.ox/notes/toolbar.js module:io.ox/notes
 msgid "New note"
 msgstr "Nova nota"
-
-#: apps/io.ox/oauth/keychain.js module:io.ox/core
-msgid "Account could not be added"
-msgstr "Conta não pode ser adicionada"
 
 #: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
@@ -10788,6 +10808,15 @@ msgstr "Convidar para %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Adicionar em %s"
+
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Existe %1$d mensagens nesta pasta; nem todas as mensagens estão exibidas "
+#~ "na lista. Se deseja mover ou excluir todas as mensagens, irá encontrar as "
+#~ "ações correspondentes no menu de contexto da pasta."
 
 #~ msgid ""
 #~ "You can manage desktop notifications at any time, by vitising your "

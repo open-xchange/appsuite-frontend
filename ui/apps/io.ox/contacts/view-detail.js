@@ -486,7 +486,9 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'suffix'),
                         simple(data, 'nickname'),
                         row('birthday', function () {
-                            if (baton.data.birthday) {
+                            // check if null, undefined, empty string
+                            // 0 is valid (1.1.1970)
+                            if (_.isNumber(baton.data.birthday)) {
                                 return util.getBirthday(baton.data.birthday);
                             }
                         }),
@@ -501,8 +503,11 @@ define('io.ox/contacts/view-detail', [
                         simple(data, 'number_of_children'),
                         simple(data, 'spouse_name'),
                         row('anniversary', function () {
-                            if (baton.data.anniversary) {
-                                return new moment(1153440000000).utc().format('l');
+                            // check if null, undefined, empty string
+                            // 0 is valid (1.1.1970)
+                            if (_.isNumber(baton.data.anniversary)) {
+                                // use same mechanic as with birthdays
+                                return util.getBirthday(baton.data.anniversary);
                             }
                         })
                     )
