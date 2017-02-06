@@ -53,7 +53,7 @@ define('io.ox/oauth/settings', [
                         });
                     this.$body.append(
                         $('<div class="form-group">').append(
-                            $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Display Name')),
+                            $('<label>', { 'for': guid = _.uniqueId('input') }).text(gt('Account Name')),
                             new MiniViews.InputView({ name: 'displayName', model: this.options.account, id: guid }).render().$el
                         ),
                         $('<div class="form-group">').append(
@@ -111,7 +111,7 @@ define('io.ox/oauth/settings', [
                         guid = _.uniqueId('input');
                     this.$body.append(
                         $('<div class="form-group">').append(
-                            $('<label>', { 'for': guid }).text(gt('Display Name')),
+                            $('<label>', { 'for': guid }).text(gt('Account Name')),
                             new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
                         )
                     );
