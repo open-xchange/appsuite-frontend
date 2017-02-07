@@ -572,8 +572,12 @@ define('io.ox/core/tk/list', [
                 render: _.debounce(this.renderListItems.bind(this), 10),
 
                 iterate: function (fn) {
-                    this.list.forEach(fn.bind(self));
-                    this.list = [];
+                    try {
+                        this.list.forEach(fn.bind(self));
+                    } finally {
+                        // use try/finally to ensure the queue get cleared
+                        this.list = [];
+                    }
                 }
             };
         },
