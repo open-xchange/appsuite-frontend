@@ -426,13 +426,17 @@ define('io.ox/mail/listview', [
         },
 
         reprocessThread: function (model) {
+
             // only used when in thread mode
             if (!(this.app && this.app.isThreaded())) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
 
-            // up to date
+            // return to avoid runtime errors if we have no thread data (see OXUI-304)
+            if (!threadlist.length) return;
+
+            // return if thread is up to date
             if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
 
             // remove head property to avid accidently using old date when processThreadMessage

@@ -574,6 +574,8 @@ define('io.ox/core/tk/list', [
                 iterate: function (fn) {
                     try {
                         this.list.forEach(fn.bind(self));
+                    } catch (e) {
+                        if (ox.debug) console.error('ListView.iterate', e);
                     } finally {
                         // use try/finally to ensure the queue get cleared
                         this.list = [];
