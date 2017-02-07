@@ -12050,11 +12050,6 @@ msgstr ""
 
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
-msgid "New mail"
-msgstr ""
-
-#: apps/plugins/notifications/mail/register.js
-#: module:plugins/notifications
 msgid "Bell"
 msgstr ""
 
@@ -12071,6 +12066,11 @@ msgstr ""
 #: apps/plugins/notifications/mail/register.js
 #: module:plugins/notifications
 msgid "Chimes"
+msgstr ""
+
+#: apps/plugins/notifications/mail/register.js
+#: module:plugins/notifications
+msgid "New mail"
 msgstr ""
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
