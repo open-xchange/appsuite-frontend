@@ -555,9 +555,9 @@
                     icon120: 'icon120.png',
                     icon144: 'icon144.png',
                     icon152: 'icon152.png',
-                    splash460: 'splashscreen_460.jpg',
-                    splash920: 'splashscreen_920.jpg',
-                    splash1096: 'splashscreen_1096.jpg',
+                    icon167: 'icon167.png',
+                    icon180: 'icon180.png',
+                    icon192: 'icon192.png',
                     win8Icon: 'icon144_win.png'
                 };
             for (var i in icons) {
