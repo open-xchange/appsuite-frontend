@@ -320,6 +320,67 @@ define('io.ox/calendar/main', [
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
+        'folderview-toolbar': function (app) {
+            if (_.device('smartphone')) return;
+
+            app.toggleFolderView = function (e) {
+                e.preventDefault();
+                app.folderView.toggle(e.data.state);
+            };
+
+            function onFolderViewOpen(app) {
+                app.left.removeClass('bottom-toolbar');
+                // for perspectives other than list
+                app.getWindow().nodes.body.removeClass('bottom-toolbar-visible');
+            }
+
+            function onFolderViewClose(app) {
+                app.left.addClass('bottom-toolbar');
+                // for perspectives other than list
+                app.getWindow().nodes.body.addClass('bottom-toolbar-visible');
+            }
+
+            // create extension point for second toolbar
+            ext.point('io.ox/calendar/vgrid/second-toolbar').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    this.addClass('visual-focus').append(
+                        $('<a href="#" class="toolbar-item">')
+                        .attr('aria-label', gt('Open folder view'))
+                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
+                        .on('click', { state: true }, app.toggleFolderView)
+                    );
+                }
+            });
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'toggle-folderview',
+                index: 1000,
+                draw: function () {
+                    this.addClass('bottom-toolbar').append(
+                        $('<div class="generic-toolbar bottom visual-focus">').append(
+                            $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
+                            .append(
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                            )
+                            .on('click', { app: app, state: false }, app.toggleFolderView)
+                        )
+                    );
+                }
+            });
+
+            app.on({
+                'folderview:open': onFolderViewOpen.bind(null, app),
+                'folderview:close': onFolderViewClose.bind(null, app)
+            });
+
+            var grid = app.getGrid(), topbar = grid.getTopbar();
+            ext.point(app.get('name') + '/vgrid/second-toolbar').invoke('draw', topbar, ext.Baton({ grid: grid }));
+            onFolderViewClose(app);
+            if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        },
+
         'premium-area': function (app) {
 
             ext.point('io.ox/calendar/sidepanel').extend({

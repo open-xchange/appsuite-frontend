@@ -247,4 +247,26 @@ define('io.ox/calendar/toolbar', [
             });
         }
     });
+
+    // bottom toolbar
+    ext.point('io.ox/calendar/mediator').extend({
+        id: 'bottom-toolbar',
+        index: 10300,
+        setup: function (app) {
+            if (_.device('smartphone')) return;
+            app.getWindow().nodes.body.toggleClass('bottom-toolbar', app.props.get('layout') !== 'list').append(
+                $('<div class="generic-toolbar calendar bottom visual-focus">').append(
+                    $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
+                    .append(
+                        $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Close folder view'))
+                    )
+                    .on('click', { state: true }, app.toggleFolderView)
+                )
+            );
+
+            app.getWindow().on('change:perspective', function (e, value) {
+                app.getWindow().nodes.body.toggleClass('bottom-toolbar', value !== 'list');
+            });
+        }
+    });
 });
