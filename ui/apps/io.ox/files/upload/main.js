@@ -273,7 +273,7 @@ define('io.ox/files/upload/main', [
                         folder: item.options.folder,
                         timestamp: _.then(),
                         params: item.options.params,
-                        version_commet: item.options.version_comment
+                        version_comment: item.options.version_comment
                     })
                     .progress(function (e) {
                         // update progress
