@@ -110,10 +110,10 @@
                 <div class="no-break">
                     <div class="contact-head">
                         <fieldset>
-                            <legend><%- element.name %></legend>
+                            <h1><%- element.name %></h1>
                             <ul>
                                 <% if (element.original.position) { %><li><%- element.original.position %></li><% } %>
-                                <% if (element.original.department) { %><li><%- element.original.deparment %></li><% } %>
+                                <% if (element.original.department) { %><li><%- element.original.department %></li><% } %>
                                 <% if (element.original.company) { %><li><%- element.original.company %></li><% } %>
                             </ul>
                         </fieldset>
@@ -153,7 +153,6 @@
                                 </ul>
                             </fieldset>
                             <% } %>
-                            &nbsp;
                         </div>
                         <div>
                             <% if (element.original.telephone_business1 || element.original.telephone_business2 || element.original.telephone_home1 || element.original.telephone_home2 || element.original.cellular_telephone1 || element.original.cellular_telephone2 || element.original.telephone_other) { %>

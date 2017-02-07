@@ -37,6 +37,14 @@ define('io.ox/contacts/print', [
         return _([data.email1, data.email2, data.email3]).compact()[index] || data.mail || '';
     }
 
+    function getCity(data, type) {
+        var zipCode = data['postal_code_' + type],
+            city = data['city_' + type];
+
+        if (!zipCode && !city) return;
+        return _([zipCode, city]).compact().join(' ');
+    }
+
     function getDistributionList(data) {
         if (!data.mark_as_distributionlist) return '';
         var list = _(data.distribution_list || []), hash = {};
@@ -70,7 +78,10 @@ define('io.ox/contacts/print', [
             isDistributionList: api.looksLikeDistributionList(data),
             distributionList: getDistributionList(data),
             thumbIndex: options.thumbIndex,
-            birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined
+            birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
+            'city_business': getCity(data, 'business'),
+            'city_home': getCity(data, 'home'),
+            'city_other': getCity(data, 'other')
         };
     }
 

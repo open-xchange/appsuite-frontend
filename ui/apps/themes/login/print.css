@@ -161,29 +161,49 @@ td.spacer {
     clear: both;
 }
 
+div.phonelist-details > div {
+    padding-bottom: 1.5em;
+}
+
 div.phonelist-details .contact-details > div {
     width: 50%;
     display: inline-block;
+    min-height: 1px;
     float: left;
 }
 
 div.phonelist-details fieldset {
     border: 0;
+    padding: 0;
 }
 
 div.phonelist-details legend {
-    font-size: 1.1em;
     font-weight: bold;
+    padding: 16px 0 8px 0;
+}
+
+div.phonelist-details h1 {
+    margin: 0;
+    padding: 0.4em 0 0.4em 0;
 }
 
 div.phonelist-details ul {
     list-style-type: none;
-    padding-left: 0;
+    margin: 0;
+    padding-left: 1px;
+}
+
+div.phonelist-details table {
+    border-spacing: 0px;
+}
+
+div.phonelist-details td {
+    padding: 0px 1px;
 }
 
 div.spacer-bottom {
     line-height: 2em;
-    border-top: 1px solid black;
+    border-bottom: 1px solid #aaa;
     clear: both;
 }
 
