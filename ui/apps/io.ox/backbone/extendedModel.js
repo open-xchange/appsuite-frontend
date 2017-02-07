@@ -129,7 +129,13 @@ define('io.ox/backbone/extendedModel', [
         },
 
         validate: function (attributes, evt, options) {
-            options = options || {};
+            // we might have options instead of an evt object
+            // check if the isSave property is set (since this is the one we want to use)
+            if (arguments.length === 2 && evt && evt.isSave) {
+                options = evt;
+            } else {
+                options = options || {};
+            }
             var self = this,
                 errors = new ValidationErrors();
             attributes = attributes || this.toJSON();

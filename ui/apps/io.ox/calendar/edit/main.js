@@ -363,9 +363,10 @@ define('io.ox/calendar/edit/main', [
                 // conflicts have their own special handling
                 if (error.conflicts) return;
 
-                this.model.set('ignore_conflicts', false, { validate: true });
+                this.model.set('ignore_conflicts', false, { validate: true, isSave: true });
                 if (this.model.endTimezone) {
-                    this.model.set('endTimezone', this.model.endTimezone);
+                    // must be silent or validation removes errormessages
+                    this.model.set('endTimezone', this.model.endTimezone, { silent: true, isSave: true });
                     delete this.model.endTimezone;
                 }
 
@@ -375,8 +376,9 @@ define('io.ox/calendar/edit/main', [
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();
-                // avoid double yells and only yell errors caused by move operation. Errors from update, create requests are handled by the onBackendError listener
-                if (options && options.isMoveOperation && error) notifications.yell(error);
+                // avoid double yells and only yell server errors caused by move operation. Errors from update, create requests are handled by the onBackendError listener
+                // errors from validation are not backenErrors, yell those too
+                if (error && (!error.errorCode || (options && options.isMoveOperation))) notifications.yell(error);
             },
 
             failSave: function () {
