@@ -44,7 +44,6 @@
             width: 64px;
             height: 64px;
             font-size: 64px; //font awesome icons
-            background-size: cover;
         }
     }
 }
@@ -57,7 +56,6 @@
         }
 
         .service-icon {
-            background-size: cover;
             float: right;
             height: 32px;
             width: 32px;
@@ -65,15 +63,42 @@
     }
 
     .account-icon.service-icon {
-        background-size: cover;
         margin-left: 6px;
+    }
+
+    .account-icon {
+        margin-left: 6px;
+        margin-top: 2px;
+        background-size: 26px;
+        background-repeat: no-repeat;
+        background-position: center;
+        width: 40px;
     }
 }
 
-.service-icon.logo-google { background-image: url(apps/themes/default/google-letter_logo.png); }
-.service-icon.logo-gmail { background-image: url(apps/themes/default/gmail_logo128.png); }
-.service-icon.logo-googledrive { background-image: url(apps/themes/default/googledrive_logo128.png); }
-.service-icon.logo-boxcom { background-image: url(apps/themes/default/box_logo128.png); }
-.service-icon.logo-onedrive { background-image: url(apps/themes/default/onedrive_logo128.png); }
-.service-icon.logo-dropbox { background-image: url(apps/themes/default/dropbox_logo128.png); }
-.service-icon.logo-twitter { background-image: url(apps/themes/default/twitter_logo_blue.png); }
+.service-icon, .account-icon {
+    background-size: cover;
+
+    // fallback "logos"
+    &:before { content: '\00a0'; }
+    &.logo-fallback:before { content: "\f111"; }
+
+    // general logos
+    &.mail:before, &.logo-mail:before { content: "\f0e0"; }
+    &.filestorage:before { content: "\f07b"; }
+    &.logo-mailwizard:before { content: "\f0e0"; }
+
+    // special logos
+    &.logo-google { background-image: url(apps/themes/default/google-letter_logo.png); }
+    &.logo-google:before { content: "\00a0"; }
+    &.mail.logo-google { background-image: url(apps/themes/default/gmail_logo128.png); }
+    &.filestorage.logo-google { background-image: url(apps/themes/default/googledrive_logo128.png); }
+    &.logo-boxcom { background-image: url(apps/themes/default/box_logo128.png); }
+    &.logo-boxcom:before { content: "\00a0"; }
+    &.logo-msliveconnect { background-image: url(apps/themes/default/onedrive_logo128.png); }
+    &.logo-msliveconnect:before { content: "\00a0"; }
+    &.logo-dropbox { background-image: url(apps/themes/default/dropbox_logo128.png); }
+    &.logo-dropbox:before { content: "\00a0"; }
+    &.logo-twitter { background-image: url(apps/themes/default/twitter_logo_blue.png); }
+    &.logo-twitter:before { content: "\00a0"; }
+}

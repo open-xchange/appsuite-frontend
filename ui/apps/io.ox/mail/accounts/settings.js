@@ -168,7 +168,7 @@ define('io.ox/mail/accounts/settings', [
                     return;
                 }
                 mailServices.push({
-                    id: 'wizard',
+                    id: 'mailwizard',
                     displayName: gt('Other')
                 });
 
@@ -180,7 +180,7 @@ define('io.ox/mail/accounts/settings', [
                 a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
-                    if (service.id === 'wizard') return;
+                    if (service.id === 'mailwizard') return;
 
                     var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
                         return !account.hasScope('mail');
@@ -214,7 +214,7 @@ define('io.ox/mail/accounts/settings', [
                     });
                 });
 
-                list.listenTo(list, 'select:wizard', function () {
+                list.listenTo(list, 'select:mailwizard', function () {
                     baton.popup.getFooter().find('[data-action="add"]').show();
                     // invoke wizard
                     ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());

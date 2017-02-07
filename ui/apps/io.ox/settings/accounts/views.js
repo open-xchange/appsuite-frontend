@@ -31,26 +31,12 @@ define('io.ox/settings/accounts/views', [
             }
         },
         drawIcon = (function () {
-            var icons = {
-                mail: 'fa-envelope',
-                xing: 'fa-xing',
-                twitter: 'fa-twitter',
-                google: 'fa-google',
-                yahoo: 'fa-yahoo',
-                linkedin: 'fa-linkedin',
-                dropbox: 'fa-dropbox',
-                msliveconnect: 'fa-windows',
-                fileStorage: 'fa-folder'
-            };
             return function (model) {
                 var type = model.get('accountType'),
-                    icon = $('<i class="account-icon" aria-hidden="true">');
-                if (model.has('icon')) {
-                    // model knows better about the icon
-                    return icon.addClass(model.get('icon'));
-                }
-                icon.addClass('fa ' + (icons[type] || 'fa-circle'));
-                return icon;
+                    shortId = String(model.get('serviceId') || model.id).match(/\.?([a-zA-Z]*)(\d*)$/)[1] || 'fallback';
+                return $('<i class="account-icon fa" aria-hidden="true">')
+                    .addClass(type.toLowerCase())
+                    .addClass('logo-' + shortId);
             };
         })(),
 

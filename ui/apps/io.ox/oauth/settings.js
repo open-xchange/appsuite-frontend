@@ -24,17 +24,6 @@ define('io.ox/oauth/settings', [
 
     'use strict';
 
-    function addIconInfo(account) {
-        var oauthAccount = oauthKeychain.accounts.get(account.transport_oauth);
-        if (account.filestorageService) {
-            account.icon = 'service-icon logo-' + account.filestorageService;
-        } else if (oauthAccount && oauthAccount.get('serviceId').indexOf('google') > 0 && account.accountType === 'mail') {
-            account.icon = 'service-icon logo-gmail';
-        }
-
-        return account;
-    }
-
     function OAuthAccountDetailExtension(serviceId) {
         this.id = serviceId;
 
@@ -43,7 +32,7 @@ define('io.ox/oauth/settings', [
                 collection = new Backbone.Collection();
 
             account.fetchRelatedAccounts().then(function (accounts) {
-                collection.push(accounts.map(addIconInfo));
+                collection.push(accounts);
             });
 
             new ModalDialog({
@@ -57,18 +46,17 @@ define('io.ox/oauth/settings', [
             })
             .extend({
                 title: function () {
-                    var header = this.$el.find('.modal-header');
+                    var header = this.$el.find('.modal-header'),
+                        shortId = this.options.service.id.match(/\.?(\w*)$/)[1] || 'fallback';
                     this.$el.addClass('oauth-account');
                     if (this.options.account.has('identity')) {
                         header.find('.modal-title').append(
                             $('<div class="account-identity">').text(this.options.account.get('identity'))
                         );
                     }
-                    if (this.options.service && this.options.service.has('icon')) {
-                        header.append(
-                            $('<div class="service-icon">').addClass(this.options.service.get('icon'))
-                        );
-                    }
+                    header.append(
+                        $('<div class="service-icon">').addClass('logo-' + shortId)
+                    );
                 },
                 text: function () {
                     var guid,

@@ -13,9 +13,8 @@
 
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
-    'gettext!io.ox/core',
     'less!io.ox/oauth/style'
-], function (http, gt) {
+], function (http) {
     'use strict';
 
     var generateId = function () {
@@ -193,7 +192,11 @@ define('io.ox/oauth/backbone', [
                     accounts.filter(function isRelated(account) {
                         return account.mail_oauth === self.get('id');
                     })
-                );
+                ).map(function (account) {
+                    // add serviceId to related account
+                    account.serviceId = self.get('serviceId');
+                    return account;
+                });
             });
         }
     });
@@ -209,40 +212,18 @@ define('io.ox/oauth/backbone', [
         }
     });
 
-    var servicesMetaData = {
-        'com.openexchange.oauth.google': {
-            className: 'logo-google'
-        },
-        'com.openexchange.oauth.dropbox': {
-            className: 'logo-dropbox'
-        },
-        'com.openexchange.oauth.boxcom': {
-            className: 'logo-boxcom'
-        },
-        'com.openexchange.oauth.msliveconnect': {
-            className: 'logo-onedrive'
-        },
-        'other': {
-            title: gt('Other'),
-            className: 'fa-envelope'
-        }
-    };
-    function metaDataFor(id) {
-        var data = servicesMetaData[id];
-        return data || servicesMetaData.other;
-    }
-
     var ServiceItemView = Backbone.View.extend({
         tagName: 'li',
         className: 'service-item',
         render: function () {
+            var shortId = this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
             this.$el.append(
                 $('<button>').addClass('btn btn-default').append(
                     $('<i class="service-icon fa">')
-                        .addClass(this.model.get('icon') || metaDataFor(this.model.id).className || 'fa-envelope'),
+                        .addClass('logo-' + shortId),
                     $('<div>')
                         .addClass('service-label')
-                        .text(this.model.get('displayName') || metaDataFor(this.model.id).title)
+                        .text(this.model.get('displayName'))
                 ).data({
                     cid: this.model.cid
                 })
