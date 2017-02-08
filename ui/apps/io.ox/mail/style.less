@@ -122,12 +122,14 @@
             display: flex;
             align-items: baseline;
             span { .ellipsis(); }
+            padding-left: 8px;
         }
     }
     // toolbar elements won't shrink
     & > *:not('.dropdown') {
         min-width: 0;
         flex: 0 0 auto;
+        padding-right: 8px;
     }
 }
 
