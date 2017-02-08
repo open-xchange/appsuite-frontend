@@ -16,8 +16,9 @@ define('io.ox/mail/view-options', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
-    'io.ox/core/commons'
-], function (ext, Dropdown, account, gt, commons) {
+    'io.ox/core/commons',
+    'settings!io.ox/mail',
+], function (ext, Dropdown, account, gt, commons, settings) {
 
     'use strict';
 
@@ -38,8 +39,10 @@ define('io.ox/mail/view-options', [
                 .option('sort', 'from-to', account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })
-                .option('sort', 607, gt('Subject'), { radio: true })
-                .option('sort', 102, gt('Color'), { radio: true });
+                .option('sort', 607, gt('Subject'), { radio: true });
+            // color flags
+            if (!settings.get('features/flag/color')) return;
+            this.data('view').option('sort', 102, gt('Color'), { radio: true });
         }
     });
 
