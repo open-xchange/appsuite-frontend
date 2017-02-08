@@ -80,7 +80,7 @@ define('io.ox/core/folder/actions/move', [
                         // files API returns array on error; mail just a single object
                         // contacts a double array of undefined; tasks the new object.
                         // so every API seems to behave differently.
-                        if (_.isArray(response)) response = _(response).compact()[0];
+                        if (!options.fullResponse && _.isArray(response)) response = _(response).compact()[0];
                         // custom callback?
                         if (options.successCallback) {
                             options.successCallback(response, { input: input, target: target, options: options.all });
