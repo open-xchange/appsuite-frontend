@@ -298,12 +298,13 @@ define('io.ox/mail/compose/extensions', [
                         extPoint: POINT,
                         isMail: true,
                         apiOptions: {
+                            limit: 20,
                             contacts: true,
                             distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
+                        maxResults: 30,
                         placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
