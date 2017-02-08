@@ -561,12 +561,13 @@ define('io.ox/files/actions', [
                 ox.load(['io.ox/files/actions/move-copy']).done(function (action) {
                     var options = {
                         type: type,
+                        fullResponse: true,
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
-                                var conflicts = { warnings: [] },
-                                    filesLeft = [];
+                                var filesLeft = [],
+                                    conflicts = { warnings: [] };
 
                                 if (!_.isArray(response)) {
                                     response = [response];
