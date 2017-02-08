@@ -260,6 +260,86 @@ define('io.ox/mail/main', [
             });
         },
 
+        'folder-view-dsc-folder-setup-notice': function () {
+
+            function returnFakeFolder(account) {
+                var fakeFolder = $('<li class="folder remote-account-setup">').attr({
+                    'data-id': account.root_folder,
+                    'data-model': account.root_folder,
+                    'data-contextmenu-id': account.root_folder,
+                    'aria-level': '1',
+                    'aria-selected': 'false',
+                    role: 'treeitem',
+                    tabindex: '-1',
+                    'aria-haspopup': 'true',
+                    title: account.name,
+                    'aria-expanded': 'false'
+                }).append(
+                    $('<div class="folder-node" style="padding-left: 0px;">').attr('aria-hidden', 'true').append(
+                        $('<div class="folder-arrow">').append(
+                        ),
+                        $('<div class="folder-icon">').append(
+                            $('<i class="fa fa-fw">')
+                        ),
+                        $('<div class="folder-label">').append(
+                            $('<div>').text(account.name)
+                        ),
+                        $('<div class="folder-counter">'),
+                        $('<a href="#" class="account-link">').attr({
+                            'data-dsc': account.root_folder,
+                            title: 'Account is being created'
+                        }).append(
+                            $('<i class="fa fa-exclamation-triangle">')
+                        ),
+                        $('<ul class="subfolders" role="group">')
+                    )
+                );
+
+                return fakeFolder;
+            }
+
+            function remoteAccountsSetup(node, obj) {
+                node.append(returnFakeFolder(obj));
+                node.closest('li').addClass('open');
+            }
+
+            function checkForFolderInSetup() {
+                if (accountAPI.hasDSCAccount) {
+                    var renderdList = app.treeView.$container.find('.remote-folders > ul');
+                    renderdList.find('li.remote-account-setup').remove();
+
+                    accountAPI.all().done(function (data) {
+                        var filteredAccounts = _.filter(data, function (num) {
+                            if (num.id !== 0) return num;
+                        });
+
+                        _.each(filteredAccounts, function (obj) {
+
+                            if (renderdList.find('.selectable[data-model="' + obj.root_folder + '"]').length) return;
+                            if (renderdList.find('.remote-account-setup[data-model="' + obj.root_folder + '"]').length) return;
+
+                            remoteAccountsSetup(renderdList, obj);
+                        });
+                    });
+                }
+            }
+
+            if (settings.get('dsc/enabled')) {
+                api.on('refresh.all', function () {
+                    checkForFolderInSetup();
+                });
+
+                folderAPI.on('refresh', function () {
+                    setTimeout(function () {
+                        checkForFolderInSetup();
+                    }, 3000);
+                });
+            }
+
+            app.checkForDSCFolderInSetup = checkForFolderInSetup;
+
+        },
+
         'folder-view-dsc-error': function (app) {
             function updateStatus() {
                 if (ox.debug) console.log('refreshing DSC status');
@@ -1836,6 +1916,12 @@ define('io.ox/mail/main', [
             .always(function always() {
                 app.mediate();
                 win.show();
+                if (settings.get('dsc/enabled')) {
+                    setTimeout(function () {
+                        app.checkForDSCFolderInSetup();
+                    }, 1000);
+
+                }
             })
             .fail(function fail(result) {
                 // missing folder information indicates a connection failure

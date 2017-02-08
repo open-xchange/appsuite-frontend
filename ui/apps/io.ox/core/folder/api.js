@@ -1080,13 +1080,14 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
-    function remove(ids) {
+    function remove(ids, options) {
 
         // ensure array
         if (!_.isArray(ids)) ids = [ids];
 
         // local copy for model data
-        var hash = {};
+        var hash = {},
+            params;
 
         _(ids).each(function (id) {
             // get model
@@ -1100,14 +1101,18 @@ define('io.ox/core/folder/api', [
             model.trigger('destroy');
         });
 
+        params = {
+            action: 'delete',
+            failOnError: true,
+            tree: tree(ids[0])
+        };
+
+        if (options && options.isDSC) params.hardDelete = true;
+
         // delete on server
         return http.PUT({
             module: 'folders',
-            params: {
-                action: 'delete',
-                failOnError: true,
-                tree: tree(ids[0])
-            },
+            params: params,
             data: ids,
             appendColumns: false
         })

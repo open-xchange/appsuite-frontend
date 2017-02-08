@@ -159,6 +159,17 @@ define('io.ox/core/api/account', [
     };
 
     /**
+     * get the root folder for a given account id
+     * @param  { int } id
+     * @return { string } folder (root_folder)
+     */
+    api.getDSCRootFolderForId = function (id) {
+        return _.findKey(dscHash, function (value) {
+            return value === id;
+        });
+    };
+
+    /**
      * get the account id for a given folder which is
      * child of a DSC account/rootfolder
      * @param  { string } folder

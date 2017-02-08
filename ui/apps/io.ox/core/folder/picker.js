@@ -149,6 +149,7 @@ define('io.ox/core/folder/picker', [
         var open = o.settings && _.isString(o.persistent) ? o.settings.get(o.persistent + '/open', []) : [];
 
         var tree = new TreeView({
+            folderBase: o.folderBase,
             all: o.all,
             context: o.context,
             filter: o.filter,
