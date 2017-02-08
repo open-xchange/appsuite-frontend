@@ -282,7 +282,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
-                    remove(e.data.id);
+                    remove(e.data.id, { isDSC: account.isDSC(e.data.id) });
                 });
             }
 
@@ -437,6 +437,8 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+
+                if (account.isDSC(baton.data.id)) return;
 
                 // check if folder can be shared
                 var id = String(baton.data.id),

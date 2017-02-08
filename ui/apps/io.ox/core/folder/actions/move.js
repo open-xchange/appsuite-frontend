@@ -17,8 +17,9 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/notifications',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
-    'io.ox/mail/api'
-], function (api, picker, notifications, dialogs, gt, mailAPI) {
+    'io.ox/mail/api',
+    'io.ox/core/api/account'
+], function (api, picker, notifications, dialogs, gt, mailAPI, accountAPI) {
 
     'use strict';
 
@@ -146,8 +147,8 @@ define('io.ox/core/folder/actions/move', [
 
             var model = api.pool.getModel(id),
                 module = model.get('module'),
-                flat = api.isFlat(module);
-
+                flat = api.isFlat(module),
+                context = accountAPI.isDSC(id) ? 'dsc' : 'popup';
             picker({
                 async: true,
                 addClass: 'zero-padding',
@@ -172,7 +173,9 @@ define('io.ox/core/folder/actions/move', [
                 indent: !flat,
                 module: module,
                 root: module === 'infostore' ? '9' : '1',
-                title: gt('Move folder') + ': ' + model.get('title')
+                title: gt('Move folder') + ': ' + model.get('title'),
+                context: context,
+                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX'
             });
         }
     };
