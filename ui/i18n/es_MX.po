@@ -649,6 +649,12 @@ msgstr "No se permite acceder a la libreta de direcciones global"
 msgid "Account"
 msgstr "Cuenta"
 
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Account name"
+msgid "Account Name"
+msgstr "Nombre de la cuenta"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1541,7 +1547,14 @@ msgstr "Navegador"
 msgid "Burnt orange"
 msgstr "naranja"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Business"
+msgstr "Dirección profesional"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Dirección profesional"
 
@@ -1983,9 +1996,11 @@ msgstr "Cerrar todos los mensajes"
 msgid "Close description panel"
 msgstr "Cerrar panel de descripción"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr "Cerrar la vista de carpeta"
 
@@ -2541,7 +2556,8 @@ msgid "Date completed"
 msgstr "Fecha completada"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js module:plugins/portal
+#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: module:plugins/portal
 msgid "Date of birth"
 msgstr "Fecha de nacimiento"
 
@@ -2786,6 +2802,12 @@ msgstr "Detallado"
 msgid "Detailed access rights"
 msgstr "Derechos de acceso detallados"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Detailed contact list"
+msgstr "Borrar contacto"
+
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -2845,10 +2867,6 @@ msgstr "Descartar mensaje"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display"
 msgstr "Mostrar"
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Display Name"
-msgstr "Nombre a mostrar"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -4513,7 +4531,15 @@ msgstr "Prioridad alta"
 msgid "Hobby"
 msgstr "Afición"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgctxt "address"
+#| msgid "Home"
+msgid "Home"
+msgstr "Casa"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Dirección privada"
 
@@ -5469,7 +5495,8 @@ msgstr "Opciones de mensajes"
 msgid "Messaging"
 msgstr "Mensajería"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Mensajería"
 
@@ -6203,6 +6230,7 @@ msgstr "Abrir panel de descripción"
 msgid "Open external link"
 msgstr "Abrir enlace externo"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -6229,6 +6257,15 @@ msgstr "Abrir en una pestaña del navegador"
 #: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Abrir en LinkedIn"
+
+#. button label within the client-onboarding widget
+#. button opens the wizard to configure your device
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+#, fuzzy
+#| msgid "Opening the settings"
+msgid "Open parental control settings"
+msgstr "Abrir los ajustes"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
@@ -6346,12 +6383,13 @@ msgstr "Organizador"
 msgid "Original mail"
 msgstr "Correo original"
 
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
 msgid "Other"
 msgstr "Otro"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Otras direcciones"
 
@@ -6501,6 +6539,7 @@ msgid "Personal"
 msgstr "Personal"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Personal information"
 msgstr "Información personal"
 
@@ -6906,6 +6945,11 @@ msgstr "Publicar una actualización de estado"
 msgid "Postcode"
 msgstr "Código postal"
 
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "PowerDNS parental control"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Premium"
 msgstr "Premium"
@@ -7024,6 +7068,12 @@ msgstr "Imprimir tareas"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Impresión"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Private contacts"
+msgid "Printout of contacts"
+msgstr "Contactos privados"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8275,6 +8325,12 @@ msgstr "Conectado como %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Conectado como:"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Phone list"
+msgid "Simple phone list"
+msgstr "Lista de teléfonos"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -14299,6 +14355,9 @@ msgstr "yyyy"
 #~ msgid "Disabled"
 #~ msgstr "Desactivado"
 
+#~ msgid "Display Name"
+#~ msgstr "Nombre a mostrar"
+
 #~ msgid "Display area"
 #~ msgstr "Área de visualización"
 
@@ -15473,10 +15532,6 @@ msgstr "yyyy"
 
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "Ciudad del Vaticano"
-
-#~ msgctxt "address"
-#~ msgid "Home"
-#~ msgstr "Casa"
 
 #~ msgid "Honduras"
 #~ msgstr "Honduras"
@@ -16778,9 +16833,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Apertura de los ajustes de correo electrónico"
 
-#~ msgid "Opening the settings"
-#~ msgstr "Abrir los ajustes"
-
 #~ msgid "Optional %d"
 #~ msgstr "Opcional %d"
 
@@ -17338,9 +17390,6 @@ msgstr "yyyy"
 
 #~ msgid "Private computer"
 #~ msgstr "Ordenador privado"
-
-#~ msgid "Private contacts"
-#~ msgstr "Contactos privados"
 
 #~ msgid "Private:"
 #~ msgstr "Privado:"

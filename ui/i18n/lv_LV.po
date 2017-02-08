@@ -678,6 +678,12 @@ msgstr "Piekļuve globālajai adrešu grāmatai nav atļauta"
 msgid "Account"
 msgstr "Konts"
 
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Account name"
+msgid "Account Name"
+msgstr "Konta vārds"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1563,7 +1569,14 @@ msgstr "Pārlūks"
 msgid "Burnt orange"
 msgstr "oranžs"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Business"
+msgstr "Adrese (darba)"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Darba adrese"
 
@@ -2003,9 +2016,11 @@ msgstr "Aizvērt visus ziņojumus"
 msgid "Close description panel"
 msgstr "Aizvērt apraksta paneli"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr "Aizvērt mapes skatu"
 
@@ -2561,7 +2576,8 @@ msgid "Date completed"
 msgstr "Izpildes datums"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js module:plugins/portal
+#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: module:plugins/portal
 msgid "Date of birth"
 msgstr "Dzimšanas datums"
 
@@ -2805,6 +2821,12 @@ msgstr "Detalizēti"
 msgid "Detailed access rights"
 msgstr "Detalizētas piekļuves tiesības"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Detailed contact list"
+msgstr "Dzēst kontaktpersonu"
+
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -2864,10 +2886,6 @@ msgstr "Atsaukt ziņojumu"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display"
 msgstr "Attēlošana"
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Display Name"
-msgstr "Uzrādes vārds"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -4529,7 +4547,15 @@ msgstr "Augsta prioritāte"
 msgid "Hobby"
 msgstr "Vaļsprieks"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgctxt "address"
+#| msgid "Home"
+msgid "Home"
+msgstr "Mājas"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Mājas adrese"
 
@@ -5484,7 +5510,8 @@ msgstr "Ziņojumu opcijas"
 msgid "Messaging"
 msgstr "Ziņapmaiņa"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Ziņotājs"
 
@@ -6222,6 +6249,7 @@ msgstr "Atvērt apraksta paneli"
 msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -6248,6 +6276,15 @@ msgstr "Atvērt pārlūka lapā"
 #: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Atvērt iekš LinkedIn"
+
+#. button label within the client-onboarding widget
+#. button opens the wizard to configure your device
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+#, fuzzy
+#| msgid "Opening the settings"
+msgid "Open parental control settings"
+msgstr "Iestatījumu atvēršana"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
@@ -6365,12 +6402,13 @@ msgstr "Organizators"
 msgid "Original mail"
 msgstr "Sākotnējais e-pasts"
 
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
 msgid "Other"
 msgstr "Cits"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Cita adrese"
 
@@ -6520,6 +6558,7 @@ msgid "Personal"
 msgstr "Privāti"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Personal information"
 msgstr "Personīgā informācija"
 
@@ -6914,6 +6953,11 @@ msgstr "Reģistrēt statusa jauniunājumu"
 msgid "Postcode"
 msgstr "Pasta kods"
 
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "PowerDNS parental control"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Premium"
 msgstr "Premium funkcijas"
@@ -7032,6 +7076,12 @@ msgstr "Drukāt uzdevumus"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Izdruka"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Private contacts"
+msgid "Printout of contacts"
+msgstr "Privātie kontakti"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8286,6 +8336,12 @@ msgstr "Pieslēdzies kā lietotājs %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Pieslēgums kā:"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Phone list"
+msgid "Simple phone list"
+msgstr "Telefonu saraksts"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -12709,6 +12765,9 @@ msgstr "yyyy"
 #~ msgid "Disabled"
 #~ msgstr "Atspējots"
 
+#~ msgid "Display Name"
+#~ msgstr "Uzrādes vārds"
+
 #~ msgid "Display area"
 #~ msgstr "Uzrādes apgabals"
 
@@ -13662,10 +13721,6 @@ msgstr "yyyy"
 
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "Svētais krēsls (Vatikāns)"
-
-#~ msgctxt "address"
-#~ msgid "Home"
-#~ msgstr "Mājas"
 
 #~ msgid "Honduras"
 #~ msgstr "Hondurasa"
@@ -14797,9 +14852,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "E-pasta iestatījumu atvēršana"
 
-#~ msgid "Opening the settings"
-#~ msgstr "Iestatījumu atvēršana"
-
 #~ msgid "Optional %d"
 #~ msgstr "Papildus %d"
 
@@ -15159,9 +15211,6 @@ msgstr "yyyy"
 
 #~ msgid "Private computer"
 #~ msgstr "Privāts dators"
-
-#~ msgid "Private contacts"
-#~ msgstr "Privātie kontakti"
 
 #~ msgid "Private:"
 #~ msgstr "Privāts:"

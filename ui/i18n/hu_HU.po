@@ -648,6 +648,12 @@ msgstr "A globális címjegyzék elérése nem engedélyezett"
 msgid "Account"
 msgstr "Fiók"
 
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Account name"
+msgid "Account Name"
+msgstr "Postafiók neve"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1538,7 +1544,14 @@ msgstr "Böngésző"
 msgid "Burnt orange"
 msgstr "narancs"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Business"
+msgstr "Cím (üzleti)"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Munkahelyi cím"
 
@@ -1981,9 +1994,11 @@ msgstr "Összes üzenet bezárása"
 msgid "Close description panel"
 msgstr "Leírópanel bezárása"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
 
@@ -2539,7 +2554,8 @@ msgid "Date completed"
 msgstr "Befejezés dátuma"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js module:plugins/portal
+#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: module:plugins/portal
 msgid "Date of birth"
 msgstr "Születési idő"
 
@@ -2782,6 +2798,12 @@ msgstr "Részletes"
 msgid "Detailed access rights"
 msgstr "Részletes hozzáférési jogok"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Detailed contact list"
+msgstr "Névjegy törlése"
+
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -2841,10 +2863,6 @@ msgstr "Üzenet elvetése"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display"
 msgstr "Megjelenítés"
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Display Name"
-msgstr "Megjelenő név"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -4495,7 +4513,12 @@ msgstr "Magas prioritás"
 msgid "Hobby"
 msgstr "Hobbi"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+msgid "Home"
+msgstr ""
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Otthoni cím"
 
@@ -5442,7 +5465,8 @@ msgstr "Üzenetek beállításai"
 msgid "Messaging"
 msgstr "Üzenetküldés"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Üzenetküldés"
 
@@ -6174,6 +6198,7 @@ msgstr "Leírópanel megnyitása"
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -6200,6 +6225,13 @@ msgstr "Megnyitás új böngészőlapon"
 #: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Megnyitás LinkedIn-en"
+
+#. button label within the client-onboarding widget
+#. button opens the wizard to configure your device
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "Open parental control settings"
+msgstr ""
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
@@ -6317,12 +6349,13 @@ msgstr "Szervező"
 msgid "Original mail"
 msgstr "Eredeti levél"
 
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
 msgid "Other"
 msgstr "Egyéb"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Egyéb cím"
 
@@ -6472,6 +6505,7 @@ msgid "Personal"
 msgstr "Személyes"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Personal information"
 msgstr "Személyes adatok"
 
@@ -6867,6 +6901,11 @@ msgstr "Állapotfrissítés küldése"
 msgid "Postcode"
 msgstr "Irányítószám"
 
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "PowerDNS parental control"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Premium"
 msgstr "Prémium"
@@ -6985,6 +7024,12 @@ msgstr "Feladatok nyomtatása"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Nyomtatás"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Edit contact"
+msgid "Printout of contacts"
+msgstr "Névjegy szerkesztése"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8232,6 +8277,12 @@ msgstr "Bejelentkezve mint %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Bejelentkezve, mint:"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Phone list"
+msgid "Simple phone list"
+msgstr "Telefonlista"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11280,6 +11331,9 @@ msgstr "yyyy"
 
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Közvetlen hivatkozás: %1$s"
+
+#~ msgid "Display Name"
+#~ msgstr "Megjelenő név"
 
 #, fuzzy
 #~| msgid "About"

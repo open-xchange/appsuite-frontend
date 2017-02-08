@@ -632,6 +632,10 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+msgid "Account Name"
+msgstr ""
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1494,7 +1498,14 @@ msgstr ""
 msgid "Burnt orange"
 msgstr ""
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Business"
+msgstr "Компанийн хаяг"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Бизнесийн хаяг"
 
@@ -1930,9 +1941,11 @@ msgstr ""
 msgid "Close description panel"
 msgstr "Тайлбар руу хуулах"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr ""
 
@@ -2483,7 +2496,8 @@ msgid "Date completed"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js module:plugins/portal
+#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: module:plugins/portal
 msgid "Date of birth"
 msgstr ""
 
@@ -2726,6 +2740,12 @@ msgstr ""
 msgid "Detailed access rights"
 msgstr ""
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Detailed contact list"
+msgstr "Контактыг устгах"
+
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -2786,10 +2806,6 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display"
-msgstr ""
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Display Name"
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
@@ -4388,7 +4404,12 @@ msgstr ""
 msgid "Hobby"
 msgstr ""
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+msgid "Home"
+msgstr ""
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Гэрийн хаяг"
 
@@ -5312,7 +5333,8 @@ msgstr "Мессенжер"
 msgid "Messaging"
 msgstr ""
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Мессенжер"
 
@@ -6021,6 +6043,7 @@ msgstr "Тайлбар руу хуулах"
 msgid "Open external link"
 msgstr ""
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -6046,6 +6069,13 @@ msgstr ""
 
 #: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
 msgid "Open on LinkedIn"
+msgstr ""
+
+#. button label within the client-onboarding widget
+#. button opens the wizard to configure your device
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "Open parental control settings"
 msgstr ""
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
@@ -6164,12 +6194,13 @@ msgstr ""
 msgid "Original mail"
 msgstr ""
 
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
 msgid "Other"
 msgstr ""
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Бусад хаяг"
 
@@ -6319,6 +6350,7 @@ msgid "Personal"
 msgstr "Хувийн"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Personal information"
 msgstr ""
 
@@ -6702,6 +6734,11 @@ msgstr ""
 msgid "Postcode"
 msgstr ""
 
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "PowerDNS parental control"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Premium"
 msgstr ""
@@ -6817,6 +6854,10 @@ msgstr ""
 
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
+msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+msgid "Printout of contacts"
 msgstr ""
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -8041,6 +8082,12 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr ""
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Phone list"
+msgid "Simple phone list"
+msgstr "Утасны жагсаалт"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js

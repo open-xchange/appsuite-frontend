@@ -681,6 +681,12 @@ msgstr "Přístup do globální knihy adres není povolen"
 msgid "Account"
 msgstr "Účet"
 
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
+#, fuzzy
+#| msgid "Account name"
+msgid "Account Name"
+msgstr "Název účtu"
+
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -1560,7 +1566,14 @@ msgstr "Prohlížeč"
 msgid "Burnt orange"
 msgstr "oranžová"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Address Business"
+msgid "Business"
+msgstr "Adresa firemní"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Firemní adresa"
 
@@ -1997,9 +2010,11 @@ msgstr "Zavřít všechny zprávy"
 msgid "Close description panel"
 msgstr "Zavřít popisní panel"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/files/main.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/main.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Close folder view"
 msgstr "Zavřít pohled na složky"
 
@@ -2554,7 +2569,8 @@ msgid "Date completed"
 msgstr "Datum dokončeno"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/plugins/halo/xing/register.js module:plugins/portal
+#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: module:plugins/portal
 msgid "Date of birth"
 msgstr "Datum narození"
 
@@ -2798,6 +2814,12 @@ msgstr "S podrobnostmi"
 msgid "Detailed access rights"
 msgstr "Podrobná přístupová práva"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Delete contact"
+msgid "Detailed contact list"
+msgstr "Smazat kontakt"
+
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -2857,10 +2879,6 @@ msgstr "Zahodit zprávu"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display"
 msgstr "Zobrazení"
-
-#: apps/io.ox/oauth/settings.js module:io.ox/settings
-msgid "Display Name"
-msgstr "Zobrazované jméno"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -4508,7 +4526,15 @@ msgstr "Vysoká priorita"
 msgid "Hobby"
 msgstr "Koníček"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#, fuzzy
+#| msgctxt "address"
+#| msgid "Home"
+msgid "Home"
+msgstr "Doma"
+
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Domácí adresa"
 
@@ -5460,7 +5486,8 @@ msgstr "Možnosti zpráv"
 msgid "Messaging"
 msgstr "Posílání zpráv"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Posílání zpráv"
 
@@ -6196,6 +6223,7 @@ msgstr "Otevřít popisní panel"
 msgid "Open external link"
 msgstr "Otevřít externí odkaz"
 
+#: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
@@ -6222,6 +6250,15 @@ msgstr "Otevřít v panelu prohlížeče"
 #: apps/io.ox/linkedIn/view-detail.js module:io.ox/portal
 msgid "Open on LinkedIn"
 msgstr "Otevřít na LinkedIn"
+
+#. button label within the client-onboarding widget
+#. button opens the wizard to configure your device
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+#, fuzzy
+#| msgid "Opening the settings"
+msgid "Open parental control settings"
+msgstr "Otevření nastavení"
 
 #: apps/io.ox/mail/threadview.js module:io.ox/mail
 msgid "Open/close all messages"
@@ -6339,12 +6376,13 @@ msgstr "Organizátor"
 msgid "Original mail"
 msgstr "Původní e-mail"
 
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/backbone.js module:io.ox/core
 msgid "Other"
 msgstr "Jiné"
 
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Další adresa"
 
@@ -6494,6 +6532,7 @@ msgid "Personal"
 msgstr "Osobní"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Personal information"
 msgstr "Osobní informace"
 
@@ -6889,6 +6928,11 @@ msgstr "Sdílet aktuální stav"
 msgid "Postcode"
 msgstr "PSČ"
 
+#: apps/plugins/portal/powerdns-parental-control/register.js
+#: module:plugins/portal
+msgid "PowerDNS parental control"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Premium"
 msgstr "Prémiové funkce"
@@ -7007,6 +7051,12 @@ msgstr "Tisknout úkoly"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Výtisk"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Private contacts"
+msgid "Printout of contacts"
+msgstr "Soukromé kontakty"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8258,6 +8308,12 @@ msgstr "Přihlášený(á) jako %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Přihlášený(á) jako:"
+
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Phone list"
+msgid "Simple phone list"
+msgstr "Seznam telefonů"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -14266,6 +14322,9 @@ msgstr "rrrr"
 #~ msgid "Disabled"
 #~ msgstr "Zakázaný"
 
+#~ msgid "Display Name"
+#~ msgstr "Zobrazované jméno"
+
 #~ msgid "Display area"
 #~ msgstr "Zobrazovací oblast"
 
@@ -15434,10 +15493,6 @@ msgstr "rrrr"
 
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "Vatikán (Svatý stolec)"
-
-#~ msgctxt "address"
-#~ msgid "Home"
-#~ msgstr "Doma"
 
 #~ msgid "Honduras"
 #~ msgstr "Honduras"
@@ -16720,9 +16775,6 @@ msgstr "rrrr"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Otevření nastavení zpráv"
 
-#~ msgid "Opening the settings"
-#~ msgstr "Otevření nastavení"
-
 #~ msgid "Optional %d"
 #~ msgstr "Nepovinné %d"
 
@@ -17278,9 +17330,6 @@ msgstr "rrrr"
 
 #~ msgid "Private computer"
 #~ msgstr "Soukromý počítač"
-
-#~ msgid "Private contacts"
-#~ msgstr "Soukromé kontakty"
 
 #~ msgid "Private:"
 #~ msgstr "Soukromé:"
