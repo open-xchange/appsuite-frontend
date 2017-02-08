@@ -386,12 +386,16 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/lock', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!smartphone') &&
+
+            var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('!locked', e);
+
+            // only test the second condition when files are selected, so 'some' and 'items' must be checked in the preCondition
+            return preCondition && folderAPI.get(_.first(e.baton.models).get('folder_id')).then(function (fileModel) { return !folderAPI.isExternalFileStorage(fileModel); });
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
@@ -403,12 +407,16 @@ define('io.ox/files/actions', [
     new Action('io.ox/files/actions/unlock', {
         capabilities: '!alone',
         requires: function (e) {
-            return _.device('!smartphone') &&
+
+            var preCondition = _.device('!smartphone') &&
                 !_.isEmpty(e.baton.data) &&
                 e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
                 util.hasStatus('lockedByMe', e);
+
+            // only test the second condition when files are selected, so 'some' and 'items' must be checked in the preCondition
+            return preCondition && folderAPI.get(_.first(e.baton.models).get('folder_id')).then(function (fileModel) { return !folderAPI.isExternalFileStorage(fileModel); });
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/lock-unlock']).done(function (action) {
