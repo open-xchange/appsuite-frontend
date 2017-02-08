@@ -32,6 +32,7 @@ define('io.ox/files/actions/move-copy', [
             module: 'infostore',
             root: '9',
             open: options.open,
+            fullResponse: options.fullResponse,
             settings: settings,
             success: options.success,
             successCallback: options.successCallback,

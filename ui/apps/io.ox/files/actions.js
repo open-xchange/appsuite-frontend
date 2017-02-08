@@ -514,12 +514,13 @@ define('io.ox/files/actions', [
                 ox.load(['io.ox/files/actions/move-copy']).done(function (action) {
                     var options = {
                         type: type,
+                        fullResponse: true,
                         label: label,
                         success: success,
                         successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
                                 var conflicts = { warnings: [] };
-                                if (_.isObject(response)) {
+                                if (!_.isArray(response)) {
                                     response = [response];
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
