@@ -453,6 +453,10 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             this.isPropagationStopped = returnTrue;
         },
 
+        resumePropagation: function () {
+            this.isPropagationStopped = returnFalse;
+        },
+
         first: function () {
             return _.isArray(this.data) ? this.data[0] : this.data;
         },
