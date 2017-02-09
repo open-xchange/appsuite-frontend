@@ -565,8 +565,10 @@ define('io.ox/files/actions', [
                         success: success,
                         successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
-                                var conflicts = { warnings: [] };
-                                if (_.isObject(response)) {
+                                var conflicts = { warnings: [] },
+                                    filesLeft = [];
+
+                                if (!_.isArray(response)) {
                                     response = [response];
                                 }
                                 // find possible conflicts with filestorages and offer a dialog with ignore warnings option see(Bug 39039)
@@ -580,19 +582,30 @@ define('io.ox/files/actions', [
                                             if (_.isArray(error.error.warnings)) {
                                                 _(error.error.warnings).each(function (warning) {
                                                     conflicts.warnings.push(warning.error);
+                                                    if (type === 'move' && !_(filesLeft).findWhere({ id: warning.error_params[3] })) {
+                                                        filesLeft.push(_(list).findWhere({ id: warning.error_params[3] }));
+                                                    }
                                                 });
                                             } else {
                                                 conflicts.warnings.push(error.error.warnings.error);
+                                                if (type === 'move' && !_(filesLeft).findWhere({ id: error.error.warnings.error_params[3] })) {
+                                                    filesLeft.push(_(list).findWhere({ id: error.error.warnings.error_params[3] }));
+                                                }
+                                            }
+                                            // unfortunately move and copy responses do nt have the same structure
+                                            if (type === 'copy') {
+                                                filesLeft.push(_(list).findWhere({ id: error.error.error_params[1] }));
                                             }
                                         }
                                     }
                                 });
-                                if (conflicts.title) {
+
+                                if (conflicts.title && filesLeft.length) {
                                     require(['io.ox/core/tk/filestorageUtil'], function (filestorageUtil) {
                                         filestorageUtil.displayConflicts(conflicts, {
                                             callbackIgnoreConflicts: function () {
                                                 // if folderpicker is used baton.target is undefined (that's why the folderpicker is needed), use the previous apiInput to get the correct folder
-                                                api[type](list, baton.target || apiInput.target, true);
+                                                api[type](filesLeft, baton.target || apiInput.target, true);
                                             },
                                             callbackCancel: function () {
                                                 if (baton.data[0].folder_id) {
