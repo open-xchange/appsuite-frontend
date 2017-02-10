@@ -67,10 +67,16 @@ define('io.ox/core/folder/actions/add', [
         .inject({
             addFolder: addFolder,
             getTitle: function () {
-                return this.context.module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+                var module = this.context.module;
+                if (module === 'calendar') return gt('Add new calendar');
+                else if (module === 'contacts') return gt('Add new address book');
+                return gt('Add new folder');
             },
             getName: function () {
-                return this.context.module === 'calendar' ? gt('New calendar') : gt('New folder');
+                var module = this.context.module;
+                if (module === 'calendar') return gt('New calendar');
+                else if (module === 'contacts') return gt('New address book');
+                return gt('New folder');
             }
         })
         .extend({

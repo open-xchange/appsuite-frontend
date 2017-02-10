@@ -332,6 +332,38 @@ define('io.ox/core/folder/extensions', [
             );
         },
 
+        subscribe: function (baton) {
+            var title;
+            if (baton.module === 'contacts') title = gt('Subscribe new address book');
+            else if (baton.module === 'calendar') title = gt('Subscribe new calendar');
+            this.append($('<div>').append(
+                    $('<a href="#" data-action="subscribe-address-book" role="button">')
+                    .text(title)
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        if (capabilities.has('subscription')) {
+                            require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
+                                subscriptions.buildSubscribeDialog({
+                                    module: baton.module,
+                                    app: baton.view.app
+                                });
+                            });
+                        } else {
+                            require(['io.ox/core/upsell'], function (upsell) {
+                                if (upsell.enabled(['subscription'])) {
+                                    upsell.trigger({
+                                        type: 'inline-action',
+                                        id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
+                                        missing: upsell.missing(['subscription'])
+                                    });
+                                }
+                            });
+                        }
+                    })
+                )
+            );
+        },
+
         allAttachments: function () {
             if (!attachmentView.all) return;
             this.append(
@@ -622,9 +654,28 @@ define('io.ox/core/folder/extensions', [
 
     ext.point('io.ox/core/foldertree/contacts/links').extend(
         {
-            id: 'my-contact-data',
+            id: 'subscribe',
             index: 300,
+            capabilities: 'subscription',
+            draw: extensions.subscribe
+        },
+        {
+            id: 'my-contact-data',
+            index: 400,
             draw: extensions.myContactData
+        }
+    );
+
+    //
+    // Calendar
+    //
+
+    ext.point('io.ox/core/foldertree/calendar/links').extend(
+        {
+            id: 'subscribe',
+            index: 300,
+            capabilities: 'subscription',
+            draw: extensions.subscribe
         }
     );
 
@@ -741,7 +792,10 @@ define('io.ox/core/folder/extensions', [
 
                     var module = baton.module,
                         folder = api.getDefaultFolder(module),
-                        title = module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+                        title = gt('Add new folder');
+
+                    if (module === 'calendar') title = gt('Add new calendar');
+                    else if (module === 'contacts') title = gt('Add new address book');
 
                     // guests might have no default folder
                     if (!folder) return;
@@ -762,7 +816,7 @@ define('io.ox/core/folder/extensions', [
         //
 
         ext.point('io.ox/core/foldertree/contacts/links').extend({
-            index: 300,
+            index: 1000,
             id: 'upsell-contacts',
             draw: function (baton) {
 
@@ -777,7 +831,7 @@ define('io.ox/core/folder/extensions', [
         });
 
         ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 300,
+            index: 1000,
             id: 'upsell-calendar',
             draw: function (baton) {
 
