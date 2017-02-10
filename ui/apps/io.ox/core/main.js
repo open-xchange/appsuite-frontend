@@ -1744,7 +1744,15 @@ define('io.ox/core/main', [
                                 });
                             }
                             // non-app deeplinks
-                            var id = _.url.hash('reg');
+                            var id = _.url.hash('reg'),
+                                // be case insensitive
+                                showFeedback = _(_.url.hash()).reduce(function (memo, value, key) {
+                                    if (key.toLowerCase() === 'showfeedbackdialog') {
+                                        return value;
+                                    }
+                                    return memo;
+                                });
+
                             if (id && ox.registry.get(id)) {
                                 // normalise args
                                 var list = (_.url.hash('regopt') || '').split(','),
@@ -1757,6 +1765,14 @@ define('io.ox/core/main', [
                                 // call after app is ready
                                 launch.done(function () {
                                     ox.registry.call(id, 'client-onboarding', { data: data });
+                                });
+                            }
+
+                            if (showFeedback === 'true' && capabilities.has('feedback')) {
+                                launch.done(function () {
+                                    require(['plugins/core/feedback/register'], function (feedback) {
+                                        feedback.show();
+                                    });
                                 });
                             }
                         });
