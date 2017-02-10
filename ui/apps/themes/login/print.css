@@ -190,7 +190,11 @@ div.phonelist-details h1 {
 div.phonelist-details ul {
     list-style-type: none;
     margin: 0;
-    padding-left: 1px;
+    padding-left: 0px;
+}
+
+div.phonelist-details address {
+    font-style: normal;
 }
 
 div.phonelist-details table {
@@ -198,7 +202,7 @@ div.phonelist-details table {
 }
 
 div.phonelist-details td {
-    padding: 0px 1px;
+    padding: 0px;
 }
 
 div.spacer-bottom {
