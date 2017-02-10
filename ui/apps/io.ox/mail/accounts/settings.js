@@ -183,7 +183,7 @@ define('io.ox/mail/accounts/settings', [
                     if (service.id === 'mailwizard') return;
 
                     var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-                        return !account.hasScope('mail');
+                        return !account.hasScopes('mail');
                     })[0] || new OAuth.Account.Model({
                         serviceId: service.id,
                         //#. %1$s is the display name of the account

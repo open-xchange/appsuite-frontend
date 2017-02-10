@@ -27,8 +27,12 @@ define('io.ox/oauth/backbone', [
     var Account = {};
 
     Account.Model = Backbone.Model.extend({
-        hasScope: function (scope) {
-            return _(this.get('enabledScopes')).contains(scope);
+        hasScopes: function (scopes) {
+            var self = this;
+            scopes = [].concat(scopes);
+            return _(scopes).reduce(function (memo, scope) {
+                return memo || _(self.get('enabledScopes')).contains(scope);
+            }, false);
         },
         enableScopes: function (scopes) {
             var wanted = this.get('wantedScopes') || this.get('enabledScopes') || [];
@@ -49,7 +53,7 @@ define('io.ox/oauth/backbone', [
             options = _.extend({ force: true }, options);
             var account = this,
                 needsReauth = options.force || (this.get('wantedScopes') || []).reduce(function (acc, scope) {
-                    return acc || !account.hasScope(scope);
+                    return acc || !account.hasScopes(scope);
                 }, false);
             if (!needsReauth) return $.when();
 
@@ -220,7 +224,7 @@ define('io.ox/oauth/backbone', [
         tagName: 'li',
         className: 'service-item',
         render: function () {
-            var shortId = this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
+            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
             this.$el.append(
                 $('<button>').addClass('btn btn-default').append(
                     $('<i class="service-icon fa">')
