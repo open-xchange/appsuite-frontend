@@ -12,8 +12,9 @@
  */
 
 define('io.ox/core/viewer/views/types/textview', [
-    'io.ox/core/viewer/views/types/baseview'
-], function (BaseView) {
+    'io.ox/core/viewer/views/types/baseview',
+    'gettext!io.ox/core'
+], function (BaseView, gt) {
 
     'use strict';
 
@@ -22,6 +23,7 @@ define('io.ox/core/viewer/views/types/textview', [
         initialize: function (options) {
             _.extend(this, options);
             this.isPrefetched = false;
+            this.xhr = null;
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
@@ -32,22 +34,62 @@ define('io.ox/core/viewer/views/types/textview', [
             this.size = 13;
             // quick hack to get rid of flex box
             this.$el.empty().css('display', 'block');
+            // run own disposer function on dispose event from DisposableView
+            this.on('dispose', this.disposeView.bind(this));
             return this;
         },
 
-        prefetch: function () {
+        /**
+         * data load handler
+         */
+        onDataLoaded: function (text) {
+            var filesize = this.model.get('file_size');
+            // work around for large files in drive, no content is provided and also no error
+            if (_.isNumber(filesize) && (filesize > 0) && _.isEmpty(text)) {
+                this.onError();
+            } else {
+                this.$el.idle();
+                this.$el.addClass('swiper-no-swiping').append(
+                    $('<div class="white-page letter plain-text">').text(text)
+                );
+            }
+        },
+
+        /**
+         * load error handler
+         */
+        onError: function () {
+            this.displayNotification(gt('Sorry, there is no preview available for this file.'));
+        },
+
+        /**
+         * "Prefetches" the text file
+         *
+         * @param {Object} options
+         *  @param {Object} options.version
+         *      an alternate version than the current version.
+         *
+         * @returns {TextView}
+         *  the TextView instance.
+         */
+        prefetch: function (options) {
             // simply load the document content via $.ajax
-            var $el = this.$el.busy(),
-                previewUrl = this.getPreviewUrl();
-            $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
-                $el.addClass('swiper-no-swiping');
-                $el.idle().append($('<div class="white-page letter plain-text">').text(text));
-                $el = null;
-            });
+            var previewUrl = this.getPreviewUrl(options);
+
+            this.$el.busy();
+            this.xhr = $.ajax({ url: previewUrl, dataType: 'text', context: this }).done(this.onDataLoaded).fail(this.onError);
+
             this.isPrefetched = true;
             return this;
         },
 
+        /**
+         * "Shows" the text file.
+         * For text files all work is already done in prefetch()
+         *
+         * @returns {TextView}
+         *  the TextView instance.
+         */
         show: function () {
             return this;
         },
@@ -59,8 +101,12 @@ define('io.ox/core/viewer/views/types/textview', [
          *  the TextView instance.
          */
         unload: function () {
-            this.$el.find('.white-page').remove();
-            this.isPrefetched = false;
+            // never unload slide duplicates
+            if (!this.$el.hasClass('swiper-slide-duplicate')) {
+                this.$el.find('.white-page').remove();
+                this.isPrefetched = false;
+            }
+
             return this;
         },
 
@@ -83,6 +129,17 @@ define('io.ox/core/viewer/views/types/textview', [
          */
         onScrollHandler: function () {
             this.viewerEvents.trigger('viewer:blendnavigation');
+        },
+
+        /**
+         * Destructor function of this view.
+         */
+        disposeView: function () {
+            // abort AJAX request
+            if (this.xhr) {
+                this.xhr.abort();
+                this.xhr = null;
+            }
         }
 
     });
