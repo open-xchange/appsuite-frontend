@@ -152,13 +152,18 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             };
             _.extend(opt.defaults.tests, defaults);
             _.extend(opt.conditionsTranslation, {
-                'envelope': gt('Envelope - To')
+                'envelope': gt('Envelope')
             });
 
             _.extend(opt.conditionsMapping, { 'envelope': ['envelope'] });
         },
 
         draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+
+            var headerValues = {
+                'To': gt('To'),
+                'From': gt('From')
+            };
 
             var inputId = _.uniqueId('envelope_');
             this.append(
@@ -167,6 +172,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     inputId: inputId,
                     title: baton.view.conditionsTranslation.envelope,
                     dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                    seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
                     inputLabel: baton.view.conditionsTranslation.envelope + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                     inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                     errorView: true

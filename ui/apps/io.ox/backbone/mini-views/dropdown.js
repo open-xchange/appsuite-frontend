@@ -179,6 +179,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                         nextValue = this.model.get(name) === value ? toggleValue : value;
                     }
                 }
+                if (this.options.saveAsArray) nextValue = [nextValue];
                 this.model.set(name, nextValue);
             }
         },

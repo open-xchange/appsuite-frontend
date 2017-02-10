@@ -85,7 +85,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             ),
             $('<div>').addClass('col-sm-8').append(
                 $('<div>').addClass('row').append(
-                    $('<div>').addClass('col-sm-4').append(
+                    o.seconddropdownOptions ? $('<div>').addClass('col-sm-2').append(
+                        new mini.DropdownLinkView(o.seconddropdownOptions).render().$el
+                    ) : [],
+                    $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
                         new mini.DropdownLinkView(o.dropdownOptions).render().$el
                     ),
                     $('<div class="col-sm-8">').append(
