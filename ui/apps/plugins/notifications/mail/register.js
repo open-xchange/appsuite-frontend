@@ -97,7 +97,6 @@ define('plugins/notifications/mail/register', [
                 body: text,
                 icon: imageURL,
                 duration: DURATION,
-                forceDisplay: true,
                 onclick: function () {
                     window.focus();
                     ox.launch('io.ox/mail/main', { folder: message.folder });
