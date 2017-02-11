@@ -4796,12 +4796,6 @@ msgstr "Belső felhasználók"
 msgid "Interval"
 msgstr "Belső felhasználó"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8352,6 +8346,10 @@ msgstr "Elnézést, most nem lehet kapcsolódni ehhez: %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Elnézést, jelenleg nincs elérhető adat ezen: %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sajnáljuk, de ehhez a képhez nincs előnézet."
@@ -10461,6 +10459,13 @@ msgstr "A hitelesítő adatokat csak biztonságos kapcsolaton keresztül küldj�
 msgid "Your current password"
 msgstr "A jelenlegi jelszava"
 
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
+
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
 msgstr "Visszajelzés"
@@ -11782,9 +11787,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Sajnáljuk, a közös levelek nem tudtak automatikusan a megfelelő laphoz "
 #~ "rendelődni."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Sajnáljuk, de ehhez a fájltípushoz nincs előnézet."
 
 #~ msgid "Start local presentation"
 #~ msgstr "Bemutató indítása helyben"

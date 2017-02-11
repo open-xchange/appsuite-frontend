@@ -4722,12 +4722,6 @@ msgstr "内部用户"
 msgid "Interval"
 msgstr "内部用户"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8248,6 +8242,10 @@ msgstr "抱歉，现在无法连接到 %s。"
 msgid "Sorry, there is no data available for you on %s."
 msgstr "抱歉，%s 没有您的可用数据。"
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "抱歉，此文件没有预览可用。"
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "抱歉，此图像没有预览可用。"
@@ -10283,6 +10281,13 @@ msgstr "您的凭据将只会通过安全连接发送"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "您的当前密码"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -14278,9 +14283,6 @@ msgstr "年"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "无法上载此文件。"
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "抱歉，此文件没有预览可用。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "排序您的电子邮件"

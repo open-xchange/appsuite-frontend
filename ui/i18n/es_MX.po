@@ -4821,12 +4821,6 @@ msgstr "Usuarios internos"
 msgid "Interval"
 msgstr "Usuario interno"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8401,6 +8395,10 @@ msgstr "Lo siento, no se puede conectar a %s en este momento."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Lo sentimos, no hay datos disponibles para usted en %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Lo sentimos, no hay vista previa disponible para este fichero."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Lo sentimos, no hay vista previa disponible para esta imagen."
@@ -10532,6 +10530,13 @@ msgstr "Sólo se enviarán sus credenciales mediante una conexión segura"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Su contraseña actual"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -18179,9 +18184,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "No se pudo cargar este fichero."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Lo sentimos, no hay vista previa disponible para este fichero."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Ordenar sus correos electrónicos"

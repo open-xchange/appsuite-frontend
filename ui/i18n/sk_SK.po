@@ -4833,12 +4833,6 @@ msgstr "Interní používatelia"
 msgid "Interval"
 msgstr "Vnútorný používateľ"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8409,6 +8403,10 @@ msgstr "Ľutujeme, ale momentálne nie je možné pripojiť sa k %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ľutujeme, nie sú pre vás k dispozícii žiadne údaje o %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Ľutujeme, nie je k dispozícii náhľad tohto súboru."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Ľutujeme, nie je k dispozícii náhľad tohto obrázka."
@@ -10534,6 +10532,13 @@ msgstr "Vaše prihlasovacie údaje budú odoslané iba cez zabezpečené pripoje
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Vaše aktuálne heslo"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -15886,9 +15891,6 @@ msgstr "RRRR"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Tento súbor nebolo možné nahrať."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Ľutujeme, nie je k dispozícii náhľad tohto súboru."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Zoraďovanie vašich emailov"

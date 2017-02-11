@@ -4773,12 +4773,6 @@ msgstr "Sisäiset käyttäjät"
 msgid "Interval"
 msgstr "Sisäinen käyttäjä"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8327,6 +8321,10 @@ msgstr "%s ei juuri nyt saada yhteyttä."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s:ssa ei ole tietoja sinun saatavillasi."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Tiedostoa ei voi valitettavasti esikatsella."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Kuvaa ei voi esikatsella."
@@ -10432,6 +10430,13 @@ msgstr "Pääsytietosi lähetetään vain suojattua yhteyttä käyttäen"
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Nykyinen salasanasi"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -12620,9 +12625,6 @@ msgstr "vvvv"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Tiedostoa ei voitu ladata."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Tiedostoa ei voi valitettavasti esikatsella."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sähköpostien lajittelu"

@@ -4778,12 +4778,6 @@ msgstr "Interne brukere"
 msgid "Interval"
 msgstr "Intern bruker"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8333,6 +8327,10 @@ msgstr "Beklager, kunne ikke koble til %s akkurat nå."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Beklager, det er ingen data tilgjengelig for deg på %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for denne filen."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for dette bildet."
@@ -10454,6 +10452,13 @@ msgstr "Detaljene dine blir kun sendt over en sikker forbindelse"
 msgid "Your current password"
 msgstr "Gjeldende passord"
 
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
+
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
 msgstr "Din tilbakemelding"
@@ -11881,9 +11886,6 @@ msgstr "yyyy"
 #~| msgid "This file could not be uploaded."
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Denne filen kan ikke lastes opp."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Beklager, ingen forhåndsvisning er tilgjengelig for denne filen."
 
 #, fuzzy
 #~| msgid "Task invitations"

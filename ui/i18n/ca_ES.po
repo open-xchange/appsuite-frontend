@@ -4890,12 +4890,6 @@ msgstr ""
 msgid "Interval"
 msgstr ""
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8515,6 +8509,12 @@ msgstr ""
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no data available for you on %s."
+msgid "Sorry, there is no preview available for this file."
+msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 #, fuzzy
 msgid "Sorry, there is no preview available for this image."
@@ -10632,6 +10632,13 @@ msgstr ""
 msgid "Your current password"
 msgstr "La vostra contrasenya actual"
 
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
+
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 msgid "Your feedback"
@@ -12052,11 +12059,6 @@ msgstr ""
 #~| msgid "This file could not be uploaded."
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "El fitxer no s'ha pogut pujar."
-
-#, fuzzy
-#~| msgid "Sorry, there is no data available for you on %s."
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Ens sap greu, no hi ha dades disponibles per a vós a %s."
 
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Aquestes dades no es podran carregar"

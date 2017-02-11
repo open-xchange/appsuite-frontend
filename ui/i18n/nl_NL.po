@@ -4823,12 +4823,6 @@ msgstr "Interne gebruikers"
 msgid "Interval"
 msgstr "Interne gebruiker"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8403,6 +8397,12 @@ msgstr "Sorry, kan momenteel geen verbinding maken met %s."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Sorry, er zijn geen gegevens beschikbaar voor u op %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+#, fuzzy
+#| msgid "Sorry, there is no preview available for this image."
+msgid "Sorry, there is no preview available for this file."
+msgstr "Sorry, er is geen voorbeeld beschikbaar voor deze afbeelding."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sorry, er is geen voorbeeld beschikbaar voor deze afbeelding."
@@ -10543,6 +10543,13 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Uw huidige wachtwoord"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"

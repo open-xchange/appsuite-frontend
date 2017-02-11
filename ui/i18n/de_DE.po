@@ -4748,14 +4748,6 @@ msgstr "Interne Benutzer"
 msgid "Interval"
 msgstr "Intervall"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-"Einladung akzeptiert. Jedoch unzureichende Berechtigungen zum Einstellen der "
-"Standarderinnerung."
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8267,6 +8259,10 @@ msgstr "Die Verbindung zu %s ist leider fehlgeschlagen."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Auf %s sind keine Daten für Sie verfügbar."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Für diese Datei ist leider keine Voransicht verfügbar."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Für dieses Bild ist leider keine Voransicht verfügbar."
@@ -10383,6 +10379,13 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Ihr aktuelles Passwort"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -13075,6 +13078,12 @@ msgstr "JJJJ"
 #~ msgstr "Ungültige Daten"
 
 #~ msgid ""
+#~ "Invitation accepted but insufficient permissions to set default reminder"
+#~ msgstr ""
+#~ "Einladung akzeptiert. Jedoch unzureichende Berechtigungen zum Einstellen "
+#~ "der Standarderinnerung."
+
+#~ msgid ""
 #~ "Invite people via email. Every recipient will get an individual link to "
 #~ "access the shared files."
 #~ msgstr ""
@@ -14413,9 +14422,6 @@ msgstr "JJJJ"
 
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Das Video konnte leider nicht abgespielt werden."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Für diese Datei ist leider keine Voransicht verfügbar."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "E-Mails sortieren"

@@ -4773,12 +4773,6 @@ msgstr "Interna användare"
 msgid "Interval"
 msgstr "Intern användare"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8327,6 +8321,10 @@ msgstr "Kunde tyvärr inte ansluta till %s just nu."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Det finns tyvärr ingen data tillgänglig för dig på %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Det finns tyvärr ingen förhandsgranskning för den här filen."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Det finns tyvärr ingen förhandsgranskning för den här bilden."
@@ -10437,6 +10435,13 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Ditt nuvarande lösenord"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -15222,9 +15227,6 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Filen kunde inte laddas upp."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Det finns tyvärr ingen förhandsgranskning för den här filen."
 
 #~ msgid "Sort field %1$s is not supported via IMAP SORT command"
 #~ msgstr "Sorteringsfält %1$s stöds inte via IMAP SORT-kommando "

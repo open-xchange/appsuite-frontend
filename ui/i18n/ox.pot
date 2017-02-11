@@ -7003,6 +7003,11 @@ msgstr ""
 msgid "Sorry, there is no preview available for this image."
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/types/textview.js
+#: module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/types/videoview.js
 #: module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -11992,7 +11997,7 @@ msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
-msgid "Invitation accepted but insufficient permissions to set default reminder"
+msgid "Your default reminder could not be set for this appointment due to insufficient permissions"
 msgstr ""
 
 #. %1$s Appointment title

@@ -4846,12 +4846,6 @@ msgstr "Utilizatori interni"
 msgid "Interval"
 msgstr "Utilizator intern"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8424,6 +8418,10 @@ msgstr "Ne pare rău, conectarea la %s este imposibilă pentru moment."
 msgid "Sorry, there is no data available for you on %s."
 msgstr "Ne pare rău, nu sunt date disponibile pe %s."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Ne pare rău, pentru această imagine nu există previzualizare"
@@ -10564,6 +10562,13 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "Parola dumneavoastră actuală"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -15976,9 +15981,6 @@ msgstr "aaaa"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Nu s-a putut încărca fișierul."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sortarea e-mailurilor"

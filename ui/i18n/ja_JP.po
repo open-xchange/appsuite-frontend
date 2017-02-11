@@ -4749,12 +4749,6 @@ msgstr "内部ユーザ"
 msgid "Interval"
 msgstr "内部ユーザ"
 
-#: apps/plugins/notifications/calendar/register.js
-#: module:plugins/notifications
-msgid ""
-"Invitation accepted but insufficient permissions to set default reminder"
-msgstr ""
-
 #. %1$s Appointment title
 #. %1$s task title
 #: apps/plugins/notifications/calendar/register.js
@@ -8289,6 +8283,10 @@ msgstr "現在 %s に接続できません。"
 msgid "Sorry, there is no data available for you on %s."
 msgstr "%s には利用できるデータがありません。"
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "このファイルに利用できるプレビューがありません。"
+
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "この画像に利用できるプレビューがありません。"
@@ -10379,6 +10377,13 @@ msgstr "認証情報はセキュリティ保護された接続のみで送信さ
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Your current password"
 msgstr "ご利用のパスワード"
+
+#: apps/plugins/notifications/calendar/register.js
+#: module:plugins/notifications
+msgid ""
+"Your default reminder could not be set for this appointment due to "
+"insufficient permissions"
+msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Your feedback"
@@ -16879,9 +16884,6 @@ msgstr "yyyy"
 
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "このファイルをアップロードできませんでした。"
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "このファイルに利用できるプレビューがありません。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "メールのソート"
