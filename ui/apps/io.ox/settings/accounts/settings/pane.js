@@ -132,7 +132,8 @@ define('io.ox/settings/accounts/settings/pane', [
                     return accountAPI.getStatus();
                 }).then(function (status) {
                     for (var id in status) {
-                        var m = collection.get(id),
+                        // to avoid double ids the collection has the account type as prefix see Bug 50219
+                        var m = collection.get('mail' + id),
                             s = status[id];
                         if (!m) return;
 
