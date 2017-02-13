@@ -256,6 +256,19 @@ define('io.ox/mail/threadview', [
         },
 
         autoSelectMail: function () {
+            // automatic selection of first seen mail on mailapp start
+            if (this.autoSelect) {
+                for (var a = 0, mail; mail = this.collection.at(a); a++) {
+                    // last or first seen?
+                    if (a === this.collection.length - 1 || !util.isUnseen(mail.toJSON())) {
+                        this.showMail(mail.cid);
+                        break;
+                    }
+                }
+                delete this.autoSelect;
+                return;
+            }
+
             for (var i = this.collection.length - 1, model; model = this.collection.at(i); i--) {
                 // most recent or first unseen?
                 if (i === 0 || util.isUnseen(model.toJSON())) {
@@ -282,6 +295,10 @@ define('io.ox/mail/threadview', [
             // use new model
             this.model = model;
             this.threaded = !!threaded;
+            if (!this.threaded) {
+                // autoselect after mail app start
+                delete this.autoSelect;
+            }
             // listen for changes
             this.listenTo(this.model, 'change:thread', this.onChangeModel);
             // reset collection
@@ -316,9 +333,17 @@ define('io.ox/mail/threadview', [
             // draw thread list
             var self = this,
                 threadId = this.collection.first().get('cid'),
+                autoOpenModel;
+            // used on mailapp start
+            if (this.autoSelect) {
+                autoOpenModel = this.collection.reduce(function (acc, model) {
+                    return !util.isUnseen(model.toJSON()) ? model : acc;
+                }, this.collection.last());
+            } else {
                 autoOpenModel = this.collection.reduce(function (acc, model) {
                     return util.isUnseen(model.toJSON()) ? model : acc;
                 }, this.collection.first());
+            }
 
             function renderItem(list, finalCallback) {
                 var model = list.shift();

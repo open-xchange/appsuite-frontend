@@ -723,6 +723,8 @@ define('io.ox/mail/main', [
             function show() {
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
+                app.threadView.autoSelect = app.autoSelect;
+                delete app.autoSelect;
                 app.threadView.show(latestMessage, app.isThreaded());
                 // a11y: used keyboard?
                 if (openMessageByKeyboard || app.props.get('layout') === 'list') {
@@ -1077,7 +1079,8 @@ define('io.ox/mail/main', [
                 _.defer(function () {
                     app.listView.collection.find(function (model) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.set([model.cid]);
+                            app.autoSelect = true;
+                            app.listView.selection.set([model.cid], false);
                             return true;
                         }
                     });
