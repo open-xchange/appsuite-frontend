@@ -182,7 +182,7 @@ define('io.ox/mail/accounts/model', [
 
             if (obj) {
                 obj = _.extend({ unified_inbox_enabled: false }, obj);
-                obj.name = obj.personal = obj.primary_address;
+                obj.name = obj.primary_address;
                 model.attributes = obj;
                 model.attributes.spam_handler = 'NoSpamHandler';
             }
