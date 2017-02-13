@@ -378,7 +378,7 @@ define('io.ox/calendar/edit/main', [
                 this.getWindow().idle();
                 // avoid double yells and only yell server errors caused by move operation. Errors from update, create requests are handled by the onBackendError listener
                 // errors from validation are not backenErrors, yell those too
-                if (error && (!error.errorCode || (options && options.isMoveOperation))) notifications.yell(error);
+                if (error && (!error.code || (options && options.isMoveOperation))) notifications.yell(error);
             },
 
             failSave: function () {
