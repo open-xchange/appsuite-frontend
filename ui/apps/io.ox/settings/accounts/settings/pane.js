@@ -48,7 +48,9 @@ define('io.ox/settings/accounts/settings/pane', [
 
         drawRecoveryButton = function () {
             var b = $('<a href="#" class="hint col-md-6 col-lg-12">')
-                .text(gt('Info about account recovery...'))
+                //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+                //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
+                .text(gt('Information about account recovery...'))
                 .attr({
                     role: 'button',
                     title: gt('Show infos about account recovery'),
