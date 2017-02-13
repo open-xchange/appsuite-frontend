@@ -332,7 +332,8 @@ define('io.ox/calendar/invitations/register', [
 
             e.preventDefault();
 
-            var action = $(e.currentTarget).attr('data-action'), self = this;
+            var action = $(e.currentTarget).attr('data-action'), self = this,
+                doConflictCheck = action !== 'decline';
 
             function performConfirm() {
                 http.PUT({
@@ -388,9 +389,12 @@ define('io.ox/calendar/invitations/register', [
                     api: {
                         checkConflicts: function () {
                             var conflicts = [];
-                            _(self.model.get('changes')).each(function (change) {
-                                if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
-                            });
+                            // no need to check if appointment was declined
+                            if (doConflictCheck) {
+                                _(self.model.get('changes')).each(function (change) {
+                                    if (change.conflicts) conflicts = conflicts.concat(change.conflicts);
+                                });
+                            }
                             return $.when(conflicts);
                         }
                     }
