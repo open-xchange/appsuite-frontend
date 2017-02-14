@@ -708,7 +708,8 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -776,8 +777,9 @@ msgstr ""
 msgid "Add mail account"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+msgid "Add new address book"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
@@ -789,10 +791,6 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js apps/io.ox/core/folder/extensions.js
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
-msgstr ""
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
 msgstr ""
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
@@ -1227,10 +1225,6 @@ msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
-msgstr ""
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
 msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -1791,10 +1785,6 @@ msgstr ""
 msgid "Checkboxes"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr ""
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr ""
@@ -2057,6 +2047,10 @@ msgstr ""
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr ""
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "Configure %1$s"
 msgstr ""
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4528,9 +4522,11 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5370,6 +5366,7 @@ msgstr ""
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5381,6 +5378,14 @@ msgstr ""
 #. e.g. My Xing account
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "My %1$s account (%2$d)"
+msgstr ""
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "My %1$s calendar"
+msgstr ""
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+msgid "My %1$s contacts"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -5477,6 +5482,10 @@ msgstr ""
 msgid "New Mail"
 msgstr ""
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "New address book"
+msgstr ""
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5547,10 +5556,6 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
-msgstr ""
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
 msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
@@ -5796,12 +5801,6 @@ msgid ""
 "Note: Refreshing this subscription will replace the calendar content with "
 "the external content. Changes you have made inside appsuite will be "
 "overwritten"
-msgstr ""
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -8070,10 +8069,6 @@ msgstr ""
 msgid "Sound"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr ""
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8195,6 +8190,14 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
+msgstr ""
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe new address book"
+msgstr ""
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+msgid "Subscribe new calendar"
 msgstr ""
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -9275,12 +9278,6 @@ msgstr ""
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
-msgstr ""
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
 msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core

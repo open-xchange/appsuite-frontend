@@ -696,7 +696,8 @@ msgstr "実際の時間 (分)"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -766,9 +767,12 @@ msgstr "ローカルファイルを追加"
 msgid "Add mail account"
 msgstr "メールアカウントを追加"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "新規アカウントを追加"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "アドレス帳に追加"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -780,10 +784,6 @@ msgstr "予定表に追加"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "新規フォルダを追加"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "この登録用に新規フォルダを追加"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1229,10 +1229,6 @@ msgstr "共有予定表のアポイント"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "承認："
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "登録の概算時間"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1800,10 +1796,6 @@ msgstr "キャラクター"
 msgid "Checkboxes"
 msgstr "チェックボックス"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "認証情報をチェックしています..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "子供"
@@ -2069,6 +2061,12 @@ msgstr "構成メール"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "構成"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "構成"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4669,9 +4667,11 @@ msgstr "インド"
 msgid "Info"
 msgstr "情報"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5533,6 +5533,7 @@ msgstr "音楽"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5549,6 +5550,18 @@ msgstr "アカウント %1$s を追加"
 #| msgid "by %1$s until %2$s"
 msgid "My %1$s account (%2$d)"
 msgstr "作成者 %1$s 期限 %2$s"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "予定表"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Add %1$s account"
+msgid "My %1$s contacts"
+msgstr "アカウント %1$s を追加"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5648,6 +5661,12 @@ msgstr "新規フォルダ"
 msgid "New Mail"
 msgstr "新規メール"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "アドレス帳"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5719,10 +5738,6 @@ msgstr "新しいパスワード"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "新しいルール"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "新規の登録"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -5979,14 +5994,6 @@ msgid ""
 msgstr ""
 "注: この登録を更新すると、予定表の内容が外部の予定表に入れ替わります。OX App "
 "Suite で変更した内容は上書きされます。"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"注: この登録を行うと、予定表の内容が外部の予定表と入れ替わります。この登録用"
-"に新規フォルダを作成してください。"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8320,10 +8327,6 @@ msgstr "ソートオプション"
 msgid "Sound"
 msgstr "音"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "ソース"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8446,6 +8449,18 @@ msgstr "登録"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "IMAP フォルダを登録"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "隠しアドレス帳"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "予定表に追加"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9633,14 +9648,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "アップデータ"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"登録したデータの更新にはしばらく時間がかかる可能性があります。例えば、100 件"
-"の連絡先をインポートするにはおよそ 5 分かかります。しばらくお待ちください。"
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11453,8 +11460,14 @@ msgstr "yyyy"
 #~ msgid "Add member"
 #~ msgstr "メンバ追加"
 
+#~ msgid "Add new account"
+#~ msgstr "新規アカウントを追加"
+
 #~ msgid "Add new contact"
 #~ msgstr "新規連絡先を追加"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "この登録用に新規フォルダを追加"
 
 #~ msgid "Add new guest"
 #~ msgstr "新規ゲストを追加"
@@ -12004,6 +12017,9 @@ msgstr "yyyy"
 
 #~ msgid "Appointments:"
 #~ msgstr "アポイント:"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "登録の概算時間"
 
 #~ msgid "Apr"
 #~ msgstr "4 月"
@@ -12698,6 +12714,9 @@ msgstr "yyyy"
 
 #~ msgid "Check for:"
 #~ msgstr "チェック間隔:"
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "認証情報をチェックしています..."
 
 #~ msgid "Children:"
 #~ msgstr "子供:"
@@ -15325,6 +15344,9 @@ msgstr "yyyy"
 #~ msgid "New subfolder"
 #~ msgstr "新規サブフォルダ"
 
+#~ msgid "New subscription"
+#~ msgstr "新規の登録"
+
 #~ msgid "New..."
 #~ msgstr "新規作成..."
 
@@ -15484,6 +15506,14 @@ msgstr "yyyy"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "注: vCard フォーマットには配布リストを含めることができません。"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "注: この登録を行うと、予定表の内容が外部の予定表と入れ替わります。この登録"
+#~ "用に新規フォルダを作成してください。"
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "ニュースフィードになにもありません。"
@@ -16891,6 +16921,9 @@ msgstr "yyyy"
 #~ msgid "Sorting your tasks"
 #~ msgstr "仕事のソート"
 
+#~ msgid "Source"
+#~ msgstr "ソース"
+
 #~ msgid "South Africa"
 #~ msgstr "南アフリカ"
 
@@ -18173,6 +18206,14 @@ msgstr "yyyy"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "アカウント データを更新しています。数秒かかる場合があります。"
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "登録したデータの更新にはしばらく時間がかかる可能性があります。例えば、100 "
+#~ "件の連絡先をインポートするにはおよそ 5 分かかります。しばらくお待ちくださ"
+#~ "い。"
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "プレミアムにアップグレード"

@@ -703,7 +703,8 @@ msgstr "Asıl süre (dakikalar ile)"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -773,9 +774,12 @@ msgstr "Yerel dosya ekle"
 msgid "Add mail account"
 msgstr "Mail Hesabı Ekle"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Yeni hesap ekle"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Adres defterine ekle"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -787,10 +791,6 @@ msgstr "Yeni takvim ekle"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Yeni klasör ekle"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Bu üyelik için yeni klasör ekle"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1247,10 +1247,6 @@ msgstr "Paylaşımlı takvimlerdeki görüşmeler"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr ""
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Üyelikler için tahmini süre"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1834,10 +1830,6 @@ msgstr "Karakter"
 msgid "Checkboxes"
 msgstr "Onay kutuları"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Bilgiler kontrol ediliyor ..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Çocuk"
@@ -2112,6 +2104,11 @@ msgstr "Onaylama"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 #, fuzzy
 msgid "Configure"
+msgstr "Onaylanmadı"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+msgid "Configure %1$s"
 msgstr "Onaylanmadı"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4775,9 +4772,11 @@ msgstr ""
 msgid "Info"
 msgstr "Bilgi"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5655,6 +5654,7 @@ msgstr "Müzik"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5668,6 +5668,17 @@ msgstr "Hesabını %1$s ekle"
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 #, fuzzy
 msgid "My %1$s account (%2$d)"
+msgstr "Hesabını %1$s ekle"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Takvimlerim"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+msgid "My %1$s contacts"
 msgstr "Hesabını %1$s ekle"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -5766,6 +5777,12 @@ msgstr "Yeni Klasör"
 msgid "New Mail"
 msgstr "Yeni  E posta "
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Adres defterlerim"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5838,10 +5855,6 @@ msgstr "Yeni parola"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Yeni kural"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Yeni abonelik"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -6105,14 +6118,6 @@ msgstr ""
 "Not: Bu üyelik yenilenirse takvim içeriği harici içerik ile yer "
 "değiştirecek. Appsuite içinde yapmış olduğunuz değişiklikler yeniden "
 "yazılmış olacak"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Not: Bu üyelik, takvim içeriğini harici içerik olarak değiştirecektir. Bu "
-"nedenle bu üyelik için yeni bir klasör oluşturmalısınız."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
@@ -8524,10 +8529,6 @@ msgstr "Seçenekleri sırala"
 msgid "Sound"
 msgstr ""
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Kaynak"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8654,6 +8655,18 @@ msgstr "Abone olun"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "IMAP klasörlerine abone olun"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Gizli adres kitabları"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Yeni takvim ekle"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9865,14 +9878,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Güncelleyici"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Abonelik verilerinin güncellenmesi biraz zaman alır. Örneğin 100 tane "
-"iletişim bilgisi yaklaşık 5 dakika içerisinde aktarılır. Lütfen bekleyiniz."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11411,6 +11416,12 @@ msgstr "yyyy"
 #~ msgid "Add member"
 #~ msgstr "Üye ekle"
 
+#~ msgid "Add new account"
+#~ msgstr "Yeni hesap ekle"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Bu üyelik için yeni klasör ekle"
+
 #~ msgid "Advanced Settings"
 #~ msgstr "Gelişmiş Ayarlar"
 
@@ -11449,6 +11460,9 @@ msgstr "yyyy"
 #~ msgid "Appointment scheduling"
 #~ msgstr "Randevu Listesi"
 
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Üyelikler için tahmini süre"
+
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Karakterden sonra düz metni otomatik olarak kaydır:"
 
@@ -11465,6 +11479,9 @@ msgstr "yyyy"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Değişiklikler kaydedildi"
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Bilgiler kontrol ediliyor ..."
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Tüm gün görüşmesi için tıklayınız"
@@ -11658,6 +11675,9 @@ msgstr "yyyy"
 #~ msgid "Monthly on the %1$s %2$s"
 #~ msgstr "%1$s %2$s da/de aylık"
 
+#~ msgid "New subscription"
+#~ msgstr "Yeni abonelik"
+
 #, fuzzy
 #~ msgid "Next slide"
 #~ msgstr "Bir sonraki hafta"
@@ -11677,6 +11697,14 @@ msgstr "yyyy"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Not: vCard formatı dağıtım listelerini içermemektedir "
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Not: Bu üyelik, takvim içeriğini harici içerik olarak değiştirecektir. Bu "
+#~ "nedenle bu üyelik için yeni bir klasör oluşturmalısınız."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Haberyayınınızda herhangi bir şey bulunamadı."
@@ -11839,6 +11867,9 @@ msgstr "yyyy"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Üzgünüz, bu video oynatılmamaktadır. "
 
+#~ msgid "Source"
+#~ msgstr "Kaynak"
+
 #, fuzzy
 #~ msgid "Start presentation"
 #~ msgstr "Sunumlar"
@@ -11901,6 +11932,14 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Unnamed"
 #~ msgstr "Kullanıcı adı"
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Abonelik verilerinin güncellenmesi biraz zaman alır. Örneğin 100 tane "
+#~ "iletişim bilgisi yaklaşık 5 dakika içerisinde aktarılır. Lütfen "
+#~ "bekleyiniz."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Premium'a yükseltin"

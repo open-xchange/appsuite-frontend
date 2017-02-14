@@ -758,7 +758,8 @@ msgstr "Faktiskais ilgums minūtēs"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -828,9 +829,12 @@ msgstr "Pievienot lokālu failu"
 msgid "Add mail account"
 msgstr "Pievienot pasta kontu"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Pievienot jaunu kontu"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Pievienot adrešu grāmatai"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -842,10 +846,6 @@ msgstr "Pievienot jaunu kalendāru"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Pievienot jaunu mapi"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Pievienot jaunu mapi šim abonementam"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1294,10 +1294,6 @@ msgstr "Mītiņi koplietojuma kalendāros"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "Akceptēts:"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Aptuvenais abonēšanas laiks"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1877,10 +1873,6 @@ msgstr "Simbols"
 msgid "Checkboxes"
 msgstr "Iezīmes"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Informācijas pārbaude ..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Bērni"
@@ -2145,6 +2137,12 @@ msgstr "Konfigurēšanas e-pasts"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "Konfigurēt"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "Konfigurēt"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4756,9 +4754,11 @@ msgstr "Indija"
 msgid "Info"
 msgstr "Informācija"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5623,6 +5623,7 @@ msgstr "Mūzika"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5639,6 +5640,18 @@ msgstr "Pievienot %1$s kontu"
 #| msgid "by %1$s until %2$s"
 msgid "My %1$s account (%2$d)"
 msgstr "pēc %1$s līdz %2$s"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Mani kalendāri"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Add %1$s account"
+msgid "My %1$s contacts"
+msgstr "Pievienot %1$s kontu"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5738,6 +5751,12 @@ msgstr "Jauna mape"
 msgid "New Mail"
 msgstr "Jaunais pasts"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Manas adrešu grāmatas"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5809,10 +5828,6 @@ msgstr "Jaunā parole"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Jauns noteikums"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Jauns abonements"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -6078,14 +6093,6 @@ msgstr ""
 "Ievērojiet: Šī abonementa jaunināšanas rezultātā kalendāra saturs tiks "
 "aizvietotas ar ārējo saturu. Izmaiņas, kuras ir veiktas Open-Xchange "
 "aplikācijā tiks zaudētas."
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Ievērojiet: Šis abonements aizvietos esošo kalendāra saturu ar ārējā "
-"kalendāra saturu. Tāpēc ir ieteicams šim abonementam izveidot jaunu mapi."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8443,10 +8450,6 @@ msgstr "Kārtošanas opcijas"
 msgid "Sound"
 msgstr "skaņa"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Avots"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8569,6 +8572,18 @@ msgstr "Abonēt"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "IMAP mapju abonēšana"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Apslēptās adrešu grāmatas"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Pievienot jaunu kalendāru"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9779,14 +9794,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Jauninātājs"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Parakstīto datu jaunināšana prasa laiku. Piemēram, 100 kontaktu importēšana "
-"var prasīt aptuveni 5 minūtes. Lūdzu uzgaidiet kamēr process tiek pabeigts."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11601,8 +11608,14 @@ msgstr "yyyy"
 #~ msgid "Add member"
 #~ msgstr "Pievienot locekli"
 
+#~ msgid "Add new account"
+#~ msgstr "Pievienot jaunu kontu"
+
 #~ msgid "Add new contact"
 #~ msgstr "Pievienot jaunu kontaktu"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Pievienot jaunu mapi šim abonementam"
 
 #~ msgid "Add new guest"
 #~ msgstr "Pievienot jaunu viesi"
@@ -11784,6 +11797,9 @@ msgstr "yyyy"
 
 #~ msgid "Appointments:"
 #~ msgstr "Tikšanās:"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Aptuvenais abonēšanas laiks"
 
 #~ msgid "Apr"
 #~ msgstr "Apr."
@@ -12241,6 +12257,9 @@ msgstr "yyyy"
 
 #~ msgid "Check for:"
 #~ msgstr "Pārbaudīt:"
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Informācijas pārbaude ..."
 
 #~ msgid "Children:"
 #~ msgstr "Bērni:"
@@ -14592,6 +14611,9 @@ msgstr "yyyy"
 #~ msgid "New subfolder"
 #~ msgstr "Jauna apakš-mape"
 
+#~ msgid "New subscription"
+#~ msgstr "Jauns abonements"
+
 #~ msgid "New..."
 #~ msgstr "Jauns..."
 
@@ -14740,6 +14762,14 @@ msgstr "yyyy"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Piezīme: vCard formāts nevar saturēt izplatīšanas sarakstus"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Ievērojiet: Šis abonements aizvietos esošo kalendāra saturu ar ārējā "
+#~ "kalendāra saturu. Tāpēc ir ieteicams šim abonementam izveidot jaunu mapi."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Jūsu ziņu straumē nav jaunas informācijas."
@@ -15922,6 +15952,9 @@ msgstr "yyyy"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Uzdevumu šķirošana"
+
+#~ msgid "Source"
+#~ msgstr "Avots"
 
 #~ msgid "South Africa"
 #~ msgstr "Dienvidāfrika"
@@ -17115,6 +17148,14 @@ msgstr "yyyy"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Konta datu jaunināšana. Tas var prasīt vairākas sekundes."
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Parakstīto datu jaunināšana prasa laiku. Piemēram, 100 kontaktu "
+#~ "importēšana var prasīt aptuveni 5 minūtes. Lūdzu uzgaidiet kamēr process "
+#~ "tiek pabeigts."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Jaunināt uz premium versiju"

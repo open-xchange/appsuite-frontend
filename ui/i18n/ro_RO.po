@@ -760,7 +760,8 @@ msgstr "Durată efectivă în minute"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -830,9 +831,12 @@ msgstr "Adaugă fișier local"
 msgid "Add mail account"
 msgstr "Adaugă cont de mail"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Adaugă un cont nou"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Adaugă în agenda de contacte"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -844,10 +848,6 @@ msgstr "Adaugă calendar nou"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Adaugă un dosar nou"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Adaugă un dosar nou pentru acest abonament"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1302,10 +1302,6 @@ msgstr "Întâlniri în calendarele partajate"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "Aprobat:"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Durata aproximativă de abonare"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1884,10 +1880,6 @@ msgstr "Caracter"
 msgid "Checkboxes"
 msgstr "Casete de selectare"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Se verifică datele de autentificare..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Copii"
@@ -2154,6 +2146,12 @@ msgstr "E-mail de configurare"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "Configurează"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "Configurează"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4766,9 +4764,11 @@ msgstr "India"
 msgid "Info"
 msgstr "Informație"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5634,6 +5634,7 @@ msgstr "Muzică"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5650,6 +5651,18 @@ msgstr "Adaugă contul %1$s"
 #| msgid "by %1$s until %2$s"
 msgid "My %1$s account (%2$d)"
 msgstr "prin %1$s până la %2$s"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Calendarele mele"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Add %1$s account"
+msgid "My %1$s contacts"
+msgstr "Adaugă contul %1$s"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5749,6 +5762,12 @@ msgstr "Dosar nou"
 msgid "New Mail"
 msgstr "Mesaj nou"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Agendele mele de contacte"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5820,10 +5839,6 @@ msgstr "Noua parolă"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Regulă nouă"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Abonament nou"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -6086,14 +6101,6 @@ msgid ""
 msgstr ""
 "Notă: Prelungirea abonării va înlocui conținutul calendarului cu conținutul "
 "extern. Modificările făcute în cadrul appsuite vor fi suprascrise."
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Notă: Abonamentul va înlocui conținutul calendarului cu conținutul extern. "
-"Trebuie să creați un nou dosar pentru această abonare."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8455,10 +8462,6 @@ msgstr "Opțiuni de sortare"
 msgid "Sound"
 msgstr "Sunet"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Sursă"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8581,6 +8584,18 @@ msgstr "Abonare"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "Abonare la dosarele IMAP"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Agende de contacte ascunse"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Adaugă calendar nou"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9806,14 +9821,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Aplicație de actualizare"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Actualizarea datelor abonate poate dura. Importarea a 100 de contacte, de "
-"exemplu, durează până la 5 minute. Vă rugăm să așteptați."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11634,8 +11641,14 @@ msgstr "aaaa"
 #~ msgid "Add member"
 #~ msgstr "Adaugă un membru"
 
+#~ msgid "Add new account"
+#~ msgstr "Adaugă un cont nou"
+
 #~ msgid "Add new contact"
 #~ msgstr "Adaugă contact nou"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Adaugă un dosar nou pentru acest abonament"
 
 #~ msgid "Add new guest"
 #~ msgstr "Adaugă un nou utilizator invitat"
@@ -11812,6 +11825,9 @@ msgstr "aaaa"
 
 #~ msgid "Appointments:"
 #~ msgstr "Întâlniri:"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Durata aproximativă de abonare"
 
 #~ msgid "Apr"
 #~ msgstr "Apr"
@@ -12272,6 +12288,9 @@ msgstr "aaaa"
 
 #~ msgid "Check for:"
 #~ msgstr "Verifică:"
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Se verifică datele de autentificare..."
 
 #~ msgid "Children:"
 #~ msgstr "Copii:"
@@ -14643,6 +14662,9 @@ msgstr "aaaa"
 #~ msgid "New subfolder"
 #~ msgstr "Dosar subordonat nou"
 
+#~ msgid "New subscription"
+#~ msgstr "Abonament nou"
+
 #~ msgid "New..."
 #~ msgstr "Nou..."
 
@@ -14792,6 +14814,14 @@ msgstr "aaaa"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Notă: Formatul vCard nu poate conține liste de distribuție"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Notă: Abonamentul va înlocui conținutul calendarului cu conținutul "
+#~ "extern. Trebuie să creați un nou dosar pentru această abonare."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Nimic în fluxul de știri."
@@ -15987,6 +16017,9 @@ msgstr "aaaa"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Sortarea sarcinilor"
+
+#~ msgid "Source"
+#~ msgstr "Sursă"
 
 #~ msgid "South Africa"
 #~ msgstr "Africa de Sud"
@@ -17198,6 +17231,13 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Se actualizează datele contului. Această operație poate să dureze câteva "
 #~ "secunde."
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Actualizarea datelor abonate poate dura. Importarea a 100 de contacte, de "
+#~ "exemplu, durează până la 5 minute. Vă rugăm să așteptați."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Treci la versiunea premium"

@@ -727,7 +727,8 @@ msgstr "Faktisk varighet i minutter"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -797,9 +798,12 @@ msgstr "Legg til lokal fil"
 msgid "Add mail account"
 msgstr "Legg til e-postkonto"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Legg til konto"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Legg til i adressebok"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -811,10 +815,6 @@ msgstr "Legg til ny kalender"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Legg til ny mappe"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Legg til ny mappe for dette abonnementet"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1264,10 +1264,6 @@ msgstr "Avtaler i delte kalendere"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "Godkjent:"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Omtrentlig varighet for abonnementer"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1842,10 +1838,6 @@ msgstr "Tegn"
 msgid "Checkboxes"
 msgstr "Avmerkingsbokser"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Sjekker detaljer ..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Barn"
@@ -2108,6 +2100,12 @@ msgstr "Konfigureringsepost"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "Konfigurer"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "Konfigurer"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4698,9 +4696,11 @@ msgstr ""
 msgid "Info"
 msgstr "Informasjon"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5558,6 +5558,7 @@ msgstr "Musikk"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5573,6 +5574,18 @@ msgstr "Legg til %1$s-konto"
 #, fuzzy
 #| msgid "Add %1$s account"
 msgid "My %1$s account (%2$d)"
+msgstr "Legg til %1$s-konto"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Mine kalendere"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Add %1$s account"
+msgid "My %1$s contacts"
 msgstr "Legg til %1$s-konto"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -5673,6 +5686,12 @@ msgstr "Ny mappe"
 msgid "New Mail"
 msgstr "Ny e-post"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Mine adressebøker"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5744,10 +5763,6 @@ msgstr "Nytt passord"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Ny regel"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Nytt abonnement"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -6007,15 +6022,6 @@ msgstr ""
 "Notat: Oppdatering av dette abonnementet vil erstatte innholdet i kalenderen "
 "med det eksterne innholdet. Endringene du har gjort inne i appsuite vil bli "
 "overskrevet"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Notat: Oppdatering av dette abonnementet vil erstatte innholdet i kalenderen "
-"med det eksterne innholdet. Derfor må du opprette en ny mappe for dette "
-"abonnementet."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8364,10 +8370,6 @@ msgstr "Sorteringsalternativer"
 msgid "Sound"
 msgstr "Lyd"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Kilde"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8490,6 +8492,18 @@ msgstr "Abonner"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "Abonner på IMAP-mapper"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Skjulte adressebøker"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Legg til ny kalender"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9694,14 +9708,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Oppdateringsklient"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Oppdaterer abonnert data tar tid. Importering av 100 kontakter kan for "
-"eksempel ta opp til 5 minutter. Vennligst ha litt tålmodighet."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11256,6 +11262,12 @@ msgstr "yyyy"
 #~ msgid "Add account"
 #~ msgstr "Legg til konto"
 
+#~ msgid "Add new account"
+#~ msgstr "Legg til konto"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Legg til ny mappe for dette abonnementet"
+
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Legger til abonnement. Dette kan ta noen sekunder ..."
 
@@ -11299,6 +11311,9 @@ msgstr "yyyy"
 #~ msgid "Appointment scheduling"
 #~ msgstr "Avtaleplanlegging"
 
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Omtrentlig varighet for abonnementer"
+
 #~ msgid "Archive"
 #~ msgstr "Arkiv"
 
@@ -11332,6 +11347,9 @@ msgstr "yyyy"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Endringene har blitt lagret"
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Sjekker detaljer ..."
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Klikk for heldagsavtale"
@@ -11628,6 +11646,9 @@ msgstr "yyyy"
 #~ msgid "New subfolder"
 #~ msgstr "Ny undermappe"
 
+#~ msgid "New subscription"
+#~ msgstr "Nytt abonnement"
+
 #~ msgid "Next slide"
 #~ msgstr "Neste lysbilde"
 
@@ -11648,6 +11669,15 @@ msgstr "yyyy"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Notat: vCard-formatet kan ikke inneholde distribusjonslister"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Notat: Oppdatering av dette abonnementet vil erstatte innholdet i "
+#~ "kalenderen med det eksterne innholdet. Derfor må du opprette en ny mappe "
+#~ "for dette abonnementet."
 
 #~ msgid "Off"
 #~ msgstr "Av"
@@ -11887,6 +11917,9 @@ msgstr "yyyy"
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Denne filen kan ikke lastes opp."
 
+#~ msgid "Source"
+#~ msgstr "Kilde"
+
 #, fuzzy
 #~| msgid "Task invitations"
 #~ msgid "Start Presentation"
@@ -12038,6 +12071,13 @@ msgstr "yyyy"
 
 #~ msgid "Unnamed"
 #~ msgstr "Uten navn"
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Oppdaterer abonnert data tar tid. Importering av 100 kontakter kan for "
+#~ "eksempel ta opp til 5 minutter. Vennligst ha litt tålmodighet."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Oppgrader til premium"

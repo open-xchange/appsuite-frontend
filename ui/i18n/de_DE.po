@@ -723,7 +723,8 @@ msgstr "Tatsächliche Dauer in Minuten"
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -791,9 +792,12 @@ msgstr "Lokale Datei hinzufügen"
 msgid "Add mail account"
 msgstr "E-Mail-Account hinzufügen"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Neuen Account hinzufügen"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Zu Adressbuch hinzufügen"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -805,10 +809,6 @@ msgstr "Neuen Kalender hinzufügen"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Neuen Ordner hinzufügen"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Neuen Ordner für das Abonnement hinzufügen"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1259,10 +1259,6 @@ msgstr "Termine in geteilten Kalendern"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "Genehmigt:"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Geschätzte Dauer für Abonnements"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1844,10 +1840,6 @@ msgstr "Charaktere"
 msgid "Checkboxes"
 msgstr "Kontrollfelder"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Zugangsdaten werden überprüft ..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Kinder"
@@ -2117,6 +2109,12 @@ msgstr "Konfigurations-E-Mail"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "Konfigurieren"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "Konfigurieren"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4670,9 +4668,13 @@ msgstr "Indigo"
 msgid "Info"
 msgstr "Info"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+#, fuzzy
+#| msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr "Infos über die Wiederherstellung des Accounts ..."
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5523,6 +5525,7 @@ msgstr "Musik"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5535,6 +5538,18 @@ msgstr "Mein %1$s-Account"
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "My %1$s account (%2$d)"
 msgstr "Mein %1$s-Account (%2$d)"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Meine Kalender"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My %1$s account"
+msgid "My %1$s contacts"
+msgstr "Mein %1$s-Account"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
@@ -5630,6 +5645,12 @@ msgstr "Neuer Ordner"
 msgid "New Mail"
 msgstr "Neue E-Mails"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Meine Adressbücher"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5701,10 +5722,6 @@ msgstr "Neues Passwort"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Neue Regel"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Neues Abonnement"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -5957,14 +5974,6 @@ msgstr ""
 "Hinweis: Das Aktualisieren des Abonnements überschreibt den Kalenderinhalt "
 "mit dem externen Inhalt. Änderungen, die Sie Innerhalb AppSuite vorgenommen "
 "haben, werden überschrieben."
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Hinweis: Dieses Abonnement überschreibt den Kalenderinhalt mit dem externen "
-"Inhalt. Sie müssen deshalb einen neuen Ordner für dieses Abonnement anlegen."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8296,10 +8305,6 @@ msgstr "Sortier-Optionen"
 msgid "Sound"
 msgstr "Ton"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Quelle"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8422,6 +8427,18 @@ msgstr "Abonnieren"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "IMAP-Ordner abonnieren"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Versteckte Adressbücher"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Neuen Kalender hinzufügen"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9630,15 +9647,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Updater"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Das Aktualisieren abonnierter Daten nimmt einige Zeit in Anspruch. Das "
-"Importieren von 100 Kontakten bspw. dauert bis zu 5 Minuten. Bitte haben Sie "
-"etwas Geduld."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11449,6 +11457,12 @@ msgstr "JJJJ"
 #~ msgid "Add member"
 #~ msgstr "Mitglied hinzufügen"
 
+#~ msgid "Add new account"
+#~ msgstr "Neuen Account hinzufügen"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Neuen Ordner für das Abonnement hinzufügen"
+
 #~ msgid "Add new guest"
 #~ msgstr "Neuen Gast hinzufügen"
 
@@ -11606,6 +11620,9 @@ msgstr "JJJJ"
 
 #~ msgid "Appointment scheduling"
 #~ msgstr "Terminplanung"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Geschätzte Dauer für Abonnements"
 
 #~ msgid "Aqua"
 #~ msgstr "Aquablau"
@@ -11900,6 +11917,9 @@ msgstr "JJJJ"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Die Änderungen wurden gespeichert."
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Zugangsdaten werden überprüft ..."
 
 #, fuzzy
 #~| msgid "Children"
@@ -13527,6 +13547,9 @@ msgstr "JJJJ"
 #~ msgid "New subfolder"
 #~ msgstr "Neuer Unterordner"
 
+#~ msgid "New subscription"
+#~ msgstr "Neues Abonnement"
+
 #~ msgid "Next appointment"
 #~ msgstr "Nächster Termin"
 
@@ -13613,6 +13636,15 @@ msgstr "JJJJ"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Hinweis: Das vCard-Format kann keine Verteilerlisten enthalten"
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Hinweis: Dieses Abonnement überschreibt den Kalenderinhalt mit dem "
+#~ "externen Inhalt. Sie müssen deshalb einen neuen Ordner für dieses "
+#~ "Abonnement anlegen."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Sie haben keine Neuigkeiten."
@@ -14428,6 +14460,9 @@ msgstr "JJJJ"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Aufgaben sortieren"
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
 
 #~ msgid "South Africa"
 #~ msgstr "Südafrika"
@@ -15330,6 +15365,14 @@ msgstr "JJJJ"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Die Account-Daten werden aktualisiert. Dies kann eine Weile dauern."
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Das Aktualisieren abonnierter Daten nimmt einige Zeit in Anspruch. Das "
+#~ "Importieren von 100 Kontakten bspw. dauert bis zu 5 Minuten. Bitte haben "
+#~ "Sie etwas Geduld."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Upgrade auf Premium"

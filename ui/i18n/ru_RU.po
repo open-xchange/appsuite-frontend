@@ -757,7 +757,8 @@ msgstr "Действительная продолжительность (мин.
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar apps/io.ox/core/folder/actions/add.js
-#: module:io.ox/core apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/core apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "Add"
@@ -827,9 +828,12 @@ msgstr "Добавить локальный файл"
 msgid "Add mail account"
 msgstr "Добавить учетную запись"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new account"
-msgstr "Добавить учетную запись"
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#: apps/io.ox/core/folder/extensions.js
+#, fuzzy
+#| msgid "Add to address book"
+msgid "Add new address book"
+msgstr "Добавить в адресную книгу"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/extensions.js
@@ -841,10 +845,6 @@ msgstr "Добавить календарь"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Add new folder"
 msgstr "Добавить папку"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Add new folder for this subscription"
-msgstr "Добавить новую папку для подписки"
 
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Add new participant"
@@ -1295,10 +1295,6 @@ msgstr "Встречи в совместных календарях"
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Approved:"
 msgstr "Подтверждено:"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Approximate Duration for Subscriptions"
-msgstr "Примерная продолжительность подписки"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
@@ -1877,10 +1873,6 @@ msgstr "Символы"
 msgid "Checkboxes"
 msgstr "Флажки"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Checking credentials ..."
-msgstr "Проверка данных авторизации..."
-
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Children"
 msgstr "Дети"
@@ -2145,6 +2137,12 @@ msgstr "Конфигурация по почте"
 #. so user reads it as 'Configure Categories'
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Configure"
+msgstr "Настроить"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Configure"
+msgid "Configure %1$s"
 msgstr "Настроить"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
@@ -4735,9 +4733,11 @@ msgstr ""
 msgid "Info"
 msgstr "Информация"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Info about account recovery..."
+msgid "Information about account recovery..."
 msgstr ""
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
@@ -5600,6 +5600,7 @@ msgstr "Музыка"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
@@ -5615,6 +5616,18 @@ msgstr "Добавить аккаунт %1$s"
 #, fuzzy
 #| msgid "Add %1$s account"
 msgid "My %1$s account (%2$d)"
+msgstr "Добавить аккаунт %1$s"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "My calendars"
+msgid "My %1$s calendar"
+msgstr "Мои календари"
+
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Add %1$s account"
+msgid "My %1$s contacts"
 msgstr "Добавить аккаунт %1$s"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -5715,6 +5728,12 @@ msgstr "Создать папку"
 msgid "New Mail"
 msgstr "Новые"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "My address books"
+msgid "New address book"
+msgstr "Мои адресные книги"
+
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js
 msgid "New appointment"
@@ -5786,10 +5805,6 @@ msgstr "Новый пароль"
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 msgid "New rule"
 msgstr "Новое правило"
-
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-msgid "New subscription"
-msgstr "Новая подписка"
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/mail
 msgid "New task"
@@ -6053,14 +6068,6 @@ msgid ""
 msgstr ""
 "Примечание. Обновление подписки заменит содержимое календаря. Существующие "
 "настройки будут переопределены."
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Note: This subscription will replace the calendar content with the external "
-"content. Therefore you must create a new folder for this subscription."
-msgstr ""
-"Примечание. Подписка заменит содержимое календаря. Необходимо создать новую "
-"папку для этой подписки."
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Notification"
@@ -8406,10 +8413,6 @@ msgstr "Параметры сортировки"
 msgid "Sound"
 msgstr "Звук"
 
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Source"
-msgstr "Источник"
-
 #. Spam folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -8532,6 +8535,18 @@ msgstr "Подписаться"
 #: apps/io.ox/core/folder/actions/imap-subscription.js module:io.ox/core
 msgid "Subscribe IMAP folders"
 msgstr "Подписаться на папки IMAP"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Hidden address books"
+msgid "Subscribe new address book"
+msgstr "Скрытые адресные книги"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#, fuzzy
+#| msgid "Add new calendar"
+msgid "Subscribe new calendar"
+msgstr "Добавить календарь"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Subscription refresh"
@@ -9726,14 +9741,6 @@ msgstr ""
 #: apps/plugins/portal/updater/register.js module:plugins/portal
 msgid "Updater"
 msgstr "Модуль обновлений"
-
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid ""
-"Updating subscribed data takes time. Importing 100 contacts for example, may "
-"take up to 5 minutes. Please have some patience."
-msgstr ""
-"Обновление данных подписки может занять некоторое время. Например, импорт "
-"100 контактов занимает до 5 минут. Пожалуйста, подождите."
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid "Upgrade required"
@@ -11352,6 +11359,12 @@ msgstr "гггг"
 #~ msgid "Add member"
 #~ msgstr "Добавить участника"
 
+#~ msgid "Add new account"
+#~ msgstr "Добавить учетную запись"
+
+#~ msgid "Add new folder for this subscription"
+#~ msgstr "Добавить новую папку для подписки"
+
 #~ msgid "Add new guest"
 #~ msgstr "Добавить гостя"
 
@@ -11444,6 +11457,9 @@ msgstr "гггг"
 
 #~ msgid "Appointment scheduling"
 #~ msgstr "Планирование встречи"
+
+#~ msgid "Approximate Duration for Subscriptions"
+#~ msgstr "Примерная продолжительность подписки"
 
 #~ msgid "Are you sure?"
 #~ msgstr "Вы уверены?"
@@ -11558,6 +11574,9 @@ msgstr "гггг"
 
 #~ msgid "Changes have been saved."
 #~ msgstr "Изменения сохранены."
+
+#~ msgid "Checking credentials ..."
+#~ msgstr "Проверка данных авторизации..."
 
 #, fuzzy
 #~| msgid "Children"
@@ -12457,6 +12476,9 @@ msgstr "гггг"
 #~ msgid "New subfolder"
 #~ msgstr "Новая вложенная папка"
 
+#~ msgid "New subscription"
+#~ msgstr "Новая подписка"
+
 #~ msgid "Next birthdays"
 #~ msgstr "Дни рождения"
 
@@ -12506,6 +12528,14 @@ msgstr "гггг"
 
 #~ msgid "Note: The vCard format cannot contain distribution lists"
 #~ msgstr "Примечание. vCard не может содержать списки рассылок."
+
+#~ msgid ""
+#~ "Note: This subscription will replace the calendar content with the "
+#~ "external content. Therefore you must create a new folder for this "
+#~ "subscription."
+#~ msgstr ""
+#~ "Примечание. Подписка заменит содержимое календаря. Необходимо создать "
+#~ "новую папку для этой подписки."
 
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Лента новостей пуста."
@@ -12986,6 +13016,9 @@ msgstr "гггг"
 
 #~ msgid "Sorting your tasks"
 #~ msgstr "Сортировка задач"
+
+#~ msgid "Source"
+#~ msgstr "Источник"
 
 #~ msgid "Spam folder"
 #~ msgstr "Папка спама"
@@ -13621,6 +13654,13 @@ msgstr "гггг"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Обновление учетной записи... Это может занять несколько секунд."
+
+#~ msgid ""
+#~ "Updating subscribed data takes time. Importing 100 contacts for example, "
+#~ "may take up to 5 minutes. Please have some patience."
+#~ msgstr ""
+#~ "Обновление данных подписки может занять некоторое время. Например, импорт "
+#~ "100 контактов занимает до 5 минут. Пожалуйста, подождите."
 
 #~ msgid "Upgrade to premium"
 #~ msgstr "Повысить до уровня Premium"
