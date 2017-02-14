@@ -30,7 +30,7 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
                 showFree: settings.get('scheduling/showFree', false),
                 showAbsent: settings.get('scheduling/showAbsent', true),
                 showReserved: settings.get('scheduling/showReserved', true),
-                showTemporary: settings.get('scheduling/showTemporary', false),
+                showTemporary: settings.get('scheduling/showTemporary', true),
                 appointments: {}
             });
         }
