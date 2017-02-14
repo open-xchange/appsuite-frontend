@@ -436,8 +436,8 @@ define('io.ox/calendar/api', [
                 module: 'calendar',
                 params: {
                     action: 'all',
-                    // id, created_by, folder_id, private_flag, title, start_date, end_date,users, location, shown_as
-                    columns: '1,2,20,101,200,201,202,221,400,402',
+                    // id, created_by, folder_id, private_flag, title, start_date, end_date, recurrence_position, users, location, shown_as
+                    columns: '1,2,20,101,200,201,202,207,221,400,402',
                     start: start,
                     end: appointment.end_date,
                     showPrivate: true,
