@@ -95,6 +95,8 @@ define('io.ox/core/viewer/views/displayerview', [
                     displayerView.onAutoplayStop();
                 }
             }
+            displayerView.toggleSwiperOnlyExternalState(false);
+
             setAutoplayControlStateToWillPlay(displayerView);
         } else {
             setAutoplayControlStateToWillPause(displayerView);
@@ -109,6 +111,11 @@ define('io.ox/core/viewer/views/displayerview', [
 
                 displayerView.toggleFullscreen(true);
             }
+            displayerView.toggleSwiperOnlyExternalState(true);
+
+          //displayerView.carouselRoot.find('.fullscreen-button').focus();
+            displayerView.$el.focus();
+            displayerView.carouselRoot.removeClass('autoplay-controls-visible');
         }
         displayerView.autoplayMode = mode;
     }
@@ -190,18 +197,18 @@ define('io.ox/core/viewer/views/displayerview', [
     }
 
     function registerAutoplayEventHandlingForUpdatedCarouselView(displayerView) {
-        if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
-
-            // register:
-            // blend in navigation by user activity
-            displayerView.$el.on('mousemove click', displayerView.displayerviewMousemoveClickHandler);
-
-        } else if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
-
-            // deregister:
-            // blend in navigation by user activity
-            displayerView.$el.off('mousemove click', displayerView.displayerviewMousemoveClickHandler);
-        }
+        // if (displayerView.autoplayMode !== 'running') { // only in case of autoplay is not running at all.
+        //
+        //     // register:
+        //     // blend in navigation by user activity
+        //     displayerView.$el.on('mousemove click', displayerView.displayerviewMousemoveClickHandler);
+        //
+        // } else if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
+        //
+        //     // deregister:
+        //     // blend in navigation by user activity
+        //     displayerView.$el.off('mousemove click', displayerView.displayerviewMousemoveClickHandler);
+        // }
 
         // one way registering since the view that gets operated on will be build always from scratch.
         var
@@ -213,6 +220,8 @@ define('io.ox/core/viewer/views/displayerview', [
         $carouselInner.on('mouseenter', '.viewer-displayer-item-container', enterHandler);
         $carouselInner.on('mouseleave', '.viewer-displayer-item-container', leaveHandler);
 
+      // - see line 361 - gets already handled there
+      // - the commented block above and also the next commented line are for another, more complex blending behavior of both navigation arrows.
       //$carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
     }
 
@@ -247,16 +256,16 @@ define('io.ox/core/viewer/views/displayerview', [
         if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
 
             window.clearTimeout(displayerView.captionTimeoutId);
-            window.clearTimeout(displayerView.navigationTimeoutId);
+          //window.clearTimeout(displayerView.navigationTimeoutId);
 
             var
                 $viewElement = displayerView.$el,
 
-                $slideCaption = $viewElement.find('.viewer-displayer-caption'),
-                $navigationArrows = $viewElement.find('.swiper-button-control');
+                $slideCaption = $viewElement.find('.viewer-displayer-caption');
+              //$navigationArrows = $viewElement.find('.swiper-button-control');
 
             $slideCaption.hide();
-            $navigationArrows.hide();
+          //$navigationArrows.hide();
         }
     }
 
@@ -356,7 +365,7 @@ define('io.ox/core/viewer/views/displayerview', [
             // in order to also use it for deregistering purposes while running the autoplay mode.
             this.displayerviewMousemoveClickHandler = _.throttle(this.blendNavigation.bind(this), 500);
             // blend in navigation by user activity
-            //this.$el.on('mousemove click', this.displayerviewMousemoveClickHandler);          // - handle register/deregister in a more centralized way.
+            this.$el.on('mousemove click', this.displayerviewMousemoveClickHandler);          // - handle register/deregister in a more centralized way.
 
             // listen to version change events
             this.listenTo(this.collection, 'change:version', this.onModelChangeVersion.bind(this));
@@ -1132,7 +1141,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 this.pause();
             });
             this.viewerEvents.trigger('viewer:displayeditem:change', this.collection.at(this.activeIndex));
-            this.swiper.params.onlyExternal = false;
+
+            this.toggleSwiperOnlyExternalState(false);
         },
 
         /**
@@ -1153,7 +1163,7 @@ define('io.ox/core/viewer/views/displayerview', [
                     activeSlideView.setInitialScrollPosition(activeSlideView.model.get('id'), scrollPosition);
                 }
             }
-            this.swiper.params.onlyExternal = true;
+            this.toggleSwiperOnlyExternalState(true);
         },
 
         /**
@@ -1300,6 +1310,13 @@ define('io.ox/core/viewer/views/displayerview', [
 
         hasAutoplayStartAlreadyBeenTriggered: function () {
             return !!this.collectionBackup; // autoplay start has already been triggered.
+        },
+
+        toggleSwiperOnlyExternalState: function (isOnlyExternal) {
+            if (this.swiper) {
+
+                this.swiper.params.onlyExternal = !!isOnlyExternal;
+            }
         },
 
         // copied directly from 'io.ox/presenter/views/mainview.js' ... see line 402
