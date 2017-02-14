@@ -1041,11 +1041,11 @@ define('io.ox/files/share/permissions', [
                 dialog.getFooter().prepend(
                     $('<div class="share-options">').append(
                         $('<div class="autocomplete-controls">').append(
-                            usePicker ? assembledGroup :
+                            (usePicker ? assembledGroup :
                             $('<div class="form-group">').append(
                                 $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid })
-                            )
+                            ))
                             // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
                             .on('keydown blur', 'input', function addManualInput(e) {
 
