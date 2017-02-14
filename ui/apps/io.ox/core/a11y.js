@@ -289,11 +289,43 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
         return !!settings.get('features/accessibility', true);
     }
 
+    function collapse(action, content, opt) {
+        // https://getbootstrap.com/javascript/#collapse
+        // https://www.w3.org/TR/wai-aria-practices-1.1/examples/accordion/accordion1.html
+        opt = _.extend({ expanded: false }, opt);
+        var actionid = _.uniqueId('action'),
+            contentid = _.uniqueId('content');
+        action.addClass('collapsed')
+            .prop('id', actionid)
+            .attr({
+                'data-target': '#' + contentid,
+                'data-toggle': 'collapse',
+                'aria-expanded': false,
+                'aria-controls': contentid
+            });
+        content.addClass('collapse')
+            .addClass(opt.expanded ? 'in' : '')
+            .prop('id', contentid)
+            .attr({
+                'role': 'region',
+                'aria-labelledby': actionid
+            })
+            .append(content);
+        // listeners
+        if (!opt.onChange || !_.isFunction(opt.onChange)) return;
+        content.on('show.bs.collapse shown.bs.collapse hide.bs.collapse hidden.bs.collapse', function (e) {
+            opt.onChange.call(content, e.type);
+        });
+        // propagate inital state
+        opt.onChange.call(content, opt.expanded ? 'show' : 'hide');
+    }
+
     return {
-        use: use,
-        getTabbable: getTabbable,
-        trapFocus: trapFocus,
+        collapse: collapse,
         dropdownTrapFocus: dropdownTrapFocus,
-        menubarKeydown: menubarKeydown
+        getTabbable: getTabbable,
+        menubarKeydown: menubarKeydown,
+        trapFocus: trapFocus,
+        use: use
     };
 });

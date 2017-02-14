@@ -16,8 +16,9 @@ define('io.ox/onboarding/clients/view-mobile', [
     'io.ox/backbone/views/modal',
     'io.ox/onboarding/clients/config',
     'io.ox/onboarding/clients/api',
+    'io.ox/core/a11y',
     'gettext!io.ox/core/onboarding'
-], function (ext, ModalDialog, config, api, gt) {
+], function (ext, ModalDialog, config, api, a11y, gt) {
 
     'use strict';
 
@@ -57,8 +58,8 @@ define('io.ox/onboarding/clients/view-mobile', [
             ];
         },
 
-        action: function (action) {
-            var node = $('<section class="action">').attr('data-id', action.id),
+        action: function (action, index) {
+            var node = $('<section class="action">').prop('id', action.id).attr({ 'data-index': index }),
                 type = action.id.split('/')[0];
             ext.point(POINT + '/' + type).invoke('draw', node, action);
             return node;
@@ -74,7 +75,7 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         descriptionDisplay: function () {
             this.append($('<p class="description">').text(
-                gt('If you know what you are doing...just setup your account manually!')
+                gt('Setup your account manually!')
             ));
         },
 
@@ -83,13 +84,31 @@ define('io.ox/onboarding/clients/view-mobile', [
                 return config.order[key] || 1000;
             });
             this.append($('<pre class="config">').append(
-                $('<div>').append(_.map(list, function (key) {
-                    return $('<div class="property">').text((config.labels[key] || key) + ':');
-                })),
-                $('<div>').append(_.map(list, function (key) {
-                    return $('<div class="value">').text(action.data[key]);
-                }))
-            ));
+                    $('<div>').append(_.map(list, function (key) {
+                        return $('<div class="property">').text((config.labels[key] || key) + ':');
+                    })),
+                    $('<div>').append(_.map(list, function (key) {
+                        return $('<div class="value">').text(action.data[key]);
+                    }))
+                )
+            );
+        },
+
+        toggle: function () {
+            // make content toggleable when 'display' isn't the primary action of a scenario
+            if (this.attr('data-index') === '0') return;
+
+            var action =  $('<a href="#" role="button" class="inline-link">'),
+                container = $('<div>').append(this.find('.config'));
+
+            a11y.collapse(action, container, { onChange: setLabel });
+            function setLabel(state) {
+                //#. button: show collapsed content
+                if (/(show)/.test(state)) return action.text(gt('Hide technical details'));
+                //#. button: hide collapsable content
+                if (/(hide)/.test(state)) return action.text(gt('Show technical details'));
+            }
+            this.empty().append(action, container);
         },
 
         // DOWNLOAD: Profile
@@ -112,10 +131,10 @@ define('io.ox/onboarding/clients/view-mobile', [
             var ref = _.uniqueId('description-');
             this.append($('<button class="btn btn-primary action-call">')
                 .attr('aria-describedby', ref)
-                .text(gt('Configure now'))
+                .text(gt('Install'))
                 .on('click', function (e) {
                     e.preventDefault();
-                    var url = api.getUrl(action.scenario, action.id);
+                    var url = api.getUrl(action.scenario, action.id, config.getDevice().id);
                     require(['io.ox/core/download'], function (download) {
                         download.url(url);
                     });
@@ -147,7 +166,8 @@ define('io.ox/onboarding/clients/view-mobile', [
     ext.point(POINT + '/display').extend(
         { id: 'title', draw: extensions.titleDisplay },
         { id: 'description', draw: extensions.descriptionDisplay },
-        { id: 'block', draw: extensions.block }
+        { id: 'block', draw: extensions.block },
+        { id: 'toggle', draw: extensions.toggle }
     );
     ext.point(POINT + '/download').extend(
         { id: 'title', draw: extensions.titleDownload },
