@@ -142,42 +142,71 @@ define('io.ox/core/viewer/views/displayerview', [
 
             } else if (IS_LOOP_ONCE_ONLY && (typeof autoplaySlideCount === 'number')) {
 
-                displayerView.autoplaySlideCount = autoplaySlideCount = (autoplaySlideCount + 1);
-                if (autoplaySlideCount >= displayerView.collection.length) {
+                // console.log('\nisAutoplayOverride : ', displayerView.isAutoplayOverride);
+                if (!displayerView.isAutoplayOverride) {
 
-                    window.clearTimeout(displayerView.timeoutIdAutoplay);
+                    window.clearTimeout(displayerView.timeoutIdAutoplayOverride);
 
-                    displayerView.timeoutIdAutoplay = window.setTimeout((function (displayerView) {
-                        return function () {
-                            if (displayerView.fullscreen) {
+                    displayerView.autoplaySlideCount = autoplaySlideCount = (autoplaySlideCount + 1);
 
-                                displayerView.toggleFullscreen(false);
-                            } else {
-                                deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
-                                displayerView.onAutoplayStop();
-                            }
-                        };
-                    }(displayerView)), AUTOPLAY_PAUSE__WHILST_RUNNING);
+                    // console.log('--- default --- autoplaySlideCount : ', autoplaySlideCount);
+                    if (autoplaySlideCount >= displayerView.collection.length) {
 
+                        window.clearTimeout(displayerView.timeoutIdAutoplay);
+
+                        displayerView.timeoutIdAutoplay = window.setTimeout((function (displayerView) {
+                            return function () {
+                                if (displayerView.fullscreen) {
+
+                                    displayerView.toggleFullscreen(false);
+                                } else {
+                                    deregisterAutoplayEventHandlingForPreviousNextControl(displayerView);
+                                    displayerView.onAutoplayStop();
+                                }
+                            };
+                        }(displayerView)), AUTOPLAY_PAUSE__WHILST_RUNNING);
+
+                    } else {
+                        // console.log('+++ triggerDisplayNextAutoplaySlide +++');
+
+                        triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
+                    }
                 } else {
-                    triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
+                    // console.log('+++ OVERRIDE +++ autoplaySlideCount : ', autoplaySlideCount);
+                    // console.log('+++ triggerDisplayNextAutoplaySlide +++');
+
+                    keepAutoplayAliveWhileInterferingWithOverride(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
                 }
+                displayerView.isAutoplayOverride = false;
             } else {
                 triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
             }
         }
     }
 
-    function triggerDisplayNextAutoplaySlide(displayerView, slideIndex, delay) {
-        var
-            displayNextAutoplaySlide = (function (swiper) {
-                return function () {
-                                                      // - for [s.slideNext] see "swiper.js" line 1586.
-                    swiper.slideNext(true, 0, false); // - params{runCallbacks, speed, internal} ... for what {internal} does see "swiper.js" line 1513.
-                };
-            }(displayerView.swiper));
+    function createDisplayNextAutoplaySlide(swiper) {
+        return function () {
+                                              // - for [s.slideNext] see "swiper.js" line 1586.
+            swiper.slideNext(true, 0, false); // - params{runCallbacks, speed, internal} ... for what {internal} does see "swiper.js" line 1513.
+        };
+    }
+    function createKeepAutoplayAlive(displayerView) {
+        return function () {
+            displayerView.autoplayOverrideSlideCount = null;
+            displayerView.autoplaySlideCount = 0;
 
-        displayerView.timeoutIdAutoplay = window.setTimeout(displayNextAutoplaySlide, delay);
+            displayerView.swiper.slideNext(true, 0, false);
+        };
+    }
+
+    function triggerDisplayNextAutoplaySlide(displayerView, slideIndex, delay) {
+        displayerView.timeoutIdAutoplay = window.setTimeout(createDisplayNextAutoplaySlide(displayerView.swiper), delay);
+        // console.log('*** JO *** ', (displayerView.timeoutIdAutoplay + ''));
+    }
+    function keepAutoplayAliveWhileInterferingWithOverride(displayerView, slideIndex, delay) {
+        window.clearTimeout(displayerView.timeoutIdAutoplayOverride);
+        displayerView.timeoutIdAutoplayOverride = window.setTimeout(createKeepAutoplayAlive(displayerView), delay);
+        // console.log('* * * DUDE * * * ', (displayerView.timeoutIdAutoplayOverride + ''));
     }
 
     function handleDisplayerItemEnter(/*event*/) {
@@ -194,6 +223,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
     function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
         window.clearTimeout(this.timeoutIdAutoplay);
+        this.isAutoplayOverride = true;
     }
 
     function registerAutoplayEventHandlingForUpdatedCarouselView(displayerView) {
@@ -338,6 +368,10 @@ define('io.ox/core/viewer/views/displayerview', [
 
             // a backup of the current collection of every displayer file object
             this.collectionBackup = null;
+            // boolean that indicates whether a running autoplay currently interferes with manually triggered previous/next slide change commands.
+            this.isAutoplayOverride = false;
+            // number value based slide counter for auto exiting in case autoplay is supposed to loop only once.
+            this.autoplayOverrideSlideCount = null;
             // number value based slide counter for auto exiting in case autoplay is supposed to loop only once.
             this.autoplaySlideCount = null;
             // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
@@ -348,6 +382,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.autoplayMode = '';
             // reference for setting and clearing autoplay timeout values.
             this.timeoutIdAutoplay = null;
+            // reference for setting and clearing autoplay timeout values in case of being over-ruled by dom/key-events.
+            this.timeoutIdAutoplayOverride = null;
             // a reference to the currently used method that handles click events on a swiper's previous/next controls while it is running in autoplay mode.
             this.previousNextControlClickWhileRunningAutoplayHandler = null;
             // with autoplay mode comes fullscreen mode too
@@ -1023,6 +1059,24 @@ define('io.ox/core/viewer/views/displayerview', [
             };
         })(),
 
+        slidePrev: function () {
+            if (this.autoplayMode === 'running') {
+
+                this.carouselRoot.children('.swiper-button-prev').eq(0).click();
+            } else {
+                this.swiper.slidePrev();
+            }
+        },
+
+        slideNext: function () {
+            if (this.autoplayMode === 'running') {
+
+                this.carouselRoot.children('.swiper-button-next').eq(0).click();
+            } else {
+                this.swiper.slideNext();
+            }
+        },
+
         /**
          * Focuses the swiper's current active slide.
          */
@@ -1243,6 +1297,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
 
             if (IS_LOOP_ONCE_ONLY) {
+                this.isAutoplayOverride = false;
+                this.autoplayOverrideSlideCount = null;
                 this.autoplaySlideCount = -1;
             }
             this.collectionBackup = this.collection.clone();
@@ -1283,6 +1339,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
 
             if (IS_LOOP_ONCE_ONLY) {
+                this.isAutoplayOverride = false;
+                this.autoplayOverrideSlideCount = null;
                 this.autoplaySlideCount = null;
             }
             this.collection.reset(this.collectionBackup.models);
@@ -1314,7 +1372,6 @@ define('io.ox/core/viewer/views/displayerview', [
 
         toggleSwiperOnlyExternalState: function (isOnlyExternal) {
             if (this.swiper) {
-
                 this.swiper.params.onlyExternal = !!isOnlyExternal;
             }
         },
@@ -1370,6 +1427,7 @@ define('io.ox/core/viewer/views/displayerview', [
             window.clearTimeout(this.captionTimeoutId);
             window.clearTimeout(this.navigationTimeoutId);
             window.clearTimeout(this.timeoutIdAutoplay);
+            window.clearTimeout(this.timeoutIdAutoplayOverride);
 
             if (this.swiper) {
                 this.swiper.removeAllSlides();
@@ -1382,12 +1440,15 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = null;
 
             this.collectionBackup = null;
+            this.isAutoplayOverride = null;
+            this.autoplayOverrideSlideCount = null;
             this.autoplaySlideCount = null;
 
             this.canAutoplayImages = null;
             this.imageFileRegistry = null;
             this.autoplayMode = null;
             this.timeoutIdAutoplay = null;
+            this.timeoutIdAutoplayOverride = null;
 
             this.previousNextControlClickWhileRunningAutoplayHandler = null;
             this.displayerviewMousemoveClickHandler = null;

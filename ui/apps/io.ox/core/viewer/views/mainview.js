@@ -131,9 +131,9 @@ define('io.ox/core/viewer/views/mainview', [
                 self = this,
                 handleChangeSlide = _.throttle(function (direction) {
                     if (direction === 'right') {
-                        self.displayerView.swiper.slideNext();
+                        self.displayerView.slideNext();
                     } else {
-                        self.displayerView.swiper.slidePrev();
+                        self.displayerView.slidePrev();
                     }
                     self.displayerView.focusActiveSlide();
                 }, 200);
