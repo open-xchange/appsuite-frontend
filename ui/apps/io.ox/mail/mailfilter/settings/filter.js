@@ -16,6 +16,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/settings/util',
     'io.ox/mail/mailfilter/settings/filter/view-form',
@@ -26,7 +27,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/backbone/disposable',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, ListView, DisposableView) {
+], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, ListView, DisposableView) {
 
     'use strict';
 
@@ -113,24 +114,30 @@ define('io.ox/mail/mailfilter/settings/filter', [
         actionArray = _.copy(myView.model.get('actioncmds'), true);
         rulename = _.copy(myView.model.get('rulename'), true);
 
-        myView.dialog = new dialogs.ModalDialog({
+        myView.dialog = new ModalDialog({
             top: 60,
             width: 800,
             center: false,
             maximize: true,
-            async: true
-        }).header($('<h4>').text(header));
+            async: true,
+            point: 'io.ox/settings/mailfilter/filter/settings/detail/dialog',
+            title: header
+        });
 
-        myView.dialog.append(
+        myView.dialog.$body.append(
             myView.render().el
-        )
-        .addPrimaryButton('save', gt('Save'), 'save')
-        .addButton('cancel', gt('Cancel'), 'cancel');
+        );
+
+        myView.dialog.addButton({
+            label: gt('Save'),
+            action: 'save'
+        })
+        .addCancelButton();
 
         //disable save button if no action is set
-        if (actionArray.length === 0) myView.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
+        if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer[data-action="save"]').prop('disabled', true);
 
-        myView.dialog.show();
+        myView.dialog.open();
         myView.$el.find('input[name="rulename"]').focus();
 
         if (data.id === undefined) {
@@ -140,7 +147,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
-            myView.dialog.getBody().find('.io-ox-mailfilter-edit').trigger('save');
+            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('save');
         });
 
         myView.dialog.on('cancel', function () {

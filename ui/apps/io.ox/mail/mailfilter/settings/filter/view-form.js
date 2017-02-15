@@ -133,9 +133,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             onToggleSaveButton: function () {
                 if (this.$el.find('.has-error, .alert-danger').length === 0) {
-                    this.dialog.getFooter().find('[data-action="save"]').prop('disabled', false);
+                    this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', false);
                 } else {
-                    this.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
+                    this.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', true);
                 }
             },
 
@@ -511,11 +511,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return $('<div>').addClass('control-group mailfilter checkbox').append(
                         $('<div>').addClass('controls'),
                         $('<label>').text(gt('Process subsequent rules')).prepend(
-                            $('<input data-action="check-for-stop" type="checkbox" tabindex="0">').attr('checked', value)
+                            $('<input type="checkbox" tabindex="0">').attr('checked', value)
                         )
                     );
                 },
-                target = baton.view.dialog.getFooter(),
+                target = baton.view.dialog.$el.find('.modal-footer'),
                 arrayOfActions = baton.model.get('actioncmds');
 
             function checkForStopAction(array) {
