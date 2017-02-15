@@ -1904,7 +1904,7 @@ define('io.ox/mail/api', [
             if (params.folder === 'virtual/all-unseen') {
                 return {
                     action: 'all',
-                    folder: 'default0/virtual/all',
+                    folder: settings.get('allMessagesFolder', 'default0/virtual/all'),
                     // need original_id and original_folder_id
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
                     sort: '651',
