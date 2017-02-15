@@ -49,7 +49,8 @@ define('io.ox/core/tk/dialogs', [
                 noBusy: false,
                 maximize: false,
                 top: '50%',
-                container: $('#io-ox-core'),
+                // sidepopups may be in body node under certain circumstances. Prevent new dialogs from hiding under them
+                container: ($('body>.io-ox-sidepopup-overlay').length ? $('body') : $('#io-ox-core')),
                 tabTrap: true,
                 focus: true
             }, options),
