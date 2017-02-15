@@ -192,7 +192,7 @@ define('io.ox/mail/accounts/settings', [
                     });
 
                     account.enableScopes('mail').save().then(function () {
-                        ox.busy();
+                        baton.popup.busy();
                         var busyMessage = $('<div class="alert-placeholder">');
                         $el.append(busyMessage);
                         drawBusy(busyMessage);
@@ -209,7 +209,7 @@ define('io.ox/mail/accounts/settings', [
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
                         }, notifications.yell).always(function () {
-                            ox.idle();
+                            baton.popup.idle();
                         });
                     });
                 });
