@@ -236,7 +236,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         },
 
         getShardingRoot: (function () {
-            var hosts = [].concat(settings.get('shardingHosts', location.host + ox.apiRoot));
+            var hosts = [].concat(settings.get('shardingSubdomains', location.host + ox.apiRoot));
             function sum(s) {
                 var i = s.length - 1, sum = 0;
                 for (; i; i--) sum += s.charCodeAt(i);
