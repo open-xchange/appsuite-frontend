@@ -105,11 +105,19 @@ define('io.ox/settings/accounts/views', [
                 var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
                     self = this;
 
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ async: true })
-                    .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'), 'delete')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    new ModalDialog({
+                        async: true,
+                        title: gt('Delete account')
+                    })
+                    .extend({
+                        id: 'default',
+                        draw: function () {
+                            this.$body.append(gt('Do you really want to delete this account?'));
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this;
                         settingsUtil.yellOnReject(
@@ -143,7 +151,7 @@ define('io.ox/settings/accounts/views', [
                             })
                         );
                     })
-                    .show();
+                    .open();
                 });
             },
 
