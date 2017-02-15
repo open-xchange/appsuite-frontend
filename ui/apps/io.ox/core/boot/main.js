@@ -117,6 +117,8 @@ define('io.ox/core/boot/main', [
             // signin phase is over (important for gettext)
             ox.signin = false;
 
+            // we have to clear the device function cache or there might be invalid return values, like for example wrong language data.(see Bug 51405)
+            _.device.cache = {};
             // make sure we have loaded precore.js now
             $.when(
                 require(['io.ox/core/boot/load', ox.base + '/precore.js']),
