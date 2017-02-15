@@ -733,7 +733,10 @@ define('io.ox/core/folder/extensions', [
                     publicFolders,
                     placeholder = $('<div>');
 
-                ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+                // no links. Used for example in move folder picker
+                if (!tree.options.noLinks) {
+                    ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+                }
 
                 this.append(placeholder);
 
