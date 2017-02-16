@@ -142,8 +142,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             } else if (IS_LOOP_ONCE_ONLY && (typeof autoplaySlideCount === 'number')) {
 
-                // console.log('\nisAutoplayOverride : ', displayerView.isAutoplayOverride);
-                if (!displayerView.isAutoplayOverride) {
+                // console.log('\nisAutoplayOverdrive : ', displayerView.isAutoplayOverdrive);
+                if (!displayerView.isAutoplayOverdrive) {
 
                     window.clearTimeout(displayerView.timeoutIdAutoplayOverride);
 
@@ -177,7 +177,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
                     keepAutoplayAliveWhileInterferingWithOverride(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
                 }
-                displayerView.isAutoplayOverride = false;
+                displayerView.isAutoplayOverdrive = false;
             } else {
                 triggerDisplayNextAutoplaySlide(displayerView, slideIndex, AUTOPLAY_PAUSE__WHILST_RUNNING);
             }
@@ -192,7 +192,7 @@ define('io.ox/core/viewer/views/displayerview', [
     }
     function createKeepAutoplayAlive(displayerView) {
         return function () {
-            displayerView.autoplayOverrideSlideCount = null;
+          //displayerView.autoplayOverdriveSlideCount = null;
             displayerView.autoplaySlideCount = 0;
 
             displayerView.swiper.slideNext(true, 0, false);
@@ -223,7 +223,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
     function handlePreviousNextControlClickWhileRunningAutoplay(/*event*/) {
         window.clearTimeout(this.timeoutIdAutoplay);
-        this.isAutoplayOverride = true;
+        this.isAutoplayOverdrive = true;
     }
 
     function registerAutoplayEventHandlingForUpdatedCarouselView(displayerView) {
@@ -369,9 +369,9 @@ define('io.ox/core/viewer/views/displayerview', [
             // a backup of the current collection of every displayer file object
             this.collectionBackup = null;
             // boolean that indicates whether a running autoplay currently interferes with manually triggered previous/next slide change commands.
-            this.isAutoplayOverride = false;
+            this.isAutoplayOverdrive = false;
             // number value based slide counter for auto exiting in case autoplay is supposed to loop only once.
-            this.autoplayOverrideSlideCount = null;
+            // this.autoplayOverdriveSlideCount = null;
             // number value based slide counter for auto exiting in case autoplay is supposed to loop only once.
             this.autoplaySlideCount = null;
             // whether or not displayerview is able of auto-play mode that will display image-type file-items exclusively.
@@ -1297,8 +1297,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
 
             if (IS_LOOP_ONCE_ONLY) {
-                this.isAutoplayOverride = false;
-                this.autoplayOverrideSlideCount = null;
+                this.isAutoplayOverdrive = false;
+              //this.autoplayOverdriveSlideCount = null;
                 this.autoplaySlideCount = -1;
             }
             this.collectionBackup = this.collection.clone();
@@ -1339,8 +1339,8 @@ define('io.ox/core/viewer/views/displayerview', [
                 });
 
             if (IS_LOOP_ONCE_ONLY) {
-                this.isAutoplayOverride = false;
-                this.autoplayOverrideSlideCount = null;
+                this.isAutoplayOverdrive = false;
+              //this.autoplayOverdriveSlideCount = null;
                 this.autoplaySlideCount = null;
             }
             this.collection.reset(this.collectionBackup.models);
@@ -1440,8 +1440,8 @@ define('io.ox/core/viewer/views/displayerview', [
             this.slideViews = null;
 
             this.collectionBackup = null;
-            this.isAutoplayOverride = null;
-            this.autoplayOverrideSlideCount = null;
+            this.isAutoplayOverdrive = null;
+          //this.autoplayOverdriveSlideCount = null;
             this.autoplaySlideCount = null;
 
             this.canAutoplayImages = null;
