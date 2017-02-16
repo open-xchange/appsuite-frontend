@@ -340,6 +340,29 @@ define('io.ox/core/folder/api', [
             if (options.reset) collection.trigger('reset');
         },
 
+        removeCollection: function (id, options) {
+            options = options || {};
+            var collection = this.collections[id], self = this;
+
+            if (!collection) return;
+            collection.each(function (model) {
+                removeFromAllCollections(model.id);
+                self.removeCollection(model.id, options);
+            });
+
+            if (options.removeModels && this.models[id]) {
+                var data = this.models[id].toJSON();
+                this.models[id] = null;
+                delete this.models[id];
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
+            }
+
+            collection = null;
+            delete this.collections[id];
+        },
+
         getModel: function (id) {
             return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
@@ -1122,6 +1145,21 @@ define('io.ox/core/folder/api', [
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
+                // get refreshed the model data for folders moved to the trash folder. If they are removed completely we remove the collection
+                // flat models don't have a collection, so no need to remove here
+                if (!isFlat(data.module)) {
+                    // if this folder is in the trash folder it was removed completely, so no need to for fresh data
+                    if (api.is('trash', data)) {
+                        api.pool.removeCollection(id, { removeModels: true });
+                    } else {
+                        api.get(id, { cache: false }).fail(function (error) {
+                            // folder does not exist
+                            if (error.code === 'FLD-0008') {
+                                api.pool.removeCollection(id, { removeModels: true });
+                            }
+                        });
+                    }
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 if (account.is('trash', id)) api.trigger('cleared-trash');
             });
