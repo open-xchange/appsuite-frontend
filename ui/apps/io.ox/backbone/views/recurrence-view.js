@@ -126,7 +126,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.$body.append(
                     $('<div class="form-group">').append(
                         $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Repeat')),
-                        $('<div class="col-sm-6">').append(
+                        $('<div class="col-sm-7">').append(
                             input.render().$el
                         )
                     )
@@ -478,7 +478,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 this.$body.append(
                     formGroup = $('<div class="form-group">').append(
                         $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Ends')),
-                        $('<div class="col-sm-6">').append(
+                        $('<div class="col-sm-7">').append(
                             input.render().$el
                         )
                     )
