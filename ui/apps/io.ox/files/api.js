@@ -21,10 +21,11 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/util',
+    'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -541,12 +542,21 @@ define('io.ox/files/api', [
             }
 
             return http.wait().then(function () {
+                if (self.mimeTypeFilter) {
+                    return self.filterByMimeType(params).then(function (data) {
+                        // apply filter
+                        if (self.filter) data = _(data).filter(self.filter);
+                        // useSlice helps if server request doesn't support "limit"
+                        return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                    });
+                }
                 return self.httpGet(module, params).then(function (data) {
                     // apply filter
                     if (self.filter) data = _(data).filter(self.filter);
                     // useSlice helps if server request doesn't support "limit"
                     return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
                 });
+
             });
         },
 
@@ -554,29 +564,34 @@ define('io.ox/files/api', [
 
             if (params.folder === '9') {
                 var folders = [];
+
                 // add all folders and favorites for the "Drive" folder list view
-                return folderAPI.get('virtual/favorites/infostore').then(function (favorites) {
-                    folders.push(favorites);
-                    return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
-                        folders = folders.concat(driveFolders);
-                        switch (String(params.sort)) {
-                            // Name
-                            case '702':
-                                folders = _(folders).sortBy('title');
-                                break;
-                            // Date
-                            case '5':
-                                folders = _.sortBy(folders, function (folder) {
-                                    return folder.last_modified ? folder.last_modified : 0;
-                                });
-                                break;
-                            default:
-                                // do nothing
+                return folderAPI.get('virtual/favorites/infostore').then(function (favoriteFolder) {
+                    return folderAPI.list('virtual/favorites/infostore').then(function (favorites) {
+                        if (favorites.length) {
+                            folders.push(favoriteFolder);
                         }
-                        if (params.order === 'desc') {
-                            folders.reverse();
-                        }
-                        return folders;
+                        return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                            folders = folders.concat(driveFolders);
+                            switch (String(params.sort)) {
+                                // Name
+                                case '702':
+                                    folders = _(folders).sortBy('title');
+                                    break;
+                                // Date
+                                case '5':
+                                    folders = _.sortBy(folders, function (folder) {
+                                        return folder.last_modified ? folder.last_modified : 0;
+                                    });
+                                    break;
+                                default:
+                                    // do nothing
+                            }
+                            if (params.order === 'desc') {
+                                folders.reverse();
+                            }
+                            return folders;
+                        });
                     });
                 });
             }
@@ -633,6 +648,91 @@ define('io.ox/files/api', [
                 );
             });
         },
+        filterByMimeType: function (params) {
+            var self = this;
+            return folderAPI.get(params.folder).then(function (folder) {
+                return folderAPI.list(params.folder).then(function (folders) {
+                    // sort by date client-side
+                    if (String(params.sort) === '5') {
+                        folders = _(folders).sortBy('last_modified');
+                    }
+                    if (params.order === 'desc') folders.reverse();
+                    // get remaining limit for files
+                    var split = params.limit.split(/,/),
+                        start = Number(split[0]),
+                        stop = Number(split[1]);
+                    // folders exceed upper limit?
+                    if (folders.length >= stop) return folders.slice(start, stop);
+                    var opt = {
+                        data: {
+                            facets: [
+                                {
+                                    facet: 'folder',
+                                    filter: null,
+                                    value: params.folder
+                                },
+                                {
+                                    facet: 'account',
+                                    filter: null,
+                                    value: folder.account_id
+                                },
+                                {
+                                    facet: 'file_type',
+                                    filter: {
+                                        fields: ['file_mimetype'],
+                                        queries: self.mimeTypeFilter
+                                    },
+                                    value: self.mimeTypeFilter
+                                }
+                            ],
+                            options: {
+                                includeSubfolders: false,
+                                sort: params.sort,
+                                order: params.order
+                            },
+                            size: stop,
+                            start: start
+                        },
+                        params: {
+                            module: 'files'
+                        }
+                    };
+
+                    // fetch files
+                    return FindAPI.query(opt).then(
+                        function (files) {
+                            files = files.results;
+                            // build virual response of folders, placeholders, and files
+                            // simple solution to get proper slice
+                            var unified = [].concat(
+                                folders,
+                                // fill up with placeholders
+                                new Array(Math.max(0, start - folders.length)),
+                                files
+                            );
+
+                            var result = unified.slice(start, stop);
+                            result.forEach(function (el, index) {
+                                result[index] = mergeDetailInPool(el);
+                            });
+                            self.addIndex(start, params, result);
+                            self.done();
+                            return result;
+                        },
+                        function fail(e) {
+                            if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                                // IFO-0400 is missing the folder in the error params -> adding this manually
+                                e.error_params.push(params.folder);
+                            }
+                            api.trigger('error error:' + e.code, e);
+                            // this one might fail due to lack of permissions; error are transformed to empty array
+                            if (ox.debug) console.warn('files.filter', e.error, e);
+                            return [];
+                        }
+                    );
+                });
+            });
+        },
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         PRIMARY_PAGE_SIZE: 210,
@@ -647,6 +747,14 @@ define('io.ox/files/api', [
 
     api.collectionLoader.each = function (data) {
         api.pool.add('detail', data);
+    };
+
+    api.collectionLoader.setMimeTypeFilter = function (mimeTypeFilter) {
+        if (_.isEqual(api.collectionLoader.mimeTypeFilter, mimeTypeFilter)) {
+            return false;
+        }
+        api.collectionLoader.mimeTypeFilter = mimeTypeFilter;
+        return true;
     };
 
     // resolve a list of composite keys

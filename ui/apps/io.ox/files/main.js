@@ -297,7 +297,7 @@ define('io.ox/files/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
-                'filter': 'none',
+                'filter': 'all',
                 'layout': layout,
                 'folderEditMode': false,
                 'details': _.device('touch') ? false : app.settings.get('showDetails', true)
@@ -700,16 +700,30 @@ define('io.ox/files/main', [
          * Respond to changed filter
          */
         'change:filter': function (app) {
-
+            var ignoreFolderChange = false;
             app.props.on('change:filter', function (model, value) {
                 app.listView.selection.selectNone();
-                if (value === 'none') app.listView.setFilter();
-                else app.listView.setFilter('.file-type-' + value);
+                if (api.collectionLoader.setMimeTypeFilter(value === 'all' ? null : [value])) {
+                    var id = app.listView.model.get('folder');
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    app.listView.empty();
+                    var options = app.getViewOptions(id);
+                    app.props.set(options);
+                    app.listView.model.set('folder', null, { silent: true });
+                    ignoreFolderChange = true;
+                    app.listView.model.set('folder', id);
+                    ignoreFolderChange = false;
+                }
             });
 
             // reset filter on folder change
             app.on('folder:change', function () {
-                app.props.set('filter', 'none');
+                if (!ignoreFolderChange) {
+                    api.collectionLoader.setMimeTypeFilter(null);
+                    app.props.set('filter', 'all');
+                }
             });
         },
 
@@ -1167,6 +1181,7 @@ define('io.ox/files/main', [
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
+                    app.props.set('filter', 'all');
                 }
             });
         },
