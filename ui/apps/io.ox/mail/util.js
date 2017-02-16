@@ -528,7 +528,8 @@ define('io.ox/mail/util', [
 
         isMalicious: (function () {
             if (!settings.get('maliciousCheck')) return _.constant(false);
-            var blacklist = settings.get('maliciousFolders', []).push();
+            var blacklist = settings.get('maliciousFolders');
+            if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
                 return accountAPI.isMalicious(data.folder_id, blacklist);
