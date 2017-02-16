@@ -445,7 +445,7 @@ define('io.ox/mail/accounts/settings', [
                 var baton = ext.Baton({});
 
                 new dialogs.ModalDialog({
-                    width: 400,
+                    width: 432,
                     async: true,
                     enter: 'add'
                 })

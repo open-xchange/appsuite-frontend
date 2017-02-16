@@ -18,11 +18,7 @@
         display: inline-block;
         padding: 0;
         line-height: 28px;
-        margin: 0 16px 7px 0;
-
-        @media (max-width: 480px), (max-device-width: 480px) {
-            margin-right: 8px;
-        }
+        margin: 0 8px 8px 0;
 
         .service-label {
             color: #555;
@@ -31,7 +27,7 @@
             text-overflow: ellipsis;
         }
 
-        &:last-child { margin-right: 0; }
+        &:nth-child(4), &:last-child { margin-right: 0; }
 
         &:focus, &:active { background-color: white; }
 
@@ -121,5 +117,6 @@
 }
 
 .services-list-view .service-item .service-icon.logo-oxmf {
-    font-size: 48px;
+    font-size: 40px;
+    line-height: 50px;
 }

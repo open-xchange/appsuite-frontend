@@ -352,8 +352,8 @@ define('io.ox/core/folder/extensions', [
 
         subscribe: function (baton) {
             var title;
-            if (baton.module === 'contacts') title = gt('Subscribe new address book');
-            else if (baton.module === 'calendar') title = gt('Subscribe new calendar');
+            if (baton.module === 'contacts') title = gt('Subscribe address book');
+            else if (baton.module === 'calendar') title = gt('Subscribe calendar');
             this.append($('<div>').append(
                     $('<a href="#" data-action="subscribe-address-book" role="button">')
                     .text(title)

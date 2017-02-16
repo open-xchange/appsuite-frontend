@@ -104,9 +104,17 @@ define('io.ox/core/sub/subscriptions', [
 
             render: function () {
                 var self = this,
-                    popup = new dialogs.ModalDialog({ async: true, help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html' });
+                    popup = new dialogs.ModalDialog({
+                        async: true,
+                        help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html',
+                        width: 570
+                    }),
+                    title = gt('Subscribe');
 
-                popup.getHeader().append($('<h4>').text(gt('Subscribe')));
+                if (this.model.get('entityModule') === 'contacts') title = gt('Subscribe address book');
+                else if (this.model.get('entityModule') === 'calendar') title = gt('Subscribe calendar');
+
+                popup.getHeader().append($('<h4>').text(title));
 
                 this.getServices().done(function (services) {
                     if (self.app.subscription && _.isArray(self.app.subscription.wantedOAuthScopes)) {
@@ -136,6 +144,8 @@ define('io.ox/core/sub/subscriptions', [
                         popup.getBody().append($('<p>').text(gt('No subscription services available for this module')));
                         popup.addPrimaryButton('cancel', gt('Cancel')).show();
                     }
+
+                    if (services.length < 4) popup.getPopup().css('width', '432px');
 
                     popup.on('cancel', function () {
                         popup.close();

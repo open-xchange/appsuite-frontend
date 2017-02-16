@@ -97,7 +97,7 @@ define('io.ox/files/actions/add-storage-account', [
     }
 
     return function () {
-        return new dialogs.ModalDialog({ width: 633 })
+        return new dialogs.ModalDialog({ width: 570 })
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close')
             .build(drawContent)
