@@ -24,25 +24,6 @@ define('io.ox/onboarding/clients/view-mobile', [
 
     var POINT = 'io.ox/onboarding/clients/views/mobile';
 
-    var stores = (function () {
-        var prefix = ox.language.slice(0, 2).toUpperCase(),
-            country = _.contains(['EN', 'DE', 'ES', 'FR'], prefix) ? prefix : 'EN';
-        return {
-            'macappstore': {
-                label: gt('Mac App Store'),
-                url: 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg'
-            },
-            'appstore': {
-                label: gt('App Store'),
-                url: 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg'
-            },
-            'playstore': {
-                label: gt('Google Play'),
-                url: 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
-            }
-        };
-    })();
-
     var extensions = {
 
         scenario: function (scenario, index, list) {
@@ -59,7 +40,7 @@ define('io.ox/onboarding/clients/view-mobile', [
         },
 
         action: function (action, index) {
-            var node = $('<section class="action">').prop('id', action.id).attr({ 'data-index': index }),
+            var node = $('<section class="action">').attr('data-action', action.id).attr({ 'data-index': index }),
                 type = action.id.split('/')[0];
             ext.point(POINT + '/' + type).invoke('draw', node, action);
             return node;
@@ -67,28 +48,13 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         // DISPLAY: IMAP, SMTP and EAS
 
-        titleDisplay: function () {
-            this.append($('<h3 class="title">').text(
-                gt('Settings for advanced users')
-            ));
-        },
-
-        descriptionDisplay: function () {
-            this.append($('<p class="description">').text(
-                gt('Setup your account manually!')
-            ));
-        },
-
         block: function (action) {
-            var list = _(Object.keys(action.data)).sortBy(function (key) {
-                return config.order[key] || 1000;
-            });
             this.append($('<pre class="config">').append(
-                    $('<div>').append(_.map(list, function (key) {
-                        return $('<div class="property">').text((config.labels[key] || key) + ':');
+                    $('<div>').append(_.map(action.data, function (prop) {
+                        return $('<div class="property">').text(prop.name + ':');
                     })),
-                    $('<div>').append(_.map(list, function (key) {
-                        return $('<div class="value">').text(action.data[key]);
+                    $('<div>').append(_.map(action.data, function (prop) {
+                        return $('<div class="value">').text(prop.value);
                     }))
                 )
             );
@@ -119,11 +85,9 @@ define('io.ox/onboarding/clients/view-mobile', [
             ));
         },
 
-        descriptionDownload: function () {
+        descriptionDownload: function (action) {
             this.append(
-                $('<p class="description">').text(
-                    gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')
-                )
+                $('<p class="description">').text(action.description)
             );
         },
 
@@ -144,28 +108,38 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         // LINK: App in a Store
 
-        descriptionLink: function (action) {
-            var data = stores[action.type];
-            this.append($('<p class="description">').text(
-                data ? gt('Get the App from %1$s', data.label) : gt('Download the application.')
+        descriptionLink: (function () {
+            return function (action) {
+                this.append($('<p class="description">').append(
+                    action.description ? action.description + ' ' : '',
+                    action.store ? action.store.description : ''
+                ));
+            };
+        })(),
+
+        imageLink: function (action) {
+            // defaults
+            if (!action.image && !action.imageplaceholder) return;
+            this.find('.description').prepend($('<a class="app" target="_blank">').attr('href', action.link).append(
+                $('<img class="app-icon action-call" role="button">').attr({
+                    'src': action.image || action.imageplaceholder
+                })
             ));
         },
 
         badge: function (action) {
-            var data = stores[action.type];
+            if (!action.store.image) return;
             this.append($('<a class="store" target="_blank">').attr('href', action.link).append(
-                $('<img class="store-icon action-call" role="button">').attr({
-                    'data-detail': data.label,
-                    'src': data.url
-                })
+                    $('<img class="store-icon action-call" role="button">').attr({
+                        'data-detail': action.store.name,
+                        'src': action.store.image
+                    })
             ));
         }
     };
 
     // supported
     ext.point(POINT + '/display').extend(
-        { id: 'title', draw: extensions.titleDisplay },
-        { id: 'description', draw: extensions.descriptionDisplay },
         { id: 'block', draw: extensions.block },
         { id: 'toggle', draw: extensions.toggle }
     );
@@ -176,6 +150,7 @@ define('io.ox/onboarding/clients/view-mobile', [
     );
     ext.point(POINT + '/link').extend(
         { id: 'description', draw: extensions.descriptionLink },
+        { id: 'imageLink', draw: extensions.imageLink },
         { id: 'badge', draw: extensions.badge }
     );
 
@@ -195,7 +170,7 @@ define('io.ox/onboarding/clients/view-mobile', [
             })
             .extend({
                 'layout': function () {
-                    this.$el.addClass('client-onboarding-mobile');
+                    this.$el.addClass('client-onboarding mobile');
                 },
                 'action-close': function () {
                     this.$el.find('.modal-header').append(

@@ -1126,6 +1126,42 @@ define('io.ox/core/main', [
         })();
 
         ext.point('io.ox/core/topbar/right').extend({
+            id: 'client-onboarding-hint',
+            index: 2200,
+            draw: function () {
+                if (capabilities.has('!client-onboarding')) return;
+                if (!_.device('smartphone')) return;
+                // exit: tab reload with autologin
+                if (_.device('reload') && session.isAutoLogin()) return;
+
+                var conf = _.extend({ enabled: true, remaining: 2 }, settings.get('features/clientOnboardingHint', {}));
+                // server prop
+                if (!conf.enabled || !conf.remaining) return;
+                // banner action, topbar action, dropdown action
+                var link = link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // popover
+                link.popover({
+                    content: gt('Did you now that you can take OX App Suite with you! Click here to connect this device.'),
+                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                    placement: 'bottom'
+                });
+                // prevent logout action when clicking hint
+                this.get(0).addEventListener('click', function (e) {
+                    if (e.target.classList.contains('popover-content-signout')) {
+                        e.stopImmediatePropagation();
+                        require(['io.ox/onboarding/clients/wizard'], function (wizard) { wizard.run(); });
+                    }
+                    settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
+                    link.popover('destroy');
+                }, true);
+                // close on click
+                $(document).one('click', link.popover.bind(link, 'destroy'));
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
             index: 10000,
             draw: function () {

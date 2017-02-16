@@ -296,14 +296,29 @@ define('io.ox/onboarding/clients/wizard', [
             Wizard.registry.add(opt, this.render.bind(this));
         },
 
+        // set predefined selections
         set: function (data) {
-            this.model.set(this.config.filterInvalid(data));
+            var props = { platform: 'platforms', device: 'devices', scenario: 'scenarios' },
+                obj = {};
+            // remove invalid values
+            _.each(data, function (value, key) {
+                var prop = props[key];
+                // invalid key
+                if (!prop) return;
+                // invalid value
+                if (!this.config.hash[prop][value]) return;
+                obj[key] = value;
+            });
+            this.model.set(obj);
         },
 
         run: function () {
             if (capabilities.has('!client-onboarding')) return;
             if (_.device('smartphone')) {
-                require(['io.ox/onboarding/clients/view-mobile'], function (dialog) { dialog.get().open(); });
+                require(['io.ox/onboarding/clients/view-mobile'], function (dialog) {
+                    dialog.get().open();
+                    settings.set('features/clientOnboardingHint/remaining', 0).save();
+                });
                 return this;
             }
             // wrapper for wizard registry
@@ -405,6 +420,7 @@ define('io.ox/onboarding/clients/wizard', [
             // add references
             wizard.config = this.config;
             wizard.model = this.model;
+            wizard.container.addClass('client-onboarding');
             // create wizard steps/pages
             wizard
                 // platform

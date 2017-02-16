@@ -119,8 +119,7 @@ define('io.ox/onboarding/clients/extensions', [
                 // draw actions
                 _.each(baton.data, function (action) {
                     node.attr('data-value', action.id);
-                    var actiontype = action.id.split('/')[0],
-                        actionpoint = ext.point(POINT + '/' + actiontype);
+                    var actionpoint = ext.point(POINT + '/' + action.type);
                     // TODO: remove when middleware is ready
                     if (actionpoint.list().length === 0 && ox.debug) console.error('missing view for client-onboarding action: ' + action.id);
                     actionpoint.invoke('draw', node, action, baton);
@@ -157,32 +156,6 @@ define('io.ox/onboarding/clients/extensions', [
 
     var DisplayActionView = Backbone.View.extend({
 
-        order: (function () {
-            var list = [
-                // card
-                'caldav_url',
-                'caldav_login',
-                'carddav_url',
-                'carddav_login',
-                // imap
-                'imapServer',
-                'imapPort',
-                'imapLogin',
-                'imapSecure',
-                // smtp
-                'smtpServer',
-                'smtpPort',
-                'smtpLogin',
-                'smtpSecure',
-                // eas
-                'eas_url',
-                'eas_login'
-            ];
-            return function (key) {
-                return list.indexOf(key);
-            };
-        }()),
-
         initialize: function (action, options) {
             _.extend(this, action);
             this.model = options.baton.model;
@@ -195,8 +168,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         render: function () {
-            var self = this, form,
-                id = _.uniqueId('controls');
+            var id = _.uniqueId('controls');
             this.$el.empty()
                 .append(
                     // title
@@ -205,41 +177,18 @@ define('io.ox/onboarding/clients/extensions', [
                         .append(
                             $('<i class="fa fa-fw fa-chevron-right" aria-hidden="true"> '),
                             $('<i class="fa fa-fw fa-chevron-down" aria-hidden="true">'),
-                            $.txt(gt('Settings for advanced users'))
+                            $.txt(gt('Manual Configuration'))
                         ),
-                    // content
-                    $('<span class="content">')
-                        .attr('id', id)
-                        .append(
-                            $('<div class="description">')
-                                .text(gt('If you know what you are doing...just setup your account manually!')),
-                            form = $('<div class="data">')
-                        )
-                );
-            // sort
-            var list = _(Object.keys(this.data)).sortBy(function (key) {
-                return this.config.order[key] || 1000;
-            }.bind(this));
-            // add rows
-            _.each(list, function (key) {
-                var value = self.data[key],
-                    group = $('<div class="row">'),
-                    id = _.uniqueId('label');
-                group.append(
-                    $('<label class="control-label display-label col-sm-3">')
-                        .attr('id', id)
-                        .text(this.config.labels[key] || key),
-                    $('<div class="col-sm-9">').append(
-                        $('<input class="form-control" readonly>')
-                            .attr('aria-labelledby', id)
-                            .val(value)
-                            .on('click', function () {
-                                $(this).select();
-                            })
+                    // data
+                    $('<pre class="config">').append(
+                        $('<div>').append(_.map(this.data, function (prop) {
+                            return $('<div class="property">').text(prop.name + ':');
+                        })),
+                        $('<div>').append(_.map(this.data, function (prop) {
+                            return $('<div class="value">').text(prop.value);
+                        }))
                     )
                 );
-                form.append(group);
-            }.bind(this));
             return this;
         }
     });
@@ -412,7 +361,7 @@ define('io.ox/onboarding/clients/extensions', [
                         // description
                         $('<div class="description">')
                             .attr('id', id)
-                            .text(gt('Get your device configured by email.')),
+                            .text(this.description),
                         // form
                         $('<div class="interaction">').append(
                             $('<form class="form-inline">').append(
@@ -485,7 +434,7 @@ define('io.ox/onboarding/clients/extensions', [
                         // description
                         $('<div class="description">')
                             .attr('id', ref)
-                            .text(gt('Let´s automatically configure your device, by clicking the button below. It´s that simple!')),
+                            .text(this.description),
                         // action
                         $('<button class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
@@ -521,44 +470,27 @@ define('io.ox/onboarding/clients/extensions', [
             );
         },
 
-        hash: {
-            'macappstore': gt('Mac App Store'),
-            'appstore': gt('App Store'),
-            'playstore': gt('Google Play')
+        getImage: function () {
+            // placeholder is a transparent base64 image; less variable defines background image url
+            if (!this.image && !this.imageplaceholder) return $();
+            // appstore button
+            return $('<a href="#" class="app">').append(
+                $('<img class="app-icon action-call" role="button">').attr({
+                    'data-detail': this.store.name,
+                    'src': this.image || this.imageplaceholder
+                })
+            );
         },
-
-        getLabel: function () {
-            var storename = this.hash[this.type];
-            //#. %1$s: app store name
-            return storename ? gt('Get the App from %1$s', storename) : gt('Download the application.');
-        },
-
 
         getButton: function () {
-            var badgeurl = this.getBadgeUrl();
-            // badge
-            if (badgeurl) {
-                return $('<a href="#" class="store">').append(
-                    $('<img class="store-icon action-call" role="button">').attr({
-                        'data-detail': this.hash[this.type],
-                        'src': this.getBadgeUrl()
-                    })
-                );
-            }
-            // simple button
-            return $('<button class="btn btn-primary action-call">').text(gt('Download'));
-        },
-
-        getBadgeUrl: function () {
-            var available = ['EN', 'DE', 'ES', 'FR'],
-                prefix = ox.language.slice(0, 2).toUpperCase(),
-                country = _.contains(available, prefix) ? prefix : 'EN',
-                stores = {
-                    'macappstore': 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg',
-                    'appstore': 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg',
-                    'playstore': 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
-                };
-            return stores[this.type];
+            if (!this.store.image) return $('<button class="btn btn-primary action-call">').text(gt('Download'));
+            // appstore button
+            return $('<a href="#" class="store">').append(
+                $('<img class="store-icon action-call" role="button">').attr({
+                    'data-detail': this.store.name,
+                    'src': this.store.image
+                })
+            );
         },
 
         render: function () {
@@ -575,7 +507,8 @@ define('io.ox/onboarding/clients/extensions', [
                         ),
                     $('<span class="content">').append(
                         // description
-                        $('<div class="description">').attr(id, id).text(this.getLabel()),
+                        $('<div class="description">').attr(id, id).text(this.store.description),
+                        this.getImage(),
                         this.getButton()
 
                     )
