@@ -1673,7 +1673,6 @@ msgstr "Takvim"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
 #: apps/io.ox/settings/apps/settings/pane.js
 #: apps/io.ox/tasks/actions/delete.js module:io.ox/tasks
 #: apps/io.ox/tasks/common-extensions.js apps/io.ox/tasks/edit/main.js

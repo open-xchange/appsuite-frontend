@@ -686,8 +686,6 @@ msgstr ""
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
-#: apps/io.ox/settings/accounts/views.js
-#: module:io.ox/settings/accounts
 #: apps/io.ox/settings/apps/settings/pane.js
 #: apps/io.ox/tasks/actions/delete.js
 #: module:io.ox/tasks
@@ -10983,12 +10981,12 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/views.js
 #: module:io.ox/settings/accounts
-msgid "Do you really want to delete this account?"
+msgid "Delete account"
 msgstr ""
 
 #: apps/io.ox/settings/accounts/views.js
 #: module:io.ox/settings/accounts
-msgid "Delete account"
+msgid "Do you really want to delete this account?"
 msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js
