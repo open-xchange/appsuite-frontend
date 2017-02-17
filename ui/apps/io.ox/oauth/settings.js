@@ -24,6 +24,11 @@ define('io.ox/oauth/settings', [
 
     'use strict';
 
+    var accountTypeAppMapping = {
+        mail: gt.pgettext('app', 'Mail'),
+        fileStorage: gt.pgettext('app', 'Drive')
+    };
+
     function OAuthAccountDetailExtension(serviceId) {
         this.id = serviceId;
 
@@ -62,7 +67,13 @@ define('io.ox/oauth/settings', [
                     var guid,
                         relatedAccountsView = new ListView({
                             tagName: 'ul',
-                            childView: AccountViews.ListItem,
+                            childView: AccountViews.ListItem.extend({
+                                getTitle: function () {
+                                    var customTitle = accountTypeAppMapping[this.model.get('accountType')];
+                                    // fall back to default implementation if we can not figure out a custom title
+                                    return customTitle || AccountViews.ListItem.prototype.getTitle.apply(this);
+                                }
+                            }),
                             collection: this.options.relatedAccountsCollection
                         });
                     this.$body.append(
