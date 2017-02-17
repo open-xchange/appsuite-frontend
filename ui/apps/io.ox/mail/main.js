@@ -293,7 +293,9 @@ define('io.ox/mail/main', [
                         ),
                         $('<ul class="subfolders" role="group">')
                     )
-                );
+                ).on('dblclick', function (e) {
+                    e.stopImmediatePropagation();
+                });
 
                 return fakeFolder;
             }
