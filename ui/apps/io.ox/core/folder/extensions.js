@@ -60,6 +60,7 @@ define('io.ox/core/folder/extensions', [
             // sent, drafts, spam, trash, archive
             _(account.getTypes()).each(function (type, folder) {
                 if (type === 'inbox') return;
+                if (!account.isPrimary(folder)) return;
                 list.push(getFolder(folder));
             });
             http.resume();
