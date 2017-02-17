@@ -136,7 +136,7 @@ define('io.ox/oauth/settings', [
                         guid = _.uniqueId('input');
                     this.$body.append(
                         $('<div class="form-group">').append(
-                            $('<label>', { 'for': guid }).text(gt('Account Name')),
+                            $('<label>', { 'for': guid }).text(gt('Folder name')),
                             new MiniViews.InputView({ name: 'displayName', model: account, id: guid }).render().$el
                         )
                     );
