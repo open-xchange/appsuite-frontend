@@ -5018,12 +5018,16 @@ msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
-msgid "Subscribe new address book"
+#: apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub
+msgid "Subscribe address book"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
 #: module:io.ox/core
-msgid "Subscribe new calendar"
+#: apps/io.ox/core/sub/subscriptions.js
+#: module:io.ox/core/sub
+msgid "Subscribe calendar"
 msgstr ""
 
 #: apps/io.ox/core/folder/extensions.js
@@ -8187,7 +8191,7 @@ msgstr ""
 
 #: apps/io.ox/files/view-options.js
 #: module:io.ox/files
-msgid "Documents"
+msgid "Text documents"
 msgstr ""
 
 #: apps/io.ox/files/view-options.js

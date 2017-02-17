@@ -3045,10 +3045,6 @@ msgstr "Wollen Sie den Zugriff dieser Applikation widerrufen?"
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokumente"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8402,11 +8398,17 @@ msgid "Subscribe IMAP folders"
 msgstr "IMAP-Ordner abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe new address book"
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Neues Adressbuch abonnieren"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-msgid "Subscribe new calendar"
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
+#, fuzzy
+#| msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Neuen Kalender abonnieren"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8605,6 +8607,12 @@ msgstr "Vorläufig bestätigt"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Dokument bearbeiten"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12263,6 +12271,9 @@ msgstr "JJJJ"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokument gespeichert in Ordner \"%1$s\""
 
+#~ msgid "Documents"
+#~ msgstr "Dokumente"
+
 #~ msgid "Dominican Republic"
 #~ msgstr "Dominikanische Republik"
 
@@ -12366,9 +12377,6 @@ msgstr "JJJJ"
 
 #~ msgid "Edit categories"
 #~ msgstr "Kategorien bearbeiten"
-
-#~ msgid "Edit document"
-#~ msgstr "Dokument bearbeiten"
 
 #~ msgid "Edit feed"
 #~ msgstr "Feed bearbeiten"

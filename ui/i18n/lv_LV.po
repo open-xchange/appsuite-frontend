@@ -3098,10 +3098,6 @@ msgstr "Vai vēlaties atsaukt šīs aplikācijas piekļuvi?"
 msgid "Document"
 msgstr "Dokuments"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokumenti"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8573,15 +8569,17 @@ msgid "Subscribe IMAP folders"
 msgstr "IMAP mapju abonēšana"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Apslēptās adrešu grāmatas"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Pievienot jaunu kalendāru"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8779,6 +8777,12 @@ msgstr "Pagaidu apstiprināts"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Teksts"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Rediģēt dokumentu"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12890,6 +12894,9 @@ msgstr "yyyy"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokuments ir saglabāts mapē \"%1$s\"."
 
+#~ msgid "Documents"
+#~ msgstr "Dokumenti"
+
 #~ msgid "Does not match"
 #~ msgstr "Neatbilst"
 
@@ -13046,9 +13053,6 @@ msgstr "yyyy"
 #~| msgid "Available Categories:"
 #~ msgid "Edit categories"
 #~ msgstr "Pieejamās kategorijas:"
-
-#~ msgid "Edit document"
-#~ msgstr "Rediģēt dokumentu"
 
 #~ msgid "Edit feed"
 #~ msgstr "Rediģēt avotu"

@@ -3118,10 +3118,6 @@ msgstr "Czy chcesz odebrać dostęp tej aplikacji?"
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokumenty"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8576,15 +8572,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Subskrybuj foldery IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Ukryte książki adresowe"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Dodaj nowy kalendarz"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8784,6 +8782,12 @@ msgstr "Wstępnie zaakceptowane"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Tekst"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Edytuj dokument "
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -11870,6 +11874,9 @@ msgstr "rrrr"
 #~ msgid "Do you want to keep the draft after sending this mail?"
 #~ msgstr "Czy chcesz zachować wersję roboczą po wysłaniu tej wiadomości?"
 
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Kliknij dwa razy, aby zmienić nazwę"
 
@@ -11925,9 +11932,6 @@ msgstr "rrrr"
 #~| msgid "Mail address"
 #~ msgid "Edit categories"
 #~ msgstr "Adres pocztowy"
-
-#~ msgid "Edit document"
-#~ msgstr "Edytuj dokument "
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Edycja wielu adresów e-mail"

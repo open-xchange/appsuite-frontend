@@ -3054,10 +3054,6 @@ msgstr "Ønsker du å tilbakekalle tilgangen til denne applikasjonen?"
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokumenter"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8493,15 +8489,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Abonner på IMAP-mapper"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Skjulte adressebøker"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Legg til ny kalender"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8696,6 +8694,12 @@ msgstr "Foreløpig godtatt"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Tekst"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Documents"
+msgid "Text documents"
+msgstr "Dokumenter"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"

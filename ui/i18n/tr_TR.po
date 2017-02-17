@@ -3095,10 +3095,6 @@ msgstr "Bu randevuyu silmek istiyor musunuz?"
 msgid "Document"
 msgstr "Belgeler"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Belgeler"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8656,15 +8652,17 @@ msgid "Subscribe IMAP folders"
 msgstr "IMAP klasörlerine abone olun"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Gizli adres kitabları"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Yeni takvim ekle"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8863,6 +8861,12 @@ msgstr "Geçici olarak kabul edildi"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Documents"
+msgid "Text documents"
+msgstr "Belgeler"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"

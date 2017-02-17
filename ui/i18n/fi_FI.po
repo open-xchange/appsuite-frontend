@@ -3058,10 +3058,6 @@ msgstr "Haluatko peruuttaa pääsyn tähän sovellukseen? "
 msgid "Document"
 msgstr "Asiakirja"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Asiakirjat"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8488,15 +8484,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Tilaa IMAP kansioita"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Piilotetut osoitekirjat"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Lisää uusi kalenteri"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8691,6 +8689,12 @@ msgstr "Alustavasti hyväksytty"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Teksti"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Documents"
+msgid "Text documents"
+msgstr "Asiakirjat"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"

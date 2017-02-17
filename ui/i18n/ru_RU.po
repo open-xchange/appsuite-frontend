@@ -3094,10 +3094,6 @@ msgstr "Отозвать доступ этого приложения?"
 msgid "Document"
 msgstr "Документ"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Документы"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8536,15 +8532,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Подписаться на папки IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Скрытые адресные книги"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Добавить календарь"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8744,6 +8742,12 @@ msgstr "Возможно"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Текст"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Изменить документ\t"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -11813,6 +11817,9 @@ msgstr "гггг"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Документ сохранен в «%1$s»."
 
+#~ msgid "Documents"
+#~ msgstr "Документы"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Дважды щелкните на имени, чтобы переименовать"
 
@@ -11868,9 +11875,6 @@ msgstr "гггг"
 #~| msgid "Mail address"
 #~ msgid "Edit categories"
 #~ msgstr "Почтовый адрес"
-
-#~ msgid "Edit document"
-#~ msgstr "Изменить документ\t"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Правка нескольких сообщений"

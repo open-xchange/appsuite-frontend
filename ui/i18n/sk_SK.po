@@ -3099,10 +3099,6 @@ msgstr "Skutočne chcete odvolať prístup k tejto aplikácii?"
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokumenty"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8570,15 +8566,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Odberať priečinky IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Skryté adresáre kontaktov"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Pridať nový kalendár"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8778,6 +8776,12 @@ msgstr "Nezáväzne prijaté"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Upraviť dokument"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12878,6 +12882,9 @@ msgstr "RRRR"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Dokument uložený v priečinku „%1$s“."
 
+#~ msgid "Documents"
+#~ msgstr "Dokumenty"
+
 #~ msgid "Does not match"
 #~ msgstr "Nezodpovedá"
 
@@ -13033,9 +13040,6 @@ msgstr "RRRR"
 #~| msgid "Available Categories:"
 #~ msgid "Edit categories"
 #~ msgstr "Dostupné kategórie:"
-
-#~ msgid "Edit document"
-#~ msgstr "Upraviť dokument"
 
 #~ msgid "Edit feed"
 #~ msgstr "Upraviť kanál"

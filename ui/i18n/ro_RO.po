@@ -3108,10 +3108,6 @@ msgstr "Doriți să revocați accesul acestei aplicații?"
 msgid "Document"
 msgstr "Document"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Documente"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8585,15 +8581,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Abonare la dosarele IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Agende de contacte ascunse"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Adaugă calendar nou"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8794,6 +8792,12 @@ msgstr "Acceptat provizoriu"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Editează documentul"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12925,6 +12929,9 @@ msgstr "aaaa"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Document salvat în dosarul \"%1$s\"."
 
+#~ msgid "Documents"
+#~ msgstr "Documente"
+
 #~ msgid "Does not match"
 #~ msgstr "Nu corespunde"
 
@@ -13085,9 +13092,6 @@ msgstr "aaaa"
 #~| msgid "Categories"
 #~ msgid "Edit categories"
 #~ msgstr "Categorii"
-
-#~ msgid "Edit document"
-#~ msgstr "Editează documentul"
 
 #~ msgid "Edit feed"
 #~ msgstr "Editează flux"

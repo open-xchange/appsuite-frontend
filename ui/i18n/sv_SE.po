@@ -3053,10 +3053,6 @@ msgstr "Vill du återkalla det här programmets åtkomst?"
 msgid "Document"
 msgstr "Dokument"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Dokument"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8488,15 +8484,17 @@ msgid "Subscribe IMAP folders"
 msgstr "Prenumerera på IMAP mappar"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Dolda adressböcker"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Lägg till ny kalender"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8693,6 +8691,12 @@ msgstr "Preliminärt accepterad"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Redigera dokument"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12735,6 +12739,9 @@ msgstr "yyyy"
 #~ msgid "Do you want to create a %s account?"
 #~ msgstr "Vill du verkligen skapa ett %s-konto?"
 
+#~ msgid "Documents"
+#~ msgstr "Dokument"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Dubbelklicka för att döpa om"
 
@@ -12843,9 +12850,6 @@ msgstr "yyyy"
 #~| msgid "Mail address"
 #~ msgid "Edit categories"
 #~ msgstr "E-postadress"
-
-#~ msgid "Edit document"
-#~ msgstr "Redigera dokument"
 
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Redigera flera e-brev"

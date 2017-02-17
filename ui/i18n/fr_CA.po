@@ -3093,10 +3093,6 @@ msgstr "Voulez-vous vraiment révoquer l'accès de cette application ?"
 msgid "Document"
 msgstr "Document"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "Documents"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8581,15 +8577,17 @@ msgid "Subscribe IMAP folders"
 msgstr "S'abonner à des dossiers IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Carnets d'adresses cachés"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Ajouter un nouvel agenda"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8784,6 +8782,12 @@ msgstr "Accepté provisoirement"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Texte"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "Modifier le document"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -12049,6 +12053,9 @@ msgstr "aaaa"
 #~ msgid "Document saved in folder \"%1$s\"."
 #~ msgstr "Document enregistré dans le dossier « %1$s »."
 
+#~ msgid "Documents"
+#~ msgstr "Documents"
+
 #~ msgid "Double click to rename"
 #~ msgstr "Faites un double clic pour le renommer"
 
@@ -12124,9 +12131,6 @@ msgstr "aaaa"
 #~| msgid "Mail address"
 #~ msgid "Edit categories"
 #~ msgstr "Adresse électronique"
-
-#~ msgid "Edit document"
-#~ msgstr "Modifier le document"
 
 #~ msgid "Edit feed"
 #~ msgstr "Modifier le flux"

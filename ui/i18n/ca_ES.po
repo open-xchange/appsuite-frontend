@@ -3133,11 +3133,6 @@ msgstr ""
 msgid "Document"
 msgstr ""
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-#, fuzzy
-msgid "Documents"
-msgstr "Documents"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8678,13 +8673,15 @@ msgid "Subscribe IMAP folders"
 msgstr "Subscriu-me a carpetes IMAP"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "Afegeix a la llibreta d'adreces"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "Afegeix al calendari"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8880,6 +8877,11 @@ msgstr "Acceptat provisionalment"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "Text"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+msgid "Text documents"
+msgstr "Documents"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"

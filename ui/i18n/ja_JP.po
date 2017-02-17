@@ -3010,10 +3010,6 @@ msgstr "このアプリケーションのアクセスを無効にしますか？
 msgid "Document"
 msgstr "ドキュメント"
 
-#: apps/io.ox/files/view-options.js module:io.ox/files
-msgid "Documents"
-msgstr "ドキュメント"
-
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgctxt "app"
 msgid "Documents"
@@ -8450,15 +8446,17 @@ msgid "Subscribe IMAP folders"
 msgstr "IMAP フォルダを登録"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Hidden address books"
-msgid "Subscribe new address book"
+msgid "Subscribe address book"
 msgstr "隠しアドレス帳"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #, fuzzy
 #| msgid "Add new calendar"
-msgid "Subscribe new calendar"
+msgid "Subscribe calendar"
 msgstr "予定表に追加"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
@@ -8650,6 +8648,12 @@ msgstr "仮承諾済み"
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Text"
 msgstr "テキスト"
+
+#: apps/io.ox/files/view-options.js module:io.ox/files
+#, fuzzy
+#| msgid "Edit document"
+msgid "Text documents"
+msgstr "ドキュメントを編集"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
@@ -13414,6 +13418,9 @@ msgstr "yyyy"
 #~ "となります。バージョン管理機能と組み合わせることで、企業は、常に統合された"
 #~ "最新のビジョンにもとづいて作業ができます。"
 
+#~ msgid "Documents"
+#~ msgstr "ドキュメント"
+
 #~ msgid "Does not match"
 #~ msgstr "次の文字列と一致しない"
 
@@ -13576,9 +13583,6 @@ msgstr "yyyy"
 #~| msgid "Mail categories"
 #~ msgid "Edit categories"
 #~ msgstr "利用可能なカテゴリ:"
-
-#~ msgid "Edit document"
-#~ msgstr "ドキュメントを編集"
 
 #~ msgid "Edit feed"
 #~ msgstr "フィードを編集"
