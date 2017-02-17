@@ -923,16 +923,6 @@ define('io.ox/files/share/permissions', [
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
 
-            if (supportsChanges) {
-                // add action buttons
-                dialog
-                    .addCancelButton()
-                    .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
-            } else {
-                dialog
-                    .addButton({ action: 'cancel', label: gt('Close') });
-            }
-
             if (supportsInvites) {
 
                 /*
@@ -1087,6 +1077,16 @@ define('io.ox/files/share/permissions', [
                 });
 
                 typeaheadView.render();
+            }
+
+            if (supportsChanges) {
+                // add action buttons
+                dialog
+                    .addCancelButton()
+                    .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
+            } else {
+                dialog
+                    .addButton({ action: 'cancel', label: gt('Close') });
             }
 
             dialog.on('save', function () {
