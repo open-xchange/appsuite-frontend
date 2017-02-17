@@ -67,15 +67,19 @@ define('io.ox/settings/accounts/views', [
             },
 
             initialize: function () {
-                // mail accounts are special, displayName might be different from account name, want account name, here
-                this.titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
-
                 this.listenTo(this.model, 'change', this.render);
+            },
+
+            getTitle: function () {
+                // mail accounts are special, displayName might be different from account name, want account name, here
+                var titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
+
+                return this.model.get(titleAttribute);
             },
 
             render: function () {
                 var self = this,
-                    title = self.model.get(this.titleAttribute);
+                    title = self.getTitle();
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
