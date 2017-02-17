@@ -1083,7 +1083,6 @@ define('io.ox/files/share/permissions', [
                 );
 
                 dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {
-                    console.log('yay', model, value);
                     this.$('.message-text').parent().toggle(value);
                 });
 
