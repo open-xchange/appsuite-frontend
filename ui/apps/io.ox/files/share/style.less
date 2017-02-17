@@ -91,12 +91,16 @@
 
 .share-permissions-dialog {
 
+    .modal-content {
+        min-height: 400px;
+    }
+
     .modal-header {
+
         *zoom: 1;
 
         .btn {
             float: right;
-
             &.btn-primary { margin-left: 13px; }
         }
 
@@ -109,9 +113,8 @@
 
         &:after { clear: both; }
 
-        .autocomplete-controls {
-            width: 402px;
-            float: left;
+        .form-group {
+            margin: 8px 0 0 0;
         }
     }
 
@@ -130,15 +133,12 @@
 
         .share-options {
             text-align: left;
-
-            textarea { margin-top: -16px; }
+            textarea {
+                resize: vertical;
+                height: 96px;
+                max-height: ~"calc(50vh - 64px)";
+            }
         }
-    }
-
-    // fix border radius for a compact widget
-    .form-control{
-        &.tt-input     { .border-radius(@border-radius-small @border-radius-small 0px 0px); }
-        &.message-text { .border-radius(0px 0px @border-radius-small @border-radius-small); }
     }
 
     .permission {
@@ -158,7 +158,6 @@
                 line-height: @picture-height;
                 color: #eee;
             }
-
         }
 
         .role, .detail-dropdown, .entity-actions {
