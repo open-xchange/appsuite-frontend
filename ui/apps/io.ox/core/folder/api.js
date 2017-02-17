@@ -342,10 +342,17 @@ define('io.ox/core/folder/api', [
 
         removeCollection: function (id, options) {
             options = options || {};
-            var collection = this.collections[id], self = this;
+            var collection = this.collections[id],
+                self = this,
+                models = collection ? collection.models : [];
 
             if (!collection) return;
-            collection.each(function (model) {
+
+            // delete collection before recursion to avoid loops, just in case
+            collection = null;
+            delete this.collections[id];
+
+            _(models).each(function (model) {
                 removeFromAllCollections(model.id);
                 self.removeCollection(model.id, options);
             });
@@ -358,9 +365,6 @@ define('io.ox/core/folder/api', [
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
             }
-
-            collection = null;
-            delete this.collections[id];
         },
 
         getModel: function (id) {
