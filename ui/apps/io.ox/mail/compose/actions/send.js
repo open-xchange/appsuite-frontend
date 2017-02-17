@@ -140,11 +140,11 @@ define('io.ox/mail/compose/actions/send', [
                 if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
 
                 var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                        return $(this).attr('id');
+                        return $(this).attr('data-id');
                     }),
                     deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
 
-                return $.when(deferreds).then(function () {
+                return $.when.apply($, deferreds).then(function () {
                     // use actual content since the image urls could have changed
                     baton.mail.attachments[0].content = baton.model.getMail().attachments[0].content;
                 });
