@@ -72,6 +72,14 @@ define('io.ox/core/tk/tokenfield', [
         return this.$element.get(0);
     };
 
+    var uniqPModel = pModel.Participant.extend({
+        setPID: function () {
+            uniqPModel.__super__.setPID.call(this);
+            // add unique id to pid attr (allows duplicates)
+            this.set('pid', this.get('pid') + '_' + _.uniqueId(), { silent: true });
+        }
+    });
+
     var Tokenfield = Typeahead.extend({
 
         className: 'test',
@@ -87,7 +95,7 @@ define('io.ox/core/tk/tokenfield', [
                 // defines tokendata
                 harmonize: function (data) {
                     return _(data).map(function (m) {
-                        var model = new pModel.Participant(m);
+                        var model = new uniqPModel(m);
                         return {
                             value: model.getTarget({ fallback: true }),
                             // fallback when firstname and lastname are empty strings
@@ -150,7 +158,7 @@ define('io.ox/core/tk/tokenfield', [
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
             var Participants = Backbone.Collection.extend({
-                model: pModel.Participant
+                model: uniqPModel
             });
 
             // initialize collection
@@ -280,7 +288,7 @@ define('io.ox/core/tk/tokenfield', [
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
                         // add external participant
-                        e.attrs.model = new pModel.Participant({
+                        e.attrs.model = new uniqPModel({
                             type: 5,
                             display_name: newAttrs[1],
                             email1: newAttrs[3]
@@ -294,7 +302,7 @@ define('io.ox/core/tk/tokenfield', [
                             .filter(function (m) { return !!m.mail; })
                             .map(function (m) {
                                 m.type = 5;
-                                var model = new pModel.Participant({
+                                var model = new uniqPModel({
                                     type: 5,
                                     display_name: m.display_name,
                                     email1: m.mail
