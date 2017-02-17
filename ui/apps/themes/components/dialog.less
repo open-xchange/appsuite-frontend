@@ -301,8 +301,8 @@
                     float: left;
                 }
 
-                .name { 
-                    .ellipsis(); 
+                .name {
+                    .ellipsis();
                      padding-left: 0.5em;
                 }
 
@@ -384,19 +384,23 @@
 //
 .modal.flex {
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     overflow: hidden;
 
     .modal-dialog {
-        margin: 0;
-        padding: 16px 0;
+        margin: 0 auto;
         width: 500px;
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
 
     .modal-content {
         border: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-height: ~"calc(100vh - 40px)";
     }
 
     .modal-title {
@@ -415,17 +419,9 @@
         flex-grow: 0;
     }
 
-    .modal-header {
-        // helps against flex grow pushing the headline out of the dialog
-        min-height: 56px;
-    }
-
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
-
-        // helps against flex grow pushing the buttons out of the dialog
-        min-height: 63px;
     }
 
     &.maximize {

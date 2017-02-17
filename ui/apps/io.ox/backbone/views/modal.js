@@ -59,11 +59,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 .append(
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
-                            $('<div class="modal-header">').append(
+                            this.$header = $('<div class="modal-header">').append(
                                 $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
                             ),
                             this.$body = $('<div class="modal-body">'),
-                            $('<div class="modal-footer">')
+                            this.$footer = $('<div class="modal-footer">')
                         )
                     )
                 );
@@ -78,7 +78,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // add help icon?
             if (options.help) {
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
-                    this.$('.modal-header').addClass('help').append(
+                    this.$header.addClass('help').append(
                         new HelpView({ href: options.help }).render().$el
                     );
                 }.bind(this));
@@ -170,7 +170,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options),
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
-            this.$('.modal-footer')[fn](
+            this.$footer[fn](
                 $('<button type="button" class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
