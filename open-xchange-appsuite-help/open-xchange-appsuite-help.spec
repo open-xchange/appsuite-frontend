@@ -8,7 +8,7 @@ BuildRequires:  ant-nodeps
 BuildRequires:  java-devel >= 1.6.0
 BuildRequires:  nodejs >= 0.10.0
 Version:        @OXVERSION@
-%define         ox_release 14
+%define         ox_release 13
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -227,8 +227,6 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
-* Fri Feb 17 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-02-21 (3969)
 * Fri Feb 17 2017 Marcus Klein <marcus.klein@open-xchange.com>
 Build for patch 2017-02-20 (3952)
 * Fri Jan 27 2017 Marcus Klein <marcus.klein@open-xchange.com>
