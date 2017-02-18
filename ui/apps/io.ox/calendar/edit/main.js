@@ -125,7 +125,8 @@ define('io.ox/calendar/edit/main', [
                                 }
                                 if (error.conflicts) return;
                                 var message;
-                                if (error.problematic) {
+                                // hmm, backend likes to send an empty object in "problematic" which makes it hard to check
+                                if (error.problematic && error.problematic.length > 0 && !_.isEmpty(error.problematic[0])) {
                                     message = _(error.problematic).map(function (field) {
                                         var id = http.getColumn('calendar', field.id) || field.id,
                                             name = util.columns[id] || id;
@@ -376,9 +377,11 @@ define('io.ox/calendar/edit/main', [
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();
-                // avoid double yells and only yell server errors caused by move operation. Errors from update, create requests are handled by the onBackendError listener
-                // errors from validation are not backenErrors, yell those too
-                if (error && (!error.code || (options && options.isMoveOperation))) notifications.yell(error);
+                // when to do what?
+                // show validation errors inline -> dont yell
+                // show server errors caused by move (whatever that might be) -> yell
+                // everything else -> no yell, handled by backendError (see above)
+                if (error && (options && options.isMoveOperation)) notifications.yell(error);
             },
 
             failSave: function () {
