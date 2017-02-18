@@ -3149,8 +3149,8 @@ msgstr "Dra för att omplacera komponent"
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/pim/actions.js
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/search/view-template.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/oauth/settings.js
+#: module:io.ox/settings apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
 msgstr "Drive"
@@ -4057,7 +4057,8 @@ msgid "Folder"
 msgstr "Mapp"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
-#: apps/io.ox/core/folder/actions/rename.js
+#: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
+#: module:io.ox/settings
 msgid "Folder name"
 msgstr "Mappnamn"
 
@@ -5167,7 +5168,8 @@ msgid "Mail"
 msgstr "E-post"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail apps/io.ox/search/view-template.js
+#: module:io.ox/mail apps/io.ox/oauth/settings.js module:io.ox/settings
+#: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
 msgstr "E-post"
