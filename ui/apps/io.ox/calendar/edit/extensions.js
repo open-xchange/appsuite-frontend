@@ -260,7 +260,8 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'start_date',
                     label: gt('Starts on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'timezone'
+                    timezoneAttribute: 'timezone',
+                    closeOnScroll: true
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -293,7 +294,8 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'end_date',
                     label: gt('Ends on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'endTimezone'
+                    timezoneAttribute: 'endTimezone',
+                    closeOnScroll: true
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)

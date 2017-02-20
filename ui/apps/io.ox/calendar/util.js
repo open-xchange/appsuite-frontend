@@ -421,6 +421,12 @@ define('io.ox/calendar/util', [
                 $(this).popover('hide');
             });
 
+            if (opt.closeOnScroll) {
+                parent.scrollParent().on('scroll', function () {
+                    parent.popover('hide');
+                });
+            }
+
             return parent;
         },
 
