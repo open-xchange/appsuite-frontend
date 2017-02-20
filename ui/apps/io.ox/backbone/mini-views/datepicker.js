@@ -99,7 +99,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                                         self.model.attributes,
                                         {
                                             placement: 'top',
-                                            trigger: 'click'
+                                            trigger: 'click',
+                                            closeOnScroll: self.options.closeOnScroll
                                         }
                                     );
                                 });
