@@ -210,7 +210,8 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     function menubarKeydown(e) {
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
-        if (e.which === 32) $(e.target).click(); // space
+        // space on role="button" is already handled
+        if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
         var links = $(e.currentTarget).find('> li:visible > a');
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
