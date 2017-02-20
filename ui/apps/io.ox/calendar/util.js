@@ -463,10 +463,12 @@ define('io.ox/calendar/util', [
                 var and =
                     //#. recurrence string
                     //#. used to concatenate two weekdays, like Monday and Tuesday
+                    //#. make sure that the leading and trailing spaces are also in the translation
                     gt(' and '),
                     delimiter =
                     //#. This delimiter is used to concatenate a list of string
                     //#. Example: Monday, Tuesday, Wednesday
+                    //#. make sure, that the trailing space is also in the translation
                     gt(', ');
 
                 return tmp.length === 2 ? tmp.join(and) : tmp.join(delimiter);
