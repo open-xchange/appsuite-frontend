@@ -19,8 +19,9 @@ define('io.ox/calendar/util', [
     'io.ox/core/util',
     'io.ox/core/folder/folder-color',
     'settings!io.ox/calendar',
+    'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, settings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -421,7 +422,7 @@ define('io.ox/calendar/util', [
                 $(this).popover('hide');
             });
 
-            if (opt.closeOnScroll) {
+            if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
                 parent.scrollParent().on('scroll', function () {
                     parent.popover('hide');
                 });
