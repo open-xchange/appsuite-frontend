@@ -17,13 +17,14 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/contacts/api',
+    'io.ox/core/http',
     'io.ox/core/util',
     'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI, util, gt) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, http, util, gt) {
 
     'use strict';
 
@@ -290,6 +291,9 @@ define('io.ox/core/tk/tokenfield', [
                     // distribution lists
                     if (e.attrs.model.has('distribution_list')) {
                         // create a model/token for every member with an email address
+                        // bundle and delay the pModel fetch calls
+                        http.pause();
+
                         var models = _.chain(e.attrs.model.get('distribution_list'))
                             .filter(function (m) { return !!m.mail; })
                             .map(function (m) {
@@ -319,6 +323,8 @@ define('io.ox/core/tk/tokenfield', [
                         self.redrawTokens();
                         // clean input
                         self.input.data('ttTypeahead').input.$input.val('');
+
+                        http.resume();
                         return false;
                     }
 
