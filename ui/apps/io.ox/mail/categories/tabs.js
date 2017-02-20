@@ -59,7 +59,7 @@ define('io.ox/mail/categories/tabs', [
                 this.collection.map(function (model) {
                     return $('<li class="category">')
                         .append(
-                            $('<a href="#" class="link" role="button">').append(
+                            $('<a href="#" class="link" role="button" draggable="false">').append(
                                 $('<div class="category-icon">'),
                                 $('<div class="category-name truncate">').text(model.get('name')),
                                 $('<div class="category-counter">').append(
