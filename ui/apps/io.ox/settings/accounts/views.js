@@ -77,6 +77,12 @@ define('io.ox/settings/accounts/views', [
                 return this.model.get(titleAttribute);
             },
 
+            renderSubTitle: function () {
+                var el = $('<div>').addClass('list-item-subtitle');
+                ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').invoke('renderSubtitle', el, this.model);
+                return el;
+            },
+
             render: function () {
                 var self = this,
                     title = self.getTitle();
@@ -87,7 +93,9 @@ define('io.ox/settings/accounts/views', [
 
                 self.$el.empty().append(
                     drawIcon(self.model),
-                    listUtils.makeTitle(title),
+                    listUtils.makeTitle(title).append(
+                        this.renderSubTitle()
+                    ),
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),

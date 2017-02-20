@@ -115,6 +115,19 @@ define('io.ox/oauth/settings', [
             })
             .open();
         };
+
+        this.renderSubtitle = function (model) {
+            var account = oauthKeychain.accounts.get(model.get('id')),
+                $el = this;
+            if (!account) return;
+
+            account.fetchRelatedAccounts().then(function (accounts) {
+                $el.append(accounts.map(function (a) {
+                    var mapping = accountTypeAppMapping[a.accountType];
+                    return mapping || a.displayName;
+                }).join(', '));
+            });
+        };
     }
 
     _(oauthKeychain.serviceIDs).each(function (serviceId) {
