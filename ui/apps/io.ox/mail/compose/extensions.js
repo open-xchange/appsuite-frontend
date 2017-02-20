@@ -375,16 +375,17 @@ define('io.ox/mail/compose/extensions', [
                 // trigger change to fill tokenfield
                 baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
 
-                tokenfieldView.collection.on('change reset add remove sort', function () {
+                tokenfieldView.collection.on('change reset add remove sort', _.debounce(function () {
                     var recipients = this.map(function (model) {
-                        var token = model.get('token');
-                        var display_name = util.removeQuotes(token.label), email = token.value;
+                        var token = model.get('token'),
+                            display_name = util.removeQuotes(token.label),
+                            email = token.value;
                         return [display_name, email];
                     });
                     redrawLock = true;
                     baton.model.set(attr, recipients);
                     redrawLock = false;
-                });
+                }.bind(tokenfieldView.collection)), 20);
             };
         },
 
