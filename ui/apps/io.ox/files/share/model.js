@@ -13,8 +13,10 @@
 
 define('io.ox/files/share/model', [
     'io.ox/files/share/api',
-    'io.ox/core/yell'
-], function (api, yell) {
+    'io.ox/core/yell',
+    'gettext!io.ox/core'
+], function (api, yell, gt) {
+
 
     'use strict';
 
@@ -237,7 +239,7 @@ define('io.ox/files/share/model', [
                 return 'Empty receipient list';
             }
             if (attr.secured === true && _.isEmpty(attr.password)) {
-                return 'Please set password';
+                return gt('Please set password');
             }
         }
     });

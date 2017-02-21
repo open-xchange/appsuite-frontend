@@ -51,6 +51,17 @@
         return true;
     }
 
+    function memoize(func, hasher) {
+        var memoize = function (key) {
+            var cache = memoize.cache;
+            var address = '' + (hasher ? hasher.apply(this, arguments) : key);
+            if (!hasOwnProperty.call(cache || {}, address)) cache[address] = func.apply(this, arguments);
+            return cache[address];
+        };
+        memoize.cache = {};
+        return memoize;
+    }
+
     function detectBrowser(nav) {
         var error = false;
         try {
@@ -258,7 +269,7 @@
         },
 
         // combination of browser & display
-        device: _.memoize(function (condition, debug) {
+        device: memoize(function (condition, debug) {
             // add support for language checks
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
@@ -269,7 +280,7 @@
             misc.reload = (window.performance && window.performance.navigation.type === 1);
             // debug
             if (condition === 'debug' || condition === 1337) {
-                return _.extend({}, browserLC, display, misc);
+                return Object.assign({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;

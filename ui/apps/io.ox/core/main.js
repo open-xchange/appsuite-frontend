@@ -1692,6 +1692,7 @@ define('io.ox/core/main', [
 
                     // restore apps
                     ox.ui.App.restore().always(function () {
+                        var allUnavailable = true;
                         // auto launch
                         _(baton.autoLaunch)
                         .chain()
@@ -1705,6 +1706,7 @@ define('io.ox/core/main', [
                         })
                         .each(function (details, index) {
                             //only load first app on small devices
+                            if (index === 0) allUnavailable = false;
                             if (_.device('smartphone') && index > 0) return;
                             // split app/call
                             var launch, method, options = _(hash).pick('folder', 'id');
@@ -1752,6 +1754,11 @@ define('io.ox/core/main', [
                                 });
                             }
                         });
+                        if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
+                            var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
+                            message = message || gt('The requested application is not available at this moment.');
+                            notifications.yell({ type: 'error', error: message, duration: -1 });
+                        }
                     });
 
                     baton.instantFadeOut = instantFadeOut;

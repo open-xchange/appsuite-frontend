@@ -361,7 +361,16 @@ define('io.ox/files/share/wizard', [
         share: function () {
             // we might have new addresses
             contactsAPI.trigger('maybeNewContact');
-            return $.when(this.model.save()).fail(yell);
+
+            // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
+            var result = this.model.save();
+
+            //  to unify the return type, we always want to return a deferred
+            if (result === false) {
+                return $.Deferred().reject();
+            }
+            return result.fail(yell);
+
         },
 
         removeLink: function () {

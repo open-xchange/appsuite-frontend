@@ -251,14 +251,9 @@ define('io.ox/files/share/listview', [
             id: 'date',
             index: 1000,
             draw: function (baton) {
-                var created = moment(baton.model.get('last_modified'));
-                this.append(
-                    $('<div class="list-item-column column-4 gray">').append(
-                        $('<time class="date">')
-                            .attr('datetime', created.toISOString())
-                            .text(_.noI18n(created.format('L')))
-                    )
-                );
+                var column = $('<div class="list-item-column column-4 gray">');
+                extensions.smartdate.call(column, baton);
+                this.append(column);
             }
         }
     );

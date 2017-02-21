@@ -21,8 +21,6 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/share/api',
-    'io.ox/core/api/user',
-    'io.ox/core/api/group',
     'io.ox/contacts/api',
     'io.ox/core/tk/dialogs',
     'io.ox/contacts/util',
@@ -32,10 +30,9 @@ define('io.ox/files/share/permissions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/util',
     'gettext!io.ox/core',
-    'less!io.ox/files/share/style',
-    // todo: relocate smart-dropdown logic
-    'io.ox/core/tk/flag-picker'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, userAPI, groupAPI, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt) {
+    'settings!io.ox/contacts',
+    'less!io.ox/files/share/style'
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt) {
 
     'use strict';
 

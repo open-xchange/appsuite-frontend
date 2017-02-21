@@ -20,7 +20,6 @@ define('io.ox/files/main', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
-    'io.ox/core/folder/node',
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
@@ -41,10 +40,10 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/share/toolbar',
+    'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
-    'io.ox/core/folder/breadcrumb',
-    'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+    'io.ox/core/folder/breadcrumb'
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -244,7 +243,7 @@ define('io.ox/files/main', [
             });
 
             var tree = new TreeView({ app: app, contextmenu: true, module: 'infostore', root: settings.get('rootFolderId', 9) });
-
+            app.treeView = tree;
             // initialize folder view
             FolderView.initialize({ app: app, tree: tree, firstResponder: 'main' });
             page.append(tree.render().$el);
@@ -479,6 +478,101 @@ define('io.ox/files/main', [
                 app.folderView.tree.selection.getItems().removeClass('selected');
                 app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
                 app.mysharesListViewControl.$el.hide().siblings().show();
+            });
+        },
+
+        /*
+         * Respond to virtual favorites
+         */
+        'myfavorites-listview': function (app) {
+
+            var loading = false;
+
+            app.folderView.tree.on({
+                'virtual': function (id) {
+                    if (id !== 'virtual/favorites/infostore') return;
+
+                    app.folder.unset();
+                    app.getWindow().setTitle(gt('Favorites'));
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        return;
+                    }
+
+                    app.getWindow().nodes.body.busy().children().hide();
+                    if (loading) return;
+                    loading = true;
+
+                    require(['io.ox/files/favorite/listview'], function (MyFavoriteView) {
+
+                        app.myFavoriteListView = new MyFavoriteView({
+                            app: app,
+                            pagination: false,
+                            draggable: false,
+                            ignoreFocus: true,
+                            noSwipe: true,
+                            noPullToRefresh: true
+                        });
+
+                        app.myFavoritesListViewControl = new ListViewControl({
+                            id: 'io.ox/files/favorite/myfavorites',
+                            listView: app.myFavoriteListView,
+                            app: app
+                        });
+
+                        var toolbar = new Toolbar({ title: app.getTitle() });
+
+                        app.getWindow().nodes.body.prepend(
+                            app.myFavoritesListViewControl.render().$el
+                                .hide()
+                                .addClass('myfavorites-list-control')
+                                .append(toolbar.render().$el)
+                        );
+
+                        app.updateMyFavoritesToolbar = _.debounce(function (list) {
+                            var baton = ext.Baton({
+                                    $el: toolbar.$list,
+                                    data: app.myFavoriteListView.collection.get(list),
+                                    collection: app.myFavoriteListView.collection,
+                                    model: app.myFavoriteListView.collection.get(app.myFavoriteListView.collection.get(list))
+                                }),
+                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
+                                .invoke('draw', toolbar.$list.empty(), baton);
+
+                            $.when.apply($, ret.value()).then(function () {
+                                toolbar.initButtons();
+                            });
+                        }, 10);
+
+                        app.updateMyFavoritesToolbar([]);
+                        // update toolbar on selection change as well as any model change
+                        app.myFavoriteListView.on('selection:change change', function () {
+                            app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
+                        });
+
+                        // show? (maybe user switched folder meanwhile)
+                        if (app.folder.get() === null) {
+                            app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        }
+
+                        loading = false;
+                    });
+                },
+                'change': function () {
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.hide().siblings().show();
+                        app.myFavoriteListView.selection.clear();
+                    }
+                    if (loading) {
+                        app.getWindow().nodes.body.idle().children().show();
+                    }
+                }
+            });
+
+            app.pages.getPage('main').on('myfavorites-folder-back', function () {
+                app.folderView.tree.selection.getItems().removeClass('selected');
+                app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
+                app.myFavoritesListViewControl.$el.hide().siblings().show();
             });
         },
 
@@ -918,41 +1012,8 @@ define('io.ox/files/main', [
         /*
          * change to default folder on no permission or folder not found errors
          */
-        'no-permission': function (app) {
-            // use debounce, so errors from folder and app api are only handled once.
-            var handleError = _.debounce(function (error) {
-                // work with (error) and (event, error) arguments
-                if (error && !error.error) {
-                    if (arguments[1] && arguments[1].error) {
-                        error = arguments[1];
-                    } else {
-                        return;
-                    }
-                }
-                // only change if folder is currently displayed
-                if (error.error_params[0] && String(app.folder.get()) !== String(error.error_params[0])) {
-                    return;
-                }
-                require(['io.ox/core/yell'], function (yell) {
-                    yell(error);
-                    // try to load the default folder
-                    // guests do not have a default folder, so the first visible one is chosen
-                    app.folder.setDefault();
-                });
-            }, 300);
-
-            folderAPI.on('error:FLD-0008 error:FLD-0003', handleError);
-            api.on('error:FLD-0008', handleError);
-            api.on('error:IFO-0400', function (error) {
-                // check if folder is currently displayed
-                if (String(app.folder.get()) !== String(error.error_params[0])) {
-                    return;
-                }
-                // see if we can still access the folder, although we are not allowed to view the contents
-                // this is important because otherwise we would not be able to change permissions (because the view jumps to the default folder all the time)
-                // if the useer is nto allowed to view this folder, the folderapi will trigger error:FLD-0003
-                folderAPI.get(app.folder.get(), { cache: false });
-            });
+        'folder-error': function (app) {
+            app.folder.handleErrors();
         },
 
         /*

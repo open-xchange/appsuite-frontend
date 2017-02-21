@@ -348,7 +348,55 @@ define('io.ox/core/desktop', [
 
                     destroy: function () {
                         that = win = grid = null;
-                    }
+                    },
+
+                    handleErrors: (function () {
+
+                        var process = _.debounce(function (error) {
+                            // refresh parent folder or if flat all
+                            var model = api.pool.getModel(self.folder.get());
+                            if (model) api.list(model.get('folder_id'), { cache: false });
+                            self.folder.setDefault();
+                            notifications.yell(error);
+                        }, 1000, true);
+
+                        var regexStr = '(' +
+                                // permission denied (calendar)
+                                'APP-0013|' +
+                                // permission denied (contacts)
+                                'CON-0104|' +
+                                // permission denied
+                                'FLD-0003|' +
+                                // not found
+                                'FLD-0008|' +
+                                // folder storage service no longer available
+                                'FLD-1004|' +
+                                // mail folder "..." could not be found on mail server
+                                'IMAP-1002|' +
+                                // imap no read permission
+                                'IMAP-2041|' +
+                                // infostore no read permission
+                                'IFO-0400|' +
+                                // The provided "..." (e.g. dropbox) resource does not exist
+                                'FILE_STORAGE-0005|' +
+                                'FILE_STORAGE-0055|' +
+                                // permission denied (tasks)
+                                'TSK-0023' +
+                            ')',
+                            regex = new RegExp(regexStr);
+
+                        return function () {
+                            self.listenTo(ox, 'http:error', function (error, request) {
+                                var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
+                                if (folder !== self.folder.get()) return;
+                                if (!regex.test(error.code)) return;
+                                // special handling for no permission. if api.get fails, 'http-error' is triggered again
+                                if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
+                                process(error);
+                            });
+                        };
+                    }())
+
                 };
 
                 return that;
@@ -641,7 +689,8 @@ define('io.ox/core/desktop', [
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
             ox.ui.App.removeRestorePoint(uniqueID);
-        }
+        },
+
     });
 
     function saveRestoreEnabled() {

@@ -60,6 +60,7 @@ define('io.ox/core/api/autocomplete', [
             this.fields = this.fields.concat(contactsAPI.getMapping('msisdn', 'names'));
         }
 
+        if (options.extPoint) ext.point(options.extPoint + '/autocomplete/customize').invoke('customize', this);
         ext.point('io.ox/core/api/autocomplete/customize').invoke('customize', this);
 
         // If contacts auto-collector might have added new contacts
@@ -139,7 +140,10 @@ define('io.ox/core/api/autocomplete', [
             // improve response
             // 1/2: resolve email addresses
             _(data).each(function (obj) {
-                if (obj.mark_as_distributionlist) {
+                if (!/contact|custom|user/.test(obj.type)) {
+                    // filter input from other apis
+                    tmp.push(obj);
+                } else if (obj.mark_as_distributionlist) {
                     // filter distribution lists
                     if (self.options.distributionlists) tmp.push(obj);
                 } else {

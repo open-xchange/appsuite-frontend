@@ -191,7 +191,8 @@ define('io.ox/core/folder/util', [
             case 'read':
                 // can read objects? (see bug 28379 and 23933 and 44957)
                 // hide folders where your only permission is to see the foldername (rights !== 1)
-                return perm(rights, 7) > 0 && rights !== 1;
+                // "Drive" data.id === 9 allways read permissions
+                return data.id === '9' || (perm(rights, 7) > 0 && rights !== 1);
             case 'create':
                 // can create objects?
                 // only folder creation is allowed in system folders
