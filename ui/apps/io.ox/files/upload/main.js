@@ -173,6 +173,10 @@ define('io.ox/files/upload/main', [
             api.trigger('refresh.all');
             totalProgress = 0;
             currentSize = 0;
+            // set abort to true to remove all files from uploadview which have not been uploaded yet
+            uploadCollection.each(function (model) {
+                if (model.get('progress') !== 1) model.set('abort', true);
+            });
             uploadCollection.reset();
         };
 

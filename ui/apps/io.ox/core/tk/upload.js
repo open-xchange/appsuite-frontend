@@ -230,7 +230,14 @@ define('io.ox/core/tk/upload', [
                 this.start();
             }
             // progress! (using always() here to keep things going even on error)
-            this.progress().always(function () {
+            this.progress().always(function (data) {
+                if (data && data.error) {
+                    // only handle quota exceed or too many requests error
+                    if (/^(FLS-0024)$/.test(data.code) || (data.error_params && data.error_params.length && /^429 /.test(data.error_params[0]))) {
+                        self.stop();
+                        return;
+                    }
+                }
                 processing = false;
                 position++;
                 self.queueChanged();
