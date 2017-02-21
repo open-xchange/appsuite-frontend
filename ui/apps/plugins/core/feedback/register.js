@@ -262,13 +262,15 @@ define('plugins/core/feedback/register', [
 
                     var data = {
                         feedback: {
-                            rating: this.ratingView.getValue(),
-                            text: this.$('.feedback-note').val()
+                            score: this.ratingView.getValue(),
+                            comment: this.$('.feedback-note').val(),
+                            app: this.appSelect ? this.appSelect.val() : 'general'
                         },
                         client: {
                             ua: window.navigator.userAgent,
                             browser: _(_.browser).pick(function (val) { return !!val; }),
-                            lang: ox.language
+                            lang: ox.language,
+                            screenResolution: screen.width + 'x' + screen.height
                         },
                         meta: {
                             serverVersion: ox.serverConfig.serverVersion,
@@ -277,9 +279,6 @@ define('plugins/core/feedback/register', [
                             path: ox.abs
                         }
                     };
-                    if (this.appSelect) {
-                        data.feedback.app = this.appSelect.val();
-                    }
 
                     sendFeedback(data)
                         .done(function () {
