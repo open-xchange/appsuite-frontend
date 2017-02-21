@@ -17,6 +17,7 @@ msgstr ""
 
 #. recurrence string
 #. used to concatenate two weekdays, like Monday and Tuesday
+#. make sure that the leading and trailing spaces are also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid " and "
 msgstr ""
@@ -523,6 +524,7 @@ msgstr "(huidige app)"
 
 #. This delimiter is used to concatenate a list of string
 #. Example: Monday, Tuesday, Wednesday
+#. make sure, that the trailing space is also in the translation
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ", "
 msgstr ""
