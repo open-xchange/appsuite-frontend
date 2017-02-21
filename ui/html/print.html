@@ -4,7 +4,7 @@
         <title></title>
         <link rel="stylesheet" href="apps/themes/login/print.css">
     </head>
-    <body onload="setTimeout(function () { window.print(); }, 500)">
+    <body onload="setTimeout(function () { if ((window.opener || window.parent)[location.search.substr(1)]) window.print(); }, 500)">
         <script type="text/template" class="mail">
         <% _.each(data, function(element) { %>
             <section class="item <%- meta.format %> <%- meta.fixedWidthFont %>">
@@ -328,6 +328,10 @@
         <% }); %>
         </script>
         <!-- the only magic we need here; asks UI to use the upper template -->
-        <script>(window.opener || window.parent)[location.search.substr(1)](document);</script>
+        <script>
+            var opener = (window.opener || window.parent),
+                cb = opener[location.search.substr(1)];
+            if (cb) cb(document);
+        </script>
     </body>
 </html>

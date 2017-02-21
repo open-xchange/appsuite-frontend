@@ -19,8 +19,7 @@ define('io.ox/contacts/settings/defaults', function () {
         showAdmin: false,
         fullNameFormat: 'auto',
         startInGlobalAddressbook: true,
-        mapService: 'google',
-        contactPrintlist: 'simple'
+        mapService: 'google'
     };
 
     return settingsDefault;
