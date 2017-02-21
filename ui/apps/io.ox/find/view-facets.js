@@ -52,6 +52,11 @@ define('io.ox/find/view-facets', [
         draw: $.noop
     });
 
+    ext.point(POINT + '/help').extend({
+        index: 100,
+        draw: extensions.help
+    });
+
     /**
      * BACKBONE
      */
