@@ -136,25 +136,4 @@ define('io.ox/contacts/settings/pane', [
         }
     });
 
-    ext.point(POINT + '/pane').extend({
-        index: 400,
-        id: 'printlist',
-        draw: function () {
-
-            var options = [
-                { label: gt('Simple phone list'), value: 'simple' },
-                { label: gt('Detailed contact list'), value: 'details' }
-            ];
-
-            this.append(
-                $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').append(
-                        $('<h2>').text(gt('Printout of contacts'))
-                    ),
-                    new mini.RadioView({ list: options, name: 'contactPrintlist', model: settings }).render().$el
-                )
-            );
-        }
-    });
-
 });

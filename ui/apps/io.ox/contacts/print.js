@@ -37,14 +37,6 @@ define('io.ox/contacts/print', [
         return _([data.email1, data.email2, data.email3]).compact()[index] || data.mail || '';
     }
 
-    function getCity(data, type) {
-        var zipCode = data['postal_code_' + type],
-            city = data['city_' + type];
-
-        if (!zipCode && !city) return;
-        return _([zipCode, city]).compact().join(' ');
-    }
-
     function getDistributionList(data) {
         if (!data.mark_as_distributionlist) return '';
         var list = _(data.distribution_list || []), hash = {};
@@ -77,11 +69,7 @@ define('io.ox/contacts/print', [
             email3: getEmail(data, 2),
             isDistributionList: api.looksLikeDistributionList(data),
             distributionList: getDistributionList(data),
-            thumbIndex: options.thumbIndex,
-            birthday: _.isNumber(data.birthday) ? util.getBirthday(data.birthday) : undefined,
-            'city_business': getCity(data, 'business'),
-            'city_home': getCity(data, 'home'),
-            'city_other': getCity(data, 'other')
+            thumbIndex: options.thumbIndex
         };
     }
 
@@ -101,16 +89,10 @@ define('io.ox/contacts/print', [
         return fn;
     }
 
-    return {
+    var printContacts = {
 
-        open: function (selection, win) {
-
-            var detailedList = settings.get('contactPrintlist', 'simple'),
-                listType = settings.get('features/printList', 'phone'),
-                selector = '.contacts';
-
-            if (detailedList === 'details') selector = '.contacts-details';
-            else if (listType === 'phone') selector = '.phonelist';
+        getOptions: function (selection, win) {
+            var listType = settings.get('features/printList', 'phone');
 
             var options = {
                 get: function (obj) {
@@ -132,28 +114,18 @@ define('io.ox/contacts/print', [
                             n
                         ), n);
                     },
-                    notPrinted: gt('This note will not be printed'),
-                    businessAddress: gt('Business Address'),
-                    homeAddress: gt('Home Address'),
-                    otherAddress: gt('Other Address'),
-                    business: gt('Business'),
-                    home: gt('Home'),
-                    otherPhone: gt('Other'),
-                    messenger: gt('Messenger'),
-                    personalInformation: gt('Personal information'),
-                    birthday: gt('Date of birth')
+                    notPrinted: gt('This note will not be printed')
                 },
 
                 process: process,
                 selection: selection,
-                selector: selector,
+                selector: listType === 'phone' ? '.phonelist' : '.contacts',
                 sortBy: 'sort_name',
                 window: win,
-
                 thumbIndex: createThumbIndex()
             };
 
-            if (listType === 'phone' && detailedList === 'simple') {
+            if (listType === 'phone') {
                 options.filter = function (o) {
                     // ignore distribution lists plus
                     // contacts should have at least one phone number to appear on a phone list
@@ -161,7 +133,13 @@ define('io.ox/contacts/print', [
                 };
             }
 
-            print.smart(options);
+            return options;
+        },
+
+        open: function (selection, win) {
+            print.smart(printContacts.getOptions(selection, win));
         }
     };
+
+    return printContacts;
 });
