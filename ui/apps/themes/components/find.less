@@ -172,7 +172,13 @@
                 }
             }
 
-            .search-box-filter { display: block; }
+            .search-box-filter {
+                display: block;
+                .classic-toolbar {
+                    // max-width (.search-box) + padding (.io-ox-find)
+                    width: calc(~"100% - 566px");
+                }
+            }
         }
     }
 }
