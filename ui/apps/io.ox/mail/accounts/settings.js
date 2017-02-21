@@ -372,9 +372,8 @@ define('io.ox/mail/accounts/settings', [
 
         configureManuallyDialog = function (args, newMailaddress) {
             new ModalDialog({ width: 400 })
-                .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
-                .addPrimaryButton('yes', gt('Yes'), 'yes')
-                .addButton('no', gt('No'), 'no')
+                .addButton({ action: 'yes', label: gt('Yes') })
+                .addButton({ action: 'no', label: gt('No') })
                 .on('yes', function () {
                     var data = {};
                     data.primary_address = newMailaddress;
@@ -383,7 +382,8 @@ define('io.ox/mail/accounts/settings', [
                         createExtpointForNewAccount(args);
                     }
                 })
-                .show();
+                .open()
+                .$body.text(gt('Auto-configuration failed. Do you want to configure your account manually?'));
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
