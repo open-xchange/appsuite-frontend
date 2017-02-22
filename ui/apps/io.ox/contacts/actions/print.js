@@ -31,11 +31,9 @@ define('io.ox/contacts/actions/print', [
             var $preview, def = new $.Deferred();
             this.$body.addClass('row').append(
                 $('<div class="col-xs-offset-1 col-xs-6">').append(
-                    $preview = $('<iframe>')
-                    .css({ width: 200, height: 270, border: '1px solid #ccc', 'box-shadow': '0px 3px 20px #ccc' })
+                    $preview = $('<iframe tabindex="-1">')
                     .attr({
                         title: gt('Print preview'),
-                        tabindex: -1,
                         src: ox.base + '/print.html'
                     }).load(def.resolve)
                 ),
@@ -57,16 +55,7 @@ define('io.ox/contacts/actions/print', [
 
             // add scaling info to body of iframe, as soon as iframe has been loaded
             def.done(function () {
-                $preview.contents().find('body').css({
-                    '-ms-transform': 'scale(0.22)',
-                    '-webkit-transform': 'scale(0.22)',
-                    transform: 'scale(0.22)',
-                    '-ms-transform-origin': '0 0',
-                    '-webkit-transform-origin': '0 0',
-                    'transform-origin': '0 0',
-                    width: '21cm',
-                    overflow: 'hidden'
-                });
+                $preview.contents().find('body').addClass('scaled-preview');
             });
 
             this.listenTo(this.model, 'change:list-type', function () {

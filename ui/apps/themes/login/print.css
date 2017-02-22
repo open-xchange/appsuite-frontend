@@ -248,3 +248,15 @@ img {
 .accepted .person { color: #353; }
 .tentative .person { color: #CA8812; }
 .declined .person { color: #800; text-decoration: line-through; }
+
+/* resized preview in iframe */
+body.scaled-preview {
+    -ms-transform: scale(0.22);
+    -webkit-transform: scale(0.22);
+    transform: scale(0.22);
+    -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    width: 21cm;
+    overflow: hidden;
+}
