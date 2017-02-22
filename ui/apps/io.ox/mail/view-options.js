@@ -91,7 +91,7 @@ define('io.ox/mail/view-options', [
             app.on('folder:change', toggle);
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
-            this.append(dropdown.render().$el.addClass('grid-options toolbar-item').on('dblclick', function (e) {
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
                 e.stopPropagation();
             }));
 
