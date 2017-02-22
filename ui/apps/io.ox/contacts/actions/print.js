@@ -30,12 +30,16 @@ define('io.ox/contacts/actions/print', [
         render: function (baton) {
             var $preview, def = new $.Deferred();
             this.$body.addClass('row').append(
-                $('<div class="col-xs-6">').append(
+                $('<div class="col-xs-offset-1 col-xs-6">').append(
                     $preview = $('<iframe>')
                     .css({ width: 200, height: 270, border: '1px solid #ccc', 'box-shadow': '0px 3px 20px #ccc' })
-                    .attr('src', ox.base + '/print.html').load(def.resolve)
+                    .attr({
+                        title: gt('Print preview'),
+                        tabindex: -1,
+                        src: ox.base + '/print.html'
+                    }).load(def.resolve)
                 ),
-                $('<div class="col-xs-6">').append(
+                $('<div class="col-xs-5">').append(
                     new mini.RadioView({
                         model: this.model,
                         name: 'list-type',
@@ -44,7 +48,8 @@ define('io.ox/contacts/actions/print', [
                             label: gt('Phone list')
                         }, {
                             value: 'details',
-                            label: gt('Details')
+                            //#. the user selects, whether to print a simple phonelist or a detailed contact list.
+                            label: gt.pgettext('contact-print-dialog', 'Details')
                         }]
                     }).render().$el
                 )
@@ -110,7 +115,7 @@ define('io.ox/contacts/actions/print', [
             require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
                 new ModalDialogView({
                     model: new Backbone.Model({ 'list-type': 'simple' }),
-                    title: gt('Print'),
+                    title: gt('Select print layout'),
                     point: 'io.ox/contacts/actions/print/dialog',
                     list: _(list).first(40)
                 })
