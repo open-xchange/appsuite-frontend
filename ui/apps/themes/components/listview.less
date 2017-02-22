@@ -67,16 +67,12 @@
             cursor: pointer;
             white-space: nowrap;
             i {
-                color: #ccc;
+                color: #767676;
                 margin-right: 8px;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
                 top: 2px;
-            }
-            @media (max-width: 900px) {
-
-                padding-right: 0px;
             }
         }
 
@@ -204,7 +200,7 @@
         width: @list-view-padding + 30;
 
         .fa-checkmark {
-            color: #ccc;
+            color: #767676;
             position: absolute;
             left: @default-padding;
             top: 12px;
@@ -267,14 +263,14 @@
         background-color: #ddd;
         -webkit-font-smoothing: antialiased;
         .fa-checkmark {
-            color: #aaa;
+            color: #626262;
         }
     }
 
     &.visible-selection.has-focus .list-item.selected {
-        color: white;
+        color: #fff;
         background-color: @selected-background;
-        i { color: rgba(255, 255, 255, 0.50); }
+        i { color: #fff; }
         html.high-contrast & {
             background-color: @hc-link-color;
         }
