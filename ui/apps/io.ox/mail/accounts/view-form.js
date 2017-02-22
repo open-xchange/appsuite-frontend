@@ -229,6 +229,9 @@ define.async('io.ox/mail/accounts/view-form', [
                 // disable E-mail address if any oauth is used
                 if (isMail_oauth || isTransport_oauth) self.$el.find('#primary_address').prop('disabled', true);
 
+                // disable account name if dsc
+                if (accountAPI.getDSCRootFolderForId(model.get('id'))) self.$el.find('#name').prop('disabled', true);
+
                 if (isMail_oauth) self.$el.find('.data_incoming').hide();
                 if (isTransport_oauth) self.$el.find('.data_outgoing').hide();
 
