@@ -32,6 +32,7 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
+    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
     'less!io.ox/files/share/style'
 ], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 
@@ -1053,6 +1054,7 @@ define('io.ox/files/share/permissions', [
                     // add message - not available for mail
                     $('<div class="share-options form-group">')
                     .toggle(notificationDefault)
+                    .addClass(_.browser.IE ? 'IE' : 'nonIE')
                     .append(
                         $('<label class="control-label sr-only">')
                             .text(gt('Enter a Message to inform users'))
@@ -1071,6 +1073,11 @@ define('io.ox/files/share/permissions', [
                         })
                     )
                 );
+
+                // apply polyfill for CSS resize which IE doesn't support natively
+                if (_.browser.IE) {
+                    window.resizeHandlerPolyfill(dialog.$footer.find('.message-text')[0]);
+                }
 
                 dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {
                     this.$('.message-text').parent().toggle(value);

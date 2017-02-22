@@ -139,6 +139,17 @@
                 min-height: 80px;
                 max-height: ~"calc(50vh - 64px)";
             }
+            
+            &.IE {
+                min-height: 80px;
+                max-height: ~"calc(50vh - 64px)";
+                min-width: 100%;
+                max-width: 100%;
+                
+                textarea {
+                    height: 100%;
+                }
+            }
         }
     }
 
