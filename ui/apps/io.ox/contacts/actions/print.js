@@ -14,8 +14,7 @@ define('io.ox/contacts/actions/print', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'gettext!io.ox/contacts',
-    'io.ox/core/print',
-    'less!io.ox/contacts/actions/print'
+    'io.ox/core/print'
 ], function (ext, mini, gt, print) {
 
     'use strict';
