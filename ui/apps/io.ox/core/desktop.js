@@ -1177,12 +1177,8 @@ define('io.ox/core/desktop', [
                 ext.point(name + '/window-toolbar').extend({
                     id: 'default',
                     draw: function () {
-                        return $('<ul class="window-toolbar">')
-                            .addClass('f6-target')
-                            .attr({
-                                'role': 'toolbar',
-                                'aria-label': gt('Application Toolbar')
-                            });
+                        return $('<ul class="window-toolbar" class="f6-target" attr="toolbar">')
+                            .attr('aria-label', gt('Application Toolbar'));
                     }
                 });
 

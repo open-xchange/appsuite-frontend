@@ -31,7 +31,7 @@ define('io.ox/files/detail/main', [
                     fileModel = api.pool.get('detail').get(_.cid(data));
 
                 app.getWindowNode().addClass('detail-view-app').append(
-                    $('<div class="f6-target detail-view-container" tabindex="0" role="complementary">').attr('aria-label', label)
+                    $('<div class="f6-target detail-view-container" tabindex="-1" role="complementary">').attr('aria-label', label)
                 );
 
                 require(['io.ox/core/viewer/main'], function (Viewer) {
