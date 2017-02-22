@@ -523,7 +523,7 @@ define('io.ox/mail/threadview', [
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });
-            return view.render().$el.attr({ tabindex: '0' });
+            return view.render().$el.attr({ tabindex: -1 });
         },
 
         // update zIndex for all list-items (descending)

@@ -230,7 +230,7 @@ define('io.ox/tasks/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
-                'tabindex': 0,
+                'tabindex': -1,
                 'role': 'main',
                 'aria-label': gt('Task Details')
             })

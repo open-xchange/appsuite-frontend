@@ -118,7 +118,7 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div class="scrollpane f6-target" tabindex="0">').on('scroll', this.updateHiddenIndicators.bind(this)),
+                pane:         $('<div class="scrollpane f6-target" tabindex="-1">').on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div class="fulltime">'),
                 fulltimeCon:  $('<div class="fulltime-container">'),
                 fulltimeNote: $('<div class="node">'),
