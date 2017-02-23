@@ -1492,13 +1492,13 @@ msgstr "ブラウザ"
 msgid "Burnt orange"
 msgstr "オレンジ"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Fax (Business)"
 msgid "Business"
 msgstr "FAX (ビジネス)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "勤務先住所"
@@ -1724,8 +1724,8 @@ msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "携帯電話"
 
@@ -2498,7 +2498,7 @@ msgid "Date completed"
 msgstr "完成日"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "生年月日"
@@ -2743,18 +2743,20 @@ msgstr "詳細"
 msgid "Detailed access rights"
 msgstr "詳細アクセス権限"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "連絡先を削除"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "次に示す詳細情報。"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "次に示す詳細情報。"
 
@@ -3347,7 +3349,8 @@ msgstr "編集して名前を設定"
 msgid "Editor"
 msgstr "エディタ"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "メール"
 
@@ -4457,14 +4460,14 @@ msgstr "優先度 (高)"
 msgid "Hobby"
 msgstr "趣味"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgctxt "address"
 #| msgid "Home"
 msgid "Home"
 msgstr "自宅"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "自宅住所"
@@ -5412,7 +5415,7 @@ msgstr "メッセージオプション"
 msgid "Messaging"
 msgstr "メッセージング"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
@@ -6069,6 +6072,7 @@ msgstr "オフライン"
 msgid "Offline mode"
 msgstr "オフラインモード"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6301,12 +6305,12 @@ msgstr "開催者"
 msgid "Original mail"
 msgstr "元のメール"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "その他"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "その他の住所"
@@ -6457,7 +6461,7 @@ msgid "Personal"
 msgstr "個人用"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "個人情報"
 
@@ -6470,7 +6474,8 @@ msgstr ""
 "個人メッセージ（オプション）このメッセージは、新規に招待された人全てに送信さ"
 "れます。"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "電話"
 
@@ -6510,7 +6515,8 @@ msgstr "電話 (自宅)"
 msgid "Phone (other)"
 msgstr "その他の電話"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "電話リスト"
 
@@ -6967,6 +6973,12 @@ msgstr "印刷"
 msgid "Print as PDF"
 msgstr "Drive として保存"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "プレビュー"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "印刷タスク"
@@ -6974,12 +6986,6 @@ msgstr "印刷タスク"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "印刷"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Private contacts"
-msgid "Printout of contacts"
-msgstr "プライベート連絡先"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7829,6 +7835,12 @@ msgstr "ファイルを選択"
 msgid "Select folder"
 msgstr "フォルダを選択"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "連絡先の選択"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選択オプションの詳細"
@@ -8213,12 +8225,6 @@ msgstr "サインインユーザ: %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "サインインユーザ:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "電話リスト"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -13272,6 +13278,11 @@ msgstr "yyyy"
 #~ msgid "Detail information for publication"
 #~ msgstr "公開するための詳細情報"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "連絡先を削除"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -16133,6 +16144,11 @@ msgstr "yyyy"
 #~ msgid "Print the selected tasks"
 #~ msgstr "選択された仕事を印刷"
 
+#, fuzzy
+#~| msgid "Private contacts"
+#~ msgid "Printout of contacts"
+#~ msgstr "プライベート連絡先"
+
 #~ msgid "Priority:"
 #~ msgstr "優先度:"
 
@@ -16845,6 +16861,11 @@ msgstr "yyyy"
 
 #~ msgid "Simple Pad"
 #~ msgstr "簡易パッド"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "電話リスト"
 
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "定期的なアポイントのため、今後競合が発生する可能性があります。"

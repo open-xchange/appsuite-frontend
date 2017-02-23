@@ -1567,13 +1567,13 @@ msgstr "Pārlūks"
 msgid "Burnt orange"
 msgstr "oranžs"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Adrese (darba)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Darba adrese"
@@ -1801,8 +1801,8 @@ msgid "Cart is empty."
 msgstr "Grozs ir tukšs"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mob. telefons"
 
@@ -2575,7 +2575,7 @@ msgid "Date completed"
 msgstr "Izpildes datums"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Dzimšanas datums"
@@ -2820,18 +2820,20 @@ msgstr "Detalizēti"
 msgid "Detailed access rights"
 msgstr "Detalizētas piekļuves tiesības"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Dzēst kontaktpersonu"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Detaļas"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Detaļas"
 
@@ -3432,7 +3434,8 @@ msgstr "Ievadiet nosaukumu."
 msgid "Editor"
 msgstr "Redaktors"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "E-pasts"
 
@@ -4543,14 +4546,14 @@ msgstr "Augsta prioritāte"
 msgid "Hobby"
 msgstr "Vaļsprieks"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgctxt "address"
 #| msgid "Home"
 msgid "Home"
 msgstr "Mājas"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Mājas adrese"
@@ -5503,7 +5506,7 @@ msgstr "Ziņojumu opcijas"
 msgid "Messaging"
 msgstr "Ziņapmaiņa"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Ziņotājs"
@@ -6168,6 +6171,7 @@ msgstr "Bezsaiste"
 msgid "Offline mode"
 msgstr "Bezsaistes režīms"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6402,12 +6406,12 @@ msgstr "Organizators"
 msgid "Original mail"
 msgstr "Sākotnējais e-pasts"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Cits"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Cita adrese"
@@ -6558,7 +6562,7 @@ msgid "Personal"
 msgstr "Privāti"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Personīgā informācija"
 
@@ -6571,7 +6575,8 @@ msgstr ""
 "Personīgais paziņojums (neobligāts). Šis paziņojums tiek nosūtīts visiem "
 "jauni uzaicinātajiem cilvēkiem."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telefons"
 
@@ -6611,7 +6616,8 @@ msgstr "Telefons (mājas)"
 msgid "Phone (other)"
 msgstr "Telefons (cits)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefonu saraksts"
 
@@ -7069,6 +7075,12 @@ msgstr "Drukāt"
 msgid "Print as PDF"
 msgstr "Drukāt kā PDF"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Apskats"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Drukāt uzdevumus"
@@ -7076,12 +7088,6 @@ msgstr "Drukāt uzdevumus"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Izdruka"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Private contacts"
-msgid "Printout of contacts"
-msgstr "Privātie kontakti"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7942,6 +7948,12 @@ msgstr "Izvēlēties failu"
 msgid "Select folder"
 msgstr "Izvēlēties mapi"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Izvēlieties kontaktus"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Izvēles detaļas"
@@ -8336,12 +8348,6 @@ msgstr "Pieslēdzies kā lietotājs %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Pieslēgums kā:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Telefonu saraksts"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -12770,6 +12776,11 @@ msgstr "yyyy"
 #~ msgid "Detail information for publication"
 #~ msgstr "Detalizēta publikācijas informācija"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Dzēst kontaktpersonu"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -15245,6 +15256,11 @@ msgstr "yyyy"
 #~ msgid "Principal:"
 #~ msgstr "Galvenais:"
 
+#, fuzzy
+#~| msgid "Private contacts"
+#~ msgid "Printout of contacts"
+#~ msgstr "Privātie kontakti"
+
 #~ msgid "Priority:"
 #~ msgstr "Prioritāte:"
 
@@ -15875,6 +15891,11 @@ msgstr "yyyy"
 
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Telefonu saraksts"
 
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "Tā kā tikšanās ir regulāra tā var izraisīt turpmākus konfliktus."

@@ -1565,13 +1565,13 @@ msgstr "Prehliadač"
 msgid "Burnt orange"
 msgstr "oranžová"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Adresa do práce"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Adresa do práce"
@@ -1802,8 +1802,8 @@ msgid "Cart is empty."
 msgstr "Košík je prázdny."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobil"
 
@@ -2576,7 +2576,7 @@ msgid "Date completed"
 msgstr "Dátum dokončenia"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Dátum narodenia"
@@ -2821,18 +2821,20 @@ msgstr "Podrobne"
 msgid "Detailed access rights"
 msgstr "Podrobné prístupové oprávnenia"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Zmazať kontakt"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Podrobnosti"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Podrobnosti"
 
@@ -3429,7 +3431,8 @@ msgstr "Upravením nastavíte meno."
 msgid "Editor"
 msgstr "Editor"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "Email"
 
@@ -4541,14 +4544,14 @@ msgstr "Vysoká priorita"
 msgid "Hobby"
 msgstr "Koníčky"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgctxt "address"
 #| msgid "Home"
 msgid "Home"
 msgstr "Domov"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Adresa domov"
@@ -5502,7 +5505,7 @@ msgstr "Možnosti správ"
 msgid "Messaging"
 msgstr "Posielanie správ"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Posielanie správ"
@@ -6164,6 +6167,7 @@ msgstr "Režime offline"
 msgid "Offline mode"
 msgstr "Režime offline"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6399,12 +6403,12 @@ msgstr "Organizátor"
 msgid "Original mail"
 msgstr "Pôvodný email"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Iné"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Iná adresa"
@@ -6555,7 +6559,7 @@ msgid "Personal"
 msgstr "Osobné"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Osobné údaje"
 
@@ -6567,7 +6571,8 @@ msgid ""
 msgstr ""
 "Osobná správa (nepovinné). Táto správa sa zašle všetkým novo pozvaným ľuďom."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telefón"
 
@@ -6607,7 +6612,8 @@ msgstr "Telefón (domov)"
 msgid "Phone (other)"
 msgstr "Telefón (iný)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefónny zoznam"
 
@@ -7067,6 +7073,12 @@ msgstr "Tlačiť"
 msgid "Print as PDF"
 msgstr "Vytlačiť do PDF"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Náhľad"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Tlačové úlohy"
@@ -7074,12 +7086,6 @@ msgstr "Tlačové úlohy"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Výtlačok"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Private contacts"
-msgid "Printout of contacts"
-msgstr "Súkromné kontakty"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7939,6 +7945,12 @@ msgstr "Vybrať súbor"
 msgid "Select folder"
 msgstr "Vybrať priečinok"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Vybrať kontakty"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Podrobnosti výberu"
@@ -8333,12 +8345,6 @@ msgstr "Prihlásený ako %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Prihlásený ako:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Telefónny zoznam"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -12758,6 +12764,11 @@ msgstr "RRRR"
 #~ msgid "Detail information for publication"
 #~ msgstr "Podrobné informácie publikácie"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Zmazať kontakt"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -15227,6 +15238,11 @@ msgstr "RRRR"
 #~ msgid "Principal:"
 #~ msgstr "Riaditeľ:"
 
+#, fuzzy
+#~| msgid "Private contacts"
+#~ msgid "Printout of contacts"
+#~ msgstr "Súkromné kontakty"
+
 #~ msgid "Priority:"
 #~ msgstr "Priorita:"
 
@@ -15848,6 +15864,11 @@ msgstr "RRRR"
 
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Telefónny zoznam"
 
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr ""

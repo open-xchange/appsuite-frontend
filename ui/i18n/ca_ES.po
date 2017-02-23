@@ -1566,13 +1566,13 @@ msgstr "Navegador"
 msgid "Burnt orange"
 msgstr "Taronja"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Adreça professional"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Adreça professional"
@@ -1806,8 +1806,8 @@ msgid "Cart is empty."
 msgstr "La cistella és buida."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Telèfon mòbil"
 
@@ -2605,7 +2605,7 @@ msgid "Date completed"
 msgstr "Data completada"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Data de naixement"
@@ -2861,17 +2861,20 @@ msgstr ""
 msgid "Detailed access rights"
 msgstr ""
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-msgid "Detailed contact list"
-msgstr "Crea un contacte"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Detalls"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Detalls"
 
@@ -3470,7 +3473,8 @@ msgstr "Edita per a definir un nom."
 msgid "Editor"
 msgstr "Editor"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "Correu electrònic"
 
@@ -4602,11 +4606,11 @@ msgstr "Alta prioritat"
 msgid "Hobby"
 msgstr "Afició"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Adreça privada"
@@ -5562,7 +5566,7 @@ msgstr "Missatge (opcional)"
 msgid "Messaging"
 msgstr "Missatgeria"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Missatgeria"
@@ -6243,6 +6247,7 @@ msgstr "Desconnectat"
 msgid "Offline mode"
 msgstr "Mode desconnectat"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6476,12 +6481,12 @@ msgstr "Organitzador"
 msgid "Original mail"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Altres adreces"
@@ -6634,7 +6639,7 @@ msgid "Personal"
 msgstr "Personal"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Informació personal"
 
@@ -6645,7 +6650,8 @@ msgid ""
 "people."
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telèfon"
 
@@ -6685,7 +6691,8 @@ msgstr "Telèfon (casa)"
 msgid "Phone (other)"
 msgstr "Telèfon (altre)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Llista de telèfons"
 
@@ -7157,6 +7164,12 @@ msgstr "Imprimeix"
 msgid "Print as PDF"
 msgstr "Imprimeix les tasques"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Vista prèvia"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Imprimeix les tasques"
@@ -7164,11 +7177,6 @@ msgstr "Imprimeix les tasques"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Impressió"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-msgid "Printout of contacts"
-msgstr "Edita contacte"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8030,6 +8038,11 @@ msgstr ""
 msgid "Select folder"
 msgstr "Selecciona carpeta"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+msgid "Select print layout"
+msgstr "Crea un contacte"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Detalls de la selecció"
@@ -8435,12 +8448,6 @@ msgstr "Connectat com a %1$s"
 #, fuzzy
 msgid "Signed in as:"
 msgstr "Connectat com a %1$s"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Llista de telèfons"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11645,6 +11652,10 @@ msgstr ""
 #~ msgid "Default calendar view"
 #~ msgstr "Vista de calendari predeterminada"
 
+#, fuzzy
+#~ msgid "Detailed contact list"
+#~ msgstr "Crea un contacte"
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Enllaç directe: %1$s"
 
@@ -11931,6 +11942,10 @@ msgstr ""
 #~ msgid "Prev"
 #~ msgstr "Prev"
 
+#, fuzzy
+#~ msgid "Printout of contacts"
+#~ msgstr "Edita contacte"
+
 #~ msgid "Public"
 #~ msgstr "Públic"
 
@@ -12063,6 +12078,11 @@ msgstr ""
 
 #~ msgid "Signature text"
 #~ msgstr "Text de la firma"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Llista de telèfons"
 
 #~ msgid "Slideshow"
 #~ msgstr "Presentació"

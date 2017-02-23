@@ -1515,13 +1515,13 @@ msgstr "Tarayıcı"
 msgid "Burnt orange"
 msgstr "turuncu"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Adres Girişimi"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "İşletme Adresi"
@@ -1757,8 +1757,8 @@ msgid "Cart is empty."
 msgstr "Araba boş."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobil telefon"
 
@@ -2552,7 +2552,7 @@ msgid "Date completed"
 msgstr "Tarih tamamlandı"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Doğum tarihi"
@@ -2808,18 +2808,20 @@ msgstr "Ayrıntılar"
 msgid "Detailed access rights"
 msgstr ""
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "İletişim bilgisini sil"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Ayrıntılar"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Ayrıntılar"
 
@@ -3435,7 +3437,8 @@ msgstr "Bir isim belirle"
 msgid "Editor"
 msgstr "Editör"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "E-posta"
 
@@ -4566,11 +4569,11 @@ msgstr "Yüksek öncelik"
 msgid "Hobby"
 msgstr "Hobi"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Ev Adresi"
@@ -5531,7 +5534,7 @@ msgstr "Mesaj (tercihi)"
 msgid "Messaging"
 msgstr "Mesajlaşma"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Mesajlaşma"
@@ -6196,6 +6199,7 @@ msgstr "Çevrim dışı"
 msgid "Offline mode"
 msgstr "Çevrim dışı mod"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6428,12 +6432,12 @@ msgstr "Organizatör"
 msgid "Original mail"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Diğer adres"
@@ -6588,7 +6592,7 @@ msgid "Personal"
 msgstr "Kişisel"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Kişisel bilgi"
 
@@ -6599,7 +6603,8 @@ msgid ""
 "people."
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telefon"
 
@@ -6639,7 +6644,8 @@ msgstr "Telefon (ev)"
 msgid "Phone (other)"
 msgstr "Telefon (diğer)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefon listesi"
 
@@ -7111,6 +7117,12 @@ msgstr "Yazdır"
 msgid "Print as PDF"
 msgstr "Görevleri yazdırın"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Önizleme"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Görevleri yazdırın"
@@ -7118,12 +7130,6 @@ msgstr "Görevleri yazdırın"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Yazdır"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "İletişim bilgisini düzenle"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -8007,6 +8013,11 @@ msgstr "Dosya seç"
 msgid "Select folder"
 msgstr "Dosya seç"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+msgid "Select print layout"
+msgstr "İletişim bilgisini sil"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Seçim ayrıntıları"
@@ -8410,12 +8421,6 @@ msgstr "%1$s olarak oturum açıldı"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Olarak oturum açıldı:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Telefon listesi"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11519,6 +11524,11 @@ msgstr "yyyy"
 #~ msgid "Day View"
 #~ msgstr "Gün Görüntüle"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "İletişim bilgisini sil"
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Link yönlendir: %1$s"
 
@@ -11782,6 +11792,11 @@ msgstr "yyyy"
 #~ msgid "Previous slide"
 #~ msgstr "Önceki Hafta"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "İletişim bilgisini düzenle"
+
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
@@ -11855,6 +11870,11 @@ msgstr "yyyy"
 
 #~ msgid "Signature"
 #~ msgstr "İmza"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Telefon listesi"
 
 #~ msgid ""
 #~ "Social accounts are only used to download contact and/or calendar data"

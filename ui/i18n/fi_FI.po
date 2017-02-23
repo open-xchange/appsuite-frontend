@@ -1531,13 +1531,13 @@ msgstr "Selain"
 msgid "Burnt orange"
 msgstr "Oranssi"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Työosoite"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Työosoite"
@@ -1765,8 +1765,8 @@ msgid "Cart is empty."
 msgstr "Kori on tyhjä."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Matkapuhelin"
 
@@ -2540,7 +2540,7 @@ msgid "Date completed"
 msgstr "Valmistumispäivämäärä"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Syntymäaika"
@@ -2785,18 +2785,20 @@ msgstr "Yksityiskohtainen"
 msgid "Detailed access rights"
 msgstr "Käyttöoikeustiedot"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Poista yhteystieto"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Yksityiskohdat"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Yksityiskohdat"
 
@@ -3386,7 +3388,8 @@ msgstr "Muokkaa asettaaksesi nimi."
 msgid "Editor"
 msgstr "Editori"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "Sähköposti"
 
@@ -4486,11 +4489,11 @@ msgstr "Korkea prioriteetti"
 msgid "Hobby"
 msgstr "Harrastus"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Kotiosoite"
@@ -5435,7 +5438,7 @@ msgstr "Viestien vaihtoehdot"
 msgid "Messaging"
 msgstr "Viestimet"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Viestin"
@@ -6093,6 +6096,7 @@ msgstr "Offline"
 msgid "Offline mode"
 msgstr "Offline tila"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6326,12 +6330,12 @@ msgstr "Järjestelijä"
 msgid "Original mail"
 msgstr "Alkuperäinen viesti"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Muu"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Muu osoite"
@@ -6482,7 +6486,7 @@ msgid "Personal"
 msgstr "Henkilökohtainen"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Henkilötiedot"
 
@@ -6495,7 +6499,8 @@ msgstr ""
 "Henkilökohtainen viesti (valinnainen). Viesti lähetetään kaikille uusille "
 "kutsutuille."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Puhelin"
 
@@ -6535,7 +6540,8 @@ msgstr "Puhelin (koti)"
 msgid "Phone (other)"
 msgstr "Puhelin (muu)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Puhelinluettelo"
 
@@ -6995,6 +7001,12 @@ msgstr "Tulosta"
 msgid "Print as PDF"
 msgstr "Tulosta PDF-tiedostona"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Esikatselu"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Tulosta tehtävät"
@@ -7002,12 +7014,6 @@ msgstr "Tulosta tehtävät"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Tuloste"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "Muokkaa yhteystietoa"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7863,6 +7869,12 @@ msgstr "Valitse tiedosto"
 msgid "Select folder"
 msgstr "Valitse kansio"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Valitse yhteystietoja"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Valinnan yksityiskohdat"
@@ -8252,12 +8264,6 @@ msgstr "Kirjautuneena käyttäjänä %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Kirjautuneena käyttäjänä"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Puhelinluettelo"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11610,6 +11616,11 @@ msgstr "vvvv"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Toimituksen kuittaus"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Poista yhteystieto"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -12417,6 +12428,11 @@ msgstr "vvvv"
 #~ msgid "Previous slide"
 #~ msgstr "Edellinen dia"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "Muokkaa yhteystietoa"
+
 #~ msgid "Privacy Notice"
 #~ msgstr "Tiedote yksityisyyden suojasta"
 
@@ -12624,6 +12640,11 @@ msgstr "vvvv"
 
 #~ msgid "Signing out"
 #~ msgstr "Uloskirjautuminen"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Puhelinluettelo"
 
 #~ msgid "Slideshow"
 #~ msgstr "Diaesitys"

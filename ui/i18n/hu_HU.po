@@ -1542,13 +1542,13 @@ msgstr "Böngésző"
 msgid "Burnt orange"
 msgstr "narancs"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Cím (üzleti)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Munkahelyi cím"
@@ -1776,8 +1776,8 @@ msgid "Cart is empty."
 msgstr "A kosár üres."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -2553,7 +2553,7 @@ msgid "Date completed"
 msgstr "Befejezés dátuma"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Születési idő"
@@ -2797,18 +2797,20 @@ msgstr "Részletes"
 msgid "Detailed access rights"
 msgstr "Részletes hozzáférési jogok"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Névjegy törlése"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Részletek"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Részletek"
 
@@ -3409,7 +3411,8 @@ msgstr "Szerkessze név beállításához."
 msgid "Editor"
 msgstr "Szerkesztő"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "E-mail"
 
@@ -4509,11 +4512,11 @@ msgstr "Magas prioritás"
 msgid "Hobby"
 msgstr "Hobbi"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Otthoni cím"
@@ -5458,7 +5461,7 @@ msgstr "Üzenetek beállításai"
 msgid "Messaging"
 msgstr "Üzenetküldés"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Üzenetküldés"
@@ -6118,6 +6121,7 @@ msgstr "Nem érhető el"
 msgid "Offline mode"
 msgstr "Kapcsolat nélküli mód"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6349,12 +6353,12 @@ msgstr "Szervező"
 msgid "Original mail"
 msgstr "Eredeti levél"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Egyéb"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Egyéb cím"
@@ -6505,7 +6509,7 @@ msgid "Personal"
 msgstr "Személyes"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Személyes adatok"
 
@@ -6517,7 +6521,8 @@ msgid ""
 msgstr ""
 "Személyes üzenet (opcionális). Minden új meghívott megkapja ezt az üzenetet."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telefon"
 
@@ -6557,7 +6562,8 @@ msgstr "Telefon (otthoni)"
 msgid "Phone (other)"
 msgstr "Telefon (egyéb)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefonlista"
 
@@ -7017,6 +7023,12 @@ msgstr "Nyomtatás"
 msgid "Print as PDF"
 msgstr "Nyomtatás PDF-ként"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Előnézet"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Feladatok nyomtatása"
@@ -7024,12 +7036,6 @@ msgstr "Feladatok nyomtatása"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Nyomtatás"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "Névjegy szerkesztése"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7888,6 +7894,12 @@ msgstr "Válasszon fájlt"
 msgid "Select folder"
 msgstr "Válasszon mappát"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Névjegyek kiválasztása"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Kijelölés részletei"
@@ -8277,12 +8289,6 @@ msgstr "Bejelentkezve mint %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Bejelentkezve, mint:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Telefonlista"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11360,6 +11366,11 @@ msgstr "yyyy"
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Összes üzenet törlése ebben a mappában"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Névjegy törlése"
+
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Közvetlen hivatkozás: %1$s"
 
@@ -11726,6 +11737,11 @@ msgstr "yyyy"
 #~ msgid "Previous slide"
 #~ msgstr "Előző dia"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "Névjegy szerkesztése"
+
 #~ msgid ""
 #~ "Rating %1$d of %2$d. Press Enter to confirm or use the left and right "
 #~ "arrowkeys to adjust your rating."
@@ -11808,6 +11824,11 @@ msgstr "yyyy"
 
 #~ msgid "Signature"
 #~ msgstr "Aláírás"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Telefonlista"
 
 #, fuzzy
 #~| msgid "Smartphone settings:"
