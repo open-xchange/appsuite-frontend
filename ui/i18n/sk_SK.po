@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-01-20 11:50+0200\n"
+"PO-Revision-Date: 2017-02-23 11:00+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -49,6 +49,7 @@ msgstr "Deň"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -181,7 +182,8 @@ msgstr "Štandardné časové pásmo"
 
 #: apps/io.ox/backbone/mini-views/timezonepicker.js module:io.ox/core
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-#: apps/io.ox/core/folder/favorites.js
+#: apps/io.ox/core/folder/favorites.js apps/io.ox/files/main.js
+#: module:io.ox/files
 msgid "Favorites"
 msgstr "Obľúbené"
 
@@ -1267,10 +1269,10 @@ msgstr "Vytvoriť distribučný zoznam"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js apps/io.ox/contacts/view-detail.js
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/files/share/view-options.js
-#: module:io.ox/files apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
+#: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Name"
 msgstr "Meno"
@@ -2081,10 +2083,10 @@ msgstr "Organizátor"
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
-#: module:io.ox/files apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js apps/io.ox/find/extensions-api.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail apps/io.ox/search/main.js
-#: module:io.ox/search
+#: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
 msgstr "Priečiok"
 
@@ -3214,6 +3216,7 @@ msgid "Item list"
 msgstr "Zoznam položiek"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
@@ -3737,7 +3740,6 @@ msgstr "Skryť"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/files/main.js module:io.ox/files
-#: apps/io.ox/files/share/view-options.js
 msgid "My shares"
 msgstr "Moje zdieľania"
 
@@ -3818,6 +3820,7 @@ msgid "This folder has publications and/or subscriptions"
 msgstr "Tento priečinok má publikácie a/alebo odbery"
 
 #: apps/io.ox/core/folder/favorites.js module:io.ox/core
+#: apps/io.ox/files/favorite/toolbar.js
 msgid "Remove from favorites"
 msgstr "Odstrániť z obľúbených"
 
@@ -4117,6 +4120,10 @@ msgstr ""
 #: module:io.ox/presenter apps/io.ox/presenter/views/toolbarview.js
 msgid "Continue"
 msgstr "Pokračovať"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "The requested application is not available at this moment."
+msgstr ""
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5955,6 +5962,29 @@ msgstr "Zamknuté"
 msgid "File Details"
 msgstr "Podrobnosti súboru"
 
+#. Sort options drop-down
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
+#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgctxt "dropdown"
+msgid "Sort by"
+msgstr "Zoradiť podľa"
+
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
+#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+msgid "Ascending"
+msgstr "vzostupne"
+
+#: apps/io.ox/files/favorite/view-options.js module:io.ox/core
+#: apps/io.ox/files/share/view-options.js module:io.ox/files
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+msgid "Descending"
+msgstr "zostupne"
+
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Add files"
 msgstr "Pridať súbory"
@@ -6120,6 +6150,10 @@ msgstr "Externí hostia"
 msgid "Public link"
 msgstr "Verejný odkaz"
 
+#: apps/io.ox/files/share/model.js module:io.ox/core
+msgid "Please set password"
+msgstr "Nastaviť heslo"
+
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Viewer"
@@ -6279,26 +6313,6 @@ msgstr "Upraviť zdieľanie"
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
 msgid "Revoked access."
 msgstr "Zrušený prístup."
-
-#. Sort options drop-down
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
-msgctxt "dropdown"
-msgid "Sort by"
-msgstr "Zoradiť podľa"
-
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
-msgid "Ascending"
-msgstr "vzostupne"
-
-#: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
-msgid "Descending"
-msgstr "zostupne"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
