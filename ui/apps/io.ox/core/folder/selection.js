@@ -106,6 +106,10 @@ define('io.ox/core/folder/selection', [], function () {
 
         onKeydown: function (e) {
             if (!/38|40/.test(e.which)) return;
+
+            // Prevent scrolling on contextmenu-control
+            if ($(e.target).hasClass('contextmenu-control')) return e.preventDefault();
+
             // bubbling?
             if (!$(e.target).hasClass('selectable')) return;
 
