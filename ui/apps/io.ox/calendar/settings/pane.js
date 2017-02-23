@@ -205,4 +205,55 @@ define('io.ox/calendar/settings/pane', [
         }
     });
 
+    ext.point(POINT + '/pane').extend({
+        index: 500,
+        id: 'workweek',
+        draw: (function () {
+            var m = moment(),
+                days = _(new Array(7)).map(function (num, index) {
+                    var weekday = m.weekday(index);
+                    return {
+                        value: weekday.day(),
+                        label: weekday.format('dddd'),
+                    };
+                }),
+                counts = _(new Array(7)).map(function (num, index) {
+                    return {
+                        value: index + 1,
+                        label: index + 1,
+                    };
+                }),
+                NumberSelectView = mini.SelectView.extend({
+                    onChange: function () {
+                        this.model.set(this.name, parseInt(this.$el.val(), 10) || 0);
+                    }
+                });
+            return function () {
+                this.append(
+                    $('<fieldset>').append(
+                        $('<legend>').addClass('sectiontitle expertmode').append(
+                            $('<h2>').text(gt('Calendar workweek view'))
+                        ),
+                        $('<div>').addClass('form-group expertmode').append(
+                            $('<div>').addClass('row').append(
+                                $('<label>').attr('for', 'num-days-workweek').addClass('control-label col-sm-4').text(gt('Number of days in work week')),
+                                $('<div>').addClass('col-sm-4').append(
+                                    new NumberSelectView({ list: counts, name: 'numDaysWorkweek', model: settings, id: 'num-days-workweek', className: 'form-control' }).render().$el
+                                )
+                            )
+                        ),
+                        $('<div>').addClass('form-group expertmode').append(
+                            $('<div>').addClass('row').append(
+                                $('<label>').attr('for', 'workweek-start').addClass('control-label col-sm-4').text(gt('Work week starts on')),
+                                $('<div>').addClass('col-sm-4').append(
+                                    new NumberSelectView({ list: days, name: 'workweekStart', model: settings, id: 'workweek-start', className: 'form-control' }).render().$el
+                                )
+                            )
+                        )
+                    )
+                );
+            };
+        }())
+    });
+
 });
