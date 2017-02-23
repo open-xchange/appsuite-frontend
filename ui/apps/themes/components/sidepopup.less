@@ -48,16 +48,31 @@
         top: 0; right: 0; bottom: 0; left: 0;
     }
 
-    // larger popups for notification overlay
-    @media (min-width: 480px), (min-device-width: 480px) {
-        .notifications-overlay &.right { left: 39.5%; }
-        .notifications-overlay &.left { right: 39.5%; }
+    // smaller screens, including tablet
+    @media (max-width: 900px) {
+        &.right, &.left {
+            left: 8px;
+            right: 8px;
+            //border-left: 0 none; border-right: 0 none;
+        }
     }
 
-    // no margins on smartphones (using 540 otherwise 500, for example, could only use 450 due to margins)
+    // smartphones
     @media (max-width: 540px), (max-device-width: 540px) {
         & { top: 0; right: 0; bottom: 0; left: 0; }
         &.first { max-width: 100%; }
+        &.right, &.left {
+            left: 0;
+            right: 0;
+            border-left: 0 none; border-right: 0 none;
+
+        }
+    }
+
+     // larger popups for notification overlay
+    @media (min-width: 480px), (min-device-width: 480px) {
+        .notifications-overlay &.right { left: 39.5%; }
+        .notifications-overlay &.left { right: 39.5%; }
     }
 }
 
@@ -177,12 +192,6 @@
 }
 
 @media (max-width: 900px) {
-
-    .io-ox-sidepopup.right, .io-ox-sidepopup.left {
-        left: 0; right: 0;
-        border-left: 0 none; border-right: 0 none;
-        .box-shadow(none);
-    }
 
     .io-ox-sidepopup-arrow {
         display: none;
