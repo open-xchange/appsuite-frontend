@@ -1535,13 +1535,13 @@ msgstr "Browser"
 msgid "Burnt orange"
 msgstr "orange"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Firmaadresse"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Virksomhedsadresse"
@@ -1769,8 +1769,8 @@ msgid "Cart is empty."
 msgstr "Indkøbsvogn er tom."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Mobiltelefon"
 
@@ -2540,7 +2540,7 @@ msgid "Date completed"
 msgstr "Gennemført dato"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Fødselsdato"
@@ -2785,18 +2785,20 @@ msgstr "Detaljeret"
 msgid "Detailed access rights"
 msgstr "Detaljerede adgangsrettigheder"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Slet kontakt"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Detaljer"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Detaljer"
 
@@ -3385,7 +3387,8 @@ msgstr "Redigér for at vælge et navn."
 msgid "Editor"
 msgstr "Editor"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "E-mail"
 
@@ -4486,11 +4489,11 @@ msgstr "Høj prioritet"
 msgid "Hobby"
 msgstr "Hobby"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Hjemmeadresse"
@@ -5436,7 +5439,7 @@ msgstr "Beskedindstillinger"
 msgid "Messaging"
 msgstr "Messenger"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
@@ -6095,6 +6098,7 @@ msgstr "Offline"
 msgid "Offline mode"
 msgstr "Offline mode"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6329,12 +6333,12 @@ msgstr "Organisér"
 msgid "Original mail"
 msgstr "Oprindelig e-mail"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Andet"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Anden adresse"
@@ -6485,7 +6489,7 @@ msgid "Personal"
 msgstr "Personlig"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Personlig information"
 
@@ -6498,7 +6502,8 @@ msgstr ""
 "Personlig besked (valgfri).  Denne besked bliver sendt til alle nyinviterede "
 "mennesker."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Telefon"
 
@@ -6538,7 +6543,8 @@ msgstr "Telefon (hjemme)"
 msgid "Phone (other)"
 msgstr "Telefon (anden)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Telefonliste"
 
@@ -6999,6 +7005,12 @@ msgstr "Udskriv"
 msgid "Print as PDF"
 msgstr "Udskriv som PDF"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Forhåndsvisning"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Udskriv opgaver"
@@ -7006,12 +7018,6 @@ msgstr "Udskriv opgaver"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Udskrivning"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "Redigér kontakt"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7866,6 +7872,12 @@ msgstr "Vælg fil"
 msgid "Select folder"
 msgstr "Vælg mappe"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Vælg kontakter"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Udvalgsdetaljer"
@@ -8255,12 +8267,6 @@ msgstr "Logget ind som %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Logget ind som:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Telefonliste"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11685,6 +11691,11 @@ msgstr "åååå"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Leveringskvittering"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Slet kontakt"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -12613,6 +12624,11 @@ msgstr "åååå"
 #~ msgid "Previous slide"
 #~ msgstr "Forrige slide"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "Redigér kontakt"
+
 #~ msgid "Privacy Notice"
 #~ msgstr "Persondatapolitik"
 
@@ -12859,6 +12875,11 @@ msgstr "åååå"
 
 #~ msgid "Signing out"
 #~ msgstr "Logger ud"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Telefonliste"
 
 #~ msgid "Skip this step"
 #~ msgstr "Spring dette skridt over"

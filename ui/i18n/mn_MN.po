@@ -1496,13 +1496,13 @@ msgstr ""
 msgid "Burnt orange"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Компанийн хаяг"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Бизнесийн хаяг"
@@ -1725,8 +1725,8 @@ msgid "Cart is empty."
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Гар утас"
 
@@ -2494,7 +2494,7 @@ msgid "Date completed"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr ""
@@ -2738,18 +2738,18 @@ msgstr ""
 msgid "Detailed access rights"
 msgstr ""
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Контактыг устгах"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr ""
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr ""
 
@@ -3330,7 +3330,8 @@ msgstr ""
 msgid "Editor"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "И-майл"
 
@@ -4399,11 +4400,11 @@ msgstr ""
 msgid "Hobby"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Гэрийн хаяг"
@@ -5325,7 +5326,7 @@ msgstr "Мессенжер"
 msgid "Messaging"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Мессенжер"
@@ -5964,6 +5965,7 @@ msgstr ""
 msgid "Offline mode"
 msgstr "Оффлайн горим"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6192,12 +6194,12 @@ msgstr ""
 msgid "Original mail"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Бусад хаяг"
@@ -6348,7 +6350,7 @@ msgid "Personal"
 msgstr "Хувийн"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr ""
 
@@ -6359,7 +6361,8 @@ msgid ""
 "people."
 msgstr ""
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Утас"
 
@@ -6399,7 +6402,8 @@ msgstr "Утас (гэрийн 1)"
 msgid "Phone (other)"
 msgstr "Утас (бусад)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Утасны жагсаалт"
 
@@ -6846,16 +6850,16 @@ msgstr "Хэвлэх"
 msgid "Print as PDF"
 msgstr ""
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+msgid "Print preview"
+msgstr ""
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr ""
 
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
-msgstr ""
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-msgid "Printout of contacts"
 msgstr ""
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
@@ -7687,6 +7691,11 @@ msgstr ""
 msgid "Select folder"
 msgstr ""
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+msgid "Select print layout"
+msgstr "Контактыг устгах"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr ""
@@ -8080,12 +8089,6 @@ msgstr ""
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr ""
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Утасны жагсаалт"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -10834,6 +10837,11 @@ msgstr ""
 #~ msgstr "Контактыг устгах"
 
 #, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Контактыг устгах"
+
+#, fuzzy
 #~ msgid "Edit Tabs"
 #~ msgstr "Засварлах"
 
@@ -10846,6 +10854,11 @@ msgstr ""
 
 #~ msgid "Search here"
 #~ msgstr "Энд хайх"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Утасны жагсаалт"
 
 #~ msgid "This email address cannot be used for appointments"
 #~ msgstr "Энэхүү и-майлыг уулзалтанд ашиглах боломжгүй"

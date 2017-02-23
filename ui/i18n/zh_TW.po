@@ -1511,13 +1511,13 @@ msgstr "瀏覽器"
 msgid "Burnt orange"
 msgstr "橘色"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "地址（業務）"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "業務地址"
@@ -1742,8 +1742,8 @@ msgid "Cart is empty."
 msgstr "購物車是空的。"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "行動電話"
 
@@ -2510,7 +2510,7 @@ msgid "Date completed"
 msgstr "完成日期"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "出生日期"
@@ -2755,18 +2755,20 @@ msgstr "詳細"
 msgid "Detailed access rights"
 msgstr "詳細存取權"
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "刪除聯絡人"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "詳細資訊"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "詳細資訊"
 
@@ -3349,7 +3351,8 @@ msgstr "編輯以設定名稱。"
 msgid "Editor"
 msgstr "編輯器"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "電子郵件"
 
@@ -4439,14 +4442,14 @@ msgstr "高優先權"
 msgid "Hobby"
 msgstr "興趣"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgctxt "address"
 #| msgid "Home"
 msgid "Home"
 msgstr "住家"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "住家位址"
@@ -5382,7 +5385,7 @@ msgstr "訊息選項"
 msgid "Messaging"
 msgstr "消息"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Messenger"
@@ -6037,6 +6040,7 @@ msgstr "離線"
 msgid "Offline mode"
 msgstr "離線模式"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6269,12 +6273,12 @@ msgstr "組織"
 msgid "Original mail"
 msgstr "原始郵件"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "其他"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "其他地址"
@@ -6425,7 +6429,7 @@ msgid "Personal"
 msgstr "私人"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "個人資訊"
 
@@ -6436,7 +6440,8 @@ msgid ""
 "people."
 msgstr "個人訊息（非必填），此訊息將傳送給所有新邀請的人員。"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "電話"
 
@@ -6476,7 +6481,8 @@ msgstr "電話（家用）"
 msgid "Phone (other)"
 msgstr "電話（其他）"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "電話清單"
 
@@ -6927,6 +6933,12 @@ msgstr "列印"
 msgid "Print as PDF"
 msgstr "列印為 PDF 檔"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "預覽"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "列印任務"
@@ -6934,12 +6946,6 @@ msgstr "列印任務"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "列印"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "編輯聯絡人"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7786,6 +7792,12 @@ msgstr "選擇檔案"
 msgid "Select folder"
 msgstr "選擇資料夾"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "選擇聯絡人"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "選擇範圍詳情"
@@ -8175,12 +8187,6 @@ msgstr "已登入為 %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "已登入為:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "電話清單"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -12405,6 +12411,11 @@ msgstr "年"
 #~ msgid "Detail information for publication"
 #~ msgstr "發佈的詳細資訊"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "刪除聯絡人"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -13867,6 +13878,11 @@ msgstr "年"
 #~ msgid "Previous slide"
 #~ msgstr "上一張"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "編輯聯絡人"
+
 #~ msgid "Privacy Notice"
 #~ msgstr "隱私權公告"
 
@@ -14167,6 +14183,11 @@ msgstr "年"
 
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "電話清單"
 
 #, fuzzy
 #~| msgid "Single"

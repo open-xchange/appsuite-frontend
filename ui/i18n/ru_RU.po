@@ -1567,13 +1567,13 @@ msgstr "Браузер"
 msgid "Burnt orange"
 msgstr "оранжевый"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgid "Address Business"
 msgid "Business"
 msgstr "Адрес (рабочий)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr "Рабочий адрес"
@@ -1801,8 +1801,8 @@ msgid "Cart is empty."
 msgstr "Корзина пуста."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/io.ox/onboarding/clients/extensions.js
-#: module:io.ox/core/onboarding
+#: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Cell phone"
 msgstr "Мобильный"
 
@@ -2574,7 +2574,7 @@ msgid "Date completed"
 msgstr "Дата завершения"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js apps/plugins/halo/xing/register.js
+#: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Date of birth"
 msgstr "Дата рождения"
@@ -2819,18 +2819,20 @@ msgstr "Подробно"
 msgid "Detailed access rights"
 msgstr "Подробнее о правах доступа "
 
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Delete contact"
-msgid "Detailed contact list"
-msgstr "Удалить контакт"
-
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/upload/main.js module:io.ox/files
+msgid "Details"
+msgstr "Подробности"
+
+#. the user selects, whether to print a simple phonelist or a detailed contact list.
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Details"
+msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Подробности"
 
@@ -3426,7 +3428,8 @@ msgstr "Отредактируйте, чтобы определить имя."
 msgid "Editor"
 msgstr "Редактор"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr "Email"
 
@@ -4525,14 +4528,14 @@ msgstr "Высокий приоритет"
 msgid "Hobby"
 msgstr "Хобби"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #, fuzzy
 #| msgctxt "address"
 #| msgid "Home"
 msgid "Home"
 msgstr "Домашний"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr "Домашний адрес"
@@ -5480,7 +5483,7 @@ msgstr "Параметры сообщения"
 msgid "Messaging"
 msgstr "Обмен сообщениями"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
 msgstr "Обмен сообщениями"
@@ -6143,6 +6146,7 @@ msgstr "Автономно"
 msgid "Offline mode"
 msgstr "Автономный режим"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6376,12 +6380,12 @@ msgstr "Организатор"
 msgid "Original mail"
 msgstr "Исходное сообщение"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Другое"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr "Другие адреса"
@@ -6532,7 +6536,7 @@ msgid "Personal"
 msgstr "Личные данные"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
-#: apps/io.ox/contacts/print.js
+#: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
 msgstr "Личная информация"
 
@@ -6544,7 +6548,8 @@ msgid ""
 msgstr ""
 "Дополнительное сообщение (будет отправлено вновь приглашенным пользователям)."
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print-details.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr "Телефон"
 
@@ -6584,7 +6589,8 @@ msgstr "Телефон (домашний)"
 msgid "Phone (other)"
 msgstr "Телефон (другой)"
 
-#: apps/io.ox/contacts/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#: apps/io.ox/contacts/print.js
 msgid "Phone list"
 msgstr "Телефонный список"
 
@@ -7042,6 +7048,12 @@ msgstr "Печать"
 msgid "Print as PDF"
 msgstr "Печать в PDF"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Preview"
+msgid "Print preview"
+msgstr "Предварительный просмотр"
+
 #: apps/io.ox/tasks/actions/printDisabled.js module:io.ox/tasks
 msgid "Print tasks"
 msgstr "Печать задач"
@@ -7049,12 +7061,6 @@ msgstr "Печать задач"
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
 msgstr "Распечатка"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Edit contact"
-msgid "Printout of contacts"
-msgstr "Изменить контакт"
 
 #: apps/io.ox/tasks/main.js module:io.ox/tasks apps/io.ox/tasks/print.js
 msgid "Priority"
@@ -7907,6 +7913,12 @@ msgstr "Выбрать файл"
 msgid "Select folder"
 msgstr "Выбор папки"
 
+#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Select contacts"
+msgid "Select print layout"
+msgstr "Выберите контакты"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Selection Details"
 msgstr "Свойства выбора"
@@ -8301,12 +8313,6 @@ msgstr "Вошел как  %1$s"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
 msgstr "Пользователь:"
-
-#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Phone list"
-msgid "Simple phone list"
-msgstr "Телефонный список"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
@@ -11774,6 +11780,11 @@ msgstr "гггг"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Уведомление о доставке"
 
+#, fuzzy
+#~| msgid "Delete contact"
+#~ msgid "Detailed contact list"
+#~ msgstr "Удалить контакт"
+
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
 #~ "settings."
@@ -12718,6 +12729,11 @@ msgstr "гггг"
 #~ msgid "Previous slide"
 #~ msgstr "Предыдущий слайд"
 
+#, fuzzy
+#~| msgid "Edit contact"
+#~ msgid "Printout of contacts"
+#~ msgstr "Изменить контакт"
+
 #~ msgid "Privacy Notice"
 #~ msgstr "Заявление о конфиденциальности"
 
@@ -12976,6 +12992,11 @@ msgstr "гггг"
 
 #~ msgid "Signing out"
 #~ msgstr "Выход"
+
+#, fuzzy
+#~| msgid "Phone list"
+#~ msgid "Simple phone list"
+#~ msgstr "Телефонный список"
 
 #~ msgid "Skip this step"
 #~ msgstr "Пропустить"
