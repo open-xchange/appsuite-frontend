@@ -207,8 +207,8 @@ define('io.ox/core/folder/tree', [
                 var shiftF10 = (e.shiftKey && e.which === 121),
                     menuKey = (_.device('windows') && e.which === 93);
                 if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focusFirst = true;
-                    if (/38|40/.test(e.which) && $(e.target).is('a')) this.onToggleContextMenu(e);
+                    this.focusFirst = !/38/.test(e.which);
+
                     // e.preventDefault() is needed here to surpress browser menu
                     if (shiftF10 || menuKey) {
                         e.preventDefault();
@@ -271,8 +271,10 @@ define('io.ox/core/folder/tree', [
 
                 if (view.focusFirst) {
                     ul.find('li:first > a').focus();
-                    view.focusFirst = false;
+                } else {
+                    ul.find('li:last > a').focus();
                 }
+                view.focusFirst = false;
             });
         },
 

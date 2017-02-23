@@ -546,7 +546,7 @@ define('io.ox/core/folder/node', [
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control">')
+                $('<a href="#" role="button" class="folder-options contextmenu-control" data-toggle="dropdown">')
                 .attr({
                     'data-contextmenu': this.options.contextmenu || 'default',
                     'aria-label': this.options.title || !this.model.has('title') ?
