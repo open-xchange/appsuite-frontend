@@ -716,7 +716,11 @@ define('io.ox/calendar/util', [
                     ext: []
                 };
 
-            if (!data.organizerId && _.isString(data.organizer)) {
+            var organizerIsExternalParticipant = !data.organizerId && _.isString(data.organizer) && _.find(participants, function (p) {
+                return p.mail === data.organizer || p.email1 === data.organizer;
+            });
+
+            if (!organizerIsExternalParticipant) {
                 participants.unshift({
                     display_name: data.organizer,
                     mail: data.organizer,
