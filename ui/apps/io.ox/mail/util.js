@@ -303,11 +303,10 @@ define('io.ox/mail/util', [
 
             var name = pair[0], email = String(pair[1] || '').toLowerCase(), display_name = name;
 
-            if (options.unescapeDisplayName === true) {
+            if (options.unescapeDisplayName) {
                 display_name = util.unescapeDisplayName(name);
             }
-
-            if (options.showDisplayName === false) return email;
+            if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
                 display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
