@@ -174,7 +174,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                                                 var view = new detail.View({
                                                     data: data,
                                                     // no threads - no different subject
-                                                    disable: { 'io.ox/mail/detail/header/row3': 'different-subject' }
+                                                    disable: {
+                                                        'io.ox/mail/detail/header/row3': 'different-subject',
+                                                        'io.ox/mail/detail/header': 'picture'
+                                                    }
                                                 });
                                                 sidepopup.show(e, function (popup) {
                                                     popup.append(view.render().expand().$el.addClass('no-padding'));
