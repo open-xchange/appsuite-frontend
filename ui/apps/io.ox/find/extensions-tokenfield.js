@@ -15,7 +15,7 @@ define('io.ox/find/extensions-tokenfield', [
     'io.ox/core/extensions',
     'io.ox/core/util',
     'io.ox/contacts/api'
-], function (ext, util, api) {
+], function (ext, util, contactsAPI) {
 
     'use strict';
 
@@ -36,24 +36,17 @@ define('io.ox/find/extensions-tokenfield', [
 
             image: function (baton) {
                 var facet = baton.data.facet;
-
                 if (!facet.hasPersons()) return;
-
-                var defaultimage = api.getFallbackImage(),
-                    image = baton.data.value.getImageUrl();
+                var data = baton.data.value.get('data').item || {};
                 // remove default indent
                 this.removeClass('indent');
-
-                // construct url
-                image = (image ? image + '&height=42&scaleType=contain' : defaultimage)
-                    .replace(/^https?\:\/\/[^\/]+/i, '')
-                    .replace(/^\/ajax/, '');
-                image = util.getShardingRoot(image);
-
                 // add image node
                 this.append(
-                    $('<div class="image">')
-                        .css('background-image', 'url(' + image + ')')
+                    contactsAPI.pictureHalo(
+                        $('<div class="image">'),
+                        { email: data.detail, image1_url: data.image_url },
+                        { width: 40, height: 40, effect: 'fadeIn', urlOnly: false }
+                    )
                 );
             },
 
