@@ -664,6 +664,7 @@ define('io.ox/mail/common-extensions', [
                     view.trigger('load:done');
                     view.model.set(data);
                 });
+                return false;
             }
 
             function draw(model) {
