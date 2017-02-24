@@ -112,8 +112,8 @@ define('io.ox/contacts/actions/print', [
                     this.$el.addClass('io-ox-contact-print-dialog');
                 })
                 .addCancelButton()
-                .addButton({ label: gt('Ok'), action: 'ok' })
-                .on('ok', function () {
+                .addButton({ label: gt('Print'), action: 'print' })
+                .on('print', function () {
                     var printFile = map[this.model.get('list-type')] || 'io.ox/contacts/print';
                     print.request(printFile, list);
                 })
