@@ -355,20 +355,20 @@ define('io.ox/core/settings', [
             if (detached) console.warn('Not merging/saving detached settings.', path);
             if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
 
-            var tree = custom || tree;
+            var treeData = custom || tree;
 
             // don't save undefined
-            if (tree === undefined) return $.when();
+            if (treeData === undefined) return $.when();
 
             pending[path] = this;
 
             return http.PUT({
                 module: 'jslob',
                 params: { action: 'merge', id: path },
-                data: tree
+                data: treeData
             })
             .done(function () {
-                saved = JSON.parse(JSON.stringify(tree));
+                saved = JSON.parse(JSON.stringify(treeData));
                 self.trigger('save');
             })
             .always(function () {
