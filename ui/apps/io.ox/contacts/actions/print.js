@@ -14,8 +14,9 @@ define('io.ox/contacts/actions/print', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'gettext!io.ox/contacts',
-    'io.ox/core/print'
-], function (ext, mini, gt, print) {
+    'io.ox/core/print',
+    'settings!io.ox/contacts'
+], function (ext, mini, gt, print, settings) {
 
     'use strict';
 
@@ -103,7 +104,7 @@ define('io.ox/contacts/actions/print', [
         multiple: function (list) {
             require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
                 new ModalDialogView({
-                    model: new Backbone.Model({ 'list-type': 'simple' }),
+                    model: new Backbone.Model({ 'list-type': settings.get('contactsPrintLayout') }),
                     title: gt('Select print layout'),
                     point: 'io.ox/contacts/actions/print/dialog',
                     list: _(list).first(40)
@@ -116,6 +117,9 @@ define('io.ox/contacts/actions/print', [
                 .on('print', function () {
                     var printFile = map[this.model.get('list-type')] || 'io.ox/contacts/print';
                     print.request(printFile, list);
+                    if (this.model.get('list-type') !== settings.get('contactsPrintLayout')) {
+                        settings.set('contactsPrintLayout', this.model.get('list-type')).save();
+                    }
                 })
                 .on('open', function () {
                     // trigger a change list on open to set the initial content of the iframe
