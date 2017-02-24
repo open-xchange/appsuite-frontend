@@ -20,11 +20,11 @@ define('io.ox/core/folder/actions/remove', [
 
     'use strict';
 
-    function handler(id) {
-        api.remove(id).fail(notifications.yell);
+    function handler(id, options) {
+        api.remove(id, options).fail(notifications.yell);
     }
 
-    return function (id) {
+    return function (id, options) {
 
         var model = api.pool.getModel(id),
             dialog = new dialogs.ModalDialog(),
@@ -40,7 +40,7 @@ define('io.ox/core/folder/actions/remove', [
         .addPrimaryButton('delete', gt('Delete'))
         .addButton('cancel', gt('Cancel'))
         .on('delete', function () {
-            handler(id);
+            handler(id, options);
         })
         .show();
 
