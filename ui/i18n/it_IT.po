@@ -1648,6 +1648,12 @@ msgstr "Vista Settimana lavorativa del calendario"
 msgid "Calendar view"
 msgstr "Vista di calendario"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "Vista Settimana lavorativa del calendario"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Calendario:"
@@ -6103,6 +6109,10 @@ msgstr "Novembre"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Numero di giorni tra gli avvisi di assenza allo stesso mittente"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr ""
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6145,7 +6155,6 @@ msgstr "Non in linea"
 msgid "Offline mode"
 msgstr "Modalità non in linea"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7041,10 +7050,10 @@ msgstr "Account principale"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Stampa"
 
@@ -10161,6 +10170,12 @@ msgstr "Giornata intera"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
 msgstr "Bosco"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "starts on"
+msgid "Work week starts on"
+msgstr "inizia il"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -15879,9 +15894,6 @@ msgstr "aaaa"
 #~| msgid "show image"
 #~ msgid "show mail"
 #~ msgstr "mostra immagine"
-
-#~ msgid "starts on"
-#~ msgstr "inizia il"
 
 #~ msgid "status "
 #~ msgstr "stato "

@@ -1593,6 +1593,12 @@ msgstr "予定表稼働日ビュー"
 msgid "Calendar view"
 msgstr "予定表ビュー"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "予定表稼働日ビュー"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "予定表："
@@ -6030,6 +6036,10 @@ msgstr "１１月"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "同じ差出人への休暇通知の通知周期"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr "稼働日数"
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6072,7 +6082,6 @@ msgstr "オフライン"
 msgid "Offline mode"
 msgstr "オフラインモード"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6962,10 +6971,10 @@ msgstr "既定のアカウント"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "印刷"
 
@@ -10025,6 +10034,10 @@ msgstr "終日"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
 msgstr "木"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Work week starts on"
+msgstr "稼働日の開始曜日"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -15560,9 +15573,6 @@ msgstr "yyyy"
 #~ msgid "Number of days in custom view"
 #~ msgstr "カスタム ビューで表示される日数"
 
-#~ msgid "Number of days in work week"
-#~ msgstr "稼働日数"
-
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "カード ビューで表示される列の数:"
 
@@ -18554,9 +18564,6 @@ msgstr "yyyy"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "職場"
-
-#~ msgid "Work week starts on"
-#~ msgstr "稼働日の開始曜日"
 
 #~ msgid "Workweek View"
 #~ msgstr "稼働日ビュー"
