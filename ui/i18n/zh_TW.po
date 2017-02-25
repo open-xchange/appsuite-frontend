@@ -1610,6 +1610,12 @@ msgstr "日曆工作週視圖"
 msgid "Calendar view"
 msgstr "日曆視圖"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "日曆工作週視圖"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "行事曆:"
@@ -5998,6 +6004,10 @@ msgstr "十一月"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "傳送假期通知給寄件者的間隔日期"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr ""
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6040,7 +6050,6 @@ msgstr "離線"
 msgid "Offline mode"
 msgstr "離線模式"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -6922,10 +6931,10 @@ msgstr "主要帳號"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "列印"
 
@@ -9942,6 +9951,12 @@ msgstr "全天"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
 msgstr "Wood"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "starts on"
+msgid "Work week starts on"
+msgstr "開始於"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -15299,9 +15314,6 @@ msgstr "年"
 #~| msgid "show image"
 #~ msgid "show mail"
 #~ msgstr "顯示圖片"
-
-#~ msgid "starts on"
-#~ msgstr "開始於"
 
 #~ msgid "status "
 #~ msgstr "狀態"

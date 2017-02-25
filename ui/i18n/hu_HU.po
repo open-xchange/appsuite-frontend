@@ -1643,6 +1643,12 @@ msgstr "Naptár munkahét nézet"
 msgid "Calendar view"
 msgstr "Naptár nézet"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "Naptár munkahét nézet"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Naptár:"
@@ -6079,6 +6085,10 @@ msgid "Number of days between vacation notices to the same sender"
 msgstr ""
 "Ugyanazon feladónak küldött szabadságértesítők között eltelt napok száma"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr ""
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6121,7 +6131,6 @@ msgstr "Nem érhető el"
 msgid "Offline mode"
 msgstr "Kapcsolat nélküli mód"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7012,10 +7021,10 @@ msgstr "Elsődleges fiók"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Nyomtatás"
 
@@ -10102,6 +10111,12 @@ msgstr "Egész nap"
 msgid "Wood"
 msgstr "Fa"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "starts on"
+msgid "Work week starts on"
+msgstr "kezdődik"
+
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
@@ -12146,9 +12161,6 @@ msgstr "yyyy"
 #~| msgid "New mail"
 #~ msgid "show mail"
 #~ msgstr "Új levél"
-
-#~ msgid "starts on"
-#~ msgstr "kezdődik"
 
 #~ msgid "status "
 #~ msgstr "állapot"

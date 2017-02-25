@@ -1666,6 +1666,12 @@ msgstr "Zobrazenie kalendára - pracovný týždeň"
 msgid "Calendar view"
 msgstr "Zobrazenie kalendára"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "Zobrazenie kalendára - pracovný týždeň"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendár:"
@@ -6125,6 +6131,10 @@ msgstr "november"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Počet dní medzi oznámeniami o dovolenke rovnakému odosielateľovi"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr "Počet dní v pracovnom týždni"
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6167,7 +6177,6 @@ msgstr "Režime offline"
 msgid "Offline mode"
 msgstr "Režime offline"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7062,10 +7071,10 @@ msgstr "Primárny účet"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Tlačiť"
 
@@ -10170,6 +10179,10 @@ msgstr "Celodenná"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
 msgstr "Drevo"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Work week starts on"
+msgstr "Pracovný týždeň začína"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -14799,9 +14812,6 @@ msgstr "RRRR"
 #~ msgid "Number of days in custom view"
 #~ msgstr "Počet dní vo vlastnom zobrazení"
 
-#~ msgid "Number of days in work week"
-#~ msgstr "Počet dní v pracovnom týždni"
-
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Počet riadkov, ktorý sa má zobraziť v zobrazení vizitiek:"
 
@@ -17410,9 +17420,6 @@ msgstr "RRRR"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "Práca"
-
-#~ msgid "Work week starts on"
-#~ msgstr "Pracovný týždeň začína"
 
 #~ msgid "Workweek View"
 #~ msgstr "Zobrazenie pracovného týždňa"

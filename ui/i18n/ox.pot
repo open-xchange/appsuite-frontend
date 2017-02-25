@@ -896,6 +896,7 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
+#: apps/io.ox/contacts/actions/print.js
 #: apps/io.ox/contacts/toolbar.js
 #: apps/io.ox/core/print.js
 #: module:io.ox/core
@@ -2473,6 +2474,21 @@ msgstr ""
 msgid "Automatically delete the invitation email after the appointment has been accepted or declined"
 msgstr ""
 
+#: apps/io.ox/calendar/settings/pane.js
+#: module:io.ox/calendar
+msgid "Calendar workweek view"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js
+#: module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/pane.js
+#: module:io.ox/calendar
+msgid "Work week starts on"
+msgstr ""
+
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
 msgid "Add timezone"
@@ -3181,16 +3197,6 @@ msgstr ""
 #: apps/io.ox/contacts/actions/print.js
 #: module:io.ox/contacts
 msgid "Select print layout"
-msgstr ""
-
-#: apps/io.ox/contacts/actions/print.js
-#: module:io.ox/contacts
-#: apps/io.ox/core/folder/picker.js
-#: module:io.ox/core
-#: apps/io.ox/core/relogin.js
-#: apps/io.ox/core/tk/filestorageUtil.js
-#: apps/io.ox/core/tk/mobiscroll.js
-msgid "Ok"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js
@@ -5165,6 +5171,14 @@ msgstr ""
 #: apps/io.ox/core/folder/node.js
 #: module:io.ox/core
 msgid "Actions for %1$s"
+msgstr ""
+
+#: apps/io.ox/core/folder/picker.js
+#: module:io.ox/core
+#: apps/io.ox/core/relogin.js
+#: apps/io.ox/core/tk/filestorageUtil.js
+#: apps/io.ox/core/tk/mobiscroll.js
+msgid "Ok"
 msgstr ""
 
 #: apps/io.ox/core/folder/picker.js

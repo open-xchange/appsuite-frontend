@@ -1672,6 +1672,10 @@ msgstr "Vedere calendar pe săptămâni de lucru"
 msgid "Calendar view"
 msgstr "Vedere calendar"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Calendar workweek view"
+msgstr "Calendar vedere pe săptămâni de lucru"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Calendar:"
@@ -6137,6 +6141,10 @@ msgstr "Noiembrie"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Număr de zile între mesajele de absență către același expeditor"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr "Număr de zile în săptămâna de lucru"
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6179,7 +6187,6 @@ msgstr "Offline"
 msgid "Offline mode"
 msgstr "Mod offline"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7074,10 +7081,10 @@ msgstr "Cont principal"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Imprimă"
 
@@ -10203,6 +10210,10 @@ msgstr "Toată ziua"
 msgid "Wood"
 msgstr "Lemn"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Work week starts on"
+msgstr "Săptămâna de lucru începe"
+
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
@@ -12204,9 +12215,6 @@ msgstr "aaaa"
 
 #~ msgid "Calendar custom view"
 #~ msgstr "Calendar vedere personalizată"
-
-#~ msgid "Calendar workweek view"
-#~ msgstr "Calendar vedere pe săptămâni de lucru"
 
 #~ msgid "Cambodia"
 #~ msgstr "Cambodgia"
@@ -14868,9 +14876,6 @@ msgstr "aaaa"
 
 #~ msgid "Number of days in custom view"
 #~ msgstr "Număr de zile în vederea personalizată"
-
-#~ msgid "Number of days in work week"
-#~ msgstr "Număr de zile în săptămâna de lucru"
 
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Număr de linii care trebuie afișate în vederea fișe:"
@@ -17553,9 +17558,6 @@ msgstr "aaaa"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "Serviciu"
-
-#~ msgid "Work week starts on"
-#~ msgstr "Săptămâna de lucru începe"
 
 #~ msgid "Workweek View"
 #~ msgstr "Vedere pe săptămâni de lucru"

@@ -1668,6 +1668,12 @@ msgstr "Kalendāra darba nedēļas skats"
 msgid "Calendar view"
 msgstr "Kalendāra skats"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Calendar Workweek View"
+msgid "Calendar workweek view"
+msgstr "Kalendāra darba nedēļas skats"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
 msgstr "Kalendārs:"
@@ -6129,6 +6135,10 @@ msgstr "Novembris"
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Dienu skaits starp prombūtnes paziņojumiem vienam sūtītājam"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Number of days in work week"
+msgstr "Dienu skaits darba nedēļā"
+
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
 msgid "Number of items"
@@ -6171,7 +6181,6 @@ msgstr "Bezsaiste"
 msgid "Offline mode"
 msgstr "Bezsaistes režīms"
 
-#: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
@@ -7064,10 +7073,10 @@ msgstr "Primārais konts"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts apps/io.ox/contacts/toolbar.js
-#: apps/io.ox/core/print.js module:io.ox/core apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/toolbar.js apps/io.ox/tasks/actions.js
-#: module:io.ox/tasks apps/io.ox/tasks/toolbar.js
+#: module:io.ox/contacts apps/io.ox/contacts/actions/print.js
+#: apps/io.ox/contacts/toolbar.js apps/io.ox/core/print.js module:io.ox/core
+#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Print"
 msgstr "Drukāt"
 
@@ -10174,6 +10183,10 @@ msgstr "Visa diena"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
 msgstr "Koks"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+msgid "Work week starts on"
+msgstr "Darba nedēļa sākas"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -14816,9 +14829,6 @@ msgstr "yyyy"
 #~ msgid "Number of days in custom view"
 #~ msgstr "Dienu skaits pielāgotajā skatā"
 
-#~ msgid "Number of days in work week"
-#~ msgstr "Dienu skaits darba nedēļā"
-
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Uzrādāmo rindu skaits kartiņu skatā:"
 
@@ -17460,9 +17470,6 @@ msgstr "yyyy"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "Darbs"
-
-#~ msgid "Work week starts on"
-#~ msgstr "Darba nedēļa sākas"
 
 #~ msgid "Workweek View"
 #~ msgstr "Darba nedēļas skats"
