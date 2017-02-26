@@ -12,6 +12,77 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+/* New list view */
+.megalist {
+
+    @blue: #3c73aa;
+
+    position: absolute;
+    z-index: 1000000;
+    background-color: #fff;
+    border: 24px solid rgba(0, 0, 0, 0.20);
+    background-clip: padding-box;
+    top: 0;
+    left: 0;
+    width: 320px;
+    bottom: 0;
+    margin: 0;
+
+    padding: 0;
+    outline: 0;
+    overflow-y: auto;
+
+    > li {
+        position: relative;
+        height: 54px;
+        padding: 8px 16px 8px 40px;
+        border: 1px solid transparent;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+        list-style-type: none;
+        outline: 0;
+    }
+
+    > li[aria-selected="true"] {
+        background-color: #ddd;
+    }
+
+    > li:before {
+        font: normal normal normal 14px/1 FontAwesome;
+        -webkit-font-smoothing: antialiased;
+        content: '\f096';
+        color: #767676;
+        position: absolute;
+        left: 16px;
+        top: 12px;
+        font-size: 14px;
+    }
+
+    > li[aria-checked="true"]:before {
+        content: '\f14a';
+    }
+
+    &.has-focus {
+
+        > li:focus {
+            border-color: @blue;
+        }
+
+        > li[aria-selected="true"] {
+            color: white;
+            background-color: @blue;
+        }
+
+        > li[aria-selected="true"]:before {
+            color: white;
+        }
+
+        > li[aria-selected="true"]:focus {
+            border-color: transparent;
+            background-color: darken(@blue, 10%);
+        }
+    }
+}
+
 /* List View */
 .list-view-control {
 

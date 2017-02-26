@@ -40,6 +40,8 @@ define('io.ox/core/main', [
 
     'use strict';
 
+    require(['io.ox/core/tk/megalist']);
+
     var DURATION = 250;
 
     // enable special logging to investigate why boot fails
