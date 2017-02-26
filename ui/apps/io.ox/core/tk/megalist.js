@@ -55,7 +55,8 @@ define('io.ox/core/tk/megalist', [], function () {
             }
         })
         .on('mousedown', 'li', function (e) {
-            trigger(e.currentTarget, e.metaKey ? 'toggle' : 'select', e);
+            var isToggle = e.ctrlKey || e.metaKey || e.offsetX < 40;
+            trigger(e.currentTarget, isToggle ? 'toggle' : 'select', e);
         })
         .on('select', 'li', function (e) {
             onSelect.call(e.currentTarget, e);
