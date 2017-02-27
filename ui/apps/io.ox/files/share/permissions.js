@@ -890,7 +890,7 @@ define('io.ox/files/share/permissions', [
 
             if (objModel.isAdmin()) {
                 dialog.$footer.prepend(
-                    $('<div class="form-group cascade">').append(
+                    $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
                         $('<label class="checkbox-inline">').text(gt('Send notification by email')).prepend(
                             new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
                             .on('click', function (e) {
@@ -997,7 +997,7 @@ define('io.ox/files/share/permissions', [
 
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
-                        $('<div class="form-group cascade">').append(
+                        $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
                             $('<label class="checkbox-inline">').text(gt('Apply to all subfolders')).prepend(
                                 new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
                             )
