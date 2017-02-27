@@ -188,7 +188,7 @@ define('io.ox/mail/common-extensions', [
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
                 var capabilities = folderAPI.pool.getModel(opt.folder).get('capabilities') || 0;
-                opt.showDisplayName = (capabilities & 4096);
+                opt.showDisplayName = !!(capabilities & 4096);
             },
             // mailAddress
             address: function (baton, opt) {
