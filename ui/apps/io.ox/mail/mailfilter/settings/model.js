@@ -15,8 +15,9 @@ define('io.ox/mail/mailfilter/settings/model', [
     'io.ox/backbone/validation',
     'io.ox/core/api/mailfilter',
     'io.ox/settings/util',
-    'gettext!io.ox/mail'
-], function (ModelFactory, Validators, api, settingsUtil, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/util'
+], function (ModelFactory, Validators, api, settingsUtil, gt, util) {
 
     'use strict';
 
@@ -25,7 +26,25 @@ define('io.ox/mail/mailfilter/settings/model', [
             api: api,
             ref: ref,
             model: {
-                idAttribute: 'id'
+                idAttribute: 'id',
+                initialize: function () {
+                    this.on('change', this.onChangeAttribute);
+
+                    // ugly way of calling OXModel.prototype.initialize inside modelFactory.js
+                    // but OXModel cannot be accessed from outside
+                    Object.getPrototypeOf(Object.getPrototypeOf(this)).initialize.apply(this, arguments);
+                },
+                onChangeAttribute: function () {
+                    var self = this;
+                    if (!this.changed.actioncmds && !this.changed.test) return;
+                    $.when(
+                        util.getDefaultRulename(this.previousAttributes()),
+                        util.getDefaultRulename(this.attributes)
+                    ).done(function (oldRulename, newRulename) {
+                        if (self.get('rulename') !== oldRulename && self.get('rulename') !== gt('New rule')) return;
+                        self.set('rulename', newRulename);
+                    });
+                }
             },
 
             update: function (model) {

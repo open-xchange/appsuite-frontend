@@ -112,7 +112,8 @@ define('io.ox/mail/actions/copyMove', [
                                 .after(infoblock);
                         // change listeners
                         checkbox.on('change', function onStateChange() {
-                            if ($(this).prop('checked')) return infoblock.text(infoText);
+                            createRule = $(this).prop('checked');
+                            if (createRule) return infoblock.text(infoText);
                             infoblock.empty();
                         });
                         tree.on('change', function onFolderChange(id) {
