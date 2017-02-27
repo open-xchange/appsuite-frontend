@@ -1028,7 +1028,8 @@ define('io.ox/mail/api', [
                 setFrom: (/reply|replyall|forward/.test(action)),
                 csid: csid,
                 embedded: obj.embedded,
-                max_size: obj.max_size
+                max_size: obj.max_size,
+                decrypt: true  // Replies, etc, should be decrypted if Guard emails
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
@@ -1490,6 +1491,7 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
+                decrypt: true, // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
                 sequence: 1
             });
