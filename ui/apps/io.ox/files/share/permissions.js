@@ -815,17 +815,22 @@ define('io.ox/files/share/permissions', [
 
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = !folderUtil.is('public', objModel.attributes);
+                notificationDefault = !folderUtil.is('public', objModel.attributes),
+                title;
 
             options = _.extend({ nested: nested, share: false }, options);
+
+            title = options.share ?
+                        //#. %1$s determines whether setting permissions for a file or folder
+                        //#. %2$s is the file or folder name
+                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName());
 
             var dialog = new ModalDialog({
                 async: true,
                 focus: '.form-control.tt-input',
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
-                title: options.share ?
-                    gt('Share "%1$s"', objModel.getDisplayName()) :
-                    gt('Permissions for "%1$s"', objModel.getDisplayName()),
+                title: title,
                 width: 800
             });
 
