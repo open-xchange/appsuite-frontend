@@ -171,6 +171,11 @@ define.async('io.ox/mail/accounts/view-form', [
                     });
                 }
 
+                // setting mail_protocol default if dsc account
+                if (settings.get('dsc/enabled', false) && self.model.get('id') === undefined) {
+                    model.set('mail_protocol', 'imap');
+                }
+
                 function syncLogin(model, value) {
                     model.set('login', value, { validate: true });
                 }
