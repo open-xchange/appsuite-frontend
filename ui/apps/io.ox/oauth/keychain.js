@@ -296,11 +296,9 @@ define.async('io.ox/oauth/keychain', [
                 label: gt('Reauthorize')
             })
             .on('reauthorize', function () {
-                var service = services.get(err.error_params[4]),
-                    account = accounts.get(err.error_params[1]),
-                    api = new OAuthKeychainAPI(service.toJSON());
+                var account = accounts.get(err.error_params[1]);
 
-                api.reauthorize(account.toJSON());
+                account.reauthorize();
             })
             .open();
         });
