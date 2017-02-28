@@ -83,7 +83,7 @@ define('io.ox/core/api/mailfilter', [
          * @return { deferred }
          */
         getConfig: function () {
-            return http.PUT({
+            return http.GET({
                 module: 'mailfilter',
                 params: { action: 'config' }
             });
