@@ -79,8 +79,14 @@ define.async('plugins/wizards/mandatory/main', [
                 .beforeShow(function () {
                     var step = this;
                     step.toggleNext(false);
+                    step.parent.options.model.set('paused', [1]);
                     user.on('change', function () {
-                        step.toggleNext(!_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name'))));
+                        var isComplete = !_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name')));
+                        if (isComplete && _.device('smartphone')) {
+                            step.parent.options.model.set('paused', []);
+                            return;
+                        }
+                        step.toggleNext(isComplete);
                     });
                 })
                 .on('show', function () {
