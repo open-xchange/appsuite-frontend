@@ -252,6 +252,15 @@ define('io.ox/core/tk/doc-converter-utils', [
                 module: moduleId
             };
 
+        } else if (model.isEncrypted()) {
+            var file_options = model.get('file_options');
+            var file_options_params = file_options ? file_options.params : null;
+            return {
+                source: 'guard',
+                cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
+                cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
+                mimetype: model.get('meta').OrigMime || model.get('file_mimetype')
+            };
         }
 
         return null;
