@@ -202,6 +202,7 @@ define('io.ox/core/tk/doc-converter-utils', [
                 id: model.get('id'),
                 folder_id: model.get('folder_id'),
                 mimetype: model.get('file_mimetype'),
+                decrypt: true,
                 nocache: _.uniqueId() // needed to trick the browser
             };
 
@@ -236,11 +237,12 @@ define('io.ox/core/tk/doc-converter-utils', [
             // the PIM module id
             moduleId = model.get('module');
 
-        if (model.isMailAttachment() && !model.isEncrypted()) {
+        if (model.isMailAttachment()) {
             return {
                 id: originalModel.mail.id,
                 source: 'mail',
-                attached: model.get('id')
+                attached: model.get('id'),
+                cryptoAuth: originalModel.auth ? originalModel.auth : ''
             };
 
         } else if (model.isPIMAttachment()) {
@@ -250,17 +252,6 @@ define('io.ox/core/tk/doc-converter-utils', [
                 module: moduleId
             };
 
-        } else if (model.isEncrypted()) {
-            var file_options = model.get('file_options');
-            var file_options_params = file_options ? file_options.params : null;
-            return {
-                source: 'guard',
-                // guardUrl being used for access of mail attachments
-                guardUrl: model.get('guardUrl') ? model.get('guardUrl') : null,
-                cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
-                cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
-                mimetype: model.get('meta').OrigMime || model.get('file_mimetype')
-            };
         }
 
         return null;
