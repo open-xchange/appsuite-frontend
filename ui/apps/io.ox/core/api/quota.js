@@ -94,7 +94,28 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
             mailQuota.fetched = false;
             if (requestForFileQuoteUpdates) fileQuota.fetched = false;
             this.load();
-        }
+        },
+
+        getAccountQuota: (function () {
+            var pool = new Backbone.Collection();
+
+            return function (account, module, cache) {
+                var model = pool.find({ account_id: account, module: module });
+                if (model && cache !== false) return $.when(model);
+
+                return http.GET({
+                    module: 'quota',
+                    params: {
+                        account: account,
+                        module: module
+                    }
+                }).then(function (data) {
+                    data.module = module;
+                    return pool.add(data);
+                });
+            };
+        }())
+
     };
 
     // get fresh quota to trigger update events
