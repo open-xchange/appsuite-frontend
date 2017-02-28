@@ -831,7 +831,7 @@ define('io.ox/files/share/permissions', [
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
-                    cascadePermissions: false,
+                    cascadePermissions: true,
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
@@ -994,16 +994,6 @@ define('io.ox/files/share/permissions', [
                     click: click,
                     extPoint: POINT
                 });
-
-                if (objModel.isFolder() && options.nested) {
-                    dialog.$footer.append(
-                        $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
-                            )
-                        )
-                    );
-                }
 
                 var guid = _.uniqueId('form-control-label-');
 
