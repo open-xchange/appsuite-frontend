@@ -254,7 +254,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="col-xs-5 col-md-5 col-md-offset-1">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -268,7 +268,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7 col-md-6">').append(node)
                 );
             }
         }
