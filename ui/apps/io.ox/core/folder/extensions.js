@@ -26,43 +26,26 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/folder/blacklist',
     'settings!io.ox/core',
     'settings!io.ox/mail',
-    'io.ox/core/http',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings, http) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings) {
 
     'use strict';
 
     var INBOX = 'default0' + mailAPI.separator + 'INBOX';
 
-    function getFolder(id) {
-        var def = new $.Deferred();
-        api.get(id).then(function success(data) {
-            def.resolve(data);
-        }, function fail() {
-            // ignore error and resolve. empty response will be filtered by VirtualFolder.list
-            def.resolve();
-        });
-        return def;
-    }
-
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
-            http.pause();
             var list = [
                 // inbox
                 api.get(INBOX),
+                // sent, drafts, spam, trash, archive
                 // default0 is alternative for IMAP server that list standard folders below INBOX
                 api.list('default0')
             ];
-            // append all-unseen below INBOX
+            // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
-            // sent, drafts, spam, trash, archive
-            _(account.getTypes()).each(function (type, folder) {
-                if (type === 'inbox') return;
-                list.push(getFolder(folder));
-            });
-            http.resume();
+            list.push(api.list(INBOX));
             return this.concat.apply(this, list);
         });
 
