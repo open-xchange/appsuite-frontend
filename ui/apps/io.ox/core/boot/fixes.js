@@ -126,6 +126,12 @@ define('io.ox/core/boot/fixes', [], function () {
         };
     }
 
+    // IE
+    // so we can add browser specific css (currently only needed for IE)
+    if (_.device('ie')) {
+        $('html').addClass('internet-explorer');
+    }
+
     //
     // Connection / Window State
     //
