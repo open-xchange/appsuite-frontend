@@ -530,7 +530,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-            if (data.security) {
+            if (data && data.security) {
                 this.onChangeSecurity();
             }
             // process unseen flag
