@@ -700,16 +700,12 @@ define('io.ox/mail/compose/extensions', [
                         }
                     });
 
-                    view.listenTo(view.notificationModel, 'change', function () {
-                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
-                    });
-
+                    // updates mail model
                     view.listenTo(view.settingsModel, 'change', function () {
-                        if (this.settingsModel.get('enable')) {
-                            baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, 'usepassword'));
-                        } else {
-                            baton.model.unset('share_attachments');
-                        }
+                        if (!this.settingsModel.get('enable')) return baton.model.unset('share_attachments');
+                        var blacklist = ['usepassword'];
+                        if (!this.settingsModel.get('usepassword')) blacklist.push('password');
+                        baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, blacklist));
                     });
 
                     view.listenTo(view.settingsModel, 'change:enable', function () {
@@ -720,6 +716,9 @@ define('io.ox/mail/compose/extensions', [
                         this.toggleShareAttachments();
                     });
 
+                    view.listenTo(view.notificationModel, 'change', function () {
+                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
+                    });
                 }
 
                 // dropzone
