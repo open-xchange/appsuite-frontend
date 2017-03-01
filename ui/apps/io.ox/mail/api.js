@@ -1401,7 +1401,8 @@ define('io.ox/mail/api', [
                     id: data.mail.id,
                     folder: data.mail.folder_id,
                     dest_folder: target,
-                    attachment: data.id
+                    attachment: data.id,
+                    decrypt: true
                 },
                 data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
