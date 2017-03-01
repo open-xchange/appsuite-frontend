@@ -640,6 +640,8 @@ define('io.ox/mail/compose/view', [
                 //#. %1$s is the time, the draft was saved
                 //#, c-format
                 self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
+                // make model not dirty after save
+                self.model.dirty(false);
                 return result;
             }).always(function () {
                 if (win) win.idle();
