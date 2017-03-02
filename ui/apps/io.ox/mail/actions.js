@@ -518,7 +518,9 @@ define('io.ox/mail/actions', [
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type && !!context.content_type.match(/^text\/calendar/i),
-                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i);
+                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i),
+                mail = api.pool.get('detail').get(_.cid(context.mail));
+            if (mail.get('imipMail')) return false;
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
