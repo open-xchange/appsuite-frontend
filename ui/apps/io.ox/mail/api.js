@@ -1029,7 +1029,7 @@ define('io.ox/mail/api', [
                 csid: csid,
                 embedded: obj.embedded,
                 max_size: obj.max_size,
-                decrypt: true  // Replies, etc, should be decrypted if Guard emails
+                decrypt: (obj.security && obj.security.decrypted)
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
@@ -1402,7 +1402,7 @@ define('io.ox/mail/api', [
                     folder: data.mail.folder_id,
                     dest_folder: target,
                     attachment: data.id,
-                    decrypt: true
+                    decrypt: (data.security && data.security.decrypted)
                 },
                 data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
@@ -1480,6 +1480,7 @@ define('io.ox/mail/api', [
                 }));
             return coreUtil.getShardingRoot(url);
         }
+
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
@@ -1492,7 +1493,7 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
-                decrypt: true, // All actions must be decrypted if Guard emails
+                decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
                 sequence: 1
             });
