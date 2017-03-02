@@ -373,7 +373,7 @@ define('io.ox/backbone/views/datepicker', [
                 case 'year': date[fn](1, 'year'); break;
                 default: date[fn](1, 'month'); break;
             }
-            this.setDate(date);
+            this.setDate(date, true);
         },
 
         onToday: function () {
@@ -549,7 +549,7 @@ define('io.ox/backbone/views/datepicker', [
             this.setDate(date);
         },
 
-        setDate: function (date) {
+        setDate: function (date, forceRender) {
 
             date = moment(date || this.date);
             // valid?
@@ -569,16 +569,21 @@ define('io.ox/backbone/views/datepicker', [
                     this.setActiveDescedant(node.attr('id'));
                 }.bind(this);
 
-            // currently visible?
-            switch (this.mode) {
-                case 'decade': selector = '#year_' + this.date.year(); break;
-                case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
-                case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
-                // no default
+            // in some cases we want to force the view to draw new (looks strange if the month doesn't switch when the next months 1st is also visible. See Bug 52026)
+            if (forceRender) {
+                this.render();
+            } else {
+                // currently visible?
+                switch (this.mode) {
+                    case 'decade': selector = '#year_' + this.date.year(); break;
+                    case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
+                    case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
+                    // no default
+                }
+                // found?
+                var node = this.$grid.find(selector);
+                if (node.length) select(node); else this.render();
             }
-            // found?
-            var node = this.$grid.find(selector);
-            if (node.length) select(node); else this.render();
             if (!isSame) this.trigger('change', this.date);
         }
     });
