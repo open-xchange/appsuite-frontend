@@ -177,7 +177,7 @@ define('io.ox/find/main', [
             'listview-empty-message': function (app) {
                 if (!app.get('parent').listView) return;
                 var ref = app.get('parent').listView.ref;
-                ext.point(ref + '/empty').extend({
+                ext.point(ref + '/notification/empty').extend({
                     id: 'search',
                     index: 100,
                     draw: function (baton) {
@@ -192,7 +192,7 @@ define('io.ox/find/main', [
                 // non-listview app OR no 'all folders' option
                 if (!app.get('parent').listView || app.isMandatory('folder')) return;
                 var ref = app.get('parent').listView.ref;
-                ext.point(ref + '/empty').extend({
+                ext.point(ref + '/notification/empty').extend({
                     id: 'search-action',
                     index: 200,
                     draw: function (baton) {
@@ -204,14 +204,8 @@ define('io.ox/find/main', [
 
                         this.append(
                             //#. text link action to run current search again wihout any folder limitations
-                            $('<a>').text(gt('Search in all folders?'))
-                                .attr({
-                                    'class': 'io-ox-action-link',
-                                    'href': '#',
-                                    'data-action': 'search-button',
-                                    'draggable': false,
-                                    'role': 'button'
-                                })
+                            $('<button type="button" class="btn btn-link" data-action="search-button">')
+                                .text(gt('Search in all folders'))
                                 .on('click', function () {
                                     manager.activate('folder', 'custom', 'disabled');
                                     require(['io.ox/metrics/main'], function (metrics) {

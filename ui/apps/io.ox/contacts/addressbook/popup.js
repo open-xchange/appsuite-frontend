@@ -719,10 +719,8 @@ define('io.ox/contacts/addressbook/popup', [
                 var $el = this.$('.list-view');
                 $el[0].innerHTML = '';
                 $el.append(
-                    $('<div class="message-empty-container">').append(
-                        $('<div class="message-empty">').text(
-                            options.isSearch ? gt('No matching items found.') : gt('Empty')
-                        )
+                    $('<div class="notification">').text(
+                        options.isSearch ? gt('No matching items found.') : gt('Empty')
                     )
                 );
             };
