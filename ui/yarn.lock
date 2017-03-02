@@ -1936,7 +1936,7 @@ grunt-contrib-jshint@^0.11.0:
     hooker "^0.2.3"
     jshint "~2.8.0"
 
-grunt-contrib-uglify@^2.0.0:
+grunt-contrib-uglify@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-2.0.0.tgz#8c9970d690936cde6d25aa1193549bd929016930"
   dependencies:
