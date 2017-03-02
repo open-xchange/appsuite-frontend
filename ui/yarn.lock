@@ -3298,9 +3298,9 @@ onetime@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/onetime/-/onetime-1.1.0.tgz#a1f7838f8314c516f05ecefcbc4ccfe04b4ed789"
 
-open-xchange-shared-grunt-config@^0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.14.1.tgz#71d1e2dc0d4f1c9a616ed2a9ee62d2cd29385eac"
+open-xchange-shared-grunt-config@^0.14.2:
+  version "0.14.2"
+  resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.14.2.tgz#a509d5a6212d2afab9964cf93d7470eac0c23846"
   dependencies:
     async "^0.9.0"
 
