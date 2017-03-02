@@ -143,6 +143,8 @@ define.async('io.ox/mail/compose/model', [
         },
 
         dirty: function (flag) {
+            var previous = !_.isEqual(this._shadowAttributes, this.getCopy()),
+                current;
             // sync mail editor content to model
             this.trigger('needsync');
             if (flag === true) {
@@ -151,7 +153,13 @@ define.async('io.ox/mail/compose/model', [
             } else if (flag === false) {
                 this.updateShadow();
             }
-            return !_.isEqual(this._shadowAttributes, this.getCopy());
+            current = !_.isEqual(this._shadowAttributes, this.getCopy());
+            if (!current && previous) {
+                // model changed to not dirty force next restorepoint save to have up to date data
+                this.forceNextFailSave = true;
+            }
+            previous = null;
+            return current;
         },
 
         getContentType: function () {
@@ -212,7 +220,9 @@ define.async('io.ox/mail/compose/model', [
         },
 
         getFailSave: function () {
-            if (!this.dirty()) return false;
+            // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
+            if (!this.forceNextFailSave && !this.dirty()) return false;
+            this.forceNextFailSave = false;
             var content = this.get('attachments').at(0).get('content');
             // Fails silently if content size is over 512kb
             if (strings.size(content) > 524288) return false;
