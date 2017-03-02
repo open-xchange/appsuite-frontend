@@ -271,6 +271,9 @@
 
     // Hide days in dayview
     .dayview {
+        fulltime .day:not(.node) {
+            display: none;
+        }
 
         .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
 
