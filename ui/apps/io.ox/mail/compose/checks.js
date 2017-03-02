@@ -36,7 +36,7 @@ define('io.ox/mail/compose/checks', [
 
     function getList(data) {
         if (!data || !data.headers || !_.isString(data.headers['List-Post'])) return '';
-        return data.headers['List-Post'].replace(/^<mailto:(.+)>$/i, '$1').toLowerCase();
+        return data.headers['List-Post'].replace(/^.*<mailto:(.+)>.*$/i, '$1').toLowerCase();
     }
 
     return {
