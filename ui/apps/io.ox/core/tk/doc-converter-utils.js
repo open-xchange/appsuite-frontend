@@ -202,7 +202,6 @@ define('io.ox/core/tk/doc-converter-utils', [
                 id: model.get('id'),
                 folder_id: model.get('folder_id'),
                 mimetype: model.get('file_mimetype'),
-                decrypt: true,
                 nocache: _.uniqueId() // needed to trick the browser
             };
 
@@ -242,7 +241,8 @@ define('io.ox/core/tk/doc-converter-utils', [
                 id: originalModel.mail.id,
                 source: 'mail',
                 attached: model.get('id'),
-                cryptoAuth: originalModel.auth ? originalModel.auth : ''
+                cryptoAuth: originalModel.auth ? originalModel.auth : '',
+                decrypt: originalModel && originalModel.security && originalModel.security.decrypted
             };
 
         } else if (model.isPIMAttachment()) {

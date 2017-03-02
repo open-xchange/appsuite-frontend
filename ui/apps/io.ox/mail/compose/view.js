@@ -426,10 +426,10 @@ define('io.ox/mail/compose/view', [
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
-                    return _.pick(o, 'id', 'folder_id', 'csid');
+                    return _.pick(o, 'id', 'folder_id', 'csid', 'security');
                 });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type', 'security');
             }
 
             // use CSS sanitizing and size limit (large than detail view)
