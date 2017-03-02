@@ -686,6 +686,7 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     editor.css('margin-top', 0);
                 }
             });
+            scrollPane.on('scroll', _.debounce(function () { $('body').click(); }, 1000, true));
         }());
 
         this.destroy = function () {
