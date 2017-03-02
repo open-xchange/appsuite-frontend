@@ -1882,6 +1882,8 @@ define('io.ox/core/main', [
             // falls through
             case 'MSG-1031':
             case 'MSG-0114':
+            // oauth stuff
+            case 'OAUTH-0013':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
