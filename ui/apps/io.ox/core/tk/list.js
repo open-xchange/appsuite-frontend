@@ -53,7 +53,7 @@ define('io.ox/core/tk/list', [
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
         // disabled by default via 'hidden class'
-        messageEmpty: $('<li class="message-empty-container hidden"><div class="message-empty"></div></li>'),
+        notification: $('<li class="abs notification hidden" role="presentation"></li>'),
 
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
@@ -170,14 +170,24 @@ define('io.ox/core/tk/list', [
             this.$el.scrollTop(0);
         },
 
-        updateEmptyMessage: function () {
-            var baton = ext.Baton({ app: this.app, options: this.options }),
-                point = ext.point(this.ref + '/empty'),
-                isEmpty = !this.collection.length;
+        renderNotification: function (type) {
+            var baton = ext.Baton({ app: this.app, options: this.options, listView: this }),
+                point = ext.point(this.ref + '/notification/' + type),
+                isEmpty = !this.collection.length,
+                $notification = this.$('.notification').attr('role', type === 'error' ? 'alert' : 'presentation').empty();
             if (isEmpty && point.keys().length) {
-                point.invoke('draw', this.$('.message-empty'), baton);
+                point.invoke('draw', $notification, baton);
             }
-            this.$('.message-empty-container').toggleClass('hidden', !isEmpty);
+            $notification.toggleClass('hidden', !isEmpty);
+        },
+
+        renderEmpty: function () {
+            this.renderNotification('empty');
+        },
+
+        renderError: function () {
+            this.idle();
+            this.renderNotification('error');
         },
 
         onReset: function () {
@@ -256,14 +266,15 @@ define('io.ox/core/tk/list', [
             var selected = items.filter('.selected')[0];
 
             // get affected DOM nodes and remove them
-            items.filter(function () {
-                var cid = $(this).attr('data-cid');
-                return !!hash[cid];
-            })
+            items
+                .filter(function () {
+                    var cid = $(this).attr('data-cid');
+                    return !!hash[cid];
+                })
                 .remove();
 
             // manage the empty message
-            this.updateEmptyMessage();
+            this.renderEmpty();
 
             if (!selected) return;
 
@@ -599,7 +610,7 @@ define('io.ox/core/tk/list', [
                 // load
                 'before:load': this.busy,
                 'load': this.onLoad,
-                'load:fail': this.idle,
+                'load:fail': this.renderError,
                 // paginate
                 'before:paginate': this.busy,
                 'paginate': this.idle,
@@ -610,9 +621,9 @@ define('io.ox/core/tk/list', [
             });
             this.listenTo(collection, {
                 // backbone
-                'add': this.updateEmptyMessage,
-                'remove': this.updateEmptyMessage,
-                'reset': this.updateEmptyMessage
+                'add': this.renderEmpty,
+                'remove': this.renderEmpty,
+                'reset': this.renderEmpty
             });
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');
@@ -695,7 +706,7 @@ define('io.ox/core/tk/list', [
                 });
             }
             this.$el.attr('data-ref', this.ref);
-            this.addMessageEmpty();
+            this.addNotification();
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -775,8 +786,8 @@ define('io.ox/core/tk/list', [
             return this.$el.find('.busy-indicator');
         },
 
-        addMessageEmpty: function () {
-            this.messageEmpty.clone().appendTo(this.$el);
+        addNotification: function () {
+            this.notification.clone().appendTo(this.$el);
         },
 
         addBusyIndicator: function () {
@@ -792,6 +803,7 @@ define('io.ox/core/tk/list', [
 
         busy: function () {
             if (this.isBusy) return;
+            this.$('.notification').addClass('hidden');
             this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
             this.isBusy = true;
             return this;

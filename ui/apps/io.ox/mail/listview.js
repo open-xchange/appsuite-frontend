@@ -19,9 +19,10 @@ define('io.ox/mail/listview', [
     'io.ox/core/api/account',
     'io.ox/core/tk/list',
     'io.ox/core/folder/api',
+    'gettext!io.ox/mail',
     'io.ox/mail/view-options',
     'less!io.ox/mail/style'
-], function (extensions, ext, util, api, account, ListView, folderAPI) {
+], function (extensions, ext, util, api, account, ListView, folderAPI, gt) {
 
     'use strict';
 
@@ -351,10 +352,29 @@ define('io.ox/mail/listview', [
         }
     );
 
-    ext.point('io.ox/mail/listview/empty').extend({
+    ext.point('io.ox/mail/listview/notification/empty').extend({
         id: 'default',
         index: 100,
         draw: extensions.empty
+    });
+
+    ext.point('io.ox/mail/listview/notification/error').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+
+            function retry(e) {
+                e.data.baton.listView.load();
+            }
+
+            this.append(
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
+                $.txt(gt('Error: Failed to fetch messages')),
+                $('<button type="button" class="btn btn-link">')
+                    .text(gt('Retry'))
+                    .on('click', { baton: baton }, retry)
+            );
+        }
     });
 
     var MailListView = ListView.extend({

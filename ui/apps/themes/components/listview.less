@@ -105,9 +105,10 @@
 
     &:not(.upside-down) {
         &.toolbar-top-visible .list-view { top: @height-default; }
-        &.toolbar-top-visible .list-view>.message-empty-container  { padding-bottom: @height-default; }
         &.toolbar-bottom-visible .list-view { bottom: @height-small; }
-        &.toolbar-bottom-visible .list-view>.message-empty-container { padding-top: @height-small; }
+        // consider some padding to get better alignment with the detail view
+        &.toolbar-top-visible .list-view > .notification  { padding-bottom: @height-default; }
+        &.toolbar-bottom-visible .list-view > .notification { padding-top: @height-small; }
     }
 
     &.upside-down {
@@ -209,27 +210,18 @@
         }
     }
 
-    .message-empty-container {
-        display: none;
-        &:only-child {
-            display: table;
-            height: 100%;
-            width: 100%;
-            .message-empty {
-                color: #777;
-                font-weight: 300;
-                font-size: 16px;
-                display: table-cell;
-                text-align: center;
-                vertical-align: middle;
-                padding-left: 8px;
-                padding-right: 8px;
-            }
+    .notification {
 
-            .io-ox-action-link {
-                text-decoration: none;
-                &:before { content: '\00a0'; }
-            }
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #767676;
+
+        i.fa-exclamation-triangle {
+            font-size: 42px;
+            color: #ccc;
+            margin-bottom: 8px;
         }
     }
 
