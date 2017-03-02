@@ -15,9 +15,10 @@
 define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/dropdown',
     'gettext!io.ox/mailfilter'
 
-], function (ext, mini, gt) {
+], function (ext, mini, Dropdown, gt) {
 
     'use strict';
 
@@ -53,7 +54,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     var drawCondition = function (o) {
         if (o.secondInputId) {
-            return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': o.conditionKey }).append(
+            return $('<li>').addClass('filter-settings-view row ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
                 $('<div>').addClass('col-sm-4 doubleline').append(
                     $('<span>').addClass('list-title').text(o.title)
                 ),
@@ -79,7 +80,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 drawDeleteButton('test')
             );
         }
-        return $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': o.conditionKey }).append(
+        return $('<li>').addClass('filter-settings-view row ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
             $('<div>').addClass('col-sm-4 singleline').append(
                 $('<span>').addClass('list-title').text(o.title)
             ),
@@ -115,10 +116,36 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         return _.extend(defaults, additionalValues);
     };
 
+    var drawDropdown = function (activeValue, values, options) {
+        var active = values[activeValue] || activeValue;
+        if (options.caret) {
+            active = active + '<b class="caret">';
+        }
+        var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
+            $ul = $('<ul class="dropdown-menu" role="menu">').append(
+                _(values).map(function (name, value) {
+                    // multi optiuons?
+                    if (value === options.skip) return;
+                    return $('<li>').append(
+                        $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                            $.txt(name)
+                        )
+                    );
+                })
+            );
+
+        return new Dropdown({
+            className: 'action dropdown value ' + options.classes,
+            $toggle: $toggle,
+            $ul: $ul
+        }).render().$el;
+    };
+
     return {
         Input: Input,
         drawCondition: drawCondition,
         drawDeleteButton: drawDeleteButton,
-        returnContainsOptions: returnContainsOptions
+        returnContainsOptions: returnContainsOptions,
+        drawDropdown: drawDropdown
     };
 });

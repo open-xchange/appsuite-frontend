@@ -55,6 +55,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         drawDropdown = function (activeValue, values, options) {
+            console.log(options);
             var active = values[activeValue] || activeValue;
             if (options.caret) {
                 active = active + '<b class="caret">';
@@ -62,6 +63,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
                 $ul = $('<ul class="dropdown-menu" role="menu">').append(
                     _(values).map(function (name, value) {
+                        if (value === options.skip) return;
                         return $('<li>').append(
                             $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
                                 $.txt(name)
@@ -103,7 +105,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 _.each(opt.conditionsMapping, function (list, conditionGroup) {
                     if (!_.has(testCapabilities, conditionGroup)) {
                         _.each(opt.conditionsMapping[conditionGroup], function (condition) {
-                            delete opt.conditionsTranslation[condition];
+                            if (!opt.conditionsTranslation.nested) delete opt.conditionsTranslation[condition];
                         });
                     }
                 });
@@ -140,11 +142,22 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             onRemoveTest: function (e) {
-
+                // cleanup
                 e.preventDefault();
                 var node = $(e.target),
                     testID = node.closest('li').attr('data-test-id'),
                     testArray = _.copy(this.model.get('test'));
+
+                // nested condition
+                if (testID.split('_').length === 2) {
+                    var rootConditionID = testID.split('_')[0],
+                        nestedConditionID = testID.split('_')[1];
+
+                    testArray.tests[rootConditionID].tests.splice(nestedConditionID, 1);
+                    this.model.set('test', testArray);
+                    this.render();
+                    return;
+                }
 
                 if (checkForMultipleTests(this.el).length > 2) {
                     testArray.tests = _(testArray.tests).without(testArray.tests[testID]);
@@ -227,18 +240,59 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             onChangeDropdownValue: function (e) {
+
+                function triggerRender() {
+                    self.render();
+
+                    setTimeout(function () {
+                        setFocus(self.el, valueType);
+                    }, 100);
+                }
+
                 e.preventDefault();
                 var node = $(e.target),
                     data = node.data(),
                     valueType = data.test ? 'test' : 'action',
-                    self = this;
-                if (data.target) {
-                    var arrayOfTests = _.copy(this.model.get('test'));
+                    self = this,
+                    testArray,
+                    arrayOfTests,
+                    nestedConditionID;
+
+                // allof/annyof
+                if (data.target === 'id') {
+                    arrayOfTests = _.copy(this.model.get('test'));
                     arrayOfTests.id = data.value;
                     this.model.set('test', arrayOfTests);
-                } else if (data.test === 'create') {
+                    triggerRender();
+                    return;
+                }
 
-                    var testArray =  _.copy(this.model.get('test'));
+                // allof/annyof nested condition
+                if (data.target === 'nestedID') {
+                    arrayOfTests = this.model.get('test');
+                    nestedConditionID = node.closest('li').attr('data-test-id');
+
+                    arrayOfTests.tests[nestedConditionID].id = data.value;
+                    this.model.set('test', arrayOfTests);
+                    triggerRender();
+                    return;
+                }
+
+                // create nested condition
+                if (data.nested && data.test === 'create') {
+                    testArray = this.model.get('test');
+                    nestedConditionID = node.closest('li').attr('data-test-id');
+                    testArray.tests[nestedConditionID].tests.push(_.copy(this.defaults.tests[data.value], true));
+                    this.model.set('test', testArray);
+                    triggerRender();
+                    return;
+                }
+
+                 // create condition
+                if (data.test === 'create') {
+
+                    testArray =  _.copy(this.model.get('test'));
+
                     if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests.push(_.copy(this.defaults.tests[data.value], true));
 
@@ -253,18 +307,19 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     }
 
                     this.model.set('test', testArray);
-                } else if (data.action === 'create') {
+                    triggerRender();
+                    return;
+                }
+
+                // create action
+                if (data.action === 'create') {
 
                     var actionArray = this.model.get('actioncmds');
                     actionArray.push(_.copy(this.defaults.actions[data.value], true));
 
                     this.model.set('actioncmds', actionArray);
+                    triggerRender();
                 }
-                this.render();
-
-                setTimeout(function () {
-                    setFocus(self.el, valueType);
-                }, 100);
 
             },
 
@@ -284,6 +339,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     this.model.set(type, actioncmds);
                 }
 
+            },
+
+            setNestedModel: function (model, num) {
+                var rootConditionKey = num.split('_')[0],
+                    conditionKey = num.split('_')[1];
+
+                var testArray = this.model.get('test'),
+
+                    nestedConditionArray = testArray.tests[rootConditionKey];
+
+                nestedConditionArray.tests[conditionKey] = model.attributes;
+
+                testArray.tests[rootConditionKey] = nestedConditionArray;
+                this.model.set('test', testArray);
             },
 
             onChangeColor: function (e) {
@@ -309,40 +378,75 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             var conditionList = $('<ol class="widget-list list-unstyled tests">'),
                 actionList = $('<ol class="widget-list list-unstyled actions">'),
-                appliedConditions = baton.model.get('test');
+                appliedConditions = baton.model.get('test'),
+                ConditionModel = Backbone.Model.extend({
+                    validate: function (attrs) {
+                        if (_.has(attrs, 'size')) {
+                            if (_.isNaN(attrs.size) || attrs.size === '') {
+                                this.trigger('invalid:size');
+                                return 'error';
+                            }
+                            this.trigger('valid:size');
+                        }
+
+                        if (_.has(attrs, 'headers')) {
+                            if ($.trim(attrs.headers[0]) === '') {
+                                this.trigger('invalid:headers');
+                                return 'error';
+                            }
+                            this.trigger('valid:headers');
+                        }
+
+                        if (_.has(attrs, 'values')) {
+                            if ($.trim(attrs.values[0]) === '') {
+                                this.trigger('invalid:values');
+                                return 'error';
+                            }
+                            this.trigger('valid::values');
+                        }
+
+                    }
+                });
 
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
             _(appliedConditions).each(function (condition, conditionKey) {
-                var ConditionModel = Backbone.Model.extend({
-                        validate: function (attrs) {
-                            if (_.has(attrs, 'size')) {
-                                if (_.isNaN(attrs.size) || attrs.size === '') {
-                                    this.trigger('invalid:size');
-                                    return 'error';
-                                }
-                                this.trigger('valid:size');
-                            }
+                var isNested = function () {
+                        if (condition.tests) return true;
+                    },
+                    addClass = isNested() ? 'nested' : '';
 
-                            if (_.has(attrs, 'headers')) {
-                                if ($.trim(attrs.headers[0]) === '') {
-                                    this.trigger('invalid:headers');
-                                    return 'error';
-                                }
-                                this.trigger('valid:headers');
-                            }
+                if (isNested()) {
+                    var nestedConditions = condition.tests;
 
-                            if (_.has(attrs, 'values')) {
-                                if ($.trim(attrs.values[0]) === '') {
-                                    this.trigger('invalid:values');
-                                    return 'error';
-                                }
-                                this.trigger('valid::values');
-                            }
+                    // condition point
+                    ext.point('io.ox/mail/mailfilter/tests').get('nested', function (point) {
+                        point.invoke('draw', conditionList, baton, conditionKey, cmodel); // baton, assembledKey, cmodel, filterValues, ncondition
+                    });
 
+                    _(nestedConditions).each(function (ncondition, nconditionKey) {
+                        // debugger;
+                        var cmodel = new ConditionModel(ncondition),
+                            assembledKey = conditionKey + '_' + nconditionKey;
+
+                        cmodel.on('change', function () {
+                            baton.view.setNestedModel(cmodel, assembledKey);
+                        });
+
+                        // condition point
+                        ext.point('io.ox/mail/mailfilter/tests').get(cmodel.get('id'), function (point) {
+                            point.invoke('draw', conditionList, baton, assembledKey, cmodel, filterValues, ncondition, addClass);
+                        });
+
+                        if (!cmodel.isValid()) {
+                            conditionList.find('[data-test-id=' + assembledKey + '] .row').addClass('has-error');
                         }
-                    }),
-                    cmodel = new ConditionModel(condition);
+
+                    });
+
+                }
+
+                var cmodel = new ConditionModel(condition);
 
                 cmodel.on('change', function () {
                     baton.view.setModel('test', cmodel, conditionKey);
@@ -350,7 +454,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 // condition point
                 ext.point('io.ox/mail/mailfilter/tests').get(cmodel.get('id'), function (point) {
-                    point.invoke('draw', conditionList, baton, conditionKey, cmodel, filterValues, condition);
+                    point.invoke('draw', conditionList, baton, conditionKey, cmodel, filterValues, condition, addClass);
                 });
 
                  // inintial validation to disable save button
@@ -420,12 +524,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             if (_.isEmpty(baton.model.get('actioncmds'))) {
                 renderWarningForEmptyActions(notificationActions);
             }
-
             this.append(
                 headlineTest, notificationConditions, conditionList,
                 drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
                     test: 'create',
-                    toggle: 'dropdown'
+                    toggle: 'dropdown',
+                    skip: baton.model.get('test').id === 'true' ? 'nested' : ''
                 }),
                 headlineActions, notificationActions, actionList,
                 drawDropdown(gt('Add action'), baton.view.actionsTranslations, {

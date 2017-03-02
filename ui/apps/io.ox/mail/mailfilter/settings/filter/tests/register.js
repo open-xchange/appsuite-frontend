@@ -25,6 +25,58 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
     ext.point('io.ox/mail/mailfilter/tests').extend({
 
+        id: 'nested',
+
+        initialize: function (opt) {
+            var defaults = {
+                'nested': {
+                    'id': 'anyof',
+                    'tests': []
+                }
+            };
+            _.extend(opt.defaults.tests, defaults);
+            _.extend(opt.conditionsTranslation, {
+                'nested': gt('Nested rule')
+            });
+
+            _.extend(opt.conditionsMapping, { 'nested': ['nested'] });
+        },
+
+        draw: function (baton, conditionKey) { //baton, conditionKey, cmodel, filterValues, condition
+
+            var arrayOfTests = baton.model.get('test').tests[conditionKey],
+                options = {
+                    target: 'nestedID',
+                    toggle: 'dropup',
+                    caret: true
+                },
+                optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these condition is met.') }, options),
+                assembled = arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof' ? optionsSwitch : $('<div>').addClass('line').text(gt('continue if all conditions are met'));
+            this.append(
+                $('<li>').addClass('filter-settings-view row nestedrule').attr({ 'data-test-id': conditionKey }).append(
+                    $('<div>').addClass('col-sm-9 singleline').append(
+                        assembled
+                    ),
+                    $('<div>').addClass('col-sm-3 singleline').append(
+                        util.drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
+                            test: 'create',
+                            nested: true,
+                            toggle: 'dropdown',
+                            classes: 'condition',
+                            // multi optiuons?
+                            skip: 'nested'
+                        })
+                    ),
+                    util.drawDeleteButton('test')
+                )
+            );
+
+        }
+
+    });
+
+    ext.point('io.ox/mail/mailfilter/tests').extend({
+
         id: 'body',
 
         initialize: function (opt) {
@@ -45,7 +97,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'body': ['body'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
             var inputId = _.uniqueId('body_');
 
             this.append(
@@ -56,7 +108,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
                     inputLabel: baton.view.conditionsTranslation.body + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                     inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                    errorView: true
+                    errorView: true,
+                    addClass: addClass
                 })
             );
 
@@ -85,7 +138,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'currentdate': ['currentdate'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
 
             var timeValues = {
                 'ge': gt('Rule applies from'),
@@ -114,7 +167,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 baton.view.$el.trigger('toggle:saveButton');
             });
             this.append(
-                $('<li>').addClass('filter-settings-view row').attr({ 'data-test-id': conditionKey }).append(
+                $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
                     $('<div>').addClass('col-sm-4 singleline').append(
                         $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
                     ),
@@ -158,7 +211,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'envelope': ['envelope'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
 
             var headerValues = {
                 'To': gt('To'),
@@ -175,7 +228,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
                     inputLabel: baton.view.conditionsTranslation.envelope + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                     inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                    errorView: true
+                    errorView: true,
+                    addClass: addClass
                 })
             );
 
@@ -246,7 +300,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'header': ['From', 'any', 'Subject', 'mailingList', 'To', 'Cc', 'cleanHeader'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
             var secondInputId = _.uniqueId('values');
 
             var title,
@@ -277,7 +331,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         secondInputId: secondInputId,
                         secondInputLabel: title + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                         secondInputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
-                        errorView: true
+                        errorView: true,
+                        addClass: addClass
                     })
                 );
             } else {
@@ -290,7 +345,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(cmodel.get('id'), util.returnContainsOptions()) },
                         inputLabel: title + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                         inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId, conditionView: baton.view },
-                        errorView: true
+                        errorView: true,
+                        addClass: addClass
                     })
                 );
             }
@@ -318,7 +374,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'size': ['size'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
             var inputId = _.uniqueId('size_'),
                 sizeValues = {
                     'over': gt('Is bigger than'),
@@ -333,7 +389,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) },
                     inputLabel: baton.view.conditionsTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
                     inputOptions: { name: 'size', model: cmodel, className: 'form-control', id: inputId },
-                    errorView: true
+                    errorView: true,
+                    addClass: addClass
                 })
             );
         }
@@ -361,7 +418,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             _.extend(opt.conditionsMapping, { 'address': ['address'] });
         },
 
-        draw: function (baton, conditionKey, cmodel, filterValues, condition) {
+        draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
             var addressValues = {
                     'user': gt('User'),
                     'detail': gt('Detail'),
@@ -378,7 +435,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, addressValues) },
                     inputLabel: baton.view.conditionsTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
                     inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                    errorView: true
+                    errorView: true,
+                    addClass: addClass
                 })
             );
         }

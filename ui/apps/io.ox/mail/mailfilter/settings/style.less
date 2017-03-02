@@ -52,6 +52,18 @@
         margin: 0 0 7px 0;
         text-align: left;
 
+        &.nested {
+            margin-left: 40px;
+        }
+
+        &.nestedrule, &.nested {
+            background-color: #ddd;
+        }
+
+        &.nestedrule .dropdown.condition {
+            text-align: right;
+        }
+
         .singleline {
             line-height: 30px;
         }
