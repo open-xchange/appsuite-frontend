@@ -78,11 +78,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }).done(function (ed) {
                     baton.editor = ed;
                     baton.editor.show();
+                    baton.content = baton.content || '';
 
-                    if (!looksLikeHTML(baton.content)) {
+                    if (baton.content && !looksLikeHTML(baton.content)) {
                         // convert to html
-                        var str = String(baton.content || '').replace(/[\s\xA0]+$/g, '');
-
+                        var str = String(baton.content).replace(/[\s\xA0]+$/g, '');
                         baton.content = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
                     }
 
