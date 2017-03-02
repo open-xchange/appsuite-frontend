@@ -692,6 +692,8 @@ define('io.ox/calendar/invitations/register', [
 
             // external?
             if ((imip = this.getIMIPAttachment())) {
+                // mark this mail as "imipMail"
+                this.model.set('imipMail', true, { silent: true });
                 imip.mail = { folder_id: this.model.get('folder_id'), id: this.model.get('id') };
                 return analyzeIMIPAttachment(imip).done(function (analyses) {
                     _(analyses).each(function (analysis) {
