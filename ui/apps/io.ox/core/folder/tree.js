@@ -207,7 +207,7 @@ define('io.ox/core/folder/tree', [
                 var shiftF10 = (e.shiftKey && e.which === 121),
                     menuKey = (_.device('windows') && e.which === 93);
                 if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focusFirst = !/38/.test(e.which);
+                    this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
 
                     // e.preventDefault() is needed here to surpress browser menu
                     if (shiftF10 || menuKey) {
@@ -269,12 +269,10 @@ define('io.ox/core/folder/tree', [
                 });
                 if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
 
-                if (view.focusFirst) {
-                    ul.find('li:first > a').focus();
-                } else {
-                    ul.find('li:last > a').focus();
+                if (view.focus) {
+                    ul.find(view.focus).focus();
                 }
-                view.focusFirst = false;
+                view.focus = false;
             });
         },
 
