@@ -842,8 +842,8 @@ define('io.ox/core/tk/selection', [
 
             hash = null;
 
-            // event?
-            if (!_.isEqual(previous, this.get()) && silent !== true) changed();
+            // event?: check ids type-independet (strings vs. integer)
+            if (!_.isEqual(_(previous).map(self.serialize), _(this.get()).map(self.serialize)) && silent !== true) changed();
 
             return this;
         };
