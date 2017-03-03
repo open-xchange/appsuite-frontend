@@ -167,6 +167,9 @@ define('io.ox/calendar/week/view', [
                         .on('select', function (date) {
                             self.setStartDate(date);
                             self.trigger('onRefresh');
+                        })
+                        .on('before:open', function () {
+                            this.setDate(self.startDate);
                         });
                 });
             }
