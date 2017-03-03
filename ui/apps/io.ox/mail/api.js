@@ -1473,8 +1473,8 @@ define('io.ox/mail/api', [
                 api.newMailTitle(true);
             } else {
                 // if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
-                // received date is measured in client timezone so use now function
-                lastUnseenMail = _.now();
+                // received date is measured in UI timezone
+                lastUnseenMail = new moment().valueOf();
             }
 
             return {
