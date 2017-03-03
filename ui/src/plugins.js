@@ -386,7 +386,24 @@
             );
 
             function load(module, modulename) {
-                $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
+                var base = [ox.apiRoot, '/apps/load/', ox.version].join(''),
+                    // default to the value from apache documentation
+                    limit = ox.serverConfig.limitRequestLine || 8190,
+                    requests = [], url, modules = module.split(',');
+
+                while (modules.length > 0) {
+                    url = base;
+                    while (modules[0] && url.length + 1 + modules[0].length < limit) {
+                        url += ',' + modules.shift();
+                    }
+                    requests.push($.ajax({ url: url, dataType: 'text' }));
+                }
+                $.when.apply(this, requests)
+                    .then(function () {
+                        return requests.map(function (res) {
+                            return res.responseText;
+                        }).join('/*:oxsep:*/');
+                    })
                     .done(function (concatenatedText) {
                         runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
