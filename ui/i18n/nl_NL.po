@@ -3618,6 +3618,12 @@ msgstr "Fout bij het uploaden van uw afbeelding"
 msgid "Error:"
 msgstr "Fout:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "U heeft geen nieuwe berichten"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Fouten"
@@ -7646,7 +7652,8 @@ msgstr "Resultaten"
 msgid "Retired"
 msgstr "Gepensioneerd"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Opnieuw proberen"
 
@@ -7874,11 +7881,10 @@ msgstr "Zoeken"
 msgid "Search facets"
 msgstr "Zoek facetten"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Alle mappen doorzocht"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

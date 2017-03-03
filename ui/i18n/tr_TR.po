@@ -3628,6 +3628,12 @@ msgstr ""
 msgid "Error:"
 msgstr "Hata:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Yeni mesajlarınız var"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Hatalar"
@@ -7708,7 +7714,8 @@ msgstr "Sonuçlar"
 msgid "Retired"
 msgstr "Emekli "
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Yeniden dene"
 
@@ -7938,11 +7945,10 @@ msgstr "Arama"
 msgid "Search facets"
 msgstr "Arama yönleri"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Standard folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Standart klasörler"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

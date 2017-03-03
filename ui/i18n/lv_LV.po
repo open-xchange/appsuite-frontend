@@ -3625,6 +3625,12 @@ msgstr "Kļūda pie attēla augšupielādes"
 msgid "Error:"
 msgstr "Kļūda:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Jums nav jaunu ziņojumu"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Kļūdas"
@@ -7647,7 +7653,8 @@ msgstr "Rezultāti"
 msgid "Retired"
 msgstr "Atvaļināts"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Vēlreiz"
 
@@ -7878,11 +7885,10 @@ msgstr "Meklēšana"
 msgid "Search facets"
 msgstr "Meklēt vienumus"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Meklēt visās mapēs"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

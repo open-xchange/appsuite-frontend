@@ -4445,6 +4445,8 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
+#: apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr ""
 
@@ -8339,10 +8341,9 @@ msgstr ""
 msgid "Accounts"
 msgstr ""
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js
 #: module:io.ox/core
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr ""
 
 #: apps/io.ox/find/view-facets.js
@@ -9591,6 +9592,11 @@ msgstr ""
 #: apps/io.ox/mail/inplace-reply.js
 #: module:io.ox/mail
 msgid "Your reply has been sent"
+msgstr ""
+
+#: apps/io.ox/mail/listview.js
+#: module:io.ox/mail
+msgid "Error: Failed to fetch messages"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js

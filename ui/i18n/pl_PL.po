@@ -3641,6 +3641,12 @@ msgstr "Podczas przesyłania obrazu wystąpił błąd"
 msgid "Error:"
 msgstr "Błąd:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Nie masz nowych wiadomości"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Błędy"
@@ -7650,7 +7656,8 @@ msgstr "Wyniki"
 msgid "Retired"
 msgstr "Emeryt(ka)"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Spróbuj ponownie"
 
@@ -7880,11 +7887,10 @@ msgstr "Szukaj"
 msgid "Search facets"
 msgstr "Przeszukaj aspekty"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Wyszukiwano we wszystkich folderach"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
