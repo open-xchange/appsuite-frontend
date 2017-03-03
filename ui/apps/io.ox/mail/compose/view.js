@@ -178,13 +178,18 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/menu').extend(
         {
-            id: 'signatures',
+            id: 'security',
             index: 100,
+            draw: extensions.security
+        },
+        {
+            id: 'signatures',
+            index: 200,
             draw: extensions.signaturemenu
         },
         {
             id: 'options',
-            index: 200,
+            index: 300,
             draw: extensions.optionsmenu
         }
     );
