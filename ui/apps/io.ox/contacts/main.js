@@ -931,7 +931,8 @@ define('io.ox/contacts/main', [
                 });
                 // selection in listview
                 app.grid.selection.on({
-                    'change': function (event, list) {
+                    'change': function (event, list, opt) {
+                        if (opt && opt.retriggerUnlessEmpty) return;
                         metrics.trackEvent({
                             app: 'contacts',
                             target: 'list',

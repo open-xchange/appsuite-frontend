@@ -129,9 +129,9 @@ define('io.ox/core/tk/selection', [
             return _.size(selectedItems) > 1;
         };
 
-        changed = function () {
+        changed = function (opt) {
             var list = self.get();
-            self.trigger('change', list);
+            self.trigger('change', list, opt);
             if (list.length === 0) {
                 self.trigger('empty');
             }
@@ -994,7 +994,7 @@ define('io.ox/core/tk/selection', [
 
         this.retriggerUnlessEmpty = function () {
             if (this.get().length) {
-                changed();
+                changed({ retriggerUnlessEmpty: true });
             }
         };
 
