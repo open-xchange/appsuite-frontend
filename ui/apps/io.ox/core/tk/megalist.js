@@ -17,12 +17,12 @@ define('io.ox/core/tk/megalist', [], function () {
 
     // draw example list
 
-    var li = $('<li tabindex="-1" role="option" aria-selected="false" aria-checked="false" data-cid="">');
+    var li = $('<li tabindex="-1" role="option" aria-selected="false" aria-checked="false" data-cid=""><i class="fa checkmark" aria-hidden="true"></i></li>');
 
     $('body').append(
-        $('<ul class="megalist" role="listbox" aria-multiselectable="true">').append(
+        $('<ul class="megalist checkboxes" role="listbox" aria-multiselectable="true">').append(
             _.range(0, 100).map(function (i) {
-                return li.clone().attr('data-cid', i).text('List option #' + i);
+                return li.clone().attr('data-cid', i).append($.txt('List option #' + i));
             })
         )
     );
@@ -55,7 +55,7 @@ define('io.ox/core/tk/megalist', [], function () {
             }
         })
         .on('mousedown', 'li', function (e) {
-            var isToggle = e.ctrlKey || e.metaKey || e.offsetX < 40;
+            var isToggle = e.ctrlKey || e.metaKey || (e.offsetX < 48 && hasCheckboxes());
             trigger(e.currentTarget, isToggle ? 'toggle' : 'select', e);
         })
         .on('select', 'li', function (e) {
@@ -92,6 +92,10 @@ define('io.ox/core/tk/megalist', [], function () {
 
     function hasChecked() {
         return !!el.querySelector(CHECKED_true);
+    }
+
+    function hasCheckboxes() {
+        return $el.hasClass('checkboxes');
     }
 
     function trigger(arg, type, e) {
@@ -164,8 +168,14 @@ define('io.ox/core/tk/megalist', [], function () {
 
     function toggle(item) {
         var newState = item.attr(CHECKED) !== 'true';
-        item.attr(CHECKED, newState).attr(SELECTED, newState);
-        if (newState) $el.children(CHECKED_false + SELECTED_true).attr(SELECTED, false);
+        if (hasCheckboxes()) {
+            var count = getAllChecked().length;
+            item.attr(CHECKED, newState);
+            if (newState || count > 1) item.attr(SELECTED, newState);
+            if (newState) $el.children(CHECKED_false + SELECTED_true).attr(SELECTED, false);
+        } else {
+            item.attr(CHECKED, newState).attr(SELECTED, newState);
+        }
     }
 
     function focus(item) {
@@ -187,6 +197,12 @@ define('io.ox/core/tk/megalist', [], function () {
         getAllSelected().attr(SELECTED, false);
     }
 
+    function toggleCheckboxes(state) {
+        $el.toggleClass('checkboxes', state);
+    }
+
+    window.toggleCheckboxes = toggleCheckboxes;
+
     // PROGAPATE CHANGE
 
     function getCIDs(selector) {
@@ -194,6 +210,12 @@ define('io.ox/core/tk/megalist', [], function () {
     }
 
     function propagateChange() {
-        $el.trigger('change', { checked: getCIDs(CHECKED_true), selected: getCIDs(SELECTED_true) });
+        var selected = getCIDs(SELECTED_true), checked;
+        if (hasCheckboxes()) {
+            checked = selected.length > 1 ? selected : [];
+        } else {
+            checked = getCIDs(CHECKED_true);
+        }
+        $el.trigger('change', { checked: checked, selected: selected });
     }
 });

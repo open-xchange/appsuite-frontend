@@ -35,7 +35,7 @@
     > li {
         position: relative;
         height: 54px;
-        padding: 8px 16px 8px 40px;
+        padding: 8px 16px;
         border: 1px solid transparent;
         border-bottom: 1px solid rgba(0, 0, 0, 0.20);
         list-style-type: none;
@@ -46,9 +46,11 @@
         background-color: #ddd;
     }
 
-    > li:before {
-        font: normal normal normal 14px/1 FontAwesome;
-        -webkit-font-smoothing: antialiased;
+    i.checkmark {
+        display: none;
+    }
+
+    i.checkmark:before {
         content: '\f096';
         color: #767676;
         position: absolute;
@@ -57,7 +59,7 @@
         font-size: 14px;
     }
 
-    > li[aria-checked="true"]:before {
+    > li[aria-checked="true"] i.checkmark:before {
         content: '\f14a';
     }
 
@@ -72,13 +74,24 @@
             background-color: @blue;
         }
 
-        > li[aria-selected="true"]:before {
+        > li[aria-selected="true"] i.checkmark:before {
             color: white;
         }
 
         > li[aria-selected="true"]:focus {
             border-color: transparent;
             background-color: darken(@blue, 10%);
+        }
+    }
+
+    &.checkboxes {
+
+        > li {
+            padding-left: 40px;
+        }
+
+        i.checkmark {
+            display: inline-block;
         }
     }
 }
