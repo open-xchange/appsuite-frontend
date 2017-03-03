@@ -886,8 +886,8 @@ define('io.ox/files/main', [
          * Respond to API events that need a reload
          */
         'requires-reload': function (app) {
-            // listen to events that affect the filename, add files, or remove files
-            api.on('rename add:version remove:version change:version', _.debounce(function () {
+            // listen to events that affect the filename, description add files, or remove files
+            api.on('rename description add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
