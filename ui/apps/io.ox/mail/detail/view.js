@@ -274,6 +274,14 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail').extend({
+        id: 'error',
+        index: INDEX += 100,
+        draw: function () {
+            this.append($('<section class="error" role="dialog">').hide());
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
@@ -391,7 +399,8 @@ define('io.ox/mail/detail/view', [
 
         events: {
             'keydown': 'onToggle',
-            'click .detail-view-header': 'onToggle'
+            'click .detail-view-header': 'onToggle',
+            'click a[data-action="retry"]': 'onRetry'
         },
 
         onChangeFlags: function () {
@@ -506,6 +515,13 @@ define('io.ox/mail/detail/view', [
             this.toggle(cid);
         },
 
+        onRetry: function (e) {
+            e.preventDefault();
+            this.$('section.error').hide();
+            this.$('section.body').show();
+            this.toggle(true);
+        },
+
         onUnseen: function () {
             var data = this.model.toJSON();
             if (util.isToplevel(data)) api.markRead(data);
@@ -543,17 +559,15 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoadFail: function (e) {
+            if (!this.$el) return;
             this.trigger('load:fail');
             this.trigger('load:done');
-            if (!this.$el) return;
             this.$el.attr('data-loaded', false);
-            this.getEmptyBodyNode().empty().append(
-                $('<div class="mail-detail-content">').append(
-                    $('<div class="loading-error">').append(
-                        $('<h4>').text(gt('Error while loading message content')),
-                        $('<div>').text(e.error)
-                    )
-                )
+            this.$('section.error').empty().show().append(
+                $('<i class="fa fa-exclamation-triangle">'),
+                $('<h4>').text(gt('Error: Failed to load message content')),
+                $('<p>').text(e.error),
+                $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
             );
         },
 
@@ -613,10 +627,13 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    this.$el.find('section.body').empty().busy();
+                    this.$('section.body').empty().busy();
                 },
                 'load:done': function () {
-                    this.$el.find('section.body').idle();
+                    this.$('section.body').idle();
+                },
+                'load:fail': function () {
+                    this.$('section.body').hide();
                 }
             });
         },

@@ -281,14 +281,39 @@
     }
 
     section.attachments,
-    section.notifications { display: none; }
+    section.notifications,
+    section.error { display: none; }
 
     &.expanded section {
         &.attachments,
-        &.notifications { display: block; }
+        &.notifications,
+        &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
         &.body { display: table; }
         &.attachments:empty { display: none;  }
+    }
+
+    section.error {
+        color: #767676;
+        position: relative;
+        line-height: 16px;
+        padding: 16px 16px 16px 72px;
+        h4 {
+            margin: 3px 0 1px 0;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: inherit;
+        }
+        p {
+            margin-bottom: 8px;
+        }
+        i.fa {
+            position: absolute;
+            left: 16px;
+            top: 16px;
+            font-size: 40px;
+            color: #ccc;
+        }
     }
 
     &.no-padding {
