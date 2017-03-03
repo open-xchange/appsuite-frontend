@@ -369,7 +369,7 @@ define('io.ox/mail/listview', [
 
             this.append(
                 $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
-                $.txt(gt('Error: Failed to fetch messages')),
+                $.txt(gt('Error: Failed to load messages')),
                 $('<button type="button" class="btn btn-link">')
                     .text(gt('Retry'))
                     .on('click', { baton: baton }, retry)
