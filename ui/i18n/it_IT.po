@@ -3600,6 +3600,12 @@ msgstr "Errore durante il caricamento della tua immagine"
 msgid "Error:"
 msgstr "Errore:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Non hai nuovi messaggi"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Errori"
@@ -7624,7 +7630,8 @@ msgstr "Risultati"
 msgid "Retired"
 msgstr "Pensionato"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Ritenta"
 
@@ -7854,11 +7861,10 @@ msgstr "Cerca"
 msgid "Search facets"
 msgstr "Ricerca faccette"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Cercato in tutte le cartelle"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

@@ -3576,6 +3576,12 @@ msgstr "Fel när din bild laddades upp"
 msgid "Error:"
 msgstr "Fel:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Du har inga nya meddelanden"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Fel"
@@ -7571,7 +7577,8 @@ msgstr "Resultat"
 msgid "Retired"
 msgstr "Pensionerad"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Försök igen"
 
@@ -7799,11 +7806,10 @@ msgstr "Sök"
 msgid "Search facets"
 msgstr "Sök efter facetter"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Sökte i alla mappar"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

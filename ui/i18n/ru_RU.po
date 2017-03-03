@@ -3617,6 +3617,12 @@ msgstr "Ошибка при добавлении изображения"
 msgid "Error:"
 msgstr "Ошибка:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Нет новых сообщений"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Ошибки"
@@ -7615,7 +7621,8 @@ msgstr "Результаты"
 msgid "Retired"
 msgstr "На пенсии"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Повторить"
 
@@ -7846,11 +7853,10 @@ msgstr "Поиск"
 msgid "Search facets"
 msgstr "Поиск критериев"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Searched in all folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Поиск выполнен во всех папках"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

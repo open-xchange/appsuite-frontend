@@ -3578,6 +3578,12 @@ msgstr "Det oppstod en feil under lasting av meldingsinnholdet"
 msgid "Error:"
 msgstr "Feil:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+#, fuzzy
+#| msgid "You have no new messages"
+msgid "Error: Failed to fetch messages"
+msgstr "Du har ingen nye meldinger"
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
 msgstr "Feil"
@@ -7574,7 +7580,8 @@ msgstr "Resultater"
 msgid "Retired"
 msgstr "Pensjonert"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr "Prøv på nytt"
 
@@ -7802,11 +7809,10 @@ msgstr "Søk"
 msgid "Search facets"
 msgstr "Søkeinnstillinger"
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
 #| msgid "Standard folders"
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr "Standardmapper"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files

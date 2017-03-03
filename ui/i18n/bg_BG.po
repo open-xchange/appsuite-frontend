@@ -3571,6 +3571,10 @@ msgstr "Грешка при зареждане на съдържанието н�
 msgid "Error:"
 msgstr "Грешка:"
 
+#: apps/io.ox/mail/listview.js module:io.ox/mail
+msgid "Error: Failed to fetch messages"
+msgstr ""
+
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Errors"
@@ -7507,7 +7511,8 @@ msgstr "Резултати"
 msgid "Retired"
 msgstr ""
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
+#: module:io.ox/mail
 msgid "Retry"
 msgstr ""
 
@@ -7738,9 +7743,8 @@ msgstr ""
 msgid "Search facets"
 msgstr ""
 
-#. text link action to run current search again wihout any folder limitations
 #: apps/io.ox/find/main.js module:io.ox/core
-msgid "Search in all folders?"
+msgid "Search in all folders"
 msgstr ""
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
