@@ -1529,6 +1529,7 @@ define('io.ox/files/api', [
                     var changes = arguments[2] || {};
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
                     if ('object_permissions' in changes) api.propagate('permissions', file);
+                    if ('description' in changes) api.propagate('description', file);  //Bug 51571
                     break;
 
                 case 'change:version':
@@ -1596,6 +1597,10 @@ define('io.ox/files/api', [
                     });
                 case 'permissions':
                     api.trigger('change:permissions', _.cid(file));
+                    break;
+
+                case 'description':  //Bug 51571
+                    api.trigger('description', _.cid(file));
                     break;
 
                 case 'unlock':
