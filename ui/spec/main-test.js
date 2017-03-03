@@ -1,3 +1,7 @@
+// clear localstorage here before everything starts
+// seems like phantom has problems with a non cleared localstorage
+localStorage.clear();
+
 /* eslint block-scoped-var:0 */
 var tests = [];
 for (var file in window.__karma__.files) {
