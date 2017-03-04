@@ -3515,10 +3515,6 @@ msgstr "錯誤"
 msgid "Error log"
 msgstr "錯誤記錄"
 
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail
-msgid "Error while loading message content"
-msgstr "載入訊息內容時發生錯誤。"
-
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid ""
 "Error while playing the video. Either your browser does not support the "
@@ -3538,10 +3534,16 @@ msgstr "更新圖片時發生錯誤"
 msgid "Error:"
 msgstr "錯誤:"
 
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
+msgstr "載入訊息內容時發生錯誤。"
+
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr "您有沒有新訊息"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -7501,8 +7503,8 @@ msgstr "結果"
 msgid "Retired"
 msgstr "已退休"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
-#: module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr "蟲試"
 
@@ -9719,6 +9721,7 @@ msgstr "使用左右鍵來切換，並使用 Esc 鍵離開檢視模式。"
 msgid "Use separate username and password"
 msgstr "使用不同用戶名和密碼"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "為此帳戶使用統一郵件"

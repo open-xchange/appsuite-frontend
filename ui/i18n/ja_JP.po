@@ -3513,10 +3513,6 @@ msgstr "エラー"
 msgid "Error log"
 msgstr "エラーログ"
 
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail
-msgid "Error while loading message content"
-msgstr "メッセージの読み込み中にエラーが発生しました。"
-
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid ""
 "Error while playing the video. Either your browser does not support the "
@@ -3539,10 +3535,16 @@ msgstr "画像のアップロード中にエラーが発生しました"
 msgid "Error:"
 msgstr "次のエラーが発生しました:"
 
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
+msgstr "メッセージの読み込み中にエラーが発生しました。"
+
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr "新規メッセージはありません。"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -7543,8 +7545,8 @@ msgstr "結果"
 msgid "Retired"
 msgstr "退職"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
-#: module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr "再試行"
 
@@ -9798,6 +9800,7 @@ msgstr "移動には左右矢印キーを、画面を終了するにはESCキー
 msgid "Use separate username and password"
 msgstr "別のユーザ名とパスワードを使用"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "このアカウントに統合メールを使用"

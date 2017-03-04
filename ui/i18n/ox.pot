@@ -4445,8 +4445,9 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
-#: apps/io.ox/mail/listview.js
+#: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr ""
 
@@ -8425,6 +8426,13 @@ msgstr ""
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js
+#: module:io.ox/settings
+msgid "Use unified mail for this account"
+msgstr ""
+
+#: apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings
 msgid "Please select your mail account provider"
 msgstr ""
 
@@ -8644,11 +8652,6 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
 msgid "Email address"
-msgstr ""
-
-#: apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings
-msgid "Use unified mail for this account"
 msgstr ""
 
 #. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
@@ -9570,7 +9573,7 @@ msgstr ""
 
 #: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
-msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
 msgstr ""
 
 #: apps/io.ox/mail/import.js
@@ -9596,7 +9599,7 @@ msgstr ""
 
 #: apps/io.ox/mail/listview.js
 #: module:io.ox/mail
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js

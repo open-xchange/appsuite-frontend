@@ -3596,10 +3596,6 @@ msgstr "Erreur"
 msgid "Error log"
 msgstr "Journal d'erreurs"
 
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail
-msgid "Error while loading message content"
-msgstr "Une erreur s'est produite pendant le chargement du contenu du message."
-
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid ""
 "Error while playing the video. Either your browser does not support the "
@@ -3623,10 +3619,16 @@ msgstr "Erreur lors du téléversement de votre image"
 msgid "Error:"
 msgstr "Erreur :"
 
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
+msgstr "Une erreur s'est produite pendant le chargement du contenu du message."
+
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr "Vous n'avez pas de nouveaux messages"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -7665,8 +7667,8 @@ msgstr "Résultats"
 msgid "Retired"
 msgstr "Retraité"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
-#: module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr "Réessayer"
 
@@ -9976,6 +9978,7 @@ msgstr ""
 msgid "Use separate username and password"
 msgstr "Utiliser des nom d'utilisateur et mot de passe séparés"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Utiliser la messagerie unifiée pour ce compte"
