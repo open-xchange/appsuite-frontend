@@ -3579,10 +3579,6 @@ msgstr "Error"
 msgid "Error log"
 msgstr "Registro de errores"
 
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail
-msgid "Error while loading message content"
-msgstr "Error al cargar el contenido del mensaje"
-
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid ""
 "Error while playing the video. Either your browser does not support the "
@@ -3605,10 +3601,16 @@ msgstr "Error al subir su imagen"
 msgid "Error:"
 msgstr "Error:"
 
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
+msgstr "Error al cargar el contenido del mensaje"
+
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr "No tiene nuevos mensajes"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -7644,8 +7646,8 @@ msgstr "Resultados"
 msgid "Retired"
 msgstr "Jubilado"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
-#: module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr "Reintentar"
 
@@ -9938,6 +9940,7 @@ msgstr ""
 msgid "Use separate username and password"
 msgstr "Utilizar nombre de usuario y contraseña por separado"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Utilizar el correo unificado para esta cuenta"

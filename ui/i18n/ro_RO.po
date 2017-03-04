@@ -3606,10 +3606,6 @@ msgstr "Eroare"
 msgid "Error log"
 msgstr "Jurnal erori"
 
-#: apps/io.ox/mail/detail/view.js module:io.ox/mail
-msgid "Error while loading message content"
-msgstr "Eroare la încărcarea conținutului mesajului."
-
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid ""
 "Error while playing the video. Either your browser does not support the "
@@ -3631,10 +3627,16 @@ msgstr "Eroare la încărcarea imaginii"
 msgid "Error:"
 msgstr "Eroare:"
 
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Error while loading message content"
+msgid "Error: Failed to load message content"
+msgstr "Eroare la încărcarea conținutului mesajului."
+
 #: apps/io.ox/mail/listview.js module:io.ox/mail
 #, fuzzy
 #| msgid "You have no new messages"
-msgid "Error: Failed to fetch messages"
+msgid "Error: Failed to load messages"
 msgstr "Nu aveți niciun mesaj nou"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
@@ -7663,8 +7665,8 @@ msgstr "Rezultate"
 msgid "Retired"
 msgstr "Pensionar"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/listview.js
-#: module:io.ox/mail
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
+#: module:io.ox/mail apps/io.ox/mail/listview.js
 msgid "Retry"
 msgstr "Încearcă din nou"
 
@@ -9973,6 +9975,7 @@ msgstr ""
 msgid "Use separate username and password"
 msgstr "Folosește numele de utilizator și parola"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Use unified mail for this account"
 msgstr "Folosește mesageria unificată pentru acest cont"
