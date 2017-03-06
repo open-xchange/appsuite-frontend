@@ -161,6 +161,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 var $temp = $('<div class="hidden">');
                 node.before($temp).detach();
                 this.$placeholder.append(node);
+                // lazy metrics support
+                this.$el.trigger(_.extend({}, e, { type: 'mousedown' }));
                 this.$el.trigger(e);
                 $temp.replaceWith(node);
             }
