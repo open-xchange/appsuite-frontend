@@ -56,7 +56,7 @@ define('io.ox/core/tk/flag-picker', [
         div: $('<div>'),
         list: $('<ul class="dropdown-menu" role="menu">'),
         listItem: $('<li>'),
-        menuItemLink: $('<a href="#" role="menuitem">'),
+        menuItemLink: $('<a href="#" role="menuitem" class="io-ox-action-link">'),
         flag: $('<span class="flag-example" aria-hidden="true">'),
         setColorLink: $('<a href="#">').attr('aria-label', gt('Set color')),
         dropdownIcon: $('<i class="flag-dropdown-icon" aria-hidden="true">').attr('title', gt('Set color'))
@@ -78,7 +78,10 @@ define('io.ox/core/tk/flag-picker', [
                                 index > 0 ? preParsed.flag.clone().addClass('flag_bg_' + index) : $(),
                                 $.txt(colorNames[color])
                             )
-                            .attr('data-color', index)
+                            .attr({
+                                'data-color': index,
+                                'data-action': 'color-' + color.toLowerCase()
+                            })
                         );
                     })
                 );
