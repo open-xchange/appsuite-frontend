@@ -16,8 +16,9 @@ define('io.ox/backbone/mini-views/addresspicker', [
     'io.ox/participants/model',
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
-    'less!io.ox/backbone/mini-views/addresspicker',
-], function (AbstractView, pModel, api, capabilities) {
+    'io.ox/mail/util',
+    'less!io.ox/backbone/mini-views/addresspicker'
+], function (AbstractView, pModel, api, capabilities, util) {
 
     'use strict';
 
@@ -42,10 +43,22 @@ define('io.ox/backbone/mini-views/addresspicker', [
             require(['io.ox/contacts/addressbook/popup'], function (popup) {
                 popup.open(function (result) {
                     _.each(result, function (singleData) {
-                        api.get(singleData).done(function (data) {
-                            var member = new pModel.Participant(data);
+                        var member;
+                        if (singleData.folder_id) {
+                            api.get(singleData).done(function (data) {
+                                member = new pModel.Participant(data);
+                                self.opt.process(e, member, singleData);
+                            });
+                        } else {
+                            member = new pModel.Participant({
+                                display_name: util.parseRecipient(singleData.array[1])[0],
+                                email1: singleData.array[1],
+                                field: 'email1',
+                                type: 5
+                            });
                             self.opt.process(e, member, singleData);
-                        });
+                        }
+
                     });
                 }, self.opt.isPermission && !capabilities.has('invite_guests'));
             });
