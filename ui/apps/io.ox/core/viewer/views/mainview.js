@@ -114,7 +114,7 @@ define('io.ox/core/viewer/views/mainview', [
                 if (!metrics.isEnabled()) return;
                 var toolbar = self.$el.find('.viewer-toolbar');
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'core',
                         target: 'viewer/toolbar',

@@ -706,7 +706,7 @@ define('io.ox/calendar/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'toolbar',
@@ -715,7 +715,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     metrics.trackEvent({
                         app: 'calendar',
@@ -726,7 +726,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // detail view
-                nodes.outer.delegate('.participants-view .io-ox-action-link', 'mousedown', function (e) {
+                nodes.outer.on('mousedown', '.participants-view .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'detail/toolbar',
@@ -735,7 +735,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // detail view as sidepopup
-                nodes.outer.delegate('.io-ox-sidepopup .io-ox-action-link', 'mousedown', function (e) {
+                nodes.outer.on('mousedown', '.io-ox-sidepopup .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'detail/toolbar',
@@ -744,7 +744,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder/context-menu',
@@ -753,7 +753,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // folder permissions action
-                sidepanel.find('.folder-tree').delegate('.folder-shared', 'mousedown', function () {
+                sidepanel.find('.folder-tree').on('mousedown', '.folder-shared', function () {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder',

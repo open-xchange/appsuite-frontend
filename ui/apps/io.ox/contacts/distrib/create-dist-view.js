@@ -159,7 +159,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
                         app: 'calendar',

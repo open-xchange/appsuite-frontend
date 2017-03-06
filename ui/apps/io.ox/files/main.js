@@ -1276,7 +1276,7 @@ define('io.ox/files/main', [
                     action: 'add'
                 });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
@@ -1285,7 +1285,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     metrics.trackEvent({
                         app: 'drive',
@@ -1297,7 +1297,7 @@ define('io.ox/files/main', [
                 });
 
                 // list view control toolbar dropdown
-                control.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                control.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
@@ -1315,7 +1315,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder/context-menu',

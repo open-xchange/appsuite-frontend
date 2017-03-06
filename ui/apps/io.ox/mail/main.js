@@ -1693,7 +1693,7 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
+                app.getWindow().nodes.main.on('mousedown', '.detail-view-header .dropdown-menu a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
@@ -1702,7 +1702,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1710,7 +1710,7 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                toolbar.delegate('.category', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.category', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1720,7 +1720,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
@@ -1732,7 +1732,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'folder/context-menu',

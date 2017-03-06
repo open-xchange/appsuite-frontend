@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/extensions', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.delegate('[data-action]', 'mousedown', function (e) {
+                self.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
                         app: 'calendar',
