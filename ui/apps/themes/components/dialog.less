@@ -409,14 +409,15 @@
         margin: -3px 0 2px 0;
     }
 
-    .modal-body {
-        min-height: 60px;
-        overflow-y: auto;
-    }
-
     .modal-header, .modal-body, .modal-footer {
         padding: 16px;
         flex-grow: 0;
+    }
+
+    .modal-body {
+        min-height: 60px;
+        overflow-y: auto;
+        flex-grow: 1;
     }
 
     .modal-footer {

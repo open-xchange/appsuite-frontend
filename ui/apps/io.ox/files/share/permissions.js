@@ -22,7 +22,7 @@ define('io.ox/files/share/permissions', [
     'io.ox/files/api',
     'io.ox/files/share/api',
     'io.ox/contacts/api',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/contacts/util',
     'io.ox/core/tk/typeahead',
     'io.ox/participants/model',
@@ -32,8 +32,9 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
+    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, dialogs, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
+], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -811,59 +812,55 @@ define('io.ox/files/share/permissions', [
         },
 
         show: function (objModel, options) {
+
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = !folderUtil.is('public', objModel.attributes);
+                notificationDefault = !folderUtil.is('public', objModel.attributes),
+                title;
 
-            // // Check if ACLs enabled and only do that for mail component,
-            // // every other component will have ACL capabilities (stored in DB)
-            // if (data.module === 'mail' && !(data.capabilities & Math.pow(2, 0))) {
-            //     isFolderAdmin = false;
-            // }
+            options = _.extend({ nested: nested, share: false }, options);
 
-            options = _.extend({
-                top: 40,
-                center: false,
+            title = options.share ?
+                        //#. %1$s determines whether setting permissions for a file or folder
+                        //#. %2$s is the file or folder name
+                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName());
+
+            var dialog = new ModalDialog({
                 async: true,
+                focus: '.form-control.tt-input',
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
-                share: false,
-                nested: nested
-            }, options);
+                title: title,
+                width: 800
+            });
 
-            if (_.device('desktop')) {
-                _.extend(options, {
-                    width: 800,
-                    maximize: true
-                });
-            }
+            var DialogConfigModel = Backbone.Model.extend({
+                defaults: {
+                    cascadePermissions: true,
+                    message: '',
+                    sendNotifications: notificationDefault,
+                    disabled: false
+                },
+                toJSON: function () {
+                    var data = {
+                        cascadePermissions: this.get('cascadePermissions'),
+                        notification: { transport: 'mail' }
+                    };
 
-            var dialog = new dialogs.ModalDialog(options),
-                DialogConfigModel = Backbone.Model.extend({
-                    defaults: {
-                        cascadePermissions: false,
-                        message: '',
-                        sendNotifications: notificationDefault,
-                        disabled: false
-                    },
-                    toJSON: function () {
-                        var data = {
-                            cascadePermissions: this.get('cascadePermissions'),
-                            notification: { transport: 'mail' }
-                        };
-
-                        if (dialogConfig.get('sendNotifications')) {
-                            // add personal message only if not empty
-                            // but always send notification!
-                            if (this.get('message') && $.trim(this.get('message')) !== '') {
-                                data.notification.message = this.get('message');
-                            }
-                        } else {
-                            delete data.notification;
+                    if (dialogConfig.get('sendNotifications')) {
+                        // add personal message only if not empty
+                        // but always send notification!
+                        if (this.get('message') && $.trim(this.get('message')) !== '') {
+                            data.notification.message = this.get('message');
                         }
-                        return data;
+                    } else {
+                        delete data.notification;
                     }
-                }),
-                dialogConfig = new DialogConfigModel(),
+                    return data;
+                }
+            });
+
+            var dialogConfig = new DialogConfigModel(),
                 permissionsView = new PermissionsView({ model: objModel, share: options.share });
 
             function hasNewGuests() {
@@ -897,10 +894,11 @@ define('io.ox/files/share/permissions', [
             });
 
             if (objModel.isAdmin()) {
-                dialog.getFooter().prepend(
-                    $('<div>').addClass('form-group cascade').append(
-                        $('<label>').addClass('checkbox-inline').text(gt('Send notification')).prepend(
-                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el.on('click', function (e) {
+                dialog.$footer.prepend(
+                    $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
+                        $('<label class="checkbox-inline">').text(gt('Send notification by email')).prepend(
+                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                            .on('click', function (e) {
                                 dialogConfig.set('byHand', e.currentTarget.checked);
                             })
                         )
@@ -909,20 +907,13 @@ define('io.ox/files/share/permissions', [
             }
 
             dialogConfig.on('change:disabled', function () {
-                dialog.getFooter().find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
+                dialog.$footer.find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
             });
 
-            dialog.getPopup().addClass('share-permissions-dialog');
-
-            dialog.getHeader().append(
-                $('<h4>').text(
-                    options.share ?
-                    gt('Share "%1$s"', objModel.getDisplayName()) :
-                    gt('Permissions for "%1$s"', objModel.getDisplayName()))
-            );
+            dialog.$el.addClass('share-permissions-dialog');
 
             // add permissions view
-            dialog.getContentNode().append(
+            dialog.$body.append(
                 permissionsView.render().$el
             );
 
@@ -937,15 +928,6 @@ define('io.ox/files/share/permissions', [
             // )
             var supportsInvites = supportsChanges && folderModel.supportsInternalSharing(),
                 supportsGuests = folderModel.supportsInviteGuests();
-
-            if (supportsChanges) {
-                // add action buttons
-                dialog
-                    .addPrimaryButton('save', options.share ? gt('Share') : gt('Save'), 'save')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
-            } else {
-                dialog.addPrimaryButton('cancel', gt('Close'));
-            }
 
             if (supportsInvites) {
 
@@ -994,104 +976,119 @@ define('io.ox/files/share/permissions', [
                     };
 
                 var typeaheadView = new Typeahead({
-                        apiOptions: {
+                    apiOptions: {
+                        // mail does not support sharing folders to guets
+                        contacts: supportsGuests,
+                        users: true,
+                        groups: true
+                    },
+                    placeholder: gt('Add people'),
+                    harmonize: function (data) {
+                        data = _(data).map(function (m) {
+                            return new pModel.Participant(m);
+                        });
+                        // remove duplicate entries from typeahead dropdown
+                        return _(data).filter(function (model) {
+                            // don't offer secondary addresses as guest accounts
+                            if (!supportsGuests && model.get('field') !== 'email1') return false;
                             // mail does not support sharing folders to guets
-                            contacts: supportsGuests,
-                            users: true,
-                            groups: true
-                        },
-                        placeholder: gt('Add people'),
-                        harmonize: function (data) {
-                            data = _(data).map(function (m) {
-                                return new pModel.Participant(m);
-                            });
-                            // remove duplicate entries from typeahead dropdown
-                            return _(data).filter(function (model) {
-                                // don't offer secondary addresses as guest accounts
-                                if (!supportsGuests && model.get('field') !== 'email1') return false;
-                                // mail does not support sharing folders to guets
-                                if (module === 'mail' && model.get('field') !== 'email1') return false;
-                                return !permissionsView.collection.get(model.id);
-                            });
-                        },
-                        click: click,
-                        extPoint: POINT
-                    }),
-                    guid = _.uniqueId('form-control-label-'),
-                    assembledGroup = $('<div class="form-group">').append(
-                        $('<div class="input-group has-picker">').append(
-                            $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
-                            typeaheadView.$el.attr({ id: guid }),
-                            usePicker ? new AddressPickerView({
-                                isPermission: true,
-                                process: click,
-                            }).render().$el : []
-                        )
-                    );
-                if (objModel.isFolder() && options.nested) {
-                    dialog.getFooter().append(
-                        $('<div>').addClass('form-group cascade').append(
-                            $('<label>').addClass('checkbox-inline').text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
+                            if (module === 'mail' && model.get('field') !== 'email1') return false;
+                            return !permissionsView.collection.get(model.id);
+                        });
+                    },
+                    click: click,
+                    extPoint: POINT
+                });
+
+                var guid = _.uniqueId('form-control-label-');
+
+                dialog.$header.append(
+                    $('<div class="row">').append(
+                        $('<div class="form-group col-sm-6">').append(
+                            $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
+                                $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                typeaheadView.$el.attr({ id: guid }),
+                                usePicker ? new AddressPickerView({
+                                    isPermission: true,
+                                    process: click,
+                                }).render().$el : []
                             )
                         )
-                    );
-                }
+                        // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
+                        .on('keydown blur', 'input', function addManualInput(e) {
 
-                dialog.getFooter().prepend(
-                    $('<div class="share-options">').append(
-                        $('<div class="autocomplete-controls">').append(
-                            (usePicker ? assembledGroup :
-                            $('<div class="form-group">').append(
-                                $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
-                                typeaheadView.$el.attr({ id: guid })
-                            ))
-                            // use delegate because typeahead's uses stopPropagation(); apparently not stopImmediatePropagation()
-                            .on('keydown blur', 'input', function addManualInput(e) {
+                            // mail does not support sharing folders to guests
+                            // so we skip any manual edits
+                            if (module === 'mail') return;
 
-                                // mail does not support sharing folders to guests
-                                // so we skip any manual edits
-                                if (module === 'mail') return;
+                            // skip manual edit if invite_guests isn't set
+                            if (!supportsGuests) return;
 
-                                // skip manual edit if invite_guests isn't set
-                                if (!supportsGuests) return;
+                            // enter or blur?
+                            if (e.type === 'keydown' && e.which !== 13) return;
 
-                                // enter or blur?
-                                if (e.type === 'keydown' && e.which !== 13) return;
+                            // use shown input
+                            var value = $.trim($(this).typeahead('val'));
+                            if (_.isEmpty(value)) return;
 
-                                // use shown input
-                                var value = $.trim($(this).typeahead('val'));
-                                if (_.isEmpty(value)) return;
+                            // add to collection
+                            permissionsView.collection.add(new Permission({
+                                bits: getBitsExternal(objModel),
+                                contact: { email1: value },
+                                type: 'guest',
+                                new: true
+                            }));
 
-                                // add to collection
-                                permissionsView.collection.add(new Permission({
-                                    bits: getBitsExternal(objModel),
-                                    contact: { email1: value },
-                                    type: 'guest',
-                                    new: true
-                                }));
-
-                                // clear input field
-                                $(this).typeahead('val', '');
-                            })
-                        ),
-                        // add message - not available for mail
-                        $('<div>').addClass('form-group').append(
-                            $('<label>').addClass('control-label sr-only').text(gt('Enter a Message to inform users')).attr({ for: guid = _.uniqueId('form-control-label-') }),
-                            new miniViews.TextView({
-                                name: 'message',
-                                model: dialogConfig
-                            }).render().$el.addClass('message-text').attr({
-                                id: guid,
-                                rows: 3,
-                                //#. placeholder text in share dialog
-                                placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
-                            })
-                        )
+                            // clear input field
+                            $(this).typeahead('val', '');
+                        })
                     )
                 );
 
+                dialog.$footer.prepend(
+                    // add message - not available for mail
+                    $('<div class="share-options form-group">')
+                    .toggle(notificationDefault)
+                    .addClass(_.browser.IE ? 'IE' : 'nonIE')
+                    .append(
+                        $('<label class="control-label sr-only">')
+                            .text(gt('Enter a Message to inform users'))
+                            .attr({ for: guid = _.uniqueId('form-control-label-') }),
+                        // message text
+                        new miniViews.TextView({
+                            name: 'message',
+                            model: dialogConfig
+                        })
+                        .render().$el.addClass('message-text')
+                        .attr({
+                            id: guid,
+                            rows: 3,
+                            //#. placeholder text in share dialog
+                            placeholder: gt('Personal message (optional). This message is sent to all newly invited people.')
+                        })
+                    )
+                );
+
+                // apply polyfill for CSS resize which IE doesn't support natively
+                if (_.browser.IE) {
+                    window.resizeHandlerPolyfill(dialog.$footer.find('.message-text')[0]);
+                }
+
+                dialog.listenTo(dialogConfig, 'change:sendNotifications', function (model, value) {
+                    this.$('.message-text').parent().toggle(value);
+                });
+
                 typeaheadView.render();
+            }
+
+            if (supportsChanges) {
+                // add action buttons
+                dialog
+                    .addCancelButton()
+                    .addButton({ action: 'save', label: options.share ? gt('Share') : gt('Save') });
+            } else {
+                dialog
+                    .addButton({ action: 'cancel', label: gt('Close') });
             }
 
             dialog.on('save', function () {
@@ -1127,9 +1124,7 @@ define('io.ox/files/share/permissions', [
                 );
             });
 
-            dialog.show(function () {
-                $(this).find('.form-control.tt-input').focus();
-            });
+            dialog.open();
         }
     };
 
