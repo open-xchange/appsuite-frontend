@@ -135,13 +135,17 @@
             };
 
             ox.clearFileCache = function () {
-                initialization.done(function () {
+                return initialization.then(function () {
+                    var def = $.Deferred();
                     try {
                         var tx = db.transaction('filecache', 'readwrite');
+                        tx.oncomplete = def.resolve;
                         tx.objectStore('filecache').clear();
                     } catch (e) {
                         console.error('clearFileCache', e.message, e);
+                        def.reject(e);
                     }
+                    return def;
                 });
             };
 
