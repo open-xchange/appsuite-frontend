@@ -56,13 +56,22 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton, ellipsis) {
-            var name = baton.data.filename || baton.data.title || '';
+            var
+                name = baton.data.filename || baton.data.title || '';
+
             // add suffix for locked files
-            if (baton.model.isLocked()) name += ' (' + gt('Locked') + ')';
+            if (baton.model.isLocked()) {
+
+                name += ' (' + gt('Locked') + ')';
+            }
             // fix long names
-            if (ellipsis) name = _.ellipsis(name, ellipsis);
+            if (ellipsis) {
+
+                name = _.ellipsis(name, ellipsis);
+            }
             // make underscore wrap as well
             name = name.replace(/_/g, '_\u200B');
+
             this.append(
                 $('<div class="filename">').text(name)
             );

@@ -614,36 +614,58 @@
 
         /**
          * shortens a string
-         * @param  {string} str
-         * @param  {object} options
-         * @param  {number} options.max: max length
-         * @param  {string} options.char: ellipsis char
-         * @param  {string} options.charpos: 'middle' or 'end'
-         * @param  {number} options.length: if charpos 'middle' value defines length of head and tail part
+         * @param  {string}   str
+         * @param  {object}   options
+         * @param  {number}   options.max: max length
+         * @param  {string}   options.char: ellipsis char
+         * @param  {string}   options.charpos: 'middle' or 'end'
+         * @param  {number}   options.length: if charpos 'middle' value defines length of head and tail part
+         * @param  {boolean}  options.suppressExtension: do not display the file extension in case this flag does exist and also equals the true value.
          * @return {string}
          */
         ellipsis: function (str, options) {
             /* eslint dot-notation: [2, {"allowKeywords": true}] */
+            var
+                space,
+                undefinedValue;
+
             //be robust
             str = String(str || '').trim();
-            var opt = _.extend({
-                    max: 70,
-                    char: '\u2026',
-                    charpos: 'end',
-                    length: undefined
-                }, options || {}),
-                space = opt.max - opt.char.length;
-            if (str.length <= opt.max) {
-                return str;
-            } else if (opt.charpos === 'end') {
-                return str.substr(0, opt.max - opt.char.length) + opt.char;
+
+            options = _.extend({
+
+                max: 70,
+                char: '\u2026',
+                charpos: 'end',
+                length: undefinedValue
+
+            }, (options || {}));
+
+            // do not display a file's extension
+            if (options.suppressExtension === true) {
+
+                str = (str.split(/.[^.]*$/)[0]).trim() || str;
             }
-            //fix invalid length
-            if (!opt.length || opt.length * 2 > space) {
-                //save space for ellipse char
-                opt.length = (space % 2 === 0 ? space / 2 : (opt.max / 2) - 1) || 1;
+
+            // compute ellipsis
+            if (str.length > options.max) {
+
+                space = options.max - options.char.length;
+
+                if (options.charpos === 'end') {
+
+                    str = str.substr(0, (options.max - options.char.length)) + options.char;
+
+                } else {
+                    // fix invalid length
+                    if (!options.length || ((options.length * 2) > space)) {
+                        //save space for ellipse char
+                        options.length = (((space % 2) === 0) ? (space / 2) : ((options.max / 2) - 1)) || 1;
+                    }
+                    str = str.substr(0, options.length).trim() + options.char + str.substr(str.length - options.length).trim();
+                }
             }
-            return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
+            return str; // exactly one exit point.
         },
 
         /**
