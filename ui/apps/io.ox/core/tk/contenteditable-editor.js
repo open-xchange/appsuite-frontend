@@ -27,6 +27,10 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
     'use strict';
 
+    // some gt-calls for translations inside the custom plugins for tinymce
+    gt('Drop inline images here');
+    gt('Please only drop images here. If you want to send other files, you can send them as attachments.');
+
     var POINT = 'io.ox/core/tk/contenteditable-editor';
 
     var INDEX = 0;
