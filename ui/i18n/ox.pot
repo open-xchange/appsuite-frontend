@@ -660,7 +660,6 @@ msgstr ""
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/upload/main.js
 #: apps/io.ox/files/upload/view.js
 #: apps/io.ox/keychain/secretRecoveryDialog.js
@@ -5707,7 +5706,6 @@ msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js
 #: module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr ""
 
@@ -6388,6 +6386,16 @@ msgstr ""
 #: module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
+msgstr ""
+
+#: apps/io.ox/core/tk/contenteditable-editor.js
+#: module:io.ox/core
+msgid "Drop inline images here"
+msgstr ""
+
+#: apps/io.ox/core/tk/contenteditable-editor.js
+#: module:io.ox/core
+msgid "Please only drop images here. If you want to send other files, you can send them as attachments."
 msgstr ""
 
 #: apps/io.ox/core/tk/contenteditable-editor.js
@@ -7916,19 +7924,35 @@ msgstr ""
 msgid "Resend invitation"
 msgstr ""
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
-msgid "Send notification"
+msgid "Share %1$s \"%2$s\""
+msgstr ""
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "file"
+msgstr ""
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "folder"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
-msgid "Share \"%1$s\""
+msgid "Permissions for %1$s \"%2$s\""
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
 #: module:io.ox/core
-msgid "Permissions for \"%1$s\""
+msgid "Send notification by email"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js

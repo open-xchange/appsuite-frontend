@@ -1248,7 +1248,6 @@ msgid "Apply rule if any condition is met."
 msgstr "Aplica la regla si es compleix alguna condició"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
 #, fuzzy
 msgid "Apply to all subfolders"
 msgstr "Totes les carpetes"
@@ -1716,14 +1715,14 @@ msgstr "Calendari"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/keychain/secretRecoveryDialog.js
-#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/actions/attachmentEmpty.js
-#: module:io.ox/mail apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3291,6 +3290,10 @@ msgstr ""
 
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
+msgstr ""
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
 msgstr ""
 
 #. %1$s is the filename of the current file
@@ -6643,8 +6646,10 @@ msgid "Permissions"
 msgstr "Permisos"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Permissions for \"%1$s\""
-msgstr ""
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Permissions for %1$s \"%2$s\""
+msgstr "Correu de %1$s: %2$s"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Permissions:"
@@ -6918,6 +6923,12 @@ msgid ""
 msgstr ""
 "Per favor, teniu en compte que modificar o eliminar l'extensió del fitxer "
 "pot causar problemes a l'hora de visualitzar-lo o editar-lo."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -8107,7 +8118,7 @@ msgstr "Envia un nou correu electrònic"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
-msgid "Send notification"
+msgid "Send notification by email"
 msgstr "No hi ha notificacions"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
@@ -8217,9 +8228,12 @@ msgstr ""
 msgid "Share"
 msgstr "Comparteix"
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share \"%1$s\""
-msgstr ""
+#, fuzzy
+msgid "Share %1$s \"%2$s\""
+msgstr "%1$s %2$s"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
@@ -10999,6 +11013,14 @@ msgstr "cada setmana"
 msgid "fifth / last"
 msgstr ""
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Tiles"
+msgid "file"
+msgstr "Fitxes"
+
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -11013,6 +11035,14 @@ msgstr "flickr.people.getPublicPhotos"
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.photos.search"
 msgstr "flickr.photos.search"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder"
+msgid "folder"
+msgstr "Carpeta"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
@@ -12423,11 +12453,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "expanded"
 #~ msgstr "desplega"
-
-#, fuzzy
-#~| msgid "Tiles"
-#~ msgid "files"
-#~ msgstr "Fitxes"
 
 #~ msgid "is not a valid user or group."
 #~ msgstr "no és un usuari o un grup vàlid."

@@ -1203,7 +1203,6 @@ msgid "Apply rule if any condition is met."
 msgstr "如果达到其中一个条件套用规则。"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "套用到所有子文件夹"
 
@@ -1655,14 +1654,14 @@ msgstr "日历"
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/keychain/secretRecoveryDialog.js
-#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/actions/attachmentEmpty.js
-#: module:io.ox/mail apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3177,6 +3176,12 @@ msgstr "拖到这里以上载 \"%1$s\" 的一个 <b class=\"dndignore\">新版�
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr "放在这里！"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+#, fuzzy
+#| msgid "Insert inline image"
+msgid "Drop inline images here"
+msgstr "插入直列图像"
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -6436,7 +6441,9 @@ msgid "Permissions"
 msgstr "权限"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Permissions for \"%1$s\""
+#, fuzzy
+#| msgid "Permissions for \"%1$s\""
+msgid "Permissions for %1$s \"%2$s\""
 msgstr "\"%1$s\" 的权限"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
@@ -6706,6 +6713,12 @@ msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
 msgstr "请您注意，更改或移除文件延伸将会于检视和编辑时引致问题。"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -7863,7 +7876,9 @@ msgid "Send new mail"
 msgstr "发送新电子邮件"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Send notification"
+#, fuzzy
+#| msgid "Send notification"
+msgid "Send notification by email"
 msgstr "发送通知"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
@@ -7969,8 +7984,12 @@ msgstr "进阶用户设置"
 msgid "Share"
 msgstr "共享"
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share \"%1$s\""
+#, fuzzy
+#| msgid "Share \"%1$s\""
+msgid "Share %1$s \"%2$s\""
 msgstr "分享 \"%1$s\""
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -10652,6 +10671,14 @@ msgstr "每周"
 msgid "fifth / last"
 msgstr ""
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "files"
+msgid "file"
+msgstr "文件"
+
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10666,6 +10693,14 @@ msgstr "flickr.people.getPublicPhotos"
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.photos.search"
 msgstr "flickr.photos.search"
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder"
+msgid "folder"
+msgstr "文件夹"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
@@ -15323,9 +15358,6 @@ msgstr "年"
 
 #~ msgid "february"
 #~ msgstr "二月"
-
-#~ msgid "files"
-#~ msgstr "文件"
 
 #~ msgid "hCard Export"
 #~ msgstr "hCard 汇出"

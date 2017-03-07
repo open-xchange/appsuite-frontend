@@ -1219,7 +1219,6 @@ msgid "Apply rule if any condition is met."
 msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr ""
 
@@ -1675,14 +1674,14 @@ msgstr ""
 #: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/main.js
-#: apps/io.ox/files/upload/view.js apps/io.ox/keychain/secretRecoveryDialog.js
-#: module:io.ox/keychain apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/mail/accounts/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/actions/attachmentEmpty.js
-#: module:io.ox/mail apps/io.ox/mail/actions/delete.js
-#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
+#: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
+#: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -3206,6 +3205,12 @@ msgstr ""
 #: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Drop here!"
 msgstr ""
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+#, fuzzy
+#| msgid "Insert inline image"
+msgid "Drop inline images here"
+msgstr "Вмъкни изборажение в мейла"
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -6447,8 +6452,10 @@ msgid "Permissions"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Permissions for \"%1$s\""
-msgstr ""
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Permissions for %1$s \"%2$s\""
+msgstr "Мейл от %1$s: %2$s"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Permissions:"
@@ -6713,6 +6720,12 @@ msgstr ""
 msgid ""
 "Please note, changing or removing the file extension will cause problems "
 "when viewing or editing."
+msgstr ""
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
 msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -7868,8 +7881,10 @@ msgid "Send new mail"
 msgstr "Изпрати нов мейл"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Send notification"
-msgstr ""
+#, fuzzy
+#| msgid "Send by mail"
+msgid "Send notification by email"
+msgstr "Изпрати по мейл"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
@@ -7978,8 +7993,12 @@ msgstr ""
 msgid "Share"
 msgstr "Сподели"
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Share \"%1$s\""
+#, fuzzy
+#| msgid "Share \"%1$s\""
+msgid "Share %1$s \"%2$s\""
 msgstr "Сподели \"%1$s\""
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
@@ -10597,6 +10616,13 @@ msgstr ""
 msgid "fifth / last"
 msgstr ""
 
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+msgid "file"
+msgstr "Ново правило"
+
 #. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: first week or first Monday
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
@@ -10611,6 +10637,14 @@ msgstr ""
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.photos.search"
 msgstr ""
+
+#. %1$s determines whether setting permissions for a file or folder
+#. %2$s is the file or folder name
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+#, fuzzy
+#| msgid "Folder"
+msgid "folder"
+msgstr "Папка"
 
 #. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
 #. as in: fourth week or fourth Monday
