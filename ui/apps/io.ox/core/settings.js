@@ -364,7 +364,7 @@ define('io.ox/core/settings', [
 
             return http.PUT({
                 module: 'jslob',
-                params: { action: 'merge', id: path },
+                params: { action: 'update', id: path },
                 data: treeData
             })
             .done(function () {
