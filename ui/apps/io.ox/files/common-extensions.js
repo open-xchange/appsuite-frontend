@@ -57,24 +57,46 @@ define('io.ox/files/common-extensions', [
 
         filename: function (baton, ellipsis) {
             var
-                name = baton.data.filename || baton.data.title || '';
+                filename = baton.data.filename || baton.data.title || '',
+                tooltipTitle = filename,
+                isWrapFilename = false;
 
             // add suffix for locked files
             if (baton.model.isLocked()) {
 
-                name += ' (' + gt('Locked') + ')';
+                filename += ' (' + gt('Locked') + ')';
             }
             // fix long names
             if (ellipsis) {
 
-                name = _.ellipsis(name, ellipsis);
+                filename = _.ellipsis(filename, ellipsis);
+
+                if (ellipsis.optimizeWordbreak !== true) {
+                    isWrapFilename = true;
+                }
+            } else {
+                isWrapFilename = true;
             }
-            // make underscore wrap as well
-            name = name.replace(/_/g, '_\u200B');
+            if (isWrapFilename) {
+
+                // make underscore wrap as well
+                filename = filename.replace(/_/g, '_\u200B');
+            }
 
             this.append(
-                $('<div class="filename">').text(name)
+                $('<div class="filename">').text(filename)
             );
+
+            //  - not recommended since the black standard bootstrap tooltip
+            //    does not match with most of the icon views file preview images.
+            //
+            // this.tooltip({ // http://getbootstrap.com/javascript/#tooltips
+            //     title: tooltipTitle,
+            //     placement: 'right'
+            //   //viewport: { selector: '.list-item', padding: '10px' } // or callback function
+            // });
+
+            this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
         },
 
         mailSubject: function (baton, ellipsis) {
