@@ -71,7 +71,7 @@ define('io.ox/core/tk/dialogs', [
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
-                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window').length > 0;
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
                 if (insidePopup) return;
                 if (nodes.popup.is(':visible')) {
                     e.stopPropagation();

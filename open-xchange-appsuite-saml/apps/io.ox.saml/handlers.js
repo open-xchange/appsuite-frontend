@@ -8,7 +8,11 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
                 var uri = baton.data.redirect_uri;
                 if (uri) {
                     if ((/^http/i).test(uri)) {
-                        _.url.redirect(uri);
+                        window.location = uri;
+                        _.defer(function() {
+                            if (window.location != uri) return;
+                            window.location.reload();
+                        });
                     } else {
                         var path = '';
                         if (uri.indexOf('/') === 0) {
@@ -18,7 +22,11 @@ define('io.ox.saml/handlers', ['io.ox/core/extensions'], function (ext) {
                         }
 
                         var l = location;
-                        _.url.redirect(l.protocol + '//' + l.host + path);
+                        window.location = l.protocol + '//' + l.host + path;
+                        _.defer(function() {
+                            if (window.location != uri) return;
+                            window.location.reload();
+                        });
                     }
                 }
             }

@@ -165,8 +165,28 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                             require(['io.ox/mail/api'], function (api) {
                                 var cid = _.cid({ folder: mail.folder, id: mail.id });
                                 // see if mail is still there. Also loads the mail into the pool. Needed for the app to work
-                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function () {
-                                    ox.launch('io.ox/mail/detail/main', { cid: cid });
+                                api.get(_.extend({}, { unseen: true }, _.cid(cid))).done(function (item) {
+                                    if (_.device('smartphone')) {
+                                        require(['io.ox/core/tk/dialogs', 'io.ox/mail/detail/view'], function (dialogs, detail) {
+                                            var sidepopup = new dialogs.SidePopup({ preserveOnAppchange: true, tabTrap: true }),
+                                                obj = api.reduce(item);
+                                            api.get(obj).done(function (data) {
+                                                var view = new detail.View({
+                                                    data: data,
+                                                    // no threads - no different subject
+                                                    disable: {
+                                                        'io.ox/mail/detail/header/row3': 'different-subject',
+                                                        'io.ox/mail/detail/header': 'picture'
+                                                    }
+                                                });
+                                                sidepopup.show(e, function (popup) {
+                                                    popup.append(view.render().expand().$el.addClass('no-padding'));
+                                                });
+                                            });
+                                        });
+                                    } else {
+                                        ox.launch('io.ox/mail/detail/main', { cid: cid });
+                                    }
                                 }).fail(function (error) {
                                     //if the mail was moved or the mail was deleted the cid cannot be found, show error
                                     require(['io.ox/core/yell'], function (yell) {
