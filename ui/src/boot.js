@@ -36,6 +36,10 @@ $(window).load(function () {
         setTimeout(function () { _.recheckDevice(); }, 10);
     }
 
+    if (_.device('!android')) {
+        // prevent loading touch icons on desktop
+        $('[rel="icon"]').remove();
+    }
     //
     // Turn global "ox" into an event hub
     //
