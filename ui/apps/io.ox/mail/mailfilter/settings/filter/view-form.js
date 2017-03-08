@@ -291,7 +291,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                  // create condition
                 if (data.test === 'create') {
 
-                    testArray =  _.copy(this.model.get('test'));
+                    testArray = _.copy(this.model.get('test'));
 
                     if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests.push(_.copy(this.defaults.tests[data.value], true));

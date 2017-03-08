@@ -235,9 +235,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
     return {
         editMailfilter: function ($node, baton) {
 
-            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
-            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
-
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
                 },
@@ -522,6 +519,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 model: mailfilterModel,
                 filterDefaults: defaults
             };
+
+            ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
+                point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
+            });
+
+            ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
+                point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
+            });
+
             return $.when(api.getRules(), api.getConfig(), options);
         },
 
