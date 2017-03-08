@@ -503,6 +503,9 @@ define('io.ox/core/main', [
                             node = $('<span>').text(getString(countdown)),
                             countdownTimer = setInterval(function () {
                                 if (countdown <= 0) {
+                                    //make sure, this does not run again in a second
+                                    clearInterval(countdownTimer);
+
                                     logout({ autologout: true });
                                 } else {
                                     countdown--;
