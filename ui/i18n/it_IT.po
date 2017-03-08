@@ -2628,6 +2628,12 @@ msgid "Default sender for vacation notice"
 msgstr "Mittente predefinito per l'avviso di assenza"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unset default signature"
+msgid "Default signature"
+msgstr "Rimuovi la firma predefinita"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Firma predefinita per i nuovi messaggi"
 
@@ -2863,6 +2869,22 @@ msgstr "Scarta"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Scarta le modifiche"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Discard mails from %1$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "This mail has no content"
+msgid "Discard mails to %1$s"
+msgstr "Questo messaggio non ha contenuto"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -4094,6 +4116,20 @@ msgstr "&Contrassegni"
 msgid "Flag mail with"
 msgstr "Contrassegna messaggio come"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Flag mail with"
+msgid "Flag mails to %1$s with a color"
+msgstr "Contrassegna messaggio come"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
 #| msgid "&Flags"
@@ -4984,6 +5020,24 @@ msgstr "Conserva la bozza."
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails from %1$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails to %1$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Keep mails with subject %1$s"
+msgstr "Sì, invia senza oggetto"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5430,6 +5484,36 @@ msgstr "Marca come non letto"
 msgid "Mark mail as"
 msgstr "Marca messaggio come"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Mark mails from %1$s as deleted"
+msgstr "Messaggio di posta da %1$s, %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Mark mails from %1$s as seen"
+msgstr "Applica a tutte le sottocartelle"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mark mail as"
+msgid "Mark mails to %1$s as seen"
+msgstr "Marca messaggio come"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #, fuzzy
 #| msgid "Cameroon"
@@ -5602,6 +5686,22 @@ msgstr "Sposta tutti i messaggi"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Sposta la cartella"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Move mails from %1$s into folder %2$s"
+msgstr "Messaggio di posta da %1$s, %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "No mails in this folder"
+msgid "Move mails to %1$s into folder %2$s"
+msgstr "Nessun messaggio in questa cartella"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -5826,6 +5926,7 @@ msgid "New password"
 msgstr "Nuova password"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Nuova regola"
 
@@ -7370,6 +7471,22 @@ msgstr "Rosso"
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails to %1$s to %2$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7404,6 +7521,22 @@ msgstr "Registrati ora"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Rifiuta le modifiche"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reject with reason"
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr "Rifiuta con motivo"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8677,6 +8810,22 @@ msgstr "TTY/TDD"
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Etichetta il messaggio con"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails from %1$s with %2$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails to %1$s with %2$s"
+msgstr "Messaggio di posta da %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
+msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -11793,11 +11942,6 @@ msgstr "aaaa"
 #~ msgid "Applications"
 #~ msgstr "Applicazioni"
 
-#, fuzzy
-#~| msgid "Email from %1$s: %2$s"
-#~ msgid "Apply for mails from %1$s"
-#~ msgstr "Messaggio di posta da %1$s: %2$s"
-
 #~ msgid "Apply to all messages?"
 #~ msgstr "Vuoi applicare a tutti i messaggi?"
 
@@ -13990,11 +14134,6 @@ msgstr "aaaa"
 #~ msgid "More zoom settings"
 #~ msgstr "Altre impostazioni di ingrandimento"
 
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Move all mails from a sender"
-#~ msgstr "Applica a tutte le sottocartelle"
-
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Spostamento dei messaggi... Potrebbe richiedere qualche secondo."
 
@@ -14091,9 +14230,6 @@ msgstr "aaaa"
 
 #~ msgid "No mails found for \"%s\""
 #~ msgstr "Nessun messaggio trovato per \"%s\""
-
-#~ msgid "No mails in this folder"
-#~ msgstr "Nessun messaggio in questa cartella"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "Nessun modello corrispondente su questo server"
@@ -15148,11 +15284,6 @@ msgstr "aaaa"
 #~ "Questa cartella è condivisa con altri. Non sarà più disponibile per gli "
 #~ "ospiti invitati."
 
-#, fuzzy
-#~| msgid "This mail has no content"
-#~ msgid "This mail was moved to %1$s."
-#~ msgstr "Questo messaggio non ha contenuto"
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Potrebbe richiedere qualche secondo"
 
@@ -15469,9 +15600,6 @@ msgstr "aaaa"
 
 #~ msgid "Unselect all"
 #~ msgstr "Rimuovi selezione"
-
-#~ msgid "Unset default signature"
-#~ msgstr "Rimuovi la firma predefinita"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr ""

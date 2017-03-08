@@ -2564,6 +2564,12 @@ msgid "Default sender for vacation notice"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default address"
+msgid "Default signature"
+msgstr "Үндсэн хаяг"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr ""
 
@@ -2799,6 +2805,19 @@ msgstr "Хүчингүй болгох"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Өөрчлөлтүүдийг хүчингүй болгох"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails from %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+msgid "Discard mails to %1$s"
+msgstr "Байршил"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -3979,6 +3998,18 @@ msgstr ""
 msgid "Flag mail with"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails to %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
 msgstr ""
@@ -4827,6 +4858,18 @@ msgstr ""
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Keep mails from %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Keep mails to %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Keep mails with subject %1$s"
+msgstr ""
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5265,6 +5308,30 @@ msgstr ""
 msgid "Mark mail as"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails from %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails from %1$s as seen"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as seen"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Maroon"
 msgstr ""
@@ -5435,6 +5502,18 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails from %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails to %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
 msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
@@ -5650,6 +5729,7 @@ msgid "New password"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr ""
 
@@ -7147,6 +7227,19 @@ msgstr ""
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "Байршил"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails to %1$s to %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7181,6 +7274,18 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Өөрчлөлтийг хүлээж авахгүй"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8419,6 +8524,18 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Tag mail with"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails from %1$s with %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails to %1$s with %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
 msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard

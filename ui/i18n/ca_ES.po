@@ -2677,6 +2677,12 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 #, fuzzy
+#| msgid "Unset default signature"
+msgid "Default signature"
+msgstr "Firma predeterminada no definida"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
 msgid "Default signature for new messages"
 msgstr "No teniu missatges nous"
 
@@ -2925,6 +2931,22 @@ msgstr "Descarta"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Descarta els canvis"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Discard mails from %1$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "This file is locked by %1$s"
+msgid "Discard mails to %1$s"
+msgstr "El fitxer està bloquejat per %1$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -4153,6 +4175,20 @@ msgstr ""
 msgid "Flag mail with"
 msgstr "Marca correu amb"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Flag mail with"
+msgid "Flag mails to %1$s with a color"
+msgstr "Marca correu amb"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
 msgstr ""
@@ -5056,6 +5092,24 @@ msgstr "Desa com a esborrany"
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails from %1$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails to %1$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Keep mails with subject %1$s"
+msgstr "Sí, envia-ho sense assumpte"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5505,6 +5559,34 @@ msgstr "Marca-ho com a no llegit"
 msgid "Mark mail as"
 msgstr "Marca correu com a"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+msgid "Mark mails from %1$s as deleted"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+msgid "Mark mails from %1$s as seen"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mark mail as"
+msgid "Mark mails to %1$s as seen"
+msgstr "Marca correu com a"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Maroon"
 msgstr ""
@@ -5682,6 +5764,19 @@ msgstr "Obre/tanca tots els missatges"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Mou la carpeta"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+msgid "Move mails from %1$s into folder %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails to %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 #, fuzzy
@@ -5917,6 +6012,7 @@ msgid "New password"
 msgstr "Nova contrasenya"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Nova regla"
 
@@ -7478,6 +7574,22 @@ msgstr "Vermell"
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails to %1$s to %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7512,6 +7624,22 @@ msgstr ""
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Rebutja els canvis"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reject with reason"
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr "Rebutja amb motiu"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8798,6 +8926,22 @@ msgstr "DTS"
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Etiqueta correu amb"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails from %1$s with %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails to %1$s with %2$s"
+msgstr "Correu de %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
+msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -11584,11 +11728,6 @@ msgstr ""
 #~ msgstr "Aplicacions"
 
 #, fuzzy
-#~| msgid "Email from %1$s: %2$s"
-#~ msgid "Apply for mails from %1$s"
-#~ msgstr "Correu de %1$s: %2$s"
-
-#, fuzzy
 #~ msgid "Apply to all messages?"
 #~ msgstr "Totes les carpetes"
 
@@ -12259,11 +12398,6 @@ msgstr ""
 #~ msgid "This file is locked by you"
 #~ msgstr "El fitxer està bloquejat per vós"
 
-#, fuzzy
-#~| msgid "This file is locked by %1$s"
-#~ msgid "This mail was moved to %1$s."
-#~ msgstr "El fitxer està bloquejat per %1$s"
-
 #~ msgid "Thursday"
 #~ msgstr "dijous"
 
@@ -12285,9 +12419,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Unnamed"
 #~ msgstr "Nom d'usuari"
-
-#~ msgid "Unset default signature"
-#~ msgstr "Firma predeterminada no definida"
 
 #~ msgid ""
 #~ "Updating subscribed data takes time. Importing 100 contacts for example, "

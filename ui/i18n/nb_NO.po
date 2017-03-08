@@ -2610,6 +2610,12 @@ msgid "Default sender for vacation notice"
 msgstr "Standard avsender for feriemelding"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Edit signature"
+msgid "Default signature"
+msgstr "Rediger signatur"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Standardsignatur for nye meldinger"
 
@@ -2848,6 +2854,22 @@ msgstr "Kast"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Forkast endringer"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Discard mails from %1$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "This file is locked by %1$s"
+msgid "Discard mails to %1$s"
+msgstr "Denne filen er låst av %1$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -4063,6 +4085,20 @@ msgstr ""
 msgid "Flag mail with"
 msgstr "Flagg post med"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Flag mail with"
+msgid "Flag mails to %1$s with a color"
+msgstr "Flagg post med"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
 msgstr ""
@@ -4947,6 +4983,24 @@ msgstr "Lagre som utkast"
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails from %1$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails to %1$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Keep mails with subject %1$s"
+msgstr "Ja, send uten emne"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5388,6 +5442,36 @@ msgstr "Marker som ulest"
 msgid "Mark mail as"
 msgstr "Marker e-post som"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s %2$s"
+msgid "Mark mails from %1$s as deleted"
+msgstr "Epost fra %1$s %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s %2$s"
+msgid "Mark mails from %1$s as seen"
+msgstr "Epost fra %1$s %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mark mail as"
+msgid "Mark mails to %1$s as seen"
+msgstr "Marker e-post som"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Maroon"
 msgstr ""
@@ -5558,6 +5642,20 @@ msgstr "Flytt alle meldinger"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Flytt mappen"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s %2$s"
+msgid "Move mails from %1$s into folder %2$s"
+msgstr "Epost fra %1$s %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails to %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -5782,6 +5880,7 @@ msgid "New password"
 msgstr "Nytt passord"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Ny regel"
 
@@ -7320,6 +7419,22 @@ msgstr "Rød"
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails to %1$s to %2$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7354,6 +7469,22 @@ msgstr "Registrer nå"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Avvis endringer"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reject with reason"
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr "Avvise med grunn"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8623,6 +8754,22 @@ msgstr "TTY/TDD"
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Tag e-post med"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails from %1$s with %2$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails to %1$s with %2$s"
+msgstr "E-post fra %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
+msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -11372,11 +11519,6 @@ msgstr "yyyy"
 #~ msgid "Applications"
 #~ msgstr "Applikasjoner"
 
-#, fuzzy
-#~| msgid "Email from %1$s: %2$s"
-#~ msgid "Apply for mails from %1$s"
-#~ msgstr "E-post fra %1$s: %2$s"
-
 #~ msgid "Apply to all messages?"
 #~ msgstr "Bruk for alle meldinger?"
 
@@ -11672,9 +11814,6 @@ msgstr "yyyy"
 
 #~ msgid "Mail and Social Accounts"
 #~ msgstr "E-post og sosiale kontoer"
-
-#~ msgid "Mail from %1$s %2$s"
-#~ msgstr "Epost fra %1$s %2$s"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-post lagret som kladd"
@@ -12118,11 +12257,6 @@ msgstr "yyyy"
 
 #~ msgid "This file is locked by you"
 #~ msgstr "Denne filen er låst av deg"
-
-#, fuzzy
-#~| msgid "This file is locked by %1$s"
-#~ msgid "This mail was moved to %1$s."
-#~ msgstr "Denne filen er låst av %1$s"
 
 #~ msgid "This message is read, press this button to mark it as unread."
 #~ msgstr ""

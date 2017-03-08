@@ -2642,6 +2642,12 @@ msgid "Default sender for vacation notice"
 msgstr "Výchozí odesílatel oznámení o nepřítomnosti"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unset default signature"
+msgid "Default signature"
+msgstr "Zrušit výchozí podpis"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "Výchozí podpisy pro nové zprávy"
 
@@ -2876,6 +2882,22 @@ msgstr "Zahodit"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Zahodit změny"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Discard mails from %1$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "This file is locked by %1$s"
+msgid "Discard mails to %1$s"
+msgstr "Tento soubor zamkl(a) %1$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -4092,6 +4114,20 @@ msgstr "Příznak"
 msgid "Flag mail with"
 msgstr "Označit zprávu příznakem"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Flag mail with"
+msgid "Flag mails to %1$s with a color"
+msgstr "Označit zprávu příznakem"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Flag"
@@ -4982,6 +5018,24 @@ msgstr "Ponechat  koncept."
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails from %1$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Keep mails to %1$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Keep mails with subject %1$s"
+msgstr "Ano, poslat bez předmětu"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5426,6 +5480,36 @@ msgstr "Označit jako nepřečtené"
 msgid "Mark mail as"
 msgstr "Označit zprávu jako"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Mark mails from %1$s as deleted"
+msgstr "Zpráva od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply to all subfolders"
+msgid "Mark mails from %1$s as seen"
+msgstr "Uplatnit na všechny podsložky"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mark mail as"
+msgid "Mark mails to %1$s as seen"
+msgstr "Označit zprávu jako"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #, fuzzy
 #| msgid "Cameroon"
@@ -5599,6 +5683,22 @@ msgstr "Přesunout všechny zprávy"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "Přesunout složku"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Move mails from %1$s into folder %2$s"
+msgstr "Zpráva od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "No mails in this folder"
+msgid "Move mails to %1$s into folder %2$s"
+msgstr "Žádné zprávy v této složce"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -5823,6 +5923,7 @@ msgid "New password"
 msgstr "Nové heslo"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Nové pravidlo"
 
@@ -7366,6 +7467,22 @@ msgstr "Červená"
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails to %1$s to %2$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7400,6 +7517,22 @@ msgstr "Registrovat"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "Odmítnout změny"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reject with reason"
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr "Odmítnout s odůvodněním"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8675,6 +8808,22 @@ msgstr "Telefon pro neslyšící (TTY/TDD)"
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "Dát zprávě příznak"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails from %1$s with %2$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails to %1$s with %2$s"
+msgstr "E-mail od %1$s: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
+msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -12886,11 +13035,6 @@ msgstr "rrrr"
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Použít šablonu (volitelné)"
 
-#, fuzzy
-#~| msgid "Email from %1$s: %2$s"
-#~ msgid "Apply for mails from %1$s"
-#~ msgstr "E-mail od %1$s: %2$s"
-
 #~ msgid "Apply to all messages?"
 #~ msgstr "Uplatnit na všechny zprávy?"
 
@@ -16440,11 +16584,6 @@ msgstr "rrrr"
 #~ msgid "Morocco"
 #~ msgstr "Maroko"
 
-#, fuzzy
-#~| msgid "Apply to all subfolders"
-#~ msgid "Move all mails from a sender"
-#~ msgstr "Uplatnit na všechny podsložky"
-
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Přesouvám zprávy... To může několik sekund trvat."
 
@@ -16641,9 +16780,6 @@ msgstr "rrrr"
 
 #~ msgid "No mails found for \"%s\""
 #~ msgstr "Pro „%s“ nebyly nalezeny žádné zprávy"
-
-#~ msgid "No mails in this folder"
-#~ msgstr "Žádné zprávy v této složce"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "Na tomto serveru nejsou žádné odpovídající šablony"
@@ -19240,11 +19376,6 @@ msgstr "rrrr"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Tato zpráva obsahuje URL publikace."
 
-#, fuzzy
-#~| msgid "This file is locked by %1$s"
-#~ msgid "This mail was moved to %1$s."
-#~ msgstr "Tento soubor zamkl(a) %1$s"
-
 #~ msgid "This may take some seconds"
 #~ msgstr "Může to několik sekund trvat"
 
@@ -19911,9 +20042,6 @@ msgstr "rrrr"
 
 #~ msgid "Unselect all"
 #~ msgstr "Odznačit vše"
-
-#~ msgid "Unset default signature"
-#~ msgstr "Zrušit výchozí podpis"
 
 #~ msgid "Until:"
 #~ msgstr "Do:"

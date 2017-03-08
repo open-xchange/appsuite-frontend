@@ -2572,6 +2572,12 @@ msgid "Default sender for vacation notice"
 msgstr "休暇通知の既定差出人"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unset default signature"
+msgid "Default signature"
+msgstr "既定の署名を設定解除"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
 msgstr "新規メッセージ用の既定署名"
 
@@ -2806,6 +2812,22 @@ msgstr "破棄"
 msgctxt "dialog"
 msgid "Discard changes"
 msgstr "変更を破棄"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply for mails from %1$s"
+msgid "Discard mails from %1$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "This mail was moved to %1$s."
+msgid "Discard mails to %1$s"
+msgstr "このメールには内容がありません。"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -4026,6 +4048,20 @@ msgstr "フラグ"
 msgid "Flag mail with"
 msgstr "次のフラグをメールに付ける"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Flag mail with"
+msgid "Flag mails to %1$s with a color"
+msgstr "次のフラグをメールに付ける"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 #, fuzzy
 #| msgid "Flag"
@@ -4917,6 +4953,24 @@ msgstr "下書きを保存"
 msgid "Keep looping endlessly"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply for mails from %1$s"
+msgid "Keep mails from %1$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Apply for mails from %1$s"
+msgid "Keep mails to %1$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Yes, send without subject"
+msgid "Keep mails with subject %1$s"
+msgstr "件名なしで送信"
+
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid "Language"
@@ -5361,6 +5415,36 @@ msgstr "未読にする"
 msgid "Mark mail as"
 msgstr "次の印をメールに付ける"
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Mark mails from %1$s as deleted"
+msgstr "%1$s %2$s からのメール"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Move all mails from a sender"
+msgid "Mark mails from %1$s as seen"
+msgstr "全てのサブフォルダに適用"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mark mail as"
+msgid "Mark mails to %1$s as seen"
+msgstr "次の印をメールに付ける"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #, fuzzy
 #| msgid "Cameroon"
@@ -5533,6 +5617,22 @@ msgstr "全てのメッセージを移動する"
 #: apps/io.ox/core/folder/actions/move.js module:io.ox/core
 msgid "Move folder"
 msgstr "フォルダを移動"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Mail from %1$s, %2$s"
+msgid "Move mails from %1$s into folder %2$s"
+msgstr "%1$s %2$s からのメール"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "No mails in this folder"
+msgid "Move mails to %1$s into folder %2$s"
+msgstr "このフォルダにメールはありません。"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
@@ -5757,6 +5857,7 @@ msgid "New password"
 msgstr "新しいパスワード"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "新しいルール"
 
@@ -7283,6 +7384,22 @@ msgstr "赤"
 msgid "Red violet"
 msgstr ""
 
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails from %1$s to %2$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Redirect mails to %1$s to %2$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Redirect to"
@@ -7317,6 +7434,22 @@ msgstr "今登録"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Reject changes"
 msgstr "変更を拒否"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Reject with reason"
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr "次の理由で拒否"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8580,6 +8713,22 @@ msgstr "TTY/TDD"
 #: module:io.ox/settings
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails from %1$s with %2$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+#, fuzzy
+#| msgid "Email from %1$s: %2$s"
+msgid "Tag mails to %1$s with %2$s"
+msgstr "%1$s からのメール: %2$s"
+
+#: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
+msgstr ""
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -12050,10 +12199,6 @@ msgstr "yyyy"
 #~ msgid "Applications"
 #~ msgstr "アプリケーション"
 
-#~| msgid "Email from %1$s: %2$s"
-#~ msgid "Apply for mails from %1$s"
-#~ msgstr "%1$s からのメール: %2$s"
-
 #~ msgid "Apply to all messages?"
 #~ msgstr "すべてのメッセージに適用されますか。"
 
@@ -15303,10 +15448,6 @@ msgstr "yyyy"
 #~ msgid "Morocco"
 #~ msgstr "モロッコ"
 
-#~| msgid "Apply to all subfolders"
-#~ msgid "Move all mails from a sender"
-#~ msgstr "全てのサブフォルダに適用"
-
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
 
@@ -15494,9 +15635,6 @@ msgstr "yyyy"
 
 #~ msgid "No mails found for \"%s\""
 #~ msgstr "\"%s\" のメールは見つかりませんでした。"
-
-#~ msgid "No mails in this folder"
-#~ msgstr "このフォルダにメールはありません。"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "このサーバには、一致するテンプレートがありません。"
@@ -17791,10 +17929,6 @@ msgstr "yyyy"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
 
-#~| msgid "This mail has no content"
-#~ msgid "This mail was moved to %1$s."
-#~ msgstr "このメールには内容がありません。"
-
 #~ msgid "This may take some seconds"
 #~ msgstr "この処理には数秒かかる場合があります。"
 
@@ -18264,9 +18398,6 @@ msgstr "yyyy"
 
 #~ msgid "Unselect all"
 #~ msgstr "すべてを選択解除"
-
-#~ msgid "Unset default signature"
-#~ msgstr "既定の署名を設定解除"
 
 #~ msgid "Unthreaded E-Mail view"
 #~ msgstr "非スレッド メール ビュー"

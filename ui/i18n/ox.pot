@@ -9873,6 +9873,7 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/model.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr ""
 
@@ -9889,6 +9890,141 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/register.js
 #: module:io.ox/mail
 msgid "Couldn't load your mail filter rules."
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Keep mails from %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Discard mails from %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Move mails from %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Redirect mails from %1$s to %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Reject mails from %1$s with reason %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails from %1$s as seen"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails from %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Flag mails from %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Tag mails from %1$s with %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Keep mails to %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Discard mails to %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Move mails to %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Redirect mails to %1$s to %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Reject mails to %1$s with reason %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails to %1$s as seen"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails to %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Flag mails to %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Tag mails to %1$s with %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Keep mails with subject %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Discard mails with subject %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Move mails with subject %1$s into folder %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Redirect mails with subject %1$s to %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Reject mails with subject %1$s with reason %2$s"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails with subject %1$s as seen"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Mark mails with subject %1$s as deleted"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Flag mails with subject %1$s with a color"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/util.js
+#: module:io.ox/mail
+msgid "Tag mails with subject %1$s with %2$s"
 msgstr ""
 
 #: apps/io.ox/mail/main.js
@@ -10223,12 +10359,17 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: module:io.ox/mail
-msgid "Default signature for new messages"
+msgid "Default signature"
 msgstr ""
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: module:io.ox/mail
 msgid "Default signature for replies or forwardings"
+msgstr ""
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js
+#: module:io.ox/mail
+msgid "Default signature for new messages"
 msgstr ""
 
 #: apps/io.ox/mail/statistics.js
