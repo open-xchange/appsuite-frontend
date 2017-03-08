@@ -14,6 +14,21 @@
     margin-bottom: 20px;
 
     legend { margin-bottom: 10px; }
+
+    .participant-wrapper {
+        margin-bottom: 8px;
+        margin-left: -15px;
+        @media (min-width: 768px) {
+            &.col-sm-6:nth-child(even) {
+                margin-left: 8px;
+            }
+        }
+        @media (max-width: 767px) {
+            .remove {
+                right: -15px;
+            }
+        }
+    }
 }
 
 .participant-wrapper {
