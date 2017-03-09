@@ -400,6 +400,12 @@ define('io.ox/calendar/view-detail', [
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
+    function showInfo(e) {
+        // avoid double warnings
+        e.data.node.find('.recurrence-warning').remove();
+        e.data.node.prepend($('<p class="alert alert-warning recurrence-warning" role="alert">').text(gt('All changes made to the series do not affect the currently selected appointment as it is an exception')));
+    }
+
     return {
 
         draw: function (baton, options) {
@@ -415,6 +421,13 @@ define('io.ox/calendar/view-detail', [
 
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
+                // check if this is an exception from a series
+                if (baton.data.recurrence_id && baton.data.recurrence_id !== baton.data.id) {
+                    calAPI.on('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
+                    node.one('remove', function () {
+                        calAPI.off('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), showInfo);
+                    });
+                }
                 return node;
 
             } catch (e) {
