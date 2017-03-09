@@ -238,7 +238,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         },
 
         getShardingRoot: (function () {
-            var hosts = [].concat(settings.get('shardingSubdomains', location.host + ox.apiRoot));
+            var defaultUrl = location.host + ox.apiRoot,
+                hosts = [].concat(settings.get('shardingSubdomains', defaultUrl));
             function sum(s) {
                 var i = s.length - 1, sum = 0;
                 for (; i; i--) sum += s.charCodeAt(i);
@@ -246,6 +247,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
             }
             return function (url) {
                 var index = 0;
+                // special case, if url already has the root and the protocol attached
+                if (url.indexOf('//' + defaultUrl) === 0) url = url.substr(defaultUrl.length + 2);
                 if (hosts.length > 1) index = sum(url) % hosts.length;
                 if (!/^\//.test(url)) url = '/' + url;
                 return '//' + hosts[index] + url;
