@@ -32,6 +32,8 @@ define('io.ox/files/upload/dropzone', [
                 caption: gt('Drop files here to upload')
             });
 
+            var guardZone = ext.point('oxguard/files/dragDrop').invoke('draw', this, app)._wrapped[0];
+
             zone.isEnabled = function () {
                 var id = app.folder.get();
                 return api.pool.getModel(id).can('create');
@@ -52,9 +54,22 @@ define('io.ox/files/upload/dropzone', [
                 }
             });
 
-            app.getWindowNode().find('.list-view-control').append(
-                zone.render().$el.addClass('abs')
-            );
+            if (guardZone) {
+                guardZone.isEnabled = function () {
+                    var id = app.folder.get();
+                    return api.pool.getModel(id).can('create');
+                };
+
+                app.getWindowNode().find('.list-view-control').append(
+                        (zone.render().$el).addClass('abs').css('height', '50%')
+                    ).append(
+                        (guardZone.render().$el).addClass('abs').css('top', '50%')
+                    );
+            } else {
+                app.getWindowNode().find('.list-view-control').append(
+                    zone.render().$el.addClass('abs')
+                );
+            }
         }
     });
 });
