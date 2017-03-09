@@ -75,7 +75,17 @@ define('io.ox/core/folder/extensions', [
             // smart cache environment
             if (dsc) {
                 if (account.hasDSCAccount()) {
-                    return api.list(id);
+                    account.getStatus().done(function (status) {
+                        var accountStatus;
+                        _.each(status, function (value, key) {
+                            // filter main account
+                            if (key === 0) return;
+                            if (value.status === 'ok') accountStatus = value.status;
+                        });
+                        // only request if status is at least for one dsc account ok
+                        if (accountStatus === 'ok') return api.list(id);
+                    });
+
                 }
                 // no account yet, return empty array
                 return $.Deferred().resolve([]);
