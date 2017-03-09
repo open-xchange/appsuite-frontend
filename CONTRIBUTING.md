@@ -3,7 +3,10 @@ Contributing
 
 # Bug reports
 
-https://bugs.open-xchange.com/
+- [Guidelines](https://intranet.open-xchange.com/wiki/qa-team:guides:bugzilla.guide#required_information)
+- [File new bug](https://bugs.open-xchange.com/enter_bug.cgi?product=OX%20App%20Suite)
+- [List open bugs](https://bugs.open-xchange.com/buglist.cgi?component=Web%20Frontend&list_id=2162361&product=OX%20App%20Suite&resolution=---)
+
 
 # Features
 
