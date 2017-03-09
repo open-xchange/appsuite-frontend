@@ -26,6 +26,10 @@ define('io.ox/contacts/edit/main', [
 
     'use strict';
 
+    function getTitle(model) {
+        return util.getFullName(model.toJSON()) || (model.get('id') ? gt('Edit Contact') : gt('Create contact'));
+    }
+
     // multi instance pattern
     function createInstance(data) {
 
@@ -70,9 +74,7 @@ define('io.ox/contacts/edit/main', [
                             ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
                             contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
                         }
-
-                        var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
-                        app.setTitle(appTitle || gt('Create contact'));
+                        app.setTitle(getTitle(contact));
                         win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact, app: app });
@@ -188,16 +190,8 @@ define('io.ox/contacts/edit/main', [
 
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
-                        contact.on('change:display_name', function () {
-                            var newTitle = contact.get('display_name');
-                            if (!newTitle) {
-                                if (contact.get('id')) {
-                                    newTitle = gt('Edit Contact');
-                                } else {
-                                    newTitle = gt('Create contact');
-                                }
-                            }
-                            app.setTitle(newTitle);
+                        contact.on('change:first_name change:last_name change:display_name', function () {
+                            app.setTitle(getTitle(contact));
                         });
 
                         def.resolve();
