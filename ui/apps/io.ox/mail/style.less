@@ -1439,20 +1439,42 @@ body.dragging .categories-toolbar-container {
 
 // simple workaround in case people try to print the entire window
 
-@media print {
+@media print{
+    // none or one mail selected
     // avoid absolute positioning; <body> needs to be the scrollpane otherwise we get no multipage print outs
-    .abs, .atb, .window-container, .window-body, .rightside { position: static; }
+    .abs, .atb, .window-container, .window-body, .rightside.selection-one, .rightside.selection-empty { position: static; }
     // hide everything we don't need
     #io-ox-banner, #io-ox-topbar, .window-sidepanel, .categories-toolbar-container, .classic-toolbar-container,
-    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
+    .leftside.selection-one, .leftside.selection-empty, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
         display: none !important;
     }
-    .thread-view-list, .rightside { padding: 0 !important; overflow: visible !important; }
-    .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
-    .detail-view-header {
+    .rightside.selection-empty .thread-view-list, .rightside.selection-one .thread-view-list, .rightside.selection-one, .rightside.selection-empty { padding: 0 !important; overflow: visible !important; }
+    .rightside.selection-empty .thread-view.list-view .list-item, .rightside.selection-one .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
+    .rightside.selection-empty .detail-view-header, .rightside.selection-one .detail-view-header {
         padding-left: 16px !important;
         .recipients {
             .io-ox-label, .person-link, .delimiter { display: inline-block !important; }
         }
+    }
+
+    // multiple mails selected
+    .rightside.selection-multiple {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple {
+        position: static !important;
+        width: 100% !important;
+        border-right: none !important;
+    }
+
+    .leftside.selection-multiple .toolbar, .leftside.selection-multiple .list-item, .leftside.selection-multiple .list-item-checkmark {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple .list-item.selected {
+        display: block !important;
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

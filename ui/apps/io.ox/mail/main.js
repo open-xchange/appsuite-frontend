@@ -992,30 +992,41 @@ define('io.ox/mail/main', [
                     .addClass(className);
             }
 
+            function resetLeft(className) {
+                return app.left
+                    .removeClass('selection-empty selection-one selection-multiple'.replace(className, ''))
+                    .addClass(className);
+            }
+
             var react = _.debounce(function (type, list) {
 
                 if (app.props.get('layout') === 'list' && type === 'action') {
                     resetRight('selection-one preview-visible');
+                    resetLeft('selection-one');
                     app.showMail(list[0]);
                     return;
                 } else if (app.props.get('layout') === 'list' && type === 'one') {
                     //don't call show mail (an invisible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
+                    resetLeft('selection-one');
                     return;
                 }
 
                 switch (type) {
                     case 'empty':
                         resetRight('selection-empty');
+                        resetLeft('selection-empty');
                         app.showEmpty();
                         break;
                     case 'one':
                     case 'action':
                         resetRight('selection-one');
+                        resetLeft('selection-one');
                         app.showMail(list[0]);
                         break;
                     case 'multiple':
                         resetRight('selection-multiple');
+                        resetLeft('selection-multiple');
                         app.showMultiple(list);
                         break;
                     // no default
@@ -1039,6 +1050,7 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // no debounce for showMultiple or screenreaders read old number of selected messages
                     resetRight('selection-multiple');
+                    resetLeft('selection-multiple');
                     app.showMultiple(list);
                 },
                 'selection:action': function (list) {
