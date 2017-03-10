@@ -429,7 +429,8 @@ define('io.ox/core/tk/tokenfield', [
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
                     inputType: this.options.inputtype || 'email',
-                    isMail: o.isMail
+                    isMail: o.isMail,
+                    minWidth: 0
                 });
 
             this.register();
@@ -575,6 +576,12 @@ define('io.ox/core/tk/tokenfield', [
                     });
                     self.redrawTokens();
                 }
+            });
+
+            this.getInput().on('focus blur', function (e) {
+                var tokenfield = self.$el.data('bs.tokenfield');
+                tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
+                tokenfield.update();
             });
 
             return this;

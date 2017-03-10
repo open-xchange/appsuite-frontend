@@ -386,6 +386,12 @@ define('io.ox/mail/compose/extensions', [
                     baton.model.set(attr, recipients);
                     redrawLock = false;
                 }.bind(tokenfieldView.collection)), 20);
+
+                baton.view.app.getWindow().one('idle', function () {
+                    // idle event is triggered, after the view is visible
+                    // call update when visible to correctly calculate tokefield dimensions (see Bug 52137)
+                    tokenfieldView.$el.data('bs.tokenfield').update();
+                });
             };
         },
 
