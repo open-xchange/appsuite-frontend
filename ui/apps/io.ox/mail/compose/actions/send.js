@@ -109,9 +109,10 @@ define('io.ox/mail/compose/actions/send', [
                 return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
             }
         },
+        // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',
-            index: 600,
+            index: 700,
             perform: function (baton) {
                 baton.view.blockReuse(baton.mail.sendtype);
 
@@ -124,9 +125,10 @@ define('io.ox/mail/compose/actions/send', [
                 }
             }
         },
+        // Placeholder for Guard delay send for key check at index 750
         {
             id: 'fix-draft-sendtype',
-            index: 700,
+            index: 800,
             perform: function (baton) {
                 if (baton.mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                     baton.mail.sendtype = mailAPI.SENDTYPE.DRAFT;
@@ -135,7 +137,7 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'wait-for-pending-images',
-            index: 800,
+            index: 900,
             perform: function (baton) {
                 if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
 
