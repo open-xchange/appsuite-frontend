@@ -13,13 +13,12 @@
 
 define('io.ox/mail/compose/actions/send', [
     'io.ox/core/extensions',
+    'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/api',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentEmpty',
-    'io.ox/mail/actions/attachmentQuota'
-], function (ext, mailAPI, settings, notifications, gt, attachmentEmpty, attachmentQuota) {
+    'gettext!io.ox/mail'
+], function (ext, extensions, mailAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -96,18 +95,12 @@ define('io.ox/mail/compose/actions/send', [
         {
             id: 'check:attachment-empty',
             index: 500,
-            perform: function (baton) {
-                return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
-                    baton.stopPropagation();
-                });
-            }
+            perform: extensions.emptyAttachmentCheck
         },
         {
             id: 'check:attachment-publishmailattachments',
             index: 550,
-            perform: function (baton) {
-                return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
-            }
+            perform: extensions.publishMailAttachments
         },
         // Placeholder for Guard extensions at index 600-630
         {
@@ -138,19 +131,7 @@ define('io.ox/mail/compose/actions/send', [
         {
             id: 'wait-for-pending-images',
             index: 900,
-            perform: function (baton) {
-                if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
-
-                var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                        return $(this).attr('data-id');
-                    }),
-                    deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
-
-                return $.when.apply($, deferreds).then(function () {
-                    // use actual content since the image urls could have changed
-                    baton.mail.attachments[0].content = baton.model.getMail().attachments[0].content;
-                });
-            }
+            perform: extensions.waitForPendingImages
         },
         {
             id: 'send',
