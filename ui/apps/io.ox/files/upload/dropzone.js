@@ -20,24 +20,13 @@ define('io.ox/files/upload/dropzone', [
 
     'use strict';
 
-    ext.point('io.ox/files/mediator').extend({
-        id: 'files-dropzone',
-        index: 1000000000000,
-        setup: function (app) {
-
-            // desktop only
-            if (!_.device('desktop')) return;
-
-            var zone = new dropzone.Inplace({
-                caption: gt('Drop files here to upload')
-            });
-
-            var guardZone = ext.point('oxguard/files/dragDrop').invoke('draw', this, app)._wrapped[0];
-
-            zone.isEnabled = function () {
-                var id = app.folder.get();
-                return api.pool.getModel(id).can('create');
-            };
+    ext.point('io.ox/files/dropzone').extend({
+        id: 'default',
+        getDropZones: function (baton) {
+            var app = baton.app,
+                zone = new dropzone.Inplace({
+                    caption: gt('Drop files here to upload')
+                });
 
             zone.on({
                 'show': function () {
@@ -54,22 +43,43 @@ define('io.ox/files/upload/dropzone', [
                 }
             });
 
-            if (guardZone) {
-                guardZone.isEnabled = function () {
-                    var id = app.folder.get();
-                    return api.pool.getModel(id).can('create');
-                };
+            baton.dropZones.push(zone);
+        }
+    });
 
-                app.getWindowNode().find('.list-view-control').append(
-                        (zone.render().$el).addClass('abs').css('height', '50%')
-                    ).append(
-                        (guardZone.render().$el).addClass('abs').css('top', '50%')
-                    );
-            } else {
-                app.getWindowNode().find('.list-view-control').append(
-                    zone.render().$el.addClass('abs')
-                );
-            }
+    ext.point('io.ox/files/mediator').extend({
+        id: 'files-dropzone',
+        index: 1000000000000,
+        setup: function (app) {
+
+            // desktop only
+            if (!_.device('desktop')) return;
+
+
+            var baton = new ext.Baton({
+                app: app,
+                dropZones: []
+            });
+            ext.point('io.ox/files/dropzone').invoke('getDropZones', this, baton);
+
+            var size = 100 / baton.dropZones.length;
+            app.getWindowNode().find('.list-view-control').append(
+                baton.dropZones.map(function (zone, index) {
+                    if (!_.isFunction(zone.isEnabled)) {
+                        zone.isEnabled = function () {
+                            var id = app.folder.get();
+                            return api.pool.getModel(id).can('create');
+                        };
+                    }
+
+                    return zone.render().$el
+                        .addClass('abs')
+                        .css({
+                            top: index * size + '%',
+                            height: size + '%'
+                        });
+                })
+            );
         }
     });
 });
