@@ -91,6 +91,9 @@ define('io.ox/backbone/mini-views/listutils', [
             if (!account || !account.get('hasError')) return '';
 
             return $('<div class="error-message">').text(account.get('error'));
+        },
+        drawWarning: function (text) {
+            return $('<div class="warning-message">').text(text);
         }
     };
 });
