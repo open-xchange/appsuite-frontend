@@ -151,7 +151,7 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = gt.noI18n(moment(data.start_date).zoneAbbr()),
+                    timeZoneStr = moment(data.start_date).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
                 if (data.full_time) {
@@ -306,19 +306,19 @@ define('io.ox/calendar/util', [
                         options[item.value] = gt('No reminder');
                         break;
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
                         break;
                     case 'hours':
                         i = Math.floor(item.value / 60);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
                         break;
                     case 'days':
                         i = Math.floor(item.value / 60 / 24);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
                         break;
                     case 'weeks':
                         i = Math.floor(item.value / 60 / 24 / 7);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
                         break;
                     // no default
                 }
@@ -389,8 +389,7 @@ define('io.ox/calendar/util', [
                     div.append($('<li>').append(
                         $('<span>')
                             .text(gt.noI18n(name.replace(/_/g, ' '))),
-                        $('<span>')
-                            .addClass('time')
+                        $('<span class="time">')
                             .text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
@@ -619,7 +618,7 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-            var text = $.trim(gt.noI18n(data.note) || '')
+            var text = $.trim(data.note || '')
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)
@@ -843,6 +842,21 @@ define('io.ox/calendar/util', [
             }
 
             return '';
+        },
+
+        getDeepLink: function (data) {
+            return [
+                ox.abs,
+                ox.root,
+                '/#app=io.ox/calendar&id=',
+                data.folder_id || data.folder,
+                '.',
+                data.recurrence_id || data.id,
+                '.',
+                data.recurrence_position || 0,
+                '&folder=',
+                data.folder_id || data.folder
+            ].join('');
         }
     };
 

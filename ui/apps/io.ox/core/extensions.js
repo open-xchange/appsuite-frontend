@@ -24,18 +24,10 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         // sort by index
         indexSorter = function (a, b) {
-            if (a.index === 'first') {
-                return -1;
-            }
-            if (b.index === 'first') {
-                return 1;
-            }
-            if (a.index === 'last') {
-                return 1;
-            }
-            if (b.index === 'last') {
-                return -1;
-            }
+            if (a.index === 'first') return -1;
+            if (b.index === 'first') return 1;
+            if (a.index === 'last') return 1;
+            if (b.index === 'last') return -1;
             return a.index - b.index;
         };
 

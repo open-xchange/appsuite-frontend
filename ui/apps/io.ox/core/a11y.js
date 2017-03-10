@@ -68,6 +68,14 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
         respondToNonKeyboardFocus(e.currentTarget);
     });
 
+    $(document).on('click', '.expandable-toggle', function (e) {
+        e.preventDefault();
+        var node = $(this).closest('.expandable').toggleClass('open');
+        var isOpen = node.hasClass('open');
+        if (isOpen) node.trigger('open');
+        $(this).attr('aria-expanded', isOpen);
+    });
+
     function respondToNonKeyboardFocus(node) {
         node = $(node);
         if (node.is('.scrollable[tabindex]')) {

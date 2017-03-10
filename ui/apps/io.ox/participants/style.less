@@ -178,25 +178,12 @@
     }
 
     .summary {
-        float: right;
         display: inline-block;
 
         .status {
             position: relative;
             margin-right: 0.3em;
             line-height: 20px;
-        }
-
-        .countgroup {
-            margin-right: 0.5em;
-            cursor: pointer;
-
-            &.badge {
-                background-color: @white;
-                color: @black;
-                border: 1px solid #888;
-                margin: 0;
-            }
         }
     }
 
@@ -210,8 +197,7 @@
             margin: 0 20px 8px 0;
             line-height: 24px;
 
-            &:focus,
-            &:hover {
+            &:focus {
                 .person.accepted,
                 .person.declined { color: black; }
             }
@@ -236,8 +222,6 @@
                     text-decoration: line-through;
                     color: @participant-declined;
                 }
-
-                .last_name { font-weight: bold; }
             }
 
             .comment {
@@ -249,5 +233,14 @@
                 margin-bottom: 3px;
             }
         }
+    }
+}
+
+.vgrid-cell ul.participant-list {
+    width: 500px;
+    white-space: normal;
+
+    .participant {
+        margin: auto;
     }
 }

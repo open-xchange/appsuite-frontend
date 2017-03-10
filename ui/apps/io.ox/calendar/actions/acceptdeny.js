@@ -195,16 +195,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 if (conflicts.length === 0) return performConfirm();
 
                                 ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    new dialogs.ModalDialog()
-                                        .header(conflictView.drawHeader())
-                                        .append(conflictView.drawList(conflicts, dialog).addClass('additional-info'))
-                                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                                        .addButton('cancel', gt('Cancel'), 'cancel')
-                                        .show()
-                                        .done(function (action) {
-                                            if (action === 'cancel') return dialog.idle();
-                                            if (action === 'ignore') performConfirm();
-                                        });
+                                    conflictView.dialog(conflicts)
+                                        .on('cancel', function () { dialog.idle(); })
+                                        .on('ignore', function () { performConfirm(); });
                                 });
                             })
                             .fail(notifications.yell)

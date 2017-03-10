@@ -321,11 +321,8 @@ html:not(.internet-explorer) .scrollable[tabindex] {
     right: 0;
 }
 
-.abs-lr {
-    position: absolute;
-    left: 0;
-    right: 0;
-}
+.abs-r { right: 0; }
+.abs-l { left: 0; }
 
 .bright-text {
     color: #888;
@@ -342,8 +339,11 @@ html:not(.internet-explorer) .scrollable[tabindex] {
 .person, .person-link {
     color: @person-link-color;
     word-break: normal;
-    cursor: pointer;
     white-space: nowrap;
+}
+
+.person-link {
+    cursor: pointer;
 }
 
 .default-content-padding { padding: 20px 30px; }

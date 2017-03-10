@@ -17,25 +17,19 @@ define('io.ox/calendar/view-grid-template', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
-    'io.ox/core/api/user',
-    'io.ox/core/api/resource',
     'less!io.ox/calendar/style'
-], function (util, VGrid, ext, folderAPI, gt, userAPI, resourceAPI) {
+], function (util, VGrid, ext, folderAPI, gt) {
 
     'use strict';
-    var fnClickPerson = function (e) {
-        e.preventDefault();
-        ext.point('io.ox/core/person:action').each(function (ext) {
-            _.call(ext.action, e.data, e);
-        });
-    };
 
     var that = {
 
         // main grid template
         main: {
+
             build: function () {
-                var title, location, time, date, shown_as, conflicts, isPrivate;
+                var title, location, time, date, shown_as, isPrivate;
+
                 this.addClass('calendar').append(
                     time = $('<div class="time">'),
                     date = $('<div class="date">'),
@@ -44,8 +38,7 @@ define('io.ox/calendar/view-grid-template', [
                     $('<div class="location-row">').append(
                         shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
                         location = $('<span class="location">')
-                    ),
-                    conflicts = $('<div class="conflicts">').hide()
+                    )
                 );
 
                 return {
@@ -54,14 +47,17 @@ define('io.ox/calendar/view-grid-template', [
                     time: time,
                     date: date,
                     shown_as: shown_as,
-                    conflicts: conflicts,
                     isPrivate: isPrivate
                 };
             },
+
             set: function (data, fields) {
+
                 var self = this,
                     isPrivate = _.isUndefined(data.title),
-                    a11yLabel = '';
+                    title = isPrivate ? gt('Private') : gt.noI18n(data.title || '\u00A0'),
+                    a11yLabel = [];
+
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 if (data.folder_id) {
                     var folder = folderAPI.get(data.folder_id);
@@ -71,81 +67,26 @@ define('io.ox/calendar/view-grid-template', [
                     });
                 }
 
-                fields.title
-                    .text(a11yLabel = isPrivate ? gt('Private') : gt.noI18n(data.title || '\u00A0'));
+                fields.title.text(title);
 
-                if (!!data.private_flag) a11yLabel += ', ' + gt('Private');
-
-                if (data.conflict && !isPrivate) {
-                    fields.title
-                        .append(
-                            $.txt(' ('),
-                            $('<a>').append(userAPI.getTextNode(data.created_by)).on('click', { internal_userid: data.created_by }, fnClickPerson),
-                            $.txt(')')
-                        );
-                }
-                if (data.location) {
-                    //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
-                    //#. This fragment appears within a long string for screen readers.
-                    //#. Some languages (e.g. German) might need to translate "location:".
-                    a11yLabel += ', ' + gt.pgettext('a11y', 'at %1$s', data.location);
-                }
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 fields.time.text(gt.noI18n(util.getTimeInterval(data)));
-                a11yLabel += ', ' + util.getTimeIntervalA11y(data);
                 fields.date.text(gt.noI18n(util.getDateInterval(data)));
-                a11yLabel += ', ' + gt.noI18n(util.getDateIntervalA11y(data));
-                fields.shown_as.get(0).className = 'shown_as label ' + util.getShownAsLabel(data);
-                if (data.participants && data.conflict) {
-                    var conflicts = $('<span>');
-                    fields.conflicts
-                        .text(gt('Conflicts:'))
-                        .append(conflicts);
+                fields.shown_as.addClass(util.getShownAsLabel(data)).attr('title', util.getShownAs(data));
 
-                    _.chain(data.participants)
-                    .filter(function (part) {
-                        // participants who declined the appointment cannot conflit
-                        return part.confirmation !== 2;
-                    })
-                    .each(function (participant, index, list) {
-                        // check for resources
-                        if (participant.type === 3) {
-                            resourceAPI.get({ id: participant.id }).done(function (resource) {
-                                conflicts.append(
-                                    $('<span class="resource-link">')
-                                        .text(gt.noI18n(resource.display_name))
-                                        .css('margin-left', '4px')
-                                );
-                            });
-                        }
-                        // internal user
-                        if (participant.type === 1) {
-                            conflicts.append(
-                                $('<a class="person-link" role="button">')
-                                    .append(userAPI.getTextNode(participant.id))
-                                    .addClass(util.getConfirmationClass(participant.confirmation))
-                                    .css('margin-left', '4px')
-                                    .on('click', { internal_userid: participant.id }, fnClickPerson)
-                            );
-                        }
-                        // separator
-                        if (index < (list.length - 1)) {
-                            conflicts.append($('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 '))));
-                        }
-                    });
-                    fields.conflicts.show();
-                    fields.conflicts.css('white-space', 'normal');
-                    this.css('height', 'auto');
-                } else {
-                    fields.conflicts.hide();
-                }
+                fields.isPrivate.toggle(isPrivate);
 
-                if (data.private_flag === true) {
-                    fields.isPrivate.show();
-                } else {
-                    fields.isPrivate.hide();
-                }
-                this.attr('aria-label', _.escape(a11yLabel) + '.');
+                // a11y: this should be unnecessary!
+
+                a11yLabel.push(title);
+                //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+                //#. This fragment appears within a long string for screen readers.
+                //#. Some languages (e.g. German) might need to translate "location:".
+                if (data.location) a11yLabel.push(gt.pgettext('a11y', 'at %1$s', data.location));
+                a11yLabel.push(util.getTimeIntervalA11y(data));
+                a11yLabel.push(gt.noI18n(util.getDateIntervalA11y(data)));
+
+                this.attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
             }
         },
 
@@ -166,7 +107,6 @@ define('io.ox/calendar/view-grid-template', [
                 var clone = tmpl.getClone();
                 clone.update(data, i);
                 clone.appendTo($ul).node
-                    .css('position', 'relative')
                     .data('appointment', data)
                     .addClass('hover');
             });

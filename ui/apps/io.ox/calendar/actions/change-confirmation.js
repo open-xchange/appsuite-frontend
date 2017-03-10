@@ -12,10 +12,8 @@
  */
 
 define('io.ox/calendar/actions/change-confirmation', [
-    'io.ox/calendar/api',
-    'io.ox/core/tk/dialogs',
-    'gettext!io.ox/calendar'
-], function (calApi, dialogs, gt) {
+    'io.ox/calendar/api'
+], function (calApi) {
 
     'use strict';
 
@@ -30,16 +28,9 @@ define('io.ox/calendar/actions/change-confirmation', [
             if (conflicts.length === 0) return def.resolve();
 
             ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                new dialogs.ModalDialog()
-                    .header(conflictView.drawHeader())
-                    .append(conflictView.drawList(conflicts))
-                    .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
-                    .show()
-                    .done(function (action) {
-                        if (action === 'cancel') return def.reject();
-                        if (action === 'ignore') def.resolve();
-                    });
+                conflictView.dialog(conflicts)
+                    .on('cancel', function () { def.reject(); })
+                    .on('ignore', function () { def.resolve(); });
             });
 
             return def;

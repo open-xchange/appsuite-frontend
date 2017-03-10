@@ -137,80 +137,33 @@ define('io.ox/calendar/edit/main', [
                                 }
                                 notifications.yell('error', message);
                             })
-                            .on('conflicts', function (con) {
-                                var hardConflict = false;
-                                // look for hard conflicts
-                                _(con).each(function (conflict) {
-                                    if (conflict.hard_conflict) {
-                                        hardConflict = true;
-                                        return;
-                                    }
-                                });
+                            .on('conflicts', function (conflicts) {
 
-                                ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/conflicts/conflictList']).done(function (dialogs, conflictView) {
-
-                                    var dialog = new dialogs.ModalDialog({
-                                        top: '20%',
-                                        center: false,
-                                        container: app.getWindow().nodes.outer
-                                    });
-
-                                    dialog
-                                        .header(conflictView.drawHeader())
-                                        .append(
-                                            conflictView.drawList(con, dialog).addClass('additional-info')
-                                        )
-                                        .getContentNode().attr('role', 'document');
-
-                                    if (hardConflict) {
-                                        dialog.prepend(
-                                            $('<div class="alert alert-info hard-conflict">')
-                                                .text(gt('Conflicts with resources cannot be ignored'))
-                                        );
-                                    } else {
-                                        dialog.addDangerButton('ignore', gt('Ignore conflicts'), 'ignore');
-                                    }
-                                    dialog.addButton('cancel', gt('Cancel'), 'cancel')
-                                        .show()
-                                        .done(function (action) {
-                                            if (action === 'cancel') {
-                                                // add temp timezone attribute again
-                                                self.model.set('endTimezone', self.model.endTimezone, { silent: true });
-                                                delete self.model.endTimezone;
-                                                // restore model attributes for moving
-                                                if (self.moveAfterSave) {
-                                                    self.model.set('folder_id', self.moveAfterSave, { silent: true });
-                                                }
-                                                return;
-                                            }
-                                            if (action === 'ignore') {
-                                                self.model.set('ignore_conflicts', true, { validate: true });
-                                                self.model.save().then(_.bind(self.onSave, self));
-                                            }
+                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                    conflictView.dialog(conflicts)
+                                        .on('cancel', function () {
+                                            // add temp timezone attribute again
+                                            self.model.set('endTimezone', self.model.endTimezone, { silent: true });
+                                            delete self.model.endTimezone;
+                                            // restore model attributes for moving
+                                            if (self.moveAfterSave) self.model.set('folder_id', self.moveAfterSave, { silent: true });
+                                        })
+                                        .on('ignore', function () {
+                                            self.model.set('ignore_conflicts', true, { validate: true });
+                                            self.model.save().then(_.bind(self.onSave, self));
                                         });
                                 });
                             });
 
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
 
-                        if (app.dropZone) {
-                            win.on('show', function () {
-                                app.dropZone.include();
-                            });
-
-                            win.on('hide', function () {
-                                app.dropZone.remove();
-                            });
-                        }
-
                         win.on('show', function () {
-                            if (self.model.get('id')) {
-                                //set url parameters
-                                self.setState({ folder: self.model.attributes.folder_id, id: self.model.attributes.id });
-                            } else {
-                                self.setState({ folder: self.model.attributes.folder_id, id: null });
-                            }
+                            if (app.dropZone) app.dropZone.include();
+                            //set url parameters
+                            self.setState({ folder: self.model.attributes.folder_id, id: self.model.get('id') ? self.model.attributes.id : null });
                         });
+
+                        if (app.dropZone) win.on('hide', function () { app.dropZone.remove(); });
 
                         if (opt.mode === 'edit') {
 
@@ -219,16 +172,13 @@ define('io.ox/calendar/edit/main', [
                                 self.model.mode = 'appointment';
                             }
 
-                            if (opt.action === 'series') {
-                                self.model.mode = 'series';
-                            }
+                            if (opt.action === 'series') self.model.mode = 'series';
 
                             // init alarm
                             if (self.model.get('alarm') === undefined || self.model.get('alarm') === null) {
                                 //0 is valid don't change to -1 then
                                 self.model.set('alarm', -1, { silent: true, validate: true });
                             }
-
                         }
 
                         $(self.getWindow().nodes.main[0]).append(self.view.render().el);
@@ -247,9 +197,7 @@ define('io.ox/calendar/edit/main', [
                     // hash support
                     self.setState({ folder: data.folder_id, id: data.id });
                     self.model = new AppointmentModel(data);
-                    loadFolder();
                 } else {
-
                     // default values from settings
                     data.alarm = data.alarm || settings.get('defaultReminder', 15);
                     if (data.full_time) {
@@ -258,11 +206,9 @@ define('io.ox/calendar/edit/main', [
                     self.model = new AppointmentModel(data);
                     if (!data.folder_id || /^virtual/.test(data.folder_id)) {
                         self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
-                        loadFolder();
-                    } else {
-                        loadFolder();
                     }
                 }
+                loadFolder();
             },
 
             considerSaved: false,
@@ -272,9 +218,8 @@ define('io.ox/calendar/edit/main', [
             },
 
             getDirtyStatus: function () {
-                if (this.considerSaved) {
-                    return false;
-                }
+                if (this.considerSaved) return false;
+
                 return !_.isEmpty(this.model.changedSinceLoading());
             },
 
@@ -285,13 +230,8 @@ define('io.ox/calendar/edit/main', [
 
                 function stopPointerEvents(e) {
 
-                    if (e.type === 'focus') {
-                        array.push('focus');
-                    }
-
-                    if (e.type === 'keyup') {
-                        array.push('keyup');
-                    }
+                    if (e.type === 'focus') array.push('focus');
+                    if (e.type === 'keyup') array.push('keyup');
 
                     if (array.length === 2) {
                         if (_.isEmpty(_.difference(signatureSequenz, array))) {
@@ -311,14 +251,8 @@ define('io.ox/calendar/edit/main', [
                     self.setTitle(self.model.get('title'));
                 }
                 self.model.on('keyup:title', function (value) {
+                    if (!value) value = self.model.get('id') ? gt('Edit appointment') : gt('Create appointment');
 
-                    if (!value) {
-                        if (self.model.get('id')) {
-                            value = gt('Edit appointment');
-                        } else {
-                            value = gt('Create appointment');
-                        }
-                    }
                     self.getWindow().setTitle(value);
                     self.setTitle(value);
                 });

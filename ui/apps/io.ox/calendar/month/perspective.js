@@ -16,6 +16,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/print',
@@ -23,7 +24,7 @@ define('io.ox/calendar/month/perspective', [
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt, printStyle) {
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, settings, gt, printStyle) {
 
     'use strict';
 
@@ -114,29 +115,17 @@ define('io.ox/calendar/month/perspective', [
             });
 
             var apiUpdate = function (obj) {
-                api.update(obj).fail(function (con) {
-                    if (con.conflicts) {
-                        var dialog = new dialogs.ModalDialog({
-                            top: '20%',
-                            center: false,
-                            container: self.main
-                        });
+                api.update(obj).fail(function (error) {
+                    if (!error.conflicts) return notifications.yell(error);
 
-                        dialog.append(conflictView.drawList(con.conflicts, dialog))
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') {
-                                    self.update();
-                                    return;
-                                }
-                                if (action === 'ignore') {
-                                    obj.ignore_conflicts = true;
-                                    apiUpdate(obj);
-                                }
+                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                        conflictView.dialog(error.conflicts)
+                            .on('cancel', function () { self.update(); })
+                            .on('ignore', function () {
+                                obj.ignore_conflicts = true;
+                                apiUpdate(obj);
                             });
-                    }
+                    });
                 });
             };
 
@@ -322,15 +311,16 @@ define('io.ox/calendar/month/perspective', [
          * update global 'tops' object with current positions of all first days of all months
          */
         getFirsts: function () {
-            this.tops = {};
+            if (!this.pane) return;
+
             var self = this;
-            if (this.pane) {
-                $('.day.first', this.pane).each(function (i, el) {
-                    var elem = $(el);
-                    // >> 0 parses a floating point number to an integer
-                    self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
-                });
-            }
+            this.tops = {};
+
+            $('.day.first', this.pane).each(function (i, el) {
+                var elem = $(el);
+                // >> 0 parses a floating point number to an integer
+                self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
+            });
         },
 
         /**
@@ -340,9 +330,7 @@ define('io.ox/calendar/month/perspective', [
             // See Bug 36417 - calendar jumps to wrong month with IE10
             // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
             // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
-            if (_.keys(this.tops).length <= 1) {
-                this.getFirsts();
-            }
+            if (_.keys(this.tops).length <= 1) this.getFirsts();
         },
 
         /**
@@ -600,8 +588,7 @@ define('io.ox/calendar/month/perspective', [
                             e.preventDefault();
                             $(e.target).click();
                             break;
-                        default:
-                            break;
+                        // no default
                     }
                 });
 

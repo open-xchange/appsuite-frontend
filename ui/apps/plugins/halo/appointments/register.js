@@ -35,7 +35,7 @@ define('plugins/halo/appointments/register', [
             // TODO: unify with portal code (copy/paste right now)
             require(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-grid-template'], function (dialogs, viewGrid) {
 
-                node.append($('<div>').addClass('widget-title clear-title').text(gt('Shared Appointments')));
+                node.append($('<div class="widget-title clear-title">').text(gt('Shared Appointments')));
                 viewGrid.drawSimpleGrid(baton.data).appendTo(node);
 
                 // mark vgrid cells to prevent unwanted close event (bug 41822)

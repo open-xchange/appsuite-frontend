@@ -64,6 +64,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 user_id: options.user_id
             };
 
+            if (data && data.nohalo) options.$el = $('<span>');
+
             var baton = new ext.Baton({ data: data || {}, halo: halo, html: options.html });
 
             // get node
