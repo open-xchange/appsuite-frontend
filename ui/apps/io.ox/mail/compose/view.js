@@ -31,7 +31,8 @@ define('io.ox/mail/compose/view', [
     'io.ox/core/a11y',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
-    'io.ox/mail/compose/actions/send'
+    'io.ox/mail/compose/actions/send',
+    'io.ox/mail/compose/actions/save'
 ], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, a11y) {
 
     'use strict';
@@ -288,6 +289,31 @@ define('io.ox/mail/compose/view', [
             node.appendTo(this);
         }
     });
+
+    // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
+    // TODO: at the moment, this resolves with the result of the last extension point.
+    // not sure if this is desired.
+    function extensionCascade(point, baton) {
+        return point.reduce(function (def, p) {
+            if (!def || !def.then) def = $.when(def);
+            return def.then(function (result, newData) {
+                if (result && result.data) baton.resultData = result.data;
+                if (newData) baton.newData = newData;
+                return $.when();
+            }, function (result) {
+                //handle errors/warnings in reject case
+                if (result && result.error) baton.error = result.error;
+                if (result && result.warnings) baton.warning = result.warnings;
+                return $.when();
+            }).then(function () {
+                if (baton.isPropagationStopped()) return;
+                if (baton.isDisabled(point.id, p.id)) return;
+                return p.perform.apply(undefined, [baton]);
+            });
+        }, $.when()).fail(function () {
+            baton.model.set('autoDismiss', false);
+        });
+    }
 
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
@@ -584,71 +610,23 @@ define('io.ox/mail/compose/view', [
             var win = this.app.getWindow();
             if (win) win.busy();
             // get mail
-            var self = this,
-                model = this.model,
-                mail = this.model.getMailForDraft(),
-                def = new $.Deferred();
+            var mail = this.model.getMailForDraft();
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
             delete mail.vcard;
 
-            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
-                var def = $.Deferred();
-                ext.point('io.ox/mail/compose/actions/send').get('wait-for-pending-images', function (p) {
-                    p.perform(new ext.Baton({
-                        mail: mail,
-                        model: model
-                    })).then(def.resolve, def.reject);
-                });
-                return def;
-            })
-            .then(function () {
-                return attachmentQuota.publishMailAttachmentsNotification(mail.files);
-            })
-            .then(function () {
-                return mailAPI.send(mail, mail.files);
-            }).then(function (result) {
-                var opt = self.parseMsgref(result.data);
-                if (mail.attachments[0].content_type === 'text/plain') opt.view = 'raw';
-                if (mail.attachments[0].content_type === 'text/html') opt.view = 'html';
-
-                return $.when(
-                    result,
-                    mailAPI.get(opt)
-                );
-            }, function (result) {
-                if (result.error) {
-                    notifications.yell(result);
-                    return def.reject(result);
-                }
-            }).then(function (result, data) {
-                // Replace inline images in contenteditable with links from draft response
-                if (model.get('editorMode') === 'html') {
-                    $('<div>' + data.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
-                    });
-                }
-                data.attachments.forEach(function (a, index) {
-                    var m = model.get('attachments').at(index);
-                    if (typeof m === 'undefined') {
-                        model.get('attachments').add(a);
-                    } else if (m.id !== a.id) {
-                        m.clear({ silent: true });
-                        m.set(a);
-                    }
+            var view = this,
+                baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
                 });
 
-                model.set('msgref', result.data);
-                model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-                model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
-                //#. %1$s is the time, the draft was saved
-                //#, c-format
-                self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                // make model not dirty after save
-                self.model.dirty(false);
-                return result;
-            }).always(function () {
+            var point = ext.point('io.ox/mail/compose/actions/save');
+
+            return extensionCascade(point, baton).always(function () {
                 if (win) win.idle();
             });
         },
@@ -833,24 +811,7 @@ define('io.ox/mail/compose/view', [
                 }),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
-            // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
-            // TODO: at the moment, this resolves with the result of the last extension point.
-            // not sure if this is desired.
-            return point.reduce(function (def, p) {
-                if (!def || !def.then) def = $.when(def);
-                return def.then(_.identity, function (result) {
-                    //handle errors/warnings in reject case
-                    if (result && result.error) baton.error = result.error;
-                    if (result && result.warnings) baton.warning = result.warnings;
-                    return $.when();
-                }).then(function () {
-                    if (baton.isPropagationStopped()) return;
-                    if (baton.isDisabled(point.id, p.id)) return;
-                    return p.perform.apply(undefined, [baton]);
-                });
-            }, $.when()).fail(function () {
-                baton.model.set('autoDismiss', false);
-            });
+            return extensionCascade(point, baton);
         },
 
         toggleTokenfield: function (e) {
