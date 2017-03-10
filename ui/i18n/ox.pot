@@ -2998,6 +2998,11 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
+#: apps/io.ox/calendar/view-detail.js
+#: module:io.ox/calendar
+msgid "All changes made to the series do not affect the currently selected appointment as it is an exception"
+msgstr ""
+
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
 #. This fragment appears within a long string for screen readers.
 #. Some languages (e.g. German) might need to translate "location:".
@@ -3357,6 +3362,11 @@ msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js
 #: module:io.ox/contacts
+msgid "Edit Contact"
+msgstr ""
+
+#: apps/io.ox/contacts/edit/main.js
+#: module:io.ox/contacts
 msgid "Create contact"
 msgstr ""
 
@@ -3369,11 +3379,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: module:io.ox/contacts
 msgid "Some fields contain invalid data"
-msgstr ""
-
-#: apps/io.ox/contacts/edit/main.js
-#: module:io.ox/contacts
-msgid "Edit Contact"
 msgstr ""
 
 #: apps/io.ox/contacts/edit/main.js

@@ -1053,6 +1053,12 @@ msgstr "Tous les dossiers"
 msgid "All attachments"
 msgstr "Toutes les pièces jointes"
 
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid ""
+"All changes made to the series do not affect the currently selected "
+"appointment as it is an exception"
+msgstr ""
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
