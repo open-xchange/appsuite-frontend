@@ -51,6 +51,8 @@ define('plugins/portal/birthdays/register', [
 
         title: gt('Birthdays'),
 
+        icon: 'fa-birthday-cake',
+
         initialize: function (baton) {
             api.on('update create delete', function () {
                 //refresh portal
@@ -92,7 +94,7 @@ define('plugins/portal/birthdays/register', [
 
             if (contacts.length === 0) {
                 $list.append(
-                    $('<li class="line">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
+                    $('<li class="item">').text(gt('No birthdays within the next %1$d weeks', WEEKS))
                 );
             } else {
                 $list.addClass('pointer');
@@ -118,18 +120,21 @@ define('plugins/portal/birthdays/register', [
 
                     if (!isDuplicate(name, birthday, hash)) {
                         $list.append(
-                            $('<li class="line">').append(
-                                birthday.isSame(today, 'day') ? $('<span class="bold">').append('<i class="cake fa fa-birthday-cake">') : $(),
-                                $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(_.noI18n(birthdayText))
+                            $('<li class="item">').append(api.pictureHalo(
+                                $('<div class="picture">'),
+                                    contact,
+                                    { width: 48, height: 48 }
+                                ),
+                                birthday.isSame(today, 'day') ? $('<span class="name">').append('<i class="cake fa fa-birthday-cake">') : $(),
+                                $('<span class="name line">').text(name), $.txt(' '),
+                                $('<span class="date line">').text(_.noI18n(birthdayText))
                             )
                         );
                         markDuplicate(name, birthday, hash);
                     }
                 });
             }
-
-            this.append($list);
+            baton.model.wrapper.append($list);
         },
 
         draw: function (baton) {

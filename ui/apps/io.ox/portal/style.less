@@ -24,11 +24,37 @@
 @widget-color-pink: darken(@pink, 10%);
 @widget-color-gray: darken(@gray-light, 10%);
 
+// Mixin
+.mixin-widget-color(@widget-color) {
+
+    .accent { color: @widget-color; }
+
+    .action { background-color: @widget-color; }
+
+    &.inverse {
+        background-color: @widget-color;
+        h2, .accent { color: @white; }
+        .decoration { background-color: @widget-color; }
+    }
+
+    html.high-contrast & {
+
+        h2, .accent { color: @black; }
+
+        .action {
+            color: white;
+            background-color: @black;
+        }
+
+        &.inverse .decoration { background-color: @black; }
+    }
+}
+
 .io-ox-portal {
     @spacing: 16px;
     @vert-spacing: 16px;
-    @line-height: 18px;
-    @lines: 18;
+    @line-height: 16px;
+    @lines: 23.5;
     @widget-padding: 16px;
 
     padding: 16px (16px - @spacing) 16px 16px;
@@ -74,36 +100,15 @@
         position: relative;
         display: inline-block;
         width: 300px;
-        height: @line-height * @lines + 16px + @vert-spacing;
-        border-width: 0 @spacing @vert-spacing 0;
-        border-style: solid;
-        border-color: transparent;
+        height: @line-height * @lines + @vert-spacing;
+        padding-right: @spacing;
         float: left;
-        background-clip: padding-box;
         overflow: hidden;
         .transition(background-color 0.3s linear);
         .user-select(none);
 
-        /* widget border decoration */
-        .decoration {
-            height: 100%;
-            .user-select(none);
-            border: solid transparent 1px;
-            background-color: #f5f5f5;
-
-            .title {
-                .ellipsis();
-                width: 90%;
-                display: inline-block;
-                font-size: 16px;
-                font-weight: normal;
-            }
-        }
-
-        &:focus .decoration { background-color: darken(#f5f5f5, 10%); }
-
         /* during drag*/
-        &.ui-sortable-helper { background-color: #eee; }
+        &.ui-sortable-helper .content { background-color: #eee; }
 
         .new-item {
             position: relative;
@@ -126,31 +131,6 @@
             .action { color: #fff; }
 
             &:hover { box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.70) inset; }
-        }
-
-        .mixin-widget-color(@widget-color) {
-
-            h2, .accent { color: @widget-color; }
-
-            .action { background-color: @widget-color; }
-
-            &.inverse {
-                background-color: @widget-color;
-                h2, .accent { color: @white; }
-                .decoration { background-color: @widget-color; }
-            }
-
-            html.high-contrast & {
-
-                h2, .accent { color: @black; }
-
-                .action {
-                    color: white;
-                    background-color: @black;
-                }
-
-                &.inverse .decoration { background-color: @black; }
-            }
         }
 
         &.widget-color-black      { .mixin-widget-color(@widget-color-black);      }
@@ -205,41 +185,135 @@
             }
         }
 
-        .content {
+        .wrapper {
+            box-shadow: 1px 2px 10px 0 #ddd;
+            margin-bottom: @vert-spacing;
+        }
 
-            position: absolute;
-            right: @widget-padding;
-            bottom: @widget-padding;
-            left: @widget-padding;
-            top: @line-height * 4;
+        // Widget title
+
+        h2 {
+            background: #3c73aa;
+            color: #fff;
+
+            font-size: 20px;
+            font-weight: bold;
+            line-height: 24px;
+            white-space: nowrap;
+
+            cursor: default;
+            display: flex;
+            position: relative;
+            border-radius: 3px 3px 0 0;
+            padding: @widget-padding / 2 @widget-padding;
+            margin: 0 -1px;
+            z-index: 2;
+            .transition(color 0.3s linear);
+
+            i {
+                font-size: 16px;
+                line-height: 20px;
+                width: 24px;
+            }
+            .title {
+                .ellipsis();
+                width: 90%;
+                display: inline-block;
+                font-size: 16px;
+                font-weight: normal;
+            }
+
+            .disable-widget {
+                text-align: center;
+                margin: 0 -16px 0 auto;
+                text-decoration: none;
+                cursor: pointer;
+                position: absolute;
+                top: -5px;
+                right: 15px;
+
+                .fa-times {
+                    color: rgba(255, 255, 255, 1);
+                    font-size: 12px
+                }
+
+                &:hover .fa-times {
+                    color: rgba(255, 255, 255, 1);
+                    text-decoration: underline;
+                }
+
+                &:focus {
+                    background-color: rgba(255, 255, 255, 1);
+                    outline: 0;
+                    text-decoration: underline;
+                }
+            }
+
+            &.action-link {
+                cursor: pointer;
+
+                &:hover { text-decoration: underline; }
+            }
+        }
+
+        // Content
+
+        .content {
+            margin-left: 0;
+            background-color: #f5f5f5;
+            padding: @widget-padding / 2 @widget-padding;
             line-height: @line-height;
             overflow: hidden;
+            height: (@lines * @line-height) - 2.5 * @line-height;
             z-index: 10;
+            border-radius: 0 0 3px 3px;
             .transition(opacity 0.3s linear);
 
             &.pointer { cursor: pointer; }
 
             &.centered { text-align: center; }
 
-            .bold { font-weight: bold; }
+            &:focus {
+                background-color: rgba(0, 0, 0, 0.10);
+                outline: none;
+            }
 
-            li .bold { line-height: 1em; }
+            .from,
+            .title {
+                .ellipsis();
+                width: 75%;
+                display: inline-block;
+                font-weight: bold;
+                line-height: 1em;
+            }
+
+            .name {
+                font-weight: bold;
+                line-height: 1em;
+            }
 
             .italic { font-style: italic; }
 
             .gray {
                 color: rgba(0, 0, 0, 0.6);
-
                 html.high-contrast & { color: @black; }
             }
 
-            &:focus {
-                background-color: rgba(0, 0, 0, 0.10);
-                outline: none;
+            .time {
+                float: right;
+                text-align: right;
+                font-size: 11px;
+                width: 20%;
+            }
+
+            .picture {
+                float: left;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                margin-right: 10px
             }
         }
-
-        ul.content { margin-left: 0; }
     }
 
     .pending {
@@ -275,30 +349,10 @@
         margin: 0;
         font-weight: bold;
         line-height: 26px;
-        height: 57px;
         z-index: 2;
         cursor: move;
         .transition(color 0.3s linear);
         white-space: nowrap;
-
-        .disable-widget {
-            float: right;
-            width: 52px;
-            padding: 14px 0;
-            text-align: center;
-            margin: -16px -16px 0 0;
-            text-decoration: none;
-            cursor: pointer;
-
-            .fa-times { color: rgba(0, 0, 0, 0.55); }
-
-            &:hover .fa-times { color: rgba(0, 0, 0, 0.55); }
-
-            &:focus {
-                background-color: rgba(0, 0, 0, 0.10);
-                outline: 0;
-            }
-        }
 
         &.action-link {
             cursor: pointer;
@@ -356,17 +410,22 @@
 
     .preview h2 { background-color: rgba(255, 255, 255, 0.80); }
 
-    .item, .paragraph {
+    .paragraph {
+        height: 3.5 * @line-height;
         line-height: @line-height;
-        margin-bottom: @line-height;
+        margin-bottom: @line-height / 2;
     }
 
     .paragraph.setup { min-height: 40px; }
 
-    .item:last-child, .paragraph:last-child { margin-bottom: 0; }
-
     .item {
+        height: 3.5 * @line-height + 4;
+        line-height: @line-height;
         cursor: pointer;
+        overflow: hidden;
+        border-bottom: 1px solid darken(#f5f5f5, 10%);
+        padding-bottom: @line-height / 2;
+        margin-bottom: @line-height / 2;
 
         &:hover { text-decoration: underline; }
 
@@ -376,7 +435,10 @@
         }
     }
 
-    .line { line-height: @line-height; }
+    .line {
+        line-height: @line-height;
+        display: block;
+    }
 
     .content a.solution { cursor: pointer; }
 }
@@ -528,12 +590,6 @@
             border-bottom: 1px solid #eee;
 
             .content { position: static; }
-
-            .decoration {
-                height: auto;
-                background-color: transparent;
-                border: 0 none;
-            }
 
             &.requires-setup { background-color: transparent; }
 

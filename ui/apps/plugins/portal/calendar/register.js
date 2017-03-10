@@ -26,6 +26,8 @@ define('plugins/portal/calendar/register', [
 
         title: gt('Appointments'),
 
+        icon: 'fa-calendar',
+
         initialize: function (baton) {
             api.on('update create delete', function () {
                 //refresh portal
@@ -88,23 +90,30 @@ define('plugins/portal/calendar/register', [
                 _(appointments).each(function (nextApp) {
                     var declined = util.getConfirmationStatus(nextApp) === 2;
                     if (settings.get('showDeclinedAppointments', false) || !declined) {
-                        var timespan = util.getSmartDate(nextApp, true);
+                        var m = nextApp.full_time ? moment.utc(nextApp.start_date).local(true) : moment(nextApp.start_date);
+                        var timespan = m.calendar(null, {
+                            sameDay: 'LT',
+                            nextDay: '[Tomorrow]',
+                            nextWeek: 'dddd',
+                            lastDay: '[Yesterday]',
+                            sameElse: 'DD/MM/YYYY'
+                        });
 
                         $content.append(
                             $('<li class="item" tabindex="0">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
-                                $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="bold">').text(_.noI18n(nextApp.title || '')), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="gray">').text(_.noI18n(nextApp.location || ''))
+                                $('<span class="title">').text(_.noI18n(nextApp.title || '')),
+                                $('<span class="time">').text(_.noI18n(timespan)),
+                                $('<span class="description">').text(_.noI18n(nextApp.location || ''))
                             )
                         );
                     }
                 });
             }
 
-            this.append($content);
+            baton.model.wrapper.append($content);
         },
 
         draw: function (baton) {

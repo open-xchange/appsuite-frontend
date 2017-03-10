@@ -71,7 +71,7 @@ define('plugins/portal/quota/register', [
     };
 
     var drawTile = function (quota) {
-        this.append(
+        this.find('.wrapper').append(
             $('<ul class="content no-pointer list-unstyled">').append(
                 _(availableQuota(quota)).map(function (q) {
                     return new QuotaView(_.extend({
@@ -93,6 +93,7 @@ define('plugins/portal/quota/register', [
 
     ext.point('io.ox/portal/widget/quota').extend({
         title: gt('Quota'),
+        icon: 'fa-pie-chart',
         load: load,
         draw: draw,
         hideSidePopup: true,

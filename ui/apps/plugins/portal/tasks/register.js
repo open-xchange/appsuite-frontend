@@ -24,6 +24,8 @@ define('plugins/portal/tasks/register', [
 
         title: gt('My tasks'),
 
+        icon: 'fa-list-alt',
+
         initialize: function (baton) {
             taskAPI.on('update create delete', function () {
                 //refresh portal
@@ -106,20 +108,20 @@ define('plugins/portal/tasks/register', [
                 task = util.interpretTask(task);
                 content.append(
                     $('<li class="item" tabindex="0">').data('item', task).append(
-                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
+                        $('<span class="title">').text(task.title),
                         task.end_time === '' ? $() :
-                            $('<span class="accent">').text(
+                            $('<span class="time">').text(
                                 //#. Due on date
                                 gt('Due on %1$s', _.noI18n(task.end_time))
                             ),
                         $.txt(' '),
                         $('<span class="pull-right">').text(task.status).addClass(task.badge),
-                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, { max: 100 })))
+                        $('<span class="description">').text(task.note)
                     )
                 );
             });
 
-            this.append(content);
+            baton.model.wrapper.append(content);
         },
 
         draw: function (baton) {

@@ -94,6 +94,8 @@ define('plugins/portal/oxdriveclients/register', [
         //.# Product name will be inserted to adevertise the product. I.e. "Get OX Drive" but meant in terms of gettings a piece of software from a online store
         title: gt.format(gt('Get %s'), settings.get('productName')),
 
+        icon: 'fa-apple',
+
         load: function (baton) {
             var def = $.Deferred();
             // .# String will include a product name and a platform forming a sentence like "Download OX Drive for Windows now."
@@ -108,7 +110,8 @@ define('plugins/portal/oxdriveclients/register', [
         preview: function (baton) {
             var platform = getPlatform(),
                 link = getShopLinkWithImage(platform, settings.get('linkTo/' + platform));
-            this.append(
+
+            baton.model.wrapper.append(
                 $('<ul class="oxdrive content pointer list-unstyled">').append(
                     $('<li class="first">').append(createAppIcon()),
                     $('<li class="message">').append($('<h4>').text(baton.message)),

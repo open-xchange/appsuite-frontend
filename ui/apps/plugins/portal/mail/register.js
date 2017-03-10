@@ -71,9 +71,11 @@ define('plugins/portal/mail/register', [
                             return $('<i class="fa fa-circle new-item accent">');
                         }
                     })(),
-                    $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
-                    subjectNode = $('<span class="normal">').text(subject), $.txt(' '),
-                    $('<span class="accent">').text(_.noI18n(received))
+                    $('<div class="line">').append(
+                        $('<span class="from">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
+                        $('<span class="time">').text(_.noI18n(received))
+                    ),
+                    subjectNode = $('<span class="subject">').text(subject), $.txt(' ')
                 );
 
             //process emoji
@@ -125,6 +127,8 @@ define('plugins/portal/mail/register', [
     ext.point('io.ox/portal/widget/mail').extend({
 
         title: gt('Inbox'),
+
+        icon: 'fa-envelope',
 
         initialize: function (baton) {
 
@@ -192,7 +196,6 @@ define('plugins/portal/mail/register', [
         },
 
         summary: function (baton) {
-
             if (this.find('.summary').length) return;
 
             var node = $('<div class="summary">');
@@ -223,7 +226,7 @@ define('plugins/portal/mail/register', [
         },
 
         preview: function (baton) {
-            this.append(new MailListView({
+            baton.model.wrapper.append(new MailListView({
                 collection: baton.collection
             }).render(baton).$el);
         },
@@ -308,6 +311,8 @@ define('plugins/portal/mail/register', [
         // helps at reverse lookup
         type: 'mail',
 
+        icon: 'fa-envelope',
+
         // called right after initialize. Should return a deferred object when done
         load: function (baton) {
             var props = baton.model.get('props') || {},
@@ -340,7 +345,7 @@ define('plugins/portal/mail/register', [
             $('<div>').html(source).contents().each(function () {
                 content += $(this).text() + ' ';
             });
-            this.append(
+            baton.model.wrapper.append(
                 $('<div class="content">').append(
                     $('<div class="item">')
                     .data('item', data)

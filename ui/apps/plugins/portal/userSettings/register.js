@@ -214,10 +214,12 @@ define('plugins/portal/userSettings/register', [
 
         title: gt('User data'),
 
-        preview: function () {
+        icon: 'fa-user',
+
+        preview: function (baton) {
             var content;
             if (internalUserEdit) {
-                this.append(
+                baton.model.wrapper.append(
                     content = $('<div class="content">').append(
                         // user data
                         $('<div class="action" role="button" tabindex="0">').text(gt('My contact data'))

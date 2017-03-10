@@ -236,18 +236,16 @@ define('io.ox/portal/main', [
         id: 'default',
         index: 300,
         draw: function (baton) {
-            this.append(
-                // border decoration
-                $('<div class="decoration pending">').append(
-                    $('<h2>').append(
-                        // add remove icon
-                        baton.model.get('protectedWidget') ? [] :
-                            $('<a href="#" role="button" class="disable-widget">').attr('aria-label', gt('Disable widget')).append(
-                                $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Disable widget'))
-                            ),
-                        // title span
-                        $('<span class="title">').text('\u00A0')
-                    )
+            baton.wrapper.append(
+                $('<h2>').append(
+                    $('<i class="fa" aria-hidden="true"></i>'),
+                    // add remove icon
+                    baton.model.get('protectedWidget') ? [] :
+                        $('<a href="#" role="button" class="disable-widget">').attr('aria-label', gt('Disable widget')).append(
+                            $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Disable widget'))
+                        ),
+                    // title span
+                    $('<span class="title">').text('\u00A0')
                 )
             );
         }
@@ -367,10 +365,14 @@ define('io.ox/portal/main', [
 
     app.drawScaffold = function (model, add) {
         add = add || false;
-        var baton = ext.Baton({ model: model, app: app, add: add }),
-            node = $('<li tabindex="0">');
+        var wrapper = $('<div class="wrapper">'),
+            baton = ext.Baton({ model: model, app: app, add: add, wrapper: wrapper }),
+            node = $('<li tabindex="0">').append(
+                wrapper
+            );
 
         model.node = node;
+        model.wrapper = wrapper;
         ext.point('io.ox/portal/widget-scaffold').invoke('draw', node, baton);
 
         if (model.get('enabled') === false) {
@@ -508,7 +510,7 @@ define('io.ox/portal/main', [
                 decoration.removeClass('pending');
                 // show error message unless it's just missing oauth account
                 if (e.code !== 'OAUTH-0006') {
-                    node.append(
+                    node.find('.wrapper').append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
                             // message
@@ -554,6 +556,7 @@ define('io.ox/portal/main', [
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
+                icon = point.prop('icon'),
                 $title = node.find('h2 .title').text(_.noI18n(title)),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
@@ -562,6 +565,7 @@ define('io.ox/portal/main', [
             node.find('a.disable-widget').attr({
                 'aria-label': title + ', ' + gt('Disable widget')
             });
+            node.find('h2 > .fa').addClass(icon);
             // setup?
             if (requiresSetUp) {
                 node.find('.decoration').removeClass('pending');

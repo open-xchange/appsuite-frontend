@@ -38,6 +38,8 @@ define('plugins/portal/recentfiles/register', [
             // helps at reverse lookup
             type: 'recentfiles',
 
+            icon: 'fa-file-o',
+
             title: title,
 
             load: function (baton) {
@@ -91,7 +93,7 @@ define('plugins/portal/recentfiles/register', [
 
             preview: function (baton) {
 
-                var content = $('<ul class="content recentfiles list-unstyled">').appendTo(this),
+                var content = $('<ul class="content recentfiles list-unstyled">'),
                     data = baton.data;
 
                 if (!data || data.length === 0) {
@@ -141,6 +143,8 @@ define('plugins/portal/recentfiles/register', [
                         });
                     });
                 });
+
+                baton.model.wrapper.append(content);
             },
 
             draw: function () {

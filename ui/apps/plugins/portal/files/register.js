@@ -26,6 +26,8 @@ define('plugins/portal/files/register', [
         // helps at reverse lookup
         type: 'files',
 
+        icon: 'fa-file-o',
+
         load: function (baton) {
             var props = baton.model.get('props') || {};
             return api.get({ folder: props.folder_id, id: props.id }).then(
@@ -54,6 +56,7 @@ define('plugins/portal/files/register', [
         },
 
         preview: function (baton) {
+
             //#. %1$s is a filename
             var content = $('<div class="content pointer" tabindex="0" role="button">')
                 .attr('aria-label', gt.format('Press [enter] to jump to %1$s', baton.data.filename)),
@@ -110,7 +113,7 @@ define('plugins/portal/files/register', [
 
             });
 
-            this.append(content);
+            baton.model.wrapper.append(content);
         },
 
         draw: function () {

@@ -34,6 +34,10 @@ define('plugins/portal/contacts/register', [
         },
 
         preview: function (baton) {
+            this.find('h2').find('> i').remove().end().prepend(
+                $('<i class="fa fa-address-book" aria-hidden="true"></i>')
+            );
+
             api.on('delete', function (event, element) {
                 if (element.id === baton.data.id && element.folder_id === baton.data.folder_id) {
                     var widgetCol = portalWidgets.getCollection();
