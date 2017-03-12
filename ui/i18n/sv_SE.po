@@ -1659,11 +1659,10 @@ msgstr "Kalendrar"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/change-confirmation.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/main.js
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
@@ -2149,11 +2148,13 @@ msgstr "Konflikter"
 msgid "Conflicts detected"
 msgstr "Konflikter upptäcktes"
 
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Konflikter med resurser kan inte ignoreras"
 
-#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts:"
 msgstr "Konflikter:"
 
@@ -2453,7 +2454,7 @@ msgstr "Skapa påminnelse"
 msgid "Create task"
 msgstr "Skapa uppgift"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Created"
 msgstr "Skapades"
 
@@ -2803,7 +2804,7 @@ msgid "Detailed access rights"
 msgstr "Detaljerade åtkomsträttigheter"
 
 #. File and folder details
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -3162,7 +3163,8 @@ msgid "Downloads"
 msgstr "Nedladdningar"
 
 #. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 #, fuzzy, c-format
 #| msgid "Save to %1$s"
 msgid "Draft saved at %1$s"
@@ -4112,7 +4114,7 @@ msgstr ""
 msgid "Flickr"
 msgstr "Flickr"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
@@ -4660,11 +4662,8 @@ msgstr "Ignorera"
 msgid "Ignore Warnings"
 msgstr "Ignorera varningar"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-confirmation.js
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Ignore conflicts"
 msgstr "Ignorera konflikter"
 
@@ -5585,7 +5584,7 @@ msgstr "Övrigt"
 msgid "Model is incomplete."
 msgstr "Modellen är ofullständig."
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
@@ -6451,7 +6450,7 @@ msgstr "Orange"
 msgid "Order"
 msgstr "Sortera"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organisatör"
@@ -7167,13 +7166,13 @@ msgctxt "Tasks"
 msgid "Priority"
 msgstr "Prioritet"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/week/view.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privat"
 
@@ -8302,6 +8301,8 @@ msgstr "Visa alla fält"
 msgid "Show all items"
 msgstr "Visa alla objekt"
 
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Visa detaljer om möte"
@@ -8396,8 +8397,8 @@ msgstr "Visa detaljer om uppgift"
 msgid "Show tiles"
 msgstr "Visa rutor"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Shown as"
 msgstr "Visa som"
 
@@ -9619,6 +9620,10 @@ msgid ""
 msgstr ""
 "Den här regeln gäller för alla meddelanden. Lägg till ett villkor för att "
 "begränsa regeln till specifika meddelanden."
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "This rule contains unsupported properties. "
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #, fuzzy

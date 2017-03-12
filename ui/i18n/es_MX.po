@@ -1668,11 +1668,10 @@ msgstr "Calendarios"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/change-confirmation.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/main.js
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
@@ -2162,11 +2161,13 @@ msgstr "Conflictos"
 msgid "Conflicts detected"
 msgstr "Conflictos detectados"
 
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Los conflictos con recursos no se pueden ignorar"
 
-#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts:"
 msgstr "Conflictos:"
 
@@ -2468,7 +2469,7 @@ msgstr "Crear recordatorio"
 msgid "Create task"
 msgstr "Crear tarea"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Created"
 msgstr "Creado"
 
@@ -2819,7 +2820,7 @@ msgid "Detailed access rights"
 msgstr "Derechos de acceso detallados"
 
 #. File and folder details
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -3187,7 +3188,8 @@ msgid "Downloads"
 msgstr "Descargas"
 
 #. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 #, fuzzy, c-format
 #| msgid "Save to %1$s"
 msgid "Draft saved at %1$s"
@@ -4149,7 +4151,7 @@ msgstr "Marca"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
@@ -4706,11 +4708,8 @@ msgstr "Ignorar"
 msgid "Ignore Warnings"
 msgstr "Ignorar advertencias"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-confirmation.js
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Ignore conflicts"
 msgstr "Ignorar conflictos"
 
@@ -5636,7 +5635,7 @@ msgstr "Otros"
 msgid "Model is incomplete."
 msgstr "El modelo está incompleto."
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
@@ -6506,7 +6505,7 @@ msgstr "Naranja"
 msgid "Order"
 msgstr "Pedir"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizador"
@@ -7232,13 +7231,13 @@ msgctxt "Tasks"
 msgid "Priority"
 msgstr "Prioridad"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/week/view.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Privada"
 
@@ -8375,6 +8374,8 @@ msgstr "Mostrar todos los campos"
 msgid "Show all items"
 msgstr "Mostrar todos los elementos"
 
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Mostrar detalles de la cita"
@@ -8469,8 +8470,8 @@ msgstr "Mostrar detalles de la tarea"
 msgid "Show tiles"
 msgstr "Mostrar paneles"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Shown as"
 msgstr "Mostrado como"
 
@@ -9704,6 +9705,10 @@ msgid ""
 msgstr ""
 "Esta regla se aplica a todos los mensajes. Por favor, añada una condición "
 "para restringir esta regla a mensajes específicos."
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "This rule contains unsupported properties. "
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #, fuzzy

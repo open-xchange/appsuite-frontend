@@ -1685,11 +1685,10 @@ msgstr "Kalendáře"
 #: apps/io.ox/backbone/views/modal.js module:io.ox/core
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
-#: apps/io.ox/calendar/actions/change-confirmation.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js apps/io.ox/calendar/month/perspective.js
+#: apps/io.ox/calendar/main.js
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: apps/io.ox/calendar/week/perspective.js
 #: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
@@ -2176,11 +2175,13 @@ msgstr "Konflikty"
 msgid "Conflicts detected"
 msgstr "Zjištěny konflikty"
 
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts with resources cannot be ignored"
 msgstr "Konflikty se zdroji nelze ignorovat"
 
-#: apps/io.ox/calendar/view-grid-template.js module:io.ox/calendar
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Conflicts:"
 msgstr "Konflikty:"
 
@@ -2481,7 +2482,7 @@ msgstr "Vytvořit upomínku"
 msgid "Create task"
 msgstr "Vytvořit úkol"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 msgid "Created"
 msgstr "Vytvořeno"
 
@@ -2831,7 +2832,7 @@ msgid "Detailed access rights"
 msgstr "Podrobná přístupová práva"
 
 #. File and folder details
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/core/viewer/views/sidebarview.js
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -3198,7 +3199,8 @@ msgid "Downloads"
 msgstr "Stahování"
 
 #. %1$s is the time, the draft was saved
-#: apps/io.ox/mail/compose/view.js module:io.ox/mail
+#: apps/io.ox/mail/compose/actions/save.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 #, fuzzy, c-format
 #| msgid "Save to %1$s"
 msgid "Draft saved at %1$s"
@@ -4144,7 +4146,7 @@ msgstr "Příznak"
 msgid "Flickr"
 msgstr "Flickr"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/common-extensions.js
 #: module:io.ox/files apps/io.ox/files/favorite/toolbar.js module:io.ox/core
@@ -4699,11 +4701,8 @@ msgstr "Ignorovat"
 msgid "Ignore Warnings"
 msgstr "Ignorovat varování"
 
-#: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/change-confirmation.js
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/month/perspective.js
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 msgid "Ignore conflicts"
 msgstr "Ignorovat konflikty"
 
@@ -4846,8 +4845,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
-"%3$s‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
+"‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -5627,7 +5626,7 @@ msgstr "Různé"
 msgid "Model is incomplete."
 msgstr "Model není kompletní."
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/notes/detail-view.js module:io.ox/notes
 msgid "Modified"
@@ -6500,7 +6499,7 @@ msgstr "Oranžová"
 msgid "Order"
 msgstr "Pořadí"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Organizer"
 msgstr "Organizátor"
@@ -7216,13 +7215,13 @@ msgctxt "Tasks"
 msgid "Priority"
 msgstr "Priorita"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/view-grid-template.js module:io.ox/calendar
-#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-detail.js
-#: apps/io.ox/calendar/view-grid-template.js apps/io.ox/calendar/week/view.js
-#: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
-#: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/view-detail.js module:io.ox/tasks
+#: apps/io.ox/calendar/list/view-grid-template.js
+#: apps/io.ox/calendar/month/view.js apps/io.ox/calendar/view-grid-template.js
+#: apps/io.ox/calendar/week/view.js apps/io.ox/contacts/view-detail.js
+#: module:io.ox/contacts apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/tasks/edit apps/io.ox/tasks/view-detail.js module:io.ox/tasks
 msgid "Private"
 msgstr "Soukromé"
 
@@ -8359,6 +8358,8 @@ msgstr "Zobrazit všechna pole"
 msgid "Show all items"
 msgstr "Zobrazit všechny položky"
 
+#: apps/io.ox/calendar/conflicts/conflictList.js
+#: module:io.ox/calendar/conflicts/conflicts
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "Show appointment details"
 msgstr "Ukázat detaily schůzky"
@@ -8453,8 +8454,8 @@ msgstr "Zobrazit detaily úkolu"
 msgid "Show tiles"
 msgstr "Zobrazit dlaždice"
 
+#: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Shown as"
 msgstr "Zobrazené jako"
 
@@ -9680,6 +9681,10 @@ msgid ""
 msgstr ""
 "Toto pravidlo se použije pro všechny zprávy. Pokud chcete omezit jeho "
 "platnost jen na některé zprávy, přidejte do pravidla podmínku."
+
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
+msgid "This rule contains unsupported properties. "
+msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #, fuzzy
