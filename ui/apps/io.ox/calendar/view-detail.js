@@ -82,6 +82,14 @@ define('io.ox/calendar/view-detail', [
     });
 
     ext.point('io.ox/calendar/detail').extend({
+        index: 450,
+        id: 'recurrence-warning',
+        draw: function () {
+            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).hide());
+        }
+    });
+
+    ext.point('io.ox/calendar/detail').extend({
         index: 500,
         id: 'note',
         draw: extensions.note
@@ -226,9 +234,7 @@ define('io.ox/calendar/view-detail', [
     }
 
     function showInfo(e) {
-        // avoid double warnings
-        e.data.node.find('.recurrence-warning').remove();
-        e.data.node.prepend($('<p class="alert alert-warning recurrence-warning" role="alert">').text(gt('All changes made to the series do not affect the currently selected appointment as it is an exception')));
+        e.data.node.find('.recurrence-warning').show();
     }
 
     return {
