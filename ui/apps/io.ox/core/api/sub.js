@@ -14,9 +14,8 @@
 
 define('io.ox/core/api/sub', [
     'io.ox/core/http',
-    'io.ox/core/api/factory',
-    'io.ox/core/folder/api'
-], function (http, apiFactory, folderAPI) {
+    'io.ox/core/api/factory'
+], function (http, apiFactory) {
 
     'use strict';
 
@@ -96,10 +95,6 @@ define('io.ox/core/api/sub', [
                     });
                 });
             }
-        })
-        .on('delete', function () {
-            //remove cloud icon
-            folderAPI.refresh();
         });
     }
 

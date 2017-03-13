@@ -150,6 +150,7 @@ define('io.ox/core/sub/subscriptions', [
                     popup.on('cancel', function () {
                         popup.close();
                     }).on('add', function () {
+                        popup.getBody().find('div.alert').remove();
                         self.subscribe();
                     });
                 });
@@ -277,6 +278,7 @@ define('io.ox/core/sub/subscriptions', [
                 var fd = model.get('formDescription'),
                     bat = ext.Baton({ view: baton.view, subModel: baton.model, model: model, services: baton.services, popup: baton.popup, app: baton.app });
                 baton.model.setSource(model.toJSON());
+                baton.popup.getBody().find('div.alert').remove();
                 if (fd.length === 1 && fd[0].widget === 'oauthAccount') {
                     ext.point(POINT + '/oauth').invoke('configure', this, bat);
                 } else {

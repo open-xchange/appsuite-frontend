@@ -290,7 +290,10 @@ define('io.ox/core/sub/settings/pane', [
         },
         onRemove: function (e) {
             e.preventDefault();
-            this.model.destroy();
+            this.model.destroy().done(function () {
+                //remove cloud icon
+                folderAPI.refresh();
+            });
         },
         close: function () {
             this.stopListening();
