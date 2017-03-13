@@ -1,0 +1,34 @@
+{
+  "src_folders": ["nightwatch/io.ox"],
+  "globals_path": "nightwatch/globals.js",
+  "custom_commands_path": "nightwatch/commands",
+
+  "selenium": {
+    "start_process" : false
+  },
+
+  "test_runner": "mocha",
+
+  "test_settings": {
+    "default": {
+      "selenium_port": 9515,
+      "selenium_host": "localhost",
+      "default_path_prefix": "",
+      "silent": true
+    },
+
+    "desiredCapabilities": {
+      "browserName": "chrome",
+      "chromeOptions": {
+        "args": ["--no-sandbox"]
+      },
+      "acceptSslCerts": true
+    },
+
+    "chrome": {
+      "desiredCapabilities": {
+        "browserName": "chrome"
+      }
+    }
+  }
+}
