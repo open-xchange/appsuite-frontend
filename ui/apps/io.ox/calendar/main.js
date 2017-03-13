@@ -450,7 +450,7 @@ define('io.ox/calendar/main', [
          * Default application properties
          */
         'props': function (app) {
-            var view = settings.get('viewView', 'week:week');
+            var view = settings.get('viewView') || 'week:week';
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
