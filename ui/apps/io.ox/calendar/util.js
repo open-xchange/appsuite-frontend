@@ -863,7 +863,7 @@ define('io.ox/calendar/util', [
         getRecurrenceChangeDialog: function () {
             return new dialogs.ModalDialog()
                     .text(gt('By changing the date of this appointment you are creating an appointment exception to the series.'))
-                    .addButton('appointment', gt('Create exception'), 'appointment')
+                    .addPrimaryButton('appointment', gt('Create exception'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
