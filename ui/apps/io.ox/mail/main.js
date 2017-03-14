@@ -488,7 +488,6 @@ define('io.ox/mail/main', [
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({
-                category_id: categories.getInitialCategoryId(),
                 folder: app.folder.get(),
                 thread: true
             });
