@@ -568,6 +568,10 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     events += ' selection:subset';
                 }
 
+                if (list.length > 1) {
+                    events += ' selection:multiple';
+                }
+
                 this.view.trigger(events, list);
             }
         }
