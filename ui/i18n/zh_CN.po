@@ -1036,12 +1036,6 @@ msgstr "所有文件夹"
 msgid "All attachments"
 msgstr "所有附件"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-msgid ""
-"All changes made to the series do not affect the currently selected "
-"appointment as it is an exception"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -9294,6 +9288,12 @@ msgid ""
 "These statistics only include folders, which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
 msgstr "这些统计只包含从 \"%1$s\" 文件夹少于四层文件夹结构深度的文件夹。"
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid ""
+"This appointment is an exception. Changing the series does not affect "
+"exceptions."
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."

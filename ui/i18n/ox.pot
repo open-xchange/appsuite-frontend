@@ -2995,12 +2995,12 @@ msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js
 #: module:io.ox/calendar
-msgid "Direct link"
+msgid "This appointment is an exception. Changing the series does not affect exceptions."
 msgstr ""
 
 #: apps/io.ox/calendar/view-detail.js
 #: module:io.ox/calendar
-msgid "All changes made to the series do not affect the currently selected appointment as it is an exception"
+msgid "Direct link"
 msgstr ""
 
 #. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)

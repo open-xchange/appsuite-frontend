@@ -1035,12 +1035,6 @@ msgstr "作為資料夾"
 msgid "All attachments"
 msgstr "所有附件"
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-msgid ""
-"All changes made to the series do not affect the currently selected "
-"appointment as it is an exception"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -9293,6 +9287,12 @@ msgid ""
 "These statistics only include folders, which have a depth less than four in "
 "the folder structure from the folder \"%1$s\"."
 msgstr "這些統計只包含資料夾，自「%1$s」資料夾開始以下小於四層深度的結構。"
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid ""
+"This appointment is an exception. Changing the series does not affect "
+"exceptions."
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."

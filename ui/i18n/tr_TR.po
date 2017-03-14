@@ -1027,12 +1027,6 @@ msgstr "Tüm Klasörler"
 msgid "All attachments"
 msgstr "Tüm ekler "
 
-#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
-msgid ""
-"All changes made to the series do not affect the currently selected "
-"appointment as it is an exception"
-msgstr ""
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "All day"
@@ -9571,6 +9565,12 @@ msgid ""
 msgstr ""
 "Bu istatistikler yalnızca, \"%1$s\" klasöründen klasör yapısındaki derinliği "
 "dörtten az olan klasörleri içermektedir."
+
+#: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
+msgid ""
+"This appointment is an exception. Changing the series does not affect "
+"exceptions."
+msgstr ""
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."
