@@ -19,8 +19,9 @@ define('io.ox/core/notifications', [
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (ext, badgeview, yell, desktopNotifications, settings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/a11y'
+], function (ext, badgeview, yell, desktopNotifications, settings, gt, a11y) {
 
     'use strict';
 
@@ -38,8 +39,8 @@ define('io.ox/core/notifications', [
         events: {
             'click .clear-area-button': 'hide',
             'click .hide-area-button': 'hideAll',
-            'keydown :tabbable': 'onKeydown',
-            'focus :tabbable': 'focusHover'
+            'keydown': 'onKeydown',
+            'focus *': 'focusHover'
         },
         initialize: function () {
             var self = this;
@@ -50,16 +51,18 @@ define('io.ox/core/notifications', [
                 // open on space key, up and down arrow, just like a dropdown
                 // if already open, focus first item (last on arrow up)
                 if (e.which === 32 || e.which === 40) {
+                    e.stopPropagation();
                     if (self.isOpen()) {
                         // try to focus first item
-                        var firstItem = self.nodes.main.find(':tabbable').first();
+                        var firstItem = a11y.getTabbable(self.nodes.main).first();
                         if (firstItem.length > 0) firstItem.focus();
                     }
                     self.show();
                 } else if (e.which === 38) {
+                    e.stopPropagation();
                     if (self.isOpen()) {
                         // try to focus last item
-                        var lastItem = self.nodes.main.find(':tabbable').last();
+                        var lastItem = a11y.getTabbable(self.nodes.main).last();
                         if (lastItem.length > 0) lastItem.focus();
                     }
                     self.show({ focus: 'last' });
@@ -279,7 +282,7 @@ define('io.ox/core/notifications', [
                 // tab
                 case 9:
                     // build a tabTrap so the menu behaves like a dropdown
-                    items = this.nodes.main.find(':tabbable');
+                    items = a11y.getTabbable(this.nodes.main);
                     if (e.shiftKey && items[0] === e.target) {
                         e.preventDefault();
                         items[items.length - 1].focus();
@@ -385,7 +388,7 @@ define('io.ox/core/notifications', [
             }, this));
 
             // set initial focus on first or last item; focus badge otherwise
-            var focusItem = this.nodes.main.find(':tabbable');
+            var focusItem = a11y.getTabbable(this.nodes.main);
             if (options.focus === 'last') {
                 focusItem = focusItem.last();
             } else {
