@@ -313,12 +313,13 @@ define('io.ox/contacts/main', [
             }
 
             Thumb.prototype.draw = function (baton) {
-                var node = $('<div class="thumb-index" aria-hidden="true">')
+                var node = $('<li class="thumb-index" role="option">')
+                    .attr('id', _.uniqueId('ti_'))
                     .text(this.label || _.noI18n(this.text));
                 if (this.enabled(baton)) {
                     node.data('text', this.text);
                 } else {
-                    node.addClass('thumb-index-disabled');
+                    node.addClass('thumb-index-disabled').attr('aria-disabled', true);
                 }
                 return node;
             };
@@ -346,9 +347,10 @@ define('io.ox/contacts/main', [
 
             app.Thumb = Thumb;
 
-            app.left.append(
+            app.left.prepend(
                 // thumb index
-                app.thumbs = $('<div class="atb contact-grid-index">')
+                app.thumbs = $('<ul class="atb contact-grid-index listbox" tabindex="0" role="listbox">')
+                    .attr('aria-label', 'Thumb index')
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
             );

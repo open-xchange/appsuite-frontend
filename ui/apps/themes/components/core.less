@@ -270,19 +270,23 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
-html:not(.internet-explorer) .scrollable[tabindex] {
-    &:focus {
-        box-shadow: inset 0 0 0 2px @link-color;
+html:not(.internet-explorer) {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            box-shadow: inset 0 0 0 2px @link-color;
+        }
     }
 }
 
 // Apparently IE does not manage to draw box shadows without leaving artifacts when scrolling
 // So we have to use boder and change the padding so the content does not move on focus. IE strikes again!
-.internet-explorer .scrollable[tabindex] {
-    &:focus {
-        border: 2px solid @link-color;
-        &.default-content-padding:not(.no-padding-adjustment) {
-            padding: 18px 28px;
+.internet-explorer {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            border: 2px solid @link-color;
+            &.default-content-padding:not(.no-padding-adjustment) {
+                padding: 18px 28px;
+            }
         }
     }
 }

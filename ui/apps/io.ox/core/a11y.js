@@ -64,6 +64,29 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
 
+    $(document).on('keydown.listbox', 'ul[role="listbox"].listbox', function (e) {
+        var node = $(e.target).closest('.window-container');
+        if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
+        if (/13|32/.test(e.which)) {
+            e.preventDefault();
+            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+        }
+        if (!/38|40/.test(e.which)) return;
+        var li = $(this).children(),
+            active = $('#' + $(this).attr('aria-activedescendant')),
+            next = (/40/.test(e.which)) ? active.next() : active.prev(),
+            wrap = (/40/.test(e.which)) ? li.first() : li.last();
+
+        if (!next.length) next = wrap;
+
+        next.addClass('focussed').attr('aria-selected', true).trigger('click').siblings().removeClass('focussed').removeAttr('aria-selected');
+        $(this).attr('aria-activedescendant', next.attr('id'));
+    });
+
+    $(document).on('click.listbox', 'ul[role="listbox"].listbox li', function () {
+        $(this).parent().attr('aria-activedescendant', $(this).attr('id'));
+    });
+
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);
     });
@@ -78,7 +101,7 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     function respondToNonKeyboardFocus(node) {
         node = $(node);
-        if (node.is('.scrollable[tabindex]')) {
+        if (node.is('.scrollable[tabindex],.listbox[tabindex]')) {
             // IE uses borders because it cannot render box-shadows without leaving artifacts all over the place on scrolling (edge doesn't render the shadows at all if there are scrollbars). IE strikes again...
             if (!_.device('ie')) {
                 node.css('box-shadow', 'none').on('blur', removeBoxShadow);

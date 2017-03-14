@@ -59,6 +59,8 @@
     width: @thumbIndexWidth;
     overflow: hidden;
     .user-select(none);
+    list-style: none;
+    padding:0;
 
     .thumb-index {
         font-size: 11px;
@@ -70,7 +72,7 @@
         cursor: pointer;
         margin: 0;
 
-        &:hover {
+        &:hover, &.focussed {
             color: @white;
             background-color: @link-color;
         }
