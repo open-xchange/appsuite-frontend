@@ -401,10 +401,10 @@ define('io.ox/mail/accounts/settings', [
         },
 
         configureManuallyDialog = function (args, newMailaddress) {
-            new ModalDialog({ width: 400 })
-                .addButton({ action: 'yes', label: gt('Yes') })
-                .addButton({ action: 'no', label: gt('No') })
-                .on('yes', function () {
+            new ModalDialog({ width: 400, title: gt('Error') })
+                .addCancelButton()
+                .addButton({ action: 'manual', label: gt('Manual') })
+                .on('manual', function () {
                     var data = {};
                     data.primary_address = newMailaddress;
                     if (args) {
@@ -439,18 +439,19 @@ define('io.ox/mail/accounts/settings', [
                     } });
 
                 } else if (forceSecure) {
-                    new ModalDialog({ async: true, width: 400 })
-                        .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
-                        .addPrimaryButton('yes', gt('Yes'), 'yes')
-                        .addButton('no', gt('No'), 'no')
-                        .on('yes', function () {
+                    new ModalDialog({ async: true, width: 400, title: gt('Warning') })
+                        .addCancelButton()
+                        .addButton({ action: 'proceed', label: gt('Ignore Warnings') })
+                        .on('proceed', function () {
                             autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
                         })
-                        .on('no', function () {
+                        .on('cancel', function () {
                             def.reject();
                             this.close();
                         })
-                        .show();
+                        .open()
+                        .$body.append(gt('Cannot establish secure connection. Do you want to proceed anyway?'));
+
                     popup.close();
                 } else {
                     configureManuallyDialog(args, newMailaddress);
