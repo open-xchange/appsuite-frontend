@@ -18,10 +18,11 @@ define('io.ox/calendar/util', [
     'io.ox/core/folder/api',
     'io.ox/core/util',
     'io.ox/core/folder/folder-color',
+    'io.ox/core/tk/dialogs',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, settings, coreSettings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -857,6 +858,23 @@ define('io.ox/calendar/util', [
                 '&folder=',
                 data.folder_id || data.folder
             ].join('');
+        },
+
+        getRecurrenceChangeDialog: function () {
+            return new dialogs.ModalDialog()
+                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series.'))
+                    .addButton('appointment', gt('Create exception'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel');
+        },
+
+        getRecurrenceEditDialog: function () {
+            return new dialogs.ModalDialog()
+                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                    .addPrimaryButton('series',
+                        //#. Use singular in this context
+                        gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel');
         }
     };
 

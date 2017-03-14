@@ -21,10 +21,11 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/print',
     'io.ox/core/folder/api',
+    'io.ox/calendar/util',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, settings, gt, printStyle) {
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, settings, gt, printStyle) {
 
     'use strict';
 
@@ -130,10 +131,7 @@ define('io.ox/calendar/month/perspective', [
             };
 
             if (obj.recurrence_type > 0) {
-                new dialogs.ModalDialog()
-                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'), 'appointment')
-                    .addButton('cancel', gt('No'), 'cancel')
+                util.getRecurrenceChangeDialog()
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {
