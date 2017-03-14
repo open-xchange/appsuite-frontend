@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 11:01+0100\n"
+"PO-Revision-Date: 2017-03-09 21:50+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
@@ -4031,7 +4031,7 @@ msgstr "繼續"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "要求的應用程式暫時無法使用。"
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4789,6 +4789,16 @@ msgid "Preview"
 msgstr "預覽"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "將行內圖片放於此處"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr "請只將圖片放於此處，若您想要傳送其他格式的檔案，可以插入為附件來傳送。"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "格式化文字區域，請按 Alt+F10 叫出工具列"
 
@@ -5396,6 +5406,10 @@ msgstr "抱歉，此頁面暫時無法使用。"
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "抱歉，無法預覽此圖片。"
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "抱歉，無法預覽此檔案。"
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -13656,9 +13670,6 @@ msgstr "新增至 %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "無法上傳此檔案。"
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "抱歉，無法預覽此檔案。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "排序您的郵件"

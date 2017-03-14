@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 11:27+0100\n"
+"PO-Revision-Date: 2017-03-09 14:07+0100\n"
 "Last-Translator: \n"
 "Language-Team: Russian <>\n"
 "Language: ru_RU\n"
@@ -4103,7 +4103,7 @@ msgstr "Продолжить"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "Запрашиваемое приложение в данный момент недоступно."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4877,6 +4877,16 @@ msgid "Preview"
 msgstr "Предварительный просмотр"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Поместите сюда встраиваемые изображения"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr "Вы можете поместить сюда только изображения. Чтобы отправить другие файлы, добавьте их в письмо в качестве вложения."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr ""
 "Область форматирования текста. Нажмите ALT+F10, чтобы открыть панель "
@@ -5498,6 +5508,10 @@ msgstr "Извините, эта страница недоступна."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Предварительный просмотр этого изображения недоступен."
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Предварительный просмотр этого файла недоступен."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -12452,9 +12466,6 @@ msgstr "Добавить в %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Не удалось отправить файл."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Предварительный просмотр этого файла недоступен."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Сортировка почты"

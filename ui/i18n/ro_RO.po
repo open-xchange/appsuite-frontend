@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 10:57+0100\n"
+"PO-Revision-Date: 2017-03-11 08:41+0100\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4128,7 +4128,7 @@ msgstr "Continuă"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "Aplicația cerută nu este disponibilă momentan."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4904,6 +4904,17 @@ msgid "Preview"
 msgstr "Previzualizare"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Glisați imaginile incluse aici"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Glisaí aici doar imagini. Dacă doriți să trimiteți alte fișiere, atașați-le."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Zonă de text îmbogățit. Apăsați ALT-F10 pentru bara de unelte"
 
@@ -5529,6 +5540,10 @@ msgstr "Ne pare rău, această pagină nu este disponibilă momentan."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Ne pare rău, pentru această imagine nu există previzualizare"
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -15477,9 +15492,6 @@ msgstr "Adaugă pe %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Nu s-a putut încărca fișierul."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Ne pare rău, pentru acest tip de fișier nu există previzualizare."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sortarea e-mailurilor"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 11:26+0100\n"
+"PO-Revision-Date: 2017-03-13 11:10+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0beta3\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4061,7 +4061,7 @@ msgstr "続行"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "要求されたアプリケーションは、現在利用できません。"
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4825,6 +4825,18 @@ msgid "Preview"
 msgstr "プレビュー"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "ここにインライン画像をドロップしてください。"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"ここには画像のみをドロップしてください。他のファイルを送りたい場合は添付ファ"
+"イルとして送ってください。"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "リッチテキストエリアツールバーの ALT-F10 を押します。"
 
@@ -5442,6 +5454,10 @@ msgstr "このページは現在、利用できません。"
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "この画像に利用できるプレビューがありません。"
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "このファイルに利用できるプレビューがありません。"
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -16389,9 +16405,6 @@ msgstr "%s に追加"
 
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "このファイルをアップロードできませんでした。"
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "このファイルに利用できるプレビューがありません。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "メールのソート"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 11:09+0100\n"
+"PO-Revision-Date: 2017-03-11 11:30+0100\n"
 "Last-Translator: Ivar Snaaijer <Ivar@bureau-cornavin.com>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
 "Language: nl_NL\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4123,7 +4123,7 @@ msgstr "Verder"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "De gevraagde applicatie is op dit moment niet beschikbaar."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4902,6 +4902,18 @@ msgid "Preview"
 msgstr "Voorbeeld"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Laat ingesloten afbeeldingen hier los"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Voeg hier alleen afbeeldingen toe. Als u andere bestanden wilt versturen kan"
+" u deze als bijlagen verzenden."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Rijketekstgebied. Toets Alt+F10 voor de werkbalk"
 
@@ -5532,6 +5544,10 @@ msgstr "Sorry, deze pagina is momenteel niet beschikbaar."
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sorry, er is geen voorbeeld beschikbaar voor deze afbeelding."
 
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Sorry, er is geen voorbeeld beschikbaar voor dit bestand."
+
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
 msgstr "Uw browser ondersteunt het videoformaat van dit bestand niet."
@@ -6159,7 +6175,6 @@ msgid "Public link"
 msgstr "Publieke link"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
-#, fuzzy
 msgid "Please set password"
 msgstr "Wachtwoord invoeren"
 
