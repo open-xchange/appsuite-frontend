@@ -248,7 +248,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-address">').text(gt('Your mail address')),
-                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
+                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address" autocomplete="section-addAccount username">')
                 )
             );
 
@@ -269,7 +269,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-password">').text(gt('Your password')),
-                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
+                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" autocomplete="section-addAccount new-password">')
                 )
             );
 
