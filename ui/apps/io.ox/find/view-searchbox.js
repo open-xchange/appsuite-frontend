@@ -53,6 +53,8 @@ define('io.ox/find/view-searchbox', [
 
         reset: function () {
             this.ui.tokenfield.reset();
+            this.ui.tokenfield.hiddenapi.dropdown.empty();
+            this.ui.tokenfield.hiddenapi.dropdown.close();
         },
 
         // show input placeholder only on empty tokenfield
