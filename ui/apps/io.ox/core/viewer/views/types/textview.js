@@ -18,12 +18,15 @@ define('io.ox/core/viewer/views/types/textview', [
 
     'use strict';
 
+    var LOAD_TIMEOUT = 90000;
+
     var TextView = BaseView.extend({
 
         initialize: function (options) {
             _.extend(this, options);
             this.isPrefetched = false;
             this.xhr = null;
+            this.loadTimeoutId = null;
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
@@ -40,9 +43,12 @@ define('io.ox/core/viewer/views/types/textview', [
         },
 
         /**
-         * data load handler
+         * Data load handler.
          */
         onDataLoaded: function (text) {
+            // if the request was successful clear load timeout
+            this.clearLoadTimeout();
+
             var filesize = this.model.get('file_size');
             // work around for large files in drive, no content is provided and also no error
             if (_.isNumber(filesize) && (filesize > 0) && _.isEmpty(text)) {
@@ -56,10 +62,42 @@ define('io.ox/core/viewer/views/types/textview', [
         },
 
         /**
-         * load error handler
+         * Load error handler.
          */
         onError: function () {
             this.displayNotification(gt('Sorry, there is no preview available for this file.'));
+        },
+
+        /**
+         * Load timeout handler.
+         *  An additional timer if the AJAX request gets stalled.
+         *  Aborts the running AJAX request and handles the error.
+         */
+        onLoadTimeout: function () {
+            this.clearLoadTimeout();
+            this.abortAjaxRequest();
+            this.onError();
+        },
+
+        /**
+         * Clear the load timeout.
+         *  Prevents invocation of the load timeout handler.
+         */
+        clearLoadTimeout: function () {
+            if (this.loadTimeoutId) {
+                window.clearTimeout(this.loadTimeoutId);
+                this.loadTimeoutId = null;
+            }
+        },
+
+        /**
+         * Abort AJAX request
+         */
+        abortAjaxRequest: function () {
+            if (this.xhr) {
+                this.xhr.abort();
+                this.xhr = null;
+            }
         },
 
         /**
@@ -77,7 +115,10 @@ define('io.ox/core/viewer/views/types/textview', [
             var previewUrl = this.getPreviewUrl(options);
 
             this.$el.busy();
+            // send AJAX request
             this.xhr = $.ajax({ url: previewUrl, dataType: 'text', context: this }).done(this.onDataLoaded).fail(this.onError);
+            // start additional timer to detect if AJAX request gets stalled
+            this.loadTimeoutId = window.setTimeout(this.onLoadTimeout.bind(this), LOAD_TIMEOUT);
 
             this.isPrefetched = true;
             return this;
@@ -133,13 +174,11 @@ define('io.ox/core/viewer/views/types/textview', [
 
         /**
          * Destructor function of this view.
+         *  Aborts the AJAX request and clears the load timeout.
          */
         disposeView: function () {
-            // abort AJAX request
-            if (this.xhr) {
-                this.xhr.abort();
-                this.xhr = null;
-            }
+            this.abortAjaxRequest();
+            this.clearLoadTimeout();
         }
 
     });
