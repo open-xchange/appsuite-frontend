@@ -326,6 +326,9 @@ define('io.ox/mail/threadview', [
             this.$messages.empty();
             this.$el.scrollTop(0);
 
+            // clear timeout of previous rendering to prevent race conditions
+            clearTimeout(this.renderItemTimoutId);
+
             this.updateHeader();
 
             this.$el.find('.thread-view-list').show();
@@ -350,7 +353,7 @@ define('io.ox/mail/threadview', [
                 if (threadChanged()) return;
                 self.$messages.append(self.renderListItem(model));
                 if (autoOpenModel === model) self.autoSelectMail();
-                if (list.length) setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
+                if (list.length) self.renderItemTimoutId = setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
             }
 
             function threadChanged() {
