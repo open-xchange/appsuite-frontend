@@ -140,6 +140,42 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
         return fnFocus.apply(this);
     };
 
+    // Accessibility F6 jump
+    // do not focus nodes with negative tabindex, or hidden nodes
+    $(document).on('keydown.f6', function (e) {
+        var tabindexSelector = '[tabindex]:visible';
+
+        if (e.which === 117 && (_.device('macos') || e.ctrlKey)) {
+
+            e.preventDefault();
+
+            var items = $('#io-ox-core .f6-target:visible'),
+                closest = $(document.activeElement).closest('.f6-target'),
+                oldIndex = items.index(closest) || 0,
+                newIndex = oldIndex,
+                nextItem;
+
+            // find next f6-target that is focusable or contains a focusable node
+            do {
+                newIndex += (e.shiftKey ? -1 : +1);
+                if (newIndex >= items.length) newIndex = 0;
+                if (newIndex < 0) newIndex = items.length - 1;
+                nextItem = items.eq(newIndex);
+
+                if (nextItem.is(tabindexSelector)) {
+                    nextItem.focus();
+                    break;
+                }
+
+                nextItem = nextItem.find(tabindexSelector).first();
+                if (nextItem.length) {
+                    nextItem.focus();
+                    break;
+                }
+            } while (oldIndex !== newIndex);
+        }
+    });
+
     //
     // Tab trap
     //

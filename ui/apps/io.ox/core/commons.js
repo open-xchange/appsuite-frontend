@@ -842,42 +842,5 @@ define('io.ox/core/commons', [
         return tmp.center();
     };
 
-    // Accessibility F6 jump
-    var macos = _.device('macos');
-    // do not focus nodes with negative tabindex, or hidden nodes
-    var tabindexSelector = '[tabindex]:not([tabindex^="-"]):visible';
-    $(document).on('keydown.f6', function (e) {
-
-        if (e.which === 117 && (macos || e.ctrlKey)) {
-
-            e.preventDefault();
-
-            var items = $('#io-ox-core .f6-target:visible'),
-                closest = $(document.activeElement).closest('.f6-target'),
-                oldIndex = items.index(closest) || 0,
-                newIndex = oldIndex,
-                nextItem;
-
-            // find next f6-target that is focusable or contains a focusable node
-            do {
-                newIndex += (e.shiftKey ? -1 : +1);
-                if (newIndex >= items.length) newIndex = 0;
-                if (newIndex < 0) newIndex = items.length - 1;
-                nextItem = items.eq(newIndex);
-
-                if (nextItem.is(tabindexSelector)) {
-                    nextItem.focus();
-                    break;
-                }
-
-                nextItem = nextItem.find(tabindexSelector).first();
-                if (nextItem.length) {
-                    nextItem.focus();
-                    break;
-                }
-            } while (oldIndex !== newIndex);
-        }
-    });
-
     return commons;
 });
