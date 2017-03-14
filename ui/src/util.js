@@ -248,7 +248,7 @@
                 // encrypt all other mail folders
                 if (/^default\d+\//.test(data.folder)) {
                     var index = data.folder.indexOf('/') + 1;
-                    obj.folder = data.folder.substr(0, index) + '/' + encrypt(data.folder.substr(index));
+                    obj.folder = data.folder.substr(0, index) + '/' + encrypt('path/' + data.folder.substr(index));
                 }
                 return obj;
             };
@@ -256,8 +256,15 @@
             url.decrypt = function (data) {
                 var obj = _.extend({}, data);
                 if (/^default\d+\/\//.test(data.folder)) {
-                    var index = obj.folder.indexOf('/') + 1;
-                    obj.folder = obj.folder.substr(0, index) + decrypt(obj.folder.substr(index + 1));
+                    var index = obj.folder.indexOf('/') + 1,
+                        prefix = obj.folder.substr(0, index),
+                        check = decrypt(obj.folder.substr(index + 1)),
+                        suffix = check.substr(5);
+                    if (/^path\//.test(check) && suffix.length) {
+                        obj.folder = prefix + suffix;
+                    } else {
+                        delete obj.folder;
+                    }
                 }
                 return obj;
             };
@@ -289,7 +296,7 @@
             decode();
             $(window).on('hashchange', decode);
 
-            // remove invlid folder
+            // remove invalid folder
             if (invalidKey && /^default\d+\//.test(url.data.folder)) url.set('folder', null);
 
             return url;
