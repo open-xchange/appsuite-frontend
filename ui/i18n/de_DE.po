@@ -1212,10 +1212,10 @@ msgid "Apply to all subfolders"
 msgstr "Auf alle Unterordner anwenden"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
 msgid "Appointment"
 msgstr "Termin"
 
@@ -1554,11 +1554,14 @@ msgstr "Geschenk kaufen"
 msgid "Buy now!"
 msgstr "Jetzt kaufen"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "By changing the date of this appointment you are creating an appointment "
+#| "exception to the series. Do you want to continue?"
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
-"exception to the series. Do you want to continue?"
+"exception to the series."
 msgstr ""
 "Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme für den "
 "Serientermin. Wollen Sie fortfahren?"
@@ -1643,15 +1646,14 @@ msgstr "Kalender"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
-#: apps/io.ox/calendar/week/perspective.js
-#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
+#: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -2389,6 +2391,12 @@ msgstr "Verteilerliste erstellen"
 msgid "Create distribution list"
 msgstr "Verteilerliste anlegen"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Create contact"
+msgid "Create exception"
+msgstr "Kontakt anlegen"
+
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/actions/copyMove.js
 msgid "Create filter rule"
@@ -3040,8 +3048,7 @@ msgstr ""
 msgid "Do you want to delete this appointment?"
 msgstr "Wollen Sie diesen Termin löschen?"
 
-#: apps/io.ox/calendar/actions/edit.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -3557,7 +3564,8 @@ msgstr "Envelope - An"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/oauth/keychain.js
+#: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
 msgid "Error"
 msgstr "Fehler"
 
@@ -4610,6 +4618,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorieren"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Ignore Warnings"
 msgstr "Warnhinweise ignorieren"
@@ -5871,10 +5880,8 @@ msgid "Nickname"
 msgstr "Spitzname"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
-#: module:io.ox/core apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Nein"
 
@@ -8041,7 +8048,7 @@ msgstr "September"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
 
@@ -10065,6 +10072,7 @@ msgid "Waiting"
 msgstr "Wartestatus"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Warning"
 msgstr "Warnhinweis"
 
@@ -10226,11 +10234,9 @@ msgid "Yellow green"
 msgstr "Gelbgrün"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
-#: module:io.ox/core apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/files/util.js module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
+#: module:io.ox/files
 msgid "Yes"
 msgstr "Ja"
 

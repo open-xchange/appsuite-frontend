@@ -1255,10 +1255,10 @@ msgid "Apply to all subfolders"
 msgstr "Uplatnit na všechny podsložky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/calendar/week/perspective.js
-#: apps/io.ox/mail/detail/links.js module:io.ox/mail
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
+#: module:io.ox/mail
 msgid "Appointment"
 msgstr "Schůzka"
 
@@ -1591,11 +1591,14 @@ msgstr "Koupit dárek"
 msgid "Buy now!"
 msgstr "Koupit!"
 
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid ""
+#| "By changing the date of this appointment you are creating an appointment "
+#| "exception to the series. Do you want to continue?"
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
-"exception to the series. Do you want to continue?"
+"exception to the series."
 msgstr "Změnou data schůzky vytvoříte výjimku v sérii. Chcete pokračovat?"
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
@@ -1680,15 +1683,14 @@ msgstr "Kalendáře"
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: apps/io.ox/calendar/actions/create.js apps/io.ox/calendar/actions/delete.js
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/edit/main.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/timezone-dialog.js
-#: apps/io.ox/calendar/main.js
+#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
+#: apps/io.ox/calendar/edit/timezone-dialog.js apps/io.ox/calendar/main.js
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
-#: apps/io.ox/calendar/week/perspective.js
-#: apps/io.ox/contacts/actions/delete.js module:io.ox/contacts
-#: apps/io.ox/contacts/distrib/main.js apps/io.ox/contacts/edit/main.js
-#: apps/io.ox/contacts/main.js apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
+#: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
+#: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
+#: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -2422,6 +2424,12 @@ msgstr "Vytvořit distribuční seznam"
 msgid "Create distribution list"
 msgstr "Vytvořit distribuční seznam"
 
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "No delete exceptions"
+msgid "Create exception"
+msgstr "Žádné výjimky mazání"
+
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/actions/copyMove.js
 msgid "Create filter rule"
@@ -3085,8 +3093,7 @@ msgstr "Chcete smazat celou sérii, nebo jednu schůzku ze série?"
 msgid "Do you want to delete this appointment?"
 msgstr "Chcete smazat tuto schůzku?"
 
-#: apps/io.ox/calendar/actions/edit.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid ""
 "Do you want to edit the whole series or just one appointment within the "
 "series?"
@@ -3605,7 +3612,8 @@ msgstr "Obálka - pro"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/core/yell.js apps/io.ox/oauth/keychain.js
+#: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
 msgid "Error"
 msgstr "Chyba"
 
@@ -4691,6 +4699,7 @@ msgstr ""
 msgid "Ignore"
 msgstr "Ignorovat"
 
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Ignore Warnings"
 msgstr "Ignorovat varování"
@@ -4839,8 +4848,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
-"‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
+"%3$s‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -5980,10 +5989,8 @@ msgid "Nickname"
 msgstr "Přezdívka"
 
 #. folder permissions - Is Admin? NO
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
-#: module:io.ox/core apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js
 msgid "No"
 msgstr "Ne"
 
@@ -8187,7 +8194,7 @@ msgstr "Září"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/actions/edit.js apps/io.ox/calendar/week/perspective.js
+#: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Série"
 
@@ -10220,6 +10227,7 @@ msgid "Waiting"
 msgstr "Čekám"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Warning"
 msgstr "Varování"
 
@@ -10390,11 +10398,9 @@ msgid "Yellow green"
 msgstr "Žlutá"
 
 #. folder permissions - Is Admin? YES
-#: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
-#: apps/io.ox/calendar/week/perspective.js apps/io.ox/core/main.js
-#: module:io.ox/core apps/io.ox/core/permissions/permissions.js
-#: apps/io.ox/files/util.js module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/io.ox/core/permissions/permissions.js apps/io.ox/files/util.js
+#: module:io.ox/files
 msgid "Yes"
 msgstr "Ano"
 
@@ -16770,9 +16776,6 @@ msgstr "rrrr"
 
 #~ msgid "No change exceptions"
 #~ msgstr "Žádné výjimky změn"
-
-#~ msgid "No delete exceptions"
-#~ msgstr "Žádné výjimky mazání"
 
 #~ msgid "No downloads available"
 #~ msgstr "Nic staženého není k dispozici"
