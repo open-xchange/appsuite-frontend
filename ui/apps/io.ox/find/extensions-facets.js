@@ -13,12 +13,11 @@
 
 define('io.ox/find/extensions-facets', [
     'io.ox/core/extensions',
-    'settings!io.ox/core',
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/help',
     'gettext!io.ox/core'
-], function (ext, settings, Toolbar, Dropdown, HelpView, gt) {
+], function (ext, Toolbar, Dropdown, HelpView, gt) {
 
     'use strict';
 

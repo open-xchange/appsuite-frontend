@@ -12,29 +12,21 @@
  */
 
 define('io.ox/files/filepicker', [
-
     'io.ox/core/cache',
     'io.ox/core/extensions',
-
     'io.ox/core/tk/selection',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/upload',
-
     'io.ox/core/folder/api',
     'io.ox/core/folder/picker',
-
     'io.ox/core/viewer/views/sidebar/fileinfoview',
-
     'io.ox/files/api',
     'io.ox/files/common-extensions',
-
     'io.ox/core/notifications',
     'io.ox/core/page-controller',
     'io.ox/core/toolbars-mobile',
-
     'settings!io.ox/core',
     'gettext!io.ox/files'
-
 ], function (cache, ext, Selection, dialogs, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
 
     'use strict';

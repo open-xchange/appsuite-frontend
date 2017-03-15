@@ -12,19 +12,15 @@
  */
 /* global blankshield */
 define('io.ox/files/actions', [
-
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
-
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-
     'settings!io.ox/files',
     'gettext!io.ox/files'
-
 ], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';

@@ -11,21 +11,16 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/displayerview', [
-
     'io.ox/files/api',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
-
     'static/3rd.party/bigscreen/bigscreen.min.js',
-
     'settings!io.ox/files',
     'gettext!io.ox/core',
-
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-
-], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, FilesSettings, gt) {
+], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, filesSettings, gt) {
 
     'use strict';
 
@@ -316,10 +311,10 @@ define('io.ox/core/viewer/views/displayerview', [
     function requireAutoplayUserSettings() {
         // from user settings or by default/fallback according to https://jira.open-xchange.com/browse/DOCS-670
 
-        IS_LOOP_ENDLESSLY = (String(FilesSettings.get('autoplayLoopMode')).toLowerCase() === 'loopendlessly'); // default value equals true.
+        IS_LOOP_ENDLESSLY = (String(filesSettings.get('autoplayLoopMode')).toLowerCase() === 'loopendlessly'); // default value equals true.
         IS_LOOP_ONCE_ONLY = !IS_LOOP_ENDLESSLY;
 
-        AUTOPLAY_PAUSE__WHILST_RUNNING = (Number(FilesSettings.get('autoplayPause')) * 1000); // value of 'autoplayPause' in seconds
+        AUTOPLAY_PAUSE__WHILST_RUNNING = (Number(filesSettings.get('autoplayPause')) * 1000); // value of 'autoplayPause' in seconds
         if (!isFinite(AUTOPLAY_PAUSE__WHILST_RUNNING)) {
             AUTOPLAY_PAUSE__WHILST_RUNNING = 5000; // default/fallback value.
         }

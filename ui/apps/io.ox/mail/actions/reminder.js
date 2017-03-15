@@ -17,7 +17,7 @@ define('io.ox/mail/actions/reminder', [
     'io.ox/mail/util',
     'settings!io.ox/core',
     'io.ox/core/notifications'
-], function (gt, util, coreConfig, notifications) {
+], function (gt, util, coreSettings, notifications) {
 
     'use strict';
 
@@ -73,7 +73,7 @@ define('io.ox/mail/actions/reminder', [
                     note = noteInput.val() + '\n--\nmail://' + _.cid(data);
                     taskAPI.create({
                         title: titleInput.val(),
-                        folder_id: coreConfig.get('folder/tasks'),
+                        folder_id: coreSettings.get('folder/tasks'),
                         alarm: dates.alarmDate,
                         note: note,
                         status: 1,

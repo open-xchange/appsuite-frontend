@@ -29,7 +29,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore, settingsContacts) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, coreSettings, settingsContacts) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -601,7 +601,7 @@ define('io.ox/mail/compose/extensions', [
                     var ShareModel = Backbone.Model.extend({});
 
                     view.settingsModel = new ShareModel({
-                        'instruction_language': settingsCore.get('language'),
+                        'instruction_language': coreSettings.get('language'),
                         'enable':  false,
                         'autodelete': settings.get('compose/shareAttachments/forceAutoDelete', false)
                     });
@@ -682,7 +682,7 @@ define('io.ox/mail/compose/extensions', [
                                     .option('expired', true, gt('when the link is expired'))
                                     .option('visit', true, gt('when the receivers have accessed the files'));
 
-                                // if (!/^en_/.test(settingsCore.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+                                // if (!/^en_/.test(coreSettings.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
 
                                 $links.append(dropdown.render().$el);
                             }

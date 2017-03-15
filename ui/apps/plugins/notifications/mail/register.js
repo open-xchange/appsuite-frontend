@@ -36,7 +36,6 @@ define('plugins/notifications/mail/register', [
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
         type = _.device('!windows && !macos && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
-        settingsModel = settings,
         soundList = [
             { label: gt('Bell'), value: 'bell' },
             { label: gt('Marimba'), value: 'marimba' },
@@ -111,9 +110,9 @@ define('plugins/notifications/mail/register', [
         if (sound) sound.play();
     }, 2000);
 
-    settingsModel.on('change:notificationSoundName', function () {
+    settings.on('change:notificationSoundName', function () {
         if (_.device('smartphone')) return;
-        var s = settingsModel.get('notificationSoundName');
+        var s = settings.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
             if (s) {
@@ -121,12 +120,12 @@ define('plugins/notifications/mail/register', [
                 sound = s;
             }
         });
-        settingsModel.saveAndYell();
+        settings.saveAndYell();
     });
 
     // get and load stored sound
     if (_.device('!smartphone')) {
-        loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
+        loadSound(settings.get('notificationSoundName')).done(function (s) {
             sound = s;
         });
     }
@@ -150,7 +149,7 @@ define('plugins/notifications/mail/register', [
                     $('<div class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
                             $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Sound')),
-                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settings, id: 'notificationSoundName', className: 'form-control' }).render().$el
 
                         )
                     )

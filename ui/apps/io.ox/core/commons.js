@@ -20,7 +20,7 @@ define('io.ox/core/commons', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/capabilities'
-], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
+], function (ext, links, gt, folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 

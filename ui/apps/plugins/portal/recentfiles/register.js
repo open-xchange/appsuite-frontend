@@ -19,7 +19,7 @@ define('plugins/portal/recentfiles/register', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'less!plugins/portal/recentfiles/style'
-], function (ext, filesAPI, userAPI, gt, settings, driveSettings) {
+], function (ext, filesAPI, userAPI, gt, settings, filesSettings) {
 
     'use strict';
 
@@ -43,7 +43,7 @@ define('plugins/portal/recentfiles/register', [
             load: function (baton) {
                 return filesAPI.search('', searchOptions).then(function (files) {
                     // don't show hidden files if disabled in settings
-                    if (driveSettings.get('showHidden') === false) {
+                    if (filesSettings.get('showHidden') === false) {
                         files = _(files).filter(function (file) {
                             var title = (file ? file.title : '');
                             return title.indexOf('.') !== 0;

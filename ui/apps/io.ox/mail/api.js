@@ -28,7 +28,7 @@ define('io.ox/mail/api', [
     'gettext!io.ox/mail',
     'io.ox/core/capabilities',
     'io.ox/core/util'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
+], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1382,7 +1382,7 @@ define('io.ox/mail/api', [
      */
     api.saveAttachments = function (list, target) {
         // be robust
-        target = target || coreConfig.get('folder/infostore');
+        target = target || coreSettings.get('folder/infostore');
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
 

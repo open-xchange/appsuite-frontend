@@ -21,7 +21,7 @@ define('io.ox/calendar/freetime/main', [
     'settings!io.ox/core',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings, settingsCore) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -142,7 +142,7 @@ define('io.ox/calendar/freetime/main', [
                 var appointment = this.createAppointment();
 
                 if (appointment) {
-                    appointment.folder = settingsCore.get('folder/calendar');
+                    appointment.folder = coreSettings.get('folder/calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {
                             this.create(appointment);

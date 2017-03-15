@@ -52,11 +52,11 @@ define('plugins/notifications/calendar/register', [
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/actions/change-confirmation'], function (folderAPI, settings, action) {
+                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/actions/change-confirmation'], function (folderAPI, calendarSettings, action) {
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder
-                                alarm: parseInt(settings.get('defaultReminder', 15), 10),
+                                alarm: parseInt(calendarSettings.get('defaultReminder', 15), 10),
                                 confirmmessage: '',
                                 confirmation: 1
                             };

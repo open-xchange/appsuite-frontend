@@ -25,7 +25,7 @@ define('io.ox/core/sub/subscriptions', [
     'io.ox/oauth/keychain',
     'io.ox/core/a11y',
     'settings!io.ox/core'
-], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt, mini, OAuth, oauthAPI, a11y) {
+], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt, mini, OAuth, oauthAPI, a11y, settings) {
 
     'use strict';
 
@@ -226,7 +226,7 @@ define('io.ox/core/sub/subscriptions', [
 
     function subscribe(model, service) {
         var module = model.get('entityModule'),
-            folder = require('settings!io.ox/core').get('folder/' + module),
+            folder = settings.get('folder/' + module),
             title = gt('New Folder');
 
         if (service.displayName && module === 'calendar') title = gt('My %1$s calendar', service.displayName);
