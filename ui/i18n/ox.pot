@@ -2722,6 +2722,62 @@ msgstr ""
 msgid "gray"
 msgstr ""
 
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Sunday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Monday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Tuesday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Wednesday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Thursday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Friday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Saturday"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 #: apps/io.ox/find/date/patterns.js
@@ -2814,50 +2870,41 @@ msgstr ""
 msgid ", "
 msgstr ""
 
+#. recurrence string
+#. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgid "Every day."
-msgstr ""
+msgid_plural "Every %1$d days."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
-msgid "Every %1$d days."
-msgstr ""
+msgid "Every day."
+msgid_plural "Every %1$d weeks on all days."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every %1$d weeks on all days."
-msgstr ""
-
-#. recurrence string
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgid "On workdays."
-msgstr ""
+msgid_plural "Every %1$d weeks on workdays."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$d: numeric
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every %1$d weeks on workdays."
-msgstr ""
-
-#. recurrence string
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgid "Every weekend."
-msgstr ""
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every %1$d weeks on weekends."
-msgstr ""
+msgid_plural "Every %1$d weeks on weekends."
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
@@ -2865,46 +2912,26 @@ msgid "Never."
 msgstr ""
 
 #. recurrence string
-#. %1$s day string, e.g. "workdays" or "Friday" or "Monday, Tuesday, Wednesday"
-#. Example: Every Monday, Wednesday, Friday
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every %1$s."
-msgstr ""
-
-#. recurrence string
 #. %1$d: numeric
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
-msgid "Every %1$d weeks on %2$s."
-msgstr ""
-
-#. recurrence string
-#. %1$d: numeric, day in month
-#. Example: Every month on day 5
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every month on day %1$d."
-msgstr ""
+msgid "Every %2$s."
+msgid_plural "Every %1$d weeks on %2$s."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$d: numeric, interval
-#. %1$d: numeric, day in month
+#. %2$d: numeric, day in month
 #. Example: Every 5 months on day 18
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
-msgid "Every %1$d months on day %2$d."
-msgstr ""
-
-#. recurrence string
-#. %1$s: count string, e.g. first, second, or last
-#. %2$s: day string, e.g. Monday
-#. Example: Every month on the second Monday
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgid "Every month on the %1$s %2$s."
-msgstr ""
+msgid "Every month on day %2$d."
+msgid_plural "Every %1$d months on day %2$d."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$d: numeric, interval
@@ -2913,8 +2940,10 @@ msgstr ""
 #. Example Every 3 months on the second Tuesday
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
-msgid "Every %1$d months on the %2$s %3$s."
-msgstr ""
+msgid "Every month on the %2$s %3$s."
+msgid_plural "Every %1$d months on the %2$s %3$s."
+msgstr[0] ""
+msgstr[1] ""
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
