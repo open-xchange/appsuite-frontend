@@ -41,7 +41,30 @@ define('io.ox/calendar/util', [
             gt('tentative')
         ],
         n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
-        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
+        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')],
+        superessiveWeekdays = [
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Sunday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Monday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Tuesday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Wednesday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Thursday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Friday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Saturday')
+        ];
 
     var that = {
 
@@ -460,11 +483,15 @@ define('io.ox/calendar/util', [
                 return n_count[i + 1];
             }
 
-            function getDayString(days) {
+            function getDayString(days, options) {
                 var firstDayOfWeek = moment.localeData().firstDayOfWeek(),
                     tmp = _(_.range(7)).chain().map(function (index) {
                         var mask = 1 << ((index + firstDayOfWeek) % 7);
-                        if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
+                        if ((days & mask) !== 0) {
+                            return options.superessive ?
+                                superessiveWeekdays[index] :
+                                moment().weekday(index).format('dddd');
+                        }
                     }).compact().value();
 
                 var and =
@@ -522,7 +549,8 @@ define('io.ox/calendar/util', [
                         //#. recurrence string
                         //#. %1$d: numeric
                         //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                        str = gt.ngettext('Every %2$s.', 'Every %1$d weeks on %2$s.', interval, getDayString(days));
+                        //#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
+                        str = gt.ngettext('Every %2$s.', 'Every %1$d weeks on %2$s.', interval, getDayString(days, { superessive: interval > 1 }));
                     }
 
                     break;
