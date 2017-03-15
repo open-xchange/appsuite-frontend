@@ -198,37 +198,41 @@ define('io.ox/calendar/common-extensions', [
         },
 
         created: function (baton) {
-            if (!baton.data.creation_date || !baton.data.created_by) return;
+            if (!baton.data.creation_date && !baton.data.created_by) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Created')),
                     $('<td class="created">').append(
-                        $('<span>').text(util.getDate(baton.data.creation_date)),
-                        $('<span>').text(' \u2013 '),
-                        coreUtil.renderPersonalName({
+                        baton.data.creation_date ? [
+                            $('<span>').text(util.getDate(baton.data.creation_date)),
+                            $('<span>').text(' \u2013 ')
+                        ] : [],
+                        baton.data.created_by ? coreUtil.renderPersonalName({
                             html: userAPI.getTextNode(baton.data.created_by),
                             user_id: baton.data.created_by
-                        }, baton.data)
+                        }, baton.data) : []
                     )
                 )
-             );
+            );
         },
 
         modified: function (baton) {
-            if (!baton.data.last_modified || !baton.data.modified_by) return;
+            if (!baton.data.last_modified && !baton.data.modified_by) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Modified')),
                     $('<td class="modified">').append(
-                        $('<span>').text(util.getDate(baton.data.last_modified)),
-                        $('<span>').text(' \u2013 '),
-                        coreUtil.renderPersonalName({
+                        baton.data.last_modified ? [
+                            $('<span>').text(util.getDate(baton.data.last_modified)),
+                            $('<span>').text(' \u2013 ')
+                        ] : [],
+                        baton.data.modified_by ? coreUtil.renderPersonalName({
                             html: userAPI.getTextNode(baton.data.modified_by),
                             user_id: baton.data.modified_by
-                        }, baton.data)
+                        }, baton.data) : []
                     )
                 )
-             );
+            );
         }
 
     };
