@@ -21,13 +21,12 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/settings/util',
     'io.ox/mail/mailfilter/settings/filter/view-form',
     'gettext!io.ox/mail',
-    'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, ListView, DisposableView) {
+], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView) {
 
     'use strict';
 
@@ -514,6 +513,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         },
         initialize: function () {
+            // needed for mail actions
             var options = {
                 api: api,
                 model: mailfilterModel,

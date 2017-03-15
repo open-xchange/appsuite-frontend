@@ -36,7 +36,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
             };
             _.extend(opt.defaults.tests, defaults);
             _.extend(opt.conditionsTranslation, {
-                'nested': gt('Nested rule')
+                'nested': gt('Nested condition')
             });
 
             _.extend(opt.conditionsMapping, { 'nested': ['nested'] });
