@@ -2874,6 +2874,7 @@ msgstr ""
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "daily"
 msgid "Every day."
 msgid_plural "Every %1$d days."
 msgstr[0] ""
@@ -2883,6 +2884,7 @@ msgstr[1] ""
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "weekly"
 msgid "Every day."
 msgid_plural "Every %1$d weeks on all days."
 msgstr[0] ""
@@ -2892,6 +2894,7 @@ msgstr[1] ""
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "weekly"
 msgid "On workdays."
 msgid_plural "Every %1$d weeks on workdays."
 msgstr[0] ""
@@ -2901,6 +2904,7 @@ msgstr[1] ""
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "weekly"
 msgid "Every weekend."
 msgid_plural "Every %1$d weeks on weekends."
 msgstr[0] ""
@@ -2917,6 +2921,7 @@ msgstr ""
 #. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "weekly"
 msgid "Every %2$s."
 msgid_plural "Every %1$d weeks on %2$s."
 msgstr[0] ""
@@ -2928,6 +2933,7 @@ msgstr[1] ""
 #. Example: Every 5 months on day 18
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "monthly"
 msgid "Every month on day %2$d."
 msgid_plural "Every %1$d months on day %2$d."
 msgstr[0] ""
@@ -2940,6 +2946,7 @@ msgstr[1] ""
 #. Example Every 3 months on the second Tuesday
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
+msgctxt "monthly"
 msgid "Every month on the %2$s %3$s."
 msgid_plural "Every %1$d months on the %2$s %3$s."
 msgstr[0] ""
@@ -5725,6 +5732,7 @@ msgstr ""
 
 #: apps/io.ox/core/permissions/permissions.js
 #: module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr ""
 
