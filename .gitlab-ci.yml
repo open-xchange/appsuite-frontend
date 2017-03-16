@@ -54,21 +54,6 @@ install_deps_help:
     PROJECT_PATH: help
   <<: *install_deps
 
-install_deps_saml:
-  variables:
-    PROJECT_PATH: open-xchange-appsuite-saml
-  <<: *install_deps
-
-install_deps_dynamic-theme:
-  variables:
-    PROJECT_PATH: open-xchange-dynamic-theme
-  <<: *install_deps
-
-install_deps_spamexperts:
-  variables:
-    PROJECT_PATH: open-xchange-appsuite-spamexperts
-  <<: *install_deps
-
 install_deps_guidedtours:
   variables:
     PROJECT_PATH: guidedtours
@@ -259,27 +244,6 @@ build_guidedtours:
     PROJECT_PATH: guidedtours
   <<: *build_ui_plugin
 
-build_saml:
-  dependencies:
-    - install_deps_saml
-  variables:
-    PROJECT_PATH: open-xchange-appsuite-saml
-  <<: *build_ui_plugin
-
-build_spamexperts:
-  dependencies:
-    - install_deps_spamexperts
-  variables:
-    PROJECT_PATH: open-xchange-appsuite-spamexperts
-  <<: *build_ui_plugin
-
-build_dynamic-theme:
-  dependencies:
-    - install_deps_dynamic-theme
-  variables:
-    PROJECT_PATH: open-xchange-dynamic-theme
-  <<: *build_ui_plugin
-
 create project on OBS:
   image: gitlab.open-xchange.com:4567/frontend/dev_env:ant
   stage: test
@@ -318,11 +282,6 @@ package open-xchange-appsuite:
     - install_deps_update-themes
   <<: *buildpkg_on_obs
 
-package open-xchange-dynamic-theme:
-  dependencies:
-    - install_deps_dynamic-theme
-  <<: *buildpkg_on_obs
-
 package open-xchange-guidedtours:
   dependencies:
     - install_deps_guidedtours
@@ -331,16 +290,6 @@ package open-xchange-guidedtours:
 package open-xchange-appsuite-help:
   dependencies:
     - install_deps_help
-  <<: *buildpkg_on_obs
-
-package open-xchange-appsuite-saml:
-  dependencies:
-    - install_deps_saml
-  <<: *buildpkg_on_obs
-
-package open-xchange-appsuite-spamexperts:
-  dependencies:
-    - install_deps_spamexperts
   <<: *buildpkg_on_obs
 
 wait for packages:
@@ -371,7 +320,7 @@ cleanup review:
   before_script:
     - echo "${OBS_OSCRC}" >> ~/.oscrc
   script:
-    - for P in open-xchange-appsuite open-xchange-dynamic-theme open-xchange-guidedtours open-xchange-appsuite-help open-xchange-appsuite-saml open-xchange-appsuite-spamexperts; do osc rdelete frontend-${CI_COMMIT_REF_SLUG} $P -m "GitLab CI environment stopped for $P" || echo "Could not remove $P, ignoring"; done
+    - for P in open-xchange-appsuite open-xchange-guidedtours open-xchange-appsuite-help; do osc rdelete frontend-${CI_COMMIT_REF_SLUG} $P -m "GitLab CI environment stopped for $P" || echo "Could not remove $P, ignoring"; done
     - osc rdelete frontend-${CI_COMMIT_REF_SLUG} -m "GitLab CI environment stopped" || echo "Leaving non-empty project on OBS"
   when: manual
   environment:
