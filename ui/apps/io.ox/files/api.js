@@ -442,8 +442,10 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707',
-        allVersionColumns = http.getAllColumns('files', true);
+    // 711 is "number of versions", needed for fixing Bug 52006,
+    // number of versions often changes when editing files
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711';
+    var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
     if (!_.isEmpty(attachmentView)) {
