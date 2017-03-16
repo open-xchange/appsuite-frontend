@@ -15,8 +15,9 @@ define('io.ox/contacts/widgets/pictureUpload', [
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
+    'io.ox/core/util',
     'less!io.ox/contacts/widgets/widgets'
-], function (notifications, api, gt, settings) {
+], function (notifications, api, gt, settings, util) {
 
     'use strict';
 
@@ -141,7 +142,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
-                    imageUrl = imageUrl.replace(/^\/ajax/, ox.apiRoot);
+                    imageUrl = util.replacePrefix(imageUrl);
                     hasImage = true;
                 } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images

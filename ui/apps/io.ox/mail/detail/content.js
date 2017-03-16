@@ -16,14 +16,14 @@
 
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
-    'io.ox/core/util',
+    'io.ox/mail/util',
     'io.ox/core/emoji/util',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'io.ox/mail/detail/links',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, coreUtil, emoji, ext, capabilities, links, settings, gt) {
+], function (api, util, emoji, ext, capabilities, links, settings, gt) {
 
     'use strict';
 
@@ -58,7 +58,7 @@ define('io.ox/mail/detail/content', [
 
     var regHTML = /^text\/html$/i,
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
-        regImageSrc = /(<img[^>]+src=")\/ajax/g;
+        regIsURL = /^https?:\S+$/i;
 
     var insertEmoticons = (function () {
 
@@ -93,8 +93,6 @@ define('io.ox/mail/detail/content', [
         };
     }());
 
-    var isURL = /^https?:\S+$/i;
-
     var beautifyText = function (text) {
 
         text = $.trim(text)
@@ -122,7 +120,7 @@ define('io.ox/mail/detail/content', [
                 // ignore tags
                 if (line[0] === '<') return line;
                 // ignore URLs
-                if (isURL.test(line)) return line;
+                if (regIsURL.test(line)) return line;
                 // process plain text
                 line = insertEmoticons(line);
                 return line;
@@ -156,8 +154,7 @@ define('io.ox/mail/detail/content', [
         id: 'images',
         index: 200,
         process: function (baton) {
-            // replace images on source level
-            baton.source = baton.source.replace(regImageSrc, '$1' + ox.apiRoot);
+            baton.source = util.replaceImagePrefix(baton.source);
         }
     });
 
