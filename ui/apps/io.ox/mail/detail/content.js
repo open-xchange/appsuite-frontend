@@ -30,7 +30,6 @@ define('io.ox/mail/detail/content', [
 
     var regHTML = /^text\/html$/i,
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
-        regImageSrc = /(<img[^>]+src=")\/ajax/g,
         regIsURL = /^https?:\S+$/i;
 
     //
@@ -53,7 +52,8 @@ define('io.ox/mail/detail/content', [
 
         images: function (baton) {
             // replace images on source level
-            baton.source = baton.source.replace(regImageSrc, '$1' + ox.apiRoot);
+            // look if prefix, usually '/ajax', needs do be replaced
+            baton.source = util.replaceImagePrefix(baton.source);
         },
 
         emoji: function (baton) {

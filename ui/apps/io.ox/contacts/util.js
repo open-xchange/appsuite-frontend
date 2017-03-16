@@ -315,7 +315,10 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            return util.getShardingRoot(arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, '') + '&' + $.param(options));
+            var url = arg.replace(/^https?\:\/\/[^\/]+/i, '');
+            url = util.replacePrefix(url);
+
+            return util.getShardingRoot(url + '&' + $.param(options));
         },
 
         getInitials: (function () {

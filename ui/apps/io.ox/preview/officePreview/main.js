@@ -13,8 +13,9 @@
 
 define('io.ox/preview/officePreview/main', [
     'io.ox/core/tk/keys',
+    'io.ox/core/util',
     'less!io.ox/preview/officePreview/style'
-], function (KeyListener) {
+], function (KeyListener, util) {
 
     'use strict';
 
@@ -134,7 +135,7 @@ define('io.ox/preview/officePreview/main', [
                 // tmp. fix images
                 $shownContent.find('img').each(function () {
                     var img = $(this), src = String(img.attr('src'));
-                    img.attr('src', src.replace(/^\/ajax/, ox.apiRoot));
+                    img.attr('src', util.replacePrefix(src, ox.apiRoot));
                 });
 
                 container.empty().append($shownContent);

@@ -636,8 +636,8 @@ define('io.ox/contacts/api', [
                     // remove host
                     if (data.image1_url) {
                         data.image1_url = data.image1_url
-                            .replace(/^https?\:\/\/[^\/]+/i, '')
-                            .replace(/^\/ajax/, '');
+                            .replace(/^https?\:\/\/[^\/]+/i, '');
+                        data.image1_url = coreUtil.replacePrefix(data.image1_url);
                         data.image1_url = coreUtil.getShardingRoot(data.image1_url);
                     }
                     // use first contact
@@ -756,7 +756,7 @@ define('io.ox/contacts/api', [
                     context: ox.context_id,
                     sequence: data.last_modified
                 });
-                url = data.image1_url.replace(/^\/ajax/, '') + '&' + $.param(params);
+                url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
                 url = coreUtil.getShardingRoot(url);
 
             } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {

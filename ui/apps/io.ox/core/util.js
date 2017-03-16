@@ -16,9 +16,11 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
     'use strict';
 
     var LENGTH = 30,
+        prefix = ox.serverConfig.prefix || '/ajax',
         regSeqSoft = /(\S{30,})/g,
         regSeqHard = /(\S{30})/g,
-        regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
+        regHyphenation = /([^.,;:-=()]+[.,;:-=()])/,
+        regImageSrc = new RegExp('^' + prefix);
 
     ext.point('io.ox/core/person').extend({
         id: 'default',
@@ -42,6 +44,13 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
     var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
 
     var that = {
+
+        replacePrefix: function (data, replacement) {
+            data = data || '';
+            replacement = replacement || '';
+
+            return data.replace(regImageSrc, replacement);
+        },
 
         // render a person's name
         renderPersonalName: function (options, data) {

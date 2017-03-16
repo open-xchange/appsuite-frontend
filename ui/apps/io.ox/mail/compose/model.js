@@ -199,8 +199,8 @@ define.async('io.ox/mail/compose/model', [
 
             // image URL fix
             if (mode === 'html') {
-                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
-
+                // look if prefix needs do be replaced
+                content = mailUtil.replaceImagePrefix(content);
                 // Remove wrapping div
                 content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
             }

@@ -25,6 +25,8 @@ define('io.ox/mail/util', [
     'use strict';
 
     var that,
+        prefix = ox.serverConfig.prefix || '/ajax',
+        regImageSrc = new RegExp('(<img[^>]+src=")' + prefix, 'g'),
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -93,6 +95,13 @@ define('io.ox/mail/util', [
     });
 
     that = {
+
+        replaceImagePrefix: function (data, replacement) {
+            data = data || '';
+            replacement = replacement || '$1' + ox.apiRoot;
+
+            return data.replace(regImageSrc, replacement);
+        },
 
         /**
          * currently registred types
@@ -565,9 +574,11 @@ define('io.ox/mail/util', [
         },
 
         fixInlineImages: function (data) {
+            // look if /ajax needs do be replaced
+            console.log('add ajax?');
             return data
-                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1' + prefix)
+                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1' + prefix)
                 .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
                 .replace(/data-mce-src="[^"]+"\s?/, '');
         },
