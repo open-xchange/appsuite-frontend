@@ -10,15 +10,13 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-exports.command = function () {
+exports.command = function (selector, wait) {
+
+    wait = wait || 500;
 
     this
-        .waitForElementVisible('#io-ox-topbar-dropdown-icon', 25000)
-        .click('#io-ox-topbar-dropdown-icon > a.dropdown-toggle')
-        .waitForElementVisible('#topbar-settings-dropdown')
-        .click('#topbar-settings-dropdown > a[data-action="logout"')
-        .waitForElementVisible('#io-ox-login-username', 10000)
-        .end();
+        .waitForElementVisible(selector, wait)
+        .click(selector);
 
     return this;
 

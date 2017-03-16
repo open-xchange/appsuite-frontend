@@ -2,6 +2,7 @@
   "src_folders": ["nightwatch/io.ox"],
   "globals_path": "nightwatch/globals.js",
   "custom_commands_path": "nightwatch/commands",
+  "custom_assertions_path": "nightwatch/assertions",
 
   "selenium": {
     "start_process" : false

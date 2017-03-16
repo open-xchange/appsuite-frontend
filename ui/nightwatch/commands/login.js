@@ -23,7 +23,7 @@ exports.command = function (parameters) {
         .waitForElementVisible('#io-ox-login-username', 10000)
         .setValue('#io-ox-login-username', this.globals.ox_credentials.username)
         .setValue('#io-ox-login-password', this.globals.ox_credentials.password)
-        .pause(1000)
+        .waitForElementEventListener('#io-ox-login-form', 'submit', 2000)
         .click('#io-ox-login-button')
         .waitForElementVisible('#io-ox-topbar', 25000);
 
