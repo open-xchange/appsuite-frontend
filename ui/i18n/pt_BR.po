@@ -1224,6 +1224,7 @@ msgid "Apply rule if any condition is met."
 msgstr "Aplicar regra se qualquer condição for atendida."
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js
 msgid "Apply to all subfolders"
 msgstr "Aplicar a todas as subpastas"
 
@@ -3657,21 +3658,51 @@ msgstr "Duração estimada em minutos"
 
 #. recurrence string
 #. %1$d: numeric
+#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
+#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Every %1$d days"
-msgid "Every %1$d days."
-msgstr "A cada %1$d dias"
+msgctxt "weekly"
+msgid "Every %2$s."
+msgid_plural "Every %1$d weeks on %2$s."
+msgstr[0] "A cada %1$d dias"
+msgstr[1] "A cada %1$d dias"
+
+#. recurrence string
+#. %1$d: numeric
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Every day"
+msgctxt "daily"
+msgid "Every day."
+msgid_plural "Every %1$d days."
+msgstr[0] "Todo dia"
+msgstr[1] "Todo dia"
+
+#. recurrence string
+#. %1$d: numeric
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Every day"
+msgctxt "weekly"
+msgid "Every day."
+msgid_plural "Every %1$d weeks on all days."
+msgstr[0] "Todo dia"
+msgstr[1] "Todo dia"
 
 #. recurrence string
 #. %1$d: numeric, interval
-#. %1$d: numeric, day in month
+#. %2$d: numeric, day in month
 #. Example: Every 5 months on day 18
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Every %1$d months on day %2$d"
-msgid "Every %1$d months on day %2$d."
-msgstr "A cada %1$d meses no dia %2$d"
+msgctxt "monthly"
+msgid "Every month on day %2$d."
+msgid_plural "Every %1$d months on day %2$d."
+msgstr[0] "A cada %1$d meses no dia %2$d"
+msgstr[1] "A cada %1$d meses no dia %2$d"
 
 #. recurrence string
 #. %1$d: numeric, interval
@@ -3681,75 +3712,11 @@ msgstr "A cada %1$d meses no dia %2$d"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Every %1$d months on the %2$s %3$s"
-msgid "Every %1$d months on the %2$s %3$s."
-msgstr "A cada %1$d meses no %2$s %3$s"
-
-#. recurrence string
-#. %1$d: numeric
-#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d weeks on %2$s"
-msgid "Every %1$d weeks on %2$s."
-msgstr "A cada %1$d semanas em %2$s"
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d weeks on all days"
-msgid "Every %1$d weeks on all days."
-msgstr "A cada %1$d semanas em todos os dias"
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d weeks on work days"
-msgid "Every %1$d weeks on weekends."
-msgstr "A cada %1$d semanas em dias de trabalho"
-
-#. recurrence string
-#. %1$d: numeric
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d weeks on work days"
-msgid "Every %1$d weeks on workdays."
-msgstr "A cada %1$d semanas em dias de trabalho"
-
-#. recurrence string
-#. %1$s day string, e.g. "workdays" or "Friday" or "Monday, Tuesday, Wednesday"
-#. Example: Every Monday, Wednesday, Friday
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d days"
-msgid "Every %1$s."
-msgstr "A cada %1$d dias"
-
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every day"
-msgid "Every day."
-msgstr "Todo dia"
-
-#. recurrence string
-#. %1$d: numeric, day in month
-#. Example: Every month on day 5
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d months on day %2$d"
-msgid "Every month on day %1$d."
-msgstr "A cada %1$d meses no dia %2$d"
-
-#. recurrence string
-#. %1$s: count string, e.g. first, second, or last
-#. %2$s: day string, e.g. Monday
-#. Example: Every month on the second Monday
-#: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$d months on the %2$s %3$s"
-msgid "Every month on the %1$s %2$s."
-msgstr "A cada %1$d meses no %2$s %3$s"
+msgctxt "monthly"
+msgid "Every month on the %2$s %3$s."
+msgid_plural "Every %1$d months on the %2$s %3$s."
+msgstr[0] "A cada %1$d meses no %2$s %3$s"
+msgstr[1] "A cada %1$d meses no %2$s %3$s"
 
 #. sharing: a guest user will be created for the owner of that email address
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -3761,11 +3728,15 @@ msgstr ""
 "modificar arquivos."
 
 #. recurrence string
+#. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
 #| msgid "every week"
+msgctxt "weekly"
 msgid "Every weekend."
-msgstr "a cada semana"
+msgid_plural "Every %1$d weeks on weekends."
+msgstr[0] "a cada semana"
+msgstr[1] "a cada semana"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -4282,6 +4253,15 @@ msgstr "Livre"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Freelancer"
 msgstr "Freelancer"
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Friday"
+msgctxt "superessive"
+msgid "Friday"
+msgstr "Sexta-feira"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
@@ -5625,6 +5605,15 @@ msgstr "O modelo está incompleto."
 msgid "Modified"
 msgstr "Modificado"
 
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Monday"
+msgctxt "superessive"
+msgid "Monday"
+msgstr "Segunda-feira"
+
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Month"
@@ -6204,6 +6193,7 @@ msgstr "Notificador"
 msgid "Notify all participants by email."
 msgstr "Notificar todos os participantes por e-mail."
 
+#. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
 msgstr "Notifique-me novamente mais tarde"
@@ -6284,11 +6274,15 @@ msgid "On specific date"
 msgstr "termina em uma data específica"
 
 #. recurrence string
+#. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
 #| msgid "On work days"
+msgctxt "weekly"
 msgid "On workdays."
-msgstr "Em dias de trabalho"
+msgid_plural "Every %1$d weeks on workdays."
+msgstr[0] "Em dias de trabalho"
+msgstr[1] "Em dias de trabalho"
 
 #. %1$d is the number of search results in the autocomplete field
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
@@ -7882,6 +7876,15 @@ msgstr "SSL/TLS"
 msgid "Sales Volume"
 msgstr "Volume de vendas"
 
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Saturday"
+msgctxt "superessive"
+msgid "Saturday"
+msgstr "Sábado"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js
@@ -8752,6 +8755,15 @@ msgstr "Sufixo"
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "Summary"
 msgstr "Resumo"
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Sunday"
+msgctxt "superessive"
+msgid "Sunday"
+msgstr "Domingo"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
@@ -9713,6 +9725,15 @@ msgstr "Linha"
 msgid "Thumbnails"
 msgstr "Miniaturas"
 
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Thursday"
+msgctxt "superessive"
+msgid "Thursday"
+msgstr "Quinta-feira"
+
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Tiles"
 msgstr "Mosaicos"
@@ -9834,6 +9855,15 @@ msgstr "Experimente agora!"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Trying to auto-configure your mail account"
 msgstr "Tentando configurar automaticamente sua conta de e-mail"
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Tuesday"
+msgctxt "superessive"
+msgid "Tuesday"
+msgstr "Terça-feira"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
@@ -10255,6 +10285,15 @@ msgstr "Advertências:"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Weather • Season"
 msgstr "Clima • Estação"
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Wednesday"
+msgctxt "superessive"
+msgid "Wednesday"
+msgstr "Quarta-feira"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -13184,6 +13223,41 @@ msgstr "aaaa"
 #~ msgid "Euro"
 #~ msgstr "Euro"
 
+#, fuzzy
+#~| msgid "Every %1$d days"
+#~ msgid "Every %1$d days."
+#~ msgstr "A cada %1$d dias"
+
+#, fuzzy
+#~| msgid "Every %1$d months on day %2$d"
+#~ msgid "Every %1$d months on day %2$d."
+#~ msgstr "A cada %1$d meses no dia %2$d"
+
+#, fuzzy
+#~| msgid "Every %1$d months on the %2$s %3$s"
+#~ msgid "Every %1$d months on the %2$s %3$s."
+#~ msgstr "A cada %1$d meses no %2$s %3$s"
+
+#, fuzzy
+#~| msgid "Every %1$d weeks on %2$s"
+#~ msgid "Every %1$d weeks on %2$s."
+#~ msgstr "A cada %1$d semanas em %2$s"
+
+#, fuzzy
+#~| msgid "Every %1$d weeks on all days"
+#~ msgid "Every %1$d weeks on all days."
+#~ msgstr "A cada %1$d semanas em todos os dias"
+
+#, fuzzy
+#~| msgid "Every %1$d weeks on work days"
+#~ msgid "Every %1$d weeks on weekends."
+#~ msgstr "A cada %1$d semanas em dias de trabalho"
+
+#, fuzzy
+#~| msgid "Every %1$d weeks on work days"
+#~ msgid "Every %1$d weeks on workdays."
+#~ msgstr "A cada %1$d semanas em dias de trabalho"
+
 #~ msgid "Every %1$d years on %2$s %3$d"
 #~ msgstr "A cada %1$d anos em %2$s %3$d"
 
@@ -13378,9 +13452,6 @@ msgstr "aaaa"
 
 #~ msgid "Fri"
 #~ msgstr "Sex"
-
-#~ msgid "Friday"
-#~ msgstr "Sexta-feira"
 
 #~ msgid "From %s"
 #~ msgstr "De %s"
@@ -14209,9 +14280,6 @@ msgstr "aaaa"
 
 #~ msgid "Monaco"
 #~ msgstr "Mônaco"
-
-#~ msgid "Monday"
-#~ msgstr "Segunda-feira"
 
 #~ msgid "Mongolia"
 #~ msgstr "Mongólia"
@@ -15166,9 +15234,6 @@ msgstr "aaaa"
 #~ msgid "Sat"
 #~ msgstr "Sáb"
 
-#~ msgid "Saturday"
-#~ msgstr "Sábado"
-
 #~ msgid "Saudi Arabia"
 #~ msgstr "Arábia Saudita"
 
@@ -15697,9 +15762,6 @@ msgstr "aaaa"
 #~ msgid "Sun"
 #~ msgstr "Dom"
 
-#~ msgid "Sunday"
-#~ msgstr "Domingo"
-
 #~ msgid ""
 #~ "Supported Outlook versions (Connector 2 for Microsoft Outlook): Latest "
 #~ "versions of Microsoft Outlook 2003, Microsoft Outlook 2007, Outlook 2010"
@@ -16221,9 +16283,6 @@ msgstr "aaaa"
 #~ msgid "Thu"
 #~ msgstr "Qui"
 
-#~ msgid "Thursday"
-#~ msgstr "Quinta-feira"
-
 #~ msgid "Tile"
 #~ msgstr "Mosaico"
 
@@ -16528,9 +16587,6 @@ msgstr "aaaa"
 #~ msgid "Tue"
 #~ msgstr "Ter"
 
-#~ msgid "Tuesday"
-#~ msgstr "Terça-feira"
-
 #~ msgid "Tunisia"
 #~ msgstr "Tunísia"
 
@@ -16809,9 +16865,6 @@ msgstr "aaaa"
 
 #~ msgid "Wed"
 #~ msgstr "Qua"
-
-#~ msgid "Wednesday"
-#~ msgstr "Quarta-feira"
 
 #~ msgid "Week View"
 #~ msgstr "Visualizar semana"

@@ -2727,14 +2727,6 @@ msgstr ""
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgctxt "superessive"
-msgid "Sunday"
-msgstr ""
-
-#. superessive of the weekday
-#. will only be used in a form like “Happens every week on $weekday”
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgctxt "superessive"
 msgid "Monday"
 msgstr ""
 
@@ -2776,6 +2768,14 @@ msgstr ""
 #: module:io.ox/calendar
 msgctxt "superessive"
 msgid "Saturday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
+msgid "Sunday"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js
@@ -5560,6 +5560,7 @@ msgstr ""
 msgid "Close notification area"
 msgstr ""
 
+#. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js
 #: module:io.ox/core
 msgid "Notify me again later"
