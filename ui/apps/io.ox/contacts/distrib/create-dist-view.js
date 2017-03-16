@@ -162,7 +162,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
                 self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
-                        app: 'calendar',
+                        app: 'contacts',
                         target: 'edit/distribution-list/toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),

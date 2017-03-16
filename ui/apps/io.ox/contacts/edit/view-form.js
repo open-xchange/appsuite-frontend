@@ -290,7 +290,7 @@ define('io.ox/contacts/edit/view-form', [
                     self.on('mousedown', '[data-action]', function (e) {
                         var node =  $(e.target);
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: node.attr('data-action') || node.attr('data-name'),
@@ -300,7 +300,7 @@ define('io.ox/contacts/edit/view-form', [
                     // toggle
                     self.on('mousedown', '.checkbox-inline', function () {
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: 'show-all-fields'
