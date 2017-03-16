@@ -1387,10 +1387,6 @@ define('io.ox/mail/api', [
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
 
-        if (list[0] && list[0].pgpFormat && capabilities.has('guard')) {
-            return api.savePGPAttachments(list, target);
-        }
-
         http.pause();
         // loop
         _(list).each(function (data) {
@@ -1409,23 +1405,6 @@ define('io.ox/mail/api', [
             });
         });
         return http.resume().done(function () {
-            require(['io.ox/files/api'], function (fileAPI) {
-                fileAPI.pool.resetFolder(target);
-                fileAPI.trigger('add:file');
-            });
-        });
-    };
-
-    api.savePGPAttachments = function (list, target) {
-        // For the moment, not supporting multiple call, so pgp needs own attachment handling
-
-        return require(['io.ox/guard/mail/attachments']).then(function (guardAttachments) {
-            return $.when.apply(this, list.map(function (data) {
-                return guardAttachments.savePGPAttachment(data, target);
-            }));
-        })
-        .then(function () { return arguments; }) // return an array of results as the first parameter
-        .done(function () {
             require(['io.ox/files/api'], function (fileAPI) {
                 fileAPI.pool.resetFolder(target);
                 fileAPI.trigger('add:file');
