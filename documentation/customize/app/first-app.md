@@ -20,7 +20,7 @@ TL;DR version:
 npm install -g grunt-cli bower yo generator-ox-ui-module
 ```
 
-Or if needed, there is a complete article about setting up an environment for [grunt](http://oxpedia.org/wiki/index.php?title=AppSuite:GettingStartedWithGrunt#Node).
+Or if needed, there is a complete article about setting up an environment for [grunt]({{ site.baseurl }}/ui/00-getting-started/04-build-process.html).
 
 # Create a Workspace
 
@@ -119,7 +119,7 @@ After logging in, the app should be loaded and display the alert message.
 Once you are sure that your setup works, you can extend the example and write the actual code for your app.
 The dev task will detect any changes and rebuild your app and even reload all browsers connected to <https://localhost:8337/appsuite>.
 
-While developing always keep in mind, that there is an [article about debugging the user interface](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI) which helps you avoid and fix typical errors.
+While developing always keep in mind, that there is an [article about debugging the user interface]({{ site.baseurl }}/ui/miscellaneous/debugging.html) which helps you avoid and fix typical errors.
 
 # Packaging
 
@@ -188,12 +188,11 @@ grunt dpkg-buildpackage --include-dependencies
 
 # i18n
 
-To use the proven way to translate your OX App Suite application, you should now check out the [documentation](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) about all [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) tasks.
-Please browse to the [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n) page.
+To use the proven way to translate your OX App Suite application, you should now check out the [documentation about all i18n tasks]({{ site.baseurl }}/ui/how-to/i18n.html).
 
 # Further Reading
 
-- Congratulations you have just built your first app for OX App Suite, but please keep in mind that there are [quite a few options](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI#What_can_i_build.3F) for developing for OX App Suite.
+- Congratulations you have just built your first app for OX App Suite, but please keep in mind that there are [quite a few options]({{ site.baseurl }}/ui/customize.html) for developing for OX App Suite.
 
 - In case you want to upgrade your existing app for OX App Suite, read [the upgrade guide](http://oxpedia.org/wiki/index.php?title=AppSuite:Upgrade_app_using_yo).
 
@@ -202,6 +201,4 @@ Please browse to the [i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18
   - [See all available grunt tasks](https://github.com/Open-Xchange-Frontend/shared-grunt-config)
   - [Documentation of all generator tasks](https://github.com/Open-Xchange-Frontend/generator-ox-ui-module)
 
-- If you're stuck somewhere, the article about [debugging the UI](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI) might help you.
-
-- You can read this to get a better overview of [developing the user inferface](http://oxpedia.org/wiki/index.php?title=AppSuite:Developing_for_the_UI).
+- If you're stuck somewhere, the article about [debugging the UI]({{ site.baseurl }}/ui/miscellaneous/debugging.html) might help you.
