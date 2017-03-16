@@ -881,6 +881,7 @@ define('io.ox/files/share/permissions', [
                 if (permissionsView.collection.where({ type: 'guest' }).length !== 0 && hasNewGuests()) {
                     dialogConfig.set('sendNotifications', true);
                     dialogConfig.set('disabled', true);
+                    dialogConfig.unset('byHand');
                 } else {
                     dialogConfig.set('sendNotifications', notificationDefault);
                     dialogConfig.set('disabled', false);
