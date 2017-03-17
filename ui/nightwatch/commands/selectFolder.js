@@ -10,18 +10,16 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-describe('Appsuite demo test', function () {
+var util = require('util');
 
-    describe('with Nightwatch', function () {
+exports.command = function (id) {
 
-        it('login into appsuite', function (client) {
-            client
-                .login()
-                .waitForElementVisible('#io-ox-topbar', 25000)
-                .assert.title('App Suite.');
+    this
+        .executeAsync(function (id) {
+            $('*[data-id="' + id + '"]', '.folder-tree:visible').click();
+        }, [id])
+        .waitForElementVisible(util.format('.folder-tree li[data-id="%s"] .contextmenu-control', id), 10000);
 
-            client.logout();
+    return this;
 
-        });
-    });
-});
+};
