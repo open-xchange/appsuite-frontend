@@ -1315,7 +1315,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder/context-menu',

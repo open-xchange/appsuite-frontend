@@ -1743,7 +1743,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'folder/context-menu',

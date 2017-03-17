@@ -687,7 +687,7 @@ define('io.ox/tasks/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'folder/context-menu',

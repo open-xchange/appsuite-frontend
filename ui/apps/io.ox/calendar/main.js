@@ -744,7 +744,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder/context-menu',
@@ -753,7 +753,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // folder permissions action
-                sidepanel.find('.folder-tree').on('mousedown', '.folder-shared', function () {
+                sidepanel.find('.folder-tree').on('mousedown', '.folder-shared, .fa.folder-sub', function () {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder',

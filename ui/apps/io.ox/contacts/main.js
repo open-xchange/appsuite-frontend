@@ -910,7 +910,7 @@ define('io.ox/contacts/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').on('mousedown', 'li>a', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'folder/context-menu',
