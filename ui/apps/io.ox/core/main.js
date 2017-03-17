@@ -1138,26 +1138,22 @@ define('io.ox/core/main', [
                 // server prop
                 if (!conf.enabled || !conf.remaining) return;
                 // banner action, topbar action, dropdown action
-                var link = link = this.find('#io-ox-topbar-dropdown-icon > a');
+                var link = this.find('#io-ox-topbar-dropdown-icon > a');
                 // popover
                 link.popover({
-                    content: gt('Did you now that you can take OX App Suite with you! Click here to connect this device.'),
-                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                    content: gt("Did you now that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                    template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
                     placement: 'bottom'
                 });
-                // prevent logout action when clicking hint
-                this.get(0).addEventListener('click', function (e) {
-                    if (e.target.classList.contains('popover-content-signout')) {
-                        e.stopImmediatePropagation();
-                        require(['io.ox/onboarding/clients/wizard'], function (wizard) { wizard.run(); });
-                    }
-                    settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
-                    link.popover('destroy');
-                }, true);
-                // close on click
-                $(document).one('click', link.popover.bind(link, 'destroy'));
                 // show
                 _.defer(link.popover.bind(link, 'show'));
+                // close on any click
+                document.body.addEventListener('click', close, true);
+                function close() {
+                    settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
+                    link.popover('destroy');
+                    document.body.removeEventListener('click', close, true);
+                }
             }
         });
 

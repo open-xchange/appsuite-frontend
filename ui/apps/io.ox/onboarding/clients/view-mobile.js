@@ -70,9 +70,9 @@ define('io.ox/onboarding/clients/view-mobile', [
             a11y.collapse(action, container, { onChange: setLabel });
             function setLabel(state) {
                 //#. button: show collapsed content
-                if (/(show)/.test(state)) return action.text(gt('Hide technical details'));
+                if (/(show)/.test(state)) return action.text(gt('Hide details'));
                 //#. button: hide collapsable content
-                if (/(hide)/.test(state)) return action.text(gt('Show technical details'));
+                if (/(hide)/.test(state)) return action.text(gt('Show details'));
             }
             this.empty().append(action, container);
         },
