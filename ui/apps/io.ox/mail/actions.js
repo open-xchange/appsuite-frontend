@@ -169,6 +169,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
+            // Can't edit encrypted E-mail
+            if (data && data.security_info && data.security_info.encrypted) return;
             // must be draft folder
             return data && isDraftMail(data);
         },
@@ -205,6 +207,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
+            // Can't edit encrypted E-mail
+            if (data && data.security_info && data.security_info.encrypted) return;
             // must be draft folder
             return data && isDraftMail(data);
         },
