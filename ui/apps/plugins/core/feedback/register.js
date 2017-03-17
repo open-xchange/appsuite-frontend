@@ -38,9 +38,22 @@ define('plugins/core/feedback/register', [
         5: gt.pgettext('rating', 'It\'s awesome')
     };
 
+    function getAppOptions() {
+        var currentApp,
+            apps = _(appApi.getFavorites()).map(function (app) {
+                // suport for edit dialogs
+                if (ox.ui.App.getCurrentApp().get('name').indexOf(app.id) === 0) {
+                    currentApp = app;
+                }
+                return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
+            });
+        return { currentApp: currentApp, apps: apps };
+    }
+
     var StarRatingView = DisposableView.extend({
 
         className: 'star-rating rating-view',
+        name: 'star-rating-v1',
 
         events: {
             'change input': 'onChange',
@@ -99,9 +112,42 @@ define('plugins/core/feedback/register', [
         }
     });
 
+    var ModuleRatingView = StarRatingView.extend({
+        name: 'module-rating-v1',
+        render: function (popupBody) {
+
+            var apps = getAppOptions();
+
+            if (settings.get('feedback/showModuleSelect', true)) {
+                //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
+                apps.apps.unshift($('<option>').val('general').text(gt('General')));
+                apps.apps.push($('<option>').val('io.ox/settings').text(gt('Settings')));
+                popupBody.append(
+                    this.appSelect = $('<select class="feedback-select-box form-control">').append(apps.apps)
+                );
+                this.appSelect.val((apps.currentApp ? apps.currentApp.id : apps.apps[0].val()));
+            } else if (apps.currentApp) {
+                popupBody.append(
+                    $('<div class="form-control">').text(/*#, dynamic*/gt.pgettext('app', apps.currentApp.title)),
+                    this.appSelect = $('<div aria-hidden="true">').val(apps.currentApp.id).hide()
+                );
+            } else {
+                popupBody.append(
+                    //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
+                    $('<div class="form-control">').text(gt('General')),
+                    this.appSelect = $('<div aria-hidden="true">').val('general').hide()
+                );
+            }
+
+            ModuleRatingView.__super__.render.call(this);
+            return this;
+        }
+    });
+
     var NpsRatingView = StarRatingView.extend({
 
         className: 'nps-rating rating-view',
+        name: 'nps-rating-v1',
 
         render: function () {
 
@@ -165,7 +211,7 @@ define('plugins/core/feedback/register', [
             title: gt('Please rate this product')
         },
         modules: {
-            ratingView: StarRatingView,
+            ratingView: ModuleRatingView,
             title: gt('Please rate the following application:')
         }
     };
@@ -190,46 +236,10 @@ define('plugins/core/feedback/register', [
                             $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/mode', 'stars')].title)
                         );
                     },
-                    modulesSelect: function () {
-                        if (settings.get('feedback/mode', 'stars') !== 'modules') return;
-
-                        var currentApp,
-                            apps = _(appApi.getFavorites()).map(function (app) {
-                                // suport for edit dialogs
-                                if (ox.ui.App.getCurrentApp().get('name').indexOf(app.id) === 0) {
-                                    currentApp = app;
-                                }
-                                return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
-                            });
-
-                        if (settings.get('feedback/showModuleSelect', true)) {
-                            //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
-                            apps.unshift($('<option>').val('general').text(gt('General')));
-                            apps.push($('<option>').val('io.ox/settings').text(gt('Settings')));
-                            this.$body.append(
-                                this.appSelect = $('<select class="feedback-select-box form-control">').append(apps)
-                            );
-                            this.appSelect.val(currentApp.id || apps[0].val());
-                            return;
-                        }
-
-                        if (currentApp) {
-                            this.$body.append(
-                                $('<div class="form-control">').text(/*#, dynamic*/gt.pgettext('app', currentApp.title)),
-                                this.appSelect = $('<div aria-hidden="true">').val(currentApp.id).hide()
-                            );
-                            return;
-                        }
-                        this.$body.append(
-                            //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
-                            $('<div class="form-control">').text(gt('General')),
-                            this.appSelect = $('<div aria-hidden="true">').val('general').hide()
-                        );
-                    },
                     ratingView: function () {
                         this.ratingView = new modes[settings.get('feedback/mode', 'stars')].ratingView({ hover: settings.get('feedback/showHover', true) });
 
-                        this.$body.append(this.ratingView.render().$el);
+                        this.$body.append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
                         if (settings.get('feedback/mode', 'stars') === 'nps') return;
@@ -260,26 +270,42 @@ define('plugins/core/feedback/register', [
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
-                    var data = {
-                        feedback: {
+                    var currentApp = getAppOptions().currentApp,
+                        found = false,
+                        OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
+                        data = {
+                            // general
+                            // context group id
+                            type: this.ratingView.name,
+                            date: new moment().valueOf(),
+                            context_id: ox.context_id,
+                            user_id: ox.user_id,
+                            login_name: ox.user,
+                            server_version: ox.serverConfig.serverVersion,
+                            client_version: ox.serverConfig.version,
+                            // feedback
                             score: this.ratingView.getValue(),
-                            comment: this.$('.feedback-note').val(),
-                            app: this.appSelect ? this.appSelect.val() : 'general'
-                        },
-                        client: {
-                            ua: window.navigator.userAgent,
-                            browser: _(_.browser).pick(function (val) { return !!val; }),
-                            lang: ox.language,
-                            screenResolution: screen.width + 'x' + screen.height
-                        },
-                        meta: {
-                            serverVersion: ox.serverConfig.serverVersion,
-                            uiVersion: ox.serverConfig.version,
-                            productName: ox.serverConfig.productName,
-                            path: ox.abs
+                            app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
+                            entry_point: (currentApp ? currentApp.id : 'general'),
+                            comment: this.$('.feedback-note').val() || '',
+                            // system info
+                            operating_system: 'Other',
+                            browser: 'Other',
+                            browser_version: 'Unknown',
+                            user_agent: window.navigator.userAgent,
+                            screenResolution: screen.width + 'x' + screen.height,
+                            language: ox.language
+                        };
+                    _(_.browser).each(function (val, key) {
+                        if (val === true && _(OS).indexOf(key) !== -1) {
+                            data.operating_system = key;
                         }
-                    };
-
+                        if (!found && _.isNumber(val)) {
+                            found = true;
+                            data.browser = key;
+                            data.browser_version = val;
+                        }
+                    });
                     sendFeedback(data)
                         .done(function () {
                             yell('success', gt('Thank you for your feedback'));
