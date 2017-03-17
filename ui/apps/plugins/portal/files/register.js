@@ -82,6 +82,8 @@ define('plugins/portal/files/register', [
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
                     content.html(_.escape(filecontent).replace(/\n/g, '<br>'));
                 });
+            } else if (baton.data.encrypted) {
+                content.addClass('encrypted');
             } else {
                 options = { width: 300, height: 300, scaleType: 'cover' };
 
