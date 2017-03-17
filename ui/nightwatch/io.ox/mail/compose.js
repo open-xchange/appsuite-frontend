@@ -25,11 +25,8 @@ describe('Mail compose', function () {
 
         // open mail compose in plain text mode
         client
-            .require(['settings!io.ox/mail'], function (settings) {
-                settings.set('messageFormat', 'text');
-            })
-            .waitForElementEventListener('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]', 'click', 2500)
-            .click('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]');
+            .setSetting('io.ox/mail', 'messageFormat', 'text')
+            .clickWhenEventListener('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]', 'click', 2500);
 
         // wait for compose area to be visible
         client

@@ -15,20 +15,13 @@
       "selenium_port": 9515,
       "selenium_host": "localhost",
       "default_path_prefix": "",
-      "silent": true
-    },
-
-    "desiredCapabilities": {
-      "browserName": "chrome",
-      "chromeOptions": {
-        "args": ["--no-sandbox"]
-      },
-      "acceptSslCerts": true
-    },
-
-    "chrome": {
+      "silent": true,
       "desiredCapabilities": {
-        "browserName": "chrome"
+        "browserName": "chrome",
+        "chromeOptions": {
+          "args": ["--no-sandbox"]
+        },
+        "acceptSslCerts": true
       }
     }
   }
