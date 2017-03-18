@@ -39,6 +39,22 @@ define('io.ox/mail/autoforward/settings/view-form', [
         });
 
         ext.point(ref + '/edit/view').extend({
+            index: 100,
+            id: ref + '/edit/view/active',
+            draw: function (baton) {
+                this.append(
+                    $('<div>').addClass('form-group').append(
+                        $('<div>').addClass('checkbox').append(
+                            $('<label>').text(model.fields.active).prepend(
+                                new mini.CheckboxView({ name: 'active', model: baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
+            }
+        });
+
+        ext.point(ref + '/edit/view').extend({
             index: 150,
             id: ref + '/edit/view/forwardmail',
             draw: function (baton) {
@@ -69,13 +85,13 @@ define('io.ox/mail/autoforward/settings/view-form', [
 
         ext.point(ref + '/edit/view').extend({
             index: 350,
-            id: ref + '/edit/view/active',
+            id: ref + '/edit/view/stop',
             draw: function (baton) {
                 this.append(
                     $('<div>').addClass('form-group').append(
                         $('<div>').addClass('checkbox').append(
-                            $('<label>').text(model.fields.active).prepend(
-                                new mini.CheckboxView({ name: 'active', model: baton.model }).render().$el
+                            $('<label>').text(model.fields.processSub).prepend(
+                                new mini.CheckboxView({ name: 'processSub', model: baton.model }).render().$el
                             )
                         )
                     )

@@ -43,6 +43,11 @@ define('io.ox/mail/autoforward/settings/model', [
         if (attributes.keep) {
             preparedData.actioncmds.push({ 'id': 'keep' });
         }
+
+        if (!attributes.processSub) {
+            preparedData.actioncmds.push({ id: 'stop' });
+        }
+
         //first rule gets 0
         if (!_.isUndefined(attributes.id) && !_.isNull(attributes.id)) {
             preparedData.id = attributes.id;
@@ -90,7 +95,8 @@ define('io.ox/mail/autoforward/settings/model', [
         headline: gt('Auto Forward'),
         forwardmail: gt('Forward all incoming emails to this address'),
         active: gt('Enable'),
-        keep: gt('Keep a copy of the message')
+        keep: gt('Keep a copy of the message'),
+        processSub: gt('Process subsequent rules')
     };
 
     return {

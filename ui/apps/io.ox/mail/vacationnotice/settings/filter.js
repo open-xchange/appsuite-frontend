@@ -35,17 +35,24 @@ define('io.ox/mail/vacationnotice/settings/filter', [
         editVacationtNotice: function ($node, multiValues, primaryMail) {
             var deferred = $.Deferred();
 
-            api.getRules('vacation').done(function (data) {
+            $.when(api.getRules('vacation'), api.getConfig()).done(function (data, config) {
+                data = data[0];
+
+                config = config[0];
                 var defaultNotice = {
                         days: '7',
                         internal_id: 'vacation',
                         subject: '',
-                        text: ''
+                        text: '',
+                        active: false
                     },
                     vacationData,
                     VacationEdit,
                     vacationNotice,
-                    setSender = settings.get('features/setFromInVacationNotice', false);
+                    setSender = settings.get('features/setFromInVacationNotice', false),
+                    setAddresses = settings.get('features/setAddressesInVacationNotice', false);
+                    // setAddresses = true,
+                    // setSender = true;
 
                 if (setSender) {
                     defaultNotice.from = _.first(multiValues.fromArrays);
@@ -53,16 +60,26 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     ext.point('io.ox/core/vacationnotice/edit/view').disable('io.ox/core/vacationnotice/edit/view/sender');
                 }
 
+                if (!setAddresses || multiValues.aliases.length === 1) ext.point('io.ox/core/vacationnotice/edit/view').disable('io.ox/core/vacationnotice/edit/view/addresses');
+
                 if (data[0] && data[0].actioncmds[0]) {
+
                     vacationData = data[0].actioncmds[0];
+
+                    // action ID
                     vacationData.internal_id = vacationData.id;
+
+                    // rule ID
                     vacationData.id = data[0].id;
-                    // reset the from value if the submitted value is unknown
+
+                    // reset the from value if the submitted value is unknown to default
                     if (setSender && _.findIndex(multiValues.from, { label: vacationData.from }) === -1 && _.findIndex(multiValues.from, { value: vacationData.from }) === -1) {
                         vacationData.from = _.first(multiValues.fromArrays);
                     }
+                    // if from is set but unsupported remove
                     if (!setSender && vacationData.from) delete vacationData.from;
 
+                    // we do have a time frame
                     if (_(data[0].test).size() === 2) {
                         _(data[0].test.tests).each(function (value) {
                             if (value.comparison === 'ge') {
@@ -73,7 +90,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                         });
 
                         vacationData.activateTimeFrame = true;
-
+                    // we do have just start or end date
                     } else if (data[0].test.id === 'currentdate') {
                         if (data[0].test.comparison === 'ge') {
                             vacationData.dateFrom = data[0].test.datevalue[0];
@@ -92,14 +109,17 @@ define('io.ox/mail/vacationnotice/settings/filter', [
 
                 vacationData.primaryMail = primaryMail;
 
-                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame);
+                // set active state
+                if (data[0] && data[0].active === true) vacationData.active = true;
+
+                VacationEdit = ViewForm.protectedMethods.createVacationEdit('io.ox/core/vacationnotice', multiValues, vacationData.activateTimeFrame, config);
                 vacationNotice = new VacationEdit({ model: factory.create(vacationData) });
 
-                if (data[0] && data[0].active === true) {
-                    _(vacationData.addresses).each(function (mail) {
-                        vacationNotice.model.set(mail, true, { validate: true });
-                    });
-                }
+
+                // transfer addresses array to model but skip primary mail
+                _(vacationData.addresses).each(function (mail) {
+                    if (mail !== vacationData.primaryMail) vacationNotice.model.set(mail, true, { validate: true });
+                });
 
                 $node.append(vacationNotice.render().$el);
 
