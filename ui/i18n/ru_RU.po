@@ -1180,7 +1180,8 @@ msgstr "Годовщина"
 msgid "Any recipient"
 msgstr "Любой получатель"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "App Store"
 msgstr "App Store"
 
@@ -1405,6 +1406,7 @@ msgid "Auto-save email drafts"
 msgstr "Автосохранение черновиков"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js
 msgid "Automatic Configuration"
 msgstr "Автоматическая настройка"
 
@@ -1604,12 +1606,12 @@ msgstr "CW"
 msgid "CW %1$d"
 msgstr "%1$d неделя"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV Login"
 msgstr "Логин CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
@@ -1767,11 +1769,11 @@ msgstr "Невозможно задать режим просмотра для %
 msgid "Capacity"
 msgstr "Объем"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
 msgstr "Логин CardDAV"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
@@ -1974,7 +1976,8 @@ msgstr "Ориентирование клиентов"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Закрыть"
@@ -2170,6 +2173,12 @@ msgstr "Подключиться"
 #: apps/io.ox/core/main.js module:io.ox/core
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
+msgstr "Подключите устройство"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect your device"
 msgstr "Подключите устройство"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2807,6 +2816,12 @@ msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Сведения"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"Did you now that you can take OX App Suite with you? Just click this icon "
+"and choose 'Connect your device' from the menu."
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
 msgstr "Прямая ссылка"
@@ -3142,8 +3157,7 @@ msgstr "Загрузить установочный файл (Windows)"
 msgid "Download the %s client for %s"
 msgstr "Загрузить клиент %s для %s"
 
-#. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Загрузите приложение."
 
@@ -3267,11 +3281,11 @@ msgstr "Срок"
 msgid "Due on %1$s"
 msgstr "Заканчивается %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS Login"
 msgstr "Логин EAS"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS URL"
 msgstr "EAS URL"
 
@@ -4271,11 +4285,18 @@ msgid "Get started here"
 msgstr "Начало работы"
 
 #. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr "Загрузить приложение из %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Get the App from %1$s"
+msgid "Get the App from %1$s."
+msgstr "Загрузить приложение из %1$s"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr "Получите данные конфигурации по электронной почте."
 
@@ -4324,7 +4345,8 @@ msgstr "Доброе утро, %s"
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -4441,8 +4463,10 @@ msgstr "Скрыть все приглашения задач."
 msgid "Hide all task reminders."
 msgstr "Скрыть напоминания задач."
 
+#. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/core/viewer apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Скрыть подробности"
@@ -4552,19 +4576,19 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "Мне понравилось"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "Логин IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Port"
 msgstr "Порт IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Secure"
 msgstr "Защита IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Server"
 msgstr "Сервер IMAP"
 
@@ -4583,12 +4607,6 @@ msgid ""
 msgstr ""
 "После изменения пароля сеанс будет завершен. Прежде чем изменить пароль, "
 "сохраните данные."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "If you know what you are doing...just setup your account manually!"
-msgstr ""
-"Если вы уверены в своих действиях, вы можете настроить учетную запись "
-"вручную."
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4747,6 +4765,12 @@ msgstr "Вставить изображение"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Вставить исходное сообщение в ответ"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Installation"
+msgid "Install"
+msgstr "Установка"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -5030,10 +5054,13 @@ msgstr "Узнать больше"
 msgid "Letters • Symbols"
 msgstr "Буквы • Знаки"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid ""
+#| "Let´s automatically configure your device, by clicking the button below. "
+#| "It´s that simple!"
 msgid ""
-"Let´s automatically configure your device, by clicking the button below. It"
-"´s that simple!"
+"Let´s automatically configure your device, by clicking the button below."
 msgstr ""
 "Чтобы автоматически настроить устройство, просто нажмите кнопку ниже. Нет "
 "ничего проще!"
@@ -5184,7 +5211,8 @@ msgstr "МБ"
 msgid "MM"
 msgstr "мм"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
@@ -5331,6 +5359,12 @@ msgstr "Управление файлами"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "Вручную"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Manual Configuration"
+msgstr "Автоматическая настройка"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -7726,19 +7760,19 @@ msgstr "Название"
 msgid "Run auto-play mode"
 msgstr "Запустить режим автозапуска"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "Логин SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Port"
 msgstr "Порт SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Secure"
 msgstr "Защита SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Server"
 msgstr "Сервер SMTP"
 
@@ -8099,10 +8133,6 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Параметры"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Settings for advanced users"
-msgstr "Экспертные настройки"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -8241,6 +8271,8 @@ msgstr "Показать отклоненные встречи"
 msgid "Show desktop notifications"
 msgstr "Показывать уведомления на рабочем столе"
 
+#. button: hide collapsable content
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
 msgstr "Показать подробности"
@@ -12301,6 +12333,11 @@ msgstr "гггг"
 #~ "on Slideshow on the upper right side."
 #~ msgstr "Изображения в папке можно просмотреть в виде слайд-шоу."
 
+#~ msgid "If you know what you are doing...just setup your account manually!"
+#~ msgstr ""
+#~ "Если вы уверены в своих действиях, вы можете настроить учетную запись "
+#~ "вручную."
+
 #~ msgid ""
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
@@ -12958,6 +12995,9 @@ msgstr "гггг"
 
 #~ msgid "Sending the E-Mail"
 #~ msgstr "Отправка почты"
+
+#~ msgid "Settings for advanced users"
+#~ msgstr "Экспертные настройки"
 
 #~ msgid "Share link by email"
 #~ msgstr "Отправить ссылку по почте"

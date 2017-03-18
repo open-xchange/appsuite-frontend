@@ -1113,7 +1113,8 @@ msgstr "記念日"
 msgid "Any recipient"
 msgstr "すべての宛先"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "App Store"
 msgstr "App Store"
 
@@ -1339,6 +1340,7 @@ msgid "Auto-save email drafts"
 msgstr "下書きの自動保存"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js
 msgid "Automatic Configuration"
 msgstr "自動構成"
 
@@ -1535,12 +1537,12 @@ msgstr "CW"
 msgid "CW %1$d"
 msgstr "CW %1$d"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV Login"
 msgstr "CalDAV ログイン"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1694,11 +1696,11 @@ msgstr "%1$s のビュータイプが要求できません。"
 msgid "Capacity"
 msgstr "容量"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
 msgstr "CardDAV ログイン"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
@@ -1902,7 +1904,8 @@ msgstr "クライアントオンボーディング"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "閉じる"
@@ -2098,6 +2101,12 @@ msgstr "接続します"
 #: apps/io.ox/core/main.js module:io.ox/core
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
+msgstr "デバイスの接続"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect your device"
 msgstr "デバイスの接続"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2735,6 +2744,12 @@ msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "次に示す詳細情報。"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"Did you now that you can take OX App Suite with you? Just click this icon "
+"and choose 'Connect your device' from the menu."
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
 msgstr "ダイレクトリンク"
@@ -3062,8 +3077,7 @@ msgstr "インストールファイルをダウンロード (Windows)"
 msgid "Download the %s client for %s"
 msgstr "%s クライアント (%s 用) をダウンロード"
 
-#. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "アプリケーションをダウンロード"
 
@@ -3192,11 +3206,11 @@ msgstr "期限"
 msgid "Due on %1$s"
 msgstr "期限: %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS Login"
 msgstr "EAS ログイン"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS URL"
 msgstr "EAS URL"
 
@@ -4187,11 +4201,18 @@ msgid "Get started here"
 msgstr "はじめにここからはじめます。"
 
 #. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr "%1$s からアプリケーションを入手してください。"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Get the App from %1$s"
+msgid "Get the App from %1$s."
+msgstr "%1$s からアプリケーションを入手してください。"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr "メールでデバイスの構成をしましょう！"
 
@@ -4240,7 +4261,8 @@ msgstr "おはようございます、%s さん。"
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -4357,8 +4379,10 @@ msgstr "仕事への出席依頼をすべて隠す。"
 msgid "Hide all task reminders."
 msgstr "仕事のアラームをすべて隠す。"
 
+#. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/core/viewer apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "詳細を隠す"
@@ -4468,19 +4492,19 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "気に入っています。"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP ログイン"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Port"
 msgstr "IMAP ポート"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Secure"
 msgstr "セキュリティ保護された IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Server"
 msgstr "IMAP サーバ"
 
@@ -4499,10 +4523,6 @@ msgid ""
 msgstr ""
 "パスワードを変更すると、サインアウトされます。作業中のすべてのファイルを保存"
 "し、閉じてください。"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "If you know what you are doing...just setup your account manually!"
-msgstr "自信がありましたら、自分でもアカウントの設定できます！"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4663,6 +4683,12 @@ msgstr "インライン画像を挿入"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "返信に元のメールの本文を残す"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Installation"
+msgid "Install"
+msgstr "インストール"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -4945,10 +4971,13 @@ msgstr "詳細は、こちらをご覧ください"
 msgid "Letters • Symbols"
 msgstr "文字・記号"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid ""
+#| "Let´s automatically configure your device, by clicking the button below. "
+#| "It´s that simple!"
 msgid ""
-"Let´s automatically configure your device, by clicking the button below. It"
-"´s that simple!"
+"Let´s automatically configure your device, by clicking the button below."
 msgstr "デバイスの自動構成は下のボタンをクリックしてください。簡単です！"
 
 #. Emoji category
@@ -5097,7 +5126,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
@@ -5245,6 +5275,12 @@ msgstr "ファイルの管理"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "手動設定"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Manual Configuration"
+msgstr "自動構成"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -7624,19 +7660,19 @@ msgstr "ルール名"
 msgid "Run auto-play mode"
 msgstr "自動再生モードを実行"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP ログイン"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Port"
 msgstr "SMTP ポート"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Secure"
 msgstr "セキュリティ保護された SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Server"
 msgstr "SMTP サーバ"
 
@@ -7995,10 +8031,6 @@ msgctxt "app"
 msgid "Settings"
 msgstr "設定"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Settings for advanced users"
-msgstr "上級ユーザ用の設定"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -8129,6 +8161,8 @@ msgstr "辞退したアポイントを表示"
 msgid "Show desktop notifications"
 msgstr "デスクトップ通知を表示"
 
+#. button: hide collapsable content
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
 msgstr "詳細を表示"
@@ -14558,6 +14592,9 @@ msgstr "yyyy"
 #~ "認証が期限切れになったか取り消された場合、次のボタンをクリックすると、認証"
 #~ "プロセスを繰り返すことができます。認証は、別のウィンドウで進行します。"
 
+#~ msgid "If you know what you are doing...just setup your account manually!"
+#~ msgstr "自信がありましたら、自分でもアカウントの設定できます！"
+
 #~ msgid ""
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
@@ -16725,6 +16762,9 @@ msgstr "yyyy"
 
 #~ msgid "Service"
 #~ msgstr "サービス"
+
+#~ msgid "Settings for advanced users"
+#~ msgstr "上級ユーザ用の設定"
 
 #~ msgid "Seychelles"
 #~ msgstr "セイシェル"

@@ -1133,7 +1133,8 @@ msgstr "周年紀念日"
 msgid "Any recipient"
 msgstr "任何收件人"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "App Store"
 msgstr "App Store"
 
@@ -1354,6 +1355,7 @@ msgid "Auto-save email drafts"
 msgstr "自動保存電子郵件草稿"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js
 msgid "Automatic Configuration"
 msgstr "自動設定"
 
@@ -1546,12 +1548,12 @@ msgstr "日曆週"
 msgid "CW %1$d"
 msgstr "第 %1$d 週"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV Login"
 msgstr "CalDAV 登入資訊"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1706,11 +1708,11 @@ msgstr "無法要求 %1$s 的檢視類型"
 msgid "Capacity"
 msgstr "容量"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
 msgstr "CardDAV 登入資訊"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
 msgstr "CardDAV 網址"
 
@@ -1911,7 +1913,8 @@ msgstr "新手上路"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "關閉"
@@ -2107,6 +2110,12 @@ msgstr "連線"
 #: apps/io.ox/core/main.js module:io.ox/core
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
+msgstr "連線至裝置"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect your device"
 msgstr "連線至裝置"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2741,6 +2750,12 @@ msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "詳細資訊"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"Did you now that you can take OX App Suite with you? Just click this icon "
+"and choose 'Connect your device' from the menu."
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
 msgstr "直接鏈結"
@@ -3067,8 +3082,7 @@ msgstr "下載安裝檔 (Windows)"
 msgid "Download the %s client for %s"
 msgstr "下載 %2$s 的 %1$s 客戶端"
 
-#. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "下載應用程式。"
 
@@ -3188,11 +3202,11 @@ msgstr "截止日"
 msgid "Due on %1$s"
 msgstr "結束於 %s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS Login"
 msgstr "EAS 登入資訊"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS URL"
 msgstr "EAS 網址"
 
@@ -4171,11 +4185,18 @@ msgid "Get started here"
 msgstr "開始入門"
 
 #. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr "到 %1$s 下載應用程式"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Get the App from %1$s"
+msgid "Get the App from %1$s."
+msgstr "到 %1$s 下載應用程式"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr "透過電子郵件設定裝置。"
 
@@ -4224,7 +4245,8 @@ msgstr "%s 早安"
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -4341,8 +4363,10 @@ msgstr "隱藏所有任務提醒。"
 msgid "Hide all task reminders."
 msgstr "隱藏所有工作提醒。"
 
+#. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/core/viewer apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "隱藏詳情"
@@ -4452,19 +4476,19 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "我喜歡"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP 登入資訊"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Port"
 msgstr "IMAP 通訊埠"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Secure"
 msgstr "IMAP 安全性"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Server"
 msgstr "IMAP 伺服器"
 
@@ -4481,10 +4505,6 @@ msgid ""
 "If you change the password, you will be signed out. Please ensure that "
 "everything is closed and saved."
 msgstr "若您變更密碼將會被登出，請確保所有東西已關閉並儲存。"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "If you know what you are doing...just setup your account manually!"
-msgstr "若您知道您要做什麼…那就可以手動設定！"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4640,6 +4660,12 @@ msgstr "插入行內圖片"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "於回覆中插入原始電子郵件文字"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Installation"
+msgid "Install"
+msgstr "安裝"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -4920,10 +4946,13 @@ msgstr "了解更多"
 msgid "Letters • Symbols"
 msgstr "書信‧符號"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid ""
+#| "Let´s automatically configure your device, by clicking the button below. "
+#| "It´s that simple!"
 msgid ""
-"Let´s automatically configure your device, by clicking the button below. It"
-"´s that simple!"
+"Let´s automatically configure your device, by clicking the button below."
 msgstr "點擊下列按鈕，讓我們自動設定您的裝置，就這麼簡單！"
 
 #. Emoji category
@@ -5071,7 +5100,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "月"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
@@ -5218,6 +5248,12 @@ msgstr "管理檔案"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "手動"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Manual Configuration"
+msgstr "自動設定"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -7585,19 +7621,19 @@ msgstr "規則名稱"
 msgid "Run auto-play mode"
 msgstr "執行自動播放模式"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP 登入資訊"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Port"
 msgstr "SMTP 通訊埠"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Secure"
 msgstr "SMTP 安全性"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Server"
 msgstr "SMTP 伺服器"
 
@@ -7956,10 +7992,6 @@ msgctxt "app"
 msgid "Settings"
 msgstr "選項"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Settings for advanced users"
-msgstr "進階設定"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -8094,6 +8126,8 @@ msgstr "顯示拒絕的約會"
 msgid "Show desktop notifications"
 msgstr "顯示桌面通知"
 
+#. button: hide collapsable content
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
 msgstr "顯示詳情"
@@ -13261,6 +13295,9 @@ msgstr "年"
 #~ msgstr ""
 #~ "若資料夾包含圖片，您可以以幻燈片模式播放。要這麼做，點選右上角的幻燈片。"
 
+#~ msgid "If you know what you are doing...just setup your account manually!"
+#~ msgstr "若您知道您要做什麼…那就可以手動設定！"
+
 #~ msgid ""
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
@@ -14117,6 +14154,9 @@ msgstr "年"
 
 #~ msgid "Server Error"
 #~ msgstr "伺服器錯誤"
+
+#~ msgid "Settings for advanced users"
+#~ msgstr "進階設定"
 
 #~ msgid "Share link by email"
 #~ msgstr "透過電子郵件分享連結"

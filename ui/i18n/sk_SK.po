@@ -1183,7 +1183,8 @@ msgstr "Výročie"
 msgid "Any recipient"
 msgstr "Ľubovoľný príjemca"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "App Store"
 msgstr "App Store"
 
@@ -1410,6 +1411,7 @@ msgid "Auto-save email drafts"
 msgstr "Automaticky ukladať rozpísané správy"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js
 msgid "Automatic Configuration"
 msgstr "Automatické nastavenie"
 
@@ -1610,12 +1612,12 @@ msgstr "Kalendárny týždeň"
 msgid "CW %1$d"
 msgstr "KT %1$d"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV Login"
 msgstr "Prihlásenie CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
@@ -1774,11 +1776,11 @@ msgstr "Nemožno vyžadovať typ zobrazenia %1$s"
 msgid "Capacity"
 msgstr "Kapacita"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
 msgstr "Prihlásenie CardDAV"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
 msgstr "URL CalDAV"
 
@@ -1981,7 +1983,8 @@ msgstr "Onboarding klientov"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Zatvoriť"
@@ -2177,6 +2180,12 @@ msgstr "Pripojiť"
 #: apps/io.ox/core/main.js module:io.ox/core
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
+msgstr "Pripojte svoje zariadenie"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect your device"
 msgstr "Pripojte svoje zariadenie"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2815,6 +2824,12 @@ msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Podrobnosti"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"Did you now that you can take OX App Suite with you? Just click this icon "
+"and choose 'Connect your device' from the menu."
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
 msgstr "Priamy odkaz"
@@ -3153,8 +3168,7 @@ msgstr "Stiahnuť inštalačný súbor (pre Windows)"
 msgid "Download the %s client for %s"
 msgstr "Stiahnuť klienta %s %s"
 
-#. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Stiahnuť aplikáciu."
 
@@ -3276,11 +3290,11 @@ msgstr "Termín"
 msgid "Due on %1$s"
 msgstr "Termín %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS Login"
 msgstr "Prihlasovacie meno EAS"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS URL"
 msgstr "URL EAS"
 
@@ -4286,11 +4300,18 @@ msgid "Get started here"
 msgstr "Začnite tu"
 
 #. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr "Získať aplikáciu z %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Get the App from %1$s"
+msgid "Get the App from %1$s."
+msgstr "Získať aplikáciu z %1$s"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr "Nechajte si zariadenie nastaviť pomocou emailu."
 
@@ -4339,7 +4360,8 @@ msgstr "Dobré ráno, %s"
 msgid "Google Maps"
 msgstr "Mapy Google"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -4456,8 +4478,10 @@ msgstr "Skryť všetky pozvania na úlohy."
 msgid "Hide all task reminders."
 msgstr "Skryť všetky pripomenutia úloh."
 
+#. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/core/viewer apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Skryť podrobnosti"
@@ -4567,19 +4591,19 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "Páči sa mi to"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "Prihlasovacie meno IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Port"
 msgstr "Port IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Secure"
 msgstr "Zabezpečenie IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Server"
 msgstr "Server IMAP"
 
@@ -4598,10 +4622,6 @@ msgid ""
 msgstr ""
 "Ak si zmeníte heslo, budete odhlásení. Uistite sa, že máte všetko zatvorené "
 "a uložené."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "If you know what you are doing...just setup your account manually!"
-msgstr "Ak viete, čo robíte, môžete svoj účet nastaviť manuálne!"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4762,6 +4782,12 @@ msgstr "Vložiť obrázok"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Vložiť pôvodný text emailu do odpovede"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Installation"
+msgid "Install"
+msgstr "Inštalácia"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -5048,10 +5074,13 @@ msgstr "Zistite viac"
 msgid "Letters • Symbols"
 msgstr "Písmená • Symboly"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid ""
+#| "Let´s automatically configure your device, by clicking the button below. "
+#| "It´s that simple!"
 msgid ""
-"Let´s automatically configure your device, by clicking the button below. It"
-"´s that simple!"
+"Let´s automatically configure your device, by clicking the button below."
 msgstr ""
 "Poďme automaticky nastaviť vaše zariadenie kliknutím na tlačidlo nižšie. "
 "Áno, je to také jednoduché!"
@@ -5201,7 +5230,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
@@ -5348,6 +5378,12 @@ msgstr "Spravovanie súborov"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "Ručne"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Manual Configuration"
+msgstr "Automatické nastavenie"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -7749,19 +7785,19 @@ msgstr "Názov pravidla"
 msgid "Run auto-play mode"
 msgstr "Spustiť režim automatického prehrávania"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "Prihlasovacie meno SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Port"
 msgstr "Port SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Secure"
 msgstr "Zabezpečenie SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Server"
 msgstr "Server SMTP"
 
@@ -8124,10 +8160,6 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Settings for advanced users"
-msgstr "Nastavenia pre pokročilých používateľov"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -8266,6 +8298,8 @@ msgstr "Zobraziť zamietnuté schôdzky"
 msgid "Show desktop notifications"
 msgstr "Zobraziť oznámenia na ploche"
 
+#. button: hide collapsable content
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
 msgstr "Zobraziť podrobnosti"
@@ -13891,6 +13925,9 @@ msgstr "RRRR"
 #~ "autorizácie kliknutím na tlačidlo nižšie. Autorizácia bude pokračovať v "
 #~ "samostatnom okne."
 
+#~ msgid "If you know what you are doing...just setup your account manually!"
+#~ msgstr "Ak viete, čo robíte, môžete svoj účet nastaviť manuálne!"
+
 #~ msgid ""
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
@@ -15773,6 +15810,9 @@ msgstr "RRRR"
 
 #~ msgid "Service"
 #~ msgstr "Služba"
+
+#~ msgid "Settings for advanced users"
+#~ msgstr "Nastavenia pre pokročilých používateľov"
 
 #~ msgid "Seychelles"
 #~ msgstr "Seychely"

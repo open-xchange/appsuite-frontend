@@ -1197,7 +1197,8 @@ msgstr "Dzimšanas diena"
 msgid "Any recipient"
 msgstr "Jebkurš saņēmējs"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "App Store"
 msgstr "App Store"
 
@@ -1424,6 +1425,7 @@ msgid "Auto-save email drafts"
 msgstr "Automātiski saglabāt e-pasta melnrakstus"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js
 msgid "Automatic Configuration"
 msgstr "Automātiska konfigurēšana"
 
@@ -1630,12 +1632,12 @@ msgstr "CW"
 msgid "CW %1$d"
 msgstr "KN %1$d"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV Login"
 msgstr "CalDAV pieslēgums"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1795,11 +1797,11 @@ msgstr "Skata tipu priekš %1$s nevar pieprasīt"
 msgid "Capacity"
 msgstr "Kapacitāte"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
 msgstr "CardDAV pieslēgums"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
@@ -2002,7 +2004,8 @@ msgstr "Klienta informācija"
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Aizvērt"
@@ -2200,6 +2203,12 @@ msgstr "Pieslēgties"
 #: apps/io.ox/core/main.js module:io.ox/core
 #: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
 msgid "Connect your Device"
+msgstr "Pieslēgt ierīci"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect your device"
 msgstr "Pieslēgt ierīci"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -2858,6 +2867,12 @@ msgctxt "contact-print-dialog"
 msgid "Details"
 msgstr "Detaļas"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid ""
+"Did you now that you can take OX App Suite with you? Just click this icon "
+"and choose 'Connect your device' from the menu."
+msgstr ""
+
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
 msgstr "Tieša saite"
@@ -3200,8 +3215,7 @@ msgstr "Lejuplādēt instalēšanas failu (Windows) "
 msgid "Download the %s client for %s"
 msgstr "Lejupielādēt %s klientu priekš %s"
 
-#. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Download the application."
 msgstr "Lejupielādēt aplikāciju."
 
@@ -3328,11 +3342,11 @@ msgstr "Izpildes datums"
 msgid "Due on %1$s"
 msgstr "Izpildāms %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS Login"
 msgstr "EAS pieslēgums"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS URL"
 msgstr "EAS URL"
 
@@ -4360,11 +4374,18 @@ msgid "Get started here"
 msgstr "Sāciet šeit"
 
 #. %1$s: app store name
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get the App from %1$s"
 msgstr "Iegūt aplikāciju no %1$s"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Get the App from %1$s"
+msgid "Get the App from %1$s."
+msgstr "Iegūt aplikāciju no %1$s"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
 msgstr "Konfigurējiet savu ierīci, izmantojot e-pastu."
 
@@ -4413,7 +4434,8 @@ msgstr "Labrīt, %s"
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -4532,8 +4554,10 @@ msgstr "Paslēpt visus uzdevumu uzaicinājumus."
 msgid "Hide all task reminders."
 msgstr "Paslēpt visus uzdevumu atgādinājumus."
 
+#. button: show collapsed content
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
-#: module:io.ox/core/viewer apps/io.ox/tasks/edit/view-template.js
+#: module:io.ox/core/viewer apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Paslēpt detaļas"
@@ -4646,19 +4670,19 @@ msgctxt "rating"
 msgid "I like it"
 msgstr "Labi"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Login"
 msgstr "IMAP pieslēgums"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Port"
 msgstr "IMAP ports"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Secure"
 msgstr "Drošs IMAP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP Server"
 msgstr "IMAP serveris"
 
@@ -4677,11 +4701,6 @@ msgid ""
 msgstr ""
 "Ja jūs izmainīsiet paroli, jūsu pieslēgums tiks pārtaukts. Lūdzu "
 "pārliecinieties, ka visas izmaiņas ir saglabātas."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "If you know what you are doing...just setup your account manually!"
-msgstr ""
-"Ja ziniet ko darāt... vienkārši veiciet sava konta manuālu iestatīšanu!"
 
 #: apps/io.ox/calendar/edit/timezone-dialog.js module:io.ox/calendar/edit/main
 msgid ""
@@ -4844,6 +4863,12 @@ msgstr "Ievietot ietverto attēlu"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Ietvert oriģinālā e-pasta tekstu atildē"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Installation"
+msgid "Install"
+msgstr "Uzstādīšana"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -5132,10 +5157,13 @@ msgstr "Uzzināt vairāk"
 msgid "Letters • Symbols"
 msgstr "Burti • Simboli"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid ""
+#| "Let´s automatically configure your device, by clicking the button below. "
+#| "It´s that simple!"
 msgid ""
-"Let´s automatically configure your device, by clicking the button below. It"
-"´s that simple!"
+"Let´s automatically configure your device, by clicking the button below."
 msgstr ""
 "Veiciet savas ierīces automātisku konfigurēšanu, piespiežot zemāk redzamo "
 "taustiņu!"
@@ -5287,7 +5315,8 @@ msgstr "MB"
 msgid "MM"
 msgstr "MM"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#. %1$s: app store name
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
@@ -5436,6 +5465,12 @@ msgstr "Failu pārvaldīšana"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "Manuāli"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Automatic Configuration"
+msgid "Manual Configuration"
+msgstr "Automātiska konfigurēšana"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -7897,19 +7932,19 @@ msgstr "Noteikuma vārds"
 msgid "Run auto-play mode"
 msgstr "Tikai lasīšanai"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Login"
 msgstr "SMTP pieslēgums"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Port"
 msgstr "SMTP ports"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Secure"
 msgstr "Drošs SMTP"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "SMTP Server"
 msgstr "SMTP serveris"
 
@@ -8277,10 +8312,6 @@ msgctxt "app"
 msgid "Settings"
 msgstr "Iestatījumi"
 
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Settings for advanced users"
-msgstr "Eksperta lietotāju iestatījumi"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js apps/io.ox/files/toolbar.js
 #: module:io.ox/files apps/plugins/portal/xing/actions.js
@@ -8419,6 +8450,8 @@ msgstr "Rādīt noraidītos mītiņus"
 msgid "Show desktop notifications"
 msgstr "Rādīt darbvirsmas paziņojumus"
 
+#. button: hide collapsable content
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Show details"
 msgstr "Rādīt detaļas"
@@ -14123,6 +14156,10 @@ msgstr "yyyy"
 #~ "atkārtot autorizēšanās procesu, piespiežot zemāk redzmo taustiņu. "
 #~ "Autorizācija tiks veikta atsevišķā logā."
 
+#~ msgid "If you know what you are doing...just setup your account manually!"
+#~ msgstr ""
+#~ "Ja ziniet ko darāt... vienkārši veiciet sava konta manuālu iestatīšanu!"
+
 #~ msgid ""
 #~ "If you no longer want to display a tile, click the cross on the upper "
 #~ "right side."
@@ -16010,6 +16047,9 @@ msgstr "yyyy"
 
 #~ msgid "Service"
 #~ msgstr "Serviss"
+
+#~ msgid "Settings for advanced users"
+#~ msgstr "Eksperta lietotāju iestatījumi"
 
 #~ msgid "Seychelles"
 #~ msgstr "Seišeļu salas"
