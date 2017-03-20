@@ -62,7 +62,7 @@ define('io.ox/contacts/util', [
             copy = {};
             _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
                 if (!$.trim(obj[id])) return;
-                var tagName = id === 'last_name' ? 'b' : 'span';
+                var tagName = id === 'last_name' ? 'strong' : 'span';
                 copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
             });
         }
@@ -315,7 +315,10 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options);
+            var url = arg.replace(/^https?\:\/\/[^\/]+/i, '');
+            url = util.replacePrefix(url);
+
+            return util.getShardingRoot(url + '&' + $.param(options));
         },
 
         getInitials: (function () {

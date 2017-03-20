@@ -47,6 +47,7 @@ define('io.ox/core/session', [
         if ('context_id' in data) ox.context_id = data.context_id || 0;
         // if the user has set the language on the login page, use this language instead of server settings lang
         ox.language = language || check(data.locale) || check(getBrowserLanguage()) || 'en_US';
+
         _.setCookie('language', ox.language);
         manifests.reset();
         $('html').attr('lang', ox.language.split('_')[0]);

@@ -127,10 +127,10 @@ A event triggers when an app started. The measure time is between the click on t
 
 | EventId                            | Trigger                                                                                          |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| tasks/list/select/one <br>  tasks/list/select/multiple | Select task by click on the list                                             |
 | tasks/folder/select/[list-of-flags]         | Clicks on a folder in the tasks folder tree (flags: private, public, shared, default, virtual)              |
 | tasks/folder/context-menu/[action] | Clicks within the context menu, which pops up, when you click on a folder name and its menu icon |
 | tasks/toolbar/[action]             | Clicks on tasks toolbar action                                                                   |
-| tasks/detail/[action]              | Clicks on task detail view toolbar action                                                        |
 | tasks/edit/toolbar/[action]        | Clicks on a action in the create/edit dialog                                                     |
 | tasks/edit/add-attachment          | Successfully adding a attachment                                                                 |
 

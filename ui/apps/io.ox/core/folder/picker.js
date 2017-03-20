@@ -13,10 +13,11 @@
 
 define('io.ox/core/folder/picker', [
     'io.ox/core/folder/tree',
+    'io.ox/mail/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/core'
-], function (TreeView, api, dialogs, gt) {
+], function (TreeView, mailAPI, api, dialogs, gt) {
 
     'use strict';
 
@@ -88,8 +89,40 @@ define('io.ox/core/folder/picker', [
             close: $.noop,
             show: $.noop,
             alternative: $.noop,
-            cancel: $.noop
+            cancel: $.noop,
+            create: $.noop
         }, options);
+
+        function create() {
+            var container = dialog.getBody().closest('.io-ox-dialog-wrapper'),
+                parentview = tree.getNodeView(tree.selection.get() || tree.root);
+            container.busy();
+            require(['io.ox/core/folder/actions/add'], function (add) {
+                container.hide().idle();
+                // request and open create-folder-dialog
+                add(mapIds(parentview.folder), { module: o.module })
+                    .then(function (data) {
+                        // add additonal 5ms to tree nodes debounced onSort handler
+                        _.delay(function () {
+                            container.show();
+                            tree.selection.set(data.id);
+                            tree.selection.scrollIntoView(data.id);
+                        }, 15);
+                    },
+                    container.show.bind(container)
+                );
+            });
+        }
+        function mapIds(id) {
+            // in flat folder views new folders are always created in the root folder
+            if (tree.flat) {
+                return api.getDefaultFolder(tree.module);
+            }
+            if (id === 'virtual/myfolders') {
+                return api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX';
+            }
+            return id;
+        }
 
         var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
             .header(
@@ -98,7 +131,8 @@ define('io.ox/core/folder/picker', [
                 )
             )
             .addPrimaryButton('ok', o.button, 'ok')
-            .addButton('cancel', gt('Cancel'), 'cancel');
+            .addButton('cancel', gt('Cancel'), 'cancel')
+            .addAlternativeButton('create', gt('Create folder'), 'create', { click: create });
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
@@ -115,10 +149,13 @@ define('io.ox/core/folder/picker', [
         var open = o.settings && _.isString(o.persistent) ? o.settings.get(o.persistent + '/open', []) : [];
 
         var tree = new TreeView({
+            folderBase: o.folderBase,
             all: o.all,
             context: o.context,
             filter: o.filter,
             flat: !!o.flat,
+            // no links like my contact data or subscubre calendar in picker
+            noLinks: true,
             indent: o.indent,
             module: o.module,
             abs: o.abs,
@@ -146,11 +183,18 @@ define('io.ox/core/folder/picker', [
         if (o.selection) {
 
             tree.on('change virtual', function (id) {
+                id = mapIds(id);
                 var model = api.pool.getModel(id), data = model.toJSON();
                 dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
+
+                // check create folder button too
+                // special case: default0 with altnamespace
+                var canCreate = data.id === 'default0' && api.altnamespace;
+                canCreate = (this.flat || (canCreate || model.can('create:folder')) && !model.is('trash'));
+                dialog.getFooter().find('.btn-default[data-action="create"]').prop('disabled', !canCreate);
             });
 
-            dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', true);
+            dialog.getFooter().find('.btn-primary[data-action="ok"],.btn-default[data-action="create"]').prop('disabled', true);
         }
 
         o.initialize(dialog, tree);

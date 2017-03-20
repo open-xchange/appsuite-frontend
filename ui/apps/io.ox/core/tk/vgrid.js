@@ -297,7 +297,7 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false">').append(
+                        $('<a href="#" class="select-all" role="checkbox" aria-checked="false">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
@@ -473,16 +473,12 @@ define('io.ox/core/tk/vgrid', [
                 // draw
                 clone = label.getClone();
                 clone.node.addClass('vgrid-label').data('label-index', i);
+                // data, index, id, prev, grid
                 defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}, self));
                 text = clone.node.text();
-                // convert Umlauts
-                text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
-                obj.text = text;
                 labels.index[obj.pos] = i;
                 labels.textIndex[text] = i;
             }
@@ -551,7 +547,7 @@ define('io.ox/core/tk/vgrid', [
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current, $i);
                 if (tmp !== false) {
-                    labels.list.push({ top: 0, text: '', pos: i });
+                    labels.list.push({ top: 0, pos: i });
                     current = tmp;
                 }
             }

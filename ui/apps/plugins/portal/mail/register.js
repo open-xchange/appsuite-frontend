@@ -181,6 +181,7 @@ define('plugins/portal/mail/register', [
             return $.when(getFolderName(baton)).then(function (folder) {
                 var loader = baton.collectionLoader,
                     params = loader.getQueryParams({ folder: folder });
+                baton.folder = folder;
                 baton.collection = loader.getCollection(params);
                 if (!folder) {
                     return $.Deferred().reject({ error: api.mailServerDownMessage, retry: false });
@@ -194,25 +195,31 @@ define('plugins/portal/mail/register', [
 
             if (this.find('.summary').length) return;
 
-            var message = '',
-                unread = _(baton.data).reduce(function (sum, obj) {
-                    return sum + (util.isUnseen(obj) ? 1 : 0);
-                }, 0);
+            var node = $('<div class="summary">');
 
-            if (unread === 0) {
-                message = gt('You have no unread messages');
-            } else if (unread === 1) {
-                message = gt('You have 1 unread message');
-            } else {
-                message = gt('You have %1$d unread messages', unread);
-            }
+            // get folder model
+            require(['io.ox/core/folder/api'], function (folderAPI) {
+                var model = folderAPI.pool.getModel(baton.folder);
+                setSummary(model);
+                this.append(node).addClass('with-summary show-summary');
+                model.on('change:unread', setSummary);
+            }.bind(this));
 
-            this.addClass('with-summary show-summary').append(
-                $('<div class="summary">').text(message)
-            )
-            .on('tap', 'h2', function (e) {
+            this.on('tap', 'h2, .summary', function (e) {
                 $(e.delegateTarget).toggleClass('show-summary');
+                return false;
             });
+
+            function setSummary(model) {
+                var unread = model.get('unread');
+                if (!unread) return node.text(gt('You have no unread messages'));
+                node.text(gt.format(
+                    //#. %1$d is the number of mails
+                    //#, c-format
+                    gt.ngettext('You have %1$d unread message', 'You have %1$d unread messages', unread),
+                    gt.noI18n(unread)
+                ));
+            }
         },
 
         preview: function (baton) {

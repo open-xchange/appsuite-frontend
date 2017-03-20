@@ -16,13 +16,11 @@ define('io.ox/files/share/toolbar', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/yell',
-    'io.ox/core/folder/api',
-    'io.ox/files/api',
     'io.ox/files/share/api',
     'gettext!io.ox/files',
     'io.ox/files/actions',
     'less!io.ox/files/style'
-], function (ext, links, actions, yell, folderAPI, filesAPI, api, gt) {
+], function (ext, links, actions, yell, api, gt) {
 
     'use strict';
 

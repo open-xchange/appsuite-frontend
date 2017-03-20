@@ -40,6 +40,12 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail').extend({
+        id: 'flagged-class',
+        index: INDEX += 100,
+        draw: extensions.flaggedClass
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         id: 'subject',
         index: INDEX += 100,
         draw: function (baton) {
@@ -150,12 +156,22 @@ define('io.ox/mail/detail/view', [
             draw: extensions.priority
         },
         {
+            id: 'security',
+            index: INDEX_header += 100,
+            draw: extensions.security
+        },
+        {
             id: 'date',
             index: INDEX_header += 100,
             draw: extensions.fulldate
         },
         {
-            id: 'flag-picker',
+            id: 'flag-toggle',
+            index: INDEX_header += 100,
+            draw: extensions.flagToggle
+        },
+        {
+            id: 'color-picker',
             index: INDEX_header += 100,
             draw: extensions.flagPicker
         }
@@ -258,14 +274,22 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail').extend({
+        id: 'error',
+        index: INDEX += 100,
+        draw: function () {
+            this.append($('<section class="error" role="dialog">').hide());
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
             var $body;
             this.append(
                 $('<section class="attachments">'),
-                // must have tabindex=0, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text focusable" tabindex="0">')
+                // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
+                $body = $('<section class="body user-select-text focusable" tabindex="-1">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
@@ -375,12 +399,14 @@ define('io.ox/mail/detail/view', [
 
         events: {
             'keydown': 'onToggle',
-            'click .detail-view-header': 'onToggle'
+            'click .detail-view-header': 'onToggle',
+            'click a[data-action="retry"]': 'onRetry'
         },
 
         onChangeFlags: function () {
             // update unread state
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
+            this.$el.toggleClass('flagged', util.isFlagged(this.model.get('flags')));
         },
 
         onChangeAttachments: function () {
@@ -401,6 +427,18 @@ define('io.ox/mail/detail/view', [
             if (this.model.previous('attachments') &&
                 this.model.get('attachments') &&
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
+        },
+
+        onChangeSecurity: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
+                node = this.$el.find('header.detail-view-header').empty();
+            ext.point('io.ox/mail/detail/header').invoke('draw', node, baton);
         },
 
         getEmptyBodyNode: function () {
@@ -477,6 +515,13 @@ define('io.ox/mail/detail/view', [
             this.toggle(cid);
         },
 
+        onRetry: function (e) {
+            e.preventDefault();
+            this.$('section.error').hide();
+            this.$('section.body').show();
+            this.toggle(true);
+        },
+
         onUnseen: function () {
             var data = this.model.toJSON();
             if (util.isToplevel(data)) api.markRead(data);
@@ -496,13 +541,14 @@ define('io.ox/mail/detail/view', [
             // done
             this.$el.find('section.body').removeClass('loading');
             this.trigger('load:done');
-
             // draw
             // nested mails do not have a subject before loading, so trigger change as well
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-
+            if (data && data.security) {
+                this.onChangeSecurity();
+            }
             // process unseen flag
             if (unseen) {
                 this.onUnseen();
@@ -513,17 +559,15 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoadFail: function (e) {
+            if (!this.$el) return;
             this.trigger('load:fail');
             this.trigger('load:done');
-            if (!this.$el) return;
             this.$el.attr('data-loaded', false);
-            this.getEmptyBodyNode().empty().append(
-                $('<div class="mail-detail-content">').append(
-                    $('<div class="loading-error">').append(
-                        $('<h4>').text(gt('Error while loading message content')),
-                        $('<div>').text(e.error)
-                    )
-                )
+            this.$('section.error').empty().show().append(
+                $('<i class="fa fa-exclamation-triangle">'),
+                $('<h4>').text(gt('Error: Failed to load message content')),
+                $('<p>').text(e.error),
+                $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
             );
         },
 
@@ -583,10 +627,13 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    this.$el.find('section.body').empty().busy();
+                    this.$('section.body').empty().busy();
                 },
                 'load:done': function () {
-                    this.$el.find('section.body').idle();
+                    this.$('section.body').idle();
+                },
+                'load:fail': function () {
+                    this.$('section.body').hide();
                 }
             });
         },

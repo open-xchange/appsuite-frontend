@@ -20,7 +20,6 @@ define('io.ox/files/main', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
-    'io.ox/core/folder/node',
     'io.ox/core/folder/view',
     'io.ox/files/listview',
     'io.ox/core/tk/list-control',
@@ -41,10 +40,10 @@ define('io.ox/files/main', [
     'less!io.ox/core/viewer/style',
     'io.ox/files/toolbar',
     'io.ox/files/share/toolbar',
+    'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
-    'io.ox/core/folder/breadcrumb',
-    'gettext!io.ox/core/viewer'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, TreeNodeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+    'io.ox/core/folder/breadcrumb'
+], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -298,7 +297,7 @@ define('io.ox/files/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
-                'filter': 'none',
+                'filter': 'all',
                 'layout': layout,
                 'folderEditMode': false,
                 'details': _.device('touch') ? false : app.settings.get('showDetails', true)
@@ -487,6 +486,101 @@ define('io.ox/files/main', [
             });
         },
 
+        /*
+         * Respond to virtual favorites
+         */
+        'myfavorites-listview': function (app) {
+
+            var loading = false;
+
+            app.folderView.tree.on({
+                'virtual': function (id) {
+                    if (id !== 'virtual/favorites/infostore') return;
+
+                    app.folder.unset();
+                    app.getWindow().setTitle(gt('Favorites'));
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        return;
+                    }
+
+                    app.getWindow().nodes.body.busy().children().hide();
+                    if (loading) return;
+                    loading = true;
+
+                    require(['io.ox/files/favorite/listview'], function (MyFavoriteView) {
+
+                        app.myFavoriteListView = new MyFavoriteView({
+                            app: app,
+                            pagination: false,
+                            draggable: false,
+                            ignoreFocus: true,
+                            noSwipe: true,
+                            noPullToRefresh: true
+                        });
+
+                        app.myFavoritesListViewControl = new ListViewControl({
+                            id: 'io.ox/files/favorite/myfavorites',
+                            listView: app.myFavoriteListView,
+                            app: app
+                        });
+
+                        var toolbar = new Toolbar({ title: app.getTitle() });
+
+                        app.getWindow().nodes.body.prepend(
+                            app.myFavoritesListViewControl.render().$el
+                                .hide()
+                                .addClass('myfavorites-list-control')
+                                .append(toolbar.render().$el)
+                        );
+
+                        app.updateMyFavoritesToolbar = _.debounce(function (list) {
+                            var baton = ext.Baton({
+                                    $el: toolbar.$list,
+                                    data: app.myFavoriteListView.collection.get(list),
+                                    collection: app.myFavoriteListView.collection,
+                                    model: app.myFavoriteListView.collection.get(app.myFavoriteListView.collection.get(list))
+                                }),
+                                ret = ext.point('io.ox/files/favorite/classic-toolbar')
+                                .invoke('draw', toolbar.$list.empty(), baton);
+
+                            $.when.apply($, ret.value()).then(function () {
+                                toolbar.initButtons();
+                            });
+                        }, 10);
+
+                        app.updateMyFavoritesToolbar([]);
+                        // update toolbar on selection change as well as any model change
+                        app.myFavoriteListView.on('selection:change change', function () {
+                            app.updateMyFavoritesToolbar(app.myFavoriteListView.selection.get());
+                        });
+
+                        // show? (maybe user switched folder meanwhile)
+                        if (app.folder.get() === null) {
+                            app.myFavoritesListViewControl.$el.show().siblings().hide();
+                        }
+
+                        loading = false;
+                    });
+                },
+                'change': function () {
+                    if (app.myFavoritesListViewControl) {
+                        app.myFavoritesListViewControl.$el.hide().siblings().show();
+                        app.myFavoriteListView.selection.clear();
+                    }
+                    if (loading) {
+                        app.getWindow().nodes.body.idle().children().show();
+                    }
+                }
+            });
+
+            app.pages.getPage('main').on('myfavorites-folder-back', function () {
+                app.folderView.tree.selection.getItems().removeClass('selected');
+                app.folderView.tree.selection.set(folderAPI.getDefaultFolder('infostore'));
+                app.myFavoritesListViewControl.$el.hide().siblings().show();
+            });
+        },
+
         'attachmentViewUpdater': function (app) {
             var attachmentView = coreSettings.get('folder/mailattachments', {});
             if (_.isEmpty(attachmentView)) return;
@@ -606,16 +700,30 @@ define('io.ox/files/main', [
          * Respond to changed filter
          */
         'change:filter': function (app) {
-
+            var ignoreFolderChange = false;
             app.props.on('change:filter', function (model, value) {
                 app.listView.selection.selectNone();
-                if (value === 'none') app.listView.setFilter();
-                else app.listView.setFilter('.file-type-' + value);
+                if (api.collectionLoader.setMimeTypeFilter(value === 'all' ? null : [value])) {
+                    var id = app.listView.model.get('folder');
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    app.listView.empty();
+                    var options = app.getViewOptions(id);
+                    app.props.set(options);
+                    app.listView.model.set('folder', null, { silent: true });
+                    ignoreFolderChange = true;
+                    app.listView.model.set('folder', id);
+                    ignoreFolderChange = false;
+                }
             });
 
             // reset filter on folder change
             app.on('folder:change', function () {
-                app.props.set('filter', 'none');
+                if (!ignoreFolderChange) {
+                    api.collectionLoader.setMimeTypeFilter(null);
+                    app.props.set('filter', 'all');
+                }
             });
         },
 
@@ -741,7 +849,7 @@ define('io.ox/files/main', [
             });
         },
 
-        //open on pressing enter
+        //open on pressing enter / space
         'selection-enter': function (app) {
             if (_.device('smartphone')) {
                 return;
@@ -749,7 +857,8 @@ define('io.ox/files/main', [
 
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
 
@@ -762,7 +871,8 @@ define('io.ox/files/main', [
 
             // files
             app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                         baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
@@ -776,8 +886,8 @@ define('io.ox/files/main', [
          * Respond to API events that need a reload
          */
         'requires-reload': function (app) {
-            // listen to events that affect the filename, add files, or remove files
-            api.on('rename add:version remove:version change:version', _.debounce(function () {
+            // listen to events that affect the filename, description add files, or remove files
+            api.on('rename description add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
@@ -1071,6 +1181,7 @@ define('io.ox/files/main', [
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
+                    app.props.set('filter', 'all');
                 }
             });
         },
@@ -1165,7 +1276,7 @@ define('io.ox/files/main', [
                     action: 'add'
                 });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
@@ -1174,7 +1285,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     metrics.trackEvent({
                         app: 'drive',
@@ -1186,7 +1297,7 @@ define('io.ox/files/main', [
                 });
 
                 // list view control toolbar dropdown
-                control.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                control.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
@@ -1204,7 +1315,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder/context-menu',

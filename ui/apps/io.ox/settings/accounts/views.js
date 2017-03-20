@@ -31,33 +31,12 @@ define('io.ox/settings/accounts/views', [
             }
         },
         drawIcon = (function () {
-            var icons = {
-                mail: 'fa-envelope',
-                xing: 'fa-xing',
-                twitter: 'fa-twitter',
-                google: 'fa-google',
-                yahoo: 'fa-yahoo',
-                linkedin: 'fa-linkedin',
-                dropbox: 'fa-dropbox',
-                msliveconnect: 'fa-windows'
-            };
-            return function (type) {
-                var icon = $('<i class="account-icon fa" aria-hidden="true">');
-                if (type === 'boxcom') {
-                    // there is no fitting icon for box in fontawesome
-                    return icon
-                        .removeClass('fa')
-                        .css({
-                            'background-image': 'url(apps/themes/default/box_logo36.png)',
-                            'background-size': 'cover',
-                            height: '14px',
-                            width: '14px',
-                            margin: '13px 0 13px 13px',
-                            padding: 0
-                        });
-                }
-                icon.addClass(icons[type] || 'fa-circle');
-                return icon;
+            return function (model) {
+                var type = model.get('accountType'),
+                    shortId = String(model.get('serviceId') || model.id).match(/\.?([a-zA-Z]*)(\d*)$/)[1] || 'fallback';
+                return $('<i class="account-icon fa" aria-hidden="true">')
+                    .addClass(type.toLowerCase())
+                    .addClass('logo-' + shortId);
             };
         })(),
 
@@ -68,20 +47,13 @@ define('io.ox/settings/accounts/views', [
          * containing the error. Will not be used in
          * non-dsc setups (atm)
          */
-        getAccountState = function (data) {
-            if (data.model.get('type') !== 'mail' && mailSettings.get('dsc/enabled', false) === false) return $();
-            var wrapper = $('<div class="account-error-wrapper">'),
-                node = $('<div class="account-error">'),
-                icon = $('<i class="account-error-icon fa fa-exclamation-triangle">');
+        drawAccountState = function (model) {
+            if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
 
-            accounts.getStatus(data.model.get('id')).done(function (status) {
-                if (status[data.model.get('id')].status !== 'ok') {
-                    wrapper.append(icon, node).show();
-                    node.text(status[data.model.get('id')].message);
-                }
-            });
-
-            return wrapper.hide();
+            return $('<div class="error-wrapper">').append(
+                $('<i class="error-icon fa fa-exclamation-triangle">'),
+                $('<div class="error-message">').text(model.get('status').message)
+            );
         },
         SettingsAccountListItemView = DisposableView.extend({
 
@@ -95,21 +67,35 @@ define('io.ox/settings/accounts/views', [
             },
 
             initialize: function () {
-                this.model.on('change', this.render, this);
+                this.listenTo(this.model, 'change', this.render);
+            },
+
+            getTitle: function () {
+                // mail accounts are special, displayName might be different from account name, want account name, here
+                var titleAttribute = this.model.get('accountType') === 'mail' ? 'name' : 'displayName';
+
+                return this.model.get(titleAttribute);
+            },
+
+            renderSubTitle: function () {
+                var el = $('<div>').addClass('list-item-subtitle');
+                ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').invoke('renderSubtitle', el, this.model);
+                return el;
             },
 
             render: function () {
                 var self = this,
-                    title = self.model.get('displayName');
+                    title = self.getTitle();
                 self.$el.attr({
                     'data-id': self.model.get('id'),
                     'data-accounttype': self.model.get('accountType')
                 });
 
-                self.$el.append(
-                    drawIcon(self.model.get('accountType')),
-                    listUtils.makeTitle(title),
-                    getAccountState(this), // show a possible account error
+                self.$el.empty().append(
+                    drawIcon(self.model),
+                    listUtils.makeTitle(title).append(
+                        this.renderSubTitle()
+                    ),
                     listUtils.makeControls().append(
                         listUtils.appendIconText(
                             listUtils.controlsEdit({ 'aria-label': gt('Edit %1$s', title) }),
@@ -118,9 +104,7 @@ define('io.ox/settings/accounts/views', [
                         ),
                         self.model.get('id') !== 0 ? listUtils.controlsDelete({ title: gt('Delete %1$s', title) }) : $('<div class="remove-placeholder">')
                     ),
-                    // some Filestorage accounts may contain errors, if thats the case show them
-                    // support for standard and oauth accounts
-                    self.model.get('accountType') !== 'mail' ? listUtils.drawError(filestorageApi.getAccountsCache().get(self.model) || filestorageApi.getAccountForOauth(self.model)) : ''
+                    drawAccountState(this.model) // show a possible account error
                 );
 
                 return self;
@@ -133,11 +117,19 @@ define('io.ox/settings/accounts/views', [
                 var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
                     self = this;
 
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog({ async: true })
-                    .text(gt('Do you really want to delete this account?'))
-                    .addPrimaryButton('delete', gt('Delete account'), 'delete')
-                    .addButton('cancel', gt('Cancel'), 'cancel')
+                require(['io.ox/backbone/views/modal'], function (ModalDialog) {
+                    new ModalDialog({
+                        async: true,
+                        title: gt('Delete account')
+                    })
+                    .extend({
+                        id: 'default',
+                        draw: function () {
+                            this.$body.append(gt('Do you really want to delete this account?'));
+                        }
+                    })
+                    .addCancelButton()
+                    .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
                         var popup = this;
                         settingsUtil.yellOnReject(
@@ -171,7 +163,7 @@ define('io.ox/settings/accounts/views', [
                             })
                         );
                     })
-                    .show();
+                    .open();
                 });
             },
 
@@ -180,6 +172,7 @@ define('io.ox/settings/accounts/views', [
                 e.data = {
                     id: this.model.get('id'),
                     accountType: this.model.get('accountType'),
+                    model: this.model,
                     node: this.el
                 };
                 createExtpointForSelectedAccount(e);

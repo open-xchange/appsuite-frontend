@@ -20,10 +20,12 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/util',
+    'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -388,7 +390,7 @@ define('io.ox/files/api', [
 
         options = _.extend({ scaleType: 'contain' }, options);
 
-        var url = ox.apiRoot + '/files',
+        var url = '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
             sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + (file.last_modified || 1),
@@ -410,19 +412,27 @@ define('io.ox/files/api', [
 
         switch (type) {
             case 'download':
-                return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                url = (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                break;
             case 'thumbnail':
-                return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                break;
             case 'preview':
-                return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                break;
             case 'cover':
-                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                break;
             case 'play':
-                return url + query + '&delivery=view';
+                url = url + query + '&delivery=view';
+                break;
             // open/view
             default:
-                return url + name + query + '&delivery=view';
+                url = url + name + query + '&delivery=view';
+                break;
         }
+
+        return util.getShardingRoot(url);
     };
 
     //
@@ -432,8 +442,10 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707',
-        allVersionColumns = http.getAllColumns('files', true);
+    // 711 is "number of versions", needed for fixing Bug 52006,
+    // number of versions often changes when editing files
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711';
+    var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
     if (!_.isEmpty(attachmentView)) {
@@ -504,7 +516,88 @@ define('io.ox/files/api', [
                 timezone: 'utc'
             };
         },
+        fetch: function (params) {
+
+            var module = this.module,
+                key = module + '/' + _.param(_.extend({ session: ox.session }, params)),
+                rampup = ox.rampup[key],
+                noSelect = this.noSelect(params),
+                virtual = this.virtual(params),
+                self = this;
+
+            if (rampup) {
+                delete ox.rampup[key];
+                return $.when(rampup);
+            }
+
+            if (noSelect) {
+                var model = folderAPI.pool.getModel(params.folder);
+                if (model.attributes.own_rights === 1) {
+                    params.tree = 1;
+                    params.parent = params.folder;
+                    module = 'folders';
+                    params.action = 'list';
+                }
+            }
+            if (virtual) {
+                return $.when(virtual);
+            }
+
+            return http.wait().then(function () {
+                if (self.mimeTypeFilter) {
+                    return self.filterByMimeType(params).then(function (data) {
+                        // apply filter
+                        if (self.filter) data = _(data).filter(self.filter);
+                        // useSlice helps if server request doesn't support "limit"
+                        return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                    });
+                }
+                return self.httpGet(module, params).then(function (data) {
+                    // apply filter
+                    if (self.filter) data = _(data).filter(self.filter);
+                    // useSlice helps if server request doesn't support "limit"
+                    return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                });
+
+            });
+        },
+
         httpGet: function (module, params) {
+
+            if (params.folder === '9') {
+                var folders = [];
+
+                // add all folders and favorites for the "Drive" folder list view
+                return folderAPI.get('virtual/favorites/infostore').then(function (favoriteFolder) {
+                    return folderAPI.list('virtual/favorites/infostore').then(function (favorites) {
+                        if (favorites.length) {
+                            folders.push(favoriteFolder);
+                        }
+                        return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                            folders = folders.concat(driveFolders);
+                            switch (String(params.sort)) {
+                                // Name
+                                case '702':
+                                    folders = _(folders).sortBy('title');
+                                    break;
+                                // Date
+                                case '5':
+                                    folders = _.sortBy(folders, function (folder) {
+                                        return folder.last_modified ? folder.last_modified : 0;
+                                    });
+                                    break;
+                                default:
+                                    // do nothing
+                            }
+                            if (params.order === 'desc') {
+                                folders.reverse();
+                            }
+                            return folders;
+                        });
+                    });
+                });
+            }
+
             // since we don't have a unified API for files and folders
             // we fetch folders first to see how many we get.
             // we always have to do that even if the offset is > 0
@@ -526,8 +619,6 @@ define('io.ox/files/api', [
                     limit = newStart + ',' + newStop;
                 // folders exceed upper limit?
                 if (folders.length >= stop) return folders.slice(start, stop);
-                // optimisation for "Drive" folder
-                if (params.folder === '9') return folders;
                 // fetch files
                 return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
                     function (files) {
@@ -559,6 +650,91 @@ define('io.ox/files/api', [
                 );
             });
         },
+        filterByMimeType: function (params) {
+            var self = this;
+            return folderAPI.get(params.folder).then(function (folder) {
+                return folderAPI.list(params.folder).then(function (folders) {
+                    // sort by date client-side
+                    if (String(params.sort) === '5') {
+                        folders = _(folders).sortBy('last_modified');
+                    }
+                    if (params.order === 'desc') folders.reverse();
+                    // get remaining limit for files
+                    var split = params.limit.split(/,/),
+                        start = Number(split[0]),
+                        stop = Number(split[1]);
+                    // folders exceed upper limit?
+                    if (folders.length >= stop) return folders.slice(start, stop);
+                    var opt = {
+                        data: {
+                            facets: [
+                                {
+                                    facet: 'folder',
+                                    filter: null,
+                                    value: params.folder
+                                },
+                                {
+                                    facet: 'account',
+                                    filter: null,
+                                    value: folder.account_id
+                                },
+                                {
+                                    facet: 'file_type',
+                                    filter: {
+                                        fields: ['file_mimetype'],
+                                        queries: self.mimeTypeFilter
+                                    },
+                                    value: self.mimeTypeFilter
+                                }
+                            ],
+                            options: {
+                                includeSubfolders: false,
+                                sort: params.sort,
+                                order: params.order
+                            },
+                            size: stop,
+                            start: start
+                        },
+                        params: {
+                            module: 'files'
+                        }
+                    };
+
+                    // fetch files
+                    return FindAPI.query(opt).then(
+                        function (files) {
+                            files = files.results;
+                            // build virual response of folders, placeholders, and files
+                            // simple solution to get proper slice
+                            var unified = [].concat(
+                                folders,
+                                // fill up with placeholders
+                                new Array(Math.max(0, start - folders.length)),
+                                files
+                            );
+
+                            var result = unified.slice(start, stop);
+                            result.forEach(function (el, index) {
+                                result[index] = mergeDetailInPool(el);
+                            });
+                            self.addIndex(start, params, result);
+                            self.done();
+                            return result;
+                        },
+                        function fail(e) {
+                            if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                                // IFO-0400 is missing the folder in the error params -> adding this manually
+                                e.error_params.push(params.folder);
+                            }
+                            api.trigger('error error:' + e.code, e);
+                            // this one might fail due to lack of permissions; error are transformed to empty array
+                            if (ox.debug) console.warn('files.filter', e.error, e);
+                            return [];
+                        }
+                    );
+                });
+            });
+        },
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         PRIMARY_PAGE_SIZE: 210,
@@ -573,6 +749,14 @@ define('io.ox/files/api', [
 
     api.collectionLoader.each = function (data) {
         api.pool.add('detail', data);
+    };
+
+    api.collectionLoader.setMimeTypeFilter = function (mimeTypeFilter) {
+        if (_.isEqual(api.collectionLoader.mimeTypeFilter, mimeTypeFilter)) {
+            return false;
+        }
+        api.collectionLoader.mimeTypeFilter = mimeTypeFilter;
+        return true;
     };
 
     // resolve a list of composite keys
@@ -1022,7 +1206,10 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model && model.get('id') !== response.id) model.set('id', response.id);
+            if (_.isObject(response) && model && model.get('id') !== response.id) {
+                model.set('id', response.id);
+                file.id = response.id;
+            }
         })
         .always(_.lfo(process, prev, model))
         .done(function () {
@@ -1312,7 +1499,7 @@ define('io.ox/files/api', [
             // get another copy for array support
             // move, copy, lock, unlock, remove:file handle multiple files at once
             var list = _.isArray(file) ? file : [file];
-
+            folderAPI.isExternalFileStorage(file);
             // reduce attributes
             file = _(file).pick('folder', 'folder_id', 'id', 'version');
 
@@ -1344,6 +1531,7 @@ define('io.ox/files/api', [
                     var changes = arguments[2] || {};
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
                     if ('object_permissions' in changes) api.propagate('permissions', file);
+                    if ('description' in changes) api.propagate('description', file);  //Bug 51571
                     break;
 
                 case 'change:version':
@@ -1400,11 +1588,21 @@ define('io.ox/files/api', [
                     });
 
                 case 'rename':
-                    api.trigger('rename', _.cid(file));
-                    break;
-
+                    return folderAPI.get(file.folder_id).then(function (fileModel) {
+                        // reload the version if it is an external storage file
+                        if (folderAPI.isExternalFileStorage(fileModel)) {
+                            return reloadVersions(file).done(function () {
+                                api.trigger('rename', _.cid(file));
+                            });
+                        }
+                        api.trigger('rename', _.cid(file));
+                    });
                 case 'permissions':
                     api.trigger('change:permissions', _.cid(file));
+                    break;
+
+                case 'description':  //Bug 51571
+                    api.trigger('description', _.cid(file));
                     break;
 
                 case 'unlock':

@@ -49,7 +49,7 @@ In order to configure this server-side, just append to existing `appsuite.proper
 
 # How to add a new icon set
 
-It is possible to add new icon sets by [writing a core plugin](http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_simple_application). It is recommended, to install the files to
+It is possible to add new icon sets by [writing a core plugin]({{ site.baseurl }}/ui/customize/app/simple-application.html). It is recommended, to install the files to
 
 ```
 apps/3rd.party/emoji/<iconSetName>/
@@ -57,8 +57,8 @@ apps/3rd.party/emoji/<iconSetName>/
 
 Put all your CSS code and images into this directory and create a register.js adding the CSS/LESS files as dependencies.
 
-Once this is done, you need to add the CSS also to the tinyMCE editor, because an iframe is used to edit the text and in order to have full emoji support, you need to load the CSS code there as well. 
-Doing so is really easy. 
+Once this is done, you need to add the CSS also to the tinyMCE editor, because an iframe is used to edit the text and in order to have full emoji support, you need to load the CSS code there as well.
+Doing so is really easy.
 There is an extension point you can use to add the paths to your CSS files.
 
 ```javascript
@@ -83,8 +83,8 @@ define('3rd.party/emoji/greatestIconSet/register',
 
 # Naming conventions in CSS code
 
-The CSS must follow some easy structure. 
-There must be a base class for all icons that defines the background image. 
+The CSS must follow some easy structure.
+There must be a base class for all icons that defines the background image.
 It must match the name of your icon set prefixed with “.emoji-”.
 
 Each icon will then be identified by a string that can be defined in the icon set metadata.
@@ -92,7 +92,7 @@ Each icon will then be identified by a string that can be defined in the icon se
 Find here a short example copied from the unified icon set shipped with OX App Suite.
 
 ```css
-.emoji-unified { 
+.emoji-unified {
     background: url("emoji.png") top left no-repeat;
     width: 20px;
     height: 20px;
@@ -102,7 +102,7 @@ Find here a short example copied from the unified icon set shipped with OX App S
     zoom: 1;
     *display: inline;
 }
-.emoji2600 { 
+.emoji2600 {
     background-position: -500px -120px;
 }
 ```

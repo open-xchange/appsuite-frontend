@@ -282,7 +282,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 ox.load(['io.ox/core/folder/actions/remove']).done(function (remove) {
-                    remove(e.data.id);
+                    remove(e.data.id, { isDSC: account.isDSC(e.data.id) });
                 });
             }
 
@@ -440,6 +440,8 @@ define('io.ox/core/folder/contextmenu', [
                 // trash or subfolders do not support sharing or permission changes
                 if (api.is('trash', baton.data)) return;
 
+                if (account.isDSC(baton.data.id)) return;
+
                 // check if folder can be shared
                 var id = String(baton.data.id),
                     model = api.pool.getModel(id);
@@ -474,48 +476,6 @@ define('io.ox/core/folder/contextmenu', [
                         enabled: true,
                         handler: getALink,
                         text: gt('Get link')
-                    });
-                }
-            };
-        }()),
-
-        //
-        // Subscribe folder
-        //
-        subscribe: (function () {
-
-            function handler(e) {
-                e.preventDefault();
-                require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
-                    subscriptions.buildSubscribeDialog(e.data);
-                });
-            }
-
-            return function (baton) {
-
-                if (!api.can('subscribe', baton.data) || api.is('trash', baton.data)) return;
-
-                var tempLink, node, self = this;
-
-                node = $('<li role="presentation">').append(
-                    tempLink = a('subscriptions', gt('New subscription'))
-                );
-
-                if (capabilities.has('subscription')) {
-                    tempLink.on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, handler);
-                    this.append(node);
-                } else {
-                    require(['io.ox/core/upsell'], function (upsell) {
-                        if (upsell.enabled(['subscription'])) {
-                            tempLink.on('click', function () {
-                                upsell.trigger({
-                                    type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
-                                    missing: upsell.missing(['subscription'])
-                                });
-                            });
-                            self.append(node);
-                        }
                     });
                 }
             };

@@ -94,7 +94,7 @@ define('io.ox/portal/settings/pane', [
             new Dropdown({
                 className: 'btn-group-portal pull-right',
                 $ul: $ul,
-                $toggle: $toggle,
+                $toggle: $toggle
             }).render().$el,
             $('<div class="clearfix">'),
             $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions text">').attr('id', notificationId)
@@ -186,14 +186,18 @@ define('io.ox/portal/settings/pane', [
         index: 200,
         draw: function (baton) {
             if (_.device('smartphone')) return;
-
             var data = baton.model.toJSON();
+            // seems to be added in MW silently..
+            // a protectedWidget might be editable. If it is the "index" allow d&d for reorder
+            var protectedButDraggable = data.protectedWidget && (data.changeable && data.changeable.index);
+
             this
-                .addClass(data.protectedWidget && data.protectedWidget === true ? ' protected' : ' draggable')
+                .addClass(data.protectedWidget && !protectedButDraggable ? ' protected' : ' draggable')
                 .append(
-                    data.protectedWidget && data.protectedWidget === true ? $('<div class="spacer">') :
+                    data.protectedWidget && !protectedButDraggable ? $('<div class="spacer">') :
                     listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
                 );
+
         }
     });
 

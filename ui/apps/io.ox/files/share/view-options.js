@@ -14,9 +14,11 @@
 define('io.ox/files/share/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/folder/breadcrumb',
+    'io.ox/core/folder/api',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style'
-], function (ext, Dropdown, gt) {
+], function (ext, Dropdown, Breadcrumb, FolderAPI, gt) {
 
     'use strict';
 
@@ -56,9 +58,20 @@ define('io.ox/files/share/view-options', [
     ext.point('io.ox/files/share/myshares/list-view/toolbar/top').extend({
         id: 'title',
         index: 300,
-        draw: function () {
-            var item = $('<div class="toolbar-item breadcrumb-tail">').text(gt('My shares'));
-            this.append(item);
+        draw: function (baton) {
+            var node = this,
+                breadcrumb = new Breadcrumb({ folder: 'virtual/myshares' });
+
+            breadcrumb.handler = function (id) {
+                baton.app.folderView.tree.selection.getItems().removeClass('selected');
+                baton.app.folderView.tree.trigger('change', id);
+            };
+
+            FolderAPI.multiple(['9', 'virtual/myshares']).then(function success(path) {
+                breadcrumb.$el.text('\xa0');
+                breadcrumb.renderPath(path);
+                node.append(breadcrumb.$el.addClass('toolbar-item'));
+            });
         }
     });
 

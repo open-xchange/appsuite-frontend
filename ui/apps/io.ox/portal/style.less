@@ -290,9 +290,9 @@
             text-decoration: none;
             cursor: pointer;
 
-            .fa-times { color: rgba(0, 0, 0, 0.15); }
+            .fa-times { color: rgba(0, 0, 0, 0.55); }
 
-            &:hover .fa-times { color: rgba(0, 0, 0, 0.50); }
+            &:hover .fa-times { color: rgba(0, 0, 0, 0.55); }
 
             &:focus {
                 background-color: rgba(0, 0, 0, 0.10);
@@ -311,6 +311,20 @@
         cursor: default;
 
         &.hide-title .decoration > h2 { display: none; }
+    }
+
+    .widgets .content.encrypted:after {
+          content: "\f023";
+          font-family: FontAwesome;
+          font-style: normal;
+          font-weight: normal;
+          text-decoration: inherit;
+          font-size: 100px;
+          color: #767676;
+          position: absolute;
+          top: 40%;
+          left: 33%;
+          z-index: 1;
     }
 
     .widget.photo-stream, .widget.preview {

@@ -135,7 +135,7 @@ define('io.ox/core/settings', [
 
         var applyDefaults = function () {
             return require([path + '/settings/defaults']).then(function (defaults) {
-                tree = _.extend(defaults, tree);
+                tree = _.extend({}, defaults, tree);
             });
         };
 
@@ -211,6 +211,25 @@ define('io.ox/core/settings', [
             // offline
             self.detach();
             return $.Deferred().resolve({ tree: tree, meta: meta });
+        };
+
+        // reload settings from server
+        // this does not trigger any change events!
+        this.reload = function () {
+
+            if (detached) return $.when();
+
+            return http.PUT({ module: 'jslob', params: { action: 'list' }, data: [path] })
+                .done(function (data) {
+                    tree = data[0].tree;
+                    meta = data[0].meta;
+                    saved = JSON.parse(JSON.stringify(tree));
+                    applyDefaults();
+                })
+                .then(function () {
+                    self.trigger('reload', tree, meta);
+                    return { tree: tree, meta: meta };
+                });
         };
 
         this.clear = function () {
@@ -320,6 +339,40 @@ define('io.ox/core/settings', [
                     //use obj.message for custom error message
                     notifications.yell(obj);
                 });
+            });
+        };
+
+        /**
+         * Save settings to backend.
+         *
+         * Does the same .save(null, { force: true })
+         * but assign a 'merge' action instead of 'set'
+         *
+         * @return The deffered object of the request sent
+         *
+         */
+        this.merge = function (custom) {
+            if (detached) console.warn('Not merging/saving detached settings.', path);
+            if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
+
+            var treeData = custom || tree;
+
+            // don't save undefined
+            if (treeData === undefined) return $.when();
+
+            pending[path] = this;
+
+            return http.PUT({
+                module: 'jslob',
+                params: { action: 'update', id: path },
+                data: treeData
+            })
+            .done(function () {
+                saved = JSON.parse(JSON.stringify(treeData));
+                self.trigger('save');
+            })
+            .always(function () {
+                delete pending[path];
             });
         };
 

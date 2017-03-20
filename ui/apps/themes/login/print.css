@@ -161,6 +161,56 @@ td.spacer {
     clear: both;
 }
 
+div.phonelist-details > div {
+    padding-bottom: 1.5em;
+}
+
+div.phonelist-details .contact-details > div {
+    width: 50%;
+    display: inline-block;
+    min-height: 1px;
+    float: left;
+}
+
+div.phonelist-details fieldset {
+    border: 0;
+    padding: 0;
+}
+
+div.phonelist-details legend {
+    font-weight: bold;
+    padding: 16px 0 8px 0;
+}
+
+div.phonelist-details h1 {
+    margin: 0;
+    padding: 0.4em 0 0.4em 0;
+}
+
+div.phonelist-details ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 0px;
+}
+
+div.phonelist-details address {
+    font-style: normal;
+}
+
+div.phonelist-details table {
+    border-spacing: 0px;
+}
+
+div.phonelist-details td {
+    padding: 0px;
+}
+
+div.spacer-bottom {
+    line-height: 2em;
+    border-bottom: 1px solid #aaa;
+    clear: both;
+}
+
 img {
     width: auto;
     height: auto;
@@ -173,7 +223,7 @@ img {
 
     body { padding: 0; }
     thead { display: table-header-group; }
-    tbody.no-break, header { page-break-inside: avoid; }
+    tbody.no-break, header, div.no-break { page-break-inside: avoid; }
     a, a:visited { color: #000; text-decoration: underline; }
 
     @page {
@@ -198,3 +248,15 @@ img {
 .accepted .person { color: #353; }
 .tentative .person { color: #CA8812; }
 .declined .person { color: #800; text-decoration: line-through; }
+
+/* resized preview in iframe */
+body.scaled-preview {
+    -ms-transform: scale(0.22);
+    -webkit-transform: scale(0.22);
+    transform: scale(0.22);
+    -ms-transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    width: 21cm;
+    overflow: hidden;
+}

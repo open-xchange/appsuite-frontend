@@ -135,13 +135,17 @@
             };
 
             ox.clearFileCache = function () {
-                initialization.done(function () {
+                return initialization.then(function () {
+                    var def = $.Deferred();
                     try {
                         var tx = db.transaction('filecache', 'readwrite');
+                        tx.oncomplete = def.resolve;
                         tx.objectStore('filecache').clear();
                     } catch (e) {
                         console.error('clearFileCache', e.message, e);
+                        def.reject(e);
                     }
+                    return def;
                 });
             };
 
@@ -382,7 +386,24 @@
             );
 
             function load(module, modulename) {
-                $.ajax({ url: [ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), dataType: 'text' })
+                var base = [ox.apiRoot, '/apps/load/', ox.version].join(''),
+                    // default to the value from apache documentation
+                    limit = ox.serverConfig.limitRequestLine || 8190,
+                    requests = [], url, modules = module.split(',');
+
+                while (modules.length > 0) {
+                    url = base;
+                    while (modules[0] && url.length + 1 + modules[0].length < limit) {
+                        url += ',' + modules.shift();
+                    }
+                    requests.push($.ajax({ url: url, dataType: 'text' }));
+                }
+                $.when.apply(this, requests)
+                    .then(function () {
+                        return requests.map(function (res) {
+                            return res.responseText;
+                        }).join('/*:oxsep:*/');
+                    })
                     .done(function (concatenatedText) {
                         runCode([ox.apiRoot, '/apps/load/', ox.version, ',', module].join(''), concatenatedText);
                         context.completeLoad(modulename);
@@ -497,9 +518,9 @@
                     icon120: 'icon120.png',
                     icon144: 'icon144.png',
                     icon152: 'icon152.png',
-                    splash460: 'splashscreen_460.jpg',
-                    splash920: 'splashscreen_920.jpg',
-                    splash1096: 'splashscreen_1096.jpg',
+                    icon167: 'icon167.png',
+                    icon180: 'icon180.png',
+                    icon192: 'icon192.png',
                     win8Icon: 'icon144_win.png'
                 };
             for (var i in icons) {

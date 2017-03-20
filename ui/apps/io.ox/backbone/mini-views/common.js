@@ -13,8 +13,9 @@
 
 define('io.ox/backbone/mini-views/common', [
     'io.ox/backbone/mini-views/abstract',
-    'io.ox/backbone/mini-views/dropdown'
-], function (AbstractView, Dropdown) {
+    'io.ox/backbone/mini-views/dropdown',
+    'gettext!io.ox/core',
+], function (AbstractView, Dropdown, gt) {
 
     'use strict';
 
@@ -79,6 +80,10 @@ define('io.ox/backbone/mini-views/common', [
             var value = this.model.get(this.name);
             this.$el.val(value !== null ? $.trim(value) : '********');
         },
+        toggle: function (state) {
+            state = _.isBoolean(state) ? state : this.$el.attr('type') === 'password';
+            this.$el.attr('type', state ? 'text' : 'password');
+        },
         render: function () {
             this.$el.attr({
                 autocomplete: 'off',
@@ -89,7 +94,56 @@ define('io.ox/backbone/mini-views/common', [
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             if (this.options.mandatory) this.$el.attr('aria-required', true);
+            // see bug 49639, 51204
+            if (_.isBoolean(this.options.autocomplete) && !this.options.autocomplete) this.$el.attr('autocomplete', 'new-password').removeAttr('name');
             this.update();
+            return this;
+        }
+    });
+
+    //
+    // wraps PasswordView and adds toggle button
+    // <span>
+    //    <input type="password">
+    //    <button class="toggle-asterisks">
+    //
+
+    var PasswordViewToggle = AbstractView.extend({
+        el: '<div class="password-container has-feedback">',
+        events: {
+            'click .toggle-asterisks': 'toggle',
+            'keydown': 'onKeyPress',
+            'keyup': 'onKeyPress',
+            'focusin': 'onFocusChange',
+            'focusout': 'onFocusChange'
+        },
+        icons: { 'password': 'fa-eye', 'text': 'fa-eye-slash' },
+        initialize: function (opt) {
+            this.passwordView = new PasswordView(opt);
+        },
+        onFocusChange: _.debounce(function () {
+            this.$el.toggleClass('has-focus', $(document.activeElement).closest('.password-container').length > 0);
+        }, 20),
+        onKeyPress: function (e) {
+            // Windows Key / Left ⌘ / Chromebook Search key
+            if (e.which !== 91) return;
+            this.toggle(e, e.type === 'keydown');
+        },
+        toggle: function (state) {
+            state = _.isBoolean(state) ? state : undefined;
+            this.passwordView.toggle(state);
+            this.$el.find('i.fa').removeClass('fa-eye fa-eye-slash').addClass(this.icons[this.passwordView.$el.attr('type')]);
+        },
+        render: function () {
+            this.$el.empty().append(
+                this.passwordView.render().$el,
+                $('<button href="#" class="btn form-control-feedback toggle-asterisks center-childs">')
+                    //#. title of toggle button within password field
+                    .attr({ title: gt('toggle password visibility') })
+                    .append(
+                        $('<i class="fa" aria-hidden="true">').addClass(this.icons.password)
+                    )
+            );
             return this;
         }
     });
@@ -301,6 +355,7 @@ define('io.ox/backbone/mini-views/common', [
         AbstractView: AbstractView,
         InputView: InputView,
         PasswordView: PasswordView,
+        PasswordViewToggle: PasswordViewToggle,
         TextView: TextView,
         CheckboxView: CheckboxView,
         RadioView: RadioView,

@@ -13,13 +13,21 @@
 
 // definitions
 @icon-size: 16px;
+@flag-color: #ffb300;
+@flag-icon: "\f005"; // fa-star
+@flag-icon-unset: "\f006"; // fa-star-o
 
 // phone
 @phone-font-size: 16px;
 @phone-line-height: 26px;
 
-// preview panes
+// helper
+.fixed-width {
+    width: 1.28571429em;
+    text-align: center;
+}
 
+// preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 .window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
 
@@ -101,8 +109,8 @@
     }
 }
 
-.list-view-control.toolbar-top-visible .toolbar.top,
-.list-view-control.toolbar-bottom-visible .toolbar.bottom {
+.io-ox-mail-window .list-view-control.toolbar-top-visible .toolbar.top,
+.io-ox-mail-window .list-view-control.toolbar-bottom-visible .toolbar.bottom {
     display: flex;
     // button label ellipsis
     .dropdown {
@@ -114,12 +122,14 @@
             display: flex;
             align-items: baseline;
             span { .ellipsis(); }
+            padding-left: 8px;
         }
     }
     // toolbar elements won't shrink
     & > *:not('.dropdown') {
         min-width: 0;
         flex: 0 0 auto;
+        padding-right: 8px;
     }
 }
 
@@ -153,11 +163,10 @@
         &.column-1 { width: @icon-width; text-align: center; }
         &.column-2 { width: @icon-width; text-align: center; }
         &.column-3 { width: @icon-width; text-align: center; }
-        &.column-4 { width: @icon-width; text-align: center; }
-        &.column-5 { width: 35%; padding-left: 10px; padding-right: 10px; }
+        &.column-4 { width: 35%; padding-right: 10px; }
+        &.column-5 { width: @icon-width; text-align: center; }
         &.column-6 { width: 55%; padding-right: 10px; }
         &.column-7 { width: 140px; text-align: right; }
-        &.column-8 { width: 3 * @icon-width; text-align: center; }
     }
 
     &.list-view .list-item {
@@ -272,14 +281,39 @@
     }
 
     section.attachments,
-    section.notifications { display: none; }
+    section.notifications,
+    section.error { display: none; }
 
     &.expanded section {
         &.attachments,
-        &.notifications { display: block; }
+        &.notifications,
+        &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
         &.body { display: table; }
         &.attachments:empty { display: none;  }
+    }
+
+    section.error {
+        color: #767676;
+        position: relative;
+        font-size: 13px;
+        line-height: 16px;
+        padding: 16px 16px 16px 72px;
+        h4 {
+            margin: 3px 0 1px 0;
+            font-size: inherit;
+            line-height: inherit;
+            font-weight: bold;
+        }
+        p {
+            margin-bottom: 8px;
+        }
+        i.fa {
+            position: absolute;
+            left: 20px;
+            top: 19px;
+            font-size: 32px;
+        }
     }
 
     &.no-padding {
@@ -520,8 +554,6 @@
     }
 }
 
-// ListView
-
 .mail-item {
 
     .contact-picture {
@@ -599,7 +631,7 @@
 
         .drag-title {opacity: 0.75; }
 
-        i.flag {
+        i.color-flag, .flag .fa {
             font-size: 18px;
             padding: 0;
             margin: 0 0 0 (@default-padding / 2);
@@ -639,12 +671,7 @@
         color: rgba(0, 0, 0, 0.20);
     }
 
-
     &.visible-selection.has-focus .list-item.selected {
-        i {
-            opacity: 0.9;
-            &:not(.flag):not(.has-attachments) { color: rgba(255, 255, 255, 0.50); }
-        }
         .fa-paperclip.has-attachments { opacity: 1; }
         &.deleted { color: rgba(255, 255, 255, 0.50); }
     }
@@ -827,6 +854,21 @@
             .flex(0 0 auto);
             .align-self(flex-start);
         }
+    }
+}
+
+//
+// Flag
+//
+
+.list-item {
+    .flag {
+        color: rgba(0, 0, 0, 0.5);
+        .fa:before { content: @flag-icon-unset; }
+    }
+    &.flagged .flag {
+        color: @flag-color;
+        .fa:before { content: @flag-icon; }
     }
 }
 
@@ -1033,11 +1075,6 @@ textarea.inplace-editor {
     .description {
         padding-left: 34px;
         padding-bottom: 6px;
-    }
-
-    .center-childs {
-        display: flex;
-        align-items: center;
     }
 
     .category-item {
@@ -1374,17 +1411,24 @@ body.dragging .categories-toolbar-container {
 
         & > header {
             &.mobile-detail-view-mail {
+                // use fa-fw for mobile
+                .fa { .fixed-width; }
                 .date {
                     margin-left: 0;
                     display: inline-block;
                     float: none;
                 }
-
-                .flag-picker {
+                .flags {
                     display: inline-block;
-                    float: none;
-                    position: absolute;
-                    right: @default-padding;
+                    float: right;
+                    margin-right: @default-padding;
+                    & > * {
+                        margin-left: 8px;
+                        float: none;
+                    }
+                }
+                .priority {
+                    margin-right: @default-padding;
                 }
             }
         }
@@ -1395,20 +1439,42 @@ body.dragging .categories-toolbar-container {
 
 // simple workaround in case people try to print the entire window
 
-@media print {
+@media print{
+    // none or one mail selected
     // avoid absolute positioning; <body> needs to be the scrollpane otherwise we get no multipage print outs
-    .abs, .atb, .window-container, .window-body, .rightside { position: static; }
+    .abs, .atb, .window-container, .window-body, .rightside.selection-one, .rightside.selection-empty { position: static; }
     // hide everything we don't need
     #io-ox-banner, #io-ox-topbar, .window-sidepanel, .categories-toolbar-container, .classic-toolbar-container,
-    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
+    .leftside.selection-one, .leftside.selection-empty, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
         display: none !important;
     }
-    .thread-view-list, .rightside { padding: 0 !important; overflow: visible !important; }
-    .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
-    .detail-view-header {
+    .rightside.selection-empty .thread-view-list, .rightside.selection-one .thread-view-list, .rightside.selection-one, .rightside.selection-empty { padding: 0 !important; overflow: visible !important; }
+    .rightside.selection-empty .thread-view.list-view .list-item, .rightside.selection-one .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
+    .rightside.selection-empty .detail-view-header, .rightside.selection-one .detail-view-header {
         padding-left: 16px !important;
         .recipients {
             .io-ox-label, .person-link, .delimiter { display: inline-block !important; }
         }
+    }
+
+    // multiple mails selected
+    .rightside.selection-multiple {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple {
+        position: static !important;
+        width: 100% !important;
+        border-right: none !important;
+    }
+
+    .leftside.selection-multiple .toolbar, .leftside.selection-multiple .list-item, .leftside.selection-multiple .list-item-checkmark {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple .list-item.selected {
+        display: block !important;
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

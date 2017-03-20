@@ -25,10 +25,28 @@ define(['io.ox/oauth/backbone'], function (OAuth) {
                 var m = new Model({
                     enabledScopes: ['drive', 'mail']
                 });
-                expect(m.hasScope).to.be.a('function');
-                expect(m.hasScope('drive')).to.be.true;
-                expect(m.hasScope('mail')).to.be.true;
-                expect(m.hasScope('not existing')).to.be.false;
+                expect(m.hasScopes).to.be.a('function');
+                expect(m.hasScopes('drive')).to.be.true;
+                expect(m.hasScopes('mail')).to.be.true;
+                expect(m.hasScopes('not existing')).to.be.false;
+            });
+
+            it('should have a way to query multiple enabled scopes', function () {
+                var m = new Model({
+                    enabledScopes: ['contacts', 'contacts_ro', 'drive', 'mail']
+                });
+                expect(m.hasScopes).to.be.a('function');
+                expect(m.hasScopes(['contacts'])).to.be.true;
+                expect(m.hasScopes(['contacts_ro'])).to.be.true;
+                expect(m.hasScopes(['contacts', 'contacts_ro'])).to.be.true;
+            });
+
+            it('should have a way to query multiple enabled scopes which are partially enabled', function () {
+                var m = new Model({
+                    enabledScopes: ['contacts', 'drive', 'mail']
+                });
+                expect(m.hasScopes).to.be.a('function');
+                expect(m.hasScopes(['contacts', 'contacts_ro'])).to.be.true;
             });
 
             describe('reauthorization workflow', function () {

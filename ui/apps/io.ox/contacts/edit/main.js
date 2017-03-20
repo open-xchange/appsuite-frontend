@@ -27,6 +27,10 @@ define('io.ox/contacts/edit/main', [
 
     'use strict';
 
+    function getTitle(model) {
+        return util.getFullName(model.toJSON()) || (model.get('id') ? gt('Edit Contact') : gt('Create contact'));
+    }
+
     // multi instance pattern
     function createInstance(data) {
 
@@ -71,9 +75,7 @@ define('io.ox/contacts/edit/main', [
                             ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
                             contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
                         }
-
-                        var appTitle = (contact.get('display_name')) ? contact.get('display_name') : util.getFullName(contact.toJSON());
-                        app.setTitle(appTitle || gt('Create contact'));
+                        app.setTitle(getTitle(contact));
                         win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
                         app.contact = contact;
                         editView = new view.ContactEditView({ model: contact, app: app });
@@ -122,7 +124,7 @@ define('io.ox/contacts/edit/main', [
                         });
 
                         function fnToggleSave(isDirty) {
-                            var node = win.nodes.header.find('.btn[data-action="save"]');
+                            var node = win.nodes.footer.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
                             if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
                         }
@@ -134,8 +136,8 @@ define('io.ox/contacts/edit/main', [
                                 fnToggleSave(isDirty);
                             });
 
-                            if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
-                                win.nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
+                            if (contact.id === undefined && _.values(_(contact.attributes).compact()).length <= 1) {
+                                win.nodes.footer.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
                             container.find('input[type="text"]').on('keyup', _.debounce(function () {
@@ -158,7 +160,7 @@ define('io.ox/contacts/edit/main', [
                             app.quit();
                         });
 
-                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('infostore')) {
+                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('filestore')) {
 
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
@@ -187,16 +189,8 @@ define('io.ox/contacts/edit/main', [
 
                         ext.point('io.ox/contacts/edit/main/model').invoke('customizeModel', contact, contact);
 
-                        contact.on('change:display_name', function () {
-                            var newTitle = contact.get('display_name');
-                            if (!newTitle) {
-                                if (contact.get('id')) {
-                                    newTitle = gt('Edit Contact');
-                                } else {
-                                    newTitle = gt('Create contact');
-                                }
-                            }
-                            app.setTitle(newTitle);
+                        contact.on('change:first_name change:last_name change:display_name', function () {
+                            app.setTitle(getTitle(contact));
                         });
 
                         def.resolve();

@@ -12,16 +12,21 @@
  */
 
 define('io.ox/core/viewer/views/types/textview', [
-    'io.ox/core/viewer/views/types/baseview'
-], function (BaseView) {
+    'io.ox/core/viewer/views/types/baseview',
+    'gettext!io.ox/core'
+], function (BaseView, gt) {
 
     'use strict';
+
+    var LOAD_TIMEOUT = 90000;
 
     var TextView = BaseView.extend({
 
         initialize: function (options) {
             _.extend(this, options);
             this.isPrefetched = false;
+            this.xhr = null;
+            this.loadTimeoutId = null;
             this.listenTo(this.viewerEvents, 'viewer:zoom:in', this.onZoomIn);
             this.listenTo(this.viewerEvents, 'viewer:zoom:out', this.onZoomOut);
             this.$el.on('scroll', _.throttle(this.onScrollHandler.bind(this), 500));
@@ -32,7 +37,67 @@ define('io.ox/core/viewer/views/types/textview', [
             this.size = 13;
             // quick hack to get rid of flex box
             this.$el.empty().css('display', 'block');
+            // run own disposer function on dispose event from DisposableView
+            this.on('dispose', this.disposeView.bind(this));
             return this;
+        },
+
+        /**
+         * Data load handler.
+         */
+        onDataLoaded: function (text) {
+            // if the request was successful clear load timeout
+            this.clearLoadTimeout();
+
+            var filesize = this.model.get('file_size');
+            // work around for large files in drive, no content is provided and also no error
+            if (_.isNumber(filesize) && (filesize > 0) && _.isEmpty(text)) {
+                this.onError();
+            } else {
+                this.$el.idle();
+                this.$el.addClass('swiper-no-swiping').append(
+                    $('<div class="white-page letter plain-text">').text(text)
+                );
+            }
+        },
+
+        /**
+         * Load error handler.
+         */
+        onError: function () {
+            this.displayNotification(gt('Sorry, there is no preview available for this file.'));
+        },
+
+        /**
+         * Load timeout handler.
+         *  An additional timer if the AJAX request gets stalled.
+         *  Aborts the running AJAX request and handles the error.
+         */
+        onLoadTimeout: function () {
+            this.clearLoadTimeout();
+            this.abortAjaxRequest();
+            this.onError();
+        },
+
+        /**
+         * Clear the load timeout.
+         *  Prevents invocation of the load timeout handler.
+         */
+        clearLoadTimeout: function () {
+            if (this.loadTimeoutId) {
+                window.clearTimeout(this.loadTimeoutId);
+                this.loadTimeoutId = null;
+            }
+        },
+
+        /**
+         * Abort AJAX request
+         */
+        abortAjaxRequest: function () {
+            if (this.xhr) {
+                this.xhr.abort();
+                this.xhr = null;
+            }
         },
 
         /**
@@ -47,17 +112,25 @@ define('io.ox/core/viewer/views/types/textview', [
          */
         prefetch: function (options) {
             // simply load the document content via $.ajax
-            var $el = this.$el.busy(),
-                previewUrl = this.getPreviewUrl(options);
-            $.ajax({ url: previewUrl, dataType: 'text' }).done(function (text) {
-                $el.addClass('swiper-no-swiping');
-                $el.idle().append($('<div class="white-page letter plain-text">').text(text));
-                $el = null;
-            });
+            var previewUrl = this.getPreviewUrl(options);
+
+            this.$el.busy();
+            // send AJAX request
+            this.xhr = $.ajax({ url: previewUrl, dataType: 'text', context: this }).done(this.onDataLoaded).fail(this.onError);
+            // start additional timer to detect if AJAX request gets stalled
+            this.loadTimeoutId = window.setTimeout(this.onLoadTimeout.bind(this), LOAD_TIMEOUT);
+
             this.isPrefetched = true;
             return this;
         },
 
+        /**
+         * "Shows" the text file.
+         * For text files all work is already done in prefetch()
+         *
+         * @returns {TextView}
+         *  the TextView instance.
+         */
         show: function () {
             return this;
         },
@@ -69,8 +142,12 @@ define('io.ox/core/viewer/views/types/textview', [
          *  the TextView instance.
          */
         unload: function () {
-            this.$el.find('.white-page').remove();
-            this.isPrefetched = false;
+            // never unload slide duplicates
+            if (!this.$el.hasClass('swiper-slide-duplicate')) {
+                this.$el.find('.white-page').remove();
+                this.isPrefetched = false;
+            }
+
             return this;
         },
 
@@ -93,6 +170,15 @@ define('io.ox/core/viewer/views/types/textview', [
          */
         onScrollHandler: function () {
             this.viewerEvents.trigger('viewer:blendnavigation');
+        },
+
+        /**
+         * Destructor function of this view.
+         *  Aborts the AJAX request and clears the load timeout.
+         */
+        disposeView: function () {
+            this.abortAjaxRequest();
+            this.clearLoadTimeout();
         }
 
     });

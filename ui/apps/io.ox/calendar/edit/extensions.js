@@ -127,7 +127,7 @@ define('io.ox/calendar/edit/extensions', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.delegate('[data-action]', 'mousedown', function (e) {
+                self.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
                         app: 'calendar',
@@ -260,7 +260,8 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'start_date',
                     label: gt('Starts on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'timezone'
+                    timezoneAttribute: 'timezone',
+                    closeOnScroll: true
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -293,7 +294,8 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'end_date',
                     label: gt('Ends on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'endTimezone'
+                    timezoneAttribute: 'endTimezone',
+                    closeOnScroll: true
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -815,7 +817,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    if (!capabilities.has('infostore')) {
+    if (!capabilities.has('filestore')) {
         ext.point('io.ox/calendar/edit/section')
             .disable('attachments_legend')
             .disable('attachments_upload');

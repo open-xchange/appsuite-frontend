@@ -165,7 +165,7 @@ define('plugins/portal/linkedIn/register', [
         if (data.message.indexOf('authorize') !== -1) {
             var account = keychain.getStandardAccount('linkedin');
             node.append(
-                $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+                $('<a class="solution">').text(gt('Authorize your account again')).on('click', function () {
                     keychain.submodules.linkedin.reauthorize(account).done(function () {
                         console.log(gt('You have reauthorized this %s account.', 'LinkedIn'));
                     }).fail(function () {

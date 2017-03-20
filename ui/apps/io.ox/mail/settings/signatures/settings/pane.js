@@ -78,11 +78,11 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }).done(function (ed) {
                     baton.editor = ed;
                     baton.editor.show();
+                    baton.content = baton.content || '';
 
-                    if (!looksLikeHTML(baton.content)) {
+                    if (baton.content && !looksLikeHTML(baton.content)) {
                         // convert to html
-                        var str = String(baton.content || '').replace(/[\s\xA0]+$/g, '');
-
+                        var str = String(baton.content).replace(/[\s\xA0]+$/g, '');
                         baton.content = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
                     }
 
@@ -298,7 +298,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         id: 'header',
         index: 100,
         draw: function () {
-            var buttonContainer = $('<div class="btn-group pull-right">').append(
+            var buttonContainer = $('<div class="pull-right">').append(
                 $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
             );
 
@@ -364,47 +364,56 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }
             }
 
-            var list = new ListView({
-                tagName: 'ul',
-                collection: baton.collection,
-                childOptions: {
-                    titleAttribute: 'displayname',
-                    customize: function (model) {
-                        var content = model.get('content')
-                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                            .replace(/<(?:.|\n)*?>/gm, '')
-                            .replace(/(\n)+/g, '<br>');
+            var onChangeDefault = _.throttle(function () {
+                    var composeId = mailutil.getDefaultSignature('compose'),
+                        replyForwardId = mailutil.getDefaultSignature('reply/forward');
+                    list.$('.default').removeClass('default').find('>.default-label').remove();
+                    list.$('[data-id="' + replyForwardId + '"]')
+                        .addClass('default')
+                        .append($('<div class="default-label">').append(
+                            $('<span class="label label-primary">').text(composeId === replyForwardId ? gt('Default signature') : gt('Default signature for replies or forwardings'))
+                        ));
+                    if (composeId === replyForwardId) return;
+                    list.$('[data-id="' + composeId + '"]')
+                        .addClass('default')
+                        .append($('<div class="default-label">').append(
+                            $('<span class="label label-success">').text(gt('Default signature for new messages'))
+                        ));
+                }, 100),
+                list = new ListView({
+                    tagName: 'ul',
+                    collection: baton.collection,
+                    childOptions: {
+                        titleAttribute: 'displayname',
+                        customize: function (model) {
+                            var content = model.get('content')
+                                .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                                .replace(/<(?:.|\n)*?>/gm, '')
+                                .replace(/(\n)+/g, '<br>');
 
-                        this.$('.list-item-controls').append(
-                            listutils.controlsEdit(),
-                            listutils.controlsDelete()
-                        );
-                        this.$el.append($('<div class="signature-preview">').append($('<div>').on('click', clickEdit).append(content)));
-
-                        if (mailutil.getDefaultSignature('compose') === model.get('id')) this.$el.addClass('default');
+                            this.$('.list-item-controls').append(
+                                listutils.controlsEdit(),
+                                listutils.controlsDelete()
+                            );
+                            this.$el.append($('<div class="signature-preview">').append($('<div>').on('click', clickEdit).append(content)));
+                            onChangeDefault();
+                        }
                     }
-                }
-            })
-            .on('edit', clickEdit)
-            .on('delete', function (e) {
-                var id = $(e.currentTarget).closest('li').attr('data-id');
-                if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
-                if (mailutil.getDefaultSignature('replay/forward') === id) settings.set('defaultReplyForwardSignature', '');
-                snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
-                e.preventDefault();
-            });
+                })
+                .on('edit', clickEdit)
+                .on('delete', function (e) {
+                    var id = $(e.currentTarget).closest('li').attr('data-id');
+                    if (mailutil.getDefaultSignature('compose') === id) settings.set('defaultSignature', '');
+                    if (mailutil.getDefaultSignature('replay/forward') === id) settings.set('defaultReplyForwardSignature', '');
+                    snippets.destroy(id).fail(require('io.ox/core/notifications').yell);
+                    e.preventDefault();
+                });
 
             this.append(list.render().$el);
 
-            function onChangeDefault() {
-                var id = mailutil.getDefaultSignature('compose');
-                list.$('.default').removeClass('default');
-                list.$('[data-id="' + id + '"]').addClass('default');
-            }
-
-            settings.on('change:defaultSignature', onChangeDefault);
+            settings.on('change:defaultSignature change:defaultReplyForwardSignature', onChangeDefault);
             list.on('dispose', function () {
-                settings.off('change:defaultSignature', onChangeDefault);
+                settings.off('change:defaultSignature change:defaultReplyForwardSignature', onChangeDefault);
             });
         }
     });

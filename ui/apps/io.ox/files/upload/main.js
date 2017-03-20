@@ -148,14 +148,16 @@ define('io.ox/files/upload/main', [
         };
 
         this.stop = function () {
-            var requests = uploadCollection.map(function (file) {
-                return file.get('request');
-            });
+            var requests = uploadCollection.pluck('request');
             totalSize = 0;
             api.trigger('stop:upload', requests);
             api.trigger('refresh.all');
             totalProgress = 0;
             currentSize = 0;
+            // set abort to true to remove all files from uploadview which have not been uploaded yet
+            uploadCollection.each(function (model) {
+                if (model.get('progress') !== 1) model.set('abort', true);
+            });
             uploadCollection.reset();
         };
 
@@ -271,7 +273,7 @@ define('io.ox/files/upload/main', [
                         folder: item.options.folder,
                         timestamp: _.then(),
                         params: item.options.params,
-                        version_commet: item.options.version_comment
+                        version_comment: item.options.version_comment
                     })
                     .progress(function (e) {
                         // update progress

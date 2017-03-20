@@ -42,7 +42,7 @@ Please refer to the middleware feature [config documentation](https://oxpedia.or
 
 # Upsell
 
-Please refer to the [upsell documentaion](http://oxpedia.org/wiki/index.php?title=AppSuite:Upsell#Custom_upsell_links) for more details.
+Please refer to the [upsell documentaion]({{ site.baseurl }}/ui/features/upsell.html) for more details.
 
 _middleware: configuration_
 

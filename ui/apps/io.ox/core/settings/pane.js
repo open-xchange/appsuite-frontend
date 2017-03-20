@@ -201,7 +201,12 @@ define('io.ox/core/settings/pane', [
                 index: 400,
                 className: 'form-group',
                 render: function () {
-                    var guid = _.uniqueId('form-control-label-');
+                    var guid = _.uniqueId('form-control-label-'),
+                        list = _(availableThemes).chain().map(function (key, val) {
+                            return { label: key, value: val };
+                        }).sortBy(function (obj) {
+                            return obj.label.toLowerCase();
+                        }).value();
                     this.$el.append(
                         $('<label>').attr({
                             class: 'control-label col-sm-4',
@@ -209,7 +214,7 @@ define('io.ox/core/settings/pane', [
                         }).text(gt('Theme')),
                         $('<div>').addClass('col-sm-6').append(
                             new miniViews.SelectView({
-                                list: _.map(availableThemes, function (key, val) { return { label: key, value: val }; }),
+                                list: list,
                                 name: 'theme',
                                 model: this.baton.model,
                                 id: guid,
@@ -434,6 +439,30 @@ define('io.ox/core/settings/pane', [
                         )
                     );
                 }
+            }
+        });
+    }());
+
+    // Accessibility feature toggle
+    (function () {
+        point.extend({
+            id: 'accessibilityFeatures',
+            index: 900,
+            className: 'form-group',
+            render: function () {
+                var value = this.baton.model.get('features/accessibility');
+                if (value === '' || value === undefined) {
+                    this.baton.model.set('features/accessibility', true);
+                }
+                this.$el.append(
+                    $('<div class="col-sm-offset-4 col-sm-8">').append(
+                        $('<div class="checkbox">').append(
+                            $('<label class="control-label">').text(gt('Use accessibility improvements')).prepend(
+                                new miniViews.CheckboxView({ name: 'features/accessibility', model: this.baton.model }).render().$el
+                            )
+                        )
+                    )
+                );
             }
         });
     }());

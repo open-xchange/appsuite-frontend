@@ -81,7 +81,7 @@ define('plugins/notifications/calendar/register', [
                                     view.hiddenCollection.remove(model);
                                     if (message) {
                                         require(['io.ox/core/yell'], function (yell) {
-                                            yell('warning', gt('Invitation accepted but insufficient permissions to set default reminder'));
+                                            yell('warning', gt('Your default reminder could not be set for this appointment due to insufficient permissions'));
                                         });
                                     }
                                 }).fail(function () {

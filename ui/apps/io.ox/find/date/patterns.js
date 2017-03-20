@@ -104,12 +104,13 @@ define('io.ox/find/date/patterns', [
     var getFormat = (function () {
         var regexEndian = /(\d{1,4})([\/\.\-])(\d{1,2})[\/\.\-](\d{1,4})/,
             replaceEndian = function (matchedPart, first, separator, second, third) {
-                var hasYearSuffix = first.length < third.length,
+                var hasYearSuffix = first.length < third.length, leadingMonth,
                     parts = hasYearSuffix ? [undefined, undefined, 'YYYY'] : ['YYYY', undefined, undefined];
-                // special case: MM/DD/YYYY
+                // special case: MM/DD/YYYY and DD/MM/YYYY
                 if (separator === '/' && hasYearSuffix) {
-                    parts[0] = first.replace(/./g, 'M');
-                    parts[1] = second.replace(/./g, 'D');
+                    leadingMonth = moment.localeData().longDateFormat('L') === 'MM/DD/YYYY';
+                    parts[0] = first.replace(/./g, leadingMonth ? 'M' : 'D');
+                    parts[1] = second.replace(/./g, leadingMonth ? 'D' : 'M');
                 }
                 // month: always in the middle
                 parts[1] = parts[1] || second.replace(/./g, 'M');

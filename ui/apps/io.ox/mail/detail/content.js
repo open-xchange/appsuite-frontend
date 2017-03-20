@@ -16,6 +16,7 @@
 
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',
+    'io.ox/mail/util',
     'io.ox/core/util',
     'io.ox/core/emoji/util',
     'io.ox/core/extensions',
@@ -23,15 +24,13 @@ define('io.ox/mail/detail/content', [
     'io.ox/mail/detail/links',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, coreUtil, emoji, ext, capabilities, links, settings, gt) {
+], function (api, util, coreUtil, emoji, ext, capabilities, links, settings, gt) {
 
     'use strict';
 
     var regHTML = /^text\/html$/i,
         regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
-        regImageSrc = /(<img[^>]+src=")\/ajax/g,
-        regIsURL = /^https?:\S+$/i,
-        maliciousFolders = _(settings.get('maliciousFolders', []));
+        regIsURL = /^https?:\S+$/i;
 
     //
     // Extensions
@@ -53,7 +52,8 @@ define('io.ox/mail/detail/content', [
 
         images: function (baton) {
             // replace images on source level
-            baton.source = baton.source.replace(regImageSrc, '$1' + ox.apiRoot);
+            // look if prefix, usually '/ajax', needs do be replaced
+            baton.source = util.replaceImagePrefix(baton.source);
         },
 
         emoji: function (baton) {
@@ -128,7 +128,7 @@ define('io.ox/mail/detail/content', [
         },
 
         disableLinks: function (baton) {
-            if (!maliciousFolders.contains(baton.data.folder_id)) return;
+            if (!util.isMalicious(baton.data)) return;
             $(this).addClass('disable-links').on('click', function () { return false; });
         },
 
@@ -319,9 +319,9 @@ define('io.ox/mail/detail/content', [
     ext.point('io.ox/mail/detail/source').extend({
         id: 'disable-links',
         index: 700,
-        enabled: maliciousFolders.size(),
+        enabled: settings.get('maliciousCheck'),
         process: function (baton) {
-            if (!maliciousFolders.contains(baton.data.folder_id)) return;
+            if (!util.isMalicious(baton.data)) return;
             baton.source = baton.source
                 .replace(/.*/g, extensions.linkDisable)
                 .replace(/.*/g, extensions.linkRemoveRef)

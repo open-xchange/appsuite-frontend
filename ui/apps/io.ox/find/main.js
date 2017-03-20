@@ -177,7 +177,7 @@ define('io.ox/find/main', [
             'listview-empty-message': function (app) {
                 if (!app.get('parent').listView) return;
                 var ref = app.get('parent').listView.ref;
-                ext.point(ref + '/empty').extend({
+                ext.point(ref + '/notification/empty').extend({
                     id: 'search',
                     index: 100,
                     draw: function (baton) {
@@ -192,7 +192,7 @@ define('io.ox/find/main', [
                 // non-listview app OR no 'all folders' option
                 if (!app.get('parent').listView || app.isMandatory('folder')) return;
                 var ref = app.get('parent').listView.ref;
-                ext.point(ref + '/empty').extend({
+                ext.point(ref + '/notification/empty').extend({
                     id: 'search-action',
                     index: 200,
                     draw: function (baton) {
@@ -204,14 +204,8 @@ define('io.ox/find/main', [
 
                         this.append(
                             //#. text link action to run current search again wihout any folder limitations
-                            $('<a>').text(gt('Search in all folders?'))
-                                .attr({
-                                    'class': 'io-ox-action-link',
-                                    'href': '#',
-                                    'data-action': 'search-button',
-                                    'draggable': false,
-                                    'role': 'button'
-                                })
+                            $('<button type="button" class="btn btn-link" data-action="search-button">')
+                                .text(gt('Search in all folders'))
                                 .on('click', function () {
                                     manager.activate('folder', 'custom', 'disabled');
                                     require(['io.ox/metrics/main'], function (metrics) {
@@ -425,7 +419,8 @@ define('io.ox/find/main', [
         // register event listeners
         function register() {
             var model = app.model,
-                manager = model.manager;
+                manager = model.manager,
+                isDrive = app.getModuleParam() === 'files';
 
             /**
              * find:query   list of active facets changed
@@ -435,6 +430,7 @@ define('io.ox/find/main', [
                 'active': _.debounce(function (count) {
                     // ignore folder facet not combined with another facet
                     if (app.model.manager.isFolderOnly()) count = 0;
+                    if (isDrive && app.model.manager.isAccountOnly()) count = 0;
                     app.trigger(count ? 'find:query' : 'find:idle');
                 }, 10)
             });

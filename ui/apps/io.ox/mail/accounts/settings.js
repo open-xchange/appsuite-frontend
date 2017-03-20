@@ -16,40 +16,48 @@ define('io.ox/mail/accounts/settings', [
     'io.ox/core/api/account',
     'io.ox/mail/accounts/model',
     'io.ox/mail/accounts/view-form',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/core/a11y',
     'settings!io.ox/mail',
     'gettext!io.ox/mail/accounts/settings',
     'less!io.ox/settings/style'
-], function (ext, api, AccountModel, AccountDetailView, dialogs, notifications, a11y, mailSettings, gt) {
+], function (ext, api, AccountModel, AccountDetailView, ModalDialog, notifications, a11y, mailSettings, gt) {
 
     'use strict';
 
-    function renderDetailView(evt, data) {
+    function renderDetailView(evt, data, apiModel) {
         var myView, myModel, myViewNode, ignoreValidationErrors = true;
 
         myViewNode = $('<div>').addClass('accountDetail');
         myModel = new AccountModel(data);
         myView = new AccountDetailView({ model: myModel, node: myViewNode });
+        myView.listenTo(myModel, 'sync', function (model) {
+            apiModel.set(model.attributes);
+        });
 
-        myView.dialog = new dialogs.ModalDialog({
+        myView.dialog = new ModalDialog({
             width: 700,
-            async: true
+            maximize: 500,
+            async: true,
+            point: 'io.ox/settings/accounts/mail/settings/detail/dialog',
+            title: myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'),
+            view: myView
         });
-        //TOOD: hack to avoid horizontal scrollbar
-        myView.dialog.getBody().css('padding-right', '15px');
 
-        myView.dialog.header(
-            $('<h2>').text(myModel.get('id') || myModel.get('id') === 0 ? gt('Edit mail account') : gt('Add mail account'))
-        ).append(
-            myView.render().el
-        )
-        .addPrimaryButton('save', gt('Save'), 'save')
-        .addButton('cancel', gt('Cancel'), 'cancel')
-        .show(function () {
-            a11y.getTabbable(this).first().focus();
-        });
+        myView.dialog.extend({
+            text: function () {
+                this.$body.append(
+                    this.options.view.render().el
+                );
+            }
+        })
+        .addCancelButton()
+        .addButton({
+            action: 'save',
+            label: gt('Save')
+        })
+        .open();
 
         //show errors
         myModel.on('validated', function (valid, model, error) {
@@ -82,7 +90,7 @@ define('io.ox/mail/accounts/settings', [
             ignoreValidationErrors = false;
             myModel.validate();
             if (myModel.isValid()) {
-                myView.dialog.getBody().find('.settings-detail-pane').trigger('save');
+                myView.dialog.$body.find('.settings-detail-pane').trigger('save');
             } else {
                 notifications.yell('error', gt('Account settings could not be saved. Please take a look at the annotations in the form. '));
                 myView.dialog.idle();
@@ -100,16 +108,29 @@ define('io.ox/mail/accounts/settings', [
         return myView.node;
     }
 
+    function createUnifiedMailboxInput(data) {
+        if (!mailSettings.get('features/accounts/configureUnifiedInboxOnCreate', false)) return;
+
+        data = _.defaults({ unified_inbox_enabled: false }, data);
+        return $('<div class="form-group checkbox">').append(
+            $('<label for="unified_inbox_enabled">').append(
+                $('<input type="checkbox" name="unified_inbox_enabled">')
+                    .prop('checked', data.unified_inbox_enabled),
+                gt('Use unified mail for this account')
+            )
+        );
+    }
+
     ext.point('io.ox/settings/accounts/mail/settings/detail').extend({
         index: 200,
         id: 'emailaccountssettings',
         draw: function (evt) {
             if (evt.data.id >= 0) {
                 api.get(evt.data.id).done(function (obj) {
-                    renderDetailView(evt, obj);
+                    renderDetailView(evt, obj, evt.data.model);
                 });
             } else {
-                renderDetailView(evt, evt.data);
+                renderDetailView(evt, evt.data, evt.data.model);
             }
         }
     });
@@ -160,22 +181,23 @@ define('io.ox/mail/accounts/settings', [
                     return;
                 }
                 mailServices.push({
-                    id: 'wizard',
+                    id: 'mailwizard',
                     displayName: gt('Other')
                 });
 
                 $el.append(
                     $('<label>').text(gt('Please select your mail account provider')),
-                    list.render().$el
+                    list.render().$el,
+                    createUnifiedMailboxInput()
                 );
                 // this code block runs deferred, need to focus the first element, again
                 a11y.getTabbable($el).first().focus();
 
                 list.listenTo(list, 'select', function (service) {
-                    if (service.id === 'wizard') return;
+                    if (service.id === 'mailwizard') return;
 
                     var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-                        return !account.hasScope('mail');
+                        return !account.hasScopes('mail');
                     })[0] || new OAuth.Account.Model({
                         serviceId: service.id,
                         //#. %1$s is the display name of the account
@@ -184,7 +206,7 @@ define('io.ox/mail/accounts/settings', [
                     });
 
                     account.enableScopes('mail').save().then(function () {
-                        ox.busy();
+                        baton.popup.busy();
                         var busyMessage = $('<div class="alert-placeholder">');
                         $el.append(busyMessage);
                         drawBusy(busyMessage);
@@ -195,21 +217,24 @@ define('io.ox/mail/accounts/settings', [
                             var def = $.Deferred();
                             // hopefully, login contains a valid mail address
                             data.primary_address = data.login;
+                            data.unified_inbox_enabled = $el.find('input[name="unified_inbox_enabled"]').prop('checked') === true;
 
                             validateMailaccount(data, baton.popup, def);
                             return def;
                         }).then(function () {
                             oauthAPI.accounts.add(account, { merge: true });
                         }, notifications.yell).always(function () {
-                            ox.idle();
+                            baton.popup.idle();
                         });
                     });
                 });
 
-                list.listenTo(list, 'select:wizard', function () {
+                list.listenTo(list, 'select:mailwizard', function () {
                     baton.popup.getFooter().find('[data-action="add"]').show();
                     // invoke wizard
-                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                    var data = {};
+                    data.unified_inbox_enabled = $el.find('input[name="unified_inbox_enabled"]').prop('checked') === true;
+                    ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty(), data);
                 });
             });
         }
@@ -223,7 +248,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-address">').text(gt('Your mail address')),
-                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address">')
+                    input = $('<input id="add-mail-account-address" type="text" class="form-control add-mail-account-address" autocomplete="section-addAccount username">')
                 )
             );
 
@@ -244,7 +269,7 @@ define('io.ox/mail/accounts/settings', [
             this.append(
                 $('<div class="form-group">').append(
                     $('<label for="add-mail-account-password">').text(gt('Your password')),
-                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password">')
+                    input = $('<input id="add-mail-account-password" type="password" class="form-control add-mail-account-password" autocomplete="section-addAccount new-password">')
                 )
             );
 
@@ -263,6 +288,14 @@ define('io.ox/mail/accounts/settings', [
         draw: function () {
             if (window.location.protocol !== 'https:') return;
             this.append($('<div class="help-block">').text(gt('Your credentials will be sent over a secure connection only')));
+        }
+    });
+
+    ext.point('io.ox/mail/add-account/wizard').extend({
+        id: 'unified-mail',
+        index: 400,
+        draw: function (data) {
+            this.append(createUnifiedMailboxInput(data));
         }
     });
 
@@ -319,8 +352,12 @@ define('io.ox/mail/accounts/settings', [
             );
         },
 
-        validateMailaccount = function (data, popup, def) {
+        validateMailaccount = function (data, popup, def, options) {
+            var node = popup.getContentNode().find('input[name="unified_inbox_enabled"]');
 
+            if (node.length > 0 && node.prop('checked')) {
+                data.unified_inbox_enabled = true;
+            }
             myModel.validationCheck(data, { ignoreInvalidTransport: true }).then(
                 function success(response, responseobject) {
                     if (response === true) {
@@ -343,11 +380,16 @@ define('io.ox/mail/accounts/settings', [
                                 failDialog(response.error);
                             }
                         );
+                    } else if (options && options.onValidationError) {
+                        options.onValidationError(response, responseobject);
                     } else {
+                        // this will not work if called from the "add account" autoconfig part, in this case
+                        // the callback from the options will be called (see above)
                         var message = responseobject.error ? responseobject.error : gt('There was no suitable server found for this mail/password combination');
                         drawAlert(getAlertPlaceholder(popup), message, { errorAttributes: 'address password' });
                         popup.idle();
                         popup.getBody().find('a.close').focus();
+
                     }
                 },
                 function fail() {
@@ -359,11 +401,10 @@ define('io.ox/mail/accounts/settings', [
         },
 
         configureManuallyDialog = function (args, newMailaddress) {
-            new dialogs.ModalDialog({ width: 400 })
-                .text(gt('Auto-configuration failed. Do you want to configure your account manually?'))
-                .addPrimaryButton('yes', gt('Yes'), 'yes')
-                .addButton('no', gt('No'), 'no')
-                .on('yes', function () {
+            new ModalDialog({ width: 400, title: gt('Error') })
+                .addCancelButton()
+                .addButton({ action: 'manual', label: gt('Manual') })
+                .on('manual', function () {
                     var data = {};
                     data.primary_address = newMailaddress;
                     if (args) {
@@ -371,7 +412,8 @@ define('io.ox/mail/accounts/settings', [
                         createExtpointForNewAccount(args);
                     }
                 })
-                .show();
+                .open()
+                .$body.text(gt('Auto-configuration failed. Do you want to configure your account manually?'));
         },
 
         autoconfigApiCall = function (args, newMailaddress, newPassword, popup, def, forceSecure) {
@@ -388,20 +430,28 @@ define('io.ox/mail/accounts/settings', [
                     // make sure not to set the SMTP credentials
                     delete data.transport_login;
                     delete data.transport_password;
-                    validateMailaccount(data, popup, def);
+
+                    validateMailaccount(data, popup, def, { onValidationError: function () {
+                        // in case the validation fails this callback will be executed
+                        configureManuallyDialog(args, newMailaddress);
+                        popup.close();
+                        def.reject();
+                    } });
+
                 } else if (forceSecure) {
-                    new dialogs.ModalDialog({ async: true, width: 400 })
-                        .text(gt('Cannot establish secure connection. Do you want to proceed anyway?'))
-                        .addPrimaryButton('yes', gt('Yes'), 'yes')
-                        .addButton('no', gt('No'), 'no')
-                        .on('yes', function () {
+                    new ModalDialog({ async: true, width: 400, title: gt('Warning') })
+                        .addCancelButton()
+                        .addButton({ action: 'proceed', label: gt('Ignore Warnings') })
+                        .on('proceed', function () {
                             autoconfigApiCall(args, newMailaddress, newPassword, this, def, false);
                         })
-                        .on('no', function () {
+                        .on('cancel', function () {
                             def.reject();
                             this.close();
                         })
-                        .show();
+                        .open()
+                        .$body.append(gt('Cannot establish secure connection. Do you want to proceed anyway?'));
+
                     popup.close();
                 } else {
                     configureManuallyDialog(args, newMailaddress);
@@ -426,7 +476,7 @@ define('io.ox/mail/accounts/settings', [
                 var baton = ext.Baton({});
 
                 new dialogs.ModalDialog({
-                    width: 400,
+                    width: 432,
                     async: true,
                     enter: 'add'
                 })
@@ -461,6 +511,10 @@ define('io.ox/mail/accounts/settings', [
                 .on('skip', function () {
                     // primary address needs to be provided, why? fails without
                     args.data = { primary_address: this.getContentNode().find('.add-mail-account-address').val() };
+
+                    if (this.getContentNode().find('input[name="unified_inbox_enabled"]').length > 0) {
+                        args.data.unified_inbox_enabled = this.getContentNode().find('input[name="unified_inbox_enabled"]').prop('checked');
+                    }
                     // close
                     this.close();
                     def.reject();

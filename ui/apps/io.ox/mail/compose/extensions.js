@@ -281,7 +281,7 @@ define('io.ox/mail/compose/extensions', [
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
-                    }, { isMail: true });
+                    });
                 });
             }
 
@@ -298,12 +298,13 @@ define('io.ox/mail/compose/extensions', [
                         extPoint: POINT,
                         isMail: true,
                         apiOptions: {
+                            limit: 20,
                             contacts: true,
                             distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
+                        maxResults: 30,
                         placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
@@ -318,7 +319,7 @@ define('io.ox/mail/compose/extensions', [
 
                 if (usePicker) {
                     node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-address-book" aria-hidden="true"></i></a>')
                         .attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
@@ -374,15 +375,22 @@ define('io.ox/mail/compose/extensions', [
                 // trigger change to fill tokenfield
                 baton.model.trigger('change:' + attr, baton.model, baton.model.get(attr));
 
-                tokenfieldView.collection.on('change reset add remove sort', function () {
+                tokenfieldView.collection.on('change reset add remove sort', _.debounce(function () {
                     var recipients = this.map(function (model) {
-                        var token = model.get('token');
-                        var display_name = util.removeQuotes(token.label), email = token.value;
+                        var token = model.get('token'),
+                            display_name = util.removeQuotes(token.label),
+                            email = token.value;
                         return [display_name, email];
                     });
                     redrawLock = true;
                     baton.model.set(attr, recipients);
                     redrawLock = false;
+                }.bind(tokenfieldView.collection)), 20);
+
+                baton.view.app.getWindow().one('idle', function () {
+                    // idle event is triggered, after the view is visible
+                    // call update when visible to correctly calculate tokefield dimensions (see Bug 52137)
+                    tokenfieldView.$el.data('bs.tokenfield').update();
                 });
             };
         },
@@ -410,14 +418,13 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
 
             var self = this,
-                container = $('<div class="dropdown signatures text-left">');
+                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true });
 
-            // IEDA: move to view to have a reference or trigger a refresh?!
+            // IDEA: move to view to have a reference or trigger a refresh?!
 
             function draw() {
-                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
-                    .option('signatureId', '', gt('No signature'));
-
+                dropdown.prepareReuse();
+                dropdown.option('signatureId', '', gt('No signature'));
                 ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
                 baton.view.signaturesLoading.done(function () {
@@ -431,8 +438,6 @@ define('io.ox/mail/compose/extensions', [
                     dropdown.$ul.addClass('pull-right');
                     dropdown.render();
                 });
-
-                container.empty().append(dropdown.$el);
             }
 
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
@@ -442,7 +447,7 @@ define('io.ox/mail/compose/extensions', [
 
                 draw();
             });
-            self.append(container);
+            self.append(dropdown.$el.addClass('signatures text-left'));
         },
 
         optionsmenu: function (baton) {
@@ -681,40 +686,32 @@ define('io.ox/mail/compose/extensions', [
                             }
                         },
                         renderPassword: function (baton) {
-                            var $links = baton.view.$header.find('.links'),
-                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('Password') });
+                            var model = baton.view.settingsModel, passContainer;
 
-                            $links.append(
+                            function toggleState() {
+                                if (model.get('usepassword')) return passContainer.find('input').removeAttr('disabled');
+                                passContainer.find('input').attr('disabled', 'disabled');
+                            }
+
+                            baton.view.$header.find('.links').append(
                                 $('<div class="input-group">').append(
                                     $('<span class="input-group-addon">').append(
-                                        new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
+                                        new mini.CheckboxView({ name: 'usepassword', model: model }).render().$el
                                     ),
-                                    passwordField.render().$el
+                                    passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                                 )
                             );
-
-                            if (!baton.view.settingsModel.get('usepassword')) passwordField.$el.attr('disabled', 'disabled');
-
-                            baton.view.settingsModel.on('change:usepassword', function () {
-                                if (baton.view.settingsModel.get('usepassword')) {
-                                    passwordField.$el.removeAttr('disabled');
-                                } else {
-                                    passwordField.$el.attr('disabled', 'disabled');
-                                }
-                            });
+                            model.on('change:usepassword', toggleState);
+                            toggleState();
                         }
                     });
 
-                    view.listenTo(view.notificationModel, 'change', function () {
-                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
-                    });
-
+                    // updates mail model
                     view.listenTo(view.settingsModel, 'change', function () {
-                        if (this.settingsModel.get('enable')) {
-                            baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, 'usepassword'));
-                        } else {
-                            baton.model.unset('share_attachments');
-                        }
+                        if (!this.settingsModel.get('enable')) return baton.model.unset('share_attachments');
+                        var blacklist = ['usepassword'];
+                        if (!this.settingsModel.get('usepassword')) blacklist.push('password');
+                        baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, blacklist));
                     });
 
                     view.listenTo(view.settingsModel, 'change:enable', function () {
@@ -725,6 +722,9 @@ define('io.ox/mail/compose/extensions', [
                         this.toggleShareAttachments();
                     });
 
+                    view.listenTo(view.notificationModel, 'change', function () {
+                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
+                    });
                 }
 
                 // dropzone

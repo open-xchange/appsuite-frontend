@@ -57,7 +57,6 @@ define('io.ox/calendar/week/view', [
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
         mode:           0,      // view mode {1: day, 2: workweek, 3: week }
-        workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
         showDeclined:   false,  // show declined appointments
 
         startDate:      null,   // start of day/week as local date (use as reference point)
@@ -118,7 +117,7 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div class="scrollpane f6-target" tabindex="0">').on('scroll', this.updateHiddenIndicators.bind(this)),
+                pane:         $('<div class="scrollpane f6-target" tabindex="-1">').on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div class="fulltime">'),
                 fulltimeCon:  $('<div class="fulltime-container">'),
                 fulltimeNote: $('<div class="node">'),
@@ -146,7 +145,7 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 'workweek':
                     this.$el.addClass('workweekview');
-                    this.columns = 5;
+                    this.columns = settings.get('numDaysWorkweek');
                     break;
                 default:
                 case 'week':
@@ -168,7 +167,49 @@ define('io.ox/calendar/week/view', [
                         .on('select', function (date) {
                             self.setStartDate(date);
                             self.trigger('onRefresh');
+                        })
+                        .on('before:open', function () {
+                            this.setDate(self.startDate);
                         });
+                });
+            }
+
+            if (this.mode === 'workweek') {
+                this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', function () {
+                    function reset() {
+                        var scrollTop = self.pane.scrollTop();
+                        // clean up
+                        self.pane.empty();
+                        self.fulltimePane.empty();
+                        self.fulltimeCon.empty();
+                        self.fulltimeNote.empty();
+                        self.timeline.empty();
+                        self.weekCon.empty();
+                        self.moreAppointmentsIndicators.empty();
+                        // render again
+                        self.columns = settings.get('numDaysWorkweek');
+                        self.setStartDate();
+                        self.render();
+                        self.renderAppointments();
+                        self.perspective.refresh();
+                        // reset pane
+                        self.pane.scrollTop(scrollTop);
+                        self.pane.on('scroll', self.updateHiddenIndicators.bind(self));
+                        if (_.device('!smartphone')) {
+                            self.kwInfo.on('click', $.preventDefault);
+                            require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                                new Picker({ date: self.startDate })
+                                    .attachTo(self.kwInfo)
+                                    .on('select', function (date) {
+                                        self.setStartDate(date);
+                                        self.trigger('onRefresh');
+                                    });
+                            });
+                        }
+                    }
+
+                    if ($('.time:visible', self.pane).length === 0) self.app.getWindow().one('show', reset);
+                    else reset();
                 });
             }
         },
@@ -241,7 +282,7 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 'workweek':
                     // settings independent, set startDate to Monday of the current week
-                    this.startDate.startOf('week').day(this.workWeekStart);
+                    this.startDate.startOf('week').day(settings.get('workweekStart'));
                     break;
                 default:
                 case 'week':
@@ -440,6 +481,11 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 13:
                     // enter
+                    this.onClickAppointment(e);
+                    break;
+                case 32:
+                    // space
+                    e.preventDefault();
                     this.onClickAppointment(e);
                     break;
                 default:
@@ -733,9 +779,13 @@ define('io.ox/calendar/week/view', [
             if (_.device('!large')) return;
 
             function drawOption() {
+                // this = timezone name (string)
                 var timezone = moment.tz(this);
-
-                return [$('<span class="offset">').text(timezone.format('Z')), $('<span class="timezone-abbr">').text(timezone.zoneAbbr()), this];
+                return [
+                    $('<span class="offset">').text(timezone.format('Z')),
+                    $('<span class="timezone-abbr">').text(timezone.zoneAbbr()),
+                    _.escape(this)
+                ];
             }
 
             function drawDropdown() {
@@ -760,6 +810,7 @@ define('io.ox/calendar/week/view', [
                     }),
                     model = new TimezoneModel(favorites),
                     dropdown = new Dropdown({
+                        className: 'dropdown timezone-label-dropdown',
                         model: model,
                         label: moment().tz(coreSettings.get('timezone')).zoneAbbr(),
                         tagName: 'div'
@@ -1066,7 +1117,7 @@ define('io.ox/calendar/week/view', [
                 today = moment().startOf('day'),
                 tmpDate = moment(this.startDate);
             // something new?
-            if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef) {
+            if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef && this.columnsRef === this.columns) {
                 if (this.options.todayClass && this.columns > 1) {
                     var weekViewContainer = $('.week-view-container', this.$el);
                     weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
@@ -1081,6 +1132,7 @@ define('io.ox/calendar/week/view', [
 
             this.dayLabelRef = today.valueOf();
             this.startLabelRef = this.startDate.valueOf();
+            this.columnsRef = this.columns;
 
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();

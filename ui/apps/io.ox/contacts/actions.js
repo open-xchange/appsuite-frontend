@@ -16,13 +16,12 @@ define('io.ox/contacts/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/core/extPatterns/actions',
     'io.ox/contacts/api',
-    'io.ox/core/print',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'gettext!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/core/pim/actions'
-], function (ext, links, actions, api, print, settings, mailSettings, gt, capabilities) {
+], function (ext, links, actions, api, settings, mailSettings, gt, capabilities) {
 
     'use strict';
 
@@ -243,7 +242,9 @@ define('io.ox/contacts/actions', [
                 })).length > 0);
         },
         multiple: function (list) {
-            print.request('io.ox/contacts/print', list);
+            require(['io.ox/contacts/actions/print'], function (print) {
+                print.multiple(list);
+            });
         }
     });
 
@@ -251,8 +252,7 @@ define('io.ox/contacts/actions', [
         capabilities: 'carddav',
         requires: function () {
             // use client onboarding here, since it is a setting and not a capability
-            if (!capabilities.has('client-onboarding')) return false;
-            return _.device('!smartphone');
+            return capabilities.has('client-onboarding');
         },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {

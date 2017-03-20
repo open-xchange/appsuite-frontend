@@ -84,16 +84,17 @@ define('io.ox/calendar/actions/acceptdeny', [
                 })
                     .build(function () {
                         if (!series && o.recurrence_position) {
-                            data = api.removeRecurrenceInformation(data);
+                            data = api.removeRecurrenceInformation(appointmentData);
                         }
 
-                        var recurrenceString = util.getRecurrenceString(data),
-                            description = $('<b>').text(data.title),
+                        var recurrenceString = util.getRecurrenceString(appointmentData),
+                            description = $('<b>').text(appointmentData.title),
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
+
                         if (!options.taskmode) {
-                            var strings = util.getDateTimeIntervalMarkup(data, { output: 'strings' });
+                            var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings' });
                             description = [
-                                $('<b>').text(data.title),
+                                $('<b>').text(appointmentData.title),
                                 $.txt(', '),
                                 $.txt(gt.noI18n(strings.dateStr)),
                                 $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
@@ -195,16 +196,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                                 if (conflicts.length === 0) return performConfirm();
 
                                 ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    new dialogs.ModalDialog()
-                                        .header(conflictView.drawHeader())
-                                        .append(conflictView.drawList(conflicts, dialog).addClass('additional-info'))
-                                        .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                                        .addButton('cancel', gt('Cancel'), 'cancel')
-                                        .show()
-                                        .done(function (action) {
-                                            if (action === 'cancel') return dialog.idle();
-                                            if (action === 'ignore') performConfirm();
-                                        });
+                                    conflictView.dialog(conflicts)
+                                        .on('cancel', function () { dialog.idle(); })
+                                        .on('ignore', function () { performConfirm(); });
                                 });
                             })
                             .fail(notifications.yell)

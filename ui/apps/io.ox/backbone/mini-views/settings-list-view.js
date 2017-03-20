@@ -123,7 +123,8 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 list = this.collection.filter(this.opt.filter);
 
             _(list).each(function (model) {
-                var id = model.get('id'),
+                // some collection don't have the standard id attribute (accounts for example see Bug 50219)
+                var id = model.get(model.idAttribute),
                     view = self.createOrGetView(id, _.extend({
                         model: model,
                         sortable: self.opt.sortable
@@ -148,7 +149,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         onAdd: function (model) {
             if (!this.opt.filter(model)) return;
 
-            var id = model.get('id'),
+            var id = model.get(model.idAttribute),
                 index = this.collection.indexOf(model),
                 insertBefore = this.$el.find('> li:nth-child(' + (index + 1) + ')'),
                 view = this.createOrGetView(id, _.extend({
@@ -165,7 +166,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         },
 
         onRemove: function (model) {
-            var id = model.get('id');
+            var id = model.get(model.idAttribute);
             if (!this.views[id]) return;
             this.trigger('remove', this.views[id]);
             this.views[id].remove();
@@ -179,6 +180,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         },
 
         onKeydownDragHandle: function (e) {
+            if ($(e.target).is('a')) return;
             var self = this,
                 current = $(e.currentTarget),
                 items = self.$el.children('.draggable'),

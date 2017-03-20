@@ -60,7 +60,7 @@
         var memoize = function (key) {
             var cache = memoize.cache;
             var address = '' + (hasher ? hasher.apply(this, arguments) : key);
-            if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+            if (!hasOwnProperty.call(cache || {}, address)) cache[address] = func.apply(this, arguments);
             return cache[address];
         };
         memoize.cache = {};
@@ -203,7 +203,7 @@
         large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
-        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)'
+        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)'
     };
 
     var display = {};
@@ -274,7 +274,7 @@
         },
 
         // combination of browser & display
-        device: _.memoize(function (condition, debug) {
+        device: memoize(function (condition, debug) {
             // add support for language checks
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
@@ -285,7 +285,9 @@
             misc.reload = (window.performance && window.performance.navigation.type === 1);
             // debug
             if (condition === 'debug' || condition === 1337) {
-                return _.extend({}, browserLC, display, misc);
+                // fallback to _.extend if Object.assign does not exist
+                var assign = Object.assign || _.extend;
+                return assign({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;

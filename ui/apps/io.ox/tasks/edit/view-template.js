@@ -485,6 +485,7 @@ define('io.ox/tasks/edit/view-template', [
     point.basicExtend({
         id: 'add_participant',
         index: 1700,
+        className: 'row',
         row: '11',
         draw: function (baton) {
             var view = new AddParticipantView({
@@ -502,7 +503,7 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 view.$el
             );
-            view.render().$el.addClass('col-xs-12 collapsed');
+            view.render().$el.addClass('col-md-6 collapsed');
             view.$el.find('input.add-participant').addClass('task-participant-input-field');
 
             view.typeahead.on('typeahead-custom:dropdown-rendered', function () {
@@ -780,7 +781,7 @@ define('io.ox/tasks/edit/view-template', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
                         app: 'task',

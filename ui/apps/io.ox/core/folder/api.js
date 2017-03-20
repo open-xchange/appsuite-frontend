@@ -340,6 +340,33 @@ define('io.ox/core/folder/api', [
             if (options.reset) collection.trigger('reset');
         },
 
+        removeCollection: function (id, options) {
+            options = options || {};
+            var collection = this.collections[id],
+                self = this,
+                models = collection ? collection.models : [];
+
+            if (!collection) return;
+
+            // delete collection before recursion to avoid loops, just in case
+            collection = null;
+            delete this.collections[id];
+
+            _(models).each(function (model) {
+                removeFromAllCollections(model.id);
+                self.removeCollection(model.id, options);
+            });
+
+            if (options.removeModels && this.models[id]) {
+                var data = this.models[id].toJSON();
+                this.models[id] = null;
+                delete this.models[id];
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
+            }
+        },
+
         getModel: function (id) {
             return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
@@ -683,6 +710,35 @@ define('io.ox/core/folder/api', [
             // to make sure we always get the same result (just data; not timestamp)
             return array;
         });
+    }
+
+    /**
+     * Get multiple lists.
+     */
+    function multipleLists(ids, options) {
+        try {
+            http.pause();
+            return $.when.apply($,
+                _(ids).map(function (id) {
+                    return list(id).then(
+                        null,
+                        function fail(error) {
+                            error.id = id;
+                            return $.when(options.errors ? error : undefined);
+                        }
+                    );
+                })
+            )
+            .then(function () {
+                var lists = [];
+                _(arguments).toArray().forEach(function (list) {
+                    Array.prototype.push.apply(lists, list);
+                });
+                return lists;
+            });
+        } finally {
+            http.resume();
+        }
     }
 
     //
@@ -1051,13 +1107,14 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
-    function remove(ids) {
+    function remove(ids, options) {
 
         // ensure array
         if (!_.isArray(ids)) ids = [ids];
 
         // local copy for model data
-        var hash = {};
+        var hash = {},
+            params;
 
         _(ids).each(function (id) {
             // get model
@@ -1071,14 +1128,18 @@ define('io.ox/core/folder/api', [
             model.trigger('destroy');
         });
 
+        params = {
+            action: 'delete',
+            failOnError: true,
+            tree: tree(ids[0])
+        };
+
+        if (options && options.isDSC) params.hardDelete = true;
+
         // delete on server
         return http.PUT({
             module: 'folders',
-            params: {
-                action: 'delete',
-                failOnError: true,
-                tree: tree(ids[0])
-            },
+            params: params,
             data: ids,
             appendColumns: false
         })
@@ -1088,6 +1149,21 @@ define('io.ox/core/folder/api', [
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
+                // get refreshed the model data for folders moved to the trash folder. If they are removed completely we remove the collection
+                // flat models don't have a collection, so no need to remove here
+                if (!isFlat(data.module)) {
+                    // if this folder is in the trash folder it was removed completely, so no need to for fresh data
+                    if (api.is('trash', data)) {
+                        api.pool.removeCollection(id, { removeModels: true });
+                    } else {
+                        api.get(id, { cache: false }).fail(function (error) {
+                            // folder does not exist
+                            if (error.code === 'FLD-0008') {
+                                api.pool.removeCollection(id, { removeModels: true });
+                            }
+                        });
+                    }
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 if (account.is('trash', id)) api.trigger('cleared-trash');
             });
@@ -1396,7 +1472,8 @@ define('io.ox/core/folder/api', [
         Bitmask: Bitmask,
         propagate: propagate,
         altnamespace: altnamespace,
-        injectIndex: injectIndex
+        injectIndex: injectIndex,
+        multipleLists: multipleLists
     });
 
     return api;

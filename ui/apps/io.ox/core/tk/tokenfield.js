@@ -17,13 +17,14 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/participants/model',
     'io.ox/participants/views',
     'io.ox/contacts/api',
+    'io.ox/core/http',
     'io.ox/core/util',
     'gettext!io.ox/core',
     'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, Typeahead, pModel, pViews, contactAPI, util, gt) {
+], function (ext, Typeahead, pModel, pViews, contactAPI, http, util, gt) {
 
     'use strict';
 
@@ -72,6 +73,14 @@ define('io.ox/core/tk/tokenfield', [
         return this.$element.get(0);
     };
 
+    var uniqPModel = pModel.Participant.extend({
+        setPID: function () {
+            uniqPModel.__super__.setPID.call(this);
+            // add unique id to pid attr (allows duplicates)
+            this.set('pid', this.get('pid') + '_' + _.uniqueId(), { silent: true });
+        }
+    });
+
     var Tokenfield = Typeahead.extend({
 
         className: 'test',
@@ -87,7 +96,7 @@ define('io.ox/core/tk/tokenfield', [
                 // defines tokendata
                 harmonize: function (data) {
                     return _(data).map(function (m) {
-                        var model = new pModel.Participant(m);
+                        var model = new uniqPModel(m);
                         return {
                             value: model.getTarget({ fallback: true }),
                             // fallback when firstname and lastname are empty strings
@@ -145,10 +154,12 @@ define('io.ox/core/tk/tokenfield', [
                 }
             });
 
+            ext.point(options.extPoint + '/tokenfield/customize').invoke('customize', this, options);
+
             // call super constructor
             Typeahead.prototype.initialize.call(this, options);
             var Participants = Backbone.Collection.extend({
-                model: pModel.Participant
+                model: uniqPModel
             });
 
             // initialize collection
@@ -278,7 +289,7 @@ define('io.ox/core/tk/tokenfield', [
                             newAttrs = ['', e.attrs.value, '', e.attrs.value];
                         }
                         // add external participant
-                        e.attrs.model = new pModel.Participant({
+                        e.attrs.model = new uniqPModel({
                             type: 5,
                             display_name: newAttrs[1],
                             email1: newAttrs[3]
@@ -288,11 +299,14 @@ define('io.ox/core/tk/tokenfield', [
                     // distribution lists
                     if (e.attrs.model.has('distribution_list')) {
                         // create a model/token for every member with an email address
+                        // bundle and delay the pModel fetch calls
+                        http.pause();
+
                         var models = _.chain(e.attrs.model.get('distribution_list'))
                             .filter(function (m) { return !!m.mail; })
                             .map(function (m) {
                                 m.type = 5;
-                                var model = new pModel.Participant({
+                                var model = new uniqPModel({
                                     type: 5,
                                     display_name: m.display_name,
                                     email1: m.mail
@@ -317,6 +331,8 @@ define('io.ox/core/tk/tokenfield', [
                         self.redrawTokens();
                         // clean input
                         self.input.data('ttTypeahead').input.$input.val('');
+
+                        http.resume();
                         return false;
                     }
 
@@ -413,7 +429,8 @@ define('io.ox/core/tk/tokenfield', [
                     typeahead: self.typeaheadOptions,
                     html: this.options.html || false,
                     inputType: this.options.inputtype || 'email',
-                    isMail: o.isMail
+                    isMail: o.isMail,
+                    minWidth: 0
                 });
 
             this.register();
@@ -559,6 +576,12 @@ define('io.ox/core/tk/tokenfield', [
                     });
                     self.redrawTokens();
                 }
+            });
+
+            this.getInput().on('focus blur', function (e) {
+                var tokenfield = self.$el.data('bs.tokenfield');
+                tokenfield.options.minWidth = e.type === 'focus' ? 320 : 0;
+                tokenfield.update();
             });
 
             return this;

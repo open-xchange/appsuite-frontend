@@ -14,8 +14,10 @@
 define('io.ox/core/tk/upload', [
     'io.ox/core/event',
     'io.ox/core/notifications',
-    'gettext!io.ox/core'
-], function (Events, notifications, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/folder/api',
+    'io.ox/core/api/filestorage'
+], function (Events, notifications, gt, folderAPI, filestorageAPI) {
 
     'use strict';
 
@@ -230,71 +232,114 @@ define('io.ox/core/tk/upload', [
                 this.start();
             }
             // progress! (using always() here to keep things going even on error)
-            this.progress().always(function () {
+            this.progress().always(function (data) {
+                if (data && data.error) {
+                    // only handle quota exceed or too many requests error
+                    // OX-0023 is special quota exceed error of hidrive (see Bug 51091)
+                    if (/^(FLS-0024|OX-0023)$/.test(data.code) || (data.error_params && data.error_params.length && /^429 /.test(data.error_params[0]))) {
+                        self.stop();
+                        return;
+                    }
+                }
                 processing = false;
                 position++;
                 self.queueChanged();
             });
         };
 
-        this.offer = function (file, options) {
+        this.validateFiles = function (newFiles, options) {
+            if (!options.folder || delegate.type === 'importEML') return $.when(newFiles);
+            return folderAPI.get(options.folder).then(function (folder) {
+                var deferred = $.when({});
+                if (folderAPI.is('infostore', folder) && filestorageAPI.isExternal(folder)) {
+                    // if it is an external infostore folder, get quota via the new quota api
+                    deferred = require(['io.ox/core/api/quota']).then(function (quotaAPI) {
+                        return quotaAPI.getAccountQuota(folder.account_id, 'filestorage').then(function (model) {
+                            return model.toJSON();
+                        });
+                    });
+                } else if (folderAPI.is('infostore', folder)) {
+                    // internal infostore folders need to calculate quota based on the settings
+                    deferred = require(['settings!io.ox/core']).then(function (settings) {
+                        var properties = settings.get('properties') || {};
+                        return {
+                            use: properties.infostoreUsage,
+                            quota: properties.infostoreQuota,
+                            maxSize: properties.infostoreMaxUploadSize
+                        };
+                    });
+                } else {
+                    // no quota
+                    deferred = $.when({});
+                }
 
-            var self = this;
+                return deferred.then(function success(data) {
+                    var use = data.use || 0,
+                        quota = data.quota || -1,
+                        maxSize = data.maxSize || Number.MAX_VALUE,
+                        totalUploadSize = 0;
 
-            require(['settings!io.ox/core', 'io.ox/core/strings'], function (settings, strings) {
-                var properties = settings.get('properties'),
-                    newFiles = [].concat(file),
-                    validFiles;
-
-                if (properties && delegate.type !== 'importEML') {
-                    var totalUploadSize = 0,
-                        maxSize = properties.infostoreMaxUploadSize,
-                        quota = properties.infostoreQuota;
-
-                    validFiles = _(newFiles).filter(function (f) {
+                    var validFiles = _(newFiles).filter(function (f) {
                         var exceedMaximum = maxSize > 0 && f.size > maxSize;
                         if (!exceedMaximum) totalUploadSize += f.size;
                         return !exceedMaximum;
                     });
 
-                    if (quota > 0 && totalUploadSize > quota - properties.infostoreUsage) {
-                        notifications.yell('error',
-                            gt.format(
-                                //#. %1$s quota limit
-                                gt.ngettext(
-                                    'The file cannot be uploaded because it exceeds the quota limit of %1$s',
-                                    'The files cannot be uploaded because they exceed the quota limit of %1$s',
-                                    newFiles.length
-                                ),
-                                strings.fileSize(quota)
-                            )
-                        );
-                        return;
+                    if (quota > 0 && totalUploadSize > quota - use) {
+                        require(['io.ox/core/strings'], function (strings) {
+                            notifications.yell('error',
+                                gt.format(
+                                    //#. %1$s quota limit
+                                    gt.ngettext(
+                                        'The file cannot be uploaded because it exceeds the quota limit of %1$s',
+                                        'The files cannot be uploaded because they exceed the quota limit of %1$s',
+                                        newFiles.length
+                                    ),
+                                    strings.fileSize(quota)
+                                )
+                            );
+                        });
+
+                        return [];
                     }
 
                     if (validFiles.length < newFiles.length) {
-                        if (newFiles.length - validFiles.length === 1) {
-                            var f = _.without.apply(_, [newFiles].concat(validFiles))[0];
-                            notifications.yell('error',
-                                //#. %1$s the filename
-                                //#. %2$s the maximum file size
-                                gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', f.name, strings.fileSize(maxSize))
-                            );
-                        } else if (validFiles.length === 0) {
-                            notifications.yell('error',
-                                //#. %1$s the maximum file size
-                                gt('The files cannot be uploaded because each file exceeds the maximum file size of %1$s', strings.fileSize(maxSize))
-                            );
-                        } else {
-                            notifications.yell('warning',
-                                //#. %1$s the maximum file size
-                                gt('Some files cannot be uploaded because they exceed the maximum file size of %1$s', strings.fileSize(maxSize))
-                            );
-                        }
+                        require(['io.ox/core/strings'], function (strings) {
+                            if (newFiles.length - validFiles.length === 1) {
+                                var f = _.without.apply(_, [newFiles].concat(validFiles))[0];
+                                notifications.yell('error',
+                                    //#. %1$s the filename
+                                    //#. %2$s the maximum file size
+                                    gt('The file "%1$s" cannot be uploaded because it exceeds the maximum file size of %2$s', f.name, strings.fileSize(maxSize))
+                                );
+                            } else if (validFiles.length === 0) {
+                                notifications.yell('error',
+                                    //#. %1$s the maximum file size
+                                    gt('The files cannot be uploaded because each file exceeds the maximum file size of %1$s', strings.fileSize(maxSize))
+                                );
+                            } else {
+                                notifications.yell('warning',
+                                    //#. %1$s the maximum file size
+                                    gt('Some files cannot be uploaded because they exceed the maximum file size of %1$s', strings.fileSize(maxSize))
+                                );
+                            }
+                        });
                     }
-                }
 
-                _(validFiles || newFiles).each(function (file) {
+                    return validFiles;
+                }, function fail() {
+                    return newFiles;
+                });
+            });
+        };
+
+        this.offer = function (file, options) {
+            var self = this,
+                newFiles = [].concat(file);
+            this.validateFiles(newFiles, options).always(function (validFiles) {
+                validFiles = validFiles || newFiles;
+                if (validFiles.length === 0) return;
+                _(validFiles).each(function (file) {
                     files.push({ file: file, options: options });
                 });
                 self.queueChanged();

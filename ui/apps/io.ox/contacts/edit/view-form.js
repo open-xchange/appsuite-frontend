@@ -147,7 +147,7 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     // Remove attachment handling when infostore is not present
-    if (!capabilities.has('infostore')) {
+    if (!capabilities.has('filestore')) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
     }
@@ -287,10 +287,10 @@ define('io.ox/contacts/edit/view-form', [
                 require(['io.ox/metrics/main'], function (metrics) {
                     if (!metrics.isEnabled()) return;
                     // buttons
-                    self.delegate('[data-action]', 'mousedown', function (e) {
+                    self.on('mousedown', '[data-action]', function (e) {
                         var node =  $(e.target);
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: node.attr('data-action') || node.attr('data-name'),
@@ -298,9 +298,9 @@ define('io.ox/contacts/edit/view-form', [
                         });
                     });
                     // toggle
-                    self.delegate('.checkbox-inline', 'mousedown', function () {
+                    self.on('mousedown', '.checkbox-inline', function () {
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: 'show-all-fields'

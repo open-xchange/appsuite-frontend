@@ -13,9 +13,8 @@
 
 define('io.ox/oauth/backbone', [
     'io.ox/core/http',
-    'gettext!io.ox/core',
     'less!io.ox/oauth/style'
-], function (http, gt) {
+], function (http) {
     'use strict';
 
     var generateId = function () {
@@ -28,8 +27,12 @@ define('io.ox/oauth/backbone', [
     var Account = {};
 
     Account.Model = Backbone.Model.extend({
-        hasScope: function (scope) {
-            return _(this.get('enabledScopes')).contains(scope);
+        hasScopes: function (scopes) {
+            var self = this;
+            scopes = [].concat(scopes);
+            return _(scopes).reduce(function (memo, scope) {
+                return memo || _(self.get('enabledScopes')).contains(scope);
+            }, false);
         },
         enableScopes: function (scopes) {
             var wanted = this.get('wantedScopes') || this.get('enabledScopes') || [];
@@ -50,7 +53,7 @@ define('io.ox/oauth/backbone', [
             options = _.extend({ force: true }, options);
             var account = this,
                 needsReauth = options.force || (this.get('wantedScopes') || []).reduce(function (acc, scope) {
-                    return acc || !account.hasScope(scope);
+                    return acc || !account.hasScopes(scope);
                 }, false);
             if (!needsReauth) return $.when();
 
@@ -173,6 +176,36 @@ define('io.ox/oauth/backbone', [
                     }).done(options.success).fail(options.error);
                 default:
             }
+        },
+        fetchRelatedAccounts: function () {
+            var self = this;
+            return require([
+                'io.ox/core/api/account',
+                'io.ox/core/api/filestorage'
+            ]).then(function (accountAPI, filestorageAPI) {
+                return $.when(accountAPI.all(), filestorageAPI.getAllAccounts());
+            }).then(function (accounts, storageAccounts) {
+                return [].concat(
+                    storageAccounts.toJSON().filter(function (account) {
+                        return account.configuration
+                            && String(account.configuration.account) === String(self.get('id'));
+                    }).map(function addAccountType(model) {
+                        model.accountType = model.accountType || 'fileStorage';
+
+                        // handle possible error messages for fileStorage accounts
+                        if (model.error) model.status = { message: model.error };
+
+                        return model;
+                    }),
+                    accounts.filter(function isRelated(account) {
+                        return account.mail_oauth === self.get('id');
+                    })
+                ).map(function (account) {
+                    // add serviceId to related account
+                    account.serviceId = self.get('serviceId');
+                    return account;
+                });
+            });
         }
     });
 
@@ -187,40 +220,18 @@ define('io.ox/oauth/backbone', [
         }
     });
 
-    var servicesMetaData = {
-        'com.openexchange.oauth.google': {
-            className: 'logo-google'
-        },
-        'com.openexchange.oauth.dropbox': {
-            className: 'logo-dropbox'
-        },
-        'com.openexchange.oauth.boxcom': {
-            className: 'logo-boxcom'
-        },
-        'com.openexchange.oauth.msliveconnect': {
-            className: 'logo-onedrive'
-        },
-        'other': {
-            title: gt('Other'),
-            className: 'fa-envelope'
-        }
-    };
-    function metaDataFor(id) {
-        var data = servicesMetaData[id];
-        return data || servicesMetaData.other;
-    }
-
     var ServiceItemView = Backbone.View.extend({
         tagName: 'li',
         className: 'service-item',
         render: function () {
+            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
             this.$el.append(
                 $('<button>').addClass('btn btn-default').append(
                     $('<i class="service-icon fa">')
-                        .addClass(this.model.get('icon') || metaDataFor(this.model.id).className || 'fa-envelope'),
+                        .addClass('logo-' + shortId),
                     $('<div>')
                         .addClass('service-label')
-                        .text(this.model.get('displayName') || metaDataFor(this.model.id).title)
+                        .text(this.model.get('displayName'))
                 ).data({
                     cid: this.model.cid
                 })

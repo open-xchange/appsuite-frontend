@@ -122,8 +122,17 @@ define('io.ox/mail/toolbar', [
             label: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
+                if (!mailsettings.get('features/flag/color')) return;
                 flagPicker.attach(this, { data: baton.data });
             }
+        },
+        'flag': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-star-o',
+            //#. Verb: (to) flag messages
+            label: gt.pgettext('verb', 'Flag'),
+            ref: 'io.ox/mail/actions/flag'
         },
         'archive': {
             prio: 'hi',
@@ -213,7 +222,9 @@ define('io.ox/mail/toolbar', [
     });
 
     new actions.Action('io.ox/mail/actions/color', {
-        requires: 'some',
+        requires: function (e) {
+            return mailsettings.get('features/flag/color') && e.collection.has('some');
+        },
         action: $.noop
     });
 
@@ -287,7 +298,7 @@ define('io.ox/mail/toolbar', [
             .divider();
 
             // feature: tabbed inbox
-            if (capabilities.has('mail_categories')) {
+            if (capabilities.has('mail_categories') && !_.device('smartphone')) {
                 dropdown
                 .header(gt('Inbox'))
                 .option('categories', true, gt('Use categories'))

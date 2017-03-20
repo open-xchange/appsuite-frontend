@@ -172,6 +172,18 @@ define('io.ox/mail/mailfilter/settings/filter', [
         }
     });
 
+    ext.point('io.ox/settings/mailfilter/filter/settings/actions/unknown').extend({
+        index: 200,
+        id: 'actions',
+        draw: function (model) {
+            var title = model.get('rulename');
+            $(this).append(
+                listUtils.drawWarning(gt('This rule contains unsupported properties. ')),
+                listUtils.controlsDelete({ title: gt('Remove %1$s', title) })
+            );
+        }
+    });
+
     ext.point('io.ox/settings/mailfilter/filter/settings/actions/vacation').extend({
         index: 200,
         id: 'actions',

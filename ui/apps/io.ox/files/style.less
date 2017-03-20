@@ -24,7 +24,7 @@
 
 // file list view
 
-.file-list-view, .myshares-list {
+.file-list-view, .myshares-list, .myfavorites-list {
 
     //
     // Column layout
@@ -58,8 +58,8 @@
 
     .list-item-content.attachment-view {
         .list-item-column {
-            &.column-2 { width: 30%; padding-right: 10px; }
-            &.column-5 { width: 20%; padding-right: 10px; text-align: left; }
+            &.column-2 { width: 40%; padding-right: 10px; }
+            &.column-5 { width: 30%; padding-right: 10px; text-align: left; }
         }
     }
 
@@ -89,7 +89,7 @@
     width: 16px;
     text-align: center;
 
-    &:before { content: '\f016'; color: #aaa; } // default: fa-file-o
+    &:before { content: '\f016'; color: #767676; } // default: fa-file-o
 
     .file-type-image  &:before { content: '\f03e'; } // fa-image
     .file-type-audio  &:before { content: '\f028'; } // fa-volume-up
@@ -102,10 +102,10 @@
     .file-type-svg    &:before { content: '\f1c9'; color: #F4502A; } // fa-file-code-o
     .file-type-txt    &:before { content: '\f0f6'; } // fa-file-text-o
     .file-type-guard  &:before { content: '\f023'; } // fa-lock
-    .file-type-folder &:before { content: '\f07b'; color: #777; } // fa-folder
+    .file-type-folder &:before { content: '\f07b'; color: #767676; } // fa-folder
 }
 
-.file-list-view, .myshares-list {
+.file-list-view, .myshares-list, .myfavorites-list {
 
     &.visible-selection.has-focus .list-item.selected .file-type-icon:before { color: white; }
 
@@ -117,13 +117,18 @@
 
         padding: @default-padding 0 0 @default-padding;
 
-        & > li.list-item {
+        > li.list-item {
             padding: 0;
             display: inline-block;
             border: solid white;
             border-width: 0 @default-padding @default-padding 0;
             overflow: hidden;
             float: left;
+        }
+        &.icon-layout {
+            > li.list-item {
+                border-width: 0 @default-padding (@default-padding - @base-padding) 0;
+            }
         }
 
         &.grid-1  > li { width: 100% /  1; }
@@ -165,7 +170,7 @@
         // since it's not equal but more than 120px we add a bit (just looks better on average)
         @thumbnail_width: 120px;
         @thumbnail_height: 96px;
-        @filename_rows: 2;
+        @filename_rows: 3;
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
         @filename_margin: 12px;
@@ -173,7 +178,14 @@
 
         .list-item-content {
             width: 100%;
-            height: @height;
+            height: @height - (1 * @base-padding);
+        }
+        .list-item.selectable:hover {
+            overflow: visible;
+
+            .list-item-content {
+                box-shadow: 0 0 7px 0 #eee
+            }
         }
 
         .icon-thumbnail {
@@ -202,7 +214,7 @@
 
         .filename-file-icon {
             position: absolute;
-            margin: @filename_margin 0;
+            margin: (2 * @base-padding) 0 @filename_margin 0;
             height: @filename_height;
             line-height: @filename_line_height;
             font-size: 14px;
@@ -214,9 +226,11 @@
             line-height: @filename_line_height;
             height: @filename_height;
             overflow: hidden;
-            margin: @filename_margin 0;
+            margin: (2 * @base-padding) 0 @filename_margin 0;
             text-align: left;
             padding: 0 5px 0 28px;
+            white-space: normal;
+            word-wrap: break-word;
             word-break: break-word;
         }
 
@@ -247,7 +261,6 @@
             color: #ccc;
             text-shadow: none;
         }
-
     }
 
     &.tile-layout {

@@ -29,7 +29,7 @@ define('io.ox/files/actions/add-storage-account', [
 
     function createAccount(service) {
         var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-            return !account.hasScope('drive');
+            return !account.hasScopes('drive');
         })[0] || new OAuth.Account.Model({
             serviceId: service.id,
             //#. %1$s is the display name of the account
@@ -97,7 +97,7 @@ define('io.ox/files/actions/add-storage-account', [
     }
 
     return function () {
-        return new dialogs.ModalDialog({ width: 633 })
+        return new dialogs.ModalDialog({ width: 570 })
             .header($('<h4>').text(gt('Add storage account')))
             .addPrimaryButton('close', gt('Close'), 'close')
             .build(drawContent)

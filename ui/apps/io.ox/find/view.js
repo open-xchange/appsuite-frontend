@@ -32,6 +32,8 @@ define('io.ox/find/view', [
 
         events: {
             'focusin': 'show',
+            // when a user clicks the cancel button the focus is still in the search field. Without the keydown handler the search field would not expand because there is no focusin event
+            'keydown': 'onKeydown',
             'focusout': 'smartCancel',
             // subview buttons
             'click .action-cancel': 'cancel'
@@ -120,6 +122,12 @@ define('io.ox/find/view', [
             this.ui.facets.render();
             this.register();
             return this;
+        },
+
+        onKeydown: function (e) {
+            // don't open on tab
+            if (this.isActive() || e.which === 9) return;
+            this.show();
         },
 
         show: function () {

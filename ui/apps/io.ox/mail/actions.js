@@ -66,8 +66,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('toplevel', 'one')) return;
             // get first mail
             var data = e.baton.first();
-            // has sender? and not a draft mail
-            return util.hasFrom(data) && !isDraftMail(data);
+            // has sender? not a draft mail and not a decrypted mail
+            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data);
         },
         action: function (baton) {
 
@@ -169,6 +169,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
+            // Can't edit encrypted E-mail
+            if (data && data.security_info && data.security_info.encrypted) return;
             // must be draft folder
             return data && isDraftMail(data);
         },
@@ -205,6 +207,8 @@ define('io.ox/mail/actions', [
             if (!e.collection.has('one') && !e.baton.isThread) return;
             // get first mail
             var data = e.baton.first();
+            // Can't edit encrypted E-mail
+            if (data && data.security_info && data.security_info.encrypted) return;
             // must be draft folder
             return data && isDraftMail(data);
         },
@@ -288,6 +292,15 @@ define('io.ox/mail/actions', [
         },
         multiple: function (list) {
             print.request('io.ox/mail/print', list);
+        }
+    });
+
+    new Action('io.ox/mail/actions/flag', {
+        requires: function (e) {
+            return settings.get('features/flag/star') && e.collection.has('some');
+        },
+        action: function (baton) {
+            api.flag(baton.data);
         }
     });
 
@@ -509,7 +522,9 @@ define('io.ox/mail/actions', [
             var context = _.isArray(e.context) ? _.first(e.context) : e.context,
                 hasRightSuffix = context.filename && !!context.filename.match(/\.ics$/i),
                 isCalendarType = context.content_type && !!context.content_type.match(/^text\/calendar/i),
-                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i);
+                isAppType = context.content_type && !!context.content_type.match(/^application\/ics/i),
+                mail = api.pool.get('detail').get(_.cid(context.mail));
+            if (mail.get('imipMail')) return false;
             return hasRightSuffix || isCalendarType || isAppType;
         },
         action: function (baton) {
@@ -603,8 +618,7 @@ define('io.ox/mail/actions', [
         capabilities: 'active_sync',
         requires: function () {
             // use client onboarding here, since it is a setting and not a capability
-            if (!capabilities.has('client-onboarding')) return false;
-            return _.device('!smartphone');
+            return capabilities.has('client-onboarding');
         },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
@@ -702,6 +716,17 @@ define('io.ox/mail/actions', [
         id: 'nospam',
         label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam',
+        section: 'flags'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: INDEX += 100,
+        prio: 'lo',
+        mobile: 'lo',
+        id: 'flag',
+        //#. Verb: (to) flag messages
+        label: gt.pgettext('verb', 'Flag'),
+        ref: 'io.ox/mail/actions/flag',
         section: 'flags'
     }));
 

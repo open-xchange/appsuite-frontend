@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/a11y', [], function () {
+define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     'use strict';
 
@@ -31,25 +31,26 @@ define('io.ox/core/a11y', [], function () {
         if (e.which === 13) $('.folder-tree:visible .folder.selected').focus();
     });
 
-    // focus active app from foldertree on <escape> and focus listview on <enter>
+    // focus active app from foldertree on <escape> and focus listview on <enter> and <space>
     $(document).on('keydown.foldertree', '.folder-tree .folder.selected', function (e) {
-        if (!/13|27/.test(e.which)) return;
+        if (!/13|32|27/.test(e.which)) return;
         if (!$(e.target).is('li')) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (e.which === 27) $('#io-ox-topbar .active-app a').focus();
-        if (e.which === 13) {
+        if (/13|32/.test(e.which)) {
+            e.preventDefault();
             node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
         }
     });
 
     // Focus foldertree on <escape> when in list-view or vgrid
     $(document).on('keydown.focusFolderTree', '.list-item, .vgrid-scrollpane-container', function (e) {
-        if (!/13|27/.test(e.which)) return;
+        if (!/13|32|27/.test(e.which)) return;
         var node = $(e.target).closest('.window-container');
         if (node.hasClass('io-ox-mail-window') || node.hasClass('io-ox-files-window')) return;
         if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
-        if (e.which === 13) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
+        if (/13|32/.test(e.which)) node.find('.rightside, .list-item.focusable:first').last().visibleFocus();
     });
 
     $(document).on('keydown.rightside', '.rightside,.scrollpane.f6-target', function (e) {
@@ -63,13 +64,44 @@ define('io.ox/core/a11y', [], function () {
 
     $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
 
+    $(document).on('keydown.listbox', 'ul[role="listbox"].listbox', function (e) {
+        var node = $(e.target).closest('.window-container');
+        if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
+        if (/13|32/.test(e.which)) {
+            e.preventDefault();
+            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+        }
+        if (!/38|40/.test(e.which)) return;
+        var li = $(this).children(),
+            active = $('#' + $(this).attr('aria-activedescendant')),
+            next = (/40/.test(e.which)) ? active.next() : active.prev(),
+            wrap = (/40/.test(e.which)) ? li.first() : li.last();
+
+        if (!next.length) next = wrap;
+
+        next.addClass('focussed').attr('aria-selected', true).trigger('click').siblings().removeClass('focussed').removeAttr('aria-selected');
+        $(this).attr('aria-activedescendant', next.attr('id'));
+    });
+
+    $(document).on('click.listbox', 'ul[role="listbox"].listbox li', function () {
+        $(this).parent().attr('aria-activedescendant', $(this).attr('id'));
+    });
+
     $(document).on('mousedown', '.focusable, .scrollable[tabindex]', function (e) {
         respondToNonKeyboardFocus(e.currentTarget);
     });
 
+    $(document).on('click', '.expandable-toggle', function (e) {
+        e.preventDefault();
+        var node = $(this).closest('.expandable').toggleClass('open');
+        var isOpen = node.hasClass('open');
+        if (isOpen) node.trigger('open');
+        $(this).attr('aria-expanded', isOpen);
+    });
+
     function respondToNonKeyboardFocus(node) {
         node = $(node);
-        if (node.is('.scrollable[tabindex]')) {
+        if (node.is('.scrollable[tabindex],.listbox[tabindex]')) {
             // IE uses borders because it cannot render box-shadows without leaving artifacts all over the place on scrolling (edge doesn't render the shadows at all if there are scrollbars). IE strikes again...
             if (!_.device('ie')) {
                 node.css('box-shadow', 'none').on('blur', removeBoxShadow);
@@ -107,6 +139,42 @@ define('io.ox/core/a11y', [], function () {
     $.fn.visibleFocus = function () {
         return fnFocus.apply(this);
     };
+
+    // Accessibility F6 jump
+    // do not focus nodes with negative tabindex, or hidden nodes
+    $(document).on('keydown.f6', function (e) {
+        var tabindexSelector = '[tabindex]:visible';
+
+        if (e.which === 117 && (_.device('macos') || e.ctrlKey)) {
+
+            e.preventDefault();
+
+            var items = $('#io-ox-core .f6-target:visible'),
+                closest = $(document.activeElement).closest('.f6-target'),
+                oldIndex = items.index(closest) || 0,
+                newIndex = oldIndex,
+                nextItem;
+
+            // find next f6-target that is focusable or contains a focusable node
+            do {
+                newIndex += (e.shiftKey ? -1 : +1);
+                if (newIndex >= items.length) newIndex = 0;
+                if (newIndex < 0) newIndex = items.length - 1;
+                nextItem = items.eq(newIndex);
+
+                if (nextItem.is(tabindexSelector)) {
+                    nextItem.focus();
+                    break;
+                }
+
+                nextItem = nextItem.find(tabindexSelector).first();
+                if (nextItem.length) {
+                    nextItem.focus();
+                    break;
+                }
+            } while (oldIndex !== newIndex);
+        }
+    });
 
     //
     // Tab trap
@@ -209,16 +277,55 @@ define('io.ox/core/a11y', [], function () {
 
     function menubarKeydown(e) {
         if (e.which === 9 || e.which === 16 && e.shiftKey) return;
-        if (e.which === 32) $(e.target).click(); // space
+        // space on role="button" is already handled
+        if (e.which === 32 && $(e.target).attr('role') !== 'button') $(e.target).click(); // space
         var links = $(e.currentTarget).find('> li:visible > a');
         cursorHorizontalKeydown(e, links);
         hotkey(e, links);
     }
 
+    function use() {
+        // focusFirstTabbable
+        return !!settings.get('features/accessibility', true);
+    }
+
+    function collapse(action, content, opt) {
+        // https://getbootstrap.com/javascript/#collapse
+        // https://www.w3.org/TR/wai-aria-practices-1.1/examples/accordion/accordion1.html
+        opt = _.extend({ expanded: false }, opt);
+        var actionid = _.uniqueId('action'),
+            contentid = _.uniqueId('content');
+        action.addClass('collapsed')
+            .prop('id', actionid)
+            .attr({
+                'data-target': '#' + contentid,
+                'data-toggle': 'collapse',
+                'aria-expanded': false,
+                'aria-controls': contentid
+            });
+        content.addClass('collapse')
+            .addClass(opt.expanded ? 'in' : '')
+            .prop('id', contentid)
+            .attr({
+                'role': 'region',
+                'aria-labelledby': actionid
+            })
+            .append(content);
+        // listeners
+        if (!opt.onChange || !_.isFunction(opt.onChange)) return;
+        content.on('show.bs.collapse shown.bs.collapse hide.bs.collapse hidden.bs.collapse', function (e) {
+            opt.onChange.call(content, e.type);
+        });
+        // propagate inital state
+        opt.onChange.call(content, opt.expanded ? 'show' : 'hide');
+    }
+
     return {
-        getTabbable: getTabbable,
-        trapFocus: trapFocus,
+        collapse: collapse,
         dropdownTrapFocus: dropdownTrapFocus,
-        menubarKeydown: menubarKeydown
+        getTabbable: getTabbable,
+        menubarKeydown: menubarKeydown,
+        trapFocus: trapFocus,
+        use: use
     };
 });

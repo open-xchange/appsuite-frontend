@@ -107,7 +107,7 @@ define.async('io.ox/core/manifests', [
     function isDisabled(manifest) {
         return (manifest.requires && manifest.upsell !== true) &&
                !capabilities.has(manifest.requires) ||
-               // check devie. this check cannot be bypassed by upsell=true
+               // check device. this check cannot be bypassed by upsell=true
                (!!manifest.device && !_.device(manifest.device));
     }
 

@@ -18,9 +18,11 @@ define('io.ox/calendar/util', [
     'io.ox/core/folder/api',
     'io.ox/core/util',
     'io.ox/core/folder/folder-color',
+    'io.ox/core/tk/dialogs',
     'settings!io.ox/calendar',
+    'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, settings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -39,7 +41,30 @@ define('io.ox/calendar/util', [
             gt('tentative')
         ],
         n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
-        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')];
+        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')],
+        superessiveWeekdays = [
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Monday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Tuesday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Wednesday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Thursday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Friday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Saturday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Sunday')
+        ];
 
     var that = {
 
@@ -150,7 +175,7 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = gt.noI18n(moment(data.start_date).zoneAbbr()),
+                    timeZoneStr = moment(data.start_date).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
                 if (data.full_time) {
@@ -305,19 +330,19 @@ define('io.ox/calendar/util', [
                         options[item.value] = gt('No reminder');
                         break;
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
                         break;
                     case 'hours':
                         i = Math.floor(item.value / 60);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
                         break;
                     case 'days':
                         i = Math.floor(item.value / 60 / 24);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
                         break;
                     case 'weeks':
                         i = Math.floor(item.value / 60 / 24 / 7);
-                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
+                        options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
                         break;
                     // no default
                 }
@@ -388,8 +413,7 @@ define('io.ox/calendar/util', [
                     div.append($('<li>').append(
                         $('<span>')
                             .text(gt.noI18n(name.replace(/_/g, ' '))),
-                        $('<span>')
-                            .addClass('time')
+                        $('<span class="time">')
                             .text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
@@ -420,6 +444,12 @@ define('io.ox/calendar/util', [
             }).on('blur dispose', function () {
                 $(this).popover('hide');
             });
+
+            if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
+                parent.scrollParent().on('scroll', function () {
+                    parent.popover('hide');
+                });
+            }
 
             return parent;
         },
@@ -453,20 +483,27 @@ define('io.ox/calendar/util', [
                 return n_count[i + 1];
             }
 
-            function getDayString(days) {
+            function getDayString(days, options) {
+                options = _.extend({ superessive: false }, options);
                 var firstDayOfWeek = moment.localeData().firstDayOfWeek(),
                     tmp = _(_.range(7)).chain().map(function (index) {
                         var mask = 1 << ((index + firstDayOfWeek) % 7);
-                        if ((days & mask) !== 0) return moment().weekday(index).format('dddd');
+                        if ((days & mask) !== 0) {
+                            return options.superessive ?
+                                superessiveWeekdays[index] :
+                                moment().weekday(index).format('dddd');
+                        }
                     }).compact().value();
 
                 var and =
                     //#. recurrence string
                     //#. used to concatenate two weekdays, like Monday and Tuesday
+                    //#. make sure that the leading and trailing spaces are also in the translation
                     gt(' and '),
                     delimiter =
                     //#. This delimiter is used to concatenate a list of string
                     //#. Example: Monday, Tuesday, Wednesday
+                    //#. make sure, that the trailing space is also in the translation
                     gt(', ');
 
                 return tmp.length === 2 ? tmp.join(and) : tmp.join(delimiter);
@@ -487,48 +524,34 @@ define('io.ox/calendar/util', [
 
                 // DAILY
                 case 1:
-                    str = interval === 1 ?
-                    gt('Every day.') :
                     //#. recurrence string
                     //#. %1$d: numeric
-                    gt('Every %1$d days.', interval);
+                    str = gt.npgettext('daily', 'Every day.', 'Every %1$d days.', interval, interval);
                     break;
 
                 // WEEKLY
                 case 2:
                     // special case: weekly but all days checked
                     if (days === 127) {
-                        str = interval === 1 ?
-                        gt('Every day.') :
                         //#. recurrence string
                         //#. %1$d: numeric
-                        gt('Every %1$d weeks on all days.', interval);
+                        str = gt.npgettext('weekly', 'Every day.', 'Every %1$d weeks on all days.', interval, interval);
                     } else if (days === 62) { // special case: weekly on workdays
-                        str = interval === 1 ?
-                            //#. recurrence string
-                            gt('On workdays.') :
-                            //#. recurrence string
-                            //#. %1$d: numeric
-                            gt('Every %1$d weeks on workdays.', interval);
+                        //#. recurrence string
+                        //#. %1$d: numeric
+                        str = gt.npgettext('weekly', 'On workdays.', 'Every %1$d weeks on workdays.', interval, interval);
                     } else if (days === 65) {
-                        str = interval === 1 ?
-                            //#. recurrence string
-                            gt('Every weekend.') :
-                            //#. recurrence string
-                            //#. %1$d: numeric
-                            gt('Every %1$d weeks on weekends.', interval);
+                        //#. recurrence string
+                        //#. %1$d: numeric
+                        str = gt.npgettext('weekly', 'Every weekend.', 'Every %1$d weeks on weekends.', interval, interval);
                     } else if (days === 0) { // special case when no day is selected
                         str = gt('Never.');
                     } else {
-                        str = interval === 1 ?
-                        //#. recurrence string
-                        //#. %1$s day string, e.g. "workdays" or "Friday" or "Monday, Tuesday, Wednesday"
-                        //#. Example: Every Monday, Wednesday, Friday
-                        gt('Every %1$s.', getDayString(days)) :
                         //#. recurrence string
                         //#. %1$d: numeric
                         //#. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
-                        gt('Every %1$d weeks on %2$s.', interval, getDayString(days));
+                        //#. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
+                        str = gt.npgettext('weekly', 'Every %2$s.', 'Every %1$d weeks on %2$s.', interval, interval, getDayString(days, { superessive: interval > 1 }));
                     }
 
                     break;
@@ -536,29 +559,18 @@ define('io.ox/calendar/util', [
                 // MONTHLY
                 case 3:
                     if (days === null) {
-                        str = interval === 1 ?
-                        //#. recurrence string
-                        //#. %1$d: numeric, day in month
-                        //#. Example: Every month on day 5
-                        gt('Every month on day %1$d.', day_in_month) :
                         //#. recurrence string
                         //#. %1$d: numeric, interval
-                        //#. %1$d: numeric, day in month
+                        //#. %2$d: numeric, day in month
                         //#. Example: Every 5 months on day 18
-                        gt('Every %1$d months on day %2$d.', interval, day_in_month);
+                        str = gt.npgettext('monthly', 'Every month on day %2$d.', 'Every %1$d months on day %2$d.', interval, interval, day_in_month);
                     } else {
-                        str = interval === 1 ?
-                        //#. recurrence string
-                        //#. %1$s: count string, e.g. first, second, or last
-                        //#. %2$s: day string, e.g. Monday
-                        //#. Example: Every month on the second Monday
-                        gt('Every month on the %1$s %2$s.', getCountString(day_in_month), getDayString(days)) :
                         //#. recurrence string
                         //#. %1$d: numeric, interval
                         //#. %2$s: count string, e.g. first, second, or last
                         //#. %3$s: day string, e.g. Monday
                         //#. Example Every 3 months on the second Tuesday
-                        gt('Every %1$d months on the %2$s %3$s.', interval, getCountString(day_in_month), getDayString(days));
+                        str = gt.npgettext('monthly', 'Every month on the %2$s %3$s.', 'Every %1$d months on the %2$s %3$s.', interval, interval, getCountString(day_in_month), getDayString(days));
                     }
 
                     break;
@@ -566,20 +578,18 @@ define('io.ox/calendar/util', [
                 // YEARLY
                 case 4:
                     if (days === null) {
-                        str =
                         //#. recurrence string
                         //#. %1$s: Month nane, e.g. January
                         //#. %2$d: Date, numeric, e.g. 29
                         //#. Example: Every year in December on day 3
-                        gt('Every year in %1$s on day %2$d.', getMonthString(month), day_in_month);
+                        str = gt('Every year in %1$s on day %2$d.', getMonthString(month), day_in_month);
                     } else {
-                        str =
                         //#. recurrence string
                         //#. %1$s: count string, e.g. first, second, or last
                         //#. %2$s: day string, e.g. Monday
                         //#. %3$s: month nane, e.g. January
                         //#. Example: Every year on the first Tuesday in December
-                        gt('Every year on the %1$s %2$s in %3$d.', getCountString(day_in_month), getDayString(days), getMonthString(month));
+                        str = gt('Every year on the %1$s %2$s in %3$d.', getCountString(day_in_month), getDayString(days), getMonthString(month));
                     }
 
                     break;
@@ -610,7 +620,7 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-            var text = $.trim(gt.noI18n(data.note) || '')
+            var text = $.trim(data.note || '')
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)
@@ -707,7 +717,11 @@ define('io.ox/calendar/util', [
                     ext: []
                 };
 
-            if (!data.organizerId && _.isString(data.organizer)) {
+            var organizerIsExternalParticipant = !data.organizerId && _.isString(data.organizer) && _.find(participants, function (p) {
+                return p.mail === data.organizer || p.email1 === data.organizer;
+            });
+
+            if (!organizerIsExternalParticipant) {
                 participants.unshift({
                     display_name: data.organizer,
                     mail: data.organizer,
@@ -830,6 +844,38 @@ define('io.ox/calendar/util', [
             }
 
             return '';
+        },
+
+        getDeepLink: function (data) {
+            return [
+                ox.abs,
+                ox.root,
+                '/#app=io.ox/calendar&id=',
+                data.folder_id || data.folder,
+                '.',
+                data.recurrence_id || data.id,
+                '.',
+                data.recurrence_position || 0,
+                '&folder=',
+                data.folder_id || data.folder
+            ].join('');
+        },
+
+        getRecurrenceChangeDialog: function () {
+            return new dialogs.ModalDialog()
+                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series.'))
+                    .addPrimaryButton('appointment', gt('Create exception'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel');
+        },
+
+        getRecurrenceEditDialog: function () {
+            return new dialogs.ModalDialog()
+                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                    .addPrimaryButton('series',
+                        //#. Use singular in this context
+                        gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel');
         }
     };
 

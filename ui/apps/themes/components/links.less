@@ -13,6 +13,13 @@
  */
 
 /* inline links */
+
+.inline-link {
+    color: @inline-link-color;
+    text-decoration: none;
+    &:hover { text-decoration: none; }
+}
+
 .io-ox-inline-links {
     font-size: @inline-link-font-size;
     font-weight: normal;
@@ -53,8 +60,7 @@
     }
 
     & > a, & > li.dropdown {
-        color: @inline-link-color;
-        text-decoration: none;
+        .inline-link;
 
         li {
             margin-right: 0;

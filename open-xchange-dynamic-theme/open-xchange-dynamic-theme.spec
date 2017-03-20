@@ -16,7 +16,12 @@ BuildRequires:  ant
 BuildRequires:  ant-nodeps
 %endif
 BuildRequires:  java-devel >= 1.6.0
+%if 0%{?suse_version}
+BuildRequires:  nodejs6
+BuildRequires:  npm6
+%else
 BuildRequires:  nodejs >= 0.10.0
+%endif
 
 Requires(post): open-xchange-appsuite-manifest
 Requires:       nodejs >= 0.10

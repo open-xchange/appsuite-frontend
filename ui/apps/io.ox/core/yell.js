@@ -157,8 +157,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
             });
 
-            var node = $('<div tabindex="-1">'),
-                className = 'io-ox-alert io-ox-alert-' + o.type,
+            var node = $('<div tabindex="-1" class="io-ox-alert">').addClass('io-ox-alert-' + o.type),
                 content, wordbreak, text;
 
             if (o.message instanceof $) {
@@ -173,14 +172,12 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             wordbreak = text.indexOf('http') >= 0 ? 'break-all' : 'normal';
 
             if (alert.length) {
-                className += ' appear';
+                node.addClass('appear');
                 alert.remove();
             }
 
-            node.attr('class', className).append(
-                $('<div class="icon">').append(
-                    $('<i>').attr('aria-hidden', true).addClass(icons[o.type] || 'fa fa-fw')
-                )
+            node.append(
+                $('<div class="icon">').append($('<i aria-hidden="true">').addClass(icons[o.type] || 'fa fa-fw'))
             );
 
             // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
@@ -197,7 +194,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             node.append(
                 $('<a href="#" role="button" class="close">').append(
                     $('<i class="fa fa-times" aria-hidden="true">'),
-                    $('<span class="sr-only">').text(gt('Click to close this notification')))
+                    $('<span class="sr-only">').text(gt('Close this notification')))
             );
 
             // yell would be behind modal dialogs, because those are attached to the body node

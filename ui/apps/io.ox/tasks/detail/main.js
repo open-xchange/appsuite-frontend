@@ -42,11 +42,10 @@ define('io.ox/tasks/detail/main', [
                         api.off('delete', handleDelete);
                     });
 
-                    app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container">').attr({
-                        'tabindex': 0,
-                        'role': 'complementary',
-                        'aria-label': gt('Task Details')
-                    }).append(detailView.draw(baton)));
+                    app.getWindowNode().addClass('detail-view-app').append(
+                        $('<div class="f6-target detail-view-container" tabindex="-1" role="complementary">')
+                            .attr('aria-label', gt('Task Details')
+                        ).append(detailView.draw(baton)));
                 }).fail(yell);
             };
         }

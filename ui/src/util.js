@@ -248,7 +248,7 @@
                 // encrypt all other mail folders
                 if (/^default\d+\//.test(data.folder)) {
                     var index = data.folder.indexOf('/') + 1;
-                    obj.folder = data.folder.substr(0, index) + '/' + encrypt(data.folder.substr(index));
+                    obj.folder = data.folder.substr(0, index) + '/' + encrypt('path/' + data.folder.substr(index));
                 }
                 return obj;
             };
@@ -256,8 +256,15 @@
             url.decrypt = function (data) {
                 var obj = _.extend({}, data);
                 if (/^default\d+\/\//.test(data.folder)) {
-                    var index = obj.folder.indexOf('/') + 1;
-                    obj.folder = obj.folder.substr(0, index) + decrypt(obj.folder.substr(index + 1));
+                    var index = obj.folder.indexOf('/') + 1,
+                        prefix = obj.folder.substr(0, index),
+                        check = decrypt(obj.folder.substr(index + 1)),
+                        suffix = check.substr(5);
+                    if (/^path\//.test(check) && suffix.length) {
+                        obj.folder = prefix + suffix;
+                    } else {
+                        delete obj.folder;
+                    }
                 }
                 return obj;
             };
@@ -289,7 +296,7 @@
             decode();
             $(window).on('hashchange', decode);
 
-            // remove invlid folder
+            // remove invalid folder
             if (invalidKey && /^default\d+\//.test(url.data.folder)) url.set('folder', null);
 
             return url;
@@ -614,36 +621,82 @@
 
         /**
          * shortens a string
-         * @param  {string} str
-         * @param  {object} options
-         * @param  {number} options.max: max length
-         * @param  {string} options.char: ellipsis char
-         * @param  {string} options.charpos: 'middle' or 'end'
-         * @param  {number} options.length: if charpos 'middle' value defines length of head and tail part
+         * @param  {string}   str
+         * @param  {object}   options
+         * @param  {number}   options.max: max length
+         * @param  {string}   options.char: ellipsis char
+         * @param  {string}   options.charpos: 'middle' or 'end'
+         * @param  {number}   options.length: if charpos 'middle' value defines length of head and tail part
+         * @param  {boolean}  options.suppressExtension: do not display the file extension in case this flag does exist and also equals the true value.
+         * @param  {boolean}  options.optimizeWordbreak: manipulate <str> in a way that text will flow and break with an optimum of used render space in case this flag does exist and also equals the true value.
          * @return {string}
          */
         ellipsis: function (str, options) {
             /* eslint dot-notation: [2, {"allowKeywords": true}] */
+            var
+                space,
+                undefinedValue;
+
             //be robust
             str = String(str || '').trim();
-            var opt = _.extend({
-                    max: 70,
-                    char: '\u2026',
-                    charpos: 'end',
-                    length: undefined
-                }, options || {}),
-                space = opt.max - opt.char.length;
-            if (str.length <= opt.max) {
-                return str;
-            } else if (opt.charpos === 'end') {
-                return str.substr(0, opt.max - opt.char.length) + opt.char;
+
+            options = _.extend({
+
+                max: 70,
+                char: '\u2026',
+                charpos: 'end',
+                length: undefinedValue
+
+            }, (options || {}));
+
+            // do not display a file's extension
+            if (options.suppressExtension === true) {
+
+                str = (str.split(/.[^.]*$/)[0]).trim() || str;
             }
-            //fix invalid length
-            if (!opt.length || opt.length * 2 > space) {
-                //save space for ellipse char
-                opt.length = (space % 2 === 0 ? space / 2 : (opt.max / 2) - 1) || 1;
+
+            // compute ellipsis
+            if (str.length > options.max) {
+
+                space = options.max - options.char.length;
+
+                if (options.charpos === 'end') {
+
+                    str = str.substr(0, (options.max - options.char.length)) + options.char;
+
+                } else {
+                    // fix invalid length
+                    if (!options.length || ((options.length * 2) > space)) {
+                        //save space for ellipse char
+                        options.length = (((space % 2) === 0) ? (space / 2) : ((options.max / 2) - 1)) || 1;
+                    }
+                    str = str.substr(0, options.length).trim() + options.char + str.substr(str.length - options.length).trim();
+                }
             }
-            return str.substr(0, opt.length).trim() + opt.char + str.substr(str.length - opt.length).trim();
+
+            if (options.optimizeWordbreak === true) {
+                var
+                    // https://www.cs.tut.fi/~jkorpela/dashes.html
+                    regXSearchHyphensGlobally = (/[\u002D\u1806\u2010\u2012\u2013\u2014\u2015\u207B\u208B\u2212]+/g),
+
+                    // http://es5.github.com/#WhiteSpace
+                    // https://www.cs.tut.fi/~jkorpela/chars/spaces.html
+                    regXSearchWhitespaceGlobally = (/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029]+/g),
+                    regXSearchZeroWhitespaceGlobally = (/[\u200B\uFEFF]+/g),
+
+                  //softHyphenChar = '\u00AD',
+                    nonBreakingHyphenChar = '\u2011',
+                    nonBreakingWhitespaceChar = '\u00A0',
+                    breakingZeroWhitespaceChar = '\u200B';
+
+                str = str
+                    .replace(regXSearchZeroWhitespaceGlobally, '')
+                    .replace(regXSearchWhitespaceGlobally, nonBreakingWhitespaceChar)
+                    .replace(regXSearchHyphensGlobally, nonBreakingHyphenChar)
+                    .split('')
+                    .join(breakingZeroWhitespaceChar);
+            }
+            return str; // exactly one exit point.
         },
 
         /**

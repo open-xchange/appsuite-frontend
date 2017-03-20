@@ -65,7 +65,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (baton.model.isFile()) {
                         ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
                             function yep() {
-                                this.attr('data-original-title', gt('File name, click to rename'));
+                                this.attr('data-original-title', gt('Rename File'));
                                 this.attr({ 'data-placement': 'bottom' });
                                 this.tooltip();
                             }.bind(this),

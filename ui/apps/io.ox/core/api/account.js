@@ -159,6 +159,17 @@ define('io.ox/core/api/account', [
     };
 
     /**
+     * get the root folder for a given account id
+     * @param  { int } id
+     * @return { string } folder (root_folder)
+     */
+    api.getDSCRootFolderForId = function (id) {
+        return _.findKey(dscHash, function (value) {
+            return value === id;
+        });
+    };
+
+    /**
      * get the account id for a given folder which is
      * child of a DSC account/rootfolder
      * @param  { string } folder
@@ -273,6 +284,15 @@ define('io.ox/core/api/account', [
 
     api.isStandardFolder = function (id) {
         return typeHash[id] !== undefined;
+    };
+
+    api.isMalicious = function (id, blacklist) {
+        // includes simple subfolder checks
+        if (api.is('spam', id)) return true;
+        if (api.is('confirmed_spam', id)) return true;
+        return _(blacklist).some(function (folder) {
+            return folder === id || (id).indexOf(folder + separator) === 0;
+        });
     };
 
     api.getType = function (id) {
@@ -549,7 +569,7 @@ define('io.ox/core/api/account', [
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam archive'.split(' ')).each(function (type) {
+                _('sent drafts trash spam archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
                     var short_name = account[type], full_name = account[type + '_fullname'];
                     typeHash[full_name || short_name] = type;

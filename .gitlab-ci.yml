@@ -95,12 +95,9 @@ copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties
 
 docker_image_ui:
   script:
-    # cleanup build name by removing any / character
-    # ex.: feature/gitlab_ci -> feature__gitlab_ci
-    - export CI_BUILD_NAME_CLEAN=$(echo ${CI_BUILD_REF_NAME} | sed s,\/,__,g)
-    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_NAME_CLEAN} ui/
+    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_BUILD_NAME_CLEAN}
+    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_BUILD_REF_SLUG}
   stage: docker
   dependencies:
     - install_deps_ui
@@ -121,12 +118,9 @@ test_ui:
 docker_develop_image_ui:
   # create a tag on the docker registry, :latest always means last build on develop branch
   script:
-    # cleanup build name by removing any / character
-    # ex.: feature/gitlab_ci -> feature__gitlab_ci
-    - export CI_BUILD_NAME_CLEAN=$(echo ${CI_BUILD_REF_NAME} | sed s,\/,__,g)
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_NAME_CLEAN}
-    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_NAME_CLEAN} ${CI_REGISTRY_IMAGE}:latest
+    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:latest
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
     - docker push ${CI_REGISTRY_IMAGE}:latest
   only:

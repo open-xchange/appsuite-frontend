@@ -75,7 +75,17 @@ define('io.ox/core/folder/extensions', [
             // smart cache environment
             if (dsc) {
                 if (account.hasDSCAccount()) {
-                    return api.list(id);
+                    return account.getStatus().then(function (status) {
+                        //remove main account
+                        status.shift();
+
+                        // only request if status is at least for one dsc account ok
+                        if (_(status).any(function (account) { return account.status === 'ok'; })) {
+                            return api.list(id);
+                        }
+                        return [];
+                    });
+
                 }
                 // no account yet, return empty array
                 return $.Deferred().resolve([]);
@@ -181,20 +191,25 @@ define('io.ox/core/folder/extensions', [
         },
 
         standardFolders: function (tree) {
+            var view = new TreeNodeView({
+                filter: function (id, model) {
+                    // do not filter unseen messages folder if enabled
+                    if (model.id === 'virtual/all-unseen' && mailSettings.get('unseenMessagesFolder')) return true;
+                    return account.isStandardFolder(model.id);
+                },
+                folder: 'virtual/standard',
+                headless: true,
+                open: true,
+                tree: tree,
+                parent: tree
+            });
             this.append(
-                // standard folders
-                new TreeNodeView({
-                    filter: function (id, model) {
-                        return account.isStandardFolder(model.id) || model.id === 'virtual/all-unseen';
-                    },
-                    folder: 'virtual/standard',
-                    headless: true,
-                    open: true,
-                    tree: tree,
-                    parent: tree
-                })
-                .render().$el.addClass('standard-folders')
+                view.render().$el.addClass('standard-folders')
             );
+            // show / hide folder on setting change
+            view.listenTo(mailSettings, 'change:unseenMessagesFolder', function () {
+                view.onReset();
+            });
         },
 
         localFolders: function (tree) {
@@ -243,6 +258,24 @@ define('io.ox/core/folder/extensions', [
                 })
                 .render().$el.addClass('remote-folders')
             );
+        },
+
+        remoteSingleAccount: function (tree) {
+            var self = this;
+            api.get(tree.options.folderBase).done(function (folderObj) {
+                self.append(
+                    new TreeNodeView({
+                        folder: folderObj.folder_id,
+                        headless: false,
+                        open: true,
+                        icons: tree.options.icons,
+                        tree: tree,
+                        parent: tree,
+                        isRemote: true
+                    })
+                    .render().$el.addClass('remote-folders')
+                );
+            });
         },
 
         fileStorageAccounts: function (tree) {
@@ -322,6 +355,38 @@ define('io.ox/core/folder/extensions', [
                         require(['io.ox/mail/accounts/settings'], function (m) {
                             m.mailAutoconfigDialog(e);
                         });
+                    })
+                )
+            );
+        },
+
+        subscribe: function (baton) {
+            var title;
+            if (baton.module === 'contacts') title = gt('Subscribe address book');
+            else if (baton.module === 'calendar') title = gt('Subscribe calendar');
+            this.append($('<div>').append(
+                    $('<a href="#" data-action="subscribe-address-book" role="button">')
+                    .text(title)
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        if (capabilities.has('subscription')) {
+                            require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
+                                subscriptions.buildSubscribeDialog({
+                                    module: baton.module,
+                                    app: baton.view.app
+                                });
+                            });
+                        } else {
+                            require(['io.ox/core/upsell'], function (upsell) {
+                                if (upsell.enabled(['subscription'])) {
+                                    upsell.trigger({
+                                        type: 'inline-action',
+                                        id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
+                                        missing: upsell.missing(['subscription'])
+                                    });
+                                }
+                            });
+                        }
                     })
                 )
             );
@@ -537,6 +602,13 @@ define('io.ox/core/folder/extensions', [
         }
     );
 
+    ext.point('io.ox/core/foldertree/mail/dsc').extend(
+        {
+            id: 'remote-accounts',
+            draw: extensions.remoteSingleAccount
+        }
+    );
+
     // looks identical to popup but has no favorites
     ext.point('io.ox/core/foldertree/mail/subscribe').extend(
         {
@@ -617,9 +689,28 @@ define('io.ox/core/folder/extensions', [
 
     ext.point('io.ox/core/foldertree/contacts/links').extend(
         {
-            id: 'my-contact-data',
+            id: 'subscribe',
             index: 300,
+            capabilities: 'subscription',
+            draw: extensions.subscribe
+        },
+        {
+            id: 'my-contact-data',
+            index: 400,
             draw: extensions.myContactData
+        }
+    );
+
+    //
+    // Calendar
+    //
+
+    ext.point('io.ox/core/foldertree/calendar/links').extend(
+        {
+            id: 'subscribe',
+            index: 300,
+            capabilities: 'subscription',
+            draw: extensions.subscribe
         }
     );
 
@@ -677,7 +768,10 @@ define('io.ox/core/folder/extensions', [
                     publicFolders,
                     placeholder = $('<div>');
 
-                ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+                // no links. Used for example in move folder picker
+                if (!tree.options.noLinks) {
+                    ext.point('io.ox/core/foldertree/' + module + '/links').invoke('draw', links, baton);
+                }
 
                 this.append(placeholder);
 
@@ -736,7 +830,10 @@ define('io.ox/core/folder/extensions', [
 
                     var module = baton.module,
                         folder = api.getDefaultFolder(module),
-                        title = module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+                        title = gt('Add new folder');
+
+                    if (module === 'calendar') title = gt('Add new calendar');
+                    else if (module === 'contacts') title = gt('Add new address book');
 
                     // guests might have no default folder
                     if (!folder) return;
@@ -757,7 +854,7 @@ define('io.ox/core/folder/extensions', [
         //
 
         ext.point('io.ox/core/foldertree/contacts/links').extend({
-            index: 300,
+            index: 1000,
             id: 'upsell-contacts',
             draw: function (baton) {
 
@@ -772,7 +869,7 @@ define('io.ox/core/folder/extensions', [
         });
 
         ext.point('io.ox/core/foldertree/calendar/links').extend({
-            index: 300,
+            index: 1000,
             id: 'upsell-calendar',
             draw: function (baton) {
 

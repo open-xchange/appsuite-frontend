@@ -15,8 +15,10 @@ define('io.ox/files/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/breadcrumb',
+    'io.ox/core/folder/api',
+    'io.ox/core/capabilities',
     'gettext!io.ox/files'
-], function (ext, Dropdown, BreadcrumbView, gt) {
+], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, gt) {
 
     'use strict';
 
@@ -120,19 +122,21 @@ define('io.ox/files/view-options', [
                 .header(gt('Select'))
                 .link('all', gt('All'))
                 .link('files', gt('All files'))
-                .link('none', gt('None'))
-                .divider()
-                //#. Verb: (to) filter documents by file type
-                .header(gt.pgettext('verb', 'Filter'))
-                .option('filter', 'pdf', gt('PDFs'), { radio: true })
-                .option('filter', 'doc', gt('Documents'), { radio: true })
-                .option('filter', 'xls', gt('Spreadsheets'), { radio: true })
-                .option('filter', 'ppt', gt('Presentations'), { radio: true })
-                .option('filter', 'image', gt('Images'), { radio: true })
-                .option('filter', 'audio', gt('Music'), { radio: true })
-                .option('filter', 'video', gt('Videos'), { radio: true })
-                .option('filter', 'none', gt('None'), { radio: true });
-
+                .link('none', gt('None'));
+            if (Capabilities.has('search')) {
+                this.data('view')
+                    .divider()
+                    //#. Verb: (to) filter documents by file type
+                    .header(gt.pgettext('verb', 'Filter'))
+                    .option('filter', 'pdf', gt('PDFs'), { radio: true })
+                    .option('filter', 'doc-text', gt('Text documents'), { radio: true })
+                    .option('filter', 'doc-spreadsheet', gt('Spreadsheets'), { radio: true })
+                    .option('filter', 'doc-presentation', gt('Presentations'), { radio: true })
+                    .option('filter', 'image', gt('Images'), { radio: true })
+                    .option('filter', 'audio', gt('Music'), { radio: true })
+                    .option('filter', 'video', gt('Videos'), { radio: true })
+                    .option('filter', 'all', gt('All'), { radio: true });
+            }
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }
     });
@@ -147,7 +151,8 @@ define('io.ox/files/view-options', [
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Select'),
                 model: baton.app.props,
-                caret: true
+                caret: true,
+                dataAction: 'select'
             });
 
             ext.point('io.ox/files/select/options').invoke('draw', dropdown.$el, baton);
@@ -200,17 +205,19 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
-
+            var node = this;
             if (_.device('smartphone')) return;
 
-            var view = new BreadcrumbView({ app: baton.app, rootAlwaysVisible: true }).render().$el.addClass('toolbar-item'),
-                results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
+            FolderAPI.get('9').then(function (drivePath) {
+                var view = new BreadcrumbView({ app: baton.app, rootAlwaysVisible: true, linkReadOnly: true, defaultRootPath: drivePath }).render().$el.addClass('toolbar-item'),
+                    results = $('<div class="toolbar-item">').text(gt('Search results')).hide();
 
-            this.append(view, results);
+                node.append(view, results);
 
-            baton.app.props.on('change:find-result', function (model, value) {
-                view.toggle(!value);
-                results.toggle(value);
+                baton.app.props.on('change:find-result', function (model, value) {
+                    view.toggle(!value);
+                    results.toggle(value);
+                });
             });
         }
     });

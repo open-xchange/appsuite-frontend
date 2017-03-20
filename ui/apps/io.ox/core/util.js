@@ -11,14 +11,16 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], function (ext, settings) {
 
     'use strict';
 
     var LENGTH = 30,
+        prefix = ox.serverConfig.prefix || '/ajax',
         regSeqSoft = /(\S{30,})/g,
         regSeqHard = /(\S{30})/g,
-        regHyphenation = /([^.,;:-=()]+[.,;:-=()])/;
+        regHyphenation = /([^.,;:-=()]+[.,;:-=()])/,
+        regImageSrc = new RegExp('^' + prefix);
 
     ext.point('io.ox/core/person').extend({
         id: 'default',
@@ -43,6 +45,13 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
 
     var that = {
 
+        replacePrefix: function (data, replacement) {
+            data = data || '';
+            replacement = replacement || '';
+
+            return data.replace(regImageSrc, replacement);
+        },
+
         // render a person's name
         renderPersonalName: function (options, data) {
 
@@ -63,6 +72,8 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
                 // user id
                 user_id: options.user_id
             };
+
+            if (data && data.nohalo) options.$el = $('<span>');
 
             var baton = new ext.Baton({ data: data || {}, halo: halo, html: options.html });
 
@@ -233,7 +244,25 @@ define('io.ox/core/util', ['io.ox/core/extensions'], function (ext) {
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });
-        }
+        },
+
+        getShardingRoot: (function () {
+            var defaultUrl = location.host + ox.apiRoot,
+                hosts = [].concat(settings.get('shardingSubdomains', defaultUrl));
+            function sum(s) {
+                var i = s.length - 1, sum = 0;
+                for (; i; i--) sum += s.charCodeAt(i);
+                return sum;
+            }
+            return function (url) {
+                var index = 0;
+                // special case, if url already has the root and the protocol attached
+                if (url.indexOf('//' + defaultUrl) === 0) url = url.substr(defaultUrl.length + 2);
+                if (hosts.length > 1) index = sum(url) % hosts.length;
+                if (!/^\//.test(url)) url = '/' + url;
+                return '//' + hosts[index] + url;
+            };
+        }())
     };
 
     return that;

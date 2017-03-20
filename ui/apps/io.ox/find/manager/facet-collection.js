@@ -77,6 +77,13 @@ define('io.ox/find/manager/facet-collection', [
             return _.where(list, { id: 'folder' }).length;
         },
 
+        isAccountOnly: function () {
+            var list = this.getActive(),
+                single = list.length === 1;
+            if (!single) return;
+            return _.where(list, { id: 'account' }).length;
+        },
+
         _createModel: function (data) {
             var Model = this.facetmodels[data.id] || BaseModel;
             return new Model(data);

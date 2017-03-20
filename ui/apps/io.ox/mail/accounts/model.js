@@ -145,7 +145,8 @@ define('io.ox/mail/accounts/model', [
 
         save: function (obj) {
 
-            var id = this.get('id');
+            var id = this.get('id'),
+                model = this;
 
             if (id !== undefined) {
 
@@ -156,15 +157,15 @@ define('io.ox/mail/accounts/model', [
                         // primary mail account only allows editing of display name, unified mail and default folders
                         keys = id === 0 ?
                             ['personal', 'name', 'unified_inbox_enabled', 'sent_fullname', 'trash_fullname', 'drafts_fullname', 'spam_fullname', 'archive_fullname'] :
-                            this.keys();
+                            model.keys();
 
                     // compare all attributes
-                    _(this.pick(keys)).each(function (value, key) {
+                    _(model.pick(keys)).each(function (value, key) {
                         if (!_.isEqual(value, account[key])) changes[key] = value;
                     });
 
                     // don't send transport_login/password if transport_auth is mail
-                    if (this.get('transport_auth') === 'mail') {
+                    if (model.get('transport_auth') === 'mail') {
                         delete changes.transport_login;
                         delete changes.transport_password;
                     }
@@ -174,16 +175,18 @@ define('io.ox/mail/accounts/model', [
                         folderAPI.refresh();
                     });
 
-                }.bind(this));
+                }).then(function () {
+                    model.trigger('sync', model);
+                });
             }
 
             if (obj) {
                 obj = _.extend({ unified_inbox_enabled: false }, obj);
-                obj.name = obj.personal = obj.primary_address;
-                this.attributes = obj;
-                this.attributes.spam_handler = 'NoSpamHandler';
+                obj.name = obj.primary_address;
+                model.attributes = obj;
+                model.attributes.spam_handler = 'NoSpamHandler';
             }
-            return AccountAPI.create(this.attributes);
+            return AccountAPI.create(model.attributes);
         },
 
         destroy: function () {

@@ -61,22 +61,11 @@
             display: table;
             text-align: right;
 
-            div {
+            > div {
                 display: table-cell;
                 vertical-align: bottom;
                 padding-right: 7px;
                 width: 80px;
-            }
-
-            .timezone-abbr {
-                display: inline-block;
-                width: 3em;
-            }
-
-            .offset {
-                color: #777;
-                display: inline-block;
-                width: 3.5em;
             }
         }
 
@@ -282,6 +271,9 @@
 
     // Hide days in dayview
     .dayview {
+        fulltime .day:not(.node) {
+            display: none;
+        }
 
         .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
 
@@ -440,5 +432,18 @@
         }
 
         .dayview .week-view-container { top: 0; }
+    }
+}
+
+.timezone-label-dropdown {
+    .timezone-abbr {
+        display: inline-block;
+        width: 3em;
+    }
+
+    .offset {
+        color: #777;
+        display: inline-block;
+        width: 3.5em;
     }
 }

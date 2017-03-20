@@ -26,8 +26,9 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/util'
+], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -264,7 +265,7 @@ define('io.ox/mail/api', [
 
         var cid = _.isObject(obj) ? _.cid(obj) : obj,
             model = pool.get('detail').get(cid),
-            cache = options && options.cache ? options.cache : true;
+            cache = options && (options.cache !== undefined) ? options.cache : true;
 
         // TODO: make this smarter
         if (cache && !obj.src && (obj.view === 'noimg' || !obj.view) && model && model.get('attachments')) return $.when(model.toJSON());
@@ -720,6 +721,42 @@ define('io.ox/mail/api', [
         });
     };
 
+     /**
+     * marks list of mails as flagged/unflagged
+     * @param {array} list
+     * @fires api#refresh.list
+     * @return { deferred }
+     */
+    api.flag = function (list, value) {
+        list = [].concat(list);
+
+        if (_.isUndefined(value)) {
+            // at least one elem is unflagged -> flag
+            value = _(list).reduce(function (memo, obj) {
+                // already false?
+                if (memo === true) return true;
+                return !util.isFlagged(obj);
+            }, false);
+        }
+
+        _(list).each(function (obj) {
+            obj.flags = value ? obj.flags | 8 : obj.flags & ~8;
+            pool.propagate('change', {
+                id: obj.id,
+                folder_id: obj.folder_id,
+                flags: obj.flags
+            });
+            // update thread model
+            api.threads.touch(obj);
+            api.trigger('update:' + _.ecid(obj), obj);
+            api.trigger('refresh.flag', list);
+        });
+        return update(list, { flags: api.FLAGS.FLAGGED, value: value }).done(function () {
+            unsetSorted(list, 651);
+            folderAPI.reload(list);
+        });
+    };
+
     /**
      * marks list of mails unread
      * @param {array} list
@@ -991,7 +1028,8 @@ define('io.ox/mail/api', [
                 setFrom: (/reply|replyall|forward/.test(action)),
                 csid: csid,
                 embedded: obj.embedded,
-                max_size: obj.max_size
+                max_size: obj.max_size,
+                decrypt: (obj.security && obj.security.decrypted)
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
@@ -1349,10 +1387,6 @@ define('io.ox/mail/api', [
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
 
-        if (list[0] && list[0].pgpFormat && capabilities.has('guard')) {
-            return api.savePGPAttachments(list, target);
-        }
-
         http.pause();
         // loop
         _(list).each(function (data) {
@@ -1363,30 +1397,14 @@ define('io.ox/mail/api', [
                     id: data.mail.id,
                     folder: data.mail.folder_id,
                     dest_folder: target,
-                    attachment: data.id
+                    attachment: data.id,
+                    decrypt: (data.security && data.security.decrypted)
                 },
                 data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
             });
         });
         return http.resume().done(function () {
-            require(['io.ox/files/api'], function (fileAPI) {
-                fileAPI.pool.resetFolder(target);
-                fileAPI.trigger('add:file');
-            });
-        });
-    };
-
-    api.savePGPAttachments = function (list, target) {
-        // For the moment, not supporting multiple call, so pgp needs own attachment handling
-
-        return require(['io.ox/guard/mail/attachments']).then(function (guardAttachments) {
-            return $.when.apply(this, list.map(function (data) {
-                return guardAttachments.savePGPAttachment(data, target);
-            }));
-        })
-        .then(function () { return arguments; }) // return an array of results as the first parameter
-        .done(function () {
             require(['io.ox/files/api'], function (fileAPI) {
                 fileAPI.pool.resetFolder(target);
                 fileAPI.trigger('add:file');
@@ -1401,18 +1419,20 @@ define('io.ox/mail/api', [
      * @return { string} url
      */
     api.getUrl = function (data, mode, options) {
+
         var opt = _.extend({ scaleType: 'contain' }, options),
-            url = ox.apiRoot + '/mail', first;
+            url = '/mail', first;
+
         if (mode === 'zip') {
             first = _(data).first();
-            return url + '?' + $.param({
+            return coreUtil.getShardingRoot(url + '?' + $.param({
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
                 // required here!
                 session: ox.session
-            });
+            }));
         } else if (mode === 'eml:reference') {
             //if eml stored as reference use parent object
             return this.getUrl(_([].concat(data)).first().parent, 'eml');
@@ -1422,12 +1442,12 @@ define('io.ox/mail/api', [
             // multiple?
             if (data.length > 1) {
                 // zipped
-                return url + '?' + $.param({
+                return coreUtil.getShardingRoot(url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,
                     id: _(data).pluck('id').join(','),
                     session: ox.session
-                });
+                }));
             }
             // single EML
             url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
@@ -1437,8 +1457,9 @@ define('io.ox/mail/api', [
                     save: 1,
                     session: ox.session
                 }));
-            return url;
+            return coreUtil.getShardingRoot(url);
         }
+
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
@@ -1451,18 +1472,22 @@ define('io.ox/mail/api', [
                 attachment: data.id,
                 user: ox.user_id,
                 context: ox.context_id,
+                decrypt: (data.security && data.security.decrypted), // All actions must be decrypted if Guard emails
                 // mails don't have a last modified attribute, just use 1
                 sequence: 1
             });
         switch (mode) {
             case 'view':
             case 'open':
-                return url + '&delivery=view' + scaling;
+                url += '&delivery=view' + scaling;
+                break;
             case 'download':
-                return url + '&delivery=download';
+                url += '&delivery=download';
+                break;
             default:
-                return url;
+                break;
         }
+        return coreUtil.getShardingRoot(url);
     };
 
     /**
@@ -1507,7 +1532,8 @@ define('io.ox/mail/api', [
                 // not really sure if limit works as expected
                 // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
                 // I still get the unread mails
-                limit: 100
+                limit: 100,
+                timezone: 'utc'
             }
         })
         .then(function (unseen) {
@@ -1524,8 +1550,9 @@ define('io.ox/mail/api', [
                 lastUnseenMail = recent[0].received_date;
                 api.newMailTitle(true);
             } else {
-                //if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
-                lastUnseenMail = _.utc();
+                // if no new mail set lastUnseenMail to now, to prevent mark as unread to trigger new mail
+                // received date is measured in UI timezone
+                lastUnseenMail = new moment().valueOf();
             }
 
             return {
@@ -1861,7 +1888,7 @@ define('io.ox/mail/api', [
             if (params.folder === 'virtual/all-unseen') {
                 return {
                     action: 'all',
-                    folder: 'default0/virtual/all',
+                    folder: settings.get('allMessagesFolder', 'default0/virtual/all'),
                     // need original_id and original_folder_id
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
                     sort: '651',

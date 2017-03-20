@@ -904,7 +904,6 @@ define('io.ox/core/main', [
             id: 'onboarding',
             index: 120,
             draw: function () {
-                if (_.device('smartphone')) return;
                 if (capabilities.has('!client-onboarding')) return;
 
                 this.append(
@@ -1127,6 +1126,38 @@ define('io.ox/core/main', [
         })();
 
         ext.point('io.ox/core/topbar/right').extend({
+            id: 'client-onboarding-hint',
+            index: 2200,
+            draw: function () {
+                if (capabilities.has('!client-onboarding')) return;
+                if (!_.device('smartphone')) return;
+                // exit: tab reload with autologin
+                if (_.device('reload') && session.isAutoLogin()) return;
+
+                var conf = _.extend({ enabled: true, remaining: 2 }, settings.get('features/clientOnboardingHint', {}));
+                // server prop
+                if (!conf.enabled || !conf.remaining) return;
+                // banner action, topbar action, dropdown action
+                var link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // popover
+                link.popover({
+                    content: gt("Did you now that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                    template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
+                    placement: 'bottom'
+                });
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+                // close on any click
+                document.body.addEventListener('click', close, true);
+                function close() {
+                    settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
+                    link.popover('destroy');
+                    document.body.removeEventListener('click', close, true);
+                }
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
             index: 10000,
             draw: function () {
@@ -1325,7 +1356,7 @@ define('io.ox/core/main', [
                         if (_.isUndefined(o)) return false;
                         if (_.isNull(o)) return false;
                         // special case to start in settings (see Bug 50987)
-                        if (o === 'io.ox/settings/main') return true;
+                        if (/^io.ox\/settings(\/main)?$/.test(o)) return true;
                         return favoritePaths.indexOf(/main$/.test(o) ? o : o + '/main') >= 0;
                     })
                     .first(1) // use 1 here to return an array
@@ -1486,11 +1517,6 @@ define('io.ox/core/main', [
             id: 'first',
             index: 100,
             run: function () {
-                if (ox.rampup && ox.rampup.errors && ox.rampup.errors['MSG-0113']) {
-                    ox.serverConfig.capabilities = _.filter(ox.serverConfig.capabilities, function (cap) {
-                        return cap.id !== 'webmail';
-                    });
-                }
                 debug('Stage "first"');
             }
         });
@@ -1701,7 +1727,9 @@ define('io.ox/core/main', [
 
                     // restore apps
                     ox.ui.App.restore().always(function () {
-                        var allUnavailable = true;
+                        // is set false, if no autoLaunch is available.
+                        // for example if default app is 'none' (see Bug 51207) or app is restored (see Bug Bug 51211)
+                        var allUnavailable = baton.autoLaunch.length > 0;
                         // auto launch
                         _(baton.autoLaunch)
                         .chain()
@@ -1747,7 +1775,15 @@ define('io.ox/core/main', [
                                 });
                             }
                             // non-app deeplinks
-                            var id = _.url.hash('reg');
+                            var id = _.url.hash('reg'),
+                                // be case insensitive
+                                showFeedback = _(_.url.hash()).reduce(function (memo, value, key) {
+                                    if (key.toLowerCase() === 'showfeedbackdialog') {
+                                        return value;
+                                    }
+                                    return memo;
+                                });
+
                             if (id && ox.registry.get(id)) {
                                 // normalise args
                                 var list = (_.url.hash('regopt') || '').split(','),
@@ -1760,6 +1796,14 @@ define('io.ox/core/main', [
                                 // call after app is ready
                                 launch.done(function () {
                                     ox.registry.call(id, 'client-onboarding', { data: data });
+                                });
+                            }
+
+                            if (showFeedback === 'true' && capabilities.has('feedback')) {
+                                launch.done(function () {
+                                    require(['plugins/core/feedback/register'], function (feedback) {
+                                        feedback.show();
+                                    });
                                 });
                             }
                         });
@@ -1868,6 +1912,8 @@ define('io.ox/core/main', [
             // INUSE (see bug 37218)
             // falls through
             case 'MSG-1031':
+            case 'MSG-0114':
+            case 'OAUTH-0013':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
@@ -1878,7 +1924,7 @@ define('io.ox/core/main', [
         }
     });
 
-    // white list warninff codes
+    // white list warning codes
     var isValidWarning = (function () {
         var check = function (code, regex) { return regex.test(code); },
             reCodes = [

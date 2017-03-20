@@ -38,7 +38,8 @@ define('io.ox/core/tk/reminder-util', [
                 );
         } else {
             // special link dropdown
-            var toggle = $('<button type="button" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus btn, btn-link">')
+            // must be <a> instead of <button> or the first item will not focus on space key
+            var toggle = $('<a role="button" href="#" data-action="remind-again" data-toggle="dropdown" aria-haspopup="true" class="refocus btn btn-link">')
                 .text(gt('Remind me again'))
                 .append(
                     $('<i class="fa fa-chevron-down" aria-hidden="true">').css({ paddingLeft: '5px', textDecoration: 'none' })

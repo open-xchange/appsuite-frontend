@@ -13,13 +13,12 @@
 
 define('io.ox/mail/compose/actions/send', [
     'io.ox/core/extensions',
+    'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/api',
     'settings!io.ox/mail',
     'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'io.ox/mail/actions/attachmentEmpty',
-    'io.ox/mail/actions/attachmentQuota'
-], function (ext, mailAPI, settings, notifications, gt, attachmentEmpty, attachmentQuota) {
+    'gettext!io.ox/mail'
+], function (ext, extensions, mailAPI, settings, notifications, gt) {
 
     'use strict';
 
@@ -96,22 +95,17 @@ define('io.ox/mail/compose/actions/send', [
         {
             id: 'check:attachment-empty',
             index: 500,
-            perform: function (baton) {
-                return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
-                    baton.stopPropagation();
-                });
-            }
+            perform: extensions.emptyAttachmentCheck
         },
         {
             id: 'check:attachment-publishmailattachments',
             index: 550,
-            perform: function (baton) {
-                return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
-            }
+            perform: extensions.publishMailAttachments
         },
+        // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',
-            index: 600,
+            index: 700,
             perform: function (baton) {
                 baton.view.blockReuse(baton.mail.sendtype);
 
@@ -124,9 +118,10 @@ define('io.ox/mail/compose/actions/send', [
                 }
             }
         },
+        // Placeholder for Guard delay send for key check at index 750
         {
             id: 'fix-draft-sendtype',
-            index: 700,
+            index: 800,
             perform: function (baton) {
                 if (baton.mail.sendtype === mailAPI.SENDTYPE.EDIT_DRAFT) {
                     baton.mail.sendtype = mailAPI.SENDTYPE.DRAFT;
@@ -135,20 +130,8 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'wait-for-pending-images',
-            index: 800,
-            perform: function (baton) {
-                if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
-
-                var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
-                        return $(this).attr('id');
-                    }),
-                    deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
-
-                return $.when(deferreds).then(function () {
-                    // use actual content since the image urls could have changed
-                    baton.mail.attachments[0].content = baton.model.getMail().attachments[0].content;
-                });
-            }
+            index: 900,
+            perform: extensions.waitForPendingImages
         },
         {
             id: 'send',

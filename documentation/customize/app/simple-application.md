@@ -44,7 +44,7 @@ Whilst developing, the manifest has to be added to src/manifests.json. Note: _Sa
 ...
 ```
 
-You can find more detailed information on manifests here: [UI manifests explained](http://oxpedia.org/wiki/index.php?title=AppSuite:UI_manifests_explained).
+You can find more detailed information on manifests here: [UI manifests explained]({{ site.baseurl }}/ui/customize/manifests.html).
 
 ## Setting an app icon
 
@@ -117,11 +117,11 @@ win.addClass('com-example-helloWorld');
 It is convention to create a file called style.less in the root folder of your application. This file has to be defined for [require.js](http://requirejs.org/docs/api.html) which is done like this.
 
 ```javascript
-...
 define('com.example/helloWorld/main',
     ['less!com.example/helloWorld/style.less'
     ], function () {
-...
+    //...
+})
 ```
 
 A simple less file would look like this:
@@ -142,40 +142,36 @@ A simple less file would look like this:
 In order to get gettext support for your app you have to require it:
 
 ```javascript
-...
 define('com.example/helloWorld/main',
-    [...
-    'gettext!com.example/helloWorld'
-    ...
+    ['gettext!com.example/helloWorld'
     ], function (gt) {
-...
+    //...
+})
 ```
 
 Every string in your app should be processed by gettext in order to have them properly translated.
 In our example it would look like this:
 
 ```javascript
-...
+//...
     .append($('<h1>').text(gt('Hello World!')));
-...
+//...
 ```
 
 Hint: If you want to check your app for untranslated strings, append &debug-i18n=true to the URL in your browser and refresh. If a string is not processed by gettext it will be highlighted.
 
-You can find more detailed information on this topic here: [Appsuite:i18n](http://oxpedia.org/wiki/index.php?title=AppSuite:I18n).
+You can find more detailed information on this topic [here]({{ site.baseurl }}/ui/how-to/i18n.html).
 
 ## Making an application window chromeless
 
 If you don't have the need for a toolbar and want a chromeless window, you can it in the ox.ui.createWindow function call.
 
 ```javascript
-...
 var win = ox.ui.createWindow({
-    ...
+    //...
     chromeless: true
-    ...
+    //...
 });
-...
 ```
 
 ## Creating a Dialog
@@ -183,7 +179,6 @@ var win = ox.ui.createWindow({
 In order to open a dialog **io.ox/core/tk/dialogs** has to be required and use one of the supplied methods.
 
 ```javascript
-...
 win.nodes.main
     .append($('<a class="btn">').text('Open Modal Dialog')
         .on('click', function (e) {
@@ -201,7 +196,6 @@ win.nodes.main
             );
         })
     );
-...
 ```
 
 ![](simple-application-04.png)
@@ -211,7 +205,6 @@ win.nodes.main
 If you want to display notifications you can require \_io.ox/core/notifications_and use the yell method, like in the examples below.
 
 ```javascript
-...
 require(['io.ox/core/notifications'],
     function (notifications) {
         win.nodes.main
@@ -226,37 +219,32 @@ require(['io.ox/core/notifications'],
                     })
             );
 });
-...
 ```
 
 ![](simple-application-05.png)
 
-You can find information about more advanced notifications [here](http://oxpedia.org/wiki/index.php?title=AppSuite:Writing_a_notification_area_plugin).
+You can find information about more advanced notifications [here]({{ site.baseurl }}/ui/customize/notifications.html).
 
 # Displaying a Halo View
 
 **For internal users**
 
 ```javascript
-...
 win.nodes.main.append(
     $('<a href="#" class="btn halo-link">')
     .data({ internal_userid: ox.user_id })
     .text('Open Halo')
 );
-...
 ```
 
 **For external users**
 
 ```javascript
-...
 win.nodes.main.append(
     $('<a class="btn halo-link">')
     .data({ email1: 'test@example.com' })
     .text('Open Halo from Email')
 );
-...
 ```
 
 ![](simple-application-06.png)
@@ -315,7 +303,6 @@ define('com.example/helloWorld/settings/model',
 ## Get/Set
 
 ```javascript
-...
 require(['settings!com.example/helloWorld'],
     function (settings) {
         win.nodes.main
@@ -328,7 +315,6 @@ require(['settings!com.example/helloWorld'],
                     })
             );
     });
-...
 ```
 
 # Download full example
@@ -339,4 +325,4 @@ You can download the example application here with all above shown examples abov
 
 # Stuck somewhere?
 
-You got stuck with a problem while developing? OXpedia might help you out with the article about [debugging the UI](http://oxpedia.org/wiki/index.php?title=AppSuite:Debugging_the_UI).
+You got stuck with a problem while developing? OXpedia might help you out with the article about [debugging the UI]({{ site.baseurl }}/ui/miscellaneous/debugging.html).

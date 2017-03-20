@@ -20,9 +20,10 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, gt) {
 
     'use strict';
 
@@ -121,32 +122,18 @@ define('io.ox/calendar/week/perspective', [
             var apiUpdate = function (obj) {
                 obj = clean(obj);
                 api.update(obj).fail(function (error) {
-                    if (error.conflicts) {
-                        var dialog = new dialogs.ModalDialog({
-                            top: '20%',
-                            center: false,
-                            container: self.main
-                        });
-                        dialog
-                            .append(
-                                conflictView.drawList(error.conflicts, dialog).addClass('additional-info')
-                            )
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') {
-                                    self.refresh();
-                                    return;
-                                }
-                                if (action === 'ignore') {
-                                    obj.ignore_conflicts = true;
-                                    apiUpdate(obj);
-                                }
+                    if (!error.conflicts) return notifications.yell(error);
+
+                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                        conflictView.dialog(error.conflicts)
+                            .on('cancel', function () {
+                                self.refresh();
+                            })
+                            .on('ignore', function () {
+                                obj.ignore_conflicts = true;
+                                apiUpdate(obj);
                             });
-                    } else {
-                        notifications.yell(error);
-                    }
+                    });
                 });
             };
 
@@ -165,19 +152,11 @@ define('io.ox/calendar/week/perspective', [
             };
 
             if (obj.recurrence_type > 0) {
-                var dialog = new dialogs.ModalDialog();
+                var dialog;
                 if (obj.drag_move && obj.drag_move !== 0) {
-                    dialog
-                        .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                        .addButton('appointment', gt('Yes'), 'appointment')
-                        .addButton('cancel', gt('No'), 'cancel');
+                    dialog = util.getRecurrenceChangeDialog();
                 } else {
-                    dialog
-                        .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
-                        //#. Use singular in this context
-                        .addPrimaryButton('series', gt('Series'), 'series')
-                        .addButton('appointment', gt('Appointment'), 'appointment')
-                        .addButton('cancel', gt('Cancel'), 'cancel');
+                    dialog = util.getRecurrenceEditDialog();
                 }
                 dialog
                     .show()
@@ -250,21 +229,15 @@ define('io.ox/calendar/week/perspective', [
          * call view print function
          */
         print: function () {
-            if (this.view) {
-                this.view.print();
-            }
+            if (this.view) this.view.print();
         },
 
         restore: function () {
-            if (this.view) {
-                this.view.restore();
-            }
+            if (this.view) this.view.restore();
         },
 
         save: function () {
-            if (this.view) {
-                this.view.save();
-            }
+            if (this.view) this.view.save();
         },
 
         updateColor: function (model) {
@@ -337,24 +310,12 @@ define('io.ox/calendar/week/perspective', [
                     perspective: this,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
-                switch (this.view.mode) {
-                    case 'day':
-                        this.main.attr({
-                            'aria-label': gt('Calendar Day View')
-                        });
-                        break;
-                    case 'workweek':
-                        this.main.attr({
-                            'aria-label': gt('Calendar Workweek View')
-                        });
-                        break;
-                    default:
-                    case 'week':
-                        this.main.attr({
-                            'aria-label': gt('Calendar Week View')
-                        });
-                        break;
-                }
+
+                this.main.attr('aria-label', {
+                    'day': gt('Calendar Day View'),
+                    'workweek': gt('Calendar Workweek View'),
+                    'week': gt('Calendar Week View')
+                }[this.view.mode]);
 
                 // bind listener for view events
                 this.view
@@ -389,13 +350,10 @@ define('io.ox/calendar/week/perspective', [
 
                 // see if id is missing the folder
                 if (cid.indexOf('.') === -1) {
-                    if (_.url.hash('folder')) {
-                        // url has folder attribute. Add this
-                        cid = _.url.hash('folder') + '.' + cid;
-                    } else {
-                        // cid is missing folder appointment cannot be restored
-                        return;
-                    }
+                     // cid is missing folder appointment cannot be restored
+                    if (!_.url.hash('folder')) return;
+                    // url has folder attribute. Add this
+                    cid = _.url.hash('folder') + '.' + cid;
                 }
 
                 if (_.device('smartphone')) {
@@ -421,8 +379,7 @@ define('io.ox/calendar/week/perspective', [
             // init perspective
             this.app = app;
             this.main
-                .addClass('week-view')
-                .addClass('secondary-time-label')
+                .addClass('week-view secondary-time-label')
                 .empty()
                 .attr({
                     'role': 'main',

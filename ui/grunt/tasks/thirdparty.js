@@ -69,7 +69,8 @@ module.exports = function (grunt) {
                             'marked/lib/marked.js',
                             'clipboard/dist/clipboard.min.js',
                             'velocity/velocity.min.js',
-                            'moment/moment.js'
+                            'moment/moment.js',
+                            'resize-polyfill/lib/polyfill-resize.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'

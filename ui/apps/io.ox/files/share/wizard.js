@@ -21,8 +21,11 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
     'gettext!io.ox/files',
+    'settings!io.ox/contacts',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/addresspicker',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
+], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
     'use strict';
 
@@ -132,7 +135,8 @@ define('io.ox/files/share/wizard', [
         id: 'recipients-tokenfield',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('form-control-label-'),
+                usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
 
             // add autocomplete
             var tokenfieldView = new Tokenfield({
@@ -149,16 +153,36 @@ define('io.ox/files/share/wizard', [
 
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
-                    tokenfieldView.$el
+                    $('<div class="input-group has-picker">').append(
+                        $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
+                        tokenfieldView.$el,
+                        usePicker ? new AddressPickerView({
+                            isPermission: true,
+                            process: function (e, member, singleData) {
+                                var token = {
+                                        label: singleData.array[0],
+                                        value: singleData.array[1]
+                                    }, list = baton.model.get('recipients') || [];
+                                member.set('token', token);
+                                baton.model.set('recipients', list.concat([member]));
+                            }
+                        }).render().$el : []
+                    )
                 )
             );
 
             tokenfieldView.render();
 
+            tokenfieldView.listenTo(baton.model, 'change:recipients', function (mailModel, recipients) {
+                if (tokenfieldView.redrawLock) return;
+                tokenfieldView.collection.reset(recipients);
+            });
+
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
+                tokenfieldView.redrawLock = true;
                 baton.model.set('recipients', this.toArray());
+                tokenfieldView.redrawLock = false;
             });
         }
     });
@@ -292,7 +316,7 @@ define('io.ox/files/share/wizard', [
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'), passInput;
+            var guid = _.uniqueId('form-control-label-'), passContainer;
             this.append(
                 $('<div>').addClass('form-inline passwordgroup').append(
                     $('<div>').addClass('form-group').append(
@@ -303,12 +327,13 @@ define('io.ox/files/share/wizard', [
                     $.txt(' '),
                     $('<div>').addClass('form-group').append(
                         $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
-                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
-                            .render().$el
+                        passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
+                            .render().$el.find('input')
                             // see bug 49639
-                            .attr({ id: guid, placeholder: gt('Password'), autocomplete: 'new-password' })
+                            .attr({ id: guid, placeholder: gt('Password') })
                             .removeAttr('name')
                             .prop('disabled', !baton.model.get('secured'))
+                            .end()
                     )
                 )
             );
@@ -318,7 +343,9 @@ define('io.ox/files/share/wizard', [
                 }
             });
             baton.view.listenTo(baton.model, 'change:secured', function (model, val, opt) {
+                var passInput = passContainer.find('input');
                 passInput.prop('disabled', !val);
+                passContainer.prop('disabled', !val);
                 if (!opt._inital) passInput.focus();
             });
         }
@@ -355,7 +382,16 @@ define('io.ox/files/share/wizard', [
         share: function () {
             // we might have new addresses
             contactsAPI.trigger('maybeNewContact');
-            return $.when(this.model.save()).fail(yell);
+
+            // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
+            var result = this.model.save();
+
+            //  to unify the return type, we always want to return a deferred
+            if (result === false) {
+                return $.Deferred().reject();
+            }
+            return result.fail(yell);
+
         },
 
         removeLink: function () {

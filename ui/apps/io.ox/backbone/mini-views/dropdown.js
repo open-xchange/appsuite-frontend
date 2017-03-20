@@ -44,6 +44,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         resetDropdownOverlay: function () {
             if (!this.$overlay) return;
+            this.$ul.removeAttr('data-original-id');
             this.$placeholder.before(this.$ul).detach();
             this.$el.removeClass('open');
             this.$ul.attr('style', this.$ul.data('style') || '').removeData('style');
@@ -61,6 +62,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$ul.data('style', this.$ul.attr('style'));
             this.adjustBounds();
 
+            this.$ul.attr('data-original-id', this.$placeholder.attr('id'));
             // replaceWith and detach ($.fn.replaceWith is replaceWith and remove)
             this.$ul.before(this.$placeholder).detach();
             $('body').append(
@@ -159,6 +161,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 var $temp = $('<div class="hidden">');
                 node.before($temp).detach();
                 this.$placeholder.append(node);
+                // lazy metrics support
+                this.$el.trigger(_.extend({}, e, { type: 'mousedown' }));
                 this.$el.trigger(e);
                 $temp.replaceWith(node);
             }
@@ -181,7 +185,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         setup: function () {
             this.$ul = this.options.$ul || $('<ul class="dropdown-menu" role="menu">');
-            this.$placeholder = $('<div class="hidden">');
+            this.$placeholder = $('<div class="hidden">').attr('id', _.uniqueId('dropdown-placeholder-'));
             this.smart = this.options.smart;
             this.margin = this.options.margin || 8;
             // not so nice but we need this for mobile support
@@ -286,7 +290,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             if (_.isString(label)) ariaLabel += (' ' + label);
             this.$el.append(
-                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr('aria-label', ariaLabel)
+                this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr({
+                    'aria-label': ariaLabel,
+                    'data-action': this.options.dataAction
+                })
                 .append(
                     // label
                     $('<span class="dropdown-label">').append(label),
@@ -327,6 +334,11 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             items
                 .find('a:not([role])')
                 .attr({ role: 'menuitem', tabIndex: '-1' });
+        },
+
+        prepareReuse: function () {
+            if (this.$toggle) this.$toggle.remove();
+            if (this.$ul) this.$ul.empty();
         },
 
         dispose: function () {

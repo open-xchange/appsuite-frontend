@@ -11,311 +11,403 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 
-.wizard-step {
 
-    /**
-     * :MIXINS
-     */
-    .mixin-unstyled-list {
-        list-style-type: none;
-        padding: 0;
+/**
+ * :MIXINS
+ */
+.mixin-unstyled-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mixin-expanded {
+    .content { display: block; }
+    .fa-chevron-right { display: none; }
+    .fa-chevron-down { display: inline-block; }
+}
+
+.client-onboarding {
+
+    [data-action='link/mailappinstall'] .app-icon {
+        background-image: url(@onboarding-mailapp);
+    }
+    [data-action='link/driveappinstall'] .app-icon {
+        background-image: url(@onboarding-driveapp);
+    }
+
+    .app-icon {
+        width: 20vw;
+        height: 20vw;
+        margin-right: 16px;
+        background-size: cover;
+    }
+
+    // general
+    pre {
         margin: 0;
-    }
-
-    .mixin-expanded {
-        .content { display: block; }
-        .fa-chevron-right { display: none; }
-        .fa-chevron-down { display: inline-block; }
-    }
-
-    .box-shadow (@string) {
-        -webkit-box-shadow: @string;
-        -moz-box-shadow:    @string;
-        box-shadow:         @string;
-    }
-
-    .transition(@duration:0.2s, @ease:ease-out) {
-        -webkit-transition: all @duration @ease;
-        -moz-transition: all @duration @ease;
-        -o-transition: all @duration @ease;
-        transition: all @duration @ease;
-    }
-
-
-    /**
-     * SIMPLE MODE
-     */
-
-    &[data-mode="simple"] {
-        fieldset.action {
-            display: none;
-        }
-        fieldset.action:nth-child(1) {
-            display: block;
-        }
-        .wizard-content .actions .toggle-link {
-            &[data-value="to-advanced"] { display: block; }
-            &[data-value="to-simple"] { display: none; }
-        }
-    }
-
-    &[data-type="scenario"] {
-        min-height: 400px;
-        // align option icons on same main axis
-        .title {
-            min-height: 32px;
-        }
-    }
-
-    /**
-     * ADVANCED MODE
-     */
-
-    .wizard-content {
-
-        .teaser {
-            margin: 0;
-        }
-
-        .options {
-            .mixin-unstyled-list;
+        &.config {
+            font-size: 14px;
             display: flex;
-            white-space: nowrap;
-            // auto expand to full height
-            display: flex;
-            align-items: stretch;
+            .property, .value { padding: 4px 8px 0 0; }
+            .property { font-weight: 700; }
+        }
+    }
 
-            .option {
-                margin: 0 16px 0 0;
-                display: inline-flex;
-                //max-width: 146px;
-                white-space: normal;
+    // mobile
+    &.mobile.modal.flex {
 
-                .premium-container {
-                    height: 100%;
+        @space: 16px;
+
+        .modal-dialog {
+            // scroll
+            max-height: 100%;
+            overflow: scroll;
+            // fixed transparent border
+            max-width: 100%;
+            padding: 16px;
+
+            .modal-header {
+                display: flex;
+
+                .modal-title {
+                    margin-left: 32px;
                     width: 100%;
-                    position: absolute;
-                    left: 50%;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
+                    text-align: center;
                 }
 
-                .premium {
-                    position: absolute;
-                    font-weight: 700;
-                    left: 50%;
-                    top: 50%;
-                    transform: translate(-50%, -50%);
-                    padding: 4px 16px;
-                    background: #3c73aa;
-                    border-radius: 12px;
-                    color: white;
-                    opacity: .8;
-                    width: 90%;
-                    .fa {
-                        padding-right: 4px;
-                    }
+                .modal-action { margin-left: @space; }
+            }
+
+            .modal-body {
+
+                .title { margin-top: 0; }
+
+                .scenario {
+                    .title { font-size: 16px; }
+                    & > .description { padding-bottom: @space; }
                 }
 
-                .link {
-                    //max-width: 144px;
-                    max-height: 200px;
-                    border: 1px solid rgba(0, 0, 0, 0.10);
-                    display: inline-block;
-                    outline: 0;
-                    text-decoration: none;
-                    color: black;
+                .action {
+                    padding-bottom: 16px;
 
-                    &.disabled {
-                        color: #ccc;
-                        cursor: default;
+                    .title { font-size: 14px; }
+
+                    .toggle {
+                        text-decoration: none;
+                        padding-bottom: 12px;
                     }
 
-                    &:hover {
-                        border-color: rgba(0, 0, 0, 0.50);
-                        &.disabled {
-                            border-color: rgba(0, 0, 0, 0.10);
+                    .store-icon { max-height: 40px; }
+
+                    .description {
+                        font-weight: 300;
+                        display: flex;
+                    }
+
+                    &:empty { display: none; }
+
+                }
+
+
+                hr.divider {
+                    border-top-width: 2px;
+                    max-width: 30vw;
+                }
+            }
+
+            .modal-footer { display: none; }
+        }
+    }
+
+    // desktop
+    .wizard-step {
+
+        .box-shadow (@string) {
+            -webkit-box-shadow: @string;
+            -moz-box-shadow:    @string;
+            box-shadow:         @string;
+        }
+
+        .transition(@duration:0.2s, @ease:ease-out) {
+            -webkit-transition: all @duration @ease;
+            -moz-transition: all @duration @ease;
+            -o-transition: all @duration @ease;
+            transition: all @duration @ease;
+        }
+
+
+        /**
+         * SIMPLE MODE
+         */
+
+        &[data-mode="simple"] {
+            fieldset.action {
+                display: none;
+            }
+            fieldset.action:nth-child(1) {
+                display: block;
+            }
+            .wizard-content .actions .toggle-link {
+                &[data-value="to-advanced"] { display: block; }
+                &[data-value="to-simple"] { display: none; }
+            }
+        }
+
+        &[data-type="scenario"] {
+            min-height: 400px;
+            // align option icons on same main axis
+            .title {
+                min-height: 32px;
+            }
+        }
+
+        /**
+         * ADVANCED MODE
+         */
+
+        .wizard-content {
+
+            .teaser {
+                margin: 0;
+            }
+
+            .options {
+                .mixin-unstyled-list;
+                display: flex;
+                white-space: nowrap;
+                // auto expand to full height
+                display: flex;
+                align-items: stretch;
+
+                .option {
+                    margin: 0 16px 0 0;
+                    display: inline-flex;
+                    //max-width: 146px;
+                    white-space: normal;
+
+                    .premium-container {
+                        height: 100%;
+                        width: 100%;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+
+                    .premium {
+                        position: absolute;
+                        font-weight: 700;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%, -50%);
+                        padding: 4px 16px;
+                        background: #3c73aa;
+                        border-radius: 12px;
+                        color: white;
+                        opacity: .8;
+                        width: 90%;
+                        .fa {
+                            padding-right: 4px;
                         }
                     }
 
-                    // https://turnkey-shop.com/animate-box-shadow-with-silky-smooth-performance
-                    &.box {
-                        position: relative;
+                    .link {
+                        //max-width: 144px;
+                        max-height: 200px;
+                        border: 1px solid rgba(0, 0, 0, 0.10);
                         display: inline-block;
-                        background-color: #fff;
-                        border-radius: 5px;
-                        .box-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
-                        .transition(0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
-                        &:hover, &:focus {
-                            z-index:1000;
-                            .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+                        outline: 0;
+                        text-decoration: none;
+                        color: black;
 
+                        &.disabled {
+                            color: #ccc;
+                            cursor: default;
+                        }
+
+                        &:hover {
+                            border-color: rgba(0, 0, 0, 0.50);
                             &.disabled {
-                               .box-shadow(none);
+                                border-color: rgba(0, 0, 0, 0.10);
                             }
                         }
-                    }
 
-                    .icon-list {
-                        margin: 8px 16px 0 16px;
-                        display: flex;
-                        justify-content: space-around;
-                        align-items: center;
-                        .icon {
-                            width: 48px;
-                            font-size: 48px;
+                        // https://turnkey-shop.com/animate-box-shadow-with-silky-smooth-performance
+                        &.box {
+                            position: relative;
+                            display: inline-block;
+                            background-color: #fff;
+                            border-radius: 5px;
+                            .box-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+                            .transition(0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
+                            &:hover, &:focus {
+                                z-index:1000;
+                                .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+
+                                &.disabled {
+                                   .box-shadow(none);
+                                }
+                            }
+                        }
+
+                        .icon-list {
+                            margin: 8px 16px 0 16px;
+                            display: flex;
+                            justify-content: space-around;
+                            align-items: center;
+                            .icon {
+                                width: 48px;
+                                font-size: 48px;
+                                text-align: center;
+                                margin: 8px;
+                                text-decoration: none;
+                            }
+                        }
+
+                        .title {
                             text-align: center;
-                            margin: 8px;
+                            line-height: 16px;
+                            margin-bottom: 8px;
+                            // overflow: hidden;
+                            // text-overflow: ellipsis;
+                            padding: 0 8px;
                             text-decoration: none;
                         }
                     }
 
-                    .title {
-                        text-align: center;
-                        line-height: 16px;
-                        margin-bottom: 8px;
-                        // overflow: hidden;
-                        // text-overflow: ellipsis;
-                        padding: 0 8px;
-                        text-decoration: none;
+                    // back buttona
+                    &.centered {
+                        .link.box { display: flex; }
+                        //.icon-list { margin: 18px 24px 18px 24px; }
+                        .icon-list { margin: 0}
                     }
+
+                    // selection
+                    &.selected>.link:not(.disabled) { border: 1px rgb(60, 115, 170) solid; }
                 }
-
-                // back buttona
-                &.centered {
-                    .link.box { display: flex; }
-                    //.icon-list { margin: 18px 24px 18px 24px; }
-                    .icon-list { margin: 0}
-                }
-
-                // selection
-                &.selected>.link:not(.disabled) { border: 1px rgb(60, 115, 170) solid; }
-            }
-        }
-
-        .descriptions { .mixin-unstyled-list; }
-
-        .teaser, .descriptions>.description {
-            width: 100%;
-            padding: 16px 0;
-            //min-height: 20px;
-            //line-height: 20px;
-        }
-
-        .actions {
-
-            .toggle-link {
-                margin-top: 12px;
-                display: inline-block;
-                outline: 0;
-                &[data-value="to-advanced"] { display: none; }
-                &[data-value="to-simple"] { display: block; }
             }
 
-            .action {
-                // accordeon: less space when collapsed
-                margin-bottom: 0;
-                margin-top: 4px;
+            .descriptions { .mixin-unstyled-list; }
 
-                .button-clicked {
-                    font-size: 18px;
-                    color: #79bb32;
-                    padding-left: 8px;
-                }
+            .teaser, .descriptions>.description {
+                width: 100%;
+                padding: 16px 0;
+            }
 
-                .btn.disabled {
-                    pointer-events: none;
-                }
+            .actions {
 
-                .store {
-                    cursor: pointer;
-                    .store-icon {
-                        height: 60px;
-                    }
-                }
-
-                .section-title {
-                    font-size: 14px;
-                    height: 32px;
-                    color: #333;
-                    cursor: pointer;
-                    margin-bottom: 5px;
+                .toggle-link {
+                    margin-top: 12px;
+                    display: inline-block;
                     outline: 0;
-                    .fa {
-                        font-size: 12px;
-                        padding-right: 8px;
+                    &[data-value="to-advanced"] { display: none; }
+                    &[data-value="to-simple"] { display: block; }
+                }
+
+                .action {
+                    // accordeon: less space when collapsed
+                    margin-bottom: 0;
+                    margin-top: 4px;
+
+                    .button-clicked {
+                        font-size: 18px;
+                        color: #79bb32;
+                        padding-left: 8px;
                     }
-                    // collapsed
-                    .fa-chevron-right { display: inline-block; }
-                    .fa-chevron-down { display: none; }
-                }
-                // style: button to legend
-                // keyboard navigation on legend node (tabindex, role button) don't work
-                button.section-title {
-                    padding-left: 0;
-                    border: none;
-                    background: none;
-                    border-bottom: 1px #ddd solid;
-                    width: 100%;
-                    text-align: left;
-                    font-weight: 700;
-                }
 
-                &[data-action="sms"] {
-                    .content .interaction .field { width: 30%; min-width: 120px; }
-                }
+                    .btn.disabled {
+                        pointer-events: none;
+                    }
 
-                .content {
-                    padding: 2px 0;
-                    display: none;
+                    .app .app-icon {
+                        max-height: 80px;
+                        max-width: 80px;
+                    }
+                    .store .store-icon { height: 40px; }
 
-                    .description {
+                    .section-title {
+                        font-size: 14px;
+                        height: 32px;
+                        color: #333;
+                        cursor: pointer;
                         margin-bottom: 5px;
-                    }
-
-                    .interaction {
-                        label, input, select { margin-right: 8px; }
-                        .field {
-                            min-width: 350px;
-                            width: 50%;
+                        outline: 0;
+                        .fa {
+                            font-size: 12px;
+                            padding-right: 8px;
                         }
-                        .select { width: 30%; }
-                        .row {
-                            margin-right: -10px;
-                            padding: 0 0 0 15px;
-                        }
-                        .form-inline>* { padding-right: 8px; }
+                        // collapsed
+                        .fa-chevron-right { display: inline-block; }
+                        .fa-chevron-down { display: none; }
+                    }
+                    // style: button to legend
+                    // keyboard navigation on legend node (tabindex, role button) don't work
+                    button.section-title {
+                        padding-left: 0;
+                        border: none;
+                        background: none;
+                        border-bottom: 1px #ddd solid;
+                        width: 100%;
+                        text-align: left;
+                        font-weight: 700;
                     }
 
-                    .data .row { padding-bottom: 5px; }
-
-                    .data .row label { padding-top: 0; }
-
-                    .control-label {
-                        margin-top: 4px;
-                        margin-bottom: 4px;
-                        .display-label { text-align: right; }
+                    &[data-action="sms"] {
+                        .content .interaction .field { width: 30%; min-width: 120px; }
                     }
 
-                }
-
-                &.expanded {
-                    .mixin-expanded;
-                }
-            }
-
-            // when only one action is visible
-            .single-action .action {
-                .mixin-expanded;
-                .section-title {
-                    cursor: default;
-                    .fa-chevron-right, .fa-chevron-down {
+                    .content {
+                        padding: 2px 0;
                         display: none;
+
+                        .description {
+                            margin-bottom: 5px;
+                        }
+
+                        .interaction {
+                            label, input, select { margin-right: 8px; }
+                            .field {
+                                min-width: 350px;
+                                width: 50%;
+                            }
+                            .select { width: 30%; }
+                            .row {
+                                margin-right: -10px;
+                                padding: 0 0 0 15px;
+                            }
+                            .form-inline>* { padding-right: 8px; }
+                        }
+
+                        .data .row { padding-bottom: 5px; }
+
+                        .data .row label { padding-top: 0; }
+
+                        .control-label {
+                            margin-top: 4px;
+                            margin-bottom: 4px;
+                            .display-label { text-align: right; }
+                        }
+
+                    }
+
+                    &.expanded {
+                        .mixin-expanded;
                     }
                 }
-            }
 
+                // when only one action is visible
+                .single-action .action {
+                    .mixin-expanded;
+                    .section-title {
+                        cursor: default;
+                        .fa-chevron-right, .fa-chevron-down {
+                            display: none;
+                        }
+                    }
+                }
+
+            }
         }
     }
-
 }

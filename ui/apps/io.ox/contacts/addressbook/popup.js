@@ -151,7 +151,7 @@ define('io.ox/contacts/addressbook/popup', [
             )
             .then(function (contacts, labels) {
                 var result = [], hash = {};
-                processAddresses(contacts[0], result, hash);
+                processAddresses(contacts[0], result, hash, options);
                 if (useLabels) processLabels(labels[0], result, hash);
                 return { items: result, hash: hash, index: buildIndex(result) };
             });
@@ -166,8 +166,13 @@ define('io.ox/contacts/addressbook/popup', [
                 limit: LIMITS.fetch
             }, options);
 
-            if (options.folder === 'all') delete options.folder;
+            var data = {
+                exclude_folders: options.exclude,
+                last_name: '*'
+            };
 
+            if (options.folder === 'all') delete options.folder;
+            if (options.useGABOnly) data.folder = ['6'];
             return http.PUT({
                 module: 'contacts',
                 params: {
@@ -178,10 +183,7 @@ define('io.ox/contacts/addressbook/popup', [
                     sort: 609
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
-                data: {
-                    exclude_folders: options.exclude,
-                    last_name: '*'
-                }
+                data: data
             });
         }
 
@@ -198,7 +200,7 @@ define('io.ox/contacts/addressbook/popup', [
             });
         }
 
-        function processAddresses(list, result, hash) {
+        function processAddresses(list, result, hash, opt) {
 
             list.forEach(function (item) {
                 // remove quotes from display name (common in collected addresses)
@@ -225,6 +227,7 @@ define('io.ox/contacts/addressbook/popup', [
                         result.push((hash[obj.cid] = obj));
                     }
                 } else {
+                    if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
                     addresses.forEach(function (address, i) {
                         var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
@@ -370,7 +373,9 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback) {
+    function open(callback, useGABOnly) {
+
+        if (useGABOnly) folder = 'folder/6';
 
         // avoid parallel popups
         if (isOpen) return;
@@ -381,15 +386,19 @@ define('io.ox/contacts/addressbook/popup', [
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
-            title: gt('Select contacts')
+            title: gt('Select contacts'),
+            useGABOnly: useGABOnly
         })
         .inject({
             renderFolders: function (folders) {
                 var $dropdown = this.$('.folder-dropdown'),
-                    count = 0;
+                    count = 0, self = this;
                 // remove global address book?
                 if (!useGlobalAddressBook && folders['public']) {
                     folders['public'] = _(folders['public']).reject({ id: '6' });
+                }
+                if (this.options.useGABOnly) {
+                    folders = _.pick(folders, 'public');
                 }
                 $dropdown.append(
                     _(folders).map(function (section, id) {
@@ -399,6 +408,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
+                                if (self.options.useGABOnly && folder.id !== '6') return;
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );
@@ -454,8 +464,8 @@ define('io.ox/contacts/addressbook/popup', [
                         ),
                         $('<div class="col-xs-6">').append(
                             $('<select class="form-control folder-dropdown invisible">').append(
-                                $('<option value="all">').text(gt('All folders')),
-                                useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
+                                this.options.useGABOnly ? $() : $('<option value="all">').text(gt('All folders')),
+                                this.options.useGABOnly || useLabels ? $() : $('<option value="all_lists">').text(gt('All distribution lists')),
                                 useLabels ? $('<option value="all_labels">').text(gt('All groups')) : $()
                             )
                         )
@@ -512,8 +522,8 @@ define('io.ox/contacts/addressbook/popup', [
 
                 this.on('open', function () {
                     _.defer(function () {
-                        if (cachedResponse) return success.call(this, cachedResponse);
-                        getAllMailAddresses().then(success.bind(this), fail.bind(this));
+                        if (cachedResponse && !this.options.useGABOnly) return success.call(this, cachedResponse);
+                        getAllMailAddresses({ useGABOnly: this.options.useGABOnly }).then(success.bind(this), fail.bind(this));
                     }.bind(this));
                 });
             },
@@ -651,13 +661,13 @@ define('io.ox/contacts/addressbook/popup', [
                 '  <div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
                 '  <div class="list-item-content">' +
                 '    <% if (item.list) { %>' +
-                '      <div class="contact-picture distribution-list" aria-label="hidden"><i class="fa fa-align-justify"></i></div>' +
+                '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify"></i></div>' +
                 '    <% } else if (item.label) { %>' +
-                '      <div class="contact-picture label" aria-label="hidden"><i class="fa fa-users"></i></div>' +
+                '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users"></i></div>' +
                 '    <% } else if (item.image) { %>' +
-                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-label="hidden"></div>' +
+                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-hidden="true"></div>' +
                 '    <% } else { %>' +
-                '      <div class="contact-picture initials <%= item.initial_color %>" aria-label="hidden"><%- item.initials %></div>' +
+                '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
                 '    <% } %>' +
                 '    <div class="name">' +
                 '       <%= item.full_name_html || item.email || "\u00A0" %>' +
@@ -709,10 +719,8 @@ define('io.ox/contacts/addressbook/popup', [
                 var $el = this.$('.list-view');
                 $el[0].innerHTML = '';
                 $el.append(
-                    $('<div class="message-empty-container">').append(
-                        $('<div class="message-empty">').text(
-                            options.isSearch ? gt('No matching items found.') : gt('Empty')
-                        )
+                    $('<div class="notification">').text(
+                        options.isSearch ? gt('No matching items found.') : gt('Empty')
                     )
                 );
             };

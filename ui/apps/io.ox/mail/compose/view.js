@@ -28,10 +28,12 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
+    'io.ox/core/a11y',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
-    'io.ox/mail/compose/actions/send'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
+    'io.ox/mail/compose/actions/send',
+    'io.ox/mail/compose/actions/save'
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, a11y) {
 
     'use strict';
 
@@ -177,13 +179,18 @@ define('io.ox/mail/compose/view', [
 
     ext.point(POINT + '/menu').extend(
         {
-            id: 'signatures',
+            id: 'security',
             index: 100,
+            draw: extensions.security
+        },
+        {
+            id: 'signatures',
+            index: 200,
             draw: extensions.signaturemenu
         },
         {
             id: 'options',
-            index: 200,
+            index: 300,
             draw: extensions.optionsmenu
         }
     );
@@ -253,7 +260,7 @@ define('io.ox/mail/compose/view', [
             id: 'add_attachments',
             index: 100,
             draw: function (baton) {
-                var node = $('<div data-extension-id="add_attachments" class="col-xs-4 col-md-5 col-md-offset-1">');
+                var node = $('<div data-extension-id="add_attachments" class="col-xs-5 col-md-5 col-md-offset-1">');
                 extensions.attachment.call(node, baton);
                 this.append(node);
             }
@@ -267,7 +274,7 @@ define('io.ox/mail/compose/view', [
                 ext.point(POINT + '/menu').invoke('draw', node, baton);
 
                 this.append(
-                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-8 col-md-6">').append(node)
+                    $('<div data-extension-id="composetoolbar-menu" class="col-xs-7 col-md-6">').append(node)
                 );
             }
         }
@@ -282,6 +289,31 @@ define('io.ox/mail/compose/view', [
             node.appendTo(this);
         }
     });
+
+    // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
+    // TODO: at the moment, this resolves with the result of the last extension point.
+    // not sure if this is desired.
+    function extensionCascade(point, baton) {
+        return point.reduce(function (def, p) {
+            if (!def || !def.then) def = $.when(def);
+            return def.then(function (result, newData) {
+                if (result && result.data) baton.resultData = result.data;
+                if (newData) baton.newData = newData;
+                return $.when();
+            }, function (result) {
+                //handle errors/warnings in reject case
+                if (result && result.error) baton.error = result.error;
+                if (result && result.warnings) baton.warning = result.warnings;
+                return $.when();
+            }).then(function () {
+                if (baton.isPropagationStopped()) return;
+                if (baton.isDisabled(point.id, p.id)) return;
+                return p.perform.apply(undefined, [baton]);
+            });
+        }, $.when()).fail(function () {
+            baton.model.set('autoDismiss', false);
+        });
+    }
 
     // disable attachmentList by default
     ext.point(POINT + '/attachments').disable('attachmentList');
@@ -425,10 +457,10 @@ define('io.ox/mail/compose/view', [
                 return $.when();
             } else if (mode === 'forward' && !obj.id) {
                 obj = _(obj).map(function (o) {
-                    return _.pick(o, 'id', 'folder_id', 'csid');
+                    return _.pick(o, 'id', 'folder_id', 'csid', 'security');
                 });
             } else {
-                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type');
+                obj = _.pick(obj, 'id', 'folder_id', 'csid', 'content_type', 'security');
             }
 
             // use CSS sanitizing and size limit (large than detail view)
@@ -578,69 +610,23 @@ define('io.ox/mail/compose/view', [
             var win = this.app.getWindow();
             if (win) win.busy();
             // get mail
-            var self = this,
-                model = this.model,
-                mail = this.model.getMailForDraft(),
-                def = new $.Deferred();
+            var mail = this.model.getMailForDraft();
 
             // never append vcard when saving as draft
             // backend will append vcard for every send operation (which save as draft is)
             delete mail.vcard;
 
-            return attachmentEmpty.emptinessCheck(mail.files).then(function () {
-                var def = $.Deferred();
-                ext.point('io.ox/mail/compose/actions/send').get('wait-for-pending-images', function (p) {
-                    p.perform(new ext.Baton({
-                        mail: mail,
-                        model: model
-                    })).then(def.resolve, def.reject);
-                });
-                return def;
-            })
-            .then(function () {
-                return attachmentQuota.publishMailAttachmentsNotification(mail.files);
-            })
-            .then(function () {
-                return mailAPI.send(mail, mail.files);
-            }).then(function (result) {
-                var opt = self.parseMsgref(result.data);
-                if (mail.attachments[0].content_type === 'text/plain') opt.view = 'raw';
-                if (mail.attachments[0].content_type === 'text/html') opt.view = 'html';
-
-                return $.when(
-                    result,
-                    mailAPI.get(opt)
-                );
-            }, function (result) {
-                if (result.error) {
-                    notifications.yell(result);
-                    return def.reject(result);
-                }
-            }).then(function (result, data) {
-                // Replace inline images in contenteditable with links from draft response
-                if (model.get('editorMode') === 'html') {
-                    $('<div>' + data.attachments[0].content + '</div>').find('img:not(.emoji)').each(function (index, el) {
-                        $('img:not(.emoji):eq(' + index + ')', self.editorContainer.find('.editable')).attr('src', $(el).attr('src'));
-                    });
-                }
-                data.attachments.forEach(function (a, index) {
-                    var m = model.get('attachments').at(index);
-                    if (typeof m === 'undefined') {
-                        model.get('attachments').add(a);
-                    } else if (m.id !== a.id) {
-                        m.clear({ silent: true });
-                        m.set(a);
-                    }
+            var view = this,
+                baton = new ext.Baton({
+                    mail: mail,
+                    model: this.model,
+                    app: this.app,
+                    view: view
                 });
 
-                model.set('msgref', result.data);
-                model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
-                model.dirty(model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
-                //#. %1$s is the time, the draft was saved
-                //#, c-format
-                self.inlineYell(gt('Draft saved at %1$s', moment().format('LT')));
-                return result;
-            }).always(function () {
+            var point = ext.point('io.ox/mail/compose/actions/save');
+
+            return extensionCascade(point, baton).always(function () {
                 if (win) win.idle();
             });
         },
@@ -651,18 +637,6 @@ define('io.ox/mail/compose/view', [
                 model = this.model,
                 self = this,
                 mail = this.model.getMailForAutosave();
-
-            if (model.get('encrypt')) {
-                var view = this;
-                var baton = new ext.Baton({
-                    mail: mail,
-                    model: this.model,
-                    app: this.app,
-                    view: view
-                });
-                this.initAutoSaveAsDraft();
-                return ext.point('oxguard/mail/autosavedraft').invoke('action', this, baton);
-            }
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
@@ -809,7 +783,7 @@ define('io.ox/mail/compose/view', [
             //#. This string must equal the prefix, which is prepended before the subject on copy
             //#. It is important, that the space is also translated, as the space will also be removed
             var str = gt('[Copy] ');
-            if (this.model.get('subject').indexOf(str) === 0) {
+            if ((this.model.get('subject') || '').indexOf(str) === 0) {
                 var subject = this.model.get('subject');
                 subject = subject.replace(str, '');
                 this.model.set('subject', subject);
@@ -825,24 +799,7 @@ define('io.ox/mail/compose/view', [
                 }),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
-            // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
-            // TODO: at the moment, this resolves with the result of the last extension point.
-            // not sure if this is desired.
-            return point.reduce(function (def, p) {
-                if (!def || !def.then) def = $.when(def);
-                return def.then(_.identity, function (result) {
-                    //handle errors/warnings in reject case
-                    if (result && result.error) baton.error = result.error;
-                    if (result && result.warnings) baton.warning = result.warnings;
-                    return $.when();
-                }).then(function () {
-                    if (baton.isPropagationStopped()) return;
-                    if (baton.isDisabled(point.id, p.id)) return;
-                    return p.perform.apply(undefined, [baton]);
-                });
-            }, $.when()).fail(function () {
-                baton.model.set('autoDismiss', false);
-            });
+            return extensionCascade(point, baton);
         },
 
         toggleTokenfield: function (e) {
@@ -1028,16 +985,28 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
+            // check if it is a draft. then do not set autoDismiss to true
+            if (this.model.keepDraftOnClose()) {
+                this.model.set('autoDismiss', false);
+            } else {
+                this.model.set('autoDismiss', this.model.get('mode') === 'edit');
+            }
+
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })
             .done(function () {
-                var mode = self.model.get('mode');
+                var target, mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
-                if (/(compose|forward)/.test(mode)) {
-                    if (_.device('!ios')) _.defer(function () { self.$('a[data-toggle="dropdown"]:first').focus(); });
-                } else {
-                    self.editor.focus();
+                if (_.device('!ios')) {
+                    if (a11y.use('focusFirstTabbable')) {
+                        target = self.$('a[data-toggle="dropdown"]:first');
+                    } else if (/(compose|forward)/.test(mode)) {
+                        target = self.$('.tokenfield:first .token-input');
+                    } else {
+                        target = self.editor;
+                    }
+                    _.defer(function () { target.focus(); });
                 }
                 self.model.setAutoBCC();
                 if (mode === 'replyall' || mode === 'edit') {

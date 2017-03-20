@@ -14,38 +14,63 @@
 define('io.ox/onboarding/clients/config', [
     'io.ox/onboarding/clients/api',
     'io.ox/core/api/user',
-    'io.ox/onboarding/clients/codes'
-], function (api, userAPI, codes) {
+    'io.ox/onboarding/clients/codes',
+    'gettext!io.ox/core/onboarding'
+
+], function (api, userAPI, codes, gt) {
 
     'use strict';
 
-    function _cid(/*id,id,...*/) {
-        var SEP = '/';
-        return Array.prototype.join.call(arguments, SEP);
-    }
+    var COMPLEMENT = {
 
-    function compactObject(o) {
-        var clone = _.clone(o);
-        _.each(clone, function (value, key) {
-            if (!_.isSet(value)) delete clone[key];
-        });
-        return clone;
-    }
+        stores: (function () {
+            var prefix = ox.language.slice(0, 2).toUpperCase(),
+                country = _.contains(['EN', 'DE', 'ES', 'FR'], prefix) ? prefix : 'EN';
+            return {
+                // stores
+                'macappstore': {
+                    name: gt('Mac App Store'),
+                    //#. %1$s: app store name
+                    description: gt('Get the App from %1$s.', gt('Mac App Store')),
+                    image: 'apps/themes/icons/default/appstore/Mac_App_Store_Badge_' + country + '_165x40.svg'
+                },
+                'appstore': {
+                    name: gt('App Store'),
+                    //#. %1$s: app store name
+                    description: gt('Get the App from %1$s.', gt('App Store')),
+                    image: 'apps/themes/icons/default/appstore/App_Store_Badge_' + country + '_135x40.svg'
+                },
+                'playstore': {
+                    name: gt('Google Play'),
+                    //#. %1$s: app store name
+                    description: gt('Get the App from %1$s', gt('Google Play')),
+                    image: 'apps/themes/icons/default/googleplay/google-play-badge_' + country + '.svg'
+                },
+                'common': {
+                    description: gt('Download the application.')
+                }
+            };
+        })(),
 
-    function getIndexFor(obj) {
-        return this.order[obj.id] || 1000;
-    }
+        actiontypes: {
+            'email': {
+                description: gt('Get your device configured by email.')
+            },
+            'download': {
+                description: gt('Let´s automatically configure your device, by clicking the button below.')
+            }
+        },
 
-    var config = {
+        actions: {
+            'link/mailappinstall': {
+                // transparent placeholder; less variable defines url that is used for background image: '@onboarding-mailapp'
+                imageplaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+            },
 
-        hash: {},
-
-        types: ['platforms', 'devices', 'scenarios', 'actions', 'matching'],
-
-        props: {
-            platform: 'platforms',
-            device: 'devices',
-            scenario: 'scenarios'
+            'link/driveappinstall': {
+                // transparent placeholder; less variable defines url that is used for background image: '@onboarding-driveapp'
+                imageplaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=',
+            }
         },
 
         order: {
@@ -54,23 +79,51 @@ define('io.ox/onboarding/clients/config', [
             'android': 102,
             'apple': 103,
             // devices
-            'apple.iphone': 101,
-            'apple.ipad': 102,
-            'apple.mac': 103,
+            'windows.desktop': 101,
             'android.phone': 201,
             'android.tablet': 202,
-            // scenarios
-            'eassync': 101,
-            'emclientinstall': 102,
-            'mailappinstall': 201,
-            'mailsync': 202,
-            'mailmanual': 203,
-            'syncappinstall': 301,
-            'davsync': 302,
-            'davmanual': 303,
-            'drivewindowsclientinstall': 401,
-            'driveappinstall': 402,
-            'drivemacinstall': 403
+            'apple.iphone': 301,
+            'apple.ipad': 302,
+            'apple.mac': 303,
+            // data
+            'caldav_url': 401,
+            'caldav_login': 402,
+            'carddav_url': 403,
+            'carddav_login': 404,
+            // imap
+            'imapServer': 411,
+            'imapPort': 412,
+            'imapLogin': 413,
+            'imapSecure': 414,
+            // smtp
+            'smtpServer': 421,
+            'smtpPort': 422,
+            'smtpLogin': 423,
+            'smtpSecure': 424,
+            // eas
+            'eas_url': 431,
+            'eas_login': 432
+        },
+
+        labels: {
+            // card
+            'caldav_url': gt('CalDAV URL'),
+            'caldav_login': gt('CalDAV Login'),
+            'carddav_url': gt('CardDAV URL'),
+            'carddav_login': gt('CardDAV Login'),
+            // imap
+            'imapServer': gt('IMAP Server'),
+            'imapPort': gt('IMAP Port'),
+            'imapLogin': gt('IMAP Login'),
+            'imapSecure': gt('IMAP Secure'),
+            // eas
+            // smtp
+            'smtpServer': gt('SMTP Server'),
+            'smtpPort': gt('SMTP Port'),
+            'smtpLogin': gt('SMTP Login'),
+            'smtpSecure': gt('SMTP Secure'),
+            'eas_url': gt('EAS URL'),
+            'eas_login': gt('EAS Login')
         },
 
         defaults: {
@@ -105,26 +158,51 @@ define('io.ox/onboarding/clients/config', [
                 'drivewindowsclientinstall':  { icon: 'fa-cloud' },
                 'driveappinstall':  { icon: 'fa-cloud' },
                 'drivemacinstall':  { icon: 'fa-cloud' }
-
             }
-        },
+        }
+    };
+
+    function _cid(/*id,id,...*/) {
+        var SEP = '/';
+        return Array.prototype.join.call(arguments, SEP);
+    }
+
+    function compactObject(o) {
+        var clone = _.clone(o);
+        _.each(clone, function (value, key) {
+            if (!_.isSet(value)) delete clone[key];
+        });
+        return clone;
+    }
+
+    function getIndexFor(obj) {
+        return COMPLEMENT.order[obj.id] || 1000;
+    }
+
+    var mobiledevice = (function () {
+        if (_.device('android')) return _.device('smartphone') ? 'android.phone' : 'android.tablet';
+        if (_.device('ios')) return _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+    })();
+
+    var config = {
+
+        hash: {},
 
         load: function () {
-            return api.config().then(function (data) {
+            return api.config(mobiledevice).then(function (data) {
                 // reoder devices and scenarios
-                data.platforms = _.sortBy(data.platforms, getIndexFor, this);
-                data.devices = _.sortBy(data.devices, getIndexFor, this);
-                data.scenarios = _.sortBy(data.scenarios, getIndexFor, this);
+                data.platforms = _.sortBy(data.platforms, getIndexFor);
+                data.devices = _.sortBy(data.devices, getIndexFor);
                 // extend
                 _.extend(this, data);
                 // user inputs and step progress
                 this.model = new Backbone.Model();
                 // hash maps and defaults
-                _(this.types).each(function (type) {
+                _('platforms,devices,scenarios,actions,matching'.split(',')).each(function (type) {
                     // create hash maps
                     var hash = this.hash[type] = _.toHash(data[type], 'id');
-                    // apply defaults (keepa hash and list up-to-date)
-                    _.each(this.defaults[type], function (value, key) {
+                    // apply defaults (keep hash and list up-to-date)
+                    _.each(COMPLEMENT.defaults[type], function (value, key) {
                         _.extend(hash[key], value, compactObject(hash[key]));
                     });
                 }, this);
@@ -142,32 +220,18 @@ define('io.ox/onboarding/clients/config', [
         },
 
         getScenarioCID: function () {
-            return _cid(this.model.get('device'), this.model.get('scenario'));
-        },
-
-        // remove invalid values
-
-        filterInvalid: function (data) {
-            var obj = {};
-            // device, scenario, action
-            _.each(data, function (value, key) {
-                var prop = config.props[key];
-                // invalid key
-                if (!prop) return;
-                // invalid value
-                if (!config.hash[prop][value]) return;
-                obj[key] = value;
-            });
-            return obj;
+            return _cid(config.getDevice().id, this.model.get('scenario'));
         },
 
         // user states
 
         getPlatform: function () {
+            if (this.platforms.length === 1) return this.platforms[0];
             return this.hash.platforms[this.model.get('platform')];
         },
 
         getDevice: function () {
+            if (this.devices.length === 1) return this.devices[0];
             return this.hash.devices[this.model.get('device')];
         },
 
@@ -198,20 +262,17 @@ define('io.ox/onboarding/clients/config', [
         },
 
         getScenarios: function () {
-            var device = this.getDevice(),
-                scenarios = this.scenarios;
-            if (device) {
-                var scenarioIds = device.scenarios;
-                return _.filter(scenarios, function (obj) {
-                    var cid = _cid(device.id, obj.id);
-                    return scenarioIds.indexOf(cid) >= 0;
-                });
-            }
-            return scenarios;
+            var device = this.getDevice();
+            if (!device) return this.scenarios;
+            // respect order for device
+            return _.map(device.scenarios, function (id) {
+                var base = id.split('/')[1];
+                return config.hash.scenarios[base];
+            });
         },
 
         getActions: function (scenario) {
-            var cid = _cid(this.model.get('device'), scenario || this.model.get('scenario')),
+            var cid = _cid(config.getDevice().id, scenario || this.model.get('scenario')),
                 matching = this.hash.matching[cid];
 
             // TODO: remove after backend added check
@@ -222,6 +283,25 @@ define('io.ox/onboarding/clients/config', [
             return _.chain(this.actions)
                     .filter(function (obj) { return matching.actions.indexOf(obj.id) >= 0; })
                     .sortBy(function (obj) { return matching.actions.indexOf(obj.id); })
+                    .map(function (obj) {
+                        // join and normalize
+                        var action = _.extend(_.pick(obj, 'id', 'default', 'data'), { 'scenario': cid }, obj[config.getDevice().id] || {});
+                        if (action.type) action.store = { type: action.type };
+                        action.type = obj.id.split('/')[0];
+                        return action;
+                    })
+                    .each(function (action) {
+                        // add store information
+                        if (action.type === 'link') { _.extend(action.store, COMPLEMENT.stores[action.store.type] || {}); }
+                        _.extend(action, COMPLEMENT.actiontypes[action.type], COMPLEMENT.actions[action.id]);
+                        // prepare properties
+                        if (action.type !== 'display') return;
+                        action.data = _(Object.keys(action.data))
+                            .chain()
+                            .sortBy(function (key) { return COMPLEMENT.order[key] || 1000; })
+                            .map(function (key) { return { name: COMPLEMENT.labels[key] || key, value: action.data[key] }; })
+                            .value();
+                    })
                     .value();
         },
 

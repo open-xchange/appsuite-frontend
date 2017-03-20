@@ -13,8 +13,8 @@ source: http://oxpedia.org/wiki/index.php?title=AppSuite:Testing_3rd-party_code
 
 # using karma-ox-ui
 
-The [shared grunt configuration](http://oxpedia.org/wiki/index.php?title=AppSuite:GettingStarted_7.6.0) ships with most of the parts pre-configured. 
-Still, a little setup is needed to enable automatic testing for an external app. 
+The [shared grunt configuration](https://github.com/Open-Xchange-Frontend/shared-grunt-config) ships with most of the parts pre-configured.
+Still, a little setup is needed to enable automatic testing for an external app.
 Since we use many standard libraries, this approach can be extended as you wish.
 
 **Setup**
@@ -35,16 +35,16 @@ After that, in your plugin directory generate a new karma.conf.js:
 
 ```bash
  jb@wiggum ~/code/appsuite/ox_pgp_mail (git)-[ding] % karma init
- 
+
  Which testing framework do you want to use ?
  Press tab to list possible options. Enter to move to the next question.
  > mocha
- 
+
  Do you want to use Require.js ?
  This will add Require.js plugin.
  Press tab to list possible options. Enter to move to the next question.
  > no
- 
+
  Do you want to capture any browsers automatically ?
  Press tab to list possible options. Enter empty string to move to the next question.
  > PhantomJS
@@ -53,16 +53,16 @@ After that, in your plugin directory generate a new karma.conf.js:
  What is the location of your source and test files ?
  You can use glob patterns, eg. "js/*.js" or "test/**/*Spec.js".
  Enter empty string to move to the next question.
- >   
- 
+ >
+
  Should any of the files included by the previous patterns be excluded ?
  You can use glob patterns, eg. "**/*.swp".
  Enter empty string to move to the next question.
- > 
- 
+ >
+
  Do you want Karma to watch all the files and run the tests on change ?
  Press tab to list possible options.
- > no                                                                              
+ > no
  Config file generated at "/home/jb/code/appsuite/ox_pgp_mail/karma.conf.js".
 ```
 
@@ -123,7 +123,7 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
 
 **Dealing with JSHINT**
 
-JSHINT is notoriously picky. 
+JSHINT is notoriously picky.
 And rightly so. But we still need to teach it to ignore our test frameworks' peculiarities. Extend the global part of your `.jshintrc` by these switches:
 
 ```json
@@ -149,7 +149,7 @@ And rightly so. But we still need to teach it to ignore our test frameworks' pec
 
 There are multiple targets provided in [shared grunt configuration](https://github.com/Open-Xchange-Frontend/shared-grunt-config).
 
-The `grunt/local.conf.json` needs to be configured and point to an existing build of the core UI (coreDir setting). 
+The `grunt/local.conf.json` needs to be configured and point to an existing build of the core UI (coreDir setting).
 When testing on a machine with the core UI installed from distribution packages, also the German translations need to be installed to run the tests.
 After that, coreDir can be set to _/opt/open-xchange/appsuite/_.
 
@@ -159,8 +159,8 @@ The recommended way to start testing is to run:
 grunt dev
 ```
 
-This will start a connect server, the karma test server and a watcher for changes. 
-Optionally, it is possible to connect multiple browsers to the host running the karma server (port 9876). 
+This will start a connect server, the karma test server and a watcher for changes.
+Optionally, it is possible to connect multiple browsers to the host running the karma server (port 9876).
 Tests will run in those browsers, too. You can trigger a test run manually by running:
 
 ```javascript

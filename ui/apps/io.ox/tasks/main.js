@@ -230,7 +230,7 @@ define('io.ox/tasks/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
-                'tabindex': 0,
+                'tabindex': -1,
                 'role': 'main',
                 'aria-label': gt('Task Details')
             })
@@ -666,7 +666,7 @@ define('io.ox/tasks/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'toolbar',
@@ -675,7 +675,7 @@ define('io.ox/tasks/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
@@ -687,7 +687,7 @@ define('io.ox/tasks/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'folder/context-menu',

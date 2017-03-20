@@ -57,6 +57,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         timeValues = {
             'ge': gt('Rule applies from'),
             'le': gt('Rule applies until'),
+            //#. The filter rule will be applied on a specific date, which can be selected by the user
             'is': gt('Rule applies on')
         },
 
@@ -258,12 +259,13 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 e.preventDefault();
                 var node = $(e.target),
                     testID = node.closest('li').attr('data-test-id'),
-                    testArray =  this.model.get('test');
+                    testArray = _.copy(this.model.get('test'));
 
                 if (checkForMultipleTests(this.el).length > 2) {
-                    testArray.tests.splice(testID, 1);
+                    testArray.tests = _(testArray.tests).without(testArray.tests[testID]);
                 } else if (testArray.tests) {
-                    testArray.tests.splice(testID, 1);
+
+                    testArray.tests = _(testArray.tests).without(testArray.tests[testID]);
                     testArray = testArray.tests[0];
                 } else {
                     testArray = { id: 'true' };
@@ -278,7 +280,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 e.preventDefault();
                 var node = $(e.target),
                     actionID = node.closest('li').attr('data-action-id'),
-                    actionArray =  this.model.get('actioncmds');
+                    actionArray = _.copy(this.model.get('actioncmds'));
 
                 actionArray.splice(actionID, 1);
                 this.model.set('actioncmds', actionArray);
@@ -346,12 +348,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     valueType = data.test ? 'test' : 'action',
                     self = this;
                 if (data.target) {
-                    var arrayOfTests = this.model.get('test');
+                    var arrayOfTests = _.copy(this.model.get('test'));
                     arrayOfTests.id = data.value;
                     this.model.set('test', arrayOfTests);
                 } else if (data.test === 'create') {
 
-                    var testArray =  this.model.get('test');
+                    var testArray =  _.copy(this.model.get('test'));
                     if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests.push(_.copy(DEFAULTS.tests[data.value], true));
 
@@ -367,7 +369,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     this.model.set('test', testArray);
                 } else if (data.action === 'create') {
-                    var actionArray = this.model.get('actioncmds');
+                    var actionArray = _.copy(this.model.get('actioncmds'));
                     actionArray.push(_.copy(DEFAULTS.actions[data.value], true));
 
                     this.model.set('actioncmds', actionArray);
@@ -382,7 +384,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
             setModel: function (type, model, num) {
                 if (type === 'test') {
-                    var testArray = this.model.get(type);
+                    var testArray = _.copy(this.model.get(type));
                     if (checkForMultipleTests(this.el).length > 1) {
                         testArray.tests[num] = model.attributes;
                     } else {
@@ -391,8 +393,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     this.model.set(type, testArray);
 
                 } else {
-                    var actioncmds = this.model.get(type);
+                    var actioncmds = _.copy(this.model.get(type));
                     actioncmds[num] = model.attributes;
+                    this.model.set(type, actioncmds);
                 }
 
             },
@@ -427,7 +430,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 var list = $(e.currentTarget).closest('li[data-action-id]'),
                     actionID = list.attr('data-action-id'),
                     colorValue = list.find('div.flag').attr('data-color-value'),
-                    actionArray =  this.model.get('actioncmds');
+                    actionArray =  _.copy(this.model.get('actioncmds'));
 
                 actionArray[actionID].flags[0] = '$cl_' + colorValue;
                 this.model.set('actioncmds', actionArray);

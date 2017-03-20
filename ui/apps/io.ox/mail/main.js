@@ -260,6 +260,88 @@ define('io.ox/mail/main', [
             });
         },
 
+        'folder-view-dsc-folder-setup-notice': function () {
+
+            function returnFakeFolder(account) {
+                var fakeFolder = $('<li class="folder remote-account-setup">').attr({
+                    'data-id': account.root_folder,
+                    'data-model': account.root_folder,
+                    'data-contextmenu-id': account.root_folder,
+                    'aria-level': '1',
+                    'aria-selected': 'false',
+                    role: 'treeitem',
+                    tabindex: '-1',
+                    'aria-haspopup': 'true',
+                    title: account.name,
+                    'aria-expanded': 'false'
+                }).append(
+                    $('<div class="folder-node" style="padding-left: 0px;">').attr('aria-hidden', 'true').append(
+                        $('<div class="folder-arrow">').append(
+                        ),
+                        $('<div class="folder-icon">').append(
+                            $('<i class="fa fa-fw">')
+                        ),
+                        $('<div class="folder-label">').append(
+                            $('<div>').text(account.name)
+                        ),
+                        $('<div class="folder-counter">'),
+                        $('<a href="#" class="account-link">').attr({
+                            'data-dsc': account.root_folder,
+                            title: 'Account is being created'
+                        }).append(
+                            $('<i class="fa fa-exclamation-triangle">')
+                        ),
+                        $('<ul class="subfolders" role="group">')
+                    )
+                ).on('dblclick', function (e) {
+                    e.stopImmediatePropagation();
+                });
+
+                return fakeFolder;
+            }
+
+            function remoteAccountsSetup(node, obj) {
+                node.append(returnFakeFolder(obj));
+                node.closest('li').addClass('open');
+            }
+
+            function checkForFolderInSetup() {
+                if (accountAPI.hasDSCAccount) {
+                    var renderdList = app.treeView.$container.find('.remote-folders > ul');
+                    renderdList.find('li.remote-account-setup').remove();
+
+                    accountAPI.all().done(function (data) {
+                        var filteredAccounts = _.filter(data, function (num) {
+                            if (num.id !== 0) return num;
+                        });
+
+                        _.each(filteredAccounts, function (obj) {
+
+                            if (renderdList.find('.selectable[data-model="' + obj.root_folder + '"]').length) return;
+                            if (renderdList.find('.remote-account-setup[data-model="' + obj.root_folder + '"]').length) return;
+
+                            remoteAccountsSetup(renderdList, obj);
+                        });
+                    });
+                }
+            }
+
+            if (settings.get('dsc/enabled')) {
+                api.on('refresh.all', function () {
+                    checkForFolderInSetup();
+                });
+
+                folderAPI.on('refresh', function () {
+                    setTimeout(function () {
+                        checkForFolderInSetup();
+                    }, 3000);
+                });
+            }
+
+            app.checkForDSCFolderInSetup = checkForFolderInSetup;
+
+        },
+
         'folder-view-dsc-error': function (app) {
             function updateStatus() {
                 if (ox.debug) console.log('refreshing DSC status');
@@ -406,7 +488,6 @@ define('io.ox/mail/main', [
         'list-view': function (app) {
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({
-                category_id: categories.getInitialCategoryId(),
                 folder: app.folder.get(),
                 thread: true
             });
@@ -723,6 +804,8 @@ define('io.ox/mail/main', [
             function show() {
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
+                app.threadView.autoSelect = app.autoSelect;
+                delete app.autoSelect;
                 app.threadView.show(latestMessage, app.isThreaded());
                 // a11y: used keyboard?
                 if (openMessageByKeyboard || app.props.get('layout') === 'list') {
@@ -908,30 +991,41 @@ define('io.ox/mail/main', [
                     .addClass(className);
             }
 
+            function resetLeft(className) {
+                return app.left
+                    .removeClass('selection-empty selection-one selection-multiple'.replace(className, ''))
+                    .addClass(className);
+            }
+
             var react = _.debounce(function (type, list) {
 
                 if (app.props.get('layout') === 'list' && type === 'action') {
                     resetRight('selection-one preview-visible');
+                    resetLeft('selection-one');
                     app.showMail(list[0]);
                     return;
                 } else if (app.props.get('layout') === 'list' && type === 'one') {
                     //don't call show mail (an invisible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
+                    resetLeft('selection-one');
                     return;
                 }
 
                 switch (type) {
                     case 'empty':
                         resetRight('selection-empty');
+                        resetLeft('selection-empty');
                         app.showEmpty();
                         break;
                     case 'one':
                     case 'action':
                         resetRight('selection-one');
+                        resetLeft('selection-one');
                         app.showMail(list[0]);
                         break;
                     case 'multiple':
                         resetRight('selection-multiple');
+                        resetLeft('selection-multiple');
                         app.showMultiple(list);
                         break;
                     // no default
@@ -955,6 +1049,7 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // no debounce for showMultiple or screenreaders read old number of selected messages
                     resetRight('selection-multiple');
+                    resetLeft('selection-multiple');
                     app.showMultiple(list);
                 },
                 'selection:action': function (list) {
@@ -1077,7 +1172,8 @@ define('io.ox/mail/main', [
                 _.defer(function () {
                     app.listView.collection.find(function (model) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.set([model.cid]);
+                            app.autoSelect = true;
+                            app.listView.selection.set([model.cid], false);
                             return true;
                         }
                     });
@@ -1608,7 +1704,7 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
+                app.getWindow().nodes.main.on('mousedown', '.detail-view-header .dropdown-menu a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
@@ -1617,7 +1713,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1625,7 +1721,7 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                toolbar.delegate('.category', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.category', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1635,7 +1731,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
                     var node =  $(e.target).closest('a');
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
@@ -1647,7 +1743,7 @@ define('io.ox/mail/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'folder/context-menu',
@@ -1833,6 +1929,12 @@ define('io.ox/mail/main', [
             .always(function always() {
                 app.mediate();
                 win.show();
+                if (settings.get('dsc/enabled')) {
+                    setTimeout(function () {
+                        app.checkForDSCFolderInSetup();
+                    }, 1000);
+
+                }
             })
             .fail(function fail(result) {
                 // missing folder information indicates a connection failure

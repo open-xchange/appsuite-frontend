@@ -32,45 +32,7 @@ define('io.ox/settings/accounts/settings/pane', [
         this.save();
     });
 
-    var onAddSubmodule = function (e) {
-            e.preventDefault();
-            var submodule = e.data.submodule;
-            // looks like oauth?
-            if ('reauthorize' in submodule) {
-                var win = window.open(ox.base + '/busy.html', '_blank', 'height=600, width=800, resizable=yes, scrollbars=yes');
-                submodule.createInteractively(win);
-            } else {
-                submodule.createInteractively(e);
-            }
-        },
-
-        drawAddButton = function () {
-            var submodules = _(api.submodules).filter(function (submodule) {
-                return !submodule.canAdd || submodule.canAdd.apply(this);
-            });
-
-            if (submodules.length === 0) return;
-
-            return new Dropdown({
-                className: 'btn-group col-md-4 col-xs-4',
-                $toggle: $('<a class="btn btn-primary dropdown-toggle pull-right" role="button" data-toggle="dropdown" href="#" aria-haspopup="true">').append(
-                    $.txt(gt('Add account')), $.txt(' '),
-                    $('<span class="caret">')
-                ),
-                $ul: $('<ul class="dropdown-menu" role="menu">').append(
-                   _(submodules).map(function (submodule) {
-                       return $('<li role="presentation">').append(
-                           $('<a href="#" role="menuitem">')
-                           .attr('data-actionname', submodule.actionName || submodule.id || '')
-                           .text(submodule.displayName)
-                           .on('click', { submodule: submodule }, onAddSubmodule)
-                       );
-                   })
-               )
-            }).render().$el;
-        },
-
-        drawCertificateValidation = function () {
+    var drawCertificateValidation = function () {
             return $('<div class="form-group">').append(
                 $('<div class="checkbox">').append(
                     $('<label class="control-label">').text(gt('Allow connections with untrusted certificates')).prepend(
@@ -85,14 +47,27 @@ define('io.ox/settings/accounts/settings/pane', [
         },
 
         drawRecoveryButton = function () {
-            return $('<div class="hint">').append(
+            var b = $('<a href="#" class="hint col-md-6 col-lg-12">')
+                //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+                //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
+                .text(gt('Information about account recovery...'))
+                .attr({
+                    role: 'button',
+                    title: gt('Show infos about account recovery'),
+                    'aria-label': gt('Show infos about account recovery')
+                }).on('click', function (e) {
+                    e.preventDefault();
+                    hint.show();
+                    $(this).hide();
+                });
+
+            var hint = $('<div class="hint col-md-8 col-lg-12">').append(
                 $.txt(
                     gt('For security reasons, all credentials are encrypted with your primary account password. ' +
                         'If you change your primary password, your external accounts might stop working. In this case, ' +
-                        'you can use your old password to recover all account passwords:')
+                        'you can use your old password to recover all account passwords.')
                 ),
-                $.txt(' '),
-                $('<a href="#" data-action="recover">').text(gt('Recover passwords')).attr({
+                $('<a href="#" class="hint recover" data-action="recover">').text(gt('Recover passwords')).attr({
                     role: 'button',
                     title: gt('Recover passwords'),
                     'aria-label': gt('Recover passwords')
@@ -102,18 +77,23 @@ define('io.ox/settings/accounts/settings/pane', [
                     ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
                         srd.show();
                     });
-                })
-            );
+                }));
+
+            hint.hide();
+            return [b, hint];
         },
 
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
                 $('<div>').addClass('row').append(
-                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts')),
-                    drawAddButton()
+                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts'))
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')
             );
+        },
+
+        hasOAuthCredentials = function hasOAuthCredentials(account) {
+            return account.has('mail_oauth') && account.get('mail_oauth') >= 0;
         };
 
     /**
@@ -144,9 +124,22 @@ define('io.ox/settings/accounts/settings/pane', [
                     accountsList = new ListView({
                         tagName: 'ul',
                         childView: AccountViews.ListItem,
-                        collection: collection
+                        collection: collection,
+                        filter: function (m) { return !hasOAuthCredentials(m); }
                     });
 
+                require(['io.ox/core/api/account']).then(function (accountAPI) {
+                    return accountAPI.getStatus();
+                }).then(function (status) {
+                    for (var id in status) {
+                        // to avoid double ids the collection has the account type as prefix see Bug 50219
+                        var m = collection.get('mail' + id),
+                            s = status[id];
+                        if (!m) return;
+
+                        m.set('status', s.status !== 'ok' ? s : s.status);
+                    }
+                });
                 $pane.append(accountsList.render().$el);
 
                 if (coreSettings.isConfigurable('security/acceptUntrustedCertificates')) {

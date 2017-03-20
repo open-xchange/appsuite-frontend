@@ -129,9 +129,9 @@ define('io.ox/core/tk/selection', [
             return _.size(selectedItems) > 1;
         };
 
-        changed = function () {
+        changed = function (opt) {
             var list = self.get();
-            self.trigger('change', list);
+            self.trigger('change', list, opt);
             if (list.length === 0) {
                 self.trigger('empty');
             }
@@ -842,8 +842,8 @@ define('io.ox/core/tk/selection', [
 
             hash = null;
 
-            // event?
-            if (!_.isEqual(previous, this.get()) && silent !== true) changed();
+            // event?: check ids type-independet (strings vs. integer)
+            if (!_.isEqual(_(previous).map(self.serialize), _(this.get()).map(self.serialize)) && silent !== true) changed();
 
             return this;
         };
@@ -994,7 +994,7 @@ define('io.ox/core/tk/selection', [
 
         this.retriggerUnlessEmpty = function () {
             if (this.get().length) {
-                changed();
+                changed({ retriggerUnlessEmpty: true });
             }
         };
 

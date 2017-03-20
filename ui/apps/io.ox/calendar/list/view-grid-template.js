@@ -33,7 +33,7 @@ define('io.ox/calendar/list/view-grid-template', [
             build: function () {
                 var title, location, time, date, shown_as, conflicts, isPrivate;
                 this.addClass('calendar').append(
-                    time = $('<div class="time">').attr('aria-hidden', true),
+                    time = $('<div class="time custom_shown_as">').attr('aria-hidden', true),
                     $('<div class="contentContainer">').append(
                         date = $('<div class="date">'),
                         isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
@@ -56,50 +56,35 @@ define('io.ox/calendar/list/view-grid-template', [
             },
             set: function (data, fields) {
 
-                var self = this,
-                    a11yLabel = '',
-                    tmpStr = '',
-                    startDate,
-                    endDate,
+                var startDate, endDate,
+                    self = this,
                     timeSplits = util.getStartAndEndTime(data);
 
                 // clear classes of time to prevent adding multiple classes on reuse
-                fields.time.removeClass().addClass('time');
+                fields.time.removeClass().addClass('time custom_shown_as');
 
                 if (data.folder_id) {
                     //conflicts with appointments, where you aren't a participant don't have a folder_id.
-                    var folder = folderAPI.get(data.folder_id);
-                    folder.done(function (folder) {
+                    folderAPI.get(data.folder_id).done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
-                        fields.time.addClass(util.getAppointmentColorClass(folder, data))
-                            .attr({
-                                'data-folder': util.canAppointmentChangeColor(folder, data) ? folder.id : ''
-                            });
+                        fields.time.addClass(util.getAppointmentColorClass(folder, data)).attr({
+                            'data-folder': util.canAppointmentChangeColor(folder, data) ? folder.id : ''
+                        });
                     });
                 }
 
-                fields.title
-                    .text(a11yLabel = data.title ? gt.noI18n(data.title || '\u00A0') : gt('Private'));
-
-                if (!!data.private_flag) a11yLabel += ', ' + gt('Private');
-
-                if (data.location) {
-                    //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
-                    //#. This fragment appears within a long string for screen readers
-                    a11yLabel += ', ' + gt.format(gt.pgettext('a11y', 'location %1$s'), data.location);
-                }
+                var title = data.title ? gt.noI18n(data.title) : gt('Private');
+                fields.title.text(title);
                 fields.location.text(gt.noI18n(data.location || '\u00A0'));
 
                 fields.time.empty()
-                    .addClass('custom_shown_as ' + util.getShownAsClass(data))
+                    .addClass(util.getShownAsClass(data))
                     .append(
                         $('<div class="fragment">').text(gt.noI18n(timeSplits[0])),
                         $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
                     );
-
-                a11yLabel += ', ' + util.getShownAs(data);
 
                 fields.date.empty()
                     .text(util.getDateInterval(data))
@@ -113,21 +98,18 @@ define('io.ox/calendar/list/view-grid-template', [
                     endDate = moment(data.end_date);
                 }
 
-                if (startDate.isSame(endDate, 'day')) {
-                    tmpStr = gt.noI18n(util.getEvenSmarterDate(data));
-                } else {
-                    tmpStr = gt.noI18n(util.getDateIntervalA11y(data));
-                }
-
-                a11yLabel += ', ' + tmpStr;
-
-                tmpStr = gt.noI18n(util.getTimeIntervalA11y(data));
-
-                a11yLabel += ', ' + tmpStr;
-
                 fields.isPrivate.toggle(!!data.private_flag);
 
-                this.attr('aria-label', _.escape(a11yLabel) + '.');
+                var a11yLabel = [title];
+                if (!!data.private_flag && !!data.title) a11yLabel.push(gt('Private'));
+                //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
+                //#. This fragment appears within a long string for screen readers
+                if (data.location) a11yLabel.push(gt.format(gt.pgettext('a11y', 'location %1$s'), data.location));
+                a11yLabel.push(util.getShownAs(data));
+                a11yLabel.push(startDate.isSame(endDate, 'day') ? util.getEvenSmarterDate(data) : util.getDateIntervalA11y(data));
+                a11yLabel.push(util.getTimeIntervalA11y(data));
+
+                this.attr('aria-label', gt.noI18n(_.escape(a11yLabel.join(', ')) + '.'));
             }
         },
 
@@ -147,9 +129,8 @@ define('io.ox/calendar/list/view-grid-template', [
 
         // detect new labels
         requiresLabel: function (i, data, current) {
-            if (!data) {
-                return false;
-            }
+            if (!data) return false;
+
             var d = util.getEvenSmarterDate(data);
             return (i === 0 || d !== current) ? d : false;
         }

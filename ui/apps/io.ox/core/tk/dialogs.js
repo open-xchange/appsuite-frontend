@@ -49,7 +49,8 @@ define('io.ox/core/tk/dialogs', [
                 noBusy: false,
                 maximize: false,
                 top: '50%',
-                container: $('#io-ox-core'),
+                // sidepopups may be in body node under certain circumstances. Prevent new dialogs from hiding under them
+                container: ($('body>.io-ox-sidepopup-overlay').length ? $('body') : $('#io-ox-core')),
                 tabTrap: true,
                 focus: true
             }, options),
@@ -71,7 +72,7 @@ define('io.ox/core/tk/dialogs', [
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
-                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker, .addressbook-popup').length > 0;
                 if (insidePopup) return;
                 // should not keep focus if smart dropdown is open
                 var smartDropdown = $('body > .smart-dropdown-container').length > 0;

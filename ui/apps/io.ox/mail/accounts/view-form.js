@@ -171,6 +171,11 @@ define.async('io.ox/mail/accounts/view-form', [
                     });
                 }
 
+                // setting mail_protocol default if dsc account
+                if (settings.get('dsc/enabled', false) && self.model.get('id') === undefined) {
+                    model.set('mail_protocol', 'imap');
+                }
+
                 function syncLogin(model, value) {
                     model.set('login', value, { validate: true });
                 }
@@ -228,6 +233,9 @@ define.async('io.ox/mail/accounts/view-form', [
 
                 // disable E-mail address if any oauth is used
                 if (isMail_oauth || isTransport_oauth) self.$el.find('#primary_address').prop('disabled', true);
+
+                // disable account name if dsc
+                if (accountAPI.getDSCRootFolderForId(model.get('id'))) self.$el.find('#name').prop('disabled', true);
 
                 if (isMail_oauth) self.$el.find('.data_incoming').hide();
                 if (isTransport_oauth) self.$el.find('.data_outgoing').hide();
@@ -346,6 +354,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                             .css('margin', '10px')
                                             .text(warn.error);
                                 });
+                                self.dialog.pause();
 
                                 new dialogs.ModalDialog()
                                     .header(
@@ -358,6 +367,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                     .addButton('cancel', gt('Cancel'))
                                     .show()
                                     .done(function (action) {
+                                        self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
                                         } else {
@@ -378,7 +388,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             onFolderSelect: function (e) {
 
-                this.dialog.getPopup().hide();
+                this.dialog.pause();
 
                 var accountId = 'default' + this.model.get('id'),
                     property = $(e.currentTarget).attr('data-property'),
@@ -392,7 +402,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         self.$el.find('input[name="' + property + '"]').val(target);
                     },
                     close: function () {
-                        self.dialog.getPopup().show();
+                        self.dialog.resume();
                     },
                     folder: id,
                     module: 'mail',
@@ -475,7 +485,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined }).render().$el
+                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined, autocomplete: false }).render().$el
                         )
                     ),
                     // refresh rate (pop3 only)
@@ -547,7 +557,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'transport_password' }).render().$el
+                            new PasswordView({ model: model, id: 'transport_password', autocomplete: false }).render().$el
                         )
                     )
                 )

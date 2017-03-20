@@ -332,7 +332,7 @@ define('io.ox/calendar/month/view', [
                         return tmp;
                     })
                 ),
-                $('<div class="scrollpane f6-target" tabindex="0">')
+                $('<div class="scrollpane f6-target" tabindex="-1">')
             );
     };
 

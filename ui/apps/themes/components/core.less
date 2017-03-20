@@ -45,8 +45,8 @@ span.hint {
 
 /* model.trigger('invalid:... */
 .help-block.error {
-    font-weight: bold;
-    color: #df0000;
+    //font-weight: bold;
+    color: @error-text-color;
 }
 
 /* fail handling */
@@ -270,19 +270,23 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
-html:not(.internet-explorer) .scrollable[tabindex] {
-    &:focus {
-        box-shadow: inset 0 0 0 2px @link-color;
+html:not(.internet-explorer) {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            box-shadow: inset 0 0 0 2px @link-color;
+        }
     }
 }
 
 // Apparently IE does not manage to draw box shadows without leaving artifacts when scrolling
 // So we have to use boder and change the padding so the content does not move on focus. IE strikes again!
-.internet-explorer .scrollable[tabindex] {
-    &:focus {
-        border: 2px solid @link-color;
-        &.default-content-padding:not(.no-padding-adjustment) {
-            padding: 18px 28px;
+.internet-explorer {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            border: 2px solid @link-color;
+            &.default-content-padding:not(.no-padding-adjustment) {
+                padding: 18px 28px;
+            }
         }
     }
 }
@@ -321,11 +325,8 @@ html:not(.internet-explorer) .scrollable[tabindex] {
     right: 0;
 }
 
-.abs-lr {
-    position: absolute;
-    left: 0;
-    right: 0;
-}
+.abs-r { right: 0; }
+.abs-l { left: 0; }
 
 .bright-text {
     color: #888;
@@ -342,8 +343,11 @@ html:not(.internet-explorer) .scrollable[tabindex] {
 .person, .person-link {
     color: @person-link-color;
     word-break: normal;
-    cursor: pointer;
     white-space: nowrap;
+}
+
+.person-link {
+    cursor: pointer;
 }
 
 .default-content-padding { padding: 20px 30px; }
@@ -391,6 +395,36 @@ html:not(.internet-explorer) .scrollable[tabindex] {
 
 // ensure visibility for tooltips
 .tooltip { z-index: 100000; }
+
+.center-childs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-container {
+    // space for toggle action and caps-lock indicator
+    input.form-control { padding-right: 50px; }
+    .toggle-asterisks.form-control-feedback {
+        display: none;
+        height: 22px;
+        padding: 0px 16px;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        z-index: 3;
+        pointer-events: all;
+        background-color: #e6e6e6;
+        font-size: 16px;
+        &:focus {
+            color: #ffffff;
+            background-color: #3c73aa;
+        }
+    }
+    &.has-focus .toggle-asterisks {
+        display: flex;
+    }
+}
 
 // small screens (mobile)
 // note that we have to target max-width and max-device-width

@@ -25,6 +25,14 @@
         float: left;
         margin-top: 6px;
         margin-bottom: 0;
+
+        &.checkbox-block {
+            float: none;
+            text-align: left;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin: 0 0 8px 0;
+        }
     }
 }
 
@@ -114,7 +122,10 @@
 
     .modal-footer > .btn { min-width: 5em; }
 
-    .modal-footer .help-block { text-align: left; }
+    .modal-footer .help-block {
+        text-align: left;
+        &:empty { display: none; }
+    }
 
     .io-ox-sidepopup {
         &.right { .border-radius(0 5px 5px 0); }
@@ -290,8 +301,8 @@
                     float: left;
                 }
 
-                .name { 
-                    .ellipsis(); 
+                .name {
+                    .ellipsis();
                      padding-left: 0.5em;
                 }
 
@@ -373,19 +384,23 @@
 //
 .modal.flex {
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     overflow: hidden;
 
     .modal-dialog {
-        margin: 0;
-        padding: 16px 0;
+        margin: 0 auto;
         width: 500px;
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
 
     .modal-content {
         border: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-height: ~"calc(100vh - 48px)";
     }
 
     .modal-title {
@@ -394,9 +409,10 @@
         margin: -3px 0 2px 0;
     }
 
-    .modal-body {
-        min-height: 60px;
-        overflow-y: auto;
+    .modal-subtitle {
+        line-height: 16px;
+        padding-top: 4px;
+        margin-bottom: 4px;
     }
 
     .modal-header, .modal-body, .modal-footer {
@@ -404,17 +420,15 @@
         flex-grow: 0;
     }
 
-    .modal-header {
-        // helps against flex grow pushing the headline out of the dialog
-        min-height: 56px;
+    .modal-body {
+        min-height: 60px;
+        overflow-y: auto;
+        flex-grow: 1;
     }
 
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
-
-        // helps against flex grow pushing the buttons out of the dialog
-        min-height: 63px;
     }
 
     &.maximize {
