@@ -516,7 +516,7 @@ define('io.ox/portal/main', [
                             $('<br>'),
                             // retry
                             e.retry !== false ?
-                                $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
                                 }) : $()

@@ -77,7 +77,7 @@ define('io.ox/onboarding/clients/extensions', [
         getToggleNode: function () {
             var id = _.uniqueId('description');
             return [
-                $('<div class="sr-only">').attr('id', id).text(gt('Click to show or hide actions for advanced users.')),
+                $('<div class="sr-only">').attr('id', id).text(gt('Show or hide actions for advanced users.')),
                 $('<a href="#" class="toggle-link" data-value="to-advanced">').attr('aria-describedby', id).text(gt('Expert user?')),
                 $('<a href="#" class="toggle-link" data-value="to-simple">').attr('aria-describedby', id).text(gt('Hide options for expert users.'))
             ];

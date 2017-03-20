@@ -228,7 +228,7 @@ define('plugins/portal/twitter/register', [
         if (errorCode === 32 || errorCode === 89 || errorCode === 135) {
             var account = keychain.getStandardAccount('twitter');
 
-            return $('<a class="solution">').text(gt('Click to authorize your account again')).on('click', function () {
+            return $('<a class="solution">').text(gt('Authorize your account again')).on('click', function () {
                 keychain.submodules.twitter.reauthorize(account).done(function () {
                     console.log(gt('You have reauthorized this %s account.', 'Twitter'));
                 }).fail(function () {
@@ -236,9 +236,9 @@ define('plugins/portal/twitter/register', [
                 });
             });
         } else if (errorCode === 88 || errorCode === 130) {
-            return $('<a class="solution">').text(gt('Click to retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+            return $('<a class="solution">').text(gt('Retry later.')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
         }
-        return $('<a class="solution">').text(gt('Click to retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
+        return $('<a class="solution">').text(gt('Retry')).on('click', function () { keychain.submodules.twitter.trigger('update'); });
     };
 
     var refreshWidget = function () {

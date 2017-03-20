@@ -465,10 +465,9 @@ define('io.ox/calendar/edit/recurrence-view', [
                 this.controls = {
                     checkbox: $('<input type="checkbox">'),
                     checkboxLabel: $('<label class="control-label">'),
-                    detailToggle: $('<a href="#" class="recurrence-detail-toggle">').attr({
-                        'role': 'button',
-                        'aria-label': gt('Click to close the recurrence view')
-                    }).css({ 'float': 'right' }).append($('<i class="fa fa-times" aria-hidden="true">'))
+                    detailToggle: $('<a href="#" class="recurrence-detail-toggle" role="button">').attr('aria-label', gt('Close recurrence view')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
                 };
 
                 // add tabindex to all control elements
@@ -479,7 +478,7 @@ define('io.ox/calendar/edit/recurrence-view', [
                 });
 
                 this.nodes = {
-                    wrapper: $('<div>').addClass('checkbox'),
+                    wrapper: $('<div class="checkbox">'),
                     recView: $('<form class="io-ox-recurrence-view form-inline">').hide(),
                     summary: $('<span class="summary">'),
                     typeChoice: $('<div class="inset">'),

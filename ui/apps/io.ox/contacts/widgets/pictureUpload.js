@@ -164,11 +164,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                             .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide'](),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
-                                $('<span>').text(gt('Click to upload image'))
+                                $('<span>').text(gt('Upload image'))
                             )[hasImage ? 'hide' : 'show']()
                     ),
                     $('<form>').append(
-                        $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
+                        $('<label class="sr-only">').attr('for', guid).text(gt('Upload image')),
                         self.fileInput = $('<input type="file" name="file" accept="image/*">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);

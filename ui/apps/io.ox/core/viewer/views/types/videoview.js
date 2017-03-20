@@ -114,7 +114,7 @@ define('io.ox/core/viewer/views/types/videoview', [
 
             if (video.length > 0 && placeholder.length < 1) {
                 placeholder = this.createNotificationNode(
-                    gt('Click to start video'),
+                    gt('Start video'),
                     'fa-play-circle-o'
                 );
                 this.$el.append(placeholder).one('click', function () {
