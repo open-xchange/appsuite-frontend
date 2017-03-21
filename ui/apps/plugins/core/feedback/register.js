@@ -163,7 +163,7 @@ define('plugins/core/feedback/register', [
                         );
                     })
                 ),
-                $('<caption>').text(gt('Extremly likely'))
+                $('<caption>').text(gt('Extremely likely'))
             );
 
             return this;

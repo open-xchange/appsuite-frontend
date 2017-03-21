@@ -498,7 +498,7 @@ define('io.ox/mail/compose/extensions', [
                             // only uncheck if allowed (server setting can enforce drivemail if attachments are to large)
                             if (locked) {
                                 //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                                yell('info', gt('Attachment file size to large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+                                yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
                                 return;
                             }
                             baton.model.set('enable', false);
@@ -620,7 +620,7 @@ define('io.ox/mail/compose/extensions', [
                         locked = thresholdExceeded;
 
                         if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
-                            yell('warning', gt('Attachment size to large. Please remove attachments or reduce the file size.'));
+                            yell('warning', gt('Attachment size too large. Please remove attachments or reduce the file size.'));
                         }
                         return thresholdExceeded || view.settingsModel.get('enable');
                     };

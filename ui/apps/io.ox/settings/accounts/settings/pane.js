@@ -47,40 +47,32 @@ define('io.ox/settings/accounts/settings/pane', [
         },
 
         drawRecoveryButton = function () {
-            var b = $('<a href="#" class="hint col-md-6 col-lg-12">')
-                //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-                //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-                .text(gt('Information about account recovery...'))
-                .attr({
-                    role: 'button',
-                    title: gt('Show infos about account recovery'),
-                    'aria-label': gt('Show infos about account recovery')
-                }).on('click', function (e) {
-                    e.preventDefault();
-                    hint.show();
-                    $(this).hide();
-                });
 
-            var hint = $('<div class="hint col-md-8 col-lg-12">').append(
-                $.txt(
-                    gt('For security reasons, all credentials are encrypted with your primary account password. ' +
-                        'If you change your primary password, your external accounts might stop working. In this case, ' +
-                        'you can use your old password to recover all account passwords.')
-                ),
-                $('<a href="#" class="hint recover" data-action="recover">').text(gt('Recover passwords')).attr({
-                    role: 'button',
-                    title: gt('Recover passwords'),
-                    'aria-label': gt('Recover passwords')
-                })
-                .on('click', function (e) {
-                    e.preventDefault();
-                    ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
-                        srd.show();
-                    });
-                }));
-
-            hint.hide();
-            return [b, hint];
+            return [
+                $('<a href="#" role="button" class="hint col-md-6 col-lg-12">')
+                    //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+                    //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
+                    .text(gt('Show information about account recovery'))
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        $(this).hide().next().show();
+                    }),
+                $('<div class="hint col-md-8 col-lg-12">').hide().append(
+                    $.txt(
+                        gt('For security reasons, all credentials are encrypted with your primary account password. ' +
+                            'If you change your primary password, your external accounts might stop working. In this case, ' +
+                            'you can use your old password to recover all account passwords.')
+                    ),
+                    $('<a href="#" role="button" class="hint recover" data-action="recover">')
+                        .text(gt('Recover passwords'))
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
+                                srd.show();
+                            });
+                        })
+                )
+            ];
         },
 
         drawPane = function () {
