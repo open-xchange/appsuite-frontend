@@ -128,6 +128,57 @@
         &.icon-layout {
             > li.list-item {
                 border-width: 0 @default-padding (@default-padding - @base-padding) 0;
+
+                + .tooltip {
+                    padding: 0 5px;
+                    margin-top: 16px;
+
+                    &.right {
+                        margin-left: -18px;
+                    }
+                    &.left {
+                        margin-left: 2px;
+                    }
+                    .tooltip-inner {
+                        max-width: 307px;
+                        box-shadow: 0 0 7px 0 #fff;
+                    }
+                }
+            }
+            &[grid-count="5"] {                     // due to an additional hidden 1st node within a grid
+                > li.list-item:nth-child(5n-2) {    // ... 5n-2 instead of 5n-3
+                                                    // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
+                    + .tooltip {
+                        &.left {
+                            margin-left: 276px;
+                            left: 0!important;
+
+                            //.tooltip.right .tooltip-arrow {
+                            //    top: 50%;
+                            //    left: 0;
+                            //    margin-top: -5px;
+                            //    border-width: 5px 5px 5px 0;
+                            //    border-right-color: #000000;
+                            //}
+                            //
+                            //.tooltip.left .tooltip-arrow {
+                            //    top: 50%;
+                            //    right: 0;
+                            //    margin-top: -5px;
+                            //    border-width: 5px 0 5px 5px;
+                            //    border-left-color: #000000;
+                            //}
+
+                            .tooltip-arrow { // turn it into a ".right" tooltip
+                                left: 0;
+                                right: auto;
+                                border-width: 5px 5px 5px 0;
+                                border-right-color: #000000;
+                              //border-left-color: transparent;
+                            }
+                        }
+                    }
+                }
             }
         }
 

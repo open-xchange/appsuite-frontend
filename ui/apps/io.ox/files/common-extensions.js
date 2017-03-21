@@ -87,16 +87,16 @@ define('io.ox/files/common-extensions', [
                 $('<div class="filename">').text(filename)
             );
 
-            //  - not recommended since the black standard bootstrap tooltip
-            //    does not match with most of the icon views file preview images.
-            //
-            // this.tooltip({ // http://getbootstrap.com/javascript/#tooltips
-            //     title: tooltipTitle,
-            //     placement: 'right'
-            //   //viewport: { selector: '.list-item', padding: '10px' } // or callback function
-            // });
+            // - not recommended since the black standard bootstrap tooltip
+            //   does not match with most of the icon views file preview images.
 
-            this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
+            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips
+                title: _.breakWord(tooltipTitle),
+                placement: 'right auto',
+                viewport: { selector: 'ul.list-view', padding: '0 16px 16px 0' } // or callback function
+            });
+
+          //this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
         },
 
         mailSubject: function (baton, ellipsis) {

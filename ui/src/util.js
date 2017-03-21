@@ -673,30 +673,35 @@
                     str = str.substr(0, options.length).trim() + options.char + str.substr(str.length - options.length).trim();
                 }
             }
-
             if (options.optimizeWordbreak === true) {
-                var
-                    // https://www.cs.tut.fi/~jkorpela/dashes.html
-                    regXSearchHyphensGlobally = (/[\u002D\u1806\u2010\u2012\u2013\u2014\u2015\u207B\u208B\u2212]+/g),
 
-                    // http://es5.github.com/#WhiteSpace
-                    // https://www.cs.tut.fi/~jkorpela/chars/spaces.html
-                    regXSearchWhitespaceGlobally = (/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029]+/g),
-                    regXSearchZeroWhitespaceGlobally = (/[\u200B\uFEFF]+/g),
-
-                  //softHyphenChar = '\u00AD',
-                    nonBreakingHyphenChar = '\u2011',
-                    nonBreakingWhitespaceChar = '\u00A0',
-                    breakingZeroWhitespaceChar = '\u200B';
-
-                str = str
-                    .replace(regXSearchZeroWhitespaceGlobally, '')
-                    .replace(regXSearchWhitespaceGlobally, nonBreakingWhitespaceChar)
-                    .replace(regXSearchHyphensGlobally, nonBreakingHyphenChar)
-                    .split('')
-                    .join(breakingZeroWhitespaceChar);
+                str = _.breakWord(str);
             }
             return str; // exactly one exit point.
+        },
+        breakWord: function (str) {
+            var
+                // https://www.cs.tut.fi/~jkorpela/dashes.html
+                regXSearchHyphensGlobally = (/[\u002D\u1806\u2010\u2012\u2013\u2014\u2015\u207B\u208B\u2212]+/g),
+
+                // http://es5.github.com/#WhiteSpace
+                // https://www.cs.tut.fi/~jkorpela/chars/spaces.html
+                regXSearchWhitespaceGlobally = (/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029]+/g),
+                regXSearchZeroWhitespaceGlobally = (/[\u200B\uFEFF]+/g),
+
+              //softHyphenChar = '\u00AD',
+                nonBreakingHyphenChar = '\u2011',
+                nonBreakingWhitespaceChar = '\u00A0',
+                breakingZeroWhitespaceChar = '\u200B';
+
+            return (str
+
+                .replace(regXSearchZeroWhitespaceGlobally, '')
+                .replace(regXSearchWhitespaceGlobally, nonBreakingWhitespaceChar)
+                .replace(regXSearchHyphensGlobally, nonBreakingHyphenChar)
+                .split('')
+                .join(breakingZeroWhitespaceChar)
+            );
         },
 
         /**
