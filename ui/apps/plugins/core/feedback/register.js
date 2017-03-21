@@ -20,8 +20,9 @@ define('plugins/core/feedback/register', [
     'settings!io.ox/core',
     'io.ox/core/api/user',
     'io.ox/core/extensions',
+    'io.ox/core/http',
     'less!plugins/core/feedback/style'
-], function (ModalDialog, appApi, gt, yell, DisposableView, settings, api, ext) {
+], function (ModalDialog, appApi, gt, yell, DisposableView, settings, api, ext, http) {
 
     'use strict';
 
@@ -190,11 +191,17 @@ define('plugins/core/feedback/register', [
         initialize: function () {
             feedbackService = {
                 sendFeedback: function (data) {
-                    console.log('Feedback API must be implemented. Use the extension point "plugins/core/feedback" and implement "sendFeedback".');
-                    console.log(data);
-                    // return a Deferred Object here ($.ajax)
-                    // which sends data to your backend
-                    return $.Deferred().resolve();
+                    if (!data) return $.when();
+
+                    return http.PUT({
+                        module: 'userfeedback',
+                        params: {
+                            action: 'store',
+                            //type is always star-rating-v1 for now (all UI implementations still work)
+                            type: 'star-rating-v1'
+                        },
+                        data: data
+                    });
                 }
             };
         }
@@ -274,15 +281,8 @@ define('plugins/core/feedback/register', [
                         found = false,
                         OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
                         data = {
-                            // general
-                            // context group id
-                            type: this.ratingView.name,
-                            date: new moment().valueOf(),
-                            context_id: ox.context_id,
-                            user_id: ox.user_id,
-                            login_name: ox.user,
-                            server_version: ox.serverConfig.serverVersion,
-                            client_version: ox.serverConfig.version,
+                            // backend only accepts star-rating-v1 as type (hardcoded in the http request), (still all UI implementations work)
+                            // type: this.ratingView.name,
                             // feedback
                             score: this.ratingView.getValue(),
                             app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
@@ -293,7 +293,7 @@ define('plugins/core/feedback/register', [
                             browser: 'Other',
                             browser_version: 'Unknown',
                             user_agent: window.navigator.userAgent,
-                            screenResolution: screen.width + 'x' + screen.height,
+                            screen_resolution: screen.width + 'x' + screen.height,
                             language: ox.language
                         };
                     _(_.browser).each(function (val, key) {
@@ -310,7 +310,9 @@ define('plugins/core/feedback/register', [
                         .done(function () {
                             yell('success', gt('Thank you for your feedback'));
                         })
-                        .fail(yell);
+                        .fail(function () {
+                            yell('error', gt('Feedback could not be send'));
+                        });
                 })
                 .open();
         },
