@@ -354,6 +354,8 @@ define('io.ox/mail/compose/extensions', [
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
                 }).on('tokenfield:next', function () {
                     extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
+                }).on('tokenfield:removetoken', function (e) {
+                    ext.point(POINT + '/removetoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
                 // bind mail-model to collection
