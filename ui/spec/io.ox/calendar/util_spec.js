@@ -226,7 +226,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             it('Every 2 months on day 11', function () {
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Monate am Tag 11.');
+                expect(str).to.equal('Alle 2 Monate an Tag 11.');
             });
 
             // Monthly - specific days
