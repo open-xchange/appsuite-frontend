@@ -1364,6 +1364,13 @@ msgstr "Godkendelse"
 msgid "Author"
 msgstr "Forfatter"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Klik for at godkende din konto igen"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1659,7 +1666,6 @@ msgstr "Kalendre"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1880,54 +1886,9 @@ msgstr "Klik på en sætning for at vælge hvornår aftalen skal gentages."
 msgid "Click on the links to change the values."
 msgstr "For at ændre værdierne kan der klikkes på et link."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Klik for at godkende din konto igen"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Klik for at lukke gentagelsesvinduet"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Klik for at lukke denne meddelelse"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Klik for at åbne."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Klik for at åbne. Træk til dit skrivebord for at hente."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Klik for at spille lydfil"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Klik for at prøve igen"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Klik for at prøve senere."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Klik for at vise eller skjule handlinger for avancerede brugere."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Klik for at afspille video"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Tryk for at prøve igen."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Klik for at overføre billede"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1977,10 +1938,22 @@ msgstr "Luk påmindelsesområde"
 msgid "Close premium features"
 msgstr "Luk præmium-funktioner"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Klik for at lukke gentagelsesvinduet"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Luk påmindelse om %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Skjul denne underretning"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3924,10 +3897,6 @@ msgstr "Filen er blevet flyttet"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Filnavn"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Filnavn, klik for at omdøbe"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6230,6 +6199,18 @@ msgstr "Åbn beskrivelsespanel"
 msgid "Open external link"
 msgstr "Åbn eksternt link"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Åbn"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Klik for at åbne. Træk til dit skrivebord for at hente."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7526,6 +7507,12 @@ msgstr "Fjernet %1$s <%2$s>."
 msgid "Rename"
 msgstr "Omdøb"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Omdøb mappe"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Omdøb mappe"
@@ -7637,8 +7624,15 @@ msgstr "Pensioneret"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Prøv igen"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Klik for at prøve senere."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8275,6 +8269,12 @@ msgstr "Vis navne"
 msgid "Show next day"
 msgstr "Vis næste dag"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "Klik for at vise eller skjule handlinger for avancerede brugere."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Vis forgående dag"
@@ -8511,6 +8511,12 @@ msgstr "Start rundvisning"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Begynd at skrive for at finde brugernavne"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Startdato"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9660,6 +9666,12 @@ msgstr "Total: %1$s forespørgsler"
 msgid "Town"
 msgstr "By"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Tryk for at prøve igen."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Prøv nu!"
@@ -9832,6 +9844,12 @@ msgstr "Overfør"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Overfør fil"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Overfør fil"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -11645,8 +11663,23 @@ msgstr "åååå"
 #~ "Tryk på et bogstav i venstre side af navigationslinjen, for at vise de "
 #~ "tilhørende kontakter fra den valgte adressebog."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Klik for at lukke denne meddelelse"
+
+#~ msgid "Click to open."
+#~ msgstr "Klik for at åbne."
+
+#~ msgid "Click to retry"
+#~ msgstr "Klik for at prøve igen"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Klik for at vælge kontakter"
+
+#~ msgid "Click to start video"
+#~ msgstr "Klik for at afspille video"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Klik for at overføre billede"
 
 #~ msgid "Close document"
 #~ msgstr "Luk dokument"
@@ -12075,6 +12108,9 @@ msgstr "åååå"
 
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privat)"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Filnavn, klik for at omdøbe"
 
 #~ msgid "File names must not be empty"
 #~ msgstr "Filnavne må ikke være tomme"
@@ -12599,11 +12635,6 @@ msgstr "åååå"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Vi kun widget-opsummering på mobile enheder"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Åbn"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Åbn i ny fane"

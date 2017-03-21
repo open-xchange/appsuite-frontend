@@ -655,7 +655,6 @@ msgstr ""
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js
 #: apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js
 #: apps/io.ox/files/main.js
@@ -1555,7 +1554,7 @@ msgstr[1] ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js
 #: module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
 msgstr ""
 
 #: apps/io.ox/calendar/edit/recurrence-view.js
@@ -4224,7 +4223,7 @@ msgstr ""
 
 #: apps/io.ox/contacts/widgets/pictureUpload.js
 #: module:io.ox/contacts
-msgid "Click to upload image"
+msgid "Upload image"
 msgstr ""
 
 #: apps/io.ox/core/about/about.js
@@ -4459,6 +4458,8 @@ msgstr ""
 #: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js
+#: module:plugins/portal
 msgid "Retry"
 msgstr ""
 
@@ -6946,7 +6947,7 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: module:io.ox/core
-msgid "File name, click to rename"
+msgid "Rename File"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js
@@ -7114,7 +7115,7 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/types/videoview.js
 #: module:io.ox/core
-msgid "Click to start video"
+msgid "Start video"
 msgstr ""
 
 #. Task: Done like in "Mark as done"
@@ -7148,7 +7149,7 @@ msgstr ""
 
 #: apps/io.ox/core/yell.js
 #: module:io.ox/core
-msgid "Click to close this notification"
+msgid "Close this notification"
 msgstr ""
 
 #: apps/io.ox/editor/main.js
@@ -7482,6 +7483,11 @@ msgstr ""
 msgid "Save as PDF"
 msgstr ""
 
+#: apps/io.ox/files/actions/share.js
+#: module:io.ox/files
+msgid "Send link"
+msgstr ""
+
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
@@ -7500,11 +7506,6 @@ msgstr[1] ""
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
 msgid "Remove link"
-msgstr ""
-
-#: apps/io.ox/files/actions/share.js
-#: module:io.ox/files
-msgid "Send link"
 msgstr ""
 
 #: apps/io.ox/files/actions/share.js
@@ -10807,7 +10808,7 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
 #: module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js
@@ -11102,7 +11103,7 @@ msgstr ""
 
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
-msgid "Click to try again."
+msgid "Try again."
 msgstr ""
 
 #: apps/io.ox/portal/main.js
@@ -11182,12 +11183,12 @@ msgstr ""
 
 #: apps/io.ox/preview/main.js
 #: module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
 msgstr ""
 
 #: apps/io.ox/preview/main.js
 #: module:io.ox/core
-msgid "Click to open."
+msgid "Open file"
 msgstr ""
 
 #: apps/io.ox/search/items/view-template.js
@@ -12641,7 +12642,7 @@ msgstr ""
 #: apps/plugins/portal/linkedIn/register.js
 #: module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
+msgid "Authorize your account again"
 msgstr ""
 
 #: apps/plugins/portal/linkedIn/register.js
@@ -12917,12 +12918,7 @@ msgstr ""
 
 #: apps/plugins/portal/twitter/register.js
 #: module:plugins/portal
-msgid "Click to retry later."
-msgstr ""
-
-#: apps/plugins/portal/twitter/register.js
-#: module:plugins/portal
-msgid "Click to retry"
+msgid "Retry later."
 msgstr ""
 
 #: apps/plugins/portal/twitter/register.js

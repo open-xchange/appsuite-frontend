@@ -1396,6 +1396,13 @@ msgstr "Autentifikácia"
 msgid "Author"
 msgstr "Autor"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Kliknutím sem znova autorizujete svoj účet"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1690,7 +1697,6 @@ msgstr "Kalendáre"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1916,55 +1922,9 @@ msgstr "Kliknutím na vetu zmeníte kedy opakovať schôdzku."
 msgid "Click on the links to change the values."
 msgstr "Kliknutím na odkazy zmeníte hodnoty."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Kliknutím sem znova autorizujete svoj účet"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Zobrazenie Opakovania zatvoríte kliknutím"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Kliknutím zatvoríte toto oznámenie"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Kliknutím otvoríte."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Kliknutím otvoríte. Stiahnuť môžete pretiahnutím na plochu."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Kliknutím prehráte zvukový súbor"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Kliknutím to skúsite znova"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Kliknutím to skúsite znova neskôr."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-"Kliknutím zobrazíte alebo skryjete operácie pre pokročilých používateľov."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Kliknutím spustíte video"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Kliknutím to skúsite znova neskôr."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Kliknite nahráte obrázok"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -2014,10 +1974,22 @@ msgstr "Zatvoriť oznamovaciu oblasť"
 msgid "Close premium features"
 msgstr "Zatvoriť prémiové funkcie"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Zobrazenie Opakovania zatvoríte kliknutím"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Zatvoriť pripomienku %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Skryť toto oznámenie"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3979,10 +3951,6 @@ msgstr "Súbory boli presunuté"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Názov súboru"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Názov súboru; premenujte kliknutím"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6295,6 +6263,18 @@ msgstr "Otvoriť panel popisu"
 msgid "Open external link"
 msgstr "Otvoriť externý odkaz"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Otvoriť"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Kliknutím otvoríte. Stiahnuť môžete pretiahnutím na plochu."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7591,6 +7571,12 @@ msgstr "Odstránený %1$s, %2$s."
 msgid "Rename"
 msgstr "Premenovať"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Premenovať priečinok"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Premenovať priečinok"
@@ -7702,8 +7688,15 @@ msgstr "V dôchodku"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Skúsiť znova"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Kliknutím to skúsite znova neskôr."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8346,6 +8339,13 @@ msgstr "Zobraziť mená"
 msgid "Show next day"
 msgstr "Zobraziť ďalší deň"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr ""
+"Kliknutím zobrazíte alebo skryjete operácie pre pokročilých používateľov."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Zobraziť predošlý deň"
@@ -8583,6 +8583,12 @@ msgstr "Spustiť prehliadku"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Vyhľadávanie spustíte napísaním mena používateľa"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Dátum začiatku"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9748,6 +9754,12 @@ msgstr "Celkom: %1$s žiadostí"
 msgid "Town"
 msgstr "Mesto"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Kliknutím to skúsite znova neskôr."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Vyskúšať teraz!"
@@ -9920,6 +9932,12 @@ msgstr "Nahrať"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Nahrať nový súbor"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Nahrať nový súbor"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12408,8 +12426,23 @@ msgstr "RRRR"
 #~ "Kliknutím na písmeno na ľavej strane navigačného panela zobrazíte "
 #~ "zodpovedajúce kontakty z vybraného adresára kontaktov."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Kliknutím zatvoríte toto oznámenie"
+
+#~ msgid "Click to open."
+#~ msgstr "Kliknutím otvoríte."
+
+#~ msgid "Click to retry"
+#~ msgstr "Kliknutím to skúsite znova"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Kliknutím vyberiete kontakty"
+
+#~ msgid "Click to start video"
+#~ msgstr "Kliknutím spustíte video"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Kliknite nahráte obrázok"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -13499,6 +13532,9 @@ msgstr "RRRR"
 
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Názov súboru; premenujte kliknutím"
 
 #~ msgid "File name:"
 #~ msgstr "Názov súboru:"
@@ -14968,11 +15004,6 @@ msgstr "RRRR"
 #~ "deň. Na prácu s groupware môžete použiť niekoľko okine prehliadača. "
 #~ "Nepoužívajte túto možnosť, keď pracujte na počítači inej osoby (napr. v "
 #~ "internetovej kaviarni)."
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Otvoriť"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Otvoriť na novej karte"

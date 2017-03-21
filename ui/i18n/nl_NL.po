@@ -1376,6 +1376,13 @@ msgstr "Authenticatie"
 msgid "Author"
 msgstr "Auteur"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Klik hier om uw account opnieuw te bevestigen"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1674,7 +1681,6 @@ msgstr "Agenda's"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1898,55 +1904,9 @@ msgstr "Klik op een zin om de interval-periode aan te passen."
 msgid "Click on the links to change the values."
 msgstr "Klik op de links om de waarden aan te passen."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Klik hier om uw account opnieuw te bevestigen"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Klik om het terugkeeroverzicht te sluiten"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Klik om deze notificatie te sluiten"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Klik om te openen."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Klik om te openen. Sleep naar het bureaublad om te downloaden."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Klik om het audiobestand af te spelen"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Klik om het opnieuw te proberen"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Klik om het later opnieuw te proberen."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-"Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Klik om het videobestand af te spelen"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Klik om het opnieuw te proberen."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Klik om de afbeelding te uploaden"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1996,10 +1956,22 @@ msgstr "Sluit kennisgevingsgebied"
 msgid "Close premium features"
 msgstr "Sluit premium functies"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Klik om het terugkeeroverzicht te sluiten"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Sluit deze herinnering voor %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Verberg deze kennisgeving"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3966,10 +3938,6 @@ msgstr "Bestand is verplaatst"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Bestandsnaam"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Bestandsnaam, klik om te hernoemen"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6287,6 +6255,18 @@ msgstr "Open omschrijvingspaneel"
 msgid "Open external link"
 msgstr "Open een externe link"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Openen"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Klik om te openen. Sleep naar het bureaublad om te downloaden."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7595,6 +7575,12 @@ msgstr "%1$s verwijderd, %2$s."
 msgid "Rename"
 msgstr "Hernoemen"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Map hernoemen"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Map hernoemen"
@@ -7706,8 +7692,15 @@ msgstr "Gepensioneerd"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Opnieuw proberen"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Klik om het later opnieuw te proberen."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8345,6 +8338,13 @@ msgstr "Namen tonen"
 msgid "Show next day"
 msgstr "Toon volgende dag"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr ""
+"Klik om de acties voor geavanceerde gebruikers te tonen of te verbergen."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Toon vorige dag"
@@ -8582,6 +8582,12 @@ msgstr "Start rondleiding"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Begin met typen om een gebruikersnaam te zoeken"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Begindatum"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9759,6 +9765,12 @@ msgstr "Totaal: %1$s aanvragen"
 msgid "Town"
 msgstr "Stad"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Klik om het opnieuw te proberen."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Probeer nu!"
@@ -9932,6 +9944,12 @@ msgstr "Uploaden"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Bestand uploaden"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Bestand uploaden"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -11702,8 +11720,23 @@ msgstr "yyyy"
 #~ "Klik op een letter aan de linkerkant van de navigatiebalk om de contacten "
 #~ "te tonen met de overeenkomstige beginletters in het gekozen adresboek."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Klik om deze notificatie te sluiten"
+
+#~ msgid "Click to open."
+#~ msgstr "Klik om te openen."
+
+#~ msgid "Click to retry"
+#~ msgstr "Klik om het opnieuw te proberen"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Klik om contactpersonen te selecteren"
+
+#~ msgid "Click to start video"
+#~ msgstr "Klik om het videobestand af te spelen"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Klik om de afbeelding te uploaden"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Deze herinnering sluiten"
@@ -12089,6 +12122,9 @@ msgstr "yyyy"
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Favoriete tijdzone"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Bestandsnaam, klik om te hernoemen"
 
 #~ msgid "File names must not be empty"
 #~ msgstr "Bestandsnamen kunnen niet leeg zijn"
@@ -12536,11 +12572,6 @@ msgstr "yyyy"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Widget samenvatting alleen tonen op mobiele apparaten"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Openen"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Openen van e-mailconversaties"

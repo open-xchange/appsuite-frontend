@@ -1362,6 +1362,13 @@ msgstr "Behörighetskontroll"
 msgid "Author"
 msgstr "Författare"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Klicka för att kontrollera din behörighet igen"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1657,7 +1664,6 @@ msgstr "Kalendrar"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1879,54 +1885,9 @@ msgstr "Klicka på en mening för att välja när mötet ska upprepas."
 msgid "Click on the links to change the values."
 msgstr "Klicka på länkarna för att ändra värdena."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Klicka för att kontrollera din behörighet igen"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Klicka för att stänga upprepningsvyn"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Klicka för att stänga den här aviseringen"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Klicka för att öppna."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Klicka för att öppna. Dra till ditt skrivbord för att ladda ner."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Klicka för att spela upp ljudfil"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Klicka för att försöka igen"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Klicka för att försöka senare."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Klicka för att visa eller dölja åtgärder för avancerade användare."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Klicka för att starta video"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Klicka för att försöka igen."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Klicka för att ladda upp bild"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1976,10 +1937,22 @@ msgstr "Stäng aviseringsområdet"
 msgid "Close premium features"
 msgstr "Stäng premiumfunktioner"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Klicka för att stänga upprepningsvyn"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Stäng påminnelse för %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Dölj den här aviseringen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3921,10 +3894,6 @@ msgstr "Filen har flyttats"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Filnamn"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Filnamn, klicka för att döpa om"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6227,6 +6196,18 @@ msgstr "Öppna beskrivningspanel"
 msgid "Open external link"
 msgstr "Öppna extern länk"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Öppna"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Klicka för att öppna. Dra till ditt skrivbord för att ladda ner."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7521,6 +7502,12 @@ msgstr "Tog bort %1$s, %2$s."
 msgid "Rename"
 msgstr "Döp om"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Döp om mapp"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Döp om mapp"
@@ -7632,8 +7619,15 @@ msgstr "Pensionerad"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Försök igen"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Klicka för att försöka senare."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8270,6 +8264,12 @@ msgstr "Visa namn"
 msgid "Show next day"
 msgstr "Visa nästa dag"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "Klicka för att visa eller dölja åtgärder för avancerade användare."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Visa föregående dag"
@@ -8507,6 +8507,12 @@ msgstr "Starta rundtur"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Börja skriva för att söka efter användarnamn"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Startdatum"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9661,6 +9667,12 @@ msgstr "Totalt: %1$s sökningar"
 msgid "Town"
 msgstr "Ort"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Klicka för att försöka igen."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Testa nu!"
@@ -9834,6 +9846,12 @@ msgstr "Ladda upp"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Ladda upp fil"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Ladda upp fil"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12445,8 +12463,23 @@ msgstr "yyyy"
 #~ "Klicka på en bokstav till vänster om navigationsraden för att visa "
 #~ "motsvarande kontakter från den valda adressboken."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Klicka för att stänga den här aviseringen"
+
+#~ msgid "Click to open."
+#~ msgstr "Klicka för att öppna."
+
+#~ msgid "Click to retry"
+#~ msgstr "Klicka för att försöka igen"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Klicka för att välja kontakter"
+
+#~ msgid "Click to start video"
+#~ msgstr "Klicka för att starta video"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Klicka för att ladda upp bild"
 
 #~ msgid "Close document"
 #~ msgstr "Stäng dokument"
@@ -13288,6 +13321,9 @@ msgstr "yyyy"
 
 #~ msgid "File is not a directory: %s"
 #~ msgstr "Filen är ingen katalog: %s"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Filnamn, klicka för att döpa om"
 
 #~ msgid "File names must not be empty"
 #~ msgstr "Filnamn får inte vara tomma"
@@ -14693,11 +14729,6 @@ msgstr "yyyy"
 
 #~ msgid "Only the task creator is allowed to set private flag."
 #~ msgstr "Endast skaparen av uppgiften är tillåten att använda privat flagga."
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Öppna"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Öppna i ny flik"

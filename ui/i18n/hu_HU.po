@@ -1365,6 +1365,13 @@ msgstr "Hitelesítés"
 msgid "Author"
 msgstr "Szerző"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Kattintson a fiók ismételt felhatalmazásához"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1663,7 +1670,6 @@ msgstr "Naptárak"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1888,56 +1894,9 @@ msgstr ""
 msgid "Click on the links to change the values."
 msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Kattintson a fiók ismételt felhatalmazásához"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Kattintson az ismétlődési nézet bezárásához"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Kattintson az értesítés bezárásához"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Kattintson a megnyitásához."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Kattintson a megnyitáshoz. Húzza az asztalára a letöltéshez."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Kattintson az audiófájlra a lejátszáshoz"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Kattintson az újrapróbálkozáshoz"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Kattintson a későbbi újrapróbálkozáshoz."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-"Kattintson ide a szakértő felhasználói műveletek megjelenítéséhez vagy "
-"elrejtéséhez."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Kattintson a videófájlra a lejátszáshoz"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Kattintson az újrapróbálkozáshoz."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Kattintson a képfeltöltéshez"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1987,10 +1946,22 @@ msgstr "Értesítési terület bezárása"
 msgid "Close premium features"
 msgstr "Prémium szolgáltatások bezárása"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Kattintson az ismétlődési nézet bezárásához"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Zárja le az emlékeztetőt: %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Értesítés elrejtése"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3947,10 +3918,6 @@ msgstr "A fájl áthelyezésre megtörtént"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Fájlnév"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Fájlnév, kattintson ide az átnevezéshez"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6249,6 +6216,18 @@ msgstr "Leírópanel megnyitása"
 msgid "Open external link"
 msgstr "Külső hivatkozás megnyitása"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Megnyitás"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Kattintson a megnyitáshoz. Húzza az asztalára a letöltéshez."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7544,6 +7523,12 @@ msgstr "%1$s, %2$s eltávolítva."
 msgid "Rename"
 msgstr "Átnevezés"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Mappa átnevezése"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Mappa átnevezése"
@@ -7655,8 +7640,15 @@ msgstr "Nyugdíjas"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Újra"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Kattintson a későbbi újrapróbálkozáshoz."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8294,6 +8286,14 @@ msgstr "Nevek megjelenítése"
 msgid "Show next day"
 msgstr "Következő nap megjelenítése"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr ""
+"Kattintson ide a szakértő felhasználói műveletek megjelenítéséhez vagy "
+"elrejtéséhez."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Előző nap megjelenítése"
@@ -8530,6 +8530,12 @@ msgstr "Termékbemutató"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Kezdje el beírni a keresett felhasználónevet"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Kezdés dátuma"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9680,6 +9686,12 @@ msgstr "Összesen: %1$s kérés"
 msgid "Town"
 msgstr "Város"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Kattintson az újrapróbálkozáshoz."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Próbálja ki!"
@@ -9850,6 +9862,12 @@ msgstr "Feltöltés"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Fájl feltöltése"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Fájl feltöltése"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -11426,8 +11444,23 @@ msgstr "yyyy"
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Egész napos találkozóért kattintson"
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Kattintson az értesítés bezárásához"
+
+#~ msgid "Click to open."
+#~ msgstr "Kattintson a megnyitásához."
+
+#~ msgid "Click to retry"
+#~ msgstr "Kattintson az újrapróbálkozáshoz"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Kattintson ide a névjegyek kiválasztásához"
+
+#~ msgid "Click to start video"
+#~ msgstr "Kattintson a videófájlra a lejátszáshoz"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Kattintson a képfeltöltéshez"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Emlékeztető bezárása"
@@ -11583,6 +11616,9 @@ msgstr "yyyy"
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "Kedvenc időzóná"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Fájlnév, kattintson ide az átnevezéshez"
 
 #~ msgid "File: %1$s"
 #~ msgstr "Fájl: %1$s"
@@ -11788,11 +11824,6 @@ msgstr "yyyy"
 
 #~ msgid "OneDrive"
 #~ msgstr "OneDrive"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Megnyitás"
 
 #, fuzzy
 #~| msgid "Distance"

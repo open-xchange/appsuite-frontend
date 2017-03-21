@@ -1373,6 +1373,13 @@ msgstr "Todennus"
 msgid "Author"
 msgstr "Tekijä"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Napsauta valtuuttaaksesi tilisi uudestaan"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1676,7 +1683,6 @@ msgstr "Kalenterit"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1901,56 +1907,9 @@ msgstr "Napsauta lausetta määritelläksesi tapaamisen toistuminen."
 msgid "Click on the links to change the values."
 msgstr "Napsauta linkkejä muuttaaksesi arvoja."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Napsauta valtuuttaaksesi tilisi uudestaan"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Napsauta sulkeaksesi toistonäkymä"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Napsauta sulkeaksesi ilmoituksen"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Napsauta avataksesi."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Napsauta avataksesi. Ladataksesi, siirrä työpöydällesi."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Napsauta soittaaksesi äänitiedosto"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Napsauta yrittääksesi uudelleen."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Napsauta yrittääksesi uudelleen myöhemmin."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-"Napauta näyttääksesi tai piilottaaksesi toiminnot edistyneemmille "
-"käyttäjille."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Napsauta käynnistääksesi video."
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Napsauta yrittääksesi uudestaan."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Napsauta ladataksesi kuva"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -2000,10 +1959,22 @@ msgstr "Sulje ilmoitusalue "
 msgid "Close premium features"
 msgstr "Sulje premium-ominaisuudet"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Napsauta sulkeaksesi toistonäkymä"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Sulje muistutus tapaamisesta tai tehtävästä %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Napsauta sulkeaksesi ilmoituksen"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3985,10 +3956,6 @@ msgstr "Tiedosto on siirretty"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Tiedoston nimi"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Tiedoston nimi, napsauta nimetäksesi uudelleen"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6336,6 +6303,18 @@ msgstr "Sulje kuvauspaneeli"
 msgid "Open external link"
 msgstr "Avaa ulkoinen linkki"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Avaa"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Napsauta avataksesi. Ladataksesi, siirrä työpöydällesi."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7647,6 +7626,12 @@ msgstr "%1$s, %2$s poistettu."
 msgid "Rename"
 msgstr "Uudelleennimeä"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Uudelleennimeä kansio"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Uudelleennimeä kansio"
@@ -7764,8 +7749,15 @@ msgstr "Eläköitynyt"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Yritä uudelleen"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Napsauta yrittääksesi uudelleen myöhemmin."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8408,6 +8400,14 @@ msgstr "Näytä nimet"
 msgid "Show next day"
 msgstr "Näytä seuraava päivä"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr ""
+"Napauta näyttääksesi tai piilottaaksesi toiminnot edistyneemmille "
+"käyttäjille."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Näytä edellinen päivä"
@@ -8646,6 +8646,12 @@ msgstr "Aloita kierros"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Aloita kirjoittaminen hakeaksesi käyttäjänimiä"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Aloituspäivämäärä"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9826,6 +9832,12 @@ msgstr "Yhteensä %1$s pyyntöä"
 msgid "Town"
 msgstr "Kaupunki"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Napsauta yrittääksesi uudestaan."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Kokeile heti!"
@@ -9998,6 +10010,12 @@ msgstr "Lataa tiedosto"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Lataa tiedosto"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Lataa tiedosto"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -11775,8 +11793,23 @@ msgstr "vvvv"
 #~ "Napsauta kirjainta vasemmasta reunasta näyttääksesi vastaavat "
 #~ "yhteystiedot valitusta osoitekirjasta."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Napsauta sulkeaksesi ilmoituksen"
+
+#~ msgid "Click to open."
+#~ msgstr "Napsauta avataksesi."
+
+#~ msgid "Click to retry"
+#~ msgstr "Napsauta yrittääksesi uudelleen."
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Näpäytä valitaksesi yhteystiedot"
+
+#~ msgid "Click to start video"
+#~ msgstr "Napsauta käynnistääksesi video."
+
+#~ msgid "Click to upload image"
+#~ msgstr "Napsauta ladataksesi kuva"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Sulje tämä muistutus"
@@ -12187,6 +12220,9 @@ msgstr "vvvv"
 
 #~ msgid "Fax (private)"
 #~ msgstr "Faksi (yksityinen)"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Tiedoston nimi, napsauta nimetäksesi uudelleen"
 
 #~ msgid "File names must not be empty"
 #~ msgstr "Tiedoston nimi ei voi olla tyhjä"
@@ -12622,11 +12658,6 @@ msgstr "vvvv"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "Näytä mobiililaitteilla widget-yhteenveto"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Avaa"
 
 #~ msgid "Opening E-Mail threads"
 #~ msgstr "Sähköpostikeskustelun avaaminen"

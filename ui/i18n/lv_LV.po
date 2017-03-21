@@ -1408,6 +1408,13 @@ msgstr "Autorizācija"
 msgid "Author"
 msgstr "Autors"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Noklikšķiniet šeit lai atkārtoti autorizētu kontu"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1712,7 +1719,6 @@ msgstr "Kalendāri"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1938,54 +1944,9 @@ msgstr "Noklikšķiniet uz teikuma, lai izvēlētos kad mītiņu atkārtot."
 msgid "Click on the links to change the values."
 msgstr "Noklikšķiniet uz saitēm, lai izmainītu vērtības."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Noklikšķiniet šeit lai atkārtoti autorizētu kontu"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Noklikšķiniet, lai aizvērtu atkārtojumu skatu"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Noklikšķiniet, lai aizvērtu šo paziņojumu"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Noklikšķiniet lai atvērtu."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Noklikšķiniet lai atvērtu. Pārvelciet uz darbvirsmu lai lejuplādētu."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Noklikšķiniet, lai atskaņotu audio failu"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Noklikšķiniet lai mēģinātu vēlreiz"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Noklikšķiniet lai mēģinātu vēlāk vēlreiz"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Noklikšķiniet, lai parādītu vai slēptu papildus darbības."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Noklikšķiniet, lai atskaņotu video"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Noklikšķiniet lai mēģinātu vēlreiz."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Noklikšķiniet, lai ielādētu attēlu"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -2035,10 +1996,22 @@ msgstr "Aizvērt paziņojumu apgabalu"
 msgid "Close premium features"
 msgstr "Aizvērt premiālās funkcijas"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Noklikšķiniet, lai aizvērtu atkārtojumu skatu"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Aizvērt %1$s atgādinājumu"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Paslēpt šo paziņojumu"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -4041,10 +4014,6 @@ msgstr "Fails ir pārvietots"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Faila vārds"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Faila nosaukumu, noklikšķiniet lai pārdēvētu"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6418,6 +6387,18 @@ msgstr "Atvērt apraksta paneli"
 msgid "Open external link"
 msgstr "Atvērt ārējo saiti"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Atvērt"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Noklikšķiniet lai atvērtu. Pārvelciet uz darbvirsmu lai lejuplādētu."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7728,6 +7709,12 @@ msgstr "Noņemts %1$s, %2$s."
 msgid "Rename"
 msgstr "Pārsaukt"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Pārdēvēt mapi"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Pārdēvēt mapi"
@@ -7845,8 +7832,15 @@ msgstr "Atvaļināts"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Vēlreiz"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Noklikšķiniet lai mēģinātu vēlāk vēlreiz"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8498,6 +8492,12 @@ msgstr "Rādīt vārdus"
 msgid "Show next day"
 msgstr "Rādīt nākošo dienu"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "Noklikšķiniet, lai parādītu vai slēptu papildus darbības."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Rādīt iepriekšējo dienu"
@@ -8737,6 +8737,12 @@ msgstr "Uzsākt tūri"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Lai meklētu lietotājus, sāciet rakstīt"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Sākuma datums"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9928,6 +9934,12 @@ msgstr "Kopā: %1$s pieprasījumi"
 msgid "Town"
 msgstr "Pilsēta"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Noklikšķiniet lai mēģinātu vēlreiz."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Izmēģineit tūlīt!"
@@ -10101,6 +10113,12 @@ msgstr "Ielādēt"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Ielādēt failu"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Ielādēt failu"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12620,8 +12638,23 @@ msgstr "yyyy"
 #~ "Noklikšķiniet uz burta kreisajā malā novietotajā navigācijas joslā lai "
 #~ "uzrādītu atbilstošās kontaktpersonas no izvēlētās adrešu grāmatas."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Noklikšķiniet, lai aizvērtu šo paziņojumu"
+
+#~ msgid "Click to open."
+#~ msgstr "Noklikšķiniet lai atvērtu."
+
+#~ msgid "Click to retry"
+#~ msgstr "Noklikšķiniet lai mēģinātu vēlreiz"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Noklikšķiniet, lai izvēlētos kontaktus"
+
+#~ msgid "Click to start video"
+#~ msgstr "Noklikšķiniet, lai atskaņotu video"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Noklikšķiniet, lai ielādētu attēlu"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -13727,6 +13760,9 @@ msgstr "yyyy"
 
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Faila nosaukumu, noklikšķiniet lai pārdēvētu"
 
 #~ msgid "File name:"
 #~ msgstr "Faila vārds:"
@@ -15200,11 +15236,6 @@ msgstr "yyyy"
 #~ "pašreizējās darba dienas garumā. Jūs varat izmantot vairākus pārlūka "
 #~ "logus darbam ar sistēmu. Neizmantojiet šo opciju ja pieslēdzaties no "
 #~ "sveša vai publiska datora."
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Atvērt"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Atvērt jaunā lapā"

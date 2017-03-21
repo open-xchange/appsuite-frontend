@@ -1339,6 +1339,11 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+msgid "Authorize your account again"
+msgstr ""
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1621,7 +1626,6 @@ msgstr ""
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1842,53 +1846,8 @@ msgstr ""
 msgid "Click on the links to change the values."
 msgstr ""
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr ""
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr ""
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr ""
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr ""
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
-msgstr ""
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr ""
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr ""
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr ""
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -1939,9 +1898,17 @@ msgstr ""
 msgid "Close premium features"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+msgid "Close recurrence view"
+msgstr ""
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
+msgstr ""
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+msgid "Close this notification"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
@@ -3831,10 +3798,6 @@ msgstr ""
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
 msgstr ""
 
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -6069,6 +6032,14 @@ msgstr ""
 msgid "Open external link"
 msgstr ""
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+msgid "Open file"
+msgstr ""
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+msgid "Open file. Drag to your desktop to download."
+msgstr ""
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7327,6 +7298,10 @@ msgstr ""
 msgid "Rename"
 msgstr ""
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Rename File"
+msgstr ""
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr ""
@@ -7438,7 +7413,12 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
+msgstr ""
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Retry later."
 msgstr ""
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
@@ -8061,6 +8041,10 @@ msgstr ""
 msgid "Show next day"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Show or hide actions for advanced users."
+msgstr ""
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr ""
@@ -8291,6 +8275,10 @@ msgstr ""
 #: apps/io.ox/files/share/permissions.js
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
+msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+msgid "Start video"
 msgstr ""
 
 #. Connection security. StartTLS.
@@ -9345,6 +9333,10 @@ msgstr ""
 msgid "Town"
 msgstr ""
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+msgid "Try again."
+msgstr ""
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr ""
@@ -9510,6 +9502,10 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr ""
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Upload image"
 msgstr ""
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files

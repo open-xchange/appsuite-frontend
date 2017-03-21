@@ -1368,6 +1368,13 @@ msgstr "Autentificación"
 msgid "Author"
 msgstr "Autor"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Pulse para autorizar su cuenta de nuevo"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1666,7 +1673,6 @@ msgstr "Calendarios"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1890,54 +1896,9 @@ msgstr "Pulse en una frase para elegir cuándo repetir la cita."
 msgid "Click on the links to change the values."
 msgstr "Pulse en los enlaces para cambiar los valores."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Pulse para autorizar su cuenta de nuevo"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Pulse para cerrar la vista de recurrencia"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Pulse para cerrar esta notificación"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Pulse para abrir."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Pulse para abrir. Arrastre a su escritorio para descargar."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Pulse para reproducir fichero de audio"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Pulse para reintentarlo"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Pulse para reintentarlo más tarde."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Pulse para mostrar u ocultar acciones para usuarios avanzados."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Pulse para comenzar el vídeo"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Pulse para intentarlo otra vez."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Pulse para subir una imagen"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1987,10 +1948,22 @@ msgstr "Cerrar área de notificaciones"
 msgid "Close premium features"
 msgstr "Cerrar las características premium"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Pulse para cerrar la vista de recurrencia"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Cerrar recordatorio de %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Ocultar esta notificación"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3948,10 +3921,6 @@ msgstr "El fichero se ha movido"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Nombre de fichero"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Nombre del fichero, pulsar para renombrar"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6260,6 +6229,18 @@ msgstr "Abrir panel de descripción"
 msgid "Open external link"
 msgstr "Abrir enlace externo"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Abrir"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Pulse para abrir. Arrastre a su escritorio para descargar."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7566,6 +7547,12 @@ msgstr "Eliminado %1$s, %2$s."
 msgid "Rename"
 msgstr "Renombrar"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Renombrar carpeta"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Renombrar carpeta"
@@ -7677,8 +7664,15 @@ msgstr "Jubilado"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Reintentar"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Pulse para reintentarlo más tarde."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8319,6 +8313,12 @@ msgstr "Mostrar nombres"
 msgid "Show next day"
 msgstr "Mostrar día siguiente"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "Pulse para mostrar u ocultar acciones para usuarios avanzados."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Mostrar día anterior"
@@ -8556,6 +8556,12 @@ msgstr "Comenzar visita"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Comience a escribir para buscar nombres de usuario"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Fecha de comienzo"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9722,6 +9728,12 @@ msgstr "Total: %1$s peticiones"
 msgid "Town"
 msgstr "Ciudad"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Pulse para intentarlo otra vez."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "¡Pruébelo ahora!"
@@ -9894,6 +9906,12 @@ msgstr "Subir"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Subir fichero"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Subir fichero"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -13941,8 +13959,23 @@ msgstr "yyyy"
 #~ "mostrar los contactos correspondientes de la libreta de direcciones "
 #~ "seleccionada."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Pulse para cerrar esta notificación"
+
+#~ msgid "Click to open."
+#~ msgstr "Pulse para abrir."
+
+#~ msgid "Click to retry"
+#~ msgstr "Pulse para reintentarlo"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Pulse para seleccionar contactos"
+
+#~ msgid "Click to start video"
+#~ msgstr "Pulse para comenzar el vídeo"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Pulse para subir una imagen"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -15290,6 +15323,9 @@ msgstr "yyyy"
 
 #~ msgid "Fiji"
 #~ msgstr "Fiji"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Nombre del fichero, pulsar para renombrar"
 
 #~ msgid "File name:"
 #~ msgstr "Nombre de fichero:"
@@ -16945,11 +16981,6 @@ msgstr "yyyy"
 #~ "de trabajo. Puede utilizar varias ventanas del navegador para trabajar "
 #~ "con el software colaborativo. No emplee esta opción si trabaja desde un "
 #~ "ordenador de terceros (por ejemplo, desde un cibercafé)"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Abrir"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Abrir en nueva pestaña"

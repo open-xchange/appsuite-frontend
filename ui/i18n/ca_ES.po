@@ -1413,6 +1413,13 @@ msgstr "Autentificació"
 msgid "Author"
 msgstr "Autor"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Premeu per a autoritzar-hi el vostre compte de nou"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1716,7 +1723,6 @@ msgstr "Calendari"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1948,57 +1954,9 @@ msgstr "Premeu una opció per a triar quan repetir la cita."
 msgid "Click on the links to change the values."
 msgstr "Premeu els enllaços per a canviar els valors."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Premeu per a autoritzar-hi el vostre compte de nou"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Tanca per a tancar la vista de recurrència"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Premeu per a tancar aquesta notificació"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Premeu per a obrir."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr ""
-"Premeu per a obrir-ho. Arrossegau-ho al vostre escriptori per a descarregar-"
-"ho."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 #, fuzzy
 msgid "Click to play audio file"
-msgstr "Premeu per a puja una imatge"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Premeu per a tornar-ho a provar"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Premeu per a provar-ho més tard."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-#, fuzzy
-msgid "Click to start video"
-msgstr "Premeu per a provar-ho de nou."
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Premeu per a provar-ho de nou."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
 msgstr "Premeu per a puja una imatge"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -2052,11 +2010,22 @@ msgstr "L'àrea de notificació està oberta"
 msgid "Close premium features"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Tanca per a tancar la vista de recurrència"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
 msgid "Close reminder for %1$s"
 msgstr "tanca per %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+msgid "Close this notification"
+msgstr "Premeu per a tancar aquesta notificació"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
@@ -4071,10 +4040,6 @@ msgstr "El fitxer ha estat mogut"
 #, fuzzy
 msgid "File name"
 msgstr "Segon nom"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr ""
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6471,6 +6436,20 @@ msgstr "Descripció del treball"
 msgid "Open external link"
 msgstr "Obre l'enllaç extern"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "New file"
+msgid "Open file"
+msgstr "Nou fitxer"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr ""
+"Premeu per a obrir-ho. Arrossegau-ho al vostre escriptori per a descarregar-"
+"ho."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7800,6 +7779,12 @@ msgstr "Suprimeix"
 msgid "Rename"
 msgstr "Reanomena"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Reanomena la carpeta"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Reanomena la carpeta"
@@ -7918,8 +7903,15 @@ msgstr "Jubilat"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Torna-ho a provar"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Premeu per a provar-ho més tard."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8571,6 +8563,10 @@ msgstr "Mostra com a"
 msgid "Show next day"
 msgstr "Mostra l'endemà"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Show or hide actions for advanced users."
+msgstr ""
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Mostra el dia anterior"
@@ -8816,6 +8812,12 @@ msgstr ""
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr ""
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Data d'inici"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9986,6 +9988,12 @@ msgstr "Total: %1$s peticions"
 msgid "Town"
 msgstr "Localitat"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Premeu per a provar-ho de nou."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr ""
@@ -10158,6 +10166,12 @@ msgstr ""
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
 msgstr ""
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Reload page"
+msgid "Upload image"
+msgstr "Actualitza la pàgina"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 #, fuzzy
@@ -11878,9 +11892,25 @@ msgstr ""
 #~ msgid "Click here for free trial."
 #~ msgstr "Premeu aquí per a una prova gratuïta."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Premeu per a tancar aquesta notificació"
+
+#~ msgid "Click to open."
+#~ msgstr "Premeu per a obrir."
+
+#~ msgid "Click to retry"
+#~ msgstr "Premeu per a tornar-ho a provar"
+
 #, fuzzy
 #~ msgid "Click to select contacts"
 #~ msgstr "Crea un contacte"
+
+#, fuzzy
+#~ msgid "Click to start video"
+#~ msgstr "Premeu per a provar-ho de nou."
+
+#~ msgid "Click to upload image"
+#~ msgstr "Premeu per a puja una imatge"
 
 #~ msgid "Close all"
 #~ msgstr "Tanca-ho tot"

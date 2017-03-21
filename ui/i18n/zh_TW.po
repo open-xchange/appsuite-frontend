@@ -1340,6 +1340,13 @@ msgstr "驗證"
 msgid "Author"
 msgstr "作者"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "點擊以再次重新授權您的帳號"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1626,7 +1633,6 @@ msgstr "日曆"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1847,54 +1853,9 @@ msgstr "點下句子修改在何時重複約會。"
 msgid "Click on the links to change the values."
 msgstr "點下鏈結修改數值。"
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "點擊以再次重新授權您的帳號"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "點擊關閉重複發生視圖"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "點擊關閉此通知"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "單點開啟。"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "單點開啟。拖曳至您的桌面以下載。"
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "點擊播放音訊檔案"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "點擊以重試。"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "點擊以稍後重試。"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "點擊以顯示或隱藏進階使用者選項。"
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "點擊開始播放影片"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "點擊以再試一次。"
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "單點上傳圖像。"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1944,10 +1905,22 @@ msgstr "關閉通知區域"
 msgid "Close premium features"
 msgstr "關閉收費功能"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "點擊關閉重複發生視圖"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "關閉 %1$s 提醒"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "隱藏此通知"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3868,10 +3841,6 @@ msgstr "已移動檔案"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "檔案名稱"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "檔案完成，點擊以重新命名"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6153,6 +6122,18 @@ msgstr "開啟描述面板"
 msgid "Open external link"
 msgstr "開啟外部連結"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "打開"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "單點開啟。拖曳至您的桌面以下載。"
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7427,6 +7408,12 @@ msgstr "已移除 %1$s, %2$s。"
 msgid "Rename"
 msgstr "重命名"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "重新命名資料夾"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "重新命名資料夾"
@@ -7538,8 +7525,15 @@ msgstr "已退休"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "蟲試"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "點擊以稍後重試。"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8174,6 +8168,12 @@ msgstr "顯示名稱"
 msgid "Show next day"
 msgstr "顯示下一天"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "點擊以顯示或隱藏進階使用者選項。"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "顯示上一天"
@@ -8406,6 +8406,12 @@ msgstr "開始導覽"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "輸入使用者名稱進行搜尋"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "起始日期"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9513,6 +9519,12 @@ msgstr "總計: %1$s 請求"
 msgid "Town"
 msgstr "城市"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "點擊以再試一次。"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "立刻試用！"
@@ -9683,6 +9695,12 @@ msgstr "上載"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "上傳檔案"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "上傳檔案"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12057,8 +12075,23 @@ msgstr "年"
 #~ "display the corresponding contacts from the selected address book."
 #~ msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
 
+#~ msgid "Click to close this notification"
+#~ msgstr "點擊關閉此通知"
+
+#~ msgid "Click to open."
+#~ msgstr "單點開啟。"
+
+#~ msgid "Click to retry"
+#~ msgstr "點擊以重試。"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "點擊選擇聯絡人"
+
+#~ msgid "Click to start video"
+#~ msgstr "點擊開始播放影片"
+
+#~ msgid "Click to upload image"
+#~ msgstr "單點上傳圖像。"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -13086,6 +13119,9 @@ msgstr "年"
 #~ msgid "Fax (private)"
 #~ msgstr "傳真（私人）"
 
+#~ msgid "File name, click to rename"
+#~ msgstr "檔案完成，點擊以重新命名"
+
 #~ msgid "File names must not be empty"
 #~ msgstr "檔案名稱不能為空"
 
@@ -13793,11 +13829,6 @@ msgstr "年"
 
 #~ msgid "Only show widget summary on mobile devices"
 #~ msgstr "只在行動裝置中顯示小工具摘要"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "打開"
 
 #~ msgid "Open in new tab"
 #~ msgstr "在新分頁開啟"

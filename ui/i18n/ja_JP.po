@@ -1325,6 +1325,13 @@ msgstr "認証"
 msgid "Author"
 msgstr "作成者"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "クリックしてアカウントを再認証"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1615,7 +1622,6 @@ msgstr "予定表"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1837,55 +1843,9 @@ msgstr "繰り返しのタイプを選択するには、文をクリックしま
 msgid "Click on the links to change the values."
 msgstr "値を変更するには、リンクをクリックします。"
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "クリックしてアカウントを再認証"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "繰り返しビューを閉じるには、クリックしてください。"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "この通知を閉じるには、クリックしてください。"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "クリックすると開きます。"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr ""
-"クリックすると開きます。ダウンロードするには、デスクトップにドラッグします。"
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "クリックして画像を再生"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "再試行"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "後で再試行"
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "クリックして、上級ユーザーのアクションを表示または隠します。"
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "クリックしてビデオを再生"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "クリックして再試行"
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "クリックして画像をアップロード"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1935,10 +1895,22 @@ msgstr "通知エリアを閉じる"
 msgid "Close premium features"
 msgstr "プレミアム機能を閉じます"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "繰り返しビューを閉じるには、クリックしてください。"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "%1$s のアラームを閉じる"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "この通知を隠す。"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3880,10 +3852,6 @@ msgstr "ファイルを移動しました。"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "ファイル名"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "ファイル名、クリックして名前を変更"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6180,6 +6148,19 @@ msgstr "説明パネルを開く"
 msgid "Open external link"
 msgstr "外部リンクを開く"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open "
+msgid "Open file"
+msgstr "開く"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr ""
+"クリックすると開きます。ダウンロードするには、デスクトップにドラッグします。"
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7466,6 +7447,12 @@ msgstr "%1$s と %2$s を削除しました。"
 msgid "Rename"
 msgstr "名前を変更"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "フォルダ名を変更"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "フォルダ名を変更"
@@ -7577,8 +7564,15 @@ msgstr "退職"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "再試行"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "後で再試行"
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8209,6 +8203,12 @@ msgstr "名前を表示する"
 msgid "Show next day"
 msgstr "次の日を表示"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "クリックして、上級ユーザーのアクションを表示または隠します。"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "前の日を表示"
@@ -8446,6 +8446,12 @@ msgstr "ツアーを開始"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "ユーザー名を検索するために入力を開始してください"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "開始日"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9587,6 +9593,12 @@ msgstr "総数: %1$s 件のリクエスト"
 msgid "Town"
 msgstr "市区町村"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "クリックして再試行"
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "購入！"
@@ -9760,6 +9772,12 @@ msgstr "アップロード"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "ファイルをアップロード"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "ファイルをアップロード"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12864,8 +12882,23 @@ msgstr "yyyy"
 #~ "選択したアドレス帳にある連絡先を表示するには、ナビゲーション バーの左側に"
 #~ "ある該当する文字をクリックします。"
 
+#~ msgid "Click to close this notification"
+#~ msgstr "この通知を閉じるには、クリックしてください。"
+
+#~ msgid "Click to open."
+#~ msgstr "クリックすると開きます。"
+
+#~ msgid "Click to retry"
+#~ msgstr "再試行"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "クリックして連絡先を選択"
+
+#~ msgid "Click to start video"
+#~ msgstr "クリックしてビデオを再生"
+
+#~ msgid "Click to upload image"
+#~ msgstr "クリックして画像をアップロード"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -14156,6 +14189,9 @@ msgstr "yyyy"
 
 #~ msgid "Fiji"
 #~ msgstr "フィジー"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "ファイル名、クリックして名前を変更"
 
 #~ msgid "File name:"
 #~ msgstr "ファイル名:"
@@ -15714,10 +15750,6 @@ msgstr "yyyy"
 #~ "ウェアを使用する際、いくつかのブラウザ ウィンドウを利用できます。また、外"
 #~ "部のコンピュータ (例えば、インターネットカフェ内) を使用している場合には、"
 #~ "このオプションを使用しないでください。"
-
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "開く"
 
 #~ msgid "Open in new tab"
 #~ msgstr "新規タブで開く"

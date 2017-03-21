@@ -1400,6 +1400,13 @@ msgstr "Autentificare"
 msgid "Author"
 msgstr "Autor"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Apăsați aici pentru a autoriza contul dumneavoastră din nou"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1694,7 +1701,6 @@ msgstr "Calendare"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1921,55 +1927,9 @@ msgstr ""
 msgid "Click on the links to change the values."
 msgstr "Apăsați pe legături pentru a modifica valorile."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Apăsați aici pentru a autoriza contul dumneavoastră din nou"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Apăsați pentru a închide vederea pe serii"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Apăsați pentru a închide notificarea"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Apăsați aici pentru a deschide."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Apăsați aici pentru a deschide. Glisați pe desktop pentru a descărca."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Apăsați pentru a reda fișierul audio"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Apăsați aici pentru a încerca din nou"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Apăsați aici pentru a încerca din nou."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-"Apăsați pentru a afișa sau ascunde acțiunile pentru utilizatorii avansați."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Apăsați pentru a porni înregistrarea video"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Apăsați aici pentru a încerca din nou."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Apăsați aici pentru a încărca imaginea"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -2019,10 +1979,22 @@ msgstr "Închide zona de notificare"
 msgid "Close premium features"
 msgstr "Închide funcționalitățile premium"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Apăsați pentru a închide vederea pe serii"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Închide mementoul pentru %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Ascunde această notificare"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3988,10 +3960,6 @@ msgstr "Fișierul a fost mutat"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Nume fișier"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Nume fișier, apăsați pentru redenumire"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6304,6 +6272,18 @@ msgstr "Deschide panoul descriere"
 msgid "Open external link"
 msgstr "Deschide legătura externă"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Deschide"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Apăsați aici pentru a deschide. Glisați pe desktop pentru a descărca."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7603,6 +7583,12 @@ msgstr "S-a eliminat %1$s, %2$s."
 msgid "Rename"
 msgstr "Redenumire"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Redenumește dosarul"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Redenumește dosarul"
@@ -7714,8 +7700,15 @@ msgstr "Pensionar"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Încearcă din nou"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Apăsați aici pentru a încerca din nou."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8359,6 +8352,13 @@ msgstr "Afișează numele"
 msgid "Show next day"
 msgstr "Afișează ziua următoare"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr ""
+"Apăsați pentru a afișa sau ascunde acțiunile pentru utilizatorii avansați."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Afișează ziua precedentă"
@@ -8596,6 +8596,12 @@ msgstr "Începe vizita ghidată"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Începeți să tastați pentru a căuta nume de utilizatori"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Dată de început"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9774,6 +9780,12 @@ msgstr "Total: %1$s cereri"
 msgid "Town"
 msgstr "Oraș"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Apăsați aici pentru a încerca din nou."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Încercați acum!"
@@ -9947,6 +9959,12 @@ msgstr "Încarcă"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Încarcă un fișier"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Încarcă un fișier"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -12450,8 +12468,23 @@ msgstr "aaaa"
 #~ "Apăsați pe o literă din partea stângă a barei de navigare pentru a afișa "
 #~ "contactele corespunzătoare din agenda de contacte selectată."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Apăsați pentru a închide notificarea"
+
+#~ msgid "Click to open."
+#~ msgstr "Apăsați aici pentru a deschide."
+
+#~ msgid "Click to retry"
+#~ msgstr "Apăsați aici pentru a încerca din nou"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Apăsați pentru a selecta contactele"
+
+#~ msgid "Click to start video"
+#~ msgstr "Apăsați pentru a porni înregistrarea video"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Apăsați aici pentru a încărca imaginea"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -13558,6 +13591,9 @@ msgstr "aaaa"
 
 #~ msgid "Fiji"
 #~ msgstr "Fiji"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Nume fișier, apăsați pentru redenumire"
 
 #~ msgid "File name:"
 #~ msgstr "Nume fișier:"
@@ -15042,11 +15078,6 @@ msgstr "aaaa"
 #~ "ferestre de navigare pentru a lucra în programele partajate. Nu utilizați "
 #~ "această opțiune când lucrați pe calculatorul unei alte persoane (de "
 #~ "exemplu într-un internet café)"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Deschide"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Deschide într-o filă nouă"

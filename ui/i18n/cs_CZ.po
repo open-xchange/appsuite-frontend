@@ -1397,6 +1397,13 @@ msgstr "Autentizace"
 msgid "Author"
 msgstr "Autor"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Klikněte pro opětovnou autorizaci svého účtu"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1686,7 +1693,6 @@ msgstr "Kalendáře"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1909,54 +1915,9 @@ msgstr "Klikněte na větu pro vybrání, kdy schůzku opakovat."
 msgid "Click on the links to change the values."
 msgstr "Klikněte na odkazy pro změnu hodnot."
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Klikněte pro opětovnou autorizaci svého účtu"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Klikněte pro zavření pohledu na opakování"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Kliknutím zavřete toto upozornění"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Kliknutím otevřete."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Kliknutím otevřete. Přetažením na plochu stáhnete."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Klikněte pro přehrání audio souboru"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Klikněte, chcete-li to zkusit znovu."
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Klikněte, chcete-li to zkusit později znovu."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Kliknutím zobrazíte nebo skryjete činnosti pro pokročilé uživatele."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Klikněte pro spuštění videa"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Klikněte, chcete-li to zkusit znovu."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Kliknutím nahrajete obrázek"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -2006,10 +1967,22 @@ msgstr "Zavřít oznamovací oblast"
 msgid "Close premium features"
 msgstr "Zavřít prémiové funkce"
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Klikněte pro zavření pohledu na opakování"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Zavřít upomínku pro %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Skrýt toto oznámení"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -3960,10 +3933,6 @@ msgstr "Soubor byl přesunut"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Název souboru"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Název souboru, klikněte pro přejmenování"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6271,6 +6240,18 @@ msgstr "Otevřít popisní panel"
 msgid "Open external link"
 msgstr "Otevřít externí odkaz"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Open"
+msgid "Open file"
+msgstr "Otevřít"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Kliknutím otevřete. Přetažením na plochu stáhnete."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7565,6 +7546,12 @@ msgstr "Odstraněn %1$s, %2$s."
 msgid "Rename"
 msgstr "Přejmenovat"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Přejmenovat složku"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Přejmenovat složku"
@@ -7676,8 +7663,15 @@ msgstr "V důchodu"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Zkusit znovu"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Klikněte, chcete-li to zkusit později znovu."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8320,6 +8314,12 @@ msgstr "Zobrazit jména"
 msgid "Show next day"
 msgstr "Zobrazit následující den"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Click to show or hide actions for advanced users."
+msgid "Show or hide actions for advanced users."
+msgstr "Kliknutím zobrazíte nebo skryjete činnosti pro pokročilé uživatele."
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Zobrazit předchozí den"
@@ -8557,6 +8557,12 @@ msgstr "Začít prohlídku"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Začněte psát a uživatelská jména budou automaticky vyhledávána"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Datum začátku"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9715,6 +9721,12 @@ msgstr "Celkem: %1$s požadavků"
 msgid "Town"
 msgstr "Město"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Klikněte, chcete-li to zkusit znovu."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "Vyzkoušet!"
@@ -9887,6 +9899,12 @@ msgstr "Nahrát"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
+msgstr "Nahrát soubor"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Upload file"
+msgid "Upload image"
 msgstr "Nahrát soubor"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -13928,8 +13946,23 @@ msgstr "rrrr"
 #~ "Kliknutím na písmeno v levé části navigační lišty zobrazíte příslušné "
 #~ "kontakty z vybrané knihy adres."
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Kliknutím zavřete toto upozornění"
+
+#~ msgid "Click to open."
+#~ msgstr "Kliknutím otevřete."
+
+#~ msgid "Click to retry"
+#~ msgstr "Klikněte, chcete-li to zkusit znovu."
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Klikněte pro výběr kontaktů"
+
+#~ msgid "Click to start video"
+#~ msgstr "Klikněte pro spuštění videa"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Kliknutím nahrajete obrázek"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -15272,6 +15305,9 @@ msgstr "rrrr"
 
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Název souboru, klikněte pro přejmenování"
 
 #~ msgid "File name:"
 #~ msgstr "Název souboru:"
@@ -16904,11 +16940,6 @@ msgstr "rrrr"
 #~ "přihlašovací údaje budou lokálně uloženy pro aktuální pracovní den. S "
 #~ "aplikací můžete pracovat ve více oknech prohlížeče. Nepoužívejte tuto "
 #~ "volbu, pokud pracujete na cizím počítači (např. v internetové kavárně)."
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Otevřít"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Otevřít v nové záložce"

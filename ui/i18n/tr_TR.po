@@ -1359,6 +1359,13 @@ msgstr "Doğrulama"
 msgid "Author"
 msgstr "Yazar"
 
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+#, fuzzy
+#| msgid "Click to authorize your account again"
+msgid "Authorize your account again"
+msgstr "Hesabınızı yeniden doğrulamak için tıklayınız"
+
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
 msgid "Auto Forward"
@@ -1666,7 +1673,6 @@ msgstr "Takvim"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1894,55 +1900,9 @@ msgstr "Görüşmeyi ne zaman tekrar edeceğinizi seçmek için cümleye tıklay
 msgid "Click on the links to change the values."
 msgstr "Değerleri değiştirmek için linklere tıklayınız"
 
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Hesabınızı yeniden doğrulamak için tıklayınız"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Yineleme görünüşünü kapatmak için tıklayınız"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Bu bildirimi kapatmak için tıklayınız"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Açmak için tıklayın. "
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Açmak için tıklayın. İndirmek için masaüstünüze sürükleyin."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 #, fuzzy
 msgid "Click to play audio file"
-msgstr "Resim yüklemek için tıklayın"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Yeniden denemek için tıklayın"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Sonra tekrar denemek için tıklayın."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr ""
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-#, fuzzy
-msgid "Click to start video"
-msgstr "Yeniden denemek için tıklayın."
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Yeniden denemek için tıklayın."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
 msgstr "Resim yüklemek için tıklayın"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -1996,11 +1956,23 @@ msgstr "Bildirim alanı açıldı"
 msgid "Close premium features"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
+#, fuzzy
+#| msgid "Click to close the recurrence view"
+msgid "Close recurrence view"
+msgstr "Yineleme görünüşünü kapatmak için tıklayınız"
+
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 #, fuzzy
 msgid "Close reminder for %1$s"
 msgstr "%1$s için kapat"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+#, fuzzy
+#| msgid "Hide this notification"
+msgid "Close this notification"
+msgstr "Bu bildirimi gizle"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 #, fuzzy
@@ -4032,11 +4004,6 @@ msgstr "Dosya taşındı"
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Dosya ismi"
-
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-#, fuzzy
-msgid "File name, click to rename"
-msgstr "Dosya adı, tekrar adlandırmak için iki kere tıklayınız"
 
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -6414,6 +6381,18 @@ msgstr "İş tanımı"
 msgid "Open external link"
 msgstr "Harici linki aç"
 
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "New file"
+msgid "Open file"
+msgstr "Yeni dosya"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Click to open. Drag to your desktop to download."
+msgid "Open file. Drag to your desktop to download."
+msgstr "Açmak için tıklayın. İndirmek için masaüstünüze sürükleyin."
+
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
 #: apps/io.ox/files/favorite/view-options.js
@@ -7754,6 +7733,12 @@ msgstr "Şunu kaldır: %1$s"
 msgid "Rename"
 msgstr "Yeniden adlandır"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+#, fuzzy
+#| msgid "Rename folder"
+msgid "Rename File"
+msgstr "Dosyayı yeniden adlandır"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Dosyayı yeniden adlandır"
@@ -7874,8 +7859,15 @@ msgstr "Emekli "
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Yeniden dene"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Click to retry later."
+msgid "Retry later."
+msgstr "Sonra tekrar denemek için tıklayın."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -8530,6 +8522,11 @@ msgstr "İsimleri göster"
 msgid "Show next day"
 msgstr "Bir sonraki günü göster"
 
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Show or hide actions for advanced users."
+msgstr "Gelişmiş filtreleri göster"
+
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
 msgstr "Bir önceki günü göster"
@@ -8778,6 +8775,12 @@ msgstr "Başlangıç tarihi"
 #: apps/plugins/administration/groups/settings/edit.js
 msgid "Start typing to search for user names"
 msgstr "Kullanıcı adları için arama yapmaya başlayın"
+
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+#, fuzzy
+#| msgid "Start date"
+msgid "Start video"
+msgstr "Başlangıç tarihi"
 
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -9968,6 +9971,12 @@ msgstr "Toplam: %1$s talepler"
 msgid "Town"
 msgstr "Şehir"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+#| msgid "Click to try again."
+msgid "Try again."
+msgstr "Yeniden denemek için tıklayın."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 #, fuzzy
 msgid "Try now!"
@@ -10141,6 +10150,11 @@ msgstr "Yükleniyor %1$s"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 #, fuzzy
 msgid "Upload file"
+msgstr "Yerel dosya yükleyin"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+#, fuzzy
+msgid "Upload image"
 msgstr "Yerel dosya yükleyin"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
@@ -11751,9 +11765,25 @@ msgstr "yyyy"
 #~ msgid "Click here for free trial."
 #~ msgstr "Bedava deneme için tıklayınız"
 
+#~ msgid "Click to close this notification"
+#~ msgstr "Bu bildirimi kapatmak için tıklayınız"
+
+#~ msgid "Click to open."
+#~ msgstr "Açmak için tıklayın. "
+
+#~ msgid "Click to retry"
+#~ msgstr "Yeniden denemek için tıklayın"
+
 #, fuzzy
 #~ msgid "Click to select contacts"
 #~ msgstr "İletişim bilgisini sil"
+
+#, fuzzy
+#~ msgid "Click to start video"
+#~ msgstr "Yeniden denemek için tıklayın."
+
+#~ msgid "Click to upload image"
+#~ msgstr "Resim yüklemek için tıklayın"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Bu hatırlatıcıyı kapat"
@@ -11877,6 +11907,10 @@ msgstr "yyyy"
 
 #~ msgid "Facebook reported an error:"
 #~ msgstr "Facebook bir hata bildirdi:"
+
+#, fuzzy
+#~ msgid "File name, click to rename"
+#~ msgstr "Dosya adı, tekrar adlandırmak için iki kere tıklayınız"
 
 #~ msgid "File: %1$s"
 #~ msgstr "Dosya: %1$s"
@@ -12122,10 +12156,6 @@ msgstr "yyyy"
 
 #~ msgid "Send feedback"
 #~ msgstr "Geri bildirim gönderin"
-
-#, fuzzy
-#~ msgid "Settings for advanced users"
-#~ msgstr "Gelişmiş filtreleri göster"
 
 #, fuzzy
 #~ msgid ""
