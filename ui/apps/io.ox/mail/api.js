@@ -1454,7 +1454,8 @@ define('io.ox/mail/api', [
                 // not really sure if limit works as expected
                 // if I only fetch 10 mails and my inbox has some unread mails but the first 10 are seen
                 // I still get the unread mails
-                limit: 100
+                limit: 100,
+                timezone: 'utc'
             }
         })
         .then(function (unseen) {
