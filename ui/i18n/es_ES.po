@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 10:40+0100\n"
-"Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
-"Language-Team: Spanish <es@bureau-cornavin.com>\n"
+"PO-Revision-Date: 2017-03-10 23:45+0100\n"
+"Last-Translator: Andres Herrera <admin@innovacionycualificacion.com>\n"
+"Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4106,7 +4106,7 @@ msgstr "Continuar"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "La aplicación solicitada no está disponible en este momento."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4883,6 +4883,18 @@ msgid "Preview"
 msgstr "Vista previa"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Deposite aquí imágenes incrustadas"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Por favor, deposite aquí solo imágenes. Si quiere enviar otros ficheros, "
+"puede enviarlos como adjuntos."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr ""
 "Zona de texto enriquecido. Pulse ALT-F10 para mostrar la barra de "
@@ -5510,6 +5522,10 @@ msgstr "Lo sentimos, esta página no está disponible en este momento."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Lo sentimos, no hay vista previa disponible para esta imagen."
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Lo sentimos, no hay vista previa disponible para este fichero."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -17684,9 +17700,6 @@ msgstr "Añadir a %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "No se pudo cargar este fichero."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Lo sentimos, no hay vista previa disponible para este fichero."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Ordenar sus correos electrónicos"

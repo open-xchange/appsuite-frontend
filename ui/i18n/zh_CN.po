@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 11:01+0100\n"
+"PO-Revision-Date: 2017-03-10 09:29+1000\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: zh_CN\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4030,7 +4030,7 @@ msgstr "继续"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "请求的应用程序现在不可用。"
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4784,6 +4784,16 @@ msgid "Preview"
 msgstr "概览"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "将内联图像放在此处"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr "图像请只放在此处。如果您想要发送的其他文件，您能够以附件的方式发送。"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Rich Text 区域。按下 ALT-F10 叫出工具条"
 
@@ -5391,6 +5401,10 @@ msgstr "抱歉，此页面暂时不可用。"
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "抱歉，此图像没有预览可用。"
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "抱歉，此文件没有预览可用。"
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -13757,9 +13771,6 @@ msgstr "在 %s 上添加"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "无法上载此文件。"
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "抱歉，此文件没有预览可用。"
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "排序您的电子邮件"

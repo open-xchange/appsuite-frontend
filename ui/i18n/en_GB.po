@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 10:28+0100\n"
+"PO-Revision-Date: 2017-03-10 20:38-0700\n"
 "Last-Translator: Timothy Friesen <timothy.friesen@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
 "Language: en_GB\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4088,7 +4088,7 @@ msgstr "Continue"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "The requested application is not available at this moment."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4857,6 +4857,18 @@ msgid "Preview"
 msgstr "Preview"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Drop inline images here"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Rich Text Area. Press ALT-F10 for tool bar"
 
@@ -5479,6 +5491,10 @@ msgstr "Sorry, this page is not available at the moment."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Sorry, there is no preview available for this image."
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Sorry, there is no preview available for this file."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -12374,9 +12390,6 @@ msgstr "Add on %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "This file could not be uploaded."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Sorry, there is no preview available for this file."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Sorting your email messages"

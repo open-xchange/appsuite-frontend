@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 10:52+0100\n"
+"PO-Revision-Date: 2017-03-13 11:15+0200\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 1.8.12\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4120,7 +4120,7 @@ msgstr "Turpināt"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "Pieprasītā aplikācija pašlaik nav pieejama."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4894,6 +4894,18 @@ msgid "Preview"
 msgstr "Apskats"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Novietojiet iekšrindu attēlus šeit"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Lūdzu šeit novietojiet tikai attēlus. Ja vēlaties nosūtīt cita tipa failus, "
+"sūtiet tos kā pielikumus."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Bagātīga teksta apgabals. Lai iegūtu rīkjoslu, piespiediet ALT-F10"
 
@@ -5522,6 +5534,10 @@ msgstr "Atvainojiet, šī lapa pašlaik nav pieejama."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Atvainojiet, šim attēlam nav apskata iespēju."
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Atvainojiet, šim failam nav apskata iespēju."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -15410,9 +15426,6 @@ msgstr "Pievienot %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Šo failu nevar augšupielādēt."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Atvainojiet, šim failam nav apskata iespēju."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "E-pasta šķirošana"

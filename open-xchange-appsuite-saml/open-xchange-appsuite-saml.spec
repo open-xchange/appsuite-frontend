@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-saml
 Version:        @OXVERSION@
-%define         ox_release 16
+%define         ox_release 17
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Francisco Laguna <francisco.laguna@open-xchange.com>
@@ -49,6 +49,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 /opt/open-xchange/appsuite
 
 %changelog
+* Tue Mar 14 2017 Markus Wagner <markus.wagner@open-xchange.com>
+Build for patch 2017-03-20 (4016)
 * Mon Mar 13 2017 Markus Wagner <markus.wagner@open-xchange.com>
 Build for patch 2017-03-17 (4020)
 * Mon Mar 06 2017 Markus Wagner <markus.wagner@open-xchange.com>

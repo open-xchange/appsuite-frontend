@@ -1,19 +1,19 @@
 # Luiz Fernando Ranghetti <luiz@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
-# Aracele Torres <aracele@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
+# Aracele Torres <aracele@bureau-cornavin.com>, 2013, 2014, 2015, 2016, 2017.
 # Bianca Oliveira <bianca@bureau-cornavin.com>, 2013, 2014, 2015, 2016.
 msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-02-23 10:57+0100\n"
-"Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
-"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"PO-Revision-Date: 2017-03-11 15:30-0300\n"
+"Last-Translator: Aracele Torres <aracele@bureau-cornavin.com>\n"
+"Language-Team: Portuguese <>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Lokalize 2.0\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -4104,7 +4104,7 @@ msgstr "Continuar"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "The requested application is not available at this moment."
-msgstr ""
+msgstr "O aplicativo solicitado não está disponível neste momento."
 
 #. %1$s is the filename
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4880,6 +4880,19 @@ msgid "Preview"
 msgstr "Visualização"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid "Drop inline images here"
+msgstr "Soltar imagens em linha aqui"
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
+msgid ""
+"Please only drop images here. If you want to send other files, you can send "
+"them as attachments."
+msgstr ""
+"Por favor, solte as imagens aqui. Se quiser enviar outros arquivos, pode"
+" enviá-los"
+"como anexos."
+
+#: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
 msgid "Rich Text Area. Press ALT-F10 for toolbar"
 msgstr "Área de Texto Rico. Pressione ALT-F10 para barra de ferramentas"
 
@@ -5504,6 +5517,10 @@ msgstr "Desculpe, esta página não está disponível no momento."
 #: apps/io.ox/core/viewer/views/types/imageview.js module:io.ox/core
 msgid "Sorry, there is no preview available for this image."
 msgstr "Desculpe, não há pré-visualização disponível para esta imagem."
+
+#: apps/io.ox/core/viewer/views/types/textview.js module:io.ox/core
+msgid "Sorry, there is no preview available for this file."
+msgstr "Desculpe, não há pré-visualização disponível para este arquivo."
 
 #: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
 msgid "Your browser does not support the video format of this file."
@@ -14769,9 +14786,6 @@ msgstr "Adicionar em %s"
 #, fuzzy
 #~ msgid "Sorry, the video could not be played."
 #~ msgstr "Este arquivo não pode ser enviado."
-
-#~ msgid "Sorry, there is no preview available for this file."
-#~ msgstr "Desculpe, não há pré-visualização disponível para este arquivo."
 
 #~ msgid "Sorting your E-Mails"
 #~ msgstr "Classificando seus e-mails"

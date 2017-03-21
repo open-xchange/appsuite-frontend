@@ -1692,7 +1692,8 @@ define('io.ox/core/main', [
 
                     // restore apps
                     ox.ui.App.restore().always(function () {
-                        var allUnavailable = true;
+                        // is set false, if default app is 'none' (see Bug 51207)
+                        var allUnavailable = settings.get('autoStart') !== 'none';
                         // auto launch
                         _(baton.autoLaunch)
                         .chain()
