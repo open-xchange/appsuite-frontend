@@ -1403,7 +1403,7 @@ define('io.ox/calendar/week/view', [
             });
 
             // disable d'n'd on small devices
-            if (_.device('touch')) return;
+            if (_.device('smartphone')) return;
 
             // init drag and resize widget on appointments
             var colWidth = this.$('.day:first').outerWidth(),
