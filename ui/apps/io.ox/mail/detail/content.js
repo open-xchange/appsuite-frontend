@@ -194,7 +194,7 @@ define('io.ox/mail/detail/content', [
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
-                } else if (href.indexOf('mailto') > -1) {
+                } else if (href.search(/^\s*mailto\:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();

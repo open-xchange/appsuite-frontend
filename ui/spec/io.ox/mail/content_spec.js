@@ -11,14 +11,14 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define([
-    'io.ox/mail/detail/content'
-], function (content) {
+define(['io.ox/mail/detail/content'], function (content) {
 
     'use strict';
 
     describe('Mail content processing', function () {
+
         describe('Text to HTML', function () {
+
             function process(str) {
                 return content.text2html(str);
             }
@@ -140,6 +140,7 @@ define([
         });
 
         describe('Link Processor', function () {
+
             var cases = {
                 local: '<a href  =  "#some-anchor">',
                 common: '<a href="www.ox.io" target="_blank">',
@@ -247,6 +248,7 @@ define([
         });
 
         describe('mail addresses', function () {
+
             it('should detect email addresses (text/plain)', function () {
                 var result = process('test<br>otto.xantner@open-xchange.com<br>test', 'text/plain');
                 expect(result.content.innerHTML).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a><br>test');
@@ -257,6 +259,11 @@ define([
                 expect(result.content.innerHTML).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a></p>');
             });
 
+            it('should skip mailto as part of a domain name', function () {
+                var result = process('<p><a href="http://mailtool.somehwere.tld">http://mailtool.somehwere.tld</a></p>');
+                expect(result.content.innerHTML).to.equal('<p><a href="http://mailtool.somehwere.tld" target="_blank" rel="noopener">http://mailtool.somehwere.tld</a></p>');
+            });
+
             it('should detect email addresses (text/html; &#64;)', function () {
                 // https://bugs.open-xchange.com/show_bug.cgi?id=29892
                 var result = process('<p><a href="mailto:otto.xantner&#64;open-xchange.com">Otto Xantner</a></p>');
@@ -265,6 +272,7 @@ define([
         });
 
         describe('folders', function () {
+
             it('should detect folder links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234">http://localhost/appsuite/?foo#m=infostore&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234" target="_blank" class="deep-link deep-link-files" role="button">Ordner</a>.</p>');
@@ -282,6 +290,7 @@ define([
         });
 
         describe('files', function () {
+
             it('should detect file links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234&i=0">http://localhost/appsuite/?foo#m=infostore&f=1234&i=0</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234&amp;i=0" target="_blank" class="deep-link deep-link-files" role="button">Datei</a>.</p>');
@@ -304,6 +313,7 @@ define([
         });
 
         describe('appointments', function () {
+
             it('should detect appointment links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&i=0&f=1234">http://localhost/appsuite/?foo#m=calendar&i=0&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-calendar" role="button">Termin</a>.</p>');
@@ -316,6 +326,7 @@ define([
         });
 
         describe('tasks', function () {
+
             it('should detect task links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&i=0&f=1234">http://localhost/appsuite/?foo#m=tasks&i=0&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-tasks" role="button">Aufgabe</a>.</p>');
