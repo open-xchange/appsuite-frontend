@@ -575,7 +575,6 @@ define('io.ox/mail/util', [
 
         fixInlineImages: function (data) {
             // look if /ajax needs do be replaced
-            console.log('add ajax?');
             return data
                 .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1' + prefix)
                 .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1' + prefix)
