@@ -1425,14 +1425,15 @@ define('io.ox/mail/api', [
 
         if (mode === 'zip') {
             first = _(data).first();
-            return coreUtil.getShardingRoot(url + '?' + $.param({
+            // no sharding for zip downloads (problems with iframe cross-origin access)
+            return ox.apiRoot + url + '?' + $.param({
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
                 // required here!
                 session: ox.session
-            }));
+            });
         } else if (mode === 'eml:reference') {
             //if eml stored as reference use parent object
             return this.getUrl(_([].concat(data)).first().parent, 'eml');
@@ -1442,12 +1443,13 @@ define('io.ox/mail/api', [
             // multiple?
             if (data.length > 1) {
                 // zipped
-                return coreUtil.getShardingRoot(url + '?' + $.param({
+                // no sharding for eml (problems with iframe cross-origin access)
+                return ox.apiRoot + url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,
                     id: _(data).pluck('id').join(','),
                     session: ox.session
-                }));
+                });
             }
             // single EML
             url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
@@ -1457,7 +1459,8 @@ define('io.ox/mail/api', [
                     save: 1,
                     session: ox.session
                 }));
-            return coreUtil.getShardingRoot(url);
+            // no sharding for eml (problems with iframe cross-origin access)
+            return ox.apiRoot + url;
         }
 
         // inject filename for more convenient file downloads
