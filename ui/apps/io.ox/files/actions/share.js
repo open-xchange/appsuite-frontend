@@ -39,17 +39,20 @@ define('io.ox/files/actions/share', [
         // build header
         if (first.isFile()) {
             //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for file "%1$d"', 'Sharing link created for %1$d items', count), filler);
         } else if (first.isFolder()) {
-            header = gt.format(gt.ngettext('Share the folder "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for folder "%1$d"', 'Sharing link created for %1$d items', count), filler);
         }
 
         // create dialog
         var dialog = new ModalDialog({
             async: true,
+            focus: '.link-group>input[type=text]',
             title: header,
             width: 600
         });
+
+        dialog.$el.addClass('get-link-dialog');
 
         // render share wizard into dialog body
         dialog.$body.append(
