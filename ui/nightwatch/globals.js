@@ -13,10 +13,12 @@
 var chromedriver = require('chromedriver');
 module.exports = {
     before: function (done) {
+        if (this.test_settings.globals.environment === 'local') return done();
         chromedriver.start();
         done();
     },
     after: function (done) {
+        if (this.test_settings.globals.environment === 'local') return done();
         chromedriver.stop();
         done();
     }

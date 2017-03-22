@@ -46,7 +46,7 @@ describe('Mail', function () {
 
             // 3) Set a recipient, add a subject and mail text
             client
-                .setValue('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', client.globals.addresses.own)
+                .insertMailaddress('.io-ox-mail-compose div[data-extension-id="to"] input.tt-input', 0)
                 .setValue('.io-ox-mail-compose div[data-extension-id="subject"] input', 'Test subject')
                 .setValue('.io-ox-mail-compose textarea.plain-text', 'Test text')
                 .assert.value('.io-ox-mail-compose textarea.plain-text', 'Test text');

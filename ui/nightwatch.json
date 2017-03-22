@@ -11,7 +11,23 @@
   "test_runner": "mocha",
 
   "test_settings": {
+
     "default": {
+      "selenium_host": "jenkins.open-xchange.com",
+      "silent": true,
+      "desiredCapabilities": {
+        "browserName": "chrome",
+        "chromeOptions": {
+          "args": ["--no-sandbox"]
+        },
+        "acceptSslCerts": true
+      },
+      "globals": {
+        "environment": "default"
+      }
+    },
+
+    "local": {
       "selenium_port": 9515,
       "selenium_host": "localhost",
       "default_path_prefix": "",
@@ -22,6 +38,9 @@
           "args": ["--no-sandbox"]
         },
         "acceptSslCerts": true
+      },
+      "globals": {
+        "environment": "local"
       }
     }
   }
