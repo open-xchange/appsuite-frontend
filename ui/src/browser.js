@@ -185,15 +185,15 @@
     // first detection
     detectBrowser(navigator);
 
-    var detectTouch = memoize(function () {
-        // Windows 8 Chrome does report touch events which leads to
-        // a wrong feature set (disabled stuff) as AppSuite thinks
-        // this is a Smartphone or tablet without a mouse.
-        if (us.browser.chrome && us.browser.windows8) return false;
-        // don't report desktop browsers with pointerevent to be touch devices
-        if ('onpointerdown' in window && !us.browser.android && !us.browser.ios) return false;
-        return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-    });
+    var isTouch = (function () {
+        var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+        // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
+        if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
+            if (window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
+            return false;
+        }
+        return reportsTouch;
+    }());
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -226,10 +226,9 @@
             stockBrowser = android && android[1] < 537,
             ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
             size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
-            touch = detectTouch(),
             razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
 
-        return (size && touch && mobileOS) || razrHD;
+        return (size && isTouch && mobileOS) || razrHD;
     }
 
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
@@ -279,7 +278,7 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
-            misc.touch = detectTouch();
+            misc.touch = isTouch;
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);
