@@ -192,7 +192,12 @@ define('io.ox/files/listview', [
         {
             id: 'thumbnail',
             index: 100,
-            draw: extensions.thumbnail
+            draw: function () {
+                extensions.thumbnail.apply(this, arguments);
+
+              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                this.prepend($('<div class="thumbnail-masking-box"></div>'));
+            }
         },
         {
             id: 'locked',

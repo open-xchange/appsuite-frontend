@@ -145,39 +145,79 @@
                     }
                 }
             }
-            &[grid-count="5"] {                     // due to an additional hidden 1st node within a grid
-                > li.list-item:nth-child(5n-2) {    // ... 5n-2 instead of 5n-3
-                                                    // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
-                    + .tooltip {
-                        &.left {
-                            margin-left: 276px;
-                            left: 0!important;
+                                                                // due to an additional hidden 1st node within a grid
+            &[grid-count="5"] > li.list-item:nth-child(5n-2),   // ... 5n-2 instead of 5n-3 // with: [grid-count="5"]
+            &[grid-count="4"] > li.list-item:nth-child(4n-2),   // ... 4n-2 instead of 4n-3 // with: [grid-count="4"]
+            &[grid-count="4"] > li.list-item:nth-child(4n-1),   // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
+            &[grid-count="3"] > li.list-item:nth-child(3n-1),   // ... 3n-1 instead of 3n-2 // with: [grid-count="3"]
+            &[grid-count="3"] > li.list-item:nth-child(3n),     // ... 3n   instead of 3n-1 // with: [grid-count="3"]
+            &[grid-count="2"] > li.list-item:nth-child(2n) {    // ... 2n   instead of 2n-1 // with: [grid-count="2"]
 
-                            //.tooltip.right .tooltip-arrow {
-                            //    top: 50%;
-                            //    left: 0;
-                            //    margin-top: -5px;
-                            //    border-width: 5px 5px 5px 0;
-                            //    border-right-color: #000000;
-                            //}
-                            //
-                            //.tooltip.left .tooltip-arrow {
-                            //    top: 50%;
-                            //    right: 0;
-                            //    margin-top: -5px;
-                            //    border-width: 5px 0 5px 5px;
-                            //    border-left-color: #000000;
-                            //}
+                + .tooltip.left {
+                    margin-left: 324px;
+                    left: 0!important;
 
-                            .tooltip-arrow { // turn it into a ".right" tooltip
-                                left: 0;
-                                right: auto;
-                                border-width: 5px 5px 5px 0;
-                                border-right-color: #000000;
-                              //border-left-color: transparent;
-                            }
-                        }
+                    //.tooltip.right .tooltip-arrow {
+                    //    top: 50%;
+                    //    left: 0;
+                    //    margin-top: -5px;
+                    //    border-width: 5px 5px 5px 0;
+                    //    border-right-color: #000000;
+                    //}
+                    //
+                    //.tooltip.left .tooltip-arrow {
+                    //    top: 50%;
+                    //    right: 0;
+                    //    margin-top: -5px;
+                    //    border-width: 5px 0 5px 5px;
+                    //    border-left-color: #000000;
+                    //}
+
+                    .tooltip-arrow { // turn it into a ".right" tooltip
+                        left: 0;
+                        right: auto;
+                        border-width: 5px 5px 5px 0;
+                        border-right-color: #000000;
+                      //border-left-color: transparent;
                     }
+                }
+            }
+            &[grid-count="4"] > li.list-item:nth-child(4n-1) {  // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
+                + .tooltip.left {
+                    margin-left: 338px;
+                }
+            }
+            &[grid-count="4"] > li.list-item:nth-child(4n-2) {  // ... 4n-2 instead of 4n-3 // with: [grid-count="4"]
+                + .tooltip.left {
+                    margin-left: 157px;
+                }
+            }
+            &[grid-count="3"] > li.list-item:nth-child(3n-1) {  // ... 3n-1 instead of 3n-2 // with: [grid-count="3"]
+                + .tooltip.left {
+                    margin-left: 179px;
+                }
+            }
+            &[grid-count="3"] > li.list-item:nth-child(3n) {    // ... 3n   instead of 3n-1 // with: [grid-count="3"]
+                + .tooltip {
+                    &.left {
+                        margin-left: 360px;
+                    }
+                    .tooltip-inner {
+                        max-width: 167px;
+                    }
+                }
+            }
+            &[grid-count="2"] > li.list-item,
+            &[grid-count="1"] > li.list-item {
+                + .tooltip {
+                    .tooltip-inner {
+                        max-width: 167px;
+                    }
+                }
+            }
+            &[grid-count="2"] > li.list-item:nth-child(2n) {
+                + .tooltip.left {
+                    margin-left: 199px;
                 }
             }
         }
@@ -230,17 +270,45 @@
         .list-item-content {
             width: 100%;
             height: @height - (1 * @base-padding);
+
+            .thumbnail-masking-box,
+            .thumbnail-effects-box {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: @thumbnail_height;
+            }
+            .thumbnail-masking-box {
+                box-shadow: inset 0 0 4px #000;
+                opacity: .15;
+            }
+            //.thumbnail-effects-box {          // please do not remove this block.
+            //    background-color: #2f5984;
+            //    opacity: .3;
+            //    display:none;
+            //}
         }
         .list-item.selectable:hover {
             overflow: visible;
 
             .list-item-content {
-                box-shadow: 0 0 7px 0 #eee
+              //box-shadow: 0 0 7px 0 #eee;     // please do not remove both blocks.
+
+                //.thumbnail-effects-box {
+                //    display: block;
+                //}
+                .filename {
+                    padding-top: ((@filename_line_height / 2) - 3px);
+                    margin-top: 1px;
+                    border-top: 2px solid #2f5984;
+                }
             }
         }
 
         .icon-thumbnail {
             .thumbnail(@thumbnail_height);
+            background-color: transparent;
         }
 
         .icon-thumbnail.default-icon {
@@ -275,11 +343,11 @@
 
         .filename {
             line-height: @filename_line_height;
-            height: @filename_height;
+            height: (@filename_height - (@filename_line_height / 2));
             overflow: hidden;
-            margin: (2 * @base-padding) 0 @filename_margin 0;
+            margin: 0;
             text-align: left;
-            padding: 0 5px 0 28px;
+            padding: (@filename_line_height / 2) 5px 0 28px;
             white-space: normal;
             word-wrap: break-word;
             word-break: break-word;

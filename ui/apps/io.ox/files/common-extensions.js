@@ -92,6 +92,7 @@ define('io.ox/files/common-extensions', [
 
             this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips
                 title: _.breakWord(tooltipTitle),
+                delay: { show: 400 },
                 placement: 'right auto',
                 viewport: { selector: 'ul.list-view', padding: '0 16px 16px 0' } // or callback function
             });
