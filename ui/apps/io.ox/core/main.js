@@ -1141,7 +1141,7 @@ define('io.ox/core/main', [
                 var link = this.find('#io-ox-topbar-dropdown-icon > a');
                 // popover
                 link.popover({
-                    content: gt("Did you now that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                    content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
                     template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
                     placement: 'bottom'
                 });
