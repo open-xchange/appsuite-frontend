@@ -132,7 +132,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             // Daily
             it('Every day', function () {
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Tag.');
+                expect(str).to.equal('Täglich.');
             });
 
             it('Every 10 days', function () {
@@ -178,7 +178,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Tag.');
+                expect(str).to.equal('Täglich.');
             });
 
             // Weekly - interval > 1
@@ -210,7 +210,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             it('Every 2 weeks on all days', function () {
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Wochen an allen Tagen.');
+                expect(str).to.equal('Täglich alle 2 Wochen.');
             });
 
             // Monthly
@@ -220,13 +220,13 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.recurrence_type = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Monat am Tag 11.');
+                expect(str).to.equal('Monatlich am 11.');
             });
 
             it('Every 2 months on day 11', function () {
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Monate an Tag 11.');
+                expect(str).to.equal('Alle 2 Monate am 11.');
             });
 
             // Monthly - specific days
@@ -235,7 +235,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.FRIDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Monat am ersten Freitag.');
+                expect(str).to.equal('Monatlich am ersten Freitag.');
             });
 
             it('Monthly on the last Sunday', function () {
@@ -243,7 +243,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.SUNDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Monat am fünften / letzten Sonntag.');
+                expect(str).to.equal('Monatlich am fünften / letzten Sonntag.');
             });
 
             // Monthly - specific days - interval > 1
@@ -271,7 +271,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.month = 0;
                 data.recurrence_type = 4;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jedes Jahr im Januar an Tag 29.');
+                expect(str).to.equal('Jährlich am 29. Januar.');
             });
 
             // Yearly - specific days
@@ -281,7 +281,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.month = 6;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jedes Jahr am ersten Freitag im Juli.');
+                expect(str).to.equal('Jährlich am ersten Freitag im Juli.');
             });
 
         });
