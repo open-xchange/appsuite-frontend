@@ -293,8 +293,7 @@ define('io.ox/mail/api', [
                     attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 }
             });
-            // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
-            data.id = decodeURIComponent(data.id);
+
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -2012,8 +2011,7 @@ define('io.ox/mail/api', [
             obj.headers = { 'X-Open-Xchange-Share-URL': obj['X-Open-Xchange-Share-URL'] };
             delete obj['X-Open-Xchange-Share-URL'];
         }
-        // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
-        obj.id = decodeURIComponent(obj.id);
+
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
 
