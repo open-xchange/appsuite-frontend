@@ -329,7 +329,6 @@ define('io.ox/core/tk/list', [
                 currentY = touches.pageY,
                 distance = currentY - this.pullToRefreshStartY;
 
-
             if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
                     e.preventDefault();
@@ -474,11 +473,17 @@ define('io.ox/core/tk/list', [
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',
                     'click': 'onKeepFocus',
-                    'keydown .list-item': 'onItemKeydown',
-                    'touchstart': 'onTouchStart',
-                    'touchend': 'onTouchEnd',
-                    'touchmove': 'onTouchMove'
+                    'keydown .list-item': 'onItemKeydown'
                 };
+
+                if (_.device('smartphone')) {
+                    _.extend(events, {
+                        'touchstart': 'onTouchStart',
+                        'touchend': 'onTouchEnd',
+                        'touchmove': 'onTouchMove'
+                    });
+                }
+
                 // set special class if not on smartphones (different behavior)
                 if (_.device('!smartphone')) this.$el.addClass('visible-selection');
                 // enable drag & drop
