@@ -1265,10 +1265,6 @@ msgstr "Approuvé :"
 msgid "Apps"
 msgstr "Apps"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "Avril"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1327,9 +1323,13 @@ msgstr "en pièce jointe"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment file size to large. You have to use %1$s or reduce the "
+#| "attachment file size."
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 "La pièce jointe est trop volumineuse. Vous devez utiliser %1$s ou compresser "
 "la pièce jointe."
@@ -1341,8 +1341,12 @@ msgstr[0] "La pièce jointe a été enregistrée"
 msgstr[1] "Les pièces jointes ont été enregistrées"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment size to large. Please remove attachments or reduce the file "
+#| "size."
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 "Les pièces jointes sont trop volumineuses. Veuillez supprimer des pièces "
 "jointes ou les compresser."
@@ -1359,10 +1363,6 @@ msgstr "Pièces jointes"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "Les pièces jointes ont été enregistrées."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "Août"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1898,14 +1898,6 @@ msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Cliquez ici pour vous reconnecter à votre compte Xing et voir les activités."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Cliquer sur une phrase pour choisir quand répéter le rendez-vous."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "Cliquer sur les liens pour modifier les valeurs."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Cliquez pour lire le fichier audio"
@@ -1957,12 +1949,6 @@ msgstr "Fermer la zone de notification"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Fermer les fonctions Premium"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "Cliquez pour fermer la vue des répétitions"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2536,10 +2522,6 @@ msgstr "Jour"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "Jours"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "Décembre"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3798,7 +3780,9 @@ msgid "External participants"
 msgstr "Participants externes"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+#, fuzzy
+#| msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "Très probable"
 
 #. Emoji category
@@ -3904,10 +3888,6 @@ msgstr "Télécopie (privé)"
 msgid "Fax (alt)"
 msgstr "Télécopie 2"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "Février"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL de l'abonnement"
@@ -3915,6 +3895,13 @@ msgstr "URL de l'abonnement"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "Impressions"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "La tâche n'a pas pu être supprimée."
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4716,13 +4703,6 @@ msgstr "Indigo"
 msgid "Info"
 msgstr "Info"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "Informations sur la récupération de compte..."
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4897,10 +4877,6 @@ msgstr "Options de la liste d'éléments"
 msgid "Items without a file can not be downloaded."
 msgstr "Les éléments sans fichier associé ne peuvent pas être téléchargés."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "Janvier"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4913,14 +4889,6 @@ msgstr "Professionnel"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Description du poste"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "Juillet"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "Juin"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5365,10 +5333,6 @@ msgstr "Configuration automatique"
 msgid "Manual input"
 msgstr "Saisie au clavier"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "Mars"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
@@ -5459,10 +5423,6 @@ msgstr "Bordeaux"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Correspond à"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "Mai"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -6133,10 +6093,6 @@ msgstr "Informer tous les participants par courriel."
 msgid "Notify me again later"
 msgstr "Me le rappeler ultérieurement"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "Novembre"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Nombre de jours entre les messages d'absence au même expéditeur"
@@ -6172,10 +6128,6 @@ msgstr "Objets"
 #: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "Occurrences"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "Octobre"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6710,10 +6662,6 @@ msgstr ""
 "\n"
 "Suivez les instructions données dans ce courriel et revenez au composant "
 "pour terminer la configuration du compte."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "Veuillez choisir une phrase ci-dessous."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7600,7 +7548,7 @@ msgid "Rename folder"
 msgstr "Renommer le dossier"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Répéter"
 
@@ -8121,10 +8069,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Messages envoyés"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "Septembre"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8337,9 +8281,13 @@ msgstr "Afficher les icônes"
 msgid "Show images"
 msgstr "Afficher les images"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+#, fuzzy
+#| msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "Afficher les informations sur la récupération de compte"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8940,84 +8888,6 @@ msgstr "Le rendez-vous a été supprimé"
 msgid "The appointment has been updated"
 msgstr "Le rendez-vous a été mis à jour"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"Le rendez-vous se répète <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">tous les <span class=\"number-control\">2</span> "
-"jours</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"Le rendez-vous se répète <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\">toutes les <span class=\"number-control\">2</span> semaines</a> "
-"le <a href=\"#\" data-widget=\"days\" data-attribute=\"days\">lundi</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"Le rendez-vous se répète de façon <a href=\"#\" data-attribute="
-"\"recurrenceType\" data-widget=\"options\">hebdomadaire</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"Le rendez-vous se répète chaque <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">premier</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">mercredi</a> d'<a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"month\">octobre</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"Le rendez-vous se répète chaque année le <a href=\"#\" data-widget=\"number"
-"\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
-"a> d'<a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octobre</"
-"a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"Le rendez-vous se répète tous les <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> du "
-"mois <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">tous "
-"les <span class=\"number-control\">2</span> mois</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"Le rendez-vous se répète toutes les <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"ordinal\">secondes</a> <a href=\"#\" data-widget=\"options"
-"\" data-attribute=\"day\">mercredi</a> <a href=\"#\" data-widget=\"number\" "
-"data-attribute=\"interval\">tous les <span class=\"number-control\">2</span> "
-"mois</a>. "
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9207,34 +9077,6 @@ msgstr "L'émetteur souhaite être prévenu quand vous aurez lu ce message"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "L'envoi du message a été annulé."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">s'arrête</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-"\"number\">après <span class=\"number-control\">2</span> rendez-vous</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">s'arrête</a> le <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">ne "
-"s'arrête jamais</a>."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
@@ -10844,12 +10686,6 @@ msgstr "[Copie] %1$s"
 msgid "accepted"
 msgstr "accepté"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "après %1$d rendez-vous"
-msgstr[1] "après %1$d rendez-vous"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -10902,11 +10738,6 @@ msgstr "créer des objets"
 msgid "create objects and subfolders"
 msgstr "créer des objets et des sous-dossiers"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "quotidienne"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "bleu foncé"
@@ -10919,14 +10750,6 @@ msgstr "vert foncé"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "datepicker"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "jour en semaine"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "jour de la fin de semaine"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10978,64 +10801,10 @@ msgstr "modifier tous les objets"
 msgid "edit own objects"
 msgstr "modifier ses propres objets"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "se termine"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "s'arrête après un certain nombre de rendez-vous"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "se termine à une date donnée"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "termine à :"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "chaque %1$d jour"
-msgstr[1] "tous les %1$d jours"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "chaque %1$d mois"
-msgstr[1] "tous les %1$d mois"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "chaque %1$d semaine"
-msgstr[1] "toutes les %1$d semaines"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "chaque jour"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "chaque mois"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "chaque semaine"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -11049,9 +10818,6 @@ msgstr "cinquième / dernier"
 msgid "file"
 msgstr "fichiers"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "premier"
@@ -11072,9 +10838,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "Dossier"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "quatrième"
@@ -11128,12 +10891,6 @@ msgstr "dans une heure"
 msgid "in one week"
 msgstr "dans une semaine"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "dernier"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "tard dans la soirée"
@@ -11177,15 +10934,6 @@ msgstr "modifié"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "mois"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "mensuelle"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "ne se termine jamais"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11260,9 +11008,6 @@ msgstr "lire ses propres objets"
 msgid "red"
 msgstr "rouge"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "deuxième"
@@ -11289,9 +11034,6 @@ msgstr "taille"
 msgid "tentative"
 msgstr "provisoire"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "troisième"
@@ -11366,11 +11108,6 @@ msgstr "afficher le dossier"
 msgid "week(s)"
 msgstr "semaine(s)"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "hebdomadaire"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "quand le lien a expiré"
@@ -11387,11 +11124,6 @@ msgstr "quand les receveurs ont fini de télécharger les fichiers"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "an(s)"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "annuelle"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -11758,6 +11490,9 @@ msgstr "aaaa"
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Durée approximative pour les abonnements"
 
+#~ msgid "April"
+#~ msgstr "Avril"
+
 #~ msgid "Are you sure?"
 #~ msgstr "En êtes-vous sûr ?"
 
@@ -11798,6 +11533,9 @@ msgstr "aaaa"
 
 #~ msgid "Audio enabled"
 #~ msgstr "Audio activée"
+
+#~ msgid "August"
+#~ msgstr "Août"
 
 #~ msgid "Auto Logout"
 #~ msgstr "Déconnexion automatique"
@@ -11925,6 +11663,12 @@ msgstr "aaaa"
 #~ "Cliquez sur une lettre à gauche de la barre de navigation pour afficher "
 #~ "les contacts du carnet d'adresse dont le nom commence par cette lettre."
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "Cliquer sur une phrase pour choisir quand répéter le rendez-vous."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "Cliquer sur les liens pour modifier les valeurs."
+
 #~ msgid "Click to close this notification"
 #~ msgstr "Cliquez pour fermer cette notification"
 
@@ -11945,6 +11689,11 @@ msgstr "aaaa"
 
 #~ msgid "Close document"
 #~ msgstr "Fermer le document"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "Cliquez pour fermer la vue des répétitions"
 
 #~ msgid "Close search"
 #~ msgstr "Fermer la recherche"
@@ -12092,6 +11841,9 @@ msgstr "aaaa"
 
 #~ msgid "Day View"
 #~ msgstr "Vue de la journée"
+
+#~ msgid "December"
+#~ msgstr "Décembre"
 
 #~ msgid "Default sender address:"
 #~ msgstr "Adresse d'expéditeur par défaut :"
@@ -12478,6 +12230,9 @@ msgstr "aaaa"
 #~ msgid "Fax (private)"
 #~ msgstr "Fax (privé)"
 
+#~ msgid "February"
+#~ msgstr "Février"
+
 #~ msgid "File name, click to rename"
 #~ msgstr "Nom de fichier, cliquer pour renommer"
 
@@ -12753,6 +12508,9 @@ msgstr "aaaa"
 #~ msgid "Info area"
 #~ msgstr "Zone d'informations"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "Informations sur la récupération de compte..."
+
 #~ msgid "Insert/Edit Hyperlink"
 #~ msgstr "Insérer ou modifier un lien hypertexte"
 
@@ -12795,6 +12553,9 @@ msgstr "aaaa"
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "Les éléments sans fichier associé ne peuvent pas être ouverts."
 
+#~ msgid "January"
+#~ msgstr "Janvier"
+
 #~ msgid "Join"
 #~ msgstr "Joindre"
 
@@ -12810,8 +12571,14 @@ msgstr "aaaa"
 #~ msgid "Joining the presentation of %1$s."
 #~ msgstr "Joindre la présentation de %1$s."
 
+#~ msgid "July"
+#~ msgstr "Juillet"
+
 #~ msgid "Jump to slide"
 #~ msgstr "Aller à la diapositive"
+
+#~ msgid "June"
+#~ msgstr "Juin"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -12915,6 +12682,9 @@ msgstr "aaaa"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "Gérer les messages électroniques"
 
+#~ msgid "March"
+#~ msgstr "Mars"
+
 #~ msgid "Mark as"
 #~ msgstr "Marquer comme"
 
@@ -12923,6 +12693,9 @@ msgstr "aaaa"
 
 #~ msgid "Mark unread"
 #~ msgstr "Marquer comme non lu"
+
+#~ msgid "May"
+#~ msgstr "Mai"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "Lecteur multimédia"
@@ -13081,6 +12854,12 @@ msgstr "aaaa"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Rien dans votre flux d'actualité."
 
+#~ msgid "November"
+#~ msgstr "Novembre"
+
+#~ msgid "October"
+#~ msgstr "Octobre"
+
 #~ msgid "Off"
 #~ msgstr "Désactivé"
 
@@ -13172,6 +12951,9 @@ msgstr "aaaa"
 
 #~ msgid "Please ask me every time"
 #~ msgstr "Veuillez me demander à chaque fois"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Veuillez choisir une phrase ci-dessous."
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Veuillez saisir un nombre valide."
@@ -13416,6 +13198,9 @@ msgstr "aaaa"
 
 #~ msgid "Sending the E-Mail"
 #~ msgstr "Envoyer le message"
+
+#~ msgid "September"
+#~ msgstr "Septembre"
 
 #~ msgid "Server Error"
 #~ msgstr "Erreur de serveur"
@@ -13760,6 +13545,79 @@ msgstr "aaaa"
 #~ "Le portail vous informe des courriels récents, des rendez-vous ou de ce "
 #~ "qui se passe sur les réseaux sociaux."
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">tous les <span class=\"number-control\">2</span> "
+#~ "jours</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\">toutes les <span class=\"number-control\">2</span> "
+#~ "semaines</a> le <a href=\"#\" data-widget=\"days\" data-attribute=\"days"
+#~ "\">lundi</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète de façon <a href=\"#\" data-attribute="
+#~ "\"recurrenceType\" data-widget=\"options\">hebdomadaire</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète chaque <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">premier</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">mercredi</a> d'<a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">octobre</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète chaque année le <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> d'<a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">octobre</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète tous les <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> du mois <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
+#~ "\">tous les <span class=\"number-control\">2</span> mois</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "Le rendez-vous se répète toutes les <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">secondes</a> <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"day\">mercredi</a> <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"interval\">tous les <span class=\"number-"
+#~ "control\">2</span> mois</a>. "
+
 #~ msgid "The calendar views display a calendar sheet with the appointments."
 #~ msgstr ""
 #~ "Les vues en calendrier affichent une page de calendrier avec les rendez-"
@@ -13878,6 +13736,31 @@ msgstr "aaaa"
 
 #~ msgid "The requested email no longer exists"
 #~ msgstr "Le message demandé n'existe plus"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">s'arrête</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">après <span class=\"number-control\">2</span> rendez-vous</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">s'arrête</a> le <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "La série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ne s'arrête jamais</a>."
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -14553,6 +14436,11 @@ msgstr "aaaa"
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "Zoom : %1$d %"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "après %1$d rendez-vous"
+#~ msgstr[1] "après %1$d rendez-vous"
+
 #~ msgid "and"
 #~ msgstr "et"
 
@@ -14575,8 +14463,17 @@ msgstr "aaaa"
 #~ msgid "collapsed"
 #~ msgstr "réduite"
 
+#~ msgid "daily"
+#~ msgstr "quotidienne"
+
 #~ msgid "date range"
 #~ msgstr "intervalle de dates"
+
+#~ msgid "day of the week"
+#~ msgstr "jour en semaine"
+
+#~ msgid "day of the weekend"
+#~ msgstr "jour de la fin de semaine"
 
 #~ msgid "december"
 #~ msgstr "Décembre"
@@ -14589,8 +14486,41 @@ msgstr "aaaa"
 #~ msgid "end date "
 #~ msgstr "date de fin"
 
+#~ msgid "ends"
+#~ msgstr "se termine"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "s'arrête après un certain nombre de rendez-vous"
+
 #~ msgid "ends on"
 #~ msgstr "se termine le"
+
+#~ msgid "ends on a specific date"
+#~ msgstr "se termine à une date donnée"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "chaque %1$d jour"
+#~ msgstr[1] "tous les %1$d jours"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "chaque %1$d mois"
+#~ msgstr[1] "tous les %1$d mois"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "chaque %1$d semaine"
+#~ msgstr[1] "toutes les %1$d semaines"
+
+#~ msgid "every day"
+#~ msgstr "chaque jour"
+
+#~ msgid "every month"
+#~ msgstr "chaque mois"
+
+#~ msgid "every week"
+#~ msgstr "chaque semaine"
 
 #~ msgid "expanded"
 #~ msgstr "étendue"
@@ -14636,6 +14566,9 @@ msgstr "aaaa"
 #~ msgid "june"
 #~ msgstr "Juin"
 
+#~ msgid "last"
+#~ msgstr "dernier"
+
 #~ msgid "later"
 #~ msgstr "ultérieurement"
 
@@ -14648,8 +14581,14 @@ msgstr "aaaa"
 #~ msgid "may"
 #~ msgstr "Mai"
 
+#~ msgid "monthly"
+#~ msgstr "mensuelle"
+
 #~ msgid "more"
 #~ msgstr "suite"
+
+#~ msgid "never ends"
+#~ msgstr "ne se termine jamais"
 
 #~ msgid "next %1$s"
 #~ msgstr "%1$s prochain"
@@ -14735,5 +14674,11 @@ msgstr "aaaa"
 #~ msgid "unread"
 #~ msgstr "non lu"
 
+#~ msgid "weekly"
+#~ msgstr "hebdomadaire"
+
 #~ msgid "work days"
 #~ msgstr "jours ouvrés"
+
+#~ msgid "yearly"
+#~ msgstr "annuelle"

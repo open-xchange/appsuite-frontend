@@ -1288,10 +1288,6 @@ msgstr "Schváleno:"
 msgid "Apps"
 msgstr "Aplikace"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "Duben"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1350,9 +1346,13 @@ msgstr "Příloha"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment file size to large. You have to use %1$s or reduce the "
+#| "attachment file size."
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 "Příloha je příliš velká. Musíte použít %1$s, nebo zmenšit velikost přílohy."
 
@@ -1364,8 +1364,12 @@ msgstr[1] "Přílohy byly uloženy"
 msgstr[2] "Přílohy byly uloženy"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment size to large. Please remove attachments or reduce the file "
+#| "size."
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 "Příloha je příliš velká. Odeberte, prosím, přílohy, nebo zmenšete jejich "
 "velikost."
@@ -1382,10 +1386,6 @@ msgstr "Přílohy"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "Přílohy byly uloženy."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "Srpen"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1907,14 +1907,6 @@ msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Klikněte sem pro opětovné přihlášení ke službě Xing pro zobrazení aktivit."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Klikněte na větu pro vybrání, kdy schůzku opakovat."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "Klikněte na odkazy pro změnu hodnot."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Klikněte pro přehrání audio souboru"
@@ -1966,12 +1958,6 @@ msgstr "Zavřít oznamovací oblast"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Zavřít prémiové funkce"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "Klikněte pro zavření pohledu na opakování"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2540,10 +2526,6 @@ msgstr "Den"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "Dny"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "Prosinec"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3788,7 +3770,9 @@ msgid "External participants"
 msgstr "Externí účastníci"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+#, fuzzy
+#| msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "Velmi pravděpodobné"
 
 #. Emoji category
@@ -3887,10 +3871,6 @@ msgstr "Fax (doma)"
 msgid "Fax (alt)"
 msgstr "Fax (alt.)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "Únor"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL kanálu"
@@ -3898,6 +3878,13 @@ msgstr "URL kanálu"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "Zpětná vazba"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "Úkol se nepodařilo smazat."
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4691,13 +4678,6 @@ msgstr "indigová modř"
 msgid "Info"
 msgstr "Info"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "Informace o obnovení účtu..."
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4870,10 +4850,6 @@ msgstr "Možnosti seznamu položek"
 msgid "Items without a file can not be downloaded."
 msgstr "Položky bez souboru nelze stáhnout."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "Leden"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4886,14 +4862,6 @@ msgstr "Práce"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Popis práce"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "Červenec"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "Červen"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5335,10 +5303,6 @@ msgstr "Automatické nastavení"
 msgid "Manual input"
 msgstr "Manuální vstup"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "Březen"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
@@ -5429,10 +5393,6 @@ msgstr "vínová"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Odpovídá"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "Květen"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -6103,10 +6063,6 @@ msgstr "Upozornit všechny účastníky e-mailem."
 msgid "Notify me again later"
 msgstr "Připomenout znovu později"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "Listopad"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Počet dní mezi oznámeními o nepřítomnosti pro stejného odesílatele"
@@ -6142,10 +6098,6 @@ msgstr "Předměty"
 #: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "Opakování"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "Říjen"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6678,10 +6630,6 @@ msgstr ""
 "\n"
 "Řiďte se pokyny ve zprávě a pak se vraťte k widgetu pro dokončení nastavení "
 "účtu."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "Vyberte, prosím, větu níže."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7557,7 +7505,7 @@ msgid "Rename folder"
 msgstr "Přejmenovat složku"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Opakovat"
 
@@ -8077,10 +8025,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Odeslané zprávy"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "Září"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8297,9 +8241,13 @@ msgstr "Zobrazit ikony"
 msgid "Show images"
 msgstr "Zobrazit obrázky"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+#, fuzzy
+#| msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "Zobrazit informace o obnovení účtu"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8903,81 +8851,6 @@ msgstr "Schůzka byla smazána"
 msgid "The appointment has been updated"
 msgstr "Schůzka byla aktualizována"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\">každé <span class=\"number-control\">2</span> dny</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\">každé <span class=\"number-control\">2</span> týdny</a> v <a "
-"href=\"#\"  data-widget=\"days\" data-attribute=\"days\">pondělí</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"Tato schůzka se opakuje <a href=\"#\" data-attribute=\"recurrenceType\" data-"
-"widget=\"options\">týdně</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"Schůzka se opakuje vždy <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">první</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">středu</a> v <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"month\">říjnu</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"Tato schůzka se opakuje každý rok <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10.</span></a> <a "
-"href=\"#\" data-widget=\"options\" data-attribute=\"month\">října</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"Tato schůzka se opakuje vždy <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10. den</span></a> "
-"<a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">každé <span "
-"class=\"number-control\">2</span> měsíce</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"Schůzka se opakuje <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">druhou</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">středu</a> <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\">každé <span class=\"number-control\">2</span> měsíce</a>. "
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9159,34 +9032,6 @@ msgstr "Odesílatel si přeje dostat potvrzení, když si zprávu přečtete"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "Odesílání zprávy bylo zrušeno."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">končí</"
-"a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">po "
-"<span class=\"number-control\">2</span> schůzkách</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">končí</"
-"a> <a href=\"#\" data-attribute=\"until\" data-widget=\"datePicker\">3. 11. "
-"2013</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nikdy "
-"nekončí</a>."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
@@ -10751,13 +10596,6 @@ msgstr "[Kopie] %1$s"
 msgid "accepted"
 msgstr "přijaté"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "po %1$d schůzce"
-msgstr[1] "po %1$d schůzkách"
-msgstr[2] "po %1$d schůzkách"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -10810,11 +10648,6 @@ msgstr "vytvořit objekty"
 msgid "create objects and subfolders"
 msgstr "vytvořit objekty a podsložky"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "denně"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "tmavě modrá"
@@ -10827,14 +10660,6 @@ msgstr "tmavě zelená"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "výběr data"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "den týdne"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "den víkendu"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10886,67 +10711,10 @@ msgstr "upravovat všechny objekty"
 msgid "edit own objects"
 msgstr "upravovat vlastní objekty"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "končí"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "končí po určitém počtu schůzek"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "končí v určené datum"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "končí:"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "každý den"
-msgstr[1] "každé %1$d dny"
-msgstr[2] "každých %1$s dní"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "každý měsíc"
-msgstr[1] "každé %1$d měsíce"
-msgstr[2] "každých %1$d měsíců"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "každý týden"
-msgstr[1] "každé %1$d týdny"
-msgstr[2] "každých %1$d týdnů"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "každý den"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "každý měsíc"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "každý týden"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -10960,9 +10728,6 @@ msgstr "pátý/poslední"
 msgid "file"
 msgstr "soubory"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "první"
@@ -10983,9 +10748,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "Složka"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "čtvrtý"
@@ -11040,12 +10802,6 @@ msgstr "za hodinu"
 msgid "in one week"
 msgstr "za týden"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "poslední"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "pozdě večer"
@@ -11089,15 +10845,6 @@ msgstr "upraveno"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "měsíc(e)"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "měsíčně"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "nikdy nekončí"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11172,9 +10919,6 @@ msgstr "číst vlastní objekty"
 msgid "red"
 msgstr "červená"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "druhý(é)"
@@ -11201,9 +10945,6 @@ msgstr "velikost"
 msgid "tentative"
 msgstr "předběžně"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "třetí"
@@ -11278,11 +11019,6 @@ msgstr "zobrazit složku"
 msgid "week(s)"
 msgstr "týden (týdny)"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "týdně"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "když odkaz vypršel"
@@ -11299,11 +11035,6 @@ msgstr "když příjemci dokončili stahování souborů"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "rok(y)"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "ročně"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -13005,6 +12736,9 @@ msgstr "rrrr"
 #~ msgid "Apr"
 #~ msgstr "Dub"
 
+#~ msgid "April"
+#~ msgstr "Duben"
+
 #~ msgid "Arctic/Longyearbyen"
 #~ msgstr "Arktis/Longyearbyen"
 
@@ -13436,6 +13170,9 @@ msgstr "rrrr"
 
 #~ msgid "Aug"
 #~ msgstr "Srp"
+
+#~ msgid "August"
+#~ msgstr "Srpen"
 
 #~ msgid "Australia"
 #~ msgstr "Austrálie"
@@ -13946,6 +13683,12 @@ msgstr "rrrr"
 #~ "Kliknutím na písmeno v levé části navigační lišty zobrazíte příslušné "
 #~ "kontakty z vybrané knihy adres."
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "Klikněte na větu pro vybrání, kdy schůzku opakovat."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "Klikněte na odkazy pro změnu hodnot."
+
 #~ msgid "Click to close this notification"
 #~ msgstr "Kliknutím zavřete toto upozornění"
 
@@ -13992,6 +13735,11 @@ msgstr "rrrr"
 
 #~ msgid "Close quick config"
 #~ msgstr "Zavřít rychlé nastavení"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "Klikněte pro zavření pohledu na opakování"
 
 #~ msgid "Close search"
 #~ msgstr "Zavřít hledání"
@@ -14329,6 +14077,9 @@ msgstr "rrrr"
 
 #~ msgid "Debug"
 #~ msgstr "Debugování"
+
+#~ msgid "December"
+#~ msgstr "Prosinec"
 
 #~ msgid "Decline counter proposal"
 #~ msgstr "Odmítnout protinávrh"
@@ -15303,6 +15054,9 @@ msgstr "rrrr"
 #~ msgid "Feb"
 #~ msgstr "Úno"
 
+#~ msgid "February"
+#~ msgstr "Únor"
+
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -15908,6 +15662,9 @@ msgstr "rrrr"
 #~ msgid "Infoitem"
 #~ msgstr "Informační položka"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "Informace o obnovení účtu..."
+
 #~ msgid "Infostore"
 #~ msgstr "Úložiště informací"
 
@@ -16063,6 +15820,9 @@ msgstr "rrrr"
 #~ msgid "Jan"
 #~ msgstr "Led"
 
+#~ msgid "January"
+#~ msgstr "Leden"
+
 #~ msgid "Japan"
 #~ msgstr "Japonsko"
 
@@ -16090,11 +15850,17 @@ msgstr "rrrr"
 #~ msgid "Jul"
 #~ msgstr "Črc"
 
+#~ msgid "July"
+#~ msgstr "Červenec"
+
 #~ msgid "Jump to slide"
 #~ msgstr "Skočit na snímek"
 
 #~ msgid "Jun"
 #~ msgstr "Čer"
+
+#~ msgid "June"
+#~ msgstr "Červen"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -16365,6 +16131,9 @@ msgstr "rrrr"
 #~ msgid "Mar"
 #~ msgstr "Bře"
 
+#~ msgid "March"
+#~ msgstr "Březen"
+
 #~ msgid "Marital status:"
 #~ msgstr "Rodinný stav"
 
@@ -16400,6 +16169,9 @@ msgstr "rrrr"
 
 #~ msgid "Maximum"
 #~ msgstr "Nejvyšší"
+
+#~ msgid "May"
+#~ msgstr "Květen"
 
 #~ msgid "Mayotte"
 #~ msgstr "Mayotte"
@@ -16828,6 +16600,9 @@ msgstr "rrrr"
 #~ msgid "Nov"
 #~ msgstr "Lis"
 
+#~ msgid "November"
+#~ msgstr "Listopad"
+
 #~ msgid "Nr:"
 #~ msgstr "Č.:"
 
@@ -16863,6 +16638,9 @@ msgstr "rrrr"
 
 #~ msgid "Oct"
 #~ msgstr "Říj"
+
+#~ msgid "October"
+#~ msgstr "Říjen"
 
 #~ msgid "Of the following conditions:"
 #~ msgstr "Z následujících podmínek:"
@@ -17288,6 +17066,9 @@ msgstr "rrrr"
 
 #~ msgid "Please choose a file!"
 #~ msgstr "Vyberte, prosím, soubor!"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Vyberte, prosím, větu níže."
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Zadejte, prosím, správné číslo."
@@ -18022,6 +17803,9 @@ msgstr "rrrr"
 #~ msgid "Separator"
 #~ msgstr "Oddělovač"
 
+#~ msgid "September"
+#~ msgstr "Září"
+
 #~ msgid "Serbia"
 #~ msgstr "Srbsko"
 
@@ -18750,6 +18534,77 @@ msgstr "rrrr"
 #~ msgid "The appointment has a new description: %1$s."
 #~ msgstr "Schůzka má nový popis: %1$s."
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">každé <span class=\"number-control\">2</span> dny</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "Schůzka se opakuje <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">každé <span class=\"number-control\">2</span> týdny</a> v <a "
+#~ "href=\"#\"  data-widget=\"days\" data-attribute=\"days\">pondělí</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "Tato schůzka se opakuje <a href=\"#\" data-attribute=\"recurrenceType\" "
+#~ "data-widget=\"options\">týdně</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "Schůzka se opakuje vždy <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\">první</a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\">středu</a> v <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"month\">říjnu</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "Tato schůzka se opakuje každý rok <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10.</span></"
+#~ "a> <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">října</"
+#~ "a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "Tato schůzka se opakuje vždy <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">10. den</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">každé "
+#~ "<span class=\"number-control\">2</span> měsíce</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "Schůzka se opakuje <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"ordinal\">druhou</a> <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"day\">středu</a> <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\">každé <span class=\"number-control\">2</span> "
+#~ "měsíce</a>. "
+
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "Schůzka proběhne na jiném místě: %1$s."
 
@@ -18972,6 +18827,31 @@ msgstr "rrrr"
 
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr "Vybrané pravidlo filtru odkazuje na neznámou složku ‚%s‘."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">končí</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">po <span class=\"number-control\">2</span> schůzkách</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">končí</a> <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">3. 11. 2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "Série <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">nikdy nekončí</a>."
 
 #~ msgid "The server didn't respond!"
 #~ msgstr "Server nereagoval!"
@@ -20771,6 +20651,12 @@ msgstr "rrrr"
 #~ msgid "after"
 #~ msgstr "po"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "po %1$d schůzce"
+#~ msgstr[1] "po %1$d schůzkách"
+#~ msgstr[2] "po %1$d schůzkách"
+
 #~ msgid "all"
 #~ msgstr "všem"
 
@@ -20835,11 +20721,20 @@ msgstr "rrrr"
 #~ msgid "d.MM.yy"
 #~ msgstr "d. MM. yy"
 
+#~ msgid "daily"
+#~ msgstr "denně"
+
 #~ msgid "date range"
 #~ msgstr "rozmezí dat"
 
 #~ msgid "day every"
 #~ msgstr "den každý"
+
+#~ msgid "day of the week"
+#~ msgstr "den týdne"
+
+#~ msgid "day of the weekend"
+#~ msgstr "den víkendu"
 
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
@@ -20870,11 +20765,47 @@ msgstr "rrrr"
 #~ msgid "end date "
 #~ msgstr "koncové datum "
 
+#~ msgid "ends"
+#~ msgstr "končí"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "končí po určitém počtu schůzek"
+
 #~ msgid "ends on"
 #~ msgstr "končí"
 
+#~ msgid "ends on a specific date"
+#~ msgstr "končí v určené datum"
+
 #~ msgid "estimated costs"
 #~ msgstr "odhadované náklady"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "každý den"
+#~ msgstr[1] "každé %1$d dny"
+#~ msgstr[2] "každých %1$s dní"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "každý měsíc"
+#~ msgstr[1] "každé %1$d měsíce"
+#~ msgstr[2] "každých %1$d měsíců"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "každý týden"
+#~ msgstr[1] "každé %1$d týdny"
+#~ msgstr[2] "každých %1$d týdnů"
+
+#~ msgid "every day"
+#~ msgstr "každý den"
+
+#~ msgid "every month"
+#~ msgstr "každý měsíc"
+
+#~ msgid "every week"
+#~ msgstr "každý týden"
 
 #~ msgid "expanded"
 #~ msgstr "rozbaleno"
@@ -20929,6 +20860,9 @@ msgstr "rrrr"
 #~ msgid "june"
 #~ msgstr "červen"
 
+#~ msgid "last"
+#~ msgstr "poslední"
+
 #~ msgid "later"
 #~ msgstr "později"
 
@@ -20948,11 +20882,17 @@ msgstr "rrrr"
 #~ msgid "mm"
 #~ msgstr "mm"
 
+#~ msgid "monthly"
+#~ msgstr "měsíčně"
+
 #~ msgid "more"
 #~ msgstr "více"
 
 #~ msgid "nd"
 #~ msgstr "."
+
+#~ msgid "never ends"
+#~ msgstr "nikdy nekončí"
 
 #~ msgid "new"
 #~ msgstr "nové"
@@ -21110,8 +21050,14 @@ msgstr "rrrr"
 #~ msgid "waiting"
 #~ msgstr "čekám"
 
+#~ msgid "weekly"
+#~ msgstr "týdně"
+
 #~ msgid "work days"
 #~ msgstr "pracovní dny"
+
+#~ msgid "yearly"
+#~ msgstr "ročně"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"

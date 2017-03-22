@@ -1217,10 +1217,6 @@ msgstr "承認："
 msgid "Apps"
 msgstr "アプリケーション"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "４月"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1279,9 +1275,13 @@ msgstr "添付ファイル"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment file size to large. You have to use %1$s or reduce the "
+#| "attachment file size."
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 "添付ファイルサイズが大きすぎます。%1$sを使用するか、添付ファイルサイズを縮小"
 "してください。"
@@ -1292,8 +1292,12 @@ msgid_plural "Attachments have been saved"
 msgstr[0] "添付ファイルを保存しました。"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment size to large. Please remove attachments or reduce the file "
+#| "size."
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 "添付ファイルサイズが大きすぎます。添付ファイルを削除するか、サイズを縮小して"
 "ください。"
@@ -1310,10 +1314,6 @@ msgstr "添付ファイル"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "添付ファイルを保存しました。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "８月"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1835,14 +1835,6 @@ msgstr ""
 "アクティビティを閲覧するには、こちらをクリックし Xing アカウントへ接続し直し"
 "てください。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "繰り返しのタイプを選択するには、文をクリックします。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "値を変更するには、リンクをクリックします。"
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "クリックして画像を再生"
@@ -1894,12 +1886,6 @@ msgstr "通知エリアを閉じる"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "プレミアム機能を閉じます"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "繰り返しビューを閉じるには、クリックしてください。"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2468,10 +2454,6 @@ msgstr "日"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "日"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "１２月"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3703,7 +3685,9 @@ msgid "External participants"
 msgstr "外部出席者"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+#, fuzzy
+#| msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "大変気に入っています。"
 
 #. Emoji category
@@ -3806,10 +3790,6 @@ msgstr "FAX (自宅)"
 msgid "Fax (alt)"
 msgstr "FAX (予備)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "２月"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "フィード URL"
@@ -3817,6 +3797,13 @@ msgstr "フィード URL"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "フィードバック"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "仕事を削除できませんでした。"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4611,13 +4598,6 @@ msgstr "インディゴ"
 msgid "Info"
 msgstr "情報"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "アカウント復元についての情報"
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4790,10 +4770,6 @@ msgstr "アイテムのリスト設定"
 msgid "Items without a file can not be downloaded."
 msgstr "ファイルがないアイテムはダウンロードできません。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "１月"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4806,14 +4782,6 @@ msgstr "職業"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "職務内容"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "７月"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "６月"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5255,10 +5223,6 @@ msgstr "自動構成"
 msgid "Manual input"
 msgstr "手動入力"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "３月"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "マリンバ"
@@ -5349,10 +5313,6 @@ msgstr "栗色"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "次の文字列と一致"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "５月"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -6016,10 +5976,6 @@ msgstr "メールですべての出席者に通知"
 msgid "Notify me again later"
 msgstr "後で再通知"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "１１月"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "同じ差出人への休暇通知の通知周期"
@@ -6055,10 +6011,6 @@ msgstr "オブジェクト"
 #: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "発生"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "１０月"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6587,10 +6539,6 @@ msgstr ""
 "受信トレイで確認メールを確認してください。\n"
 "\n"
 "メールの指示に従い、ウィジットを返信してアカウント設定を終了します。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "次の文を選択してください。"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7458,7 +7406,7 @@ msgid "Rename folder"
 msgstr "フォルダ名を変更"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "定期的なアポイント"
 
@@ -7974,10 +7922,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "送信済みメッセージ"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "９月"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8186,9 +8130,13 @@ msgstr "アイコンを表示"
 msgid "Show images"
 msgstr "画像を表示"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+#, fuzzy
+#| msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "アカウント復元についての情報を表示"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8785,85 +8733,6 @@ msgstr "アポイントが削除されました。"
 msgid "The appointment has been updated"
 msgstr "アポイントが更新されました。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> 日ごとに</a> 繰り返され"
-"ます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span> 週間ごと</a> の <a href="
-"\"#\" data-widget=\"days\" data-attribute=\"days\">月曜日</a> に繰り返されま"
-"す。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">毎週</a> 繰り返されます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"この定期的なアポイントは<a href=\"#\" data-widget=\"options\" data-attribute="
-"\"month\">１０月</a>の<a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">第１</a><a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">水曜日</a>に繰り返されます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"この定期的なアポイントは毎年<a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"month\">１０月</a>の<a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">１０</span></a>日に繰"
-"り返されます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"この定期的なアポイントは<a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">２</span>か月ごと</a>の<a href="
-"\"#\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class="
-"\"number-control\">１０</span></a>日に繰り返されます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"この定期的なアポイントは<a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">２</span>か月ごと</a>の<a href="
-"\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第２</a><a href=\"#"
-"\" data-widget=\"options\" data-attribute=\"day\">水曜日</a>に繰り返されま"
-"す。"
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9044,35 +8913,6 @@ msgstr ""
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "メッセージ送信がキャンセルされました。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"この定期的なアポイントは<a href=\"#\" data-attribute=\"occurrences\" data-"
-"widget=\"number\"><span class=\"number-control\">２</span>回のアポイント</a>"
-"で<a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</a>し"
-"ます。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"この定期的なアポイントは<a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">２０１３年３月１１日</a>に<a href=\"#\" data-attribute="
-"\"ending\" data-widget=\"options\">終了</a>します。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"この定期的なアポイントは <a href=\"#\" data-attribute=\"ending\" data-widget="
-"\"options\">期限なし</a> に設定されています。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
@@ -10619,11 +10459,6 @@ msgstr "%1$s の［コピー］"
 msgid "accepted"
 msgstr "承諾済み"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "%1$d 回のアポイント"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -10676,11 +10511,6 @@ msgstr "オブジェクトを作成"
 msgid "create objects and subfolders"
 msgstr "オブジェクトとサブフォルダを作成"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "毎日"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "濃い青"
@@ -10693,14 +10523,6 @@ msgstr "濃い緑"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "日付ピッカー"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "稼働日"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "週末"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10752,61 +10574,10 @@ msgstr "すべてのオブジェクトを編集"
 msgid "edit own objects"
 msgstr "自分のオブジェクトのみを編集"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "終了"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "特定回数のアポイントで終了"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "特定の日に終了"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "終了："
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "%1$d 日ごとに"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "%1$d か月ごと"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "%1$d 週間ごと"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "毎日"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "毎月"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "毎週"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -10820,9 +10591,6 @@ msgstr "５番目/最後"
 msgid "file"
 msgstr "ファイル"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "第１"
@@ -10843,9 +10611,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "フォルダ"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "第４"
@@ -10898,12 +10663,6 @@ msgstr "１時間後"
 msgid "in one week"
 msgstr "１週間後"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "最終"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "深夜"
@@ -10947,15 +10706,6 @@ msgstr "更新日"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "月"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "毎月"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "期限なし"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11030,9 +10780,6 @@ msgstr "自分のオブジェクトのみを表示"
 msgid "red"
 msgstr "赤"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "第２"
@@ -11059,9 +10806,6 @@ msgstr "サイズ"
 msgid "tentative"
 msgstr "仮承諾"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "第３"
@@ -11136,11 +10880,6 @@ msgstr "フォルダを表示"
 msgid "week(s)"
 msgstr "週"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "毎週"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "リンクの期限を越えた時"
@@ -11157,11 +10896,6 @@ msgstr "宛先がダウンロードを終えた時"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "年"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "毎年"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -12133,6 +11867,9 @@ msgstr "yyyy"
 #~ msgid "Apr"
 #~ msgstr "4 月"
 
+#~ msgid "April"
+#~ msgstr "４月"
+
 #~ msgid ""
 #~ "Are you sure you want to delete all E-Mails from this folder? The deleted "
 #~ "E-Mails will be moved to the Trash folder."
@@ -12461,6 +12198,9 @@ msgstr "yyyy"
 
 #~ msgid "Aug"
 #~ msgstr "8 月"
+
+#~ msgid "August"
+#~ msgstr "８月"
 
 #~ msgid "Australia"
 #~ msgstr "オーストラリア"
@@ -12882,6 +12622,12 @@ msgstr "yyyy"
 #~ "選択したアドレス帳にある連絡先を表示するには、ナビゲーション バーの左側に"
 #~ "ある該当する文字をクリックします。"
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "繰り返しのタイプを選択するには、文をクリックします。"
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "値を変更するには、リンクをクリックします。"
+
 #~ msgid "Click to close this notification"
 #~ msgstr "この通知を閉じるには、クリックしてください。"
 
@@ -12930,6 +12676,11 @@ msgstr "yyyy"
 
 #~ msgid "Close quick config"
 #~ msgstr "クイック構成を閉じる"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "繰り返しビューを閉じるには、クリックしてください。"
 
 #~ msgid "Close search"
 #~ msgstr "検索を閉じる"
@@ -13254,6 +13005,9 @@ msgstr "yyyy"
 
 #~ msgid "Debug"
 #~ msgstr "デバッグ"
+
+#~ msgid "December"
+#~ msgstr "１２月"
 
 #~ msgid "Decline counter proposal"
 #~ msgstr "新しい提案を拒否"
@@ -14187,6 +13941,9 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "2 月"
 
+#~ msgid "February"
+#~ msgstr "２月"
+
 #~ msgid "Fiji"
 #~ msgstr "フィジー"
 
@@ -14778,6 +14535,9 @@ msgstr "yyyy"
 #~ msgid "Infoitem"
 #~ msgstr "インフォアイテム"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "アカウント復元についての情報"
+
 #~ msgid "Infostore"
 #~ msgstr "インフォストア"
 
@@ -14929,6 +14689,9 @@ msgstr "yyyy"
 #~ msgid "Jan"
 #~ msgstr "1 月"
 
+#~ msgid "January"
+#~ msgstr "１月"
+
 #~ msgid "Japan"
 #~ msgstr "日本"
 
@@ -14956,11 +14719,17 @@ msgstr "yyyy"
 #~ msgid "Jul"
 #~ msgstr "7 月"
 
+#~ msgid "July"
+#~ msgstr "７月"
+
 #~ msgid "Jump to slide"
 #~ msgstr "スライドへ移動"
 
 #~ msgid "Jun"
 #~ msgstr "6 月"
+
+#~ msgid "June"
+#~ msgstr "６月"
 
 #~| msgid "Due on %1$s"
 #~ msgid "Just open %1$s"
@@ -15231,6 +15000,9 @@ msgstr "yyyy"
 #~ msgid "Mar"
 #~ msgstr "3 月"
 
+#~ msgid "March"
+#~ msgstr "３月"
+
 #~ msgid "Marital status:"
 #~ msgstr "既婚/未婚:"
 
@@ -15266,6 +15038,9 @@ msgstr "yyyy"
 
 #~ msgid "Maximum"
 #~ msgstr "最大"
+
+#~ msgid "May"
+#~ msgstr "５月"
 
 #~ msgid "Mayotte"
 #~ msgstr "メイヨット"
@@ -15666,6 +15441,9 @@ msgstr "yyyy"
 #~ msgid "Nov"
 #~ msgstr "11 月"
 
+#~ msgid "November"
+#~ msgstr "１１月"
+
 #~ msgid "Nr:"
 #~ msgstr "No:"
 
@@ -15692,6 +15470,9 @@ msgstr "yyyy"
 
 #~ msgid "Oct"
 #~ msgstr "10 月"
+
+#~ msgid "October"
+#~ msgstr "１０月"
 
 #~ msgid "Of the following conditions:"
 #~ msgstr "次の条件を満たすメッセージに対して:"
@@ -16081,6 +15862,9 @@ msgstr "yyyy"
 
 #~ msgid "Please choose"
 #~ msgstr "選択してください。"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "次の文を選択してください。"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "正しい数を入力してください。"
@@ -16768,6 +16552,9 @@ msgstr "yyyy"
 
 #~ msgid "Separator"
 #~ msgstr "表示方法"
+
+#~ msgid "September"
+#~ msgstr "９月"
 
 #~ msgid "Serbia"
 #~ msgstr "セルビア"
@@ -17554,6 +17341,79 @@ msgstr "yyyy"
 #~ "ア フォルダがあります。ユーザがインフォストア フォルダまたはそのサブ フォ"
 #~ "ルダを共有すると、それらのフォルダにあるオブジェクトを閲覧できます。"
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\"><span class=\"number-control\">2</span> 日ごとに</"
+#~ "a> 繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\"><span class=\"number-control\">2</span> 週間ごと</"
+#~ "a> の <a href=\"#\" data-widget=\"days\" data-attribute=\"days\">月曜日</"
+#~ "a> に繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは <a href=\"#\" data-attribute=\"recurrenceType\" "
+#~ "data-widget=\"options\">毎週</a> 繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは<a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"month\">１０月</a>の<a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">第１</a><a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\">水曜日</a>に繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは毎年<a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"month\">１０月</a>の<a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">１０</span></a>日"
+#~ "に繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは<a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\"><span class=\"number-control\">２</span>か月ごと</"
+#~ "a>の<a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
+#~ "\"><span class=\"number-control\">１０</span></a>日に繰り返されます。"
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは<a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\"><span class=\"number-control\">２</span>か月ごと</"
+#~ "a>の<a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">第２"
+#~ "</a><a href=\"#\" data-widget=\"options\" data-attribute=\"day\">水曜日</"
+#~ "a>に繰り返されます。"
+
 #~ msgid "The calendar views"
 #~ msgstr "予定表ビュー"
 
@@ -17706,6 +17566,32 @@ msgstr "yyyy"
 
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr "選択されたフィルタ ルールは不明なフォルダ '%s' を参照しています。"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは<a href=\"#\" data-attribute=\"occurrences\" data-"
+#~ "widget=\"number\"><span class=\"number-control\">２</span>回のアポイント</"
+#~ "a>で<a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">終了</"
+#~ "a>します。"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは<a href=\"#\" data-attribute=\"until\" data-"
+#~ "widget=\"datePicker\">２０１３年３月１１日</a>に<a href=\"#\" data-"
+#~ "attribute=\"ending\" data-widget=\"options\">終了</a>します。"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "この定期的なアポイントは <a href=\"#\" data-attribute=\"ending\" data-"
+#~ "widget=\"options\">期限なし</a> に設定されています。"
 
 #~ msgid "The server didn't respond!"
 #~ msgstr "サーバは応答していません。"
@@ -18920,6 +18806,10 @@ msgstr "yyyy"
 #~ msgid "after"
 #~ msgstr "回数指定"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "%1$d 回のアポイント"
+
 #~ msgid "all"
 #~ msgstr "すべて"
 
@@ -18980,11 +18870,20 @@ msgstr "yyyy"
 #~ msgid "d.MM.yy"
 #~ msgstr "d.MM.yy"
 
+#~ msgid "daily"
+#~ msgstr "毎日"
+
 #~ msgid "date range"
 #~ msgstr "日付の範囲"
 
 #~ msgid "day every"
 #~ msgstr "日。　毎"
+
+#~ msgid "day of the week"
+#~ msgstr "稼働日"
+
+#~ msgid "day of the weekend"
+#~ msgstr "週末"
 
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
@@ -19017,11 +18916,41 @@ msgstr "yyyy"
 #~ msgid "end date "
 #~ msgstr "終了日 "
 
+#~ msgid "ends"
+#~ msgstr "終了"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "特定回数のアポイントで終了"
+
 #~ msgid "ends on"
 #~ msgstr "終了日時"
 
+#~ msgid "ends on a specific date"
+#~ msgstr "特定の日に終了"
+
 #~ msgid "estimated costs"
 #~ msgstr "見込まれるコスト"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "%1$d 日ごとに"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "%1$d か月ごと"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "%1$d 週間ごと"
+
+#~ msgid "every day"
+#~ msgstr "毎日"
+
+#~ msgid "every month"
+#~ msgstr "毎月"
+
+#~ msgid "every week"
+#~ msgstr "毎週"
 
 #~ msgid "expanded"
 #~ msgstr "開いた状態"
@@ -19075,6 +19004,9 @@ msgstr "yyyy"
 #~ msgid "june"
 #~ msgstr "6 月"
 
+#~ msgid "last"
+#~ msgstr "最終"
+
 #~ msgid "later"
 #~ msgstr "後で"
 
@@ -19094,8 +19026,14 @@ msgstr "yyyy"
 #~ msgid "mm"
 #~ msgstr "mm"
 
+#~ msgid "monthly"
+#~ msgstr "毎月"
+
 #~ msgid "more"
 #~ msgstr "その他"
+
+#~ msgid "never ends"
+#~ msgstr "期限なし"
 
 #~ msgid "new"
 #~ msgstr "新規"
@@ -19250,11 +19188,17 @@ msgstr "yyyy"
 #~ msgid "waiting"
 #~ msgstr "待機中"
 
+#~ msgid "weekly"
+#~ msgstr "毎週"
+
 #~ msgid "who|From"
 #~ msgstr "差出人"
 
 #~ msgid "work days"
 #~ msgstr "稼働日"
+
+#~ msgid "yearly"
+#~ msgstr "毎年"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"

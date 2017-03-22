@@ -1235,10 +1235,6 @@ msgstr "允許於:"
 msgid "Apps"
 msgstr "應用程式"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "四月"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1297,9 +1293,13 @@ msgstr "附件"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment file size to large. You have to use %1$s or reduce the "
+#| "attachment file size."
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr "附件檔案大小太大，您需要使用 %1$s 或縮小附件檔案大小。"
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
@@ -1309,8 +1309,12 @@ msgstr[0] "已儲存附件"
 msgstr[1] "已儲存附件"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment size to large. Please remove attachments or reduce the file "
+#| "size."
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr "附件太大，請移除附件或縮小檔案大小。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1325,10 +1329,6 @@ msgstr "附件"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "已儲存附件！"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "八月"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1845,14 +1845,6 @@ msgstr "點擊此處離開說明中心"
 msgid "Click here to reconnect to your xing account to see activities."
 msgstr "點擊此處重新連線至您的 XING 帳號以檢視活動。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "點下句子修改在何時重複約會。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "點下鏈結修改數值。"
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "點擊播放音訊檔案"
@@ -1904,12 +1896,6 @@ msgstr "關閉通知區域"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "關閉收費功能"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "點擊關閉重複發生視圖"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2475,10 +2461,6 @@ msgstr "日"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "日"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "十二月"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3699,7 +3681,9 @@ msgid "External participants"
 msgstr "外部參與者"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+#, fuzzy
+#| msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "非常有可能"
 
 #. Emoji category
@@ -3795,10 +3779,6 @@ msgstr "傳真（住宅）"
 msgid "Fax (alt)"
 msgstr "傳真（替代）"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "二月"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "資訊來源 URL"
@@ -3806,6 +3786,13 @@ msgstr "資訊來源 URL"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "回饋"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "無法刪除工作。"
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4590,13 +4577,6 @@ msgstr "靛藍色"
 msgid "Info"
 msgstr "信息"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "帳號救援相關資訊…"
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4766,10 +4746,6 @@ msgstr "項目清單選項"
 msgid "Items without a file can not be downloaded."
 msgstr "無法下載沒有檔案的項目。"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "一月"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4782,14 +4758,6 @@ msgstr "工作"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "工作描述"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "七月"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "六月"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5229,10 +5197,6 @@ msgstr "自動設定"
 msgid "Manual input"
 msgstr "手動輸入"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "三月"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
@@ -5323,10 +5287,6 @@ msgstr "栗色"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "符合"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "五月"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -5989,10 +5949,6 @@ msgstr "透過電子郵件通知所有參與者。"
 msgid "Notify me again later"
 msgstr "稍後再通知我"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "十一月"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "傳送假期通知給寄件者的間隔日期"
@@ -6028,10 +5984,6 @@ msgstr "物件"
 #: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "發生於"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "十月"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6556,10 +6508,6 @@ msgstr ""
 "請到您的收件匣收取確認郵件。\n"
 "\n"
 "請依照郵件中的指示操作，然後回到小工具來完成郵件設定。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "請從下方挑選一個句子"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7419,7 +7367,7 @@ msgid "Rename folder"
 msgstr "重新命名資料夾"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "重複"
 
@@ -7935,10 +7883,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "寄件備份"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "九月"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8151,9 +8095,13 @@ msgstr "顯示圖示"
 msgid "Show images"
 msgstr "顯示圖片"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+#, fuzzy
+#| msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "顯示帳號救援資訊…"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8747,81 +8695,6 @@ msgstr "已刪除約會"
 msgid "The appointment has been updated"
 msgstr "已更新約會"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"約會將於 <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">每"
-"<span class=\"number-control\">2</span> 天</a> 重複。 "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"約會將於 <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval\">每"
-"<span class=\"number-control\">2</span> 週</a> 的<a href=\"#\"  data-widget="
-"\"days\" data-attribute=\"days\">週一</a> 重複。 "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"約會將於 <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
-"\"options\">每週</a> 重複。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"約會將於每年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">"
-"十月</a> 的 <a href=\"#\" data-widget=\"options\" data-attribute=\"ordinal\">"
-"第一個</a> <a href=\"#\" data-widget=\"options\" data-attribute=\"day\">週三"
-"</a> 重複。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"約會將於每年的 <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">十月</a> <a href=\"#\" data-widget=\"number\" data-attribute=\"dayInMonth"
-"\"><span class=\"number-control\">10</span></a> 日重複。 "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">每 "
-"<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"a> 日重複。 "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">每"
-"<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-widget="
-"\"options\" data-attribute=\"ordinal\">第二個</a> <a href=\"#\" data-widget="
-"\"options\" data-attribute=\"day\">週三</a>重複。 "
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -8987,34 +8860,6 @@ msgstr "寄件者想在您閱讀此郵件時收到通知"
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "已取消傳送訊息。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"約會將 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">結束於"
-"</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number\">發生"
-"<span class=\"number-control\">2</span> 次約會後</a>。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"約會<a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">結束</a> "
-"於 <a href=\"#\" data-attribute=\"until\" data-widget=\"datePicker"
-"\">2013/03/11</a>。"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"約會 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">永不結束"
-"</a>。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
@@ -10522,12 +10367,6 @@ msgstr "[副本] %1$s"
 msgid "accepted"
 msgstr "已接受"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "%1$d 次約會後"
-msgstr[1] "%1$d 次約會後"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -10580,11 +10419,6 @@ msgstr "建立物件"
 msgid "create objects and subfolders"
 msgstr "建立物件與子資料夾"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "每天"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "深藍色"
@@ -10597,14 +10431,6 @@ msgstr "深紅色"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "日期選擇器"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "每週日期"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "周末日期"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10656,64 +10482,10 @@ msgstr "編輯所有物件"
 msgid "edit own objects"
 msgstr "編輯自己的物件"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "結束"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "在幾次約會後結束"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "結束於指定日期"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "結束於:"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "每天"
-msgstr[1] "每 %1$d 天"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "每月"
-msgstr[1] "每 %1$d 月"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "每個"
-msgstr[1] "每 %1$d 周"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "每天"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "每月"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "每周"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -10727,9 +10499,6 @@ msgstr "第五個/最後一個"
 msgid "file"
 msgstr "檔案"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "第一個"
@@ -10750,9 +10519,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "文件夾"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "第四個"
@@ -10806,12 +10572,6 @@ msgstr "一小時內"
 msgid "in one week"
 msgstr "1 周內"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "最後一個"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "今天晚上"
@@ -10855,15 +10615,6 @@ msgstr "修改於"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "個月"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "每月"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "永不結束"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -10938,9 +10689,6 @@ msgstr "讀取自己的物件"
 msgid "red"
 msgstr "紅色"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "第二個"
@@ -10967,9 +10715,6 @@ msgstr "大小"
 msgid "tentative"
 msgstr "暫定"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "第三個"
@@ -11044,11 +10789,6 @@ msgstr "檢視文件夾"
 msgid "week(s)"
 msgstr "星期"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "每週"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "連結過期時"
@@ -11065,11 +10805,6 @@ msgstr "當收件者完成下載檔案時"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "年"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "每年"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -11609,6 +11344,9 @@ msgstr "年"
 #~ msgid "Apr"
 #~ msgstr "四月"
 
+#~ msgid "April"
+#~ msgstr "四月"
+
 #~ msgid ""
 #~ "Are you sure you want to delete all E-Mails from this folder? The deleted "
 #~ "E-Mails will be moved to the Trash folder."
@@ -11727,6 +11465,9 @@ msgstr "年"
 #~ msgstr "已啟用音效"
 
 #~ msgid "Aug"
+#~ msgstr "八月"
+
+#~ msgid "August"
 #~ msgstr "八月"
 
 #~ msgid "Australia"
@@ -12075,6 +11816,12 @@ msgstr "年"
 #~ "display the corresponding contacts from the selected address book."
 #~ msgstr "點選導覽列左方的字母以顯示選擇的通訊錄中對應的聯絡人。"
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "點下句子修改在何時重複約會。"
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "點下鏈結修改數值。"
+
 #~ msgid "Click to close this notification"
 #~ msgstr "點擊關閉此通知"
 
@@ -12116,6 +11863,11 @@ msgstr "年"
 
 #~ msgid "Close quick config"
 #~ msgstr "關閉快速配置"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "點擊關閉重複發生視圖"
 
 #~ msgid "Close search"
 #~ msgstr "關閉搜尋"
@@ -12405,6 +12157,9 @@ msgstr "年"
 
 #~ msgid "Debug"
 #~ msgstr "除錯"
+
+#~ msgid "December"
+#~ msgstr "十二月"
 
 #~ msgid "Decline counter proposal"
 #~ msgstr "拒絕反提案"
@@ -13119,6 +12874,9 @@ msgstr "年"
 #~ msgid "Fax (private)"
 #~ msgstr "傳真（私人）"
 
+#~ msgid "February"
+#~ msgstr "二月"
+
 #~ msgid "File name, click to rename"
 #~ msgstr "檔案完成，點擊以重新命名"
 
@@ -13397,6 +13155,9 @@ msgstr "年"
 #~ msgid "Info area"
 #~ msgstr "資訊區域"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "帳號救援相關資訊…"
+
 #~ msgid "Inline With Text"
 #~ msgstr "行內文字"
 
@@ -13473,6 +13234,9 @@ msgstr "年"
 #~ msgid "Items without a file can not be opened."
 #~ msgstr "無法開啟沒有檔案的項目。"
 
+#~ msgid "January"
+#~ msgstr "一月"
+
 #~ msgid "Join"
 #~ msgstr "加入"
 
@@ -13488,8 +13252,14 @@ msgstr "年"
 #~ msgid "Joining the presentation of %1$s."
 #~ msgstr "加入 %1$s 的簡報。"
 
+#~ msgid "July"
+#~ msgstr "七月"
+
 #~ msgid "Jump to slide"
 #~ msgstr "跳到其他投影片"
+
+#~ msgid "June"
+#~ msgstr "六月"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -13604,6 +13374,9 @@ msgstr "年"
 #~ msgid "Managing E-Mail messages"
 #~ msgstr "管理 E-Mail"
 
+#~ msgid "March"
+#~ msgstr "三月"
+
 #~ msgid "Mark as"
 #~ msgstr "標記為"
 
@@ -13617,6 +13390,9 @@ msgstr "年"
 #~| msgid "Cayman Islands"
 #~ msgid "Marshall Islands"
 #~ msgstr "開曼群島"
+
+#~ msgid "May"
+#~ msgstr "五月"
 
 #~ msgid "Mediaplayer"
 #~ msgstr "Mediaplayer"
@@ -13792,8 +13568,14 @@ msgstr "年"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "您的 Newsfeed 中沒有內容。"
 
+#~ msgid "November"
+#~ msgstr "十一月"
+
 #~ msgid "Numbering On/Off"
 #~ msgstr "編號開關"
+
+#~ msgid "October"
+#~ msgstr "十月"
 
 #~ msgid "Off"
 #~ msgstr "關閉"
@@ -13909,6 +13691,9 @@ msgstr "年"
 
 #~ msgid "Please ask me every time"
 #~ msgstr "每次都問我"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "請從下方挑選一個句子"
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "請輸入一個正確數字。"
@@ -14182,6 +13967,9 @@ msgstr "年"
 
 #~ msgid "Sending the E-Mail"
 #~ msgstr "寄送郵件"
+
+#~ msgid "September"
+#~ msgstr "九月"
 
 #~ msgid "Server Error"
 #~ msgstr "伺服器錯誤"
@@ -14523,6 +14311,75 @@ msgstr "年"
 #~ "network news."
 #~ msgstr "入口可通知您目前有什麼郵件、約會、或社交網路中的消息。"
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "約會將於 <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval"
+#~ "\">每<span class=\"number-control\">2</span> 天</a> 重複。 "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "約會將於 <a href=\"#\"  data-widget=\"number\" data-attribute=\"interval"
+#~ "\">每<span class=\"number-control\">2</span> 週</a> 的<a href=\"#\"  data-"
+#~ "widget=\"days\" data-attribute=\"days\">週一</a> 重複。 "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "約會將於 <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
+#~ "\"options\">每週</a> 重複。"
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "約會將於每年 <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">十月</a> 的 <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"ordinal\">第一個</a> <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"day\">週三</a> 重複。"
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "約會將於每年的 <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">十月</a> <a href=\"#\" data-widget=\"number\" data-attribute="
+#~ "\"dayInMonth\"><span class=\"number-control\">10</span></a> 日重複。 "
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">"
+#~ "每 <span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-"
+#~ "widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-"
+#~ "control\">10</a> 日重複。 "
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "約會將於 <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">"
+#~ "每<span class=\"number-control\">2</span> 月</a> 的 <a href=\"#\" data-"
+#~ "widget=\"options\" data-attribute=\"ordinal\">第二個</a> <a href=\"#\" "
+#~ "data-widget=\"options\" data-attribute=\"day\">週三</a>重複。 "
+
 #~ msgid "The calendar views"
 #~ msgstr "行事曆視圖"
 
@@ -14620,6 +14477,31 @@ msgstr "年"
 
 #~ msgid "The requested email no longer exists"
 #~ msgstr "請求的郵件不存在"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "約會將 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">結"
+#~ "束於</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
+#~ "\">發生<span class=\"number-control\">2</span> 次約會後</a>。"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "約會<a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">結束</"
+#~ "a> 於 <a href=\"#\" data-attribute=\"until\" data-widget=\"datePicker"
+#~ "\">2013/03/11</a>。"
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "約會 <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">永不"
+#~ "結束</a>。"
 
 #~ msgid ""
 #~ "The settings are organized in topics. Select the topic on the left side, "
@@ -15227,6 +15109,11 @@ msgstr "年"
 #~ msgid "Zoom: %1$d%"
 #~ msgstr "縮放: %1$d%"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "%1$d 次約會後"
+#~ msgstr[1] "%1$d 次約會後"
+
 #~ msgid "all"
 #~ msgstr "全部"
 
@@ -15252,8 +15139,17 @@ msgstr "年"
 #~ msgid "collapsed"
 #~ msgstr "摺疊"
 
+#~ msgid "daily"
+#~ msgstr "每天"
+
 #~ msgid "date range"
 #~ msgstr "日期範圍"
+
+#~ msgid "day of the week"
+#~ msgstr "每週日期"
+
+#~ msgid "day of the weekend"
+#~ msgstr "周末日期"
 
 #, fuzzy
 #~| msgid "Edit signature"
@@ -15263,8 +15159,41 @@ msgstr "年"
 #~ msgid "end date "
 #~ msgstr "結束日期"
 
+#~ msgid "ends"
+#~ msgstr "結束"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "在幾次約會後結束"
+
 #~ msgid "ends on"
 #~ msgstr "結束於"
+
+#~ msgid "ends on a specific date"
+#~ msgstr "結束於指定日期"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "每天"
+#~ msgstr[1] "每 %1$d 天"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "每月"
+#~ msgstr[1] "每 %1$d 月"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "每個"
+#~ msgstr[1] "每 %1$d 周"
+
+#~ msgid "every day"
+#~ msgstr "每天"
+
+#~ msgid "every month"
+#~ msgstr "每月"
+
+#~ msgid "every week"
+#~ msgstr "每周"
 
 #~ msgid "expanded"
 #~ msgstr "展開"
@@ -15307,6 +15236,9 @@ msgstr "年"
 #~ msgid "june"
 #~ msgstr "六月"
 
+#~ msgid "last"
+#~ msgstr "最後一個"
+
 #~ msgid "later"
 #~ msgstr "後"
 
@@ -15319,8 +15251,14 @@ msgstr "年"
 #~ msgid "may"
 #~ msgstr "五月"
 
+#~ msgid "monthly"
+#~ msgstr "每月"
+
 #~ msgid "more"
 #~ msgstr "更多"
+
+#~ msgid "never ends"
+#~ msgstr "永不結束"
 
 #~ msgid "new"
 #~ msgstr "新"
@@ -15412,5 +15350,11 @@ msgstr "年"
 #~ msgid "vacation"
 #~ msgstr "假期"
 
+#~ msgid "weekly"
+#~ msgstr "每週"
+
 #~ msgid "work days"
 #~ msgstr "工作日"
+
+#~ msgid "yearly"
+#~ msgstr "每年"

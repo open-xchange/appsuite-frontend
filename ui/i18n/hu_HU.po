@@ -1256,10 +1256,6 @@ msgstr "Jóváhagyva:"
 msgid "Apps"
 msgstr "Alkalmazások"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "Április"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1318,9 +1314,13 @@ msgstr "Melléklet"
 
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment file size to large. You have to use %1$s or reduce the "
+#| "attachment file size."
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 "A melléklet mérete túl nagy. Vagy a(z) %1$s szolgáltatást használja vagy "
 "csökkentenie kell a melléklet méretét."
@@ -1332,8 +1332,12 @@ msgstr[0] "A melléklet mentve"
 msgstr[1] "A mellékletek mentve"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid ""
+#| "Attachment size to large. Please remove attachments or reduce the file "
+#| "size."
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 "A mellékelt mérete túl nagy. Távolítsa el a mellékletet vagy csökkentse a "
 "fájl méretét."
@@ -1350,10 +1354,6 @@ msgstr "Mellékletek"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "Mellékletei mentésre kerültek!"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "Augusztus"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1885,15 +1885,6 @@ msgstr ""
 "Kattintson ide, hogy újrakapcsolódjon a xing felhasználói fiókjához, hogy "
 "megtekinthesse tevékenységeit."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr ""
-"Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Kattintson az audiófájlra a lejátszáshoz"
@@ -1945,12 +1936,6 @@ msgstr "Értesítési terület bezárása"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Prémium szolgáltatások bezárása"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "Kattintson az ismétlődési nézet bezárásához"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2520,10 +2505,6 @@ msgstr "Nap"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "Nap"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "December"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3770,7 +3751,9 @@ msgid "External participants"
 msgstr "GKülső résztvevők"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+#, fuzzy
+#| msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "Nagyon valószínű"
 
 #. Emoji category
@@ -3872,10 +3855,6 @@ msgstr "Fax (otthoni)"
 msgid "Fax (alt)"
 msgstr "Fax (másik)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "Február"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Forrás URL"
@@ -3883,6 +3862,13 @@ msgstr "Forrás URL"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "Visszajelzés"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "A feladat nem törölhető."
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4675,13 +4661,6 @@ msgstr "Indigókék"
 msgid "Info"
 msgstr "Információ"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "Információ a felhasználói fiók visszaállításáról..."
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4856,10 +4835,6 @@ msgstr "Elemlista beállításai"
 msgid "Items without a file can not be downloaded."
 msgstr "Fájl nélküli elemek nem tölthetők le."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "Január"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4872,14 +4847,6 @@ msgstr "Munka"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Munkaköri leírás"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "Július"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "Június"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5321,10 +5288,6 @@ msgstr "Automatikus beállítás"
 msgid "Manual input"
 msgstr "Kézi bevitel"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "Március"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
@@ -5415,10 +5378,6 @@ msgstr "Gesztenyebarna"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Megegyezik"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "Május"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -6081,10 +6040,6 @@ msgstr "Minden résztvevő értesítése e-mailben."
 msgid "Notify me again later"
 msgstr "Értesítsen később"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "November"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr ""
@@ -6121,10 +6076,6 @@ msgstr "Tárgyak"
 #: module:io.ox/calendar/edit/main
 msgid "Occurrences"
 msgstr "Ismétlődés"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "Október"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6654,10 +6605,6 @@ msgstr ""
 "\n"
 "Kövesse az levélben található utmutatást és beállítás befejezéséhez térjen "
 "vissza a widgethez."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "Válasszon egy mondatot alább."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7534,7 +7481,7 @@ msgid "Rename folder"
 msgstr "Mappa átnevezése"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Ismétlés"
 
@@ -8053,10 +8000,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Elküldött üzenetek"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "Szeptember"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8269,9 +8212,13 @@ msgstr "Ikonok megjelenítése"
 msgid "Show images"
 msgstr "Képek megjelenítése"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+#, fuzzy
+#| msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "Információ megjelenítése a felhasználói fiók visszaállításáról"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8873,82 +8820,6 @@ msgstr "A találkozó törölve"
 msgid "The appointment has been updated"
 msgstr "A találkozó frissítve"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"A találkozó minden <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span>. nap</a> ismétlődik."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"A találkozó minden <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"><span class=\"number-control\">2</span>. héten</a> <a href=\"#"
-"\" data-widget=\"days\" data-attribute=\"days\">hétfőn ismétlődik</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"A találkozó <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
-"\"options\">hetente</a> ismétlődik."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">október</a> minden <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">szerdai</a> napján ismétlődik."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"A találkozó minden év <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"month\">október</a> <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"dayInMonth\"><span class=\"number-control\">10</span></a>. napján "
-"ismétlődik."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
-"\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" "
-"data-widget=\"number\" data-attribute=\"dayInMonth\"><span class=\"number-"
-"control\">10</span></a>. napján ismétlődik."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
-"\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#\" "
-"data-widget=\"options\" data-attribute=\"ordinal\">második</a> <a href=\"#\" "
-"data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján ismétlődik."
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9130,34 +9001,6 @@ msgstr "A feladó értesítést szeretne kapni arról, hogy elolvasta ezt a leve
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "Az üzenet küldése megszakítva."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-"\"number\"><span class=\"number-control\">2</span> találkozó után</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">soha nem fejeződik be</a>."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
@@ -10716,12 +10559,6 @@ msgstr "[Másolat] %1$s"
 msgid "accepted"
 msgstr "elfogadva"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "%1$d találkozó után"
-msgstr[1] "%1$d találkozó után"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -10774,11 +10611,6 @@ msgstr "elemek létrehozása"
 msgid "create objects and subfolders"
 msgstr "elemek és almappák létrehozása"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "naponta"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "sötétkék"
@@ -10791,14 +10623,6 @@ msgstr "sötétzöld"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "dátumválasztó"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "nap a héten"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "nap a hétvégén"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10850,64 +10674,10 @@ msgstr "minden elem szerkesztése"
 msgid "edit own objects"
 msgstr "saját elemek szerkesztése"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "befejeződik"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "adott számú találkozó után fejeződik be"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "adott dátumon fejeződik be"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "befejeződik:"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "minden %1$d. nap"
-msgstr[1] "minden %1$d. nap"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "minden %1$d. hónap"
-msgstr[1] "minden %1$d. hónap"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "minden %1$d. héten"
-msgstr[1] "minden %1$d. héten"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "minden nap"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "minden hónap"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "minden héten"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -10921,9 +10691,6 @@ msgstr "ötödik / utolsó"
 msgid "file"
 msgstr "Új fájl"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "első"
@@ -10944,9 +10711,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "Mappa"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "negyedik"
@@ -11000,12 +10764,6 @@ msgstr "egy órán belül"
 msgid "in one week"
 msgstr "egy hét múlva"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "utolsó"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "késő este"
@@ -11049,15 +10807,6 @@ msgstr "módosítva"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "hónap"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "havonta"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "soha nem fejeződik be"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11132,9 +10881,6 @@ msgstr "saját elemek olvasása"
 msgid "red"
 msgstr "vörös"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "második"
@@ -11161,9 +10907,6 @@ msgstr "méret"
 msgid "tentative"
 msgstr "feltételes"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "harmadik"
@@ -11238,11 +10981,6 @@ msgstr "mappa megtekintése"
 msgid "week(s)"
 msgstr "hét"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "hetente"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "amikor a hivatkozás lejárt"
@@ -11259,11 +10997,6 @@ msgstr "amikor a fogadó befejezte a fájlok letöltését"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "év"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "évente"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -11398,6 +11131,12 @@ msgstr "yyyy"
 #~ msgid "Approximate Duration for Subscriptions"
 #~ msgstr "Feliratkozások hozzávetőleges időtartama"
 
+#~ msgid "April"
+#~ msgstr "Április"
+
+#~ msgid "August"
+#~ msgstr "Augusztus"
+
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Automatikusan szövegtördelés ennyi karakter után:"
 
@@ -11444,6 +11183,13 @@ msgstr "yyyy"
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Egész napos találkozóért kattintson"
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr ""
+#~ "Kattintson egy mondatra a találkozó megismétlési idejének kiválasztásához."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "Kattintson a hivatkozásokra az értékek megváltoztatásához."
+
 #~ msgid "Click to close this notification"
 #~ msgstr "Kattintson az értesítés bezárásához"
 
@@ -11461,6 +11207,11 @@ msgstr "yyyy"
 
 #~ msgid "Click to upload image"
 #~ msgstr "Kattintson a képfeltöltéshez"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "Kattintson az ismétlődési nézet bezárásához"
 
 #~ msgid "Close this reminder"
 #~ msgstr "Emlékeztető bezárása"
@@ -11494,6 +11245,9 @@ msgstr "yyyy"
 
 #~ msgid "Day View"
 #~ msgstr "Napnézet"
+
+#~ msgid "December"
+#~ msgstr "December"
 
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Összes üzenet törlése ebben a mappában"
@@ -11617,6 +11371,9 @@ msgstr "yyyy"
 #~ msgid "Favorite timezone"
 #~ msgstr "Kedvenc időzóná"
 
+#~ msgid "February"
+#~ msgstr "Február"
+
 #~ msgid "File name, click to rename"
 #~ msgstr "Fájlnév, kattintson ide az átnevezéshez"
 
@@ -11690,6 +11447,9 @@ msgstr "yyyy"
 #~ msgid "Indonesia"
 #~ msgstr "Visszavonva"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "Információ a felhasználói fiók visszaállításáról..."
+
 #~ msgid "Invalid data"
 #~ msgstr "Érvénytelen adatok"
 
@@ -11702,6 +11462,9 @@ msgstr "yyyy"
 
 #~ msgid "Item List"
 #~ msgstr "Elemlista"
+
+#~ msgid "January"
+#~ msgstr "Január"
 
 #~ msgid "Join"
 #~ msgstr "Csatlakozás"
@@ -11718,8 +11481,14 @@ msgstr "yyyy"
 #~ msgid "Joining the presentation of %1$s."
 #~ msgstr "Csatlakozás a(z) %1$s beállításhoz."
 
+#~ msgid "July"
+#~ msgstr "Július"
+
 #~ msgid "Jump to slide"
 #~ msgstr "Ugrás a diára"
+
+#~ msgid "June"
+#~ msgstr "Június"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -11755,6 +11524,9 @@ msgstr "yyyy"
 #~ msgid "Manage applications"
 #~ msgstr "Alkalmazások kezelése"
 
+#~ msgid "March"
+#~ msgstr "Március"
+
 #~ msgid "Mark as"
 #~ msgstr "Megjelölés másként"
 
@@ -11763,6 +11535,9 @@ msgstr "yyyy"
 
 #~ msgid "Mark unread"
 #~ msgstr "Megjelölés olvasottként"
+
+#~ msgid "May"
+#~ msgstr "Május"
 
 #~ msgid "Monthly on day %1$d"
 #~ msgstr "Havonta a(z) %1$d. napon"
@@ -11819,6 +11594,12 @@ msgstr "yyyy"
 #~ msgid "Nothing in your newsfeed."
 #~ msgstr "Nincs semmi a hírcsatornában."
 
+#~ msgid "November"
+#~ msgstr "November"
+
+#~ msgid "October"
+#~ msgstr "Október"
+
 #~ msgid "Off"
 #~ msgstr "Ki"
 
@@ -11841,6 +11622,9 @@ msgstr "yyyy"
 
 #~ msgid "Please ask me every time"
 #~ msgstr "Kérdezze meg minden alkalommal"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Válasszon egy mondatot alább."
 
 #~ msgid ""
 #~ "Please feel free to rename tabs to better match your needs. Use "
@@ -11943,6 +11727,9 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "Visszajelzés küldése"
 
+#~ msgid "September"
+#~ msgstr "Szeptember"
+
 #~ msgid "Settings for advanced users"
 #~ msgstr "Beállítások szakértő felhasználóknak"
 
@@ -12028,6 +11815,77 @@ msgstr "yyyy"
 #~ msgid "Tablet"
 #~ msgstr "Engedélyezés"
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "A találkozó minden <a href=\"#\" data-widget=\"number\" data-attribute="
+#~ "\"interval\"><span class=\"number-control\">2</span>. nap</a> ismétlődik."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "A találkozó minden <a href=\"#\" data-widget=\"number\" data-attribute="
+#~ "\"interval\"><span class=\"number-control\">2</span>. héten</a> <a href="
+#~ "\"#\" data-widget=\"days\" data-attribute=\"days\">hétfőn ismétlődik</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "A találkozó <a href=\"#\" data-attribute=\"recurrenceType\" data-widget="
+#~ "\"options\">hetente</a> ismétlődik."
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "A találkozó <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">október</a> minden <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\">első</a> <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"day\">szerdai</a> napján ismétlődik."
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "A találkozó minden év <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"month\">október</a> <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a>. "
+#~ "napján ismétlődik."
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
+#~ "\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#"
+#~ "\" data-widget=\"number\" data-attribute=\"dayInMonth\"><span class="
+#~ "\"number-control\">10</span></a>. napján ismétlődik."
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "A találkozó <a href=\"#\" data-widget=\"number\" data-attribute=\"interval"
+#~ "\">minden <span class=\"number-control\">2</span>. hónap</a> <a href=\"#"
+#~ "\" data-widget=\"options\" data-attribute=\"ordinal\">második</a> <a href="
+#~ "\"#\" data-widget=\"options\" data-attribute=\"day\">szerdai</a> napján "
+#~ "ismétlődik."
+
 #~ msgid "The following actions apply to all messages (%1$d) in this folder:"
 #~ msgstr ""
 #~ "A következő műveletek jutnak érvényre a mappában található összes üzentre "
@@ -12061,6 +11919,32 @@ msgstr "yyyy"
 
 #~ msgid "The requested document does not exist."
 #~ msgstr "A kért dokumentum nem létezik."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget="
+#~ "\"options\">befejeződik</a> <a href=\"#\" data-attribute=\"occurrences\" "
+#~ "data-widget=\"number\"><span class=\"number-control\">2</span> találkozó "
+#~ "után</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget="
+#~ "\"options\">befejeződik</a> ekkor: <a href=\"#\" data-attribute=\"until\" "
+#~ "data-widget=\"datePicker\">11/03/2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "Az ismétlődés <a href=\"#\" data-attribute=\"ending\" data-widget="
+#~ "\"options\">soha nem fejeződik be</a>."
 
 #~ msgid "The tabbed inbox can be completely disabled in the mail settings."
 #~ msgstr "A levelezés beállításainál a lapok teljesen letilthatók."
@@ -12249,6 +12133,11 @@ msgstr "yyyy"
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "A visszajelzés elküldésekor az e-mail címe is csatolva lesz"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "%1$d találkozó után"
+#~ msgstr[1] "%1$d találkozó után"
+
 #~ msgid "and"
 #~ msgstr "és"
 
@@ -12258,11 +12147,53 @@ msgstr "yyyy"
 #~ msgid "collapsed"
 #~ msgstr "összecsukott"
 
+#~ msgid "daily"
+#~ msgstr "naponta"
+
+#~ msgid "day of the week"
+#~ msgstr "nap a héten"
+
+#~ msgid "day of the weekend"
+#~ msgstr "nap a hétvégén"
+
 #~ msgid "end date "
 #~ msgstr "befejező dátum"
 
+#~ msgid "ends"
+#~ msgstr "befejeződik"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "adott számú találkozó után fejeződik be"
+
 #~ msgid "ends on"
 #~ msgstr "befejeződik"
+
+#~ msgid "ends on a specific date"
+#~ msgstr "adott dátumon fejeződik be"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "minden %1$d. nap"
+#~ msgstr[1] "minden %1$d. nap"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "minden %1$d. hónap"
+#~ msgstr[1] "minden %1$d. hónap"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "minden %1$d. héten"
+#~ msgstr[1] "minden %1$d. héten"
+
+#~ msgid "every day"
+#~ msgstr "minden nap"
+
+#~ msgid "every month"
+#~ msgstr "minden hónap"
+
+#~ msgid "every week"
+#~ msgstr "minden héten"
 
 #~ msgid "expanded"
 #~ msgstr "kibontott"
@@ -12278,8 +12209,17 @@ msgstr "yyyy"
 #~ msgid "is on"
 #~ msgstr "folyamatban"
 
+#~ msgid "last"
+#~ msgstr "utolsó"
+
 #~ msgid "login"
 #~ msgstr "bejelentkezés"
+
+#~ msgid "monthly"
+#~ msgstr "havonta"
+
+#~ msgid "never ends"
+#~ msgstr "soha nem fejeződik be"
 
 #~ msgid "next %1$s"
 #~ msgstr "következő %1$s"
@@ -12310,5 +12250,11 @@ msgstr "yyyy"
 #~ msgid "the line length must be a number"
 #~ msgstr "a sorhossz egy szám kell hogy legyen"
 
+#~ msgid "weekly"
+#~ msgstr "hetente"
+
 #~ msgid "work days"
 #~ msgstr "munkanapok"
+
+#~ msgid "yearly"
+#~ msgstr "évente"

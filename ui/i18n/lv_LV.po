@@ -1302,10 +1302,6 @@ msgstr "Akceptēts:"
 msgid "Apps"
 msgstr "Aplikācijas"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "Aprīlis"
-
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgctxt "folder"
@@ -1365,8 +1361,8 @@ msgstr "Pievienojums"
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 
 #: apps/io.ox/mail/actions/attachmentSave.js module:io.ox/mail
@@ -1378,7 +1374,7 @@ msgstr[2] "Pievienojumi ir saglabāti"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1393,10 +1389,6 @@ msgstr "Pievienojumi"
 #: apps/io.ox/core/pim/actions.js module:io.ox/core
 msgid "Attachments have been saved!"
 msgstr "Pievienojumi ir saglabāti!"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "Augusts"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
@@ -1936,14 +1928,6 @@ msgstr ""
 "Noklikšķiniet šeit lai no jauna pieslēgtos savam Xing kontam un skatītu "
 "aktivitātes."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Noklikšķiniet uz teikuma, lai izvēlētos kad mītiņu atkārtot."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "Noklikšķiniet uz saitēm, lai izmainītu vērtības."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Noklikšķiniet, lai atskaņotu audio failu"
@@ -1995,12 +1979,6 @@ msgstr "Aizvērt paziņojumu apgabalu"
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Close premium features"
 msgstr "Aizvērt premiālās funkcijas"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-#, fuzzy
-#| msgid "Click to close the recurrence view"
-msgid "Close recurrence view"
-msgstr "Noklikšķiniet, lai aizvērtu atkārtojumu skatu"
 
 #. %1$s appointment or task title
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
@@ -2586,10 +2564,6 @@ msgstr "Diena"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "Dienas"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "Decembris"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -3864,7 +3838,7 @@ msgid "External participants"
 msgstr "Ārējie dalībnieki"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr ""
 
 #. Emoji category
@@ -3968,10 +3942,6 @@ msgstr "Fakss (māja)"
 msgid "Fax (alt)"
 msgstr "Fakss (alt.)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "Februāris"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "Plūsmas URL"
@@ -3979,6 +3949,13 @@ msgstr "Plūsmas URL"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "Atsauksmes"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "The task could not be deleted."
+#| msgid_plural "The tasks could not be deleted."
+msgid "Feedback could not be send"
+msgstr "Attēls nevar tikt ievietots."
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -4792,13 +4769,6 @@ msgstr "Indija"
 msgid "Info"
 msgstr "Informācija"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr ""
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4975,10 +4945,6 @@ msgstr "Sarakstra opcijas"
 msgid "Items without a file can not be downloaded."
 msgstr "Vienības bez failiem nevar tikt lejupielādētas."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "Janvāris"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4991,14 +4957,6 @@ msgstr "Darbs"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Job description"
 msgstr "Darba apsraksts"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "Jūlijs"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "Jūnijs"
 
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -5446,10 +5404,6 @@ msgstr "Automātiska konfigurēšana"
 msgid "Manual input"
 msgstr "Manuāla ievade"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "Marts"
-
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
 msgstr "Marimba"
@@ -5542,10 +5496,6 @@ msgstr "Kamerūna"
 #: module:io.ox/settings
 msgid "Matches"
 msgstr "Atbilst"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "Maijs"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -6247,10 +6197,6 @@ msgstr "Paziņot visiem dalībniekiem ar e-pastu."
 msgid "Notify me again later"
 msgstr "Atgādināt vēlāk vēlreiz"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "Novembris"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Dienu skaits starp prombūtnes paziņojumiem vienam sūtītājam"
@@ -6288,10 +6234,6 @@ msgstr "Objekti"
 #| msgid "Recurrence"
 msgid "Occurrences"
 msgstr "Atkārtojumi"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "Oktobris"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
@@ -6827,10 +6769,6 @@ msgstr ""
 "\n"
 "Izpildiet vēstulē norādītās darbības un atgriezieties pie logrīka, lai "
 "pabeigtu iestatīšanu."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "Lūdzu izvēlieties teikumu zemāk."
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
@@ -7720,7 +7658,7 @@ msgid "Rename folder"
 msgstr "Pārdēvēt mapi"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Atkārtot"
 
@@ -8255,10 +8193,6 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Nosūtītie ziņojumi"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "Septembris"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/calendar/util.js
@@ -8475,9 +8409,11 @@ msgstr "Rādīt ikonas"
 msgid "Show images"
 msgstr "Rādīt attēlus"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr ""
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -9089,81 +9025,6 @@ msgstr "Mītiņš ir izdzēsts"
 msgid "The appointment has been updated"
 msgstr "Mītiņš ir jaunināts"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"Darbība tiek atkārtota <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\">katrās <span class=\"number-control\">2</span> dienās</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"Darbība tiek atkārtota: <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\"> katras <span class=\"number-control\">2</span> nedēļas </a> <a "
-"href=\"#\"  data-widget=\"days\" data-attribute=\"days\">pirmdienā</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"Darbība tiek atkārtota: <a href=\"#\" data-attribute=\"recurrenceType\" data-"
-"widget=\"options\">katru nedēļu</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"Darbība tiek atkārtota: <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\"> pirmajā </a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\"> trešdienā </a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"month\">oktobrī</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"Darbība tiek atkārtota katru gadu: <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> of <a "
-"href=\"#\" data-widget=\"options\" data-attribute=\"month\">oktobrī</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"Darbība tiek atkārtota: <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" "
-"data-widget=\"number\" data-attribute=\"interval\"> dienā ik katru <span "
-"class=\"number-control\">2</span> mēnesi</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"Darbība tiek atkārtota: <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">otrajā </a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\"> trešdienā </a> <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\"> katrā <span class=\"number-control\">2</span> mēnesī</a>. "
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
 "The blue graph shows the distribution of request durations in percent. The "
@@ -9356,34 +9217,6 @@ msgstr ""
 #: apps/io.ox/mail/compose/actions/send.js module:io.ox/mail
 msgid "The sending of the message has been canceled."
 msgstr "Ziņojuma sūtīšana ir atcelta."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">beidzas</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-"\"number\">pēc<span class=\"number-control\">2</span> mītiņu reizēm</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">beidzas</a> <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">nekad "
-"nebeidzas</a>."
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, fuzzy
@@ -10993,13 +10826,6 @@ msgstr "%1$s krāsa"
 msgid "accepted"
 msgstr "apstiprināts"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "pēc %1$d reizes"
-msgstr[1] "pēc %1$d reizēm"
-msgstr[2] "pēc %1$d reizēm"
-
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
@@ -11052,11 +10878,6 @@ msgstr "izveidot objektus"
 msgid "create objects and subfolders"
 msgstr "izveidot objektus un apakšmapes"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "ik-dienas"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "tumši zils"
@@ -11069,14 +10890,6 @@ msgstr "tumši zaļš"
 #: module:io.ox/settings
 msgid "datepicker"
 msgstr "datepicker"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "nedēļas diena"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "izejamā diena"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11128,67 +10941,10 @@ msgstr "rediģēt visus objektus"
 msgid "edit own objects"
 msgstr "rediģēt paša objektus"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "beidzas"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "beidzas pēc noteikta skaita reizēm"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "beidzas norādītā datumā"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "beidzas:"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "katru %1$d dienu"
-msgstr[1] "katras %1$d dienas"
-msgstr[2] "katras %1$d dienas"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "katru %1$d mēnesi"
-msgstr[1] "katrus %1$d mēnešus"
-msgstr[2] "katrus %1$d mēnešus"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "katru %1$d nedēļu"
-msgstr[1] "katras %1$d nedēļas"
-msgstr[2] "katras %1$d nedēļas"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "katru dienu"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "katru mēnesi"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "katru nedēļu"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -11202,9 +10958,6 @@ msgstr ""
 msgid "file"
 msgstr "faili"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "pirmā"
@@ -11225,9 +10978,6 @@ msgstr "flickr.photos.search"
 msgid "folder"
 msgstr "Mape"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "ceturtā"
@@ -11282,12 +11032,6 @@ msgstr "vienā stundā"
 msgid "in one week"
 msgstr "pēc vienas nedēļas"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "pēdējā"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "vēlu vakarā"
@@ -11335,15 +11079,6 @@ msgstr "izmainīts"
 #| msgid "3 months"
 msgid "month(s)"
 msgstr "3 mēneši"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "ik-mēneša"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "nekad nebeidzas"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11418,9 +11153,6 @@ msgstr "lasīt paša objektus"
 msgid "red"
 msgstr "sarkans"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "otrā"
@@ -11447,9 +11179,6 @@ msgstr "izmērs"
 msgid "tentative"
 msgstr "pagaidu"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "trešā"
@@ -11526,11 +11255,6 @@ msgstr "skatīt mapi"
 msgid "week(s)"
 msgstr "2 nedēļas"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "ik-nedēļas"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "kad siates derīgums ir beidzies"
@@ -11548,11 +11272,6 @@ msgstr "kad saņēmēji būs pabeiguši failu lejupielādi"
 #, fuzzy
 #| msgid "yearly"
 msgid "year(s)"
-msgstr "ik-gada"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
 msgstr "ik-gada"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
@@ -12132,6 +11851,9 @@ msgstr "yyyy"
 #~ msgid "Apr"
 #~ msgstr "Apr."
 
+#~ msgid "April"
+#~ msgstr "Aprīlis"
+
 #~ msgid ""
 #~ "Are you sure you want to delete all E-Mails from this folder? The deleted "
 #~ "E-Mails will be moved to the Trash folder."
@@ -12263,6 +11985,9 @@ msgstr "yyyy"
 
 #~ msgid "Aug"
 #~ msgstr "Aug."
+
+#~ msgid "August"
+#~ msgstr "Augusts"
 
 #~ msgid "Australia"
 #~ msgstr "Austrālija"
@@ -12638,6 +12363,12 @@ msgstr "yyyy"
 #~ "Noklikšķiniet uz burta kreisajā malā novietotajā navigācijas joslā lai "
 #~ "uzrādītu atbilstošās kontaktpersonas no izvēlētās adrešu grāmatas."
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "Noklikšķiniet uz teikuma, lai izvēlētos kad mītiņu atkārtot."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "Noklikšķiniet uz saitēm, lai izmainītu vērtības."
+
 #~ msgid "Click to close this notification"
 #~ msgstr "Noklikšķiniet, lai aizvērtu šo paziņojumu"
 
@@ -12680,6 +12411,11 @@ msgstr "yyyy"
 
 #~ msgid "Close quick config"
 #~ msgstr "Aizvērt ātro konfig."
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "Noklikšķiniet, lai aizvērtu atkārtojumu skatu"
 
 #~ msgid "Close search"
 #~ msgstr "Aizvērt meklēšanu"
@@ -12978,6 +12714,9 @@ msgstr "yyyy"
 
 #~ msgid "Debug"
 #~ msgstr "Atblusot"
+
+#~ msgid "December"
+#~ msgstr "Decembris"
 
 #~ msgid "Decline counter proposal"
 #~ msgstr "Noraidīt alternatīvo priekšlikumu"
@@ -13758,6 +13497,9 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "Feb."
 
+#~ msgid "February"
+#~ msgstr "Februāris"
+
 #~ msgid "Fiji"
 #~ msgstr "Fidži"
 
@@ -14463,6 +14205,9 @@ msgstr "yyyy"
 #~ msgid "Jan"
 #~ msgstr "Jan."
 
+#~ msgid "January"
+#~ msgstr "Janvāris"
+
 #~ msgid "Japan"
 #~ msgstr "Japāna"
 
@@ -14490,11 +14235,17 @@ msgstr "yyyy"
 #~ msgid "Jul"
 #~ msgstr "Jūl."
 
+#~ msgid "July"
+#~ msgstr "Jūlijs"
+
 #~ msgid "Jump to slide"
 #~ msgstr "Pāriet uz slaidu"
 
 #~ msgid "Jun"
 #~ msgstr "Jūn."
+
+#~ msgid "June"
+#~ msgstr "Jūnijs"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -14743,6 +14494,9 @@ msgstr "yyyy"
 #~ msgid "Mar"
 #~ msgstr "Mar."
 
+#~ msgid "March"
+#~ msgstr "Marts"
+
 #~ msgid "Marital status:"
 #~ msgstr "Ģimenes stāvolkis:"
 
@@ -14775,6 +14529,9 @@ msgstr "yyyy"
 
 #~ msgid "Maximum"
 #~ msgstr "Maksimums"
+
+#~ msgid "May"
+#~ msgstr "Maijs"
 
 #~ msgid "Mayotte"
 #~ msgstr "Majota"
@@ -15156,6 +14913,9 @@ msgstr "yyyy"
 #~ msgid "Nov"
 #~ msgstr "Nov."
 
+#~ msgid "November"
+#~ msgstr "Novembris"
+
 #~ msgid "Nr:"
 #~ msgstr "Nr.:"
 
@@ -15179,6 +14939,9 @@ msgstr "yyyy"
 
 #~ msgid "Oct"
 #~ msgstr "Okt."
+
+#~ msgid "October"
+#~ msgstr "Oktobris"
 
 #~ msgid "Of the following conditions:"
 #~ msgstr "Sekojošiem nosacījumiem:"
@@ -15443,6 +15206,9 @@ msgstr "yyyy"
 
 #~ msgid "Please choose"
 #~ msgstr "Lūdzu izvēlieties"
+
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Lūdzu izvēlieties teikumu zemāk."
 
 #~ msgid "Please enter a correct number."
 #~ msgstr "Lūdzu ievadiet pareizu skaitli."
@@ -16069,6 +15835,9 @@ msgstr "yyyy"
 
 #~ msgid "Separator"
 #~ msgstr "Atdalītājs"
+
+#~ msgid "September"
+#~ msgstr "Septembris"
 
 #~ msgid "Serbia"
 #~ msgstr "Serbija"
@@ -16732,6 +16501,79 @@ msgstr "yyyy"
 #~ "Portāls informē jūs par pašreizējām e-pasta vēstulēm, uzdevumiem, "
 #~ "tikšanās reizēm un sociālo tīklu jaunumiem."
 
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">katrās <span class=\"number-control\">2</span> "
+#~ "dienās</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota: <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\"> katras <span class=\"number-control\">2</span> "
+#~ "nedēļas </a> <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">pirmdienā</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota: <a href=\"#\" data-attribute=\"recurrenceType\" "
+#~ "data-widget=\"options\">katru nedēļu</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota: <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\"> pirmajā </a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\"> trešdienā </a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"month\">oktobrī</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota katru gadu: <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">oktobrī</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota: <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
+#~ "href=\"#\" data-widget=\"number\" data-attribute=\"interval\"> dienā ik "
+#~ "katru <span class=\"number-control\">2</span> mēnesi</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "Darbība tiek atkārtota: <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\">otrajā </a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\"> trešdienā </a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\"> katrā <span class=\"number-control\">2</"
+#~ "span> mēnesī</a>. "
+
 #~ msgid "The calendar views"
 #~ msgstr "Kalendāra skati"
 
@@ -16888,6 +16730,31 @@ msgstr "yyyy"
 
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr "Izvēlētais filtrēšanas noteikums atsaucas uz nezināmu mapi '%s'."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">beidzas</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">pēc<span class=\"number-control\">2</span> mītiņu reizēm</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">beidzas</a> <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "Sērija <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">nekad nebeidzas</a>."
 
 #~ msgid "The server didn't respond!"
 #~ msgstr "Nav atbildes no servera!"
@@ -18048,6 +17915,12 @@ msgstr "yyyy"
 #~ msgid "after"
 #~ msgstr "pēc"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "pēc %1$d reizes"
+#~ msgstr[1] "pēc %1$d reizēm"
+#~ msgstr[2] "pēc %1$d reizēm"
+
 #~ msgid "all"
 #~ msgstr "visiem"
 
@@ -18106,11 +17979,20 @@ msgstr "yyyy"
 #~ msgid "d.MM.yy"
 #~ msgstr "d.MM.yy"
 
+#~ msgid "daily"
+#~ msgstr "ik-dienas"
+
 #~ msgid "date range"
 #~ msgstr "datumu apgabals"
 
 #~ msgid "day every"
 #~ msgstr "diena katrā"
+
+#~ msgid "day of the week"
+#~ msgstr "nedēļas diena"
+
+#~ msgid "day of the weekend"
+#~ msgstr "izejamā diena"
 
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
@@ -18141,11 +18023,47 @@ msgstr "yyyy"
 #~ msgid "end date "
 #~ msgstr "beigu datums "
 
+#~ msgid "ends"
+#~ msgstr "beidzas"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "beidzas pēc noteikta skaita reizēm"
+
 #~ msgid "ends on"
 #~ msgstr "beidzas"
 
+#~ msgid "ends on a specific date"
+#~ msgstr "beidzas norādītā datumā"
+
 #~ msgid "estimated costs"
 #~ msgstr "plānotās izmaksas"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "katru %1$d dienu"
+#~ msgstr[1] "katras %1$d dienas"
+#~ msgstr[2] "katras %1$d dienas"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "katru %1$d mēnesi"
+#~ msgstr[1] "katrus %1$d mēnešus"
+#~ msgstr[2] "katrus %1$d mēnešus"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "katru %1$d nedēļu"
+#~ msgstr[1] "katras %1$d nedēļas"
+#~ msgstr[2] "katras %1$d nedēļas"
+
+#~ msgid "every day"
+#~ msgstr "katru dienu"
+
+#~ msgid "every month"
+#~ msgstr "katru mēnesi"
+
+#~ msgid "every week"
+#~ msgstr "katru nedēļu"
 
 #~ msgid "expanded"
 #~ msgstr "izvērsti"
@@ -18200,6 +18118,9 @@ msgstr "yyyy"
 #~ msgid "june"
 #~ msgstr "jūnijs"
 
+#~ msgid "last"
+#~ msgstr "pēdējā"
+
 #~ msgid "later"
 #~ msgstr "vēlāk"
 
@@ -18219,8 +18140,14 @@ msgstr "yyyy"
 #~ msgid "mm"
 #~ msgstr "mm"
 
+#~ msgid "monthly"
+#~ msgstr "ik-mēneša"
+
 #~ msgid "more"
 #~ msgstr "vairāk"
+
+#~ msgid "never ends"
+#~ msgstr "nekad nebeidzas"
 
 #~ msgid "new"
 #~ msgstr "jauns"
@@ -18363,8 +18290,14 @@ msgstr "yyyy"
 #~ msgid "waiting"
 #~ msgstr "gaida"
 
+#~ msgid "weekly"
+#~ msgstr "ik-nedēļas"
+
 #~ msgid "work days"
 #~ msgstr "darba dienas"
+
+#~ msgid "yearly"
+#~ msgstr "ik-gada"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"
