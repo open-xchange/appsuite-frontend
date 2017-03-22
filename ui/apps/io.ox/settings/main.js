@@ -290,6 +290,7 @@ define('io.ox/settings/main', [
         // select tree node on expand
         tree.on('open', function (id, autoOpen) {
             if (autoOpen) return;
+            if (_.device('smartphone')) return;
             select(id, undefined, undefined, { focus: true, focusPane: true });
         });
 
