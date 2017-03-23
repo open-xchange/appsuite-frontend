@@ -2707,7 +2707,7 @@ msgstr "詳細資訊"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
-"Did you now that you can take OX App Suite with you? Just click this icon "
+"Did you know that you can take OX App Suite with you? Just click this icon "
 "and choose 'Connect your device' from the menu."
 msgstr ""
 
@@ -7965,19 +7965,6 @@ msgstr[1] "分享選擇的資料夾"
 msgid "Share selected objects"
 msgstr "分享選擇的物件"
 
-#. if only one item -> insert filename / on more than one item -> item count
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the file \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "分享檔案「%1$d」"
-msgstr[1] "分享 %1$d 個項目"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the folder \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "分享資料夾「%1$d」"
-msgstr[1] "分享 %1$d 個項目"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
 msgstr "分享此檔案"
@@ -8024,6 +8011,24 @@ msgstr "共享"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Sharing"
 msgstr "共享"
+
+#. if only one item -> insert filename / on more than one item -> item count
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Share the file \"%1$d\""
+#| msgid_plural "Share %1$d items"
+msgid "Sharing link created for file \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "分享檔案「%1$d」"
+msgstr[1] "分享 %1$d 個項目"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Only showing items related to folder \"%1$s\""
+msgid "Sharing link created for folder \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "只顯示與「%1$s」資料夾相關的項目"
+msgstr[1] "只顯示與「%1$s」資料夾相關的項目"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
@@ -13979,6 +13984,11 @@ msgstr "年"
 
 #~ msgid "Share link by email"
 #~ msgstr "透過電子郵件分享連結"
+
+#~ msgid "Share the folder \"%1$d\""
+#~ msgid_plural "Share %1$d items"
+#~ msgstr[0] "分享資料夾「%1$d」"
+#~ msgstr[1] "分享 %1$d 個項目"
 
 #, fuzzy
 #~ msgctxt "owner"

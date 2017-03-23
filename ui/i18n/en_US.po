@@ -2684,7 +2684,7 @@ msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
-"Did you now that you can take OX App Suite with you? Just click this icon "
+"Did you know that you can take OX App Suite with you? Just click this icon "
 "and choose 'Connect your device' from the menu."
 msgstr ""
 
@@ -7827,19 +7827,6 @@ msgstr[1] ""
 msgid "Share selected objects"
 msgstr ""
 
-#. if only one item -> insert filename / on more than one item -> item count
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the file \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the folder \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] ""
-msgstr[1] ""
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
 msgstr ""
@@ -7886,6 +7873,19 @@ msgstr ""
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Sharing"
 msgstr ""
+
+#. if only one item -> insert filename / on more than one item -> item count
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+msgid "Sharing link created for file \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+msgid "Sharing link created for folder \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] ""
+msgstr[1] ""
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"

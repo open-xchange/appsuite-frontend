@@ -5242,7 +5242,7 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-msgid "Did you now that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."
+msgid "Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."
 msgstr ""
 
 #: apps/io.ox/core/main.js
@@ -7228,15 +7228,15 @@ msgstr ""
 #. if only one item -> insert filename / on more than one item -> item count
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
-msgid "Share the file \"%1$d\""
-msgid_plural "Share %1$d items"
+msgid "Sharing link created for file \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
 msgstr[0] ""
 msgstr[1] ""
 
 #: apps/io.ox/files/actions/share.js
 #: module:io.ox/files
-msgid "Share the folder \"%1$d\""
-msgid_plural "Share %1$d items"
+msgid "Sharing link created for folder \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
 msgstr[0] ""
 msgstr[1] ""
 

@@ -2816,7 +2816,7 @@ msgstr "Detaļas"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
-"Did you now that you can take OX App Suite with you? Just click this icon "
+"Did you know that you can take OX App Suite with you? Just click this icon "
 "and choose 'Connect your device' from the menu."
 msgstr ""
 
@@ -8277,21 +8277,6 @@ msgstr[2] "Koplietot izvēlētās mapes"
 msgid "Share selected objects"
 msgstr "Koplietot izvēlētos objektus"
 
-#. if only one item -> insert filename / on more than one item -> item count
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the file \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "Koplietot failu \"%1$d\""
-msgstr[1] "Koplietot %1$d vienības"
-msgstr[2] "Koplietot %1$d vienības"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the folder \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "Koplietot mapi \"%1$d\""
-msgstr[1] "Koplietot %1$d vienības"
-msgstr[2] "Koplietot %1$d vienības"
-
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
 msgstr "Koplietot failu"
@@ -8338,6 +8323,26 @@ msgstr "Koplietojumi"
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Sharing"
 msgstr "Koplietošana"
+
+#. if only one item -> insert filename / on more than one item -> item count
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Share the file \"%1$d\""
+#| msgid_plural "Share %1$d items"
+msgid "Sharing link created for file \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "Koplietot failu \"%1$d\""
+msgstr[1] "Koplietot %1$d vienības"
+msgstr[2] "Koplietot %1$d vienības"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+#, fuzzy
+#| msgid "Only showing items related to folder \"%1$s\""
+msgid "Sharing link created for folder \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
+msgstr[1] "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
+msgstr[2] "Uzrāda tikai ar mapi \"%1$s\" saistītās vienības"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
@@ -15856,6 +15861,12 @@ msgstr "yyyy"
 
 #~ msgid "Share link by email"
 #~ msgstr "Kopīgot saiti ar e-pastu"
+
+#~ msgid "Share the folder \"%1$d\""
+#~ msgid_plural "Share %1$d items"
+#~ msgstr[0] "Koplietot mapi \"%1$d\""
+#~ msgstr[1] "Koplietot %1$d vienības"
+#~ msgstr[2] "Koplietot %1$d vienības"
 
 #~ msgid "Shared"
 #~ msgstr "Koplietojuma"
