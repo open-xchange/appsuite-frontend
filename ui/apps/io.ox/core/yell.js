@@ -144,6 +144,10 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 filestorageUtil.displayConflicts(conflicts);
             });
         } else {
+
+            // avoid empty yells
+            if (!o.message) return;
+
             clearTimeout(timer);
             timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?

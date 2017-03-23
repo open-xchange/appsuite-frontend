@@ -25,13 +25,13 @@ define('io.ox/settings/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/util',
     'io.ox/core/api/mailfilter',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
     'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications, keychainAPI) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
     'use strict';
 
@@ -229,7 +229,7 @@ define('io.ox/settings/main', [
 
                     appsInitialized.fail(def.reject);
                 }).fail(function (response) {
-                    notifications.yell('error', response.error_desc);
+                    yell('error', response.error_desc);
                 }).always(function () {
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
@@ -474,7 +474,7 @@ define('io.ox/settings/main', [
                                 }
                             }).done(function (resp) {
                                 fillUpURL.resolve(declaration.url.replace('[token]', resp.token));
-                            }).fail(require('io.ox/core/notifications').yell);
+                            }).fail(yell);
                         });
                     } else {
                         fillUpURL.resolve(declaration.url);
@@ -620,7 +620,7 @@ define('io.ox/settings/main', [
             .fail(function fail(result) {
                 var errorMsg = (result && result.error) ? result.error + ' ' : '';
                 errorMsg += gt('Application may not work as expected until this problem is solved.');
-                notifications.yell('error', errorMsg);
+                yell('error', errorMsg);
             });
     });
 
