@@ -157,7 +157,7 @@ define('io.ox/core/tk/tokenfield', [
                         e.attrs.value = model.id;
                         e.attrs.model = model;
                         // set correct displayname
-                        model.set('display_name', newAttrs[1])
+                        model.set('display_name', newAttrs[1]);
                     } else if (!self.redrawLock) {
                         // create mode
                         var model;
