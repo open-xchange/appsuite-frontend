@@ -69,7 +69,9 @@ define('io.ox/core/tk/tokenfield', [
     // workaround for 7.6.2: use more than one emailaddreses of a single user/contact
     function makeUnique (model) {
         // extend id by used email field
-        model.id = model.id + '_' + model.get('field') + '_' + _.uniqueId();
+        var unique = _.uniqueId();
+        model.id = model.id + '_' + model.get('field') + '_' + unique;
+        model.cid = model.cid + '_' + unique;
         return model;
     }
 
@@ -154,6 +156,8 @@ define('io.ox/core/tk/tokenfield', [
                         // save id to token value
                         e.attrs.value = model.id;
                         e.attrs.model = model;
+                        // set correct displayname
+                        model.set('display_name', newAttrs[1])
                     } else if (!self.redrawLock) {
                         // create mode
                         var model;
@@ -168,7 +172,7 @@ define('io.ox/core/tk/tokenfield', [
                             } else {
                                 newAttrs = ['', e.attrs.value, '', e.attrs.value];
                             }
-                            // add extrenal participant
+                            // add external participant
                             model = new pModel.Participant({
                                 type: 5,
                                 display_name: newAttrs[1],
