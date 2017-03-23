@@ -15,10 +15,9 @@ define('io.ox/mail/compose/actions/save', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/api',
-    'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, mailAPI, notifications, gt) {
 
     'use strict';
 

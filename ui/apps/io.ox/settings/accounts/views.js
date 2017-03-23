@@ -20,9 +20,8 @@ define('io.ox/settings/accounts/views', [
     'io.ox/settings/util',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
-    'settings!io.ox/mail',
     'gettext!io.ox/settings/accounts'
-], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, mailSettings, gt) {
+], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, gt) {
     'use strict';
 
     var createExtpointForSelectedAccount = function (args) {

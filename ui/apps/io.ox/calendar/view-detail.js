@@ -18,11 +18,10 @@ define('io.ox/calendar/view-detail', [
     'io.ox/calendar/api',
     'io.ox/core/tk/attachments',
     'io.ox/participants/detail',
-    'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, calAPI, attachments, ParticipantsView, settings, gt) {
+], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt) {
 
     'use strict';
 

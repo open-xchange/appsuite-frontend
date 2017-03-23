@@ -366,11 +366,9 @@ define('io.ox/core/api/account', [
     };
 
     api.getDefaultAddress = function () {
-        return require(['settings!io.ox/mail']).then(function (settings) {
-            return api.get(0).then(ensureDisplayName).then(function (account) {
-                var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
-                return [account.personal, defaultSendAddress || account.primary_address];
-            });
+        return api.get(0).then(ensureDisplayName).then(function (account) {
+            var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
+            return [account.personal, defaultSendAddress || account.primary_address];
         });
     };
 

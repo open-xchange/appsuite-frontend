@@ -22,10 +22,9 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/print',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
-    'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, settings, gt, printStyle) {
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, gt, printStyle) {
 
     'use strict';
 

@@ -19,9 +19,8 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/files/util',
     'io.ox/core/extensions',
     'io.ox/files/upload/main',
-    'settings!io.ox/files',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, fileUpload, settings, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, fileUpload, gt) {
 
     'use strict';
 
