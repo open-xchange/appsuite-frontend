@@ -54,7 +54,7 @@ define('io.ox/calendar/actions/create', [
             })
             .on('invite', function () {
                 params.participants = [{ id: user.id, type: 1 }];
-                params.folder_id = settings.get('folders/calendar');
+                params.folder_id = settings.get('folder/calendar');
                 openEditDialog(params);
             })
             .show();
