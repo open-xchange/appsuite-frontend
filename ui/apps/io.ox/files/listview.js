@@ -131,6 +131,7 @@ define('io.ox/files/listview', [
             index: 200,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-2">');
+              //baton.options.tooltip = false; // does not trigger the intended behavior.
                 extensions.filename.call(column, baton);
                 this.append(column);
             }
@@ -218,6 +219,8 @@ define('io.ox/files/listview', [
             id: 'filename',
             index: 400,
             draw: function (baton) {
+                //baton.options.tooltip = true; // see: `ext.point(ITEM + '/list')` / `id: 'col2'` - line: 134 // does not trigger the intended behavior.
+
                 // use inner ellipsis for too long filenames
                 extensions.filename.call(this, baton, { max: 36, charpos: 'middle', suppressExtension: true, optimizeWordbreak: true });
             }
@@ -235,7 +238,12 @@ define('io.ox/files/listview', [
         {
             id: 'thumbnail',
             index: 100,
-            draw: extensions.thumbnail
+            draw: function () {
+                extensions.thumbnail.apply(this, arguments);
+
+              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                this.prepend($('<div class="thumbnail-masking-box"></div>'));
+            }
         },
         {
             id: 'locked',

@@ -124,12 +124,18 @@
             border-width: 0 @default-padding @default-padding 0;
             overflow: hidden;
             float: left;
+
+            + .tooltip {
+                display: none !important;
+            }
         }
         &.icon-layout {
             > li.list-item {
                 border-width: 0 @default-padding (@default-padding - @base-padding) 0;
 
                 + .tooltip {
+                    display: inherit !important;
+
                     padding: 0 5px;
                     margin-top: 16px;
 
@@ -236,9 +242,28 @@
         &.grid-12 > li { width: 100% / 12; }
     }
 
+    .thumbnail-support-structure(@height) {
+      //.thumbnail-effects-box,             // please do not remove this line.
+        .thumbnail-masking-box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: @height;
+        }
+        .thumbnail-masking-box {
+            box-shadow: inset 0 0 4px #000;
+            opacity: .15;
+        }
+      //.thumbnail-effects-box {            // please do not remove this block.
+      //    background-color: #2f5984;
+      //    opacity: .3;
+      //    display:none;
+      //}
+    }
+
     .thumbnail(@height) {
         height: @height;
-        background-color: #eee;
         background-size: cover;
         background-repeat: no-repeat;
         // top is necessary for documents; images override this to "center center"
@@ -271,23 +296,7 @@
             width: 100%;
             height: @height - (1 * @base-padding);
 
-            .thumbnail-masking-box,
-            .thumbnail-effects-box {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: @thumbnail_height;
-            }
-            .thumbnail-masking-box {
-                box-shadow: inset 0 0 4px #000;
-                opacity: .15;
-            }
-            //.thumbnail-effects-box {          // please do not remove this block.
-            //    background-color: #2f5984;
-            //    opacity: .3;
-            //    display:none;
-            //}
+            .thumbnail-support-structure(@thumbnail_height);
         }
         .list-item.selectable:hover {
             overflow: visible;
@@ -308,7 +317,7 @@
 
         .icon-thumbnail {
             .thumbnail(@thumbnail_height);
-            background-color: transparent;
+          //background-color: transparent;
         }
 
         .icon-thumbnail.default-icon {
@@ -328,7 +337,10 @@
                 }
             }
 
-            .folder-icon i.fa:before { color: #ccc; }
+            .folder-icon i.fa:before {
+                color: #fff;
+                text-shadow: 0 0 1px #000;
+            }
         }
 
         .filename-file-icon {
@@ -380,11 +392,44 @@
             color: #ccc;
             text-shadow: none;
         }
+        .file-type-folder {
+
+            .icon-thumbnail {
+                background-color: #eee;
+            }
+            .filename-file-icon {
+                display: none;
+            }
+            .filename {
+                text-align: center;
+                padding-left: 5px;
+              //padding: (@filename_line_height / 2) 5px 0 5px;
+            }
+        }
     }
 
     &.tile-layout {
 
-        & > li.list-item { border-width: 0 @default-padding @default-padding 0; }
+        > li.list-item {
+
+            border-width: 0 @default-padding @default-padding 0;
+            overflow: visible;
+
+            + .tooltip {
+                display: inherit !important;
+            }
+
+            &:hover:after {
+                content: "";
+                display: block;
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #2f5984;
+            }
+        }
 
         // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
         @thumbnail_height: 128px;
@@ -392,6 +437,8 @@
         .list-item-content {
             width: 100%;
             height: @thumbnail_height;
+
+            .thumbnail-support-structure(@thumbnail_height);
         }
 
         .icon-thumbnail {
@@ -413,7 +460,32 @@
             }
         }
 
-        .file-type-folder .folder-icon { display: none; }
+        .file-type-folder {
+
+            .icon-thumbnail {
+                background-color: #eee;
+
+                .folder-name {
+                    width: 100%;
+                }
+                .folder-icon {
+                    position: absolute;
+                    left: 14px;
+                    right: auto;
+                    top: auto;
+                    bottom: 6px;
+
+                    .file-type-icon {
+                        font-size: 21px;
+
+                        &:before {
+                            color: #fff;
+                            text-shadow: 0 0 1px #000;
+                        }
+                    }
+                }
+            }
+        }
 
         .busy-indicator(@thumbnail_height, left);
 
@@ -434,13 +506,37 @@
             }
         }
 
-        .file-type-folder .list-item-checkmark .fa-checkmark {
-            color: #ccc;
-            text-shadow: none;
-        }
+        .file-type-folder {
 
-        li.selected .list-item-checkmark .fa-checkmark { color: #fff; }
+            .list-item-checkmark {
+                .fa-checkmark {
+
+                    color: #ccc;
+                    text-shadow: none;
+                }
+            }
+        }
+        //:not(.file-type-folder) {     // please do not remove this block - work in progress.
+        //
+        //    .list-item-checkmark {
+        //        .fa-checkmark {
+        //
+        //            &:before { content: '\f0c8'; } // empty square
+        //        }
+        //    }
+        //}
+
+        li.selected {
+
+            .list-item-checkmark {
+                .fa-checkmark {
+
+                    color: #fff;
+                }
+            }
+        }
     }
+
 
     //
     // Selection handling
@@ -453,15 +549,16 @@
         &.has-focus .selected .icon-thumbnail {
             background-color: darken(@selected-background, 15%);
 
-            .folder-icon i.fa:before { color: rgba(0, 0, 0, 0.50); }
+          //.folder-icon i.fa:before { color: rgba(0, 0, 0, 0.50); }
         }
     }
 
     &.tile-layout {
 
         .selected:not(.file-type-folder) .icon-thumbnail {
-            border: 4px solid #ddd;
-            box-shadow: 0 0 1px 2px white inset;
+            border: 2px solid #ddd;
+            box-shadow: 0 0 0 1px white inset;
+            opacity: .8;
         }
 
         .selected.file-type-folder .icon-thumbnail { background-color: #ddd; }
@@ -473,6 +570,21 @@
                 background-color: @selected-background;
 
                 .folder-name { color: white; }
+            }
+            > li.list-item.selected:not(.file-type-folder) {
+                &:hover {
+
+                    .icon-thumbnail {
+                      //box-shadow: 0 0 0 2px white inset;
+                        box-shadow: none;
+                      //border-color: #2f5984;
+                    }
+
+                    &:after {
+                        display: none;
+                      //bottom: -2px;
+                    }
+                }
             }
         }
     }

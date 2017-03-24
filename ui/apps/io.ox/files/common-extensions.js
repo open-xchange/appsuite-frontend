@@ -86,6 +86,9 @@ define('io.ox/files/common-extensions', [
             this.append(
                 $('<div class="filename">').text(filename)
             );
+            // check back with `baton.options.tooltip` approach of file 'io.ox/files/listview' that does not trigger the intended behavior.
+            //
+            //if (baton.options.tooltip === true) {
 
             // - not recommended since the black standard bootstrap tooltip
             //   does not match with most of the icon views file preview images.
@@ -96,8 +99,8 @@ define('io.ox/files/common-extensions', [
                 placement: 'right auto',
                 viewport: { selector: 'ul.list-view', padding: '0 16px 16px 0' } // or callback function
             });
-
-          //this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
+            // this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
+            //}
         },
 
         mailSubject: function (baton, ellipsis) {
