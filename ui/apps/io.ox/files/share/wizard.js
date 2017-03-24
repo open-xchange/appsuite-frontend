@@ -299,25 +299,6 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
-     * extension point for write permissions checkbox
-     */
-    ext.point(POINT + '/options').extend({
-        id: 'write-permissions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div>').addClass('form-group editgroup').append(
-                    $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
-                            new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
-                        )
-                    )
-                )
-            );
-        }
-    });
-
-    /*
      * extension point for password protection
      */
     ext.point(POINT + '/options').extend({
