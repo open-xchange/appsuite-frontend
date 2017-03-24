@@ -468,14 +468,14 @@ define('io.ox/core/folder/contextmenu', [
                     });
                 }
 
-                // "Get link" doesn't work for mail folders
+                // "Create sharing link" doesn't work for mail folders
                 if (showGetLink) {
                     addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: getALink,
-                        text: gt('Get link')
+                        text: gt('Create sharing link')
                     });
                 }
             };

@@ -249,7 +249,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'sharelink': {
                     mobile: 'lo',
-                    label: gt('Get link'),
+                    label: gt('Create sharing link'),
                     section: 'share',
                     ref: 'io.ox/files/actions/getalink'
                 },
