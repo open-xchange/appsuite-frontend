@@ -51,10 +51,12 @@ define('io.ox/onboarding/clients/view-mobile', [
         block: function (action) {
             this.append($('<pre class="config">').append(
                     $('<div>').append(_.map(action.data, function (prop) {
-                        return $('<div class="property">').text(prop.name + ':');
+                        var isTitle = !('value' in prop);
+                        return $('<div class="property">').addClass(isTitle ? 'title' : '').text(prop.name + (isTitle ? '' : ':'));
                     })),
                     $('<div>').append(_.map(action.data, function (prop) {
-                        return $('<div class="value">').text(prop.value);
+                        var isTitle = !('value' in prop);
+                        return $('<div class="value">').text(isTitle ? '\xa0' : prop.value).addClass(isTitle ? 'title' : '');
                     }))
                 )
             );

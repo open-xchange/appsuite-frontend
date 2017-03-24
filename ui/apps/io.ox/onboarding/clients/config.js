@@ -107,23 +107,28 @@ define('io.ox/onboarding/clients/config', [
 
         labels: {
             // card
-            'caldav_url': gt('CalDAV URL'),
-            'caldav_login': gt('CalDAV Login'),
-            'carddav_url': gt('CardDAV URL'),
-            'carddav_login': gt('CardDAV Login'),
+            'caldav': gt('CalDAV'),
+            'caldav_url': gt('URL'),
+            'caldav_login': gt('Login'),
+            'carddav': gt('CardDAV'),
+            'carddav_url': gt('URL'),
+            'carddav_login': gt('Login'),
             // imap
-            'imapServer': gt('IMAP Server'),
-            'imapPort': gt('IMAP Port'),
-            'imapLogin': gt('IMAP Login'),
-            'imapSecure': gt('IMAP Secure'),
-            // eas
+            'imap': gt('IMAP'),
+            'imapServer': gt('Server Name'),
+            'imapPort': gt('Port'),
+            'imapLogin': gt('User Name'),
+            'imapSecure': gt('Connection'),
             // smtp
-            'smtpServer': gt('SMTP Server'),
-            'smtpPort': gt('SMTP Port'),
-            'smtpLogin': gt('SMTP Login'),
-            'smtpSecure': gt('SMTP Secure'),
-            'eas_url': gt('EAS URL'),
-            'eas_login': gt('EAS Login')
+            'smtp': gt('SMTP'),
+            'smtpServer': gt('Server Name'),
+            'smtpPort': gt('Port'),
+            'smtpLogin': gt('User Name'),
+            'smtpSecure': gt('Connection'),
+            // eas
+            'eas': gt('EAS'),
+            'eas_url': gt('URL'),
+            'eas_login': gt('Login')
         },
 
         defaults: {
@@ -273,7 +278,7 @@ define('io.ox/onboarding/clients/config', [
 
         getActions: function (scenario) {
             var cid = _cid(config.getDevice().id, scenario || this.model.get('scenario')),
-                matching = this.hash.matching[cid];
+                matching = this.hash.matching[cid], lasttype;
 
             // TODO: remove after backend added check
             if (!matching) {
@@ -299,7 +304,23 @@ define('io.ox/onboarding/clients/config', [
                         action.data = _(Object.keys(action.data))
                             .chain()
                             .sortBy(function (key) { return COMPLEMENT.order[key] || 1000; })
-                            .map(function (key) { return { name: COMPLEMENT.labels[key] || key, value: action.data[key] }; })
+                            .map(function (key) {
+                                var type = key.indexOf('_') >= 0 ? key.split('_')[0] : key.substr(0, 4),
+                                    injectHeadline = lasttype !== type;
+                                lasttype = type;
+                                /* eslint-disable no-nested-ternary */
+                                return [
+                                    injectHeadline ? { name: COMPLEMENT.labels[type] || type } : undefined,
+                                    {
+                                        name: COMPLEMENT.labels[key] || key,
+                                        value: /imapSecure|smtpSecure/.test(key) ? (action.data[key] ? 'SSL/TLS' : 'STARTTLS') : action.data[key],
+                                        type: type
+                                    }
+                                ];
+                                /* eslint-enable no-nested-ternary */
+                            })
+                            .flatten()
+                            .compact()
                             .value();
                     })
                     .value();
