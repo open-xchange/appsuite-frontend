@@ -359,7 +359,7 @@ define.async('io.ox/mail/compose/model', [
         keepDraftOnClose: function () {
             if (settings.get('features/deleteDraftOnClose') !== true) return false;
             return this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;
-        },
+        }
     });
 
     var def = $.Deferred();
