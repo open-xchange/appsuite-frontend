@@ -302,7 +302,10 @@ define('io.ox/mail/compose/view', [
                 return $.when();
             }, function (result) {
                 //handle errors/warnings in reject case
-                if (result && result.error) baton.error = result.error;
+                if (result && result.error) {
+                    baton.error = result.error;
+                    baton.errorResult = result;
+                }
                 if (result && result.warnings) baton.warning = result.warnings;
                 return $.when();
             }).then(function () {
@@ -642,8 +645,12 @@ define('io.ox/mail/compose/view', [
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
-                    notifications.yell(result);
-                    def.reject(result);
+                    if (result.code === 'GRD-MW-0001') {
+                        ext.point('oxguard/mail/authorization').invoke('perform', self, model, self.autoSaveDraft);
+                    } else {
+                        notifications.yell(result);
+                        def.reject(result);
+                    }
                 } else {
                     model.set({
                         'autosavedAsDraft': true,

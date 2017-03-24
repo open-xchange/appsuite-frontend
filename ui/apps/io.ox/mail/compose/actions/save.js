@@ -60,6 +60,7 @@ define('io.ox/mail/compose/actions/save', [
                 return mailAPI.send(baton.mail, baton.mail.files);
             }
         },
+        // Placeholder for Guard auth check, index 1050
         {
             id: 'error',
             index: 1100,
