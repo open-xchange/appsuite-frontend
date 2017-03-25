@@ -95,6 +95,9 @@ define('io.ox/core/attachments/backbone', [
                 var meta = _.clone(model.get('meta'));
                 // get URL of preview image
                 meta.previewUrl = mailAPI.getUrl(model.toJSON(), 'view') + '&scaleType=cover&width=' + size + '&height=' + size;
+                // Check if from an encrypted mail, add authentication if so
+                var security = model.get('security');
+                if (security && security.authentication) meta.previewUrl += '&decrypt=true&cryptoAuth=' + encodeURIComponent(security.authentication);
                 // non-image files need special format parameter
                 if (!regIsImage.test(model.get('filename'))) meta.previewUrl += '&format=preview_image&session=' + ox.session;
                 def.resolve(meta.previewUrl);

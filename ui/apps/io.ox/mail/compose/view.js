@@ -514,7 +514,7 @@ define('io.ox/mail/compose/view', [
                     // to keep the previews working we copy data from the original mail
                     if (mode === 'forward' || mode === 'edit') {
                         attachments.forEach(function (file) {
-                            _.extend(file, { group: 'mail', mail: mailReference });
+                            _.extend(file, { group: 'mail', mail: mailReference, security: obj.security });
                         });
                     }
 
