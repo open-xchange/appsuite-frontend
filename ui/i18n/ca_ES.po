@@ -1632,11 +1632,11 @@ msgstr "Setm %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #, fuzzy
-msgid "CalDAV Login"
+#| msgid "CalDAV URL"
+msgid "CalDAV"
 msgstr "URL de CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL de CalDAV"
 
@@ -1799,12 +1799,7 @@ msgstr "Capacitat"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #, fuzzy
-msgid "CardDAV Login"
-msgstr "URL de CalDAV"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "URL de CalDAV"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2177,6 +2172,11 @@ msgstr ""
 msgid "Connect your device"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Connection"
+msgstr "Converses"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr ""
@@ -2467,6 +2467,14 @@ msgstr ""
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Crea'n un recordatori"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Crea una llista de distribució"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3315,11 +3323,7 @@ msgid "Due on %1$s"
 msgstr "Venç el %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+msgid "EAS"
 msgstr ""
 
 #. Exabytes
@@ -4327,12 +4331,6 @@ msgstr "Obtén %s"
 msgid "Get free upgrade"
 msgstr "Obtén una actualització gratuïta"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr ""
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4660,19 +4658,7 @@ msgid "I like it"
 msgstr "Us agrada això"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
+msgid "IMAP"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -5230,6 +5216,10 @@ msgstr "Bloqueja"
 #, fuzzy
 msgid "Locked"
 msgstr "Bloqueja"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -7080,6 +7070,11 @@ msgstr ""
 msgid "Pop out standalone viewer"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Port"
+msgstr "Portal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #, fuzzy
 msgid "Portal"
@@ -7480,10 +7475,6 @@ msgstr "Fitxers modificats recentment"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Emprats recentment"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Els destinataris poden editar"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7933,19 +7924,7 @@ msgid "Run auto-play mode"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
+msgid "SMTP"
 msgstr ""
 
 #. Connection security. SSL/TLS.
@@ -8265,6 +8244,12 @@ msgstr "Missatges enviats"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Sèrie"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Nom del servidor"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9875,6 +9860,7 @@ msgid "UI version"
 msgstr "Versió de la interfície d'usuari"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -10133,6 +10119,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Nom d'usuari"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11593,6 +11585,14 @@ msgstr ""
 #~ msgstr "Cco"
 
 #, fuzzy
+#~ msgid "CalDAV Login"
+#~ msgstr "URL de CalDAV"
+
+#, fuzzy
+#~ msgid "CardDAV Login"
+#~ msgstr "URL de CalDAV"
+
+#, fuzzy
 #~| msgid "Mail address"
 #~ msgid "Categories"
 #~ msgstr "Adreça de correu electrònic"
@@ -12060,6 +12060,9 @@ msgstr ""
 #~ "Puntuació %1$d de %2$d confirmada. Premeu Intro per a confirmar-la o "
 #~ "emprau les tecles de moviment del cursor a l'esquerra i a la dreta per a "
 #~ "ajustar la vostra puntuació."
+
+#~ msgid "Recipients can edit"
+#~ msgstr "Els destinataris poden editar"
 
 #, fuzzy
 #~| msgid "Remove contact"

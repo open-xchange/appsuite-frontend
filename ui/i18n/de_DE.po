@@ -1586,11 +1586,12 @@ msgid "CW %1$d"
 msgstr "KW %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV-Login"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1749,11 +1750,9 @@ msgid "Capacity"
 msgstr "Kapazität"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV-Login"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV-URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2109,6 +2108,12 @@ msgstr "Ihr Gerät verbinden"
 msgid "Connect your device"
 msgstr "Ihr Gerät verbinden"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Verbinden"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Verbindungssicherheit"
@@ -2386,6 +2391,14 @@ msgstr "Objekte und Unterordner anlegen"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Erinnerung erstellen"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Verteilerliste anlegen"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3211,11 +3224,9 @@ msgid "Due on %1$s"
 msgstr "Fällig am %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS-Login"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS-URL"
 
 #. Exabytes
@@ -4179,12 +4190,6 @@ msgstr "%s abrufen"
 msgid "Get free upgrade"
 msgstr "Freies Upgrade holen"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Link abrufen"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4489,20 +4494,10 @@ msgid "I like it"
 msgstr "Gefällt mir"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP-Login"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP-Port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "IMAPS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP-Server"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5051,6 +5046,10 @@ msgstr "Sperren"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Gesperrt"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Login"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6815,6 +6814,12 @@ msgstr "Neues Fenster"
 msgid "Pop out standalone viewer"
 msgstr "In eigenem Fenster öffnen"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
@@ -7208,10 +7213,6 @@ msgstr "Kürzlich geänderte Dateien"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Kürzlich verwendet"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Empfänger können bearbeiten"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7637,20 +7638,10 @@ msgid "Run auto-play mode"
 msgstr "Automatischen Wiedergabemodus starten"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP-Login"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP-Port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "SMTPS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP-Server"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7959,6 +7950,12 @@ msgstr "Gesendete Nachrichten"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Server-Name"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9556,6 +9553,7 @@ msgid "UI version"
 msgstr "Version der Benutzeroberfläche"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9810,6 +9808,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Benutzer"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Benutzername"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11823,6 +11827,9 @@ msgstr "JJJJ"
 #~ "Das Ändern des Termindatums führt zum Erstellen einer Terminausnahme für "
 #~ "den Serientermin. Wollen Sie fortfahren?"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV-Login"
+
 #~ msgid "Calendar chapter"
 #~ msgstr "Kapitel 'Kalender'"
 
@@ -11845,6 +11852,9 @@ msgstr "JJJJ"
 
 #~ msgid "Cannot move system folder."
 #~ msgstr "Systemordner kann nicht verschoben werden"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV-Login"
 
 #~ msgid "Categories"
 #~ msgstr "Kategorien"
@@ -12364,6 +12374,9 @@ msgstr "JJJJ"
 #~ msgid "E-mail settings chapter"
 #~ msgstr "Kapitel 'E-Mail-Einstellungen'"
 
+#~ msgid "EAS Login"
+#~ msgstr "EAS-Login"
+
 #~ msgid "EAS hostname"
 #~ msgstr "EAS-Hostname"
 
@@ -12878,6 +12891,9 @@ msgstr "JJJJ"
 #~ msgid "Get a link"
 #~ msgstr "Einen Link abrufen"
 
+#~ msgid "Get link"
+#~ msgstr "Link abrufen"
+
 #~ msgid "Get started here!"
 #~ msgstr "Einstieg"
 
@@ -12994,6 +13010,15 @@ msgstr "JJJJ"
 
 #~ msgid "Hungary"
 #~ msgstr "Ungarn"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP-Login"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "IMAPS"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP-Server"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Abonnement von IMAP-Ordnern"
@@ -13403,9 +13428,6 @@ msgstr "JJJJ"
 
 #~ msgid "Load all mails. This might take some time."
 #~ msgstr "Alle E-Mails laden. Dies kann eine Weile dauern."
-
-#~ msgid "Login"
-#~ msgstr "Login"
 
 #~ msgid "Login must not be empty."
 #~ msgstr "Das Login darf nicht leer sein."
@@ -14171,6 +14193,9 @@ msgstr "JJJJ"
 #~ msgid "Receiver"
 #~ msgstr "Erhaltene E-Mails"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Empfänger können bearbeiten"
+
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Serienaufgaben benötigen ein gültiges Enddatum."
 
@@ -14245,6 +14270,15 @@ msgstr "JJJJ"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP-Login"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "SMTPS"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP-Server"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP-Login"

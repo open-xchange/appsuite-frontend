@@ -1596,11 +1596,12 @@ msgid "CW %1$d"
 msgstr "Sem %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "Acceder a CalDAV"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "URL de CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL de CalDAV"
 
@@ -1758,11 +1759,9 @@ msgid "Capacity"
 msgstr "Capacidad"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "Acceder a CardDAV"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "URL de CardDAV"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2121,6 +2120,12 @@ msgstr "Conectar su dispositivo"
 msgid "Connect your device"
 msgstr "Conectar su dispositivo"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Conectar"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Seguridad de la conexión"
@@ -2400,6 +2405,14 @@ msgstr "Crear objetos y subcarpetas"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Crear recordatorio"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Crear lista de distribución"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3220,11 +3233,9 @@ msgid "Due on %1$s"
 msgstr "Vence el %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "Acceder a EAS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "URL de EAS"
 
 #. Exabytes
@@ -4209,12 +4220,6 @@ msgstr "Obtener %s"
 msgid "Get free upgrade"
 msgstr "Obtener actualización gratuita"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Obtener enlace"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4520,20 +4525,10 @@ msgid "I like it"
 msgstr "Me gusta"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "Acceder a IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "Puerto IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "IMAP seguro"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "Servidor IMAP"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5093,6 +5088,10 @@ msgstr "Bloquear"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Bloqueado"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Nombre de usuario"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6875,6 +6874,12 @@ msgstr "Mostrar aparte"
 msgid "Pop out standalone viewer"
 msgstr "Mostrar aparte en visor independiente"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
@@ -7266,10 +7271,6 @@ msgstr "Archivos modificados recientemente"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Usados recientemente"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Los destinatarios pueden editar"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7707,20 +7708,10 @@ msgid "Run auto-play mode"
 msgstr "Ejecutar el modo de reproducción automática"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "Acceder a SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "Puerto SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "SMTP seguro"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "Servidor SMTP"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8035,6 +8026,12 @@ msgstr "Mensajes enviados"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Nombre del servidor"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9630,6 +9627,7 @@ msgid "UI version"
 msgstr "Versión del interfaz de usuario"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9884,6 +9882,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Usuario"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Nombre de usuario"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -13512,6 +13516,9 @@ msgstr "yyyy"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (Contactos)"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "Acceder a CalDAV"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Vista personalizada del calendario"
 
@@ -13562,6 +13569,9 @@ msgstr "yyyy"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Cabo Verde"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "Acceder a CardDAV"
 
 #~ msgid "Cards"
 #~ msgstr "Tarjetas"
@@ -14463,6 +14473,9 @@ msgstr "yyyy"
 #~ msgid "E-Mail:"
 #~ msgstr "E-Mail:"
 
+#~ msgid "EAS Login"
+#~ msgstr "Acceder a EAS"
+
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
 
@@ -15287,6 +15300,9 @@ msgstr "yyyy"
 #~ msgid "Get directions"
 #~ msgstr "Obtener indicaciones"
 
+#~ msgid "Get link"
+#~ msgstr "Obtener enlace"
+
 #~ msgid "Get started here!"
 #~ msgstr "¡Empezar aquí!"
 
@@ -15498,8 +15514,17 @@ msgstr "yyyy"
 #~ msgid "IM (private):"
 #~ msgstr "MI (privado):"
 
+#~ msgid "IMAP Login"
+#~ msgstr "Acceder a IMAP"
+
 #~ msgid "IMAP Mail Server"
 #~ msgstr "Servidor de correo IMAP"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "IMAP seguro"
+
+#~ msgid "IMAP Server"
+#~ msgstr "Servidor IMAP"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Suscripción a carpeta IMAP"
@@ -16037,9 +16062,6 @@ msgstr "yyyy"
 
 #~ msgid "Location: %1$s"
 #~ msgstr "Ubicación: %1$s"
-
-#~ msgid "Login"
-#~ msgstr "Nombre de usuario"
 
 #
 #~ msgctxt "username"
@@ -17462,6 +17484,9 @@ msgstr "yyyy"
 #~ msgid "Received:"
 #~ msgstr "Recibido:"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Los destinatarios pueden editar"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "Patrón de recurrencia"
 
@@ -17621,6 +17646,15 @@ msgstr "yyyy"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "Acceder a SMTP"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "SMTP seguro"
+
+#~ msgid "SMTP Server"
+#~ msgstr "Servidor SMTP"
 
 #~ msgid "SMTP login"
 #~ msgstr "Usuario SMTP"

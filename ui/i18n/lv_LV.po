@@ -1632,11 +1632,12 @@ msgid "CW %1$d"
 msgstr "KN %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV pieslēgums"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1796,11 +1797,9 @@ msgid "Capacity"
 msgstr "Kapacitāte"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV pieslēgums"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2162,6 +2161,12 @@ msgstr "Pieslēgt ierīci"
 msgid "Connect your device"
 msgstr "Pieslēgt ierīci"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Pieslēgties"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Pieslēguma drošība"
@@ -2445,6 +2450,14 @@ msgstr "Izveidot objektus un apakšmapes"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Izveidot atgādinājumu"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Izveidot izplatīšanas sarakstu"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3290,11 +3303,9 @@ msgid "Due on %1$s"
 msgstr "Izpildāms %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS pieslēgums"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS URL"
 
 #. Exabytes
@@ -4301,12 +4312,6 @@ msgstr "Iegūt %s"
 msgid "Get free upgrade"
 msgstr "Iegūt bezmaksas jauninājumu"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Iegūt saiti"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4617,20 +4622,10 @@ msgid "I like it"
 msgstr "Labi"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP pieslēgums"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP ports"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "Drošs IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP serveris"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5196,6 +5191,10 @@ msgstr "Noslēgs"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Noslēgts"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Pieslēgties"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -7021,6 +7020,12 @@ msgstr "Izlekt"
 msgid "Pop out standalone viewer"
 msgstr "Parādīt atsevišķu apskatlogu"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portāls"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portāls"
@@ -7416,10 +7421,6 @@ msgstr "Nesen izmainītie faili"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Nesen izmantotie"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Saņēmēji var rediģēt"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7865,20 +7866,10 @@ msgid "Run auto-play mode"
 msgstr "Tikai lasīšanai"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP pieslēgums"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP ports"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "Drošs SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP serveris"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8198,6 +8189,12 @@ msgstr "Nosūtītie ziņojumi"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Sērija"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Servera vārds"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9823,6 +9820,7 @@ msgid "UI version"
 msgstr "Interfeisa versija"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -10079,6 +10077,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Lietotājs"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Lietotāja vārds"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -12220,6 +12224,9 @@ msgstr "yyyy"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (Kontakti)"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV pieslēgums"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Kalendāra pielāgotais skats"
 
@@ -12243,6 +12250,9 @@ msgstr "yyyy"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Kaboverde"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV pieslēgums"
 
 #~ msgid "Cards"
 #~ msgstr "Kartiņas"
@@ -13067,6 +13077,9 @@ msgstr "yyyy"
 #~ msgid "E-Mail:"
 #~ msgstr "E-pasts:"
 
+#~ msgid "EAS Login"
+#~ msgstr "EAS pieslēgums"
+
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
 
@@ -13705,6 +13718,9 @@ msgstr "yyyy"
 #~ msgid "Get directions"
 #~ msgstr "Iegūt norādes"
 
+#~ msgid "Get link"
+#~ msgstr "Iegūt saiti"
+
 #~ msgid "Get started here!"
 #~ msgstr "Sāciet šeit!"
 
@@ -13895,6 +13911,15 @@ msgstr "yyyy"
 
 #~ msgid "IM (private):"
 #~ msgstr "IM (privāti):"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP pieslēgums"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "Drošs IMAP"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP serveris"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP mapes abonements"
@@ -14379,9 +14404,6 @@ msgstr "yyyy"
 
 #~ msgid "Location:"
 #~ msgstr "Vieta:"
-
-#~ msgid "Login"
-#~ msgstr "Pieslēgties"
 
 #~ msgctxt "username"
 #~ msgid "Login"
@@ -15481,6 +15503,9 @@ msgstr "yyyy"
 #~ msgid "Received:"
 #~ msgstr "Saņemts:"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Saņēmēji var rediģēt"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "Atkārtojumu veids"
 
@@ -15620,6 +15645,15 @@ msgstr "yyyy"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP pieslēgums"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "Drošs SMTP"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP serveris"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP pieslēgums"

@@ -1593,11 +1593,12 @@ msgid "CW %1$d"
 msgstr "%1$d. hét"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV bejelentkezés"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1753,11 +1754,9 @@ msgid "Capacity"
 msgstr "Kapacitás"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV bejelentkezés"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2117,6 +2116,12 @@ msgstr "Eszköz csatlakoztatása"
 msgid "Connect your device"
 msgstr "Eszköz csatlakoztatása"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Csatlakozás"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Kapcsolat biztonsága:"
@@ -2396,6 +2401,14 @@ msgstr "Elemek és almappák létrehozása"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Emlékeztető létrehozása"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Disztribúciós lista létrehozása"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3222,11 +3235,9 @@ msgid "Due on %1$s"
 msgstr "Határidő: %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS bejelentkezés"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS URL"
 
 #. Exabytes
@@ -4200,12 +4211,6 @@ msgstr "%s beszerzése"
 msgid "Get free upgrade"
 msgstr "Ingyenes bővítés"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Hivatkozás letöltése"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4511,20 +4516,10 @@ msgid "I like it"
 msgstr "Tetszik"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP bejelentkezés"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "IMAP biztonságos"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP kiszolgáló"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5082,6 +5077,12 @@ msgstr "Zárolás"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Zárolt"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "login"
+msgid "Login"
+msgstr "bejelentkezés"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6849,6 +6850,12 @@ msgstr "Megnyitás új ablakban"
 msgid "Pop out standalone viewer"
 msgstr "Megnyitás külső megjelenítőben"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portál"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portál"
@@ -7239,10 +7246,6 @@ msgstr "Nemrégen módosított fájlok"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Legutóbb használt"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Címzettek szerkeszthetnek"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7680,20 +7683,10 @@ msgid "Run auto-play mode"
 msgstr "Automatikus lejátszás indítása"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP bejelentkezés"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "SMTP biztonságos"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP kiszolgáló"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8005,6 +7998,12 @@ msgstr "Elküldött üzenetek"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Ismétlődések"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Kiszolgáló neve"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9583,6 +9582,7 @@ msgid "UI version"
 msgstr "Grafikus felület verziója"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9837,6 +9837,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Felhasználó"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Felhasználónév"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11166,6 +11172,12 @@ msgstr "yyyy"
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Bemutató sugárzása az interneten."
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV bejelentkezés"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV bejelentkezés"
+
 #, fuzzy
 #~| msgid "Series"
 #~ msgid "Categories"
@@ -11279,6 +11291,9 @@ msgstr "yyyy"
 
 #~ msgid "Dropbox"
 #~ msgstr "Dropbox"
+
+#~ msgid "EAS Login"
+#~ msgstr "EAS bejelentkezés"
 
 #, fuzzy
 #~| msgid "Mail"
@@ -11399,6 +11414,9 @@ msgstr "yyyy"
 #~ msgid "Fullscreen"
 #~ msgstr "Teljes képernyő"
 
+#~ msgid "Get link"
+#~ msgstr "Hivatkozás letöltése"
+
 #~ msgid "Google Drive"
 #~ msgstr "Google Drive"
 
@@ -11422,6 +11440,15 @@ msgstr "yyyy"
 
 #~ msgid "Hide comments"
 #~ msgstr "Megjegyzések elrejtése"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP bejelentkezés"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "IMAP biztonságos"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP kiszolgáló"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP mappafeliratkozás"
@@ -11697,11 +11724,23 @@ msgstr "yyyy"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "%1$d/%2$d oldal"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Címzettek szerkeszthetnek"
+
 #~ msgid "Resource name"
 #~ msgstr "Erőforrásnév"
 
 #~ msgid "Running applications"
 #~ msgstr "Alkalmazások futtatása"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP bejelentkezés"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "SMTP biztonságos"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP kiszolgáló"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP bejelentkezés"
@@ -12221,9 +12260,6 @@ msgstr "yyyy"
 
 #~ msgid "last"
 #~ msgstr "utolsó"
-
-#~ msgid "login"
-#~ msgstr "bejelentkezés"
 
 #~ msgid "monthly"
 #~ msgstr "havonta"

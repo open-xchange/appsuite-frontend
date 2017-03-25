@@ -1556,11 +1556,12 @@ msgid "CW %1$d"
 msgstr "第 %1$d 週"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV 登入資訊"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1715,11 +1716,9 @@ msgid "Capacity"
 msgstr "容量"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV 登入資訊"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV 網址"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2077,6 +2076,12 @@ msgstr "連線至裝置"
 msgid "Connect your device"
 msgstr "連線至裝置"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "連線"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "連線安全性"
@@ -2352,6 +2357,14 @@ msgstr "建立物件與子資料夾"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "建立提醒"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "建立新通訊組列表"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3158,11 +3171,9 @@ msgid "Due on %1$s"
 msgstr "結束於 %s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS 登入資訊"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS 網址"
 
 #. Exabytes
@@ -4124,12 +4135,6 @@ msgstr "下載 %s"
 msgid "Get free upgrade"
 msgstr "取得免費升級"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "取得鏈結"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4433,20 +4438,10 @@ msgid "I like it"
 msgstr "我喜歡"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP 登入資訊"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP 通訊埠"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "IMAP 安全性"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP 伺服器"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4991,6 +4986,10 @@ msgstr "鎖定"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "已鎖定"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "登錄"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6744,6 +6743,12 @@ msgstr "彈出"
 msgid "Pop out standalone viewer"
 msgstr "彈出獨立檢視器"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "入口"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "入口"
@@ -7125,10 +7130,6 @@ msgstr "最近修改的檔案"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "最近使用"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "收件人可編輯"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7564,20 +7565,10 @@ msgid "Run auto-play mode"
 msgstr "執行自動播放模式"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP 登入資訊"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP 通訊埠"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "SMTP 安全性"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP 伺服器"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7888,6 +7879,12 @@ msgstr "寄件備份"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "系列"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "伺服器名"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9420,6 +9417,7 @@ msgid "UI version"
 msgstr "UI 版本"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9665,6 +9663,12 @@ msgstr "使用上下鍵修改時間，按下 ESC 鍵關閉選擇範圍"
 #: module:io.ox/settings
 msgid "User"
 msgstr "使用者"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "用戶名"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11684,6 +11688,9 @@ msgstr "年"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV（聯繫方式）"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV 登入資訊"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "日曆自定義視圖"
 
@@ -11707,6 +11714,9 @@ msgstr "年"
 
 #~ msgid "Cape Verde"
 #~ msgstr "維德角"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV 登入資訊"
 
 #~ msgid "Categories"
 #~ msgstr "類別"
@@ -12483,6 +12493,9 @@ msgstr "年"
 #~ msgid "E-Mail:"
 #~ msgstr "電子郵件："
 
+#~ msgid "EAS Login"
+#~ msgstr "EAS 登入資訊"
+
 #~ msgid "EEE, %s"
 #~ msgstr "EEE、%s"
 
@@ -12979,6 +12992,9 @@ msgstr "年"
 #~ msgid "Germany"
 #~ msgstr "德文"
 
+#~ msgid "Get link"
+#~ msgstr "取得鏈結"
+
 #~ msgid "Get started here!"
 #~ msgstr "開始入門！"
 
@@ -13069,6 +13085,15 @@ msgstr "年"
 #~| msgid "Hungarian"
 #~ msgid "Hungary"
 #~ msgstr "匈牙利文"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP 登入資訊"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "IMAP 安全性"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP 伺服器"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP 資料夾訂閱"
@@ -13330,9 +13355,6 @@ msgstr "年"
 
 #~ msgid "Load all mails. This might take some time."
 #~ msgstr "載入所有郵件，可能需要一些時間。"
-
-#~ msgid "Login"
-#~ msgstr "登錄"
 
 #~ msgid "Login must not be empty."
 #~ msgstr "帳號不能為空。"
@@ -13836,6 +13858,9 @@ msgstr "年"
 #~ msgid "Reading the details"
 #~ msgstr "閱讀詳情"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "收件人可編輯"
+
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "重複發生的任務需要有效結束日期。"
 
@@ -13896,6 +13921,15 @@ msgstr "年"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP 登入資訊"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "SMTP 安全性"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP 伺服器"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP 帳號"

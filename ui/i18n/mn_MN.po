@@ -1553,11 +1553,10 @@ msgid "CW %1$d"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
+msgid "CalDAV"
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr ""
 
@@ -1712,11 +1711,7 @@ msgid "Capacity"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr ""
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2078,6 +2073,11 @@ msgstr ""
 msgid "Connect your device"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Connection"
+msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr ""
@@ -2357,6 +2357,12 @@ msgstr ""
 
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
+msgstr ""
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+msgid "Create sharing link"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
@@ -3168,11 +3174,7 @@ msgid "Due on %1$s"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+msgid "EAS"
 msgstr ""
 
 #. Exabytes
@@ -4125,12 +4127,6 @@ msgstr ""
 msgid "Get free upgrade"
 msgstr ""
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr ""
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4432,19 +4428,7 @@ msgid "I like it"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
+msgid "IMAP"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -4973,6 +4957,10 @@ msgstr ""
 
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
 msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
@@ -6731,6 +6719,10 @@ msgstr ""
 msgid "Pop out standalone viewer"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Port"
+msgstr ""
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr ""
@@ -7111,10 +7103,6 @@ msgstr ""
 
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
-msgstr ""
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
 msgstr ""
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
@@ -7542,19 +7530,7 @@ msgid "Run auto-play mode"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
+msgid "SMTP"
 msgstr ""
 
 #. Connection security. SSL/TLS.
@@ -7860,6 +7836,12 @@ msgstr ""
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Цувралууд"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server version"
+msgid "Server Name"
+msgstr "Серверийн хувилбар"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9362,6 +9344,7 @@ msgid "UI version"
 msgstr "Хэрэглэгчийн интерфейсийн хувилбар"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "Вэб хуудас"
@@ -9608,6 +9591,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr ""
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Хэрэглэгчийн нэр"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"

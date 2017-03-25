@@ -1614,11 +1614,12 @@ msgid "CW %1$d"
 msgstr "%1$d неделя"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "Логин CalDAV"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
@@ -1776,11 +1777,9 @@ msgid "Capacity"
 msgstr "Объем"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "Логин CardDAV"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2140,6 +2139,12 @@ msgstr "Подключите устройство"
 msgid "Connect your device"
 msgstr "Подключите устройство"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Подключиться"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Безопасность соединения"
@@ -2418,6 +2423,14 @@ msgstr "Создавать объекты и вложенные папки"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Создать напоминание"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Создать список рассылки"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3237,11 +3250,9 @@ msgid "Due on %1$s"
 msgstr "Заканчивается %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "Логин EAS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS URL"
 
 #. Exabytes
@@ -4222,12 +4233,6 @@ msgstr "Получить %s"
 msgid "Get free upgrade"
 msgstr "Получить бесплатное обновление"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Получить ссылку"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4533,20 +4538,10 @@ msgid "I like it"
 msgstr "Мне понравилось"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "Логин IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "Порт IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "Защита IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "Сервер IMAP"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5102,6 +5097,10 @@ msgstr "Заблокировать"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Заблокирован"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Имя пользователя"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6876,6 +6875,12 @@ msgstr "Всплывающее окно"
 msgid "Pop out standalone viewer"
 msgstr "Открыть в отдельном окне"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Портал"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Портал"
@@ -7262,10 +7267,6 @@ msgstr "Недавно измененные файлы"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Последние"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Получатели могут редактировать"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7703,20 +7704,10 @@ msgid "Run auto-play mode"
 msgstr "Запустить режим автозапуска"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "Логин SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "Порт SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "Защита SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "Сервер SMTP"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8029,6 +8020,12 @@ msgstr "Отправленные"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Серия"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Имя сервера"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9608,6 +9605,7 @@ msgid "UI version"
 msgstr "Версия интерфейса"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9859,6 +9857,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Пользователь"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Имя пользователя"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11425,6 +11429,12 @@ msgstr "гггг"
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Онлайн-трансляция"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "Логин CalDAV"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "Логин CardDAV"
+
 #, fuzzy
 #~| msgid "Mail address"
 #~ msgid "Categories"
@@ -11743,6 +11753,9 @@ msgstr "гггг"
 #~ msgid "E-Mail Settings"
 #~ msgstr "Параметры почты"
 
+#~ msgid "EAS Login"
+#~ msgstr "Логин EAS"
+
 #, fuzzy
 #~| msgid "E-Mail"
 #~ msgid "EMail"
@@ -12032,6 +12045,9 @@ msgstr "гггг"
 #~ msgid "Further information"
 #~ msgstr "Дополнительная информация"
 
+#~ msgid "Get link"
+#~ msgstr "Получить ссылку"
+
 #~ msgid "Get started here!"
 #~ msgstr "Начало работы"
 
@@ -12103,6 +12119,15 @@ msgstr "гггг"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "Категории настроек"
+
+#~ msgid "IMAP Login"
+#~ msgstr "Логин IMAP"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "Защита IMAP"
+
+#~ msgid "IMAP Server"
+#~ msgstr "Сервер IMAP"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Подписка папки IMAP"
@@ -12285,9 +12310,6 @@ msgstr "гггг"
 
 #~ msgid "Load all mails. This might take some time."
 #~ msgstr "Загрузить все сообщения. Это может занять некоторое время."
-
-#~ msgid "Login"
-#~ msgstr "Имя пользователя"
 
 #~ msgid "Login must not be empty."
 #~ msgstr "Имя пользователя не может быть пустым."
@@ -12699,6 +12721,9 @@ msgstr "гггг"
 #~ msgid "Reading the details"
 #~ msgstr "Подробности"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Получатели могут редактировать"
+
 #~ msgid "Recurring tasks need a valid end date."
 #~ msgstr "Необходимо указать дату окончания повторяющихся задач."
 
@@ -12733,6 +12758,15 @@ msgstr "гггг"
 
 #~ msgid "Running applications"
 #~ msgstr "Работающие приложения"
+
+#~ msgid "SMTP Login"
+#~ msgstr "Логин SMTP"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "Защита SMTP"
+
+#~ msgid "SMTP Server"
+#~ msgstr "Сервер SMTP"
 
 #~ msgid "SMTP login"
 #~ msgstr "Аутентификация SMTP"

@@ -3499,6 +3499,8 @@ msgstr ""
 
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js
+#: module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js
 #: module:io.ox/portal
 msgid "URL"
@@ -4615,8 +4617,6 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/properties.js
 #: module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js
-#: module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr ""
 
@@ -4753,7 +4753,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/toolbarview.js
 #: apps/io.ox/files/actions.js
 #: module:io.ox/files
-msgid "Get link"
+msgid "Create sharing link"
 msgstr ""
 
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7829,11 +7829,6 @@ msgstr ""
 
 #: apps/io.ox/files/share/wizard.js
 #: module:io.ox/files
-msgid "Recipients can edit"
-msgstr ""
-
-#: apps/io.ox/files/share/wizard.js
-#: module:io.ox/files
 msgid "Password required"
 msgstr ""
 
@@ -10480,67 +10475,52 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "CalDAV Login"
+msgid "CalDAV"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "CardDAV URL"
+msgid "Login"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "CardDAV Login"
+msgid "CardDAV"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "IMAP Server"
+msgid "IMAP"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "IMAP Port"
+msgid "Server Name"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "IMAP Login"
+msgid "Port"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "IMAP Secure"
+msgid "User Name"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "SMTP Server"
+msgid "Connection"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "SMTP Port"
+msgid "SMTP"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js
 #: module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js
-#: module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js
-#: module:io.ox/core/onboarding
-msgid "EAS URL"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js
-#: module:io.ox/core/onboarding
-msgid "EAS Login"
+msgid "EAS"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/extensions.js

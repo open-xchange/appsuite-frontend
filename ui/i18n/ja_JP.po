@@ -1545,11 +1545,12 @@ msgid "CW %1$d"
 msgstr "CW %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV ログイン"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1703,11 +1704,9 @@ msgid "Capacity"
 msgstr "容量"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV ログイン"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2067,6 +2066,12 @@ msgstr "デバイスの接続"
 msgid "Connect your device"
 msgstr "デバイスの接続"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "接続します"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "接続セキュリティ"
@@ -2344,6 +2349,14 @@ msgstr "オブジェクトとサブフォルダを作成"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "アラームを作成"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "配布リストを作成"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3161,11 +3174,9 @@ msgid "Due on %1$s"
 msgstr "期限: %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS ログイン"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS URL"
 
 #. Exabytes
@@ -4137,12 +4148,6 @@ msgstr "%s を入手"
 msgid "Get free upgrade"
 msgstr "無償のアップグレードを入手"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "リンク"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4448,20 +4453,10 @@ msgid "I like it"
 msgstr "気に入っています。"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP ログイン"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP ポート"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "セキュリティ保護された IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP サーバ"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5015,6 +5010,10 @@ msgstr "ロック"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "ロックされています"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "ログイン:"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6781,6 +6780,12 @@ msgstr "ポップアウト"
 msgid "Pop out standalone viewer"
 msgstr "スタンドアロンビューアをポップアウト"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "ポータル"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "ポータル"
@@ -7164,10 +7169,6 @@ msgstr "最近変更されたファイル"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "最近使用した絵文字"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "宛先は編集できます。"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7603,20 +7604,10 @@ msgid "Run auto-play mode"
 msgstr "自動再生モードを実行"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP ログイン"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP ポート"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "セキュリティ保護された SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP サーバ"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7927,6 +7918,12 @@ msgstr "送信済みメッセージ"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "アポイント全体"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "サーバ名"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9489,6 +9486,7 @@ msgid "UI version"
 msgstr "UI バージョン"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9740,6 +9738,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "ユーザ"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "ユーザ名"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -12457,6 +12461,9 @@ msgstr "yyyy"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (連絡先)"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV ログイン"
+
 #~| msgid "Calendar day view"
 #~ msgid "Calendar (Manually)"
 #~ msgstr "予定表の日ビュー"
@@ -12484,6 +12491,9 @@ msgstr "yyyy"
 
 #~ msgid "Cape Verde"
 #~ msgstr "カボヴェルデ"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV ログイン"
 
 #~ msgid "Cards"
 #~ msgstr "カード"
@@ -13394,6 +13404,9 @@ msgstr "yyyy"
 #~ msgid "E-Mail:"
 #~ msgstr "メール:"
 
+#~ msgid "EAS Login"
+#~ msgstr "EAS ログイン"
+
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
 
@@ -14140,6 +14153,9 @@ msgstr "yyyy"
 #~ msgid "Get directions"
 #~ msgstr "案内を表示"
 
+#~ msgid "Get link"
+#~ msgstr "リンク"
+
 #~ msgid "Get started here!"
 #~ msgstr "ここからはじめます。"
 
@@ -14347,6 +14363,15 @@ msgstr "yyyy"
 
 #~ msgid "IM (private):"
 #~ msgstr "メッセンジャー (プライベート):"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP ログイン"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "セキュリティ保護された IMAP"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP サーバ"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP フォルダの登録"
@@ -14884,9 +14909,6 @@ msgstr "yyyy"
 
 #~ msgid "Lock object"
 #~ msgstr "オブジェクトをロック"
-
-#~ msgid "Login"
-#~ msgstr "ログイン:"
 
 #
 #~ msgctxt "username"
@@ -16202,6 +16224,9 @@ msgstr "yyyy"
 #~ msgid "Received:"
 #~ msgstr "受信日時:"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "宛先は編集できます。"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "繰り返しパターン"
 
@@ -16341,6 +16366,15 @@ msgstr "yyyy"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP ログイン"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "セキュリティ保護された SMTP"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP サーバ"
 
 #~ msgid "SMTP login"
 #~ msgstr "SMTP ログイン"

@@ -1581,11 +1581,11 @@ msgstr "CW %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #, fuzzy
-msgid "CalDAV Login"
+#| msgid "CalDAV URL"
+msgid "CalDAV"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1750,12 +1750,7 @@ msgstr "Kapasite"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #, fuzzy
-msgid "CardDAV Login"
-msgstr "CalDAV URL"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, fuzzy
-msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2126,6 +2121,11 @@ msgstr ""
 msgid "Connect your device"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+msgid "Connection"
+msgstr "Konuşmalar"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr ""
@@ -2416,6 +2416,14 @@ msgstr "nesne ve alt klasörler yarat"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Hatırlatıcı oluştur"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Dağıtım listesi oluştur"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3282,11 +3290,7 @@ msgid "Due on %1$s"
 msgstr "%1$s tarihinde sona eriyor"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+msgid "EAS"
 msgstr ""
 
 #. Exabytes
@@ -4291,13 +4295,6 @@ msgstr " % alın "
 msgid "Get free upgrade"
 msgstr "Ücretsiz  yükseltme hakkı edinin"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-#, fuzzy
-msgid "Get link"
-msgstr "Link edinin "
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4617,19 +4614,7 @@ msgid "I like it"
 msgstr "Bunu beğendiniz"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
+msgid "IMAP"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -5192,6 +5177,10 @@ msgstr "Kilitle"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Kilitli"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr ""
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -7021,6 +7010,12 @@ msgstr "küçültmek"
 msgid "Pop out standalone viewer"
 msgstr ""
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
@@ -7436,10 +7431,6 @@ msgstr "Son dönemde değiştirilmiş dosyalar"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Son kullanılanlar"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Alıcılar düzenleme yapabilir"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7891,19 +7882,7 @@ msgid "Run auto-play mode"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
+msgid "SMTP"
 msgstr ""
 
 #. Connection security. SSL/TLS.
@@ -8226,6 +8205,12 @@ msgstr "Gönderilen Epostalar"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Diziler"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Sunucu ismi"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9857,6 +9842,7 @@ msgid "UI version"
 msgstr "UI sürümü"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -10118,6 +10104,12 @@ msgstr ""
 #: module:io.ox/settings
 #, fuzzy
 msgid "User"
+msgstr "Kullanıcı adı"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
 msgstr "Kullanıcı adı"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -11482,6 +11474,14 @@ msgstr "yyyy"
 #~ msgstr "Gizli bilgi"
 
 #, fuzzy
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV URL"
+
+#, fuzzy
+#~ msgid "CardDAV Login"
+#~ msgstr "CalDAV URL"
+
+#, fuzzy
 #~| msgid "Mail address"
 #~ msgid "Categories"
 #~ msgstr "E-posta adresi"
@@ -11675,6 +11675,10 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Folder-specific actions for %1$s"
 #~ msgstr "Klasör-özellikli hareketler"
+
+#, fuzzy
+#~ msgid "Get link"
+#~ msgstr "Link edinin "
 
 #~ msgid "Hide advanced filters"
 #~ msgstr "Gelişmiş filitreleri gizle"
@@ -11904,6 +11908,9 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "%1$d of %2$d"
+
+#~ msgid "Recipients can edit"
+#~ msgstr "Alıcılar düzenleme yapabilir"
 
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"

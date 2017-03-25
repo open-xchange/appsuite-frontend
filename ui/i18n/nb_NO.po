@@ -1596,11 +1596,12 @@ msgid "CW %1$d"
 msgstr "Kalenderuke %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "CalDAV-brukernavn"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
@@ -1761,11 +1762,9 @@ msgid "Capacity"
 msgstr "Kapasitet"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "CardDAV-brukernavn"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "CardDAV-URL"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2125,6 +2124,12 @@ msgstr "Tilknytt enheten din"
 msgid "Connect your device"
 msgstr "Tilknytt enheten din"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Koble til"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Tilkoblingssikkerhet"
@@ -2408,6 +2413,14 @@ msgstr "Opprette objekter og undermapper"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Opprett ny påminnelse"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Lag distribusjonsliste"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3242,11 +3255,9 @@ msgid "Due on %1$s"
 msgstr "Forfaller den %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "EAS-brukernavn"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "EAS-URL"
 
 #. Exabytes
@@ -4242,12 +4253,6 @@ msgstr "Få %s"
 msgid "Get free upgrade"
 msgstr "Få gratis oppgradering"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Få en link"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4555,20 +4560,10 @@ msgid "I like it"
 msgstr "Jeg liker det"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "IMAP-brukernavn"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "IMAP-port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "Kryptering (SSL/TLS)"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "IMAP-tjener"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5131,6 +5126,12 @@ msgstr "Lås"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Låst"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "login"
+msgid "Login"
+msgstr "innlogging"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6943,6 +6944,12 @@ msgstr "Popp ut"
 msgid "Pop out standalone viewer"
 msgstr "Popp ut i nytt vindu"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portal"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
@@ -7335,10 +7342,6 @@ msgstr "Nylig endrede filer"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Nylig brukt"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Mottakere kan redigere"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7782,20 +7785,10 @@ msgid "Run auto-play mode"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "SMTP-brukernavn"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "SMTP-port"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "Kryptering (SSL/TLS)"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "SMTP-tjener"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8114,6 +8107,12 @@ msgstr "Sendte meldinger"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Servernavn"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9730,6 +9729,7 @@ msgid "UI version"
 msgstr "UI versjon"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9984,6 +9984,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Bruker"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Brukernavn"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -11393,6 +11399,12 @@ msgstr "yyyy"
 #~ msgid "Broadcast your presentation over the Web."
 #~ msgstr "Kringkast presentasjonen din på internett."
 
+#~ msgid "CalDAV Login"
+#~ msgstr "CalDAV-brukernavn"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "CardDAV-brukernavn"
+
 #, fuzzy
 #~| msgid "Mail address"
 #~ msgid "Categories"
@@ -11498,6 +11510,9 @@ msgstr "yyyy"
 
 #~ msgid "Dropbox"
 #~ msgstr "Dropbox"
+
+#~ msgid "EAS Login"
+#~ msgstr "EAS-brukernavn"
 
 #~| msgid "Mail"
 #~ msgid "EMail"
@@ -11633,6 +11648,9 @@ msgstr "yyyy"
 #~ msgid "Fullscreen"
 #~ msgstr "Fullskjerm"
 
+#~ msgid "Get link"
+#~ msgstr "Få en link"
+
 #~ msgid "Google Drive"
 #~ msgstr "Google Drive"
 
@@ -11647,6 +11665,15 @@ msgstr "yyyy"
 
 #~ msgid "Hide comments"
 #~ msgstr "Skjul kommentarer"
+
+#~ msgid "IMAP Login"
+#~ msgstr "IMAP-brukernavn"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "Kryptering (SSL/TLS)"
+
+#~ msgid "IMAP Server"
+#~ msgstr "IMAP-tjener"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "IMAP-abonnement"
@@ -11933,6 +11960,9 @@ msgstr "yyyy"
 #~ msgid "Rating %1$d of 5"
 #~ msgstr "Side %1$d av %2$d"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Mottakere kan redigere"
+
 #~ msgid "Remove facet"
 #~ msgstr "Fjern filter"
 
@@ -11943,6 +11973,15 @@ msgstr "yyyy"
 
 #~ msgid "Running applications"
 #~ msgstr "Kjørende programmer"
+
+#~ msgid "SMTP Login"
+#~ msgstr "SMTP-brukernavn"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "Kryptering (SSL/TLS)"
+
+#~ msgid "SMTP Server"
+#~ msgstr "SMTP-tjener"
 
 #~ msgid "Save to Drive"
 #~ msgstr "Lagre til Drive"
@@ -12551,9 +12590,6 @@ msgstr "yyyy"
 
 #~ msgid "last"
 #~ msgstr "forrige"
-
-#~ msgid "login"
-#~ msgstr "innlogging"
 
 #~ msgid "monthly"
 #~ msgstr "månedlig"

@@ -1620,11 +1620,12 @@ msgid "CW %1$d"
 msgstr "KT %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "Prihlásenie CalDAV"
+#, fuzzy
+#| msgid "CalDAV URL"
+msgid "CalDAV"
+msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
@@ -1783,11 +1784,9 @@ msgid "Capacity"
 msgstr "Kapacita"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "Prihlásenie CardDAV"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
+#, fuzzy
+#| msgid "CardDAV URL"
+msgid "CardDAV"
 msgstr "URL CalDAV"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
@@ -2146,6 +2145,12 @@ msgstr "Pripojte svoje zariadenie"
 msgid "Connect your device"
 msgstr "Pripojte svoje zariadenie"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Connect"
+msgid "Connection"
+msgstr "Pripojiť"
+
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
 msgstr "Zabezpečenie spojenia"
@@ -2425,6 +2430,14 @@ msgstr "Vytvárať objekty a podpriečinky"
 #: apps/io.ox/mail/actions/reminder.js module:io.ox/mail
 msgid "Create reminder"
 msgstr "Vytvoriť pripomienku"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+#, fuzzy
+#| msgid "Create distribution list"
+msgid "Create sharing link"
+msgstr "Vytvoriť distribučný zoznam"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3245,11 +3258,9 @@ msgid "Due on %1$s"
 msgstr "Termín %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "Prihlasovacie meno EAS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
+#, fuzzy
+#| msgid "EAS URL"
+msgid "EAS"
 msgstr "URL EAS"
 
 #. Exabytes
@@ -4236,12 +4247,6 @@ msgstr "Stiahnuť %s"
 msgid "Get free upgrade"
 msgstr "Získajte aktualizáciu zadarmo"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Získať odkaz"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4547,20 +4552,10 @@ msgid "I like it"
 msgstr "Páči sa mi to"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "Prihlasovacie meno IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
+#, fuzzy
+#| msgid "IMAP Port"
+msgid "IMAP"
 msgstr "Port IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "Zabezpečenie IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "Server IMAP"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -5120,6 +5115,10 @@ msgstr "Zamknúť"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Zamknuté"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Prihlásiť sa"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Loop once only"
@@ -6897,6 +6896,12 @@ msgstr "Oddeliť"
 msgid "Pop out standalone viewer"
 msgstr "Oddeliť samostatný prehliadač"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Portal"
+msgid "Port"
+msgstr "Portál"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portál"
@@ -7288,10 +7293,6 @@ msgstr "Nedávno zmenené súbory"
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Recently used"
 msgstr "Nedávno použité"
-
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Príjemca môže upravovať"
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
@@ -7727,20 +7728,10 @@ msgid "Run auto-play mode"
 msgstr "Spustiť režim automatického prehrávania"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "Prihlasovacie meno SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
+#, fuzzy
+#| msgid "SMTP Port"
+msgid "SMTP"
 msgstr "Port SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "Zabezpečenie SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "Server SMTP"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8055,6 +8046,12 @@ msgstr "Odoslané správy"
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Séria"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "Server name"
+msgid "Server Name"
+msgstr "Názov servera"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -9655,6 +9652,7 @@ msgid "UI version"
 msgstr "Verzia používateľského rozhrania"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9908,6 +9906,12 @@ msgstr ""
 #: module:io.ox/settings
 msgid "User"
 msgstr "Používateľ"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+#, fuzzy
+#| msgid "User name"
+msgid "User Name"
+msgstr "Meno používateľa"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -12019,6 +12023,9 @@ msgstr "RRRR"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (kontakty)"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "Prihlásenie CalDAV"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Zobrazenie kalendára - vlastné"
 
@@ -12043,6 +12050,9 @@ msgstr "RRRR"
 
 #~ msgid "Cape Verde"
 #~ msgstr "Kapverdy"
+
+#~ msgid "CardDAV Login"
+#~ msgstr "Prihlásenie CardDAV"
 
 #~ msgid "Cards"
 #~ msgstr "Vizitky"
@@ -12866,6 +12876,9 @@ msgstr "RRRR"
 #~ msgid "E-Mail:"
 #~ msgstr "Email:"
 
+#~ msgid "EAS Login"
+#~ msgstr "Prihlasovacie meno EAS"
+
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
 
@@ -13486,6 +13499,9 @@ msgstr "RRRR"
 #~ msgid "Get directions"
 #~ msgstr "Získať inštrukcie"
 
+#~ msgid "Get link"
+#~ msgstr "Získať odkaz"
+
 #~ msgid "Get started here!"
 #~ msgstr "Začnite tu!"
 
@@ -13676,6 +13692,15 @@ msgstr "RRRR"
 
 #~ msgid "IM (private):"
 #~ msgstr "IM (súkromné):"
+
+#~ msgid "IMAP Login"
+#~ msgstr "Prihlasovacie meno IMAP"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "Zabezpečenie IMAP"
+
+#~ msgid "IMAP Server"
+#~ msgstr "Server IMAP"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Prihlásenie odoberania priečinka IMAP"
@@ -14164,9 +14189,6 @@ msgstr "RRRR"
 
 #~ msgid "Location:"
 #~ msgstr "Umiestnenie:"
-
-#~ msgid "Login"
-#~ msgstr "Prihlásiť sa"
 
 #~ msgctxt "username"
 #~ msgid "Login"
@@ -15263,6 +15285,9 @@ msgstr "RRRR"
 #~ msgid "Received:"
 #~ msgstr "Prijaté:"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Príjemca môže upravovať"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "Vzor opakovania"
 
@@ -15401,6 +15426,15 @@ msgstr "RRRR"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "Prihlasovacie meno SMTP"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "Zabezpečenie SMTP"
+
+#~ msgid "SMTP Server"
+#~ msgstr "Server SMTP"
 
 #~ msgid "SMTP login"
 #~ msgstr "Prihlasovacie meno SMTP"
