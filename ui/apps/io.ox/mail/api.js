@@ -1388,16 +1388,21 @@ define('io.ox/mail/api', [
         http.pause();
         // loop
         _(list).each(function (data) {
+            var params = {
+                action: 'attachment',
+                id: data.mail.id,
+                folder: data.mail.folder_id,
+                dest_folder: target,
+                attachment: data.id,
+                decrypt: (data.security && data.security.decrypted)
+            };
+            // Guard actions.  If it was from decrypted email, must be decrypted
+            if (data.security && data.security.decrypted) params.decrypt = true;
+            // If saving encrypted copy, but be re-encrypted from original email
+            if (data.reEncrypt) params.encrypt = true;
             http.PUT({
                 module: 'mail',
-                params: {
-                    action: 'attachment',
-                    id: data.mail.id,
-                    folder: data.mail.folder_id,
-                    dest_folder: target,
-                    attachment: data.id,
-                    decrypt: (data.security && data.security.decrypted)
-                },
+                params: params,
                 data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
             });
