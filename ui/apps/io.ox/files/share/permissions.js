@@ -550,21 +550,6 @@ define('io.ox/files/share/permissions', [
                 );
             }
         },
-        //
-        // Halo link
-        //
-        {
-            index: 220,
-            id: 'halo',
-            draw: function (baton) {
-                if (!baton.model.isPerson()) return;
-                if (!capabilities.has('contacts')) return;
-                var email = baton.model.getEmail();
-                this.find('.display_name, .image').each(function (index, node) {
-                    $(node).addClass('halo-link').data({ email1: email });
-                });
-            }
-        },
 
         //
         // Role dropdown
