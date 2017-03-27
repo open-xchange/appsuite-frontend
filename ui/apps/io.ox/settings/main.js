@@ -220,9 +220,12 @@ define('io.ox/settings/main', [
 
             if (capabilities.has('mailfilter')) {
                 mailfilterAPI.getConfig().done(function (config) {
+
+                    // disable autoforward or vacationnotice if the needed actions are not available
                     _.each(actionPoints, function (val, key) {
-                        if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                        if (_.findIndex(config.actioncommands, function (obj) { return obj.action === key; }) === -1) disabledSettingsPanes.push(val);
                     });
+
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
                     });

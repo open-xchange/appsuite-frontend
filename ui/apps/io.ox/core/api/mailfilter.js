@@ -28,7 +28,7 @@ define('io.ox/core/api/mailfilter', [
         deleteRule: function (ruleId) {
 
             return http.PUT({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: { action: 'delete' },
                 data: { id: ruleId }
             });
@@ -42,7 +42,7 @@ define('io.ox/core/api/mailfilter', [
         create: function (data) {
 
             return http.PUT({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: { action: 'new' },
                 data: data
             });
@@ -56,7 +56,7 @@ define('io.ox/core/api/mailfilter', [
         getRules: function (flag) {
 
             return http.GET({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: {
                     action: 'list',
                     flag: flag
@@ -72,7 +72,7 @@ define('io.ox/core/api/mailfilter', [
         update: function (data) {
 
             return http.PUT({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: { action: 'update' },
                 data: data
             });
@@ -84,7 +84,7 @@ define('io.ox/core/api/mailfilter', [
          */
         getConfig: function () {
             return http.GET({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: { action: 'config' }
             });
         },
@@ -96,7 +96,7 @@ define('io.ox/core/api/mailfilter', [
          */
         reorder: function (data) {
             return http.PUT({
-                module: 'mailfilter',
+                module: 'mailfilter/v2',
                 params: { action: 'reorder' },
                 data: data
             });
