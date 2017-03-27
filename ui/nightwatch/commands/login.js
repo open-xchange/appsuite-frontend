@@ -29,7 +29,7 @@ exports.command = function (parameters, userIndex) {
 
     this
         .url(launchURL + '#' + parameters.join('&'))
-        .waitForElementVisible('#io-ox-login-username', 10000)
+        .waitForElementFocus('#io-ox-login-username', 10000)
         .setValue('#io-ox-login-username', user.username)
         .setValue('#io-ox-login-password', user.password)
         .waitForElementEventListener('#io-ox-login-form', 'submit', 2000)

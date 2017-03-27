@@ -24,15 +24,15 @@ describe('Mail', function () {
 
             // 1.1) Mark all messages as read to identify the new message later on
             client
-                .selectFolder('default0/INBOX')
+                .selectFolder({ id: 'default0/INBOX' })
                 .openFolderContextMenu('default0/INBOX')
                 .clickWhenVisible('.dropdown.open a[data-action="markfolderread"]');
 
             // 1.2) continue opening mail compose
-            client.waitForElementVisible('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]', 20000)
-                .assert.containsText('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]', 'Compose')
+            client.waitForElementVisible('.io-ox-mail-window .window-body .classic-toolbar a[data-action="compose"]', 20000)
+                .assert.containsText('.io-ox-mail-window .window-body .classic-toolbar a[data-action="compose"]', 'Compose')
                 .setSetting('io.ox/mail', 'messageFormat', 'html')
-                .clickWhenEventListener('.io-ox-mail-window .window-body > .classic-toolbar-container a[data-action=compose]', 'click', 2500)
+                .clickWhenEventListener('.io-ox-mail-window .window-body  .classic-toolbar a[data-action="compose"]', 'click', 2500)
                 .waitForElementVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor', 20000)
                 .pause(1000)
                 .assert.title('App Suite. Compose');
@@ -66,9 +66,8 @@ describe('Mail', function () {
 
             // 5) Check the "Sent" folder
             client
-                .selectFolder('default0/INBOX/Sent Items')
-                .waitForElementVisible('.io-ox-mail-window .leftside ul li.list-item', 2500)
-                .click('.io-ox-mail-window .leftside ul li.list-item')
+                .selectFolder({ id: 'default0/INBOX/Sent Items' })
+                .clickWhenVisible('.io-ox-mail-window .leftside ul li.list-item', 2500)
                 .waitForElementVisible('.io-ox-mail-window .mail-detail-pane .subject', 1000)
                 .assert.containsText('.io-ox-mail-window .mail-detail-pane .subject', 'Test subject');
 
