@@ -26,8 +26,9 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/folder/blacklist',
     'settings!io.ox/core',
     'settings!io.ox/mail',
+    'io.ox/core/http',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings) {
+], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings, http) {
 
     'use strict';
 
@@ -36,16 +37,26 @@ define('io.ox/core/folder/extensions', [
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
+            http.pause();
             var list = [
-                // inbox
-                api.get(INBOX),
-                // sent, drafts, spam, trash, archive
-                // default0 is alternative for IMAP server that list standard folders below INBOX
-                api.list('default0')
-            ];
+                    // inbox
+                    api.get(INBOX),
+                    // sent, drafts, spam, trash, archive
+                    // default0 is alternative for IMAP server that list standard folders below INBOX
+                    api.list('default0')
+                ],
+                defaultFolders = mailSettings.get('defaultFolder') || {};
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
-            list.push(api.list(INBOX));
+            // sent, drafts, spam, trash, archive
+            _(account.getTypes()).each(function (type, folder) {
+                if (type === 'inbox') return;
+                if (!account.isPrimary(folder)) return;
+                // non-default folders which are not the archive folder (if enabled) are skipped
+                if (!defaultFolders[type] && (type !== 'archive' || !capabilities.has('archive_emails'))) return;
+                list.push(api.get(folder));
+            });
+            http.resume();
             return this.concat.apply(this, list);
         });
 
