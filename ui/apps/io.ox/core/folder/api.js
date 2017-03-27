@@ -1131,7 +1131,8 @@ define('io.ox/core/folder/api', [
         params = {
             action: 'delete',
             failOnError: true,
-            tree: tree(ids[0])
+            tree: tree(ids[0]),
+            extendedResponse: true
         };
 
         if (options && options.isDSC) params.hardDelete = true;
@@ -1143,8 +1144,9 @@ define('io.ox/core/folder/api', [
             data: ids,
             appendColumns: false
         })
-        .done(function () {
-            _(ids).each(function (id) {
+        .done(function (response) {
+            response = response || [];
+            _(ids).each(function (id, index) {
                 var data = hash[id];
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
@@ -1152,11 +1154,13 @@ define('io.ox/core/folder/api', [
                 // get refreshed the model data for folders moved to the trash folder. If they are removed completely we remove the collection
                 // flat models don't have a collection, so no need to remove here
                 if (!isFlat(data.module)) {
-                    // if this folder is in the trash folder it was removed completely, so no need to for fresh data
-                    if (api.is('trash', data)) {
+                    // see if this folder was moved to trash or deleted completely
+                    if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
                         api.pool.removeCollection(id, { removeModels: true });
                     } else {
-                        api.get(id, { cache: false }).fail(function (error) {
+                        // use new path if available, else use id
+                        var pathOrId = (response[index] ? response[index].new_path : id);
+                        api.get(pathOrId, { cache: false }).fail(function (error) {
                             // folder does not exist
                             if (error.code === 'FLD-0008') {
                                 api.pool.removeCollection(id, { removeModels: true });
