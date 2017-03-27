@@ -26,9 +26,8 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities',
-    'io.ox/core/util'
-], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
+    'io.ox/core/capabilities'
+], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -1420,12 +1419,11 @@ define('io.ox/mail/api', [
     api.getUrl = function (data, mode, options) {
 
         var opt = _.extend({ scaleType: 'contain' }, options),
-            url = '/mail', first;
+            url = ox.apiRoot + '/mail', first;
 
         if (mode === 'zip') {
             first = _(data).first();
-            // no sharding for zip downloads (problems with iframe cross-origin access)
-            return ox.apiRoot + url + '?' + $.param({
+            return url + '?' + $.param({
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
@@ -1442,8 +1440,7 @@ define('io.ox/mail/api', [
             // multiple?
             if (data.length > 1) {
                 // zipped
-                // no sharding for eml (problems with iframe cross-origin access)
-                return ox.apiRoot + url + '?' + $.param({
+                return url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,
                     id: _(data).pluck('id').join(','),
@@ -1458,7 +1455,7 @@ define('io.ox/mail/api', [
                     save: 1,
                     session: ox.session
                 }));
-            // no sharding for eml (problems with iframe cross-origin access)
+
             return ox.apiRoot + url;
         }
 
@@ -1489,7 +1486,7 @@ define('io.ox/mail/api', [
             default:
                 break;
         }
-        return coreUtil.getShardingRoot(url);
+        return url;
     };
 
     /**

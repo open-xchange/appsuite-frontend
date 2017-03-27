@@ -418,8 +418,7 @@ define('io.ox/files/api', [
                 url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
                 break;
             case 'preview':
-                url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
-                break;
+                return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
                 url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
                 break;
@@ -432,7 +431,7 @@ define('io.ox/files/api', [
                 break;
         }
 
-        return util.getShardingRoot(url);
+        return ox.apiRoot + url;
     };
 
     //
