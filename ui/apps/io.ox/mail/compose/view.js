@@ -301,11 +301,9 @@ define('io.ox/mail/compose/view', [
                 if (newData) baton.newData = newData;
                 return $.when();
             }, function (result) {
+                if (result) baton.result = result;
                 //handle errors/warnings in reject case
-                if (result && result.error) {
-                    baton.error = result.error;
-                    baton.errorResult = result;
-                }
+                if (result && result.error) baton.error = result.error;
                 if (result && result.warnings) baton.warning = result.warnings;
                 return $.when();
             }).then(function () {
