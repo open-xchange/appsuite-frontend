@@ -290,6 +290,14 @@ define('io.ox/mail/compose/view', [
         }
     });
 
+    ext.point(POINT + '/autosave/error').extend({
+        id: 'default',
+        handler: function (baton) {
+            notifications.yell(baton.data);
+            baton.returnValue.reject(baton.data);
+        }
+    });
+
     // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
     // TODO: at the moment, this resolves with the result of the last extension point.
     // not sure if this is desired.
@@ -643,12 +651,12 @@ define('io.ox/mail/compose/view', [
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
-                    if (result.code === 'GRD-MW-0001') {
-                        ext.point('oxguard/mail/authorization').invoke('perform', self, model, self.autoSaveDraft);
-                    } else {
-                        notifications.yell(result);
-                        def.reject(result);
-                    }
+                    var baton = new ext.Baton(result);
+                    baton.model = model;
+                    baton.view = self;
+                    baton.returnValue = def;
+                    ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
+                    def = baton.returnValue;
                 } else {
                     model.set({
                         'autosavedAsDraft': true,
