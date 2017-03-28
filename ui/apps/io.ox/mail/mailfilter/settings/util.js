@@ -46,7 +46,11 @@ define('io.ox/mail/mailfilter/settings/util', [
             switch (testname) {
                 case 'From':
                 case 'address':
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Keep mails from test@invalid
                     if (actionname === 'keep') return gt('Keep mails from %1$s', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Discard mails from test@invalid
                     if (actionname === 'discard') return gt('Discard mails from %1$s', _(test.values).first());
                     if (actionname === 'move') {
                         return folderAPI.get(action.into).then(function (data) {
@@ -54,19 +58,48 @@ define('io.ox/mail/mailfilter/settings/util', [
                             arrayOfParts.shift();
                             if (data.standard_folder) title = data.title;
                             else title = arrayOfParts.join('/');
+                            //#. This is a summary for a mail filter rule
+                            //#. %1$s A user input (usually a mail address)
+                            //#. %2$s A folder selected by the user
+                            //#. Example: Move mails from test@invalid into folder INBOX
                             return gt('Move mails from %1$s into folder %2$s', _(test.values).first(), title);
                         });
                     }
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s A user input (usually a mail address)
+                    //#. %2$s user input (expected a mail address) where the messages are redirected to
+                    //#. Example: Redirect mails from test@invalid to another@invalid
                     if (actionname === 'redirect') return gt('Redirect mails from %1$s to %2$s', _(test.values).first(), action.to);
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s A user input (usually a mail address)
+                    //#. %2$s A reason which is entered by the user
+                    //#. Example: Reject mails from test@invalid with reason Invalid
                     if (actionname === 'reject') return gt('Reject mails from %1$s with reason %2$s', _(test.values).first(), action.text);
-                    if (actionname === 'markmail') return _(action.flags).first() === '\\seen' ? gt('Mark mails from %1$s as seen', _(test.values).first()) : gt('Mark mails from %1$s as deleted', _(test.values).first());
+                    if (actionname === 'markmail') {
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails from test@invalid as seen
+                        if (_(action.flags).first() === '\\seen') return gt('Mark mails from %1$s as seen', _(test.values).first());
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails from test@invalid as deleted
+                        return gt('Mark mails from %1$s as deleted', _(test.values).first());
+                    }
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Flag mails from test@invalid with a color
                     if (actionname === 'flag') return gt('Flag mails from %1$s with a color', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s User input (usually a mail address)
+                    //#. %2$s A tag, which is entered by the user via a text input
+                    //#. Example: Tag mails from test@invalid with SoccerTeam
                     if (actionname === 'addflags') return gt('Tag mails from %1$s with %2$s', _(test.values).first(), _(action.flags).first().substr(1));
                     break;
                 case 'any':
                 case 'To':
                 case 'Cc':
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Keep mails to test@invalid
                     if (actionname === 'keep') return gt('Keep mails to %1$s', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Discard mails to test@invalid
                     if (actionname === 'discard') return gt('Discard mails to %1$s', _(test.values).first());
                     if (actionname === 'move') {
                         return folderAPI.get(action.into).then(function (data) {
@@ -74,17 +107,46 @@ define('io.ox/mail/mailfilter/settings/util', [
                             arrayOfParts.shift();
                             if (data.standard_folder) title = data.title;
                             else title = arrayOfParts.join('/');
+                            //#. This is a summary for a mail filter rule
+                            //#. %1$s A user input (usually a mail address)
+                            //#. %2$s A folder selected by the user
+                            //#. Example: Move mails to test@invalid into folder INBOX
                             return gt('Move mails to %1$s into folder %2$s', _(test.values).first(), title);
                         });
                     }
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s A user input (usually a mail address)
+                    //#. %2$s user input (expected a mail address) where the messages are redirected to
+                    //#. Example: Redirect mails to test@invalid to another@invalid
                     if (actionname === 'redirect') return gt('Redirect mails to %1$s to %2$s', _(test.values).first(), action.to);
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s A user input (usually a mail address)
+                    //#. %2$s A reason which is entered by the user
+                    //#. Example: Reject mails to test@invalid with reason Invalid
                     if (actionname === 'reject') return gt('Reject mails to %1$s with reason %2$s', _(test.values).first(), action.text);
-                    if (actionname === 'markmail') return _(action.flags).first() === '\\seen' ? gt('Mark mails to %1$s as seen', _(test.values).first()) : gt('Mark mails to %1$s as deleted', _(test.values).first());
+                    if (actionname === 'markmail') {
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails to test@invalid as seen
+                        if (_(action.flags).first() === '\\seen') return gt('Mark mails to %1$s as seen', _(test.values).first());
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails to test@invalid as deleted
+                        return gt('Mark mails to %1$s as deleted', _(test.values).first());
+                    }
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Flag mails to test@invalid with a color
                     if (actionname === 'flag') return gt('Flag mails to %1$s with a color', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s User input
+                    //#. %2$s A tag, which is entered by the user via a text input
+                    //#. Example: Tag mails to test@invalid with SoccerTeam
                     if (actionname === 'addflags') return gt('Tag mails to %1$s with %2$s', _(test.values).first(), _(action.flags).first().substr(1));
                     break;
                 case 'Subject':
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Keep mails with subject Some subject
                     if (actionname === 'keep') return gt('Keep mails with subject %1$s', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Discard mails with subject Some subject
                     if (actionname === 'discard') return gt('Discard mails with subject %1$s', _(test.values).first());
                     if (actionname === 'move') {
                         return folderAPI.get(action.into).then(function (data) {
@@ -92,13 +154,38 @@ define('io.ox/mail/mailfilter/settings/util', [
                             arrayOfParts.shift();
                             if (data.standard_folder) title = data.title;
                             else title = arrayOfParts.join('/');
+                            //#. This is a summary for a mail filter rule
+                            //#. %1$s User input for mail subjects to filter for
+                            //#. %2$s A folder selected by the user
+                            //#. Example: Move mails with subject Some subject into folder INBOX
                             return gt('Move mails with subject %1$s into folder %2$s', _(test.values).first(), title);
                         });
                     }
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s User input for mail subjects to filter for
+                    //#. %2$s user input (expected a mail address) where the messages are redirected to
+                    //#. Example: Redirect mails with subject Some subject to another@invalid
                     if (actionname === 'redirect') return gt('Redirect mails with subject %1$s to %2$s', _(test.values).first(), action.to);
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s User input for mail subjects to filter for
+                    //#. %2$s A reason which is entered by the user
+                    //#. Example: Reject mails with subject Some subject with reason Invalid
                     if (actionname === 'reject') return gt('Reject mails with subject %1$s with reason %2$s', _(test.values).first(), action.text);
-                    if (actionname === 'markmail') return _(action.flags).first() === '\\seen' ? gt('Mark mails with subject %1$s as seen', _(test.values).first()) : gt('Mark mails with subject %1$s as deleted', _(test.values).first());
+                    if (actionname === 'markmail') {
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails with subject Some subject as seen
+                        if (_(action.flags).first() === '\\seen') return gt('Mark mails with subject %1$s as seen', _(test.values).first());
+                        //#. This is a summary for a mail filter rule
+                        //#. Example: Mark mails with subject Some subject as deleted
+                        return gt('Mark mails with subject %1$s as deleted', _(test.values).first());
+                    }
+                    //#. This is a summary for a mail filter rule
+                    //#. Example: Flag mails with subject Some subject with a color
                     if (actionname === 'flag') return gt('Flag mails with subject %1$s with a color', _(test.values).first());
+                    //#. This is a summary for a mail filter rule
+                    //#. %1$s User input for mail subjects to filter for
+                    //#. %2$s A tag, which is entered by the user via a text input
+                    //#. Example: Tag mails with subject Some subject with SoccerTeam
                     if (actionname === 'addflags') return gt('Tag mails with subject %1$s with %2$s', _(test.values).first(), _(action.flags).first().substr(1));
                     break;
                 default:
