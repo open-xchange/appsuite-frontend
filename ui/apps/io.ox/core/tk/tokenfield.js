@@ -447,7 +447,7 @@ define('io.ox/core/tk/tokenfield', [
             // add non-public api;
             this.hiddenapi = this.input.data('ttTypeahead');
 
-            // calculate postion for typeahead dropdown (tt-dropdown-menu)
+            // calculate position for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
                 // non-public api of typeahead
                 this.hiddenapi.dropdown._show = function () {

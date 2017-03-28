@@ -608,6 +608,8 @@ define('io.ox/mail/compose/view', [
 
         saveDraft: function () {
             var win = this.app.getWindow();
+            // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
+            this.trigger('updateTokens');
             if (win) win.busy();
             // get mail
             var mail = this.model.getMailForDraft();
@@ -788,7 +790,8 @@ define('io.ox/mail/compose/view', [
                 subject = subject.replace(str, '');
                 this.model.set('subject', subject);
             }
-
+            // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
+            this.trigger('updateTokens');
             var mail = this.model.getMail(),
                 view = this,
                 baton = new ext.Baton({
