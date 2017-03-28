@@ -308,10 +308,12 @@ define('plugins/core/feedback/register', [
                     });
                     sendFeedback(data)
                         .done(function () {
+                            //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
                         })
                         .fail(function () {
-                            yell('error', gt('Feedback could not be send'));
+                            //#. popup error message
+                            yell('error', gt('Feedback could not be sent'));
                         });
                 })
                 .open();
