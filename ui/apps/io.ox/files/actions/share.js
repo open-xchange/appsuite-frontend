@@ -81,7 +81,7 @@ define('io.ox/files/actions/share', [
         });
 
         view.listenTo(view.model, 'change:recipients', function (model, value) {
-            toggleButtons(value.length);
+            toggleButtons(value.length > 0);
         });
 
         dialog
