@@ -3136,6 +3136,7 @@ msgstr ""
 msgid "Contact"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/edit/view-form.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
@@ -3302,6 +3303,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
@@ -3453,6 +3455,7 @@ msgstr ""
 msgid "Fax (Home)"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
@@ -3701,46 +3704,54 @@ msgstr ""
 msgid "This contact is private and cannot be shared"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Phone"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Email"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 msgid "Business"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 msgid "Home"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js
@@ -3748,6 +3759,7 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
@@ -9675,136 +9687,214 @@ msgstr ""
 msgid "Couldn't load your mail filter rules."
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Keep mails from %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Discard mails from %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails from test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Move mails from %1$s into folder %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails from test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Redirect mails from %1$s to %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails from test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Reject mails from %1$s with reason %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails from %1$s as seen"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails from %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails from test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Flag mails from %1$s with a color"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input (usually a mail address)
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails from test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Tag mails from %1$s with %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Keep mails to %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Discard mails to %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails to test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Move mails to %1$s into folder %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails to test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Redirect mails to %1$s to %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails to test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Reject mails to %1$s with reason %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails to %1$s as seen"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails to %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails to test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Flag mails to %1$s with a color"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails to test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Tag mails to %1$s with %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Keep mails with subject %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Discard mails with subject %1$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A folder selected by the user
+#. Example: Move mails with subject Some subject into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Move mails with subject %1$s into folder %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails with subject Some subject to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails with subject Some subject with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails with subject %1$s as seen"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Mark mails with subject %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails with subject Some subject with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Flag mails with subject %1$s with a color"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails with subject Some subject with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js
 #: module:io.ox/mail
 msgid "Tag mails with subject %1$s with %2$s"
@@ -11838,14 +11928,16 @@ msgstr ""
 msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly."
 msgstr ""
 
+#. popup info message
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
 msgid "Thank you for your feedback"
 msgstr ""
 
+#. popup error message
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
-msgid "Feedback could not be send"
+msgid "Feedback could not be sent"
 msgstr ""
 
 #: apps/plugins/core/feedback/register.js

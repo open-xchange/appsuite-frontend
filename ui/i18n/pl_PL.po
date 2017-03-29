@@ -1566,10 +1566,12 @@ msgstr "Przeglądarka"
 msgid "Burnt orange"
 msgstr "Palony pomarańczowy"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Business"
 msgstr "Służbowy"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
@@ -1798,6 +1800,7 @@ msgstr "Adres URL CardDAV"
 msgid "Cart is empty."
 msgstr "Koszyk jest pusty."
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -2539,6 +2542,7 @@ msgstr "Data"
 msgid "Date completed"
 msgstr "Data ukończenia"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
@@ -2848,18 +2852,24 @@ msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Odrzuć zmiany"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Discard mails from %1$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "This mail has no content"
 msgid "Discard mails to %1$s"
 msgstr "Wiadomość nie ma zawartości"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Discard mails with subject %1$s"
 msgstr ""
@@ -3414,6 +3424,7 @@ msgstr "Edytuj, aby ustawić nazwę."
 msgid "Editor"
 msgstr "Edytor"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Email"
@@ -3923,11 +3934,12 @@ msgstr "Adres URL kanału"
 msgid "Feedback"
 msgstr "Opinie"
 
+#. popup error message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid "The task could not be deleted."
 #| msgid_plural "The tasks could not be deleted."
-msgid "Feedback could not be send"
+msgid "Feedback could not be sent"
 msgstr "Nie można usunąć zadania."
 
 #. Emoji category
@@ -4054,16 +4066,22 @@ msgstr "Oflaguj"
 msgid "Flag mail with"
 msgstr "Oznacz wiadomość flagą"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails from test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails from %1$s with a color"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails to test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Flag mail with"
 msgid "Flag mails to %1$s with a color"
 msgstr "Oznacz wiadomość flagą"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails with subject Some subject with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails with subject %1$s with a color"
 msgstr ""
@@ -4520,10 +4538,12 @@ msgstr "Wysoki priorytet"
 msgid "Hobby"
 msgstr "Hobby"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr "Prywatny"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
@@ -4922,18 +4942,24 @@ msgstr "Zachowaj wersję roboczą"
 msgid "Keep looping endlessly"
 msgstr "Zapętl w nieskończoność"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Keep mails from %1$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Keep mails to %1$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Yes, send without subject"
@@ -5392,32 +5418,44 @@ msgstr "Oznacz jako nieprzeczytane"
 msgid "Mark mail as"
 msgstr "Oznacz wiadomość jako"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail from %1$s, %2$s"
 msgid "Mark mails from %1$s as deleted"
 msgstr "Wiadomość od %1$s, %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Mark mails from %1$s as seen"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails to %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mark mail as"
 msgid "Mark mails to %1$s as seen"
 msgstr "Oznacz wiadomość jako"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as seen"
 msgstr ""
@@ -5487,6 +5525,7 @@ msgstr "Opcje wiadomości"
 msgid "Messaging"
 msgstr "System wiadomości"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
@@ -5593,18 +5632,30 @@ msgstr "Przenieś wszystkie wiadomości"
 msgid "Move folder"
 msgstr "Przenieś folder"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails from test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail from %1$s, %2$s"
 msgid "Move mails from %1$s into folder %2$s"
 msgstr "Wiadomość od %1$s, %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails to test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "No mails in this folder"
 msgid "Move mails to %1$s into folder %2$s"
 msgstr "Brak nowych wiadomości w tym folderze"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A folder selected by the user
+#. Example: Move mails with subject Some subject into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Move mails with subject %1$s into folder %2$s"
 msgstr ""
@@ -6391,11 +6442,13 @@ msgstr "Organizator"
 msgid "Original mail"
 msgstr "Wiadomość oryginalna"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Inne"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
@@ -6547,6 +6600,7 @@ msgstr "Uprawnienia:"
 msgid "Personal"
 msgstr "Osobiste"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
@@ -6561,6 +6615,7 @@ msgstr ""
 "Wiadomość osobista (opcjonalnie). Wiadomość ta zostanie wysłana do "
 "wszystkich nowo zaproszonych osób."
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Phone"
@@ -7342,18 +7397,30 @@ msgstr "Czerwony"
 msgid "Red violet"
 msgstr "Czerwonofiołkowy"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails from test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails from %1$s to %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails to test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails to %1$s to %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails with subject Some subject to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
@@ -7393,18 +7460,30 @@ msgstr "Zarejestruj teraz"
 msgid "Reject changes"
 msgstr "Odrzuć zmiany"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails from test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Reject mails from %1$s with reason %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails to test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Reject with reason"
 msgid "Reject mails to %1$s with reason %2$s"
 msgstr "Odrzuć, podając powód"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails with subject Some subject with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
@@ -8714,18 +8793,30 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "Oznacz wiadomość znacznikiem"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input (usually a mail address)
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails from test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Tag mails from %1$s with %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails to test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Tag mails to %1$s with %2$s"
 msgstr "Wiadomość od: %1$s — %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails with subject Some subject with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Tag mails with subject %1$s with %2$s"
 msgstr ""
@@ -8855,6 +8946,7 @@ msgstr "Tekst"
 msgid "Text documents"
 msgstr "Dokumenty tekstowe"
 
+#. popup info message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
 msgstr "Dziękujemy za opinię"

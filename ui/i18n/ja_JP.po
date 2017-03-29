@@ -1483,10 +1483,12 @@ msgstr "ブラウザ"
 msgid "Burnt orange"
 msgstr "バーントオレンジ"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Business"
 msgstr "ビジネス"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
@@ -1713,6 +1715,7 @@ msgstr "CardDAV URL"
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -2452,6 +2455,7 @@ msgstr "日付"
 msgid "Date completed"
 msgstr "完成日"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
@@ -2759,18 +2763,24 @@ msgctxt "dialog"
 msgid "Discard changes"
 msgstr "変更を破棄"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply for mails from %1$s"
 msgid "Discard mails from %1$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "This mail was moved to %1$s."
 msgid "Discard mails to %1$s"
 msgstr "このメールには内容がありません。"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Discard mails with subject %1$s"
 msgstr ""
@@ -3316,6 +3326,7 @@ msgstr "編集して名前を設定"
 msgid "Editor"
 msgstr "エディタ"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Email"
@@ -3809,11 +3820,12 @@ msgstr "フィード URL"
 msgid "Feedback"
 msgstr "フィードバック"
 
+#. popup error message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 #, fuzzy
 #| msgid "The task could not be deleted."
 #| msgid_plural "The tasks could not be deleted."
-msgid "Feedback could not be send"
+msgid "Feedback could not be sent"
 msgstr "仕事を削除できませんでした。"
 
 #. Emoji category
@@ -3940,16 +3952,22 @@ msgstr "フラグ"
 msgid "Flag mail with"
 msgstr "次のフラグをメールに付ける"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails from test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails from %1$s with a color"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails to test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Flag mail with"
 msgid "Flag mails to %1$s with a color"
 msgstr "次のフラグをメールに付ける"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails with subject Some subject with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails with subject %1$s with a color"
 msgstr ""
@@ -4406,10 +4424,12 @@ msgstr "優先度 (高)"
 msgid "Hobby"
 msgstr "趣味"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr "自宅"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
@@ -4806,18 +4826,24 @@ msgstr "下書きを保持"
 msgid "Keep looping endlessly"
 msgstr "永遠に繰り返し"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply for mails from %1$s"
 msgid "Keep mails from %1$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Apply for mails from %1$s"
 msgid "Keep mails to %1$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Yes, send without subject"
@@ -5274,32 +5300,44 @@ msgstr "未読にする"
 msgid "Mark mail as"
 msgstr "次の印をメールに付ける"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail from %1$s, %2$s"
 msgid "Mark mails from %1$s as deleted"
 msgstr "%1$s %2$s からのメール"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Move all mails from a sender"
 msgid "Mark mails from %1$s as seen"
 msgstr "全てのサブフォルダに適用"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails to %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mark mail as"
 msgid "Mark mails to %1$s as seen"
 msgstr "次の印をメールに付ける"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as deleted"
 msgstr ""
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as seen"
 msgstr ""
@@ -5367,6 +5405,7 @@ msgstr "メッセージオプション"
 msgid "Messaging"
 msgstr "メッセージング"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
@@ -5474,18 +5513,30 @@ msgstr "全てのメッセージを移動する"
 msgid "Move folder"
 msgstr "フォルダを移動"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails from test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Mail from %1$s, %2$s"
 msgid "Move mails from %1$s into folder %2$s"
 msgstr "%1$s %2$s からのメール"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails to test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "No mails in this folder"
 msgid "Move mails to %1$s into folder %2$s"
 msgstr "このフォルダにメールはありません。"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A folder selected by the user
+#. Example: Move mails with subject Some subject into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Move mails with subject %1$s into folder %2$s"
 msgstr ""
@@ -6263,11 +6314,13 @@ msgstr "開催者"
 msgid "Original mail"
 msgstr "元のメール"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "その他"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
@@ -6419,6 +6472,7 @@ msgstr "権限："
 msgid "Personal"
 msgstr "個人用"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
@@ -6433,6 +6487,7 @@ msgstr ""
 "個人メッセージ（オプション）このメッセージは、新規に招待された人全てに送信さ"
 "れます。"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Phone"
@@ -7204,18 +7259,30 @@ msgstr "赤"
 msgid "Red violet"
 msgstr "赤紫"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails from test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails from %1$s to %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails to test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails to %1$s to %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails with subject Some subject to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
@@ -7255,18 +7322,30 @@ msgstr "今登録"
 msgid "Reject changes"
 msgstr "変更を拒否"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails from test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Reject mails from %1$s with reason %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails to test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Reject with reason"
 msgid "Reject mails to %1$s with reason %2$s"
 msgstr "次の理由で拒否"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails with subject Some subject with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
@@ -8558,18 +8637,30 @@ msgstr "TTY/TDD"
 msgid "Tag mail with"
 msgstr "次のタグをメールに付ける"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input (usually a mail address)
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails from test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Tag mails from %1$s with %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails to test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 #, fuzzy
 #| msgid "Email from %1$s: %2$s"
 msgid "Tag mails to %1$s with %2$s"
 msgstr "%1$s からのメール: %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails with subject Some subject with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Tag mails with subject %1$s with %2$s"
 msgstr ""
@@ -8692,6 +8783,7 @@ msgstr "テキスト"
 msgid "Text documents"
 msgstr "テキストドキュメント"
 
+#. popup info message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
 msgstr "フィードバックのご送信、ありがとうございました。"
