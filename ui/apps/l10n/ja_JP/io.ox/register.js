@@ -100,15 +100,20 @@ define('l10n/ja_JP/io.ox/register', [
                 id: yomiID,
                 index: 1000000000000,
                 draw: function (baton) {
-                    var input = this.find('input[name="' + id + '"]');
+                    var input = this.find('input[name="' + id + '"]'),
+                        label = input.closest('label');
+
                     // insert furigana field before orginal field
                     input.before(
                         new mini.InputView({ name: yomiID, model: baton.model }).render().$el
                         .addClass('furigana')
                         .attr('placeholder', placeholders[id])
                     );
+
+                    // use wrapper so both fields have the same width
+                    label.removeClass('col-xs-12').wrap($('<div class="col-xs-12">'));
                     // now move original input field after its label
-                    input.closest('label').after(input);
+                    label.after(input);
                 }
             });
         }
