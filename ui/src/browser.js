@@ -26,7 +26,6 @@
         isOpera,
         webkit,
         chrome,
-        firefox,
         edge,
         phantom,
         MacOS,
@@ -39,7 +38,6 @@
         standalone,
         uiwebview,
         chromeIOS,
-        firefoxIOS,
         browserLC = {};
 
     // supported browsers
@@ -47,12 +45,9 @@
         'Chrome':    50,
         'Safari':     8,
         'Firefox':   40,
-        'IE':        11
-    };
-
-    us.platformSupport = {
-        'Android':  4.4,
-        'iOS':      9.0
+        'IE':        11,
+        'Android':  4.2,
+        'iOS':      8.0
     };
 
     // helpers
@@ -77,10 +72,10 @@
         try {
             // browser detection - adopted from prototype.js
             ua = nav.userAgent;
+
             isOpera = Object.prototype.toString.call(window.opera) === '[object Opera]';
             webkit = ua.indexOf('AppleWebKit/') > -1;
             chrome = ua.indexOf('Chrome/') > -1;
-            firefox = ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1;
             // TODO: This needs to be updated, if better user agent is available
             // http://dev.modern.ie/platform/faq/what-is-the-microsoft-edge-user-agent-st
             edge = ua.indexOf('Edge/') > -1;
@@ -91,12 +86,10 @@
             Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
             WindowsPhone = ua.indexOf('Windows Phone') > -1;
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
-
             iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g, '.') : undefined;
             standalone = ('standalone' in nav) && nav.standalone;
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
-            firefoxIOS = ua.indexOf('FxiOS/') > -1;
 
             // TODO: This needs to be updated, if better user agent is available
             // Edge is no Chrome, Webkit or Android.
@@ -105,6 +98,7 @@
                 webkit = false;
                 Android = false;
             }
+
             /*eslint no-nested-ternary: 0*/
             // add namespaces, just sugar
             us.browser = {
@@ -125,19 +119,18 @@
                 /** is WebKit? */
                 WebKit: webkit,
                 /** Safari */
-                Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry && !chromeIOS && !firefoxIOS ?
+                Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry ?
                     (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
                 /** Chrome */
-                Chrome: webkit && chrome && !iOS ?
+                Chrome: webkit && chrome ?
                     ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is Firefox? */
-                Firefox: (firefox && !iOS && !Android) ? ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
-                ChromeiOS: chromeIOS ? ua.split('CriOS/')[1].split(' ')[0].split('.')[0] : undefined,
-                FirefoxiOS: firefoxIOS ? ua.split('FxiOS/')[1].split(' ')[0].split('.')[0] : undefined,
-                FirefoxAndroid: (Android && firefox) ? ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
+                Firefox: (ua.indexOf('Gecko') > -1 && ua.indexOf('Firefox') > -1 && ua.indexOf('KHTML') === -1) ?
+                    ua.split(/Firefox(\/| )/)[2].split('.')[0] : undefined,
+                ChromeiOS: chromeIOS,
                 UIWebView: uiwebview,
                 /** OS **/
                 Blackberry: Blackberry ?
@@ -321,30 +314,18 @@
         _.browser = us.browser;
     };
 
-    // helper for browser support
+    // check for supported browser
     function isBrowserSupported() {
-        var supported = false;
+        var supp = false;
         for (var b in us.browserSupport) {
             if (us.browser[b] >= us.browserSupport[b]) {
-                supported = true;
+                supp = true;
             }
         }
-        return supported;
+        return supp;
     }
-    // helper for platform support
-    function isPlatformSupported() {
-        var supported = false;
-        for (var b in us.platformSupport) {
-            if (us.browser[b] >= us.platformSupport[b]) {
-                supported = true;
-            }
-        }
-        return supported;
-    }
-
     // global function
     window.isBrowserSupported = isBrowserSupported;
-    window.isPlatformSupported = isPlatformSupported;
 
     // check if appsuite is present, otherwise use global scope
     if (window.ox !== undefined) {
