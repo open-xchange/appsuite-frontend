@@ -93,11 +93,17 @@ define('io.ox/files/common-extensions', [
             // - not recommended since the black standard bootstrap tooltip
             //   does not match with most of the icon views file preview images.
 
-            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips
+          //window.console.log('+++ this.parent().parent()[0].id : ', this.parent().parent()[0].id);
+
+            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
                 title: _.breakWord(tooltipTitle),
-                delay: { show: 400 },
-                placement: 'right auto',
-                viewport: { selector: 'ul.list-view', padding: '0 16px 16px 0' } // or callback function
+                trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
+              //placement: 'right auto',                // top | bottom | left | right | auto.
+                placement: 'bottom auto',               // top | bottom | left | right | auto.
+                animation: true,                        // false
+              //delay: { 'show': 400, 'hide': 50000 },
+                delay: { 'show': 400 },
+                viewport: { selector: '.list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
             });
             // this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
             //}
