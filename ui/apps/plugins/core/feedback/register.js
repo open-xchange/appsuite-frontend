@@ -42,8 +42,9 @@ define('plugins/core/feedback/register', [
     function getAppOptions() {
         var currentApp,
             apps = _(appApi.getFavorites()).map(function (app) {
+                app.id = app.id.replace('io.ox/', '');
                 // suport for edit dialogs
-                if (ox.ui.App.getCurrentApp().get('name').indexOf(app.id) === 0) {
+                if (ox.ui.App.getCurrentApp().get('name').replace('io.ox/', '').indexOf(app.id) === 0) {
                     currentApp = app;
                 }
                 return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
@@ -54,7 +55,7 @@ define('plugins/core/feedback/register', [
     var StarRatingView = DisposableView.extend({
 
         className: 'star-rating rating-view',
-        name: 'star-rating-v1',
+        name: 'simple-star-rating-v1',
 
         events: {
             'change input': 'onChange',
@@ -88,7 +89,8 @@ define('plugins/core/feedback/register', [
             this.$('.star').each(function (index) {
                 $(this).toggleClass('checked', index < value);
             });
-            this.$('caption').text(captions[value]);
+
+            this.$('caption').text(captions[value] || '\u00a0');
         },
 
         getValue: function () {
@@ -114,7 +116,7 @@ define('plugins/core/feedback/register', [
     });
 
     var ModuleRatingView = StarRatingView.extend({
-        name: 'module-rating-v1',
+        name: 'star-rating-v1',
         render: function (popupBody) {
 
             var apps = getAppOptions();
@@ -122,7 +124,7 @@ define('plugins/core/feedback/register', [
             if (settings.get('feedback/showModuleSelect', true)) {
                 //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
                 apps.apps.unshift($('<option>').val('general').text(gt('General')));
-                apps.apps.push($('<option>').val('io.ox/settings').text(gt('Settings')));
+                apps.apps.push($('<option>').val('settings').text(gt('Settings')));
                 popupBody.append(
                     this.appSelect = $('<select class="feedback-select-box form-control">').append(apps.apps)
                 );
@@ -230,26 +232,26 @@ define('plugins/core/feedback/register', [
     var feedback = {
 
         show: function () {
-            var options = { enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback'), class: settings.get('feedback/mode', 'stars') + '-feedback-view' };
+            var options = { enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback'), class: settings.get('feedback/mode', 'modules') + '-feedback-view' };
 
             // nps view needs more space
-            if (settings.get('feedback/mode', 'stars') === 'nps') {
+            if (settings.get('feedback/mode', 'modules') === 'nps') {
                 options.width = 600;
             }
             new ModalDialog(options)
                 .extend({
                     title: function () {
                         this.$body.append(
-                            $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/mode', 'stars')].title)
+                            $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/mode', 'modules')].title)
                         );
                     },
                     ratingView: function () {
-                        this.ratingView = new modes[settings.get('feedback/mode', 'stars')].ratingView({ hover: settings.get('feedback/showHover', true) });
+                        this.ratingView = new modes[settings.get('feedback/mode', 'modules')].ratingView({ hover: settings.get('feedback/showHover', true) });
 
                         this.$body.append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
-                        if (settings.get('feedback/mode', 'stars') === 'nps') return;
+                        if (settings.get('feedback/mode', 'modules') === 'nps') return;
                         var guid = _.uniqueId('feedback-note-');
                         this.$body.append(
                             $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
@@ -258,7 +260,7 @@ define('plugins/core/feedback/register', [
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (settings.get('feedback/mode', 'stars') === 'nps') return;
+                        if (settings.get('feedback/mode', 'modules') === 'nps') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
