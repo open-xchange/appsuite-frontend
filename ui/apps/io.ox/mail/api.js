@@ -972,7 +972,8 @@ define('io.ox/mail/api', [
                     module: 'mail',
                     params: {
                         action: 'autosave',
-                        lineWrapAfter: 0
+                        lineWrapAfter: 0,
+                        decrypt: true
                     },
                     data: obj,
                     appendColumns: false
