@@ -240,12 +240,14 @@ define('io.ox/files/share/permissions', [
 
             className: 'permission row',
 
+            /* doesn't work on mobile phones
             events: {
                 'click a.bit': 'updateDropdown',
                 'click a[data-name="edit"]': 'onEdit',
                 'click a[data-name="resend"]': 'onResend',
                 'click a[data-name="revoke"]': 'onRemove'
             },
+            */
 
             initialize: function (options) {
                 if (this.model.get('type') === 'anonymous') {
@@ -309,6 +311,12 @@ define('io.ox/files/share/permissions', [
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
+
+                // The menu node is moved outside the PermissionEntityView root node. That's why Backbone event delegate seems to have problems on mobile phones.
+                this.$el.find('a[data-name="edit"]').on('click', this.onEdit.bind(this));
+                this.$el.find('a[data-name="resend"]').on('click', this.onResend.bind(this));
+                this.$el.find('a[data-name="revoke"]').on('click', this.onRemove.bind(this));
+
                 return this;
             },
 
