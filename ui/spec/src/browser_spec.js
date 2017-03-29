@@ -11,7 +11,8 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 define(['fixture!browser_support/userAgents.json'], function (userAgents) {
-    describe('_.device utilities:', function () {
+    describe.only('_.device utilities:', function () {
+        alert(userAgents);
         afterEach(function () {
             _.device.loadUA(window.navigator);
         });
@@ -40,12 +41,39 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
         });
 
         _(userAgents.valid).each(function (a, browser) {
-            _(userAgents[browser]).each(function (b, version) {
+            _(userAgents.valid[browser]).each(function (b, version) {
                 it('should detect ' + browser + ' ' + version, function () {
-                    _.device.loadUA(userAgents.browser[browser][version]);
+                    _.device.loadUA(userAgents.valid[browser][version]);
                     expect(_.device(browser)).to.be.true;
-                    expect(_.browser[browser]).to.match(version);
+                    expect(parseFloat(_.browser[browser])).to.be.at.least(version);
                 });
+            });
+        });
+
+        _(userAgents.valid).each(function (a, browser) {
+            _(userAgents.valid[browser]).each(function (b, version) {
+                if (b.supported) {
+                    it('should check ' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isBrowserSupported()).to.be.true;
+                    });
+                } else {
+                    it('should check ' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isBrowserSupported()).to.be.false;
+                    });
+                }
+                if (b.platformSupport === true) {
+                    it('should check the mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isPlatformSupported()).to.be.true;
+                    });
+                } else if (b.platformSupport === false) {
+                    it('should check the mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isPlatformSupported()).to.be.false;
+                    });
+                }
             });
         });
 
@@ -59,6 +87,24 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                 expect(_.browser.unknown).to.be.true;
                 spy.restore();
             });
+        });
+
+        it('should detect iOS Chrome as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.ChromeiOS[56]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
+        });
+
+        it('should detect iOS Firefox as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.FirefoxiOS[1]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
+        });
+
+        it('should detect Android Firefox as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.FirefoxAndroid[52]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
         });
 
         it.skip('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
