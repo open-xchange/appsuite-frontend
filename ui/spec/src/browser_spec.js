@@ -11,8 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 define(['fixture!browser_support/userAgents.json'], function (userAgents) {
-    describe.only('_.device utilities:', function () {
-        alert(userAgents);
+    describe('_.device utilities:', function () {
         afterEach(function () {
             _.device.loadUA(window.navigator);
         });
