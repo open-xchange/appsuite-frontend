@@ -581,6 +581,11 @@ define('io.ox/find/main', [
                     app.trigger('find:config-updated');
                     // manager knows all mandatory facets now and will add them to all calls
                     app.configReady.resolve();
+                }, function (error) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell(error);
+                    });
+                    app.cancel();
                 });
         };
 
