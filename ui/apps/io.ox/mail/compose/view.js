@@ -293,8 +293,8 @@ define('io.ox/mail/compose/view', [
     ext.point(POINT + '/autosave/error').extend({
         id: 'default',
         handler: function (baton) {
-            notifications.yell(baton.data);
-            baton.returnValue.reject(baton.data);
+            notifications.yell('error', baton.error);
+            baton.returnValue.reject(baton.error);
         }
     });
 
