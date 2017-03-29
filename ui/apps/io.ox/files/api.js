@@ -20,12 +20,13 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
     'io.ox/core/util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -551,13 +552,24 @@ define('io.ox/files/api', [
                         return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
                     });
                 }
-                return self.httpGet(module, params).then(function (data) {
-                    // apply filter
-                    if (self.filter) data = _(data).filter(self.filter);
-                    // useSlice helps if server request doesn't support "limit"
-                    return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                return $.when(self.httpGet(module, params), ox.manifests.loadPluginsFor('io.ox/files/filter'));
+            }).then(function (data) {
+                // apply custom filter
+                if (_.isFunction(self.filter)) data = _(data).filter(self.filter);
+                // apply filter extensions
+                data = data.filter(function (file) {
+                    return ext.point('io.ox/files/filter').filter(function (p) {
+                        return p.invoke('isEnabled', this, file) !== false;
+                    })
+                    .map(function (p) {
+                        return p.invoke('isVisible', this, file);
+                    })
+                    .reduce(function (acc, isVisible) {
+                        return acc && isVisible;
+                    }, true);
                 });
-
+                // useSlice helps if server request doesn't support "limit"
+                return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
             });
         },
 
