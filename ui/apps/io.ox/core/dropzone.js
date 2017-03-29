@@ -181,15 +181,17 @@ define('io.ox/core/dropzone', [], function () {
 
         // firefox only. Firefox has the strange behavior of only triggering this when no file is dragged
         // so it can be used to clear the dropzones (firefox does not trigger the dragleave event on window leave)
-        onMouseenter: _.throttle(function (e) {
+        onMouseenter: function (e) {
             if (!this.visible) return;
             var from = e.relatedTarget || e.toElement;
             if (!from) {
-                this.leaving = true;
-                clearTimeout(this.timeout);
-                this.onLeave(e);
+                _.delay(function () {
+                    this.leaving = true;
+                    clearTimeout(this.timeout);
+                    this.onLeave(e);
+                }.bind(this), 50);
             }
-        }, 20, { leading: false }),
+        },
 
         // while we can ignore document's drop event, we need this one
         // to detect that a file was dropped over the dropzone
