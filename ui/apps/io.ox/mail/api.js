@@ -967,14 +967,15 @@ define('io.ox/mail/api', [
     api.autosave = function (obj) {
         api.trigger('before:autosave', { data: obj });
         try {
+            var params = {
+                action: 'autosave',
+                lineWrapAfter: 0
+            };
+            if (obj.security && obj.security.decrypted) params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
             return http.wait(
                 http.PUT({
                     module: 'mail',
-                    params: {
-                        action: 'autosave',
-                        lineWrapAfter: 0,
-                        decrypt: true
-                    },
+                    params: params,
                     data: obj,
                     appendColumns: false
                 })
