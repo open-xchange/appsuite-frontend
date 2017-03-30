@@ -312,8 +312,13 @@ define('io.ox/core/folder/extensions', [
             function getAvailableServices() {
                 var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
 
-                return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
-                    var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
+                return require(['io.ox/core/api/filestorage']).then(function (filestorageApi) {
+                    var availableFilestorageServices = filestorageApi.rampup().then(function () {
+                        return _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
+                    });
+
+                    return $.when(require(['io.ox/keychain/api']), availableFilestorageServices);
+                }).then(function (keychainApi, availableFilestorageServices) {
                     return _(keychainApi.submodules).filter(function (submodule) {
                         if (services.indexOf(submodule.id) < 0) return false;
                         // we need support for both accounts, Oauth accounts and filestorage accounts.
