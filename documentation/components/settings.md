@@ -18,7 +18,9 @@ The second usage is to communicate small configuration 'switches'.
 In contrast to capabilites these attributes cover small impacts on the ui.
 Of course they are read only are not synced when calling _save_.
 
-**capability vs. setting**
+Usually they provide a simple on/off information (often called 'feature switch') or they provide configuration details maybe in form of a list of folders.
+
+# Capability vs. setting
 
 Capabilities covers more global configurations with it's simple enabled/disabled states.
 For example the capability _tasks_ controlls the availability of the task app.
@@ -33,7 +35,6 @@ settings!io.ox/core
 // modules
 settings!io.ox/portal
 settings!io.ox/mail
-settings!io.ox/mail/emoji
 settings!io.ox/calendar
 settings!io.ox/contacts
 settings!io.ox/files
@@ -68,10 +69,20 @@ require(['settings!io.ox/core']).done(function(settings) {
 })
 ```
 
-## chage
+## change
 
 ```javascript
 require(['settings!io.ox/core']).done(function(settings) {
     settings.set('some/id', 'some-value').save();
 })
 ```
+
+# Best practices
+
+- use the `feature/` namespace for feature switches or feature details (`feature/[foobar]/...`)
+- do not user slashes as part of the key (f.e. 'folder/hidden') cause slashes are uses as dividers when building up the settings tree
+- prefer camelCase instead of underscores or dashses
+
+# List
+
+A full list of settings are available [here](../miscellaneous/settings-list-of)
