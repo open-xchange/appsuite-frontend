@@ -40,12 +40,39 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
         });
 
         _(userAgents.valid).each(function (a, browser) {
-            _(userAgents[browser]).each(function (b, version) {
+            _(userAgents.valid[browser]).each(function (b, version) {
                 it('should detect ' + browser + ' ' + version, function () {
-                    _.device.loadUA(userAgents.browser[browser][version]);
+                    _.device.loadUA(userAgents.valid[browser][version]);
                     expect(_.device(browser)).to.be.true;
-                    expect(_.browser[browser]).to.match(version);
+                    expect(parseFloat(_.browser[browser])).to.be.at.least(version);
                 });
+            });
+        });
+
+        _(userAgents.valid).each(function (a, browser) {
+            _(userAgents.valid[browser]).each(function (b, version) {
+                if (b.supported) {
+                    it('should check ' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isBrowserSupported()).to.be.true;
+                    });
+                } else if (!b.unsupported) {
+                    it('should check ' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isBrowserSupported()).to.be.false;
+                    });
+                }
+                if (b.platformSupport === true) {
+                    it('should check the mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isPlatformSupported()).to.be.true;
+                    });
+                } else if (b.platformSupport === false) {
+                    it('should check the unsupported mobile platform' + browser + ' ' + version + ' against AS support matrix', function () {
+                        _.device.loadUA(userAgents.valid[browser][version]);
+                        expect(window.isPlatformSupported()).to.be.false;
+                    });
+                }
             });
         });
 
@@ -61,7 +88,31 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             });
         });
 
-        it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+        it('should detect iOS Chrome as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.ChromeiOS[56]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
+        });
+
+        it('should detect iOS Firefox as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.FirefoxiOS[1]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
+        });
+
+        it('should detect Android Firefox as unsupported browser on a supported platform', function () {
+            _.device.loadUA(userAgents.valid.FirefoxAndroid[52]);
+            expect(window.isBrowserSupported()).to.be.false;
+            expect(window.isPlatformSupported()).to.be.true;
+        });
+
+        it('should detect Windows Phone as an unsupported platform with an supported Browser', function () {
+            _.device.loadUA(userAgents.valid.WindowsPhone[10]);
+            expect(window.isBrowserSupported()).to.be.true;
+            expect(window.isPlatformSupported()).to.be.false;
+        });
+
+        it.skip('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
             _.device.loadUA(userAgents.valid.Chrome[34]);
             expect(_.device('touch')).to.be.false;
             expect(_.browser.windows8).to.be.true;
