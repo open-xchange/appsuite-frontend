@@ -301,6 +301,7 @@ define('io.ox/mail/compose/view', [
     // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
     // TODO: at the moment, this resolves with the result of the last extension point.
     // not sure if this is desired.
+    // TODO: factor this out into a library or util class
     function extensionCascade(point, baton) {
         return point.reduce(function (def, p) {
             if (!def || !def.then) def = $.when(def);
@@ -309,6 +310,7 @@ define('io.ox/mail/compose/view', [
                 if (newData) baton.newData = newData;
                 return $.when();
             }, function (result) {
+                //TODO: think about the naming, here
                 if (result) baton.result = result;
                 //handle errors/warnings in reject case
                 if (result && result.error) baton.error = result.error;
