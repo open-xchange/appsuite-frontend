@@ -200,7 +200,7 @@ define('plugins/core/feedback/register', [
                         params: {
                             action: 'store',
                             //type is always star-rating-v1 for now (all UI implementations still work)
-                            type: 'star-rating-v1'
+                            type: settings.get('feedback/mode', 'star-rating-v1')
                         },
                         data: data
                     });
@@ -232,26 +232,26 @@ define('plugins/core/feedback/register', [
     var feedback = {
 
         show: function () {
-            var options = { enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback'), class: settings.get('feedback/mode', 'modules') + '-feedback-view' };
+            var options = { enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback'), class: settings.get('feedback/dialog', 'modules') + '-feedback-view' };
 
             // nps view needs more space
-            if (settings.get('feedback/mode', 'modules') === 'nps') {
+            if (settings.get('feedback/dialog', 'modules') === 'nps') {
                 options.width = 600;
             }
             new ModalDialog(options)
                 .extend({
                     title: function () {
                         this.$body.append(
-                            $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/mode', 'modules')].title)
+                            $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/dialog', 'modules')].title)
                         );
                     },
                     ratingView: function () {
-                        this.ratingView = new modes[settings.get('feedback/mode', 'modules')].ratingView({ hover: settings.get('feedback/showHover', true) });
+                        this.ratingView = new modes[settings.get('feedback/dialog', 'modules')].ratingView({ hover: settings.get('feedback/showHover', true) });
 
                         this.$body.append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
-                        if (settings.get('feedback/mode', 'modules') === 'nps') return;
+                        if (settings.get('feedback/dialog', 'modules') === 'nps') return;
                         var guid = _.uniqueId('feedback-note-');
                         this.$body.append(
                             $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
@@ -260,7 +260,7 @@ define('plugins/core/feedback/register', [
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (settings.get('feedback/mode', 'modules') === 'nps') return;
+                        if (settings.get('feedback/dialog', 'modules') === 'nps') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
@@ -278,13 +278,20 @@ define('plugins/core/feedback/register', [
                 .addCancelButton()
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
+                    // done. default ist modules aber in star-rating-v1 umbenennen
+                    // done. neuen namen für den simplen dialog ausdenken
+                    // done. hover muss zurueckspringen
+                    // done. io.ox namespace weg
+                    // score 0?
+                    // leeres feedback erlauben?
+                    // os erkennung + version analog zu comcast feedback
+                    // ox.review, woher kommt das?
+                    // guard springt ins input feld
 
                     var currentApp = getAppOptions().currentApp,
                         found = false,
                         OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
                         data = {
-                            // backend only accepts star-rating-v1 as type (hardcoded in the http request), (still all UI implementations work)
-                            // type: this.ratingView.name,
                             // feedback
                             score: this.ratingView.getValue(),
                             app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
@@ -296,7 +303,8 @@ define('plugins/core/feedback/register', [
                             browser_version: 'Unknown',
                             user_agent: window.navigator.userAgent,
                             screen_resolution: screen.width + 'x' + screen.height,
-                            language: ox.language
+                            language: ox.language,
+                            client_version: ox.serverConfig.version + ' ' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
                     _(_.browser).each(function (val, key) {
                         if (val === true && _(OS).indexOf(key) !== -1) {
