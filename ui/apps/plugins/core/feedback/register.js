@@ -278,15 +278,6 @@ define('plugins/core/feedback/register', [
                 .addCancelButton()
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
-                    // done. default ist modules aber in star-rating-v1 umbenennen
-                    // done. neuen namen für den simplen dialog ausdenken
-                    // done. hover muss zurueckspringen
-                    // done. io.ox namespace weg
-                    // score 0?
-                    // leeres feedback erlauben?
-                    // os erkennung + version analog zu comcast feedback
-                    // ox.review, woher kommt das?
-                    // guard springt ins input feld
 
                     var currentApp = getAppOptions().currentApp,
                         found = false,
