@@ -489,7 +489,7 @@ define('io.ox/mail/compose/extensions', [
                 if (settings.get('compose/shareAttachments/enabled', false)) {
                     var locked = false;
 
-                    if (settings.get('compose/shareAttachments/limit', -1) !== -1 || settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
+                    if (settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
                         baton.model.get('attachments').on('add remove reset', view.shareAttachmentsIsActive);
                     }
 
@@ -587,7 +587,7 @@ define('io.ox/mail/compose/extensions', [
                             }
 
                             baton.dropdown.option('expiry_date', '', gt('no expiry date'));
-                            if (!baton.view.model.get('autodelete', true)) {
+                            if (!settings.get('compose/shareAttachments/forceAutoDelete', false)) {
                                 baton.view.model.on('change:expiry_date', function (settingsModel, value) {
                                     // autodelete makes no sense if links cannot expire
                                     if (value === '') baton.view.model.set('autodelete', false);
@@ -628,9 +628,8 @@ define('io.ox/mail/compose/extensions', [
                             actualAttachmentSize = actualAttachmentSize + model.getSize();
                         });
 
-                        thresholdExceeded = threshold === 0 ? false : actualAttachmentSize > threshold;
+                        thresholdExceeded = threshold <= 0 ? false : (actualAttachmentSize > threshold);
                         locked = thresholdExceeded;
-
                         if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
                             yell('warning', gt('Attachment size too large. Please remove attachments or reduce the file size.'));
                         }
