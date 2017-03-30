@@ -10,7 +10,7 @@ We do define three display sizes to macht the majority of devices.
 These are simply named "small", "medium" and "large".
 Theses classes are used to match smartphones, tablets and desktop PCs.
 If you are developing a app for OX App Suite make sure it runs nicely and looks great on all of these three device categories.
-(If you are not familiar with latest CSS techniques and the principles of responsive design you should have a look at this [article]({{ site.baseurl }}/ui/00-getting-started/01-skills-needed.html)).
+(If you are not familiar with latest CSS techniques and the principles of responsive design you should have a look at this [article](http://oxpedia.org/wiki/index.php?title=AppSuite:UI_developer_primer)).
 
 Often the simple use of media queries is not enough to customize your app for small and medium screens, you may need to customize your application code as well.
 We have integrated a function to detect everything you might want to know during runtime in your javascript code.
@@ -24,65 +24,13 @@ Your App should work on devices with this resolution.
 - medium: 481px up to 1024px
 - large: 1025px and higher
 
-# The \_.device function
+# The `_.device` function
 
-We extended underscore with a new function called \__.device_
-
-The \__.device()_ function can be used to retrieve informations about the device. The function takes a string as argument which contains a boolean expression.
-This expression will be evaluated and the result is returned as a boolean.
-
-The device function uses `_.browser` object for informations in combination with `_.screenInfo`
-
-The device class 'smartphone' is used to determine a mobile device and is detected by several criteria. For more details, see this [article about smartphone classification](../miscellaneous/mobile-device-classification).
-
-# Examples for \_.device
-
-```javascript
-// handle different mobile operating systems
-if (_.device('ios')) {
-   // true for all devices running iOS, no matter what version
-   console.log('you are running iOS');
-}
-
-// combined statements
-if (_.device('ios && android')) {
-   // true for all android and iOS devices
-}
-
-// negation
-if (_.device('!android')) {
-    // true for all devices except android
-}
-
-// screen information
-if (_.device('small && iOS ')) {
-   // true for iPhone, not for iPad
-}
-
-// shorthands
-_.device('smartphone')
-// true for small devices running a mobile OS (iOS, Android, BB or Windowsphone)
-
-_.device('tablet')
-// true for medium sized devices running a mobile OS
-
-_.device('desktop')
-// true for all devices not running a mobile OS
-
-// getting version informations
-_.device('ios > 5 || android > 4')
-// true for ios > 5, i.e. 5.1 and 6. Same for Android, 4.0 will fail 4.1 or 4.2 will be true.
-
-// enhanced screen information
-_.device('iOS && retina && small')
-// true for iPhone 4, 4s and 5 (retina display)
-
-_.device('landscape && android && medium')
-// true for android tablet held in landscape mode
-
-// other information, simple browser detection
-_.device('safari || firefox')
-```
+We extended underscore with a new function called `_.device`.
+The `_.device()` function can be used to retrieve informations about the device.
+For more details please visit [the main article](../miscellaneous/device).
+The device class 'smartphone' is used to determine a mobile device and is detected by several criteria.
+For more details, see this [article about smartphone classification](../miscellaneous/device-classification).
 
 Please note that information about device orientation may change during usage.
 
