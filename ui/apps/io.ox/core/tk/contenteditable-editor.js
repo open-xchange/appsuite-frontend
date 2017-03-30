@@ -13,7 +13,7 @@
 
 /* global tinyMCE: true */
 
-define.async('io.ox/core/tk/contenteditable-editor', [
+define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
@@ -366,7 +366,9 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
 
-        editor.tinymce(options);
+        require(['3rd.party/tinymce/jquery.tinymce.min']).then(function () {
+            editor.tinymce(options);
+        });
 
         function trimEnd(str) {
             return String(str || '').replace(/[\s\xA0]+$/g, '');
@@ -714,9 +716,5 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
     }
 
-    if (!window.tinyMCE) {
-        return require(['3rd.party/tinymce/jquery.tinymce.min'])
-            .then(function () { return Editor; });
-    }
-    return $.Deferred().resolve(Editor);
+    return Editor;
 });
