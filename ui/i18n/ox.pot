@@ -403,6 +403,8 @@ msgstr ""
 
 #: apps/io.ox/backbone/mini-views/listutils.js
 #: module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js
+#: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -2842,6 +2844,8 @@ msgstr ""
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Add contact"
@@ -6027,6 +6031,7 @@ msgstr ""
 #: apps/io.ox/mail/autoforward/settings/model.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Enable"
@@ -10473,9 +10478,34 @@ msgstr ""
 msgid "Send vacation notice during this time only"
 msgstr ""
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mail
+msgid "Send from"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/register.js
+#: module:io.ox/mail
+msgid "default sender"
+msgstr ""
+
 #: apps/io.ox/mail/vacationnotice/settings/register.js
 #: module:io.ox/mail
 msgid "Couldn't load your vacation notice."
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js
+#: module:io.ox/mail
+msgid "unselect all"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js
+#: module:io.ox/mail
+msgid "select all"
+msgstr ""
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js
+#: module:io.ox/mail
+msgid "The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:"
 msgstr ""
 
 #: apps/io.ox/mail/view-options.js

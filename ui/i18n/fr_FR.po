@@ -762,6 +762,7 @@ msgstr "Ajouter une condition"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Ajouter un contact"
@@ -3504,6 +3505,7 @@ msgstr "Vider la corbeille"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "Activer"
@@ -7162,6 +7164,7 @@ msgid "Private address"
 msgstr "Adresse privée"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -8074,6 +8077,12 @@ msgstr "Envoyer en tant que vCard"
 msgid "Send by mail"
 msgstr "Envoyer par courriel"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sender/From"
+msgid "Send from"
+msgstr "Expéditeur / De"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "Envoyer le lien"
@@ -8957,6 +8966,12 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "L'app Drive"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -10865,6 +10880,12 @@ msgstr "jj"
 msgid "declined"
 msgstr "décliné"
 
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default reminder"
+msgid "default sender"
+msgstr "Rappel par défaut"
+
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -11118,6 +11139,12 @@ msgstr "deuxième"
 msgid "seen"
 msgstr "vu"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "select all"
+msgstr "Tout désélectionner"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
@@ -11185,6 +11212,12 @@ msgstr "expéditeur inconnu"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "illimité"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "unselect all"
+msgstr "Tout désélectionner"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
@@ -14306,9 +14339,6 @@ msgstr "aaaa"
 
 #~ msgid "Unread only"
 #~ msgstr "Seulement les non lus"
-
-#~ msgid "Unselect all"
-#~ msgstr "Tout désélectionner"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr ""

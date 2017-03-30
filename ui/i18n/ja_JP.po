@@ -725,6 +725,7 @@ msgstr "条件を追加"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "メンバを追加する"
@@ -3417,6 +3418,7 @@ msgstr "ゴミ箱を空にする"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "有効"
@@ -7027,6 +7029,7 @@ msgid "Private address"
 msgstr "プライベートアドレス"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7928,6 +7931,12 @@ msgstr "vCard を送信"
 msgid "Send by mail"
 msgstr "メールで送信"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sender/From"
+msgid "Send from"
+msgstr "差出人"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "リンクを送信"
@@ -8802,6 +8811,12 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "Drive アプリケーション"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -10638,6 +10653,12 @@ msgstr "dd"
 msgid "declined"
 msgstr "辞退"
 
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default reminder"
+msgid "default sender"
+msgstr "既定のアラーム"
+
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -10890,6 +10911,12 @@ msgstr "第２"
 msgid "seen"
 msgstr "既読"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "select all"
+msgstr "すべてを選択解除"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
@@ -10957,6 +10984,12 @@ msgstr "差出人が不明です。"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "無制限"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "unselect all"
+msgstr "すべてを選択解除"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
@@ -18327,9 +18360,6 @@ msgstr "yyyy"
 
 #~ msgid "Unread only"
 #~ msgstr "未読のみ"
-
-#~ msgid "Unselect all"
-#~ msgstr "すべてを選択解除"
 
 #~ msgid "Unthreaded E-Mail view"
 #~ msgstr "非スレッド メール ビュー"

@@ -790,6 +790,7 @@ msgstr "Přidat stav"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Přidat kontakt"
@@ -3490,6 +3491,7 @@ msgstr "Vyprázdnit koš"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "Povolit"
@@ -4744,8 +4746,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
-"%3$s‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
+"‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -7120,6 +7122,7 @@ msgid "Private address"
 msgstr "Soukromá adresa"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -8029,6 +8032,12 @@ msgstr "Poslat jako vCard"
 msgid "Send by mail"
 msgstr "Poslat ve zprávě"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sender/From"
+msgid "Send from"
+msgstr "Odesílatel/od"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "Poslat odkaz"
@@ -8920,6 +8929,12 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "Aplikace Drive"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -10775,6 +10790,12 @@ msgstr "dd"
 msgid "declined"
 msgstr "odmítnuté"
 
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default reminder"
+msgid "default sender"
+msgstr "Výchozí upomínka"
+
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -11029,6 +11050,12 @@ msgstr "druhý(é)"
 msgid "seen"
 msgstr "prohlédnuto"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "select all"
+msgstr "Odznačit vše"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
@@ -11096,6 +11123,12 @@ msgstr "neznámý odesílatel"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "neomezené"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "unselect all"
+msgstr "Odznačit vše"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
@@ -19985,9 +20018,6 @@ msgstr "rrrr"
 
 #~ msgid "Unread only"
 #~ msgstr "Jen nepřečtené"
-
-#~ msgid "Unselect all"
-#~ msgstr "Odznačit vše"
 
 #~ msgid "Until:"
 #~ msgstr "Do:"

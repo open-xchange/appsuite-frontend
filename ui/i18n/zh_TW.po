@@ -748,6 +748,7 @@ msgstr "添加條件"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "新增號碼..."
@@ -3414,6 +3415,7 @@ msgstr "清空垃圾桶"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "啟用"
@@ -6990,6 +6992,7 @@ msgid "Private address"
 msgstr "私人地址"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7888,6 +7891,12 @@ msgstr "以 vCard 傳送"
 msgid "Send by mail"
 msgstr "透過電子郵件寄送"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sender/From"
+msgid "Send from"
+msgstr "寄件者/自"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "傳送鏈結"
@@ -8764,6 +8773,12 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "Drive 應用程式"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -10546,6 +10561,12 @@ msgstr "日"
 msgid "declined"
 msgstr "已拒絕"
 
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default reminder"
+msgid "default sender"
+msgstr "預設提醒時間"
+
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -10799,6 +10820,12 @@ msgstr "第二個"
 msgid "seen"
 msgstr "已閱讀"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "select all"
+msgstr "取消選擇全部"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
@@ -10866,6 +10893,12 @@ msgstr "未知寄件者"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "未限制"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "unselect all"
+msgstr "取消選擇全部"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
@@ -14984,9 +15017,6 @@ msgstr "年"
 
 #~ msgid "Unread only"
 #~ msgstr "僅未讀"
-
-#~ msgid "Unselect all"
-#~ msgstr "取消選擇全部"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "正在更新帳戶需料，可能需要幾秒鐘。"

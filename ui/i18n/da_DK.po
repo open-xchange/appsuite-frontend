@@ -756,6 +756,7 @@ msgstr "Tilføj betingelse"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Tilføj kontakt"
@@ -3457,6 +3458,7 @@ msgstr "Tøm papirkurv"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "Aktivér"
@@ -7081,6 +7083,7 @@ msgid "Private address"
 msgstr "Privatadresse"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7989,6 +7992,12 @@ msgstr "Send som vCard"
 msgid "Send by mail"
 msgstr "Send med e-mail"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Sender/From"
+msgid "Send from"
+msgstr "Sender/Fra"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "Send URL"
@@ -8870,6 +8879,12 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "Drive-app'en"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -10724,6 +10739,12 @@ msgstr "dd"
 msgid "declined"
 msgstr "afslået"
 
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default reminder"
+msgid "default sender"
+msgstr "Standard påmindelse"
+
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -10977,6 +10998,12 @@ msgstr "anden"
 msgid "seen"
 msgstr "set"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "select all"
+msgstr "Afmarkér alle"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "select format"
@@ -11044,6 +11071,12 @@ msgstr "ukendt afsender"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 msgid "unlimited"
 msgstr "ubegrænset"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#, fuzzy
+#| msgid "Unselect all"
+msgid "unselect all"
+msgstr "Afmarkér alle"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
@@ -13674,9 +13707,6 @@ msgstr "åååå"
 
 #~ msgid "Unread only"
 #~ msgstr "Kun ulæste"
-
-#~ msgid "Unselect all"
-#~ msgstr "Afmarkér alle"
 
 #~ msgid "Updating account data. This might take a few seconds."
 #~ msgstr "Opdatere kontoens data. Dette kan tage nogle sekunder."
