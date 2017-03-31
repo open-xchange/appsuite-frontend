@@ -297,7 +297,6 @@ define('io.ox/core/main', [
         }
         $('li', launcherDropdown).attr('role', 'menuitem').hide();
 
-
         if (hidden > 0) {
             launchers.append(launcherDropdownTab);
             for (i = hidden; i > 0; i--) {
@@ -708,7 +707,6 @@ define('io.ox/core/main', [
 
             model.set('topbarNode', node);
             add(node, launchers, model);
-
             // call extensions to customize
             name = model.get('name') || model.id;
             ext.point('io.ox/core/topbar/launcher').invoke('draw', node, ext.Baton({ model: model, name: name }));
@@ -717,23 +715,26 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li>').append(
+            var launchernode = $('<li>').append(
                 $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                     'data-app-name': name,
                     'data-app-guid': model.guid
                 }).text(/*#, dynamic*/gt.pgettext('app', title))
             );
+            // also store dropdown node in app model
+            model.set('launcherNode', launchernode);
 
             //add close button
-            if (closable) node.append(quit(model));
+            if (closable) launchernode.append(quit(model));
 
             launcherDropdown.append(
-                node.on('click', function (e) {
+                launchernode.on('click', function (e) {
                     e.preventDefault();
                     model.launch();
                 })
             );
-            add(node, launcherDropdown, model);
+            add(launchernode, launcherDropdown, model);
+
             tabManager();
         });
 
