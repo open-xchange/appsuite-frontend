@@ -135,10 +135,11 @@ define('io.ox/mail/compose/actions/send', [
         },
         {
             id: 'disable-manual-close',
-            index: 990,
+            index: 900,
             perform: function (baton) {
                 var app = ox.ui.apps.get(baton.app.id);
-                baton.closelink = app.get('topbarNode').find('.closelink').hide();
+                baton.close = $(app.get('topbarNode').find('.closelink')).hide();
+                baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
             }
         },
         {
@@ -157,10 +158,10 @@ define('io.ox/mail/compose/actions/send', [
                     // check if abort is triggered by the ui
                         text = baton.error === 'abort' ? gt('The sending of the message has been canceled.') : baton.error;
                     if (win) {
-                        // reenable the close button in toolbar
-                        if (baton.closelink) {
-                            baton.closelink.show();
-                        }
+                        // reenable the close button(s) in toolbar
+                        if (baton.close) baton.close.show();
+                        if (baton.launcherClose) baton.launcherClose.show();
+
                         win.idle().show();
                     }
                     baton.app.launch();
