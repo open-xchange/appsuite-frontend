@@ -1208,10 +1208,10 @@ msgid "Apply to all subfolders"
 msgstr "Alkalmazás az összes mappára"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Találkozó"
 
@@ -2637,8 +2637,7 @@ msgstr "Összes üzenet törlése"
 msgid "Delete all objects"
 msgstr "Minden elem törlése"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Találkozó törlése"
 
@@ -2680,10 +2679,6 @@ msgstr "Feladat törlése"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Verzió törlése"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Teljes ismétlődés törlése"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -4729,8 +4724,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a %3$s"
-"„Kezdőképernyőhöz adás”%4$s gombra"
+"Ezen webapp telepítéséhez %1$s eszközére: koppintson ide: %2$s, majd a "
+"%3$s„Kezdőképernyőhöz adás”%4$s gombra"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -8083,7 +8078,7 @@ msgstr "Elküldött üzenetek"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Ismétlődések"
 
@@ -11393,6 +11388,9 @@ msgstr "yyyy"
 
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Összes üzenet törlése ebben a mappában"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Teljes ismétlődés törlése"
 
 #, fuzzy
 #~| msgid "Delete contact"

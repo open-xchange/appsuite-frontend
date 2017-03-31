@@ -1188,10 +1188,10 @@ msgid "Apply to all subfolders"
 msgstr "套用到所有子文件夹"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "约会"
 
@@ -2594,8 +2594,7 @@ msgstr "删除所有消息"
 msgid "Delete all objects"
 msgstr "删除所有对象"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "删除约会"
 
@@ -2637,10 +2636,6 @@ msgstr "删除任务"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "删除版本"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "删除整个系列"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -7966,7 +7961,7 @@ msgstr "已发送消息"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "系列"
 
@@ -12384,6 +12379,9 @@ msgstr "年"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "发送后删除草稿。"
+
+#~ msgid "Delete whole series"
+#~ msgstr "删除整个系列"
 
 #, fuzzy
 #~| msgid "Return Receipt"

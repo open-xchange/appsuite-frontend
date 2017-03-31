@@ -1210,10 +1210,10 @@ msgid "Apply to all subfolders"
 msgstr "Aplicar a todas as subpastas"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Compromisso"
 
@@ -2638,8 +2638,7 @@ msgstr "Excluir todas as mensagens"
 msgid "Delete all objects"
 msgstr "Excluir todos os objetos"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Excluir compromisso"
 
@@ -2681,10 +2680,6 @@ msgstr "Excluir tarefa"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Excluir versão"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Excluir série inteira"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8092,7 +8087,7 @@ msgstr "Mensagens enviadas"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Série"
 
@@ -12465,6 +12460,9 @@ msgstr "aaaa"
 
 #~ msgid "Delete this action"
 #~ msgstr "Excluir essa ação"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Excluir série inteira"
 
 #, fuzzy
 #~| msgid "Return Receipt"

@@ -1008,12 +1008,14 @@ msgstr ""
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/acceptdeny.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/actions/delete.js
 #: apps/io.ox/calendar/edit/main.js
 #: module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/list/perspective.js
@@ -1052,17 +1054,6 @@ msgstr ""
 #: apps/io.ox/calendar/actions/delete.js
 #: module:io.ox/calendar
 msgid "Do you want to delete the whole series or just one appointment within the series?"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/delete.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
-msgid "Delete appointment"
-msgstr ""
-
-#: apps/io.ox/calendar/actions/delete.js
-#: module:io.ox/calendar
-msgid "Delete whole series"
 msgstr ""
 
 #: apps/io.ox/calendar/actions/delete.js
@@ -2279,6 +2270,11 @@ msgstr ""
 #: apps/io.ox/tasks/main.js
 #: module:io.ox/tasks
 msgid "Status"
+msgstr ""
+
+#: apps/io.ox/calendar/toolbar.js
+#: module:io.ox/calendar
+msgid "Delete appointment"
 msgstr ""
 
 #. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View

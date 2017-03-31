@@ -1206,10 +1206,10 @@ msgid "Apply to all subfolders"
 msgstr "Verkställ för alla underliggande mappar"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Möte"
 
@@ -2627,8 +2627,7 @@ msgstr "Radera alla meddelanden"
 msgid "Delete all objects"
 msgstr "Ta bort alla objekt"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Ta bort möte"
 
@@ -2670,10 +2669,6 @@ msgstr "Ta bort uppgift"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Ta bort version"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Ta bort hela serien"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8059,7 +8054,7 @@ msgstr "Skickade meddelanden"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
 
@@ -12718,6 +12713,9 @@ msgstr "yyyy"
 
 #~ msgid "Delete exceptions: %1$s"
 #~ msgstr "Ta bort undantag: %1$s"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Ta bort hela serien"
 
 #~ msgid "Deletion of folder %1$s failed"
 #~ msgstr "Borttagande av mapp %1$s misslyckades"

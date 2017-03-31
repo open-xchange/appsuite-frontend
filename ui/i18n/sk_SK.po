@@ -1238,10 +1238,10 @@ msgid "Apply to all subfolders"
 msgstr "Použiť na všetky podpriečinky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Schôdzka"
 
@@ -2666,8 +2666,7 @@ msgstr "Zmazať všetky správy"
 msgid "Delete all objects"
 msgstr "Mazať všetky objekty"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Zmazať schôdzku"
 
@@ -2709,10 +2708,6 @@ msgstr "Zmazať úlohu"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Zmazať verziu"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Zmazať celú sériu"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8131,7 +8126,7 @@ msgstr "Odoslané správy"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Séria"
 
@@ -12751,6 +12746,9 @@ msgstr "RRRR"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Zmazať po odoslaní z Rozpísaných."
+
+#~ msgid "Delete whole series"
+#~ msgstr "Zmazať celú sériu"
 
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"

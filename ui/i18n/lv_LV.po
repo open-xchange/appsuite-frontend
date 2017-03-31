@@ -1236,10 +1236,10 @@ msgid "Apply to all subfolders"
 msgstr "Piemērot visam apakšmapēm"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Mītiņš"
 
@@ -2666,8 +2666,7 @@ msgstr "Izdzēst visas ziņas"
 msgid "Delete all objects"
 msgstr "Dzēst visus objektus"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Dzēst mītiņu"
 
@@ -2709,10 +2708,6 @@ msgstr "Dzēst uzdevumu"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Dzēst versiju"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Dzēst visu sēriju"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8134,7 +8129,7 @@ msgstr "Nosūtītie ziņojumi"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Sērija"
 
@@ -12757,6 +12752,9 @@ msgstr "yyyy"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Pec nosūtīšanas izdzēst melnrakstu."
+
+#~ msgid "Delete whole series"
+#~ msgstr "Dzēst visu sēriju"
 
 #, fuzzy
 #~| msgid "Return Receipt"

@@ -1169,10 +1169,10 @@ msgid "Apply to all subfolders"
 msgstr "全てのサブフォルダに適用"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "アポイント"
 
@@ -2586,8 +2586,7 @@ msgstr "すべてのファイルを削除する"
 msgid "Delete all objects"
 msgstr "すべてのオブジェクトを削除"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "アポイントを削除"
 
@@ -2629,10 +2628,6 @@ msgstr "仕事を削除"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "バージョンを削除"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "アポイント全体を削除"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8003,7 +7998,7 @@ msgstr "送信済みメッセージ"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "アポイント全体"
 
@@ -13247,6 +13242,9 @@ msgstr "yyyy"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "送信後に下書きを削除"
+
+#~ msgid "Delete whole series"
+#~ msgstr "アポイント全体を削除"
 
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"

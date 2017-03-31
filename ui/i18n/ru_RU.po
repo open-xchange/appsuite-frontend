@@ -1234,10 +1234,10 @@ msgid "Apply to all subfolders"
 msgstr "Применить к вложенным папкам"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Встреча"
 
@@ -2659,8 +2659,7 @@ msgstr "Удалить все сообщения"
 msgid "Delete all objects"
 msgstr "Удалять все объекты"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Удалить встречу"
 
@@ -2702,10 +2701,6 @@ msgstr "Удалить задачу"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Удалить версию"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Удалить всю серию"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8105,7 +8100,7 @@ msgstr "Отправленные"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Серия"
 
@@ -11795,6 +11790,9 @@ msgstr "гггг"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Удалить черновик после отправки."
+
+#~ msgid "Delete whole series"
+#~ msgstr "Удалить всю серию"
 
 #, fuzzy
 #~| msgid "Return Receipt"

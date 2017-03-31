@@ -1240,10 +1240,10 @@ msgid "Apply to all subfolders"
 msgstr "Uplatnit na všechny podsložky"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Schůzka"
 
@@ -2658,8 +2658,7 @@ msgstr "Smazat všechny zprávy"
 msgid "Delete all objects"
 msgstr "Smazat všechny objekty"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Smazat schůzku"
 
@@ -2701,10 +2700,6 @@ msgstr "Smazat úkol"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Smazat verzi"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Smazat celou sérii"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -4746,8 +4741,8 @@ msgid ""
 "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home "
 "Screen'%4$s"
 msgstr ""
-"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak %3$s"
-"‚Přidat na domácí stránku‘%4$s"
+"Nainstalujte tuto webovou aplikaci na svůj %1$s: Ťukněte na %2$s a pak "
+"%3$s‚Přidat na domácí stránku‘%4$s"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Installation"
@@ -8106,7 +8101,7 @@ msgstr "Odeslané zprávy"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Série"
 
@@ -14316,6 +14311,9 @@ msgstr "rrrr"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Smazat koncept po odeslání."
+
+#~ msgid "Delete whole series"
+#~ msgstr "Smazat celou sérii"
 
 #, fuzzy
 #~| msgid "Return Receipt"

@@ -1199,10 +1199,10 @@ msgid "Apply to all subfolders"
 msgstr "Käytä kaikkiin alakansioihin"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Tapaaminen"
 
@@ -2621,8 +2621,7 @@ msgstr "Poista kaikki viestit"
 msgid "Delete all objects"
 msgstr "Poista kaikki objektit"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Poista tapaaminen"
 
@@ -2664,10 +2663,6 @@ msgstr "Poista tehtävä"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Poista versio"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Poista koko sarja"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -8055,7 +8050,7 @@ msgstr "Lähetetyt viestit"
 
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Sarja"
 
@@ -11633,6 +11628,9 @@ msgstr "vvvv"
 
 #~ msgid "Delete all messages in this folder"
 #~ msgstr "Poista kaikki tämän kansion viestit"
+
+#~ msgid "Delete whole series"
+#~ msgstr "Poista koko sarja"
 
 #, fuzzy
 #~| msgid "Return Receipt"
