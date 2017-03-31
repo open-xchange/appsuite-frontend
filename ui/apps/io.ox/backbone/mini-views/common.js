@@ -14,7 +14,7 @@
 define('io.ox/backbone/mini-views/common', [
     'io.ox/backbone/mini-views/abstract',
     'io.ox/backbone/mini-views/dropdown',
-    'gettext!io.ox/core',
+    'gettext!io.ox/core'
 ], function (AbstractView, Dropdown, gt) {
 
     'use strict';
@@ -50,6 +50,8 @@ define('io.ox/backbone/mini-views/common', [
             // update model too or the the left spaces are still in the model data. They would be saved when the model is saved, creating inconsistent data
             // infinite loops are not possible because the change event is only triggered if the new value is different
             this.model.set(this.name, val);
+            // trigger extra update event on view
+            this.trigger('update', this.$el);
         },
         render: function () {
             this.$el.attr({ name: this.name });

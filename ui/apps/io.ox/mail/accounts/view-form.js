@@ -399,7 +399,6 @@ define.async('io.ox/mail/accounts/view-form', [
                     context: 'account',
                     done: function (target) {
                         self.model.set(property, target, { validate: true });
-                        self.$el.find('input[name="' + property + '"]').val(target);
                     },
                     close: function () {
                         self.dialog.resume();
@@ -588,14 +587,17 @@ define.async('io.ox/mail/accounts/view-form', [
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
                         var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
-
+                        /* eslint-disable */
                         return group(
                             label(folder, text),
                             $('<div class="col-sm-7">').append(
                                 enabled ?
                                 // show controls
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
-                                    new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
+                                    new InputView({ model: model, id: folder })
+                                        .on('update', function (node) {
+                                            if (node) node.val(this.model.get(folder).replace(/^default\d+\D/, ''));
+                                        }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
                                         $('<button type="button" class="btn btn-default">').text(gt('Select'))
                                     )
