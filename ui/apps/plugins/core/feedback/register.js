@@ -27,28 +27,36 @@ define('plugins/core/feedback/register', [
     'use strict';
 
     var captions = {
-        //#. 1 of 5 star rating
-        1: gt.pgettext('rating', 'It\'s really bad'),
-        //#. 2 of 5 star rating
-        2: gt.pgettext('rating', 'I don\'t like it'),
-        //#. 3 of 5 star rating
-        3: gt.pgettext('rating', 'It\'s ok'),
-        //#. 4 of 5 star rating
-        4: gt.pgettext('rating', 'I like it'),
-        //#. 5 of 5 star rating
-        5: gt.pgettext('rating', 'It\'s awesome')
-    };
+            //#. 1 of 5 star rating
+            1: gt.pgettext('rating', 'It\'s really bad'),
+            //#. 2 of 5 star rating
+            2: gt.pgettext('rating', 'I don\'t like it'),
+            //#. 3 of 5 star rating
+            3: gt.pgettext('rating', 'It\'s ok'),
+            //#. 4 of 5 star rating
+            4: gt.pgettext('rating', 'I like it'),
+            //#. 5 of 5 star rating
+            5: gt.pgettext('rating', 'It\'s awesome')
+        },
+        appWhiteList = [
+            'mail',
+            'contacts',
+            'calendar',
+            'files'
+        ];
 
     function getAppOptions() {
         var currentApp,
             apps = _(appApi.getFavorites()).map(function (app) {
                 app.id = app.id.replace('io.ox/', '');
+                if (!_(appWhiteList).contains(app.id)) return;
                 // suport for edit dialogs
                 if (ox.ui.App.getCurrentApp().get('name').replace('io.ox/', '').indexOf(app.id) === 0) {
                     currentApp = app;
                 }
                 return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
             });
+        apps = _(apps).compact();
         return { currentApp: currentApp, apps: apps };
     }
 
@@ -124,7 +132,6 @@ define('plugins/core/feedback/register', [
             if (settings.get('feedback/showModuleSelect', true)) {
                 //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
                 apps.apps.unshift($('<option>').val('general').text(gt('General')));
-                apps.apps.push($('<option>').val('settings').text(gt('Settings')));
                 popupBody.append(
                     this.appSelect = $('<select class="feedback-select-box form-control">').append(apps.apps)
                 );
@@ -297,8 +304,9 @@ define('plugins/core/feedback/register', [
                             language: ox.language,
                             client_version: ox.serverConfig.version + ' ' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
+
                     _(_.browser).each(function (val, key) {
-                        if (val === true && _(OS).indexOf(key) !== -1) {
+                        if (val && _(OS).indexOf(key) !== -1) {
                             data.operating_system = key;
                         }
                         if (!found && _.isNumber(val)) {
@@ -307,6 +315,53 @@ define('plugins/core/feedback/register', [
                             data.browser_version = val;
                         }
                     });
+
+                    // Add additional version information for some OS
+                    switch (data.operating_system) {
+                        case 'MacOS':
+                            if (!navigator.userAgent.match(/Mac OS X (\d+_?)*/)) return;
+                            data.operating_system = navigator.userAgent.match(/Mac OS X (\d+_?)*/)[0];
+                            break;
+                        case 'iOS':
+                            if (!navigator.userAgent.match(/iPhone OS (\d+_?)*/)) return;
+                            data.operating_system = navigator.userAgent.match(/iPhone OS (\d+_?)*/)[0];
+                            break;
+                        case 'Android':
+                            data.operating_system = 'Android ' + _.browser.Android;
+                            break;
+                        case 'Windows':
+                            if (navigator.userAgent.match(/Windows NT 5\.1/)) {
+                                data.operating_system = 'Windows XP';
+                                return;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.0/)) {
+                                data.operating_system = 'Windows Vista';
+                                return;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.1/)) {
+                                data.operating_system = 'Windows 7';
+                                return;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.2/)) {
+                                data.operating_system = 'Windows 8';
+                                return;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.3/)) {
+                                data.operating_system = 'Windows 8.1';
+                                return;
+                            }
+                            if (navigator.userAgent.match(/Windows NT [10\.0|6\.4]?/)) {
+                                data.operating_system = 'Windows 10';
+                                return;
+                            }
+                            break;
+                        case 'Other':
+                            // maybe a linux system
+                            if (!navigator.userAgent.match(/Linux/)) return;
+                            data.operating_system = 'Linux';
+                            break;
+                        // no default
+                    }
                     sendFeedback(data)
                         .done(function () {
                             //#. popup info message
