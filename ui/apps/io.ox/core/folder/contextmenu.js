@@ -70,7 +70,7 @@ define('io.ox/core/folder/contextmenu', [
         update: function () {
             //toggle active class
             $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + this.model.get('meta').color_label, this.$el).addClass('active').attr('aria-checked', true);
+            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
         },
         select: function (e) {
             var meta = _.extend({},
