@@ -212,7 +212,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '709': 'version_comment',
                 '710': 'current_version',
                 '711': 'number_of_versions',
-                '7010': 'com.openexchange.share.extendedObjectPermissions'
+                '7010': 'com.openexchange.share.extendedObjectPermissions',
+                '7030': 'com.openexchange.file.storage.mail.mailMetadata',
+                '7040': 'com.openexchange.file.sanitizedFilename'
             },
             'tasks': {
                 '200': 'title',
