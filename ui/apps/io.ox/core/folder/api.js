@@ -1176,6 +1176,9 @@ define('io.ox/core/folder/api', [
             _(ids).each(function (id) {
                 api.trigger('remove:fail', id);
             });
+
+            // use refresh to rollback the folderdata
+            refresh();
         });
     }
 
