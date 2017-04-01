@@ -38,7 +38,7 @@ define('io.ox/mail/vacationnotice/settings/filter', [
             $.when(api.getRules('vacation'), api.getConfig()).done(function (data, config) {
                 data = data[0];
 
-                config = config[0];
+                // config = config;
                 var defaultNotice = {
                         days: '7',
                         internal_id: 'vacation',
