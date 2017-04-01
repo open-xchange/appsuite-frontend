@@ -55,7 +55,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         drawDropdown = function (activeValue, values, options) {
-            console.log(options);
+
             var active = values[activeValue] || activeValue;
             if (options.caret) {
                 active = active + '<b class="caret">';
@@ -97,7 +97,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 // filter unsupported actions
                 _.each(opt.actionCapabilities, function (action) {
-                    if (!_.has(opt.config.actioncommands, action)) unsupported.push(action);
+                    if (_.indexOf(_.map(opt.config.actioncommands, function (val) { return val.action; }), action) === -1) unsupported.push(action);
                 });
 
                 this.actionsTranslations = _.omit(this.actionsTranslations, unsupported);
@@ -153,8 +153,20 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     var rootConditionID = testID.split('_')[0],
                         nestedConditionID = testID.split('_')[1];
 
+                    // handle empty nested condition
+                    // if (_.isEmpty(testArray.tests[rootConditionID].tests)) {
+                    //     testArray.tests.splice(rootConditionID, 1);
+                    //     this.model.set('test', testArray);
+                    //     this.render();
+                    //     return;
+                    // }
+
+                    // remove condition in nested condition
                     testArray.tests[rootConditionID].tests.splice(nestedConditionID, 1);
+                    // handle empty nested condition
+                    if (testArray.tests[rootConditionID].tests.length === 0) testArray.tests.splice(rootConditionID, 1);
                     this.model.set('test', testArray);
+
                     this.render();
                     return;
                 }
@@ -204,12 +216,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return indicatorKey;
                 }
 
-                if (testsPart.tests) {
-                    if (testsPart.tests.length === 0) {
-                        this.model.set('test', { id: 'true' });
-                    } else {
-                        this.model.set('test', testsPart);
-                    }
+                if (testsPart.tests && testsPart.tests.length === 0) {
+                    this.model.set('test', { id: 'true' });
+
                 } else {
                     if (testsPart.id === 'header' && testsPart.values[0].trim() === '') {
                         this.model.set('test', { id: 'true' });
@@ -217,6 +226,35 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'size' && testsPart.size.toString().trim() === '') {
                         this.model.set('test', { id: 'true' });
                     }
+                    // clear zone option in date condition for single test if no special zone is set
+                    if (testsPart.zone === 'original') {
+                        delete this.model.attributes.test.zone;
+                    }
+
+                }
+
+                if (this.model.attributes.test.tests) {
+
+                    // _.each(this.model.attributes.test.tests, function (test, key) {
+
+                    //     // remove empty nested condition
+                    //     if (test.tests && _.isEmpty(test.tests)) {
+                    //         self.model.attributes.test.tests.splice(key, 1);
+                    //     }
+                    // });
+
+                    _.each(this.model.attributes.test.tests, function (test, key) {
+
+                        // clear zone option in date condition for multiple tests if no special zone is set
+                        if (test.zone === 'original') self.model.attributes.test.tests[key].zone = null;
+
+                        // clear zone option in date condition for multiple nested tests if no special zone is set
+                        if (test.tests && !_.isEmpty(test.tests)) {
+                            _.each(test.tests, function (nestedTest, nestedKey) {
+                                if (nestedTest.zone === 'original') self.model.attributes.test.tests[key].tests[nestedKey].zone = null;
+                            });
+                        }
+                    });
                 }
 
                 // if there is a stop action it should always be the last
@@ -290,7 +328,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                  // create condition
                 if (data.test === 'create') {
-
                     testArray = _.copy(this.model.get('test'));
 
                     if (checkForMultipleTests(this.el).length > 1) {
@@ -411,6 +448,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
             _(appliedConditions).each(function (condition, conditionKey) {
+
                 var isNested = function () {
                         if (condition.tests) return true;
                     },
@@ -421,11 +459,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                     // condition point
                     ext.point('io.ox/mail/mailfilter/tests').get('nested', function (point) {
-                        point.invoke('draw', conditionList, baton, conditionKey, cmodel); // baton, assembledKey, cmodel, filterValues, ncondition
+                        point.invoke('draw', conditionList, baton, conditionKey, cmodel);
                     });
 
                     _(nestedConditions).each(function (ncondition, nconditionKey) {
-                        // debugger;
                         var cmodel = new ConditionModel(ncondition),
                             assembledKey = conditionKey + '_' + nconditionKey;
 
@@ -439,7 +476,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         });
 
                         if (!cmodel.isValid()) {
-                            conditionList.find('[data-test-id=' + assembledKey + '] .row').addClass('has-error');
+                            conditionList.find('[data-test-id=' + assembledKey + '] input').closest('.row').addClass('has-error');
                         }
 
                     });
@@ -459,7 +496,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                  // inintial validation to disable save button
                 if (!cmodel.isValid()) {
-                    conditionList.find('[data-test-id=' + conditionKey + '] .row').addClass('has-error');
+                    conditionList.find('[data-test-id=' + conditionKey + '] input').closest('.row').addClass('has-error');
                 }
             });
 

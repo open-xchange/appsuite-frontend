@@ -24,9 +24,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
+    'settings!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView) {
+
+], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings) {
 
     'use strict';
 
@@ -113,7 +115,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
         actionArray = _.copy(myView.model.get('actioncmds'), true);
         rulename = _.copy(myView.model.get('rulename'), true);
 
-        myView.dialog = new ModalDialog({
+        var Dialog = ModalDialog.extend({
+            // manipulating the focus renders the dialog dropdowns unfunctional
+            pause: function () {
+                // $(document).off('focusin', this.keepFocus);
+                this.$el.next().addBack().hide();
+                this.toggleAriaHidden(false);
+            },
+            resume: function () {
+                // $(document).on('focusin', $.proxy(this.keepFocus, this));
+                this.$el.next().addBack().show();
+                this.toggleAriaHidden(true);
+            }
+        });
+
+        myView.dialog = new Dialog({
             top: 60,
             width: 800,
             center: false,
@@ -242,7 +258,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             return this.initialize().then(function (data, config) {
                 data = data[0];
-                config = config[0];
 
                 // adds test for testcase
                 // config.tests.push({ test: 'newtest', comparison: ['regex', 'is', 'contains', 'matches', 'testValue'] });
@@ -269,7 +284,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
-                            actions = (this.model.get('actioncmds') || []);
+                            actions = (this.model.get('actioncmds') || []),
+                            supportColorFlags = settings.get('features/flag/color');
 
                         if (this.disposed) {
                             return;
@@ -277,9 +293,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         function checkForUnknown() {
                             var unknown = false;
+
+                            function checkForColorFlags(a) {
+                                if (a.flags) {
+                                    return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
+                                }
+                            }
                             _.each(actions, function (action) {
                                 if (!_.contains(['stop', 'vacation'], action.id)) {
-                                    unknown = _.isEmpty(_.where(defaults.actions, { id: action.id }));
+                                    unknown = _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action);
                                 }
                             });
 

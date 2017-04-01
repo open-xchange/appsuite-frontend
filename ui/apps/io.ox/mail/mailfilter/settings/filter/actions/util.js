@@ -38,7 +38,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         events: { 'change': 'onChange', 'keyup': 'onKeyup' },
         onChange: function () {
             if (this.name === 'flags') {
-                var value = (/customflag_/g.test(this.id)) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
+                var value = ((/customflag_/g.test(this.id)) || (/removeflags_/g.test(this.id))) ? ['$' + this.$el.val().toString()] : [this.$el.val()];
                 this.model.set(this.name, value);
             } else if (this.name === 'to') {
                 this.model.set(this.name, this.$el.val().trim());
@@ -47,7 +47,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
             }
         },
         update: function () {
-            if (/customflag_/g.test(this.id)) {
+            if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {
                 this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
             } else if (/move_/g.test(this.id)) {
                 prepareFolderForDisplay(this.model.get('into'), this.$el);

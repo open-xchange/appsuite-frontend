@@ -53,6 +53,41 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     };
 
     var drawCondition = function (o) {
+        if (o.layout === '3') {
+            return $('<li>').addClass('filter-settings-view row layout-3 ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
+                $('<div>').addClass('col-sm-2 doubleline').append(
+                    $('<span>').addClass('list-title').text(o.title)
+                ),
+                $('<div>').addClass('col-sm-10').append(
+                    $('<div>').addClass('row').append(
+                        $('<div>').addClass('col-sm-4 dualdropdown').append(
+                            $('<div>').addClass('row').append(
+                                $('<label class="col-sm-4">').text(gt('Header')),
+                                $('<div>').addClass('col-sm-8').append(
+                                    new mini.DropdownLinkView(o.seconddropdownOptions).render().$el
+                                )
+                            ),
+                            $('<div>').addClass('row').append(
+                                $('<label class="col-sm-4">').text(gt('Part')),
+                                $('<div>').addClass('col-sm-8').append(
+                                    new mini.DropdownLinkView(o.thirddropdownOptions).render().$el
+                                )
+                            )
+                        ),
+                        $('<div>').addClass('col-sm-3 dropdownadjust').append(
+                            new mini.DropdownLinkView(o.dropdownOptions).render().$el
+                        ),
+                        $('<div>').addClass('col-sm-5 doubleline').append(
+                            $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
+                            new Input(o.inputOptions).render().$el,
+                            o.errorView ? new mini.ErrorView({ selector: '.row' }).render().$el : []
+                        )
+                    )
+                ),
+                drawDeleteButton('test')
+            );
+        }
+
         if (o.secondInputId) {
             return $('<li>').addClass('filter-settings-view row ' + o.addClass).attr({ 'data-test-id': o.conditionKey }).append(
                 $('<div>').addClass('col-sm-4 doubleline').append(
@@ -90,7 +125,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                         new mini.DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
                     $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
-                        new mini.DropdownLinkView(o.dropdownOptions).render().$el
+                        o.dropdownOptions ? new mini.DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
                     $('<div class="col-sm-8">').append(
                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
@@ -104,14 +139,29 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     };
 
-    var returnContainsOptions = function (additionalValues) {
+    var returnContainsOptions = function (cap, additionalValues) {
+
         var defaults = {
-            'contains': gt('Contains'),
-            'is': gt('Is exactly'),
-            'matches': gt('Matches'),
-            //needs no different translation
-            'regex': gt('Regex')
-        };
+                'contains': gt('Contains'),
+                'not contains': gt('Contains not'),
+                'is': gt('Is exactly'),
+                'not is': gt('Is not exactly'),
+                'matches': gt('Matches'),
+                'not matches': gt('Matches not'),
+                //needs no different translation
+                'startswith': gt('Starts with'),
+                'not startswith': gt('Starts not with'),
+                'endswith': gt('Ends with'),
+                'not endswith': gt('Ends not with')
+            },
+            regex = {
+                'regex': gt('Regex'),
+                'not regex': gt('Not Regex')
+            };
+
+        if (_.has(cap, 'regex')) {
+            _.extend(defaults, regex);
+        }
 
         return _.extend(defaults, additionalValues);
     };
