@@ -8096,7 +8096,6 @@ msgid "Set color"
 msgstr "Ange färg"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
-#: apps/plugins/core/feedback/register.js
 msgid "Settings"
 msgstr "Inställningar"
 

@@ -8140,7 +8140,6 @@ msgid "Set color"
 msgstr "Imposta il colore"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
-#: apps/plugins/core/feedback/register.js
 msgid "Settings"
 msgstr "Impostazioni"
 
