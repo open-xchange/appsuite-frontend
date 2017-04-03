@@ -28,12 +28,11 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
-    'io.ox/core/a11y',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, a11y) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -1017,9 +1016,7 @@ define('io.ox/mail/compose/view', [
                 var target, mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (a11y.use('focusFirstTabbable')) {
-                        target = self.$('a[data-toggle="dropdown"]:first');
-                    } else if (/(compose|forward)/.test(mode)) {
+                    if (/(compose|forward)/.test(mode)) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;
