@@ -285,7 +285,6 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
     }
 
     function use() {
-        // focusFirstTabbable
         return !!settings.get('features/accessibility', true);
     }
 
