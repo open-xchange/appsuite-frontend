@@ -1652,30 +1652,18 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         baton.$.group.append(
                             // search
-                            $('<i>')
+                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
-                                    'tabindex': '-1',
-                                    'class': 'fa fa-search form-control-feedback action action-show',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search')
-                                })
+                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
                                 .tooltip(),
                             // cancel/reset
-                            $('<i>')
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
-                                    'tabindex': '-1',
-                                    'class': 'fa fa-times-circle form-control-feedback action action-cancel',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
                                     'data-original-title': gt('Cancel search'),
                                     'aria-label': gt('Cancel search')
-                                })
+                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
                                 .tooltip()
                         );
                     }

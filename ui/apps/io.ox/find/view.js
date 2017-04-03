@@ -36,7 +36,8 @@ define('io.ox/find/view', [
             'keydown': 'onKeydown',
             'focusout': 'smartCancel',
             // subview buttons
-            'click .action-cancel': 'cancel'
+            'click .action-cancel': 'cancel',
+            'keydown .action-cancel': 'cancel'
         },
 
         classes: {
@@ -178,7 +179,9 @@ define('io.ox/find/view', [
             this.trigger('reset');
         },
 
-        cancel: function () {
+        cancel: function (e) {
+            if (!(e.type === 'click' || /13|32/.test(e.which))) return;
+
             this.reset();
             this.hide();
             // move focus
