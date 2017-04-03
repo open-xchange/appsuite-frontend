@@ -135,7 +135,8 @@ define('io.ox/core/attachments/backbone', [
         },
 
         getTitle: function () {
-            return this.get('filename');
+            // attachments from drive may have a sanitized filename
+            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename');
         },
 
         getShortTitle: function (length) {

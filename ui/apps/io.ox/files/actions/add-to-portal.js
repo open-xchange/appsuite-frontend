@@ -27,7 +27,7 @@ define('io.ox/files/actions/add-to-portal', [
             props: {
                 id: data.id,
                 folder_id: data.folder_id,
-                title: data.filename || data.title
+                title: data['com.openexchange.file.sanitizedFilename'] || data.filename || data.title
             }
         });
         notifications.yell('success', message);
