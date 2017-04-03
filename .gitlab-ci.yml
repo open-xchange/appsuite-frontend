@@ -291,10 +291,6 @@ create project on OBS:
   script:
     - cd build
     - ant -f buildAll.xml -DshortProductName=frontend -Dbranch=${CI_COMMIT_REF_SLUG} -DprojectSets=frontend-packages determineProject createProject
-  environment:
-    name: packages/$CI_COMMIT_REF_NAME
-    on_stop: "cleanup review"
-    url: http://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
   only:
     - /^feature\//
     - /^poc\//
@@ -346,6 +342,25 @@ package open-xchange-appsuite-spamexperts:
   dependencies:
     - install_deps_spamexperts
   <<: *buildpkg_on_obs
+
+wait for packages:
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:ant
+  stage: deploy
+  dependencies: []
+  variables:
+  variables:
+    GIT_SUBMODULE_STRATEGY: normal
+  script:
+    - cd build
+    - ant -f buildAll.xml -DshortProductName=frontend -Dbranch=${CI_COMMIT_REF_SLUG} -DprojectSets=frontend-packages determineProject wait4Project
+  environment:
+    name: packages/$CI_COMMIT_REF_NAME
+    on_stop: "cleanup review"
+    url: http://buildservice.open-xchange.com/frontend-$CI_COMMIT_REF_SLUG/
+  only:
+    - /^feature\//
+    - /^poc\//
+    - /^bug\//
 
 cleanup review:
   image: gitlab.open-xchange.com:4567/frontend/osc_env:latest
