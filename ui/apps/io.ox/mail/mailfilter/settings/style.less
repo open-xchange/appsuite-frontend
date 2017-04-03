@@ -8,6 +8,12 @@
     }
 }
 
+.modal-footer .control-group.mailfilter.checkbox {
+    float: left;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
 .io-ox-mailfilter-edit {
 
     .warning { color:  #B94A48; border-color: #B94A48; }
@@ -48,9 +54,21 @@
     li.filter-settings-view {
         position: relative;
         background-color: #f5f5f5;
-        padding: 8px 70px 8px 13px;
+        padding: 8px 40px 8px 13px;
         margin: 0 0 7px 0;
         text-align: left;
+
+        &.nested {
+            margin-left: 40px;
+        }
+
+        &.nestedrule, &.nested {
+            background-color: #ddd;
+        }
+
+        &.nestedrule .dropdown.condition {
+            text-align: right;
+        }
 
         .singleline {
             line-height: 30px;
@@ -58,6 +76,27 @@
 
         .doubleline {
             line-height: 63px;
+
+            input {
+                margin-top: 15px;
+            }
+        }
+
+        .dropdownadjust {
+            line-height: 50px;
+        }
+
+        .dualdropdown {
+
+            .dropdownlink {
+                text-align: left;
+            }
+
+            label {
+                padding-top: 5px;
+                font-size: 14px;
+                font-weight: normal;
+            }
         }
 
         .center {
@@ -86,7 +125,7 @@
 
         }
 
-        .dateinput {
+        .dateinput.dateonly {
 
             .input-group {
                 display: block;
@@ -94,6 +133,34 @@
 
             .datepicker-day-field {
                 width: 100%;
+            }
+
+        }
+
+        &.nested .dateinput.dateonly {
+
+            .datepicker-day-field {
+                width: 100%;
+            }
+
+        }
+
+        &.nested .dateinput {
+
+            .datepicker-day-field {
+                width: 104px;
+            }
+
+        }
+
+        .dateinput {
+
+            .datepicker-day-field {
+                width: 118px;
+            }
+
+            .timezone {
+                display: none;
             }
 
         }

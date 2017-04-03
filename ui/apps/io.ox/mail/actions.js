@@ -267,7 +267,7 @@ define('io.ox/mail/actions', [
                         preparedTest = {
                             id: 'allof',
                             tests: [
-                                _.copy(opt.filterDefaults.tests.Subject),
+                                _.copy(opt.filterDefaults.tests.subject),
                                 opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
                             ]
                         };
@@ -277,7 +277,7 @@ define('io.ox/mail/actions', [
 
                     args.data.obj.set('test', preparedTest);
 
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config);
                 });
             });
         }

@@ -16,23 +16,37 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/model',
     'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/core/notifications',
     'io.ox/settings/util',
     'io.ox/mail/mailfilter/settings/filter/view-form',
     'gettext!io.ox/mail',
-    'io.ox/mail/mailfilter/settings/filter/defaults',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
+    'settings!io.ox/mail',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
-], function (ext, api, mailfilterModel, dialogs, notifications, settingsUtil, FilterDetailView, gt, DEFAULTS, listUtils, ListView, DisposableView) {
+
+], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings) {
 
     'use strict';
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
-        notificationId = _.uniqueId('notification_');
+        notificationId = _.uniqueId('notification_'),
+        conditionsTranslation = {},
+        actionsTranslations = {},
+        defaults = {
+            tests: {
+                'true': {
+                    'id': 'true'
+                }
+            },
+            actions: {}
+        },
+        actionCapabilities = {},
+        conditionsMapping = {};
 
     function containsStop(actioncmds) {
         var stop = false;
@@ -74,7 +88,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 return tests;
             };
 
-        myView = new FilterDetailView({ model: data, listView: evt.data.listView, config: config });
+        myView = new FilterDetailView({
+            model: data,
+            listView: evt.data.listView,
+            config: config,
+            conditionsTranslation: conditionsTranslation,
+            actionsTranslations: actionsTranslations,
+            defaults: defaults,
+            actionCapabilities: actionCapabilities,
+            conditionsMapping: conditionsMapping
+        });
 
         if (myView.model.get('test').tests) {
             var conditionsCopy = myView.model.get('test');
@@ -92,24 +115,44 @@ define('io.ox/mail/mailfilter/settings/filter', [
         actionArray = _.copy(myView.model.get('actioncmds'), true);
         rulename = _.copy(myView.model.get('rulename'), true);
 
-        myView.dialog = new dialogs.ModalDialog({
+        var Dialog = ModalDialog.extend({
+            // manipulating the focus renders the dialog dropdowns unfunctional
+            pause: function () {
+                // $(document).off('focusin', this.keepFocus);
+                this.$el.next().addBack().hide();
+                this.toggleAriaHidden(false);
+            },
+            resume: function () {
+                // $(document).on('focusin', $.proxy(this.keepFocus, this));
+                this.$el.next().addBack().show();
+                this.toggleAriaHidden(true);
+            }
+        });
+
+        myView.dialog = new Dialog({
             top: 60,
             width: 800,
             center: false,
             maximize: true,
-            async: true
-        }).header($('<h4>').text(header));
+            async: true,
+            point: 'io.ox/settings/mailfilter/filter/settings/detail/dialog',
+            title: header
+        });
 
-        myView.dialog.append(
+        myView.dialog.$body.append(
             myView.render().el
-        )
-        .addPrimaryButton('save', gt('Save'), 'save')
-        .addButton('cancel', gt('Cancel'), 'cancel');
+        );
+
+        myView.dialog.addButton({
+            label: gt('Save'),
+            action: 'save'
+        })
+        .addCancelButton();
 
         //disable save button if no action is set
-        if (actionArray.length === 0) myView.dialog.getFooter().find('[data-action="save"]').prop('disabled', true);
+        if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer[data-action="save"]').prop('disabled', true);
 
-        myView.dialog.show();
+        myView.dialog.open();
         myView.$el.find('input[name="rulename"]').focus();
 
         if (data.id === undefined) {
@@ -119,7 +162,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         myView.collection = collection;
 
         myView.dialog.on('save', function () {
-            myView.dialog.getBody().find('.io-ox-mailfilter-edit').trigger('save');
+            myView.dialog.$body.find('.io-ox-mailfilter-edit').trigger('save');
         });
 
         myView.dialog.on('cancel', function () {
@@ -215,7 +258,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
             return this.initialize().then(function (data, config) {
                 data = data[0];
-                config = config[0];
+
+                // adds test for testcase
+                // config.tests.push({ test: 'newtest', comparison: ['regex', 'is', 'contains', 'matches', 'testValue'] });
 
                 collection = factory.createCollection(data);
                 collection.comparator = function (model) {
@@ -239,7 +284,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     render: function () {
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
-                            actions = (this.model.get('actioncmds') || []);
+                            actions = (this.model.get('actioncmds') || []),
+                            supportColorFlags = settings.get('features/flag/color');
 
                         if (this.disposed) {
                             return;
@@ -247,9 +293,15 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                         function checkForUnknown() {
                             var unknown = false;
+
+                            function checkForColorFlags(a) {
+                                if (a.flags) {
+                                    return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
+                                }
+                            }
                             _.each(actions, function (action) {
                                 if (!_.contains(['stop', 'vacation'], action.id)) {
-                                    unknown = _.isEmpty(_.where(DEFAULTS.actions, { id: action.id }));
+                                    unknown = _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action);
                                 }
                             });
 
@@ -391,6 +443,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         e.data = {};
                         e.data.id = self.model.get('id');
                         e.data.obj = self.model;
+                        e.data.listView = this;
                         if (e.data.obj !== undefined) {
                             createExtpointForSelectedFilter(this.$el.parent(), e, config);
                         }
@@ -414,6 +467,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                     },
 
                     render: function () {
+                        this.$el.empty();
                         this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
                             $('<div>').addClass('btn-group pull-right').append(
                                 $('<button type="button" class="btn btn-primary" data-action="add">').addClass('btn btn-primary').text(gt('Add new rule'))
@@ -481,11 +535,21 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         },
         initialize: function () {
+            // needed for mail actions
             var options = {
                 api: api,
                 model: mailfilterModel,
-                filterDefaults: DEFAULTS
+                filterDefaults: defaults
             };
+
+            ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
+                point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
+            });
+
+            ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
+                point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
+            });
+
             return $.when(api.getRules(), api.getConfig(), options);
         },
 

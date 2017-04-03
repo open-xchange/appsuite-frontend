@@ -63,7 +63,7 @@ define('io.ox/mail/actions/copyMove', [
 
                             args.data.obj.set('test', preparedTest);
 
-                            ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                            ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config);
                         });
                     });
                 }
