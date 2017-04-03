@@ -213,8 +213,6 @@ define('io.ox/core/tk/contenteditable-editor', [
         // inside blockquote?
         if (!isInsideBlockquote(range)) return;
         if (!range.startContainer) return;
-        if (_.device('IE')) return;
-        // split; W3C-compliant strategy; older IEs needed a different strategy
         splitContent_W3C(ed);
         ed.dom.events.cancel(e);
     }
