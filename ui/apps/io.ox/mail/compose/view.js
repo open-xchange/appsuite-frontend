@@ -356,7 +356,7 @@ define('io.ox/mail/compose/view', [
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.editorContainer = $('<div class="editor">').attr({
+            this.editorContainer = $('<div class="editor" role="application">').attr({
                 'data-editor-id': this.editorId
             });
 
