@@ -180,7 +180,7 @@ define('io.ox/find/view', [
         },
 
         cancel: function (e) {
-            if (!(e.type === 'click' || /13|32/.test(e.which))) return;
+            if (e && !(e.type === 'click' || /13|32/.test(e.which))) return;
 
             this.reset();
             this.hide();
