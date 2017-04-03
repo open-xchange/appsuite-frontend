@@ -371,14 +371,27 @@ define('io.ox/files/share/wizard', [
         share: function () {
             // we might have new addresses
             contactsAPI.trigger('maybeNewContact');
+            var result;
 
-            // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
-            var result = this.model.save();
+            // Bug 52046: When the password checkbox is enable and the password could not be validated (e.g. it's empty) in the set function from the model,
+            // we have the previous, not up-to-date model data, but also an validationError to indicate that there was a error.
+            // So the validation in the save function would work with the old model data. Therefore don't call save() when there
+            // is an validationError, because it would work with an old model.
+            if (this.model.get('secured') && _.isString(this.model.validationError)) {
+                // reject so that the dialog is not closed later and pass the yell message for the fail handler
+                result = $.Deferred().reject('error', this.model.validationError);
 
-            //  to unify the return type, we always want to return a deferred
-            if (result === false) {
-                return $.Deferred().reject();
+            } else {
+                // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
+                result = this.model.save();
+
+                //  to unify the return type for later functions, we must return a deferred
+                if (result === false) {
+                    // no yell message needed, therefore return directly, the yell is called in the save function above
+                    return $.Deferred().reject();
+                }
             }
+
             return result.fail(yell);
 
         },
