@@ -47,7 +47,8 @@ define('io.ox/mail/settings/defaults', [], function () {
         'notificationSoundName': 'bell',
         'playSound': true,
         'confirmReplyToMailingLists': true,
-        'unseenMessagesFolder': true
+        'unseenMessagesFolder': true,
+        'showCheckboxes': true  // show checkboxes in mail list as default
     };
 
     return settingsDefaults;
