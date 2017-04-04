@@ -100,7 +100,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     };
                     _.extend(opt.defaults.tests, defaults);
                     _.extend(opt.conditionsTranslation, {
-                        'body': gt('Content')
+                        'body': gt('Body')
                     });
 
                     _.extend(opt.conditionsMapping, { 'body': ['body'] });
@@ -360,7 +360,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'envelope': {
                             'id': 'envelope',
-                            'comparison': 'matches',
+                            'comparison': 'is',
                             'addresspart': 'all',
                             'headers': ['To'],
                             'values': ['']
@@ -522,7 +522,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 };
                 _.extend(opt.defaults.tests, defaults);
                 _.extend(opt.conditionsTranslation, {
-                    'from': gt('Sender/From'),
+                    'from': gt('From'),
                 });
 
                 _.extend(opt.conditionsMapping, { 'from': ['from'] });

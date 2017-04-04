@@ -136,7 +136,8 @@ define('io.ox/mail/mailfilter/settings/filter', [
             maximize: true,
             async: true,
             point: 'io.ox/settings/mailfilter/filter/settings/detail/dialog',
-            title: header
+            title: header,
+            help: 'ox.appsuite.user.sect.email.manage.mailfilter.html'
         });
 
         myView.dialog.$body.append(
