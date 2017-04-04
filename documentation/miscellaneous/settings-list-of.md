@@ -491,7 +491,7 @@ settings!io.ox/portal
 > show only summary of portal widgets on mobile
 
 
-## Unused/Crap?
+## Unused?
 
 **force**
 > ...
@@ -573,7 +573,7 @@ settings!io.ox/mail
 > Show folder with all unseen messages (true/false)
 
 **playSound**
-> Play sound on incoming e-mail - depends on capability `'websocket'` (true/false)
+> Play sound on incoming push e-mail - depends on capability `'websocket'` (true/false)
 
 ### Compose
 
@@ -1031,7 +1031,7 @@ settings!io.ox/tasks
 > list of available currencies (3-digits) in edit/new dialog
 
 
-## Unused/Crap?
+## Unused?
 
 **interval**
 > ...
