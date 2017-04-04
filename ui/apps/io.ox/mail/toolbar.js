@@ -281,7 +281,7 @@ define('io.ox/mail/toolbar', [
             .divider();
 
             // feature: tabbed inbox
-            if (capabilities.has('mail_categories')) {
+            if (capabilities.has('mail_categories') && !_.device('smartphone')) {
                 dropdown
                 .header(gt('Inbox'))
                 .option('categories', true, gt('Use categories'))

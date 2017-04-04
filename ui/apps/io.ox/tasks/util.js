@@ -256,17 +256,21 @@ define('io.ox/tasks/util', [
                     task.title = '\u2014';
                 }
 
-                function formatTime(value, format) {
+                function formatTime(value, fullTime) {
                     if (value === undefined || value === null) return '';
 
-                    return moment.tz(value, coreSettings.get('timezone')).format(format);
+                    if (fullTime) {
+                        // fulltime tasks are timezone independent
+                        return moment.utc(value).format('l');
+                    }
+                    return moment.tz(value, coreSettings.get('timezone')).format('l, LT');
                 }
 
                 // convert UTC timestamps to local time
-                task.end_time = formatTime(task.end_time, task.full_time ? 'l' : 'l, LT');
-                task.start_time = formatTime(task.start_time, task.full_time ? 'l' : 'l, LT');
-                task.alarm = formatTime(task.alarm, 'l, LT');
-                task.date_completed = formatTime(task.date_completed, 'l, LT');
+                task.end_time = formatTime(task.end_time, task.full_time);
+                task.start_time = formatTime(task.start_time, task.full_time);
+                task.alarm = formatTime(task.alarm);
+                task.date_completed = formatTime(task.date_completed);
 
                 return task;
             },

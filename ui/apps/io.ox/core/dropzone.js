@@ -82,7 +82,15 @@ define('io.ox/core/dropzone', [], function () {
             this.visible = false;
             this.leaving = false;
             this.timeout = -1;
+
             $(document).on(EVENTS, this.onDrag.bind(this));
+            // firefox does not fire dragleave correct when leaving the window.
+            // it also does not fire mouseevents while dragging (so mouseout does not work either)
+            // use mouseenter to remove the dropzones when eintering the window wiand nothing is dragged
+            if (_.device('firefox')) {
+                $(document).on('mouseenter', this.onMouseenter.bind(this));
+            }
+
             this.$el.on('dispose', function (e) { this.dispose(e); }.bind(this));
         },
 
@@ -182,6 +190,20 @@ define('io.ox/core/dropzone', [], function () {
             $(e.currentTarget).parent().removeClass('dragover');
         },
 
+        // firefox only. Firefox has the strange behavior of only triggering this when no file is dragged
+        // so it can be used to clear the dropzones (firefox does not trigger the dragleave event on window leave)
+        onMouseenter: function (e) {
+            if (!this.visible) return;
+            var from = e.relatedTarget || e.toElement;
+            if (!from) {
+                _.delay(function () {
+                    this.leaving = true;
+                    clearTimeout(this.timeout);
+                    this.onLeave(e);
+                }.bind(this), 50);
+            }
+        },
+
         // while we can ignore document's drop event, we need this one
         // to detect that a file was dropped over the dropzone
         onDrop: function (e) {
@@ -210,6 +232,9 @@ define('io.ox/core/dropzone', [], function () {
         dispose: function () {
             this.stopListening();
             $(document).off(EVENTS, this.onDrag);
+            if (_.device('firefox')) {
+                $(document).off('mouseenter', this.onMouseenter);
+            }
         }
     });
 
