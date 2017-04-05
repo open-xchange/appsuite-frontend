@@ -126,7 +126,8 @@ define.async('io.ox/oauth/keychain', [
         this.createInteractively = function (popupWindow, scopes) {
             scopes = [].concat(scopes || []);
 
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                self = this;
 
             // the popup must exist already, otherwise we run into the popup blocker
             if (!popupWindow) return def.reject();
@@ -141,6 +142,8 @@ define.async('io.ox/oauth/keychain', [
 
             return newAccount.save().then(function (account) {
                 accounts.add(newAccount);
+                // needed for some portal plugins (xing, twitter, for example)
+                self.trigger('create', account);
                 ox.trigger('refresh-portal');
                 notifications.yell('success', gt('Account added successfully'));
                 return account;
