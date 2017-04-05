@@ -718,8 +718,7 @@ define('io.ox/mail/api', [
             unsetSorted(list, 102);
         });
     };
-
-     /**
+    /**
      * marks list of mails as flagged/unflagged
      * @param {array} list
      * @fires api#refresh.list

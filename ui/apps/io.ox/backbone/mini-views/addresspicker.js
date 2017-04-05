@@ -27,7 +27,7 @@ define('io.ox/backbone/mini-views/addresspicker', [
         tagName: 'span',
 
         events: {
-            'click button': 'onClick',
+            'click button': 'onClick'
         },
 
         initialize: function (opt) {

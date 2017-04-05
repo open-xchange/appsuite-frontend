@@ -232,7 +232,7 @@ define('io.ox/core/attachments/view', [
         className: 'preview',
 
         events: {
-            'keydown': 'onKeydown',
+            'keydown': 'onKeydown'
         },
 
         initialize: function () {
@@ -292,7 +292,7 @@ define('io.ox/core/attachments/view', [
             $(e.target).trigger('click');
             e.preventDefault();
             e.stopPropagation();
-        },
+        }
 
     });
 

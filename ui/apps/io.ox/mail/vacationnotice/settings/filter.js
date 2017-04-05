@@ -49,10 +49,8 @@ define('io.ox/mail/vacationnotice/settings/filter', [
                     vacationData,
                     VacationEdit,
                     vacationNotice,
-                    setSender = settings.get('features/setFromInVacationNotice', false),
-                    setAddresses = settings.get('features/setAddressesInVacationNotice', false);
-                    // setAddresses = true,
-                    // setSender = true;
+                    setSender = settings.get('features/setFromInVacationNotice', true),
+                    setAddresses = settings.get('features/setAddressesInVacationNotice', true);
 
                 if (setSender) {
                     defaultNotice.from = _.first(multiValues.fromArrays);

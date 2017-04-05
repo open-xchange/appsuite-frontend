@@ -342,9 +342,21 @@ define('io.ox/core/tk/tokenfield', [
                         value: e.attrs.value
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
-                    //#. %1$s is the display name of an added user or mail recipient
-                    //#. %2$s is the email address of the user or mail recipient
-                    self.$el.trigger('aria-live-update', gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value));
+                    var message;
+                    if (e.attrs.model.get('display_name') && e.attrs.model.value) {
+                        //#. %1$s is the display name of an added user or mail recipient
+                        //#. %2$s is the email address of the user or mail recipient
+                        message = gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value);
+                    } else if (e.attrs.model.get('name') && e.attrs.model.get('detail')) {
+                        //#. %1$s is the added search query
+                        //#. %2$s is the context of the added search query
+                        message = gt('Added %1$s, %2$s.', e.attrs.model.get('name'), e.attrs.model.get('detail'));
+                    } else if (e.attrs.model.get('name')) {
+                        //#. %1$s is the added search query
+                        message = gt('Added %1$s.', e.attrs.model.get('name'));
+                    }
+
+                    if (message) self.$el.trigger('aria-live-update', message);
                     // add model to the collection and save cid to the token
                     self.collection.add(e.attrs.model);
                 },
@@ -407,9 +419,23 @@ define('io.ox/core/tk/tokenfield', [
                     _([].concat(e.attrs)).each(function (el) {
                         var model = self.getModelByCID(el.value);
                         if (!model) return;
-                        //#. %1$s is the display name of a removed user or mail recipient
-                        //#. %2$s is the email address of the user or mail recipient
-                        self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));
+
+                        var message;
+                        if (model.get('display_name') && model.value) {
+                            //#. %1$s is the display name of a removed user or mail recipient
+                            //#. %2$s is the email address of the user or mail recipient
+                            message = gt('Removed %1$s, %2$s.', model.get('display_name'), model.value);
+                        } else if (model.get('name') && model.get('detail')) {
+                            //#. %1$s is the removed search query
+                            //#. %2$s is the context of the removed search query
+                            message = gt('Removed %1$s, %2$s.', model.get('name'), model.get('detail'));
+                        } else if (model.get('name')) {
+                            //#. %1$s is the removed search query
+                            message = gt('Removed %1$s.', model.get('name'));
+                        }
+
+                        if (message) self.$el.trigger('aria-live-update', message);
+
                         self.collection.remove(model);
                     });
                 }

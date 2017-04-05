@@ -155,7 +155,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                             'flags': ['$'],
                             'id': 'removeflags'
 
-                        },
+                        }
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {

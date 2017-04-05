@@ -300,7 +300,7 @@ define('io.ox/core/tk/dialogs', [
             p.append($('<h4 class="plain-text">').attr('id', id).text(str || ''));
             nodes.popup.attr({
                 'aria-labelledby': id,
-                role: 'alertdialog',
+                role: 'alertdialog'
             });
             return this;
         };

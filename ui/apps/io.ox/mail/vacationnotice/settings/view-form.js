@@ -34,7 +34,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     ext.point(ref + '/edit/view').invoke('draw', this.$el.empty(), baton);
                     return this;
 
-                },
+                }
             }),
             hasCurrentDate = _.findIndex(config.tests, function (obj) { return obj.test === 'currentdate'; }) !== -1;
 

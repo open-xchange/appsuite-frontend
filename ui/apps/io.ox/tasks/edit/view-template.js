@@ -250,7 +250,7 @@ define('io.ox/tasks/edit/view-template', [
         index: 800,
         render: function () {
             this.$el.append(new RecurrenceView({
-                model: this.model,
+                model: this.model
             }).render().$el);
             this.$el.find('.recurrence-view checkbox').attr('tabindex', 0);
         }

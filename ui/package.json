@@ -1,6 +1,6 @@
 {
   "name": "open-xchange-appsuite",
-  "version": "7.8.4-0",
+  "version": "7.8.4-1",
   "repository": {
     "type": "git",
     "url": "https://code.open-xchange.com/git/wd/frontend/web"
@@ -12,7 +12,7 @@
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
     "eslint": "^3.14.0",
-    "eslint-config-open-xchange-appsuite": "^0.1.0",
+    "eslint-config-open-xchange-appsuite": "^0.2.0",
     "grunt": "^0.4.5",
     "grunt-bump": "^0.3.0",
     "grunt-check-dependencies": "^0.9.0",

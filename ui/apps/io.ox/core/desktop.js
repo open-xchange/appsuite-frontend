@@ -692,7 +692,7 @@ define('io.ox/core/desktop', [
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
             ox.ui.App.removeRestorePoint(uniqueID);
-        },
+        }
 
     });
 

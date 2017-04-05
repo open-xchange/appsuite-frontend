@@ -1383,9 +1383,9 @@ escope@^3.2.0, escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-open-xchange-appsuite@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-open-xchange-appsuite/-/eslint-config-open-xchange-appsuite-0.1.0.tgz#3efa7dad00811bb937dedaed3502c7abd6dcea11"
+eslint-config-open-xchange-appsuite@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-open-xchange-appsuite/-/eslint-config-open-xchange-appsuite-0.2.0.tgz#58f097cfd588f1daadd51d96ac0c0454c34bf863"
 
 eslint@^3.0.0, eslint@^3.14.0:
   version "3.15.0"

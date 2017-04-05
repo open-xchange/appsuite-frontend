@@ -143,6 +143,28 @@ settings!io.ox/core
 **properties/infostoreUsage**
 > current summarized file size of all inforstore files
 
+## Feedback
+
+**feedback/supportlink**
+> stores a link to a support site
+
+**feedback/mode**
+> provided by middleware. Defines the type used when sending the feedback request. 'star-rating-v1' is the only possible value.
+
+**feedback/dialog**
+> used to switch feedback dialogs. 'modules' is the default value . Should only be changed for testing purpose, since only 'modules' has proper mw support yet. (stars/modules/nps)
+
+**feedback/position**
+> defines the position of the feedback button. Default value is 'right'. (left/right)
+
+**feedback/show**
+> defines which feedback buttons to show. Default value is 'both'. (topbar/side/both)
+
+**feedback/showHover**
+> defines if the rating should show when hovering with the mose over it. (true/false)
+
+**feedback/showModuleSelect**
+> only applies to 'modules' dialog. Defines if the select box for he module selection should be replaced by a static text, resembling the current app. (true/false)
 
 ## Special
 
@@ -469,7 +491,7 @@ settings!io.ox/portal
 > show only summary of portal widgets on mobile
 
 
-## Unused/Crap?
+## Unused?
 
 **force**
 > ...
@@ -551,7 +573,7 @@ settings!io.ox/mail
 > Show folder with all unseen messages (true/false)
 
 **playSound**
-> Play sound on incoming e-mail - depends on capability `'websocket'` (true/false)
+> Play sound on incoming push e-mail - depends on capability `'websocket'` (true/false)
 
 ### Compose
 
@@ -1009,7 +1031,7 @@ settings!io.ox/tasks
 > list of available currencies (3-digits) in edit/new dialog
 
 
-## Unused/Crap?
+## Unused?
 
 **interval**
 > ...

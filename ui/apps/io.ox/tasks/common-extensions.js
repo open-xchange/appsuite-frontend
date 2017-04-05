@@ -122,7 +122,7 @@ define('io.ox/tasks/common-extensions', [
                 new Dropdown({
                     el: this.parent(),
                     $toggle: this,
-                    $ul: $ul,
+                    $ul: $ul
                 }).render();
 
                 this.parent().addClass('dropdown');

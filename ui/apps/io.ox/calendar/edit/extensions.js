@@ -371,7 +371,7 @@ define('io.ox/calendar/edit/extensions', [
         index: recurrenceIndex,
         render: function () {
             this.$el.append(new RecurrenceView({
-                model: this.model,
+                model: this.model
             }).render().$el);
         }
     }, {

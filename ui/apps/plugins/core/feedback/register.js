@@ -45,11 +45,11 @@ define('plugins/core/feedback/register', [
             'files'
         ];
 
-    function getAppOptions() {
+    function getAppOptions(useWhitelist) {
         var currentApp,
             apps = _(appApi.getFavorites()).map(function (app) {
                 app.id = app.id.replace('io.ox/', '');
-                if (!_(appWhiteList).contains(app.id)) return;
+                if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
                 // suport for edit dialogs
                 if (ox.ui.App.getCurrentApp().get('name').replace('io.ox/', '').indexOf(app.id) === 0) {
                     currentApp = app;
@@ -127,7 +127,7 @@ define('plugins/core/feedback/register', [
         name: 'star-rating-v1',
         render: function (popupBody) {
 
-            var apps = getAppOptions();
+            var apps = getAppOptions(true);
 
             if (settings.get('feedback/showModuleSelect', true)) {
                 //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
@@ -239,7 +239,13 @@ define('plugins/core/feedback/register', [
     var feedback = {
 
         show: function () {
-            var options = { enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback'), class: settings.get('feedback/dialog', 'modules') + '-feedback-view' };
+            var options = {
+                async: true,
+                enter: 'send',
+                point: 'plugins/core/feedback',
+                title: gt('Your feedback'),
+                class: settings.get('feedback/dialog', 'modules') + '-feedback-view'
+            };
 
             // nps view needs more space
             if (settings.get('feedback/dialog', 'modules') === 'nps') {
@@ -279,13 +285,18 @@ define('plugins/core/feedback/register', [
                         this.$body.append(
                             $('<a>').attr('href', settings.get('feedback/supportlink', ''))
                         );
-                    },
+                    }
 
                 })
                 .addCancelButton()
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
+                    if (this.ratingView.getValue() === 0) {
+                        yell('error', gt('Please select a rating.'));
+                        this.idle();
+                        return;
+                    }
                     var currentApp = getAppOptions().currentApp,
                         found = false,
                         OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
@@ -302,7 +313,7 @@ define('plugins/core/feedback/register', [
                             user_agent: window.navigator.userAgent,
                             screen_resolution: screen.width + 'x' + screen.height,
                             language: ox.language,
-                            client_version: ox.serverConfig.version + ' ' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
+                            client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
                         };
 
                     _(_.browser).each(function (val, key) {
@@ -371,6 +382,7 @@ define('plugins/core/feedback/register', [
                             //#. popup error message
                             yell('error', gt('Feedback could not be sent'));
                         });
+                    this.close();
                 })
                 .open();
         },

@@ -46,7 +46,8 @@ define('plugins/portal/userSettings/register', [
 
         require(['io.ox/core/tk/dialogs', 'io.ox/core/http', 'io.ox/core/yell'], function (dialogs, http, yell) {
 
-            var oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
+            var isGuest = capabilities.has('guest-test'),
+                oldPass, oldScore, newPass, newPass2, strengthBar, strengthLabel, strengthBarWrapper,
                 minLength = settings.get('password/minLength', 4),
                 maxLength = settings.get('password/maxLength', 0),
                 showStrength = settings.get('password/showStrength', true),
@@ -89,8 +90,15 @@ define('plugins/portal/userSettings/register', [
                     );
                     pwContainer = [strengthBarWrapper, $('<div class=password-hint-container>').append(hintText)];
                 }
+
+                var currentPasswordString = gt('Your current password');
+                if (isGuest) {
+                    //.# Hint to leave an input field empty if the user does not already have a password
+                    var guestHint = gt('Leave empty if you have none');
+                    currentPasswordString = currentPasswordString + ' (' + guestHint + ')';
+                }
                 this.getContentNode().append(
-                    $('<label class="password-change-label">').text(gt('Your current password')),
+                    $('<label class="password-change-label">').text(currentPasswordString),
                     oldPass = $('<input type="password" class="form-control current-password">'),
                     $('<label class="password-change-label">').text(gt('New password')),
                     newPass = $('<input type="password" class="form-control new-password">'),
@@ -106,6 +114,7 @@ define('plugins/portal/userSettings/register', [
                 if (showStrength) {
                     newPass.on('keyup', updateStrength);
                 }
+
             })
             .addPrimaryButton('change', gt('Change password and sign out'))
             .addButton('cancel', gt('Cancel'))
@@ -117,7 +126,7 @@ define('plugins/portal/userSettings/register', [
                     newPassword2 = newPass2.val() === '' ? null : newPass2.val(),
                     oldPassword = oldPass.val() === '' ? null : oldPass.val();
 
-                if (!capabilities.has('guest') && newPassword1 === null) {
+                if (isGuest && newPassword1 === null) {
                     yell('warning', gt('Your new password may not be empty.'));
                     dialog.idle();
                     newPass.focus();
