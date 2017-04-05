@@ -216,7 +216,7 @@ define('io.ox/calendar/conflicts/conflictList', [
             return $('<h4 class="text-error">')
                 .text(gt('Conflicts detected'))
                 .add($('<div class="modal-subtitle">').text(gt('The new appointment conflicts with existing appointments.')));
-        },
+        }
 
     };
 });

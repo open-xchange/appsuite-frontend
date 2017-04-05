@@ -18,8 +18,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
     'io.ox/backbone/mini-views',
     'io.ox/mail/mailfilter/settings/filter/tests/util',
     'io.ox/backbone/mini-views/datepicker',
-    'io.ox/core/api/mailfilter',
-
+    'io.ox/core/api/mailfilter'
 ], function (ext, gt, mini, util, DatePicker, api) {
 
     'use strict';
@@ -522,7 +521,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 };
                 _.extend(opt.defaults.tests, defaults);
                 _.extend(opt.conditionsTranslation, {
-                    'from': gt('From'),
+                    'from': gt('From')
                 });
 
                 _.extend(opt.conditionsMapping, { 'from': ['from'] });
@@ -836,12 +835,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 var defaults = {
                     'exists': {
                         'headers': [],
-                        'id': 'exists',
+                        'id': 'exists'
                     }
                 };
                 _.extend(opt.defaults.tests, defaults);
                 _.extend(opt.conditionsTranslation, {
-                    'exists': gt('Exists'),
+                    'exists': gt('Exists')
                 });
 
                 _.extend(opt.conditionsMapping, { 'exists': ['exists'] });

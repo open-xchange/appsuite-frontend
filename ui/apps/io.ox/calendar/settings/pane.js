@@ -214,13 +214,13 @@ define('io.ox/calendar/settings/pane', [
                     var weekday = m.weekday(index);
                     return {
                         value: weekday.day(),
-                        label: weekday.format('dddd'),
+                        label: weekday.format('dddd')
                     };
                 }),
                 counts = _(new Array(7)).map(function (num, index) {
                     return {
                         value: index + 1,
-                        label: index + 1,
+                        label: index + 1
                     };
                 }),
                 NumberSelectView = mini.SelectView.extend({

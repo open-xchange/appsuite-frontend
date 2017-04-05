@@ -27,7 +27,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 var value = this.$el.val();
                 if (value.match(/^\d+$/)) value = parseInt(value, 10);
                 this.model.set(this.name, value, { validate: true });
-            },
+            }
         });
 
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
@@ -55,7 +55,7 @@ define('io.ox/backbone/views/recurrence-view', [
                     // special handling for weekly on weekdays
                     if (this.model.get('every-weekday')) this.$el.val('2:1');
                     else this.$el.val(value);
-                },
+                }
             });
 
             return function () {

@@ -1014,7 +1014,7 @@ define('io.ox/files/share/permissions', [
                                 typeaheadView.$el.attr({ id: guid }),
                                 usePicker ? new AddressPickerView({
                                     isPermission: true,
-                                    process: click,
+                                    process: click
                                 }).render().$el : []
                             )
                         )

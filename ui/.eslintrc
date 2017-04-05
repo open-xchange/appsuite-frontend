@@ -1,5 +1,9 @@
 {
     "root": true,
 
-    "extends": ["open-xchange-appsuite/.eslintrc"]
+    "extends": ["open-xchange-appsuite/.eslintrc"],
+
+    "rules": {
+        "comma-dangle": "error"
+    }
 }

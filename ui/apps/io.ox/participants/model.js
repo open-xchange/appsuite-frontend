@@ -30,7 +30,7 @@ define('io.ox/participants/model', [
             RESOURCE: 3,
             RESOURCE_GROUP: 4,
             EXTERNAL_USER: 5,
-            DISTLIST: 6,
+            DISTLIST: 6
         },
         TYPE_PIDS = {
             0: 'unknown',

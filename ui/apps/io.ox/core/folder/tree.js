@@ -299,7 +299,7 @@ define('io.ox/core/folder/tree', [
                     className: 'context-dropdown dropdown',
                     $toggle: this.$dropdownToggle,
                     $ul: this.$dropdownMenu,
-                    margin: 24,
+                    margin: 24
                 });
 
                 this.$el.after(

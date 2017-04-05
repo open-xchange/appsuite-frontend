@@ -285,7 +285,7 @@ define('plugins/core/feedback/register', [
                         this.$body.append(
                             $('<a>').attr('href', settings.get('feedback/supportlink', ''))
                         );
-                    },
+                    }
 
                 })
                 .addCancelButton()

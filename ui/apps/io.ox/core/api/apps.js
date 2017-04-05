@@ -16,7 +16,7 @@ define('io.ox/core/api/apps', [
     'io.ox/core/extensions',
     'io.ox/core/manifests',
     'io.ox/core/capabilities',
-    'settings!io.ox/core',
+    'settings!io.ox/core'
 ], function (Events, ext, manifests, capabilities, settings) {
 
     'use strict';
