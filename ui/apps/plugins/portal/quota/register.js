@@ -16,9 +16,10 @@ define('plugins/portal/quota/register', [
     'gettext!plugins/portal',
     'io.ox/core/api/quota',
     'io.ox/core/capabilities',
+    'settings!io.ox/core',
     'io.ox/backbone/mini-views/quota',
     'less!plugins/portal/quota/style'
-], function (ext, gt, api, capabilities, QuotaView) {
+], function (ext, gt, api, capabilities, settings, QuotaView) {
 
     'use strict';
 
@@ -30,18 +31,17 @@ define('plugins/portal/quota/register', [
     var availableQuota = function (quota) {
 
         var fields = [];
-
-        if (capabilities.has('infostore')) {
+        if (settings.get('quotaMode', 'default') === 'unified' || capabilities.has('infostore')) {
             fields.push({
                 module: 'file',
                 quota: quota.file.quota,
                 usage: quota.file.use,
                 name: 'memory-file',
-                title: gt('File quota')
+                title: settings.get('Mode', 'default') === 'unified' ? gt('Overall quota') : gt('File quota')
             });
         }
 
-        if (capabilities.has('webmail')) {
+        if (settings.get('quotaMode', 'default') === 'default' && capabilities.has('webmail')) {
             fields.push({
                 module: 'mail',
                 quota: quota.mail.quota,
