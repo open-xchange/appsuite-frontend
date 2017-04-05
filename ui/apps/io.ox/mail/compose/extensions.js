@@ -413,11 +413,9 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
-                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr({
-                        'for': guid
-                    }),
+                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr('for', guid),
                     $('<div class="col-xs-12 col-sm-11">').append(
-                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el.attr({ placeholder: gt('Subject') })
+                        new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
             );
