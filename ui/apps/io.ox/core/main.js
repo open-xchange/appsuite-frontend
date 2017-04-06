@@ -852,12 +852,13 @@ define('io.ox/core/main', [
             index: 300,
             draw: function () {
                 if (_.device('smartphone')) return;
-
+                var helpView = new HelpView({
+                    iconClass: 'launcher-icon',
+                    href: getHelp
+                });
+                if (helpView.$el.hasClass('hidden')) return;
                 this.append(
-                    addLauncher('right', new HelpView({
-                        iconClass: 'launcher-icon',
-                        href: getHelp
-                    }).render().$el)
+                    addLauncher('right', helpView.render().$el)
                 );
             }
         });
@@ -975,14 +976,18 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 //replaced by module
-                var node = this;
+                var node = this,
+                    helpView = new HelpView({
+                        content: gt('Help'),
+                        href: getHelp
+                    });
                 node.append(
-                    $('<li class="divider" role="separator"></li>'),
+                    $('<li class="divider" role="separator"></li>')
+                );
+                if (helpView.$el.hasClass('hidden')) return;
+                node.append(
                     $('<li class="io-ox-specificHelp" role="presentation">').append(
-                        new HelpView({
-                            content: gt('Help'),
-                            href: getHelp
-                        }).render().$el.attr('role', 'menuitem')
+                        helpView.render().$el.attr('role', 'menuitem')
                     )
                 );
             }
