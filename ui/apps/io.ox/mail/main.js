@@ -394,6 +394,13 @@ define('io.ox/mail/main', [
             );
         },
 
+        'select-all-actions': function () {
+            // otherwise user would have wait for 'auto refresh'
+            api.on('move deleted-mails archive', function () {
+                if (!app.listView.collection.length) app.listView.reload();
+            });
+        },
+
         /*
          * Default application properties
          */

@@ -616,6 +616,7 @@ define('io.ox/mail/api', [
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
             });
+            if (move) api.trigger('move');
             if (apiAction === 'copy' || move) {
                 //give response if its a copy action (to look if there was an error)
                 //not doing this as a standardaction to prevent errors with functions looking only for the list parameter
