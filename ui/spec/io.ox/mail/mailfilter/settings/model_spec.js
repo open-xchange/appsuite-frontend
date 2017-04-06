@@ -13,8 +13,13 @@
 
 define([
     'io.ox/mail/mailfilter/settings/model',
-    'gettext!io.ox/mail'
-], function (mailfilterModel, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/filter/tests/register',
+    'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/core/extensions',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'fixture!io.ox/mail/mailfilter/config.json'
+], function (mailfilterModel, gt, conditionsExtensions, actionsExtensions, ext, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
@@ -92,6 +97,13 @@ define([
 
         beforeEach(function () {
             model = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
+
+            conditionsExtensions.processConfig(fixtureMailfilterConfig);
+            actionsExtensions.processConfig(fixtureMailfilterConfig);
+
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults });
+
         });
 
         it('should change for default values', function () {
@@ -100,7 +112,7 @@ define([
                 test: {
                     'comparison': 'contains',
                     'headers': ['From'],
-                    'id': 'header',
+                    'id': 'from',
                     'values': ['test@open-xchange.com']
                 },
                 actioncmds: [{ 'id': 'keep' }]
@@ -116,7 +128,7 @@ define([
                 test: {
                     'comparison': 'contains',
                     'headers': ['From'],
-                    'id': 'header',
+                    'id': 'from',
                     'values': ['test@open-xchange.com']
                 },
                 actioncmds: [{ 'id': 'keep' }]
@@ -132,7 +144,7 @@ define([
                 test: {
                     'comparison': 'contains',
                     'headers': ['From'],
-                    'id': 'header',
+                    'id': 'from',
                     'values': ['test@open-xchange.com']
                 },
                 actioncmds: [{ 'id': 'keep' }]

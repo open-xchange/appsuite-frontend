@@ -23,7 +23,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
     'use strict';
 
-    api.getConfig().done(function (config) {
+    api.getConfig().done(processConfig);
+
+    function processConfig(config) {
+
 
         var cap = _.object(config.capabilities, config.capabilities);
         ext.point('io.ox/mail/mailfilter/tests').extend({
@@ -523,7 +526,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 _.extend(opt.conditionsTranslation, {
                     'from': gt('From')
                 });
-
                 _.extend(opt.conditionsMapping, { 'from': ['from'] });
             },
 
@@ -864,48 +866,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
         });
 
-        // testcase
-        // ext.point('io.ox/mail/mailfilter/tests').extend({
+    }
 
-        //     id: 'newtest',
-
-        //     initialize: function (opt) {
-        //         var defaults = {
-        //             'newtest': {
-        //                 'comparison': 'contains',
-        //                 'headers': ['newHeader'],
-        //                 'id': 'newtest',
-        //                 'values': ['']
-        //             }
-        //         };
-        //         _.extend(opt.defaults.tests, defaults);
-        //         _.extend(opt.conditionsTranslation, {
-        //             'newtest': gt('Newtest/Trans')
-        //         });
-
-        //         _.extend(opt.conditionsMapping, { 'newtest': ['newtest'] });
-        //     },
-
-        //     draw: function (baton, conditionKey, cmodel, filterValues, condition) {
-        //         debugger;
-        //         var inputId = _.uniqueId('newtest_');
-        //         this.append(
-        //             util.drawCondition({
-        //                 conditionKey: conditionKey,
-        //                 inputId: inputId,
-        //                 title: baton.view.conditionsTranslation.newtest,
-        //                 dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions({ 'testValue': gt('testValue') })) },
-        //                 inputLabel: baton.view.conditionsTranslation.envelope + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
-        //                 inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-        //                 errorView: true
-        //             })
-        //         );
-
-        //     }
-
-        // });
-
-    });
-
+    return {
+        processConfig: processConfig
+    };
 
 });

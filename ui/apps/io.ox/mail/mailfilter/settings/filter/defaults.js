@@ -11,121 +11,39 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/settings/filter/defaults', function () {
+define('io.ox/mail/mailfilter/settings/filter/defaults', [
+    'io.ox/core/extensions'
+], function (ext) {
 
     'use strict';
 
-    return {
-        tests: {
-            'From': {
-                'comparison': 'contains',
-                'headers': ['From'],
-                'id': 'header',
-                'values': ['']
+    var conditionsTranslation = {},
+        actionsTranslations = {},
+        actionCapabilities = {},
+        conditionsMapping = {},
+        defaults = {
+            tests: {
+                'true': {
+                    'id': 'true'
+                }
             },
-            'any': {
-                'comparison': 'contains',
-                'headers': ['To', 'Cc'],
-                'id': 'header',
-                'values': ['']
-            },
-            'Subject': {
-                'comparison': 'contains',
-                'headers': ['Subject'],
-                'id': 'header',
-                'values': ['']
-            },
-            'mailingList': {
-                'comparison': 'contains',
-                'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
-                'id': 'header',
-                'values': ['']
-            },
-            'To': {
-                'comparison': 'contains',
-                'headers': ['To'],
-                'id': 'header',
-                'values': ['']
-            },
-            'Cc': {
-                'comparison': 'contains',
-                'headers': ['Cc'],
-                'id': 'header',
-                'values': ['']
-            },
-            'cleanHeader': {
-                'comparison': 'matches',
-                'headers': [''],
-                'id': 'header',
-                'values': ['']
-            },
-            'envelope': {
-                'comparison': 'matches',
-                'headers': ['To'],
-                'id': 'envelope',
-                'values': ['']
-            },
-            'true': {
-                'id': 'true'
-            },
-            'size': {
-                'comparison': 'over',
-                'id': 'size',
-                'size': ''
-            },
-            'body': {
-                'id': 'body',
-                'comparison': 'contains',
-                'extensionskey': 'text',
-                'extensionsvalue': null,
-                'values': ['']
-            },
-            'currentdate': {
-                'id': 'currentdate',
-                'comparison': 'ge',
-                'datepart': 'date',
-                'datevalue': []
-            },
-            'address': {
-                'id': 'address',
-                'comparison': 'all',
-                'headers': ['From'],
-                'values': ['']
-            }
-        },
-        actions: {
-            'keep': {
-                'id': 'keep'
-            },
-            'discard': {
-                'id': 'discard'
-            },
-            'redirect': {
-                'id': 'redirect',
-                'to': ''
-            },
-            'move': {
-                'id': 'move',
-                'into': 'default0/INBOX'
-            },
-            'reject': {
-                'id': 'reject',
-                'text': ''
+            actions: {}
+        };
 
-            },
-            'markmail': {
-                'flags': ['\\seen'],
-                'id': 'addflags'
-            },
-            'tag': {
-                'flags': ['$'],
-                'id': 'addflags'
+    ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
+        point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
+    });
 
-            },
-            'flag': {
-                'flags': ['$cl_1'],
-                'id': 'addflags'
-            }
-        }
-    };
+    ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
+        point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
+    });
+
+    _.extend(defaults, {
+        conditionsTranslation: conditionsTranslation,
+        actionsTranslations: actionsTranslations,
+        actionCapabilities: actionCapabilities,
+        conditionsMapping: conditionsMapping
+    });
+
+    return defaults;
 });
