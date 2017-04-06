@@ -926,8 +926,17 @@ msgstr "Lisää tilisi"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "%1$s, %2$s lisätty."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "%1$s, %2$s lisätty."
 
 #. %s is a list of filenames separeted by commas
@@ -1523,6 +1532,11 @@ msgstr "Piilotettu kopio"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Sininen"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2195,11 +2209,6 @@ msgstr "Sisältää merkkejä"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Sisältää merkkejä"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Sisältö"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4037,6 +4046,14 @@ msgstr "Mahduta näyttöön"
 msgid "Fit to screen width"
 msgstr "Mahduta näytönleveyteen"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Liputa"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5018,6 +5035,10 @@ msgstr "Sommittelu"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Lue lisää"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6461,6 +6482,12 @@ msgstr "Muu osoite"
 msgid "Outgoing server (SMTP)"
 msgstr "Lähtevän postin palvelin (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Viestikiintiö"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Myöhässä"
@@ -6889,6 +6916,12 @@ msgstr "Ole hyvä ja arvioi tämä tuote"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Valitse tuotava tiedosto"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Valitse vähintään yksi päivä."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7610,9 +7643,18 @@ msgstr "Poista jäsen"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s, %2$s poistettu."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Poista  %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8147,11 +8189,6 @@ msgstr "Lähetä lomailmoitus vain tänä aikana"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Sender"
-msgstr "Lähettäjä"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
 msgstr "Lähettäjä"
 
 #. %1$d is number of messages; %2$d is progress in percent
@@ -11720,6 +11757,9 @@ msgstr "vvvv"
 #~ msgid "Confirmation status"
 #~ msgstr "Vahvistustilanne"
 
+#~ msgid "Content"
+#~ msgstr "Sisältö"
+
 #, fuzzy
 #~ msgid "Continue Presentation"
 #~ msgstr "Tehtäväkutsut"
@@ -12815,6 +12855,9 @@ msgstr "vvvv"
 
 #~ msgid "Sender address"
 #~ msgstr "Lähettäjän osoite"
+
+#~ msgid "Sender/From"
+#~ msgstr "Lähettäjä"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Sähköpostin lähettäminen yhteystietoa käyttäen"

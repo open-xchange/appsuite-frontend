@@ -924,9 +924,17 @@ msgstr ""
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr ""
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+msgid "Added %1$s."
+msgstr "Байршил"
 
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
@@ -1500,6 +1508,11 @@ msgstr ""
 #: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2168,11 +2181,6 @@ msgstr ""
 #, fuzzy
 msgid "Contains not"
 msgstr "Контактыг устгах"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -3986,6 +3994,11 @@ msgstr ""
 msgid "Fit to screen width"
 msgstr ""
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Flag"
+msgstr ""
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -4928,6 +4941,10 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
+msgstr ""
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
 msgstr ""
 
 #. Emoji category
@@ -6350,6 +6367,10 @@ msgstr ""
 msgid "Outgoing server (SMTP)"
 msgstr ""
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+msgid "Overall quota"
+msgstr ""
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr ""
@@ -6769,6 +6790,11 @@ msgstr "Өнгөрсөн нэг огноог оруулна уу"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr ""
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+msgid "Please select a rating."
+msgstr "Өнгөрсөн нэг огноог оруулна уу"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7477,8 +7503,15 @@ msgstr ""
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
+msgstr ""
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "Removed %1$s."
 msgstr ""
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
@@ -7991,11 +8024,6 @@ msgstr ""
 #| msgid "Reminder"
 msgid "Sender"
 msgstr "Сануулагч"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr ""
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail

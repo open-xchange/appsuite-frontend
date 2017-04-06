@@ -962,8 +962,17 @@ msgstr "Adaugați contul dumneavoastră"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "S-a adăugat %1$s, %2$s."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "S-a adăugat %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1568,6 +1577,11 @@ msgstr "Copie ascunsă"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Albastru"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2244,11 +2258,6 @@ msgstr "Conține"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Conține"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Conținut"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4109,6 +4118,14 @@ msgstr "Ajustează la dimensiunea ecranului"
 msgid "Fit to screen width"
 msgstr "Ajustează la lățimea ecranului"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Marchează"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5092,6 +5109,10 @@ msgstr "Aspect"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Mai multe informații"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6540,6 +6561,12 @@ msgstr "Altă adresă"
 msgid "Outgoing server (SMTP)"
 msgstr "Server de expediere (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Cotă de mail"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Scadență depășită"
@@ -6969,6 +6996,12 @@ msgstr "Evaluați acest produs"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selectați fișierul care trebuie importat"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a rating."
+msgstr "Selectați fișierul de inserat"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7693,9 +7726,18 @@ msgstr "Elimină membrul"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "S-a eliminat %1$s, %2$s."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Elimină %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8233,11 +8275,6 @@ msgstr "Trimite mesajul de absență numai în această perioadă"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "Expeditor"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Expeditor/De la"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12660,6 +12697,9 @@ msgstr "aaaa"
 #~ msgid "Contact overview"
 #~ msgstr "Prezentare generală a contactului"
 
+#~ msgid "Content"
+#~ msgstr "Conținut"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -15445,9 +15485,6 @@ msgstr "aaaa"
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Selectați o țară pentru adresa de pornire"
 
-#~ msgid "Please select a file to insert"
-#~ msgstr "Selectați fișierul de inserat"
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "Selectați o singură publicație"
 
@@ -16014,6 +16051,9 @@ msgstr "aaaa"
 
 #~ msgid "Sender address"
 #~ msgstr "Adresă expeditor"
+
+#~ msgid "Sender/From"
+#~ msgstr "Expeditor/De la"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Trimiterea unui e-mail către un contact"

@@ -963,8 +963,17 @@ msgstr "Přidat váš účet"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "Přidán %1$s, %2$s."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "Přidán %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1562,6 +1571,11 @@ msgstr "Slepá kopie"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "modrá"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2233,11 +2247,6 @@ msgstr "Obsahuje"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Obsahuje"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Obsah"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4081,6 +4090,14 @@ msgstr "Přizpůsobit velikosti obrazovky"
 msgid "Fit to screen width"
 msgstr "Přizpůsobit šířce obrazovky"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Příznak"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5060,6 +5077,10 @@ msgstr "Rozložení"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Dozvědět se více"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6509,6 +6530,12 @@ msgstr "Další adresa"
 msgid "Outgoing server (SMTP)"
 msgstr "Odchozí server (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Limit zpráv"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Zpoždění"
@@ -6937,6 +6964,12 @@ msgstr "Ohodnoťte, prosím, tento produkt"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Vyberte, prosím, soubor k importu"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select a file to insert"
+msgid "Please select a rating."
+msgstr "Vyberte, prosím, soubor k vložení"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7657,9 +7690,18 @@ msgstr "Odstranit člena"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Odstraněn %1$s, %2$s."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Odstranit %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8196,11 +8238,6 @@ msgstr "Oznámení o nepřítomnosti posílat pouze v tuto dobu"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "Odesílatel"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Odesílatel/od"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -14161,6 +14198,9 @@ msgstr "rrrr"
 #~ msgid "Contact overview"
 #~ msgstr "Přehled kontaktu"
 
+#~ msgid "Content"
+#~ msgstr "Obsah"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Druh obsahu:"
 
@@ -17472,9 +17512,6 @@ msgstr "rrrr"
 #~ msgid "Please select a country for the start address"
 #~ msgstr "Vyberte, prosím, zemi pro počáteční adresu"
 
-#~ msgid "Please select a file to insert"
-#~ msgstr "Vyberte, prosím, soubor k vložení"
-
 #~ msgid "Please select only one Publication"
 #~ msgstr "Vyberte, prosím, jen jednu publikaci"
 
@@ -18113,6 +18150,9 @@ msgstr "rrrr"
 
 #~ msgid "Sender address"
 #~ msgstr "Adresa odesílatele"
+
+#~ msgid "Sender/From"
+#~ msgstr "Odesílatel/od"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Poslání zprávy kontaktu"

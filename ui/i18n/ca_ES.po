@@ -964,9 +964,17 @@ msgstr "Afegeix el meu compte"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
 msgid "Added %1$s, %2$s."
+msgstr "%1$s %2$s"
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+msgid "Added %1$s."
 msgstr "%1$s %2$s"
 
 #. %s is a list of filenames separeted by commas
@@ -1572,6 +1580,11 @@ msgstr ""
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blau"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2267,11 +2280,6 @@ msgstr "Conté"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Conté"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr ""
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4175,6 +4183,11 @@ msgstr ""
 msgid "Fit to screen width"
 msgstr ""
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Flag"
+msgstr ""
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5187,6 +5200,10 @@ msgstr "Disposició"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
+msgstr ""
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
 msgstr ""
 
 #. Emoji category
@@ -6692,6 +6709,12 @@ msgstr "Altres adreces"
 msgid "Outgoing server (SMTP)"
 msgstr "Paràmetres del servidor de sortida (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Quota de correu"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Vençut"
@@ -7127,6 +7150,11 @@ msgstr "Per favor, introduïu una data ja passada"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
+msgstr "Per favor, seleccionau un fitxer a importar"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+msgid "Please select a rating."
 msgstr "Per favor, seleccionau un fitxer a importar"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -7871,9 +7899,17 @@ msgstr "novembre"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
 msgid "Removed %1$s, %2$s."
+msgstr "Suprimeix"
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+msgid "Removed %1$s."
 msgstr "Suprimeix"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
@@ -8411,11 +8447,6 @@ msgstr "Envia un avís d'absència només durant aquest període de temps"
 #| msgid "Send"
 msgid "Sender"
 msgstr "Envia"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Remitent/De"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12406,6 +12437,9 @@ msgstr ""
 #~| msgid "Other address"
 #~ msgid "Sender address"
 #~ msgstr "Altres adreces"
+
+#~ msgid "Sender/From"
+#~ msgstr "Remitent/De"
 
 #~ msgid "September"
 #~ msgstr "setembre"

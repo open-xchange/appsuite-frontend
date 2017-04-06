@@ -922,8 +922,17 @@ msgstr "添加您的帐户"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "添加了 %1$s、%2$s。"
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "添加了 %1$s、%2$s。"
 
 #. %s is a list of filenames separeted by commas
@@ -1503,6 +1512,11 @@ msgstr "暗送"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "蓝色"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2172,11 +2186,6 @@ msgstr "包含"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "包含"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "内容"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -3991,6 +4000,14 @@ msgstr "调整成屏幕大小"
 msgid "Fit to screen width"
 msgstr "调整成屏幕宽度"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "标记"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -4960,6 +4977,10 @@ msgstr "布局"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "了解更多"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6395,6 +6416,12 @@ msgstr "其他地址"
 msgid "Outgoing server (SMTP)"
 msgstr "外送服务器 (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "电子邮件限额"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "过期"
@@ -6814,6 +6841,12 @@ msgstr "请评价此产品"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "请选择一个汇入的文件"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "请选择最少一天"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7524,9 +7557,18 @@ msgstr "移除成员"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "已移除 %1$s,、%2$s。"
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "移除 %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8059,11 +8101,6 @@ msgstr "只于此时间发送假期通知"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "发送者"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "发送者/来自"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12269,6 +12306,9 @@ msgstr "年"
 #~ msgid "Contact overview"
 #~ msgstr "联系人概览"
 
+#~ msgid "Content"
+#~ msgstr "内容"
+
 #~ msgid "Content-Type:"
 #~ msgstr "内容类型："
 
@@ -14400,6 +14440,9 @@ msgstr "年"
 
 #~ msgid "Sender address"
 #~ msgstr "发送者地址"
+
+#~ msgid "Sender/From"
+#~ msgstr "发送者/来自"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "发送一个电子邮件的一个联系人中"

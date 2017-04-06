@@ -933,8 +933,17 @@ msgstr "Aggiungi il tuo account"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "Aggiunto %1$s, %2$s."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "Aggiunto %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1543,6 +1552,11 @@ msgstr "Copia nascosta"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blu"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2216,11 +2230,6 @@ msgstr "Contiene"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Contiene"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Contenuto"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4074,6 +4083,14 @@ msgstr "Adatta alle dimensioni dello schermo"
 msgid "Fit to screen width"
 msgstr "Adatta alla larghezza dello schermo"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Contrassegno"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5058,6 +5075,10 @@ msgstr "Disposizione"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Per saperne di più"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6503,6 +6524,12 @@ msgstr "Altro indirizzo"
 msgid "Outgoing server (SMTP)"
 msgstr "Server della posta in uscita (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Quota di posta"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Oltre la scadenza"
@@ -6934,6 +6961,12 @@ msgstr "Valuta questo prodotto"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selezionare un file da importare"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Selezionare almeno un giorno"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7656,9 +7689,18 @@ msgstr "Rimuovi membro"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Rimosso %1$s, %2$s."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Rimuovi %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8196,11 +8238,6 @@ msgstr "Invia l'avviso di assenza solo durante questo orario"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "Mittente"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Mittente/Da"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -12607,6 +12644,9 @@ msgstr "aaaa"
 #~ msgid "Contact overview"
 #~ msgstr "Riepilogo contatto"
 
+#~ msgid "Content"
+#~ msgstr "Contenuto"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Tipo di contenuto:"
 
@@ -14721,6 +14761,9 @@ msgstr "aaaa"
 
 #~ msgid "Sender address"
 #~ msgstr "Indirizzo del mittente"
+
+#~ msgid "Sender/From"
+#~ msgstr "Mittente/Da"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Inviare un messaggio a un contatto"

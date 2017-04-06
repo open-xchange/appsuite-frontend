@@ -930,8 +930,17 @@ msgstr "Fiók hozzáadása"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "%1$s, %2$s hozzáadva."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "%1$s, %2$s hozzáadva."
 
 #. %s is a list of filenames separeted by commas
@@ -1537,6 +1546,11 @@ msgstr "Rejtett másolat"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Kék"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2211,11 +2225,6 @@ msgstr "Tartalmazza"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Tartalmazza"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Tartalom"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4065,6 +4074,14 @@ msgstr "Képernyőhöz igazítás"
 msgid "Fit to screen width"
 msgstr "Szélességhez igazítás"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Megjelöl"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5047,6 +5064,10 @@ msgstr "Elrendezés"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "További információ"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6488,6 +6509,12 @@ msgstr "Egyéb cím"
 msgid "Outgoing server (SMTP)"
 msgstr "Kimenő kiszolgáló (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Levélkvóta"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Lejárt"
@@ -6916,6 +6943,12 @@ msgstr "Értékelje ezt a terméket"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Válassza ki a fájlt az importáláshoz"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Válasszon ki legalább egy napot"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7637,9 +7670,18 @@ msgstr "Tag eltávolítása"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s, %2$s eltávolítva."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "%1$s eltávolítás"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8178,11 +8220,6 @@ msgstr "Szabadságértesítő küldése csak ezen idő alatt"
 #| msgid "Send"
 msgid "Sender"
 msgstr "Küldés"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Küldő/Feladó"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -11563,6 +11600,9 @@ msgstr "yyyy"
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Beérkezett üzenetek lapjainak beállítása"
 
+#~ msgid "Content"
+#~ msgstr "Tartalom"
+
 #~ msgid "Continue presentation"
 #~ msgstr "Bemutató folytatása"
 
@@ -12082,6 +12122,9 @@ msgstr "yyyy"
 
 #~ msgid "Sender address"
 #~ msgstr "Küldő címe"
+
+#~ msgid "Sender/From"
+#~ msgstr "Küldő/Feladó"
 
 #~ msgid "September"
 #~ msgstr "Szeptember"

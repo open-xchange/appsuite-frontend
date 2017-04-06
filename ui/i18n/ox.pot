@@ -6363,16 +6363,32 @@ msgstr ""
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr ""
 
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js
+#: module:io.ox/core
+msgid "Added %1$s."
+msgstr ""
+
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
 msgid "Removed %1$s, %2$s."
+msgstr ""
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js
+#: module:io.ox/core
+msgid "Removed %1$s."
 msgstr ""
 
 #: apps/io.ox/core/tk/upload.js
@@ -9565,7 +9581,7 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Content"
+msgid "Body"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -9642,11 +9658,6 @@ msgstr ""
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Header"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -10644,6 +10655,12 @@ msgstr ""
 #: apps/io.ox/mail/vacationnotice/settings/view-form.js
 #: module:io.ox/mail
 msgid "The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:"
+msgstr ""
+
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
+msgid "Flag"
 msgstr ""
 
 #: apps/io.ox/mail/view-options.js
@@ -12096,6 +12113,11 @@ msgstr ""
 msgid "Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly."
 msgstr ""
 
+#: apps/plugins/core/feedback/register.js
+#: module:io.ox/core
+msgid "Please select a rating."
+msgstr ""
+
 #. popup info message
 #: apps/plugins/core/feedback/register.js
 #: module:io.ox/core
@@ -12743,6 +12765,11 @@ msgstr ""
 
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
+msgid "Overall quota"
+msgstr ""
+
+#: apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Mail count quota"
 msgstr ""
 
@@ -13031,6 +13058,11 @@ msgstr ""
 #: apps/plugins/portal/userSettings/register.js
 #: module:io.ox/core
 msgid "Your current password"
+msgstr ""
+
+#: apps/plugins/portal/userSettings/register.js
+#: module:io.ox/core
+msgid "Leave empty if you have none"
 msgstr ""
 
 #: apps/plugins/portal/userSettings/register.js

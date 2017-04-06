@@ -931,8 +931,17 @@ msgstr "Add your account"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "Added %1$s, %2$s."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "Added %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1530,6 +1539,11 @@ msgstr "Blind copy"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blue"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2201,11 +2215,6 @@ msgstr "Contains"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Contains"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Content"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4053,6 +4062,14 @@ msgstr "Fit to screen size"
 msgid "Fit to screen width"
 msgstr "Fit to screen width"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Flag"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5036,6 +5053,10 @@ msgstr "Layout"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Learn more"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6476,6 +6497,12 @@ msgstr "Other address"
 msgid "Outgoing server (SMTP)"
 msgstr "Outgoing server (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "Mail quota"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Overdue"
@@ -6905,6 +6932,12 @@ msgstr "Please rate this product"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Please select a file to import"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Please select at least one day"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7627,9 +7660,18 @@ msgstr "Remove member"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Removed %1$s, %2$s."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Remove %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8165,11 +8207,6 @@ msgstr "Send vacation notice during this time only"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "Sender"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Sender/From"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -11785,6 +11822,9 @@ msgstr "yyyy"
 #~ msgid "Confirmation status"
 #~ msgstr "Confirmation status"
 
+#~ msgid "Content"
+#~ msgstr "Content"
+
 #, fuzzy
 #~ msgid "Continue Presentation"
 #~ msgstr "Task invitations"
@@ -13060,6 +13100,9 @@ msgstr "yyyy"
 
 #~ msgid "Sender address"
 #~ msgstr "Sender address"
+
+#~ msgid "Sender/From"
+#~ msgstr "Sender/From"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Sending an email to a contact"

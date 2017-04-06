@@ -937,8 +937,17 @@ msgstr "Uw account toevoegen"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "%1$s toegevoegd, %2$s."
+
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "%1$s toegevoegd, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1548,6 +1557,11 @@ msgstr "Blinde kopie"
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blauw"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -2224,11 +2238,6 @@ msgstr "Bevat"
 #| msgid "Contains"
 msgid "Contains not"
 msgstr "Bevat"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Content"
-msgstr "Inhoud"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -4089,6 +4098,14 @@ msgstr "Aanpassen aan schermformaat"
 msgid "Fit to screen width"
 msgstr "Aanpassen aan schermbreedte"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Vlag"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
@@ -5075,6 +5092,10 @@ msgstr "Layout"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Learn more"
 msgstr "Leer meer"
+
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -6528,6 +6549,12 @@ msgstr "Ander adres"
 msgid "Outgoing server (SMTP)"
 msgstr "Uitgaande server (SMTP)"
 
+#: apps/plugins/portal/quota/register.js module:plugins/portal
+#, fuzzy
+#| msgid "Mail quota"
+msgid "Overall quota"
+msgstr "E-mailquota"
+
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Te laat"
@@ -6963,6 +6990,12 @@ msgstr "Geef alstublieft feedback over dit product"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selecteer een bestand voor import"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Selecteer alstublieft minimaal één dag."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7690,9 +7723,18 @@ msgstr "Verwijder deelnemer"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s verwijderd, %2$s."
+
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Verwijder %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -8229,11 +8271,6 @@ msgstr "Stuur alleen een afwezigheidsmelding gedurende deze periode"
 #: module:io.ox/mailfilter
 msgid "Sender"
 msgstr "Verzender"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender/From"
-msgstr "Verzender/Van"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -11845,6 +11882,9 @@ msgstr "yyyy"
 #~ msgid "Confirmation status"
 #~ msgstr "bevestigingsstatus"
 
+#~ msgid "Content"
+#~ msgstr "Inhoud"
+
 #, fuzzy
 #~ msgid "Continue Presentation"
 #~ msgstr "Taak uitnodigingen"
@@ -12948,6 +12988,9 @@ msgstr "yyyy"
 
 #~ msgid "Sender address"
 #~ msgstr "Verzendadres"
+
+#~ msgid "Sender/From"
+#~ msgstr "Verzender/Van"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Versturen van e-mailberichten naar een contactpersoon"
