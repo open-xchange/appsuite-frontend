@@ -45,6 +45,9 @@ define('io.ox/calendar/util', [
         superessiveWeekdays = [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Sunday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
             gt.pgettext('superessive', 'Monday'),
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
@@ -60,10 +63,7 @@ define('io.ox/calendar/util', [
             gt.pgettext('superessive', 'Friday'),
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
-            gt.pgettext('superessive', 'Saturday'),
-            //#. superessive of the weekday
-            //#. will only be used in a form like “Happens every week on $weekday”
-            gt.pgettext('superessive', 'Sunday')
+            gt.pgettext('superessive', 'Saturday')
         ];
 
     var that = {
@@ -490,7 +490,7 @@ define('io.ox/calendar/util', [
                         var mask = 1 << ((index + firstDayOfWeek) % 7);
                         if ((days & mask) !== 0) {
                             return options.superessive ?
-                                superessiveWeekdays[index] :
+                                superessiveWeekdays[(index + firstDayOfWeek) % 7] :
                                 moment().weekday(index).format('dddd');
                         }
                     }).compact().value();
