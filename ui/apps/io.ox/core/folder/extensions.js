@@ -52,8 +52,9 @@ define('io.ox/core/folder/extensions', [
             _(account.getTypes()).each(function (type, folder) {
                 if (type === 'inbox') return;
                 if (!account.isPrimary(folder)) return;
-                // non-default folders which are not the archive folder (if enabled) are skipped
-                if (!defaultFolders[type] && (type !== 'archive' || !capabilities.has('archive_emails'))) return;
+                // non-default and undefined folders are skipped
+                if (!defaultFolders[type]) return;
+                if (type === 'archive' && !capabilities.has('archive_emails')) return;
                 list.push(api.get(folder));
             });
             http.resume();
