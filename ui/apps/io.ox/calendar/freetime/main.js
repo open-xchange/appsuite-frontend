@@ -262,11 +262,18 @@ define('io.ox/calendar/freetime/main', [
         };
 
         app.failRestore = function (point) {
-            this.view.model.get('participants').add(point.participants);
-            this.view.timeSubview.setDate(point.currentWeek);
+
             this.view.timeSubview.lassoStart = point.lassoStart;
             this.view.timeSubview.lassoEnd = point.lassoEnd;
+            this.view.timeSubview.setDate(point.currentWeek);
             this.view.timeSubview.updateLasso(true);
+            if (!point.lassoStart) {
+                this.view.timeSubview.keepScrollpos = 'today';
+            } else {
+                this.view.timeSubview.keepScrollpos = this.view.timeSubview.lassoStartTime;
+            }
+            this.view.model.get('participants').add(point.participants);
+
             return $.when();
         };
 
