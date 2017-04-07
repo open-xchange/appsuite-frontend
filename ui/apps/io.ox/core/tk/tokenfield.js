@@ -343,10 +343,15 @@ define('io.ox/core/tk/tokenfield', [
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
                     var message;
-                    if (e.attrs.model.get('display_name') && e.attrs.model.value) {
-                        //#. %1$s is the display name of an added user or mail recipient
-                        //#. %2$s is the email address of the user or mail recipient
-                        message = gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value);
+                    if (e.attrs.model.get('display_name')) {
+                        if (e.attrs.model.value && e.attrs.model.value !== e.attrs.model.get('display_name')) {
+                            //#. %1$s is the display name of an added user or mail recipient
+                            //#. %2$s is the email address of the user or mail recipient
+                            message = gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value);
+                        } else {
+                            //#. %1$s is the display name of an added user or mail recipient
+                            message = gt('Added %1$s.', e.attrs.model.get('display_name'));
+                        }
                     } else if (e.attrs.model.get('name') && e.attrs.model.get('detail')) {
                         //#. %1$s is the added search query
                         //#. %2$s is the context of the added search query
@@ -421,10 +426,15 @@ define('io.ox/core/tk/tokenfield', [
                         if (!model) return;
 
                         var message;
-                        if (model.get('display_name') && model.value) {
-                            //#. %1$s is the display name of a removed user or mail recipient
-                            //#. %2$s is the email address of the user or mail recipient
-                            message = gt('Removed %1$s, %2$s.', model.get('display_name'), model.value);
+                        if (model.get('display_name')) {
+                            if (model.value && model.value !== model.get('display_name')) {
+                                //#. %1$s is the display name of a removed user or mail recipient
+                                //#. %2$s is the email address of the user or mail recipient
+                                message = gt('Removed %1$s, %2$s.', model.get('display_name'), model.value);
+                            } else {
+                                //#. %1$s is the display name of a removed user or mail recipient
+                                message = gt('Removed %1$s.', model.get('display_name'));
+                            }
                         } else if (model.get('name') && model.get('detail')) {
                             //#. %1$s is the removed search query
                             //#. %2$s is the context of the removed search query
