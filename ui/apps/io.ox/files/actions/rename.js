@@ -23,7 +23,7 @@ define('io.ox/files/actions/rename', [
 
     return function (data) {
 
-        var filename = data.filename || data.title;
+        var filename = data['com.openexchange.file.sanitizedFilename'] || data.filename || data.title;
 
         function rename(name) {
             // 'title only' entries vs files
