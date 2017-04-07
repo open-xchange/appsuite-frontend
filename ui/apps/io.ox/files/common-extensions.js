@@ -57,7 +57,7 @@ define('io.ox/files/common-extensions', [
 
         filename: function (baton, ellipsis) {
             var
-                filename = baton.data.filename || baton.data.title || '',
+                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '',
                 tooltipTitle = filename,
                 isWrapFilename = false;
 
