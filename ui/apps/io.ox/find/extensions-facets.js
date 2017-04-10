@@ -221,9 +221,11 @@ define('io.ox/find/extensions-facets', [
             return function (baton) {
                 var target = links[baton.app.getModuleParam()];
                 if (!target) return;
+                var helpView = new HelpView({ href: target });
+                if (helpView.$el.hasClass('hidden')) return;
                 this.append($('<li class="pull-right">').append(
                     $('<a href="#">').append(
-                        new HelpView({ href: target }).render().$el
+                        helpView.render().$el
                     )
                 ));
             };

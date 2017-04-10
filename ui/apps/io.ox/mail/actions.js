@@ -656,7 +656,7 @@ define('io.ox/mail/actions', [
         prio: 'hi',
         id: 'reply-all',
         mobile: 'lo',
-        label: gt('Reply All'),
+        label: gt('Reply all'),
         ref: 'io.ox/mail/actions/reply-all',
         drawDisabled: true,
         section: 'standard'

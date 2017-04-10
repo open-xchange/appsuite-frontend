@@ -203,7 +203,8 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                title: gt('File quota'),
+                //#. Quota means a general quota for mail and files
+                title: coreSettings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('File quota'),
                 renderUnlimited: false,
                 module: 'file',
                 upsell: {

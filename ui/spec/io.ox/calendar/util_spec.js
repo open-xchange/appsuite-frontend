@@ -118,14 +118,24 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
         describe('should translate recurrence strings', function () {
 
             var data = {
-                day_in_month: 13,
-                days: 1,
-                interval: 1,
-                month: 1,
-                recurrence_type: 1
-            };
+                    day_in_month: 13,
+                    days: 1,
+                    interval: 1,
+                    month: 1,
+                    recurrence_type: 1
+                },
+                localeWeek = {
+                    dow: moment.localeData().firstDayOfWeek(),
+                    doy: moment.localeData().firstDayOfYear()
+                };
 
-            it('Only works for en_US', function () {
+            afterEach(function () {
+                moment.updateLocale('de', {
+                    week: localeWeek
+                });
+            });
+
+            it('Only works for de_DE', function () {
                 expect(ox.language).to.equal('de_DE');
             });
 
@@ -183,6 +193,15 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             // Weekly - interval > 1
             it('Every 2 weeks on Monday', function () {
+                data.days = util.days.MONDAY;
+                data.interval = 2;
+                var str = util.getRecurrenceString(data);
+                expect(str).to.equal('Alle 2 Wochen am Montag.');
+            });
+
+            // test if superessive days and start of the week work well together
+            it('Every 2 weeks on Monday with start of week = 3', function () {
+                moment.updateLocale('de', { week: { dow: 3, doy: localeWeek.doy } });
                 data.days = util.days.MONDAY;
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);

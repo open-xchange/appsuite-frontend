@@ -44,7 +44,7 @@ define('io.ox/mail/mailfilter/settings/util', [
             if (actionname === 'addflags' && /^\$cl_\d+$/.test(_(action.flags).first())) actionname = 'flag';
 
             switch (testname) {
-                case 'From':
+                case 'from':
                 case 'address':
                     //#. This is a summary for a mail filter rule
                     //#. Example: Keep mails from test@invalid
@@ -93,8 +93,8 @@ define('io.ox/mail/mailfilter/settings/util', [
                     if (actionname === 'addflags') return gt('Tag mails from %1$s with %2$s', _(test.values).first(), _(action.flags).first().substr(1));
                     break;
                 case 'any':
-                case 'To':
-                case 'Cc':
+                case 'to':
+                case 'cc':
                     //#. This is a summary for a mail filter rule
                     //#. Example: Keep mails to test@invalid
                     if (actionname === 'keep') return gt('Keep mails to %1$s', _(test.values).first());
@@ -141,7 +141,7 @@ define('io.ox/mail/mailfilter/settings/util', [
                     //#. Example: Tag mails to test@invalid with SoccerTeam
                     if (actionname === 'addflags') return gt('Tag mails to %1$s with %2$s', _(test.values).first(), _(action.flags).first().substr(1));
                     break;
-                case 'Subject':
+                case 'subject':
                     //#. This is a summary for a mail filter rule
                     //#. Example: Keep mails with subject Some subject
                     if (actionname === 'keep') return gt('Keep mails with subject %1$s', _(test.values).first());

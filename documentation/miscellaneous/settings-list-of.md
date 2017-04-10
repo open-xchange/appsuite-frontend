@@ -519,6 +519,9 @@ settings!io.ox/mail
 **namespace**
 > Check if 'altnamespace' is enabled that does not has a 'INBOX' part
 
+**defaultFolder/[type]**
+> Name of default folder or `null` of not existing
+
 
 ## Folderpopup
 

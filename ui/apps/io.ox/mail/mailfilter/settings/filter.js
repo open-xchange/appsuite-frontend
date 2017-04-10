@@ -25,28 +25,22 @@ define('io.ox/mail/mailfilter/settings/filter', [
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/disposable',
     'settings!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/mail/mailfilter/settings/style'
 
-], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings) {
+], function (ext, api, mailfilterModel, dialogs, ModalDialog, notifications, settingsUtil, FilterDetailView, gt, listUtils, ListView, DisposableView, settings, DEFAULTS) {
 
     'use strict';
 
     var factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', api),
         collection,
         notificationId = _.uniqueId('notification_'),
-        conditionsTranslation = {},
-        actionsTranslations = {},
-        defaults = {
-            tests: {
-                'true': {
-                    'id': 'true'
-                }
-            },
-            actions: {}
-        },
-        actionCapabilities = {},
-        conditionsMapping = {};
+        conditionsTranslation = DEFAULTS.conditionsTranslation,
+        actionsTranslations = DEFAULTS.actionsTranslations,
+        defaults = DEFAULTS,
+        actionCapabilities = DEFAULTS.actionCapabilities,
+        conditionsMapping = DEFAULTS.conditionsMapping;
 
     function containsStop(actioncmds) {
         var stop = false;
@@ -542,14 +536,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 model: mailfilterModel,
                 filterDefaults: defaults
             };
-
-            ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
-                point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
-            });
-
-            ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
-                point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
-            });
 
             return $.when(api.getRules(), api.getConfig(), options);
         },

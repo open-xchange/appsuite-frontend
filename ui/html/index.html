@@ -94,7 +94,7 @@
     </head>
     <body class="unselectable">
         <!-- Visual overlays -->
-        <div id="background-loader" class="busy">
+        <div id="background-loader" class="busy" aria-hidden="true">
             <div class="throbber">
               <div class="bounce1"></div>
               <div class="bounce2"></div>
@@ -134,8 +134,8 @@
                 <div id="io-ox-login-container" class="container">
                     <div id="io-ox-login-header">
                         <h1>
-                            <span id='io-ox-login-header-prefix'></span>
-                            <span id='io-ox-login-header-label'>...</span>
+                            <span id="io-ox-login-header-prefix" aria-hidden="true"></span>
+                            <span id="io-ox-login-header-label" aria-hidden="true">...</span>
                         </h1>
                     </div>
                     <div id="io-ox-login-form-container">
@@ -182,9 +182,7 @@
                             </div>
                             <div class="row buttons">
                                 <div class="form-group col-sm-6 col-xs-12">
-                                    <input type="submit" name="signin"
-                                        id="io-ox-login-button" class="btn btn-primary form-control"
-                                        value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
+                                    <input type="submit" name="signin" id="io-ox-login-button" class="btn btn-primary form-control" value="Sign in" data-i18n="Sign in" data-i18n-attr="value,aria-label"/>
                                 </div>
                             </div>
                         </form>
@@ -203,9 +201,7 @@
                             </div>
                             <div class="row button">
                                 <div class="form-group col-sm-6 col-xs-12">
-                                    <input type="submit" name="resetpassword"
-                                        id="resetpassword-button" class="btn btn-primary form-control"
-                                        value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
+                                    <input type="submit" name="resetpassword" id="resetpassword-button" class="btn btn-primary form-control" value="Reset my password" data-i18n="Next" data-i18n-attr="value,aria-label">
                                 </div>
                                 <div class="col-sm-6 col-xs-12 text-right" id="io-ox-backtosignin">
                                     <a href="#" target="_blank" data-i18n="Back to sign in">Back to sign in</a>

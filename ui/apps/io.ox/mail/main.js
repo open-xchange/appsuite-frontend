@@ -35,6 +35,7 @@ define('io.ox/mail/main', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
+    'settings!io.ox/core',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -42,7 +43,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -371,7 +372,8 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                title: gt('Mail quota'),
+                //#. Quota means a general quota for mail and files
+                title: coreSettings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('Mail quota'),
                 renderUnlimited: false,
                 upsell: {
                     title: gt('Need more space?'),
@@ -392,6 +394,13 @@ define('io.ox/mail/main', [
             app.treeView.$el.append(
                 quota.render().$el
             );
+        },
+
+        'select-all-actions': function () {
+            // otherwise user would have wait for 'auto refresh'
+            api.on('move deleted-mails archive', function () {
+                if (!app.listView.collection.length) app.listView.reload();
+            });
         },
 
         /*
@@ -644,7 +653,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 

@@ -4,8 +4,8 @@
 <title>Kapitel 11. Datenorganisation</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
-<link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="index.html" title="Benutzeranleitung">
+<link rel="home" href="index.html" title="1&amp;1 Webmail Server">
+<link rel="up" href="index.html" title="1&amp;1 Webmail Server">
 <link rel="prev" href="ox.appsuite.user.sect.pad.edit.html" title="10.2. Textdateien bearbeiten">
 <link rel="next" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Ordner">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
@@ -19,7 +19,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">1&amp;1 Webmail</a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.pad.edit.html">Zurück</a></li>
@@ -46,11 +46,12 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.move.html">11.1.7 Ordner verschieben</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.folder.delete.html">11.1.8 Ordner löschen</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.rights.html">11.2 Berechtigungen</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.permissions.html">11.2 Berechtigungen</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.defined.html">11.2.1 Welche Berechtigungen können erteilt werden?</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.folders.html">11.2.2 Berechtigungen an vorhandenen Ordnern</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.rights.foldernew.html">11.2.3 Berechtigungen an neuen Ordnern</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html">11.2.1 Welche Berechtigungen können erteilt werden?</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.permissions.folder.html">11.2.2 Berechtigungen an vorhandenen Ordnern</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.permissions.newfolder.html">11.2.3 Berechtigungen an neuen Ordnern</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.permissions.examples.html">11.2.4 Anwendungsbeispiele für Berechtigungen</a></span></dt>
 </dl></dd>
 <dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.sharing.html">11.3 Freigaben</a></span></dt>
 <dd><dl>
@@ -59,16 +60,16 @@
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">11.3.3 Auf andere Freigaben zugreifen</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.manage.html">11.3.4 Eigene Freigaben verwalten</a></span></dt>
 <dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.sharing.view.html">11.3.5 Eigene Freigaben in der App 
-        <span class="phrase">Drive</span>
         
         
+        <span class="phrase">Dateien</span>
         
         anzeigen</a></span></dt>
 </dl></dd>
-<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.html">11.4 Abonnements</a></span></dt>
+<dt><span class="sect1"><a href="ox.appsuite.user.sect.dataorganisation.subscribe.html">11.4 Abonnements</a></span></dt>
 <dd><dl>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html">11.4.1 Daten abonnieren</a></span></dt>
-<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.pubsub.manage.html">11.4.2 Abonnierte Ordner verwalten</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.subscribe.data.html">11.4.1 Daten abonnieren</a></span></dt>
+<dt><span class="sect2"><a href="ox.appsuite.user.sect.dataorganisation.subscribe.manage.html">11.4.2 Abonnierte Ordner verwalten</a></span></dt>
 </dl></dd>
 </dl>
 </div>
@@ -79,11 +80,11 @@
 <li class="listitem"><p>Arbeiten Sie effizienter mit Hilfe der 
           <a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.html" title="11.1. Ordner">Ordnerverwaltung</a>.</p></li>
 <li class="listitem"><p>Erfahren Sie die Grundlagen von
-          <a class="link" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Berechtigungen">Berechtigungen</a>.</p></li>
+          <a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. Berechtigungen">Berechtigungen</a>.</p></li>
 <li class="listitem"><p>Organisieren Sie Ihre Arbeit im Team mit Hilfe von 
           <a class="link" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. Freigaben">Freigaben</a>.</p></li>
 <li class="listitem"><p>Nutzen Sie die Daten Ihrer sozialen Netzwerke wie LinkedIn mit Hilfe von 
-          <a class="link" href="ox.appsuite.user.sect.dataorganisation.pubsub.html" title="11.4. Abonnements">Abonnements</a>.</p></li>
+          <a class="link" href="ox.appsuite.user.sect.dataorganisation.subscribe.html" title="11.4. Abonnements">Abonnements</a>.</p></li>
 </ul></div>
 <p>
   </p>

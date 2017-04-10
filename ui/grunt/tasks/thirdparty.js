@@ -122,7 +122,8 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'build/pdf.combined.js'
+                            'build/pdf.combined.js',
+                            'web/images/*'
                         ],
                         cwd: 'bower_components/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/'

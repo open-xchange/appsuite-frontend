@@ -28,6 +28,12 @@
         }
     }
 
+    .dropdown > .dropdown-toggle {
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+
     a.newcondition, a.newaction {
         margin-top: 10px;
         margin-bottom: 25px;
@@ -224,7 +230,7 @@
         width: 44px;
         cursor: pointer;
 
-        &:hover {
+        &:hover, &:focus {
             background-color: @trash-icon-hover-background;
             text-decoration: none;
 

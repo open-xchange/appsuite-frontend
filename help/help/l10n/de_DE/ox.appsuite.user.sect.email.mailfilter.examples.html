@@ -1,0 +1,116 @@
+<html lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>5.6.4. Anwendungsbeispiele für E-Mail Filter</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="1&amp;1 Webmail Server">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. E-Mail Filter verwenden">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Eine Regel ändern">
+<link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.7. E-Mails suchen">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand">1&amp;1 Webmail</a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.change.html">Zurück</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.search.html">Weiter</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">
+    
+    
+    <span class="phrase">E-Mail</span>
+        
+  </h1>
+<h2 class="sr-only">E-Mail Filter verwenden</h2>
+<div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Anwendungsbeispiele für E-Mail Filter</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>Sie erstellen eine Bedingung, indem Sie 
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>einen E-Mail-Bestandteil auswählen, z.B. "Betreff";</p></li>
+<li class="listitem"><p>ein Kriterium wählen, z.B. "stimmt exakt überein mit";</p></li>
+<li class="listitem"><p>ein Argument eingeben, z.B. "Protokoll".</p></li>
+</ul></div>
+<p> 
+        In diesem Fall würde geprüft, ob der Betreff einer E-Mail den Zeichen des Arguments "Protokoll" exakt
+        entspricht. Mit Hilfe des Kriteriums und der Zeichenkette steuern Sie, wann die Bedingung erfüllt ist. Die
+        Unterschiede zwischen den Kriterien werden nachfolgend mit Hilfe von einfachen Beispielen erläutert. In den Beispielen
+        werden E-Mails wie oben anhand des Betreffs gefiltert. 
+        </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>Kriterium: "enthält" Die Bedingung ist erfüllt, wenn der Betreff die Zeichen des Arguments
+              enthält. Beispiel: Das Argument lautet "Protokoll". 
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Meeting-Protokoll" ist die Bedingung ebenfalls erfüllt.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>Kriterium: "stimmt exakt überein mit" Die Bedingung ist erfüllt, wenn der Betreff den Zeichen
+              des Arguments exakt entspricht. Beispiel: Das Argument lautet "Protokoll". 
+              </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Protokoll" ist die Bedingung erfüllt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>Kriterium: "stimmt überein mit" Die Bedingung ist erfüllt, wenn der Betreff den Zeichen des
+              Arguments exakt entspricht. Die Zeichenkette kann Platzhalter enthalten. Beispiel: Das Argument
+              lautet "Protokoll*". Das Zeichen "*" ist Platzhalter für beliebige Zeichen. </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Meeting-Protokoll" ist die Bedingung nicht erfüllt.</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>Kriterium: "Regex" Die Bedingung ist erfüllt, wenn der Betreff die Zeichen enthält, die der
+              reguläre Ausdruck des Arguments liefert. Mit regulären Ausdrücken sind sehr komplexe Abfragen möglich.
+              Informationen dazu finden Sie auf den einschlägigen Seiten im Internet. Einen Einblick soll der folgende, sehr
+              einfache reguläre Ausdruck bieten. Beispiel: Das Argument lautet "proto(c|k)ol". Der Ausdruck
+              "(c|k)" steht für das Zeichen "c" oder "k". </p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Protokoll von Gestern" ist die Bedingung erfüllt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Meeting protocol yesterday" ist die Bedingung ebenfalls erfüllt.</p></li>
+<li class="listitem" style="list-style-type: none"><p>Für den Betreff "Prototyp" ist die Bedingung nicht erfüllt.</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+</ul></div>
+<p>
+      </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Siehe auch</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Neue Regel erstellen">Neue Regel erstellen</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Neue Regel erstellen beim Verschieben">Neue Regel erstellen beim Verschieben</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Eine Regel ändern">Eine Regel ändern</a></p>
+</li></ul>
+</div>
+<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Übergeordnetes Thema:
+        <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. E-Mail Filter verwenden">E-Mail Filter verwenden</a>
+      </p>
+</div>
+          </div>
+        </body>
+</html>

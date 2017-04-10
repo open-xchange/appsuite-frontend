@@ -88,8 +88,8 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
             this.fileQuota.fetch();
             return http.resume().then(function () {
                 if (settings.get('quotaMode', 'default') === 'unified') {
-                    this.mailQuota.fetched = true;
-                    this.mailQuota.set(fileQuota.attributes);
+                    mailQuota.fetched = true;
+                    mailQuota.set(fileQuota.attributes);
                 }
                 return {
                     mail: mailQuota.toJSON(),

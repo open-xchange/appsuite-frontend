@@ -14,31 +14,46 @@
 define([
     'io.ox/mail/mailfilter/settings/util',
     'io.ox/mail/mailfilter/settings/model',
-    'gettext!io.ox/mail'
-], function (util, mailfilterModel, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/filter/tests/register',
+    'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/core/extensions',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'fixture!io.ox/mail/mailfilter/config.json'
+], function (util, mailfilterModel, gt, conditionsExtensions, actionsExtensions, ext, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
     var FROM = {
             'comparison': 'contains',
             'headers': ['From'],
-            'id': 'header',
+            'id': 'from',
             'values': ['test@open-xchange.com']
         },
         TO = {
             'comparison': 'contains',
             'headers': ['To'],
-            'id': 'header',
+            'id': 'to',
             'values': ['test@open-xchange.com']
         },
         SUBJECT = {
             'comparison': 'contains',
             'headers': ['Subject'],
-            'id': 'header',
+            'id': 'subject',
             'values': ['Test subject']
         };
 
     describe('Mailfilter util generates default name', function () {
+
+        beforeEach(function () {
+
+            conditionsExtensions.processConfig(fixtureMailfilterConfig);
+            actionsExtensions.processConfig(fixtureMailfilterConfig);
+
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults });
+
+        });
 
         describe('mails from', function () {
             it('keep', function (done) {

@@ -25,7 +25,10 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
     'use strict';
 
-    api.getConfig().done(function (config) {
+    api.getConfig().done(processConfig);
+
+    function processConfig(config) {
+
         var cap = _.object(config.capabilities, config.capabilities);
 
         if (_.has(cap, 'imap4flags')) {
@@ -452,8 +455,10 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
             }
 
         });
+    }
 
-
-    });
+    return {
+        processConfig: processConfig
+    };
 
 });

@@ -330,7 +330,7 @@ define('io.ox/mail/compose/view', [
 
     var MailComposeView = Backbone.View.extend({
 
-        className: 'io-ox-mail-compose container',
+        className: 'io-ox-mail-compose container f6-target',
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
