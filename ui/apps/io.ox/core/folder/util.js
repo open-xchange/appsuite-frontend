@@ -126,7 +126,16 @@ define('io.ox/core/folder/util', [
             case 'unlocked':
             case 'shared-by-me':
                 // maybe need a better word. It's shared TO others
-                if (!data.permissions || data.permissions.length <= 1) return false;
+                // don't show share icon if only bit 1 is set (see folder)
+                var onlyShowFolder;
+                if (data.permissions && data.permissions.length >= 1) {
+                    onlyShowFolder = _(data.permissions).filter(function (p) {
+                        if (p.bits === 1) return true;
+                    });
+                }
+
+                if (!data.permissions || data.permissions.length <= 1 || onlyShowFolder.length > 0) return;
+
                 // only shared BY me, not TO me
                 return data.type === 1 || data.type === 7 || (data.module === 'infostore' && data.created_by === ox.user_id);
             case 'hidden':
