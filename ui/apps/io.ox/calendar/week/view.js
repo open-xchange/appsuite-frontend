@@ -60,6 +60,7 @@ define('io.ox/calendar/week/view', [
         mode:           0,      // view mode {1: day, 2: workweek, 3: week }
         workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
         showDeclined:   false,  // show declined appointments
+        limit:          1000,   // limit for number of appointments. If there are more appointments resize drag and opacity functions are disabled for performace resons
 
         startDate:      null,   // start of day/week as local date (use as reference point)
         apiRefTime:     null,   // current reference time for api calls
@@ -200,6 +201,14 @@ define('io.ox/calendar/week/view', [
                         return model;
                     });
                 this.collection.reset(data);
+                if (this.collection.length > this.limit) {
+                    var self = this;
+                    console.warn('Too many appointments. There are ' + this.collection.length + ' appointments. The limit is ' + this.limit + '. Resize, drag and opacity are disabled due to performance reasons.');
+                    require(['io.ox/core/yell'], function (yell) {
+                        //#. %1$n is the maximum number of appointments
+                        yell('warning', gt('There are more than %n appointments in the current calendar. Some features are disabled to due to performance reasons.', self.limit));
+                    });
+                }
                 this.renderAppointments();
             }
         },
@@ -440,7 +449,7 @@ define('io.ox/calendar/week/view', [
                     $('.appointment', self.$el)
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
-                        .addClass(_.device('smartphone') ? '' : 'opac'); // do not add opac class on phones
+                        .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
 
@@ -1093,7 +1102,7 @@ define('io.ox/calendar/week/view', [
         },
 
         /**
-         * clear all appointments from current week and render all appointments form collection
+         * clear all appointments from current week and render all appointments from collection
          */
         renderAppointments: function () {
 
@@ -1101,6 +1110,7 @@ define('io.ox/calendar/week/view', [
 
             var self = this,
                 draw = {},
+                appointmentStartDate,
                 fulltimeColPos = [0],
                 fulltimeCount = 0;
 
@@ -1112,15 +1122,17 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
+                appointmentStartDate = moment(model.get('start_date'));
+
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
-                            fulltimePos = moment(model.getDate('start_date')).diff(this.startDate, 'days'),
+                            fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(moment(model.get('start_date')).utc(), 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(appointmentStartDate.utc(), 'days') + Math.min(0, fulltimePos)), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
@@ -1297,8 +1309,8 @@ define('io.ox/calendar/week/view', [
                 self.$('.week-container ' + day, self.$el).append(apps);
             });
 
-            // disable d'n'd on small devices
-            if (_.device('touch')) return;
+            // disable d'n'd on small devices or really big collections
+            if (this.collection.length > this.limit || _.device('smartphone')) return;
 
             // init drag and resize widget on appointments
             var colWidth = this.$('.day:first').outerWidth(),
@@ -1751,8 +1763,7 @@ define('io.ox/calendar/week/view', [
          * @return { Object }           a jQuery object of the appointment
          */
         renderAppointment: function (a) {
-            var el = $('<div>')
-                .addClass('appointment')
+            var el = $('<div class="appointment">')
                 .attr({
                     'data-cid': a.id,
                     'data-extension-point': this.extPoint,
