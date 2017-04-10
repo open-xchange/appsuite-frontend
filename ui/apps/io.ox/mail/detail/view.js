@@ -524,7 +524,9 @@ define('io.ox/mail/detail/view', [
 
         onUnseen: function () {
             var data = this.model.toJSON();
-            if (util.isToplevel(data)) api.markRead(data);
+            if (!util.isToplevel(data)) return;
+            if (this.options.app && this.options.app.props.get('sort') === 651) return;
+            api.markRead(data);
         },
 
         onLoad: function (data) {
@@ -601,7 +603,9 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).then(
+                        var data = { id: this.model.get('id'), folder_id: this.model.get('folder_id') };
+                        if (this.options.app && this.options.app.props.get('sort') === 651) data.unseen = true;
+                        api.get(data).then(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
