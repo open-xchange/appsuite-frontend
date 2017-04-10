@@ -38,7 +38,7 @@ define('plugins/portal/quota/register', [
                 usage: quota.file.use,
                 name: 'memory-file',
                 //#. Quota means a general quota for mail and files
-                title: settings.get('Mode', 'default') === 'unified' ? gt('Quota') : gt('File quota')
+                title: settings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('File quota')
             });
         }
 
