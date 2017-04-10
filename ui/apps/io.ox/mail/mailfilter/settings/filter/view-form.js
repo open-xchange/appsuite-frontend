@@ -141,59 +141,57 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
             },
 
-            onRemoveTest: function (e) {
-                // cleanup
-                e.preventDefault();
-                var node = $(e.target),
-                    testID = node.closest('li').attr('data-test-id'),
-                    testArray = _.copy(this.model.get('test'));
+            removeTest: function (testArray, testID) {
 
                 // nested condition
                 if (testID.split('_').length === 2) {
                     var rootConditionID = testID.split('_')[0],
                         nestedConditionID = testID.split('_')[1];
 
-                    // handle empty nested condition
-                    // if (_.isEmpty(testArray.tests[rootConditionID].tests)) {
-                    //     testArray.tests.splice(rootConditionID, 1);
-                    //     this.model.set('test', testArray);
-                    //     this.render();
-                    //     return;
-                    // }
-
                     // remove condition in nested condition
                     testArray.tests[rootConditionID].tests.splice(nestedConditionID, 1);
                     // handle empty nested condition
                     if (testArray.tests[rootConditionID].tests.length === 0) testArray.tests.splice(rootConditionID, 1);
-                    this.model.set('test', testArray);
 
-                    this.render();
-                    return;
-                }
+                    // only one test left
+                    if (testArray.tests.length === 1) testArray = testArray.tests[0];
 
-                if (checkForMultipleTests(this.el).length > 2) {
+                } else if (testArray.tests && testArray.tests.length > 2) {
                     testArray.tests = _(testArray.tests).without(testArray.tests[testID]);
                 } else if (testArray.tests) {
-
                     testArray.tests = _(testArray.tests).without(testArray.tests[testID]);
                     testArray = testArray.tests[0];
                 } else {
                     testArray = { id: 'true' };
                 }
 
-                this.model.set('test', testArray);
+                return testArray;
+
+            },
+
+            onRemoveTest: function (e) {
+                e.preventDefault();
+                var node = $(e.target),
+                    testID = node.closest('li').attr('data-test-id'),
+                    testArray = _.copy(this.model.get('test'));
+
+                this.model.set('test', this.removeTest(testArray, testID));
                 this.render();
+
+            },
+
+            removeAction: function (actionArray, actionID) {
+                actionArray.splice(actionID, 1);
+                return actionArray;
             },
 
             onRemoveAction: function (e) {
-
                 e.preventDefault();
                 var node = $(e.target),
                     actionID = node.closest('li').attr('data-action-id'),
                     actionArray = _.copy(this.model.get('actioncmds'));
 
-                actionArray.splice(actionID, 1);
-                this.model.set('actioncmds', actionArray);
+                this.model.set('actioncmds', this.removeAction(actionArray, actionID));
                 this.render();
 
             },
