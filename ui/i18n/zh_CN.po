@@ -928,6 +928,7 @@ msgstr "添加您的帐户"
 msgid "Added %1$s, %2$s."
 msgstr "添加了 %1$s、%2$s。"
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3923,6 +3924,7 @@ msgstr "文档已被移动"
 msgid "File name"
 msgstr "文件名称"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5221,6 +5223,7 @@ msgstr "邮件没有题目，您还要发送吗？"
 msgid "Mail has no recipient."
 msgstr "邮件没有收件人。"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6416,12 +6419,6 @@ msgstr "其他地址"
 msgid "Outgoing server (SMTP)"
 msgstr "外送服务器 (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "电子邮件限额"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "过期"
@@ -7216,7 +7213,10 @@ msgstr "快速回复"
 msgid "Quit"
 msgstr "退出"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "限额"
 
@@ -7563,6 +7563,7 @@ msgstr "移除成员"
 msgid "Removed %1$s, %2$s."
 msgstr "已移除 %1$s,、%2$s。"
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7612,10 +7613,7 @@ msgid "Reply"
 msgstr "回复"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "全部回复"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "回复全部"
 
@@ -9239,6 +9237,13 @@ msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
 msgstr "此文件夹里有 %1$d 个消息。不是所有消息现在都在列表里显示。"
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -14086,6 +14091,11 @@ msgstr "年"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "打开电子邮件设定"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "电子邮件限额"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "过期任务。%1$s %2$s。请按 [enter] 打开"
 
@@ -14315,6 +14325,9 @@ msgstr "年"
 
 #~ msgid "Rename Document"
 #~ msgstr "文档更名"
+
+#~ msgid "Reply All"
+#~ msgstr "全部回复"
 
 #~ msgid "Reply to"
 #~ msgstr "回复"

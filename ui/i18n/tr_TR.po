@@ -931,6 +931,7 @@ msgstr "Hesabını ekle"
 msgid "Added %1$s, %2$s."
 msgstr "%1$s, %2$s"
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -4064,6 +4065,7 @@ msgstr "Dosya taşındı"
 msgid "File name"
 msgstr "Dosya ismi"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5407,6 +5409,7 @@ msgstr "E-postanın konu kısmı boş. Yine de yollamak istiyor musunuz?"
 msgid "Mail has no recipient."
 msgstr "E postanın herhangi bir alıcısı yok."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6648,12 +6651,6 @@ msgstr "Diğer adres"
 msgid "Outgoing server (SMTP)"
 msgstr "Giden sunucu (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "E posta kotası"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Süresi dolmuş"
@@ -7490,7 +7487,10 @@ msgstr ""
 msgid "Quit"
 msgstr "Çıkış yap"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kota"
 
@@ -7858,6 +7858,7 @@ msgstr "Üyeyi çıkar"
 msgid "Removed %1$s, %2$s."
 msgstr "Şunu kaldır: %1$s"
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7909,10 +7910,7 @@ msgid "Reply"
 msgstr "Cevapla"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Tümüne Cevapla"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 #, fuzzy
 #| msgid "Reply All"
 msgid "Reply all"
@@ -9626,6 +9624,13 @@ msgstr "Tema"
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
+msgstr ""
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
 msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
@@ -12171,6 +12176,11 @@ msgstr "yyyy"
 #~ msgstr "Drive"
 
 #, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "E posta kotası"
+
+#, fuzzy
 #~ msgid "Pause presentation"
 #~ msgstr "Sunumlar"
 
@@ -12241,6 +12251,9 @@ msgstr "yyyy"
 
 #~ msgid "Remove facet"
 #~ msgstr "Özellliği kaldır"
+
+#~ msgid "Reply All"
+#~ msgstr "Tümüne Cevapla"
 
 #~ msgid "Running applications"
 #~ msgstr "Çalışmakta olan uygulamalar"

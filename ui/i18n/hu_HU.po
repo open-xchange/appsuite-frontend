@@ -936,6 +936,7 @@ msgstr "Fiók hozzáadása"
 msgid "Added %1$s, %2$s."
 msgstr "%1$s, %2$s hozzáadva."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3997,6 +3998,7 @@ msgstr "A fájl áthelyezésre megtörtént"
 msgid "File name"
 msgstr "Fájlnév"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5312,6 +5314,7 @@ msgstr "A levél tárgya üres. Mindenképp elküldi?"
 msgid "Mail has no recipient."
 msgstr "A levélnek nincs címzettje."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6509,12 +6512,6 @@ msgstr "Egyéb cím"
 msgid "Outgoing server (SMTP)"
 msgstr "Kimenő kiszolgáló (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Levélkvóta"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Lejárt"
@@ -7320,7 +7317,10 @@ msgstr "Gyors válasz"
 msgid "Quit"
 msgstr "Kilépés"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kvóta"
 
@@ -7676,6 +7676,7 @@ msgstr "Tag eltávolítása"
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s, %2$s eltávolítva."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7725,10 +7726,7 @@ msgid "Reply"
 msgstr "Válasz"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Válasz mindenkinek"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Válasz mindenkinek"
 
@@ -9391,6 +9389,13 @@ msgid ""
 msgstr ""
 "%1$d üzenet van ebben a mappában; jelenleg nem jelenik meg az összes üzenet "
 "a listában."
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -11994,6 +11999,11 @@ msgstr "yyyy"
 #~ msgstr "OneDrive"
 
 #, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Levélkvóta"
+
+#, fuzzy
 #~| msgid "Distance"
 #~ msgid "Pakistan"
 #~ msgstr "Távolság"
@@ -12075,6 +12085,9 @@ msgstr "yyyy"
 
 #~ msgid "Recipients can edit"
 #~ msgstr "Címzettek szerkeszthetnek"
+
+#~ msgid "Reply All"
+#~ msgstr "Válasz mindenkinek"
 
 #~ msgid "Resource name"
 #~ msgstr "Erőforrásnév"

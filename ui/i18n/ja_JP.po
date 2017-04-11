@@ -904,6 +904,7 @@ msgstr "アカウントを追加"
 msgid "Added %1$s, %2$s."
 msgstr "%1$s と %2$s を追加しました。"
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3932,6 +3933,7 @@ msgstr "ファイルを移動しました。"
 msgid "File name"
 msgstr "ファイル名"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5242,6 +5244,7 @@ msgstr "メールに件名がありません。このまま送信しますか。
 msgid "Mail has no recipient."
 msgstr "メールには宛先がありません。"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6439,12 +6442,6 @@ msgstr "その他の住所"
 msgid "Outgoing server (SMTP)"
 msgstr "送信サーバ (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "メール割当量"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "期限切れ"
@@ -7248,7 +7245,10 @@ msgstr "クイック返信"
 msgid "Quit"
 msgstr "終了"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "割当量"
 
@@ -7597,6 +7597,7 @@ msgstr "メンバを削除"
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s と %2$s を削除しました。"
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7646,10 +7647,7 @@ msgid "Reply"
 msgstr "返信"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "全員に返信"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "全員に返信"
 
@@ -9294,6 +9292,13 @@ msgid ""
 msgstr ""
 "このフォルダにメッセージが %1$d 通あります；現在メッセージがすべてリストに表"
 "示されるわけではありません。"
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -15944,6 +15949,11 @@ msgstr "yyyy"
 #~ msgid "Outlook file"
 #~ msgstr "Outlook ファイル"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "メール割当量"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "期限が過ぎた仕事: %1$s %2$s Enter キーで開きます。"
 
@@ -16615,6 +16625,9 @@ msgstr "yyyy"
 
 #~ msgid "Renminbi"
 #~ msgstr "人民元"
+
+#~ msgid "Reply All"
+#~ msgstr "全員に返信"
 
 #~ msgid "Reply to"
 #~ msgstr "返信先:"

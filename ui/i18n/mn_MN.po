@@ -930,6 +930,7 @@ msgstr ""
 msgid "Added %1$s, %2$s."
 msgstr ""
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3917,6 +3918,7 @@ msgstr ""
 msgid "File name"
 msgstr ""
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5182,6 +5184,7 @@ msgstr ""
 msgid "Mail has no recipient."
 msgstr ""
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6367,10 +6370,6 @@ msgstr ""
 msgid "Outgoing server (SMTP)"
 msgstr ""
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Overall quota"
-msgstr ""
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr ""
@@ -7169,7 +7168,10 @@ msgstr ""
 msgid "Quit"
 msgstr "Гарах"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr ""
 
@@ -7509,6 +7511,7 @@ msgstr ""
 msgid "Removed %1$s, %2$s."
 msgstr ""
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s."
@@ -7556,10 +7559,7 @@ msgid "Reply"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr ""
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr ""
 
@@ -9140,6 +9140,13 @@ msgstr ""
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
+msgstr ""
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
 msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core

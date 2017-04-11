@@ -937,6 +937,7 @@ msgstr "Lägg till ditt konto"
 msgid "Added %1$s, %2$s."
 msgstr "Lade till %1$s, %2$s."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3973,6 +3974,7 @@ msgstr "Filen har flyttats"
 msgid "File name"
 msgstr "Filnamn"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5289,6 +5291,7 @@ msgstr "Meddelandet har ingen rubrik. Skicka ändå?"
 msgid "Mail has no recipient."
 msgstr "Meddelandet har ingen mottagare."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6487,12 +6490,6 @@ msgstr "Övrig adress"
 msgid "Outgoing server (SMTP)"
 msgstr "Utgående server (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Meddelandekvot"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Försenad"
@@ -7298,7 +7295,10 @@ msgstr "Snabbsvar"
 msgid "Quit"
 msgstr "Avsluta"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kvot"
 
@@ -7653,6 +7653,7 @@ msgstr "Ta bort medlem"
 msgid "Removed %1$s, %2$s."
 msgstr "Tog bort %1$s, %2$s."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7702,10 +7703,7 @@ msgid "Reply"
 msgstr "Svara"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Svara alla"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Svara alla"
 
@@ -9364,6 +9362,13 @@ msgid ""
 msgstr ""
 "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte i "
 "listan just nu."
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -14905,6 +14910,11 @@ msgstr "yyyy"
 #~ msgid "Other infostore folders"
 #~ msgstr "Andra infolagringsmappar"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Meddelandekvot"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Försenad uppgift. %1$s %2$s. Tryck [enter] för att öppna"
 
@@ -15212,6 +15222,9 @@ msgstr "yyyy"
 
 #~ msgid "Remove on cache failed"
 #~ msgstr "Borttagandet på cacheminnet misslyckades."
+
+#~ msgid "Reply All"
+#~ msgstr "Svara alla"
 
 #~ msgid "Reply to"
 #~ msgstr "Svar till"

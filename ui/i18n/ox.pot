@@ -2461,6 +2461,14 @@ msgstr ""
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
 msgctxt "superessive"
+msgid "Sunday"
+msgstr ""
+
+#. superessive of the weekday
+#. will only be used in a form like “Happens every week on $weekday”
+#: apps/io.ox/calendar/util.js
+#: module:io.ox/calendar
+msgctxt "superessive"
 msgid "Monday"
 msgstr ""
 
@@ -2502,14 +2510,6 @@ msgstr ""
 #: module:io.ox/calendar
 msgctxt "superessive"
 msgid "Saturday"
-msgstr ""
-
-#. superessive of the weekday
-#. will only be used in a form like “Happens every week on $weekday”
-#: apps/io.ox/calendar/util.js
-#: module:io.ox/calendar
-msgctxt "superessive"
-msgid "Sunday"
 msgstr ""
 
 #: apps/io.ox/calendar/util.js
@@ -2774,6 +2774,12 @@ msgstr ""
 #: apps/io.ox/calendar/week/perspective.js
 #: module:io.ox/calendar
 msgid "Appointment list"
+msgstr ""
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js
+#: module:io.ox/calendar
+msgid "There are more than %n appointments in the current calendar. Some features are disabled to due to performance reasons."
 msgstr ""
 
 #: apps/io.ox/calendar/week/view.js
@@ -6370,6 +6376,7 @@ msgstr ""
 msgid "Added %1$s, %2$s."
 msgstr ""
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
@@ -6385,6 +6392,7 @@ msgstr ""
 msgid "Removed %1$s, %2$s."
 msgstr ""
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
@@ -7469,6 +7477,17 @@ msgstr ""
 msgid "Please specify these missing variables: "
 msgstr ""
 
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js
+#: module:io.ox/files
+#: apps/io.ox/mail/main.js
+#: module:io.ox/mail
+#: apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr ""
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
 #: apps/plugins/portal/quota/register.js
@@ -8529,7 +8548,8 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
-msgid "Reply All"
+#: apps/io.ox/mail/compose/checks.js
+msgid "Reply all"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js
@@ -8995,11 +9015,6 @@ msgstr ""
 #: apps/io.ox/mail/compose/checks.js
 #: module:io.ox/mail
 msgid "Do you really want to reply all or just %1$s?"
-msgstr ""
-
-#: apps/io.ox/mail/compose/checks.js
-#: module:io.ox/mail
-msgid "Reply all"
 msgstr ""
 
 #: apps/io.ox/mail/compose/checks.js
@@ -10059,6 +10074,7 @@ msgstr ""
 msgid "Thread"
 msgstr ""
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 #: apps/plugins/portal/quota/register.js
@@ -12765,17 +12781,7 @@ msgstr ""
 
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
-msgid "Overall quota"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js
-#: module:plugins/portal
 msgid "Mail count quota"
-msgstr ""
-
-#: apps/plugins/portal/quota/register.js
-#: module:plugins/portal
-msgid "Quota"
 msgstr ""
 
 #: apps/plugins/portal/recentfiles/register.js

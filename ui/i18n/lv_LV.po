@@ -966,6 +966,7 @@ msgstr "Pievienot savu kontu"
 msgid "Added %1$s, %2$s."
 msgstr "Pievienots %1$s, %2$s."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -4035,6 +4036,7 @@ msgstr "Fails ir pārvietots"
 msgid "File name"
 msgstr "Faila vārds"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5347,6 +5349,7 @@ msgstr "Vēstulei nav subjekta teksta. Vai vienalga to nosūtīt?"
 msgid "Mail has no recipient."
 msgstr "Vēstulei nav saņēmēja."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6556,12 +6559,6 @@ msgstr "Cita adrese"
 msgid "Outgoing server (SMTP)"
 msgstr "Izejošais serveris (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Pasta kvota"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Nokavēts"
@@ -7366,7 +7363,10 @@ msgstr "Ātrā atbilde"
 msgid "Quit"
 msgstr "Beigt"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kvota"
 
@@ -7723,6 +7723,7 @@ msgstr "Noņemt dalībnieku"
 msgid "Removed %1$s, %2$s."
 msgstr "Noņemts %1$s, %2$s."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7772,10 +7773,7 @@ msgid "Reply"
 msgstr "Atbildēt"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Atbildēt visiem"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Atbildēt visiem"
 
@@ -9452,6 +9450,13 @@ msgid ""
 "the list currently."
 msgstr ""
 "Šajā mapē ir %1$d ziņojumi; visi tie pašlaik redzamajā sarakstā nav uzrāditi."
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -15192,6 +15197,11 @@ msgstr "yyyy"
 #~ msgid "Outlook file"
 #~ msgstr "Outlook fails"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Pasta kvota"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Nokavēts uzdevums. %1$s %2$s. Lai atvērtu piespiediet [enter]"
 
@@ -15687,6 +15697,9 @@ msgstr "yyyy"
 
 #~ msgid "Renminbi"
 #~ msgstr "Renminbi"
+
+#~ msgid "Reply All"
+#~ msgstr "Atbildēt visiem"
 
 #~ msgid "Reply to"
 #~ msgstr "Atbildēt"

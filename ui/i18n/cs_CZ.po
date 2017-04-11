@@ -969,6 +969,7 @@ msgstr "Přidat váš účet"
 msgid "Added %1$s, %2$s."
 msgstr "Přidán %1$s, %2$s."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -4013,6 +4014,7 @@ msgstr "Soubor byl přesunut"
 msgid "File name"
 msgstr "Název souboru"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5323,6 +5325,7 @@ msgstr "Zpráva nemá předmět. Poslat i tak?"
 msgid "Mail has no recipient."
 msgstr "Zpráva nemá žádného adresáta."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6530,12 +6533,6 @@ msgstr "Další adresa"
 msgid "Outgoing server (SMTP)"
 msgstr "Odchozí server (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Limit zpráv"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Zpoždění"
@@ -7341,7 +7338,10 @@ msgstr "Rychlá odpověď"
 msgid "Quit"
 msgstr "Konec"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Limit"
 
@@ -7696,6 +7696,7 @@ msgstr "Odstranit člena"
 msgid "Removed %1$s, %2$s."
 msgstr "Odstraněn %1$s, %2$s."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7745,10 +7746,7 @@ msgid "Reply"
 msgstr "Odpovědět"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Odpovědět všem"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Odpovědět všem"
 
@@ -9418,6 +9416,13 @@ msgid ""
 msgstr ""
 "Počet zpráv ve složce: %1$d; ne všechny zprávy jsou v tuto chvíli v seznamu "
 "zobrazeny."
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -17124,6 +17129,11 @@ msgstr "rrrr"
 #~ msgid "Outlook file"
 #~ msgstr "Soubor Outlooku"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Limit zpráv"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Zpožděný úkol. %1$s %2$s. Otevřete stisknutím [enter]"
 
@@ -17829,6 +17839,9 @@ msgstr "rrrr"
 
 #~ msgid "Renminbi"
 #~ msgstr "Čínský jüan"
+
+#~ msgid "Reply All"
+#~ msgstr "Odpovědět všem"
 
 #~ msgid "Reply to"
 #~ msgstr "Komu odpovědět"

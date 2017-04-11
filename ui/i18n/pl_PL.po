@@ -969,6 +969,7 @@ msgstr "Dodaj konto"
 msgid "Added %1$s, %2$s."
 msgstr "Dodano %1$s, %2$s."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -4046,6 +4047,7 @@ msgstr "Plik został przeniesiony"
 msgid "File name"
 msgstr "Nazwa pliku"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5363,6 +5365,7 @@ msgstr "Wiadomość ma pusty temat. Czy chcesz ją mimo tego wysłać?"
 msgid "Mail has no recipient."
 msgstr "Wiadomość nie ma adresata."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6569,12 +6572,6 @@ msgstr "Inny adres"
 msgid "Outgoing server (SMTP)"
 msgstr "Serwer poczty wychodzącej (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Zajętość skrzynki"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Termin przekroczony"
@@ -7380,7 +7377,10 @@ msgstr "Szybka odpowiedź"
 msgid "Quit"
 msgstr "Zakończ"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Ograniczenie miejsca"
 
@@ -7737,6 +7737,7 @@ msgstr "Usuń członka"
 msgid "Removed %1$s, %2$s."
 msgstr "Usunięto %1$s, %2$s."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7786,10 +7787,7 @@ msgid "Reply"
 msgstr "Odpowiedz"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Odpowiedz wszystkim"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Odpowiedz wszystkim"
 
@@ -9476,6 +9474,13 @@ msgid ""
 msgstr ""
 "W folderze znajdują się wiadomości: %1$d. Nie wszystkie wiadomości są "
 "obecnie wyświetlane na liście."
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -12968,6 +12973,11 @@ msgstr "rrrr"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Otwieranie ustawień poczty e-mail"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Zajętość skrzynki"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Zaległe zadanie. %1$s %2$s. Aby otworzyć, naciśnij klawisz [Enter]."
 
@@ -13142,6 +13152,9 @@ msgstr "rrrr"
 
 #~ msgid "Remove from recipient list"
 #~ msgstr "Usuń z listy odbiorców"
+
+#~ msgid "Reply All"
+#~ msgstr "Odpowiedz wszystkim"
 
 #~ msgid "Reply to"
 #~ msgstr "Odpowiedz do"

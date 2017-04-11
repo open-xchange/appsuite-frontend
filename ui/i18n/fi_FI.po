@@ -932,6 +932,7 @@ msgstr "Lisää tilisi"
 msgid "Added %1$s, %2$s."
 msgstr "%1$s, %2$s lisätty."
 
+#. %1$s is the display name of an added user or mail recipient
 #. %1$s is the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -3969,6 +3970,7 @@ msgstr "Tiedosto on siirretty"
 msgid "File name"
 msgstr "Tiedoston nimi"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5283,6 +5285,7 @@ msgstr "Viestin aihe on tyhjä. Lähetä silti?"
 msgid "Mail has no recipient."
 msgstr "Viestillä ei ole vastaanottajia."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -6482,12 +6485,6 @@ msgstr "Muu osoite"
 msgid "Outgoing server (SMTP)"
 msgstr "Lähtevän postin palvelin (SMTP)"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-#, fuzzy
-#| msgid "Mail quota"
-msgid "Overall quota"
-msgstr "Viestikiintiö"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "Overdue"
 msgstr "Myöhässä"
@@ -7293,7 +7290,10 @@ msgstr "Nopea vastaus"
 msgid "Quit"
 msgstr "Lopeta"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kiintiö"
 
@@ -7649,6 +7649,7 @@ msgstr "Poista jäsen"
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s, %2$s poistettu."
 
+#. %1$s is the display name of a removed user or mail recipient
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
@@ -7698,10 +7699,7 @@ msgid "Reply"
 msgstr "Vastaa"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Vastaa kaikille"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Vastaa kaikille"
 
@@ -9363,6 +9361,13 @@ msgid ""
 "the list currently."
 msgstr ""
 "Tässä kansiossa on %1$d viestiä; kaikki viestit eivät näy luettelossa. "
+
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
@@ -12615,6 +12620,11 @@ msgstr "vvvv"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Sähköpostiasetusten avaaminen"
 
+#, fuzzy
+#~| msgid "Mail quota"
+#~ msgid "Overall quota"
+#~ msgstr "Viestikiintiö"
+
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Erääntynyt tehtävä. %1$s %2$s. Paina [enter] avataksesi"
 
@@ -12766,6 +12776,9 @@ msgstr "vvvv"
 
 #~ msgid "Remove from recipient list"
 #~ msgstr "Poista vastaanottajien listalta"
+
+#~ msgid "Reply All"
+#~ msgstr "Vastaa kaikille"
 
 #~ msgid "Reply to"
 #~ msgstr "Vastaa"
