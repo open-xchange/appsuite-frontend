@@ -260,6 +260,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 if (url.indexOf('//' + defaultUrl) === 0) url = url.substr(defaultUrl.length + 2);
                 if (hosts.length > 1) index = sum(url) % hosts.length;
                 if (!/^\//.test(url)) url = '/' + url;
+                // do not use sharding when on development system
+                if (ox.debug) return '//' + defaultUrl + url;
                 return '//' + hosts[index] + url;
             };
         }())
