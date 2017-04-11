@@ -821,7 +821,6 @@ define('io.ox/files/share/permissions', [
 
             var dialog = new ModalDialog({
                 async: true,
-                backdrop: 'static',
                 focus: '.form-control.tt-input',
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
                 title: title,
