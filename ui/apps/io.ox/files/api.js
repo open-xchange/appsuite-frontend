@@ -420,8 +420,7 @@ define('io.ox/files/api', [
                 url = (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
                 break;
             case 'thumbnail':
-                url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
-                break;
+                return util.getShardingRoot((file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling);
             case 'preview':
                 return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
