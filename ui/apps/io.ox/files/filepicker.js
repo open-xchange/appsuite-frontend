@@ -303,7 +303,8 @@ define('io.ox/files/filepicker', [
             },
             acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
             cancel: $.noop,
-            initialize: $.noop
+            initialize: $.noop,
+            createFolderButton: true
         }, options);
 
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
@@ -548,6 +549,7 @@ define('io.ox/files/filepicker', [
             abs: false,
             folder: options.folder || undefined,
             hideTrashfolder: options.hideTrashfolder || undefined,
+            createFolderButton: options.createFolderButton,
 
             done: function (id, dialog) {
                 def.resolve(
