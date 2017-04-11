@@ -60,9 +60,11 @@ define('io.ox/core/folder/tree', [
             this.open = options.open;
             this.root = options.root;
             this.realNames = options.realNames;
+            this.id = _.uniqueId('folder-tree-');
 
             this.$el.data('view', this);
-            this.$container = $('<ul class="tree-container f6-target" role="tree">');
+            this.$container = $('<ul class="tree-container f6-target" role="tree">').attr('id', this.id);
+
             this.$dropdownMenu = $();
             this.options = options;
 

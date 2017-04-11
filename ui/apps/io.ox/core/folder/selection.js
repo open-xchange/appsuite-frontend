@@ -63,7 +63,12 @@ define('io.ox/core/folder/selection', [], function () {
 
         // returns true if successful
         preselect: function (id) {
-            return this.check(this.byId(id)).length > 0;
+            var node = this.check(this.byId(id));
+            if (node.length > 0) {
+                this.view.$container.attr('aria-activedescendant', node.attr('id'));
+                return true;
+            }
+            return false;
         },
 
         scrollIntoView: function (id) {
@@ -157,6 +162,7 @@ define('io.ox/core/folder/selection', [], function () {
             var opt = _.extend({ focus: true }, options);
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
+            this.view.$container.attr('aria-activedescendant', node.attr('id'));
             this.triggerChange(items);
         },
 

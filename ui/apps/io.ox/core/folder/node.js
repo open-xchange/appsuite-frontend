@@ -329,9 +329,10 @@ define('io.ox/core/folder/node', [
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
             this.realNames = options.tree.realNames;
-
+            this.id = _.uniqueId(o.tree.id + '-node-');
             this.$ = {};
 
+            this.options.a11yDescription.unshift(this.getTitle());
             // make accessible via DOM
             this.$el.data('view', this);
 
@@ -389,6 +390,7 @@ define('io.ox/core/folder/node', [
             // draw scaffold
             this.$el
                 .attr({
+                    'id': this.id,
                     'data-id': this.folder,
                     'data-model': o.model_id,
                     'data-contextmenu-id': o.contextmenu_id
@@ -548,7 +550,7 @@ define('io.ox/core/folder/node', [
 
         renderContextControl: function () {
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control" data-toggle="dropdown">')
+                $('<a tabindex="-1" aria-hidden="true" href="#" role="button" class="folder-options contextmenu-control" data-toggle="dropdown">')
                 .attr({
                     'data-contextmenu': this.options.contextmenu || 'default',
                     'aria-label': this.options.title || !this.model.has('title') ?
