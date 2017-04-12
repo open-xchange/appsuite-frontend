@@ -126,6 +126,15 @@ Provides:      open-xchange-appsuite-l10n
 %description   l10n-es-mx
 Translation of the OX App Suite HTML5 client (es_MX)
 
+%package       l10n-et-ee
+Group:         Applications/Productivity
+Summary:       Translation of the OX App Suite HTML5 client (et_EE)
+Requires:      open-xchange-l10n-et-ee
+Provides:      open-xchange-appsuite-l10n
+
+%description   l10n-et-ee
+Translation of the OX App Suite HTML5 client (et_EE)
+
 %package       l10n-fi-fi
 Group:         Applications/Productivity
 Summary:       Translation of the OX App Suite HTML5 client (fi_FI)
@@ -292,7 +301,7 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docro
 APPSUITE=/opt/open-xchange/appsuite/
 find "%{buildroot}$APPSUITE" -type d | sed -e 's,%{buildroot},%dir ,' > open-xchange-appsuite-manifest.files
 find "%{buildroot}$APPSUITE" \( -type f -o -type l \) | sed -e 's,%{buildroot},,' >> open-xchange-appsuite-manifest.files
-for LANG in ca_ES cs_CZ da_DK de_DE en_GB en_US es_ES es_MX fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nb_NO nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
+for LANG in ca_ES cs_CZ da_DK de_DE en_GB en_US es_ES es_MX et_EE fi_FI fr_CA fr_FR hu_HU it_IT ja_JP lv_LV nb_NO nl_NL pl_PL pt_BR ro_RO ru_RU sk_SK sv_SE zh_CN zh_TW; do
     ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -Dhtdoc=%{docroot} -DinstallTarget=${LANG} -DkeepCache=true -Dnoclean=true -f build/build.xml build
 done
 mv "%{buildroot}/opt/open-xchange/sbin/touch-appsuite" "%{buildroot}/opt/open-xchange/sbin/touch-appsuite.tmp"
@@ -413,6 +422,16 @@ if [ -x %{update} ]; then %{update}; fi
 /opt/open-xchange/appsuite/apps/*/*/*.es_MX.js
 /opt/open-xchange/appsuite/apps/*/*/*/*.es_MX.js
 /opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-es-mx.properties
+
+%files l10n-et-ee
+%defattr(-,root,root)
+%dir /opt/open-xchange/etc
+%dir /opt/open-xchange/etc/languages
+%dir /opt/open-xchange/etc/languages/appsuite
+/opt/open-xchange/appsuite/apps/*/*.et_EE.js
+/opt/open-xchange/appsuite/apps/*/*/*.et_EE.js
+/opt/open-xchange/appsuite/apps/*/*/*/*.et_EE.js
+/opt/open-xchange/etc/languages/appsuite/open-xchange-appsuite-l10n-et-ee.properties
 
 %files l10n-fi-fi
 %defattr(-,root,root)
