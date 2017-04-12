@@ -809,7 +809,8 @@ define('io.ox/files/share/permissions', [
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !folderUtil.is('public', objModel.attributes),
-                title;
+                title,
+                guid;
 
             options = _.extend({ nested: nested, share: false }, options);
 
@@ -886,12 +887,12 @@ define('io.ox/files/share/permissions', [
                 }
 
             });
-
             if (objModel.isAdmin()) {
+
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<label class="checkbox-inline">').text(gt('Send notification by email')).prepend(
-                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Send notification by email')).prepend(
+                            new miniViews.CheckboxView({ id: guid, name: 'sendNotifications', model: dialogConfig }).render().$el
                             .on('click', function (e) {
                                 dialogConfig.set('byHand', e.currentTarget.checked);
                             })
@@ -997,20 +998,18 @@ define('io.ox/files/share/permissions', [
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
+                            $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
+                                new miniViews.CheckboxView({ id: guid, name: 'cascadePermissions', model: dialogConfig }).render().$el
                             )
                         )
                     );
                 }
 
-                var guid = _.uniqueId('form-control-label-');
-
                 dialog.$header.append(
                     $('<div class="row">').append(
                         $('<div class="form-group col-sm-6">').append(
                             $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
-                                $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid }),
                                 usePicker ? new AddressPickerView({
                                     isPermission: true,

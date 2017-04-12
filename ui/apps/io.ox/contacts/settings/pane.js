@@ -16,9 +16,10 @@ define('io.ox/contacts/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/contacts',
     'io.ox/backbone/mini-views',
+    'io.ox/core/settings/util',
     'io.ox/core/notifications',
     'io.ox/core/capabilities'
-], function (settings, ext, gt, mini, notifications, capabilities) {
+], function (settings, ext, gt, mini, util, notifications, capabilities) {
 
     'use strict';
 
@@ -31,15 +32,10 @@ define('io.ox/contacts/settings/pane', [
         });
 
         settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
-
             function success() {
+                if (!showNotice) return;
 
-                if (showNotice) {
-                    notifications.yell(
-                        'success',
-                        gt('The setting has been saved and will become active when you enter the application the next time.')
-                    );
-                }
+                notifications.yell('success', gt('The setting has been saved and will become active when you enter the application the next time.'));
             }
         );
     });
@@ -48,9 +44,8 @@ define('io.ox/contacts/settings/pane', [
         index: 100,
         id: 'contactssettings',
         draw: function () {
-            var holder = $('<div>').css('max-width', '800px');
-            pane = $('<div class="io-ox-contacts-settings">');
-            this.append(holder.append(pane));
+            var holder = $('<div class="io-ox-contacts-settings">');
+            this.append(holder);
             ext.point(POINT + '/pane').invoke('draw', pane);
         }
     });
@@ -59,9 +54,7 @@ define('io.ox/contacts/settings/pane', [
         index: 100,
         id: 'header',
         draw: function () {
-            this.append(
-                $('<h1>').text(gt('Address Book'))
-            );
+            this.append(util.header(gt('Address Book')));
         }
     });
 
@@ -70,20 +63,12 @@ define('io.ox/contacts/settings/pane', [
             index: 150,
             id: 'startfolder',
             draw: function () {
-
                 if (!settings.isConfigurable('startInGlobalAddressbook')) return;
 
                 this.append(
-                    $('<fieldset>').append(
-                        $('<legend class="sectiontitle">').append(
-                            $('<h2>').text(gt('Initial folder'))
-                        ),
+                    util.fieldset(gt('Initial folder'),
                         $('<div class="form-group">').append(
-                            $('<div class="checkbox">').append(
-                                $('<label>').text(gt('Start in global address book')).prepend(
-                                    new mini.CheckboxView({ name: 'startInGlobalAddressbook', model: settings }).render().$el
-                                )
-                            )
+                            util.checkbox('startInGlobalAddressbook', gt('Start in global address book'), settings)
                         )
                     )
                 );
@@ -102,10 +87,7 @@ define('io.ox/contacts/settings/pane', [
 
             ];
             this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Display of names'))
-                    ),
+                util.fieldset(gt('Display of names'),
                     new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: settings }).render().$el
                 )
             );
@@ -126,10 +108,7 @@ define('io.ox/contacts/settings/pane', [
             if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
 
             this.append(
-                $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').append(
-                        $('<h2>').text(gt('Link postal addresses with map service'))
-                    ),
+                util.fieldset(gt('Link postal addresses with map service'),
                     new mini.RadioView({ list: options, name: 'mapService', model: settings }).render().$el
                 )
             );

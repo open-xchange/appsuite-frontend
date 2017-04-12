@@ -206,6 +206,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.options.id) this.$el.attr('id', this.options.id);
             this.update();
             return this;
         }

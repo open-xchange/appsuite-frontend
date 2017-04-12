@@ -440,12 +440,13 @@ define('io.ox/files/filepicker', [
                     .filter(options.filter)
                     .sortBy(options.sorter)
                     .map(function (file) {
+                        var guid = _.uniqueId('form-control-label-');
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
-                                    .attr('title', title)
+                                    .attr({ 'title': title, 'for': guid })
                                     .append(
-                                        $('<input type="checkbox" tabindex="-1">')
+                                        $('<input type="checkbox" tabindex="-1">').attr('id', guid)
                                             .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)

@@ -14,9 +14,9 @@
 define('io.ox/tasks/settings/pane', [
     'settings!io.ox/tasks',
     'io.ox/core/extensions',
-    'gettext!io.ox/tasks',
-    'io.ox/backbone/mini-views'
-], function (settings, ext, gt, mini) {
+    'io.ox/core/settings/util',
+    'gettext!io.ox/tasks'
+], function (settings, ext, util, gt) {
 
     'use strict';
 
@@ -30,11 +30,8 @@ define('io.ox/tasks/settings/pane', [
         index: 100,
         id: 'taskssettings',
         draw: function () {
-
-            var self = this,
-                pane = $('<div class="io-ox-tasks-settings">'),
-                holder = $('<div>').css('max-width', '800px');
-            self.append(pane.append(holder));
+            var holder = $('<div class="io-ox-tasks-settings">');
+            this.append(holder);
             ext.point(POINT + '/pane').invoke('draw', holder);
         }
 
@@ -44,9 +41,7 @@ define('io.ox/tasks/settings/pane', [
         index: 100,
         id: 'header',
         draw: function () {
-            this.append(
-                $('<h1>').text(gt.pgettext('app', 'Tasks'))
-            );
+            this.append(util.header(gt.pgettext('app', 'Tasks')));
         }
     });
 
@@ -54,33 +49,11 @@ define('io.ox/tasks/settings/pane', [
         index: 200,
         id: 'notifications',
         draw: function () {
-
             this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Email notifications'))
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notifications when a task in which you participate is created, modified or deleted')).prepend(
-                                new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: settings }).render().$el
-                            )
-                        )
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notifications when a participant accepted or declined a task created by you')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: settings }).render().$el
-                            )
-                        )
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notifications when a participant accepted or declined a task in which you participate')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: settings }).render().$el
-                            )
-                        )
-                    )
+                util.fieldset(gt('Email notifications'),
+                    util.checkbox('notifyNewModifiedDeleted', gt('Receive notifications when a task in which you participate is created, modified or deleted'), settings),
+                    util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notifications when a participant accepted or declined a task created by you'), settings),
+                    util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notifications when a participant accepted or declined a task in which you participate'), settings)
                 )
             );
         }

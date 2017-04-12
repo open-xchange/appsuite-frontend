@@ -18,12 +18,13 @@ define('io.ox/settings/accounts/settings/pane', [
     'io.ox/keychain/model',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views',
+    'io.ox/core/settings/util',
     'io.ox/settings/accounts/views',
     'settings!io.ox/core',
     'gettext!io.ox/settings/accounts',
     'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, Dropdown, mini, AccountViews, coreSettings, gt, ListView) {
+], function (ext, dialogs, api, keychainModel, Dropdown, mini, util, AccountViews, coreSettings, gt, ListView) {
 
     'use strict';
 
@@ -34,11 +35,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
     var drawCertificateValidation = function () {
             return $('<div class="form-group">').append(
-                $('<div class="checkbox">').append(
-                    $('<label class="control-label">').text(gt('Allow connections with untrusted certificates')).prepend(
-                        new mini.CheckboxView({ name: 'security/acceptUntrustedCertificates', model: coreSettings }).render().$el
-                    )
-                )
+                util.checkbox('security/acceptUntrustedCertificates', gt('Allow connections with untrusted certificates'), coreSettings)
             );
         },
 
@@ -77,7 +74,7 @@ define('io.ox/settings/accounts/settings/pane', [
 
         drawPane = function () {
             return $('<div class="io-ox-accounts-settings">').append(
-                $('<div>').addClass('row').append(
+                $('<div class="row">').append(
                     $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts'))
                 ),
                 $('<ul class="list-unstyled list-group widget-list">')

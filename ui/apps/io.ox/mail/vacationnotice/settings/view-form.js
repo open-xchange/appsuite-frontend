@@ -16,10 +16,11 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
+    'io.ox/core/settings/util',
     'io.ox/backbone/mini-views/datepicker',
     'gettext!io.ox/mail',
     'less!io.ox/mail/vacationnotice/settings/style'
-], function (model, views, ext, mini, DatePicker, gt) {
+], function (model, views, ext, mini, util, DatePicker, gt) {
 
     'use strict';
 
@@ -42,9 +43,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 50,
             id: 'headline',
             draw: function () {
-                this.append($('<div>').append(
-                    $('<h1>').text(model.fields.headline)
-                ));
+                this.append(util.header(model.fields.headline));
             }
         });
 
@@ -53,12 +52,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             id: ref + '/edit/view/active',
             draw: function (baton) {
                 this.append(
-                    $('<div>').addClass('form-group activate').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').text(model.fields.active).prepend(
-                                new mini.CheckboxView({ name: 'active', model: baton.model }).render().$el
-                            )
-                        )
+                    $('<div class="form-group activate">').append(
+                        util.checkbox('active', model.fields.active, baton.model)
                     )
                 );
             }
@@ -84,14 +79,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     }, ext.point(ref + '/edit/view'));
 
                     this.append(
-                        $('<fieldset>').append(
-                            $('<div>').addClass('checkbox').append(
-                                $('<label>').addClass('control-label').append(
-                                    new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model }).render().$el,
-                                    $.txt(model.fields.activateTimeFrame)
-                                )
-                            )
-                        )
+                        util.checkbox('activateTimeFrame', model.fields.activateTimeFrame, baton.model)
                     );
                 }
             });
@@ -223,8 +211,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 300,
             id: ref + '/edit/view/addresses',
             draw: function (baton) {
-                var checkboxes = [],
-                    primaryMail = baton.multiValues.aliases[0],
+                var primaryMail = baton.multiValues.aliases[0],
                     actionlink = $('<a href="#" role="button" data-action="selectall">'),
                     self = this,
                     all;
@@ -247,24 +234,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                 baton.model.set('selectall', all);
 
-                _(baton.multiValues.aliases).each(function (alias) {
-                    checkboxes.push(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label blue').append(
-                                new mini.CheckboxView({ name: alias, model: baton.model }).render().$el,
-                                $.txt(alias)
-                            )
-                        )
-                    );
-                });
-
                 this.append(
-                    $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').append(
-                            $('<h2>').append(
-                                gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail)
-                            )
-                        ),
+                    util.fieldset(gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail),
                         actionlink
                         .on('click', function (e) {
                             e.preventDefault();
@@ -279,10 +250,10 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                                 });
                                 baton.model.set('selectall', false);
                             }
-
-                        }),
-                        checkboxes
-                    )
+                        })
+                    ).append(_(baton.multiValues.aliases).map(function (alias) {
+                        return util.checkbox(alias, alias, baton.model);
+                    }))
                 );
             }
         });

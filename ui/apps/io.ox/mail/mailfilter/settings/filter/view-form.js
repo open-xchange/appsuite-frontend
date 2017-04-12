@@ -633,10 +633,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 },
 
                 drawcheckbox = function (value) {
-                    return $('<div>').addClass('control-group mailfilter checkbox').append(
-                        $('<div>').addClass('controls'),
-                        $('<label>').text(gt('Process subsequent rules')).prepend(
-                            $('<input type="checkbox" tabindex="0">').attr('checked', value)
+                    var guid = _.uniqueId('form-control-label-');
+                    return $('<div class="control-group mailfilter checkbox">').append(
+                        $('<div class="controls">'),
+                        $('<label>').attr('for', guid).text(gt('Process subsequent rules')).prepend(
+                            $('<input type="checkbox">').attr({ id: guid, 'checked': value })
                         )
                     );
                 },

@@ -100,13 +100,13 @@ define('io.ox/core/folder/actions/add', [
                 if (!this.context.supportsPublicFolders) return;
 
                 var label = this.context.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
-
+                var guid = _.uniqueId('form-control-label-');
                 this.$body.append(
                     // public
                     $('<div class="form-group checkbox">').append(
                         // checkbox
-                        $('<label>').append(
-                            $('<input type="checkbox" name="public">'),
+                        $('<label>').attr('for', guid).append(
+                            $('<input type="checkbox" name="public">').attr('id', guid),
                             $.txt(label)
                         )
                     ),
