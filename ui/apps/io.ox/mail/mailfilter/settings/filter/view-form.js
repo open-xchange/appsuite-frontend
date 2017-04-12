@@ -55,13 +55,21 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
         },
 
         drawDropdown = function (activeValue, values, options) {
-
             var active = values[activeValue] || activeValue;
             if (options.caret) {
                 active = active + '<b class="caret">';
             }
-            var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
-                $ul = $('<ul class="dropdown-menu" role="menu">').append(
+
+            function getOptions() {
+                return options.sort ?
+                    _(options.sort).map(function (value) {
+                        if (value === options.skip) return;
+                        return $('<li>').append(
+                            $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
+                                $.txt(values[value])
+                            )
+                        );
+                    }) :
                     _(values).map(function (name, value) {
                         if (value === options.skip) return;
                         return $('<li>').append(
@@ -69,7 +77,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                                 $.txt(name)
                             )
                         );
-                    })
+                    });
+            }
+
+            var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
+                $ul = $('<ul class="dropdown-menu" role="menu">').append(
+                    getOptions()
                 );
 
             return new Dropdown({
@@ -224,35 +237,6 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'size' && testsPart.size.toString().trim() === '') {
                         this.model.set('test', { id: 'true' });
                     }
-                    // clear zone option in date condition for single test if no special zone is set
-                    if (testsPart.zone === 'original') {
-                        delete this.model.attributes.test.zone;
-                    }
-
-                }
-
-                if (this.model.attributes.test.tests) {
-
-                    // _.each(this.model.attributes.test.tests, function (test, key) {
-
-                    //     // remove empty nested condition
-                    //     if (test.tests && _.isEmpty(test.tests)) {
-                    //         self.model.attributes.test.tests.splice(key, 1);
-                    //     }
-                    // });
-
-                    _.each(this.model.attributes.test.tests, function (test, key) {
-
-                        // clear zone option in date condition for multiple tests if no special zone is set
-                        if (test.zone === 'original') self.model.attributes.test.tests[key].zone = null;
-
-                        // clear zone option in date condition for multiple nested tests if no special zone is set
-                        if (test.tests && !_.isEmpty(test.tests)) {
-                            _.each(test.tests, function (nestedTest, nestedKey) {
-                                if (nestedTest.zone === 'original') self.model.attributes.test.tests[key].tests[nestedKey].zone = null;
-                            });
-                        }
-                    });
                 }
 
                 // if there is a stop action it should always be the last
@@ -564,12 +548,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
                     test: 'create',
                     toggle: 'dropdown',
-                    skip: baton.model.get('test').id === 'true' ? 'nested' : ''
+                    skip: baton.model.get('test').id === 'true' ? 'nested' : '',
+                    sort: baton.view.defaults.conditionsOrder
                 }),
                 headlineActions, notificationActions, actionList,
                 drawDropdown(gt('Add action'), baton.view.actionsTranslations, {
                     action: 'create',
-                    toggle: 'dropup'
+                    toggle: 'dropup',
+                    sort: baton.view.defaults.actionsOrder
                 })
             );
 
@@ -598,7 +584,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     classes: 'no-positioning',
                     caret: true
                 },
-                optionsSwitch = drawDropdown(arrayOfTests.id, { allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met.') }, options);
+                optionsSwitch = drawDropdown(arrayOfTests.id, { allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met') }, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {
                 this.append($('<div>').addClass('line').append(optionsSwitch));
             } else {

@@ -15,30 +15,21 @@ define([
     'io.ox/core/extensions',
     'io.ox/mail/mailfilter/settings/filter/tests/register',
     'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
     'fixture!io.ox/mail/mailfilter/config.json'
-], function (ext, conditionsExtensions, actionsExtensions, fixtureMailfilterConfig) {
+], function (ext, conditionsExtensions, actionsExtensions, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
     describe('Mailfilter defaults', function () {
-
-        var defaults;
 
         beforeEach(function () {
 
             conditionsExtensions.processConfig(fixtureMailfilterConfig);
             actionsExtensions.processConfig(fixtureMailfilterConfig);
 
-            defaults = {
-                tests: {
-                    'true': {
-                        'id': 'true'
-                    }
-                },
-                actions: {}
-            };
-            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults });
-            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults });
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
 
         });
 
