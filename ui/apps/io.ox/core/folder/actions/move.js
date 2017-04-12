@@ -15,11 +15,10 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/picker',
     'io.ox/core/notifications',
-    'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
     'io.ox/mail/api',
     'io.ox/core/api/account'
-], function (api, picker, notifications, dialogs, gt, mailAPI, accountAPI) {
+], function (api, picker, notifications, gt, mailAPI, accountAPI) {
 
     'use strict';
 
@@ -143,7 +142,7 @@ define('io.ox/core/folder/actions/move', [
             this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll', title: gt('Move all messages') }, options));
         },
 
-        folder: function (id) {
+        folder: function (id, settings) {
 
             var model = api.pool.getModel(id),
                 module = model.get('module'),
@@ -175,7 +174,9 @@ define('io.ox/core/folder/actions/move', [
                 root: module === 'infostore' ? '9' : '1',
                 title: gt('Move folder') + ': ' + model.get('title'),
                 context: context,
-                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX'
+                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX',
+                persistent: 'folderpopup',
+                settings: settings
             });
         }
     };
