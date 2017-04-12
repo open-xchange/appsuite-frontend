@@ -47,11 +47,11 @@ define('io.ox/core/boot/fixes', [], function () {
         '.mediaplayer'
     ];
 
-    if (!ox.debug) {
-        $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {
-            e.preventDefault();
-        });
-    }
+    $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {
+        if (ox.debug) { console.log('io.ox/core/boot/fixes prevent contextmenu!'); }
+        e.preventDefault();
+        return false;
+    });
 
     // Prevent Content Spoofing
     // See: https://mathiasbynens.github.io/rel-noopener/
@@ -125,11 +125,6 @@ define('io.ox/core/boot/fixes', [], function () {
         if (_.browser.chrome === 18 || !_.browser.chrome) {
             $('html').addClass('legacy-chrome');
         }
-        // disable context menu on chrome for android
-        document.oncontextmenu = function (e) {
-            e.preventDefault();
-            return false;
-        };
     }
 
     // IE
