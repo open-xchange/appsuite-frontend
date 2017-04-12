@@ -39,7 +39,7 @@ define('sinon-wrapper', {
                 return obj[property];
             },
             stub: function (obj, method, fn) {
-                var stub = sinon.stub(obj, method, fn),
+                var stub = sinon.stub(obj, method).callsFake(fn),
                     restore = stub.restore,
                     id = counter + 1;
                 counter = id;
