@@ -129,7 +129,7 @@ define('io.ox/core/folder/actions/add', [
                 this.busy(true);
                 this.addFolder(isPublic ? '2' : folder, this.context.module, name)
                     .then(def.resolve.bind(def))
-                    .then(this.close, this.idle);
+                    .then(this.close, this.idle).fail(this.idle);
             },
             close: def.reject.bind(def),
             open: function () {
