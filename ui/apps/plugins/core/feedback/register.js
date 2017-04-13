@@ -297,6 +297,7 @@ define('plugins/core/feedback/register', [
                         this.idle();
                         return;
                     }
+
                     var currentApp = getAppOptions().currentApp,
                         found = false,
                         OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
@@ -330,11 +331,11 @@ define('plugins/core/feedback/register', [
                     // Add additional version information for some OS
                     switch (data.operating_system) {
                         case 'MacOS':
-                            if (!navigator.userAgent.match(/Mac OS X (\d+_?)*/)) return;
+                            if (!navigator.userAgent.match(/Mac OS X (\d+_?)*/)) break;
                             data.operating_system = navigator.userAgent.match(/Mac OS X (\d+_?)*/)[0];
                             break;
                         case 'iOS':
-                            if (!navigator.userAgent.match(/iPhone OS (\d+_?)*/)) return;
+                            if (!navigator.userAgent.match(/iPhone OS (\d+_?)*/)) break;
                             data.operating_system = navigator.userAgent.match(/iPhone OS (\d+_?)*/)[0];
                             break;
                         case 'Android':
@@ -343,32 +344,32 @@ define('plugins/core/feedback/register', [
                         case 'Windows':
                             if (navigator.userAgent.match(/Windows NT 5\.1/)) {
                                 data.operating_system = 'Windows XP';
-                                return;
+                                break;
                             }
                             if (navigator.userAgent.match(/Windows NT 6\.0/)) {
                                 data.operating_system = 'Windows Vista';
-                                return;
+                                break;
                             }
                             if (navigator.userAgent.match(/Windows NT 6\.1/)) {
                                 data.operating_system = 'Windows 7';
-                                return;
+                                break;
                             }
                             if (navigator.userAgent.match(/Windows NT 6\.2/)) {
                                 data.operating_system = 'Windows 8';
-                                return;
+                                break;
                             }
                             if (navigator.userAgent.match(/Windows NT 6\.3/)) {
                                 data.operating_system = 'Windows 8.1';
-                                return;
+                                break;
                             }
                             if (navigator.userAgent.match(/Windows NT [10\.0|6\.4]?/)) {
                                 data.operating_system = 'Windows 10';
-                                return;
+                                break;
                             }
                             break;
                         case 'Other':
                             // maybe a linux system
-                            if (!navigator.userAgent.match(/Linux/)) return;
+                            if (!navigator.userAgent.match(/Linux/)) break;
                             data.operating_system = 'Linux';
                             break;
                         // no default
