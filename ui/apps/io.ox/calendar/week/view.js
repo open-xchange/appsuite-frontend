@@ -1128,6 +1128,8 @@ define('io.ox/calendar/week/view', [
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
+                        // make sure we have full days when calculating the difference or we might get wrong results
+                        appointmentStartDate.startOf('day');
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
