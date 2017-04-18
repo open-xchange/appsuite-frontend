@@ -17,8 +17,9 @@ define('io.ox/mail/print', [
     'io.ox/mail/util',
     'io.ox/mail/detail/content',
     'settings!io.ox/mail',
-    'gettext!io.ox/mail'
-], function (print, api, util, content, settings, gt) {
+    'gettext!io.ox/mail',
+    'io.ox/core/attachments/view'
+], function (print, api, util, content, settings, gt, attachment) {
 
     'use strict';
 
@@ -46,10 +47,16 @@ define('io.ox/mail/print', [
     }
 
     function getAttachments(data) {
-        return _(util.getAttachments(data) || []).map(function (attachment, i) {
+        var headers = data.headers || {};
+        // hide attachments for our own share invitations
+        if (headers['X-Open-Xchange-Share-Type']) return [];
+
+        return new attachment.Collection(util.getAttachments(data) || []).filter(function (model) {
+            return model.isFileAttachment();
+        }).map(function (model, i) {
             return {
-                title: attachment.filename || ('Attachment #' + i),
-                size: attachment.size ? _.filesize(attachment.size || 0) : 0
+                title: model.get('filename', 'Attachment #' + i),
+                size: model.get('size') ? _.filesize(model.get('size') || 0) : 0
             };
         });
     }
