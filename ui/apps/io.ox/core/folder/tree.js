@@ -48,7 +48,8 @@ define('io.ox/core/folder/tree', [
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
                 highlightclass: 'visible-selection',
-                hideTrashfolder: false
+                hideTrashfolder: false,
+                realNames: false
             }, options);
 
             this.all = !!options.all;
@@ -58,6 +59,7 @@ define('io.ox/core/folder/tree', [
             this.module = options.module;
             this.open = options.open;
             this.root = options.root;
+            this.realNames = options.realNames;
 
             this.$el.data('view', this);
             this.$container = $('<ul class="tree-container f6-target" role="tree">');

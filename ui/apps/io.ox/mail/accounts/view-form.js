@@ -406,6 +406,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     },
                     folder: id,
                     module: 'mail',
+                    realNames: true,
                     root: accountId
                 });
             }

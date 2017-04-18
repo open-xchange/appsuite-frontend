@@ -328,6 +328,7 @@ define('io.ox/core/folder/node', [
             this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
+            this.realNames = options.tree.realNames;
 
             this.$ = {};
 
@@ -509,7 +510,8 @@ define('io.ox/core/folder/node', [
         },
 
         renderTitle: function () {
-            var title = this.getTitle();
+            var title = (this.realNames === true ? this.model.get('folder_name') || this.getTitle() : this.getTitle());
+
             this.$.label.text(title);
         },
 

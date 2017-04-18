@@ -92,7 +92,8 @@ define('io.ox/core/folder/picker', [
             alternative: $.noop,
             cancel: $.noop,
             create: $.noop,
-            createFolderButton: true
+            createFolderButton: true,
+            realNames: false
         }, options);
 
         function create() {
@@ -171,6 +172,7 @@ define('io.ox/core/folder/picker', [
             hideTrashfolder: o.hideTrashfolder,
             // highlight current selection
             highlight: true,
+            realNames: options.realNames,
             highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'
         });
 
