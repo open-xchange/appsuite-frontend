@@ -348,7 +348,8 @@ define('io.ox/backbone/mini-views/common', [
             var self = this;
             Dropdown.prototype.render.apply(this, arguments);
             _(this.options.values).each(function (name, value) {
-                self.option(self.name, value, name, { radio: true });
+                var tooltip = self.options.tooltips && self.options.tooltips[value] ? self.options.tooltips[value] : name;
+                self.option(self.name, value, name, { radio: true, title: tooltip });
             });
             this.updateLabel();
             return this;

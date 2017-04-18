@@ -166,6 +166,23 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         return _.extend(defaults, additionalValues);
     };
 
+    var returnDefaultToolTips = function () {
+        return {
+            'contains': gt('matches a substring'),
+            'not contains': gt('does not matches a substring'),
+            'is': gt('an exact, full match'),
+            'not is': gt('not an exact, full match '),
+            'matches': gt('a full match (allows DOS-style wildcards)'),
+            'not matches': gt('not a full match (allows DOS-style wildcards)'),
+            'startswith': gt('Starts with'),
+            'not startswith': gt('Starts not with'),
+            'endswith': gt('Ends with'),
+            'not endswith': gt('Ends not with'),
+            'regex': gt('Regex'),
+            'not regex': gt('Not Regex')
+        };
+    };
+
     var drawDropdown = function (activeValue, values, options) {
         var active = values[activeValue] || activeValue;
         if (options.caret) {
@@ -174,7 +191,6 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         var $toggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true" tabindex="0">').html(active),
             $ul = $('<ul class="dropdown-menu" role="menu">').append(
                 _(values).map(function (name, value) {
-                    // multi optiuons?
                     if (value === options.skip) return;
                     return $('<li>').append(
                         $('<a href="#" data-action="change-dropdown-value">').attr('data-value', value).data(options).append(
@@ -196,6 +212,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         drawCondition: drawCondition,
         drawDeleteButton: drawDeleteButton,
         returnContainsOptions: returnContainsOptions,
-        drawDropdown: drawDropdown
+        drawDropdown: drawDropdown,
+        returnDefaultToolTips: returnDefaultToolTips
     };
 });

@@ -558,7 +558,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         conditionKey: conditionKey,
                         inputId: inputId,
                         title: baton.view.conditionsTranslation.from,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
+                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)), tooltips: util.returnDefaultToolTips() },
                         inputLabel: baton.view.conditionsTranslation.from + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
                         inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                         errorView: true,
