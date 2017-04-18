@@ -288,6 +288,7 @@ define('io.ox/settings/main', [
 
         // select tree node on expand
         tree.on('open', function (id) {
+            if (_.device('smartphone')) return;
             select(id, undefined, undefined, { focus: true, focusPane: true });
         });
 

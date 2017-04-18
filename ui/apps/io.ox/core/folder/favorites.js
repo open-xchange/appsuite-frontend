@@ -15,13 +15,18 @@ define('io.ox/core/folder/favorites', [
     'io.ox/core/folder/node',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
+    'io.ox/core/upsell',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (TreeNodeView, api, ext, settings, gt) {
+], function (TreeNodeView, api, ext, upsell, settings, gt) {
 
     'use strict';
 
     _('mail contacts calendar tasks infostore'.split(' ')).each(function (module) {
+
+        // skip if no capability (use capabilities from upsell to work in demo mode)
+        if (module === 'mail' && !upsell.has('webmail')) return;
+        if (module !== 'mail' && !upsell.has(module)) return;
 
         // register collection
         var id = 'virtual/favorites/' + module,
@@ -134,7 +139,8 @@ define('io.ox/core/folder/favorites', [
 
     function getAffectedSubfolders(collection, id) {
         return collection.filter(function (model) {
-            return model.get('id').indexOf(id + api.getMailFolderSeparator()) === 0;
+            var modelId = model.get('id');
+            return modelId.indexOf(id + api.getMailFolderSeparator(modelId)) === 0;
         });
     }
 

@@ -700,7 +700,6 @@ define('io.ox/core/desktop', [
 
         return urlForceOn ||
             !urlForceOff &&
-            _.device('!smartphone') &&
             coreConfig.get('features/storeSavePoints', true);
     }
     // static methods

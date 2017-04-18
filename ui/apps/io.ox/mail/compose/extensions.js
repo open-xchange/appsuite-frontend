@@ -629,7 +629,9 @@ define('io.ox/mail/compose/extensions', [
                     view.listenTo(view.settingsModel, 'change', function () {
                         if (!this.settingsModel.get('enable')) return baton.model.unset('share_attachments');
                         var blacklist = ['usepassword'];
-                        if (!this.settingsModel.get('usepassword')) blacklist.push('password');
+
+                        // don't save password if the field is empty or disabled.
+                        if (!this.settingsModel.get('usepassword') || _.isEmpty(this.settingsModel.get('password'))) blacklist.push('password');
                         baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, blacklist));
                     });
 
