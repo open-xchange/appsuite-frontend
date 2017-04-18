@@ -29,7 +29,7 @@ Gruntfile.js
 .gitattributes
 .editorconfig
 .*ignore
-.eslintrc !node_modules/eslint-config-open-xchange-appsuite/
+.eslintrc
 .jshintrc
 .flowconfig
 .documentup.json
