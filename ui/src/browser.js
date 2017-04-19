@@ -94,7 +94,8 @@
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
 
             iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g, '.') : undefined;
-            standalone = ('standalone' in nav) && nav.standalone;
+            // ios vs. chrome
+            standalone = (('standalone' in nav) && nav.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
             firefoxIOS = ua.indexOf('FxiOS/') > -1;
