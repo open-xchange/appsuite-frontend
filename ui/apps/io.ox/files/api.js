@@ -20,10 +20,11 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -452,34 +453,45 @@ define('io.ox/files/api', [
                 // folders exceed upper limit?
                 if (folders.length >= stop) return folders.slice(start, stop);
                 // fetch files
-                return http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }).then(
-                    function (files) {
-                        // build virual response of folders, placeholders, and files
-                        // simple solution to get proper slice
-                        var unified = [].concat(
-                            folders,
-                            // fill up with placeholders
-                            new Array(Math.max(0, start - folders.length)),
-                            files
-                        );
+                return $.when(http.GET({ module: module, params: _.extend({}, params, { limit: limit }) }), ox.manifests.loadPluginsFor('io.ox/files/filter'))
+                .then(function (files) {
+                    // apply filter extensions
+                    files = files[0].filter(function (file) {
+                        return ext.point('io.ox/files/filter').filter(function (p) {
+                            return p.invoke('isEnabled', this, file) !== false;
+                        })
+                        .map(function (p) {
+                            return p.invoke('isVisible', this, file);
+                        })
+                        .reduce(function (acc, isVisible) {
+                            return acc && isVisible;
+                        }, true);
+                    });
 
-                        var result = unified.slice(start, stop);
-                        result.forEach(function (el, index) {
-                            result[index] = mergeDetailInPool(el);
-                        });
-                        return result;
-                    },
-                    function fail(e) {
-                        if (e.code === 'IFO-0400' && e.error_params.length === 0) {
-                            // IFO-0400 is missing the folder in the error params -> adding this manually
-                            e.error_params.push(params.folder);
-                        }
-                        api.trigger('error error:' + e.code, e);
-                        // this one might fail due to lack of permissions; error are transformed to empty array
-                        if (ox.debug) console.warn('files.httpGet', e.error, e);
-                        return [];
+                    // build virual response of folders, placeholders, and files
+                    // simple solution to get proper slice
+                    var unified = [].concat(
+                        folders,
+                        // fill up with placeholders
+                        new Array(Math.max(0, start - folders.length)),
+                        files
+                    );
+
+                    var result = unified.slice(start, stop);
+                    result.forEach(function (el, index) {
+                        result[index] = mergeDetailInPool(el);
+                    });
+                    return result;
+                }, function fail(e) {
+                    if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                        // IFO-0400 is missing the folder in the error params -> adding this manually
+                        e.error_params.push(params.folder);
                     }
-                );
+                    api.trigger('error error:' + e.code, e);
+                    // this one might fail due to lack of permissions; error are transformed to empty array
+                    if (ox.debug) console.warn('files.httpGet', e.error, e);
+                    return [];
+                });
             });
         },
         // set higher limit; works much faster than mail

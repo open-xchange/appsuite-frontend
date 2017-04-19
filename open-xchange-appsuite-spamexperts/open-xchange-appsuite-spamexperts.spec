@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-spamexperts
 Version:        @OXVERSION@
-%define         ox_release 25
+%define         ox_release 26
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -90,6 +90,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 #%{docroot}
 
 %changelog
+* Fri Apr 07 2017 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2017-04-18 (4083)
 * Wed Mar 29 2017 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2017-04-03 (4049)
 * Fri Mar 10 2017 Viktor Pracht <viktor.pracht@open-xchange.com>

@@ -1,4 +1,4 @@
-{
+[{
     "title": "Drive",
     "company": "Open-Xchange",
     "icon": "files.png",
@@ -10,4 +10,7 @@
     "refreshable": true,
     "index": 1000,
     "advancedMode": true
-}
+}, {
+    "namespace": "io.ox/files/filter",
+    "path": "io.ox/filter/files"
+}]
