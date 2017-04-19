@@ -48,10 +48,11 @@ define('plugins/core/feedback/register', [
     function getAppOptions(useWhitelist) {
         var currentApp,
             apps = _(appApi.getFavorites()).map(function (app) {
-                app.id = app.id.replace('io.ox/', '');
+                app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
+
                 if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
                 // suport for edit dialogs
-                if (ox.ui.App.getCurrentApp() && ox.ui.App.getCurrentApp().get('name').replace('io.ox/', '').indexOf(app.id) === 0) {
+                if (ox.ui.App.getCurrentApp() && ox.ui.App.getCurrentApp().get('name').replace(/io\.ox\/(office\/portal\/|office\/)?/, '').indexOf(app.id) === 0) {
                     currentApp = app;
                 }
                 return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
