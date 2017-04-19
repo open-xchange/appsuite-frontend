@@ -27,6 +27,19 @@
     .fa-chevron-down { display: inline-block; }
 }
 
+/**
+ * :SPECIAL
+ */
+
+// reserve extra space for bars on ios
+.ios:not(.standalone) .client-onboarding.mobile .modal-content {
+    max-height: calc(~"100vh - 88px");
+}
+
+/**
+ * :GENERAL
+ */
+
 .client-onboarding {
 
     [data-action='link/mailappinstall'] .app-icon {
