@@ -435,28 +435,32 @@ define('io.ox/files/filepicker', [
 
             filesPane.empty();
             filesAPI.getAll(id, { cache: false }).done(function (files) {
-                filesPane.append(
-                    _.chain(files)
+
+                files = _.chain(files)
                     .filter(options.filter)
                     .sortBy(options.sorter)
-                    .map(function (file) {
-                        var guid = _.uniqueId('form-control-label-');
-                        var title = (file.filename || file.title),
-                            $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
-                                $('<label class="checkbox-inline sr-only">')
-                                    .attr({ 'title': title, 'for': guid })
-                                    .append(
-                                        $('<input type="checkbox" tabindex="-1">').attr('id', guid)
-                                            .val(file.id).data('file', file)
-                                    ),
-                                $('<div class="name">').text(title)
-                            );
-                        if (options.point) {
-                            ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
-                        }
-                        return $div;
-                    })
-                    .value()
+                    .value();
+
+                var paneItems = files.map(function (file) {
+                    var guid = _.uniqueId('form-control-label-');
+                    var title = (file.filename || file.title),
+                        $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
+                            $('<label class="checkbox-inline sr-only">')
+                                .attr({ 'title': title, 'for': guid })
+                                .append(
+                                    $('<input type="checkbox" tabindex="-1">').attr('id', guid)
+                                        .val(file.id).data('file', file)
+                                ),
+                            $('<div class="name">').text(title)
+                        );
+                    if (options.point) {
+                        ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
+                    }
+                    return $div;
+                });
+
+                filesPane.append(
+                    paneItems
                 );
                 self.selection.clear();
                 self.selection.init(files);
