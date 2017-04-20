@@ -218,20 +218,26 @@ define('plugins/core/feedback/register', [
     });
 
     var modes = {
-        nps: {
-            ratingView: NpsRatingView,
-            //#. %1$s is the product name, for example 'OX App Suite'
-            title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
+            nps: {
+                ratingView: NpsRatingView,
+                //#. %1$s is the product name, for example 'OX App Suite'
+                title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
+            },
+            stars: {
+                ratingView: StarRatingView,
+                title: gt('Please rate this product')
+            },
+            modules: {
+                ratingView: ModuleRatingView,
+                title: gt('Please rate the following application:')
+            }
         },
-        stars: {
-            ratingView: StarRatingView,
-            title: gt('Please rate this product')
-        },
-        modules: {
-            ratingView: ModuleRatingView,
-            title: gt('Please rate the following application:')
-        }
-    };
+        dialogMode = settings.get('feedback/dialog', 'modules');
+
+    // make sure dialogMode is valid
+    if (_(_(modes).keys()).indexOf(dialogMode) === -1) {
+        dialogMode = 'modules';
+    }
 
     function sendFeedback(data) {
         return feedbackService ? feedbackService.sendFeedback(data) : $.when();
@@ -245,27 +251,27 @@ define('plugins/core/feedback/register', [
                 enter: 'send',
                 point: 'plugins/core/feedback',
                 title: gt('Your feedback'),
-                class: settings.get('feedback/dialog', 'modules') + '-feedback-view'
+                class: dialogMode + '-feedback-view'
             };
 
             // nps view needs more space
-            if (settings.get('feedback/dialog', 'modules') === 'nps') {
+            if (dialogMode === 'nps') {
                 options.width = 600;
             }
             new ModalDialog(options)
                 .extend({
                     title: function () {
                         this.$body.append(
-                            $('<div class="feedback-welcome-text">').text(modes[settings.get('feedback/dialog', 'modules')].title)
+                            $('<div class="feedback-welcome-text">').text(modes[dialogMode].title)
                         );
                     },
                     ratingView: function () {
-                        this.ratingView = new modes[settings.get('feedback/dialog', 'modules')].ratingView({ hover: settings.get('feedback/showHover', true) });
+                        this.ratingView = new modes[dialogMode].ratingView({ hover: settings.get('feedback/showHover', true) });
 
                         this.$body.append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
-                        if (settings.get('feedback/dialog', 'modules') === 'nps') return;
+                        if (dialogMode === 'nps') return;
                         var guid = _.uniqueId('feedback-note-');
                         this.$body.append(
                             $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
@@ -274,7 +280,7 @@ define('plugins/core/feedback/register', [
                     },
                     infotext: function () {
                         // without comment field infotext makes no sense
-                        if (settings.get('feedback/dialog', 'modules') === 'nps') return;
+                        if (dialogMode === 'nps') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
