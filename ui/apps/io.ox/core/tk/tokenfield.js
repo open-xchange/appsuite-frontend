@@ -378,13 +378,13 @@ define('io.ox/core/tk/tokenfield', [
                             label.css('max-width', label.width() - 16 + 'px');
                         }
                         // a11y: set title
-                        node.attr('title', function () {
+                        node.attr('aria-label', function () {
                             var token = model.get('token'),
                                 title = token.label;
                             if (token.label !== token.value) {
-                                title = token.label ? token.label + ' <' + token.value + '>' : token.value;
+                                title = token.label ? token.label + ' ' + token.value : token.value;
                             }
-                            return title;
+                            return gt('%1$s Press backspace to delete.', title);
                         });
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
@@ -587,7 +587,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.$el.closest('div.tokenfield').on('copy', function (e) {
+            this.$el.closest('div.tokenfield').attr('role', 'application').on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
@@ -603,14 +603,6 @@ define('io.ox/core/tk/tokenfield', [
                 if (result !== '') {
                     e.originalEvent.clipboardData.setData('text/plain', result);
                     e.preventDefault();
-                }
-            }).on('keydown', function (e) {
-                //Remove on cut
-                if ((e.ctrlKey || e.metaKey) && e.which === 88) {
-                    $(this).find('.token.active').each(function () {
-                        self.collection.remove($(this).data().attrs.model);
-                    });
-                    self.redrawTokens();
                 }
             });
 
