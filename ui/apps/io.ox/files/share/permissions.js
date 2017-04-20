@@ -825,6 +825,7 @@ define('io.ox/files/share/permissions', [
                 focus: '.form-control.tt-input',
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
                 title: title,
+                smartphoneInputFocus: true,
                 width: 800
             });
 

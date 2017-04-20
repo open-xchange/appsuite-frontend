@@ -49,6 +49,7 @@ define('io.ox/files/actions/share', [
             async: true,
             focus: '.link-group>input[type=text]',
             title: header,
+            smartphoneInputFocus: true,
             width: 600
         });
 

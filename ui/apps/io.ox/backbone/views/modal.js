@@ -48,7 +48,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 async: false,
                 context: {},
                 keyboard: true,
-                maximize: false
+                maximize: false,
+                smartphoneInputFocus: false
             }, options);
             this.context = options.context;
             // the original constructor will call initialize()
@@ -85,11 +86,26 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 }.bind(this));
             }
+
+            // scroll inputs into view when smartphone keyboard shows up
+            if (_.device('smartphone') && options.smartphoneInputFocus) {
+                // make sure scrolling actually works
+                this.$el.find('.modal-content').css('overflow-y', 'auto');
+                $(window).on('resize', this.scrollToInput);
+            }
+
             // track focusin
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.on('dispose', function () {
                 $(document).off('focusin', this.keepFocus);
+                $(window).off('resize', this.scrollToInput);
             });
+        },
+
+        scrollToInput: function () {
+            if ($(document.activeElement).filter('input[type="email"],input[type="text"],textarea').length === 1) {
+                document.activeElement.scrollIntoView();
+            }
         },
 
         keepFocus: function (e) {
