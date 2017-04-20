@@ -647,7 +647,7 @@ define('io.ox/mail/util', [
                     if (obj.disp === 'attachment' || /^image/.test(obj.content_type)) {
                         fixIds(data, obj);
                         attachments.push(
-                            _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
+                            _.extend({}, obj, { cid: null, mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     }
                 }

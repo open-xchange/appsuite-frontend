@@ -21,6 +21,8 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', [
         actionsTranslations = {},
         actionCapabilities = {},
         conditionsMapping = {},
+        conditionsOrder = [],
+        actionsOrder = [],
         defaults = {
             tests: {
                 'true': {
@@ -31,18 +33,20 @@ define('io.ox/mail/mailfilter/settings/filter/defaults', [
         };
 
     ext.point('io.ox/mail/mailfilter/tests').each(function (point) {
-        point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping });
+        point.invoke('initialize', null, { conditionsTranslation: conditionsTranslation, defaults: defaults, conditionsMapping: conditionsMapping, conditionsOrder: conditionsOrder });
     });
 
     ext.point('io.ox/mail/mailfilter/actions').each(function (point) {
-        point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities });
+        point.invoke('initialize', null, { actionsTranslations: actionsTranslations, defaults: defaults, actionCapabilities: actionCapabilities, actionsOrder: actionsOrder });
     });
 
     _.extend(defaults, {
         conditionsTranslation: conditionsTranslation,
         actionsTranslations: actionsTranslations,
         actionCapabilities: actionCapabilities,
-        conditionsMapping: conditionsMapping
+        conditionsMapping: conditionsMapping,
+        conditionsOrder: conditionsOrder,
+        actionsOrder: actionsOrder
     });
 
     return defaults;

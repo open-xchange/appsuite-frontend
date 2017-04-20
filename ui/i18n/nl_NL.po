@@ -734,11 +734,6 @@ msgstr "Werkelijke duur in minuten"
 msgid "Add"
 msgstr "Toevoegen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Add IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -762,8 +757,6 @@ msgstr "Toevoegen als publieke map"
 msgid "Add attachments"
 msgstr "Bijlagen toevoegen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -937,18 +930,8 @@ msgstr "Uw account toevoegen"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the added search query
-#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
-msgstr "%1$s toegevoegd, %2$s."
-
-#. %1$s is the display name of an added user or mail recipient
-#. %1$s is the added search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Added %1$s, %2$s."
-msgid "Added %1$s."
 msgstr "%1$s toegevoegd, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -984,13 +967,6 @@ msgstr "Bestanden met identieke namen toevoegen"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "Additional settings"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Addresses"
-msgid "Address"
-msgstr "Adressen"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -1042,8 +1018,8 @@ msgstr "Na een specifiek aantal gebeurtenissen"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Alle"
 
@@ -1183,8 +1159,8 @@ msgstr "Er is een onbekende fout opgetreden"
 msgid "Anniversary"
 msgstr "Verjaardag"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Any recipient"
 msgstr "Elke ontvanger"
 
@@ -1509,11 +1485,6 @@ msgstr "Terug naar aanmelden"
 msgid "Basic settings"
 msgstr "Basisinstellingen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Bcc"
-msgstr "Bcc"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1553,16 +1524,11 @@ msgstr "Blinde kopie"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blauw"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Body"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1619,8 +1585,8 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "CC"
 msgstr "Kopie aan"
 
@@ -1809,11 +1775,6 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Winkelwagentje is leeg."
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Cc"
-msgstr ""
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2228,17 +2189,15 @@ msgstr "Contacten zijn verplaatst"
 msgid "Contacts toolbar"
 msgstr "Contactenwerkbalk"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Contains"
 msgstr "Bevat"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Contains"
-msgid "Contains not"
-msgstr "Bevat"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Content"
+msgstr "Inhoud"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2281,13 +2240,6 @@ msgstr "Kopiëren"
 msgctxt "CC"
 msgid "Copy"
 msgstr "Kopie"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Move to folder"
-msgid "Copy message to folder"
-msgstr "Verplaats naar map"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
@@ -2493,13 +2445,6 @@ msgstr "Bestanden Aanmaken"
 msgid "Currency"
 msgstr "Valuta"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Current Date"
-msgid "Current date"
-msgstr "Huidige datum"
-
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Huidige rol"
@@ -2563,8 +2508,9 @@ msgstr "Gegevens zijn gedeeltelijk geïmporteerd (%1$s van %2$s records)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Date"
 msgstr "Datum"
 
@@ -2799,8 +2745,8 @@ msgstr "Omschrijving is gekopieerd"
 msgid "Description text"
 msgstr "Omschrijvingstekst"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Detail"
 msgstr "Detail"
 
@@ -2860,8 +2806,8 @@ msgstr "De widget uitschakelen"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "Afbreken"
@@ -3122,8 +3068,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Documenten"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Domain"
 msgstr "Domein"
 
@@ -3574,23 +3520,9 @@ msgstr "Einde van werktijd"
 msgid "Ends"
 msgstr "Eindigt"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends on"
-msgid "Ends not with"
-msgstr "Eindigt op"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
-msgstr "Eindigt op"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends on"
-msgid "Ends with"
 msgstr "Eindigt op"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
@@ -3610,10 +3542,10 @@ msgstr "Geef hier de titel van het document"
 msgid "Entrepreneur"
 msgstr "Ondernemer"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Envelope"
-msgstr "Envelope"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Envelope - To"
+msgstr "Envelope - Aan"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3791,11 +3723,6 @@ msgstr "Exacte data"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Directeur"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Exists"
-msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -4019,7 +3946,6 @@ msgstr "Bestand is verplaatst"
 msgid "File name"
 msgstr "Bestandsnaam"
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -4100,19 +4026,16 @@ msgstr "Aanpassen aan schermformaat"
 msgid "Fit to screen width"
 msgstr "Aanpassen aan schermbreedte"
 
-#. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
-#, fuzzy
-#| msgctxt "verb"
-#| msgid "Flag"
-msgid "Flag"
-msgstr "Vlag"
-
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Flag"
 msgstr "Vlag"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Flag mail with"
+msgstr "Markeer met vlag"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
@@ -4293,8 +4216,7 @@ msgstr "Vrijdag"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Van"
 
@@ -4411,8 +4333,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Grijs"
@@ -4423,8 +4345,8 @@ msgstr "Grijsblauw"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Groen"
@@ -4461,9 +4383,8 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML en platte tekst"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Header"
 msgstr "Header"
 
@@ -4899,25 +4820,18 @@ msgstr "Uitnodigen voor een afspraak"
 msgid "Invite to new appointment"
 msgstr "Uitnodigen voor een nieuwe afspraak"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is bigger than"
 msgstr "Is groter dan"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is exactly"
 msgstr "Is exact"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Is exactly"
-msgid "Is not exactly"
-msgstr "Is exact"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Is kleiner dan"
 
@@ -4985,8 +4899,8 @@ msgstr "De widget alleen uitschakelen"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Keep"
 msgstr "Behouden"
 
@@ -5095,10 +5009,6 @@ msgstr "Layout"
 msgid "Learn more"
 msgstr "Leer meer"
 
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Leave empty if you have none"
-msgstr ""
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -5127,15 +5037,15 @@ msgid "Life"
 msgstr "Leven"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Lichtblauw"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "lichtgroen"
@@ -5202,8 +5112,8 @@ msgstr ""
 "Het inladen van het volledige e-mailbericht kan leiden tot performance "
 "problemen."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Localpart"
 msgstr "Lokaal deel"
 
@@ -5344,7 +5254,6 @@ msgstr "Het e-mailbericht heeft geen onderwerp. Desondanks verzenden?"
 msgid "Mail has no recipient."
 msgstr "E-mailbericht heeft geen ontvanger."
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5372,8 +5281,8 @@ msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 "E-mailbericht is niet geïmporteerd, alleen .eml bestanden worden ondersteund."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mailing list"
 msgstr "Mailinglijst"
 
@@ -5481,8 +5390,8 @@ msgstr "Markeer als onvoltooid"
 msgid "Mark as unread"
 msgstr "Markeer als ongelezen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mark mail as"
 msgstr "Markeer e-mail als"
 
@@ -5532,16 +5441,9 @@ msgstr ""
 msgid "Maroon"
 msgstr "Bordeauxrood"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Matches"
-msgstr "Komt overeen"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Matches"
-msgid "Matches not"
 msgstr "Komt overeen"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5739,8 +5641,8 @@ msgid "Move to category"
 msgstr "Verplaats naar categorie"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Verplaats naar map"
 
@@ -5821,8 +5723,8 @@ msgstr "Mijn taken"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Name"
 msgstr "Naam"
 
@@ -5840,13 +5742,6 @@ msgstr "Marineblauw"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "Meer ruimte nodig?"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Add condition"
-msgid "Nested condition"
-msgstr "Voorwaarde toevoegen"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -6146,8 +6041,7 @@ msgstr "Geen titel."
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 msgid "None"
 msgstr "Geen"
 
@@ -6161,13 +6055,6 @@ msgstr "Geen"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Normaal"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Regex"
-msgid "Not Regex"
-msgstr "Reguliere expressie"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6513,8 +6400,8 @@ msgstr "Opties"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Oranje"
@@ -6592,11 +6479,6 @@ msgstr "Pagina %1$d van %2$d"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "Pager"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Part"
-msgstr ""
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6768,8 +6650,8 @@ msgstr "Kies hier een tijd"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Roze"
@@ -6860,8 +6742,8 @@ msgstr "Voer alstublieft een zoekopdracht in"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Voer een geldige datum in"
 
@@ -6987,12 +6869,6 @@ msgstr "Geef alstublieft feedback over dit product"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selecteer een bestand voor import"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Please select at least one day"
-msgid "Please select a rating."
-msgstr "Selecteer alstublieft minimaal één dag."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7352,8 +7228,8 @@ msgstr "Aankoopbevestiging"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Paars"
@@ -7367,10 +7243,7 @@ msgstr "Snel antwoorden"
 msgid "Quit"
 msgstr "Stoppen"
 
-#. Quota means a general quota for mail and files
-#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/plugins/portal/quota/register.js
-#: module:plugins/portal
+#: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Quota"
 msgstr "Quota"
 
@@ -7504,8 +7377,8 @@ msgstr "Een terugkerende taak moet een geldige startdatum hebben."
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Rood"
@@ -7542,8 +7415,8 @@ msgstr "E-mail van %1$s: %2$s"
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Redirect to"
 msgstr "Doorsturen naar"
 
@@ -7564,8 +7437,8 @@ msgstr "Verversingsinterval"
 msgid "Refresh rate in minutes"
 msgstr "Vernieuwingstijd in minuten"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Regex"
 msgstr "Reguliere expressie"
 
@@ -7605,8 +7478,8 @@ msgstr "Afwijzen met reden"
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Reject with reason"
 msgstr "Afwijzen met reden"
 
@@ -7689,11 +7562,6 @@ msgstr "Verwijderen"
 msgid "Remove %1$s"
 msgstr "Verwijder %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Remove IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7723,19 +7591,9 @@ msgstr "Verwijder deelnemer"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the removed search query
-#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s verwijderd, %2$s."
-
-#. %1$s is the display name of a removed user or mail recipient
-#. %1$s is the removed search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Remove %1$s"
-msgid "Removed %1$s."
-msgstr "Verwijder %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7779,7 +7637,10 @@ msgid "Reply"
 msgstr "Beantwoorden"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/checks.js
+msgid "Reply All"
+msgstr "Allen Beantwoorden"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply all"
 msgstr "Allen beantwoorden"
 
@@ -7815,20 +7676,6 @@ msgstr "Verzoek om een leesbevestiging"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "Uitnodiging opnieuw gestuurd"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-From"
-msgstr "Herstel"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-To"
-msgstr "Herstel"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7937,39 +7784,19 @@ msgstr "Rijen"
 msgid "Royal blue"
 msgstr "Koningsblauw"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies from"
 msgstr "Regel toepassen van"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies from"
-msgid "Rule applies not from"
-msgstr "Regel toepassen van"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies on"
-msgid "Rule applies not on"
-msgstr "Regel toepassen op"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies until"
-msgid "Rule applies not until"
-msgstr "Regel toepassen tot"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#. The filter rule will be applied on a specific date, which can be selected by the user
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies on"
 msgstr "Regel toepassen op"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies until"
 msgstr "Regel toepassen tot"
 
@@ -8195,8 +8022,8 @@ msgstr "Selecteer bestand"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Select folder"
 msgstr "Selecteer map"
 
@@ -8265,10 +8092,15 @@ msgstr "Verstuur kennisgevingen"
 msgid "Send vacation notice during this time only"
 msgstr "Stuur alleen een afwezigheidsmelding gedurende deze periode"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender"
-msgstr "Verzender"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Verzendadres"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender/From"
+msgstr "Verzender/Van"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8281,13 +8113,6 @@ msgstr[1] "Verzend %1$d berichten ... %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "Verzonden"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "end date "
-msgid "Sent date"
-msgstr "einddatum "
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8345,13 +8170,6 @@ msgstr "Categorie instellen"
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
-msgstr "Stel kleur in"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Set color"
-msgid "Set color flag"
 msgstr "Stel kleur in"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
@@ -8639,8 +8457,8 @@ msgstr "Aangemeld als:"
 msgid "Size"
 msgstr "Grootte"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Grootte (bytes)"
 
@@ -8810,22 +8628,8 @@ msgstr "Begindatum"
 msgid "StartTLS"
 msgstr "StartTLS"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts on"
-msgid "Starts not with"
-msgstr "Start op"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
-msgstr "Start op"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts on"
-msgid "Starts with"
 msgstr "Start op"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -8860,8 +8664,8 @@ msgstr "Student"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8968,6 +8772,11 @@ msgstr "TB"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "Teletype/TDD"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Tag mail with"
+msgstr "Labelen met"
 
 #. This is a summary for a mail filter rule
 #. %1$s User input (usually a mail address)
@@ -9455,13 +9264,6 @@ msgstr ""
 "Er zijn %1$d berichten in deze map: momenteel worden niet alle berichten in "
 "de lijst getoond."
 
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled to due to performance reasons."
-msgstr ""
-
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9825,8 +9627,8 @@ msgstr "Titel"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "Aan"
@@ -10214,8 +10016,8 @@ msgstr ""
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Gebruiker"
 
@@ -10493,8 +10295,8 @@ msgid "Years"
 msgstr "Jaren"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Yellow"
 msgstr "Geel"
 
@@ -11003,27 +10805,6 @@ msgstr "kies een ander scenario"
 msgid "close for %1$s"
 msgstr "sluiten voor %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all conditions are met"
-msgstr "Pas regel toe als aan alle voorwaarden is voldaan"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all of these conditions are met"
-msgstr "Pas regel toe als aan alle voorwaarden is voldaan"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if any condition is met."
-msgid "continue if any of these condition is met."
-msgstr "Pas regel toe als aan één voorwaarde is voldaan"
-
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "create objects"
@@ -11042,8 +10823,8 @@ msgstr "donkerblauw"
 msgid "dark green"
 msgstr "donkergroen"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "datepicker"
 msgstr "datumselectie"
 
@@ -11080,8 +10861,8 @@ msgstr "verwijder indien verlopen"
 msgid "delete only own objects"
 msgstr "Verwijder alleen eigen objecten"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "deleted"
 msgstr "verwijderd"
 
@@ -11123,13 +10904,6 @@ msgstr "bestanden"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "eerste"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Flagged"
-msgid "flagged"
-msgstr "Gemarkeerd"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -11291,13 +11065,6 @@ msgstr "één jaar"
 msgid "orange"
 msgstr "oranje"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Your timezone"
-msgid "original timezone"
-msgstr "Uw tijdzone"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
 msgstr "roze"
@@ -11328,8 +11095,8 @@ msgstr "rood"
 msgid "second"
 msgstr "tweede"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "seen"
 msgstr "gezien"
 
@@ -11636,6 +11403,9 @@ msgstr "yyyy"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Abonnement toevoegen. Dit kan enige seconden duren …"
 
+#~ msgid "Addresses"
+#~ msgstr "Adressen"
+
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Geavanceerde Filters blok is gesloten."
 
@@ -11750,6 +11520,9 @@ msgstr "yyyy"
 #~| msgid "your platform"
 #~ msgid "Back to platforms"
 #~ msgstr "uw platform"
+
+#~ msgid "Bcc"
+#~ msgstr "Bcc"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -11887,9 +11660,6 @@ msgstr "yyyy"
 #~ msgid "Confirmation status"
 #~ msgstr "bevestigingsstatus"
 
-#~ msgid "Content"
-#~ msgstr "Inhoud"
-
 #, fuzzy
 #~ msgid "Continue Presentation"
 #~ msgstr "Taak uitnodigingen"
@@ -11954,6 +11724,9 @@ msgstr "yyyy"
 
 #~ msgid "Creating the task"
 #~ msgstr "De taak aanmaken"
+
+#~ msgid "Current Date"
+#~ msgstr "Huidige datum"
 
 #~ msgid "Customizing"
 #~ msgstr "Aanpassingen"
@@ -12194,8 +11967,8 @@ msgstr "yyyy"
 #~ msgid "Entire thread"
 #~ msgstr "Gehele conversatie"
 
-#~ msgid "Envelope - To"
-#~ msgstr "Envelope - Aan"
+#~ msgid "Envelope"
+#~ msgstr "Envelope"
 
 #~ msgid "Every %1$d days."
 #~ msgstr "Elke %1$d dagen."
@@ -12271,9 +12044,6 @@ msgstr "yyyy"
 
 #~ msgid "Files View"
 #~ msgstr "Bestandenoverzicht"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Markeer met vlag"
 
 #~ msgid "Folder names must not contain slashes"
 #~ msgstr "Mapnamen mogen geen schuine streep bevatten"
@@ -12745,11 +12515,6 @@ msgstr "yyyy"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "De e-mailinstellingen openen"
 
-#, fuzzy
-#~| msgid "Mail quota"
-#~ msgid "Overall quota"
-#~ msgstr "E-mailquota"
-
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Achterstallige Taak. %1$s %2$s. Toets [enter] om te openen"
 
@@ -12903,11 +12668,11 @@ msgstr "yyyy"
 #~ msgid "Remove from recipient list"
 #~ msgstr "Verwijder uit verzendlijst"
 
-#~ msgid "Reply All"
-#~ msgstr "Allen Beantwoorden"
-
 #~ msgid "Reply to"
 #~ msgstr "Antwoorden naar"
+
+#~ msgid "Reset"
+#~ msgstr "Herstel"
 
 #~ msgid "Resource name"
 #~ msgstr "Bronnaam"
@@ -12999,11 +12764,8 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "Stuur feedback"
 
-#~ msgid "Sender address"
-#~ msgstr "Verzendadres"
-
-#~ msgid "Sender/From"
-#~ msgstr "Verzender/Van"
+#~ msgid "Sender"
+#~ msgstr "Verzender"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Versturen van e-mailberichten naar een contactpersoon"
@@ -13199,9 +12961,6 @@ msgstr "yyyy"
 #~| msgid "Your name"
 #~ msgid "Suriname"
 #~ msgstr "Uw naam"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Labelen met"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "Taakuitnodiging. %1$s %2$s %3$s. Toets [enter] om te openen"
@@ -14091,6 +13850,9 @@ msgstr "yyyy"
 #~| msgid "Edit signature"
 #~ msgid "edit share"
 #~ msgstr "Bewerk ondertekening"
+
+#~ msgid "end date "
+#~ msgstr "einddatum "
 
 #~ msgid "ends"
 #~ msgstr "eindigt"

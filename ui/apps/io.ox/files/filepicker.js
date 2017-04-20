@@ -303,7 +303,8 @@ define('io.ox/files/filepicker', [
             },
             acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
             cancel: $.noop,
-            initialize: $.noop
+            initialize: $.noop,
+            createFolderButton: true
         }, options);
 
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
@@ -439,12 +440,13 @@ define('io.ox/files/filepicker', [
                     .filter(options.filter)
                     .sortBy(options.sorter)
                     .map(function (file) {
+                        var guid = _.uniqueId('form-control-label-');
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
-                                    .attr('title', title)
+                                    .attr({ 'title': title, 'for': guid })
                                     .append(
-                                        $('<input type="checkbox" tabindex="-1">')
+                                        $('<input type="checkbox" tabindex="-1">').attr('id', guid)
                                             .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
@@ -548,6 +550,7 @@ define('io.ox/files/filepicker', [
             abs: false,
             folder: options.folder || undefined,
             hideTrashfolder: options.hideTrashfolder || undefined,
+            createFolderButton: options.createFolderButton,
 
             done: function (id, dialog) {
                 def.resolve(

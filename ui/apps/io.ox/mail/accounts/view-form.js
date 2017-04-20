@@ -20,8 +20,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
-    'io.ox/core/capabilities'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/settings/util'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util) {
 
     'use strict';
 
@@ -405,6 +406,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     },
                     folder: id,
                     module: 'mail',
+                    realNames: true,
                     root: accountId
                 });
             }
@@ -425,12 +427,9 @@ define.async('io.ox/mail/accounts/view-form', [
         return $('<div class="col-sm-7">').append(args);
     }
 
-    function checkbox(text) {
-        var args = _(arguments).toArray();
+    function checkbox(id, text, model) {
         return $('<div class="col-sm-offset-4 col-sm-7">').append(
-            $('<div class="checkbox">').append(
-                $('<label class="control-label">').text(text).prepend(args.slice(1))
-            )
+            util.checkbox(id, text, model)
         );
     }
 
@@ -497,18 +496,12 @@ define.async('io.ox/mail/accounts/view-form', [
                     .addClass('pop3'),
                     // expunge (pop3 only)
                     group(
-                        checkbox(
-                            gt('Remove copy from server after retrieving a message'),
-                            new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
-                        )
+                        checkbox('pop3_expunge_on_quit', gt('Remove copy from server after retrieving a message'), model)
                     )
                     .addClass('pop3'),
                     // delete write-through (pop3)
                     group(
-                        checkbox(
-                            gt('Deleting messages on local storage also deletes them on server'),
-                            new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
-                        )
+                        checkbox('pop3_delete_write_through', gt('Deleting messages on local storage also deletes them on server'), model)
                     )
                     .addClass('pop3')
                 )
@@ -640,10 +633,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
                         $() :
                         group(
-                            checkbox(
-                                gt('Use unified mail for this account'),
-                                new mini.CheckboxView({ id: 'unified_inbox_enabled', model: model }).render().$el
-                            )
+                            checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
                         )
                     )
                 )

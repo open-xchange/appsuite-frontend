@@ -718,11 +718,6 @@ msgstr "實際持續分鐘數"
 msgid "Add"
 msgstr "新增"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Add IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -746,8 +741,6 @@ msgstr "新增為公開資料夾"
 msgid "Add attachments"
 msgstr "新增附件"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -921,18 +914,8 @@ msgstr "新增您的帳號"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the added search query
-#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
-msgstr "已新增 %1$s, %2$s。"
-
-#. %1$s is the display name of an added user or mail recipient
-#. %1$s is the added search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Added %1$s, %2$s."
-msgid "Added %1$s."
 msgstr "已新增 %1$s, %2$s。"
 
 #. %s is a list of filenames separeted by commas
@@ -964,13 +947,6 @@ msgstr "新增相同檔名的檔案"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "其他選項"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Addresses"
-msgid "Address"
-msgstr "地址"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -1022,8 +998,8 @@ msgstr "次後"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "全部"
 
@@ -1153,8 +1129,8 @@ msgstr "發生未知錯誤"
 msgid "Anniversary"
 msgstr "周年紀念日"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Any recipient"
 msgstr "任何收件人"
 
@@ -1465,11 +1441,6 @@ msgstr "回到登入"
 msgid "Basic settings"
 msgstr "基礎設定"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Bcc"
-msgstr "密件抄送"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1507,16 +1478,11 @@ msgstr "密件副本"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "藍色"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Body"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1571,8 +1537,8 @@ msgstr "更改此約會日期可建立一個系列約會的例外情況。是否
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "CC"
 msgstr "副本"
 
@@ -1761,11 +1727,6 @@ msgstr "CardDAV 網址"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "購物車是空的。"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "抄送"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2175,17 +2136,15 @@ msgstr "已移動聯絡人"
 msgid "Contacts toolbar"
 msgstr "聯絡人工具列"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Contains"
 msgstr "包含"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Contains"
-msgid "Contains not"
-msgstr "包含"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Content"
+msgstr "內容"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2227,13 +2186,6 @@ msgstr "複製"
 msgctxt "CC"
 msgid "Copy"
 msgstr "副本"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Move to folder"
-msgid "Copy message to folder"
-msgstr "移至文件夾"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
@@ -2437,13 +2389,6 @@ msgstr "建立檔案"
 msgid "Currency"
 msgstr "幣值"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Current Date"
-msgid "Current date"
-msgstr "今日"
-
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "目前角色"
@@ -2507,8 +2452,9 @@ msgstr "只匯入部分資料〈%1$s 筆記錄，共 %2$s 筆〉"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Date"
 msgstr "日期"
 
@@ -2743,8 +2689,8 @@ msgstr "已複製描述"
 msgid "Description text"
 msgstr "描述文字"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Detail"
 msgstr "詳細資訊"
 
@@ -2804,8 +2750,8 @@ msgstr "停用小工具"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "放棄"
@@ -3053,8 +2999,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "文件"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Domain"
 msgstr "網域"
 
@@ -3494,24 +3440,10 @@ msgstr "工作時間結束"
 msgid "Ends"
 msgstr "結束於"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends on"
-msgid "Ends not with"
-msgstr "結束於"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
 msgstr "結束於"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends at"
-msgid "Ends with"
-msgstr "結束日期"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Enter Password"
@@ -3530,10 +3462,10 @@ msgstr "在此輸入文件標題"
 msgid "Entrepreneur"
 msgstr "創業者"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Envelope"
-msgstr "信封"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Envelope - To"
+msgstr "信封 - 給"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3704,11 +3636,6 @@ msgstr "準確日期"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "執行階層"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Exists"
-msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -3922,7 +3849,6 @@ msgstr "已移動檔案"
 msgid "File name"
 msgstr "檔案名稱"
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -4000,19 +3926,16 @@ msgstr "調整成螢幕大小"
 msgid "Fit to screen width"
 msgstr "調整成螢幕寬度"
 
-#. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
-#, fuzzy
-#| msgctxt "verb"
-#| msgid "Flag"
-msgid "Flag"
-msgstr "標誌"
-
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Flag"
 msgstr "標誌"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Flag mail with"
+msgstr "為郵件加入旗標"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
@@ -4190,8 +4113,7 @@ msgstr "星期五"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "從"
 
@@ -4306,8 +4228,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "灰色"
@@ -4318,8 +4240,8 @@ msgstr "灰藍色"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "綠色"
@@ -4356,9 +4278,8 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML 和純文字"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Header"
 msgstr "標題"
 
@@ -4784,25 +4705,18 @@ msgstr "約會邀請"
 msgid "Invite to new appointment"
 msgstr "邀請至新約會"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is bigger than"
 msgstr "大於"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is exactly"
 msgstr "等於"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Is exactly"
-msgid "Is not exactly"
-msgstr "等於"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "小於"
 
@@ -4868,8 +4782,8 @@ msgstr "僅停用小工具"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Keep"
 msgstr "保留"
 
@@ -4978,10 +4892,6 @@ msgstr "版面"
 msgid "Learn more"
 msgstr "了解更多"
 
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Leave empty if you have none"
-msgstr ""
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -5008,15 +4918,15 @@ msgid "Life"
 msgstr "生活"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "亮藍"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "亮綠"
@@ -5081,8 +4991,8 @@ msgstr "載入完整郵件"
 msgid "Loading the full mail might lead to performance problems."
 msgstr "載入完整郵件可能會造成效能問題。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Localpart"
 msgstr "本地部分"
 
@@ -5221,7 +5131,6 @@ msgstr "這封信沒有主旨，要傳送嗎？"
 msgid "Mail has no recipient."
 msgstr "郵件沒有收件者。"
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5248,8 +5157,8 @@ msgstr "郵件來源"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "郵件未被匯入，僅支援 .eml 檔案。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mailing list"
 msgstr "郵件清單"
 
@@ -5357,8 +5266,8 @@ msgstr "標示為未完成"
 msgid "Mark as unread"
 msgstr "標記為未讀"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mark mail as"
 msgstr "將郵件標示為"
 
@@ -5408,16 +5317,9 @@ msgstr ""
 msgid "Maroon"
 msgstr "栗色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Matches"
-msgstr "符合"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Matches"
-msgid "Matches not"
 msgstr "符合"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5615,8 +5517,8 @@ msgid "Move to category"
 msgstr "移至分類"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "移至文件夾"
 
@@ -5697,8 +5599,8 @@ msgstr "我的任務"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Name"
 msgstr "姓名"
 
@@ -5716,13 +5618,6 @@ msgstr "海軍藍"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "需要更多空間嗎？"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Add condition"
-msgid "Nested condition"
-msgstr "添加條件"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -6018,8 +5913,7 @@ msgstr "無標題。"
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 msgid "None"
 msgstr "無"
 
@@ -6033,13 +5927,6 @@ msgstr "無"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "一般"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Regex"
-msgid "Not Regex"
-msgstr "Regex"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6378,8 +6265,8 @@ msgstr "選項"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "橘色"
@@ -6457,11 +6344,6 @@ msgstr "第 %1$d 頁，共 %2$d 頁"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "尋呼機"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Part"
-msgstr ""
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6630,8 +6512,8 @@ msgstr "請在此選擇一個時間"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "粉紅色"
@@ -6718,8 +6600,8 @@ msgstr "請輸入搜尋字串"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "請輸入有效日期"
 
@@ -6835,12 +6717,6 @@ msgstr "請為此產品打分數"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "請選擇要匯入的檔案"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Please select at least one day"
-msgid "Please select a rating."
-msgstr "請選擇至少一天"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7195,8 +7071,8 @@ msgstr "確認購買"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫色"
@@ -7210,10 +7086,7 @@ msgstr "快速回覆"
 msgid "Quit"
 msgstr "離開"
 
-#. Quota means a general quota for mail and files
-#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/plugins/portal/quota/register.js
-#: module:plugins/portal
+#: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Quota"
 msgstr "額度"
 
@@ -7335,8 +7208,8 @@ msgstr "重複發生的任務需要有效開始日期。"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "紅紅"
@@ -7373,8 +7246,8 @@ msgstr "來自 %1$s 的郵件: %2$d"
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Redirect to"
 msgstr "重導至"
 
@@ -7395,8 +7268,8 @@ msgstr "更新時間"
 msgid "Refresh rate in minutes"
 msgstr "按分鐘設置重新整理頻率"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Regex"
 msgstr "Regex"
 
@@ -7436,8 +7309,8 @@ msgstr "拒絕理由"
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Reject with reason"
 msgstr "拒絕理由"
 
@@ -7520,11 +7393,6 @@ msgstr "刪除"
 msgid "Remove %1$s"
 msgstr "移除 %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Remove IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7554,19 +7422,9 @@ msgstr "移除成員"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the removed search query
-#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "已移除 %1$s, %2$s。"
-
-#. %1$s is the display name of a removed user or mail recipient
-#. %1$s is the removed search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Remove %1$s"
-msgid "Removed %1$s."
-msgstr "移除 %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7610,7 +7468,10 @@ msgid "Reply"
 msgstr "回覆"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/checks.js
+msgid "Reply All"
+msgstr "全部回覆"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply all"
 msgstr "回覆全部"
 
@@ -7646,20 +7507,6 @@ msgstr "要求送達回執"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "重寄邀請函"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-From"
-msgstr "重設"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-To"
-msgstr "重設"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7768,39 +7615,19 @@ msgstr "欄"
 msgid "Royal blue"
 msgstr "皇室藍"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies from"
 msgstr "規則套用自"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies from"
-msgid "Rule applies not from"
-msgstr "規則套用自"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies on"
-msgid "Rule applies not on"
-msgstr "規則套用於"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies until"
-msgid "Rule applies not until"
-msgstr "規則套用至"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#. The filter rule will be applied on a specific date, which can be selected by the user
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies on"
 msgstr "規則套用於"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies until"
 msgstr "規則套用至"
 
@@ -8023,8 +7850,8 @@ msgstr "選擇檔案"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Select folder"
 msgstr "選擇資料夾"
 
@@ -8093,10 +7920,15 @@ msgstr "傳送通知"
 msgid "Send vacation notice during this time only"
 msgstr "只在此時間傳送假期通知"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender"
-msgstr "寄件者"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "寄件地址"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender/From"
+msgstr "寄件者/自"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8109,13 +7941,6 @@ msgstr[1] "正在傳送 %1$d 封訊息… %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "已發出"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "end date "
-msgid "Sent date"
-msgstr "結束日期"
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8173,13 +7998,6 @@ msgstr "設定分類"
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
-msgstr "設定色彩"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Set color"
-msgid "Set color flag"
 msgstr "設定色彩"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
@@ -8466,8 +8284,8 @@ msgstr "已登入為:"
 msgid "Size"
 msgstr "大小"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "大小 (位元組)"
 
@@ -8632,22 +8450,8 @@ msgstr "起始日期"
 msgid "StartTLS"
 msgstr "StartTLS"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts on"
-msgid "Starts not with"
-msgstr "開始於"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
-msgstr "開始於"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts on"
-msgid "Starts with"
 msgstr "開始於"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -8682,8 +8486,8 @@ msgstr "學生"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8790,6 +8594,11 @@ msgstr "TB"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Tag mail with"
+msgstr "為郵件加入標籤"
 
 #. This is a summary for a mail filter rule
 #. %1$s User input (usually a mail address)
@@ -9237,13 +9046,6 @@ msgid ""
 "the list currently."
 msgstr "此信件匣中有 %1$d 封訊息，不是所有訊息都顯示於清單中。"
 
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled to due to performance reasons."
-msgstr ""
-
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9580,8 +9382,8 @@ msgstr "頭銜"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "收件人"
@@ -9958,8 +9760,8 @@ msgstr "使用上下鍵修改時間，按下 ESC 鍵關閉選擇範圍"
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "使用者"
 
@@ -10235,8 +10037,8 @@ msgid "Years"
 msgstr "年"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Yellow"
 msgstr "黃色"
 
@@ -10717,27 +10519,6 @@ msgstr "選擇不同情境"
 msgid "close for %1$s"
 msgstr "關閉 %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all conditions are met"
-msgstr "符合所有條件時套用規則"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all of these conditions are met"
-msgstr "符合所有條件時套用規則"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if any condition is met."
-msgid "continue if any of these condition is met."
-msgstr "符合任何條件時套用規則"
-
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "create objects"
@@ -10756,8 +10537,8 @@ msgstr "深藍色"
 msgid "dark green"
 msgstr "深紅色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "datepicker"
 msgstr "日期選擇器"
 
@@ -10794,8 +10575,8 @@ msgstr "過期時刪除"
 msgid "delete only own objects"
 msgstr "僅刪除自己的物件"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "deleted"
 msgstr "已刪除"
 
@@ -10837,13 +10618,6 @@ msgstr "檔案"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "第一個"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Flagged"
-msgid "flagged"
-msgstr "已標誌"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -11005,13 +10779,6 @@ msgstr "一年"
 msgid "orange"
 msgstr "橘色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Your timezone"
-msgid "original timezone"
-msgstr "您的時區"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
 msgstr "粉紅色"
@@ -11042,8 +10809,8 @@ msgstr "紅色"
 msgid "second"
 msgstr "第二個"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "seen"
 msgstr "已閱讀"
 
@@ -11560,6 +11327,9 @@ msgstr "年"
 #~ msgid "Address (private)"
 #~ msgstr "地址（私人）"
 
+#~ msgid "Addresses"
+#~ msgstr "地址"
+
 #~ msgid "Admin"
 #~ msgstr "管理"
 
@@ -11913,6 +11683,9 @@ msgstr "年"
 #~ msgid "Based on sender"
 #~ msgstr "基於發信人"
 
+#~ msgid "Bcc"
+#~ msgstr "密件抄送"
+
 #~ msgid "Bcc..."
 #~ msgstr "密件抄送..."
 
@@ -12078,6 +11851,9 @@ msgstr "年"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "開曼群島"
+
+#~ msgid "Cc"
+#~ msgstr "抄送"
 
 #~ msgid "Cc..."
 #~ msgstr "抄送..."
@@ -12308,9 +12084,6 @@ msgstr "年"
 #~ msgid "Contact overview"
 #~ msgstr "聯繫人概覽"
 
-#~ msgid "Content"
-#~ msgstr "內容"
-
 #~ msgid "Content-Type:"
 #~ msgstr "內容類型："
 
@@ -12439,6 +12212,9 @@ msgstr "年"
 
 #~ msgid "Current Costs:"
 #~ msgstr "當前費用："
+
+#~ msgid "Current Date"
+#~ msgstr "今日"
 
 #~ msgid "Current costs:"
 #~ msgstr "目前費用："
@@ -13043,6 +12819,9 @@ msgstr "年"
 #~ msgid "End:"
 #~ msgstr "結束："
 
+#~ msgid "Ends at"
+#~ msgstr "結束日期"
+
 #~ msgid "Ends at:"
 #~ msgstr "結束日期："
 
@@ -13124,8 +12903,8 @@ msgstr "年"
 #~ msgid "Entire thread"
 #~ msgstr "整個討論串"
 
-#~ msgid "Envelope - To"
-#~ msgstr "信封 - 給"
+#~ msgid "Envelope"
+#~ msgstr "信封"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "赤道幾內亞"
@@ -13270,9 +13049,6 @@ msgstr "年"
 #~| msgid "Fit to screen width"
 #~ msgid "Fit to screen height"
 #~ msgstr "調整成螢幕寬度"
-
-#~ msgid "Flag mail with"
-#~ msgstr "為郵件加入旗標"
 
 #~ msgid "Float Left"
 #~ msgstr "置左"
@@ -13997,11 +13773,6 @@ msgstr "年"
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "開啟郵件選項"
 
-#, fuzzy
-#~| msgid "Mail quota"
-#~ msgid "Overall quota"
-#~ msgstr "郵件額度"
-
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "過期任務。%1$s %2$s。按 Enter 以開啟"
 
@@ -14224,11 +13995,11 @@ msgstr "年"
 #~ msgid "Rename Document"
 #~ msgstr "更名文件"
 
-#~ msgid "Reply All"
-#~ msgstr "全部回覆"
-
 #~ msgid "Reply to"
 #~ msgstr "回復給"
+
+#~ msgid "Reset"
+#~ msgstr "重設"
 
 #~ msgid "Resource name"
 #~ msgstr "資源名稱"
@@ -14349,11 +14120,8 @@ msgstr "年"
 #~ msgid "Send feedback"
 #~ msgstr "寄送意見回饋"
 
-#~ msgid "Sender address"
-#~ msgstr "寄件地址"
-
-#~ msgid "Sender/From"
-#~ msgstr "寄件者/自"
+#~ msgid "Sender"
+#~ msgstr "寄件者"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "傳送郵件給某個聯絡人"
@@ -14630,9 +14398,6 @@ msgstr "年"
 #~| msgid "Table"
 #~ msgid "Tablet"
 #~ msgstr "表格"
-
-#~ msgid "Tag mail with"
-#~ msgstr "為郵件加入標籤"
 
 #~ msgid "Task invitation. %1$s %2$s %3$s. Press [enter] to open"
 #~ msgstr "任務邀請。%1$s %2$s %3$s。按 Enter 以開啟。"
@@ -15553,6 +15318,9 @@ msgstr "年"
 #~| msgid "Edit signature"
 #~ msgid "edit share"
 #~ msgstr "編輯簽名"
+
+#~ msgid "end date "
+#~ msgstr "結束日期"
 
 #~ msgid "ends"
 #~ msgstr "結束"

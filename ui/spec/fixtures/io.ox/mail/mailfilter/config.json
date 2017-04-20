@@ -91,5 +91,5 @@
         { "action": "copy" },
         { "action": "keep" }
     ],
-    "capabilities": ["copy", "subaddress", "regex", "relational", "body", "fileinto", "imap4flags", "vacation", "date", "envelope"]
+    "capabilities": ["copy", "subaddress", "regex", "relational", "body", "fileinto", "imap4flags", "vacation", "date", "envelope", "reject"]
 }

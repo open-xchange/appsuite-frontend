@@ -97,6 +97,12 @@ define('io.ox/core/boot/fixes', [], function () {
         Modernizr.touch = false;
     }
 
+    // Standalone
+
+    if (_.device('standalone')) {
+        $('html').addClass('standalone');
+    }
+
     // iOS
 
     if (_.device('iOS')) {

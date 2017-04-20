@@ -18,8 +18,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, settings, gt) {
 
     'use strict';
 
@@ -307,7 +308,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.folder(e.data.id);
+                    move.folder(e.data.id, settings);
                 });
             }
 

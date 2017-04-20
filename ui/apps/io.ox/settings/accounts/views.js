@@ -50,7 +50,7 @@ define('io.ox/settings/accounts/views', [
             if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
 
             return $('<div class="error-wrapper">').append(
-                $('<i class="error-icon fa fa-exclamation-triangle">'),
+                $('<i class="error-icon fa fa-exclamation-triangle" aria-hidden="true">'),
                 $('<div class="error-message">').text(model.get('status').message)
             );
         },
@@ -77,7 +77,7 @@ define('io.ox/settings/accounts/views', [
             },
 
             renderSubTitle: function () {
-                var el = $('<div>').addClass('list-item-subtitle');
+                var el = $('<div class="list-item-subtitle">');
                 ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').invoke('renderSubtitle', el, this.model);
                 return el;
             },

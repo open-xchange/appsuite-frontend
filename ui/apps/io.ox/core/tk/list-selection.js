@@ -1061,6 +1061,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onSpace: function (e) {
             // actually same as a click
             this.onClick(e);
+            e.preventDefault();
         },
 
         onCursor: function (e) {

@@ -50,8 +50,8 @@ define([
             conditionsExtensions.processConfig(fixtureMailfilterConfig);
             actionsExtensions.processConfig(fixtureMailfilterConfig);
 
-            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults });
-            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults });
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
 
         });
 

@@ -33,7 +33,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'nested',
 
-            index: 100,
+            index: 1500,
 
             initialize: function (opt) {
                 var defaults = {
@@ -48,6 +48,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'nested': ['nested'] });
+
+                opt.conditionsOrder.push('nested');
             },
 
             draw: function (baton, conditionKey) {
@@ -88,7 +90,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
                 id: 'body',
 
-                index: 200,
+                index: 700,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -106,6 +108,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
 
                     _.extend(opt.conditionsMapping, { 'body': ['body'] });
+
+                    opt.conditionsOrder.push('body');
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -136,7 +140,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
                 id: 'currentdate',
 
-                index: 300,
+                index: 1400,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -154,6 +158,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
 
                     _.extend(opt.conditionsMapping, { 'currentdate': ['currentdate'] });
+
+                    opt.conditionsOrder.push('currentdate');
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -171,17 +177,17 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             value = i > -1 ? '+' + value : '-' + value;
                             values[value] = label;
                         }
-                        values.original = gt('original timezone');
+                        values.original = gt('original time zone');
                         return values;
                     }
 
                     var timeValues = {
-                        'ge': gt('Rule applies from'),
-                        'le': gt('Rule applies until'),
-                        'is': gt('Rule applies on'),
-                        'not is': gt('Rule applies not on'),
-                        'not ge': gt('Rule applies not from'),
-                        'not le': gt('Rule applies not until')
+                        'ge': gt('Greater equals'),
+                        'le': gt('Lower equals'),
+                        'is': gt('Is exactly'),
+                        'not is': gt('Is not exactly'),
+                        'not ge': gt('Lower'),
+                        'not le': gt('Greater')
                     };
 
                     var timezoneValues = generateTimezoneValues(-12, 14);
@@ -223,7 +229,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                                         new mini.DropdownLinkView({ name: 'zone', model: cmodel, values: timezoneValues }).render().$el
                                     ),
                                     $('<div class="col-sm-5">').append(
-                                        new ModifiedDatePicker({ model: cmodel, display: 'DATE', attribute: 'datevalue', label: gt('datepicker') }).render().$el
+                                        new ModifiedDatePicker({
+                                            model: cmodel,
+                                            display: 'DATETIME',
+                                            attribute: 'datevalue',
+                                            label: gt('datepicker')
+                                        }).render().$el
                                     )
                                 )
                             ),
@@ -240,7 +251,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
                 id: 'date',
 
-                index: 400,
+                index: 1300,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -260,6 +271,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
 
                     _.extend(opt.conditionsMapping, { 'date': ['date'] });
+
+                    opt.conditionsOrder.push('date');
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -277,17 +290,17 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             value = i > -1 ? '+' + value : '-' + value;
                             values[value] = label;
                         }
-                        values.original = gt('original timezone');
+                        values.original = gt('original time zone');
                         return values;
                     }
 
                     var timeValues = {
-                        'ge': gt('Rule applies from'),
-                        'le': gt('Rule applies until'),
-                        'is': gt('Rule applies on'),
-                        'not is': gt('Rule applies not on'),
-                        'not ge': gt('Rule applies not from'),
-                        'not le': gt('Rule applies not until')
+                        'ge': gt('Greater equals'),
+                        'le': gt('Lower equals'),
+                        'is': gt('Is exactly'),
+                        'not is': gt('Is not exactly'),
+                        'not ge': gt('Lower'),
+                        'not le': gt('Greater')
                     };
 
                     var timezoneValues = generateTimezoneValues(-12, 14);
@@ -356,7 +369,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
                 id: 'envelope',
 
-                index: 500,
+                index: 900,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -374,6 +387,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
 
                     _.extend(opt.conditionsMapping, { 'envelope': ['envelope'] });
+
+                    opt.conditionsOrder.push('envelope');
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -422,7 +437,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'header',
 
-            index: 600,
+            index: 1000,
 
             initialize: function (opt) {
                 var defaults = {
@@ -439,6 +454,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'header': ['cleanHeader'] });
+
+                opt.conditionsOrder.push('cleanHeader');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -469,7 +486,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'subject',
 
-            index: 700,
+            index: 600,
 
             initialize: function (opt) {
                 var defaults = {
@@ -486,6 +503,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'subject': ['subject'] });
+
+                opt.conditionsOrder.push('subject');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -511,7 +530,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'from',
 
-            index: 800,
+            index: 100,
 
             initialize: function (opt) {
                 var defaults = {
@@ -527,6 +546,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     'from': gt('From')
                 });
                 _.extend(opt.conditionsMapping, { 'from': ['from'] });
+
+                opt.conditionsOrder.push('from');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -537,7 +558,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         conditionKey: conditionKey,
                         inputId: inputId,
                         title: baton.view.conditionsTranslation.from,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
+                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)), tooltips: util.returnDefaultToolTips() },
                         inputLabel: baton.view.conditionsTranslation.from + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
                         inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                         errorView: true,
@@ -552,7 +573,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'to',
 
-            index: 900,
+            index: 200,
 
             initialize: function (opt) {
                 var defaults = {
@@ -569,6 +590,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'to': ['to'] });
+
+                opt.conditionsOrder.push('to');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -594,7 +617,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'cc',
 
-            index: 1000,
+            index: 300,
 
             initialize: function (opt) {
                 var defaults = {
@@ -607,10 +630,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 };
                 _.extend(opt.defaults.tests, defaults);
                 _.extend(opt.conditionsTranslation, {
-                    'cc': gt('CC')
+                    'cc': gt('Cc')
                 });
 
                 _.extend(opt.conditionsMapping, { 'cc': ['cc'] });
+
+                opt.conditionsOrder.push('cc');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -636,7 +661,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'anyRecipient',
 
-            index: 1100,
+            index: 400,
 
             initialize: function (opt) {
                 var defaults = {
@@ -653,6 +678,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'anyRecipient': ['anyRecipient'] });
+
+                opt.conditionsOrder.push('anyRecipient');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -678,7 +705,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'mailingList',
 
-            index: 1200,
+            index: 500,
 
             initialize: function (opt) {
                 var defaults = {
@@ -695,6 +722,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'mailingList': ['mailingList'] });
+
+                opt.conditionsOrder.push('mailingList');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -720,7 +749,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'size',
 
-            index: 1300,
+            index: 1200,
 
             initialize: function (opt) {
                 var defaults = {
@@ -736,6 +765,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'size': ['size'] });
+
+                opt.conditionsOrder.push('size');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -765,7 +796,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'address',
 
-            index: 1400,
+            index: 800,
 
             initialize: function (opt) {
                 var defaults = {
@@ -783,6 +814,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 });
 
                 _.extend(opt.conditionsMapping, { 'address': ['address'] });
+
+                opt.conditionsOrder.push('address');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
@@ -831,7 +864,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
             id: 'exists',
 
-            index: 1500,
+            index: 1100,
 
             initialize: function (opt) {
                 var defaults = {
@@ -842,10 +875,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 };
                 _.extend(opt.defaults.tests, defaults);
                 _.extend(opt.conditionsTranslation, {
-                    'exists': gt('Exists')
+                    'exists': gt('Header exists')
                 });
 
                 _.extend(opt.conditionsMapping, { 'exists': ['exists'] });
+
+                opt.conditionsOrder.push('exists');
             },
 
             draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {

@@ -757,11 +757,6 @@ msgstr "Faktiskais ilgums minūtēs"
 msgid "Add"
 msgstr "Pievienot"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Add IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -785,8 +780,6 @@ msgstr "Pievienot publisko mapi"
 msgid "Add attachments"
 msgstr "Pielikumu pievienošana"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -960,18 +953,8 @@ msgstr "Pievienot savu kontu"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the added search query
-#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
-msgstr "Pievienots %1$s, %2$s."
-
-#. %1$s is the display name of an added user or mail recipient
-#. %1$s is the added search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Added %1$s, %2$s."
-msgid "Added %1$s."
 msgstr "Pievienots %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -1007,13 +990,6 @@ msgstr "Pievieno failus ar vienādiem vārdiem"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "Papildus iestatījumi"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Addresses"
-msgid "Address"
-msgstr "Adreses"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -1065,8 +1041,8 @@ msgstr "Pēc atkārtojuma reizēm"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "All"
 msgstr "Viss"
 
@@ -1201,8 +1177,8 @@ msgstr "Reģistrēta neatpazīta kļūda"
 msgid "Anniversary"
 msgstr "Dzimšanas diena"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Any recipient"
 msgstr "Jebkurš saņēmējs"
 
@@ -1527,11 +1503,6 @@ msgstr "Atpakaļ pie pieslēgšanās"
 msgid "Basic settings"
 msgstr "Pamata iestatījumi"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Bcc"
-msgstr "Bcc"
-
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1571,16 +1542,11 @@ msgstr "BCC kopija"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Zils"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Body"
-msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1637,8 +1603,8 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
@@ -1828,11 +1794,6 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Grozs ir tukšs"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "Cc"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2244,17 +2205,15 @@ msgstr "Kontakts ir pārvietots"
 msgid "Contacts toolbar"
 msgstr "Kontaktu rīkjosla"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Contains"
 msgstr "Satur"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Contains"
-msgid "Contains not"
-msgstr "Satur"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Content"
+msgstr "Saturs"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2298,13 +2257,6 @@ msgstr "Kopēt"
 msgctxt "CC"
 msgid "Copy"
 msgstr "Kopija"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Move to folder"
-msgid "Copy message to folder"
-msgstr "Pārvietot uz mapi"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
@@ -2510,13 +2462,6 @@ msgstr "Failu izveide"
 msgid "Currency"
 msgstr "Valūta"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Current Date"
-msgid "Current date"
-msgstr "Pašreizējais datums"
-
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Pašreizējā loma"
@@ -2580,8 +2525,9 @@ msgstr "Dati ir tikai daļēji importēti ( %1$s no %2$s ierakstiem)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Date"
 msgstr "Datums"
 
@@ -2816,8 +2762,8 @@ msgstr "Apraksts ir nokopēts"
 msgid "Description text"
 msgstr "Apraksta teksts"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Detail"
 msgstr "Detaļas"
 
@@ -2877,8 +2823,8 @@ msgstr "Atspējot vidžetu"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "Izmest"
@@ -3138,8 +3084,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Dokumenti"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Domain"
 msgstr "Domēns"
 
@@ -3587,23 +3533,9 @@ msgstr "Darbalaika beigas"
 msgid "Ends"
 msgstr "Beidzas"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends on"
-msgid "Ends not with"
-msgstr "Beidzas"
-
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
-msgstr "Beidzas"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Ends at"
-msgid "Ends with"
 msgstr "Beidzas"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
@@ -3623,10 +3555,10 @@ msgstr "Ievadiet dokumenta nosaukumu"
 msgid "Entrepreneur"
 msgstr "Uzņēmējs"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Envelope"
-msgstr "Aploksne"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Envelope - To"
+msgstr "Aploksne-Kam"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3809,11 +3741,6 @@ msgstr "Precīzi datumi"
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Vadītājs"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Exists"
-msgstr ""
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -4036,7 +3963,6 @@ msgstr "Fails ir pārvietots"
 msgid "File name"
 msgstr "Faila vārds"
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -4114,19 +4040,16 @@ msgstr "Pilnekrāna izmērs"
 msgid "Fit to screen width"
 msgstr "Ekrāna platums"
 
-#. Sort by messages which are flagged, "Flag" is used in dropdown
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
-#, fuzzy
-#| msgctxt "verb"
-#| msgid "Flag"
-msgid "Flag"
-msgstr "Iezīmēt"
-
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Flag"
 msgstr "Iezīmēt"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Flag mail with"
+msgstr "Iezīmēt pastu ar"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
@@ -4305,8 +4228,7 @@ msgstr "Piektdiena"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Sūtītājs"
 
@@ -4423,8 +4345,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Pelēks"
@@ -4435,8 +4357,8 @@ msgstr "Pelēki zils"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Zaļš"
@@ -4473,9 +4395,8 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML un vienkāršs teksts"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Header"
 msgstr "Hederis"
 
@@ -4910,23 +4831,18 @@ msgstr "Uzaicināt uz mītiņu"
 msgid "Invite to new appointment"
 msgstr "Uzaicināt uz jaunu mītiņu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is bigger than"
 msgstr "Ir lielāks par"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is exactly"
 msgstr "Ir tieši"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Nav tieši"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Is smaller than"
 msgstr "Ir mazāks par"
 
@@ -4994,8 +4910,8 @@ msgstr "Tikai atspējot vidžetu"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Keep"
 msgstr "Paturēt"
 
@@ -5104,10 +5020,6 @@ msgstr "Izvietojums"
 msgid "Learn more"
 msgstr "Uzzināt vairāk"
 
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Leave empty if you have none"
-msgstr ""
-
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -5136,15 +5048,15 @@ msgid "Life"
 msgstr "Dzīvesstils"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Gaiši zils"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "Gaiši zaļš"
@@ -5209,8 +5121,8 @@ msgstr "Ielādēt pilnu pastu"
 msgid "Loading the full mail might lead to performance problems."
 msgstr "Pilnīga pasta ielāde var izraisīt ātrdarbības problēmas."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Localpart"
 msgstr "Lokālā daļa"
 
@@ -5349,7 +5261,6 @@ msgstr "Vēstulei nav subjekta teksta. Vai vienalga to nosūtīt?"
 msgid "Mail has no recipient."
 msgstr "Vēstulei nav saņēmēja."
 
-#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5376,8 +5287,8 @@ msgstr "Pasta avots"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Pasts nav importēts. Atbalstīti tiek tikai .eml faili."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mailing list"
 msgstr "Adresātu saraksts"
 
@@ -5485,8 +5396,8 @@ msgstr "Iezīmēt kā nepabeiktu"
 msgid "Mark as unread"
 msgstr "Iezīmēt kā nelasītu"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Mark mail as"
 msgstr "Iestatīt pastu kā"
 
@@ -5536,16 +5447,9 @@ msgstr ""
 msgid "Maroon"
 msgstr "Kastaņbrūns"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Matches"
-msgstr "Atbilst"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Matches"
-msgid "Matches not"
 msgstr "Atbilst"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5744,8 +5648,8 @@ msgid "Move to category"
 msgstr "Pārvietot uz kategoriju"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Pārvietot uz mapi"
 
@@ -5826,8 +5730,8 @@ msgstr "Mani uzdevumi"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Name"
 msgstr "Vārds"
 
@@ -5845,13 +5749,6 @@ msgstr "Jūras zils"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "Vai ir nepieciešama papildus vieta?"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Add condition"
-msgid "Nested condition"
-msgstr "Pievienot nosacījumu"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -6149,8 +6046,7 @@ msgstr "Nav virsraksta."
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 msgid "None"
 msgstr "Nekas"
 
@@ -6164,13 +6060,6 @@ msgstr "Nekas"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Parasta"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Regex"
-msgid "Not Regex"
-msgstr "Regex"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6520,8 +6409,8 @@ msgstr "Opcijas"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Oranžs"
@@ -6599,11 +6488,6 @@ msgstr "Lapa %1$d no %2$d"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "Peidžeris"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Part"
-msgstr ""
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6774,8 +6658,8 @@ msgstr "Izvēlieties laiku šeit"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Rozā"
@@ -6865,8 +6749,8 @@ msgstr "Lūdzu ievadiet meklēšanas vaicājumu"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Please enter a valid date"
 msgstr "Ievadiet derīgu datumu"
 
@@ -6988,12 +6872,6 @@ msgstr "Lūdzu novērtējiet šo produktu"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Lūdzu izvēlieties importējamo failu"
-
-#: apps/plugins/core/feedback/register.js module:io.ox/core
-#, fuzzy
-#| msgid "Please select at least one day"
-msgid "Please select a rating."
-msgstr "Lūdzu norādiet vismaz vienu dienu"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7348,8 +7226,8 @@ msgstr "Pirkuma apstiprinājums"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Purpura"
@@ -7363,10 +7241,7 @@ msgstr "Ātrā atbilde"
 msgid "Quit"
 msgstr "Beigt"
 
-#. Quota means a general quota for mail and files
-#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/plugins/portal/quota/register.js
-#: module:plugins/portal
+#: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Quota"
 msgstr "Kvota"
 
@@ -7498,8 +7373,8 @@ msgstr "Uzdevumu atkārtošanai ir nepieciešams derīgs sākuma datums."
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Sarkans"
@@ -7536,8 +7411,8 @@ msgstr "E-pasts no %1$s: %2$s"
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Redirect to"
 msgstr "Pāradresēt"
 
@@ -7558,8 +7433,8 @@ msgstr "Jaunināšanas intervāls"
 msgid "Refresh rate in minutes"
 msgstr "Jaunināšanas intervāls minūtēs"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Regex"
 msgstr "Regex"
 
@@ -7599,8 +7474,8 @@ msgstr "Atteikt ar iemeslu"
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Reject with reason"
 msgstr "Atteikt ar iemeslu"
 
@@ -7683,11 +7558,6 @@ msgstr "Noņemt"
 msgid "Remove %1$s"
 msgstr "Noņemt %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-msgid "Remove IMAP keyword"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7717,19 +7587,9 @@ msgstr "Noņemt dalībnieku"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
-#. %1$s is the removed search query
-#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Noņemts %1$s, %2$s."
-
-#. %1$s is the display name of a removed user or mail recipient
-#. %1$s is the removed search query
-#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-#| msgid "Remove %1$s"
-msgid "Removed %1$s."
-msgstr "Noņemt %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7773,7 +7633,10 @@ msgid "Reply"
 msgstr "Atbildēt"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/compose/checks.js
+msgid "Reply All"
+msgstr "Atbildēt visiem"
+
+#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
 msgid "Reply all"
 msgstr "Atbildēt visiem"
 
@@ -7809,20 +7672,6 @@ msgstr "Prasīt piegādes apstiprinājumu"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "Pārsūtīt uzaicinājumu"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-From"
-msgstr "Pārstatīt"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Reset"
-msgid "Resent-To"
-msgstr "Pārstatīt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7931,39 +7780,19 @@ msgstr "Rindas"
 msgid "Royal blue"
 msgstr "Koši zils"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies from"
 msgstr "Noteikums ir spēkā no"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies from"
-msgid "Rule applies not from"
-msgstr "Noteikums ir spēkā no"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies on"
-msgid "Rule applies not on"
-msgstr "Noteikums ir spēkā"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Rule applies until"
-msgid "Rule applies not until"
-msgstr "Noteikums ir spēkā līdz"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#. The filter rule will be applied on a specific date, which can be selected by the user
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies on"
 msgstr "Noteikums ir spēkā"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Rule applies until"
 msgstr "Noteikums ir spēkā līdz"
 
@@ -8190,8 +8019,8 @@ msgstr "Izvēlēties failu"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Select folder"
 msgstr "Izvēlēties mapi"
 
@@ -8260,10 +8089,15 @@ msgstr "Sūtīt paziņojumu"
 msgid "Send vacation notice during this time only"
 msgstr "Sūtīt prombūtnes paziņojumus tikai šajā laikā"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Sender"
-msgstr "Sūtītājs"
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender address"
+msgstr "Sūtītāja adrese"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Sender/From"
+msgstr "Sūtītājs/No"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8277,13 +8111,6 @@ msgstr[2] "Sūta %1$d ziņojumus ... %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "Nosūtīts"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "end date "
-msgid "Sent date"
-msgstr "beigu datums "
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8341,13 +8168,6 @@ msgstr "Iestatīt kategoriju"
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
-msgstr "Iestatīt krāsu"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Set color"
-msgid "Set color flag"
 msgstr "Iestatīt krāsu"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
@@ -8638,8 +8458,8 @@ msgstr "Pieslēgums kā:"
 msgid "Size"
 msgstr "Izmērs"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Size (bytes)"
 msgstr "Izmērs (baiti)"
 
@@ -8809,22 +8629,8 @@ msgstr "Sākuma datums"
 msgid "StartTLS"
 msgstr "StartTLS"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts on"
-msgid "Starts not with"
-msgstr "Sākas"
-
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
-msgstr "Sākas"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Starts at"
-msgid "Starts with"
 msgstr "Sākas"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -8859,8 +8665,8 @@ msgstr "Studnts"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8967,6 +8773,11 @@ msgstr "TB"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
+msgid "Tag mail with"
+msgstr "Marķēt pastu ar"
 
 #. This is a summary for a mail filter rule
 #. %1$s User input (usually a mail address)
@@ -9451,13 +9262,6 @@ msgid ""
 msgstr ""
 "Šajā mapē ir %1$d ziņojumi; visi tie pašlaik redzamajā sarakstā nav uzrāditi."
 
-#. %1$n is the maximum number of appointments
-#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
-msgid ""
-"There are more than %n appointments in the current calendar. Some features "
-"are disabled to due to performance reasons."
-msgstr ""
-
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9813,8 +9617,8 @@ msgstr "Virsraksts"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "Saņēmējs"
@@ -10200,8 +10004,8 @@ msgstr ""
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "User"
 msgstr "Lietotājs"
 
@@ -10479,8 +10283,8 @@ msgid "Years"
 msgstr "Gadi"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "Yellow"
 msgstr "Dzeltens"
 
@@ -10991,27 +10795,6 @@ msgstr "izvēlieties citu scenāriju"
 msgid "close for %1$s"
 msgstr "slēgts priekš %1$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all conditions are met"
-msgstr "Pielietot, ja izpildās visi nosacījumi"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if all conditions are met"
-msgid "continue if all of these conditions are met"
-msgstr "Pielietot, ja izpildās visi nosacījumi"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Apply rule if any condition is met."
-msgid "continue if any of these condition is met."
-msgstr "Pielietot, ja izpildās jebkurš nosacījums"
-
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "create objects"
@@ -11030,8 +10813,8 @@ msgstr "tumši zils"
 msgid "dark green"
 msgstr "tumši zaļš"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "datepicker"
 msgstr "datepicker"
 
@@ -11068,8 +10851,8 @@ msgstr "dzēst, ja derīguma termiņš beidzies"
 msgid "delete only own objects"
 msgstr "dzēst paša objektus"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "deleted"
 msgstr "izdzēsts"
 
@@ -11111,13 +10894,6 @@ msgstr "faili"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "pirmā"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Flagged"
-msgid "flagged"
-msgstr "Iezīmēts"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -11280,13 +11056,6 @@ msgstr "viens gads"
 msgid "orange"
 msgstr "oranžs"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-#, fuzzy
-#| msgid "Your timezone"
-msgid "original timezone"
-msgstr "Jūsu laika zona"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
 msgstr "sārta"
@@ -11317,8 +11086,8 @@ msgstr "sarkans"
 msgid "second"
 msgstr "otrā"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: module:io.ox/settings
 msgid "seen"
 msgstr "redzēts"
 
@@ -11861,6 +11630,9 @@ msgstr "yyyy"
 #~ msgid "Address (private)"
 #~ msgstr "Adrese (privāta)"
 
+#~ msgid "Addresses"
+#~ msgstr "Adreses"
+
 #~ msgid "Admin"
 #~ msgstr "Admin"
 
@@ -12246,6 +12018,9 @@ msgstr "yyyy"
 #~ msgid "Based on sender"
 #~ msgstr "Pamatots uz nosūtītāju"
 
+#~ msgid "Bcc"
+#~ msgstr "Bcc"
+
 #~ msgid "Bcc..."
 #~ msgstr "Bcc..."
 
@@ -12427,6 +12202,9 @@ msgstr "yyyy"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "Kaimanu salas"
+
+#~ msgid "Cc"
+#~ msgstr "Cc"
 
 #~ msgid "Cc..."
 #~ msgstr "Cc..."
@@ -12664,9 +12442,6 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "Kontaktu pārskats"
 
-#~ msgid "Content"
-#~ msgstr "Saturs"
-
 #~ msgid "Content-Type:"
 #~ msgstr "Satura tips:"
 
@@ -12801,6 +12576,9 @@ msgstr "yyyy"
 
 #~ msgid "Current Costs:"
 #~ msgstr "Pašreiz. izmaksas:"
+
+#~ msgid "Current Date"
+#~ msgstr "Pašreizējais datums"
 
 #~ msgid "Current costs:"
 #~ msgstr "Pašreiz. izmaksas:"
@@ -13435,6 +13213,9 @@ msgstr "yyyy"
 #~ msgid "End:"
 #~ msgstr "Beigas:"
 
+#~ msgid "Ends at"
+#~ msgstr "Beidzas"
+
 #~ msgid "Ends at:"
 #~ msgstr "Beidzas:"
 
@@ -13521,8 +13302,8 @@ msgstr "yyyy"
 #~ msgid "Entire thread"
 #~ msgstr "Viss pavediens"
 
-#~ msgid "Envelope - To"
-#~ msgstr "Aploksne-Kam"
+#~ msgid "Envelope"
+#~ msgstr "Aploksne"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "Ekvatoriālā Gvineja"
@@ -13717,9 +13498,6 @@ msgstr "yyyy"
 
 #~ msgid "Flag #%d"
 #~ msgstr "Iezīmēt #%d"
-
-#~ msgid "Flag mail with"
-#~ msgstr "Iezīmēt pastu ar"
 
 #~ msgid "Flags"
 #~ msgstr "Iezīmes"
@@ -14342,6 +14120,9 @@ msgstr "yyyy"
 
 #~ msgid "Is at most"
 #~ msgstr "Ir ne vairāk"
+
+#~ msgid "Is not exactly"
+#~ msgstr "Nav tieši"
 
 #~ msgid "Isle of Man"
 #~ msgstr "Menas sala"
@@ -15197,11 +14978,6 @@ msgstr "yyyy"
 #~ msgid "Outlook file"
 #~ msgstr "Outlook fails"
 
-#, fuzzy
-#~| msgid "Mail quota"
-#~ msgid "Overall quota"
-#~ msgstr "Pasta kvota"
-
 #~ msgid "Overdue Task. %1$s %2$s. Press [enter] to open"
 #~ msgstr "Nokavēts uzdevums. %1$s %2$s. Lai atvērtu piespiediet [enter]"
 
@@ -15698,14 +15474,14 @@ msgstr "yyyy"
 #~ msgid "Renminbi"
 #~ msgstr "Renminbi"
 
-#~ msgid "Reply All"
-#~ msgstr "Atbildēt visiem"
-
 #~ msgid "Reply to"
 #~ msgstr "Atbildēt"
 
 #~ msgid "Reply-to Address"
 #~ msgstr "Atbildes adrese"
+
+#~ msgid "Reset"
+#~ msgstr "Pārstatīt"
 
 #~ msgid "Resource email"
 #~ msgstr "Resursa e-pasts"
@@ -15999,11 +15775,8 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "Nosūtīt atsauksmi"
 
-#~ msgid "Sender address"
-#~ msgstr "Sūtītāja adrese"
-
-#~ msgid "Sender/From"
-#~ msgstr "Sūtītājs/No"
+#~ msgid "Sender"
+#~ msgstr "Sūtītājs"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "E-pasta nosūtīšana kontaktpersonai"
@@ -16367,6 +16140,9 @@ msgstr "yyyy"
 #~ msgid "Started %s weeks ago:"
 #~ msgstr "Uzsākts pirms %s nedēļām:"
 
+#~ msgid "Starts at"
+#~ msgstr "Sākas"
+
 #~ msgid "Starts at:"
 #~ msgstr "Sākas:"
 
@@ -16560,9 +16336,6 @@ msgstr "yyyy"
 
 #~ msgid "Tabs example"
 #~ msgstr "Tabulatoru piemērs"
-
-#~ msgid "Tag mail with"
-#~ msgstr "Marķēt pastu ar"
 
 #~ msgid "Taiwan"
 #~ msgstr "Taivāna"
@@ -18206,6 +17979,9 @@ msgstr "yyyy"
 #~| msgid "Edit signature"
 #~ msgid "edit share"
 #~ msgstr "Rediģēt parakstu"
+
+#~ msgid "end date "
+#~ msgstr "beigu datums "
 
 #~ msgid "ends"
 #~ msgstr "beidzas"

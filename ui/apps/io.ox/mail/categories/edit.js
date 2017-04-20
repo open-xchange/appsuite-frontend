@@ -87,6 +87,7 @@ define('io.ox/mail/categories/edit', [
                     );
                 },
                 'form-inline': function () {
+                    var guid = _.uniqueId('form-control-label-');
                     this.$container.append(
                         this.collection.map(function (model) {
                             return $('<form class="form-inline">').append(
@@ -96,10 +97,10 @@ define('io.ox/mail/categories/edit', [
                                     .append(
                                         // read only
                                         model.can('rename') ? $() : [
-                                            $('<label class="center-childs">').append(
+                                            $('<label class="center-childs">').attr('for', guid).append(
                                                 $('<input type="checkbox" class="status">')
                                                     .prop('checked', model.isEnabled())
-                                                    .attr('disabled', !model.can('disable'))
+                                                    .attr({ 'id': guid, 'disabled': !model.can('disable') })
                                                     .toggleClass('disabled', !model.can('disable')),
                                                 $('<div class="name form-control">').text(model.get('name'))
                                             )

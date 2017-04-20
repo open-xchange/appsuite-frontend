@@ -263,10 +263,11 @@ define('io.ox/files/share/wizard', [
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
+            var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div>').addClass('form-group expiresgroup').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
-                        new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
+                $('<div class="form-group expiresgroup">').append(
+                    $('<label class="checkbox-inline">').attr('for', guid).text(gt('Expires in')).prepend(
+                        new miniViews.CheckboxView({ id: guid, name: 'temporary', model: baton.model }).render().$el
                     ),
                     $.txt(' '),
                     dropdown.render().$el.addClass('dropup')
@@ -305,17 +306,17 @@ define('io.ox/files/share/wizard', [
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'), passContainer;
+            var guid, passContainer;
             this.append(
-                $('<div>').addClass('form-inline passwordgroup').append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('checkbox-inline').text(gt('Password required')).prepend(
-                            new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                $('<div class="form-inline passwordgroup">').append(
+                    $('<div class="form-group">').append(
+                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password required')).prepend(
+                            new miniViews.CheckboxView({ id: guid, name: 'secured', model: baton.model }).render().$el
                         )
                     ),
                     $.txt(' '),
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
+                    $('<div class="form-group">').append(
+                        $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('form-control-label-') }),
                         passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
                             .render().$el.find('input')
                             // see bug 49639

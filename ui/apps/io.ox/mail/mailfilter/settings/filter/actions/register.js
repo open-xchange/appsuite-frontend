@@ -37,7 +37,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
                 id: 'addflags',
 
-                index: 100,
+                index: 400,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -63,9 +63,13 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     if (settings.get('features/flag/color')) translations.flag = gt('Set color flag');
 
                     _.extend(opt.defaults.actions, defaults);
+
                     _.extend(opt.actionsTranslations, translations);
 
                     _.extend(opt.actionCapabilities, { 'markmail': 'addflags', 'tag': 'addflags', 'flag': 'addflags' });
+
+                    opt.actionsOrder.push('markmail', 'tag');
+                    if (settings.get('features/flag/color')) opt.actionsOrder.push('flag');
 
                 },
 
@@ -150,7 +154,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
                 id: 'removeflags',
 
-                index: 200,
+                index: 1000,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -166,6 +170,9 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     });
 
                     _.extend(opt.actionCapabilities, { 'removeflags': 'removeflags' });
+
+                    if (_.indexOf(opt.actionsOrder, 'tag') !== -1) opt.actionsOrder.push(_.first(opt.actionsOrder.splice(_.indexOf(opt.actionsOrder, 'tag'), 1)));
+                    opt.actionsOrder.push('removeflags');
                 },
 
                 draw: function (baton, actionKey, amodel) {
@@ -189,7 +196,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
             id: 'discard',
 
-            index: 300,
+            index: 600,
 
             initialize: function (opt) {
                 var defaults = {
@@ -203,6 +210,8 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                 });
 
                 _.extend(opt.actionCapabilities, { 'discard': 'discard' });
+
+                opt.actionsOrder.push('discard');
             },
 
             draw: function (baton, actionKey, amodel, filterValues, action) {
@@ -223,7 +232,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
             id: 'keep',
 
-            index: 400,
+            index: 800,
 
             initialize: function (opt) {
                 var defaults = {
@@ -237,6 +246,8 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                 });
 
                 _.extend(opt.actionCapabilities, { 'keep': 'keep' });
+
+                opt.actionsOrder.push('keep');
             },
 
             draw: function (baton, actionKey, amodel, filterValues, action) {
@@ -258,7 +269,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
                 id: 'move',
 
-                index: 500,
+                index: 100,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -269,11 +280,12 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {
-                        'move': gt('Move to folder')
+                        'move': gt('File into')
                     });
 
                     _.extend(opt.actionCapabilities, { 'move': 'move' });
 
+                    opt.actionsOrder.push('move');
                 },
 
                 draw: function (baton, actionKey, amodel, filterValues, action) {
@@ -322,7 +334,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
                 id: 'copy',
 
-                index: 550,
+                index: 200,
 
                 initialize: function (opt) {
                     var defaults = {
@@ -334,11 +346,12 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {
-                        'copy': gt('Copy message to folder')
+                        'copy': gt('Copy into')
                     });
 
                     _.extend(opt.actionCapabilities, { 'copy': 'copy' });
 
+                    opt.actionsOrder.push('copy');
                 },
 
                 draw: function (baton, actionKey, amodel, filterValues, action) {
@@ -385,7 +398,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
             id: 'redirect',
 
-            index: 600,
+            index: 300,
 
             initialize: function (opt) {
                 var defaults = {
@@ -400,6 +413,8 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                 });
 
                 _.extend(opt.actionCapabilities, { 'redirect': 'redirect' });
+
+                opt.actionsOrder.push('redirect');
             },
 
             draw: function (baton, actionKey, amodel, filterValues, action) {
@@ -418,43 +433,49 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
         });
 
-        // if (_.has(cap, 'reject') ) {}
-        ext.point('io.ox/mail/mailfilter/actions').extend({
+        if (_.has(cap, 'reject')) {
 
-            id: 'reject',
+            ext.point('io.ox/mail/mailfilter/actions').extend({
 
-            index: 700,
+                id: 'reject',
 
-            initialize: function (opt) {
-                var defaults = {
-                    'reject': {
-                        'id': 'reject',
-                        'text': ''
-                    }
-                };
-                _.extend(opt.defaults.actions, defaults);
-                _.extend(opt.actionsTranslations, {
-                    'reject': gt('Reject with reason')
-                });
+                index: 700,
 
-                _.extend(opt.actionCapabilities, { 'reject': 'reject' });
-            },
+                initialize: function (opt) {
+                    var defaults = {
+                        'reject': {
+                            'id': 'reject',
+                            'text': ''
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'reject': gt('Reject with reason')
+                    });
 
-            draw: function (baton, actionKey, amodel, filterValues, action) {
-                var inputId = _.uniqueId('reject_');
-                this.append(
-                    util.drawAction({
-                        actionKey: actionKey,
-                        inputId: inputId,
-                        title: baton.view.actionsTranslations[action.id],
-                        inputLabel: baton.view.actionsTranslations.reject,
-                        inputOptions: { name: 'text', model: amodel, className: 'form-control', id: inputId },
-                        errorView: true
-                    })
-                );
-            }
+                    _.extend(opt.actionCapabilities, { 'reject': 'reject' });
 
-        });
+                    opt.actionsOrder.push('reject');
+                },
+
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('reject_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations[action.id],
+                            inputLabel: baton.view.actionsTranslations.reject,
+                            inputOptions: { name: 'text', model: amodel, className: 'form-control', id: inputId },
+                            errorView: true
+                        })
+                    );
+                }
+
+            });
+
+        }
+
     }
 
     return {

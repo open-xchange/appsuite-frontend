@@ -320,9 +320,7 @@ define('io.ox/mail/compose/view', [
                 if (baton.isDisabled(point.id, p.id)) return;
                 return p.perform.apply(undefined, [baton]);
             });
-        }, $.when()).fail(function () {
-            baton.model.set('autoDismiss', false);
-        });
+        }, $.when());
     }
 
     // disable attachmentList by default
@@ -355,7 +353,7 @@ define('io.ox/mail/compose/view', [
             this.editor = null;
             this.composeMode = 'compose';
             this.editorId = _.uniqueId('editor-');
-            this.editorContainer = $('<div class="editor" role="application">').attr({
+            this.editorContainer = $('<div class="editor">').attr({
                 'data-editor-id': this.editorId
             });
 
@@ -793,7 +791,6 @@ define('io.ox/mail/compose/view', [
 
         send: function () {
 
-            this.model.set('autoDismiss', true);
 
             //#. This is a prefix of a copied draft and will be removed
             //#. This string must equal the prefix, which is prepended before the subject on copy
@@ -816,7 +813,13 @@ define('io.ox/mail/compose/view', [
                 }),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
-            return extensionCascade(point, baton);
+            // don't ask wether the app can be closed if we have unsaved data, we just want to send
+            baton.model.set('autoDismiss', true);
+
+            return extensionCascade(point, baton).then(function () {
+                //app is re-opened; we want to be asked before any unsaved data is discarded
+                if (baton.error) baton.model.set('autoDismiss', false);
+            });
         },
 
         toggleTokenfield: function (e) {

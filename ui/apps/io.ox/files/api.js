@@ -588,6 +588,11 @@ define('io.ox/files/api', [
                             folders.push(favoriteFolder);
                         }
                         return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                            if (!capabilities.has('share_links || invite_guests')) {
+                                driveFolders = _.filter(driveFolders, function (folder) {
+                                    return folder.id !== 'virtual/myshares';
+                                });
+                            }
                             folders = folders.concat(driveFolders);
                             switch (String(params.sort)) {
                                 // Name

@@ -1463,7 +1463,7 @@ define('io.ox/mail/api', [
                     session: ox.session
                 }));
 
-            return ox.apiRoot + url;
+            return url;
         }
 
         // inject filename for more convenient file downloads

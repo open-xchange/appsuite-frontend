@@ -119,11 +119,11 @@ define('io.ox/core/import/import', [
 
             // show option only for calendar and tasks
             if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
-
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="checkbox">').append(
-                    $('<label>').append(
-                        $('<input type="checkbox" name="ignore_uuids">'),
+                    $('<label>').attr('for', guid).append(
+                        $('<input type="checkbox" name="ignore_uuids">').attr('id', guid),
                         baton.module === 'calendar' ?
                             gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
                             gt('Ignore existing events')
