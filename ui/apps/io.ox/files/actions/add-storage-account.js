@@ -12,6 +12,7 @@
  */
 
 define('io.ox/files/actions/add-storage-account', [
+    'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/metrics/main',
     'io.ox/core/yell',
@@ -20,7 +21,7 @@ define('io.ox/files/actions/add-storage-account', [
     'io.ox/oauth/keychain',
     'io.ox/core/api/filestorage',
     'io.ox/oauth/backbone'
-], function (dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
+], function (ext, dialogs, metrics, yell, gt, oauthAPI, filestorageApi, OAuth) {
 
     'use strict';
 
@@ -42,6 +43,8 @@ define('io.ox/files/actions/add-storage-account', [
             className: 'logo-onedrive'
         }
     };
+
+    ext.point('io.ox/files/storage-accounts/list').invoke('customize', services);
 
     function needsOAuthScope(accounts) {
         return accounts.reduce(function (acc, account) {
