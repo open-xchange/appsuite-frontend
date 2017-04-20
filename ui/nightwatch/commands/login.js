@@ -10,6 +10,13 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
+/**
+ * Use this before each test to make sure, the user is logged in. This will wait until the login page is loaded
+ * insert the credentials of the first user (or another if you explicitly specify one), clicks login and waits,
+ * until the page has been loaded. Example: .login('app=io.ox/mail')
+ * @param parameters {string} a string or an array with url parameters
+ * @param userIndex {number} optional, the index of the user in the global users array
+ */
 exports.command = function (parameters, userIndex) {
     // make sure, parameters is an array
     parameters = [].concat(parameters);

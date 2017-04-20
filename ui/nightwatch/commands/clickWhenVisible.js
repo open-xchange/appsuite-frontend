@@ -10,12 +10,17 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-exports.command = function (selector, wait) {
+/**
+ * This is a shorthand for .waitForElementVisible('...').click('...')
+ * @param selector {string}
+ * @param timeout {number} optional, default is 500
+ */
+exports.command = function (selector, timeout) {
 
-    wait = wait || 500;
+    timeout = timeout || 500;
 
     this
-        .waitForElementVisible(selector, wait)
+        .waitForElementVisible(selector, timeout)
         .click(selector);
 
     return this;

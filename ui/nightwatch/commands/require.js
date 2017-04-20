@@ -10,6 +10,14 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
+/**
+ * This is a helper function, if you need to change something inside the appsuite code.
+ * This should only be used if really necessary. Usually, everything could be achieved by simulating that user action.
+ * Example: .require(['io.ox/core/folder/api'], function (api) { // do something });
+ * Please note, that the callback of the require is running inside the client environment and has no access to the variables from the test.
+ * @param packages {array}
+ * @param callback {function}
+ */
 exports.command = function (packages, callback) {
     // make sure, packages is an array
     packages = [].concat(packages);

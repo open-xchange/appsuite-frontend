@@ -10,6 +10,13 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
+/**
+ * This simplifies the input of mail addresses into input fields.
+ * There is an array of users defined in the globals. If you want to fill in a mailadress of such a user
+ * you can simply use this function.
+ * @param selector {string} the selector of an editable field
+ * @param userIndex {number} the users position in the global users array
+ */
 exports.command = function (selector, userIndex) {
 
     var users = this.globals.users;

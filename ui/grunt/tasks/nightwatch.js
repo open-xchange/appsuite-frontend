@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         nightwatch: {
-            options:  config,
+            options: config
         }
     });
 

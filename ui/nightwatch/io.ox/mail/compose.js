@@ -25,7 +25,7 @@ describe('Mail', function () {
             // 1.1) Mark all messages as read to identify the new message later on
             client
                 .selectFolder({ id: 'default0/INBOX' })
-                .openFolderContextMenu('default0/INBOX')
+                .openFolderContextMenu({ id: 'default0/INBOX' })
                 .clickWhenVisible('.dropdown.open a[data-action="markfolderread"]');
 
             // 1.2) continue opening mail compose
@@ -66,7 +66,7 @@ describe('Mail', function () {
 
             // 5) Check the "Sent" folder
             client
-                .selectFolder({ id: 'default0/INBOX/Sent Items' })
+                .selectFolder({ title: 'Sent objects' })
                 .clickWhenVisible('.io-ox-mail-window .leftside ul li.list-item', 2500)
                 .waitForElementVisible('.io-ox-mail-window .mail-detail-pane .subject', 1000)
                 .assert.containsText('.io-ox-mail-window .mail-detail-pane .subject', 'Test subject');

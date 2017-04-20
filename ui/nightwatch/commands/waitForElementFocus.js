@@ -12,29 +12,20 @@
 
 var util = require('util');
 
-exports.command = function (selector, wait) {
+/**
+ * Waits until an element specified by the selector has the focus
+ * @param selector {string}
+ * @param timeout {number} optional, the maximum time to wait for the selector to have the focus. Default is 500
+ */
+exports.command = function (selector, timeout) {
 
-    wait = wait || 500;
+    timeout = timeout || 500;
 
-    this
-        .timeoutsAsyncScript(wait + 1000)
-        .executeAsync(function (selector, wait, done) {
-            var start = new Date().getTime(),
-                pid = setInterval(function () {
-                    var now = new Date().getTime();
-                    if ($(selector).is(':focus')) {
-                        clearInterval(pid);
-                        return done(true);
-                    }
-                    // wait time is over
-                    if (now - start > wait) {
-                        clearInterval(pid);
-                        return done(false);
-                    }
-                }, 500);
-        }, [selector, wait], function (result) {
-            if (!result || result.value !== true) this.assert.fail('not found', 'focus', util.format('Timedout while waiting for "%s" to have have focus.', selector));
-        });
+    this.waitForStatement(function (selector) {
+        return $(selector).is(':focus');
+    }, [selector], timeout, 500, function error() {
+        this.assert.fail('not found', 'focus', util.format('Timedout while waiting for "%s" to have focus.', selector));
+    });
 
     return this;
 

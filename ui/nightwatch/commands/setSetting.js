@@ -12,18 +12,25 @@
 
 var util = require('util');
 
+/**
+ * If you need to set a non user setting, you can use this function to set it.
+ * Example: setSetting('mail', 'features/unseenFolder', true);
+ * @param module {string} for example mail, calender, contacts etc.
+ * @param name {string} the settings name
+ * @param value {boolean|number|string|object} the value for the setting
+ */
 exports.command = function (module, name, value) {
 
     this
         .timeoutsAsyncScript(2000)
-        .executeAsync(function (module, name, value, done) {
+        .executeAsync(function (module, name, valueStr, done) {
             require(['settings!' + module], function (settings) {
-                settings.set(name, value);
+                settings.set(name, JSON.parse(value));
                 done(true);
             }, function () {
                 done(false);
             });
-        }, [module, name, value], function (result) {
+        }, [module, name, JSON.stringify(value)], function (result) {
             if (result.value === false) this.assert.fail('not found', 'settings!' + module, util.format('Failed to save %s=%s in module %s.', name, value, module));
         });
 

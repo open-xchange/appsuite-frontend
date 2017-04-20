@@ -10,6 +10,9 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
+/**
+ * This will logout the user and should be called at the end of every test.
+ */
 exports.command = function () {
 
     this

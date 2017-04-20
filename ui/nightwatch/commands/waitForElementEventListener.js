@@ -10,30 +10,22 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-exports.command = function (selector, eventType, wait) {
+ /**
+  * Waits for an event listener to be registered.
+  * @param selector {string}
+  * @param eventType {string} for example click or focus
+  * @param timeout {number} optional, default is 500
+  */
+exports.command = function (selector, eventType, timeout) {
 
-    wait = wait || 500;
+    timeout = timeout || 500;
 
-    this
-        .timeoutsAsyncScript(wait + 1000)
-        .executeAsync(function (selector, eventType, wait, done) {
-            var start = new Date().getTime(),
-                pid = setInterval(function () {
-                    var now = new Date().getTime(),
-                        ev = $._data(document.querySelector(selector), 'events');
-                    if (ev[eventType]) {
-                        clearInterval(pid);
-                        return done(true);
-                    }
-                    // wait time is over
-                    if (now - start > wait) {
-                        clearInterval(pid);
-                        return done(false);
-                    }
-                }, 500);
-        }, [selector, eventType, wait], function (result) {
-            if (!result || result.value !== true) this.assert.fail('not found', eventType, 'Timedout while waiting for "' + selector + '" to have event type "' + eventType + '".');
-        });
+    this.waitForStatement(function (selector, eventType) {
+        var ev = $._data(document.querySelector(selector), 'events');
+        return !!ev[eventType];
+    }, [selector, eventType], timeout, 500, function error() {
+        this.assert.fail('not found', eventType, 'Timedout while waiting for "' + selector + '" to have event type "' + eventType + '".');
+    });
 
     return this;
 

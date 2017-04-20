@@ -10,34 +10,28 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-exports.command = function (selector, wait) {
+/**
+ * This is a special waitForElementVisible function in case an element might be inside a shadow dom.
+ * The selector should contain the ::shadow selector somewhere. If that selector fails, this function will try to find
+ * the target element without the ::shadow selector
+ * @param selector {string}
+ * @param timeout {number} default is 500
+ */
+exports.command = function (selector, timeout) {
 
-    wait = wait || 500;
+    timeout = timeout || 500;
 
     this
-        .timeoutsAsyncScript(wait + 1000)
-        .executeAsync(function (selector, wait, done) {
-            var start = new Date().getTime(),
-                pid = setInterval(function () {
-                    var now = new Date().getTime(),
-                        isVisible = false;
-                    try {
-                        isVisible = $(selector).is(':visible');
-                    } catch (e) {
-                        isVisible = $(selector.replace(/::shadow/g, '')).is(':visible');
-                    }
-                    if (isVisible) {
-                        clearInterval(pid);
-                        return done(true);
-                    }
-                    // wait time is over
-                    if (now - start > wait) {
-                        clearInterval(pid);
-                        return done(false);
-                    }
-                }, 500);
-        }, [selector, wait], function (result) {
-            if (!result || result.value !== true) this.assert.fail('not visible', 'visible', 'Timedout while waiting for "' + selector + '" to to become visible.');
+        .waitForStatement(function (selector) {
+            var isVisible = false;
+            try {
+                isVisible = $(selector).is(':visible');
+            } catch (e) {
+                isVisible = $(selector.replace(/::shadow/g, '')).is(':visible');
+            }
+            return isVisible;
+        }, [selector], timeout, 500, function error() {
+            this.assert.fail('not visible', 'visible', 'Timedout while waiting for "' + selector + '" to to become visible.');
         });
 
     return this;
