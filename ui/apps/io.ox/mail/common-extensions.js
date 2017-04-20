@@ -719,6 +719,27 @@ define('io.ox/mail/common-extensions', [
 
         }()),
 
+        plainTextFallback: (function () {
+
+            function draw(model) {
+                // avoid duplicates
+                if (this.find('.warnings').length) return;
+
+                if (model.get('warnings')) {
+
+                    this.append(
+                        $('<div class="alert alert-error warnings">')
+                        .text(model.get('warnings').error)
+                    );
+                }
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                baton.view.listenTo(baton.model, 'change:warnings', draw.bind(this));
+            };
+        }()),
+
         dispositionNotification: (function () {
 
             var skip = {};

@@ -253,6 +253,22 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail').extend({
+        id: 'warnings',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var section = $('<section class="warnings">');
+            ext.point('io.ox/mail/detail/warnings').invoke('draw', section, baton);
+            this.append(section);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/warnings').extend({
+        id: 'plaintextfallback',
+        index: 100,
+        draw: extensions.plainTextFallback
+    });
+
     var INDEX_notifications = 0;
 
     ext.point('io.ox/mail/detail/notifications').extend({

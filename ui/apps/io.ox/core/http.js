@@ -690,8 +690,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     }
                     deferred.resolve(data);
                 } else {
+
                     var columns = o.params.columns || (o.processResponse === true ? getAllColumns(o.columnModule, true) : '');
                     data = sanitize(response.data, o.columnModule, columns);
+                    if (o.module === 'mail' && o.type === 'GET' && response.warnings) {
+                        // inject warning for mail get
+                        data.warnings = response.warnings;
+                    }
                     timestamp = response.timestamp !== undefined ? response.timestamp : _.now();
                     deferred.resolve(data, timestamp);
                 }
