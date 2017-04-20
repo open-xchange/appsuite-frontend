@@ -13,9 +13,8 @@
 
 define('io.ox/backbone/mini-views/help', [
     'settings!io.ox/core',
-    'io.ox/core/extensions',
     'gettext!io.ox/core'
-], function (settings, ext, gt) {
+], function (settings, gt) {
 
     'use strict';
 
@@ -30,83 +29,77 @@ define('io.ox/backbone/mini-views/help', [
     //  iconClass       {string} These classes are added to the i-tag
     //  content         {object or string} The object to display. If unset, the help icon will be displayed
 
-    var baton = new ext.Baton({
+    var HelpView = Backbone.View.extend({
 
-        HelpView: Backbone.View.extend({
+        tagName: 'a',
 
-            tagName: 'a',
+        className: 'io-ox-context-help',
 
-            className: 'io-ox-context-help',
+        events: {
+            'click': 'onClick'
+        },
 
-            events: {
-                'click': 'onClick'
-            },
+        onClick: function (e) {
 
-            onClick: function (e) {
+            e.preventDefault();
 
-                e.preventDefault();
+            var href = this.options.href,
+                base = this.options.base;
 
-                var href = this.options.href,
-                    base = this.options.base;
+            // if target is dynamic, execute as function
+            if (_.isFunction(href)) href = this.options.href();
 
-                // if target is dynamic, execute as function
-                if (_.isFunction(href)) href = this.options.href();
-
-                if (_.isObject(href)) {
-                    base = href.base || base;
-                    href = href.target || href;
-                }
-
-                window.open(base + '/l10n/' + ox.language + '/' + href);
-
-                // metrics
-                require(['io.ox/metrics/main'], function (metrics) {
-                    if (!metrics.isEnabled()) return;
-                    // track help as separate app/page
-                    metrics.trackPage({
-                        id: 'io.ox/help'
-                    });
-                    // track what page/anchor of help is requested
-                    metrics.trackEvent({
-                        app: 'core',
-                        target: 'toolbar',
-                        type: 'click',
-                        action: 'help',
-                        detail: href.substr(href.lastIndexOf('#') + 1)
-                    });
-                });
-            },
-
-            initialize: function (options) {
-                this.options = _.extend({
-                    href: 'index.html',
-                    content: $('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Online help')),
-                    base: 'help'
-                }, options);
-
-                if (!_.isString(this.options.content)) {
-                    this.options.content.addClass(this.options.iconClass);
-                }
-
-                if (!settings.get('features/showHelpLinks', true)) this.$el.addClass('hidden');
-            },
-
-            render: function () {
-                if (this.$el.hasClass('hidden')) return this;
-                this.$el
-                    .append(this.options.content)
-                    .attr({
-                        href: '#',
-                        target: '_blank',
-                        'aria-label': gt('Online help')
-                    });
-                return this;
+            if (_.isObject(href)) {
+                base = href.base || base;
+                href = href.target || href;
             }
-        })
+
+            window.open(base + '/l10n/' + ox.language + '/' + href);
+
+            // metrics
+            require(['io.ox/metrics/main'], function (metrics) {
+                if (!metrics.isEnabled()) return;
+                // track help as separate app/page
+                metrics.trackPage({
+                    id: 'io.ox/help'
+                });
+                // track what page/anchor of help is requested
+                metrics.trackEvent({
+                    app: 'core',
+                    target: 'toolbar',
+                    type: 'click',
+                    action: 'help',
+                    detail: href.substr(href.lastIndexOf('#') + 1)
+                });
+            });
+        },
+
+        initialize: function (options) {
+            this.options = _.extend({
+                href: 'index.html',
+                content: $('<i class="fa fa-question-circle" aria-hidden="true">').attr('title', gt('Online help')),
+                base: 'help'
+            }, options);
+
+            if (!_.isString(this.options.content)) {
+                this.options.content.addClass(this.options.iconClass);
+            }
+
+            if (!settings.get('features/showHelpLinks', true)) this.$el.addClass('hidden');
+        },
+
+        render: function () {
+            if (this.$el.hasClass('hidden')) return this;
+            this.$el
+                .append(this.options.content)
+                .attr({
+                    href: '#',
+                    target: '_blank',
+                    'aria-label': gt('Online help')
+                });
+            return this;
+        }
     });
 
-    // allow customization
-    ext.point('io.ox/backbone/mini-views/help').invoke('customize', undefined, baton);
-
-    return baton.HelpView;
+    return HelpView;
 });
