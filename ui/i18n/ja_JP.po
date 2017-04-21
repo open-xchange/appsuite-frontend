@@ -695,6 +695,11 @@ msgstr "実際の時間 (分)"
 msgid "Add"
 msgstr "追加"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Add IMAP keyword"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -718,6 +723,8 @@ msgstr "パブリックフォルダに追加"
 msgid "Add attachments"
 msgstr "添付ファイルを追加"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -891,8 +898,18 @@ msgstr "アカウントを追加"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "%1$s と %2$s を追加しました。"
+
+#. %1$s is the display name of an added user or mail recipient
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "%1$s と %2$s を追加しました。"
 
 #. %s is a list of filenames separeted by commas
@@ -928,6 +945,13 @@ msgstr "同じ名前でファイルを追加する"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "追加設定"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Addresses"
+msgid "Address"
+msgstr "住所"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -979,8 +1003,8 @@ msgstr "何回も発生した後"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "All"
 msgstr "すべて"
 
@@ -1109,8 +1133,8 @@ msgstr "不明なエラーが発生しました。"
 msgid "Anniversary"
 msgstr "記念日"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "すべての宛先"
 
@@ -1160,7 +1184,9 @@ msgstr "すべての条件を満たす場合にルールを適用"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
+#, fuzzy
+#| msgid "Apply rule if any condition is met."
+msgid "Apply rule if any condition is met"
 msgstr "いずれかの条件を満たす場合にルールを適用"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -1426,6 +1452,11 @@ msgstr "サインインに戻る"
 msgid "Basic settings"
 msgstr "基本設定"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Bcc"
+msgstr "Bcc"
+
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1465,11 +1496,16 @@ msgstr "ブラインドコピー"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "青"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1526,8 +1562,6 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
@@ -1715,6 +1749,11 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "カートには何も入っていません。"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Cc"
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2126,15 +2165,17 @@ msgstr "連絡先を移動しました。"
 msgid "Contacts toolbar"
 msgstr "連絡先ツールバー"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Contains"
 msgstr "次の文字列を含む"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Content"
-msgstr "コンテンツ"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Contains"
+msgid "Contains not"
+msgstr "次の文字列を含む"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2178,6 +2219,13 @@ msgctxt "CC"
 msgid "Copy"
 msgstr "コピー"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Copy to"
+msgid "Copy into"
+msgstr "CC:"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
 msgstr "クリックボードにコピー"
@@ -2193,6 +2241,12 @@ msgstr "コストは -%1$d から %1$d までの数字でなければなりま�
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must only have two decimal places."
 msgstr "コストは小数第２位まで入力する必要があります。"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -2381,6 +2435,13 @@ msgstr "ファイルの作成"
 msgid "Currency"
 msgstr "通貨"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Current Date"
+msgid "Current date"
+msgstr "現在の日付"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "現在のロール"
@@ -2445,9 +2506,8 @@ msgstr ""
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Date"
 msgstr "日付"
 
@@ -2682,8 +2742,8 @@ msgstr "説明がコピーされました。"
 msgid "Description text"
 msgstr "説明"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Detail"
 msgstr "詳細"
 
@@ -2743,8 +2803,8 @@ msgstr "ウィジェットを無効化"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "破棄"
@@ -2993,8 +3053,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "ドキュメント"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "ドメイン"
 
@@ -3443,10 +3503,24 @@ msgstr "稼働時間の終了時刻"
 msgid "Ends"
 msgstr "終了"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Ends on"
+msgid "Ends not with"
+msgstr "終了日時"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
 msgstr "終了日時"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Ends at"
+msgid "Ends with"
+msgstr "終了"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Enter Password"
@@ -3465,10 +3539,10 @@ msgstr "ドキュメントの件名をここに入力してください。"
 msgid "Entrepreneur"
 msgstr "起業家"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Envelope - To"
-msgstr "エンベロープ - 宛先"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Envelope"
+msgstr "エンベロープ"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3856,10 +3930,18 @@ msgstr "ファイルをコピーしました。"
 msgid "File has been moved"
 msgstr "ファイルを移動しました。"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "File name"
+msgid "File into"
+msgstr "ファイル名"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "ファイル名"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -3938,16 +4020,19 @@ msgstr "画面サイズに合わせる"
 msgid "Fit to screen width"
 msgstr "画面サイズに合わせる"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "フラグ"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Flag"
 msgstr "フラグ"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Flag mail with"
-msgstr "次のフラグをメールに付ける"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
@@ -4126,7 +4211,8 @@ msgstr "金曜日"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "差出人"
 
@@ -4243,8 +4329,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "グレー"
@@ -4253,10 +4339,24 @@ msgstr "グレー"
 msgid "Grayish blue"
 msgstr "グレイッシュブルー"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Create"
+msgid "Greater"
+msgstr "作成"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Create list"
+msgid "Greater equals"
+msgstr "リストを作成"
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "緑"
@@ -4293,9 +4393,17 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML とテキスト"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Header"
+msgstr "ヘッダ"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Header"
+msgid "Header exists"
 msgstr "ヘッダ"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -4729,18 +4837,25 @@ msgstr "アポイントへの出席を依頼"
 msgid "Invite to new appointment"
 msgstr "新規アポイントへの出席を依頼"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "次の数より大きい"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Is exactly"
 msgstr "次の文字列と完全に一致"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "次の数値以外"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "次の数より小さい"
 
@@ -4806,8 +4921,8 @@ msgstr "ウィジェットを無効化"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Keep"
 msgstr "保持"
 
@@ -4916,6 +5031,10 @@ msgstr "レイアウト"
 msgid "Learn more"
 msgstr "詳細は、こちらをご覧ください"
 
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4942,15 +5061,15 @@ msgid "Life"
 msgstr "日常"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "薄い青"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "薄い緑"
@@ -5015,8 +5134,8 @@ msgstr "メールを全て読み込み"
 msgid "Loading the full mail might lead to performance problems."
 msgstr "メールを全て読み込むと性能上の問題が起こることがあります。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Localpart"
 msgstr "ローカル部"
 
@@ -5073,6 +5192,16 @@ msgstr "優先度 (低)"
 msgctxt "E-Mail"
 msgid "Low priority"
 msgstr "優先度 (低)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr ""
 
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5156,6 +5285,7 @@ msgstr "メールに件名がありません。このまま送信しますか。
 msgid "Mail has no recipient."
 msgstr "メールには宛先がありません。"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5183,8 +5313,8 @@ msgid "Mail was not imported. Only .eml files are supported."
 msgstr ""
 "メールはインポートされませんでした。.eml ファイルのみがサポートされます。"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Mailing list"
 msgstr "メーリングリスト"
 
@@ -5292,8 +5422,8 @@ msgstr "未完了"
 msgid "Mark as unread"
 msgstr "未読にする"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Mark mail as"
 msgstr "次の印をメールに付ける"
 
@@ -5343,9 +5473,16 @@ msgstr ""
 msgid "Maroon"
 msgstr "栗色"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Matches"
+msgstr "次の文字列と一致"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Matches"
+msgid "Matches not"
 msgstr "次の文字列と一致"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5543,8 +5680,6 @@ msgid "Move to category"
 msgstr "カテゴリに移動"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "フォルダに移動"
 
@@ -5625,8 +5760,8 @@ msgstr "自分の仕事"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Name"
 msgstr "名前"
 
@@ -5644,6 +5779,13 @@ msgstr "ネイビーブルー"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "容量が必要ですか？"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Add condition"
+msgid "Nested condition"
+msgstr "条件を追加"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -5941,7 +6083,8 @@ msgstr "タイトルなし"
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "なし"
 
@@ -5955,6 +6098,13 @@ msgstr "なし"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "標準"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Regex"
+msgid "Not Regex"
+msgstr "次の文字列と一致 (正規表現)"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6292,8 +6442,8 @@ msgstr "オプション"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "オレンジ"
@@ -6371,6 +6521,11 @@ msgstr "%2$d ページ中の %1$d ページ"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "ポケットベル"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Part"
+msgstr ""
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6541,8 +6696,8 @@ msgstr "時間を選択してください。"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "ピンク"
@@ -6631,8 +6786,8 @@ msgstr "検索クエリを入力してください。"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Please enter a valid date"
 msgstr "有効な日付を入力してください。"
 
@@ -6754,6 +6909,12 @@ msgstr "この製品を評価してください。"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "インポートするファイルを選択してください。"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "少なくとも1日を指定してください。"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7108,8 +7269,8 @@ msgstr "購入の確認"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "紫"
@@ -7123,7 +7284,10 @@ msgstr "クイック返信"
 msgid "Quit"
 msgstr "終了"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "割当量"
 
@@ -7247,8 +7411,8 @@ msgstr "定期的な仕事には、有効な開始日が必要です。"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "赤"
@@ -7285,8 +7449,8 @@ msgstr "%1$s からのメール: %2$s"
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Redirect to"
 msgstr "次へ転送"
 
@@ -7307,8 +7471,8 @@ msgstr "更新間隔"
 msgid "Refresh rate in minutes"
 msgstr "更新間隔 (分)"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "次の文字列と一致 (正規表現)"
 
@@ -7348,8 +7512,8 @@ msgstr "次の理由で拒否"
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Reject with reason"
 msgstr "次の理由で拒否"
 
@@ -7432,6 +7596,11 @@ msgstr "削除"
 msgid "Remove %1$s"
 msgstr "%1$sを解除"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Remove IMAP keyword"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7461,9 +7630,19 @@ msgstr "メンバを削除"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "%1$s と %2$s を削除しました。"
+
+#. %1$s is the display name of a removed user or mail recipient
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "%1$sを解除"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7507,10 +7686,7 @@ msgid "Reply"
 msgstr "返信"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "全員に返信"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "全員に返信"
 
@@ -7546,6 +7722,20 @@ msgstr "開封確認メッセージを要求"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "出席依頼を再送する"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Reset"
+msgid "Resent-From"
+msgstr "リセット"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Reset"
+msgid "Resent-To"
+msgstr "リセット"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7653,22 +7843,6 @@ msgstr "行"
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Royal blue"
 msgstr "ロイヤルブルー"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies from"
-msgstr "からルールが適用されます:"
-
-#. The filter rule will be applied on a specific date, which can be selected by the user
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies on"
-msgstr "にルールが適用されます。"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies until"
-msgstr "までルールが適用されます。"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7890,8 +8064,8 @@ msgstr "ファイルを選択"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter
 msgid "Select folder"
 msgstr "フォルダを選択"
 
@@ -7960,14 +8134,9 @@ msgstr "通知を送信"
 msgid "Send vacation notice during this time only"
 msgstr "休暇通知をこの期間のみ送信"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender address"
-msgstr "差出人アドレス"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender/From"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Sender"
 msgstr "差出人"
 
 #. %1$d is number of messages; %2$d is progress in percent
@@ -7980,6 +8149,13 @@ msgstr[0] "メッセージ１つを送信 ... %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "送信日時"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "end date "
+msgid "Sent date"
+msgstr "終了日 "
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8037,6 +8213,13 @@ msgstr "カテゴリを設定"
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
+msgstr "色を設定"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Set color"
+msgid "Set color flag"
 msgstr "色を設定"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
@@ -8319,8 +8502,8 @@ msgstr "サインインユーザ:"
 msgid "Size"
 msgstr "サイズ"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Size (bytes)"
 msgstr "サイズ (バイト)"
 
@@ -8490,9 +8673,23 @@ msgstr "開始日"
 msgid "StartTLS"
 msgstr "StartTLS"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Starts on"
+msgid "Starts not with"
+msgstr "開始日時"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr "開始日時"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Starts at"
+msgid "Starts with"
+msgstr "開始時刻"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "State"
@@ -8526,8 +8723,8 @@ msgstr "学生"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8634,11 +8831,6 @@ msgstr "TB"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Tag mail with"
-msgstr "次のタグをメールに付ける"
 
 #. This is a summary for a mail filter rule
 #. %1$s User input (usually a mail address)
@@ -9104,6 +9296,13 @@ msgstr ""
 "このフォルダにメッセージが %1$d 通あります；現在メッセージがすべてリストに表"
 "示されるわけではありません。"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
+
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9451,8 +9650,8 @@ msgstr "敬称（前）"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "宛先"
@@ -9835,8 +10034,8 @@ msgstr ""
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "User"
 msgstr "ユーザ"
 
@@ -10114,8 +10313,8 @@ msgid "Years"
 msgstr "年"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Yellow"
 msgstr "黄"
 
@@ -10565,9 +10764,19 @@ msgstr "[コピー] "
 msgid "[Copy] %1$s"
 msgstr "%1$s の［コピー］"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "accepted"
 msgstr "承諾済み"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr ""
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -10611,6 +10820,27 @@ msgstr "他のシナリオを選択してください。"
 msgid "close for %1$s"
 msgstr "%1$s を閉じる"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if all conditions are met"
+msgstr "すべての条件を満たす場合にルールを適用"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if all of these conditions are met"
+msgstr "すべての条件を満たす場合にルールを適用"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if any condition is met."
+msgid "continue if any of these condition is met."
+msgstr "いずれかの条件を満たす場合にルールを適用"
+
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "create objects"
@@ -10629,8 +10859,8 @@ msgstr "濃い青"
 msgid "dark green"
 msgstr "濃い緑"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "datepicker"
 msgstr "日付ピッカー"
 
@@ -10667,8 +10897,8 @@ msgstr "期限を過ぎたら削除"
 msgid "delete only own objects"
 msgstr "自分のオブジェクトのみを削除"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "deleted"
 msgstr "削除済み"
 
@@ -10679,6 +10909,13 @@ msgstr "無効"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "disabled"
 msgstr "無効"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Does not match regex"
+msgid "does not matches a substring"
+msgstr "次の文字列と一致しない (正規表現)"
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -10710,6 +10947,13 @@ msgstr "ファイル"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "第１"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Flagged"
+msgid "flagged"
+msgstr "フラグ"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -10810,6 +11054,11 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "場所: %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr ""
+
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "message"
 msgstr "メッセージ"
@@ -10846,6 +11095,16 @@ msgstr "期限がありません。"
 msgid "no read permissions"
 msgstr "表示権限なし"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "of %1$d"
 msgstr "%1$d中"
@@ -10869,6 +11128,13 @@ msgstr "１年"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "オレンジ"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Your timezone"
+msgid "original time zone"
+msgstr "タイムゾーン"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
@@ -10900,8 +11166,8 @@ msgstr "赤"
 msgid "second"
 msgstr "第２"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "seen"
 msgstr "既読"
 
@@ -11470,9 +11736,6 @@ msgstr "yyyy"
 
 #~ msgid "Address (private)"
 #~ msgstr "住所 (プライベート)"
-
-#~ msgid "Addresses"
-#~ msgstr "住所"
 
 #~ msgid "Admin"
 #~ msgstr "管理者"
@@ -12441,9 +12704,6 @@ msgstr "yyyy"
 #~ msgid "Based on sender"
 #~ msgstr "差出人"
 
-#~ msgid "Bcc"
-#~ msgstr "Bcc"
-
 #~ msgid "Bcc..."
 #~ msgstr "Bcc..."
 
@@ -12634,9 +12894,6 @@ msgstr "yyyy"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "ケイマン諸島"
-
-#~ msgid "Cc"
-#~ msgstr "Cc"
 
 #~ msgid "Cc..."
 #~ msgstr "Cc..."
@@ -12906,6 +13163,9 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "連絡先の概要"
 
+#~ msgid "Content"
+#~ msgstr "コンテンツ"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -12922,9 +13182,6 @@ msgstr "yyyy"
 #~ msgstr "クック諸島"
 
 #~ msgid "Copy (CC) to"
-#~ msgstr "CC:"
-
-#~ msgid "Copy to"
 #~ msgstr "CC:"
 
 #~ msgid "Costa Rica"
@@ -13060,9 +13317,6 @@ msgstr "yyyy"
 
 #~ msgid "Current Costs:"
 #~ msgstr "現在のコスト:"
-
-#~ msgid "Current Date"
-#~ msgstr "現在の日付"
 
 #~ msgid "Current costs:"
 #~ msgstr "現在のコスト:"
@@ -13437,9 +13691,6 @@ msgstr "yyyy"
 #~ msgid "Does not match"
 #~ msgstr "次の文字列と一致しない"
 
-#~ msgid "Does not match regex"
-#~ msgstr "次の文字列と一致しない (正規表現)"
-
 #~ msgid "Dominica"
 #~ msgstr "ドミニカ"
 
@@ -13734,9 +13985,6 @@ msgstr "yyyy"
 #~ msgid "End:"
 #~ msgstr "終了:"
 
-#~ msgid "Ends at"
-#~ msgstr "終了"
-
 #~ msgid "Ends at:"
 #~ msgstr "終了時刻:"
 
@@ -13824,8 +14072,8 @@ msgstr "yyyy"
 #~ msgid "Entire thread"
 #~ msgstr "スレッド全体"
 
-#~ msgid "Envelope"
-#~ msgstr "エンベロープ"
+#~ msgid "Envelope - To"
+#~ msgstr "エンベロープ - 宛先"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "赤道ギニア"
@@ -14142,6 +14390,9 @@ msgstr "yyyy"
 
 #~ msgid "Flag #%d"
 #~ msgstr "フラグ #%d"
+
+#~ msgid "Flag mail with"
+#~ msgstr "次のフラグをメールに付ける"
 
 #~ msgid "Flags"
 #~ msgstr "フラグ"
@@ -14809,9 +15060,6 @@ msgstr "yyyy"
 
 #~ msgid "Is at most"
 #~ msgstr "最大"
-
-#~ msgid "Is not exactly"
-#~ msgstr "次の数値以外"
 
 #~ msgid "Isle of Man"
 #~ msgstr "マン島"
@@ -16402,14 +16650,14 @@ msgstr "yyyy"
 #~ msgid "Renminbi"
 #~ msgstr "人民元"
 
+#~ msgid "Reply All"
+#~ msgstr "全員に返信"
+
 #~ msgid "Reply to"
 #~ msgstr "返信先:"
 
 #~ msgid "Reply-to Address"
 #~ msgstr "返信先アドレス"
-
-#~ msgid "Reset"
-#~ msgstr "リセット"
 
 #~ msgid "Resource email"
 #~ msgstr "設備メール"
@@ -16455,6 +16703,15 @@ msgstr "yyyy"
 
 #~ msgid "Route Planning"
 #~ msgstr "ルート プランニング"
+
+#~ msgid "Rule applies from"
+#~ msgstr "からルールが適用されます:"
+
+#~ msgid "Rule applies on"
+#~ msgstr "にルールが適用されます。"
+
+#~ msgid "Rule applies until"
+#~ msgstr "までルールが適用されます。"
 
 #~ msgid "Rules"
 #~ msgstr "ルール"
@@ -16696,7 +16953,10 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "フィードバックを送信"
 
-#~ msgid "Sender"
+#~ msgid "Sender address"
+#~ msgstr "差出人アドレス"
+
+#~ msgid "Sender/From"
 #~ msgstr "差出人"
 
 #~ msgid "Sending an E-Mail to a contact"
@@ -17102,9 +17362,6 @@ msgstr "yyyy"
 #~ msgid "Started %s weeks ago:"
 #~ msgstr "%s 週間前に開始:"
 
-#~ msgid "Starts at"
-#~ msgstr "開始時刻"
-
 #~ msgid "Starts at:"
 #~ msgstr "開始時刻:"
 
@@ -17335,6 +17592,9 @@ msgstr "yyyy"
 #~| msgid "Table"
 #~ msgid "Tablet"
 #~ msgstr "表"
+
+#~ msgid "Tag mail with"
+#~ msgstr "次のタグをメールに付ける"
 
 #~ msgid "Tagging"
 #~ msgstr "タグ付け"
@@ -19074,9 +19334,6 @@ msgstr "yyyy"
 #~| msgid "Edit signature"
 #~ msgid "edit share"
 #~ msgstr "署名を編集"
-
-#~ msgid "end date "
-#~ msgstr "終了日 "
 
 #~ msgid "ends"
 #~ msgstr "終了"

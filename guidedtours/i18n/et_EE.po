@@ -14,293 +14,33 @@ msgstr ""
 "X-Generator: Pootle 2.5.1.1\n"
 "X-POOTLE-MTIME: 1491975823.000000\n"
 
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Creating a new appointment"
-msgstr "Uue kohtumise loomine"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Add another account"
+msgstr "Uue konto lisamine"
 
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To create a new appointment, click on New in the toolbar."
-msgstr "Uue kohtumise loomiseks klõpsake Uus tööriistaribal."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Entering the appointment's data"
-msgstr "Kohtumise andmete sisestamine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Enter the subject, the start and the end date of the appointment. Other details are optional."
-msgstr ""
-"Sisestage teema ja kohtumise algus- ning lõppkuupäev. Muud andmed on "
-"valikulised."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Creating recurring appointments"
-msgstr "Korduvate kohtumiste loomine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To create recurring appointments, enable Repeat. Functions for setting the recurrence parameters are shown."
-msgstr ""
-"Korduvate kohtumiste loomiseks aktiveerige Korda. Funktsioonid korduvuse "
-"parameetrite seadistamiseks on näidatud."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-#: apps/io.ox/tours/tasks.js
-msgid "Using the reminder function"
-msgstr "Meeldetuletusfunktsiooni kasutamine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To not miss the appointment, use the reminder function."
-msgstr "Kohtumise unustamise vältimiseks kasutage meeldetuletusfunktsiooni."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-#: apps/io.ox/tours/tasks.js
-msgid "Inviting other participants"
-msgstr "Teiste osalejate kutsumine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To invite other participants, enter their names in the field below Participants. To avoid appointment conflicts, click on Find a free time at the upper right side."
-msgstr ""
-"Teiste osalejate kutsumiseks sisestage nende nimed väljale Osalejate all. "
-"Kohtumiste kattumise vältimiseks klõpsake Leia vaba aeg ülemises paremas "
-"servas."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
 msgstr "Manuste lisamine"
 
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Further down you can add documents as attachments to the appointment."
-msgstr "Allpool saate lisada kohtumisele manustena dokumente."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Adding further details"
+msgstr "Täiendavate andmete lisamine"
 
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "Creating the appointment"
-msgstr "Kohtumise loomine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To create the appointment, click on Create at the lower left side."
-msgstr "Koosoleku lisamiseks vajuta nupule Loo - all vasakus nurgas."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-#: apps/io.ox/tours/mail.js
-msgid "Selecting a view"
-msgstr "Vaate valimine"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "To select one of the views like Day, Month or List, click on View in the toolbar. Select a menu entry from the Layout section."
-msgstr ""
-"Vaate nagu Päev, Kuu või Loetelu valimiseks klõpsake tööriistariba elemendil "
-"Vaade. Valige menüü kirje osas Küljendus."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "The calendar views"
-msgstr "Kalendrivaated"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "The calendar views display a calendar sheet with the appointments for the selected time range."
-msgstr ""
-"Kalendrivaated kuvavad kalendrilehe kohtumistega valitud ajavahemiku jooksul."
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "The List view"
-msgstr "Loetelu vaade"
-
-#: apps/io.ox/tours/calendar.js
-#: module:io.ox/tours
-msgid "The List view shows a list of the appointments in the current folder. If clicking on an appointment, the appointment's data and some functions are displayed in the Detail view."
-msgstr ""
-"Loetelu vaade näitab kohtumiste loetelu aktiivses kaustas. Kui klõpsate "
-"mõnel kohtumistest, kuvatakse kohtumise andmed ja mõningad funktsioonid "
-"Üksikasjade vaates."
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "Creating a new contact"
-msgstr "Uue kontakti loomine"
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "To create a new contact, click on New > Add contact in the toolbar."
-msgstr "Uue kontakti loomiseks klõpsake Uus > Lisa kontakt tööriistaribal."
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "Navigation bar"
-msgstr "Navigeerimisriba"
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "Click on a letter on the left side of the navigation bar in order to display the corresponding contacts from the selected address book."
-msgstr ""
-"Klõpsake tähel navigeerimisriba vasakul poolel vastavate kontaktide "
-"kuvamiseks valitud aadressiraamatust."
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "Sending an E-Mail to a contact"
-msgstr "E-kirja saatmine kontaktile"
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "To send an E-Mail to the contact, click on an E-Mail address or on Send email in the toolbar."
-msgstr ""
-"E-kirja saatmiseks kontaktile klõpsake e-posti aadressil või tööriistariba "
-"elemendil Saada e-kiri."
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "Editing multiple contacts"
-msgstr "Mitme kontakti andmete muutmine"
-
-#: apps/io.ox/tours/contacts.js
-#: module:io.ox/tours
-msgid "To edit multiple contacts at once, enable the checkboxes on the left side of the contacts. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar."
-msgstr ""
-"Mitme kontakti andmete korraga muutmiseks aktiveerige märkeruudud "
-"kontaktidest vasakul. Kui märkeruute pole näha, klõpsake Vaade > Märkeruudud "
-"tööriistariba paremal poolel."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "The Drive app tour.txt"
-msgstr "Rakenduse Drive tutvustus.txt"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "The Drive app"
-msgstr "Rakendus Drive"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Welcome to your cloud storage app. This Guided Tour will introduce you to your new online storage solution - your one point to access online stored files from all your accounts. This is where you can upload and save your files, share them and synchronize them with different devices.  "
-msgstr ""
-"Teie pilvemälu rakendus tervitab teid! See tutvustus annab ülevaate teie "
-"uuest võrgupõhisest mälulahendusest, mis võimaldab juurdepääsu salvestatud "
-"failidele teie kõigilt kontodelt. Siitkaudu saate oma faile üles laadida ja "
-"salvestada, jagada ning erinevate seadmetega sünkroniseerida.  "
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Folder tree"
-msgstr "Kaustapuu"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "On the left you can see the folder tree. It displays your folder structure and allows you to navigate to specific folders and subfolders. To make your life easier, we have already included folders for your Documents, Music, Pictures and Videos."
-msgstr ""
-"Vasakul näete kaustapuud, mis kuvab teie kaustade struktuuri ja võimaldab "
-"teil soovitud kaustadele ning alamkaustadele juurde pääseda. Teie elu "
-"kergendamiseks oleme juba loonud kaustad teie dokumentide, muusika, piltide "
-"ja videote jaoks."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Folder content"
-msgstr "Kausta sisu"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Clicking on a folder displays all the subfolders, documents, media and other files that it contains."
-msgstr ""
-"Kaustal klõpsamine kuvab kõik alamkaustad, dokumendid, meedia- ja muud "
-"failid, mis kaustas leiduvad."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Select a view"
-msgstr "Vaate valimine"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Different views are available. Just select the one you like best."
-msgstr "Saadaval on erinevad vaated. Valige teile meelepärane vaade."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Toolbar"
-msgstr "Tööriistariba"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "At the top you can find the toolbar with many functions and additional options. You can easily create new folders, new files and much more."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"At the top you can find the toolbar with many functions and additional "
+"options. You can easily create new folders, new files and much more."
 msgstr ""
 "Tööriistariba üleval pakub hulgaliselt funktsioone ja lisavalikuid. Uute "
 "kaustade ja failide lihtne loomine ning palju muid võimalusi on teie "
 "käsutuses."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Upload a new file"
-msgstr "Uue faili üleslaadimine"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "To upload a new file from your local device, simply click on Add local file and select the file you would like to upload. It is even easier if you just drag and drop files from your local device into Drive. The uploaded file is now available in Drive on all your devices."
-msgstr ""
-"Uue faili üleslaadimiseks kohalikult seadmelt klõpsake Lisa kohalik fail ja "
-"valige fail, mida soovite üles laadida. Veelgi lihtsam on failide "
-"lohistamine teie kohalikult seadmelt Drive'i peale. Üleslaetud fail on nüüd "
-"Drive'i kaudu saadaval kõigi teie seadmete jaoks."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Preview files"
-msgstr "Failide eelvaade"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Clicking on the view icon leads you to a preview of the selected file."
-msgstr "Vaate ikoonile klõpsamine avab valitud faili eelvaate."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Preview mode"
-msgstr "Eelvaaterežiim"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "From preview you can also select other options to help you manage and work on your files."
-msgstr ""
-"Eelvaate kaudu saate valida muidki võimalusi, mis on teile abiks failide "
-"haldamisel ja nendega töötamisel."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Share files"
-msgstr "Failide jagamine"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Here you can share files with your colleagues and external contacts. You can also collaborate on a document and set different access rights."
-msgstr ""
-"Võimaldab failide jagamist kolleegide ja väliste kontaktidega. Võite teha "
-"koostööd dokumendi kallal ja seadistada erinevaid juurdepääsuõigusi."
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Sharing options"
-msgstr "Jagamisvalikud"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Choose from two alternatives to share your files and folders. Use Invite people if you want to manage access rights and allow recipients to create and edit files. Or just get a link to let others view and download your files. You can use an expiration date and password protection if you like."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Choose from two alternatives to share your files and folders. Use Invite "
+"people if you want to manage access rights and allow recipients to create "
+"and edit files. Or just get a link to let others view and download your "
+"files. You can use an expiration date and password protection if you like."
 msgstr ""
 "Valige kahe võimaluse vahel teie failide ja kaustade jagamiseks. Kasutage "
 "Kutsu inimesi juhul, kui soovite hallata juurdepääsuõigusi ja lubada kutse "
@@ -308,589 +48,818 @@ msgstr ""
 "saaksid teie faile vaadata ja alla laadida. Soovi korral saate seadistada "
 "aegumiskuupäeva ja kaitseparooli."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"Click on a letter on the left side of the navigation bar in order to display "
+"the corresponding contacts from the selected address book."
+msgstr ""
+"Klõpsake tähel navigeerimisriba vasakul poolel vastavate kontaktide "
+"kuvamiseks valitud aadressiraamatust."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Clicking on a folder displays all the subfolders, documents, media and other "
+"files that it contains."
+msgstr ""
+"Kaustal klõpsamine kuvab kõik alamkaustad, dokumendid, meedia- ja muud "
+"failid, mis kaustas leiduvad."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Clicking on the view icon leads you to a preview of the selected file."
+msgstr "Vaate ikoonile klõpsamine avab valitud faili eelvaate."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Closing a square"
+msgstr "Ruudu sulgemine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
 msgstr "Koostöö"
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Sharing files by inviting people does not only offer your recipients the option to create and edit files. Internal and external participants are also able to collaborate with you on text documents and spreadsheets at the same time."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Composing a new E-Mail"
+msgstr "Uue e-kirja koostamine"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating a new appointment"
+msgstr "Uue kohtumise loomine"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Creating a new contact"
+msgstr "Uue kontakti loomine"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating a new task"
+msgstr "Uue ülesande loomine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Creating new items"
+msgstr "Uute üksuste loomine"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating recurring appointments"
+msgstr "Korduvate kohtumiste loomine"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating recurring tasks"
+msgstr "Korduvate ülesannete loomine"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Creating the appointment"
+msgstr "Kohtumise loomine"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Creating the task"
+msgstr "Ülesande loomine"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Customizing the Portal"
+msgstr "Portaali kohandamine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Depending on the app, the toolbar contains various functions for creating, "
+"editing and organizing objects."
 msgstr ""
-"Lisaks sellele, et failide jagamine inimeste kutsumise teel pakub "
-"kutsututele võimaluse failide loomiseks ja muutmiseks, saavad sise- ja "
-"välisosalejad koos teiega tekstdokumentide ning arvutustabelitega "
-"samaaegselt töötada."
+"Rakendusest olenevalt sisaldab tööriistariba erinevaid funktsioone objektide "
+"loomiseks, muutmiseks ja korrastamiseks."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Edit documents"
-msgstr "Dokumentide muutmine"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Detailed instructions for the single apps are located in System menu > Help."
+msgstr ""
+"Üksikasjalikud juhised konkreetsete rakenduste kohta leiate Süsteemi menüü > "
+"Abi alt."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Did you know that you can edit text documents and spreadsheets online? Drive will automatically update your edited file, but thanks to versioning the original file stays available."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Did you know that you can edit text documents and spreadsheets online? Drive "
+"will automatically update your edited file, but thanks to versioning the "
+"original file stays available."
 msgstr ""
 "Kas teadsite, et tekstdokumente ja arvutustabeleid saab võrgus muuta? Drive "
 "värskendab automaatselt teie muudetud faili, kuid tänu versioonihaldusele "
 "jääb kättesaadavaks ka algupärane fail."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "File details"
-msgstr "Faili üksikasjad"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Different views are available. Just select the one you like best."
+msgstr "Saadaval on erinevad vaated. Valige teile meelepärane vaade."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "The file details side bar offers additional information about your files. Just enable the File details option from the View drop down menu and select a file to see the details."
-msgstr ""
-"Faili üksikasjade külgriba pakub lisateavet teie failide kohta. Üksikasjade "
-"vaatamiseks aktiveerige Faili üksikasjad rippmenüüs Vaade ja valige soovitud "
-"fail."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Displaying the help or the settings"
+msgstr "Abi või seadistuste kuvamine"
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Add another account"
-msgstr "Uue konto lisamine"
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Drag and drop"
+msgstr "Lohistamine"
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Drive allows you to connect to other storage solutions if you already have a cloud storage account you use to save and sync your files. Simply click on the appropriate logo to access your existing data."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Drive allows you to connect to other storage solutions if you already have a "
+"cloud storage account you use to save and sync your files. Simply click on "
+"the appropriate logo to access your existing data."
 msgstr ""
 "Drive võimaldab ühenduse loomist muude mälulahendustega, kui teil on juba "
 "pilvemälu konto, mida oma failide salvestamiseks ja sünkroniseerimiseks "
 "kasutate. Klõpsake vastaval logol oma olemasolevatele andmetele "
 "juurdepääsemiseks."
 
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Restart Guided Tour"
-msgstr "Tutvustuse taaskäivitus"
-
-#: apps/io.ox/tours/files.js
-#: module:io.ox/tours
-msgid "Hint: you can always restart guided tours, any time you need them, from the system menu."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"Edit a setting on the right side. In most of the cases, the changes are "
+"activated immediately."
 msgstr ""
-"Vihje: vajadusel saab tutvustust suvalisel ajal süsteemi menüüst "
-"taaskäivitada."
+"Muutke seadet paremal poolel. Muudatused jõustuvad enamikul juhtudest kohe."
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Welcome to %s"
-msgstr "Tere tulemast %s-i"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Edit documents"
+msgstr "Dokumentide muutmine"
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "This guided tour will briefly introduce you to the product. Get more detailed information in the tours for the single apps or in the online help."
-msgstr ""
-"See tutvustus annab teile lühiülevaate tootest. Üksikasjalikumat teavet "
-"pakuvad eraldi rakenduste tutvustused või võrguabi."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Editing multiple E-Mails"
+msgstr "Mitme e-kirja muutmine"
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Launching an app"
-msgstr "Rakenduse käivitamine"
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Editing multiple contacts"
+msgstr "Mitme kontakti andmete muutmine"
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "To launch an app, click on an entry on the left side of the menu bar."
-msgstr "Rakenduse käivitamiseks klõpsake kirjel menüüriba vasakul poolel."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Editing multiple tasks"
+msgstr "Mitme ülesande muutmine"
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Displaying the help or the settings"
-msgstr "Abi või seadistuste kuvamine"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Editing settings"
+msgstr "Seadete muutmine"
 
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "To display the help or the settings, click the System menu icon in the menu bar."
-msgstr ""
-"Abi või seadistuste kuvamiseks klõpsake Süsteemi menüü ikoonile menüüribal."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The New objects icon"
-msgstr "Uute objektide ikoon"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The New objects icon shows the number of appointment reminders or other notifications. If clicking the icon, the info area opens."
-msgstr ""
-"Ikoon Uus näitab koosolekute meeldetuletusi ja teisi teateid. Kui vajutad "
-"ikoonile, siis avaneb täpsem info. "
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The info area"
-msgstr "Infoala"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "In case of new notifications, e.g. appointment invitations, the info area is opened."
-msgstr "Uute teavituste, nt. kohtumiskutsete korral avaneb infoala."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Creating new items"
-msgstr "Uute üksuste loomine"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
-msgstr "Uue e-kirja loomiseks klõpsake Koosta uus e-kiri tööriistaribal."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Opening or closing the folder tree"
-msgstr "Kaustapuu avamine või sulgemine"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "To open or close the folder tree, click on View >  Folder view on the right side of the toolbar."
-msgstr ""
-"Kaustapuu avamiseks või sulgemiseks klõpsake Vaade > Kaustavaade "
-"tööriistariba paremal poolel."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Searching for objects"
-msgstr "Objektide otsing"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "To search for objects, click the Search icon in the menu bar."
-msgstr "Objektide otsimiseks klõpsake menüüriba ikoonil Otsi."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The toolbar"
-msgstr "Tööriistariba"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Depending on the app, the toolbar contains various functions for creating, editing and organizing objects."
-msgstr ""
-"Rakendusest olenevalt sisaldab tööriistariba erinevaid funktsioone objektide "
-"loomiseks, muutmiseks ja korrastamiseks."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The folder tree"
-msgstr "Kaustapuu"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Use the folder tree to open the folder containing the objects that you want to view in the list."
-msgstr ""
-"Kasutage kaustapuud selle kausta avamiseks, mis sisaldab objekte, mida te "
-"loetelus näha soovite."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The list"
-msgstr "Loetelu"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Use the list to select an object, show its contents or activate functions."
-msgstr ""
-"Kasutage loetelu objekti valimiseks, selle sisu vaatamiseks või "
-"funktsioonide aktiveerimiseks."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The Detail view"
-msgstr "Üksikasjade vaade"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "The Detail view displays an object's content. Depending on the app, further functions for organizing objects can be found in the Detail view."
-msgstr ""
-"Üksikasjade vaade kuvab objekti sisu. Rakendusest sõltuvalt võib Üksikasjade "
-"vaatest leida täiendavaid funktsioone objektide korrastamiseks."
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Further information"
-msgstr "Lisateave"
-
-#: apps/io.ox/tours/intro.js
-#: module:io.ox/tours
-msgid "Detailed instructions for the single apps are located in System menu > Help."
-msgstr ""
-"Üksikasjalikud juhised konkreetsete rakenduste kohta leiate Süsteemi menüü > "
-"Abi alt."
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Composing a new E-Mail"
-msgstr "Uue e-kirja koostamine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To compose a new E-Mail, click on Compose in the toolbar."
-msgstr "Uue e-kirja koostamiseks klõpsake Koosta tööriistaribal."
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Entering the recipient's name"
-msgstr "Adressaadi nime sisestamine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Enter the recipient's name into the recipients field. As soon as you typed the first letters, suggestions from the address books are displayed. To accept a recipient suggestion, click on it."
-msgstr ""
-"Sisestage adressaadi nimi saajate väljale. Kui olete sisestanud esimesed "
-"tähed, pakutakse välja nimevariandid aadressiraamatust. Väljapakutud "
-"adressaadi kinnitamiseks klõpsake nimel."
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Entering the subject"
-msgstr "Teema sisestamine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Enter the subject into the subject field."
-msgstr "Sisestage teema teemaväljale."
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Further functions"
-msgstr "Täiendavad funktsioonid"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "In this area you can find further functions, e.g. for adding attachments."
-msgstr ""
-"Sellelt alalt võib leida täiendavaid funktsioone, näiteks manuste lisamiseks."
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Entering the E-Mail text"
-msgstr "E-kirja teksti sisestamine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Enter the E-Mail text into the main area. If the text format was set to HTML in the options, you can format the E-Mail text. To do so select a text part and then click an icon in the formatting bar."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the E-Mail text into the main area. If the text format was set to HTML "
+"in the options, you can format the E-Mail text. To do so select a text part "
+"and then click an icon in the formatting bar."
 msgstr ""
 "Sisestage e-kirja tekst põhialale. Kui teksti vorminguks seadistati valikute "
 "all HTML, saate e-kirja teksti vormindada. Selleks valige teksti lõik ja "
 "klõpsake vormindusriba ikoonil."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Sending the E-Mail"
-msgstr "E-kirja saatmine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To send the E-Mail, click on Send"
-msgstr "E-kirja saatmiseks klõpsake Saada"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Sorting your E-Mails"
-msgstr "E-kirjade sorteerimine"
-
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"Enter the recipient's name into the recipients field. As soon as you typed "
+"the first letters, suggestions from the address books are displayed. To "
+"accept a recipient suggestion, click on it."
 msgstr ""
-"E-kirjade sorteerimiseks klõpsake elemendil Sorteerimise alus. Valige "
-"sorteerimise kriteeriumid."
+"Sisestage adressaadi nimi saajate väljale. Kui olete sisestanud esimesed "
+"tähed, pakutakse välja nimevariandid aadressiraamatust. Väljapakutud "
+"adressaadi kinnitamiseks klõpsake nimel."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To choose between the different views. click on View in the toolbar. Select a menu entry in the layout."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Enter the subject into the subject field."
+msgstr "Sisestage teema teemaväljale."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"Enter the subject, the start and the end date of the appointment. Other "
+"details are optional."
 msgstr ""
-"Erinevate vaadete vahel valimiseks klõpsake tööriistariba elemendil Vaade. "
-"Valige menüü kirje."
+"Sisestage teema ja kohtumise algus- ning lõppkuupäev. Muud andmed on "
+"valikulised."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Opening an E-Mail in a separate window"
-msgstr "E-kirja avamine eraldi aknas"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Enter the subject, the start date, and a description."
+msgstr "Sisestage teema, alguskuupäev ja kirjeldus."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "If double-clicking on an E-Mail in the list, the E-Mail is opened in a separate window."
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering billing information"
+msgstr "Arveldusteabe sisestamine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the E-Mail text"
+msgstr "E-kirja teksti sisestamine"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Entering the appointment's data"
+msgstr "Kohtumise andmete sisestamine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the recipient's name"
+msgstr "Adressaadi nime sisestamine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Entering the subject"
+msgstr "Teema sisestamine"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Entering the task's data"
+msgstr "Ülesande andmete sisestamine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "File details"
+msgstr "Faili üksikasjad"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder content"
+msgstr "Kausta sisu"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Folder tree"
+msgstr "Kaustapuu"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"From preview you can also select other options to help you manage and work "
+"on your files."
 msgstr ""
-"Topeltklõps loetelus sisalduval e-kirjal avab selle e-kirja eraldi aknas."
+"Eelvaate kaudu saate valida muidki võimalusi, mis on teile abiks failide "
+"haldamisel ja nendega töötamisel."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Reading E-Mail conversations"
-msgstr "E-kirjavahetuste lugemine"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "Further down you can add documents as attachments to the appointment."
+msgstr "Allpool saate lisada kohtumisele manustena dokumente."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To open or close an E-Mail in a conversation, click on a free area in the header."
-msgstr ""
-"E-kirja avamiseks või sulgemiseks kirjavahetuses klõpsake vabal alal päises."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Further functions"
+msgstr "Täiendavad funktsioonid"
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Further information"
+msgstr "Lisateave"
+
+#. Tour name; general introduction
+#: apps/io.ox/tours/main.js module:io.ox/tours
+msgid "Getting started"
+msgstr "Alustamine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
 msgstr "Halo vaade"
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To receive information about the sender or other recipients, open the Halo view by clicking on a name."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Here you can share files with your colleagues and external contacts. You can "
+"also collaborate on a document and set different access rights."
 msgstr ""
-"Teabe saamiseks saatja või muude adressaatide kohta klõpsake mõnd nime Halo "
-"vaate avamiseks."
+"Võimaldab failide jagamist kolleegide ja väliste kontaktidega. Võite teha "
+"koostööd dokumendi kallal ja seadistada erinevaid juurdepääsuõigusi."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "Editing multiple E-Mails"
-msgstr "Mitme e-kirja muutmine"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Hint: you can always restart guided tours, any time you need them, from the "
+"system menu."
+msgstr ""
+"Vihje: vajadusel saab tutvustust suvalisel ajal süsteemi menüüst "
+"taaskäivitada."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "In order to edit multiple E-Mails at once, enable the checkboxes on the left side of the E-Mails. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "How the settings are organized"
+msgstr "Kuidas seaded on organiseeritud"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
+"separate window."
+msgstr ""
+"Topeltklõps loetelus sisalduval e-kirjal avab selle e-kirja eraldi aknas."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "If you no longer want to display a square, click the delete icon."
+msgstr "Kui ruudu edasine kuvamine pole vajalik, klõpsake kustutamisikoonil."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"In case of new notifications, e.g. appointment invitations, the info area is "
+"opened."
+msgstr "Uute teavituste, nt. kohtumiskutsete korral avaneb infoala."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In order to edit multiple E-Mails at once, enable the checkboxes on the left "
+"side of the E-Mails. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
 msgstr ""
 "Mitme e-kirja korraga muutmiseks aktiveerige märkeruudud e-kirjadest "
 "vasakul. Kui märkeruute pole näha, klõpsake Vaade > Märkeruudud "
 "tööriistariba paremal poolel."
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"In this area you can find further functions, e.g. for adding attachments."
+msgstr ""
+"Sellelt alalt võib leida täiendavaid funktsioone, näiteks manuste lisamiseks."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Inviting other participants"
+msgstr "Teiste osalejate kutsumine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Launching an app"
+msgstr "Rakenduse käivitamine"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Navigation bar"
+msgstr "Navigeerimisriba"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"On the left you can see the folder tree. It displays your folder structure "
+"and allows you to navigate to specific folders and subfolders. To make your "
+"life easier, we have already included folders for your Documents, Music, "
+"Pictures and Videos."
+msgstr ""
+"Vasakul näete kaustapuud, mis kuvab teie kaustade struktuuri ja võimaldab "
+"teil soovitud kaustadele ning alamkaustadele juurde pääseda. Teie elu "
+"kergendamiseks oleme juba loonud kaustad teie dokumentide, muusika, piltide "
+"ja videote jaoks."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Opening an E-Mail in a separate window"
+msgstr "E-kirja avamine eraldi aknas"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Opening or closing the folder tree"
+msgstr "Kaustapuu avamine või sulgemine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the E-Mail settings"
 msgstr "E-posti seadete avamine"
 
-#: apps/io.ox/tours/mail.js
-#: module:io.ox/tours
-msgid "To open the E-Mail settings, click the System menu icon on the upper right side of the menu bar. Select Settings. Click on E-Mail on the left side."
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the help"
+msgstr "Abi avamine"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Opening the settings"
+msgstr "Seadete avamine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview files"
+msgstr "Failide eelvaade"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Preview mode"
+msgstr "Eelvaaterežiim"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Reading E-Mail conversations"
+msgstr "E-kirjavahetuste lugemine"
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "Reading the details"
+msgstr "Üksikasjade lugemine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Restart Guided Tour"
+msgstr "Tutvustuse taaskäivitus"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Searching for objects"
+msgstr "Objektide otsing"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Select a view"
+msgstr "Vaate valimine"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
+msgid "Selecting a view"
+msgstr "Vaate valimine"
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "Sending an E-Mail to a contact"
+msgstr "E-kirja saatmine kontaktile"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sending the E-Mail"
+msgstr "E-kirja saatmine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Share files"
+msgstr "Failide jagamine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Sharing files by inviting people does not only offer your recipients the "
+"option to create and edit files. Internal and external participants are also "
+"able to collaborate with you on text documents and spreadsheets at the same "
+"time."
 msgstr ""
-"E-posti seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemises "
-"paremas servas. Valige Seaded. Klõpsake E-post vasakul poolel."
+"Lisaks sellele, et failide jagamine inimeste kutsumise teel pakub "
+"kutsututele võimaluse failide loomiseks ja muutmiseks, saavad sise- ja "
+"välisosalejad koos teiega tekstdokumentide ning arvutustabelitega "
+"samaaegselt töötada."
 
-#. Tour name; general introduction
-#: apps/io.ox/tours/main.js
-#: module:io.ox/tours
-msgid "Getting started"
-msgstr "Alustamine"
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Sharing options"
+msgstr "Jagamisvalikud"
 
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid "Signing out"
+msgstr "Väljalogimine"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Sorting tasks"
+msgstr "Ülesannete sorteerimine"
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "Sorting your E-Mails"
+msgstr "E-kirjade sorteerimine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The Detail view"
+msgstr "Üksikasjade vaade"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The Detail view displays an object's content. Depending on the app, further "
+"functions for organizing objects can be found in the Detail view."
+msgstr ""
+"Üksikasjade vaade kuvab objekti sisu. Rakendusest sõltuvalt võib Üksikasjade "
+"vaatest leida täiendavaid funktsioone objektide korrastamiseks."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app"
+msgstr "Rakendus Drive"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "The Drive app tour.txt"
+msgstr "Rakenduse Drive tutvustus.txt"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The List view"
+msgstr "Loetelu vaade"
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The List view shows a list of the appointments in the current folder. If "
+"clicking on an appointment, the appointment's data and some functions are "
+"displayed in the Detail view."
+msgstr ""
+"Loetelu vaade näitab kohtumiste loetelu aktiivses kaustas. Kui klõpsate "
+"mõnel kohtumistest, kuvatakse kohtumise andmed ja mõningad funktsioonid "
+"Üksikasjade vaates."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The New objects icon"
+msgstr "Uute objektide ikoon"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"The New objects icon shows the number of appointment reminders or other "
+"notifications. If clicking the icon, the info area opens."
+msgstr ""
+"Ikoon Uus näitab koosolekute meeldetuletusi ja teisi teateid. Kui vajutad "
+"ikoonile, siis avaneb täpsem info. "
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
 msgstr "Portaal"
 
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "The Portal informs you about current E-Mails, appointments or social network news."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"The Portal informs you about current E-Mails, appointments or social network "
+"news."
 msgstr ""
 "Portaal pakub teavet saabunud e-kirjade, kohtumiste või sotsiaalvõrgu "
 "uudiste kohta."
 
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "Reading the details"
-msgstr "Üksikasjade lugemine"
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "The calendar views"
+msgstr "Kalendrivaated"
 
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "To read the details, click on an entry in a square."
-msgstr "Üksikasjade lugemiseks klõpsake kirjel ruudus."
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "Drag and drop"
-msgstr "Lohistamine"
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "To change the layout, drag a square's title to another position and drop it there."
-msgstr "Paigutuse muutmiseks lohistage ruudu pealkiri teise kohta."
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "Closing a square"
-msgstr "Ruudu sulgemine"
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "If you no longer want to display a square, click the delete icon."
-msgstr "Kui ruudu edasine kuvamine pole vajalik, klõpsake kustutamisikoonil."
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "Customizing the Portal"
-msgstr "Portaali kohandamine"
-
-#: apps/io.ox/tours/portal.js
-#: module:io.ox/tours
-msgid "To display a square again or to display further information sources, click on Customize this page."
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"The calendar views display a calendar sheet with the appointments for the "
+"selected time range."
 msgstr ""
-"Ruudu uuesti kuvamiseks või täiendavate teabeallikate kuvamiseks klõpsake "
-"Kohanda sellel lehel."
+"Kalendrivaated kuvavad kalendrilehe kohtumistega valitud ajavahemiku jooksul."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "Opening the settings"
-msgstr "Seadete avamine"
-
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "To open the settings, click the System menu icon on the upper right side of the menu bar. Select Settings."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"The file details side bar offers additional information about your files. "
+"Just enable the File details option from the View drop down menu and select "
+"a file to see the details."
 msgstr ""
-"Seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
-"poolel. Valige Seaded."
+"Faili üksikasjade külgriba pakub lisateavet teie failide kohta. Üksikasjade "
+"vaatamiseks aktiveerige Faili üksikasjad rippmenüüs Vaade ja valige soovitud "
+"fail."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "How the settings are organized"
-msgstr "Kuidas seaded on organiseeritud"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The folder tree"
+msgstr "Kaustapuu"
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "The settings are organized in topics. Select the topic on the left side, e.g Basic settings or E-Mail."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The info area"
+msgstr "Infoala"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The list"
+msgstr "Loetelu"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"The settings are organized in topics. Select the topic on the left side, e.g "
+"Basic settings or E-Mail."
 msgstr ""
 "Seaded on organiseeritud teemade järgi. Valige teema vasakul poolel, nt. "
 "Põhiseaded või E-post."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "Editing settings"
-msgstr "Seadete muutmine"
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "The toolbar"
+msgstr "Tööriistariba"
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "Edit a setting on the right side. In most of the cases, the changes are activated immediately."
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"This guided tour will briefly introduce you to the product. Get more "
+"detailed information in the tours for the single apps or in the online help."
 msgstr ""
-"Muutke seadet paremal poolel. Muudatused jõustuvad enamikul juhtudest kohe."
+"See tutvustus annab teile lühiülevaate tootest. Üksikasjalikumat teavet "
+"pakuvad eraldi rakenduste tutvustused või võrguabi."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "Opening the help"
-msgstr "Abi avamine"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To add further details, click on Expand form."
+msgstr "Täiendavate andmete lisamiseks klõpsake Laienda vormi."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "To open the help, click the System menu icon on the upper right side of the menu bar. Select Help. The help for the currently selected app is displayed. To browse the complete help, click on Start Page or Table Of Contents at the upper part of the window."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To change the layout, drag a square's title to another position and drop it "
+"there."
+msgstr "Paigutuse muutmiseks lohistage ruudu pealkiri teise kohta."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To choose between the different views. click on View in the toolbar. Select "
+"a menu entry in the layout."
+msgstr ""
+"Erinevate vaadete vahel valimiseks klõpsake tööriistariba elemendil Vaade. "
+"Valige menüü kirje."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To compose a new E-Mail, click on Compose in the toolbar."
+msgstr "Uue e-kirja koostamiseks klõpsake Koosta tööriistaribal."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
+msgstr "Uue e-kirja loomiseks klõpsake Koosta uus e-kiri tööriistaribal."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create a new appointment, click on New in the toolbar."
+msgstr "Uue kohtumise loomiseks klõpsake Uus tööriistaribal."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid "To create a new contact, click on New > Add contact in the toolbar."
+msgstr "Uue kontakti loomiseks klõpsake Uus > Lisa kontakt tööriistaribal."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create a new task, click on New in the toolbar."
+msgstr "Uue ülesande loomiseks klõpsake tööriistariba elemendil Uus."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To create recurring appointments, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Korduvate kohtumiste loomiseks aktiveerige Korda. Funktsioonid korduvuse "
+"parameetrite seadistamiseks on näidatud."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To create recurring tasks, enable Repeat. Functions for setting the "
+"recurrence parameters are shown."
+msgstr ""
+"Korduvate ülesannete loomiseks aktiveerige Korda. Kuvatakse funktsioonid "
+"korduvuse parameetrite seadistamiseks."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To create the appointment, click on Create at the lower left side."
+msgstr "Koosoleku lisamiseks vajuta nupule Loo - all vasakus nurgas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To create the task, click on Create."
+msgstr "Ülesande loomiseks klõpsake Loo."
+
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid ""
+"To display a square again or to display further information sources, click "
+"on Customize this page."
+msgstr ""
+"Ruudu uuesti kuvamiseks või täiendavate teabeallikate kuvamiseks klõpsake "
+"Kohanda sellel lehel."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To display the help or the settings, click the System menu icon in the menu "
+"bar."
+msgstr ""
+"Abi või seadistuste kuvamiseks klõpsake Süsteemi menüü ikoonile menüüribal."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To edit multiple contacts at once, enable the checkboxes on the left side of "
+"the contacts. If the checkboxes are not displayed, click on View > "
+"Checkboxes on the right side of the toolbar."
+msgstr ""
+"Mitme kontakti andmete korraga muutmiseks aktiveerige märkeruudud "
+"kontaktidest vasakul. Kui märkeruute pole näha, klõpsake Vaade > Märkeruudud "
+"tööriistariba paremal poolel."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To edit multiple tasks at once, enable the checkboxes at the left side of "
+"the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
+"on the right side of the toolbar."
+msgstr ""
+"Mitme ülesande korraga muutmiseks aktiveerige märkeruudud ülesannetest "
+"vasakul. Kui märkeruute pole näha, klõpsake Vaade > Märkeruudud "
+"tööriistariba paremal poolel."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To enter billing information, click on Show details."
+msgstr "Arveldusteabe sisestamiseks klõpsake Näita üksikasju."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. To avoid appointment conflicts, click on Find a free time at "
+"the upper right side."
+msgstr ""
+"Teiste osalejate kutsumiseks sisestage nende nimed väljale Osalejate all. "
+"Kohtumiste kattumise vältimiseks klõpsake Leia vaba aeg ülemises paremas "
+"servas."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid ""
+"To invite other participants, enter their names in the field below "
+"Participants. You can add documents as attachment to the task."
+msgstr ""
+"Muude osalejate kutsumiseks sisestage nende nimed väljale Osalejate all. "
+"Ülesandele saab manusena lisada dokumente."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To launch an app, click on an entry on the left side of the menu bar."
+msgstr "Rakenduse käivitamiseks klõpsake kirjel menüüriba vasakul poolel."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid "To not miss the appointment, use the reminder function."
+msgstr "Kohtumise unustamise vältimiseks kasutage meeldetuletusfunktsiooni."
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To not miss the task, use the reminder function."
+msgstr "Ülesande unustamise vältimiseks kasutage meeldetuletusfunktsiooni."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open or close an E-Mail in a conversation, click on a free area in the "
+"header."
+msgstr ""
+"E-kirja avamiseks või sulgemiseks kirjavahetuses klõpsake vabal alal päises."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"To open or close the folder tree, click on View >  Folder view on the right "
+"side of the toolbar."
+msgstr ""
+"Kaustapuu avamiseks või sulgemiseks klõpsake Vaade > Kaustavaade "
+"tööriistariba paremal poolel."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To open the E-Mail settings, click the System menu icon on the upper right "
+"side of the menu bar. Select Settings. Click on E-Mail on the left side."
+msgstr ""
+"E-posti seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemises "
+"paremas servas. Valige Seaded. Klõpsake E-post vasakul poolel."
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the help, click the System menu icon on the upper right side of the "
+"menu bar. Select Help. The help for the currently selected app is displayed. "
+"To browse the complete help, click on Start Page or Table Of Contents at the "
+"upper part of the window."
 msgstr ""
 "Abi avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
 "poolel. Valige Abi. Kuvatakse abi hetkel valitud rakenduse jaoks. Kogu "
 "abiteabe sirvimiseks klõpsake elemendil Avaleht või Sisukord akna ülaosas."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "Signing out"
-msgstr "Väljalogimine"
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To open the settings, click the System menu icon on the upper right side of "
+"the menu bar. Select Settings."
+msgstr ""
+"Seadete avamiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
+"poolel. Valige Seaded."
 
-#: apps/io.ox/tours/settings.js
-#: module:io.ox/tours
-msgid "To sign out, click the System menu icon on the upper right side of the menu bar. Select Sign out."
+#: apps/io.ox/tours/portal.js module:io.ox/tours
+msgid "To read the details, click on an entry in a square."
+msgstr "Üksikasjade lugemiseks klõpsake kirjel ruudus."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid ""
+"To receive information about the sender or other recipients, open the Halo "
+"view by clicking on a name."
+msgstr ""
+"Teabe saamiseks saatja või muude adressaatide kohta klõpsake mõnd nime Halo "
+"vaate avamiseks."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "To search for objects, click the Search icon in the menu bar."
+msgstr "Objektide otsimiseks klõpsake menüüriba ikoonil Otsi."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours
+msgid ""
+"To select one of the views like Day, Month or List, click on View in the "
+"toolbar. Select a menu entry from the Layout section."
+msgstr ""
+"Vaate nagu Päev, Kuu või Loetelu valimiseks klõpsake tööriistariba elemendil "
+"Vaade. Valige menüü kirje osas Küljendus."
+
+#: apps/io.ox/tours/contacts.js module:io.ox/tours
+msgid ""
+"To send an E-Mail to the contact, click on an E-Mail address or on Send "
+"email in the toolbar."
+msgstr ""
+"E-kirja saatmiseks kontaktile klõpsake e-posti aadressil või tööriistariba "
+"elemendil Saada e-kiri."
+
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To send the E-Mail, click on Send"
+msgstr "E-kirja saatmiseks klõpsake Saada"
+
+#: apps/io.ox/tours/settings.js module:io.ox/tours
+msgid ""
+"To sign out, click the System menu icon on the upper right side of the menu "
+"bar. Select Sign out."
 msgstr ""
 "Väljalogimiseks klõpsake Süsteemi menüü ikoonil menüüriba ülemisel paremal "
 "poolel. Valige Logi välja."
 
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Creating a new task"
-msgstr "Uue ülesande loomine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To create a new task, click on New in the toolbar."
-msgstr "Uue ülesande loomiseks klõpsake tööriistariba elemendil Uus."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Entering the task's data"
-msgstr "Ülesande andmete sisestamine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Enter the subject, the start date, and a description."
-msgstr "Sisestage teema, alguskuupäev ja kirjeldus."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Adding further details"
-msgstr "Täiendavate andmete lisamine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To add further details, click on Expand form."
-msgstr "Täiendavate andmete lisamiseks klõpsake Laienda vormi."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Creating recurring tasks"
-msgstr "Korduvate ülesannete loomine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To create recurring tasks, enable Repeat. Functions for setting the recurrence parameters are shown."
+#: apps/io.ox/tours/mail.js module:io.ox/tours
+msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
-"Korduvate ülesannete loomiseks aktiveerige Korda. Kuvatakse funktsioonid "
-"korduvuse parameetrite seadistamiseks."
+"E-kirjade sorteerimiseks klõpsake elemendil Sorteerimise alus. Valige "
+"sorteerimise kriteeriumid."
 
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To not miss the task, use the reminder function."
-msgstr "Ülesande unustamise vältimiseks kasutage meeldetuletusfunktsiooni."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Tracking the editing status"
-msgstr "Muuteoleku jälgimine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To track the editing status, enter the current progress."
-msgstr "Muuteoleku jälgimiseks sisestage senine progress."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To invite other participants, enter their names in the field below Participants. You can add documents as attachment to the task."
-msgstr ""
-"Muude osalejate kutsumiseks sisestage nende nimed väljale Osalejate all. "
-"Ülesandele saab manusena lisada dokumente."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Entering billing information"
-msgstr "Arveldusteabe sisestamine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To enter billing information, click on Show details."
-msgstr "Arveldusteabe sisestamiseks klõpsake Näita üksikasju."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Creating the task"
-msgstr "Ülesande loomine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To create the task, click on Create."
-msgstr "Ülesande loomiseks klõpsake Loo."
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Sorting tasks"
-msgstr "Ülesannete sorteerimine"
-
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
 "Ülesannete sorteerimiseks klõpsake elemendil Sorteerimise alus. Valige "
 "sorteerimiskriteerium."
 
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "Editing multiple tasks"
-msgstr "Mitme ülesande muutmine"
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "To track the editing status, enter the current progress."
+msgstr "Muuteoleku jälgimiseks sisestage senine progress."
 
-#: apps/io.ox/tours/tasks.js
-#: module:io.ox/tours
-msgid "To edit multiple tasks at once, enable the checkboxes at the left side of the tasks. If the checkboxes are not displayed, click on View > Checkboxes on the right side of the toolbar."
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"To upload a new file from your local device, simply click on Add local file "
+"and select the file you would like to upload. It is even easier if you just "
+"drag and drop files from your local device into Drive. The uploaded file is "
+"now available in Drive on all your devices."
 msgstr ""
-"Mitme ülesande korraga muutmiseks aktiveerige märkeruudud ülesannetest "
-"vasakul. Kui märkeruute pole näha, klõpsake Vaade > Märkeruudud "
-"tööriistariba paremal poolel."
+"Uue faili üleslaadimiseks kohalikult seadmelt klõpsake Lisa kohalik fail ja "
+"valige fail, mida soovite üles laadida. Veelgi lihtsam on failide "
+"lohistamine teie kohalikult seadmelt Drive'i peale. Üleslaetud fail on nüüd "
+"Drive'i kaudu saadaval kõigi teie seadmete jaoks."
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Toolbar"
+msgstr "Tööriistariba"
+
+#: apps/io.ox/tours/tasks.js module:io.ox/tours
+msgid "Tracking the editing status"
+msgstr "Muuteoleku jälgimine"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid "Upload a new file"
+msgstr "Uue faili üleslaadimine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the folder tree to open the folder containing the objects that you want "
+"to view in the list."
+msgstr ""
+"Kasutage kaustapuud selle kausta avamiseks, mis sisaldab objekte, mida te "
+"loetelus näha soovite."
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid ""
+"Use the list to select an object, show its contents or activate functions."
+msgstr ""
+"Kasutage loetelu objekti valimiseks, selle sisu vaatamiseks või "
+"funktsioonide aktiveerimiseks."
+
+#: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
+msgid "Using the reminder function"
+msgstr "Meeldetuletusfunktsiooni kasutamine"
+
+#: apps/io.ox/tours/intro.js module:io.ox/tours
+msgid "Welcome to %s"
+msgstr "Tere tulemast %s-i"
+
+#: apps/io.ox/tours/files.js module:io.ox/tours
+msgid ""
+"Welcome to your cloud storage app. This Guided Tour will introduce you to "
+"your new online storage solution - your one point to access online stored "
+"files from all your accounts. This is where you can upload and save your "
+"files, share them and synchronize them with different devices.  "
+msgstr ""
+"Teie pilvemälu rakendus tervitab teid! See tutvustus annab ülevaate teie "
+"uuest võrgupõhisest mälulahendusest, mis võimaldab juurdepääsu salvestatud "
+"failidele teie kõigilt kontodelt. Siitkaudu saate oma faile üles laadida ja "
+"salvestada, jagada ning erinevate seadmetega sünkroniseerida.  "

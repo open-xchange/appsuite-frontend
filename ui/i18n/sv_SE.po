@@ -728,6 +728,11 @@ msgstr "Faktisk tidsåtgång i minuter"
 msgid "Add"
 msgstr "Lägg till"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Add IMAP keyword"
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -751,6 +756,8 @@ msgstr "Lägg till som offentlig mapp"
 msgid "Add attachments"
 msgstr "Lägg till bilagor"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -924,8 +931,18 @@ msgstr "Lägg till ditt konto"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
+msgstr "Lade till %1$s, %2$s."
+
+#. %1$s is the display name of an added user or mail recipient
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s, %2$s."
+msgid "Added %1$s."
 msgstr "Lade till %1$s, %2$s."
 
 #. %s is a list of filenames separeted by commas
@@ -961,6 +978,13 @@ msgstr "Lägger till filer med identiska namn"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "Fler inställningar"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Addresses"
+msgid "Address"
+msgstr "Adresser"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -1012,8 +1036,8 @@ msgstr "Efter visst antal instanser"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "All"
 msgstr "Alla"
 
@@ -1148,8 +1172,8 @@ msgstr "Ett okänt fel inträffade"
 msgid "Anniversary"
 msgstr "Årsdag"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Alla mottagare"
 
@@ -1197,7 +1221,9 @@ msgstr "Tillämpa regeln om alla villkor möts"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
+#, fuzzy
+#| msgid "Apply rule if any condition is met."
+msgid "Apply rule if any condition is met"
 msgstr "Tillämpa regeln om något villkor möts."
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -1468,6 +1494,11 @@ msgstr "Bakåt för att logga in"
 msgid "Basic settings"
 msgstr "Grundinställningar"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Bcc"
+msgstr "Bcc"
+
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1507,11 +1538,16 @@ msgstr "Blind kopia"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Blått"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1568,8 +1604,6 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
@@ -1758,6 +1792,11 @@ msgstr "CardDAV URL"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "Vagnen är tom."
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Cc"
+msgstr ""
 
 #. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -2168,15 +2207,17 @@ msgstr "Kontakter har flyttats"
 msgid "Contacts toolbar"
 msgstr "Kontakter verktygsfält"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Contains"
 msgstr "Innehåller"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Content"
-msgstr "Innehåll"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Contains"
+msgid "Contains not"
+msgstr "Innehåller"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2219,6 +2260,13 @@ msgctxt "CC"
 msgid "Copy"
 msgstr "Kopia"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Copy (CC) to"
+msgid "Copy into"
+msgstr "Kopia (CC) till"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
 msgstr "Kopiera till klippbord"
@@ -2234,6 +2282,12 @@ msgstr "Kostnaden måste vara mellan -%1$d och %1$d."
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must only have two decimal places."
 msgstr "Kostnader får bara ha två decimaler."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -2423,6 +2477,13 @@ msgstr "Skapa filer"
 msgid "Currency"
 msgstr "Valuta"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Current Date"
+msgid "Current date"
+msgstr "Aktuellt datum"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "Aktuell roll"
@@ -2486,9 +2547,8 @@ msgstr "Data importerades bara delvis (%1$s av %2$s poster)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Date"
 msgstr "Datum"
 
@@ -2723,8 +2783,8 @@ msgstr "Beskrivningen har kopierats"
 msgid "Description text"
 msgstr "Beskrivande text"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Detail"
 msgstr "Detaljer"
 
@@ -2784,8 +2844,8 @@ msgstr "Avaktivera komponent"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "Kasta"
@@ -3035,8 +3095,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Dokument"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Domän"
 
@@ -3480,9 +3540,23 @@ msgstr "Arbetstid slutar"
 msgid "Ends"
 msgstr "Slutar"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Ends on"
+msgid "Ends not with"
+msgstr "Slutar den"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
+msgstr "Slutar den"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Ends on"
+msgid "Ends with"
 msgstr "Slutar den"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
@@ -3502,10 +3576,10 @@ msgstr "Skriv in dokumentets titel här"
 msgid "Entrepreneur"
 msgstr "Entreprenör"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Envelope - To"
-msgstr "Kuvert - Till"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Envelope"
+msgstr "Kuvert"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3897,10 +3971,18 @@ msgstr "Filen har kopierats"
 msgid "File has been moved"
 msgstr "Filen har flyttats"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "File name"
+msgid "File into"
+msgstr "Filnamn"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Filnamn"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -3980,16 +4062,19 @@ msgstr "Anpassa till skärmens storlek"
 msgid "Fit to screen width"
 msgstr "Anpassa till skärmens bredd"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "verb"
+#| msgid "Flag"
+msgid "Flag"
+msgstr "Flagga"
+
 #. Verb: (to) flag messages
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Flag"
 msgstr "Flagga"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Flag mail with"
-msgstr "Flagga meddelande med"
 
 #. This is a summary for a mail filter rule
 #. Example: Flag mails from test@invalid with a color
@@ -4168,7 +4253,8 @@ msgstr "Fredag"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "Från"
 
@@ -4285,8 +4371,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Grått"
@@ -4295,10 +4381,24 @@ msgstr "Grått"
 msgid "Grayish blue"
 msgstr "Gråblått"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Create"
+msgid "Greater"
+msgstr "Skapa"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Create list"
+msgid "Greater equals"
+msgstr "Skapa lista"
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Grönt"
@@ -4335,9 +4435,17 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML och vanlig text"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Header"
+msgstr "Rubrik"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Header"
+msgid "Header exists"
 msgstr "Rubrik"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
@@ -4771,18 +4879,27 @@ msgstr "Bjud in till möte"
 msgid "Invite to new appointment"
 msgstr "Bjud in till nytt möte"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Är större än"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Is exactly"
 msgstr "Är exakt"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#, fuzzy
+#| msgid "Is exactly"
+msgid "Is not exactly"
+msgstr "Är exakt"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "Är mindre än"
 
@@ -4850,8 +4967,8 @@ msgstr "Bara avaktivera komponenten"
 msgid "KB"
 msgstr "Kb"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Keep"
 msgstr "Behåll"
 
@@ -4960,6 +5077,10 @@ msgstr "Layout"
 msgid "Learn more"
 msgstr "Läs mer"
 
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr ""
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -4988,15 +5109,15 @@ msgid "Life"
 msgstr "Liv"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Ljusblått"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "Ljusgrönt"
@@ -5061,8 +5182,8 @@ msgstr "Läs in fullständigt meddelande"
 msgid "Loading the full mail might lead to performance problems."
 msgstr "Att läsa in det fullständiga meddelandet kan medföra prestandaproblem."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Localpart"
 msgstr "Lokaldel"
 
@@ -5119,6 +5240,16 @@ msgstr "Låg prioritet"
 msgctxt "E-Mail"
 msgid "Low priority"
 msgstr "Låg prioritet"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr ""
 
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5201,6 +5332,7 @@ msgstr "Meddelandet har ingen rubrik. Skicka ändå?"
 msgid "Mail has no recipient."
 msgstr "Meddelandet har ingen mottagare."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5227,8 +5359,8 @@ msgstr "Meddelandekälla"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "Meddelandet importerades inte. Endast .eml-filer stöds."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Mailing list"
 msgstr "Sändlista"
 
@@ -5336,8 +5468,8 @@ msgstr "Märk som inte färdigt"
 msgid "Mark as unread"
 msgstr "Märk som oläst"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Mark mail as"
 msgstr "Märk meddelande som"
 
@@ -5387,9 +5519,16 @@ msgstr ""
 msgid "Maroon"
 msgstr "Maroon"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Matches"
+msgstr "Matchar"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Matches"
+msgid "Matches not"
 msgstr "Matchar"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -5587,8 +5726,6 @@ msgid "Move to category"
 msgstr "Flytta till kategori"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Flytta till mapp"
 
@@ -5669,8 +5806,8 @@ msgstr "Mina uppgifter"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Namn"
 
@@ -5688,6 +5825,13 @@ msgstr "Navy-blått"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "Behöver du mer utrymme?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Add condition"
+msgid "Nested condition"
+msgstr "Lägg till villkor"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -5985,7 +6129,8 @@ msgstr "Ingen titel."
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Ingen"
 
@@ -5999,6 +6144,13 @@ msgstr "Ingen"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Normal"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Regex"
+msgid "Not Regex"
+msgstr "Reguttr"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6338,8 +6490,8 @@ msgstr "Alternativ"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Oranget"
@@ -6417,6 +6569,11 @@ msgstr "Sida %1$d av %2$d"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "Sökare"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Part"
+msgstr ""
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6586,8 +6743,8 @@ msgstr "Välj tid här"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Rosa"
@@ -6677,8 +6834,8 @@ msgstr "Skriv söktermer"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Please enter a valid date"
 msgstr "Ange ett giltigt datum"
 
@@ -6800,6 +6957,12 @@ msgstr "Betygsätt denna produkt"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Välj fil att importera"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+#, fuzzy
+#| msgid "Please select at least one day"
+msgid "Please select a rating."
+msgstr "Välj minst en dag"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -7156,8 +7319,8 @@ msgstr "Bekräfta köp"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Lila"
@@ -7171,7 +7334,10 @@ msgstr "Snabbsvar"
 msgid "Quit"
 msgstr "Avsluta"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Kvot"
 
@@ -7301,8 +7467,8 @@ msgstr "Upprepade uppgifter behöver giltiga startdatum."
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Rött"
@@ -7339,8 +7505,8 @@ msgstr "Meddelande från %1$s: %2$s"
 msgid "Redirect mails with subject %1$s to %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Redirect to"
 msgstr "Omdirigera till"
 
@@ -7361,8 +7527,8 @@ msgstr "Uppdateringsintervall"
 msgid "Refresh rate in minutes"
 msgstr "Uppdateringsfrekvens i minuter"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Reguttr"
 
@@ -7402,8 +7568,8 @@ msgstr "Neka med anledning"
 msgid "Reject mails with subject %1$s with reason %2$s"
 msgstr ""
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Reject with reason"
 msgstr "Neka med anledning"
 
@@ -7486,6 +7652,11 @@ msgstr "Ta bort"
 msgid "Remove %1$s"
 msgstr "Ta bort %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Remove IMAP keyword"
+msgstr ""
+
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7515,9 +7686,19 @@ msgstr "Ta bort medlem"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Tog bort %1$s, %2$s."
+
+#. %1$s is the display name of a removed user or mail recipient
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove %1$s"
+msgid "Removed %1$s."
+msgstr "Ta bort %1$s"
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7561,10 +7742,7 @@ msgid "Reply"
 msgstr "Svara"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Svara alla"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Svara alla"
 
@@ -7600,6 +7778,20 @@ msgstr "Begär läskvitto"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "Skicka inbjudan igen"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Reset"
+msgid "Resent-From"
+msgstr "Återställ"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Reset"
+msgid "Resent-To"
+msgstr "Återställ"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7707,22 +7899,6 @@ msgstr "Rader"
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Royal blue"
 msgstr "Kungsblått"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies from"
-msgstr "Regel gäller från"
-
-#. The filter rule will be applied on a specific date, which can be selected by the user
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies on"
-msgstr "Regel gäller den"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies until"
-msgstr "Regel gäller till"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7945,8 +8121,8 @@ msgstr "Välj fil"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter
 msgid "Select folder"
 msgstr "Välj mapp"
 
@@ -8015,15 +8191,10 @@ msgstr "Skicka avisering"
 msgid "Send vacation notice during this time only"
 msgstr "Skicka semesternotis endast vid denna tid"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender address"
-msgstr "Avsändaradress"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender/From"
-msgstr "Avsändare/Från"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Sender"
+msgstr "Avsändare"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8036,6 +8207,13 @@ msgstr[1] "Skickar %1$d meddelanden... %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "Skickades"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "end date "
+msgid "Sent date"
+msgstr "slutdatum "
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8093,6 +8271,13 @@ msgstr "Ange kategori"
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 msgid "Set color"
+msgstr "Ange färg"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Set color"
+msgid "Set color flag"
 msgstr "Ange färg"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
@@ -8379,8 +8564,8 @@ msgstr "Inloggad som:"
 msgid "Size"
 msgstr "Storlek"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Size (bytes)"
 msgstr "Storlek (byte)"
 
@@ -8550,8 +8735,22 @@ msgstr "Startdatum"
 msgid "StartTLS"
 msgstr "StartTLS"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Starts on"
+msgid "Starts not with"
+msgstr "Startar den"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
+msgstr "Startar den"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Starts on"
+msgid "Starts with"
 msgstr "Startar den"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
@@ -8586,8 +8785,8 @@ msgstr "Student"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8695,11 +8894,6 @@ msgstr "Tb"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "TTY/TDD"
 msgstr "TTY/TDD"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Tag mail with"
-msgstr "Etikettera meddelande med"
 
 #. This is a summary for a mail filter rule
 #. %1$s User input (usually a mail address)
@@ -9172,6 +9366,13 @@ msgstr ""
 "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte i "
 "listan just nu."
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled to due to performance reasons."
+msgstr ""
+
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9528,8 +9729,8 @@ msgstr "Titel"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "Till"
@@ -9913,8 +10114,8 @@ msgstr ""
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "User"
 msgstr "Användare"
 
@@ -10192,8 +10393,8 @@ msgid "Years"
 msgstr "År"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Yellow"
 msgstr "Gult"
 
@@ -10651,9 +10852,19 @@ msgstr "[Kopia]"
 msgid "[Copy] %1$s"
 msgstr "[Kopia] %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr ""
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "accepted"
 msgstr "accepterad"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr ""
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -10697,6 +10908,27 @@ msgstr "välj ett annat scenario"
 msgid "close for %1$s"
 msgstr "stäng för %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if all conditions are met"
+msgstr "Tillämpa regeln om alla villkor möts"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if all of these conditions are met"
+msgstr "Tillämpa regeln om alla villkor möts"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Apply rule if any condition is met."
+msgid "continue if any of these condition is met."
+msgstr "Tillämpa regeln om något villkor möts."
+
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "create objects"
@@ -10715,8 +10947,8 @@ msgstr "mörkblått"
 msgid "dark green"
 msgstr "mörkgrönt"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "datepicker"
 msgstr "datumväljare"
 
@@ -10753,8 +10985,8 @@ msgstr "radera vid utgångsdatum"
 msgid "delete only own objects"
 msgstr "ta bara bort egna objekt"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "deleted"
 msgstr "borttagen"
 
@@ -10765,6 +10997,11 @@ msgstr "avaktivera"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "disabled"
 msgstr "avaktiverad"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not matches a substring"
+msgstr ""
 
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -10796,6 +11033,13 @@ msgstr "filer"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "första"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Flagged"
+msgid "flagged"
+msgstr "Flaggat"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -10897,6 +11141,11 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "plats %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr ""
+
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "message"
 msgstr "meddelande"
@@ -10933,6 +11182,16 @@ msgstr "inget utgångsdatum"
 msgid "no read permissions"
 msgstr "inga läsrättigheter"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr ""
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "of %1$d"
 msgstr "av %1$d"
@@ -10956,6 +11215,13 @@ msgstr "ett år"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "orange"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "Your timezone"
+msgid "original time zone"
+msgstr "Din tidszon"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
@@ -10987,8 +11253,8 @@ msgstr "rött"
 msgid "second"
 msgstr "andra"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "seen"
 msgstr "läst"
 
@@ -11690,9 +11956,6 @@ msgstr "yyyy"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Lägger till prenumeration. Det här kan ta en liten stund ..."
 
-#~ msgid "Addresses"
-#~ msgstr "Adresser"
-
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Avancerade facettblock stängdes."
 
@@ -12023,9 +12286,6 @@ msgstr "yyyy"
 
 #~ msgid "Bad value %1$s in parameter %2$s"
 #~ msgstr "Felaktigt värde %1$s i parametern %2$s"
-
-#~ msgid "Bcc"
-#~ msgstr "Bcc"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -12428,6 +12688,9 @@ msgstr "yyyy"
 #~ msgid "Contact not found! Context %1$d"
 #~ msgstr "Kontakt hittas ej! Kontext %1$d"
 
+#~ msgid "Content"
+#~ msgstr "Innehåll"
+
 #~ msgid "Context is locked."
 #~ msgstr "Kontext är låst."
 
@@ -12446,9 +12709,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Cookien JSESSIONID innehåller ingen matchande JVM-rutt: %1$s inte samma "
 #~ "som %2$s"
-
-#~ msgid "Copy (CC) to"
-#~ msgstr "Kopia (CC) till"
 
 #~ msgid ""
 #~ "Corrupt AJP package #%1$d: First two bytes do not indicate a package from "
@@ -12647,9 +12907,6 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Kritiskt fel inträffade. Denna mappen innehåller en kontakt utan id. "
 #~ "Kontext %1$d Mapp %2$d"
-
-#~ msgid "Current Date"
-#~ msgstr "Aktuellt datum"
 
 #~ msgid "Customizing"
 #~ msgstr "Anpassa"
@@ -13033,8 +13290,8 @@ msgstr "yyyy"
 #~ msgid "Entire thread"
 #~ msgstr "Hela tråden"
 
-#~ msgid "Envelope"
-#~ msgstr "Kuvert"
+#~ msgid "Envelope - To"
+#~ msgstr "Kuvert - Till"
 
 #~ msgid "Error communicating with mbean in server: %s"
 #~ msgstr "Ett fel uppstod i kommunikationen med mbean i server: %s"
@@ -13269,6 +13526,9 @@ msgstr "yyyy"
 
 #~ msgid "Flag %1$s could not be changed due to following reason: %2$s"
 #~ msgstr "Flagga %1$s kunde inte ändras på grund av följande orsak: %2$s"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Flagga meddelande med"
 
 #~ msgid "Folder %1$s (%2$d) is not a task folder."
 #~ msgstr "Mappen %1$s (%2$d) är ingen uppgiftsmapp."
@@ -14988,6 +15248,9 @@ msgstr "yyyy"
 #~ msgid "Remove on cache failed"
 #~ msgstr "Borttagandet på cacheminnet misslyckades."
 
+#~ msgid "Reply All"
+#~ msgstr "Svara alla"
+
 #~ msgid "Reply to"
 #~ msgstr "Svar till"
 
@@ -14999,9 +15262,6 @@ msgstr "yyyy"
 
 #~ msgid "Required value \"Title\" was not supplied."
 #~ msgstr "Önskat värde \"Titel\" var inte tillgodosett."
-
-#~ msgid "Reset"
-#~ msgstr "Återställ"
 
 #~ msgid "Resolving database for context %1$d and server %2$d not possible!"
 #~ msgstr "Bestämma databas för kontext %1$d och server %2$d inte möjligt!"
@@ -15031,6 +15291,15 @@ msgstr "yyyy"
 
 #~ msgid "Root folder must not be modified or deleted"
 #~ msgstr "Rotmappen får inte ändras eller tas bort"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Regel gäller från"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Regel gäller den"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Regel gäller till"
 
 #~ msgid "Running applications"
 #~ msgstr "Program som körs"
@@ -15155,8 +15424,11 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "Lämna synpunkter"
 
-#~ msgid "Sender"
-#~ msgstr "Avsändare"
+#~ msgid "Sender address"
+#~ msgstr "Avsändaradress"
+
+#~ msgid "Sender/From"
+#~ msgstr "Avsändare/Från"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Skicka e-post till en kontakt"
@@ -15463,6 +15735,9 @@ msgstr "yyyy"
 #~| msgid "Enable"
 #~ msgid "Tablet"
 #~ msgstr "Aktivera"
+
+#~ msgid "Tag mail with"
+#~ msgstr "Etikettera meddelande med"
 
 #~ msgid "Target and source folder cannot be equal in context %1$s"
 #~ msgstr "Mål- och ursprungsmappen kan inte vara lika i kontext %1$s"
@@ -17868,9 +18143,6 @@ msgstr "yyyy"
 #~| msgid "Edit signature"
 #~ msgid "edit share"
 #~ msgstr "Redigera signatur"
-
-#~ msgid "end date "
-#~ msgstr "slutdatum "
 
 #~ msgid "ends"
 #~ msgstr "upphör"
