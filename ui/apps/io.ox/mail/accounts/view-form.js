@@ -589,7 +589,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
                                     new InputView({ model: model, id: folder })
                                         .on('update', function (node) {
-                                            if (node) node.val(this.model.get(folder).replace(/^default\d+\D/, ''));
+                                            if (node && _.isString(this.model.get(folder))) node.val(this.model.get(folder).replace(/^default\d+\D/, ''));
                                         }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
                                         $('<button type="button" class="btn btn-default">').text(gt('Select'))
