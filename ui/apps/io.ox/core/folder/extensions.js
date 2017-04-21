@@ -89,7 +89,7 @@ define('io.ox/core/folder/extensions', [
                 if (account.hasDSCAccount()) {
                     return account.getStatus().then(function (status) {
                         //remove main account
-                        status.shift();
+                        delete status['0'];
 
                         // only request if status is at least for one dsc account ok
                         if (_(status).any(function (account) { return account.status === 'ok'; })) {
