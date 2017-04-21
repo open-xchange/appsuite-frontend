@@ -66,9 +66,9 @@ define('io.ox/core/folder/actions/properties', [
                         total
                     ) : ''
                 );
-                // show CalDAV URL for calendar and task folders
+                // show CalDAV URL for calendar and task folders (tasks only supports private folders)
                 // users requires "caldav" capability
-                if ((module === 'calendar' || module === 'tasks') && capabilities.has('caldav')) {
+                if (capabilities.has('caldav') && (module === 'calendar' || (module === 'tasks' && model.is('private')))) {
                     node.append(
                         group(gt('CalDAV URL'), _.noI18n(
                             caldavConfig.get('url')
