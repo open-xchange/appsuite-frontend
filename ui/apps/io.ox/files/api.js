@@ -540,6 +540,8 @@ define('io.ox/files/api', [
                     params.parent = params.folder;
                     module = 'folders';
                     params.action = 'list';
+                    // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
+                    params.columns = '1,2,3,5,20,23';
                 }
             }
             if (virtual) {
