@@ -102,6 +102,91 @@ module.exports = function (grunt) {
                     }
                 ]
             },
+            aploaderjs: {
+                options: {
+                    banner: 'dependencies = {};\n'
+                },
+                files: [
+                    {
+                        src: [
+                            'bower_components/jquery/dist/jquery.js',
+                            'lib/jquery.mobile.touch.min.js',
+                            'bower_components/underscore/underscore.js', // load this before require.js to keep global object
+                            'build/ox.js',
+                            // add backbone and dot.js may be a AMD-variant would be better
+                            'bower_components/backbone/backbone.js',
+                            'bower_components/backbone-validation/dist/backbone-validation.js',
+                            // load moment before require, because of anonymous define
+                            'build/static/3rd.party/moment/moment.js',
+                            'build/static/3rd.party/moment/moment-timezone-with-data.js',
+                            'build/static/3rd.party/moment/moment-interval.js',
+                            'build/static/3rd.party/velocity/velocity.min.js',
+                            'bower_components/requirejs/require.js',
+                            'lib/require-fix.js',
+                            'lib/modernizr.js',
+                            'src/lazyload.js',
+                            'src/util.js',
+                            'src/browser.js',
+                            'src/plugins.js',
+                            'src/jquery.plugins.js',
+
+                            'bower_components/blankshield/blankshield.js',
+                            // add bootstrap JavaScript
+                            'bower_components/bootstrap/js/transition.js',
+                            'bower_components/bootstrap/js/alert.js',
+                            'bower_components/bootstrap/js/button.js',
+                            'bower_components/bootstrap/js/carousel.js',
+                            'bower_components/bootstrap/js/collapse.js',
+                            'bower_components/bootstrap/js/modal.js',
+                            'bower_components/bootstrap/js/tooltip.js',
+                            'bower_components/bootstrap/js/popover.js',
+                            'bower_components/bootstrap/js/scrollspy.js',
+                            'bower_components/bootstrap/js/tab.js',
+                            'bower_components/bootstrap/js/affix.js',
+                            // add custom bootstrap code
+                            'apps/io.ox/core/tk/dropdown.js',
+                            'lib/bootstrap-a11y.js',
+                            // add mandatory UI sources
+                            'apps/io.ox/core/http.js',
+                            'apps/io.ox/core/http_errors.js',
+                            'apps/io.ox/core/uuids.js',
+                            'apps/io.ox/core/session.js',
+                            'apps/io.ox/core/cache.js',
+                            'apps/io.ox/core/extensions.js',
+                            'apps/io.ox/core/manifests.js',
+                            'apps/io.ox/core/capabilities.js',
+                            'apps/io.ox/core/settings.js',
+                            'apps/io.ox/core/gettext.js',
+                            'apps/io.ox/core/event.js',
+                            'apps/io.ox/core/cache/indexeddb.js',
+                            'apps/io.ox/core/cache/localstorage.js',
+                            'apps/io.ox/core/cache/simple.js',
+                            'apps/plugins/halo/register.js',
+                            'apps/io.ox/core/settings/defaults.js',
+                            'apps/io.ox/core/moment.js',
+                            'apps/io.ox/core/viewer/main.js',
+                            // missing for signin
+                            'apps/io.ox/core/boot/config.js',
+                            'apps/io.ox/core/boot/fixes.js',
+                            'apps/io.ox/core/boot/form.js',
+                            'apps/io.ox/core/boot/i18n.js',
+                            'apps/io.ox/core/boot/language.js',
+                            'apps/io.ox/core/boot/load.js',
+                            'apps/io.ox/core/boot/util.js',
+                            'apps/io.ox/core/boot/support.js',
+                            'apps/io.ox/core/boot/login/auto.js',
+                            'apps/io.ox/core/boot/login/standard.js',
+                            'apps/io.ox/core/boot/login/token.js',
+                            'apps/io.ox/core/boot/main.js',
+                            'build/apps/io.ox/core/boot.en_US.js',
+                            'build/apps/io.ox/core/boot.de_DE.js',
+                            'src/apploader.js'
+                        ],
+                        dest: 'build/apploader.js',
+                        nonull: true
+                    }
+                ]
+            },
             precore: {
                 options: {
                     banner: 'define(ox.base + "/precore.js", ["io.ox/core/boot/config", "io.ox/core/manifests"], function (config) {\n\n' +

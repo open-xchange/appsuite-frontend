@@ -64,6 +64,10 @@ module.exports = function (grunt) {
                     {
                         src: 'html/busy.html',
                         dest: 'build/busy.html'
+                    },
+                    {
+                        src: 'html/minimalset.html',
+                        dest: 'build/minimalset.html'
                     }
                 ]
             },

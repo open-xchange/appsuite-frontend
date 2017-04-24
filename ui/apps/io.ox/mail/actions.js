@@ -23,7 +23,8 @@ define('io.ox/mail/actions', [
     'io.ox/core/notifications',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities'
+    'io.ox/core/capabilities',
+    'io.ox/core/windowManager'
 ], function (ext, links, api, util, folderAPI, print, account, notifications, settings, gt, capabilities) {
 
     'use strict';
@@ -42,8 +43,13 @@ define('io.ox/mail/actions', [
         requires: function () {
             return true;
         },
-        action: function (baton) {
-            ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
+        action: function () {
+            ox.windowManager.openAppInWindow({
+                appName: 'mail-compose',
+                windowAttributes: 'toolbar=no,menubar=no,resizable=yes,top=100,left=100,width=1000,height=1200'
+            });
+
+            //ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
         }
     });
 
