@@ -244,7 +244,7 @@ define('io.ox/mail/settings/pane', [
                             );
                         }) : []
                     ),
-                    settings.get('features/unseenFolder', false) ? util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
+                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ? util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
                 )
             );
         }
