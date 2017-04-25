@@ -67,7 +67,6 @@ define([
         });
 
         it('should provide a launch function', function () {
-            console.log(main(appOptions).getApp().launch);
             expect(main(appOptions).getApp().launch).to.be.a('function');
         });
 
