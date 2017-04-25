@@ -49,16 +49,17 @@ define([
 
     describe('iframe app', function () {
 
-        beforeEach(function (done) {
+        beforeEach(function () {
             app = main(appOptions).getApp();
-            app.launch().done(function () {
-                done();
-            });
 
             this.server.respondWith('GET', /api\/token\?action=acquireToken/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(response));
             });
+            return app.launch();
+        });
 
+        afterEach(function () {
+            return app.quit();
         });
 
         it('should provide a getApp function', function () {
@@ -66,7 +67,6 @@ define([
         });
 
         it('should provide a launch function', function () {
-            console.log(main(appOptions).getApp().launch);
             expect(main(appOptions).getApp().launch).to.be.a('function');
         });
 
@@ -90,12 +90,13 @@ define([
 
     describe('iframe app without token', function () {
 
-        beforeEach(function (done) {
+        beforeEach(function () {
             app = main(appOptionsWithoutToken).getApp();
-            app.launch().done(function () {
-                done();
-            });
+            return app.launch();
+        });
 
+        afterEach(function () {
+            return app.quit();
         });
 
         it('should render the iframe', function () {
@@ -110,17 +111,19 @@ define([
 
     describe('iframe app without appended parameter', function () {
 
-        beforeEach(function (done) {
+        beforeEach(function () {
             app = main(appOptionsWithoutParameter).getApp();
-            app.launch().done(function () {
-                done();
-            });
 
             this.server.respondWith('GET', /api\/token\?action=acquireToken/, function (xhr) {
                 xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(response));
             });
-
+            return app.launch();
         });
+
+        afterEach(function () {
+            return app.quit();
+        });
+
 
         it('should render the iframe src', function () {
             expect(app.getWindow().nodes.main.find('iframe').attr('src')).to.equal(appOptionsWithoutParameter.url + '?ox_token=' + response.data.token);

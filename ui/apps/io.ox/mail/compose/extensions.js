@@ -363,11 +363,13 @@ define('io.ox/mail/compose/extensions', [
                     if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
                         var display_name = util.removeQuotes(recipient[0]),
-                            email = recipient[1];
+                            email = recipient[1],
+                            image = recipient[2];
                         return {
                             type: 5,
                             display_name: display_name,
                             email1: email,
+                            image1_url: image,
                             token: { label: display_name, value: email }
                         };
                     });

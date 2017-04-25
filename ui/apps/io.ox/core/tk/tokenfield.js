@@ -134,7 +134,7 @@ define('io.ox/core/tk/tokenfield', [
                         contactAPI.pictureHalo(
                             $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
-                            { width: 16, height: 16, scaleType: 'contain' }
+                            { width: 16, height: 16, scaleType: 'contain', lazyload: true }
                         )
                     );
                 }

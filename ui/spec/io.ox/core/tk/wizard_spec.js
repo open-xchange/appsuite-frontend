@@ -100,6 +100,20 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
                 expect(spyBack.called, 'step:back event').to.be.true;
                 expect(spyClose.called, 'step:close event').to.be.true;
             });
+
+            it('should not fail with resize events sent shortly before wizard closed', function () {
+                var timer = sinon.useFakeTimers();
+                this.wizard
+                    .step({ referTo: '#io-ox-core' })
+                    .end()
+                    .start();
+                $(window).trigger('resize.wizard-step');
+                this.wizard.close();
+
+                //enough time for all timers to timeout
+                timer.tick(60000);
+                timer.restore();
+            });
         });
 
         describe('Execution.', function () {

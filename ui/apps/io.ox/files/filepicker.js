@@ -476,7 +476,11 @@ define('io.ox/files/filepicker', [
                 }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
                 self.selection.clear();
                 self.selection.init(files); // - provide the filtered model ... see 1st point above.
-                self.selection.selectFirst();
+                if (options.multiselect) {
+                    self.selection.markFirst();
+                } else {
+                    self.selection.selectFirst();
+                }
                 currentFolder = id;
                 hub.trigger('folder:changed');
             });
