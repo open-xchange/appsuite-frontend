@@ -16,43 +16,77 @@ define('io.ox/core/windowManager', [
 
     if (ox.windowManager) return true;
 
+    console.log('loading windowManager');
+
+    var wins = [],
+        makeParent = function () {
+            console.log('this window is now the parent');
+        };
+
+    if (window.opener) {
+        wins = _(window.opener.ox.windowManager.windows).filter(function (win) {
+            return win;
+        });
+    }
     ox.windowManager = {
-        collection: new Backbone.Collection(),
+        // add existing windows
+        windows: wins,
+        get: function (name) {
+            return _(this.windows).findWhere({ name: name });
+        },
+        sendMessageTo: function (message, id) {
+            if (!message) return;
+            if (!id) {
+                _(this.windows).each(function (win) {
+                    win.ox.trigger('message', message, window.name);
+                });
+            }
+            if (id && this.get(id)) {
+                this.get(id).ox.trigger('message', message, window.name);
+            }
+        },
         openAppInWindow: function (options) {
             options = options || {};
-            options.appName = options.appName || 'app';
-            var id = _.uniqueId(options.appName + '_'),
-                model = this.collection.add({
-                    appName: options.appName,
-                    id: id,
-                    window: window.open(ox.base + '/minimalset.html', id, options.windowAttributes)
-                });
-            // remove model from collection on window close
-            model.get('window').onunload = function () {
-                // firefox fix , there is one unload before the window is fully opened on firefox (firefox always loads blank page first then switches the location. this triggers a too early unload event)
-                if (this.location.href !== 'about:blank') {
-                    ox.windowManager.collection.remove(model);
-                }
-            };
-            return model;
+            options.name = options.name || 'app';
+            var win = window.open('/minimalset.html', _.uniqueId(window.name + '_' + options.name + '_'), options.windowAttributes);
+            return win;
         }
     };
 
-    ox.windowManager.main = ox.windowManager.collection.add({
-        appName: 'main',
-        id: 'main',
-        window: window
+    // add event listeners to own window
+    $(window).on('unload', function () {
+        _(ox.windowManager.windows).each(function (win) {
+            if (win.name === window.name) return;
+            win.ox.trigger('windowClosed', window);
+        });
     });
 
-    ox.windowManager.main.on('message', function (message) {
+    // add event listeners to ox object
+    ox.on('windowClosed', function (win) {
+        var prevIndex = ox.windowManager.windows.findIndex(function (obj) { return obj.name === window.name; });
+        if (!ox.windowManager.get(win.name)) return;
+        ox.windowManager.windows.splice(ox.windowManager.windows.findIndex(function (obj) { return obj.name === win.name; }), 1);
+        // check if we need a new parent
+        if (prevIndex !== 0 && ox.windowManager.windows[0].name === window.name) {
+            makeParent();
+        }
+    });
+    ox.on('windowOpened', function (win) {
+        ox.windowManager.windows.push(win);
+    });
+
+    // trigger add event on other windows and add own window to collection
+    _(ox.windowManager.windows).each(function (win) {
+        win.ox.trigger('windowOpened', window);
+    });
+    ox.windowManager.windows.push(window);
+    // check if this window is the parent window
+    if (ox.windowManager.windows.length === 1) {
+        makeParent();
+    }
+
+    ox.on('message', function (message) {
         console.log(message);
-    });
-
-    ox.windowManager.collection.on('add', function (newModel) {
-        console.log('new window opened', newModel.id);
-    });
-    ox.windowManager.collection.on('remove', function (newModel) {
-        console.log('window closed', newModel.id);
     });
 
     return true;

@@ -11,10 +11,12 @@ $(window).load(function () {
     if (_.device('smartphone')) {
         setTimeout(function () { _.recheckDevice(); }, 10);
     }
+
     //
-    // let global ox object reflect the parent window
+    // Turn global "ox" into an event hub
     //
-    ox = window.opener.ox;
+
+    _.extend(ox, Backbone.Events);
 
     //
     // teach require.js to use deferred objects
@@ -43,33 +45,45 @@ $(window).load(function () {
 
         _.extend(window.require, require);
     }(window.require));
-    if (ox.windowManager.collection.get(window.name)) {
-        ox.windowManager.collection.get(window.name).on('message', function (message) {
-            console.log(message);
-        });
+
+    if (!window.name) {
+        window.name = 'main';
     }
 
-    ox.windowManager.collection.on('add', function (model) {
-        console.log('new window opened', model.id);
-        $('body').append($('<button class="btn btn-primary">').attr('data-window-id', model.id).text('message to ' + model.id).on('click', function () {
-            ox.windowManager.collection.get(model.id).trigger('message', 'Hello from ' + window.name);
-        }));
-    });
-    ox.windowManager.collection.on('remove', function (model) {
-        console.log('window closed', model.id);
-        $('body').find('[data-window-id="' + model.id + '"]').remove();
-    });
-
-    $('body').append($('<button class="btn btn-primary">').text('message to parent').on('click', function () {
-        console.log('Message to parent');
-        ox.windowManager.main.trigger('message', 'Hello from ' + window.name);
-    }));
-
-    _(ox.windowManager.collection.models).each(function (model) {
-        if (model.id !== 'main' && model.id !== window.name) {
-            $('body').append($('<button class="btn btn-primary">').attr('data-window-id', model.id).text('message to ' + model.id).on('click', function () {
-                ox.windowManager.collection.get(model.id).trigger('message', 'Hello from ' + window.name);
+    var message, focus;
+    $('body').append(window.name, message = $('<div class="message">'), focus = $('<div class="focus">'));
+    require(['io.ox/core/windowManager.js', 'io.ox/core/windowManager'], function () {
+        ox.on('windowOpened', function (win) {
+            console.log('window opened', win.name);
+            message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
+                ox.windowManager.sendMessageTo('Hello ' + win.name, win.name);
             }));
-        }
+            focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
+                ox.windowManager.get(win.name).focus();
+            }));
+        });
+        ox.on('windowClosed', function (win) {
+            console.log('window closed', win.name);
+            $('body').find('[data-window-id="' + win.name + '"]').remove();
+        });
+        $('body').append($('<button class="btn btn-primary">').text('message to all').on('click', function () {
+            ox.windowManager.sendMessageTo('Hello to all');
+        }));
+        $('body').append($('<button class="btn btn-primary">').text('open new window').on('click', function () {
+            ox.windowManager.openAppInWindow({
+                name: 'test-app'
+            });
+        }));
+
+        _(ox.windowManager.windows).each(function (win) {
+            if (win.name !== window.name) {
+                message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
+                    ox.windowManager.sendMessageTo('Hello ' + win.name, win.name);
+                }));
+                focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
+                    window.open('', win.name);
+                }));
+            }
+        });
     });
 });
