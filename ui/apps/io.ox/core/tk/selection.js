@@ -87,6 +87,7 @@ define('io.ox/core/tk/selection', [
             isRange,
             getIndex,
             getNode,
+            markFirst,
             selectFirst,
             selectPrevious,
             selectLast,
@@ -174,6 +175,23 @@ define('io.ox/core/tk/selection', [
                 selectOnly();
             } else {
                 apply(id, e);
+            }
+        };
+
+        markFirst = function (e) {
+            if (bHasIndex && observedItems.length) {
+                var
+                    item = observedItems[0],
+                    obj = item.data;
+
+                clear(e);
+                mark(obj);
+
+                var
+                    key = self.serialize(obj),
+                    $node = getNode(key);
+
+                $node.focus();
             }
         };
 
@@ -413,7 +431,7 @@ define('io.ox/core/tk/selection', [
                 }
                 if (silent !== true) {
                     // append additional argument - the selected object that is named `id`.
-                    self.trigger('select', self.serialize(id), id);
+                    self.trigger('select', self.serialize(id), id); // 'select', fileId, fileObject
                 }
             }
         };
@@ -876,6 +894,11 @@ define('io.ox/core/tk/selection', [
                 // fast update - just updates existing nodes instead of looking for thousands
                 this.update();
             }
+            return this;
+        };
+
+        this.markFirst = function () {
+            markFirst();
             return this;
         };
 
