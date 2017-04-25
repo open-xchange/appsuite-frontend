@@ -69,7 +69,9 @@ define('io.ox/core/tk/tokenfield', [
     // workaround for 7.6.2: use more than one emailaddreses of a single user/contact
     function makeUnique (model) {
         // extend id by used email field
-        model.id = model.id + '_' + model.get('field') + '_' + _.uniqueId();
+        var unique = _.uniqueId();
+        model.id = model.id + '_' + model.get('field') + '_' + unique;
+        model.cid = model.cid + '_' + unique;
         return model;
     }
 
@@ -151,9 +153,11 @@ define('io.ox/core/tk/tokenfield', [
                             label: newAttrs[1],
                             value: newAttrs[3]
                         });
-                        // save cid to token value
-                        e.attrs.value = model.cid;
+                        // save id to token value
+                        e.attrs.value = model.id;
                         e.attrs.model = model;
+                        // set correct displayname
+                        model.set('display_name', newAttrs[1]);
                     } else if (!self.redrawLock) {
                         // create mode
                         var model;
@@ -168,7 +172,7 @@ define('io.ox/core/tk/tokenfield', [
                             } else {
                                 newAttrs = ['', e.attrs.value, '', e.attrs.value];
                             }
-                            // add extrenal participant
+                            // add external participant
                             model = new pModel.Participant({
                                 type: 5,
                                 display_name: newAttrs[1],
@@ -179,17 +183,18 @@ define('io.ox/core/tk/tokenfield', [
                             label: e.attrs.label,
                             value: e.attrs.value
                         }, { silent: true });
-                        // add model to the collection and save cid to the token
+                        // add model to the collection and save id to the token
                         self.collection.addUniquely(makeUnique(model));
-                        // save cid to token value
-                        e.attrs.value = model.cid;
+                        // save id to token value
+                        // id was made unique with makeUnique method
+                        e.attrs.value = model.id;
                         e.attrs.model = model;
                     }
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
                         // a11y: set title
-                        var model = e.attrs.model || self.getModelByCID(e.attrs.value);
+                        var model = e.attrs.model || self.getModelByID(e.attrs.value);
                         $(e.relatedTarget).attr('title', function () {
                             var token = model.get('token'),
                                 title = token.label;
@@ -208,7 +213,7 @@ define('io.ox/core/tk/tokenfield', [
                 'tokenfield:edittoken': function (e) {
                     if (e.attrs && e.attrs.model) {
                         var token = e.attrs.model.get('token');
-                        // save cid to input
+                        // save id to input
                         self.getInput().data('editModel', e.attrs.model);
                         // build edit string
                         e.attrs.value = token.label;
@@ -219,7 +224,7 @@ define('io.ox/core/tk/tokenfield', [
                     }
                 },
                 'tokenfield:removetoken': function (e) {
-                    self.collection.remove(self.getModelByCID(e.attrs.value));
+                    self.collection.remove(self.getModelByID(e.attrs.value));
                 }
             });
 
@@ -292,8 +297,8 @@ define('io.ox/core/tk/tokenfield', [
             return this;
         },
 
-        getModelByCID: function (cid) {
-            return this.collection.get({ cid: cid });
+        getModelByID: function (id) {
+            return this.collection.get({ id: id });
         },
 
         redrawToken: function () {
@@ -302,7 +307,7 @@ define('io.ox/core/tk/tokenfield', [
             this.collection.each(function (model) {
                 tokens.push({
                     label: model.getDisplayName(),
-                    value: model.cid,
+                    value: model.id,
                     model: model
                 });
             });
@@ -313,7 +318,7 @@ define('io.ox/core/tk/tokenfield', [
         resort: function () {
             var col = this.collection;
             _(this.$el.tokenfield('getTokens')).each(function (token, index) {
-                col.get({ cid: token.value }).index = index;
+                col.get({ id: token.value }).index = index;
             });
             col.sort();
             this.redrawToken();

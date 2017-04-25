@@ -884,21 +884,23 @@ define('io.ox/mail/compose/view', [
                                                        : self.contentEditable,
                             { oxContext: { view: self } }))
                     .done(function () {
-                        self.editor = self.editorHash[self.editorMode];
-                        self.editor.setPlainText(content);
-                        self.editor.handleShow(true);
-                        if (self.model.get('mode') !== 'compose') {
-                            self.editor.focus();
-                        }
+                        self.editor = self.editorHash[self.model.get('editorMode')];
+                        return $.when(self.editor.setPlainText(content)).done(function () {
+                            self.editor.handleShow(true);
+                            if (self.model.get('mode') !== 'compose') {
+                                self.editor.focus();
+                            }
+                        });
                     });
             });
         },
 
         reuseEditor: function (content) {
-            this.editor = this.editorHash[this.editorMode];
-            this.editor.setPlainText(content);
-            this.editor.handleShow(true);
-            return $.when();
+            var self = this;
+            this.editor = this.editorHash[this.model.get('editorMode')];
+            return $.when(this.editor.setPlainText(content)).done(function () {
+                self.editor.handleShow(true);
+            });
         },
 
         getEditor: function () {
@@ -950,7 +952,16 @@ define('io.ox/mail/compose/view', [
                 content = content.replace(/[\s\uFEFF\xA0]+$/, '');
             }
 
+            if (this.model.get('mode') !== 'compose') {
+                // Remove extranous <br>
+                content = content.replace(/\n<br>&nbsp;$/, '\n');
+            }
+
             this.editor.setContent(content);
+
+            if (this.model.get('initial')) {
+                this.prependNewLine();
+            }
         },
 
         getParagraph: function (text) {
@@ -961,12 +972,10 @@ define('io.ox/mail/compose/view', [
             return $('<div>').append(node).html();
         },
 
-        prependNewLine: function (content) {
-            var content = this.editor.getContent(),
-                nl = this.editorMode === 'html' ? '<p><br></p>' : '\n\n';
-            if (content !== '' && content.indexOf(nl) !== 0 && content.indexOf('<br>') !== 0) {
-                this.editor.setContent(nl + content);
-            }
+        prependNewLine: function () {
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''),
+                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
+            this.editor.setContent(nl + content);
         },
 
         setMail: function () {
