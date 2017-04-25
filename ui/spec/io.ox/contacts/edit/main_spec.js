@@ -80,6 +80,13 @@ define([
 
         });
 
+        it('should close the edit app', function () {
+            app.setQuit(function () {
+                return $.when();
+            });
+            return app.quit();
+        });
+
     });
 
 });
