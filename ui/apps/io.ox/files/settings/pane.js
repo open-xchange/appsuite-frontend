@@ -103,16 +103,16 @@ define('io.ox/files/settings/pane', [
         id: 'displayerviewAutoplay',
         draw: function () {
             var preferences = [
-                { label: gt('Loop once only'), value: 'loopOnceOnly' },
-                { label: gt('Keep looping endlessly'), value: 'loopEndlessly' }
+                { label: gt('Show all images just once'), value: 'loopOnceOnly' },
+                { label: gt('Repeat slideshow'), value: 'loopEndlessly' }
             ];
             this.append(
-                util.fieldset(gt('Slideshow / Autoplay mode'),
+                util.fieldset(gt('Slideshow / Autoplay mode for images'),
                     new mini.RadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
 
                     $('<div class="form-group expertmode">').append(
-                        $('<div class="row">').append(
-                            util.select('autoplayPause', gt('Autoplay pause in seconds'), settings, optionsAutoplayPause())
+                        $('<div class="row" style="margin: auto">').append(
+                            util.inlineSelect('autoplayPause', gt('Show all images for'), gt('seconds'), settings, optionsAutoplayPause())
                         )
                     )
                 )
