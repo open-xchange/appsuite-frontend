@@ -23,7 +23,7 @@ define('io.ox/contacts/settings/pane', [
 
     'use strict';
 
-    var POINT = 'io.ox/contacts/settings/detail', pane,
+    var POINT = 'io.ox/contacts/settings/detail',
         reloadMe = [];
 
     settings.on('change', function (setting) {
@@ -46,7 +46,7 @@ define('io.ox/contacts/settings/pane', [
         draw: function () {
             var holder = $('<div class="io-ox-contacts-settings">');
             this.append(holder);
-            ext.point(POINT + '/pane').invoke('draw', pane);
+            ext.point(POINT + '/pane').invoke('draw', holder);
         }
     });
 

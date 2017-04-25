@@ -247,7 +247,7 @@ define('io.ox/calendar/week/view', [
                     console.warn('Too many appointments. There are ' + this.collection.length + ' appointments. The limit is ' + this.limit + '. Resize, drag and opacity are disabled due to performance reasons.');
                     require(['io.ox/core/yell'], function (yell) {
                         //#. %1$n is the maximum number of appointments
-                        yell('warning', gt('There are more than %n appointments in the current calendar. Some features are disabled to due to performance reasons.', self.limit));
+                        yell('warning', gt('There are more than %n appointments in the current calendar. Some features are disabled due to performance reasons.', self.limit));
                     });
                 }
                 this.renderAppointments();

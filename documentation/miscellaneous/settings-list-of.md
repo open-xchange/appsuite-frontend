@@ -358,6 +358,17 @@ settings!io.ox/core
 **password/special**
 > required special characters for new passwords - capability `'edit_password'
 
+
+### Client Onboarding
+
+**features/clientOnboardingHint/enabled**
+> enables hint on mobile (true/false)
+
+**features/clientOnboardingHint/remaining**
+> sets number of times hint is beeing shown.
+> IMPORTANT: The protection of this setting needs to be disabled in `/opt/open-xchange/etc/meta/ui.yml` cause it's used as starting value AND as storage for the remaining hints afterwards.
+
+
 ## Unused/Deprecated?
 
 **settings/downloadDisabled**

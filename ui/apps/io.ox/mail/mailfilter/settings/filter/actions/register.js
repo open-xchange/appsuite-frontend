@@ -280,6 +280,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {
+                        //#. File a message into a folder
                         'move': gt('File into')
                     });
 
@@ -346,6 +347,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/register', [
                     };
                     _.extend(opt.defaults.actions, defaults);
                     _.extend(opt.actionsTranslations, {
+                        //#. Copy a message into a folder
                         'copy': gt('Copy into')
                     });
 

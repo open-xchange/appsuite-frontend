@@ -435,12 +435,25 @@ define('io.ox/files/filepicker', [
 
             filesPane.empty();
             filesAPI.getAll(id, { cache: false }).done(function (files) {
-                filesPane.append(
-                    _.chain(files)
-                    .filter(options.filter)
-                    .sortBy(options.sorter)
-                    .map(function (file) {
-                        var guid = _.uniqueId('form-control-label-');
+                /**
+                 *  fixing Bug 50949: 'Insert image' from drive offers non image file
+                 *  fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
+                 *
+                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50949]
+                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50501]
+                 */
+                files = _.chain(files)                                  // - 1stly, really do what the original intention was:
+                    .filter(options.filter)                             //
+                    .sortBy(options.sorter)                             //   ... filter and sort the model and not the view.
+                    .value();                                           //
+
+                if (files.length <= 0) {                                // (additional win: change view acoording to the filtered model)
+
+                    deletePreviewPane();
+                } else {                                                // - 2ndly, use human readable variable names
+                    var paneItems = files.map(function (file) {         //   in order to show other developers what
+                                                                        //   direction you are heading to.
+                        var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
                         var title = (file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
@@ -455,11 +468,14 @@ define('io.ox/files/filepicker', [
                             ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
                         }
                         return $div;
-                    })
-                    .value()
-                );
+                    });
+                                                                        // - 3rd, you provide a result that got processed stepwise
+                    filesPane.append(                                   //   (and not by spaghetti code), thus other devs much easear
+                        paneItems                                       //   recognize its creation process, thus they will be able changing
+                    );                                                  //   this process' control flow (better refactoring/maintaining of code).
+                }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
                 self.selection.clear();
-                self.selection.init(files);
+                self.selection.init(files); // - provide the filtered model ... see 1st point above.
                 self.selection.selectFirst();
                 currentFolder = id;
                 hub.trigger('folder:changed');
@@ -522,13 +538,17 @@ define('io.ox/files/filepicker', [
             });
         }
 
-        // function deletePreviewPane() {
-        //     if ($previewPane) {
+        // support for
+        // - fixing Bug 50949: 'Insert image' from drive offers non image file
+        // - fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
         //
-        //         $previewPane.remove();
-        //         $previewPane = null;
-        //     }
-        // }
+        function deletePreviewPane() {
+            if ($previewPane) {
+
+                $previewPane.remove();
+                $previewPane = null;
+            }
+        }
 
         function focusButtons() {
             this.getFooter().find('button').first().focus();

@@ -540,6 +540,8 @@ define('io.ox/files/api', [
                     params.parent = params.folder;
                     module = 'folders';
                     params.action = 'list';
+                    // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
+                    params.columns = '1,2,3,5,20,23';
                 }
             }
             if (virtual) {
@@ -1443,6 +1445,10 @@ define('io.ox/files/api', [
          * @return {Deferred} with a boolean
          */
         getCurrentState: function (file, options) {
+
+            //workaround for Bug 53002
+            if (typeof file.current_version === 'boolean') { return $.when(file.current_version); }
+
             return api.versions.load(file, options).then(function (versions) {
                 var currentVersion = false;
                 if (_.isArray(versions)) {

@@ -182,11 +182,15 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     }
 
                     var timeValues = {
+                        //#. greater than or equal to
                         'ge': gt('Greater equals'),
+                        //#. lower than or equal to
                         'le': gt('Lower equals'),
                         'is': gt('Is exactly'),
                         'not is': gt('Is not exactly'),
+                        //#. lower than the given value
                         'not ge': gt('Lower'),
+                        //#. greater than the given value
                         'not le': gt('Greater')
                     };
 
@@ -295,11 +299,15 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     }
 
                     var timeValues = {
+                        //#. greater than or equal to
                         'ge': gt('Greater equals'),
+                        //#. lower than or equal to
                         'le': gt('Lower equals'),
                         'is': gt('Is exactly'),
                         'not is': gt('Is not exactly'),
+                        //#. lower than the given value
                         'not ge': gt('Lower'),
+                        //#. greater than the given value
                         'not le': gt('Greater')
                     };
 
@@ -830,7 +838,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         'Cc': gt('Cc'),
                         'Bcc': gt('Bcc'),
                         'Sender': gt('Sender'),
+                        //#. header entry - needs no different translation
                         'Resent-From': gt('Resent-From'),
+                        //#. header entry - needs no different translation
                         'Resent-To': gt('Resent-To')
                     },
                     inputId = _.uniqueId('address_');
