@@ -1309,7 +1309,7 @@ define('io.ox/files/main', [
                     }
                     metrics.trackEvent({
                         app: 'drive',
-                        target: 'list-view-toolbar',
+                        target: 'list/toolbar',
                         type: 'click',
                         action: action,
                         detail: detail
