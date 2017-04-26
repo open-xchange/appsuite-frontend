@@ -358,6 +358,11 @@ define('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
+                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    _.defer(function () {
+                        // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
+                        toolbar.find('span.mce-txt').attr('tabindex', -1);
+                    });
                 });
             }
         };
