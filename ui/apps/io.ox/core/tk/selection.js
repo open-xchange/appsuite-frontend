@@ -913,6 +913,11 @@ define('io.ox/core/tk/selection', [
             return this;
         };
 
+        this.selectLast = function () {
+            selectLast();
+            return this;
+        };
+
         this.selectSmart = function () {
             if (this.get().length === 0) {
                 this.selectFirst();
