@@ -265,12 +265,20 @@ define('io.ox/contacts/addressbook/popup', [
                 initial_color: util.getInitialsColor(useInitialsColor && initials),
                 keywords: (full_name + ' ' + address + ' ' + department).toLowerCase(),
                 last_name: item.last_name,
-                list: item.mark_as_distributionlist ? item.distribution_list : false,
+                list: processLists(item),
                 mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title
             };
+        }
+
+        function processLists(item) {
+            // avoid needless pmodel display name lookups/redraws after 'select' (bug 51755)
+            if (!item.mark_as_distributionlist) return false;
+            return _.map(item.distribution_list, function (listitem) {
+                return _.extend(listitem, { mail_full_name: util.getMailFullName(listitem) });
+            });
         }
 
         function getDisplayName(str) {
