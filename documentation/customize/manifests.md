@@ -18,7 +18,9 @@ The minimal declaration for an app looks like this:
 }
 ```
 
-It consists of a title for the app and the path to the main entry file, by convention always called `main.js`. This declaration is usually found in the file `manifest.json` right next to the app in question, but could theoretically be located anywhere. If the file is located in the same directory as the main entry file and the file is, as is the convention, called _main.js_ you can leave out the path as it will be added automatically by the buildsystem, so the minimal definition then becomes:
+It consists of a title for the app and the _path_ to the main entry file, by convention always called `main.js`.
+This declaration is usually found in the file `manifest.json` right next to the app in question, but could theoretically be located anywhere.
+If the file is located in the same directory as the main entry file and the file is, as is the convention, called _main.js_ you can leave out the path as it will be added automatically by the buildsystem, so the minimal definition then becomes:
 
 ```json
 {
@@ -37,9 +39,13 @@ In turn, this is the definition of a plugin file:
 }
 ```
 
-The _namespace_ contains the name of a frontend module for which the plugin is relevant.
-Declaring a plugin like this has the effect, that the plugin is loaded before the file named as the namespace is loaded, so it can affect what the core file is doing, commonly by extending an extension point.
+
 The convention is to always put plugins into the file `register.js` so again, the path can be omitted if the `manifest.json` is placed alongside the register.js` containing the plugin.
+
+**Important**
+
+The _namespace_ contains the name of a frontend module for which the plugin is relevant. Declaring a plugin like this has the effect, that the _plugin is loaded before_ the file named as the namespace is loaded, so it can affect what the core file is doing, commonly by extending an extension point.
+
 A plugin may be associated with more than one namespace, in that case, just use a list as the value for the namespace attribute:
 
 ```json
