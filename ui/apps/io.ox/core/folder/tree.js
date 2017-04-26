@@ -33,7 +33,8 @@ define('io.ox/core/folder/tree', [
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
-            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
+            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys',
+            'keydown .folder.selectable': 'onKeydown'
         },
 
         initialize: function (options) {
@@ -70,10 +71,6 @@ define('io.ox/core/folder/tree', [
 
             this.$el.toggleClass(options.highlightclass, !!options.highlight);
             this.$el.append(this.$container);
-
-            this.$el.attr({
-                'aria-label': gt('Folders')
-            });
 
             this.selection = new Selection(this);
 
@@ -202,6 +199,17 @@ define('io.ox/core/folder/tree', [
 
             target.data('preventFocus', true);
             this.toggleContextMenu(target, top, left);
+        },
+
+        onKeydown: function (e) {
+            // home / end support
+            if (!/35|36/.test(e.which)) return;
+
+            if (e.which === 36) {
+                this.$el.find('li.folder.selectable:visible:first').trigger('click');
+            } else if (e.which === 35) {
+                this.$el.find('li.folder.selectable:visible:last').trigger('click');
+            }
         },
 
         onKeydownMenuKeys: function (e) {

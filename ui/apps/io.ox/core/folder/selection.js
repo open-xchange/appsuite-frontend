@@ -173,7 +173,7 @@ define('io.ox/core/folder/selection', [], function () {
 
         resetTabIndex: function (items, skip) {
             items = items.filter('[tabindex="0"]');
-            items.not(skip).attr('tabindex', '-1');
+            items.not(skip).attr('tabindex', -1);
         },
 
         focus: function (index, items) {
@@ -194,7 +194,7 @@ define('io.ox/core/folder/selection', [], function () {
                 .find('.folder-label').each(function () {
                     // special handling for settings for now
                     if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
-                    var left = $(this).position().left, maxWidth = width - left - 64 - 8;
+                    var left = $(this).position().left, maxWidth = width - left - 76;
                     $(this).css('max-width', Math.max(maxWidth, 80));
                 })
                 .end();
@@ -203,7 +203,7 @@ define('io.ox/core/folder/selection', [], function () {
         uncheck: function (items) {
             items = items || this.getItems();
             items.filter('.selected')
-                .removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
+                .removeClass('selected').attr({ 'aria-selected': false, tabindex: -1 })
                 .find('.folder-label').css('max-width', 'initial');
             return this;
         },

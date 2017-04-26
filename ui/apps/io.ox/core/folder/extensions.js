@@ -154,12 +154,29 @@ define('io.ox/core/folder/extensions', [
         return id ? api.get(id) : null;
     }
 
+    function openAttachmentView(e) {
+        e.preventDefault();
+        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+            this.folder.set(attachmentView.all);
+        });
+    }
+
     function getTrashFolder() {
         return api.list('9').then(function (list) {
             return _(list).filter(function (data) {
                 return api.is('trash', data);
             });
         });
+    }
+
+    function openMailAutoconfigDialog(e) {
+        e.preventDefault();
+        require(['io.ox/mail/accounts/settings'], function (m) { m.mailAutoconfigDialog(e); });
+    }
+
+    function openUserSettingsDialog(e) {
+        e.preventDefault();
+        require(['io.ox/core/settings/user'], function (m) { m.openModalDialog(); });
     }
 
     if (capabilities.has('infostore')) {
@@ -179,6 +196,53 @@ define('io.ox/core/folder/extensions', [
                 });
             });
         });
+    }
+
+    function getAvailableServices() {
+        var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
+
+        return require(['io.ox/core/api/filestorage']).then(function (filestorageApi) {
+            var availableFilestorageServices = filestorageApi.rampup().then(function () {
+                return _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
+            });
+
+            return $.when(require(['io.ox/keychain/api']), availableFilestorageServices);
+        }).then(function (keychainApi, availableFilestorageServices) {
+            return _(keychainApi.submodules).filter(function (submodule) {
+                if (services.indexOf(submodule.id) < 0) return false;
+                // we need support for both accounts, Oauth accounts and filestorage accounts.
+                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+            });
+        });
+    }
+
+    function openAddStorageAccount(e) {
+        e.preventDefault();
+        require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
+            addStorageAccount();
+        });
+    }
+
+    function openSubscriptionDialog(e) {
+        e.preventDefault();
+        if (capabilities.has('subscription')) {
+            require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
+                subscriptions.buildSubscribeDialog({
+                    module: e.data.baton.module,
+                    app: e.data.baton.view.app
+                });
+            });
+        } else {
+            require(['io.ox/core/upsell'], function (upsell) {
+                if (!upsell.enabled(['subscription'])) return;
+
+                upsell.trigger({
+                    type: 'inline-action',
+                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
+                    missing: upsell.missing(['subscription'])
+                });
+            });
+        }
     }
 
     var extensions = {
@@ -231,9 +295,8 @@ define('io.ox/core/folder/extensions', [
             var node = new TreeNodeView({
                 filter: function (id, model) {
                     // filtering for DSC folders
-                    if (account.isDSC(model.id)) {
-                        return false;
-                    }
+                    if (account.isDSC(model.id)) return false;
+
                     return true;
                 },
                 contextmenu: 'myfolders',
@@ -308,38 +371,13 @@ define('io.ox/core/folder/extensions', [
         addStorageAccount: (function () {
             if (_.device('smartphone')) return $.noop;
 
-            var links = $('<div class="links">');
-
-            function getAvailableServices() {
-                var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
-
-                return require(['io.ox/core/api/filestorage']).then(function (filestorageApi) {
-                    var availableFilestorageServices = filestorageApi.rampup().then(function () {
-                        return _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
-                    });
-
-                    return $.when(require(['io.ox/keychain/api']), availableFilestorageServices);
-                }).then(function (keychainApi, availableFilestorageServices) {
-                    return _(keychainApi.submodules).filter(function (submodule) {
-                        if (services.indexOf(submodule.id) < 0) return false;
-                        // we need support for both accounts, Oauth accounts and filestorage accounts.
-                        return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
-                    });
-                });
-            }
+            var links = $('<li class="links" role="presentation">');
 
             function draw() {
                 getAvailableServices().done(function (services) {
                     if (services.length > 0) {
                         links.empty().show().append(
-                            $('<a href="#" data-action="add-storage-account" role="button">')
-                            .text(gt('Add storage account'))
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                require(['io.ox/files/actions/add-storage-account'], function (addStorageAccount) {
-                                    addStorageAccount();
-                                });
-                            })
+                            $('<a href="#" data-action="add-storage-account" role="treeitem">').text(gt('Add storage account')).on('click', openAddStorageAccount)
                         );
                     } else {
                         links.hide();
@@ -360,67 +398,37 @@ define('io.ox/core/folder/extensions', [
             };
         })(),
 
-        addRemoteAccount: function () {
-            if (!capabilities.has('multiple_mail_accounts')) return;
-
-            this.append(
-                $('<div class="links">').append(
-                    $('<a href="#" data-action="add-mail-account" role="button">')
-                    .text(gt('Add mail account'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/mail/accounts/settings'], function (m) {
-                            m.mailAutoconfigDialog(e);
-                        });
-                    })
-                )
-            );
-        },
-
         subscribe: function (baton) {
             var title;
             if (baton.module === 'contacts') title = gt('Subscribe address book');
             else if (baton.module === 'calendar') title = gt('Subscribe calendar');
-            this.append($('<div>').append(
-                    $('<a href="#" data-action="subscribe-address-book" role="button">')
-                    .text(title)
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        if (capabilities.has('subscription')) {
-                            require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
-                                subscriptions.buildSubscribeDialog({
-                                    module: baton.module,
-                                    app: baton.view.app
-                                });
-                            });
-                        } else {
-                            require(['io.ox/core/upsell'], function (upsell) {
-                                if (upsell.enabled(['subscription'])) {
-                                    upsell.trigger({
-                                        type: 'inline-action',
-                                        id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
-                                        missing: upsell.missing(['subscription'])
-                                    });
-                                }
-                            });
-                        }
-                    })
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="subscribe-address-book" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionDialog)
                 )
             );
+        },
+
+        treeLinks: function () {
+            var node = $('<ul class="list-unstyled" role="group">');
+            ext.point('io.ox/core/foldertree/mail/treelinks').invoke('draw', node);
+            this.append($('<li class="links list-unstyled" role="treeitem">').append(node));
         },
 
         allAttachments: function () {
             if (!attachmentView.all) return;
             this.append(
-                $('<div class="links">').append(
-                    $('<a href="#" data-action="all-attachments" role="button">')
-                    .text(gt('View all attachments'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
-                            this.folder.set(attachmentView.all);
-                        });
-                    })
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="all-attachments" role="treeitem">').text(gt('View all attachments')).on('click', openAttachmentView)
+                )
+            );
+        },
+
+        addRemoteAccount: function () {
+            if (!capabilities.has('multiple_mail_accounts')) return;
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="add-mail-account" role="treeitem">').text(gt('Add mail account')).on('click', openMailAutoconfigDialog)
                 )
             );
         },
@@ -428,8 +436,7 @@ define('io.ox/core/folder/extensions', [
         synchronizeAccount: function () {
             this.append(new UpsellView({
                 id: 'folderview/mail',
-                className: 'links',
-                requires: 'active_sync',
+                // requires: 'active_sync',
                 title: gt('Synchronize with your tablet or smartphone')
             }).render().$el);
         },
@@ -461,15 +468,9 @@ define('io.ox/core/folder/extensions', [
             // check if users can edit their own data (see bug 34617)
             if (settings.get('user/internalUserEdit', true) === false) return;
 
-            this.append($('<div>').append(
-                    $('<a href="#" data-action="my-contact-data" role="button">')
-                    .text(gt('My contact data'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        require(['io.ox/core/settings/user'], function (userSettings) {
-                            userSettings.openModalDialog();
-                        });
-                    })
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="my-contact-data" role="treeitem">').text(gt('My contact data')).on('click', openUserSettingsDialog)
                 )
             );
         },
@@ -579,9 +580,9 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.otherFolders
         },
         {
-            id: 'all-attachments',
+            id: 'tree-links',
             index: INDEX += 100,
-            draw: extensions.allAttachments
+            draw: extensions.treeLinks
         },
         {
             id: 'remote-accounts',
@@ -589,14 +590,22 @@ define('io.ox/core/folder/extensions', [
             draw: extensions.remoteAccounts
         },
         {
-            id: 'add-account',
-            index: INDEX += 100,
-            draw: extensions.addRemoteAccount
-        },
-        {
             id: 'upsell-mail',
             index: INDEX += 100,
             draw: extensions.synchronizeAccount
+        }
+    );
+
+    ext.point('io.ox/core/foldertree/mail/treelinks').extend(
+        {
+            id: 'all-attachments',
+            index: INDEX += 100,
+            draw: extensions.allAttachments
+        },
+        {
+            id: 'add-account',
+            index: INDEX += 100,
+            draw: extensions.addRemoteAccount
         }
     );
 
@@ -776,14 +785,14 @@ define('io.ox/core/folder/extensions', [
             index: 100,
             draw: function (tree) {
 
-                var links = $('<div class="links">'),
+                var links = $('<ul class="list-unstyled" role="group">'),
                     baton = ext.Baton({ module: module, view: tree, context: tree.context }),
                     folder = 'virtual/flat/' + module,
                     model_id = 'flat/' + module,
                     defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
                     privateFolders,
                     publicFolders,
-                    placeholder = $('<div>');
+                    placeholder = $('<li role="treeitem">');
 
                 // no links. Used for example in move folder picker
                 if (!tree.options.noLinks) {
@@ -813,7 +822,7 @@ define('io.ox/core/folder/extensions', [
                         // private folders
                         privateFolders.render().$el.addClass('section'),
                         // links
-                        links,
+                        $('<li class="links list-unstyled" role="treeitem">').append(links),
                         // public folders
                         publicFolders.render().$el.addClass('section'),
                         // shared with me
@@ -837,34 +846,29 @@ define('io.ox/core/folder/extensions', [
         // Links
         //
 
-        ext.point('io.ox/core/foldertree/' + module + '/links').extend(
-            {
-                index: 200,
-                id: 'private',
-                draw: function (baton) {
+        ext.point('io.ox/core/foldertree/' + module + '/links').extend({
+            index: 200,
+            id: 'private',
+            draw: function (baton) {
+                if (baton.context !== 'app') return;
 
-                    if (baton.context !== 'app') return;
+                var module = baton.module,
+                    folder = api.getDefaultFolder(module),
+                    title = gt('Add new folder');
 
-                    var module = baton.module,
-                        folder = api.getDefaultFolder(module),
-                        title = gt('Add new folder');
+                if (module === 'calendar') title = gt('Add new calendar');
+                else if (module === 'contacts') title = gt('Add new address book');
 
-                    if (module === 'calendar') title = gt('Add new calendar');
-                    else if (module === 'contacts') title = gt('Add new address book');
+                // guests might have no default folder
+                if (!folder) return;
 
-                    // guests might have no default folder
-                    if (!folder) return;
-
-                    this.append(
-                        $('<div>').append(
-                            $('<a href="#" data-action="add-subfolder" role="button">')
-                            .text(title)
-                            .on('click', { folder: folder, module: module }, addFolder)
-                        )
-                    );
-                }
+                this.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="add-subfolder" role="treeitem">').text(title).on('click', { folder: folder, module: module }, addFolder)
+                    )
+                );
             }
-        );
+        });
 
         //
         // Upsell
@@ -874,7 +878,6 @@ define('io.ox/core/folder/extensions', [
             index: 1000,
             id: 'upsell-contacts',
             draw: function (baton) {
-
                 if (baton.context !== 'app') return;
 
                 this.append(new UpsellView({
@@ -889,7 +892,6 @@ define('io.ox/core/folder/extensions', [
             index: 1000,
             id: 'upsell-calendar',
             draw: function (baton) {
-
                 if (baton.context !== 'app') return;
 
                 this.append(new UpsellView({
@@ -936,7 +938,7 @@ define('io.ox/core/folder/extensions', [
                     if (!/^(contacts|calendar|tasks)$/.test(data.module)) return;
                     if (!api.is('shared', data)) return;
 
-                    baton.view.options.a11yDescription.push(gt('Shared by other users'));
+                    baton.view.addA11yDescription(gt('Shared by other users'));
                 }
             },
             {
@@ -945,20 +947,16 @@ define('io.ox/core/folder/extensions', [
                 draw: function (baton) {
 
                     this.find('.folder-node:first .folder-shared:first').remove();
-                    baton.view.options.a11yDescription = baton.view.options.a11yDescription.filter(function (description) {
-                        return description !== gt('You share this folder with other users');
-                    });
 
                     if (_.device('smartphone')) return;
                     // drive has virtual folder 'Shared by me'
                     if (baton.data.module === 'infostore') return;
                     if (!api.is('unlocked', baton.data)) return;
 
-                    this.find('.folder-node:first').append(
-                        $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users'))
-                        .on('click', { id: baton.data.id }, openPermissions)
+                    baton.view.$.buttons.append(
+                        $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
                     );
-                    baton.view.options.a11yDescription.push(gt('You share this folder with other users'));
+                    baton.view.addA11yDescription(gt('You share this folder with other users'));
                 }
             },
             {
@@ -974,11 +972,10 @@ define('io.ox/core/folder/extensions', [
                     if (api.is('shared', baton.data)) return;
                     if (!api.is('subscribed', baton.data)) return;
 
-                    this.find('.folder-node:first').append(
-                        $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions'))
-                        .on('click', { folder: baton.data }, openSubSettings)
+                    baton.view.$.buttons.append(
+                        $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
                     );
-                    baton.view.options.a11yDescription.push(gt('This folder has publications and/or subscriptions'));
+                    baton.view.addA11yDescription(gt('This folder has publications and/or subscriptions'));
                 }
             },
             {
