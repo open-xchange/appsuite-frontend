@@ -673,12 +673,17 @@
 
     .list-item.deleted {
         text-decoration: line-through;
-        color: rgba(0, 0, 0, 0.20);
+        color: #767676;
+        .date, .drag-title { opacity: 1; }
+    }
+
+    &.visible-selection .list-item.selected.deleted {
+        color: #626262;
     }
 
     &.visible-selection.has-focus .list-item.selected {
         .fa-paperclip.has-attachments { opacity: 1; }
-        &.deleted { color: rgba(255, 255, 255, 0.50); }
+        &.deleted { color: #f4f4f4; }
     }
 
     .priority {
