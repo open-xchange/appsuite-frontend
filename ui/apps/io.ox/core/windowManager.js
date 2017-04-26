@@ -18,9 +18,29 @@ define('io.ox/core/windowManager', [
 
     console.log('loading windowManager');
 
+    if (!window.name) {
+        window.name = 'main';
+    }
+
     var wins = [],
         makeParent = function () {
             console.log('this window is now the parent');
+            require(['io.ox/core/sockets', 'io.ox/core/capabilities'], function (socket, capabilities) {
+                // get connected socket
+                socket.getSocket().done(function (socket) {
+                    console.log('sockets connected', socket);
+                    if (capabilities.has('webmail')) {
+                        socket.on('ox:mail:new', function (data) {
+                            console.log('new mail');
+                            // simple event forwarding
+                            _(ox.windowManager.windows).each(function (win) {
+                                if (win.name === window.name) return;
+                                win.ox.trigger('socket:mail:new', data);
+                            });
+                        });
+                    }
+                });
+            });
         };
 
     if (window.opener) {
@@ -34,21 +54,21 @@ define('io.ox/core/windowManager', [
         get: function (name) {
             return _(this.windows).findWhere({ name: name });
         },
-        sendMessageTo: function (message, id) {
-            if (!message) return;
+        broadcastTo: function (data, id) {
+            if (!data) return;
             if (!id) {
                 _(this.windows).each(function (win) {
-                    win.ox.trigger('message', message, window.name);
+                    win.ox.trigger('broadcast', data, window.name);
                 });
             }
             if (id && this.get(id)) {
-                this.get(id).ox.trigger('message', message, window.name);
+                this.get(id).ox.trigger('broadcast', data, window.name);
             }
         },
         openAppInWindow: function (options) {
             options = options || {};
             options.name = options.name || 'app';
-            var win = window.open('/minimalset.html', _.uniqueId(window.name + '_' + options.name + '_'), options.windowAttributes);
+            var win = window.open(ox.root + '/', _.uniqueId(window.name + '_' + options.name + '_'), options.windowAttributes);
             return win;
         }
     };
@@ -80,13 +100,14 @@ define('io.ox/core/windowManager', [
         win.ox.trigger('windowOpened', window);
     });
     ox.windowManager.windows.push(window);
+
     // check if this window is the parent window
     if (ox.windowManager.windows.length === 1) {
         makeParent();
     }
 
-    ox.on('message', function (message) {
-        console.log(message);
+    ox.on('broadcast', function (data) {
+        console.log(data);
     });
 
     return true;

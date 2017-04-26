@@ -46,44 +46,44 @@ $(window).load(function () {
         _.extend(window.require, require);
     }(window.require));
 
-    if (!window.name) {
-        window.name = 'main';
-    }
-
     var message, focus;
     $('body').append(window.name, message = $('<div class="message">'), focus = $('<div class="focus">'));
-    require(['io.ox/core/windowManager.js', 'io.ox/core/windowManager'], function () {
-        ox.on('windowOpened', function (win) {
-            console.log('window opened', win.name);
-            message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
-                ox.windowManager.sendMessageTo('Hello ' + win.name, win.name);
-            }));
-            focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
-                ox.windowManager.get(win.name).focus();
-            }));
-        });
-        ox.on('windowClosed', function (win) {
-            console.log('window closed', win.name);
-            $('body').find('[data-window-id="' + win.name + '"]').remove();
-        });
-        $('body').append($('<button class="btn btn-primary">').text('message to all').on('click', function () {
-            ox.windowManager.sendMessageTo('Hello to all');
-        }));
-        $('body').append($('<button class="btn btn-primary">').text('open new window').on('click', function () {
-            ox.windowManager.openAppInWindow({
-                name: 'test-app'
-            });
-        }));
-
-        _(ox.windowManager.windows).each(function (win) {
-            if (win.name !== window.name) {
+    require(['io.ox/core/windowManager.js'], function () {
+        require(['io.ox/core/windowManager'], function () {
+            ox.on('windowOpened', function (win) {
+                console.log('window opened', win.name);
                 message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
-                    ox.windowManager.sendMessageTo('Hello ' + win.name, win.name);
+                    ox.windowManager.broadcastTo('Hello ' + win.name, win.name);
                 }));
                 focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
-                    window.open('', win.name);
+                    ox.windowManager.get(win.name).focus();
                 }));
-            }
+            });
+            ox.on('windowClosed', function (win) {
+                console.log('window closed', win.name);
+                $('body').find('[data-window-id="' + win.name + '"]').remove();
+            });
+            $('body').append($('<button class="btn btn-primary">').text('message to all').on('click', function () {
+                ox.windowManager.broadcastTo('Hello to all');
+            }));
+            $('body').append($('<button class="btn btn-primary">').text('open new window').on('click', function () {
+                ox.windowManager.openAppInWindow({
+                    name: 'test-app'
+                });
+            }));
+
+            _(ox.windowManager.windows).each(function (win) {
+                if (win.name !== window.name) {
+                    message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
+                        ox.windowManager.broadcastTo('Hello ' + win.name, win.name);
+                    }));
+                    focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
+                        // bug in chrome, focus doesn't shift https://bugs.chromium.org/p/chromium/issues/detail?id=1383
+                        // window open with windowname would work but documents is using window.name for their restore functionality
+                        ox.windowManager.get(win.name).focus();
+                    }));
+                }
+            });
         });
     });
 });
