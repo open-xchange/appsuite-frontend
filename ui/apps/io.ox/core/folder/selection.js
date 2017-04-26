@@ -134,6 +134,9 @@ define('io.ox/core/folder/selection', [], function () {
             if (e.isDefaultPrevented()) return;
             e.preventDefault();
 
+            // trigger action event
+            this.view.trigger('selection:action', items, index);
+
             // sort?
             if (e.altKey && current.parent().parent().attr('data-sortable') === 'true') {
                 return this.move(current, up);
