@@ -14,8 +14,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
     'use strict';
 
     describe('Mail Compose', function () {
-        //skip, because the tests are slow :/
-        describe.skip('draft mails', function () {
+        describe('draft mails', function () {
 
             var app, pictureHalo, snippetsGetAll, getValidAddress;
 
