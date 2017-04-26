@@ -455,7 +455,8 @@
 
         position: relative;
         line-height: 16px;
-        padding: (@default-padding + 3) @default-padding (@default-padding - 5) (@picture-padding + @default-padding + 24px);
+        padding: (@default-padding + 3) 0 8px (@picture-padding + @default-padding + 24px);
+
         min-height: 64px;
 
         .fa-paperclip.has-attachments {
@@ -480,10 +481,19 @@
             a { color: #333; }
         }
         .actions {
-            font-size: 13px;
-            margin: 8px 0 0 0;
+            margin: 5px 8px 0 0;
             & > li {
                 display: inline-block;
+                a {
+                    display: inline-block;
+                    &:focus {
+                        background: #3C73AA;
+                        color: #fff;
+                        outline: 0;
+                        text-decoration: none;
+                    }
+                }
+                &:not(.dropdown) a, &.dropdown i { padding: 4px 8px; }
             }
             .fa-bars {
                 font-size: 14px;
@@ -493,6 +503,7 @@
 
     .detail-view-row.row-1 {
         display: flex;
+        margin-right: @default-padding;
         .from { flex: 1; }
         & > *:not(:first-child) { margin-left: @default-padding; }
     }
@@ -601,12 +612,6 @@
         opacity: 0.75;
 
         html.high-contrast & { opacity: 1; }
-    }
-
-    .actions {
-        font-size: 14px;
-
-        a { padding-left: @default-padding; }
     }
 
     @item-line-height: 20px;
