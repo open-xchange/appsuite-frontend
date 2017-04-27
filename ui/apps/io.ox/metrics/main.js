@@ -47,8 +47,10 @@ define('io.ox/metrics/main', [
         var data = baton.data,
             // remove leading 'io.ox/' to flatten the id a little bit
             action = data.action ? data.action.replace(/^io\.ox\//, '') : data.action,
+            // prevent false to be removed by _.compact
+            detail = _.isBoolean(data.detail) ? String(data.detail) : data.detail,
             // we do not use data.value for this -  mostly these values do not repeat
-            id = _.compact([data.app, data.target, action, data.detail]).join('/');
+            id = _.compact([data.app, data.target, action, detail]).join('/');
         if (!id) return baton;
         baton.id = id;
         return baton;
