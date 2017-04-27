@@ -65,6 +65,17 @@ define('io.ox/core/windowManager', [
                 this.get(id).ox.trigger('broadcast', data, window.name);
             }
         },
+        sendPostMessageTo: function (data, id) {
+            if (!data) return;
+            if (!id) {
+                _(this.windows).each(function (win) {
+                    win.postMessage(data, ox.abs);
+                });
+            }
+            if (id && this.get(id)) {
+                this.get(id).postMessage(data, ox.abs);
+            }
+        },
         openAppInWindow: function (options) {
             options = options || {};
             options.name = options.name || 'app';
@@ -108,6 +119,14 @@ define('io.ox/core/windowManager', [
 
     ox.on('broadcast', function (data) {
         console.log(data);
+    });
+
+    $(window).on('message', function (e) {
+        // chrome uses originalEvent attribute
+        var origin = e.origin || e.originalEvent.origin;
+        if (origin === ox.abs) {
+            console.log('post message', e.data || e.originalEvent.data);
+        }
     });
 
     return true;

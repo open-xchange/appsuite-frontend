@@ -58,6 +58,9 @@ define('io.ox/core/boot/load', [
             message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
                 ox.windowManager.broadcastTo('Hello ' + win.name, win.name);
             }));
+            message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('post message to ' + win.name).on('click', function () {
+                ox.windowManager.sendPostMessageTo('Hello ' + win.name, win.name);
+            }));
             focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
                 ox.windowManager.get(win.name).focus();
             }));
@@ -72,17 +75,19 @@ define('io.ox/core/boot/load', [
         container.append($('<button class="btn btn-primary">').text('message to all').on('click', function () {
             ox.windowManager.broadcastTo('Hello to all');
         }));
+        message.append($('<button class="btn btn-primary">').text('post message to all').on('click', function () {
+            ox.windowManager.sendPostMessageTo('Hello to all');
+        }));
         container.append($('<button class="btn btn-primary">').text('open new tab').on('click', function () {
-             // edge seems to always open a fullscreen popup
+            // IE always seems to open a maximised window instead of a new tab
             ox.windowManager.openAppInWindow({
                 name: 'test-app'
             });
         }));
         container.append($('<button class="btn btn-primary">').text('open new popup').on('click', function () {
-            // edge seems to always open a fullscreen popup
             ox.windowManager.openAppInWindow({
                 name: 'test-app',
-                windowAttributes: 'resizable=yes,top=100,left=100,width=1000,height=1200'
+                windowAttributes: 'resizable=yes,top=100,left=100,width=800,height=1000'
 
             });
         }));
@@ -91,6 +96,9 @@ define('io.ox/core/boot/load', [
             if (win.name !== window.name) {
                 message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('message to ' + win.name).on('click', function () {
                     ox.windowManager.broadcastTo('Hello ' + win.name, win.name);
+                }));
+                message.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('post message to ' + win.name).on('click', function () {
+                    ox.windowManager.sendPostMessageTo('Hello ' + win.name, win.name);
                 }));
                 focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
                     // chrome, only focus on direct child window works
