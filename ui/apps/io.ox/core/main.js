@@ -1339,6 +1339,16 @@ define('io.ox/core/main', [
                         type: 'click',
                         action: 'noop'
                     });
+
+                    $(document.documentElement).on('mousedown', '.halo-link', function () {
+                        var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                        metrics.trackEvent({
+                            app: 'core',
+                            type: 'click',
+                            action: 'halo',
+                            detail: _.last(app.get('name').split('/'))
+                        });
+                    });
                 });
             }
         });

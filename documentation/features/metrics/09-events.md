@@ -70,6 +70,11 @@ A event triggers when an app started. The measure time is between the click on t
 | ------------------------------------- | ---------------------- |
 | core/upsell/[upsell.type]/[upsell.id] | Upsell event triggered |
 
+## Halo
+
+| EventId         | Trigger               |
+|-----------------|-----------------------|
+| core/halo/[app] | Halo link was clicked |
 
 ## Search
 
