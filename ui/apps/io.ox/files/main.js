@@ -1298,9 +1298,8 @@ define('io.ox/files/main', [
                         detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
-
                 // list view control toolbar dropdown
-                control.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
+                control.on('mousedown', 'a[data-name]', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');

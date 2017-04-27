@@ -1721,6 +1721,18 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
+                // listview toolbar
+                nodes.main.find('.list-view-control').on('mousedown', 'a[data-name]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-name')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: node.attr('data-name'),
+                        detail: node.attr('data-value')
+                    });
+                });
                 // toolbar actions
                 toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
