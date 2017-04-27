@@ -1713,7 +1713,7 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.on('mousedown', '.detail-view-header .dropdown-menu a', function (e) {
+                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
