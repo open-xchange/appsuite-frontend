@@ -1287,7 +1287,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 }),
                 fileModelList = this.collection.models,
                 activeFileId = fileModelList[this.activeIndex].attributes.id,
-                activeIndex = imageFileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                activeIndex = _.findIndex(imageFileModelList, function (fileModel/*, idx, list*/) { // due to MSIE 11 not supporting `findIndex` natively.
                     return (fileModel.attributes.id === activeFileId);
                 });
 
@@ -1329,7 +1329,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 imageFileModelList = this.collection.models,
                 fileModelList = this.collectionBackup.models,
                 activeFileId = imageFileModelList[this.activeIndex].attributes.id,
-                activeIndex = fileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                activeIndex = _.findIndex(fileModelList, function (fileModel/*, idx, list*/) { // due to MSIE 11 not supporting `findIndex` natively.
                     return (fileModel.attributes.id === activeFileId);
                 });
 
