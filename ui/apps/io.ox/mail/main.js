@@ -1739,16 +1739,17 @@ define('io.ox/mail/main', [
                         detail: $(e.currentTarget).attr('data-id')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action

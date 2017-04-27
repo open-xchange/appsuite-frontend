@@ -1285,15 +1285,17 @@ define('io.ox/files/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
 
