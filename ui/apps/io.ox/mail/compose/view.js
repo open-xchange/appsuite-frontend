@@ -1005,13 +1005,6 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            // check if it is a draft. then do not set autoDismiss to true
-            if (this.model.keepDraftOnClose()) {
-                this.model.set('autoDismiss', false);
-            } else {
-                this.model.set('autoDismiss', this.model.get('mode') === 'edit');
-            }
-
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })

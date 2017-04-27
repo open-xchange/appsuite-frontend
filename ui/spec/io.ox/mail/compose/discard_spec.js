@@ -35,6 +35,24 @@ define([
                     return def;
                 });
 
+                it('for dirty draft mails', function () {
+                    var spy = sinon.spy(dialogs, 'ModalDialog'),
+                        view = new View({
+                            model: new Model({
+                                mode: 'edit'
+                            }),
+                            app: fakeApp
+                        });
+                    sinon.stub(view.model, 'dirty').returns(true);
+                    var def = view.discard();
+                    expect(spy.calledOnce).to.be.true;
+
+                    //close dialog, again
+                    $('button[data-action="delete"]').click();
+                    spy.restore();
+                    return def;
+                });
+
                 it('for autosaved draft mails', function () {
                     var spy = sinon.spy(dialogs, 'ModalDialog'),
                         view = new View({
