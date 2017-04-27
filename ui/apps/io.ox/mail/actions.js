@@ -719,17 +719,6 @@ define('io.ox/mail/actions', [
         section: 'flags'
     }));
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        id: 'flag',
-        //#. Verb: (to) flag messages
-        label: gt.pgettext('verb', 'Flag'),
-        ref: 'io.ox/mail/actions/flag',
-        section: 'flags'
-    }));
-
     // recipients
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
