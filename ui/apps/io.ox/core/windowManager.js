@@ -83,9 +83,9 @@ define('io.ox/core/windowManager', [
 
     // add event listeners to ox object
     ox.on('windowClosed', function (win) {
-        var prevIndex = ox.windowManager.windows.findIndex(function (obj) { return obj.name === window.name; });
+        var prevIndex = _(ox.windowManager.windows).findIndex(function (obj) { return obj.name === window.name; });
         if (!ox.windowManager.get(win.name)) return;
-        ox.windowManager.windows.splice(ox.windowManager.windows.findIndex(function (obj) { return obj.name === win.name; }), 1);
+        ox.windowManager.windows.splice(_(ox.windowManager.windows).findIndex(function (obj) { return obj.name === win.name; }), 1);
         // check if we need a new parent
         if (prevIndex !== 0 && ox.windowManager.windows[0].name === window.name) {
             makeParent();

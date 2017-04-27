@@ -61,6 +61,9 @@ define('io.ox/core/boot/load', [
             focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
                 ox.windowManager.get(win.name).focus();
             }));
+            focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('open ' + win.name).on('click', function () {
+                window.open('', win.name);
+            }));
         });
         ox.on('windowClosed', function (win) {
             console.log('window closed', win.name);
@@ -69,9 +72,18 @@ define('io.ox/core/boot/load', [
         container.append($('<button class="btn btn-primary">').text('message to all').on('click', function () {
             ox.windowManager.broadcastTo('Hello to all');
         }));
-        container.append($('<button class="btn btn-primary">').text('open new window').on('click', function () {
+        container.append($('<button class="btn btn-primary">').text('open new tab').on('click', function () {
+             // edge seems to always open a fullscreen popup
             ox.windowManager.openAppInWindow({
                 name: 'test-app'
+            });
+        }));
+        container.append($('<button class="btn btn-primary">').text('open new popup').on('click', function () {
+            // edge seems to always open a fullscreen popup
+            ox.windowManager.openAppInWindow({
+                name: 'test-app',
+                windowAttributes: 'resizable=yes,top=100,left=100,width=1000,height=1200'
+
             });
         }));
 
@@ -81,9 +93,19 @@ define('io.ox/core/boot/load', [
                     ox.windowManager.broadcastTo('Hello ' + win.name, win.name);
                 }));
                 focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('focus ' + win.name).on('click', function () {
-                    // bug in chrome, focus doesn't shift https://bugs.chromium.org/p/chromium/issues/detail?id=1383
+                    // chrome, only focus on direct child window works
+                    // safari, works totally random... sometimes only last opener can focus, sometines only the child windows are focussable
+                    // doesn't work in firefox at all yay... http://stackoverflow.com/questions/4085544/why-window-focus-not-working-in-mozilla-firefox
                     // window open with windowname would work but documents is using window.name for their restore functionality
+                    // this works in firefox for popups when typing about:config in the addressbar and setting dom.disable_window_flip to false
+                    // works without problem in IE 11 and edge
                     ox.windowManager.get(win.name).focus();
+                }));
+                focus.append($('<button class="btn btn-primary">').attr('data-window-id', win.name).text('open ' + win.name).on('click', function () {
+                    // open doesn't work in firefox for tabs http://stackoverflow.com/questions/4085544/why-window-focus-not-working-in-mozilla-firefox
+                    // first open then using focus works in firefox, for popups at least (even with dom.disable_window_flip enabled), but not in the same event listener...
+                    // doesn't work at all in IE 11 and edge
+                    window.open('', win.name);
                 }));
             }
         });
