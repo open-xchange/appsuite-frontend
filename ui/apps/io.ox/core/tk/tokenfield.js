@@ -384,7 +384,8 @@ define('io.ox/core/tk/tokenfield', [
                             if (token.label !== token.value) {
                                 title = token.label ? token.label + ' ' + token.value : token.value;
                             }
-                            return gt('%1$s Press backspace to delete.', title);
+                            //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                            return gt('%1$s. Press backspace to delete.', title);
                         });
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
