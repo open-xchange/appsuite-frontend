@@ -541,17 +541,19 @@ define('io.ox/core/tk/list', [
             if (_.device('smartphone')) {
                 var timer,
                     scrollPos = 0;
-                this.selection.isScrolling = false;
-                this.$el.scroll(function () {
-                    if (self.$el.scrollTop() !== scrollPos) {
-                        self.selection.isScrolling = true;
-                        scrollPos = self.$el.scrollTop();
-                    }
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        self.selection.isScrolling = false;
-                    }, 500);
-                });
+                if (this.selection) {
+                    this.selection.isScrolling = false;
+                    this.$el.scroll(function () {
+                        if (self.$el.scrollTop() !== scrollPos) {
+                            self.selection.isScrolling = true;
+                            scrollPos = self.$el.scrollTop();
+                        }
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            self.selection.isScrolling = false;
+                        }, 500);
+                    });
+                }
             }
 
             if (this.options.pagination) {
