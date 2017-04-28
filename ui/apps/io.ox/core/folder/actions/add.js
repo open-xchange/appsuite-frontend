@@ -62,7 +62,7 @@ define('io.ox/core/folder/actions/add', [
             previousFocus: $(document.activeElement),
             help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
             point: 'io.ox/core/folder/add-popup',
-            width: 400
+            width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })
         .inject({
             addFolder: addFolder,
