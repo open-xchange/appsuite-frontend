@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-20 09:32+0200\n"
+"PO-Revision-Date: 2017-04-28 11:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -1459,10 +1459,10 @@ msgstr "Ort %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Ordner"
 
@@ -2184,8 +2184,10 @@ msgstr "Terminliste"
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid ""
 "There are more than %n appointments in the current calendar. Some features "
-"are disabled to due to performance reasons."
+"are disabled due to performance reasons."
 msgstr ""
+"Es gibt mehr als %n Termine im aktuellen Kalender. Einige Funktionen sind "
+"aus Performance-Gründen deaktiviert."
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -3725,14 +3727,13 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
-#, fuzzy
 msgid ""
 "Could not delete folder. This can be due to insufficient permissions in your "
 "trash folder or this might be a special folder that cannot be deleted."
 msgstr ""
-"Ordner konnte nicht gelöscht werden. Dies kann aufgrund unzureichender "
-"Berechtigungen in Ihrem Papierkorb sein oder dies könnte ein spezieller "
-"Ordner sein, der nicht gelöscht werden kann."
+"Ordner konnte nicht gelöscht werden. Dies kann an unzureichenden "
+"Berechtigungen für Ihren Papierkorb liegen oder es handelt sich um einen "
+"speziellen Ordner, der nicht gelöscht werden kann."
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
@@ -3870,12 +3871,6 @@ msgid "Add storage account"
 msgstr "Speicherkonto hinzufügen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "E-Mail-Account hinzufügen"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Adressbuch abonnieren"
@@ -3888,6 +3883,12 @@ msgstr "Kalender abonnieren"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Alle Anhänge anzeigen"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "E-Mail-Account hinzufügen"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3966,8 +3967,18 @@ msgid "Total: %1$d"
 msgstr "Gesamt: %1$s"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+#, fuzzy
+msgid "%1$d total"
+msgstr "%1$d gesamt"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Ungelesen: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+#, fuzzy
+msgid "%1$d unread"
+msgstr "%$d ungelesen"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
@@ -4236,7 +4247,6 @@ msgstr ""
 "Schaltfläche \"Abmelden\", wenn Sie Ihre Arbeit beendet haben."
 
 #: apps/io.ox/core/main.js module:io.ox/core
-#, fuzzy
 msgid ""
 "Did you know that you can take OX App Suite with you? Just click this icon "
 "and choose 'Connect your device' from the menu."
@@ -5209,6 +5219,11 @@ msgstr "%1$s, %2$s hinzugefügt."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "%1$s wurde hinzugefügt."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+#, fuzzy
+msgid "%1$s Press backspace to delete."
+msgstr "%1$s Rücktaste zum Löschen drücken."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6235,20 +6250,25 @@ msgid "Adding files with identical names"
 msgstr "Hinzufügen von Dateien mit identischen Namen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Nur eine Programmschleife"
+msgid "Show all images just once"
+msgstr "Alle Bilder nur einmal anzeigen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Endlosschleife beibehalten"
+msgid "Repeat slideshow"
+msgstr "Diashow wiederholen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Diashow / Automatische Wiedergabe"
+#, fuzzy
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Diashow / Automatische Wiedergabe für Bilder"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Pause der automatischen Wiedergabe in Sekunden"
+msgid "Show all images for"
+msgstr "Alle Bilder anzeigen für"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "Sekunden"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -7961,14 +7981,15 @@ msgstr "IMAP-Schlüsselwort entfernen"
 msgid "Keep"
 msgstr "Behalten"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "File into"
-msgstr ""
+msgstr "Speichern unter"
 
+#. Copy a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Copy into"
 msgstr "Kopieren nach"
 
@@ -8024,15 +8045,17 @@ msgstr "Aktuelles Datum"
 msgid "original time zone"
 msgstr "ursprüngliche Zeitzone"
 
+#. greater than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Greater equals"
-msgstr ""
+msgstr "Größer als oder gleich"
 
+#. lower than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Lower equals"
-msgstr ""
+msgstr "Kleiner als oder gleich"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8046,15 +8069,15 @@ msgstr "stimmt exakt überein mit"
 msgid "Is not exactly"
 msgstr "stimmt nicht exakt überein mit"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Lower"
 msgstr "Kleiner"
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Greater"
 msgstr "Größer"
 
@@ -8065,7 +8088,6 @@ msgstr "Minikalender"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Sent date"
 msgstr "Versanddatum"
 
@@ -8140,27 +8162,25 @@ msgstr "BCC"
 msgid "Sender"
 msgstr "Absender"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Resent-From"
-msgstr "Neu gesendet von"
+msgstr "Resent-From"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Resent-To"
-msgstr "Neu gesendet an"
+msgstr "Resent-To"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Header exists"
-msgstr "Header existiert"
+msgstr "Header ist vorhanden"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Part"
 msgstr "Teil"
 
@@ -8194,12 +8214,14 @@ msgstr "Beginnt mit"
 msgid "Starts not with"
 msgstr "Beginnt nicht mit"
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "Ends with"
 msgstr "Endet mit"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
@@ -8218,38 +8240,37 @@ msgstr "Kein regulärer Ausdruck"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "matches a substring"
-msgstr "Stimmt mit einem Substring überein"
+msgstr "stimmt mit einem Teilstring überein"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
-msgid "does not matches a substring"
-msgstr "stimmt nicht mit einem Substring überein"
+msgid "does not match a substring"
+msgstr "stimmt nicht mit einem Teilstring überein"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "an exact, full match"
-msgstr "eine exakte, genaue Übereinstimmung"
+msgstr "eine genaue, volle Übereinstimmung"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "not an exact, full match "
-msgstr "keine exakte, volle Übereinstimmung"
+msgstr "keine genaue, volle Übereinstimmung "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "a full match (allows DOS-style wildcards)"
-msgstr "eine genaue Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
+msgstr "eine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
+#, fuzzy
 msgid "not a full match (allows DOS-style wildcards)"
-msgstr ""
+msgstr "keine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -11011,8 +11032,9 @@ msgid "Your current password"
 msgstr "Ihr aktuelles Passwort"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
+#, fuzzy
 msgid "Leave empty if you have none"
-msgstr ""
+msgstr "Leer lassen, wenn Sie keines haben"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "New password"
@@ -11244,6 +11266,30 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Loop once only"
+#~ msgstr "Nur eine Programmschleife"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Endlosschleife beibehalten"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Diashow / Automatische Wiedergabe"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Pause der automatischen Wiedergabe in Sekunden"
+
+#, fuzzy
+#~ msgid ""
+#~ "There are more than %n appointments in the current calendar. Some "
+#~ "features are disabled to due to performance reasons."
+#~ msgstr ""
+#~ "Es gibt mehr als %n Termine im aktuellen Kalender. Einige Funktionen sind "
+#~ "aus Performance-Gründen deaktiviert."
+
+#, fuzzy
+#~ msgid "does not matches a substring"
+#~ msgstr "stimmt nicht mit einem Substring überein"
 
 #~ msgid "Copy message to folder"
 #~ msgstr "Nachricht in Ordner kopieren"
