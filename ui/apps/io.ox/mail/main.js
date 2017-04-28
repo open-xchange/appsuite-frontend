@@ -1773,6 +1773,15 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
+                app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'drop',
+                        detail: baton.data.length ? 'single' : 'multiple'
+                    });
+                });
                 // check for clicks in folder trew
                 app.on('folder:change folder-virtual:change', function (folder, data) {
                     data = data || {};
