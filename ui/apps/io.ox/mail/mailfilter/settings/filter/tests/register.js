@@ -57,9 +57,11 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     options = {
                         target: 'nestedID',
                         toggle: 'dropup',
-                        caret: true
+                        caret: true,
+                        type: 'appliesto',
+                        classes: 'appliesto'
                     },
-                    optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these condition is met.') }, options),
+                    optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these condition is met') }, options),
                     assembled = arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof' ? optionsSwitch : $('<div>').addClass('line').text(gt('continue if all conditions are met'));
                 this.append(
                     $('<li>').addClass('filter-settings-view row nestedrule').attr({ 'data-test-id': conditionKey }).append(
@@ -68,11 +70,11 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         ),
                         $('<div>').addClass('col-sm-3 singleline').append(
                             util.drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
-                                test: 'create',
+                                type: 'condition',
                                 nested: true,
                                 toggle: 'dropdown',
-                                classes: 'condition',
-                                // multi optiuons?
+                                classes: 'add-condition',
+                                // multi options?
                                 skip: 'nested'
                             })
                         ),
