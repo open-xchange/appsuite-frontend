@@ -111,6 +111,7 @@ define('io.ox/core/folder/view', [
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
                 populateResize();
+                sidepanel.css('display', 'flex');
             },
 
             hide: function () {
