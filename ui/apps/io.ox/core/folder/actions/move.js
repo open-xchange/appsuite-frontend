@@ -54,6 +54,7 @@ define('io.ox/core/folder/actions/move', [
                 // input is either source folder (move all) or a list of items (move)
                 input = options.source || options.list,
                 isMove = /^move/.test(type),
+                onlyFolder = false,
                 multiple = type === 'moveAll' || options.list.length > 1,
                 current = options.source || options.list[0].folder_id;
 
@@ -109,6 +110,13 @@ define('io.ox/core/folder/actions/move', [
                 return;
             }
 
+            if (type !== 'moveAll') {
+                onlyFolder = true;
+                _(options.list).each(function (item) {
+                    if (!onlyFolder) return;
+                    onlyFolder = item.folder_id === 'folder';
+                });
+            }
             picker({
 
                 button: options.button,
@@ -131,7 +139,7 @@ define('io.ox/core/folder/actions/move', [
 
                 disable: function (data, options) {
                     var same = isMove && data.id === current,
-                        create = api.can('create', data);
+                        create = onlyFolder ? api.can('create:folder', data) : api.can('create', data);
                     return same || !create || (options && /^virtual/.test(options.folder));
                 }
             });
