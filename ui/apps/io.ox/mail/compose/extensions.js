@@ -352,6 +352,7 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+
                 }).on('tokenfield:next', function () {
                     extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
                 }).on('tokenfield:removetoken', function (e) {
@@ -606,6 +607,19 @@ define('io.ox/mail/compose/extensions', [
                             if (baton.view.model.get('autodelete')) {
                                 // show disabled so user knows that the drive files are deleted, even if it cannot be changed
                                 baton.dropdown.$ul.find('[data-name="autodelete"]').attr('disabled', 'disabled').addClass('disabled');
+                            }
+                        }
+                    });
+
+                    ext.point(POINT + '/createtoken').extend({
+                        id: 'scrolltop',
+                        index: 10,
+                        action: function (baton) {
+                            if (_.device('!smartphone')) return;
+                            if (baton && baton.view) {
+                                setTimeout(function () {
+                                    if (baton.view.$el[0].scrollIntoView) baton.view.$el[0].scrollIntoView();
+                                }, 10);
                             }
                         }
                     });

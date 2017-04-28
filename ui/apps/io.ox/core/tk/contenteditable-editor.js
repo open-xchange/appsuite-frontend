@@ -394,11 +394,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                     editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                     return;
                 } else if (_.device('smartphone')) {
-                    composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-                    var topBarHeight = $('#io-ox-topbar').height(),
-                        windowHeaderHeight = el.parents().find('.window-header').height(),
-                        editorPadding = 30;
-                    editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
+
+                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
                     return;
                 }
 
