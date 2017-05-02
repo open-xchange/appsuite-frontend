@@ -318,7 +318,7 @@ define('io.ox/mail/util', [
             if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
