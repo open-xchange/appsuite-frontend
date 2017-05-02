@@ -1609,17 +1609,19 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
-                            $('<div class="header">').append(
-                                $('<h1>').text(gt('Restore applications')),
-                                $('<div>').text(
-                                    gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="-1" role="dialog" aria-labelledby="restore-heading" aria-describedby="restore-description">').append(
+                            $('<div role="document">').append(
+                                $('<div class="header">').append(
+                                    $('<h1 id="restore-heading">').text(gt('Restore applications')),
+                                    $('<div id="restore-description">').text(
+                                        gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                                    )
+                                ),
+                                $('<ul class="list-unstyled content">'),
+                                $('<div class="footer">').append(
+                                    btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                    btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                                 )
-                            ),
-                            $('<ul class="list-unstyled content">'),
-                            $('<div class="footer">').append(
-                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
-                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1646,7 +1648,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i>').addClass(item.icon) : $(),
+                                    item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )

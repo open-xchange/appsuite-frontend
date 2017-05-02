@@ -293,7 +293,7 @@ define('io.ox/mail/detail/view', [
         id: 'error',
         index: INDEX += 100,
         draw: function () {
-            this.append($('<section class="error" role="dialog">').hide());
+            this.append($('<section class="error">').hide());
         }
     });
 
@@ -580,7 +580,7 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
             this.$el.attr('data-loaded', false);
             this.$('section.error').empty().show().append(
-                $('<i class="fa fa-exclamation-triangle">'),
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
                 $('<h4>').text(gt('Error: Failed to load message content')),
                 $('<p>').text(e.error),
                 $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
