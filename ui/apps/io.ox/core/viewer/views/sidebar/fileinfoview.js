@@ -41,6 +41,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         });
     }
 
+    function renderFileName(model) {
+        var name = model.getDisplayName() || '-',
+            link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
+
+        if (model.get('source') !== 'drive') return $.txt(name);
+
+        return $('<a href="#" target="_blank" style="word-break: break-all">')
+            .attr('href', link)
+            .text(name);
+    }
+
     Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
         id: 'fileinfo',
@@ -50,7 +61,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             var model = baton.model,
                 options = baton.options || {},
-                name = model.getDisplayName() || '-',
                 size = model.get('file_size'),
                 sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
                 modifiedBy = model.get('modified_by'),
@@ -58,7 +68,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 isToday = moment().isSame(moment(modified), 'day'),
                 dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
                 folder_id = model.get('folder_id'),
-                link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id')),
                 dl = $('<dl>'),
                 isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
@@ -66,9 +75,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 // filename
                 $('<dt>').text(gt('Name')),
                 $('<dd class="file-name">').append(
-                    $('<a href="#" target="_blank" style="word-break: break-all">')
-                    .attr('href', link)
-                    .text(name)
+                    renderFileName(model)
                 ),
                 // size
                 $('<dt>').text(gt('Size')),
