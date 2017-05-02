@@ -5094,7 +5094,7 @@ msgstr "Años"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Remind me again"
-msgstr "Recordar otra vez"
+msgstr "Recordarme de nuevo"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Pick a time here"
