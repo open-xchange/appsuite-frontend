@@ -51,8 +51,10 @@
 
     .window-content .rightside > .scrollable-pane {
 
-        a { text-decoration: underline; }
+        // A11y: TODO This will be removed after the default for links include text-decoration underline
+        a:not(.action):not([role="tab"]):not(.dropdown-toggle):not([data-toggle="dropdown"]), a[target="_blank"] { text-decoration: underline; }
         li > a, .dropdown a { text-decoration: none; }
+        .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
 
         max-width: 780px;
 
