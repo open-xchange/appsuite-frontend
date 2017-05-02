@@ -236,7 +236,7 @@ define('io.ox/mail/settings/pane', [
                     .append(
                         // if supported add register now link
                         navigator.registerProtocolHandler ?
-                        $('<a href="#">').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
+                        $('<a href="#" role="button">').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
                             e.preventDefault();
                             var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                             navigator.registerProtocolHandler(

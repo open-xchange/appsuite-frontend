@@ -303,7 +303,7 @@ define('io.ox/core/settings/pane', [
                 var self = this,
                     // add ask now link (by design browsers only allow asking if there was no decision yet)
                     //#. Opens popup to decide if desktop notifications should be shown
-                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#">').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" role="button">').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
                         e.preventDefault();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {
