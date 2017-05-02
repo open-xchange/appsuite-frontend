@@ -367,9 +367,8 @@ define('io.ox/calendar/edit/recurrence-view', [
                 if (_.device('smartphone')) {
                     require(['io.ox/core/tk/mobiscroll'], function () {
                         $dateInput.mobiscroll().date({
-                            onChange: updateValue,
                             minDate: minDate
-                        }).mobiscroll('show');
+                        }).on('change', updateValue).mobiscroll('show');
                     });
                 } else {
                     require(['io.ox/core/tk/datepicker'], function () {
