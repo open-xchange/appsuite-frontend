@@ -687,11 +687,33 @@ define('io.ox/tasks/main', [
                         detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
+                // vgrid toolbar
+                nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
+                    });
+                });
                 // folder tree action
                 sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

@@ -726,6 +726,18 @@ define('io.ox/calendar/main', [
                         detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
+                // vgrid toolbar
+                nodes.main.on('mousedown', '.vgrid-toolbar a[data-name], .vgrid-toolbar a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
+                    });
+                });
                 // detail view
                 nodes.outer.on('mousedown', '.participants-view .io-ox-action-link', function (e) {
                     metrics.trackEvent({
@@ -749,6 +761,16 @@ define('io.ox/calendar/main', [
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

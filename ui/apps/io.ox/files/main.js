@@ -1299,7 +1299,7 @@ define('io.ox/files/main', [
                     });
                 });
                 // list view control toolbar dropdown
-                control.on('mousedown', 'a[data-name]', function (e) {
+                control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
@@ -1321,6 +1321,16 @@ define('io.ox/files/main', [
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

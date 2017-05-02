@@ -1722,14 +1722,15 @@ define('io.ox/mail/main', [
                     });
                 });
                 // listview toolbar
-                nodes.main.find('.list-view-control').on('mousedown', 'a[data-name]', function (e) {
+                nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node = $(e.currentTarget);
-                    if (!node.attr('data-name')) return;
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'list/toolbar',
                         type: 'click',
-                        action: node.attr('data-name'),
+                        action: action,
                         detail: node.attr('data-value')
                     });
                 });
@@ -1769,6 +1770,16 @@ define('io.ox/mail/main', [
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });
