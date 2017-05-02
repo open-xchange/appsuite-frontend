@@ -375,7 +375,7 @@ define('io.ox/core/folder/view', [
 
         // respond to folder move
         api.on('move', function (id, newId) {
-            tree.traversePath(id, showFolder);
+            tree.traversePath(newId, showFolder);
             tree.selection.set(newId);
         });
 
