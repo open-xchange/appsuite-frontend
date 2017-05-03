@@ -71,21 +71,21 @@ define('io.ox/participants/detail', [
         var isResource = looksLikeResource(obj);
 
         node = $('<li class="participant">');
-        if (options.halo) {
-            node.attr('tabindex', 0)
-                .addClass(isResource ? 'halo-resource-link' : 'halo-link')
-                .on('keydown', function (e) {
-                    if (e.which === 13) $(this).click();
-                });
-        }
+
+        if (!options.halo) return node.append($.txt(name));
 
         if (isResource) {
             node.append(
-                options.halo ? $('<a href="#">').addClass(personClass + ' ' + statusClass).attr('title', text).append(text) : text
+                $('<a href="#" role="button" class="halo-resource-link">')
+                    .addClass(personClass + ' ' + statusClass)
+                    .attr('title', name)
+                    // use obj for the 'looksLikeResource' duck check
+                    .data(_.extend(obj, { email1: mail_lc }))
+                    .append($.txt(name))
             );
         } else {
             node.append(
-                coreUtil.renderPersonalName({ email: mail_lc, html: text }, obj).addClass(personClass + ' ' + statusClass),
+                coreUtil.renderPersonalName({ email: mail_lc, html: text, user_id: obj.internal_userid }, obj).addClass(personClass + ' ' + statusClass),
                 // pause for screenreader
                 $('<span class="sr-only">').text(', ' + statusLabel + '.'),
                 // has confirmation icon?
