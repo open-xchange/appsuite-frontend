@@ -330,16 +330,15 @@
         <!-- the only magic we need here; asks UI to use the upper template -->
         <script>
             (function () {
-                var name = location.search.substr(1), cb, win;
+                var name = location.search.substr(1), cb;
                 if (!name) return;
                 cb = (window.opener && window.opener[name]) ? window.opener[name] : null;
-                win = window.opener;
+
                 if (!cb) {
                     cb = (window.parent && window.parent[name]) ? window.parent[name] : null;
-                    win = window.parent;
                 }
 
-                if (cb) cb.call(win, document);
+                if (cb) cb(document);
             }());
         </script>
     </body>
