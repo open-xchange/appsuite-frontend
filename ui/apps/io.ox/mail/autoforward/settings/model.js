@@ -41,7 +41,7 @@ define('io.ox/mail/autoforward/settings/model', [
             'active': !!attributes.active
         };
         if (attributes.keep) {
-            preparedData.actioncmds.push({ 'id': 'keep' });
+            preparedData.actioncmds[0].copy = true;
         }
 
         if (!attributes.processSub) {

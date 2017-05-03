@@ -71,9 +71,7 @@ define('io.ox/mail/autoforward/settings/filter', [
                         switch (value.id) {
                             case 'redirect':
                                 autoForwardData.forwardmail = value.to;
-                                break;
-                            case 'keep':
-                                autoForwardData.keep = true;
+                                autoForwardData.keep = value.copy;
                                 break;
                             case 'stop':
                                 autoForwardData.processSub = false;
