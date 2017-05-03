@@ -203,7 +203,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             );
 
         return new Dropdown({
-            className: 'action dropdown value ' + options.classes,
+            className: 'action dropdown value ' + (options.classes ? options.classes : ''),
             $toggle: $toggle,
             $ul: $ul
         }).render().$el;

@@ -42,6 +42,8 @@ define.async('io.ox/mail/compose/model', [
                 autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
+                // enable auto-remove on "discard"
+                autoDiscard: true,
                 preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
@@ -118,8 +120,8 @@ define.async('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
-            // check if it is a draft. then do not set autoDismiss to true
-            if (!this.keepDraftOnClose()) this.set('autoDismiss', this.get('mode') === 'edit');
+            // disable auto remove on discard for draft mails
+            this.set('autoDiscard', this.get('mode') !== 'edit');
 
             if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
@@ -342,9 +344,8 @@ define.async('io.ox/mail/compose/model', [
         },
 
         discard: function () {
-            // never delete on edit
+            if (!this.get('autoDiscard')) return;
             // only delete autosaved drafts that are not saved manually and have a msgref
-            if (this.get('autoDismiss')) return;
             if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 

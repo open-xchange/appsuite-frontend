@@ -93,7 +93,7 @@ define('plugins/portal/userSettings/register', [
 
                 var currentPasswordString = gt('Your current password');
                 if (isGuest) {
-                    //.# Hint to leave an input field empty if the user does not already have a password
+                    //#. Hint to leave an input field empty if the user does not already have a password
                     var guestHint = gt('Leave empty if you have none');
                     currentPasswordString = currentPasswordString + ' (' + guestHint + ')';
                 }

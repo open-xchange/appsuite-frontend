@@ -29,11 +29,15 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             return $(el).find('[data-test-id]');
         },
 
-        setFocus = function (el, type) {
-            var listelement = $(el).find('[data-' + type + '-id]').last();
-            if (type === 'test') listelement.find('input[tabindex="0"]').first().focus();
+        setFocus = function (el, type, nestedConditionID) {
 
-            if (type === 'action') listelement.find('[tabindex="0"]').first().focus();
+            var node = nestedConditionID ? $(el).find('[data-test-id="' + nestedConditionID + '"]') : $(el);
+
+            if (type === 'condition') node.find((nestedConditionID ? '' : '.main') + '.add-condition > a').focus();
+
+            if (type === 'action') $(el).find('.add-action > a').focus();
+
+            if (type === 'appliesto') node.find((nestedConditionID ? '' : '.main') + '.appliesto > a').focus();
         },
 
         renderWarningForEmptyTests = function (node) {
@@ -86,7 +90,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 );
 
             return new Dropdown({
-                className: 'action dropdown value',
+                className: 'action dropdown value ' + (options.classes ? options.classes : ''),
                 $toggle: $toggle,
                 $ul: $ul
             }).render().$el;
@@ -237,6 +241,28 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     if (testsPart.id === 'size' && testsPart.size.toString().trim() === '') {
                         this.model.set('test', { id: 'true' });
                     }
+
+                    // clear zone option in currentdate condition for single test if no special zone is set
+                    if (testsPart.zone === 'original' && testsPart.id === 'currentdate') {
+                        delete this.model.attributes.test.zone;
+                    }
+                }
+
+                if (this.model.attributes.test.tests) {
+
+                    _.each(this.model.attributes.test.tests, function (test, key) {
+
+                        // clear zone option in currentdate condition for multiple tests if no special zone is set
+                        if (test.zone === 'original' && test.id === 'currentdate') self.model.attributes.test.tests[key].zone = null;
+
+                        // clear zone option in currentdate condition for multiple nested tests if no special zone is set
+                        if (test.tests && !_.isEmpty(test.tests)) {
+                            _.each(test.tests, function (nestedTest, nestedKey) {
+                                if (nestedTest.zone === 'original' && nestedTest.id === 'currentdate') self.model.attributes.test.tests[key].tests[nestedKey].zone = null;
+                            });
+                        }
+                    });
+
                 }
 
                 // if there is a stop action it should always be the last
@@ -265,14 +291,14 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     self.render();
 
                     setTimeout(function () {
-                        setFocus(self.el, valueType);
+                        setFocus(self.el, valueType, nestedConditionID);
                     }, 100);
                 }
 
                 e.preventDefault();
                 var node = $(e.target),
                     data = node.data(),
-                    valueType = data.test ? 'test' : 'action',
+                    valueType = data.type,
                     self = this,
                     testArray,
                     arrayOfTests,
@@ -299,7 +325,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
 
                 // create nested condition
-                if (data.nested && data.test === 'create') {
+                if (data.nested && data.type === 'condition') {
                     testArray = this.model.get('test');
                     nestedConditionID = node.closest('li').attr('data-test-id');
                     testArray.tests[nestedConditionID].tests.push(_.copy(this.defaults.tests[data.value], true));
@@ -309,7 +335,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
 
                  // create condition
-                if (data.test === 'create') {
+                if (data.type === 'condition') {
                     testArray = _.copy(this.model.get('test'));
 
                     if (checkForMultipleTests(this.el).length > 1) {
@@ -331,7 +357,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
 
                 // create action
-                if (data.action === 'create') {
+                if (data.type === 'action') {
 
                     var actionArray = this.model.get('actioncmds');
                     actionArray.push(_.copy(this.defaults.actions[data.value], true));
@@ -546,16 +572,18 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             this.append(
                 headlineTest, notificationConditions, conditionList,
                 drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
-                    test: 'create',
+                    type: 'condition',
                     toggle: 'dropdown',
                     skip: baton.model.get('test').id === 'true' ? 'nested' : '',
-                    sort: baton.view.defaults.conditionsOrder
+                    sort: baton.view.defaults.conditionsOrder,
+                    classes: 'add-condition main'
                 }),
                 headlineActions, notificationActions, actionList,
                 drawDropdown(gt('Add action'), baton.view.actionsTranslations, {
-                    action: 'create',
+                    type: 'action',
                     toggle: 'dropup',
-                    sort: baton.view.defaults.actionsOrder
+                    sort: baton.view.defaults.actionsOrder,
+                    classes: 'add-action'
                 })
             );
 
@@ -581,8 +609,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 options = {
                     target: 'id',
                     toggle: 'dropup',
-                    classes: 'no-positioning',
-                    caret: true
+                    classes: 'no-positioning appliesto main',
+                    caret: true,
+                    type: 'appliesto'
                 },
                 optionsSwitch = drawDropdown(arrayOfTests.id, { allof: gt('Apply rule if all conditions are met'), anyof: gt('Apply rule if any condition is met') }, options);
             if (arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof') {

@@ -126,30 +126,54 @@ console.
 ## source
 
 ```javascript
-  io.ox/metrics/adapters/console.js
+io.ox/metrics/adapters/console.js
 ```
 
 ## hint
 
-You can activate this special adapter that writes events to console and
-tracks all events in browsers localstorage. To activate/deactivate
-simply paste this code into your console when you are logged in at
-appsuite:
+You can activate this special adapter that writes events to console.
+To activate/deactivate simply paste this code into your browser console when you are logged in at appsuite:
 
 ```javascript
-  // enable
-  require('settings!io.ox/core').set('tracking/console/enabled', true).save();
-  
-  // disable
-  require('settings!io.ox/core').set('tracking/console/enabled', false).save();
+// enable
+require('settings!io.ox/core').set('tracking/console/enabled', true).save();
+
+// disable
+require('settings!io.ox/core').set('tracking/console/enabled', false).save();
 ```
 
- You can see all tracked events by using the browers console again:
+
+**Verbosity level**
 
 ```javascript
-  //directly accessing to the data
-  metrics.hash
-  
-  // please use the following only in chrome cause it is using console.table
-  metrics.show();
+// DEBUG (default)
+require('settings!io.ox/core').set('tracking/console/verbosity', 'DEBUG').save();
+
+// INFO
+require('settings!io.ox/core').set('tracking/console/verbosity', 'INFO').save();
+```
+
+
+# Context
+
+You can activate this special adapter that tracks events in browsers localstorage (limited to the last 10).
+To activate/deactivate simply paste this code into your browser console when you are logged in at appsuite:
+
+## hint
+
+```javascript
+// enable
+require('settings!io.ox/core').set('tracking/context/enabled', true).save();
+
+// disable
+require('settings!io.ox/core').set('tracking/context/enabled', false).save();
+```
+
+You can access tracked events by using the browers console again:
+
+```javascript
+// directly accessing to the data
+ox.metrics.get()
+// please use the following only in chrome cause it is using console.table
+ox.metrics.show();
 ```

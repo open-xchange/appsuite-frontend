@@ -255,6 +255,12 @@ define('io.ox/core/tk/selection', [
                         selectPrevious(e);
                     }
                     break;
+                case 36:
+                    selectFirst(e);
+                    break;
+                case 35:
+                    selectLast(e);
+                    break;
                 case 32:
                     // last is the current selected/focussed
                     if (options.markable) {
@@ -904,6 +910,11 @@ define('io.ox/core/tk/selection', [
 
         this.selectFirst = function () {
             selectFirst();
+            return this;
+        };
+
+        this.selectLast = function () {
+            selectLast();
             return this;
         };
 

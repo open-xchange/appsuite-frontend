@@ -345,7 +345,7 @@ define('io.ox/calendar/main', [
                 index: 100,
                 draw: function () {
                     this.addClass('visual-focus').append(
-                        $('<a href="#" class="toolbar-item">')
+                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
                         .attr('aria-label', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
                         .on('click', { state: true }, app.toggleFolderView)
@@ -359,7 +359,7 @@ define('io.ox/calendar/main', [
                 draw: function () {
                     this.addClass('bottom-toolbar').append(
                         $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
+                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
@@ -713,15 +713,29 @@ define('io.ox/calendar/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
+                // vgrid toolbar
+                nodes.main.on('mousedown', '.vgrid-toolbar a[data-name], .vgrid-toolbar a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
                     });
                 });
                 // detail view
@@ -747,6 +761,16 @@ define('io.ox/calendar/main', [
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

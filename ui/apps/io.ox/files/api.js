@@ -702,7 +702,7 @@ define('io.ox/files/api', [
                                 {
                                     facet: 'file_type',
                                     filter: {
-                                        fields: ['file_mimetype'],
+                                        fields: ['file_extension'],
                                         queries: self.mimeTypeFilter
                                     },
                                     value: self.mimeTypeFilter

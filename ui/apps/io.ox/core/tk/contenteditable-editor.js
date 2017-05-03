@@ -358,6 +358,11 @@ define('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
+                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    _.defer(function () {
+                        // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
+                        toolbar.find('span.mce-txt').attr('tabindex', -1);
+                    });
                 });
             }
         };
@@ -389,11 +394,8 @@ define('io.ox/core/tk/contenteditable-editor', [
                     editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                     return;
                 } else if (_.device('smartphone')) {
-                    composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-                    var topBarHeight = $('#io-ox-topbar').height(),
-                        windowHeaderHeight = el.parents().find('.window-header').height(),
-                        editorPadding = 30;
-                    editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
+
+                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
                     return;
                 }
 

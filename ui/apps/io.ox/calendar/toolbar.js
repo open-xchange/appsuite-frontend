@@ -254,18 +254,17 @@ define('io.ox/calendar/toolbar', [
         index: 10300,
         setup: function (app) {
             if (_.device('smartphone')) return;
-            app.getWindow().nodes.body.toggleClass('bottom-toolbar', app.props.get('layout') !== 'list').append(
-                $('<div class="generic-toolbar calendar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
-                    .append(
-                        $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Close folder view'))
-                    )
-                    .on('click', { state: true }, app.toggleFolderView)
-                )
+            var toolbar = $('<div class="generic-toolbar calendar bottom visual-focus">').append(
+                $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view')).append(
+                    $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Close folder view'))
+                ).on('click', { state: true }, app.toggleFolderView)
             );
+            app.getWindow().nodes.body.toggleClass('bottom-toolbar', app.props.get('layout') !== 'list').append(toolbar);
+            toolbar.toggle(app.props.get('layout') !== 'list');
 
             app.getWindow().on('change:perspective', function (e, value) {
                 app.getWindow().nodes.body.toggleClass('bottom-toolbar', value !== 'list');
+                toolbar.toggle(value !== 'list');
             });
         }
     });

@@ -269,7 +269,7 @@ define('io.ox/mail/common-extensions', [
                     // see if the user is allowed to modify the flag status - always allows for unified folder
                     if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
                     self.append(
-                        $('<a href="#" role="button" class="flag">')
+                        $('<a href="#" role="button" class="flag io-ox-action-link" data-action="flag">')
                         .append(extensions.flagIcon.call(this))
                         .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
@@ -643,7 +643,7 @@ define('io.ox/mail/common-extensions', [
                     var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
                     if (!showUnreadToggle) return;
                     self.append(
-                        $('<a href="#" role="button" class="unread-toggle">')
+                        $('<a href="#" role="button" class="unread-toggle io-ox-action-link" data-action="unread-toggle">')
                         .append('<i class="fa" aria-hidden="true">')
                         .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)

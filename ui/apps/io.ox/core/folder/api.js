@@ -199,8 +199,8 @@ define('io.ox/core/folder/api', [
         supportsInternalSharing: function () {
             // drive: always enabled
             if (this.is('drive')) return true;
-            // mail: check gab (webmail, PIM, PIM+infostore)
-            if (this.is('mail')) return capabilities.has('gab');
+            // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
+            if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes

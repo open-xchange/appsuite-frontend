@@ -112,6 +112,7 @@ define('io.ox/files/settings/pane', [
 
                     $('<div class="form-group expertmode">').append(
                         $('<div class="row" style="margin: auto">').append(
+                            //.# Used as settings label, User can select a numeric value of seconds. Final "sentence" i.e. "show all images for 5 seconds"
                             util.inlineSelect('autoplayPause', gt('Show all images for'), gt('seconds'), settings, optionsAutoplayPause())
                         )
                     )

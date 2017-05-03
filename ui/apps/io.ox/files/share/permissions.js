@@ -909,7 +909,7 @@ define('io.ox/files/share/permissions', [
             dialog.$el.addClass('share-permissions-dialog');
 
             // add permissions view
-            dialog.$body.append(
+            dialog.$body.addClass(_.browser.IE < 12 ? 'IE11' : '').append(
                 permissionsView.render().$el
             );
 

@@ -195,6 +195,7 @@ define('io.ox/mail/compose/actions/send', [
                     notifications.yell('success', gt('The email has been sent'));
                 }
                 baton.model.dirty(false);
+                baton.model.set('autosavedAsDraft', false);
                 baton.app.quit();
             }
         },

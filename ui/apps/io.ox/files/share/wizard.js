@@ -100,7 +100,7 @@ define('io.ox/files/share/wizard', [
             // copy-to-clipboard button
             group.append(
                 $('<span class="input-group-btn">').append(
-                    button = $('<button class="btn btn-default" type="button" disabled="disabled">')
+                    button = $('<button class="btn btn-default" type="button">')
                     .append($('<i class="fa fa-clipboard clippy">'))
                     .attr({
                         'data-clipboard-target': target,

@@ -1713,12 +1713,25 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.on('mousedown', '.detail-view-header .dropdown-menu a', function (e) {
+                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // listview toolbar
+                nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action,
+                        detail: node.attr('data-value')
                     });
                 });
                 // toolbar actions
@@ -1739,16 +1752,17 @@ define('io.ox/mail/main', [
                         detail: $(e.currentTarget).attr('data-id')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action
@@ -1758,6 +1772,25 @@ define('io.ox/mail/main', [
                         target: 'folder/context-menu',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'drop',
+                        detail: baton.data.length ? 'single' : 'multiple'
                     });
                 });
                 // check for clicks in folder trew

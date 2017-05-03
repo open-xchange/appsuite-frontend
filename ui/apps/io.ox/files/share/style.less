@@ -33,7 +33,7 @@
         .share-permissions-dialog, .get-link-dialog {
             .modal-dialog {
                 max-width: 100%;
-    
+
                 .modal-content {
                     textarea { resize: none; }
                 }
@@ -145,6 +145,10 @@
 
 .modal.share-permissions-dialog {
 
+    .modal-content {
+        min-height: 450px;
+    }
+
     .modal-header {
 
         *zoom: 1;
@@ -171,6 +175,10 @@
     .modal-body {
         padding: 16px 0;
         min-height: 184px;
+
+        &.IE11 {
+            max-height: 184px; /* workaround for IE11 with resizing the contact list */
+        }
     }
 
     .modal-footer {
@@ -194,7 +202,7 @@
                 resize: vertical;
                 height: 96px;
                 min-height: 80px;
-                max-height: ~"calc(50vh - 64px)";
+                max-height: ~"calc(100vh - 410px)";
                 border: none;
                 box-shadow: none;
                 padding-left: 12px;
@@ -203,15 +211,15 @@
 
             &.IE {
                 min-height: 80px;
-                max-height: ~"calc(50vh - 64px)";
+                max-height: ~"calc(100vh - 410px)";
                 min-width: ~"calc(100% + 32px)";
                 max-width: ~"calc(100% + 32px)";
-                
+
                 textarea {
                     height: 100%;
-                    min-height: auto;
+                    min-height: 100%;
                 }
- 
+
                 .resize-polyfill.resize-polyfill-br { cursor: ns-resize; }
             }
         }

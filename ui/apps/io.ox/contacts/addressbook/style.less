@@ -124,6 +124,11 @@
         font-weight: bold;
     }
 
+    .list-view .notification {
+        font-size: 13px;
+        font-weight: 400;
+    }
+
     .selection-summary {
         font-size: 13px;
         padding: 0 0 16px 0;
@@ -132,14 +137,43 @@
             color: #777;
         }
         .addresses {
-            font-weight: bold;
+            padding-left: 0;
             clear: both;
-            .ellipsis();
-        }
-    }
+            max-height: 200px;
+            overflow: auto;
+            outline: 0;
+            display: flex;
+            flex-wrap: wrap;
+            .token {
+                margin: 0 5px 3px 0;
+                padding: 2px 4px;
+                white-space: nowrap;
+                max-width: calc(~"50% - 5px");
 
-    .list-view .notification {
-        font-size: 13px;
-        font-weight: 400;
+                display: flex;
+                align-items: baseline;
+
+                border-radius: 3px;
+                border: 1px solid #d9d9d9;
+                background-color: #ededed;
+                cursor: default;
+
+            }
+            .token-label {
+                .ellipsis();
+                padding-left: 4px;
+                vertical-align: top;
+            }
+            .token-action {
+                margin-left: 5px;
+                padding-right: 4px;
+                color: #000;
+                opacity: 0.2;
+            }
+            &.active .selected {
+                border-color: rgba(82,168,236,.8);
+            }
+
+        }
     }
 }

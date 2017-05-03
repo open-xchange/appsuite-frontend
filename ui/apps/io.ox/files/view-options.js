@@ -247,7 +247,7 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item">').attr('aria-label', gt('Open folder view')).append(
+                $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );

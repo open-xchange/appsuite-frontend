@@ -297,7 +297,7 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" role="checkbox" aria-checked="false">').append(
+                        $('<a href="#" class="select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
@@ -309,6 +309,36 @@ define('io.ox/core/tk/vgrid', [
         if (options.templateOptions) {
             templateOptions = _.extend(templateOptions, options.templateOptions);
         }
+        container.on('keydown', function (e) {
+            switch (e.which) {
+
+                // [Ctrl|Cmd + A] > select all
+                case 65:
+                case 97:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        // Select last element for correct scroll position
+                        self.selection.selectLast();
+                        _.defer(function () {
+                            self.selection.selectAll();
+                            updateSelectAll(self.selection.get());
+                        });
+                    }
+                    break;
+
+                // [Ctrl|Cmd + D] > Deselect all
+                case 68:
+                case 100:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        self.selection.clear();
+                    }
+                    break;
+
+                // no default
+            }
+        });
+
         var template = new Template(templateOptions),
             // label template
             label = new Template({ tempDrawContainer: container }),

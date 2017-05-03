@@ -309,32 +309,28 @@ define('io.ox/participants/detail', [
                     // add summary
                     var sumData = util.getConfirmationSummary(confirmations);
                     if (options.summary && sumData.count > 3) {
-                        var sum = $('<ul class="summary list-inline pull-right">').attr('aria-label', gt('Summary'));
-                        _.each(sumData, function (res) {
-                            if (res.count <= 0) return;
+                        participants.find('legend').first().append(
+                            $('<ul class="summary list-inline pull-right">').attr('aria-label', gt('Summary')).append(
+                                _.map(sumData, function (res) {
+                                    if (!_.isNumber(res.count) || res.count <= 0) return;
 
-                            sum.append(
-                                $('<li>').append(
-                                    $('<a href="#" role="button" aria-pressed="false">')
-                                        .attr('aria-label', res.title + ' ' + res.count)
-                                        .text(res.count)
-                                        .prepend(
+                                    return $('<li>').append(
+                                        $('<a href="#" role="button" aria-pressed="false">').text(res.count).attr('aria-label', res.title + ' ' + res.count).prepend(
                                             $('<span class="status">').addClass(res.css).append(res.icon)
                                         )
                                         .on('click', { participants: participants, res: res }, filterParticipants)
-                                )
-                            );
-                        });
-                        participants.find('legend').first().append(sum);
+                                    );
+                                })
+                            )
+                        );
                     }
 
                     //remove temporary changes
                     if (changedBaton) delete baton.data;
 
                     // draw action links if extension point is provided
-                    if (options.inlineLinks) {
-                        ext.point(options.inlineLinks).invoke('draw', participants, baton);
-                    }
+                    if (options.inlineLinks) ext.point(options.inlineLinks).invoke('draw', participants, baton);
+
                     // finish
                     participants.idle();
                 });

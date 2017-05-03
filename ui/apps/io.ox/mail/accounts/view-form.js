@@ -668,7 +668,7 @@ define.async('io.ox/mail/accounts/view-form', [
             }
 
             // don't show folder settings if this is a new account or we are in a DSC environment
-            if (model.get('id') !== undefined && !settings.get('dsc/enabled')) {
+            if (model.get('id') !== undefined && (model.get('id') === 0 || !settings.get('dsc/enabled'))) {
                 this.append(serverSettingsFolder);
             }
         }

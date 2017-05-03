@@ -224,9 +224,7 @@ define('io.ox/find/extensions-facets', [
                 var helpView = new HelpView({ href: target });
                 if (helpView.$el.hasClass('hidden')) return;
                 this.append($('<li class="pull-right">').append(
-                    $('<a href="#">').append(
-                        helpView.render().$el
-                    )
+                    helpView.render().$el
                 ));
             };
         })()
