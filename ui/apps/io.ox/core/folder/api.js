@@ -522,7 +522,11 @@ define('io.ox/core/folder/api', [
     VirtualFolder.prototype.list = function () {
         var id = this.id;
         return this.getter().done(function (array) {
-            _(array).each(injectIndex.bind(null, id));
+            _(array).chain().map(function (folder) {
+                // use current data of virtual folders (for example, unread count could be updated in the meantime)
+                if (isVirtual(folder.id)) return _.extend(folder, pool.getModel(folder.id).toJSON());
+                return folder;
+            }).each(injectIndex.bind(null, id)).value();
             pool.addCollection(getCollectionId(id), array);
             pool.getModel(id).set('subscr_subflds', array.length > 0);
         });

@@ -1886,6 +1886,25 @@ define('io.ox/mail/api', [
         return !accountAPI.is('spam|trash', data.folder_id);
     }
 
+    api.allMessagesFolder = settings.get('allMessagesFolder', 'default0/virtual/all');
+
+    api.getAllUnseenMessages = function () {
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'all',
+                folder: api.allMessagesFolder,
+                // need original_id and original_folder_id
+                columns: '600,654,655',
+                sort: '610',
+                order: 'desc',
+                unseen: true,
+                deleted: false,
+                timezone: 'utc'
+            }
+        });
+    };
+
     // collection loader
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
@@ -1894,11 +1913,13 @@ define('io.ox/mail/api', [
             if (params.folder === 'virtual/all-unseen') {
                 return {
                     action: 'all',
-                    folder: settings.get('allMessagesFolder', 'default0/virtual/all'),
+                    folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
-                    sort: '651',
-                    order: 'asc',
+                    sort: '610',
+                    order: 'desc',
+                    unseen: true,
+                    deleted: false,
                     timezone: 'utc'
                 };
             }
@@ -1935,7 +1956,7 @@ define('io.ox/mail/api', [
         },
         httpGet: function (module, params) {
             // apply static limit for all-unseen
-            var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
+            var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
                 // drop all seen messages for all-unseen

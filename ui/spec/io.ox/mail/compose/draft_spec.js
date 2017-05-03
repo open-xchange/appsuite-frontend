@@ -16,7 +16,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
     describe('Mail Compose', function () {
         describe('draft mails', function () {
 
-            var app, pictureHalo, snippetsGetAll, getValidAddress;
+            var app, pictureHalo, snippetsGetAll, getValidAddress, throttle;
 
             var editors = {
                     text: 'io.ox/core/tk/text-editor',
@@ -44,6 +44,8 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
                     pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
                     getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                    //disable throttling (throttled event listeners might cause random tests to fail)
+                    throttle = sinon.stub(_, 'throttle', function (f) { return f; });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
                 }).then(function () {
@@ -65,6 +67,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 snippetsGetAll.restore();
                 pictureHalo.restore();
                 getValidAddress.restore();
+                throttle.restore();
                 return app.quit();
             });
 

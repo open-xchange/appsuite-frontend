@@ -463,7 +463,7 @@ define('io.ox/mail/main', [
             collection.CUSTOM_PAGE_SIZE = 250;
 
             // register load listener which triggers complete
-            collection.on('load', function () {
+            collection.on('load reload', function () {
                 this.complete = true;
                 this.trigger('complete');
             });
@@ -473,6 +473,32 @@ define('io.ox/mail/main', [
             api.on('all-unseen', function (e, count) {
                 virtualAllSeen.set('unread', count);
             });
+
+            function loadAllUnseenMessages() {
+                api.getAllUnseenMessages().done(function success(list) {
+                    var folders = _(list).chain().filter(function (data) {
+                        // rewrite folder_id and id
+                        data.id = data.original_id;
+                        data.folder_id = data.original_folder_id;
+                        // drop messages from spam and trash
+                        return !accountAPI.is('spam|trash', data.folder_id);
+                    }).pluck('folder_id').uniq().value();
+                    folderAPI.multiple(folders);
+                });
+            }
+
+            function initAllMessagesFolder() {
+                loadAllUnseenMessages();
+                ox.on('refresh^', loadAllUnseenMessages);
+            }
+
+            if (settings.get('features/unseenFolder')) {
+                if (settings.get('unseenMessagesFolder')) {
+                    initAllMessagesFolder();
+                } else {
+                    settings.once('change:features/unseenFolder', initAllMessagesFolder);
+                }
+            }
 
             // make virtual folder clickable
             app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-unseen');

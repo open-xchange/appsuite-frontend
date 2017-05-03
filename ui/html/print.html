@@ -329,9 +329,17 @@
         </script>
         <!-- the only magic we need here; asks UI to use the upper template -->
         <script>
-            var opener = (window.opener || window.parent),
-                cb = opener[location.search.substr(1)];
-            if (cb) cb(document);
+            (function () {
+                var name = location.search.substr(1), cb;
+                if (!name) return;
+                cb = (window.opener && window.opener[name]) ? window.opener[name] : null;
+
+                if (!cb) {
+                    cb = (window.parent && window.parent[name]) ? window.parent[name] : null;
+                }
+
+                if (cb) cb(document);
+            }());
         </script>
     </body>
 </html>
