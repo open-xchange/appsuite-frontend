@@ -33,6 +33,7 @@ define('io.ox/calendar/month/view', [
         clicks:         0,      // click counter
         pane:           $(),
         type:           '',
+        limit:          1000,
 
         events: {
             'click .appointment':      'onClickAppointment',
@@ -63,7 +64,7 @@ define('io.ox/calendar/month/view', [
                     self.pane.find('.appointment')
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
-                        .addClass(_.device('smartphone') ? '' : 'opac');
+                        .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');

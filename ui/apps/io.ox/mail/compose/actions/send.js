@@ -151,6 +151,15 @@ define('io.ox/mail/compose/actions/send', [
             }
         },
         {
+            id: 'disable-manual-close',
+            index: 900,
+            perform: function (baton) {
+                var app = ox.ui.apps.get(baton.app.id);
+                baton.close = $(app.get('topbarNode').find('.closelink')).hide();
+                baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
+            }
+        },
+        {
             id: 'send',
             index: 1000,
             perform: function (baton) {
@@ -165,7 +174,13 @@ define('io.ox/mail/compose/actions/send', [
                     var win = baton.app.getWindow(),
                     // check if abort is triggered by the ui
                         text = baton.error === 'abort' ? gt('The sending of the message has been canceled.') : baton.error;
-                    if (win) { win.idle().show(); }
+                    if (win) {
+                        // reenable the close button(s) in toolbar
+                        if (baton.close) baton.close.show();
+                        if (baton.launcherClose) baton.launcherClose.show();
+
+                        win.idle().show();
+                    }
                     baton.app.launch();
                     // TODO: check if backend just says "A severe error occurred"
                     notifications.yell('error', text);

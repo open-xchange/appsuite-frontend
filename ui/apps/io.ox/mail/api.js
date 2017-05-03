@@ -807,6 +807,7 @@ define('io.ox/mail/api', [
             appendColumns: false
         })
         .done(function () {
+            api.trigger('after:all-seen', folder);
             folderAPI.reload(folder);
         });
     };

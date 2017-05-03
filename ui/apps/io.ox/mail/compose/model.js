@@ -339,6 +339,11 @@ define.async('io.ox/mail/compose/model', [
         }),
         attachFiles: function attachFiles(files) {
             this.get('attachments').add(files);
+
+        },
+        keepDraftOnClose: function () {
+            if (settings.get('features/deleteDraftOnClose') !== true) return false;
+            return this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;
         }
     });
 
