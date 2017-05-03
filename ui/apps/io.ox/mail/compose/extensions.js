@@ -139,7 +139,7 @@ define('io.ox/mail/compose/extensions', [
 
                         function redraw() {
                             var from = _(baton.model.get('from')).first();
-                            dropdown.$('ul').empty();
+                            dropdown.$ul.empty();
                             drawOptions();
                             dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             // re-focus element otherwise the bootstap a11y closes the drop-down
