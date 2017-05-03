@@ -22,8 +22,6 @@ define('io.ox/backbone/mini-views/upsell', [
 
         tagName: 'div',
 
-        className: 'io-ox-upsell-link',
-
         events: {
             'click a': 'onClick'
         },
@@ -45,7 +43,13 @@ define('io.ox/backbone/mini-views/upsell', [
             }, opt, settings.get('features/upsell/' + opt.id), settings.get('features/upsell/' + opt.id + '/i18n/' + ox.language));
 
             // A11y: Links in foldertree need to be nested in li with role presentation
-            if (/^folderview\//.test(opt.id)) this.setElement('<li class="links" role="presentation">');
+            if (/^folderview\//.test(opt.id)) {
+                this.setElement('<li role="presentation">');
+                this.$el.addClass(this.className);
+            }
+
+            // ensure io-ox-upsell-link class
+            this.$el.addClass('io-ox-upsell-link');
 
             this.customize = this.opt.customize;
             this.icon = this.opt.icon;
