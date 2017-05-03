@@ -49,7 +49,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         update: function () {
             if (/customflag_/g.test(this.id) || /removeflags_/g.test(this.id)) {
                 this.$el.val(this.model.get('flags')[0].replace(/^\$+/, ''));
-            } else if (/move_/g.test(this.id)) {
+            } else if (/move_/g.test(this.id) || /copy_/g.test(this.id)) {
                 prepareFolderForDisplay(this.model.get('into'), this.$el);
             } else {
                 this.$el.val($.trim(this.model.get(this.name)));
