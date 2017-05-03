@@ -68,7 +68,7 @@ Header always set X-Frame-Options SAMEORIGIN
 
 RewriteEngine On
 
-RewriteCond %{HTTP_USER_AGENT} "MSIE [6-8]" [NC]
+RewriteCond %{HTTP_USER_AGENT} "MSIE [6-9]" [NC]
 RewriteRule ^(/?|signin)$ /appsuite/unsupported.html [R=301,L]
 
 RewriteRule v=[^\/]+/(.+) $1 [L]
