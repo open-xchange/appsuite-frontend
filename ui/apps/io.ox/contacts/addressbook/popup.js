@@ -395,6 +395,7 @@ define('io.ox/contacts/addressbook/popup', [
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
+            help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
             useGABOnly: useGABOnly
         })

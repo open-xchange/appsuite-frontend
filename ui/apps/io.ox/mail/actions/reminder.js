@@ -31,7 +31,7 @@ define('io.ox/mail/actions/reminder', [
                 dateSelector,
                 endDate = new Date(),
                 popup = new dialogs.ModalDialog({
-                    help: 'ox.appsuite.user.sect.email.manage.reminder.html#ox.appsuite.user.concept.email.reminder'
+                    help: 'ox.appsuite.user.sect.email.manage.reminder.html'
                 })
                     .addPrimaryButton('create', gt('Create reminder'), 'create')
                     .addButton('cancel', gt('Cancel'), 'cancel');

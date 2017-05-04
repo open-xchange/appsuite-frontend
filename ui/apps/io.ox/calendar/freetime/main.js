@@ -277,6 +277,10 @@ define('io.ox/calendar/freetime/main', [
             return $.when();
         };
 
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.calendar.add.scheduling.html';
+        };
+
         return app;
     }
 

@@ -70,7 +70,7 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
                 'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
                 'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
-                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.manage.mailfilter.html',
+                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.mailfilter.html',
                 'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.signatures',
                 'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
                 'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
