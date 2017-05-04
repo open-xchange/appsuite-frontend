@@ -121,11 +121,8 @@ define('io.ox/settings/accounts/views', [
                         async: true,
                         title: gt('Delete account')
                     })
-                    .extend({
-                        id: 'default',
-                        draw: function () {
-                            this.$body.append(gt('Do you really want to delete this account?'));
-                        }
+                    .build(function () {
+                        this.$body.append(gt('Do you really want to delete this account?'));
                     })
                     .addCancelButton()
                     .addButton({ action: 'delete', label: gt('Delete account') })
