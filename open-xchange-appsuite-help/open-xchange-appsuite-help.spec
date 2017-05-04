@@ -13,7 +13,7 @@ BuildRequires:  npm6
 BuildRequires:  nodejs >= 0.10.0
 %endif
 Version:        @OXVERSION@
-%define         ox_release 1
+%define         ox_release 2
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -232,6 +232,8 @@ done
 %{docroot}/appsuite/help/l10n/zh_TW
 
 %changelog
+* Thu May 04 2017 Marcus Klein <marcus.klein@open-xchange.com>
+Second preview of 7.8.4 release
 * Mon Apr 03 2017 Marcus Klein <marcus.klein@open-xchange.com>
 First preview of 7.8.4 release
 * Fri Dec 02 2016 Marcus Klein <marcus.klein@open-xchange.com>
@@ -289,7 +291,7 @@ prepare for 7.8.1 release
 * Tue Oct 06 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Sixth candidate for 7.8.0 release
 * Wed Sep 30 2015 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2015-10-12 (2784)
+Build for patch  2015-10-12 (2784)
 * Fri Sep 25 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Fith candidate for 7.8.0 release
 * Thu Sep 24 2015 Marcus Klein <marcus.klein@open-xchange.com>
