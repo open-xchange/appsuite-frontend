@@ -72,8 +72,13 @@ define('io.ox/calendar/actions', [
         capabilities: 'webmail',
         action: function (baton) {
             util.resolveParticipants(baton.data).done(function (recipients) {
+                var hash = {};
                 recipients = _(recipients)
                     .chain()
+                    .filter(function (rec) {
+                        // don't add duplicates
+                        return rec.mail in hash ? false : (hash[rec.mail] = true);
+                    })
                     .filter(function (rec) {
                         // don't add myself
                         // don't add if mail address is missing (yep, edge-case)
