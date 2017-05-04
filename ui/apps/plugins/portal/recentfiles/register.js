@@ -101,7 +101,7 @@ define('plugins/portal/recentfiles/register', [
 
                 content.append(
                     _(data).map(function (file) {
-                        var filename = String(file.filename || file.title || '');
+                        var filename = String(file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title || '');
                         // create nice filename for long names
                         if (filename.length > 20) {
                             // remove leading & tailing date stufff
