@@ -337,7 +337,7 @@ define('io.ox/mail/settings/pane', [
                                     new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
                                 )
                             ),
-                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look like.')).css(getCSS()))
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look.')).css(getCSS()))
                         )
                     )]
                 ),
