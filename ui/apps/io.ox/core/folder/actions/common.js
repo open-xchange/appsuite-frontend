@@ -76,6 +76,12 @@ define('io.ox/core/folder/actions/common', [
                                 clear(id, folder.module);
                             }
                         })
+                        .on('show', function () {
+                            var self = this;
+                            _.defer(function () {
+                                self.getFooter().find('.btn-primary').focus();
+                            });
+                        })
                         .show();
                 });
             };
