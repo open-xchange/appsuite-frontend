@@ -64,10 +64,6 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 if (app.model) {
                     app.model.dirty(false);
                 }
-                if (app.view) {
-                    //make sure, no autosave timers running
-                    app.view.stopAutoSave();
-                }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
                 getValidAddress.restore();
@@ -97,6 +93,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                             data: {}
                         }));
                     });
+                    app.view.stopAutoSave();
                     clock = sinon.useFakeTimers(new Date().getTime());
                     //initialize timer (again) _after_ setting up fake timer
                     app.view.initAutoSaveAsDraft();
@@ -118,6 +115,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                             data: {}
                         }));
                     });
+                    app.view.stopAutoSave();
                     clock = sinon.useFakeTimers(new Date().getTime());
                     //initialize timer (again) _after_ setting up fake timer
                     app.view.initAutoSaveAsDraft();
