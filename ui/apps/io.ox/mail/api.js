@@ -520,12 +520,16 @@ define('io.ox/mail/api', [
                 // backend tells us the if the archive folder is new and its id
                 if (_(_(data).pluck('created')).contains(true)) {
                     // update account data
-                    accountAPI.reload().done(function () {
-                        // refresh all folders because the archive folder might be new
-                        folderAPI.refresh();
-                        // reload mail views
-                        api.trigger('refresh.all');
-                    });
+                    accountAPI.reload()
+                        .then(function () {
+                            // reload  settings for virtual folder 'virtual/standard' first (bug 52608)
+                            return settings.reload();
+                        }).done(function () {
+                            // refresh all folders because the archive folder might be new
+                            folderAPI.refresh();
+                            // reload mail views
+                            api.trigger('refresh.all');
+                        });
                 } else {
                     folderAPI.reload(_(data).pluck('id'));
                 }
