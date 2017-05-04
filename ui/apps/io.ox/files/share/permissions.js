@@ -823,7 +823,7 @@ define('io.ox/files/share/permissions', [
             var dialog = new ModalDialog({
                 async: true,
                 focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html',
                 title: title,
                 smartphoneInputFocus: true,
                 width: 800

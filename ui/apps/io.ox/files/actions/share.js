@@ -49,6 +49,7 @@ define('io.ox/files/actions/share', [
             async: true,
             focus: '.link-group>input[type=text]',
             title: header,
+            help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
             smartphoneInputFocus: true,
             width: 600
         });

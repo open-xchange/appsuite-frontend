@@ -60,7 +60,7 @@ define('io.ox/core/folder/actions/add', [
             enter: 'add',
             focus: 'input[name="name"]',
             previousFocus: $(document.activeElement),
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html',
             point: 'io.ox/core/folder/add-popup',
             width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })

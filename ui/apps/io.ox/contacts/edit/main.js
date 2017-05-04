@@ -298,7 +298,7 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.create';
+            return 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({

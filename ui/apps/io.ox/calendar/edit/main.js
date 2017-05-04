@@ -338,7 +338,7 @@ define('io.ox/calendar/edit/main', [
             },
 
             getContextualHelp: function () {
-                return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create';
+                return 'ox.appsuite.user.sect.calendar.gui.create.html';
             }
         });
 

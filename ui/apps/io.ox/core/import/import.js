@@ -170,7 +170,7 @@ define('io.ox/core/import/import', [
             folderAPI.get(id).done(function () {
 
                 new dialogs.ModalDialog({
-                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html#ox.appsuite.user.sect.datainterchange.import.contactscsv'
+                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html'
                 })
                 .build(function () {
 

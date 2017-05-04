@@ -80,7 +80,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                 return new dialogs.ModalDialog({
                     async: true,
-                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
+                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
                 })
                     .build(function () {
                         if (!series && o.recurrence_position) {

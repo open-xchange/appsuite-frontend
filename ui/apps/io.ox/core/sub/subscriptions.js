@@ -106,7 +106,7 @@ define('io.ox/core/sub/subscriptions', [
                 var self = this,
                     popup = new dialogs.ModalDialog({
                         async: true,
-                        help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html',
+                        help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
                         width: 570
                     }),
                     title = gt('Subscribe');
