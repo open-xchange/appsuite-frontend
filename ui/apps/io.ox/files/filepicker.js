@@ -454,7 +454,7 @@ define('io.ox/files/filepicker', [
                     var paneItems = files.map(function (file) {         //   in order to show other developers what
                                                                         //   direction you are heading to.
                         var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
-                        var title = (file.filename || file.title),
+                        var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
                                     .attr({ 'title': title, 'for': guid })
