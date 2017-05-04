@@ -45,7 +45,7 @@ define('plugins/portal/recentfiles/register', [
                     // don't show hidden files if disabled in settings
                     if (filesSettings.get('showHidden') === false) {
                         files = _(files).filter(function (file) {
-                            var title = (file ? file.title : '');
+                            var title = (file ? file['com.openexchange.file.sanitizedFilename'] : '');
                             return title.indexOf('.') !== 0;
                         });
                     }

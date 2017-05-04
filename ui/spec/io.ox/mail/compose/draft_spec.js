@@ -64,6 +64,10 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 if (app.model) {
                     app.model.dirty(false);
                 }
+                if (app.view) {
+                    //make sure, no autosave timers running
+                    app.view.stopAutoSave();
+                }
                 snippetsGetAll.restore();
                 pictureHalo.restore();
                 getValidAddress.restore();
