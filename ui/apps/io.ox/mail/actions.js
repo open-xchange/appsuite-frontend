@@ -80,7 +80,6 @@ define('io.ox/mail/actions', [
                 link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-                debugger;
                 view.$('section.attachments').after(
                     new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
                     .on('send', function (cid) {
