@@ -1233,13 +1233,16 @@ define('io.ox/calendar/week/view', [
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
+
+                        appointmentStartDate = moment.utc(model.get('start_date')).local(true);
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
+
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(appointmentStartDate.utc(), 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max((moment.utc(model.get('end_date')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
