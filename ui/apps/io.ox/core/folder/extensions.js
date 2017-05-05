@@ -436,7 +436,7 @@ define('io.ox/core/folder/extensions', [
         synchronizeAccount: function () {
             this.append(new UpsellView({
                 id: 'folderview/mail',
-                // requires: 'active_sync',
+                requires: 'active_sync',
                 title: gt('Synchronize with your tablet or smartphone')
             }).render().$el);
         },
