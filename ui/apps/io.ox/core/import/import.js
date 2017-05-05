@@ -215,18 +215,7 @@ define('io.ox/core/import/import', [
                         if (_.isArray(data)) {
                             data = _(data)
                             .chain()
-                            .map(function (item) {
-                                if (!item) return false;
-                                var message = item.code === 'CON-0600' ?
-                                    // append first value which caused conversion error (csv import)
-                                    item.error + '\n' + item.error_stack[0] :
-                                    // otherwise use error description (see bug 47378); fallback is still error
-                                    item.error_desc || item.error;
-                                return item.line_number ?
-                                    //#. %1$d is line number, %2$s is an error message
-                                    gt('Line %1$d: %2$s', item.line_number, message) :
-                                    message;
-                            })
+                            .map(function (item) { return (item || {}).error; })
                             .compact()
                             .value();
                             message = data.length ? data.join('\n\n') : getDefautMessage(module);
