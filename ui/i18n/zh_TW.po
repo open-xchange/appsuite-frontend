@@ -9309,7 +9309,9 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "這是標準資料夾，無法更名。"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
+#, fuzzy
+#| msgid "This is how your message text will look like."
+msgid "This is how your message text will look."
 msgstr ""
 "您的訊息文字將長得像這個樣子。\n"
 "This is how your message text will look like."

@@ -9553,7 +9553,9 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Dit is een standaard-map, deze kan niet hernoemd worden."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
+#, fuzzy
+#| msgid "This is how your message text will look like."
+msgid "This is how your message text will look."
 msgstr "Dit is hoe de tekst van uw bericht er uit zal zien."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain

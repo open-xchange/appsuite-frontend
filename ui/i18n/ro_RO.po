@@ -9567,7 +9567,9 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Acesta este un dosar standard, care nu poate fi redenumit."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
+#, fuzzy
+#| msgid "This is how your message text will look like."
+msgid "This is how your message text will look."
 msgstr "Așa va arăta mesajul dumneavoastră text."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
