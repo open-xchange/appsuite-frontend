@@ -205,13 +205,14 @@ define('io.ox/mail/settings/pane', [
                 util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
                 // fixed width
                 util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
-                // beautify plain text
-                util.checkbox('beautifyPlainText',
-                    //#. prettify or beautify
-                    //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-                    gt('Prettify plain text mails'),
-                    settings
-                ),
+                // // beautify plain text
+                // hidden until bug 52294 gets fixed
+                // util.checkbox('beautifyPlainText',
+                //     //#. prettify or beautify
+                //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                //     gt('Prettify plain text mails'),
+                //     settings
+                // ),
                 // read receipts
                 util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings)
             ));
