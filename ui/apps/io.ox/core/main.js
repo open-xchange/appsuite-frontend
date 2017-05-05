@@ -1932,6 +1932,9 @@ define('io.ox/core/main', [
             case 'MSG-1031':
             case 'MSG-0114':
             case 'OAUTH-0013':
+            case 'OAUTH-0042':
+            case 'OAUTH-0043':
+            case 'OAUTH-0044':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
