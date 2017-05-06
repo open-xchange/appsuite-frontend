@@ -5087,11 +5087,6 @@ msgstr "Mi piace"
 msgid "Liked comment"
 msgstr "Commento gradito"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Riga %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Collegamento"
@@ -13982,6 +13977,9 @@ msgstr "aaaa"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "\"Mi piace\" per un collegamento: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Riga %1$d: %2$s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "Interlinea"

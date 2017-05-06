@@ -5084,12 +5084,6 @@ msgstr ""
 msgid "Liked comment"
 msgstr ""
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-#, fuzzy
-msgid "Line %1$d: %2$s"
-msgstr "%1$d %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Линк"
@@ -11391,6 +11385,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Leave the presentation"
 #~ msgstr "Започни презентация"
+
+#, fuzzy
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "%1$d %2$s"
 
 #~ msgid "Mail Details"
 #~ msgstr "Мейл Детайли"

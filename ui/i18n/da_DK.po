@@ -5054,11 +5054,6 @@ msgstr "Synes om"
 msgid "Liked comment"
 msgstr "Syntes om kommentar"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Linje %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Link"
@@ -12438,6 +12433,9 @@ msgstr "åååå"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Syntes om et link: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Linje %1$d: %2$s"
 
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"

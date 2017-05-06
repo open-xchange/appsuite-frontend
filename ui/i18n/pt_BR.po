@@ -5080,11 +5080,6 @@ msgstr "Curtir"
 msgid "Liked comment"
 msgstr "Comentário curtido"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Linha %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Link"
@@ -13909,6 +13904,9 @@ msgstr "aaaa"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Curtiu um link: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Linha %1$d: %2$s"
 
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"

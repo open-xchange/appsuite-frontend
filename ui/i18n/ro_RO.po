@@ -5121,11 +5121,6 @@ msgstr "Îmi place"
 msgid "Liked comment"
 msgstr "Comentariu apreciat"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Linia %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Legătură"
@@ -14448,6 +14443,9 @@ msgstr "aaaa"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Legătură apreciată: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Linia %1$d: %2$s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "Spațiere linii"

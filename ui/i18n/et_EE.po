@@ -5046,11 +5046,6 @@ msgstr "Märgi meeldivaks"
 msgid "Liked comment"
 msgstr "Meeldivaks märgitud kommentaar"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Rida %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Link"
@@ -11547,6 +11542,9 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Kui vajutate alljärgnevale nupule, seadistame teie seadme automaatselt. "
 #~ "Nii lihtne see ongi!"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Rida %1$d: %2$s"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-kiri salvestatud mustandina"

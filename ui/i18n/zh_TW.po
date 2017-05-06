@@ -4985,11 +4985,6 @@ msgstr "讚"
 msgid "Liked comment"
 msgstr "已覺得留言讚"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "行 %1$s: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "鏈結"
@@ -13566,6 +13561,9 @@ msgstr "年"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "對連結說讚: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "行 %1$s: %2$s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "行距"

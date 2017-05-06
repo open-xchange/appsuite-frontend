@@ -5075,11 +5075,6 @@ msgstr "Kedvelem"
 msgid "Liked comment"
 msgstr "Kedvelt megjegyzés"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "%1$d sor: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Hivatkozás"
@@ -11792,6 +11787,9 @@ msgstr "yyyy"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Kedvelt egy hivatkozást: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "%1$d sor: %2$s"
 
 #~ msgid "Loop once only"
 #~ msgstr "Egyszeri lejátszás"

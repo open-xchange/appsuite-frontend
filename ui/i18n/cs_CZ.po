@@ -5089,11 +5089,6 @@ msgstr "To se mi líbí"
 msgid "Liked comment"
 msgstr "Komentář se vám líbí"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Řádek %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Odkaz"
@@ -16222,6 +16217,9 @@ msgstr "rrrr"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Líbil se vám odkaz: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Řádek %1$d: %2$s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "Řádkování"

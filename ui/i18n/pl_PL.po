@@ -5126,11 +5126,6 @@ msgstr "Polub"
 msgid "Liked comment"
 msgstr "Polubiony komentarz"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Wiersz %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Połącz"
@@ -12593,6 +12588,9 @@ msgstr "rrrr"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Polubiono łącze: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Wiersz %1$d: %2$s"
 
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"

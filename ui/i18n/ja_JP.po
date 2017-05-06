@@ -5009,11 +5009,6 @@ msgstr "いいね！"
 msgid "Liked comment"
 msgstr "いいね！を付けられたコメント"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "行 %1$d：%2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "リンク"
@@ -15087,6 +15082,9 @@ msgstr "yyyy"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "次のリンクは「いいね！」に登録されています: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "行 %1$d：%2$s"
 
 #~ msgid "Line Spacing"
 #~ msgstr "行間"

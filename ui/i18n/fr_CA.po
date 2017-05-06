@@ -5121,11 +5121,6 @@ msgstr "J'aime"
 msgid "Liked comment"
 msgstr "Commentaire passé en « J'aime ça »"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Ligne %1$d : %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Lien"
@@ -12886,6 +12881,9 @@ msgstr "aaaa"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Lien passé en « J'aime ça » : %1$s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Ligne %1$d : %2$s"
 
 #, fuzzy
 #~ msgid "Line wrap when sending text mails after"

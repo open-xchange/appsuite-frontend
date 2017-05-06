@@ -5045,11 +5045,6 @@ msgstr "Tykkää"
 msgid "Liked comment"
 msgstr "Tykätty kommentti"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Rivi %1$d: %2$s"
-
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
 msgstr "Linkki"
@@ -12298,6 +12293,9 @@ msgstr "vvvv"
 
 #~ msgid "Liked a link: %s"
 #~ msgstr "Tykkäsit linkistä: %s"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Rivi %1$d: %2$s"
 
 #~ msgid "Line wrap when sending text mails after "
 #~ msgstr "Rivitä tekstimuotoiset postit "
