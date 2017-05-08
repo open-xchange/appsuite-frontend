@@ -158,9 +158,6 @@
     .picker-pc-container {
         position: relative;
         height: 350px;
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            .folder-tree .folder-node .folder-arrow { position: static; }
-        }
 
         .io-ox-fileselection {
              li.file {
@@ -280,11 +277,6 @@
             }
         }
 
-        @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            > div,
-            > ul { width: 100%; }
-        }
-
         .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
@@ -339,6 +331,17 @@
     }
 
     .modal-footer { margin-top: 0; }
+}
+
+.smartphone .add-infostore-file {
+    .picker-pc-container {
+        .folder-tree .folder-node .folder-arrow { position: static; }
+    }
+
+    .modal-body {
+        > div,
+        > ul { width: 100%; }
+    }
 }
 
 /* ios momentum scrolling, breakes mobile chrome if applied to all devices */

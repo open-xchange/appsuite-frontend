@@ -558,6 +558,12 @@ define('io.ox/files/filepicker', [
             this.getFooter().find('button').first().focus();
         }
 
+        function onResize() {
+            var height = $(window).height() - 200;
+            pcContainer.css('height', height)
+                .find('.modal-body').css('height', height);
+        }
+
         picker({
 
             addClass: 'zero-padding add-infostore-file',
@@ -616,6 +622,11 @@ define('io.ox/files/filepicker', [
                     pcContainer.css('height', containerHeight + 'px');
                     pcContainer.append(navbar, toolbar);
                     pcContainer.insertAfter('.clearfix', container);
+
+                    $(window).on('resize', onResize);
+                    dialog.on('close', function () {
+                        $(window).off('resize', onResize);
+                    });
 
                     // always change pages on click, do not wait for folder-change
                     dialog.getBody().on('click', 'li .folder.selectable.open', function (e) {
