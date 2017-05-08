@@ -130,13 +130,29 @@ define('io.ox/calendar/month/perspective', [
             };
 
             if (obj.recurrence_type > 0) {
-                util.getRecurrenceChangeDialog()
+                util.getRecurrenceEditDialog()
                     .show()
                     .done(function (action) {
-                        if (action === 'appointment') {
-                            apiUpdate(api.removeRecurrenceInformation(obj));
-                        } else {
-                            self.update();
+                        switch (action) {
+                            case 'series':
+                                // get recurrence master object
+                                if (obj.old_start_date || obj.old_end_date) {
+                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
+                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
+                                        // calculate new dates if old dates are available
+                                        data.start_date += (obj.start_date - obj.old_start_date);
+                                        data.end_date += (obj.end_date - obj.old_end_date);
+                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
+                                        apiUpdate(data);
+                                    });
+                                }
+                                break;
+                            case 'appointment':
+                                apiUpdate(api.removeRecurrenceInformation(obj));
+                                break;
+                            default:
+                                self.update();
+                                return;
                         }
                     });
             } else {

@@ -618,6 +618,44 @@ define('io.ox/calendar/util', [
             if (data.recurrence_type > 0 && (data.until || data.occurrences)) str += ' ' + that.getRecurrenceEnd(data);
             return str;
         },
+        // basically the same as in recurrence-view, just without model
+        // used to fix reccurence information when Ïging
+        updateRecurrenceDate: function (appointment, old_start_date) {
+            if (!appointment || !old_start_date) return;
+
+            var type = appointment.recurrence_type;
+            if (type === 0) return;
+            var oldDate = moment(old_start_date),
+                date = moment(appointment.start_date);
+
+            // if weekly and only single day selected
+            if (type === 2 && appointment.days === 1 << oldDate.day()) {
+                appointment.days = 1 << date.day();
+            }
+
+            // if monthly or yeary, adjust date/day of week
+            if (type === 3 || type === 4) {
+                if (_(appointment).has('days')) {
+                    // repeat by weekday
+                    appointment.day_in_month = ((date.date() - 1) / 7 >> 0) + 1;
+                    appointment.days = 1 << date.day();
+                } else {
+                    // repeat by date
+                    appointment.day_in_month = date.date();
+                }
+            }
+
+            // if yearly, adjust month
+            if (type === 4) {
+                appointment.month = date.month();
+            }
+
+            // change until
+            if (appointment.until && moment(appointment.until).isBefore(date)) {
+                appointment.until = date.add(1, ['d', 'w', 'M', 'y'][appointment.recurrence_type - 1]).valueOf();
+            }
+            return appointment;
+        },
 
         getNote: function (data) {
             var text = $.trim(data.note || '')

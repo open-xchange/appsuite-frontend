@@ -307,6 +307,11 @@ define('io.ox/calendar/month/view', [
                         start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }).valueOf(),
                         end = start + app.end_date - app.start_date;
                     if (app.start_date !== start || app.end_date !== end) {
+                        // save for update calculations
+                        if (app.recurrence_type > 0) {
+                            app.old_start_date = app.start_date;
+                            app.old_end_date = app.end_date;
+                        }
                         app.start_date = start;
                         app.end_date = end;
                         ui.draggable.busy().draggable('disable');

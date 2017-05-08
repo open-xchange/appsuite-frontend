@@ -170,6 +170,7 @@ define('io.ox/calendar/week/perspective', [
                                         // calculate new dates if old dates are available
                                         data.start_date += (obj.start_date - obj.old_start_date);
                                         data.end_date += (obj.end_date - obj.old_end_date);
+                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
                                         apiUpdate(data);
                                     });
                                 }
