@@ -831,7 +831,8 @@ define('io.ox/files/share/permissions', [
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
-                    cascadePermissions: true,
+                    // default is true for nested and false for flat folder tree, #53439
+                    cascadePermissions: nested,
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
