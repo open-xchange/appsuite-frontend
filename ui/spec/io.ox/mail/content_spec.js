@@ -54,7 +54,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
             it('transforms mail addresses', function () {
                 var html = process('Lorem <ipsum@dolor.amet>');
-                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet" rel="noopener" target="_blank">ipsum@dolor.amet</a>&gt;');
+                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&gt;');
             });
 
             // QUOTES
@@ -232,14 +232,14 @@ define(['io.ox/mail/detail/content'], function (content) {
             expect(/fixed-width-font/.test(result.content.className)).to.be.true;
         });
 
-        it('should remove leading <br> tags', function () {
-            var result = process(' <br/> <br />  <br >text', 'text/plain');
+        it('should remove leading white-space', function () {
+            var result = process(' \n \n  \ntext', 'text/plain');
             expect(result.content.innerHTML).to.equal('text');
         });
 
-        it('should reduce long <br> sequences', function () {
-            var result = process('text<br><br><br><br>text<br><br>', 'text/plain');
-            expect(result.content.innerHTML).to.equal('text<br><br>text<br><br>');
+        it('should reduce long \n sequences', function () {
+            var result = process('text\n\n\n\ntext\n\n', 'text/plain');
+            expect(result.content.innerHTML).to.equal('text<br><br>text');
         });
 
         it('should simplify links', function () {
@@ -250,7 +250,7 @@ define(['io.ox/mail/detail/content'], function (content) {
         describe('mail addresses', function () {
 
             it('should detect email addresses (text/plain)', function () {
-                var result = process('test<br>otto.xantner@open-xchange.com<br>test', 'text/plain');
+                var result = process('test\notto.xantner@open-xchange.com\ntest', 'text/plain');
                 expect(result.content.innerHTML).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a><br>test');
             });
 

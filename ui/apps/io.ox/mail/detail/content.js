@@ -590,7 +590,9 @@ define('io.ox/mail/detail/content', [
             }
 
             var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
-                beautifyPlainText = settings.get('beautifyPlainText'),
+                // was: beautifyPlainText = settings.get('beautifyPlainText'),
+                // true until bug 52294 gets fixed
+                beautifyPlainText = true,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
@@ -696,7 +698,9 @@ define('io.ox/mail/detail/content', [
 
         beautifyPlainText: function (str) {
             var plain = str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n');
-            return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: true, rulers: true });
+            return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: false, rulers: false })
+                // remove leading BR
+                .replace(/^\s*(<br\s*\/?>\s*)+/g, '');
         },
 
         transformForHTMLEditor: function (str) {
@@ -765,8 +769,8 @@ define('io.ox/mail/detail/content', [
                     }
 
                     if (match = exec(regText, str)) {
-                        // add 1 character to catch the next newline
-                        str = str.substr(match.length + 1);
+                        // advance
+                        str = str.substr(match.length + (options.lists ? 1 : 0));
                         // escape first
                         match = _.escape(match);
                         // rulers
@@ -780,8 +784,12 @@ define('io.ox/mail/detail/content', [
                         // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
-                                .replace(regLink, '<a href="$1" rel="noopener" target="_blank">$1</a>$2')
-                                .replace(regMailAddress, '<a href="mailto:$1" rel="noopener" target="_blank">$1</a>');
+                                .replace(regLink, function (all, href, suffix) {
+                                    // substitute @ by entity to avoid double detection, e.g. if an email address is part of a link
+                                    href = href.replace(/@/g, '&#64;');
+                                    return '<a href="' + href + '" rel="noopener" target="_blank">' + href + '</a>' + suffix;
+                                })
+                                .replace(regMailAddress, '<a href="mailto:$1">$1</a>');
                         }
                         // replace newlines
                         out += match.replace(/\n/g, '<br>');

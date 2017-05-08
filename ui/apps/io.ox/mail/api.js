@@ -276,7 +276,9 @@ define('io.ox/mail/api', [
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         // do not process plain text if we prettify text client-side
-        obj.process_plain_text = !settings.get('beautifyPlainText');
+        // was !settings.get('beautifyPlainText');
+        // false until bug 52294 is fixed
+        obj.process_plain_text = false;
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {

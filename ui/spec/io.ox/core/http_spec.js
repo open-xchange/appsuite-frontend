@@ -19,7 +19,7 @@ define([
         describe('non-JSON response (callback)', function () {
             it('should reject the deferred object if request failed', function () {
                 this.server.respondWith('POST', /api\/test\?action=fail/, function (xhr) {
-                    xhr.respond(200, 'text/html;charset=UTF-8', '<!DOCTYPE html><html><head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">(parent["callback_new"] || window.opener && window.opener["callback_new"])({"error":"Test error message"})</script></head></html>');
+                    xhr.respond(200, { 'Content-Type': 'text/html;charset=UTF-8' }, '<!DOCTYPE html><html><head><META http-equiv="Content-Type" content="text/html; charset=UTF-8"><script type="text/javascript">(parent["callback_new"] || window.opener && window.opener["callback_new"])({"error":"Test error message"})</script></head></html>');
                 });
                 return http.UPLOAD({
                     module: 'test',
@@ -30,6 +30,7 @@ define([
                     fixPost: true,
                     dataType: 'json'
                 }).then(function () {
+                    console.info(arguments);
                     return $.Deferred().reject({ error: 'expected to fail' });
                 }, function (result) {
                     expect(result).to.be.an('object');
