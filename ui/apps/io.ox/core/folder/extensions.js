@@ -17,6 +17,7 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/account',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
+    'io.ox/core/upsell',
     'io.ox/contacts/util',
     'io.ox/core/api/user',
     'io.ox/mail/api',
@@ -28,7 +29,7 @@ define('io.ox/core/folder/extensions', [
     'settings!io.ox/mail',
     'io.ox/core/http',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings, http) {
+], function (TreeNodeView, api, account, ext, capabilities, upsell, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings, http) {
 
     'use strict';
 
@@ -233,14 +234,12 @@ define('io.ox/core/folder/extensions', [
                 });
             });
         } else {
-            require(['io.ox/core/upsell'], function (upsell) {
-                if (!upsell.enabled(['subscription'])) return;
+            if (!upsell.enabled(['subscription'])) return;
 
-                upsell.trigger({
-                    type: 'inline-action',
-                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
-                    missing: upsell.missing(['subscription'])
-                });
+            upsell.trigger({
+                type: 'inline-action',
+                id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
+                missing: upsell.missing(['subscription'])
             });
         }
     }
@@ -399,6 +398,7 @@ define('io.ox/core/folder/extensions', [
         })(),
 
         subscribe: function (baton) {
+            if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
             var title;
             if (baton.module === 'contacts') title = gt('Subscribe address book');
             else if (baton.module === 'calendar') title = gt('Subscribe calendar');
@@ -718,7 +718,7 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'subscribe',
             index: 300,
-            capabilities: 'subscription',
+            capabilities: ['subscription'],
             draw: extensions.subscribe
         },
         {
@@ -736,7 +736,7 @@ define('io.ox/core/folder/extensions', [
         {
             id: 'subscribe',
             index: 300,
-            capabilities: 'subscription',
+            capabilities: ['subscription'],
             draw: extensions.subscribe
         }
     );
