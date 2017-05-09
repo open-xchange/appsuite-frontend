@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-28 11:02+0200\n"
+"PO-Revision-Date: 2017-05-09 09:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -2368,6 +2368,18 @@ msgstr "Alle Verteilerlisten"
 msgid "All groups"
 msgstr "Alle Gruppen"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Leer"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Auswählen"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2381,22 +2393,6 @@ msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d Adresse ausgewählt"
 msgstr[1] "%1$d Adressen ausgewählt"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Auswahl zurücksetzen"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Leer"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Auswählen"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3967,7 +3963,6 @@ msgid "Total: %1$d"
 msgstr "Gesamt: %1$s"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, fuzzy
 msgid "%1$d total"
 msgstr "%1$d gesamt"
 
@@ -3976,7 +3971,6 @@ msgid "Unread: %1$d"
 msgstr "Ungelesen: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
-#, fuzzy
 msgid "%1$d unread"
 msgstr "%$d ungelesen"
 
@@ -4079,11 +4073,6 @@ msgstr "Keine Aufgabendaten zum Importieren vorhanden"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "There was no appointment data to import"
 msgstr "Es sind keine Termindaten zum Importieren vorhanden"
-
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Zeile %1$d: %2$s"
 
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
@@ -5014,8 +5003,8 @@ msgid "My %1$s account"
 msgstr "Mein %1$s-Account"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "%1 konfigurieren"
+msgid "Configure %s"
+msgstr "%s konfigurieren"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5221,9 +5210,8 @@ msgid "Added %1$s."
 msgstr "%1$s wurde hinzugefügt."
 
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
-#, fuzzy
-msgid "%1$s Press backspace to delete."
-msgstr "%1$s Rücktaste zum Löschen drücken."
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Drücken Sie die Rücktaste zum Löschen."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6258,7 +6246,6 @@ msgid "Repeat slideshow"
 msgstr "Diashow wiederholen"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
 msgid "Slideshow / Autoplay mode for images"
 msgstr "Diashow / Automatische Wiedergabe für Bilder"
 
@@ -7109,12 +7096,6 @@ msgstr "Als Spam markieren"
 #: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
 msgid "Not spam"
 msgstr "Kein Spam"
-
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Markieren"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
@@ -8015,7 +7996,8 @@ msgstr "fortsetzen, wenn alle diese Bedingungen erfüllt sind"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
+#, fuzzy
+msgid "continue if any of these condition is met"
 msgstr "fortsetzen, wenn irgendeine dieser Bedingungen erfüllt ist."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -8250,25 +8232,21 @@ msgstr "stimmt nicht mit einem Teilstring überein"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "an exact, full match"
 msgstr "eine genaue, volle Übereinstimmung"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "not an exact, full match "
 msgstr "keine genaue, volle Übereinstimmung "
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "a full match (allows DOS-style wildcards)"
 msgstr "eine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "not a full match (allows DOS-style wildcards)"
 msgstr "keine volle Übereinstimmung (erlaubt Wildcards im DOS-Stil)"
 
@@ -8657,12 +8635,6 @@ msgstr "Zitierte Zeilen farbig hervorheben "
 msgid "Use fixed-width font for text mails"
 msgstr "Schrift mit fester Breite für Text-E-Mails verwenden"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Reine Textmails verschönern"
-
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
 msgstr "Anfragen für Lesebestätigungen anzeigen"
@@ -8872,6 +8844,12 @@ msgstr "Kopie bearbeiten"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Kategorie festlegen"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Markieren"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -11031,8 +11009,8 @@ msgstr "Minimale Passwortlänge ist %1$d."
 msgid "Your current password"
 msgstr "Ihr aktuelles Passwort"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
-#, fuzzy
 msgid "Leave empty if you have none"
 msgstr "Leer lassen, wenn Sie keines haben"
 
@@ -11266,6 +11244,25 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Zeile %1$d: %2$s"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Reine Textmails verschönern"
+
+#~ msgid "Clear selection"
+#~ msgstr "Auswahl zurücksetzen"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "%1 konfigurieren"
+
+#, fuzzy
+#~ msgid "%1$s Press backspace to delete."
+#~ msgstr "%1$s Rücktaste zum Löschen drücken."
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "fortsetzen, wenn irgendeine dieser Bedingungen erfüllt ist."
 
 #~ msgid "Loop once only"
 #~ msgstr "Nur eine Programmschleife"
