@@ -22,8 +22,9 @@ define('io.ox/calendar/conflicts/conflictList', [
     'io.ox/calendar/util',
     'io.ox/contacts/util',
     'io.ox/backbone/views/modal',
-    'gettext!io.ox/calendar/conflicts/conflicts'
-], function (ext, extensions, calAPI, folderAPI, userAPI, resourceAPI, coreUtil, util, contactsUtil, ModalDialog, gt) {
+    'gettext!io.ox/calendar/conflicts/conflicts',
+    'settings!io.ox/calendar'
+], function (ext, extensions, calAPI, folderAPI, userAPI, resourceAPI, coreUtil, util, contactsUtil, ModalDialog, gt, settings) {
 
     'use strict';
 
@@ -36,6 +37,12 @@ define('io.ox/calendar/conflicts/conflictList', [
 
         var baton = e.data.baton;
         if (!!e.data.content.children().length) return;
+        // there is no folder given for appointments where the user is not invited, so just use the data available
+        if (!baton.data.folder_id) {
+            ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), ext.Baton.ensure(baton.data));
+            e.data.content.show();
+            return;
+        }
         calAPI.get(baton.data).done(function (appointment) {
             // we don't show details for private appointments in shared/public folders (see bug 37971)
             var folder = folderAPI.pool.getModel(baton.data.folder_id);
@@ -171,8 +178,8 @@ define('io.ox/calendar/conflicts/conflictList', [
                 toggle = $('<a href="#" role="button" class="detail-toggle">').attr('title', gt('Show appointment details')).append(icon),
                 li = $('<li>').append(toggle, summary, details);
 
-            // No details for private appointments
-            if (conflict.created_by !== ox.user_id && _.isUndefined(conflict.title)) {
+            // use same setting as schedulingview (freeBusyStrict) to decide if we show infos about appointments the user is not invited too
+            if (settings.get('freeBusyStrict', true) && conflict.created_by !== ox.user_id && _.isUndefined(conflict.title)) {
                 toggle.remove();
                 details.remove();
             } else {
