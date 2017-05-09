@@ -838,6 +838,8 @@ define('io.ox/calendar/week/view', [
                         dropdown.option(fav, true, drawOption.bind(fav));
                     }
                 });
+                // add keep open for all timezone options, *not* the link to settings (Bug 53471)
+                $('a', dropdown.$ul).attr('data-keep-open', 'true');
 
                 dropdown.divider();
                 dropdown.link('settings', gt('Manage favorites'), function () {
@@ -847,7 +849,6 @@ define('io.ox/calendar/week/view', [
                     });
                 });
 
-                $('a', dropdown.$ul).attr('data-keep-open', 'true');
                 $('.dropdown', self.timeLabelBar).remove();
                 self.timeLabelBar.append(dropdown.render().$el);
                 $('.dropdown-label', dropdown.$el).append($('<i class="fa fa-caret-down" aria-hidden="true">'));
