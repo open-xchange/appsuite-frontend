@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-12 13:06+0000\n"
-"PO-Revision-Date: 2016-07-04 18:33+0000\n"
+"POT-Creation-Date: 2017-05-09 15:35+0000\n"
+"PO-Revision-Date: 2017-05-09 12:42+0000\n"
 "Last-Translator: hv@webhuset.no <hv@webhuset.no>\n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: nb_NO\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1467657196.000000\n"
+"X-POOTLE-MTIME: 1494333751.000000\n"
 
 #: apps/io.ox/tours/calendar.js
 #: module:io.ox/tours
@@ -90,9 +90,8 @@ msgstr "Opprette avtalen"
 
 #: apps/io.ox/tours/calendar.js
 #: module:io.ox/tours
-#, fuzzy
 msgid "To create the appointment, click on Create at the lower left side."
-msgstr "For å opprette avtalen, klikk \"Opprett\" øverst."
+msgstr "For å opprette avtalen, klikk Opprett nederst til venstre."
 
 #: apps/io.ox/tours/calendar.js
 #: module:io.ox/tours
@@ -417,11 +416,10 @@ msgstr "Varslingsikonet"
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
-#, fuzzy
 msgid "The New objects icon shows the number of appointment reminders or other notifications. If clicking the icon, the info area opens."
 msgstr ""
-"Varslingsikonet viser antall uleste eposter eller andre varslinger. Klikk på "
-"ikonet for å åpne varslingsområdet."
+"Varslingsikonet viser antall avtalepåminnelser eller andre varslinger. Klikk "
+"på ikonet for å åpne varslingsområdet."
 
 #: apps/io.ox/tours/intro.js
 #: module:io.ox/tours
