@@ -82,7 +82,8 @@ define('io.ox/calendar/actions', [
                     .filter(function (rec) {
                         // don't add myself
                         // don't add if mail address is missing (yep, edge-case)
-                        return rec.id !== ox.user_id && !!rec.mail;
+                        // support user and contact data
+                        return rec.id !== ox.user_id && rec.internal_userid !== ox.user_id && !!rec.mail;
                     })
                     .map(function (rec) {
                         return [rec.display_name, rec.mail];
