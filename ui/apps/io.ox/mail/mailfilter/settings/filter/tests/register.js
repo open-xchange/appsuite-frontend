@@ -861,7 +861,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         inputId: inputId,
                         title: baton.view.conditionsTranslation.address,
                         dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues },
+                        seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
                         thirddropdownOptions: { name: 'addresspart', model: cmodel, values: addressValues },
                         inputLabel: baton.view.conditionsTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
                         inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
