@@ -7031,12 +7031,6 @@ msgstr "Nyomja meg az [enter]-t a Twitter folyamra ugráshoz."
 msgid "Press to open Details"
 msgstr "Nyomja meg a részletek megnyitásához"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Formázatlan szöveg csinosítása"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -11955,6 +11949,9 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to open"
 #~ msgstr "Nyomja meg az [enter]-t a megnyitáshoz:"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Formázatlan szöveg csinosítása"
 
 #~ msgid "Previous slide"
 #~ msgstr "Előző dia"

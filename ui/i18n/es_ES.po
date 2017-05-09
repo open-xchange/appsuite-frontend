@@ -7051,12 +7051,6 @@ msgstr "Pulse [Intro] para saltar al flujo de Twitter."
 msgid "Press to open Details"
 msgstr "Pulse para abrir Detalles"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Embellecer correos de texto sencillo"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -17545,6 +17539,9 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Pulse [Intro] para seleccionar el momento en que desea que se le recuerde "
 #~ "de nuevo"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Embellecer correos de texto sencillo"
 
 #~ msgid "Prev"
 #~ msgstr "Anterior"

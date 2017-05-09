@@ -7039,12 +7039,6 @@ msgstr "Pressione [Enter] para ir ao feed do Twitter."
 msgid "Press to open Details"
 msgstr "Pressione para abrir detalhes"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Embelezar e-mails de texto simples"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -14847,6 +14841,9 @@ msgstr "aaaa"
 #~ msgstr ""
 #~ "Pressione [Enter] para selecionar uma hora em que deseja ser lembrado "
 #~ "novamente"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Embelezar e-mails de texto simples"
 
 #~ msgid "Prev"
 #~ msgstr "Anterior"

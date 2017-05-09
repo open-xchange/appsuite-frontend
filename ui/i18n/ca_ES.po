@@ -7284,13 +7284,6 @@ msgstr "Premeu [Intro] per a anar al flux de Twitter."
 msgid "Press to open Details"
 msgstr "Detalls de la selecció"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Prettify plain text mails"
-msgstr "Detalls de la selecció"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -12315,6 +12308,10 @@ msgstr ""
 
 #~ msgid "Press to hide all notifications for new mails."
 #~ msgstr "Premeu per a amagar totes les notificacions de nous correus."
+
+#, fuzzy
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Detalls de la selecció"
 
 #~ msgid "Prev"
 #~ msgstr "Prev"

@@ -6961,12 +6961,6 @@ msgstr "Twitter フィードにアクセスするには、Enter キーを押し�
 msgid "Press to open Details"
 msgstr "詳細を開くには押してください"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "テキストメールを修飾"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -16272,6 +16266,9 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "Enter キーを押すと、再通知の時間を選択できます。"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "テキストメールを修飾"
 
 #~ msgid "Prev"
 #~ msgstr "前へ"

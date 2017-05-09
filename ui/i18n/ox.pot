@@ -10276,13 +10276,6 @@ msgstr ""
 msgid "Use fixed-width font for text mails"
 msgstr ""
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js
-#: module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr ""
-
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Show requests for read receipts"

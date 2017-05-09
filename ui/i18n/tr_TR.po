@@ -7224,13 +7224,6 @@ msgstr "Twitter'a bağlanmak için [giriş yapın] a tıklayın."
 msgid "Press to open Details"
 msgstr "Seçim ayrıntıları"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#, fuzzy
-msgid "Prettify plain text mails"
-msgstr "Seçim ayrıntıları"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -12154,6 +12147,10 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to open"
 #~ msgstr "Açmak için [giriş yapın] a tıklayın"
+
+#, fuzzy
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Seçim ayrıntıları"
 
 #, fuzzy
 #~ msgid "Previous slide"

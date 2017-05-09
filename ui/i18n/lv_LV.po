@@ -7077,12 +7077,6 @@ msgstr "Lai pārslēgtos uz Twitter straumi, piespiediet [enter]."
 msgid "Press to open Details"
 msgstr "Piespiediet lai skatītu detaļas"
 
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Izkrāšņot vienkārša teksta vēstules"
-
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
 msgid "Preview"
@@ -15408,6 +15402,9 @@ msgstr "yyyy"
 
 #~ msgid "Press [enter] to select a time when you want to be reminded again"
 #~ msgstr "Piespiediet [enter] lai izvēlētos atkārtotā atgādinājuma laiku"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Izkrāšņot vienkārša teksta vēstules"
 
 #~ msgid "Prev"
 #~ msgstr "Iepr"
