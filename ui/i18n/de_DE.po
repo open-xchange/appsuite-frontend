@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-09 09:07+0200\n"
+"PO-Revision-Date: 2017-05-10 12:48+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7996,9 +7996,8 @@ msgstr "fortsetzen, wenn alle diese Bedingungen erfüllt sind"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-#, fuzzy
-msgid "continue if any of these condition is met"
-msgstr "fortsetzen, wenn irgendeine dieser Bedingungen erfüllt ist."
+msgid "continue if any of these conditions are met"
+msgstr "fortsetzen, wenn irgendeine dieser Bedingungen erfüllt ist"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8199,16 +8198,14 @@ msgstr "Beginnt nicht mit"
 #. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Ends with"
-msgstr "Endet mit"
+msgstr "Endet auf"
 
 #. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
-#, fuzzy
 msgid "Ends not with"
-msgstr "Endet nicht mit"
+msgstr "Endet nicht auf"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11244,6 +11241,10 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#, fuzzy
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "fortsetzen, wenn irgendeine dieser Bedingungen erfüllt ist."
 
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "Zeile %1$d: %2$s"
