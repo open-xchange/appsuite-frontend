@@ -49,7 +49,7 @@ define('io.ox/core/viewer/views/types/baseview', [
             iconClass = iconClass || Util.getIconClass(this.model);
 
             return $('<div class="viewer-displayer-notification">').append(
-                $('<i class="fa">').addClass(iconClass),
+                $('<i class="fa" aria-hidden="true">').addClass(iconClass),
                 $('<p class="apology">').text(notification || '')
             );
         },

@@ -57,7 +57,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                             null,
                         // filename
                         $('<span class="filename-label">').text(displayName)
-                    ).attr('aria-label', displayName);
+                    ).attr({
+                        role: 'button',
+                        'aria-label': displayName
+                    });
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
@@ -65,8 +68,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (baton.model.isFile()) {
                         ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
                             function yep() {
-                                this.attr('data-original-title', gt('Rename File'));
-                                this.attr({ 'data-placement': 'bottom' });
+                                this.attr({
+                                    'data-original-title': gt('Rename File'),
+                                    'data-placement': 'bottom'
+                                });
                                 this.tooltip();
                             }.bind(this),
                             function nope() {
@@ -84,7 +89,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -97,7 +102,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -114,7 +119,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -128,7 +133,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -142,7 +147,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('View details')
                         });
                 }
@@ -156,7 +161,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -170,7 +175,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
@@ -675,7 +680,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 this.currentlyDrawn = model;
                 // draw toolbar
                 var origData = model.get('origData'),
-                    toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                    toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                     isDriveFile = model.isFile(),
                     baton = Ext.Baton({
@@ -740,10 +745,10 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Renders the document page navigation controls.
          */
         renderPageNavigation: function () {
-            var prev = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+            var prev = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
                     .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
-                next = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+                next = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
                     .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" role="textbox">'),

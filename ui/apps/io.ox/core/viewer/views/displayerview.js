@@ -442,8 +442,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
-                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 autoplay,
                 fullscreen,
                 caption = $('<div class="viewer-displayer-caption">'),
@@ -670,7 +670,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             view.$el.attr('data-swiper-slide-index', swiperIndex);
                             view.$el.addClass(additionalClasses);
                             if (active) {
-                                view.$el.focus();
+                                view.$el.attr('tabindex', 0).focus();
                             }
 
                             if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').length) {
@@ -1076,7 +1076,8 @@ define('io.ox/core/viewer/views/displayerview', [
          * Focuses the swiper's current active slide.
          */
         focusActiveSlide: function () {
-            this.getActiveSlideNode().focus();
+            this.swiper.slides.attr('tabindex', -1);
+            this.getActiveSlideNode().attr('tabindex', 0).focus();
         },
 
         /**
