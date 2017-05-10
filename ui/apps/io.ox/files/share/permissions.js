@@ -401,7 +401,7 @@ define('io.ox/files/share/permissions', [
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.get('entity') === this.parentModel.get('created_by')) {
+                } else if (this.model.get('entity') === this.parentModel.get('created_by') || this.model.get('entity') === this.parentModel.getOwner()) {
                     return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
@@ -734,6 +734,7 @@ define('io.ox/files/share/permissions', [
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
+                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.getOwner()) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
