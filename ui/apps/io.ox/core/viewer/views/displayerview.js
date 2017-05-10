@@ -783,7 +783,7 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 duplicate = arguments.length > 1,
                 dummy = {
-                    $el: duplicate ? arguments[0] : $('<div class="dummy-slide swiper-slide scrollable">').attr('data-index', index).attr('data-index', index),
+                    $el: duplicate ? arguments[0] : $('<div class="dummy-slide swiper-slide scrollable focusable">').attr('data-index', index).attr('data-index', index),
                     show: function () {
                         // allow chaining
                         return this;
@@ -1077,7 +1077,7 @@ define('io.ox/core/viewer/views/displayerview', [
          */
         focusActiveSlide: function () {
             this.swiper.slides.attr('tabindex', -1);
-            this.getActiveSlideNode().attr('tabindex', 0).focus();
+            this.getActiveSlideNode().attr('tabindex', 0).visibleFocus();
         },
 
         /**

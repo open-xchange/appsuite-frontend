@@ -155,7 +155,7 @@ define('io.ox/core/viewer/views/mainview', [
                     nextElementIndex = 0;
                 }
                 // focus next action candidate
-                tabableActions.eq(nextElementIndex).focus();
+                tabableActions.eq(nextElementIndex).visibleFocus();
             }
             switch (event.which) {
                 case 9: // TAB key
