@@ -87,12 +87,6 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail/header').extend({
-        id: 'security',
-        index: INDEX_header += 100,
-        draw: extensions.security
-    });
-
-    ext.point('io.ox/mail/mobile/detail/header').extend({
         id: 'paper-clip',
         index: INDEX_header += 100,
         draw: extensions.paperClip
@@ -137,6 +131,12 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail/header/flags').extend({
+        id: 'security',
+        index: INDEX_header += 100,
+        draw: extensions.security
+    });
+
+    ext.point('io.ox/mail/mobile/detail/header/flags').extend({
         id: 'flag-toggle',
         index: INDEX_header += 100,
         draw: extensions.flagToggle
@@ -147,6 +147,7 @@ define('io.ox/mail/detail/mobileView', [
         index: INDEX_header += 100,
         draw: extensions.flagPicker
     });
+
 
     ext.point('io.ox/mail/mobile/detail').extend({
         id: 'notifications',
