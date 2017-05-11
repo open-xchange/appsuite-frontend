@@ -91,9 +91,13 @@ define('io.ox/files/actions/share', [
                 view.share().then(this.close, this.idle);
             })
             .on('remove', function () {
-                view.removeLink();
-                notifications.yell('success', gt('The link has been removed'));
-                this.close();
+                view.removeLink()
+                    .done(function () {
+                        notifications.yell('success', gt('The link has been removed'));
+                        this.close();
+                    }.bind(this))
+                    .fail(notifications.yell)
+                    .always(dialog.idle.bind(dialog));
             });
 
         dialog.open();

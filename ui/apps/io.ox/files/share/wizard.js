@@ -14,6 +14,7 @@
 define('io.ox/files/share/wizard', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
+    'io.ox/files/share/api',
     'io.ox/files/share/model',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
@@ -26,7 +27,7 @@ define('io.ox/files/share/wizard', [
     'io.ox/backbone/mini-views/addresspicker',
     'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
     'use strict';
 
@@ -399,10 +400,8 @@ define('io.ox/files/share/wizard', [
 
         removeLink: function () {
             var model = this.model;
-            require(['io.ox/files/share/api'], function (api) {
-                api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
-                model.destroy();
-            });
+            return api.deleteLink(model.toJSON(), model.get('lastModified'))
+                .done(model.destroy.bind(model));
         }
     });
 
