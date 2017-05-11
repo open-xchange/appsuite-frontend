@@ -16,12 +16,13 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/freetime/model',
     'io.ox/calendar/freetime/participantsView',
     'io.ox/calendar/freetime/timeView',
+    'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings, coreSettings) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -60,9 +61,11 @@ define('io.ox/calendar/freetime/main', [
             this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
             this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
 
+            api.on('refresh.all update', self.refresh.bind(this));
             this.on('dispose', function () {
                 self.timeSubview.dispose();
                 self.participantsSubview.dispose();
+                api.off('refresh.all update', self.refresh);
             });
             this.timeSubview.bodyNode.on('scroll', function () {
                 if (self.participantsSubview.bodyNode[0].scrollTop === 0 && this.scrollTop === 0) {
@@ -118,6 +121,11 @@ define('io.ox/calendar/freetime/main', [
             this.timeSubview.renderBody();
             return this.body;
         },
+
+        // use debouce since we don't want to refresh to often
+        refresh: _.debounce(function () {
+            this.timeSubview.getAppointmentsInstant();
+        }, 200),
 
         render: function () {
             this.renderHeader();
