@@ -61,7 +61,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         type: 'appliesto',
                         classes: 'appliesto'
                     },
-                    optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these condition is met') }, options),
+                    optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these conditions are met') }, options),
                     assembled = arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof' ? optionsSwitch : $('<div>').addClass('line').text(gt('continue if all conditions are met'));
                 this.append(
                     $('<li>').addClass('filter-settings-view row nestedrule').attr({ 'data-test-id': conditionKey }).append(
@@ -861,7 +861,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         inputId: inputId,
                         title: baton.view.conditionsTranslation.address,
                         dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues },
+                        seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
                         thirddropdownOptions: { name: 'addresspart', model: cmodel, values: addressValues },
                         inputLabel: baton.view.conditionsTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
                         inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },

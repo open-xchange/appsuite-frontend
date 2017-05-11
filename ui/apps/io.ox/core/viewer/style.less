@@ -538,7 +538,6 @@
                 -ms-flex-align: center;
                 -webkit-align-items: center;
                 align-items: center;
-                outline: none;
                 .user-select(none);
 
                 &.swiper-slide-document {
@@ -784,10 +783,12 @@
             background-color: @viewer-sidebar-uploadnewversion-bgcolor;
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
 
+            &.active,
             &:active,
             &:hover {
                 border-color: @viewer-sidebar-uploadnewversion-hovercolor;
             }
+            &.active,
             &:focus {
                 outline: 0;
                 color: @viewer-sidebar-active-color;

@@ -131,7 +131,9 @@ define('io.ox/files/listview', [
             index: 200,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-2">');
-              //baton.options.tooltip = false; // does not trigger the intended behavior.
+
+                this.parent().tooltip('destroy');
+
                 extensions.filename.call(column, baton);
                 this.append(column);
             }
@@ -219,10 +221,11 @@ define('io.ox/files/listview', [
             id: 'filename',
             index: 400,
             draw: function (baton) {
-                //baton.options.tooltip = true; // see: `ext.point(ITEM + '/list')` / `id: 'col2'` - line: 134 // does not trigger the intended behavior.
-
                 // use inner ellipsis for too long filenames
                 extensions.filename.call(this, baton, { max: 36, charpos: 'middle', suppressExtension: true, optimizeWordbreak: true });
+
+                // additionally render a long version filename tooltip on hover
+                extensions.filenameTooltip.call(this, baton);
             }
         }
     );
@@ -249,6 +252,14 @@ define('io.ox/files/listview', [
             id: 'locked',
             index: 200,
             draw: extensions.locked
+        },
+        {
+            id: 'filename',
+            index: 400,
+            draw: function (baton) {
+                // render a long version filename tooltip on hover
+                extensions.filenameTooltip.call(this, baton);
+            }
         }
     );
 

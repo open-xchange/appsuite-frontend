@@ -848,11 +848,14 @@ define('io.ox/files/actions', [
     // add another link for the viewer
     ext.point('io.ox/core/viewer/toolbar/links/drive').extend(new links.Link({
         id: 'editor',
-        index: 100,
+        index: 110,
         prio: 'hi',
         mobile: 'lo',
         label: gt('Edit'),
-        ref: 'io.ox/files/actions/editor'
+        ref: 'io.ox/files/actions/editor',
+        customize: function () {
+            this.attr('role', 'button');
+        }
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
