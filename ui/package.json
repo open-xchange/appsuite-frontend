@@ -24,10 +24,10 @@
     "grunt-eslint": "^20.0.0",
     "grunt-newer": "^1.3.0",
     "grunt-require-gettext": "^0.8.1",
-    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#master"
+    "open-xchange-shared-grunt-config": "^0.15.0-pre1"
   },
   "devDependencies": {
-    "appserver": "git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8",
+    "appserver": "^0.7.0-pre1",
     "chai": "^4.0.2",
     "chromedriver": "^2.25.1",
     "grunt-contrib-connect": "^1.0.2",
