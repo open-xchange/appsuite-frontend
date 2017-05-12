@@ -252,6 +252,11 @@ define(['io.ox/core/util'], function (util) {
                     .to.deep.equal(['email1@domain.tld', '"email2"@domain.tld', 'email3@domain.tld']);
             });
 
+            it('recognizes addresses with only one character in local part', function () {
+                expect(util.getAddresses('a@domain.tld'))
+                    .to.deep.equal(['a@domain.tld']);
+            });
+
             it('recognizes addresses with IP address as domain part', function () {
                 expect(util.getAddresses('email1@domain.tld email2@domain.tld email3@8.8.8.8'))
                     .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@8.8.8.8']);
