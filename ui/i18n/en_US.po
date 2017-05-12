@@ -10480,7 +10480,7 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
+msgid "continue if any of these conditions are met"
 msgstr ""
 
 #. folder permissions

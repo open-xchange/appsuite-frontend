@@ -11125,9 +11125,9 @@ msgstr "Aplica la regla si es compleixen totes les condicions"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Apply rule if any condition is met."
-msgid "continue if any of these condition is met"
-msgstr "Aplica la regla si es compleix alguna condició"
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "Aplica la regla si es compleixen totes les condicions"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -12865,6 +12865,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "collapsed"
 #~ msgstr "plega"
+
+#, fuzzy
+#~| msgid "Apply rule if any condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "Aplica la regla si es compleix alguna condició"
 
 #~ msgid "daily"
 #~ msgstr "diària"

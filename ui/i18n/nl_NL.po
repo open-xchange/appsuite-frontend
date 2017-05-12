@@ -10863,9 +10863,9 @@ msgstr "doorgaan als deze voorwaarden zijn gehaald"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "doorgaan als één van deze voorwaarden is gehaald"
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "doorgaan als deze voorwaarden zijn gehaald"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -13971,6 +13971,11 @@ msgstr "yyyy"
 
 #~ msgid "collapsed"
 #~ msgstr "ingeklapt"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "doorgaan als één van deze voorwaarden is gehaald"
 
 #~ msgid "daily"
 #~ msgstr "dagelijks"

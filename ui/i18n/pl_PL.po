@@ -10879,9 +10879,9 @@ msgstr "kontynuuj, jeśli spełnione zostały wszystkie warunki."
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "kontynuuj, jeśli spełniono co najmniej jeden warunek."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "kontynuuj, jeśli spełnione zostały wszystkie warunki."
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -14334,6 +14334,11 @@ msgstr "rrrr"
 
 #~ msgid "collapsed"
 #~ msgstr "zwinięty"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "kontynuuj, jeśli spełniono co najmniej jeden warunek."
 
 #~ msgid "daily"
 #~ msgstr "codziennie"

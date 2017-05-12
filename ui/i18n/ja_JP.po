@@ -10669,9 +10669,9 @@ msgstr "この条件全てを満たす時に継続"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "この条件のいずれかを満たす時に継続"
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "この条件全てを満たす時に継続"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -19149,6 +19149,11 @@ msgstr "yyyy"
 
 #~ msgid "collapsed"
 #~ msgstr "閉じた状態"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "この条件のいずれかを満たす時に継続"
 
 #~ msgid "created by %s"
 #~ msgstr "%s により作成"

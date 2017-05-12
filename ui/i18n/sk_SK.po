@@ -10849,9 +10849,9 @@ msgstr "pokračovať ak sú splnené všetky tieto podmienky"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "pokračovať ak sú splnené všetky tieto podmienky"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -18000,6 +18000,11 @@ msgstr "RRRR"
 
 #~ msgid "collapsed"
 #~ msgstr "zbalené"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok."
 
 #~ msgid "created by %s"
 #~ msgstr "vytvoril %s"

@@ -10781,9 +10781,9 @@ msgstr "folytassa, ha ezen feltételek mindegyike teljesül"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "folytassa, ha bármely feltétel teljesül."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "folytassa, ha ezen feltételek mindegyike teljesül"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -12474,6 +12474,11 @@ msgstr "yyyy"
 
 #~ msgid "collapsed"
 #~ msgstr "összecsukott"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "folytassa, ha bármely feltétel teljesül."
 
 #~ msgid "daily"
 #~ msgstr "naponta"

@@ -10571,9 +10571,9 @@ msgstr "如果满足所有这些条件就继续"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "如果满足任何这些条件就继续。"
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "如果满足所有这些条件就继续"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -15551,6 +15551,11 @@ msgstr "年"
 
 #~ msgid "collapsed"
 #~ msgstr "已折叠"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "如果满足任何这些条件就继续。"
 
 #~ msgid "daily"
 #~ msgstr "每天"

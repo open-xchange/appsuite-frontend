@@ -10899,9 +10899,9 @@ msgstr "poursuivre si l'ensemble de ces conditions sont vérifiées"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "poursuivre si l'une au moins des conditions est vérifiée."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "poursuivre si l'ensemble de ces conditions sont vérifiées"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -14766,6 +14766,11 @@ msgstr "aaaa"
 
 #~ msgid "collapsed"
 #~ msgstr "réduite"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "poursuivre si l'une au moins des conditions est vérifiée."
 
 #~ msgid "daily"
 #~ msgstr "quotidienne"

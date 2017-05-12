@@ -10809,9 +10809,9 @@ msgstr "continuar se todas essas condições forem atendidas"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "continuar se alguma dessas condições for atendida."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "continuar se todas essas condições forem atendidas"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -17273,6 +17273,11 @@ msgstr "aaaa"
 
 #~ msgid "collapsed"
 #~ msgstr "Minimizado"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continuar se alguma dessas condições for atendida."
 
 #~ msgid "created by %s"
 #~ msgstr "criado por %s"

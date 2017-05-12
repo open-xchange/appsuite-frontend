@@ -11136,9 +11136,9 @@ msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Apply rule if any condition is met."
-msgid "continue if any of these condition is met"
-msgstr "Herhangi bir koşulun sağlanması durumunda kuralı uygula"
+#| msgid "Apply rule if all conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -12543,6 +12543,11 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "collapsed"
 #~ msgstr "daralt"
+
+#, fuzzy
+#~| msgid "Apply rule if any condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "Herhangi bir koşulun sağlanması durumunda kuralı uygula"
 
 #~ msgid "daily"
 #~ msgstr "günlük"

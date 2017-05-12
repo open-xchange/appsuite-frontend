@@ -10742,9 +10742,9 @@ msgstr "jatka jos kaikki nämä ehdot täyttyvät"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "jatka jos jokin näistä ehdoista täyttyy."
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "jatka jos kaikki nämä ehdot täyttyvät"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -13810,6 +13810,11 @@ msgstr "vvvv"
 
 #~ msgid "collapsed"
 #~ msgstr "pienennetty"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "jatka jos jokin näistä ehdoista täyttyy."
 
 #~ msgid "daily"
 #~ msgstr "päivittäin"

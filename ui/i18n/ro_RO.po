@@ -10873,9 +10873,9 @@ msgstr "continuă dacă toate aceste condiții sunt adevărate"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "continue if any of these condition is met."
-msgid "continue if any of these condition is met"
-msgstr "continuă dacă una dintre condiții e adevărată"
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "continuă dacă toate aceste condiții sunt adevărate"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -18156,6 +18156,11 @@ msgstr "aaaa"
 
 #~ msgid "collapsed"
 #~ msgstr "restrâns"
+
+#, fuzzy
+#~| msgid "continue if any of these condition is met."
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continuă dacă una dintre condiții e adevărată"
 
 #~ msgid "copy to clipboard"
 #~ msgstr "copiere în clipboard"
