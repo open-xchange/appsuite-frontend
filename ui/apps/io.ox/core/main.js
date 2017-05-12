@@ -648,8 +648,11 @@ define('io.ox/core/main', [
             var ariaBasicLabel =
                     //#. %1$s is app title/name
                     _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel)
-                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', ariaBasicLabel))
+                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel).tooltip({
+                    title: ariaBasicLabel,
+                    placement: 'bottom'
+                })
+                    .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
                         e.stopImmediatePropagation();
