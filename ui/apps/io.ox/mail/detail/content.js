@@ -57,6 +57,8 @@ define('io.ox/mail/detail/content', [
         },
 
         emoji: function (baton) {
+            if (baton.isText) return;
+            if (baton.processedEmoji) return;
             baton.processedEmoji = false;
             baton.source = emoji.processEmoji(baton.source, function (text, lib) {
                 baton.processedEmoji = !lib.loaded;
@@ -646,13 +648,13 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    content.innerHTML = beautifyPlainText ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
-                    if (!baton.processedEmoji) {
-                        emoji.processEmoji(baton.source, function (text, lib) {
-                            baton.processedEmoji = !lib.loaded;
-                            content.innerHTML = beautifyText(text);
-                        });
-                    }
+                    baton.source = beautifyPlainText ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
+                    content.innerHTML = baton.source;
+                    // process emoji now (and don't do it again)
+                    baton.processedEmoji = true;
+                    emoji.processEmoji(baton.source, function (html) {
+                        content.innerHTML = html;
+                    });
                 }
 
                 // process content
