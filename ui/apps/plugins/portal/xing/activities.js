@@ -201,7 +201,10 @@ define('plugins/portal/xing/activities', [
             var profile = activity.objects[0];
 
             return $('<div class="xing activityObj">').append(
-                $('<div class="actionDesc">').text(gt('%1$s updated their profile:', makeName(profile))),
+                //#. We do not know the gender of the user and therefore, it is impossible to write e.g. '%1$s changed her profile:'.
+                //#. But you could use '%1$s changes his/her profile:' depending on the language.
+                //#. %1$s the name of the user which changed his/her profile
+                $('<div class="actionDesc">').text(gt('%1$s updated the profile:', makeName(profile))),
                     $('<div class="actionContent">').append(
                         linkXingContact(profile)
                     )
