@@ -404,10 +404,6 @@ msgstr "%1$s až %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s aktualizoval(a) svoj profil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s aktualizoval(a) svoj profil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11390,6 +11386,9 @@ msgstr "RRRR"
 #~ msgstr[0] "%1$s email, %2$s neprečítaných"
 #~ msgstr[1] "%1$s emaily, %2$s neprečítaných"
 #~ msgstr[2] "%1$s emailov, %2$s neprečítaných"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s aktualizoval(a) svoj profil:"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"

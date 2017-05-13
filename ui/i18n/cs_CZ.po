@@ -403,10 +403,6 @@ msgstr "%1$s, %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s aktualizoval(a) profil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s aktualizoval(a) svůj profil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11421,6 +11417,9 @@ msgstr "rrrr"
 
 #~ msgid "%1$s sets the status to 'none' for: %1$s"
 #~ msgstr "%1$s nastavil(a) stav ‚žádné‘ pro: %1$s"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s aktualizoval(a) svůj profil:"
 
 #~ msgid ""
 #~ "%1$s would like to be brought up to date about the appointment %2$s. "

@@ -379,10 +379,6 @@ msgstr "%1$s til %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s oppdaterte sin profil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s oppdaterte sin profil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11315,6 +11311,9 @@ msgstr "yyyy"
 
 #~ msgid "%1$s seconds"
 #~ msgstr "%1$s sekunder"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s oppdaterte sin profil:"
 
 #~ msgid "%1$s week"
 #~ msgstr "%1$s uke"

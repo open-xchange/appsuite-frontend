@@ -380,10 +380,6 @@ msgstr "%1$s até %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s atualizou o perfil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s atualizou seu perfil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11333,6 +11329,9 @@ msgstr "aaaa"
 
 #~ msgid "%1$s on behalf of"
 #~ msgstr "%1$s em nome de"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s atualizou seu perfil:"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"

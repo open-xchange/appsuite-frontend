@@ -379,10 +379,6 @@ msgstr "%1$s kuni %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s värskendas profiili:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s värskendasid oma profiili:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11214,6 +11210,9 @@ msgstr "aaaa"
 
 #~ msgid "%1$s has started the presentation."
 #~ msgstr "%1$s on käivitanud esitluse."
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s värskendasid oma profiili:"
 
 #~ msgid "1 day"
 #~ msgstr "1 päev"

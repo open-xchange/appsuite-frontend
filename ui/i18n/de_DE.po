@@ -377,10 +377,6 @@ msgstr "%1$s bis %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s hat das Profil aktualisiert:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s haben ihr Profil aktualisiert:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr "%1$s. Drücken Sie die Rücktaste zum Löschen."
@@ -11394,6 +11390,9 @@ msgstr "JJJJ"
 
 #~ msgid "%1$s seconds"
 #~ msgstr "%1$s Sekunden"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s haben ihr Profil aktualisiert:"
 
 #~ msgid "%1$s week"
 #~ msgstr "%1$s Woche"

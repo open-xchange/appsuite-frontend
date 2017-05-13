@@ -403,10 +403,6 @@ msgstr "din%1$s până în %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s și-a actualizat profilul:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s și-a actualizat profilul:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11415,6 +11411,9 @@ msgstr "aaaa"
 #~ msgstr[0] "%1$s mesaj, %2$s necitite"
 #~ msgstr[1] "%1$s mesaje, %2$s necitite"
 #~ msgstr[2] "%1$s de mesaje, %2$s necitite"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s și-a actualizat profilul:"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"

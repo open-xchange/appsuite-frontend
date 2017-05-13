@@ -381,10 +381,6 @@ msgstr "%1$s till %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s uppdaterade profilen:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s uppdaterade sin profil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11260,6 +11256,9 @@ msgstr "yyyy"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s e-brev, %2$s oläst"
 #~ msgstr[1] "%1$s e-brev, %2$s oläst"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s uppdaterade sin profil:"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"

@@ -379,10 +379,6 @@ msgstr "%1$s a %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s ha actualizado su perfil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s ha actualizado su perfil:"
-
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "%1$s. Press backspace to delete."
 msgstr ""
@@ -11444,6 +11440,9 @@ msgstr "yyyy"
 
 #~ msgid "%1$s sets the status to 'none' for: %1$s"
 #~ msgstr "%1$s ha fijado el estado a 'ninguno' para: %1$s"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s ha actualizado su perfil:"
 
 #~ msgid ""
 #~ "%1$s would like to be brought up to date about the appointment %2$s. "
