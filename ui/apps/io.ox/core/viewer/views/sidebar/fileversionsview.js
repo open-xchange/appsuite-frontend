@@ -101,7 +101,7 @@ define('io.ox/core/viewer/views/sidebar/fileversionsview', [
             if (baton.data.current_version) {
                 $node.addClass('current');
             }
-            Util.setClippedLabel($node, baton.data.filename);
+            Util.setClippedLabel($node, baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename);
         }
     });
 
