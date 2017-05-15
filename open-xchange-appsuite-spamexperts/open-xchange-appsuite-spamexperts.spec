@@ -1,6 +1,6 @@
 Name:           open-xchange-appsuite-spamexperts
 Version:        @OXVERSION@
-%define         ox_release 20
+%define         ox_release 21
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Packager:       Viktor Pracht <viktor.pracht@open-xchange.com>
@@ -15,7 +15,11 @@ BuildRequires:  ant
 %else
 BuildRequires:  ant-nodeps
 %endif
-BuildRequires:  java-devel >= 1.6.0
+%if 0%{?rhel_version} && 0%{?rhel_version} == 600
+BuildRequires: java7-devel
+%else
+BuildRequires: java-devel >= 1.7.0
+%endif
 BuildRequires:  nodejs >= 0.10.0
 
 Requires(post): open-xchange-appsuite-manifest
@@ -90,6 +94,8 @@ if [ -x %{update} ]; then %{update} --later; fi
 #%{docroot}
 
 %changelog
+* Tue May 09 2017 Viktor Pracht <viktor.pracht@open-xchange.com>
+Build for patch 2017-05-15 (4132)
 * Wed Apr 26 2017 Viktor Pracht <viktor.pracht@open-xchange.com>
 Build for patch 2017-05-02 (4113)
 * Thu Apr 06 2017 Viktor Pracht <viktor.pracht@open-xchange.com>

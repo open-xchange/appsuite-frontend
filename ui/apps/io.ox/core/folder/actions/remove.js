@@ -21,7 +21,15 @@ define('io.ox/core/folder/actions/remove', [
     'use strict';
 
     function handler(id, options) {
-        api.remove(id, options).fail(notifications.yell);
+        api.remove(id, options).fail(function (error) {
+            // special errormessage, backend message will confuse user (reads could not create folder on a remove action)
+            // happens when yu try to delete a special system folder from an external account
+            if (error && error.code === 'IMAP-2015') {
+                notifications.yell('error', gt('Could not delete folder. This can be due to insufficient permissions in your trash folder or this might be a special folder that cannot be deleted.'));
+                return;
+            }
+            notifications.yell(error);
+        });
     }
 
     return function (id, options) {

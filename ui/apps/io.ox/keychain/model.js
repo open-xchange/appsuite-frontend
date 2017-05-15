@@ -14,7 +14,9 @@ define('io.ox/keychain/model', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
-    var Account = Backbone.Model.extend();
+    var Account = Backbone.Model.extend({
+        idAttribute: 'cid'
+    });
     var Accounts = Backbone.Collection.extend({
         model: Account
     });
@@ -25,8 +27,16 @@ define('io.ox/keychain/model', ['io.ox/core/extensions'], function (ext) {
         }
         if (_.isArray(thing)) {
             var accounts = new Accounts();
+            // avoid double ids (for example Oauth account and mail account can have the same id)
+            _(thing).each(function (acc) {
+                acc.cid = acc.accountType + acc.id;
+            });
             accounts.add(thing);
             return accounts;
+        }
+
+        if (thing.accountType && thing.id) {
+            thing.cid = thing.accountType + thing.id;
         }
 
         ext.point('io.ox/keychain/model').each(function (extension) {

@@ -56,7 +56,7 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton, ellipsis) {
-            var name = baton.data.filename || baton.data.title || '';
+            var name = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
             // add suffix for locked files
             if (baton.model.isLocked()) name += ' (' + gt('Locked') + ')';
             // fix long names

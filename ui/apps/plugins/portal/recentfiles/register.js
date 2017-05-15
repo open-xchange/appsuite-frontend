@@ -45,7 +45,7 @@ define('plugins/portal/recentfiles/register', [
                     // don't show hidden files if disabled in settings
                     if (driveSettings.get('showHidden') === false) {
                         files = _(files).filter(function (file) {
-                            var title = (file ? file.title : '');
+                            var title = (file ? file['com.openexchange.file.sanitizedFilename'] : '');
                             return title.indexOf('.') !== 0;
                         });
                     }
@@ -101,7 +101,7 @@ define('plugins/portal/recentfiles/register', [
 
                 content.append(
                     _(data).map(function (file) {
-                        var filename = String(file.filename || file.title || '');
+                        var filename = String(file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title || '');
                         // create nice filename for long names
                         if (filename.length > 20) {
                             // remove leading & tailing date stufff

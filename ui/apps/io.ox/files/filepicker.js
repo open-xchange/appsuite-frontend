@@ -144,7 +144,7 @@ define('io.ox/files/filepicker', [
                     .filter(options.filter)
                     .sortBy(options.sorter)
                     .map(function (file) {
-                        var title = (file.filename || file.title),
+                        var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
                                     .attr('title', title)
