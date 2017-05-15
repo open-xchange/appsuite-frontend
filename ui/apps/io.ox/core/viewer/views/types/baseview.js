@@ -73,9 +73,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function (options) {
+            // turn off sharding #53731
+            options = _.extend(options || {}, { noSharding: true });
+
             if (this.model.get('file_options')) {
                 options = _.extend(options, this.model.get('file_options'));
             }
+
             if (this.model.isFile()) {
                 var modelJSON = this.model.toJSON();
                 if (options && !_.isEmpty(options.version)) {
