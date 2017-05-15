@@ -645,13 +645,12 @@ define('io.ox/core/main', [
         }
 
         function quit(model) {
-            var ariaBasicLabel =
-                    //#. %1$s is app title/name
-                    _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel).tooltip({
-                    title: ariaBasicLabel,
-                    placement: 'bottom'
-                })
+            var quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', getCloseIconLabel(model.get('title'))).tooltip({
+                title: function () {
+                    return getCloseIconLabel(model.get('title'));
+                },
+                placement: 'bottom'
+            })
                     .append($('<i class="fa fa-times" aria-hidden="true">'))
                     .on('click', function (e) {
                         e.preventDefault();
@@ -659,7 +658,7 @@ define('io.ox/core/main', [
                         model.getWindow().app.quit();
                     })
                     .on('focus', function () {
-                        quitApp.attr('aria-label', ariaBasicLabel);
+                        quitApp.attr('aria-label', getCloseIconLabel(model.get('title')));
                     });
             return quitApp;
         }
@@ -697,6 +696,10 @@ define('io.ox/core/main', [
                 ).help;
 
             return manifest;
+        }
+
+        function getCloseIconLabel(docTitle) {
+            return _.escape(gt('Close for %1$s', docTitle));
         }
 
         ox.ui.apps.on('add', function (model) {
@@ -767,6 +770,8 @@ define('io.ox/core/main', [
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
             launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
+            $('a.closelink', node).attr('aria-label', getCloseIconLabel(value));
+
             tabManager();
         });
 
