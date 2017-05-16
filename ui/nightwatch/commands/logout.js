@@ -12,16 +12,22 @@
 
 /**
  * This will logout the user and should be called at the end of every test.
+ * @param endSession {boolean} optional, default true
+ * @param cb {function} optional, a callback which is executed after the logout
  */
-exports.command = function () {
+exports.command = function (endSession, cb) {
 
     this
-        .waitForElementVisible('#io-ox-topbar-dropdown-icon', 25000)
-        .click('#io-ox-topbar-dropdown-icon > a.dropdown-toggle')
-        .waitForElementVisible('#topbar-settings-dropdown')
-        .click('#topbar-settings-dropdown > a[data-action="logout"')
+        .clickWhenVisible('#io-ox-topbar-dropdown-icon > a.dropdown-toggle', 25000)
+        .clickWhenVisible('.dropdown.open a[data-action="logout"]')
         .waitForElementVisible('#io-ox-login-username', 10000)
-        .end();
+        .assert.visible('#io-ox-login-username');
+
+    this.perform(function (api, done) {
+        if (endSession !== false) api.end();
+        if (cb) cb.call(api);
+        done();
+    });
 
     return this;
 

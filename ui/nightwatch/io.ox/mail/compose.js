@@ -16,10 +16,20 @@ describe('Mail', function () {
 
         // https://testrail.open-xchange.com/index.php?/cases/view/7382
         it('Compose plain text mail', function (client) {
+            // 0) log in to settings and set compose mode to html
+            client
+                .login('app=io.ox/settings')
+                .waitForElementVisible('.io-ox-settings-main', 20000);
+
+            // open mail settings
+            client.selectFolder({ id: 'virtual/settings/io.ox/mail' });
+
+            // set compose mode to html
+            client.clickWhenVisible('.io-ox-mail-settings input[value="html"]', 2500);
+
             // 1) Switch to the mail app, select "Create mail"
             client
-                .login('app=io.ox/mail')
-                .waitForElementVisible('*[data-app-name="io.ox/mail"]', 20000)
+                .clickWhenVisible('.launchers li[data-app-name="io.ox/mail"]')
                 .assert.containsText('*[data-app-name="io.ox/mail"]', 'Mail');
 
             // 1.1) Mark all messages as read to identify the new message later on
@@ -31,7 +41,6 @@ describe('Mail', function () {
             // 1.2) continue opening mail compose
             client.waitForElementVisible('.io-ox-mail-window .window-body .classic-toolbar a[data-action="compose"]', 20000)
                 .assert.containsText('.io-ox-mail-window .window-body .classic-toolbar a[data-action="compose"]', 'Compose')
-                .setSetting('io.ox/mail', 'messageFormat', 'html')
                 .clickWhenEventListener('.io-ox-mail-window .window-body  .classic-toolbar a[data-action="compose"]', 'click', 2500)
                 .waitForElementVisible('.io-ox-mail-compose textarea.plain-text,.io-ox-mail-compose .contenteditable-editor', 20000)
                 .pause(1000)

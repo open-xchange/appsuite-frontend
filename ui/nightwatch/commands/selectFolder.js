@@ -44,8 +44,8 @@ exports.command = function (opt) {
     this
         // make sure, the folderview of the app is visible
         .execute(function () {
-            if ($('.window-container:visible .window-body > .bottom > a') === 0) return;
-            $('.window-container:visible .window-body > .bottom > a').click();
+            if ($('.window-container:visible .window-body a[data-action="open-folder-view"]').length === 0) return;
+            $('.window-container:visible .window-body a[data-action="open-folder-view"]').click();
         })
         // make sure, that the parent folder is expanded
         .execute(function (selector) {
