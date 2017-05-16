@@ -144,6 +144,7 @@ define('io.ox/portal/settings/pane', [
     var drawChangeColor = (function () {
 
         var colorNames = {
+            default:    gt('Default'),
             black:      gt('Black'),
             gray:       gt('Gray'),
             red:        gt('Red'),

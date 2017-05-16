@@ -23,7 +23,8 @@ define('plugins/portal/mail/register', [
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
     'io.ox/core/emoji/util',
-    'io.ox/core/capabilities'
+    'io.ox/core/capabilities',
+    'less!plugins/portal/mail/style'
 ], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji, capabilities) {
 
     'use strict';
@@ -67,14 +68,16 @@ define('plugins/portal/mail/register', [
             this.$el.empty()
                 .data('item', this.model.attributes)
                 .append(
-                    (function () {
-                        if ((self.model.get('flags') & 32) === 0) {
-                            return $('<i class="fa fa-circle new-item accent" aria-hidden="true">');
-                        }
-                    })(),
-                    $('<span class="bold">').text(util.getDisplayName(this.model.get('from')[0])), $.txt(' '),
-                    subjectNode = $('<span class="normal">').text(subject), $.txt(' '),
-                    $('<span class="accent">').text(received)
+                    $('<div class="row1">').append(
+                        (function () {
+                            if ((self.model.get('flags') & 32) === 0) {
+                                return $('<i class="fa fa-circle new-item accent">');
+                            }
+                        })(),
+                        $('<div class="date">').text(_.noI18n(received)),
+                        $('<div class="sender">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' ')
+                    ),
+                    $('<div class="row2">').append(subjectNode = $('<div class="subject normal">').text(subject), $.txt(' '))
                 );
 
             //process emoji
@@ -92,7 +95,7 @@ define('plugins/portal/mail/register', [
 
         tagName: 'ul',
 
-        className: 'content list-unstyled',
+        className: 'mailwidget content list-unstyled',
 
         initialize: function () {
             // reset is only triggered by garbage collection and causes wrong "empty inbox" messages under certain conditions

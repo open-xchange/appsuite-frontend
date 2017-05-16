@@ -62,7 +62,7 @@ define('plugins/portal/calendar/register', [
                 var obj = _(baton.data).first();
 
                 sum.append(
-                    $('<span class="normal accent">').text(util.getSmartDate(obj, true)), $.txt('\u00A0'),
+                    $('<span class="normal accent">').text(util.getEvenSmarterDate(obj, true)), $.txt('\u00A0'),
                     $('<span class="bold">').text(obj.title || ''), $.txt('\u00A0'),
                     $('<span class="gray">').text(obj.location || '')
                 );

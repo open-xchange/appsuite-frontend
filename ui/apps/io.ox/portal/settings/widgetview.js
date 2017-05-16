@@ -44,7 +44,7 @@ define('io.ox/portal/settings/widgetview', [
             this.model.set('enabled', !!(enabled === undefined || enabled === true), { validate: true });
             // get default color
             var color = this.model.get('color');
-            this.model.set('color', color === undefined || color === 'default' ? 'black' : color, { validate: true });
+            this.model.set('color', color === undefined || color === 'default' ? 'default' : color, { validate: true });
             // get widget options
             this.point = 'io.ox/portal/widget/' + this.model.get('type');
             this.options = ext.point(this.point + '/settings').options();
