@@ -1,4 +1,4 @@
-<html lang="es">
+<html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>7.4.1. Creación de nuevas citas</title>
@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="Guía del usuario">
 <link rel="up" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Creación de citas">
 <link rel="prev" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Creación de citas">
-<link rel="next" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. Planificación de citas con varios participantes">
+<link rel="next" href="ox.appsuite.user.sect.calendar.add.datepicker.html" title="7.4.2. Uso del selector de fecha">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Aviso Legal">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -19,13 +19,13 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
 <div class="navbar-header">
-<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.add.html">Anterior</a></li>
-<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Inicio</a></li>
-<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">TdC</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.add.scheduling.html">Siguiente</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.calendar.add.html">Zurück</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.calendar.add.datepicker.html">Weiter</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,20 +34,11 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.calendar.add.create"></a>7.4.1. Creación de nuevas citas</h3></div></div></div>
-<a class="indexterm" name="id-1.8.11.4.2"></a><a class="indexterm" name="id-1.8.11.4.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.calendar.new"></a><p>Para crear una nueva cita, dispone de las siguientes opciones:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create" title="Cómo crear una nueva cita:">Crear una cita</a> indicando asunto, hora y ubicación.</p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create.more" title="Cómo usar más funciones en la página Crear cita:">Usar funciones adicionales</a>: crear repeticiones, añadir otros participantes o recursos, establecer la disponibilidad o añadir adjuntos.</p></li>
-</ul></div>
-<p>
-      </p>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.calendar.create"></a><p class="title">Cómo crear una nueva cita:</p>
+<a class="indexterm" name="id-1.8.11.5.2"></a><a class="indexterm" name="id-1.8.11.5.3"></a><div class="task">
+<a name="ox.appsuite.user.task.calendar.add.create"></a><p class="title">Cómo crear una nueva cita:</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.folder.select" title="Cómo abrir o seleccionar una carpeta:">Abra</a> una carpeta de calendario en el árbol de carpetas.</p>
+<p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select" title="Cómo abrir o seleccionar una carpeta:">Abra</a> una carpeta de calendario en el árbol de carpetas.</p>
 <p><span class="phrase"><strong>Nota: </strong></span> Abra una carpeta de calendario en la que tenga los permisos adecuados para crear citas. Si ha seleccionado una carpeta de calendario compartida, se le preguntará dónde crear la cita:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none"><p>Si crea la cita en nombre del propietario, la cita se crea en la carpeta de calendario compartida del propietario.</p></li>
@@ -82,156 +73,31 @@
 </li>
 </ul></div>
 <p>
-            </p>
+          </p>
+        </div>
+</div>
 <div class="itemizedlist">
-<a name="ox.appsuite.user.task.calendar.create.related"></a><p class="title">Vea también</p>
+<a name="ox.appsuite.user.concept.calendar.add.create.related"></a><p class="title">Vea también</p>
 <ul class="itemizedlist" style="list-style-type: none; ">
 <li class="listitem" style="list-style-type: none">
-<p>
-                  </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create.datepicker" title="Cómo usar el selector de fechas en la página Crear cita:">Cómo usar el selector de fechas en la página <span class="guilabel"><strong>Crear cita</strong></span>:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create.more" title="Cómo usar más funciones en la página Crear cita:">Cómo usar más funciones en la página <span class="guilabel"><strong>Crear cita</strong></span>:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html#ox.appsuite.user.task.calendar.scheduling" title="Cómo usar la vista de planificación para crear citas:">Cómo usar la vista de planificación para crear citas:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html" title="7.4.7. Resolución de conflictos de citas">Resolución de conflictos de citas</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.3. Creación de citas de seguimiento">Creación de citas de seguimiento</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.icalattachment.html" title="7.4.4. Crear citas desde adjuntos iCal">Crear citas desde adjuntos iCal</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.import.html" title="7.4.5. Importar citas desde ficheros">Importar citas desde ficheros</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.subscribe.html" title="7.4.6. Suscribirse a citas de otros calendarios">Suscribirse a citas de otros calendarios</a></td></tr>
-</table>
-<p>
-                </p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.datepicker.html" title="7.4.2. Uso del selector de fecha">Uso del selector de fecha</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.serial.html" title="7.4.3. Establecer cita periódica">Establecer cita periódica</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.participants.html" title="7.4.4. Añadir participantes o recursos a una cita">Añadir participantes o recursos a una cita</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.display.html" title="7.4.5. Configuración de la visualización de una cita">Configuración de la visualización de una cita</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.attachments.html" title="7.4.6. añadir adjuntos">añadir adjuntos</a></p>
 </li>
+<li class="listitem" style="list-style-type: none"><p><a class="xref" href="ox.appsuite.user.sect.calendar.gui.create.html" title="7.1.11. La vista para crear o editar de Calendario">La vista para crear o editar de <span class="phrase">Calendario</span></a></p></li>
 <li class="listitem" style="list-style-type: none">
-<table border="0" summary="Simple list" class="simplelist"><tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.create" title="Vista para crear o editar">Vista para crear o editar</a></td></tr></table>
-<p>
-                </p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.7. Uso de la vista de planificación">Uso de la vista de planificación</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.followup.html" title="7.4.8. Creación de citas de seguimiento">Creación de citas de seguimiento</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.icalattachment.html" title="7.4.9. Crear citas desde adjuntos iCal">Crear citas desde adjuntos iCal</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.import.html" title="7.4.10. Importar citas desde ficheros">Importar citas desde ficheros</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.subscribe.html" title="7.4.11. Suscribirse a citas de otros calendarios">Suscribirse a citas de otros calendarios</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html" title="7.4.12. Resolución de conflictos de citas">Resolución de conflictos de citas</a></p>
 </li>
 </ul>
 </div>
-<p>
-          </p>
-</div>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.calendar.create.datepicker"></a><p class="title">Cómo usar el selector de fechas en la página <span class="guilabel"><strong>Crear cita</strong></span>:</p>
-<div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>Pulse en el campo de fecha ubicado debajo de <span class="guibutton"><strong>Comienza el</strong></span> o de <span class="guibutton"><strong>Finaliza el</strong></span>. Se abrirá el selector de fechas.</p></li>
-<li class="step">
-<p>Para seleccionar una fecha del mes actual, pulse en el día deseado. Para seleccionar la fecha de hoy, también puede pulsar en el botón <span class="guibutton"><strong>Hoy</strong></span>.</p>
-<p>El selector de fechas se cerrará. La fecha se introducirá en el campo de fecha.</p>
-</li>
-<li class="step">
-<p>Para seleccionar una fecha de otro mes, dispone de las siguientes opciones:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>Para navegar por mes, utilice los iconos de <span class="guibutton"><strong>Navegación</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.datepicker.browse.month"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>.</p></li>
-<li class="listitem">
-<p>Para navegar a un mes específico del año actual, pulse en el nombre del mes en la cabecera. Se mostrarán los meses del año actual.</p>
-<p>Para navegar por año, utilice los iconos de <span class="guibutton"><strong>Navegación</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.datepicker.browse.year"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>.</p>
-<p>Pulse en el mes deseado.</p>
-</li>
-<li class="listitem">
-<p>Para navegar a un mes concreto de un año distinto, pulse en el nombre del mes en la cabecera. Se mostrarán los meses del año actual. </p>
-<p>Pulse en el año. Se muestra una lista de años.</p>
-<p>Para navegar por esta vista general, utilice los iconos de <span class="guibutton"><strong>Navegación</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.datepicker.browse.decade"></a><img src="../../images/appsuite_user_icon_calendar_browse.png"></span>.</p>
-<p>Pulse en el año deseado. Pulse en el mes deseado.</p>
-</li>
-</ul></div>
-<p>
-            </p>
-<p>Pulse en el día deseado. Se cerrará el selector de fechas. La fecha se introducirá en el campo de fecha.</p>
-</li>
-</ol></div>
-<div class="taskrelated">
-          <p>
-            </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.task.calendar.create.datepicker.related"></a><p class="title">Vea también</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                  </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create" title="Cómo crear una nueva cita:">Cómo crear una nueva cita:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html#ox.appsuite.user.task.calendar.scheduling" title="Cómo usar la vista de planificación para crear citas:">Cómo usar la vista de planificación para crear citas:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html" title="7.4.7. Resolución de conflictos de citas">Resolución de conflictos de citas</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.groups.html" title="7.9. Gestión de grupos">Gestión de grupos</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.resources.html" title="7.10. Gestión de recursos">Gestión de recursos</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="6.6. Creación de listas de distribución">Creación de listas de distribución</a></td></tr>
-</table>
-<p>
-                </p>
-</li>
-<li class="listitem" style="list-style-type: none">
-<table border="0" summary="Simple list" class="simplelist"><tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.reference.calendar.gui.datepicker" title="Selector de fecha">Selector de fecha</a></td></tr></table>
-<p>
-                </p>
-</li>
-</ul>
-</div>
-<p>
-          </p>
-</div>
-</div>
-<div class="task">
-<a name="ox.appsuite.user.task.calendar.create.more"></a><p class="title">Cómo usar más funciones en la página <span class="guilabel"><strong>Crear cita</strong></span>:</p>
-<div class="procedure"><ol class="procedure" type="1">
-<li class="step">
-<p>Para crear una cita periódica, marque <span class="guibutton"><strong>Repetir</strong></span>. Se mostrarán los parámetros de repetición actuales.</p>
-<p>Para establecer los parámetros de repetición, pulse en cada valor. Se pueden encontrar ejemplos en las <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.serial" title="P:">Preguntas y respuestas del calendario</a>.</p>
-<p>Para ocultar los parámetros de repetición, pulse el icono <span class="guibutton"><strong>Cerrar</strong></span> <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.more"></a><img src="../../images/appsuite_user_icon_close_setting.png"></span> . Para mostrarlos de nuevo, pulse en la frase que hay junto a <span class="guibutton"><strong>Repetir</strong></span>.</p>
-</li>
-<li class="step"><p>En <span class="guibutton"><strong>Mostrado como</strong></span> se puede establecer la apariencia de disponibilidad. Se pueden encontrar ejemplos en las <a class="link" href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar.display_as" title="P:">Preguntas y respuestas del calendario</a>.</p></li>
-<li class="step"><p>Si el asunto no se debe mostrar a otros usuarios, marque <span class="guibutton"><strong>Privado</strong></span>. Las citas privadas se marcan con el icono <span class="guilabel"><strong>Privado</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.more.private"></a><img src="../../images/appsuite_user_icon_private.png"></span> . </p></li>
-<li class="step">
-<p>Para asignar un color individual a la cita, pulse en un campo de color. Si no selecciona un color o pulsa en el primer campo de color, la cita se muestra en el color de la carpeta de calendario. El color predeterminado de una carpeta de calendario es azul claro.</p>
-<p><span class="phrase"><strong>Nota: </strong></span> El desplegable de selección de color solo se muestra si está marcado <span class="guibutton"><strong>Colores personalizados</strong></span> en el menú <span class="guibutton"><strong>Vista</strong></span> de la barra de herramientas.</p>
-</li>
-<li class="step">
-<p>Para añadir otros participantes o recursos, indique los correos de los participantes, un nombre de grupo, una lista de distribución o el nombre del recurso en el campo que hay debajo de <span class="guilabel"><strong>Participantes</strong></span>.</p>
-<div class="more">
-<a name="ox.appsuite.user.task.calendar.create.participant.more"></a><p><span class="phrase"><strong>Consejo:</strong></span> Al introducir los destinatarios se van mostrando sugerencias similares a lo escrito. Para aceptar una sugerencia use uno de los siguientes métodos: </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>Use la barra de desplazamiento para navegar por la lista. Pulse en una sugerencia.</p></li>
-<li class="listitem" style="list-style-type: none"><p>Use las teclas de movimiento del cursor para seleccionar una sugerencia. Pulse Intro.</p></li>
-</ul></div>
-<p> Para eliminar un participante o un recurso, pulse en el icono <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.create.participant.remove"></a><img src="../../images/appsuite_user_icon_trash.png"></span> que hay junto a su nombre.</p>
-</div>
-<p>Para informar a todos los participantes de la nueva cita, marque <span class="guilabel"><strong>Notificar a todos los participantes por correo electrónico.</strong></span>.</p>
-<p><span class="phrase"><strong>Consejo:</strong></span> Para encontrar citas libres de todos los participantes y recursos puede <a class="link" href="ox.appsuite.user.sect.calendar.add.scheduling.html#ox.appsuite.user.task.calendar.scheduling" title="Cómo usar la vista de planificación para crear citas:">usar la vista de planificación</a>. </p>
-</li>
-<li class="step">
-<p>Para añadir adjuntos a la cita, pulse en <span class="guibutton"><strong>Añadir adjuntos</strong></span> debajo de <span class="guilabel"><strong>Adjuntos</strong></span>. Seleccione uno o varios ficheros.</p>
-<p>Para eliminar un adjunto, pulse el icono <span class="guibutton"><strong>Borrar</strong></span><span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.calendar.delete.attachment"></a><img src="../../images/appsuite_user_icon_trash.png"></span> .</p>
-<div class="more">
-<a name="ox.appsuite.user.task.calendar.send.attachment.more"></a><p><span class="phrase"><strong>Consejo:</strong></span> También puede añadir un adjunto arrastrando y soltando un documento desde un administrador de ficheros o desde el escritorio hasta la ventana de la cita. </p>
-</div>
-</li>
-</ol></div>
-<div class="taskrelated">
-          <p>
-            </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.task.calendar.create.more.related"></a><p class="title">Vea también</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p>
-                  </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.create.html#ox.appsuite.user.task.calendar.create" title="Cómo crear una nueva cita:">Cómo crear una nueva cita:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html#ox.appsuite.user.task.calendar.scheduling" title="Cómo usar la vista de planificación para crear citas:">Cómo usar la vista de planificación para crear citas:</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.add.conflicthandling.html" title="7.4.7. Resolución de conflictos de citas">Resolución de conflictos de citas</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.groups.html" title="7.9. Gestión de grupos">Gestión de grupos</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.calendar.resources.html" title="7.10. Gestión de recursos">Gestión de recursos</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.contacts.distributionlist.html" title="6.6. Creación de listas de distribución">Creación de listas de distribución</a></td></tr>
-</table>
-<p>
-                </p>
-</li></ul>
-</div>
-<p>
-          </p>
-</div>
-</div>
+<p><a name="ox.appsuite.user.concept.calendar.add.create.parent"></a>Tema superior: <a class="xref" href="ox.appsuite.user.sect.calendar.add.html" title="7.4. Creación de citas">Creación de citas</a></p>
 </div>
           </div>
         </body>
