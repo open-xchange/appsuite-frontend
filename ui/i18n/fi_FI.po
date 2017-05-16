@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-17 14:06+0200\n"
+"PO-Revision-Date: 2017-05-14 16:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: NAME <EMAIL>\n"
 "Language: fi_FI\n"
@@ -1463,10 +1463,10 @@ msgstr "paikka  %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Kansiot"
 
@@ -2183,6 +2183,15 @@ msgstr "Kalenterin viikkonäkymä"
 msgid "Appointment list"
 msgstr "Tapaamisluettelo"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr ""
+"Nykyisessä kalenterissa on enemmän kuin %n tapaamista. Jotkin ominaisuudet "
+"on kytketty pois päältä suorituskykysyistä."
+
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "Hallitse suosikkeja"
@@ -2362,6 +2371,18 @@ msgstr "Kaikki jakelulistat"
 msgid "All groups"
 msgstr "Kaikki ryhmät"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Tyhjä"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Valitse"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2375,22 +2396,6 @@ msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d viesti valittuna"
 msgstr[1] "%1$d viestiä valittuna"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Tyhjennä kenttä"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Tyhjä"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Valitse"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3711,6 +3716,14 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"Kansiota ei voitu poistaa. Tämä voi johtua roskakorisi puuttuvista luvista "
+"tai kyseessä saattaa olla erityinen kansio, jota ei voida poistaa."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Haluatko varmasti poistaa kansion \"%s\"?"
 
@@ -3845,12 +3858,6 @@ msgid "Add storage account"
 msgstr "Lisää säilytystili"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "Lisää postitili"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Tilaa osoitekirja"
@@ -3863,6 +3870,12 @@ msgstr "Tilaa kalenteri"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Katso kaikki liitteet"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "Lisää postitili"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3941,8 +3954,16 @@ msgid "Total: %1$d"
 msgstr "Yhteensä %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "%1$d yhteensä"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Lukematon: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
+msgstr "%1$d luettu"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
@@ -4704,6 +4725,10 @@ msgid "High contrast theme"
 msgstr "Korkean kontrastin teema"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Refresh interval"
+msgstr "Päivitysväli"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minuuttia"
@@ -4720,10 +4745,6 @@ msgstr "15 minuuttia"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minuuttia"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Refresh interval"
-msgstr "Päivitysväli"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -4973,8 +4994,8 @@ msgid "My %1$s account"
 msgstr " %1$s -tilini"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "Konfiguroi  %1$s"
+msgid "Configure %s"
+msgstr "Konfiguroi %s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5176,6 +5197,10 @@ msgstr "%1$s, %2$s lisätty."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "%1$s lisätty."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Paina askelpalautinnäppäintä poistaaksesi."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6115,6 +6140,13 @@ msgid "Please specify these missing variables: "
 msgstr "Määrittele nämä puuttuvat muuttujat:"
 
 #. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr "Kiintiö"
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -6171,20 +6203,24 @@ msgid "Adding files with identical names"
 msgstr "Lisätään samannimiset tiedostot"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Toista vain kerran"
+msgid "Show all images just once"
+msgstr "Näytä kaikki kuvat vain kerran"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Toista loputtomasti"
+msgid "Repeat slideshow"
+msgstr "Toista diaesitys"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Diaesitys / Automaattinen esitys"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Diaesitys / Automaattinen soitto-tila kuville"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Automaattisen esityksen keskeytys sekunneissa"
+msgid "Show all images for"
+msgstr "Näytä kaikki kuvat "
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "sekuntia"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -7015,12 +7051,6 @@ msgstr "Roskaposti"
 msgid "Not spam"
 msgstr "Ei roskapostia"
 
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Liputa"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Lähetä uusi viesti"
@@ -7274,8 +7304,6 @@ msgid "Move to category"
 msgstr "Siirrä alaan"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
 msgid "Move to folder"
 msgstr "Siirrä kansioon"
 
@@ -7436,8 +7464,6 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "CC"
 msgstr "Kopio"
 
@@ -7870,10 +7896,17 @@ msgstr "Poista IMAP avainsana"
 msgid "Keep"
 msgstr "Säilytä"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-msgid "Copy message to folder"
-msgstr "Kopioi viesti kansioon"
+msgid "File into"
+msgstr "Arkistoi kansioon"
+
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Kopioi kansioon"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7897,8 +7930,8 @@ msgstr "jatka jos kaikki nämä ehdot täyttyvät"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
-msgstr "jatka jos jokin näistä ehdoista täyttyy."
+msgid "continue if any of these condition is met"
+msgstr "jatka jos jokin näistä ehdoista täyttyy"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7924,38 +7957,44 @@ msgstr "Päivämäärä tänään"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "original timezone"
-msgstr "Alkuperäinen aikavyöhyke"
+msgid "original time zone"
+msgstr "alkuperäinen aikavyöhyke"
+
+#. greater than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Greater equals"
+msgstr "Yhtä suuri tai suurempi kuin"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "yhtä suuri tai pienempi kuin"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies from"
-msgstr "Sääntöä noudatetaan alkaen"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is exactly"
+msgstr "On täsmälleen"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies until"
-msgstr "Säännön noudattaminen päättyy"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "Ei ole tarkasti"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies on"
-msgstr "Sääntöä noudatetaan "
+msgid "Lower"
+msgstr "Pienempi"
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not on"
-msgstr "Sääntö ei koske"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not from"
-msgstr "Sääntö ei koske "
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not until"
-msgstr "Sääntö ei koske ennen"
+msgid "Greater"
+msgstr "Suurempi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7995,6 +8034,11 @@ msgstr "Otsake"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Cc"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Kuka tahansa vastaanottaja"
 
@@ -8025,11 +8069,6 @@ msgstr "Osoite"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "Cc"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Piilokopio"
 
@@ -8038,11 +8077,13 @@ msgstr "Piilokopio"
 msgid "Sender"
 msgstr "Lähettäjä"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-From"
 msgstr "Uudelleenlähetetty-lähettäjä"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-To"
@@ -8050,8 +8091,8 @@ msgstr "Uudelleenlähetetty - Vastaanottaja"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Exists"
-msgstr "On olemassa"
+msgid "Header exists"
+msgstr "Otsikko on olemassa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8067,16 +8108,6 @@ msgstr "Sisältää merkkejä"
 #: module:io.ox/mailfilter
 msgid "Contains not"
 msgstr "Ei sisällä"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is exactly"
-msgstr "On täsmälleen"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Ei ole tarkasti"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8098,11 +8129,13 @@ msgstr "Alkaa"
 msgid "Starts not with"
 msgstr "Ei ala "
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends with"
 msgstr "Loppuu tavalla"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends not with"
@@ -8117,6 +8150,36 @@ msgstr "Säännöllinen lauseke (regex)"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Ei Regex"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "löytyy vastaava alajono"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "ei löydy vastaavaa alajonoa"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "löytyy tarkasti vastaava osuma"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "ei löydy tarkasti vastaavaa osumaa"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "täydellinen vastaavuus (sallii DOS-tyyppiset villit kortit)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "ei täydellistä vastaavuutta (sallii DOS-tyyppiset villit kortit)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8154,8 +8217,8 @@ msgstr "Sovella sääntöä, jos kaikki ehdot täyttyvät"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Sovella sääntöä, jos jokin ehto täyttyy."
+msgid "Apply rule if any condition is met"
+msgstr "Käytä sääntöä jos jokin ehto täyttyy"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -8364,6 +8427,7 @@ msgstr "Merkitse viestit, joiden aihe on %1$s, tunnisteella %2$s"
 msgid "Thread"
 msgstr "Keskustelu"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -8715,6 +8779,12 @@ msgstr "Muokkaa kopiota"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Aseta kategoria"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Liputa"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -10643,11 +10713,6 @@ msgstr "PowerDNS vanhemman valvonta"
 msgid "Open parental control settings"
 msgstr "Avaa vanhempien valvontasetukset"
 
-#. Quota means a general quota for mail and files
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Quota"
-msgstr "Kiintiö"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Viestien kappalemäärän kiintiö"
@@ -10885,6 +10950,7 @@ msgstr "Salasanan vähimmäispituus on %1$d."
 msgid "Your current password"
 msgstr "Nykyinen salasanasi"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Leave empty if you have none"
 msgstr "Jätä tyhjäksi jos ei mitään"
@@ -11117,6 +11183,57 @@ msgstr "Kutsu %s:in"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "%s lisää"
+
+#~ msgid "Clear selection"
+#~ msgstr "Tyhjennä kenttä"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "Konfiguroi  %1$s"
+
+#~ msgid "Loop once only"
+#~ msgstr "Toista vain kerran"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Toista loputtomasti"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Diaesitys / Automaattinen esitys"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Automaattisen esityksen keskeytys sekunneissa"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Kopioi viesti kansioon"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "jatka jos jokin näistä ehdoista täyttyy."
+
+#~ msgid "original timezone"
+#~ msgstr "Alkuperäinen aikavyöhyke"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Sääntöä noudatetaan alkaen"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Säännön noudattaminen päättyy"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Sääntöä noudatetaan "
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Sääntö ei koske"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Sääntö ei koske "
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Sääntö ei koske ennen"
+
+#~ msgid "Exists"
+#~ msgstr "On olemassa"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Sovella sääntöä, jos jokin ehto täyttyy."
 
 #~ msgid "Content"
 #~ msgstr "Sisältö"

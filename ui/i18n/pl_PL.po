@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-22 10:45+0200\n"
+"PO-Revision-Date: 2017-05-10 15:14+0200\n"
 "Last-Translator: jolanta <kontekst@kontekst.biz>\n"
 "Language-Team: Polish <>\n"
 "Language: pl_PL\n"
@@ -1411,10 +1411,10 @@ msgstr "miejsce: %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Foldery"
 
@@ -2131,6 +2131,13 @@ msgstr "Widok tygodnia w kalendarzu"
 msgid "Appointment list"
 msgstr "Lista spotkań"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr "W bieżącym kalendarzu jest więcej niż spotkań niż %n. Niektóre funkcje wyłączono ze względu na wydajność."
+
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "Zarządzaj ulubionymi"
@@ -2310,6 +2317,18 @@ msgstr "Wszystkie listy dystrybucyjne"
 msgid "All groups"
 msgstr "Wszystkie grupy"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Puste"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Wybierz"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2325,22 +2344,6 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "Wybrano %1$d adres"
 msgstr[1] "Wybrano %1$d adresy"
 msgstr[2] "Wybrano %1$d adresów"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Wyczyść zaznaczenie"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Puste"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Wybierz"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3645,6 +3648,12 @@ msgid "CalDAV URL"
 msgstr "Adres URL CalDAV"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr "Nie można usunąć folderu. Może to być spowodowane niedostatecznymi uprawnieniami do folderu kosza lub może to być folder specjalny, którego nie można usunąć."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Czy na pewno chcesz usunąć folder \"%s\"?"
 
@@ -3776,12 +3785,6 @@ msgid "Add storage account"
 msgstr "Dodaj konto magazynu"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "Dodaj konto e-mail"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Subskrybuj książkę adresową"
@@ -3794,6 +3797,12 @@ msgstr "Subskrybuj kalendarz"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Wyświetl wszystkie załączniki"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "Dodaj konto e-mail"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3872,7 +3881,15 @@ msgid "Total: %1$d"
 msgstr "Razem: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "Łącznie: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
+msgstr "Nieprzeczytane: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
 msgstr "Nieprzeczytane: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
@@ -4604,6 +4621,10 @@ msgid "High contrast theme"
 msgstr "Motyw z wysokim kontrastem"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Refresh interval"
+msgstr "Odstęp odświeżania"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minut"
@@ -4620,10 +4641,6 @@ msgstr "15 minut"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minut"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Refresh interval"
-msgstr "Odstęp odświeżania"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -4864,8 +4881,8 @@ msgid "My %1$s account"
 msgstr "Moje konto %1$s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "Konfiguruj %1$s"
+msgid "Configure %s"
+msgstr "Konfiguruj %s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5065,6 +5082,10 @@ msgstr "Dodano %1$s, %2$s."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "Dodano %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Aby usunąć, naciśnij klawisz Backspace."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5988,6 +6009,13 @@ msgid "Please specify these missing variables: "
 msgstr "Podaj następujące brakujące zmienne:"
 
 #. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr "Ograniczenie miejsca"
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -6044,20 +6072,24 @@ msgid "Adding files with identical names"
 msgstr "Dodawanie plików o identycznych nazwach"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Zapętl tylko raz"
+msgid "Show all images just once"
+msgstr "Pokazuj wszystkie obrazy tylko raz"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Zapętl w nieskończoność"
+msgid "Repeat slideshow"
+msgstr "Powtórz pokaz slajdów"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Pokaz slajdów / Tryb odtwarzania automatycznego"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Pokaz slajdów / Tryb automatycznego odtwarzania obrazów"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Wstrzymanie odtwarzania automatycznego w sekundach"
+msgid "Show all images for"
+msgstr "Pokazuj wszystkie obrazy przez"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "s"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -6882,12 +6914,6 @@ msgstr "Oznacz jako spam"
 msgid "Not spam"
 msgstr "Nie spam"
 
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Oflaguj"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Wyślij nową wiadomość"
@@ -7125,8 +7151,6 @@ msgid "Move to category"
 msgstr "Przenieś do kategorii"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
 msgid "Move to folder"
 msgstr "Przenieś do folderu"
 
@@ -7284,8 +7308,6 @@ msgstr "Pole tokenu autouzupełniania %1$s. Do poruszania się między tokenami 
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "CC"
 msgstr "DW"
 
@@ -7717,10 +7739,17 @@ msgstr "Usuń słowo kluczowe IMAP"
 msgid "Keep"
 msgstr "Zatrzymaj"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-msgid "Copy message to folder"
-msgstr "Skopiuj wiadomość do folderu"
+msgid "File into"
+msgstr "Plik do"
+
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Kopiuj do"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7740,12 +7769,12 @@ msgstr "Warunek zagnieżdżony"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "continue if all of these conditions are met"
-msgstr "kontynuuj, jeśli spełnione zostały wszystkie warunki."
+msgstr "kontynuuj, jeśli spełnione zostały wszystkie warunki"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
-msgstr "kontynuuj, jeśli spełniono co najmniej jeden warunek."
+msgid "continue if any of these condition is met"
+msgstr "kontynuuj, jeśli spełniono co najmniej jeden warunek"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7771,38 +7800,44 @@ msgstr "Bieżąca data"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "original timezone"
+msgid "original time zone"
 msgstr "oryginalna strefa czasowa"
 
+#. greater than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies from"
-msgstr "Reguła obowiązuje od"
+msgid "Greater equals"
+msgstr "Większe lub równe"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "Mniejsze lub równe"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies until"
-msgstr "Reguła obowiązuje do"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is exactly"
+msgstr "Jest dokładnie"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies on"
-msgstr "Reguła obowiązuje"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "Nie jest niedokładnie"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not on"
-msgstr "Reguła nie obowiązuje w"
+msgid "Lower"
+msgstr "Mniejsze"
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not from"
-msgstr "Reguła nie obowiązuje od"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not until"
-msgstr "Reguła nie obowiązuje do"
+msgid "Greater"
+msgstr "Większe"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7842,6 +7877,11 @@ msgstr "Nagłówek"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "DW"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Dowolny adresat"
 
@@ -7872,11 +7912,6 @@ msgstr "Adres"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "DW"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "UDW"
 
@@ -7885,11 +7920,13 @@ msgstr "UDW"
 msgid "Sender"
 msgstr "Nadawca"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-From"
 msgstr "Wyślij ponownie-Od"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-To"
@@ -7897,8 +7934,8 @@ msgstr "Wyślij ponownie-Do"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Exists"
-msgstr "Istnieje"
+msgid "Header exists"
+msgstr "Nagłówek istnieje"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -7914,16 +7951,6 @@ msgstr "Zawiera"
 #: module:io.ox/mailfilter
 msgid "Contains not"
 msgstr "Nie zawiera"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is exactly"
-msgstr "Jest dokładnie"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Nie jest niedokładnie"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -7945,11 +7972,13 @@ msgstr "Zaczyna się od"
 msgid "Starts not with"
 msgstr "Nie zaczyna się od"
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends with"
 msgstr "Kończy się na"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends not with"
@@ -7964,6 +7993,36 @@ msgstr "Wyrażenie regularne"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nie jest wyrażeniem regularnym"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "pasuje do podłańcucha"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "nie pasuje do podłańcucha"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "pełne, dokładne dopasowanie"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "inne niż pełne, dokładne dopasowanie "
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "pełne dopasowanie (dozwolone są znaki wieloznaczne z systemu DOS)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "inne niż pełne dopasowanie (dozwolone są znaki wieloznaczne z systemu DOS)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7995,12 +8054,12 @@ msgstr "Nazwa reguły"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Apply rule if all conditions are met"
-msgstr "Zastosuj regułę, jeśli spełnione zostały wszystkie warunki."
+msgstr "Zastosuj regułę, jeśli spełniono wszystkie warunki."
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Zastosuj regułę, jeśli spełniony został co najmniej jeden warunek."
+msgid "Apply rule if any condition is met"
+msgstr "Zastosuj regułę, jeśli spełniono co najmniej jeden warunek."
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -8209,6 +8268,7 @@ msgstr "Oznacz wiadomości z tematem \"%1$s\" znacznikiem %2$s"
 msgid "Thread"
 msgstr "Wątek"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -8555,6 +8615,12 @@ msgstr "Edytuj kopię"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Ustaw kategorię"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Oflaguj"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -10432,11 +10498,6 @@ msgstr "Kontrola rodzicielska PowerDNS"
 msgid "Open parental control settings"
 msgstr "Otwórz ustawienia kontroli rodzicielskiej"
 
-#. Quota means a general quota for mail and files
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Quota"
-msgstr "Ograniczenie miejsca"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Ograniczenie liczby wiadomości e-mail"
@@ -10672,6 +10733,7 @@ msgstr "Minimalna długość hasła: %1$d."
 msgid "Your current password"
 msgstr "Bieżące hasło"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Leave empty if you have none"
 msgstr "Jeśli go nie masz, pozostaw pole puste"
@@ -10890,6 +10952,57 @@ msgstr "Zaproś na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Dodaj w serwisie %s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Wyczyść zaznaczenie"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "Konfiguruj %1$s"
+
+#~ msgid "Loop once only"
+#~ msgstr "Zapętl tylko raz"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Zapętl w nieskończoność"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Pokaz slajdów / Tryb odtwarzania automatycznego"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Wstrzymanie odtwarzania automatycznego w sekundach"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Skopiuj wiadomość do folderu"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "kontynuuj, jeśli spełniono co najmniej jeden warunek."
+
+#~ msgid "original timezone"
+#~ msgstr "oryginalna strefa czasowa"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Reguła obowiązuje od"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Reguła obowiązuje do"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Reguła obowiązuje"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Reguła nie obowiązuje w"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Reguła nie obowiązuje od"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Reguła nie obowiązuje do"
+
+#~ msgid "Exists"
+#~ msgstr "Istnieje"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Zastosuj regułę, jeśli spełniony został co najmniej jeden warunek."
 
 #~ msgid "Content"
 #~ msgstr "Zawartość"

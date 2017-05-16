@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-21 11:35+0300\n"
+"PO-Revision-Date: 2017-05-15 19:15+0300\n"
 "Last-Translator: Aivars Oliņš <aivars@adsl.lv>\n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: lv_LV\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.2\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -1442,10 +1442,10 @@ msgstr "vieta %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mapes"
 
@@ -2170,6 +2170,15 @@ msgstr "Kalendāra nedēļas skats"
 msgid "Appointment list"
 msgstr "Mītiņu saraksts"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr ""
+"Pašreizējā kalendārā ir vairāk par %n tikšanās ierakstu. Veiktspējas iemeslu "
+"dēļ dažas no funkcijām ir atspējotas."
+
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "Pārvaldīt izlases"
@@ -2349,6 +2358,18 @@ msgstr "Visi izplatīšanas sarakstui"
 msgid "All groups"
 msgstr "Visas grupas"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Tukšs"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Izvēlēties"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2364,22 +2385,6 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "Izvēlēta %1$s adrese"
 msgstr[1] "Izvēlētas %1$s adreses"
 msgstr[2] "Izvēlētas %1$s adreses"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Notīrīt izvēles"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Tukšs"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Izvēlēties"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3721,6 +3726,14 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"Nevar izdzēst mapi. Tas var būt saistīts ar nepietiekamām tiesībām miskastes "
+"mapē vai tā var arī būt īpaša mape, kuru nevar dzēst."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Vai tiešām vēlaties dzēst mapi \"%s\"?"
 
@@ -3854,12 +3867,6 @@ msgid "Add storage account"
 msgstr "Pievienot glabātuves kontu"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "Pievienot pasta kontu"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Abonēt adrešu grāmatu"
@@ -3872,6 +3879,12 @@ msgstr "Abonēt kalendāru"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Skatīt visus pievienojumus"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "Pievienot pasta kontu"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3950,8 +3963,16 @@ msgid "Total: %1$d"
 msgstr "Kopā: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "%1$ d kopā"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Nelasīts: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
+msgstr "%1$ d nelasīts"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
@@ -4712,6 +4733,10 @@ msgid "High contrast theme"
 msgstr "Augsta kontrasta tēma"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Refresh interval"
+msgstr "Jaunināšanas intervāls"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minūtes"
@@ -4728,10 +4753,6 @@ msgstr "15 minūtes"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minūtes"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Refresh interval"
-msgstr "Jaunināšanas intervāls"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -4980,8 +5001,8 @@ msgid "My %1$s account"
 msgstr "Mans %1$s konts"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "Konfigurēt %1$s"
+msgid "Configure %s"
+msgstr "Konfigurēt %s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5187,6 +5208,10 @@ msgstr "Pievienots %1$s, %2$s."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "Pievienots %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Lai dzēstu, piespiediet atpakaļatkāpes taustiņu."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6146,6 +6171,13 @@ msgid "Please specify these missing variables: "
 msgstr "Lūdzu norādiet iztrūkstošās vērtības: "
 
 #. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr "Kvota"
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -6202,20 +6234,24 @@ msgid "Adding files with identical names"
 msgstr "Pievieno failus ar vienādiem vārdiem"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Ciklot tikai vienu reizi"
+msgid "Show all images just once"
+msgstr "Parādīt visus attēlus tikai vienu reizi"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Turpināt ciklot bezgalīgi"
+msgid "Repeat slideshow"
+msgstr "Atkārtot slaidrādi"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Slaidrādes / Auto-atskaņošanas režīms"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Slaidrāde / Auto-atskaņošanas režīms"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Auto-atskaņošanas pauze sekundēs"
+msgid "Show all images for"
+msgstr "Rādīt visus attēlus"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "sekundes"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -7057,12 +7093,6 @@ msgstr "Iestatīt kā mēstuli"
 msgid "Not spam"
 msgstr "Nav mēstule"
 
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Iezīmēt"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Sūtīt  jaunu pastu"
@@ -7325,8 +7355,6 @@ msgid "Move to category"
 msgstr "Pārvietot uz kategoriju"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
 msgid "Move to folder"
 msgstr "Pārvietot uz mapi"
 
@@ -7492,8 +7520,6 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "CC"
 msgstr "CC"
 
@@ -7933,10 +7959,17 @@ msgstr "Noņemt IMAP atslēgvārdu"
 msgid "Keep"
 msgstr "Paturēt"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-msgid "Copy message to folder"
-msgstr "Kopēt paziņojumu uz mapi"
+msgid "File into"
+msgstr "Saglabāt iekš"
+
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Kopēt iekš"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7960,8 +7993,8 @@ msgstr "turpināt, ja izpildās visi šie nosacījumi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
-msgstr "turpināt, ja izpildās jebkurš nosacījums"
+msgid "continue if any of these condition is met"
+msgstr "turpināt, ja izpildās jebkurš no nosacījumiem"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7987,38 +8020,44 @@ msgstr "Pašreizējais datums"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "original timezone"
+msgid "original time zone"
 msgstr "oriģinālā laika josla"
 
+#. greater than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies from"
-msgstr "Noteikums ir spēkā no"
+msgid "Greater equals"
+msgstr "Lielāks vienāds"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "Mazāks vienāds"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies until"
-msgstr "Noteikums ir spēkā līdz"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is exactly"
+msgstr "Ir tieši"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies on"
-msgstr "Noteikums ir spēkā"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "Nav tieši"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not on"
-msgstr "Noteikums nav spēkā"
+msgid "Lower"
+msgstr "Mazāks"
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not from"
-msgstr "Noteikums nav spēkā no"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not until"
-msgstr "Noteikums nav spēkā līdz"
+msgid "Greater"
+msgstr "Lielāks"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8058,6 +8097,11 @@ msgstr "Hederis"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Cc"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Jebkurš saņēmējs"
 
@@ -8088,11 +8132,6 @@ msgstr "Adrese"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "Cc"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Bcc"
 
@@ -8101,11 +8140,13 @@ msgstr "Bcc"
 msgid "Sender"
 msgstr "Sūtītājs"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-From"
 msgstr "Pārsūtīts-No"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-To"
@@ -8113,8 +8154,8 @@ msgstr "Pārsūtīts-Kam"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Exists"
-msgstr "Eksistē"
+msgid "Header exists"
+msgstr "Galvene eksistē"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8130,16 +8171,6 @@ msgstr "Satur"
 #: module:io.ox/mailfilter
 msgid "Contains not"
 msgstr "Nesatur"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is exactly"
-msgstr "Ir tieši"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Nav tieši"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8161,11 +8192,13 @@ msgstr "Sākas ar"
 msgid "Starts not with"
 msgstr "Nesākas ar"
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends with"
 msgstr "Beidzas ar"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends not with"
@@ -8180,6 +8213,36 @@ msgstr "Regex"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nav Regex"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "atbilst fargmentam"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "neatbilst fragmentam"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "precīzi atbilst"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "nav precīza atbilstība"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "pilnīga atbilstība (var lietot DOS aizstājsimbolus)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "nav pilnīga atbilstība (var lietot DOS aizstājsimbolus)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8217,8 +8280,8 @@ msgstr "Pielietot, ja izpildās visi nosacījumi"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Pielietot, ja izpildās jebkurš nosacījums"
+msgid "Apply rule if any condition is met"
+msgstr "Pielietot, ja izpildās jebkurš no nosacījumiem"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -8427,6 +8490,7 @@ msgstr "Kartēt vēstules ar tematu %1$s iezīmē %2$s"
 msgid "Thread"
 msgstr "Vītne"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -8779,6 +8843,12 @@ msgstr "Rediģēt kopiju"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Iestatīt kategoriju"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Iezīmēt"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -10689,11 +10759,6 @@ msgstr "PowerDNS piekļuves kontrole"
 msgid "Open parental control settings"
 msgstr "Atvērt kontroles iestatījumus"
 
-#. Quota means a general quota for mail and files
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Quota"
-msgstr "Kvota"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Vēstuļu skaita kvota"
@@ -10933,6 +10998,7 @@ msgstr "Minimālais paroles garums ir %1$d."
 msgid "Your current password"
 msgstr "Jūsu pašreizējā parole"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Leave empty if you have none"
 msgstr "Atstājiet tukšu, ja tāda nav"
@@ -11165,6 +11231,57 @@ msgstr "Uzaicināt %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pievienot %s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Notīrīt izvēles"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "Konfigurēt %1$s"
+
+#~ msgid "Loop once only"
+#~ msgstr "Ciklot tikai vienu reizi"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Turpināt ciklot bezgalīgi"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Slaidrādes / Auto-atskaņošanas režīms"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Auto-atskaņošanas pauze sekundēs"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Kopēt paziņojumu uz mapi"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "turpināt, ja izpildās jebkurš nosacījums"
+
+#~ msgid "original timezone"
+#~ msgstr "oriģinālā laika josla"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Noteikums ir spēkā no"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Noteikums ir spēkā līdz"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Noteikums ir spēkā"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Noteikums nav spēkā"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Noteikums nav spēkā no"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Noteikums nav spēkā līdz"
+
+#~ msgid "Exists"
+#~ msgstr "Eksistē"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Pielietot, ja izpildās jebkurš nosacījums"
 
 #~ msgid "Content"
 #~ msgstr "Saturs"

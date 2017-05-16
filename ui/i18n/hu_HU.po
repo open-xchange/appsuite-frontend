@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-25 12:39+0200\n"
+"PO-Revision-Date: 2017-05-08 15:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: Hungarian <hu@bureau-cornavin.com>\n"
 "Language: hu_HU\n"
@@ -1410,10 +1410,10 @@ msgstr "hely: %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Mappák"
 
@@ -2116,6 +2116,13 @@ msgstr "Naptár heti nézet"
 msgid "Appointment list"
 msgstr "Találkozólista"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr "A jelenlegi naptárban több mint %n találkozó van. Teljesítmény okokból néhány funkció letiltásra került."
+
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "Kedvencek kezelése"
@@ -2295,6 +2302,18 @@ msgstr "Összes disztribúciós lista"
 msgid "All groups"
 msgstr "Összes csoport"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Üres"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Kiválasztás"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2308,22 +2327,6 @@ msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d cím kijelölve"
 msgstr[1] "%1$d cím kijelölve"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Kijelölés megszüntetése"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Üres"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Kiválasztás"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3614,6 +3617,12 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr "Nem tudja a mappát törölni. Lehet, hogy nincs megfelelő jogosultsága a saját Törölt elemek mappájához vagy ez egy különleges mappa, amely nem törölhető."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Biztos, hogy törölni szeretné a mappát: „%s”?"
 
@@ -3745,12 +3754,6 @@ msgid "Add storage account"
 msgstr "Tároló felhasználói fiók hozzáadása"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "E-mail fiók hozzáadása"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Feliratkozás a címjegyzékre"
@@ -3763,6 +3766,12 @@ msgstr "Feliratkozás a naptárra"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Összes melléklet megjelenítése."
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "E-mail fiók hozzáadása"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3841,8 +3850,16 @@ msgid "Total: %1$d"
 msgstr "Összesen: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "%1$d összesen"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Olvasatlan: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
+msgstr "%1$d olvasatlan"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
@@ -4570,6 +4587,10 @@ msgid "High contrast theme"
 msgstr "Magas kontrasztú témák"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Refresh interval"
+msgstr "Frissítési időköz"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 perc"
@@ -4586,10 +4607,6 @@ msgstr "15 perc"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 perc"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Refresh interval"
-msgstr "Frissítési időköz"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -4830,8 +4847,8 @@ msgid "My %1$s account"
 msgstr "%1$s felhasználói fiókom"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "%1$s beállítása"
+msgid "Configure %s"
+msgstr "%s beállítása"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5029,6 +5046,10 @@ msgstr "%1$s, %2$s hozzáadva."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "%1$s hozzáadva."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Törléshez nyomja meg a backspace-t."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -5943,6 +5964,13 @@ msgid "Please specify these missing variables: "
 msgstr "Adja meg ezeket a hiányzó változókat:"
 
 #. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr "Kvóta"
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -5999,20 +6027,24 @@ msgid "Adding files with identical names"
 msgstr "Azonos nevű fájlok hozzáadása"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Egyszeri lejátszás"
+msgid "Show all images just once"
+msgstr "Összes kép megjelenítése csak egyszer"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Végtelenített lejátszás"
+msgid "Repeat slideshow"
+msgstr "Diavetítés ismétlése"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Diavetítés / Automatikus lejátszás"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Diavetítés / Automatikus lejátszás képekhez"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Automatikus lejátszás várakozása másodpercben"
+msgid "Show all images for"
+msgstr "Összes kép megjelenítése ennyi ideig:"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "másodperc"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -6830,12 +6862,6 @@ msgstr "Megjelölés levélszemétként"
 msgid "Not spam"
 msgstr "Nem levélszemét"
 
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Megjelöl"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Új levél küldése"
@@ -7069,8 +7095,6 @@ msgid "Move to category"
 msgstr "Mozgatás egy kategóriába"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
 msgid "Move to folder"
 msgstr "Mozgatás mappába"
 
@@ -7226,8 +7250,6 @@ msgstr "A %1$s egy automatikusan kiegészítéssel rendelkező mező. Használja
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "CC"
 msgstr "Másolat"
 
@@ -7657,10 +7679,17 @@ msgstr "IMAP kulcsszó eltávolítása"
 msgid "Keep"
 msgstr "Megtartás"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-msgid "Copy message to folder"
-msgstr "Üzenet másolása a mappába"
+msgid "File into"
+msgstr "Iktatás ide:"
+
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Másolás ide:"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7684,8 +7713,8 @@ msgstr "folytassa, ha ezen feltételek mindegyike teljesül"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
-msgstr "folytassa, ha bármely feltétel teljesül."
+msgid "continue if any of these condition is met"
+msgstr "folytassa, ha ezen feltételek bármelyike teljesül"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7711,38 +7740,44 @@ msgstr "Jelenlegi dátum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "original timezone"
+msgid "original time zone"
 msgstr "eredeti időzóna"
 
+#. greater than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies from"
-msgstr "Szabály alkalmazása ettől:"
+msgid "Greater equals"
+msgstr "Nagyobb vagy egyenlő"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "Kisebb vagy egyenlő"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies until"
-msgstr "Szabály alkalmazása eddig:"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is exactly"
+msgstr "Pontosan"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies on"
-msgstr "Szabály alkalmazása erre:"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "Nem pontosan"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not on"
-msgstr "Szabály kihagyása ezen:"
+msgid "Lower"
+msgstr "Kisebb "
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not from"
-msgstr "Szabály kihagyása ettől:"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not until"
-msgstr "Szabály kihagyása eddig:"
+msgid "Greater"
+msgstr "Nagyobb"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7782,6 +7817,11 @@ msgstr "Fejléc"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Másolat"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Bármely címzett"
 
@@ -7812,11 +7852,6 @@ msgstr "Cím"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "Másolat"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Titkos másolat"
 
@@ -7825,11 +7860,13 @@ msgstr "Titkos másolat"
 msgid "Sender"
 msgstr "Feladó"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-From"
 msgstr "Újraküldött-feladó"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-To"
@@ -7837,8 +7874,8 @@ msgstr "Újraküldött-címzett"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Exists"
-msgstr "Létezik"
+msgid "Header exists"
+msgstr "Van fejléc"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -7854,16 +7891,6 @@ msgstr "Tartalmazza"
 #: module:io.ox/mailfilter
 msgid "Contains not"
 msgstr "Nem tartalmazza"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is exactly"
-msgstr "Pontosan"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Nem pontosan"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -7885,11 +7912,13 @@ msgstr "Ezzel kezdődik:"
 msgid "Starts not with"
 msgstr "Ezzel kezdődik:"
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends with"
 msgstr "Ezzel végződik:"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends not with"
@@ -7904,6 +7933,36 @@ msgstr "Regexre illeszkedő:"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Regexre nem illeszkedő:"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "egyezik rész-karaktersorozatra"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "nem egyezik rész-karaktersorozatra"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "pontos, teljes egyezés"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "nem pontos, teljes egyezés "
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "a teljes egyezés (engedélyez DOS-stílus helyettesítő karaktereket)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "nem teljes egyezés (engedélyez DOS-stílus helyettesítő karaktereket)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7939,8 +7998,8 @@ msgstr "Szabály alkalmazása, ha minden feltétel teljesül"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
+msgid "Apply rule if any condition is met"
+msgstr "Szabály alkalmazása, ha bármely feltétel teljesül"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -8149,6 +8208,7 @@ msgstr "%1$s tárgyú levelek megjelölése %2$s címkével"
 msgid "Thread"
 msgstr "Szál"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -8493,6 +8553,12 @@ msgstr "Másolat szerkesztése"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Kategória beállítása"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Megjelöl"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -10361,11 +10427,6 @@ msgstr "PowerDNS szülői felügyelet"
 msgid "Open parental control settings"
 msgstr "Szülői felügyelet beállításaok megnyitása"
 
-#. Quota means a general quota for mail and files
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Quota"
-msgstr "Kvóta"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Levélszámkvóta"
@@ -10601,6 +10662,7 @@ msgstr "A jelszó minimális hossza: %1$d."
 msgid "Your current password"
 msgstr "A jelenlegi jelszava"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Leave empty if you have none"
 msgstr "Hagyja üresen, ha nem rendelkezik vele"
@@ -10819,6 +10881,57 @@ msgstr "Meghívás ide: %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Hozzáadás itt: %s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Kijelölés megszüntetése"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "%1$s beállítása"
+
+#~ msgid "Loop once only"
+#~ msgstr "Egyszeri lejátszás"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Végtelenített lejátszás"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Diavetítés / Automatikus lejátszás"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Automatikus lejátszás várakozása másodpercben"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Üzenet másolása a mappába"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "folytassa, ha bármely feltétel teljesül."
+
+#~ msgid "original timezone"
+#~ msgstr "eredeti időzóna"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Szabály alkalmazása ettől:"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Szabály alkalmazása eddig:"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Szabály alkalmazása erre:"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Szabály kihagyása ezen:"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Szabály kihagyása ettől:"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Szabály kihagyása eddig:"
+
+#~ msgid "Exists"
+#~ msgstr "Létezik"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Szabály alkalmazása, ha bármely feltétel teljesül."
 
 #~ msgid "Content"
 #~ msgstr "Tartalom"

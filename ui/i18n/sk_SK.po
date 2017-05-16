@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-12 01:01+0200\n"
+"PO-Revision-Date: 2017-05-03 13:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -1447,10 +1447,10 @@ msgstr "umiestnenie %1$s"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Priečinky"
 
@@ -2173,6 +2173,15 @@ msgstr "Zobrazenie kalendára - týždeň"
 msgid "Appointment list"
 msgstr "Zoznam schôdzok"
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr ""
+"V aktuálnom kalendári je viac ako %n schôdzok. Niektoré funkcie sú z dôvodu "
+"výkonnosti vypnuté."
+
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
 msgstr "Spravovať obľúbené"
@@ -2352,6 +2361,18 @@ msgstr "Všetky distribučné zoznamy"
 msgid "All groups"
 msgstr "Všetky skupiny"
 
+#. empty message for list view
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
+msgid "Empty"
+msgstr "Prázdne"
+
+#. Context: Add selected contacts; German "Auswählen", for example
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgctxt "select-contacts"
+msgid "Select"
+msgstr "Vybrať"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2367,22 +2388,6 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d správa vybraná"
 msgstr[1] "%1$d správy vybrané"
 msgstr[2] "%1$d správ vybraných"
-
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Vymazať výber"
-
-#. empty message for list view
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/mail/common-extensions.js module:io.ox/mail
-msgid "Empty"
-msgstr "Prázdne"
-
-#. Context: Add selected contacts; German "Auswählen", for example
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgctxt "select-contacts"
-msgid "Select"
-msgstr "Vybrať"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3721,6 +3726,15 @@ msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"Priečinok nemožno odstrániť. Dôvodom môžu byť nedostatočné oprávnenia vo "
+"vašom priečinku Kôš alebo môže to byť špeciálny priečinok, ktorý nemožno "
+"odstrániť."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Ste si istý, že chcete priečinok „%s“ zmazať?"
 
@@ -3855,12 +3869,6 @@ msgid "Add storage account"
 msgstr "Pridať účet úložiska"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
-msgid "Add mail account"
-msgstr "Pridať poštový účet"
-
-#: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "Subscribe address book"
 msgstr "Prihlásiť sa k odberu adresára kontaktov"
@@ -3873,6 +3881,12 @@ msgstr "Prihlásiť sa k odberu kalendára"
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Zobraziť všetky prílohy"
+
+#: apps/io.ox/core/folder/extensions.js module:io.ox/core
+#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/folderview-extensions.js module:io.ox/mail
+msgid "Add mail account"
+msgstr "Pridať poštový účet"
 
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "Synchronize with your tablet or smartphone"
@@ -3951,8 +3965,16 @@ msgid "Total: %1$d"
 msgstr "Celkom: %1$d"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "%1$d celkom"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Unread: %1$d"
 msgstr "Neprečítaných: %1$d"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
+msgstr "%1$d neprečítaných"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 msgid "Folder-specific actions"
@@ -4715,6 +4737,10 @@ msgid "High contrast theme"
 msgstr "Téma vzhľadu s vysokým kontrastom"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
+msgid "Refresh interval"
+msgstr "Interval obnovenia"
+
+#: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minút"
@@ -4731,10 +4757,6 @@ msgstr "15 minút"
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "30 minutes"
 msgstr "30 minút"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "Refresh interval"
-msgstr "Interval obnovenia"
 
 #. object permissions - read
 #. object permissions - edit/modify
@@ -4983,8 +5005,8 @@ msgid "My %1$s account"
 msgstr "Môj účet %1$s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "Nastaviť %1$s"
+msgid "Configure %s"
+msgstr "Nastaviť %s"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/plugins/portal/mail/register.js module:plugins/portal
@@ -5190,6 +5212,10 @@ msgstr "Pridaný %1$s, %2$s."
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s."
 msgstr "Pridané %1$s."
+
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Stlačením klávesu backspace zmažete."
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6147,6 +6173,13 @@ msgid "Please specify these missing variables: "
 msgstr "Prosím, uveďte tieto chýbajúce premenné: "
 
 #. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
+msgid "Quota"
+msgstr "Kvóta"
+
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -6203,20 +6236,24 @@ msgid "Adding files with identical names"
 msgstr "Pridávajú sa súbory s rovnakými názvami"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Prehrať iba raz"
+msgid "Show all images just once"
+msgstr "Zobraziť všetky obrázky len raz"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Prehrávať dokola"
+msgid "Repeat slideshow"
+msgstr "Zopakovať prezentáciu"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Režim prezentácie / automatického prehrávania"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Režim prezentácie / automatického prehliadania obrázkov"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Pozastavenie automatického prehrávania o sekúnd"
+msgid "Show all images for"
+msgstr "Zobraziť všetky obrázky na"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "sekúnd"
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
@@ -7054,12 +7091,6 @@ msgstr "Označiť ako Spam"
 msgid "Not spam"
 msgstr "Nie je Spam"
 
-#. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
-msgctxt "verb"
-msgid "Flag"
-msgstr "Značka"
-
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Send new mail"
 msgstr "Poslať nový email"
@@ -7321,8 +7352,6 @@ msgid "Move to category"
 msgstr "Presunúť do kategórie"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
-#: module:io.ox/mailfilter
 msgid "Move to folder"
 msgstr "Presunúť do priečinka"
 
@@ -7486,8 +7515,6 @@ msgstr ""
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "CC"
 msgstr "Kópia"
 
@@ -7926,10 +7953,17 @@ msgstr "Odstrániť kľúčové slovo IMAP"
 msgid "Keep"
 msgstr "Ponechať"
 
+#. File a message into a folder
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
-msgid "Copy message to folder"
-msgstr "Skopírovať správu do priečinka"
+msgid "File into"
+msgstr "Založiť do"
+
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Skopírovať do"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
@@ -7953,8 +7987,8 @@ msgstr "pokračovať ak sú splnené všetky tieto podmienky"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met."
-msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok."
+msgid "continue if any of these condition is met"
+msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -7980,38 +8014,44 @@ msgstr "Aktuálny dátum"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "original timezone"
+msgid "original time zone"
 msgstr "pôvodné časové pásmo"
 
+#. greater than or equal to
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies from"
-msgstr "Pravidlo sa použije od"
+msgid "Greater equals"
+msgstr "väčší alebo rovný"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "menší alebo rovný"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies until"
-msgstr "Pravidlo sa použije do"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is exactly"
+msgstr "Je presne"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies on"
-msgstr "Pravidlo sa použije"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "Je približne"
 
+#. lower than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not on"
-msgstr "Pravidlo použije „not“ na"
+msgid "Lower"
+msgstr "menší"
 
+#. greater than the given value
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Rule applies not from"
-msgstr "Pravidlo použije „not“ od"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Rule applies not until"
-msgstr "Pravidlo použije „not“ do"
+msgid "Greater"
+msgstr "väčší"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8051,6 +8091,11 @@ msgstr "Hlavička"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Kópia"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Ľubovoľný príjemca"
 
@@ -8081,11 +8126,6 @@ msgstr "Adresa"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Cc"
-msgstr "Kópia"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Skrytá kópia"
 
@@ -8094,11 +8134,13 @@ msgstr "Skrytá kópia"
 msgid "Sender"
 msgstr "Odosielateľ"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-From"
 msgstr "Znovu odoslané od"
 
+#. header entry - needs no different translation
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Resent-To"
@@ -8106,8 +8148,8 @@ msgstr "Znovu odoslané komu"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Exists"
-msgstr "Existuje"
+msgid "Header exists"
+msgstr "Hlavička existuje"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8123,16 +8165,6 @@ msgstr "Obsahuje"
 #: module:io.ox/mailfilter
 msgid "Contains not"
 msgstr "Neobsahuje"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is exactly"
-msgstr "Je presne"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
-#: module:io.ox/mailfilter
-msgid "Is not exactly"
-msgstr "Je približne"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8154,11 +8186,13 @@ msgstr "Začína na"
 msgid "Starts not with"
 msgstr "Nezačína na"
 
+#. a given string does end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends with"
 msgstr "Končí"
 
+#. a given string does not end with a specified pattern
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Ends not with"
@@ -8173,6 +8207,36 @@ msgstr "reg. výraz"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nezodpovedá regulárnemu výrazu"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "zodpovedá podreťazcu"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "nezodpovedá podreťazcu"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "presná, úplná zhoda"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "nie je presná, úplná zhoda"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "úplná zhoda (umožňuje zástupné znaky v štýle DOSu)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "nie je úplná zhoda (umožňuje zástupné znaky v štýle DOSu)"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -8210,8 +8274,8 @@ msgstr "Použiť pravidlo, ak sú splnené všetky podmienky"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
+msgid "Apply rule if any condition is met"
+msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená"
 
 #: apps/io.ox/mail/mailfilter/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/util.js
@@ -8420,6 +8484,7 @@ msgstr "Označiť emaily s predmetom %1$s ako %2$s"
 msgid "Thread"
 msgstr "Vlákno"
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -8773,6 +8838,12 @@ msgstr "Upraviť kópiu"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Set category"
 msgstr "Nastaviť kategóriu"
+
+#. Verb: (to) flag messages
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
+msgctxt "verb"
+msgid "Flag"
+msgstr "Značka"
 
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Vertical"
@@ -10685,11 +10756,6 @@ msgstr "Rodičovské nastavenia PowerDNS"
 msgid "Open parental control settings"
 msgstr "Otvorenie rodičovských nastavení"
 
-#. Quota means a general quota for mail and files
-#: apps/plugins/portal/quota/register.js module:plugins/portal
-msgid "Quota"
-msgstr "Kvóta"
-
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail count quota"
 msgstr "Kvóta počtu správ emailu"
@@ -10930,6 +10996,7 @@ msgstr "Minimálna dĺžka hesla je %1$d."
 msgid "Your current password"
 msgstr "Vaše aktuálne heslo"
 
+#. Hint to leave an input field empty if the user does not already have a password
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "Leave empty if you have none"
 msgstr "Ponechajte prázdne, ak máte žiadny"
@@ -11163,6 +11230,57 @@ msgstr "Pozvať na %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Pridať na %s"
+
+#~ msgid "Clear selection"
+#~ msgstr "Vymazať výber"
+
+#~ msgid "Configure %1$s"
+#~ msgstr "Nastaviť %1$s"
+
+#~ msgid "Loop once only"
+#~ msgstr "Prehrať iba raz"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Prehrávať dokola"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Režim prezentácie / automatického prehrávania"
+
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Pozastavenie automatického prehrávania o sekúnd"
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Skopírovať správu do priečinka"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok."
+
+#~ msgid "original timezone"
+#~ msgstr "pôvodné časové pásmo"
+
+#~ msgid "Rule applies from"
+#~ msgstr "Pravidlo sa použije od"
+
+#~ msgid "Rule applies until"
+#~ msgstr "Pravidlo sa použije do"
+
+#~ msgid "Rule applies on"
+#~ msgstr "Pravidlo sa použije"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "Pravidlo použije „not“ na"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "Pravidlo použije „not“ od"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "Pravidlo použije „not“ do"
+
+#~ msgid "Exists"
+#~ msgstr "Existuje"
+
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
 
 #~ msgid "Content"
 #~ msgstr "Obsah"
