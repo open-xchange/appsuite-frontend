@@ -554,11 +554,23 @@ define('io.ox/core/tk/contenteditable-editor', [
             var content = '';
             // normalise
             data = _.isString(data) ? { content: data } : data;
+            data.content = data.content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
             // concat content parts
             if (data.content) content += data.content;
-            if (type === 'above' && data.cite) content += ('\n\n' + data.cite);
-            if (data.quote) content += ('\n\n' + data.quote || '');
-            if (type === 'below' && data.cite) content += ('\n\n' + data.cite);
+            else content += '<p><br></p>';
+            if (type === 'above' && data.cite) content += data.cite;
+            if (data.quote) {
+                // backend appends &nbsp; to the quote which are wrapped in a paragraph by the ui. remove those.
+                data.quote = data.quote.replace(/<p><br>(&nbsp;|&#160;)<\/p>/, '');
+                content += (data.quote || '');
+            }
+            if (type === 'below' && data.cite) {
+                // add a blank line between the quoted text and the signature below
+                // but only, if the sigature is directly after the quoted text
+                // then, the user can always insert text between the quoted text and the signature but has no unnecessary empty lines
+                if (!/<p><br><\/p>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<p><br></p>';
+                content += data.cite;
+            }
             this.setContent(content);
         };
 
@@ -585,6 +597,14 @@ define('io.ox/core/tk/contenteditable-editor', [
             // add cite
             data.cite = str;
             this.setContentParts(data, 'above');
+        };
+
+        this.insertPostCite = function (str) {
+            var data = this.getContentParts();
+            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'below');
         };
 
         this.replaceParagraph = function (str, rep) {
