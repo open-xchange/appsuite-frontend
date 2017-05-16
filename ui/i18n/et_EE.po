@@ -1934,6 +1934,12 @@ msgstr "Sulge kirjelduse paneel"
 msgid "Close folder view"
 msgstr "Sulge kaustavaade"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "%1$s sulgemine"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "Sulge teadete ala"
@@ -10714,11 +10720,6 @@ msgstr "valige muu platvorm"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "choose a different scenario"
 msgstr "valige muu stsenaarium"
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "%1$s sulgemine"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter

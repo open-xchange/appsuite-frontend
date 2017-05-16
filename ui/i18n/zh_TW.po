@@ -1914,6 +1914,12 @@ msgstr "關閉描述面板"
 msgid "Close folder view"
 msgstr "關閉文件夾面板"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "關閉 %1$s"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "關閉通知區域"
@@ -10551,11 +10557,6 @@ msgstr "選擇其他平台"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "choose a different scenario"
 msgstr "選擇不同情境"
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "關閉 %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter

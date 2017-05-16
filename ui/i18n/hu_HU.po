@@ -1954,6 +1954,12 @@ msgstr "Leírópanel bezárása"
 msgid "Close folder view"
 msgstr "Mappanézet bezárása"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "%1$s bezárása"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "Értesítési terület bezárása"
@@ -10758,11 +10764,6 @@ msgstr "válasszon más platformot"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "choose a different scenario"
 msgstr "válasszon más szituációt"
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "%1$s bezárása"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter

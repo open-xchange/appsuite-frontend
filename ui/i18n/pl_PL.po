@@ -1987,6 +1987,12 @@ msgstr "Zamknij panel opisu"
 msgid "Close folder view"
 msgstr "Zamknij widok folderów"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "zamknij dla: %1$s"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "Zamknij obszar powiadomień"
@@ -10856,11 +10862,6 @@ msgstr "wybierz inną platformę"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "choose a different scenario"
 msgstr "wybierz inny scenariusz"
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "zamknij dla: %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter

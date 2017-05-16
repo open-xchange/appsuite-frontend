@@ -1944,6 +1944,12 @@ msgstr "Lukk beskrivelsespanel"
 msgid "Close folder view"
 msgstr "Lukk mappevisning"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "lukk for %1$s"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "Lukk varslingsområdet"
@@ -10776,11 +10782,6 @@ msgstr "velg en annen plattform"
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "choose a different scenario"
 msgstr "velg et annet scenario"
-
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "lukk for %1$s"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter

@@ -5209,10 +5209,9 @@ msgstr ""
 msgid "Sign out now"
 msgstr ""
 
-#. %1$s is app title/name
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
-msgid "close for %1$s"
+msgid "Close for %1$s"
 msgstr ""
 
 #: apps/io.ox/core/main.js
