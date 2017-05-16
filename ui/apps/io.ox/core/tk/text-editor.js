@@ -157,12 +157,14 @@ define('io.ox/core/tk/text-editor', [
         this.getContentParts = function () {
             var content = this.getContent(),
                 index = content.indexOf('\n> ');
+            // make sure that the quote part does not start with \n
+            if (index >= 0) index++;
             // special case: initial reply/forward
             if (content.substring(0, 2) === '> ') index = 0;
             if (index < 0) return { content: content };
             return {
                 // content without trailing whitespace
-                content: content.substring(0, index).replace(/\s+$/g, ''),
+                content: content.substring(0, index - 1).replace(/\s+$/g, ''),
                 quote: content.substring(index),
                 cite: undefined
             };
@@ -173,6 +175,13 @@ define('io.ox/core/tk/text-editor', [
             // add cite
             data.cite = str;
             this.setContentParts(data, 'above');
+        };
+
+        this.insertPostCite = function (str) {
+            var data = this.getContentParts();
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'below');
         };
 
         this.replaceParagraph = function (str, rep) {
