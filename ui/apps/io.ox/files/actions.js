@@ -625,6 +625,9 @@ define('io.ox/files/actions', [
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
                                     yell('error', response);
+                                    // bug 53498: refresh the list to display the not moved elements again after a failed move,
+                                    // when it's working without this sometimes, it's due to a side effect from pagination
+                                    api.trigger('reload:listview');
                                 });
                             }
                         }
