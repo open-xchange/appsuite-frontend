@@ -697,6 +697,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             if (!target.find('[type="checkbox"]').length) {
                 _.defer(function () {
                     target.prepend(drawcheckbox(checkForStopAction(arrayOfActions)).on('change', checkStopAction));
+                    baton.view.$el.trigger('toggle:saveButton');
                 });
             }
 
