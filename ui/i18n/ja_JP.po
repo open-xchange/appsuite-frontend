@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-17 11:40+0200\n"
+"PO-Revision-Date: 2017-05-17 12:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.0.2\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core apps/io.ox/backbone/extendedModel.js
 msgid "The dialog contains invalid data"
@@ -6352,7 +6352,7 @@ msgstr "未フラグ"
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail apps/io.ox/mail/print.js
 msgctxt "CC"
 msgid "Copy"
-msgstr "コピー"
+msgstr "CC"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Blind copy"
@@ -7378,7 +7378,7 @@ msgstr "下書きを編集"
 #: apps/io.ox/mail/print.js module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
-msgstr "ブラインドコピー"
+msgstr "BCC"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
