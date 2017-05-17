@@ -1806,12 +1806,10 @@ msgstr "Ändra IMAP-prenumerationer"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "Ändra bekräftelsestatus"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr "Ändra deadline"
 
@@ -1855,7 +1853,7 @@ msgstr "Tecken"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr "Kryssrutor"
 
@@ -2696,7 +2694,7 @@ msgstr "Ta bort tillstånd"
 msgid "Delete resource"
 msgstr "Ta bort resurs"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Ta bort uppgift"
 
@@ -3078,8 +3076,8 @@ msgstr "Domän"
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr "Klart"
 
@@ -3225,7 +3223,6 @@ msgstr "Släpp bara en enstaka fil som ny version."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr "Deadline"
 
@@ -3373,7 +3370,7 @@ msgstr "Redigera signatur"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Redigera uppgift"
 
@@ -4078,7 +4075,7 @@ msgstr "Mapptyp"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr "Mappvy"
 
@@ -5354,8 +5351,7 @@ msgstr "Märk som distributionslista"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Märk som färdigt"
 
@@ -5370,7 +5366,6 @@ msgstr "Märk som skräp"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "Märk som inte färdigt"
 
@@ -5834,7 +5829,7 @@ msgstr "Nytt lösenord"
 msgid "New rule"
 msgstr "Ny regel"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Ny uppgift"
 
@@ -6371,7 +6366,7 @@ msgstr "Valfritt 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Alternativ"
 
@@ -9746,7 +9741,7 @@ msgid "Unconfirmed"
 msgstr "Obekräftad"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr "Ångrad"
 
@@ -10024,7 +10019,7 @@ msgstr "Videor"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Vy"
 

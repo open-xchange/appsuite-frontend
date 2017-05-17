@@ -1764,12 +1764,10 @@ msgstr "IMAP登録を変更"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "確認ステータスを変更"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr "期限を変更"
 
@@ -1813,7 +1811,7 @@ msgstr "キャラクター"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr "チェックボックス"
 
@@ -2656,7 +2654,7 @@ msgstr "削除権限"
 msgid "Delete resource"
 msgstr "設備を削除"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "仕事を削除"
 
@@ -3037,8 +3035,8 @@ msgstr "ドメイン"
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr "完了"
 
@@ -3191,7 +3189,6 @@ msgstr "単一ファイルのみを新規バージョンとしてドロップ"
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr "期限"
 
@@ -3339,7 +3336,7 @@ msgstr "署名を編集"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "仕事を編集"
 
@@ -4036,7 +4033,7 @@ msgstr "フォルダタイプ"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr "フォルダビュー"
 
@@ -5312,8 +5309,7 @@ msgstr "配布リストにする"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "完了の印を付ける"
 
@@ -5328,7 +5324,6 @@ msgstr "スパムメールの印を付ける"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "未完了"
 
@@ -5792,7 +5787,7 @@ msgstr "新しいパスワード"
 msgid "New rule"
 msgstr "新しいルール"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "新規の仕事"
 
@@ -6327,7 +6322,7 @@ msgstr "オプション 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "オプション"
 
@@ -9670,7 +9665,7 @@ msgid "Unconfirmed"
 msgstr "未確認"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr "未完了"
 
@@ -9947,7 +9942,7 @@ msgstr "動画"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "表示"
 

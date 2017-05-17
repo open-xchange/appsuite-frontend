@@ -1837,12 +1837,10 @@ msgstr "Změnit odběry IMAP"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "Změnit stav potvrzení"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr "Změnit datum dokončení"
 
@@ -1886,7 +1884,7 @@ msgstr "Postava"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr "Zaškrtávací políčka"
 
@@ -2728,7 +2726,7 @@ msgstr "Oprávnění k výmazu"
 msgid "Delete resource"
 msgstr "Smazat zdroj"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Smazat úkol"
 
@@ -3118,8 +3116,8 @@ msgstr "Doména"
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr "Hotovo"
 
@@ -3263,7 +3261,6 @@ msgstr "Jako novou verzi přetáhněte jen jediný soubor."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr "Do"
 
@@ -3411,7 +3408,7 @@ msgstr "Upravit podpis"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Upravit úkol"
 
@@ -4116,7 +4113,7 @@ msgstr "Druh složky"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr "Pohled na složku"
 
@@ -5390,8 +5387,7 @@ msgstr "Označit jako distribuční seznam"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Označit jako hotové"
 
@@ -5406,7 +5402,6 @@ msgstr "Označit jako spam"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "Označit jako nehotové"
 
@@ -5871,7 +5866,7 @@ msgstr "Nové heslo"
 msgid "New rule"
 msgstr "Nové pravidlo"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Nový úkol"
 
@@ -6416,7 +6411,7 @@ msgstr "Nepovinné 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Volby"
 
@@ -9801,7 +9796,7 @@ msgid "Unconfirmed"
 msgstr "Nepotvrzeno"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr "Vráceno"
 
@@ -10078,7 +10073,7 @@ msgstr "Videa"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Zobrazit"
 

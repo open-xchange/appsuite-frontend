@@ -1815,12 +1815,10 @@ msgstr ""
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr ""
 
@@ -1864,7 +1862,7 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr ""
 
@@ -2724,7 +2722,7 @@ msgstr ""
 msgid "Delete resource"
 msgstr ""
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Изтрий задача"
 
@@ -3111,8 +3109,8 @@ msgstr ""
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr ""
 
@@ -3259,7 +3257,6 @@ msgstr ""
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr ""
 
@@ -3409,7 +3406,7 @@ msgstr "Редактирай подпис"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Редактирай задача"
 
@@ -4122,7 +4119,7 @@ msgstr ""
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr ""
 
@@ -5388,8 +5385,7 @@ msgstr ""
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Маркирай като приключен"
 
@@ -5404,7 +5400,6 @@ msgstr "Маркирай като спам"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "Маркирай като неприкючен"
 
@@ -5890,7 +5885,7 @@ msgstr ""
 msgid "New rule"
 msgstr "Ново правило"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Нова задача"
 
@@ -6433,7 +6428,7 @@ msgstr ""
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr ""
 
@@ -9761,7 +9756,7 @@ msgid "Unconfirmed"
 msgstr ""
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr ""
 
@@ -10035,7 +10030,7 @@ msgstr ""
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr ""
 

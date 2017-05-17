@@ -1817,12 +1817,10 @@ msgstr "IMAP-Abonnements ändern"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "Bestätigungsstatus ändern"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr "Fälligkeitsdatum ändern"
 
@@ -1866,7 +1864,7 @@ msgstr "Charaktere"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr "Kontrollfelder"
 
@@ -2709,7 +2707,7 @@ msgstr "Löschberechtigungen"
 msgid "Delete resource"
 msgstr "Ressource löschen"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Aufgabe löschen"
 
@@ -3108,8 +3106,8 @@ msgstr "Domain"
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr "Erledigt"
 
@@ -3258,7 +3256,6 @@ msgstr "Nur eine einzelne Datei als neue Version ablegen."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr "Fällig"
 
@@ -3406,7 +3403,7 @@ msgstr "Signatur bearbeiten"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Aufgabe bearbeiten"
 
@@ -4115,7 +4112,7 @@ msgstr "Ordnertyp"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr "Ordneransicht"
 
@@ -5393,8 +5390,7 @@ msgstr "Als Verteilerliste markieren"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Als erledigt markieren"
 
@@ -5409,7 +5405,6 @@ msgstr "Als Spam markieren"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "Als unerledigt markieren"
 
@@ -5873,7 +5868,7 @@ msgstr "Neues Passwort"
 msgid "New rule"
 msgstr "Neue Regel"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Neue Aufgabe"
 
@@ -6419,7 +6414,7 @@ msgstr "Optional 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Optionen"
 
@@ -9829,7 +9824,7 @@ msgid "Unconfirmed"
 msgstr "Nicht bestätigt"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr "Nicht erledigt"
 
@@ -10111,7 +10106,7 @@ msgstr "Videos"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Ansicht"
 

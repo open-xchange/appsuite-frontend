@@ -948,7 +948,6 @@ msgstr ""
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr ""
 
@@ -1712,6 +1711,7 @@ msgstr ""
 #: apps/io.ox/mail/compose/view.js
 #: apps/io.ox/mail/toolbar.js
 #: apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks
 msgid "Options"
 msgstr ""
 
@@ -2290,6 +2290,7 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js
 #: apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks
 msgid "View"
 msgstr ""
 
@@ -2320,6 +2321,7 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks
 msgid "Folder view"
 msgstr ""
 
@@ -2332,6 +2334,7 @@ msgstr ""
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 #: apps/io.ox/tasks/toolbar.js
+#: module:io.ox/tasks
 msgid "Checkboxes"
 msgstr ""
 
@@ -6909,7 +6912,6 @@ msgstr ""
 #: apps/io.ox/tasks/print.js
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 #: apps/io.ox/tasks/util.js
 #: apps/plugins/notifications/tasks/register.js
 #: module:plugins/notifications
@@ -11353,7 +11355,6 @@ msgstr ""
 #: apps/io.ox/tasks/actions.js
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr ""
 
@@ -11361,7 +11362,6 @@ msgstr ""
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 #: apps/plugins/notifications/tasks/register.js
 #: module:plugins/notifications
 msgid "Mark as done"
@@ -11371,7 +11371,6 @@ msgstr ""
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr ""
 
@@ -11475,7 +11474,6 @@ msgstr ""
 #: module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Edit task"
 msgstr ""
 
@@ -11752,7 +11750,6 @@ msgstr ""
 #: apps/io.ox/tasks/print.js
 #: module:io.ox/tasks
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr ""
 
@@ -11784,18 +11781,18 @@ msgid "Receive notifications when a participant accepted or declined a task in w
 msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/tasks
 msgid "New task"
 msgstr ""
 
 #. Task: Undone like in "Mark as undone"
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/tasks
 msgid "Undone"
 msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
+#: module:io.ox/tasks
 msgid "Delete task"
 msgstr ""
 
