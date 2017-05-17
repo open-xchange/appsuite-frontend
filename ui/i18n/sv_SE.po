@@ -6,9 +6,9 @@ msgstr ""
 "Project-Id-Version: Open-Xchange 7\n"
 "Report-Msgid-Bugs-To: Antje Faber <antje.faber@open-xchange.com>\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-24 13:12+0200\n"
+"PO-Revision-Date: 2017-05-17 14:40+0200\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <ox@workshop-chapina.com>\n"
+"Language-Team: Swedish <ox@bureau-cornavin.com>\n"
 "Language: sv_SE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -863,7 +863,7 @@ msgstr[1] "efter %1$d möten"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
-msgstr ""
+msgstr "Klicka för att stänga upprepningsvyn"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
@@ -1541,6 +1541,8 @@ msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
 msgstr ""
+"Genom att ändra datum för det här mötet skapar du ett mötesundantag i "
+"serien. Vill du fortsätta?"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -1940,30 +1942,30 @@ msgstr "och"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every day"
-msgstr ""
+msgstr "Varje dag"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d days"
-msgstr ""
+msgstr "Var %1$d dag"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
-msgstr ""
+msgstr "Var %1$d vecka, alla dagar"
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
-msgstr ""
+msgstr "På arbetsdagar"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
-msgstr ""
+msgstr "Var %1$d vecka på arbetsdagar"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
@@ -1976,7 +1978,7 @@ msgstr "Varje vecka på %1$s"
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
-msgstr ""
+msgstr "Var %1$d vecka på %2$s"
 
 #. recurrence string
 #. %1$d: numeric, day in month
@@ -1989,7 +1991,7 @@ msgstr "Varje månad den %1$d"
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
-msgstr ""
+msgstr "Var %1$d månad den %2$d"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
@@ -2004,7 +2006,7 @@ msgstr "Varje månad den %1$s %2$s"
 #. %3$s: day string, e.g. Monday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
-msgstr ""
+msgstr "Var %1$d månad den %2$s %3$s"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -2036,17 +2038,17 @@ msgstr "Varje år den %1$s %2$s i %3$d"
 #. %4$s: month nane, e.g. January
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
-msgstr ""
+msgstr "Var %1$d år den %2$s %3$s i %4$d"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends on %1$s"
-msgstr ""
+msgstr "Serien slutar %1$s"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Serien slutar efter %1$d möte"
+msgstr[1] "Serien slutar efter %1$d möten"
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
@@ -2121,6 +2123,8 @@ msgid ""
 "There are more than %n appointments in the current calendar. Some features "
 "are disabled to due to performance reasons."
 msgstr ""
+"Det finns fler än %n möten i den aktuella kalendern. Vissa funktioner har "
+"avaktiverats för att bibehålla prestandan."
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -2959,7 +2963,7 @@ msgstr "Kunde inte ladda bilagor för den här kontakten."
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "This list has no contacts yet"
-msgstr ""
+msgstr "Den här listan har inga medlemmar än"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
@@ -3582,6 +3586,14 @@ msgid "CalDAV URL"
 msgstr "CalDAV-URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"Kunde inte ta bort mappen. Det kan bero på otillräckliga rättigheter i din "
+"papperskorgmapp, eller så kan det vara en specialmapp som inte får tas bort."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Vill du verkligen ta bort mappen \"%s\"?"
 
@@ -3819,7 +3831,7 @@ msgstr "Ok"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr "Inga åtgärder tillgängliga"
+msgstr "Ingen åtgärd tillgänglig"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
@@ -4050,7 +4062,7 @@ msgid ""
 "You forgot to sign out last time. Always use the sign-out button when you "
 "finished your work."
 msgstr ""
-"Du glömde logga ut tidigare. Använd alltid logga-utknappen när du har "
+"Du glömde logga ut tidigare. Använd alltid logga ut-knappen när du har "
 "arbetat färdigt."
 
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -4611,7 +4623,7 @@ msgid ""
 "domain"
 msgstr ""
 "Kontrollera dina webbläsarinställningar och aktivera skrivbordsaviseringar "
-"för den här domänen"
+"för den här domänen."
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Show desktop notifications"
@@ -4942,7 +4954,7 @@ msgstr "Ljusgrönt"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Orange"
-msgstr "Oranget"
+msgstr "Orange"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
@@ -5807,7 +5819,7 @@ msgstr "Kontot kunde inte läggas till"
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
-msgstr ""
+msgstr "Lägg till %1$s-konto"
 
 #: apps/io.ox/files/actions/add-to-portal.js module:io.ox/files
 msgid "This file has been added to the portal"
@@ -5867,8 +5879,8 @@ msgstr "Fil: %1$s"
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the file \"%1$d\""
 msgid_plural "Share %1$d items"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dela filen \"%1$d\""
+msgstr[1] "Dela %1$d objekt"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the folder \"%1$d\""
@@ -6246,15 +6258,15 @@ msgstr "Skicka inbjudan igen"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Send notification"
-msgstr ""
+msgstr "Skicka avisering"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Share \"%1$s\""
-msgstr ""
+msgstr "Dela ut \"%1$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for \"%1$s\""
-msgstr ""
+msgstr "Tillstånd för \"%1$s\""
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
@@ -7029,7 +7041,6 @@ msgid "unknown sender"
 msgstr "okänd avsändare"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr "Alla nya meddelanden från %1$s kommer flyttas till den valda mappen."
 
@@ -7375,11 +7386,11 @@ msgstr "1 vecka"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 month"
-msgstr ""
+msgstr "1 månad"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "3 months"
-msgstr ""
+msgstr "3 månader"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "6 months"
@@ -7387,7 +7398,7 @@ msgstr "6 månader"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 year"
-msgstr ""
+msgstr "1 år"
 
 #. text of a user list that shows the names of presenting user and participants.
 #. the text to display as presenter name if no user is presenting yet.
@@ -7598,7 +7609,7 @@ msgstr "Meddelande från %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error while loading message content"
-msgstr ""
+msgstr "Fel när meddelandets innehåll laddades"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
@@ -7720,7 +7731,7 @@ msgstr "Domän"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "starts on"
-msgstr ""
+msgstr "startar den"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
@@ -7905,9 +7916,7 @@ msgstr[1] "%1$d meddelanden markerade"
 msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
-msgstr ""
-"Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte i "
-"listan just nu."
+msgstr "Det finns %1$d meddelanden i den här mappen; listan visar inte alla."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8362,7 +8371,7 @@ msgstr "Skärmnamn"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
-msgstr ""
+msgstr "Klicka för att visa eller dölja åtgärder för avancerade användare."
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
@@ -8378,7 +8387,7 @@ msgstr "CalDAV-inloggning"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
-msgstr ""
+msgstr "CardDAV URL"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
@@ -8390,7 +8399,7 @@ msgstr "SMTP-server"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Port"
-msgstr ""
+msgstr "SMTP-port"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
@@ -8406,7 +8415,7 @@ msgstr "IMAP-server"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Port"
-msgstr ""
+msgstr "IMAP-port"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
@@ -8418,7 +8427,7 @@ msgstr "IMAP säker"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS URL"
-msgstr ""
+msgstr "EAS URL"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS Login"
@@ -8461,6 +8470,8 @@ msgid ""
 "Let´s automatically configure your device, by clicking the button below. It"
 "´s that simple!"
 msgstr ""
+"Nu ställer vi automatiskt in din enhet - klicka på knappen nedanför. Så "
+"enkelt är det!"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -8566,12 +8577,12 @@ msgstr[1] "Följande e-postadresser kan inte användas: %1$d"
 
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
-msgstr ""
+msgstr "Lägg till deltagare/resurs"
 
 #. %1$s is an email address
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Cannot add participant/member with an invalid mail address: %1$s"
-msgstr ""
+msgstr "Kan inte lägga till deltagare/medlem med ogiltig e-postadress: %1$s"
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "External participants"
@@ -8672,7 +8683,7 @@ msgstr "Ett fel inträffade."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
-msgstr ""
+msgstr "Klicka för att försöka igen."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal widgets"
@@ -9047,7 +9058,7 @@ msgstr "Presentatörens verktygsfält"
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open. Drag to your desktop to download."
-msgstr ""
+msgstr "Klicka för att öppna. Dra till ditt skrivbord för att ladda ner."
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open."
@@ -9105,6 +9116,9 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords:"
 msgstr ""
+"Av säkerhetsskäl krypteras alla uppgifter med ditt kontosprimärlösenord. Om "
+"du ändrar primärlösenord kan dina externa konton sluta fungera. I så fall "
+"kan du använda ditt gamla lösenord för att hämta ut alla lösenord:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
@@ -10203,7 +10217,7 @@ msgstr "LinkedIn gav ett fel:"
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
 msgid "Click to authorize your account again"
-msgstr ""
+msgstr "Klicka för att kontrollera din behörighet igen"
 
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
@@ -10266,7 +10280,7 @@ msgstr "Du har 1 oläst meddelande"
 
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "You have %1$d unread messages"
-msgstr ""
+msgstr "Du har %1$d olästa meddelanden"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "your platform"
@@ -10430,7 +10444,7 @@ msgstr "Twitter rapporterade följande fel:"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry later."
-msgstr ""
+msgstr "Klicka för att försöka senare."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
@@ -10778,896 +10792,21 @@ msgstr "Bjud in till %s"
 msgid "Add on %s"
 msgstr "Lägg till på %s"
 
-#~ msgid "Burnt orange"
-#~ msgstr "Bränt orange"
-
-#~ msgid "Dark olive"
-#~ msgstr "Mörkt olivgrönt"
-
-#~ msgid "Dark green"
-#~ msgstr "Mörkgrönt"
-
-#~ msgid "Dark azure"
-#~ msgstr "Mörkt azurblått"
-
-#~ msgid "Navy Blue"
-#~ msgstr "Navy-blått"
-
-#~ msgid "Indigo"
-#~ msgstr "Indigo"
-
-#~ msgid "Very dark gray"
-#~ msgstr "Mycket mörkt grå"
-
-#~ msgid "Maroon"
-#~ msgstr "Maroon"
-
-#~ msgid "Olive"
-#~ msgstr "Olivgrönt"
-
-#~ msgid "Teal"
-#~ msgstr "Blågrönt"
-
-#~ msgid "Grayish blue"
-#~ msgstr "Gråblått"
-
-#~ msgid "Amber"
-#~ msgstr "Amber"
-
-#~ msgid "Yellow green"
-#~ msgstr "Gulgrönt"
-
-#~ msgid "Sea green"
-#~ msgstr "Havsgrönt"
-
-#~ msgid "Turquoise"
-#~ msgstr "Turkost"
-
-#~ msgid "Royal blue"
-#~ msgstr "Kungsblått"
-
-#~ msgid "Medium gray"
-#~ msgstr "Mellangrått"
-
-#~ msgid "Magenta"
-#~ msgstr "Magenta"
-
-#~ msgid "Gold"
-#~ msgstr "Guld"
-
-#~ msgid "Sky blue"
-#~ msgstr "Himmelsblått"
-
-#~ msgid "Red violet"
-#~ msgstr "Rödviolett"
-
-#~ msgid "Light sky blue"
-#~ msgstr "Ljust himmelsblått"
-
-#~ msgid "Plum"
-#~ msgstr "Plommon"
-
-#~ msgid "No color"
-#~ msgstr "Ingen färg"
-
-#~ msgid "toggle password visibility"
-#~ msgstr "växla lösenordets synlighet"
-
-#~ msgid "Daily"
-#~ msgstr "Varje dag"
-
-#~ msgid "Daily on workdays"
-#~ msgstr "Varje dag på arbetsdagar"
-
-#~ msgid "Weekly"
-#~ msgstr "Varje vecka"
-
-#~ msgid "Monthly"
-#~ msgstr "Varje månad"
-
-#~ msgid "Yearly"
-#~ msgstr "Varje år"
-
-#~ msgid "Weekday"
-#~ msgstr "Vardag"
-
-#~ msgid "Repeat by"
-#~ msgstr "Upprepa enligt"
-
-#~ msgid "day(s)"
-#~ msgstr "dag(ar)"
-
-#~ msgid "week(s)"
-#~ msgstr "vecka/-or"
-
-#~ msgid "month(s)"
-#~ msgstr "månad(er)"
-
-#~ msgid "year(s)"
-#~ msgstr "år"
-
-#~ msgid "Interval"
-#~ msgstr "Intervall"
-
-#~ msgid "After a number of occurrences"
-#~ msgstr "Efter visst antal instanser"
-
-#~ msgid "On specific date"
-#~ msgstr "På angivet datum"
-
-#~ msgid "Ends"
-#~ msgstr "Slutar"
-
-#~ msgid "Occurrences"
-#~ msgstr "Instanser"
-
-#~ msgid "Please enter a positive number"
-#~ msgstr "Ange ett positivt nummer"
-
-#~ msgid "Please insert a date after the start date"
-#~ msgstr "Ange ett datum efter startdatumet"
-
-#~ msgid "Please select at least one day"
-#~ msgstr "Välj minst en dag"
-
-#~ msgid "Edit recurrence"
-#~ msgstr "Redigera upprepning"
-
-#~ msgid "Apply"
-#~ msgstr "Verkställ"
-
-#~ msgid "Calendar workweek view"
-#~ msgstr "Kalenderns arbetsveckovy"
-
-#~ msgid "Number of days in work week"
-#~ msgstr "Antal dagar i arbetsvecka"
-
-#~ msgid "Work week starts on"
-#~ msgstr "Arbetsveckor startar på"
-
-#~ msgid "fifth / last"
-#~ msgstr "femte / sista"
-
-#~ msgctxt "superessive"
-#~ msgid "Sunday"
-#~ msgstr "söndag"
-
-#~ msgctxt "superessive"
-#~ msgid "Monday"
-#~ msgstr "måndag "
-
-#~ msgctxt "superessive"
-#~ msgid "Tuesday"
-#~ msgstr "tisdag"
-
-#~ msgctxt "superessive"
-#~ msgid "Wednesday"
-#~ msgstr "onsdag"
-
-#~ msgctxt "superessive"
-#~ msgid "Thursday"
-#~ msgstr "torsdag"
-
-#~ msgctxt "superessive"
-#~ msgid "Friday"
-#~ msgstr "fredag"
-
-#~ msgctxt "superessive"
-#~ msgid "Saturday"
-#~ msgstr "lördag"
-
-#~ msgid " and "
-#~ msgstr "och "
-
-#~ msgid ", "
-#~ msgstr ", "
-
-#~ msgctxt "daily"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d days."
-#~ msgstr[0] "Varje dag."
-#~ msgstr[1] "Var %1$d dag."
-
-#~ msgctxt "weekly"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d weeks on all days."
-#~ msgstr[0] "Varje dag."
-#~ msgstr[1] "Var %1$d dag, alla dagar."
-
-#~ msgctxt "weekly"
-#~ msgid "On workdays."
-#~ msgid_plural "Every %1$d weeks on workdays."
-#~ msgstr[0] "På arbetsdagar."
-#~ msgstr[1] "Var %1$d vecka på arbetsdagar."
-
-#~ msgctxt "weekly"
-#~ msgid "Every weekend."
-#~ msgid_plural "Every %1$d weeks on weekends."
-#~ msgstr[0] "Varje helg."
-#~ msgstr[1] "Var %1$d vecka på helgen."
-
-#~ msgid "Never."
-#~ msgstr "Aldrig."
-
-#~ msgctxt "weekly"
-#~ msgid "Every %2$s."
-#~ msgid_plural "Every %1$d weeks on %2$s."
-#~ msgstr[0] "Varje %2$s."
-#~ msgstr[1] "Var %1$d vecka på %2$s."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on day %2$d."
-#~ msgid_plural "Every %1$d months on day %2$d."
-#~ msgstr[0] "Varje månad på dag %2$d."
-#~ msgstr[1] "Var %1$d månad på dag %2$d."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on the %2$s %3$s."
-#~ msgid_plural "Every %1$d months on the %2$s %3$s."
-#~ msgstr[0] "Varje månad den %2$s %3$s."
-#~ msgstr[1] "Var %1$d månad den %2$s %3$s."
-
-#~ msgid "Every year in %1$s on day %2$d."
-#~ msgstr "Varje år i %1$s på dag %2$d."
-
-#~ msgid "Every year on the %1$s %2$s in %3$d."
-#~ msgstr "Varje år den %1$s %2$s i %3$d."
-
-#~ msgid "The series ends on %1$s."
-#~ msgstr "Serien slutar %1$s."
-
-#~ msgid "The series ends after one occurrence."
-#~ msgid_plural "The series ends after %1$d occurences."
-#~ msgstr[0] "Serien slutar efter en instans."
-#~ msgstr[1] "Serien slutar efter %1$d instanser."
-
-#~ msgid "The series never ends."
-#~ msgstr "Serien slutar aldrig."
+#~ msgid ""
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
+#~ msgstr ""
+#~ "Det finns %1$d meddelanden i den här mappen; alla meddelanden visas inte "
+#~ "i listan. Om du vill flytta eller radera alla meddelanden hittar du "
+#~ "motsvarande åtgärder i mappens snabbmeny."
 
 #~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
+#~ "You can manage desktop notifications at any time, by vitising your "
+#~ "settings"
 #~ msgstr ""
-#~ "Genom att ändra datum för det här mötet skapar du ett mötesundantag i "
-#~ "serien."
-
-#~ msgid "Create exception"
-#~ msgstr "Skapa undantag"
-
-#~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-#~ msgstr ""
-#~ "Det här mötet är ett undantag. Ändringar på serien påverkar inte undantag."
-
-#~ msgid "Print preview"
-#~ msgstr "Förhandsgranskning"
-
-#~ msgctxt "contact-print-dialog"
-#~ msgid "Details"
-#~ msgstr "Detaljerad"
-
-#~ msgid "Select print layout"
-#~ msgstr "Välj utskriftslayout"
-
-#~ msgid "This list has no members yet"
-#~ msgstr "Den här listan har inga medlemmar än"
-
-#~ msgid "Business"
-#~ msgstr "Arbete"
-
-#~ msgid "Home"
-#~ msgstr "Hem"
-
-#~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-#~ msgstr ""
-#~ "Den här filtypen stöds inte som kontaktbild. Bara bildtyper (JPG, GIF, "
-#~ "BMP eller PNG) stöds."
-
-#~ msgid "Upload image"
-#~ msgstr "Ladda upp bild"
-
-#~ msgid "Warning!"
-#~ msgstr "Varning!"
-
-#~ msgid ""
-#~ "This is a browser feature for developers. If you were asked to copy and "
-#~ "paste anything here, somebody might want to take over your account. Do "
-#~ "not enter any script code without knowing what it does."
-#~ msgstr ""
-#~ "Detta är en webbläsarfunktion för utvecklare. Om du blev ombedd att "
-#~ "kopiera och klistra in något här kan det vara någon som försöker ta över "
-#~ "ditt konto. Mata inte in någon skriptkod om du inte vet vad den gör."
-
-#~ msgid "Add new address book"
-#~ msgstr "Lägg till ny adressbok"
-
-#~ msgid "New address book"
-#~ msgstr "Ny adressbok"
-
-#~ msgid "Create sharing link"
-#~ msgstr "Skapa delningslänk"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Prenumerera på adressbok"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Prenumerera på kalender"
-
-#~ msgid "Actions for %1$s"
-#~ msgstr "Åtgärder för %1$s"
-
-#~ msgid "Create folder"
-#~ msgstr "Skapa mapp"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Visste du att du kan ta OX App Suite med deg? Klicka på den här ikonen "
-#~ "och välj \"Anslut din enhet\" från menyn."
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Använd tillgänglighetsförbättringar"
-
-#~ msgid "My %1$s calendar"
-#~ msgstr "Min %1$s-kalender"
-
-#~ msgid "My %1$s contacts"
-#~ msgstr "Mina %1$s-kontakter"
-
-#~ msgid "My %1$s account"
-#~ msgstr "Mitt %1$s-konto"
-
-#~ msgid "Configure %1$s"
-#~ msgstr "Anpassa %1$s"
-
-#~ msgid "Added %1$s."
-#~ msgstr "Lade till %1$s."
-
-#~ msgid "Removed %1$s."
-#~ msgstr "Tog bort %1$s."
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Kör autouppspelningsläge"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pausa autouppspelningsläge"
-
-#~ msgid "Rename File"
-#~ msgstr "Döp om fil"
-
-#~ msgid "Start video"
-#~ msgstr "Starta video"
-
-#~ msgid "Close this notification"
-#~ msgstr "Stäng den här aviseringen"
-
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Delningslänk skapades för filen \"%1$d\""
-#~ msgstr[1] "Delningslänk skapades för %1$d objekt"
-
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Delningslänk skapades för mappen \"%1$d\""
-#~ msgstr[1] "Delningslänk skapades för %1$d objekt"
-
-#~ msgid "Loop once only"
-#~ msgstr "Spela bara en gång"
-
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Upprepa ändlöst"
-
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Bildvisning / Autouppspelningsläge"
-
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Autouppspelningspaus i sekunder"
-
-#~ msgid "Share %1$s \"%2$s\""
-#~ msgstr "Dela ut %1$s \"%2$s\""
-
-#~ msgid "file"
-#~ msgstr "fil"
-
-#~ msgid "folder"
-#~ msgstr "mapp"
-
-#~ msgid "Permissions for %1$s \"%2$s\""
-#~ msgstr "Rättigheter för %1$s \"%2$s\""
-
-#~ msgid "Send notification by email"
-#~ msgstr "Skicka avisering via e-post"
-
-#~ msgid "Text documents"
-#~ msgstr "Textdokument"
-
-#~ msgid "Search in all folders"
-#~ msgstr "Sök i alla mappar"
-
-#~ msgid "This field is mandatory"
-#~ msgstr "Fältet är obligatoriskt"
-
-#~ msgid "[Copy] %1$s"
-#~ msgstr "[Kopia] %1$s"
-
-#~ msgid "Reply all"
-#~ msgstr "Svara alla"
-
-#~ msgctxt "verb"
-#~ msgid "Flag"
-#~ msgstr "Flagga"
-
-#~ msgid ""
-#~ "The file \"%1$s\" cannot be uploaded because it exceeds the total "
-#~ "attachment size limit of %2$s"
-#~ msgstr ""
-#~ "Filen \"%1$s\" kan inte laddas upp eftersom den överskrider totala "
-#~ "storleksgränsen för bilagor på %2$s"
-
-#~ msgid "Flagged"
-#~ msgstr "Flaggat"
-
-#~ msgid "Not flagged"
-#~ msgstr "Inte flaggat"
-
-#~ msgid "Draft saved at %1$s"
-#~ msgstr "Utkast sparades %1$s"
-
-#~ msgid "Reply to mailing list"
-#~ msgstr "Svara till sändlista"
-
-#~ msgid "This message was sent via the mailing list %1$s."
-#~ msgstr "Meddelandet skickades via sändlistan %1$s."
-
-#~ msgid "This message was sent via a mailing list."
-#~ msgstr "Detta meddelande skickades via en sändlista."
-
-#~ msgid "Do you really want to reply all or just %1$s?"
-#~ msgstr "Vill du verkligen svara till alla, eller bara %1$s?"
-
-#~ msgid ""
-#~ "Attachment file size too large. You have to use %1$s or reduce the "
-#~ "attachment file size."
-#~ msgstr ""
-#~ "Bilagans filstorlek är för stor. Du måste använda %1$s eller reducera "
-#~ "filstorleken för bilagan."
-
-#~ msgid "%1$d month"
-#~ msgid_plural "%1$d months"
-#~ msgstr[0] "%1$d månad"
-#~ msgstr[1] "%1$d månader"
-
-#~ msgid "%1$d year"
-#~ msgid_plural "%1$d years"
-#~ msgstr[0] "%1$d år"
-#~ msgstr[1] "%1$d år"
-
-#~ msgid "no expiry date"
-#~ msgstr "inget utgångsdatum"
-
-#~ msgid ""
-#~ "Attachment size too large. Please remove attachments or reduce the file "
-#~ "size."
-#~ msgstr ""
-#~ "Bilagornas storlek är för stor. Ta bort bilagor eller minska filstorleken."
-
-#~ msgctxt "dialog"
-#~ msgid "Delete draft"
-#~ msgstr "Ta bort utkast"
-
-#~ msgid "Keep draft"
-#~ msgstr "Behåll utkast"
-
-#~ msgid "Do you really want to delete this draft?"
-#~ msgstr "Vill du verkligen ta bort utkastet?"
-
-#~ msgid "[Copy] "
-#~ msgstr "[Kopia]"
-
-#~ msgid "Couldn't load editor"
-#~ msgstr "Kunde inte ladda editor"
-
-#~ msgid "Error: Failed to load message content"
-#~ msgstr "Fel: Kunde inte läsa meddelandets innehåll"
-
-#~ msgid "Error: Failed to load messages"
-#~ msgstr "Fel: Kunde inte läsa in meddelanden"
-
-#~ msgid "This rule contains unsupported properties. "
-#~ msgstr "Den här regeln innehåller egenskaper som inte stöds."
-
-#~ msgid "Add IMAP keyword"
-#~ msgstr "Lägg till IMAP-nyckelord"
-
-#~ msgid "Set color flag"
-#~ msgstr "Ange färgflagga"
-
-#~ msgid "flagged"
-#~ msgstr "flaggad"
-
-#~ msgid "Remove IMAP keyword"
-#~ msgstr "Ta bort IMAP-nyckelord"
-
-#~ msgid "Copy message to folder"
-#~ msgstr "Kopiera meddelande till mapp"
-
-#~ msgid "Nested condition"
-#~ msgstr "Nästat villkor"
-
-#~ msgid "continue if all of these conditions are met"
-#~ msgstr "fortsätt om alla dessa villkor uppfylls"
-
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "fortsätt om något av dessa villkor uppfylls."
-
-#~ msgid "continue if all conditions are met"
-#~ msgstr "fortsätt om alla villkor uppfylls"
-
-#~ msgid "Body"
-#~ msgstr "Brödtext"
-
-#~ msgid "Current date"
-#~ msgstr "Aktuellt datum"
-
-#~ msgid "original timezone"
-#~ msgstr "ursprunglig tidszon"
-
-#~ msgid "Rule applies from"
-#~ msgstr "Regel gäller från"
-
-#~ msgid "Rule applies until"
-#~ msgstr "Regel gäller till"
-
-#~ msgid "Rule applies on"
-#~ msgstr "Regel gäller den"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "Regeln gäller inte den"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "Regeln gäller inte från"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "Regeln gäller inte tills"
-
-#~ msgid "Sent date"
-#~ msgstr "Skickades datum"
-
-#~ msgid "Envelope"
-#~ msgstr "Kuvert"
-
-#~ msgid "Address"
-#~ msgstr "Adress"
-
-#~ msgid "Cc"
-#~ msgstr "Kopia"
-
-#~ msgid "Bcc"
-#~ msgstr "Dold kopia"
-
-#~ msgid "Sender"
-#~ msgstr "Avsändare"
-
-#~ msgid "Resent-From"
-#~ msgstr "Återskickat-från"
-
-#~ msgid "Resent-To"
-#~ msgstr "Återskickat-till"
-
-#~ msgid "Exists"
-#~ msgstr "Finns"
-
-#~ msgid "Part"
-#~ msgstr "Del"
-
-#~ msgid "Contains not"
-#~ msgstr "Innehåller inte"
-
-#~ msgid "Is not exactly"
-#~ msgstr "Är inte exakt"
-
-#~ msgid "Matches not"
-#~ msgstr "Matchar inte"
-
-#~ msgid "Starts with"
-#~ msgstr "Börjar med"
-
-#~ msgid "Starts not with"
-#~ msgstr "Börjar inte med"
-
-#~ msgid "Ends with"
-#~ msgstr "Slutar med"
-
-#~ msgid "Ends not with"
-#~ msgstr "Slutar inte med"
-
-#~ msgid "Not Regex"
-#~ msgstr "Inte reguttr"
-
-#~ msgid "Keep mails from %1$s"
-#~ msgstr "Behåll meddelanden från %1$s"
-
-#~ msgid "Discard mails from %1$s"
-#~ msgstr "Kasta meddelanden från %1$s"
-
-#~ msgid "Move mails from %1$s into folder %2$s"
-#~ msgstr "Flytta meddelanden från %1$s till mapp %2$s"
-
-#~ msgid "Redirect mails from %1$s to %2$s"
-#~ msgstr "Omdirigera meddelanden från %1$s till %2$s"
-
-#~ msgid "Reject mails from %1$s with reason %2$s"
-#~ msgstr "Avslå meddelanden från %1$s med motivering %2$s"
-
-#~ msgid "Mark mails from %1$s as seen"
-#~ msgstr "Märk meddelanden från %1$s som lästa"
-
-#~ msgid "Mark mails from %1$s as deleted"
-#~ msgstr "Märk meddelanden från %1$s som raderade"
-
-#~ msgid "Flag mails from %1$s with a color"
-#~ msgstr "Flagga meddelanden från %1$s med en färg"
-
-#~ msgid "Tag mails from %1$s with %2$s"
-#~ msgstr "Tagga meddelanden från %1$s med %2$s"
-
-#~ msgid "Keep mails to %1$s"
-#~ msgstr "Behåll meddelanden till %1$s"
-
-#~ msgid "Discard mails to %1$s"
-#~ msgstr "Kasta meddelanden till %1$s"
-
-#~ msgid "Move mails to %1$s into folder %2$s"
-#~ msgstr "Flytta meddelanden till %1$s till mappen %2$s"
-
-#~ msgid "Redirect mails to %1$s to %2$s"
-#~ msgstr "Omdirigera meddelanden från %1$s till %2$s"
-
-#~ msgid "Reject mails to %1$s with reason %2$s"
-#~ msgstr "Avslå meddelanden till %1$s med motivering %2$s"
-
-#~ msgid "Mark mails to %1$s as seen"
-#~ msgstr "Märk meddelanden till %1$s som lästa"
-
-#~ msgid "Mark mails to %1$s as deleted"
-#~ msgstr "Märk meddelanden till %1$s som raderade"
-
-#~ msgid "Flag mails to %1$s with a color"
-#~ msgstr "Flagga meddelanden till %1$s med en färg"
-
-#~ msgid "Tag mails to %1$s with %2$s"
-#~ msgstr "Tagga meddelanden till %1$s med %2$s"
-
-#~ msgid "Keep mails with subject %1$s"
-#~ msgstr "Behåll meddelanden med ämnet %1$s"
-
-#~ msgid "Discard mails with subject %1$s"
-#~ msgstr "Kasta meddelanden med ämnet %1$s"
-
-#~ msgid "Move mails with subject %1$s into folder %2$s"
-#~ msgstr "Flytta meddelanden med ämnet %1$s till mappen %2$s"
-
-#~ msgid "Redirect mails with subject %1$s to %2$s"
-#~ msgstr "Omdirigera meddelanden med ämnet %1$s till %2$s"
-
-#~ msgid "Reject mails with subject %1$s with reason %2$s"
-#~ msgstr "Avslå meddelanden med ämnet %1$s med motivering %2$s"
-
-#~ msgid "Mark mails with subject %1$s as seen"
-#~ msgstr "Märk meddelanden med ämnet %1$s som lästa"
-
-#~ msgid "Mark mails with subject %1$s as deleted"
-#~ msgstr "Märk meddelanden med ämnet %1$s som raderade"
-
-#~ msgid "Flag mails with subject %1$s with a color"
-#~ msgstr "Flagga meddelanden med ämnet %1$s med en färg"
-
-#~ msgid "Tag mails with subject %1$s with %2$s"
-#~ msgstr "Tagga meddelanden med ämnet %1$s med %2$s"
-
-#~ msgid "Use browser default"
-#~ msgstr "Använd standardinställningar"
-
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Pynta e-post i klartext"
-
-#~ msgid "Show folder with all unseen messages"
-#~ msgstr "Visa mapp med alla olästa meddelanden"
-
-#~ msgid "Font"
-#~ msgstr "Teckensnitt"
-
-#~ msgid "Confirm recipients when replying to a mailing list"
-#~ msgstr "Bekräfta kvitton vid svar till sändlista"
-
-#~ msgid "Default font style"
-#~ msgstr "Förvald teckensnittsstil"
-
-#~ msgid "This is how your message text will look like."
-#~ msgstr "Så här kommer din meddelandetext se ut."
-
-#~ msgid "Default signature"
-#~ msgstr "Förvald signatur"
-
-#~ msgid "Edit copy"
-#~ msgstr "Redigera kopia"
-
-#~ msgid "message"
-#~ msgstr "meddelande"
-
-#~ msgid "Send from"
-#~ msgstr "Skickat från"
-
-#~ msgid "default sender"
-#~ msgstr "förvald avsändare"
-
-#~ msgid "unselect all"
-#~ msgstr "avmarkera alla"
-
-#~ msgid "select all"
-#~ msgstr "markera alla"
-
-#~ msgid ""
-#~ "The Notice is sent out for messages received by %1$s. You may choose to "
-#~ "send it out for other recipient addresses too:"
-#~ msgstr ""
-#~ "Notisen skickas ut för meddelanden mottagna av %1$s. Du kan också välja "
-#~ "att skicka notiser för andra mottagaradresser:"
-
-#~ msgid "Flag"
-#~ msgstr "Flagga"
-
-#~ msgid "My %1$s account (%2$d)"
-#~ msgstr "Mitt %1$s-konto (%2$d)"
-
-#~ msgid "Account Name"
-#~ msgstr "Kontonamn"
-
-#~ msgid "Get the App from %1$s."
-#~ msgstr "Hämta programmet från %1$s."
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr ""
-#~ "Nu ställer vi automatiskt in din enhet - klicka på knappen nedanför."
-
-#~ msgid "CalDAV"
-#~ msgstr "CalDAV"
-
-#~ msgid "Login"
-#~ msgstr "Inloggning"
-
-#~ msgid "CardDAV"
-#~ msgstr "CardDAV"
-
-#~ msgid "IMAP"
-#~ msgstr "IMAP"
-
-#~ msgid "Server Name"
-#~ msgstr "Servernamn"
-
-#~ msgid "Port"
-#~ msgstr "Port"
-
-#~ msgid "User Name"
-#~ msgstr "Användarnamn"
-
-#~ msgid "Connection"
-#~ msgstr "Anslutning"
-
-#~ msgid "SMTP"
-#~ msgstr "SMTP"
-
-#~ msgid "EAS"
-#~ msgstr "EAS"
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "Visa eller dölj åtgärder för avancerade användare."
-
-#~ msgid "Manual Configuration"
-#~ msgstr "Manuell konfiguration"
-
-#~ msgid "Install"
-#~ msgstr "Installera"
-
-#~ msgid "Connect your device"
-#~ msgstr "Anslut din enhet"
-
-#~ msgid "Add contact/resource"
-#~ msgstr "Lägg till kontakt/resurs"
-
-#~ msgid "Cannot add contact with an invalid mail address: %1$s"
-#~ msgstr "Kan inte lägga till kontakt med ogiltig e-postadress: %1$s"
-
-#~ msgid "This list has no participants yet"
-#~ msgstr "Den här listan har inga deltagare än"
-
-#~ msgid "Members (%1$d)"
-#~ msgstr "Medlemmar (%1$d)"
-
-#~ msgid "Try again."
-#~ msgstr "Försök igen."
-
-#~ msgid "Open file. Drag to your desktop to download."
-#~ msgstr "Öppna fil. Dra till ditt skrivbord för att ladda ner."
-
-#~ msgid "Open file"
-#~ msgstr "Öppna fil"
-
-#~ msgid "Show information about account recovery"
-#~ msgstr "Visa information om återställning av konto"
-
-#~ msgid ""
-#~ "For security reasons, all credentials are encrypted with your primary "
-#~ "account password. If you change your primary password, your external "
-#~ "accounts might stop working. In this case, you can use your old password "
-#~ "to recover all account passwords."
-#~ msgstr ""
-#~ "Av säkerhetsskäl krypteras alla uppgifter med ditt primära kontos "
-#~ "lösenord. Om du ändrar ditt primära lösenord kan dina externa konton "
-#~ "sluta fungera. I så fall kan du använda ditt gamla lösenord för att hämta "
-#~ "ut alla kontons lösenord."
-
-#~ msgid "This task has no participants yet"
-#~ msgstr "Den här listan har inga deltagare än"
-
-#~ msgid "General"
-#~ msgstr "Allmänt"
-
-#~ msgid "Not likely at all"
-#~ msgstr "Inte alls sannolikt"
-
-#~ msgid "%1$d of 10 points."
-#~ msgstr "%1$d av 10 poäng."
-
-#~ msgid "Extremely likely"
-#~ msgstr "Extremt sannolikt"
-
-#~ msgid "How likely is it that you would recommend %1$s to a friend?"
-#~ msgstr "Hur sannolikt är det att du rekommenderar %1$s till en vän?"
-
-#~ msgid "Please rate the following application:"
-#~ msgstr "Betygsätt följande program:"
-
-#~ msgid "Please select a rating."
-#~ msgstr "Välj ett betyg."
-
-#~ msgid "Feedback could not be sent"
-#~ msgstr "Synpunkterna kunde inte skickas"
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Din förvalda påminnelse kunde inte anges för det här mötet på grund av "
-#~ "otillräckliga rättigheter"
-
-#~ msgid "Overdue Task %1$s."
-#~ msgstr "Försenad uppgift %1$s."
-
-#~ msgid "Authorize your account again"
-#~ msgstr "Ge ditt konto behörighet igen"
-
-#~ msgid "You have %1$d unread message"
-#~ msgid_plural "You have %1$d unread messages"
-#~ msgstr[0] "Du har %1$d oläst meddelande"
-#~ msgstr[1] "Du har %1$d olästa meddelanden"
-
-#~ msgid "PowerDNS parental control"
-#~ msgstr "PowerDNS föräldrakontroll"
-
-#~ msgid "Open parental control settings"
-#~ msgstr "Öppna inställningarna för föräldrakontroll"
-
-#~ msgid "Retry later."
-#~ msgstr "Försök igen senare."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Lämna tomt om du inte har någon"
+#~ "Du kan hantera skrivbordsaviseringar när som helst, genom dina "
+#~ "inställningar"
 
 #, fuzzy
 #~| msgid "is not a valid user or group."
@@ -11753,6 +10892,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "2 hour"
 #~ msgstr "2 timmar"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 veckor"
 
 #~ msgid "200%"
 #~ msgstr "200%"
@@ -12373,6 +11515,16 @@ msgstr "Lägg till på %s"
 #~ msgid "Applications"
 #~ msgstr "Program"
 
+#, fuzzy
+#~| msgid "Apply role"
+#~ msgid "Apply"
+#~ msgstr "Tillämpa roll"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "E-post från %1$s: %2$s"
+
 #~ msgid "Apply to all messages?"
 #~ msgstr "Verkställ för alla meddelanden?"
 
@@ -12402,6 +11554,11 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Are you sure?"
 #~ msgstr "Är du säker?"
+
+#, fuzzy
+#~| msgid "Attention"
+#~ msgid "Argentina"
+#~ msgstr "Varning"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "Be om läskvitto"
@@ -12489,6 +11646,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Bad value %1$s in parameter %2$s"
 #~ msgstr "Felaktigt värde %1$s i parametern %2$s"
+
+#~ msgid "Bcc"
+#~ msgstr "Bcc"
 
 #~ msgid ""
 #~ "Below the recipient you will find further functions, e.g. for sending "
@@ -12784,11 +11944,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Close document"
 #~ msgstr "Stäng dokument"
 
-#, fuzzy
-#~| msgid "Click to close the recurrence view"
-#~ msgid "Close recurrence view"
-#~ msgstr "Klicka för att stänga upprepningsvyn"
-
 #~ msgid "Close this reminder"
 #~ msgstr "Stäng påminnelse"
 
@@ -12995,6 +12150,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Couldn't find servlet class \"%s\""
 #~ msgstr "Kunde inte hitta servlet-klass \"%s\""
 
+#~ msgid "Couldn't load file data."
+#~ msgstr "Kunde inte ladda fildata."
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "Kunde inte ladda mappar."
 
@@ -13100,6 +12258,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Default sender address:"
 #~ msgstr "Förvald avsändaradress:"
 
+#~ msgid "Default view"
+#~ msgstr "Standardvy"
+
 #~ msgid ""
 #~ "Defined permissions for folder %1$s in context %2$s are not applicable to "
 #~ "user %3$s due to user configuration"
@@ -13136,11 +12297,6 @@ msgstr "Lägg till på %s"
 #~| msgid "Return Receipt"
 #~ msgid "Delivery Receipt"
 #~ msgstr "Läskvitto"
-
-#, fuzzy
-#~| msgid "Delete contact"
-#~ msgid "Detailed contact list"
-#~ msgstr "Ta bort kontakt"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -13285,6 +12441,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Edit categories"
 #~ msgstr "E-postadress"
 
+#~ msgid "Edit document"
+#~ msgstr "Redigera dokument"
+
 #~ msgid "Editing multiple E-Mails"
 #~ msgstr "Redigera flera e-brev"
 
@@ -13415,6 +12574,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Entire thread"
 #~ msgstr "Hela tråden"
 
+#~ msgid "Envelope"
+#~ msgstr "Kuvert"
+
 #~ msgid "Error communicating with mbean in server: %s"
 #~ msgstr "Ett fel uppstod i kommunikationen med mbean i server: %s"
 
@@ -13447,27 +12609,6 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Fel: Fick ett UserParticipant-objekt med en identifierare < 1 "
 #~ "Identifierare:mapp_Typ = %d:%d"
-
-#~ msgid "Every %1$d days."
-#~ msgstr "Var %1$d dag."
-
-#~ msgid "Every %1$d months on day %2$d."
-#~ msgstr "Var %1$d månad på dag %2$d."
-
-#~ msgid "Every %1$d months on the %2$s %3$s."
-#~ msgstr "Var %1$d månad den %2$s %3$s."
-
-#~ msgid "Every %1$d weeks on %2$s."
-#~ msgstr "Var %1$d vecka på %2$s."
-
-#~ msgid "Every %1$d weeks on all days."
-#~ msgstr "Var %1$d vecka, alla dagar."
-
-#~ msgid "Every %1$d weeks on weekends."
-#~ msgstr "Var %1$d vecka på helgen."
-
-#~ msgid "Every %1$d weeks on workdays."
-#~ msgstr "Var %1$d vecka på arbetsdagar."
 
 #~ msgid "Exception while building JSON."
 #~ msgstr "Undantag när JSON byggs."
@@ -13788,6 +12929,9 @@ msgstr "Lägg till på %s"
 #~ msgid "FreeBusyResults calculation problem with oid: %1$d"
 #~ msgstr "FreeBusyResults Beräkningsproblem uppstod med oid: %1$d"
 
+#~ msgid "Friday"
+#~ msgstr "Fredag"
+
 #~ msgid "Fullscreen"
 #~ msgstr "Helskärm"
 
@@ -14080,9 +13224,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Info area"
 #~ msgstr "Informationsområde"
 
-#~ msgid "Information about account recovery..."
-#~ msgstr "Information om återställning av konto…"
-
 #~ msgid ""
 #~ "Insert expected but the object id is already given. Aborting action..."
 #~ msgstr "Tillägg förväntat men objekt-id finns redan. Avbryter åtgärd..."
@@ -14268,6 +13409,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Load Error"
 #~ msgstr "Laddningsfel"
 
+#~ msgid "Login"
+#~ msgstr "Inloggning"
+
 #~ msgid "Login must not be empty."
 #~ msgstr "Inloggning måste vara tom."
 
@@ -14328,6 +13472,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Mail was not imported, only .eml files are supported."
 #~ msgstr "E-post importerades inte; endast .eml-filer stöds."
 
+#~ msgid "Mail(s) %1$s could not be found in folder %2$s"
+#~ msgstr "Brev(en) %1$s kunde inte hittas i mappen %2$s"
+
 #~ msgid ""
 #~ "Mailbox' root folder must not be source or the destination fullname of a "
 #~ "move operation."
@@ -14383,6 +13530,9 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Maximala sessionsstorleken för användare %1$s i kontext %2$s är "
 #~ "överskriden"
+
+#~ msgid "Message could not be sent"
+#~ msgstr "Meddelandet kunde inte skickas"
 
 #~ msgid "Message could not be sent because it is too large"
 #~ msgstr "Meddelandet kunde inte skickas på grund av att det är för stort"
@@ -14553,6 +13703,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Module type of the object is missing."
 #~ msgstr "Modultypen för objektet saknas."
 
+#~ msgid "Monday"
+#~ msgstr "Måndag "
+
 #~ msgid "Month View"
 #~ msgstr "Månadsvy"
 
@@ -14563,6 +13716,11 @@ msgstr "Lägg till på %s"
 
 #~ msgid "More zoom settings"
 #~ msgstr "Fler zoom-inställningar"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "Verkställ för alla underliggande mappar"
 
 #~ msgid "Move not allowed from shared folders"
 #~ msgstr "Flytt inte tillåten från delade mappar"
@@ -14703,6 +13861,12 @@ msgstr "Lägg till på %s"
 
 #~ msgid "No delete access to mail folder %1$s"
 #~ msgstr "Du har ingen åtkomst att ta bort e-post-mappen %1$s"
+
+#~ msgid "No delete exceptions"
+#~ msgstr "Inga borttagna undantag"
+
+#~ msgid "No downloads available"
+#~ msgstr "Inga nedladdningar tillgängliga"
 
 #~ msgid "No file selected for upload."
 #~ msgstr "Ingen fil valdes för uppladdning."
@@ -14921,6 +14085,11 @@ msgstr "Lägg till på %s"
 #~ msgid "Only the task creator is allowed to set private flag."
 #~ msgstr "Endast skaparen av uppgiften är tillåten att använda privat flagga."
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Öppna"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Öppna i ny flik"
 
@@ -14932,6 +14101,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Öppna e-postinställningarna"
+
+#~ msgid "Opening the settings"
+#~ msgstr "Öppna inställningarna"
 
 #~ msgid "Operation not allowed on a closed SearchIterator"
 #~ msgstr "Funktionen är inte tillåten i en stängd sökiterator"
@@ -15070,11 +14242,6 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Ursprunglig e-post-adress i systemet får inte redigeras: Kontext %1$d "
 #~ "Objekt %2$d Användare %3$d"
-
-#, fuzzy
-#~| msgid "Edit contact"
-#~ msgid "Printout of contacts"
-#~ msgstr "Redigera kontakt"
 
 #~ msgid "Privacy Notice"
 #~ msgstr "Integritetsnotis"
@@ -15307,6 +14474,9 @@ msgstr "Lägg till på %s"
 #~ "Spara i cacheminnet misslyckades. Ett objekt som är bundet till nyckel "
 #~ "finns redan."
 
+#~ msgid "Saturday"
+#~ msgstr "Lördag"
+
 #~ msgid "Save in file store"
 #~ msgstr "Spara i fillagringen"
 
@@ -15336,6 +14506,9 @@ msgstr "Lägg till på %s"
 #~ msgid "Searched in"
 #~ msgstr "Sökte i"
 
+#~ msgid "Searched in all folders"
+#~ msgstr "Sökte i alla mappar"
+
 #~ msgid "Searching for objects"
 #~ msgstr "Hitta objekt"
 
@@ -15361,6 +14534,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Send feedback"
 #~ msgstr "Lämna synpunkter"
+
+#~ msgid "Sender"
+#~ msgstr "Avsändare"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Skicka e-post till en kontakt"
@@ -15391,6 +14567,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Sessiond Exception"
 #~ msgstr "Sessiond undantag"
+
+#~ msgid "Set as default"
+#~ msgstr "Ange som standard"
 
 #~ msgid "Setting \"%1$s\" is not a leaf one."
 #~ msgstr "Inställning \"%1$s\" är inte ett barn"
@@ -15496,11 +14675,6 @@ msgstr "Lägg till på %s"
 #~ msgid "Signing out"
 #~ msgstr "Logga ut"
 
-#, fuzzy
-#~| msgid "Phone list"
-#~ msgid "Simple phone list"
-#~ msgstr "Telefonlista"
-
 #~ msgid "Skip this step"
 #~ msgstr "Hoppa över det här steget"
 
@@ -15600,6 +14774,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Such data will never be uploaded"
 #~ msgstr "Sådan data kommer aldrig laddas upp."
+
+#~ msgid "Sunday"
+#~ msgstr "Söndag"
 
 #, fuzzy
 #~| msgid "Your name"
@@ -15818,6 +14995,12 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Det inlagda värdet för kostnaden är inte inom beviljad gräns. Använd ett "
 #~ "värde från -130000.00 till 130000.00."
+
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "Filen \"%1$s\" kan inte laddas upp eftersom den överskrider kvoten på %2$s"
 
 #~ msgid ""
 #~ "The file cannot be added to filestore. File size: %s Quota: %s Used: %s"
@@ -16364,6 +15547,11 @@ msgstr "Lägg till på %s"
 #~ "mottagarens dator. Det finns ingen garanti att mottagaren har läst eller "
 #~ "förstått meddelandets innehåll."
 
+#, fuzzy
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "E-brevet har inget innehåll"
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Det här kan ta en liten stund"
 
@@ -16551,6 +15739,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Though expected, SQL query returned no result."
 #~ msgstr "Även om det var väntat returnerade SQL-frågan inga svar."
+
+#~ msgid "Thursday"
+#~ msgstr "Torsdag"
 
 #~ msgid "Tile"
 #~ msgstr "Ruta"
@@ -16817,6 +16008,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "Tried to delete %1$d participants but only %2$d were deleted."
 #~ msgstr "Försökte ta bort %1$d deltagare men endast %2$d togs bort."
+
+#~ msgid "Tuesday"
+#~ msgstr "Tisdag"
 
 #~ msgid "Tweet"
 #~ msgstr "Tweet"
@@ -17188,6 +16382,12 @@ msgstr "Lägg till på %s"
 #~ msgid "Unread only"
 #~ msgstr "Bara oläst"
 
+#~ msgid "Unselect all"
+#~ msgstr "Avmarkera alla"
+
+#~ msgid "Unset default signature"
+#~ msgstr "Nollställ förvald signatur"
+
 #~ msgid "Unsupported MIME type %1$s"
 #~ msgstr "MiME-typen stöds inte %1$s"
 
@@ -17447,8 +16647,15 @@ msgstr "Lägg till på %s"
 #~ msgid "Warnings when importing file: %i warnings"
 #~ msgstr "Varningar när fil importeras: %i varningar"
 
+#~ msgid "Wednesday"
+#~ msgstr "Onsdag"
+
 #~ msgid "Week View"
 #~ msgstr "Veckovy"
+
+#~| msgid "Weekend day"
+#~ msgid "Weekend Day"
+#~ msgstr "Helgdag"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Välkommen. Ge oss dina synpunkter om den här produkten"
@@ -17577,13 +16784,6 @@ msgstr "Lägg till på %s"
 #~ msgstr ""
 #~ "Du kan dra och släppa filer från din dator för att ladda upp dem som "
 #~ "nyafiler eller en annan version av en fil."
-
-#~ msgid ""
-#~ "You can manage desktop notifications at any time, by vitising your "
-#~ "settings"
-#~ msgstr ""
-#~ "Du kan hantera skrivbordsaviseringar när som helst, genom dina "
-#~ "inställningar"
 
 #~ msgid ""
 #~ "You can not move one element of a recurring appointment into another "
@@ -17841,6 +17041,9 @@ msgstr "Lägg till på %s"
 
 #~ msgid "end date "
 #~ msgstr "slutdatum "
+
+#~ msgid "files"
+#~ msgstr "filer"
 
 #~ msgid "hCard Export"
 #~ msgstr "Exportera till hCard"

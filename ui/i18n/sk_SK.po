@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-21 09:35+0200\n"
+"PO-Revision-Date: 2017-05-17 14:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -873,7 +873,7 @@ msgstr[2] "po %1$d schôdzkach"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
-msgstr ""
+msgstr "Zobrazenie Opakovania zatvoríte kliknutím"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
@@ -1552,6 +1552,8 @@ msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
 msgstr ""
+"Ak zmenáte dátum tejto schôdzky, vytvoríte v sérii stretnutí výnimku. Chcete "
+"pokračovať?"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -1955,30 +1957,30 @@ msgstr "a"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every day"
-msgstr ""
+msgstr "každý deň"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d days"
-msgstr ""
+msgstr "Každých %1$d dní"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
-msgstr ""
+msgstr "Každý deň každého %1$d. týždňa"
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
-msgstr ""
+msgstr "V pracovné dni"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
-msgstr ""
+msgstr "V pracovné dni každého %1$d. týždňa"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
@@ -1991,7 +1993,7 @@ msgstr "Týždenne v %1$s"
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
-msgstr ""
+msgstr "V %2$s každého %1$d. týždňa"
 
 #. recurrence string
 #. %1$d: numeric, day in month
@@ -2004,7 +2006,7 @@ msgstr "%1$d. deň každého mesiaca"
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
-msgstr ""
+msgstr "%1$d. deň každých %1$d mesiacov"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
@@ -2019,7 +2021,7 @@ msgstr "%1$s %2$s každého mesiaca"
 #. %3$s: day string, e.g. Monday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
-msgstr ""
+msgstr "%2$s %3$s každého %1$d. mesiaca"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -2051,18 +2053,18 @@ msgstr "Každý rok %1$s %2$s v %3$d"
 #. %4$s: month nane, e.g. January
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
-msgstr ""
+msgstr "Každých %1$d rokov %2$s %3$s v %4$d"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends on %1$s"
-msgstr ""
+msgstr "Táto séria končí %1$s"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Séria končí po %1$d schôdzke"
+msgstr[1] "Séria končí po %1$d schôdzkach"
+msgstr[2] "Séria končí po %1$d schôdzkach"
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
@@ -2086,7 +2088,7 @@ msgstr "Organizátor"
 #: apps/io.ox/find/extensions-api.js apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail apps/io.ox/search/main.js module:io.ox/search
 msgid "Folder"
-msgstr "Priečinok"
+msgstr "Priečiok"
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 #: apps/io.ox/files/actions/showlink.js module:io.ox/files
@@ -2137,6 +2139,8 @@ msgid ""
 "There are more than %n appointments in the current calendar. Some features "
 "are disabled to due to performance reasons."
 msgstr ""
+"V aktuálnom kalendári je viac ako %n schôdzok. Niektoré funkcie sú z dôvodu "
+"výkonnosti vypnuté."
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -2983,7 +2987,7 @@ msgstr "Nepodarilo sa načítať prílohy tohto kontaktu."
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "This list has no contacts yet"
-msgstr ""
+msgstr "Táto skupina zatiaľ nemá členov"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
@@ -3622,6 +3626,15 @@ msgid "CalDAV URL"
 msgstr "URL CalDAV"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"Priečinok nemožno odstrániť. Dôvodom môžu byť nedostatočné oprávnenia vo "
+"vašom priečinku Kôš alebo môže to byť špeciálny priečinok, ktorý nemožno "
+"odstrániť."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "Ste si istý, že chcete priečinok „%s“ zmazať?"
 
@@ -3858,7 +3871,7 @@ msgstr "OK"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "No action available"
-msgstr "Nie sú dostupné žiadne operácie"
+msgstr "Nie je dostupná žiadna operácia"
 
 #: apps/io.ox/core/folder/tree.js module:io.ox/core
 msgid "Folder options"
@@ -4092,8 +4105,8 @@ msgid ""
 "You forgot to sign out last time. Always use the sign-out button when you "
 "finished your work."
 msgstr ""
-"Minule ste sa zabudli odhlásiť. Po ukončení práce vždy použite tlačidlo na "
-"odhlásenie."
+"Naposledy ste sa zabudli odhlásiť. Vždy použite tlačidlo odhlásiť sa, keď "
+"dokončíte svoju prácu."
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Signed in as:"
@@ -4653,8 +4666,8 @@ msgid ""
 "Please check your browser settings and enable desktop notifications for this "
 "domain"
 msgstr ""
-"Prosím, skontrolujte nastavenia vášho prehliadača a povoľte oznámenia na "
-"ploche pre túto doménu"
+"Prosím, skontrolujte nastavenia svojho prehliadača a zapnite oznámenia "
+"pracovného prostredia pre túto doménu"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Show desktop notifications"
@@ -5853,7 +5866,7 @@ msgstr "Účet sa nepodarilo pridať"
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
-msgstr ""
+msgstr "Pridať účet %1$s"
 
 #: apps/io.ox/files/actions/add-to-portal.js module:io.ox/files
 msgid "This file has been added to the portal"
@@ -5919,9 +5932,9 @@ msgstr "Súbor: %1$s"
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the file \"%1$d\""
 msgid_plural "Share %1$d items"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zdieľať súbor „%1$d“"
+msgstr[1] "Zdieľať „%1$d“ položky"
+msgstr[2] "Zdieľať „%1$d“ položiek"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the folder \"%1$d\""
@@ -6173,7 +6186,7 @@ msgstr "Verejný odkaz"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
 msgid "Please set password"
-msgstr "Prosím, nastavte heslo"
+msgstr "Nastaviť heslo"
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -6301,15 +6314,15 @@ msgstr "Znovu poslať pozvanie"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Send notification"
-msgstr ""
+msgstr "Poslať oznámenie"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Share \"%1$s\""
-msgstr ""
+msgstr "Zdieľať „%1$s“"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for \"%1$s\""
-msgstr ""
+msgstr "Oprávnenia „%1$s“"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
@@ -7093,7 +7106,6 @@ msgid "unknown sender"
 msgstr "neznámy odosielateľ"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr "Všetky budúce správy od %1$s budú presunuté do vybraného priečinka."
 
@@ -7446,11 +7458,11 @@ msgstr "1 týždeň"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 month"
-msgstr ""
+msgstr "1 mesiac"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "3 months"
-msgstr ""
+msgstr "3 mesiace"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "6 months"
@@ -7458,7 +7470,7 @@ msgstr "6 mesiacov"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 year"
-msgstr ""
+msgstr "1 rok"
 
 #. text of a user list that shows the names of presenting user and participants.
 #. the text to display as presenter name if no user is presenting yet.
@@ -7669,7 +7681,7 @@ msgstr "Email od %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error while loading message content"
-msgstr ""
+msgstr "Vyskytla sa chyba pri načítaní obsahu správy."
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
@@ -7978,8 +7990,7 @@ msgid ""
 "There are %1$d messages in this folder; not all messages are displayed in "
 "the list currently."
 msgstr ""
-"Tento priečinok obsahuje %1$d správ v tomto priečinku. Nie všetky správy sú "
-"zobrazené v zozname."
+"V tomto priečinku je %1$d správ. Nie všetky správy sú zobrazené v zozname."
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8438,6 +8449,7 @@ msgstr "Zobrazené meno"
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
 msgstr ""
+"Kliknutím zobrazíte alebo skryjete operácie pre pokročilých používateľov."
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
@@ -8453,7 +8465,7 @@ msgstr "Prihlásenie CalDAV"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
-msgstr ""
+msgstr "URL CalDAV"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
@@ -8465,7 +8477,7 @@ msgstr "Server SMTP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Port"
-msgstr ""
+msgstr "Port SMTP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
@@ -8481,7 +8493,7 @@ msgstr "Server IMAP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Port"
-msgstr ""
+msgstr "Port IMAP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
@@ -8493,7 +8505,7 @@ msgstr "Zabezpečenie IMAP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS URL"
-msgstr ""
+msgstr "URL EAS"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS Login"
@@ -8536,6 +8548,8 @@ msgid ""
 "Let´s automatically configure your device, by clicking the button below. It"
 "´s that simple!"
 msgstr ""
+"Poďme automaticky nastaviť vaše zariadenie kliknutím na tlačidlo nižšie. "
+"Áno, je to také jednoduché!"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -8643,12 +8657,12 @@ msgstr[2] "Nasledovné emailové adresy nie je možné použiť: %1$d"
 
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
-msgstr ""
+msgstr "Pridať účastníkov/zdroje"
 
 #. %1$s is an email address
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Cannot add participant/member with an invalid mail address: %1$s"
-msgstr ""
+msgstr "Nemožno pridať účastníka/člena s neplatnou e-mailovou adresou: %1$s"
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "External participants"
@@ -8749,7 +8763,7 @@ msgstr "Vyskytla sa chyba."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
-msgstr ""
+msgstr "Kliknutím to skúsite znova neskôr."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal widgets"
@@ -9127,7 +9141,7 @@ msgstr "Panel nástrojov prezentujúceho"
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open. Drag to your desktop to download."
-msgstr ""
+msgstr "Kliknutím otvoríte. Stiahnuť môžete pretiahnutím na plochu."
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open."
@@ -9186,6 +9200,10 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords:"
 msgstr ""
+"Z bezpečnostných dôvodov sú všetky prihlasovacie údaje šifrované vaším "
+"heslom k primárnemu účtu. Ak zmeníte vaše primárne heslo, vaše externé účty "
+"môžu prestať fungovať. V takom prípade môžete použitím starého hesla obnoviť "
+"všetky heslá účtov:"
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
@@ -10293,7 +10311,7 @@ msgstr "LinkedIn ohlásil chybu:"
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
 msgid "Click to authorize your account again"
-msgstr ""
+msgstr "Kliknutím sem znova autorizujete svoj účet"
 
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
@@ -10356,7 +10374,7 @@ msgstr "Máte 1 neprečítanú správu"
 
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "You have %1$d unread messages"
-msgstr ""
+msgstr "Máte %1$d neprečítaných správ"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "your platform"
@@ -10521,7 +10539,7 @@ msgstr "Twitter ohlásil nasledovné chyby:"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry later."
-msgstr ""
+msgstr "Kliknutím to skúsite znova neskôr."
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
@@ -10871,909 +10889,19 @@ msgstr "Pozvať na %s"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
-#~ msgid "Burnt orange"
-#~ msgstr "Spálená oranžová"
-
-#~ msgid "Dark olive"
-#~ msgstr "Tmavoolivová"
-
-#~ msgid "Dark green"
-#~ msgstr "Tmavozelená"
-
-#~ msgid "Dark azure"
-#~ msgstr "Tmavoazúrová"
-
-#~ msgid "Navy Blue"
-#~ msgstr "Námornícka modrá"
-
-#~ msgid "Indigo"
-#~ msgstr "Indigo"
-
-#~ msgid "Very dark gray"
-#~ msgstr "Veľmi tmavá šedá"
-
-#~ msgid "Maroon"
-#~ msgstr "Ttmavogaštanová"
-
-#~ msgid "Olive"
-#~ msgstr "Olivová"
-
-#~ msgid "Teal"
-#~ msgstr "Modrozelená"
-
-#~ msgid "Grayish blue"
-#~ msgstr "Šedomodrá"
-
-#~ msgid "Amber"
-#~ msgstr "Jantárová"
-
-#~ msgid "Yellow green"
-#~ msgstr "Žltozelená"
-
-#~ msgid "Sea green"
-#~ msgstr "Morská zelená"
-
-#~ msgid "Turquoise"
-#~ msgstr "Tyrkysová"
-
-#~ msgid "Royal blue"
-#~ msgstr "Kráľovská modrá"
-
-#~ msgid "Medium gray"
-#~ msgstr "Stredne šedá"
-
-#~ msgid "Magenta"
-#~ msgstr "Purpurová"
-
-#~ msgid "Gold"
-#~ msgstr "Zlatá"
-
-#~ msgid "Sky blue"
-#~ msgstr "Belasá"
-
-#~ msgid "Red violet"
-#~ msgstr "červená fialová"
-
-#~ msgid "Light sky blue"
-#~ msgstr "Svetlobelasá"
-
-#~ msgid "Plum"
-#~ msgstr "Slivková"
-
-#~ msgid "No color"
-#~ msgstr "Bez farby"
-
-#~ msgid "toggle password visibility"
-#~ msgstr "prepnúť viditeľnosť hesla"
-
-#~ msgid "Daily"
-#~ msgstr "Denne"
-
-#~ msgid "Daily on workdays"
-#~ msgstr "Denne v pracovné dni"
-
-#~ msgid "Weekly"
-#~ msgstr "Týždenne"
-
-#~ msgid "Monthly"
-#~ msgstr "Mesačne"
-
-#~ msgid "Yearly"
-#~ msgstr "Ročne"
-
-#~ msgid "Weekday"
-#~ msgstr "Deň v týždni"
-
-#~ msgid "Repeat by"
-#~ msgstr "Opakovať každý"
-
-#~ msgid "day(s)"
-#~ msgstr "dní"
-
-#~ msgid "week(s)"
-#~ msgstr "týždňov"
-
-#~ msgid "month(s)"
-#~ msgstr "mesiacov"
-
-#~ msgid "year(s)"
-#~ msgstr "rokov"
-
-#~ msgid "Interval"
-#~ msgstr "Interval"
-
-#~ msgid "After a number of occurrences"
-#~ msgstr "Po počte opakovaní"
-
-#~ msgid "On specific date"
-#~ msgstr "V konkrétnom dátume"
-
-#~ msgid "Ends"
-#~ msgstr "Končí"
-
-#~ msgid "Occurrences"
-#~ msgstr "Opakovania"
-
-#~ msgid "Please enter a positive number"
-#~ msgstr "Prosím, zadajte kladné číslo"
-
-#~ msgid "Please insert a date after the start date"
-#~ msgstr "Prosím, vložte dátum, ktorý je neskorší ako dátum začiatku"
-
-#~ msgid "Please select at least one day"
-#~ msgstr "Prosím, vyberte aspoň jeden deň"
-
-#~ msgid "Edit recurrence"
-#~ msgstr "Upraviť opakovanie"
-
-#~ msgid "Apply"
-#~ msgstr "Aplikovať rolu"
-
-#~ msgid "Calendar workweek view"
-#~ msgstr "Zobrazenie kalendára - pracovný týždeň"
-
-#~ msgid "Number of days in work week"
-#~ msgstr "Počet dní v pracovnom týždni"
-
-#~ msgid "Work week starts on"
-#~ msgstr "Pracovný týždeň začína"
-
-#~ msgid "fifth / last"
-#~ msgstr "piaty / posledný"
-
-#~ msgctxt "superessive"
-#~ msgid "Sunday"
-#~ msgstr "Nedeľa"
-
-#~ msgctxt "superessive"
-#~ msgid "Monday"
-#~ msgstr "Pondelok"
-
-#~ msgctxt "superessive"
-#~ msgid "Tuesday"
-#~ msgstr "Utorok"
-
-#~ msgctxt "superessive"
-#~ msgid "Wednesday"
-#~ msgstr "Streda"
-
-#~ msgctxt "superessive"
-#~ msgid "Thursday"
-#~ msgstr "Štvrtok"
-
-#~ msgctxt "superessive"
-#~ msgid "Friday"
-#~ msgstr "Piatok"
-
-#~ msgctxt "superessive"
-#~ msgid "Saturday"
-#~ msgstr "Sobota"
-
-#~ msgid " and "
-#~ msgstr " a "
-
-#~ msgid ", "
-#~ msgstr ", "
-
-#~ msgctxt "daily"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d days."
-#~ msgstr[0] "Každý deň."
-#~ msgstr[1] "Každé %1$d dni."
-#~ msgstr[2] "Každých %1$d dní."
-
-#~ msgctxt "weekly"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d weeks on all days."
-#~ msgstr[0] "Každý deň."
-#~ msgstr[1] "Každé %1$d týždne každý deň."
-#~ msgstr[2] "Každých %1$d týždňov každý deň."
-
-#~ msgctxt "weekly"
-#~ msgid "On workdays."
-#~ msgid_plural "Every %1$d weeks on workdays."
-#~ msgstr[0] "Každý %1$d týždeň v pracovné dni."
-#~ msgstr[1] "Každé %1$d týždne v pracovné dni."
-#~ msgstr[2] "Každých %1$d týždňov v pracovné dni."
-
-#~ msgctxt "weekly"
-#~ msgid "Every weekend."
-#~ msgid_plural "Every %1$d weeks on weekends."
-#~ msgstr[0] "Každý %1$d týždeň cez víkend."
-#~ msgstr[1] "Každé %1$d týždne cez víkendy."
-#~ msgstr[2] "Každých %1$d týždňov cez víkendy."
-
-#~ msgid "Never."
-#~ msgstr "Nikdy."
-
-#~ msgctxt "weekly"
-#~ msgid "Every %2$s."
-#~ msgid_plural "Every %1$d weeks on %2$s."
-#~ msgstr[0] "Každý %1$d týždeň v %1$s."
-#~ msgstr[1] "Každé %1$d týždne v %1$s."
-#~ msgstr[2] "Každých %1$d týždňov v %1$s."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on day %2$d."
-#~ msgid_plural "Every %1$d months on day %2$d."
-#~ msgstr[0] "%2$d. deň každých %1$d mesiacov."
-#~ msgstr[1] "%2$d. deň každých %1$d mesiacov."
-#~ msgstr[2] "%2$d. deň každých %1$d mesiacov."
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on the %2$s %3$s."
-#~ msgid_plural "Every %1$d months on the %2$s %3$s."
-#~ msgstr[0] "%2$s %3$s každého mesiaca."
-#~ msgstr[1] "%2$s %3$s každé %1$d mesiace."
-#~ msgstr[2] "%2$s %3$s každých %1$d mesiacov."
-
-#~ msgid "Every year in %1$s on day %2$d."
-#~ msgstr "%2$d. deň každých %1$d mesiacov."
-
-#~ msgid "Every year on the %1$s %2$s in %3$d."
-#~ msgstr "Každý rok %1$s %2$s v %3$d."
-
-#~ msgid "The series ends on %1$s."
-#~ msgstr "Táto séria končí %1$s."
-
-#~ msgid "The series ends after one occurrence."
-#~ msgid_plural "The series ends after %1$d occurences."
-#~ msgstr[0] "Séria končí po %1$d opakovaní."
-#~ msgstr[1] "Séria končí po %1$d opakovaniach."
-#~ msgstr[2] "Séria končí po %1$d opakovaniach."
-
-#~ msgid "The series never ends."
-#~ msgstr "Táto séria nikdy nekončí."
-
 #~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
 #~ msgstr ""
-#~ "Ak zmeníte dátum tejto schôdzky, vytvoríte v sérii stretnutí výnimku."
-
-#~ msgid "Create exception"
-#~ msgstr "Vytvoriť výnimku"
-
-#~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-#~ msgstr "Táto schôdzka je výnimka. Zmena série neovplyvní výnimky."
-
-#~ msgid "Print preview"
-#~ msgstr "Náhľad pred tlačou"
-
-#~ msgctxt "contact-print-dialog"
-#~ msgid "Details"
-#~ msgstr "Podrobnosti"
-
-#~ msgid "Select print layout"
-#~ msgstr "Vybrať rozloženie tlače"
-
-#~ msgid "This list has no members yet"
-#~ msgstr "Tento distribučný zoznam zatiaľ nemá členov"
-
-#~ msgid "Business"
-#~ msgstr "Do práce"
-
-#~ msgid "Home"
-#~ msgstr "Domov"
+#~ "Tento priečinok obsahuje %1$d správ. Nie všetky správy sú zobrazené v "
+#~ "zozname. Ak chcete presunúť alebo zmazať všetky správy, zodpovedajúcu "
+#~ "operáciu nájdete v kontextovom menu priečinka."
 
 #~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-#~ msgstr ""
-#~ "Tento typ súboru nie je podporovaný ako obrázok kontaktu. Sú podporované "
-#~ "len obrázky (JPG, GIF, BMP alebo PNG)."
-
-#~ msgid "Upload image"
-#~ msgstr "Nahrať obrázok"
-
-#~ msgid "Warning!"
-#~ msgstr "Upozornenie!"
-
-#~ msgid ""
-#~ "This is a browser feature for developers. If you were asked to copy and "
-#~ "paste anything here, somebody might want to take over your account. Do "
-#~ "not enter any script code without knowing what it does."
-#~ msgstr ""
-#~ "To je funkcia prehliadača určená pre vývojárov. Ak ste boli požiadaní, "
-#~ "aby ste sem niečo skopírovali a vložili, je možné, že sa niekto pokúša "
-#~ "uniesť váš účet. Nevkladajte sem žiadny kód bez toho, aby ste vedeli, čo "
-#~ "robí."
-
-#~ msgid "Add new address book"
-#~ msgstr "Pridať nový adresár kontaktov"
-
-#~ msgid "New address book"
-#~ msgstr "Nový adresár kontaktov"
-
-#~ msgid "Create sharing link"
-#~ msgstr "Vytvorenie odkaz na zdieľanie"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "Prihlásiť sa k odberu adresára kontaktov"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "Prihlásiť sa k odberu kalendára"
-
-#~ msgid "Actions for %1$s"
-#~ msgstr "Operácie s %1$s"
-
-#~ msgid "Create folder"
-#~ msgstr "Vytvoriť priečinok"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "Vedeli ste, že si môžete Balík aplikácií OX vziať so sebou? Stačí kliknúť "
-#~ "na túto ikonu a vybrať z menu „Pripojiť svoje zariadenie“."
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "Použiť vylepšenia prístupnosti"
-
-#~ msgid "My %1$s calendar"
-#~ msgstr "Môj kalendár %1$s"
-
-#~ msgid "My %1$s contacts"
-#~ msgstr "Moje kontakty %1$s"
-
-#~ msgid "My %1$s account"
-#~ msgstr "Môj účet %1$s"
-
-#~ msgid "Configure %1$s"
-#~ msgstr "Nastaviť %1$s"
-
-#~ msgid "Added %1$s."
-#~ msgstr "Pridané %1$s."
-
-#~ msgid "Removed %1$s."
-#~ msgstr "Odstránené %1$s."
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "Spustiť režim automatického prehrávania"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "Pozastaviť režim automatického prehrávania"
-
-#~ msgid "Rename File"
-#~ msgstr "Premenovať súbor"
-
-#~ msgid "Start video"
-#~ msgstr "Spustiť video"
-
-#~ msgid "Close this notification"
-#~ msgstr "Zatvoriť toto oznámenie"
-
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Odkaz zdieľania na súbor „%1$d“ bol vytvorený"
-#~ msgstr[1] "Odkaz zdieľania na „%1$d“ položky bol vytvorený"
-#~ msgstr[2] "Odkaz zdieľania na „%1$d“ položiek bol vytvorený"
-
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "Odkaz zdieľania na priečinok „%1$d“ bol vytvorený"
-#~ msgstr[1] "Odkaz zdieľania na „%1$d“ položky bol vytvorený"
-#~ msgstr[2] "Odkaz zdieľania na „%1$d“ položiek bol vytvorený"
-
-#~ msgid "Loop once only"
-#~ msgstr "Prehrať iba raz"
-
-#~ msgid "Keep looping endlessly"
-#~ msgstr "Prehrávať dokola"
-
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "Režim prezentácie / automatického prehrávania"
-
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "Pozastavenie automatického prehrávania o sekúnd"
-
-#~ msgid "Share %1$s \"%2$s\""
-#~ msgstr "Zdieľať %1$s „%2$s“"
-
-#~ msgid "file"
-#~ msgstr "súbor"
-
-#~ msgid "folder"
-#~ msgstr "priečinok"
-
-#~ msgid "Permissions for %1$s \"%2$s\""
-#~ msgstr "Oprávnenia pre %1$s „%2$s“"
-
-#~ msgid "Send notification by email"
-#~ msgstr "Poslať upozornenie emailom"
-
-#~ msgid "Text documents"
-#~ msgstr "Textové dokumenty"
-
-#~ msgid "Search in all folders"
-#~ msgstr "Vyhľadávať vo všetkých priečinkoch"
-
-#~ msgid "This field is mandatory"
-#~ msgstr "Toto pole je povinné"
-
-#~ msgid "[Copy] %1$s"
-#~ msgstr "[Kópia] %1$s"
-
-#~ msgid "Reply all"
-#~ msgstr "Odpovedať všetkým"
-
-#~ msgctxt "verb"
-#~ msgid "Flag"
-#~ msgstr "Značka"
-
-#~ msgid ""
-#~ "The file \"%1$s\" cannot be uploaded because it exceeds the total "
-#~ "attachment size limit of %2$s"
-#~ msgstr ""
-#~ "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje celkovú veľkosť "
-#~ "príloh %2$s"
-
-#~ msgid "Flagged"
-#~ msgstr "Označené"
-
-#~ msgid "Not flagged"
-#~ msgstr "Neoznačené"
-
-#~ msgid "Draft saved at %1$s"
-#~ msgstr "Koncept uložený %1$s"
-
-#~ msgid "Reply to mailing list"
-#~ msgstr "Odpovedať do poštovej konferencie"
-
-#~ msgid "This message was sent via the mailing list %1$s."
-#~ msgstr "Táto správa bola poslaná prostredníctvom poštovej konferencie %1$s."
-
-#~ msgid "This message was sent via a mailing list."
-#~ msgstr "Táto správa bola poslaná prostredníctvom poštovej konferencie."
-
-#~ msgid "Do you really want to reply all or just %1$s?"
-#~ msgstr "Ste si istý, že chcete odpovedať všetkým a nie len „%s“?"
-
-#~ msgid ""
-#~ "Attachment file size too large. You have to use %1$s or reduce the "
-#~ "attachment file size."
-#~ msgstr ""
-#~ "Veľkosť súboru prílohy je príliš veľká. Budete musieť použiť %1$s alebo "
-#~ "zmenšiť veľkosť súboru prílohy."
-
-#~ msgid "%1$d month"
-#~ msgid_plural "%1$d months"
-#~ msgstr[0] "%1$d mesiac"
-#~ msgstr[1] "%1$d mesiace"
-#~ msgstr[2] "%1$d mesiacov"
-
-#~ msgid "%1$d year"
-#~ msgid_plural "%1$d years"
-#~ msgstr[0] "%1$d rok"
-#~ msgstr[1] "%1$d roky"
-#~ msgstr[2] "%1$d rokov"
-
-#~ msgid "no expiry date"
-#~ msgstr "neobmedzená platnosť"
-
-#~ msgid ""
-#~ "Attachment size too large. Please remove attachments or reduce the file "
-#~ "size."
-#~ msgstr ""
-#~ "Veľkosť prílohy je príliš veľká. Prosím, odstráňte prílohy alebo zmenšite "
-#~ "veľkosť súboru prílohy."
-
-#~ msgctxt "dialog"
-#~ msgid "Delete draft"
-#~ msgstr "Zmazať koncept"
-
-#~ msgid "Keep draft"
-#~ msgstr "Zachovať koncept"
-
-#~ msgid "Do you really want to delete this draft?"
-#~ msgstr "Skutočne chcete zmazať tento koncept?"
-
-#~ msgid "[Copy] "
-#~ msgstr "[Kópia] "
-
-#~ msgid "Couldn't load editor"
-#~ msgstr "Nepodarilo sa načítať editor"
-
-#~ msgid "Error: Failed to load message content"
-#~ msgstr "Chyba: Nepodarilo sa načítať obsah správy"
-
-#~ msgid "Error: Failed to load messages"
-#~ msgstr "Chyba: Nepodarilo sa načítať správy"
-
-#~ msgid "This rule contains unsupported properties. "
-#~ msgstr "Toto pravidlo obsahuje nepodporované vlastnosti."
-
-#~ msgid "Add IMAP keyword"
-#~ msgstr "Pridať kľúčové slovo IMAP"
-
-#~ msgid "Set color flag"
-#~ msgstr "Nastaviť príznak farby"
-
-#~ msgid "flagged"
-#~ msgstr "označené"
-
-#~ msgid "Remove IMAP keyword"
-#~ msgstr "Odstrániť kľúčové slovo IMAP"
-
-#~ msgid "Copy message to folder"
-#~ msgstr "Skopírovať správu do priečinka"
-
-#~ msgid "Nested condition"
-#~ msgstr "Vnorená podmienka"
-
-#~ msgid "continue if all of these conditions are met"
-#~ msgstr "pokračovať ak sú splnené všetky tieto podmienky"
-
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok."
-
-#~ msgid "continue if all conditions are met"
-#~ msgstr "pokračovať ak sú splnené všetky podmienky"
-
-#~ msgid "Body"
-#~ msgstr "Telo"
-
-#~ msgid "Current date"
-#~ msgstr "Aktuálny dátum"
-
-#~ msgid "original timezone"
-#~ msgstr "pôvodné časové pásmo"
-
-#~ msgid "Rule applies from"
-#~ msgstr "Pravidlo sa použije od"
-
-#~ msgid "Rule applies until"
-#~ msgstr "Pravidlo sa použije do"
-
-#~ msgid "Rule applies on"
-#~ msgstr "Pravidlo sa použije"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "Pravidlo použije „not“ na"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "Pravidlo použije „not“ od"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "Pravidlo použije „not“ do"
-
-#~ msgid "Sent date"
-#~ msgstr "Dátum odoslania"
-
-#~ msgid "Envelope"
-#~ msgstr "Obálka"
-
-#~ msgid "Address"
-#~ msgstr "Adresa"
-
-#~ msgid "Cc"
-#~ msgstr "Kópia"
-
-#~ msgid "Bcc"
-#~ msgstr "Skrytá kópia"
-
-#~ msgid "Sender"
-#~ msgstr "Odosielateľ"
-
-#~ msgid "Resent-From"
-#~ msgstr "Znovu odoslané od"
-
-#~ msgid "Resent-To"
-#~ msgstr "Znovu odoslané komu"
-
-#~ msgid "Exists"
-#~ msgstr "Existuje"
-
-#~ msgid "Part"
-#~ msgstr "Časť"
-
-#~ msgid "Contains not"
-#~ msgstr "Neobsahuje"
-
-#~ msgid "Is not exactly"
-#~ msgstr "Je približne"
-
-#~ msgid "Matches not"
-#~ msgstr "Nezodpovedá"
-
-#~ msgid "Starts with"
-#~ msgstr "Začína na"
-
-#~ msgid "Starts not with"
-#~ msgstr "Nezačína na"
-
-#~ msgid "Ends with"
-#~ msgstr "Končí"
-
-#~ msgid "Ends not with"
-#~ msgstr "Nekončí"
-
-#~ msgid "Not Regex"
-#~ msgstr "Nezodpovedá regulárnemu výrazu"
-
-#~ msgid "Keep mails from %1$s"
-#~ msgstr "Zachovať emaily od %1$s"
-
-#~ msgid "Discard mails from %1$s"
-#~ msgstr "Zahodiť emaily od %1$s"
-
-#~ msgid "Move mails from %1$s into folder %2$s"
-#~ msgstr "Presunúť emaily od %1$s do priečinka %2$s"
-
-#~ msgid "Redirect mails from %1$s to %2$s"
-#~ msgstr "Presmerovať emaily od %1$s do %2$s"
-
-#~ msgid "Reject mails from %1$s with reason %2$s"
-#~ msgstr "Odmietnuť emaily od %1$s s dôvodom %2$s"
-
-#~ msgid "Mark mails from %1$s as seen"
-#~ msgstr "Označiť emaily od %1$s ako prečítané"
-
-#~ msgid "Mark mails from %1$s as deleted"
-#~ msgstr "Označiť emaily od %1$s ako zmazané"
-
-#~ msgid "Flag mails from %1$s with a color"
-#~ msgstr "Označiť emaily od %1$s farbou"
-
-#~ msgid "Tag mails from %1$s with %2$s"
-#~ msgstr "Označiť emaily od %1$s ako %2$s"
-
-#~ msgid "Keep mails to %1$s"
-#~ msgstr "Zachovať emaily s adresátom %1$s"
-
-#~ msgid "Discard mails to %1$s"
-#~ msgstr "Zahodiť emaily s adresátom %1$s"
-
-#~ msgid "Move mails to %1$s into folder %2$s"
-#~ msgstr "Presunúť emaily s adresátom %1$s do priečinka %2$s"
-
-#~ msgid "Redirect mails to %1$s to %2$s"
-#~ msgstr "Presmerovať emaily s adresátom %1$s do %2$s"
-
-#~ msgid "Reject mails to %1$s with reason %2$s"
-#~ msgstr "Odmietnuť emaily s adresátom %1$s s dôvodom %2$s"
-
-#~ msgid "Mark mails to %1$s as seen"
-#~ msgstr "Označiť emaily s adresátom %1$s ako prečítané"
-
-#~ msgid "Mark mails to %1$s as deleted"
-#~ msgstr "Označiť emaily s adresátom %1$s ako zmazané"
-
-#~ msgid "Flag mails to %1$s with a color"
-#~ msgstr "Označiť emaily s adresátom %1$s farbou"
-
-#~ msgid "Tag mails to %1$s with %2$s"
-#~ msgstr "Označiť emaily s adresátom %1$s ako %2$s"
-
-#~ msgid "Keep mails with subject %1$s"
-#~ msgstr "Zachovať emaily s predmetom %1$s"
-
-#~ msgid "Discard mails with subject %1$s"
-#~ msgstr "Zahodiť emaily s predmetom %1$s"
-
-#~ msgid "Move mails with subject %1$s into folder %2$s"
-#~ msgstr "Presunúť emaily s predmetom %1$s do priečinka %2$s"
-
-#~ msgid "Redirect mails with subject %1$s to %2$s"
-#~ msgstr "Presmerovať emaily s predmetom %1$s do %2$s"
-
-#~ msgid "Reject mails with subject %1$s with reason %2$s"
-#~ msgstr "Odmietnuť emaily s predmetom %1$s s dôvodom %2$s"
-
-#~ msgid "Mark mails with subject %1$s as seen"
-#~ msgstr "Označiť maily s predmetom %1$s ako prečítané"
-
-#~ msgid "Mark mails with subject %1$s as deleted"
-#~ msgstr "Označiť emaily s predmetom %1$s ako zmazané"
-
-#~ msgid "Flag mails with subject %1$s with a color"
-#~ msgstr "Označiť emaily s predmetom %1$s farbou"
-
-#~ msgid "Tag mails with subject %1$s with %2$s"
-#~ msgstr "Označiť emaily s predmetom %1$s ako %2$s"
-
-#~ msgid "Use browser default"
-#~ msgstr "Použiť predvoľby prehliadača"
-
-#~ msgid "Prettify plain text mails"
-#~ msgstr "Skrášliť čisto textové emaily"
-
-#~ msgid "Show folder with all unseen messages"
-#~ msgstr "Zobraziť priečinok so všetkými neprečítanými správami"
-
-#~ msgid "Font"
-#~ msgstr "Písmo"
-
-#~ msgid "Confirm recipients when replying to a mailing list"
-#~ msgstr "Potvrdiť príjemcov pri odpovedaní do poštovej konferencie"
-
-#~ msgid "Default font style"
-#~ msgstr "Predvolený štýl písma emailov"
-
-#~ msgid "This is how your message text will look like."
-#~ msgstr "Takto bude vyzerať text vašej správy."
-
-#~ msgid "Default signature"
-#~ msgstr "Predvolený podpis"
-
-#~ msgid "Edit copy"
-#~ msgstr "Upraviť kópiu"
-
-#~ msgid "message"
-#~ msgstr "správa"
-
-#~ msgid "Send from"
-#~ msgstr "Odosielateľ/Od"
-
-#~ msgid "default sender"
-#~ msgstr "predvolený odosielateľ"
-
-#~ msgid "unselect all"
-#~ msgstr "zrušiť výber všetkých"
-
-#~ msgid "select all"
-#~ msgstr "vybrať všetko"
-
-#~ msgid ""
-#~ "The Notice is sent out for messages received by %1$s. You may choose to "
-#~ "send it out for other recipient addresses too:"
-#~ msgstr ""
-#~ "Oznámenie sa pošle pre správy, ktoré prijal %1$s. Môžete sa rozhodnúť "
-#~ "poslať ich tiež na iné adresy príjemcov:"
-
-#~ msgid "Flag"
-#~ msgstr "Označenie"
-
-#~ msgid "My %1$s account (%2$d)"
-#~ msgstr "Môj účet %1$s (%2$d)"
-
-#~ msgid "Account Name"
-#~ msgstr "Názov účtu"
-
-#~ msgid "Get the App from %1$s."
-#~ msgstr "Získať aplikáciu z %1$s."
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr ""
-#~ "Poďme automaticky nastaviť vaše zariadenie kliknutím na tlačidlo nižšie."
-
-#~ msgid "CalDAV"
-#~ msgstr "CalDAV"
-
-#~ msgid "Login"
-#~ msgstr "Prihlásiť sa"
-
-#~ msgid "CardDAV"
-#~ msgstr "CardDAV"
-
-#~ msgid "IMAP"
-#~ msgstr "IMAP"
-
-#~ msgid "Server Name"
-#~ msgstr "Názov servera"
-
-#~ msgid "Port"
-#~ msgstr "Port"
-
-#~ msgid "User Name"
-#~ msgstr "Používateľské meno"
-
-#~ msgid "Connection"
-#~ msgstr "Pripojenie"
-
-#~ msgid "SMTP"
-#~ msgstr "SMTP"
-
-#~ msgid "EAS"
-#~ msgstr "EAS"
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "Zobraziť alebo skryť operácie pre pokročilých používateľov."
-
-#~ msgid "Manual Configuration"
-#~ msgstr "Manuálne nastavenie"
-
-#~ msgid "Install"
-#~ msgstr "Nainštalovať"
-
-#~ msgid "Connect your device"
-#~ msgstr "Pripojte svoje zariadenie"
-
-#~ msgid "Add contact/resource"
-#~ msgstr "Pridať účastníkov/zdroje"
-
-#~ msgid "Cannot add contact with an invalid mail address: %1$s"
-#~ msgstr "Nemožno pridať kontakt s neplatnou e-mailovou adresou: %1$s"
-
-#~ msgid "This list has no participants yet"
-#~ msgstr "Tento distribučný zoznam zatiaľ nemá členov"
-
-#~ msgid "Members (%1$d)"
-#~ msgstr "Členovia (%1$d)"
-
-#~ msgid "Try again."
-#~ msgstr "Skúste to znova."
-
-#~ msgid "Open file. Drag to your desktop to download."
-#~ msgstr "Otvoriť súbor. Stiahnuť môžete pretiahnutím na plochu."
-
-#~ msgid "Open file"
-#~ msgstr "Otvoriť súbor"
-
-#~ msgid "Show information about account recovery"
-#~ msgstr "Zobraziť informácie o obnovení účtu"
-
-#~ msgid ""
-#~ "For security reasons, all credentials are encrypted with your primary "
-#~ "account password. If you change your primary password, your external "
-#~ "accounts might stop working. In this case, you can use your old password "
-#~ "to recover all account passwords."
-#~ msgstr ""
-#~ "Z bezpečnostných dôvodov sú všetky prihlasovacie údaje šifrované vaším "
-#~ "heslom k primárnemu účtu. Ak zmeníte vaše primárne heslo, vaše externé "
-#~ "účty môžu prestať fungovať. V takom prípade môžete použitím starého hesla "
-#~ "obnoviť všetky heslá účtov:"
-
-#~ msgid "This task has no participants yet"
-#~ msgstr "Táto úloha zatiaľ nemá členov"
-
-#~ msgid "General"
-#~ msgstr "Všeobecné"
-
-#~ msgid "Not likely at all"
-#~ msgstr "Vôbec to nie je pravdepodobné"
-
-#~ msgid "%1$d of 10 points."
-#~ msgstr "%1$d z 10 bodov."
-
-#~ msgid "Extremely likely"
-#~ msgstr "Extrémne pravdepodobné"
-
-#~ msgid "How likely is it that you would recommend %1$s to a friend?"
-#~ msgstr "Do akej miery je pravdepodobné, že by ste odporučili %1$s známemu?"
-
-#~ msgid "Please rate the following application:"
-#~ msgstr "Prosím, ohodnoťte nasledovnú aplikáciu:"
-
-#~ msgid "Please select a rating."
-#~ msgstr "Prosím, vyberte hodnotenie."
-
-#~ msgid "Feedback could not be sent"
-#~ msgstr "Spätnú väzbu nebolo možné odoslať"
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "Vaše predvolené pripomenutie nie je možné nastaviť na túto schôdzku z "
-#~ "dôvodu nedostatočných oprávnení"
-
-#~ msgid "Overdue Task %1$s."
-#~ msgstr "Úloha po termíne %1$s."
-
-#~ msgid "Authorize your account again"
-#~ msgstr "Znova autorizovať váš účet"
-
-#~ msgid "You have %1$d unread message"
-#~ msgid_plural "You have %1$d unread messages"
-#~ msgstr[0] "Máte %1$d neprečítanú správu"
-#~ msgstr[1] "Máte %1$d neprečítané správy"
-#~ msgstr[2] "Máte %1$d neprečítaných správ"
-
-#~ msgid "PowerDNS parental control"
-#~ msgstr "Rodičovské nastavenia PowerDNS"
-
-#~ msgid "Open parental control settings"
-#~ msgstr "Otvorenie rodičovských nastavení"
-
-#~ msgid "Retry later."
-#~ msgstr "Skúste to znova neskôr."
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "Ponechajte prázdne, ak máte žiadny"
+#~ "You can manage desktop notifications at any time, by vitising your "
+#~ "settings"
+#~ msgstr "Oznámenia môžete spravovať kedykoľvek vo vašich Nastaveniach."
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -11906,6 +11034,9 @@ msgstr "Pridať na %s"
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(môže trvať dlho na starých počítačh)"
 
+#~ msgid ", "
+#~ msgstr ", "
+
 #~ msgid "--"
 #~ msgstr "--"
 
@@ -11935,6 +11066,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "2 hour"
 #~ msgstr "2 hodiny"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 týždne"
 
 #~ msgid "20"
 #~ msgstr "20"
@@ -12224,6 +11358,14 @@ msgstr "Pridať na %s"
 #~ msgid "Applications"
 #~ msgstr "Aplikácie"
 
+#~ msgid "Apply"
+#~ msgstr "Aplikovať rolu"
+
+#, fuzzy
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "Email od %1$s: %2$s"
+
 #~ msgid "Apply to all messages?"
 #~ msgstr "Použiť na všetky správy?"
 
@@ -12334,6 +11476,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Are you sure?"
 #~ msgstr "Ste si istý?"
+
+#~ msgid "Argentina"
+#~ msgstr "Argentína"
 
 #~ msgid "Armenia"
 #~ msgstr "Arménsko"
@@ -12478,8 +11623,14 @@ msgstr "Pridať na %s"
 #~ msgid "Bars"
 #~ msgstr "Panely"
 
+#~ msgid "Based on mailing list"
+#~ msgstr "Na základe konferencie"
+
 #~ msgid "Based on sender"
 #~ msgstr "Na základe odosielateľa"
+
+#~ msgid "Bcc"
+#~ msgstr "Skrytá kópia"
 
 #~ msgid "Bcc..."
 #~ msgstr "Skrytá kópia..."
@@ -12611,6 +11762,9 @@ msgstr "Pridať na %s"
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
 
+#~ msgid "Cameroon"
+#~ msgstr "Kamerun"
+
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr ""
 #~ "Nie je možné vytvoriť schôdzku v inom priečinku ako v priečinku schôdzok"
@@ -12650,6 +11804,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "Kajmanie ostrovy"
+
+#~ msgid "Cc"
+#~ msgstr "Kópia"
 
 #~ msgid "Cc..."
 #~ msgstr "Kópia..."
@@ -12770,11 +11927,6 @@ msgstr "Pridať na %s"
 #~ msgid "Close quick config"
 #~ msgstr "Zatvoriť rýchlu konfiguráciu"
 
-#, fuzzy
-#~| msgid "Click to close the recurrence view"
-#~ msgid "Close recurrence view"
-#~ msgstr "Zobrazenie Opakovania zatvoríte kliknutím"
-
 #~ msgid "Close search"
 #~ msgstr "Zatvoriť vyhľadávanie"
 
@@ -12893,6 +12045,9 @@ msgstr "Pridať na %s"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Nepodarilo sa načítať všetky obrázky kontaktov."
 
+#~ msgid "Couldn't load file data."
+#~ msgstr "Nepodarilo sa načítať údaje súboru."
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "Nepodarilo sa načítať priečinky."
 
@@ -12931,6 +12086,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Created by:"
 #~ msgstr "Vytvoril:"
+
+#~ msgid "Created on"
+#~ msgstr "Vytvorené"
 
 #~ msgid "Created on %1$s by %2$s, last changed on %3$s by %4$s"
 #~ msgstr "Vytvoril %1$s %2$s, naposledy zmenil %3$s by %4$s"
@@ -13068,6 +12226,9 @@ msgstr "Pridať na %s"
 #~ msgid "Decline counter proposal"
 #~ msgstr "Zamietnuť protinávrh"
 
+#~ msgid "Default E-Mail font size?"
+#~ msgstr "Predvolená veľkosť písma emailov?"
+
 #~ msgid "Default E-Mail font?"
 #~ msgstr "Predvolené písmo emailov?"
 
@@ -13187,11 +12348,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Detail information for publication"
 #~ msgstr "Podrobné informácie publikácie"
-
-#, fuzzy
-#~| msgid "Delete contact"
-#~ msgid "Detailed contact list"
-#~ msgstr "Zmazať kontakt"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -13468,6 +12624,9 @@ msgstr "Pridať na %s"
 #~ msgid "Edit categories"
 #~ msgstr "Dostupné kategórie:"
 
+#~ msgid "Edit document"
+#~ msgstr "Upraviť dokument"
+
 #~ msgid "Edit feed"
 #~ msgstr "Upraviť kanál"
 
@@ -13678,6 +12837,9 @@ msgstr "Pridať na %s"
 #~ msgid "Entire thread"
 #~ msgstr "Celé vlákno"
 
+#~ msgid "Envelope"
+#~ msgstr "Obálka"
+
 #~ msgid "Equatorial Guinea"
 #~ msgstr "Rovníková Guinea"
 
@@ -13710,27 +12872,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Every"
 #~ msgstr "Každý"
-
-#~ msgid "Every %1$d days."
-#~ msgstr "Každých %1$d dní."
-
-#~ msgid "Every %1$d months on day %2$d."
-#~ msgstr "%1$d. deň každých %1$d mesiacov."
-
-#~ msgid "Every %1$d months on the %2$s %3$s."
-#~ msgstr "%2$s %3$s každého %1$d. mesiaca."
-
-#~ msgid "Every %1$d weeks on %2$s."
-#~ msgstr "V %2$s každého %1$d. týždňa."
-
-#~ msgid "Every %1$d weeks on all days."
-#~ msgstr "Každý deň každého %1$d. týždňa."
-
-#~ msgid "Every %1$d weeks on weekends."
-#~ msgstr "Cez víkend každého %1$d. týždňa."
-
-#~ msgid "Every %1$d weeks on workdays."
-#~ msgstr "V pracovné dni každého %1$d. týždňa."
 
 #~ msgid "Exception caught: "
 #~ msgstr "Zachytená výnimka:"
@@ -13857,6 +12998,9 @@ msgstr "Pridať na %s"
 #~ msgid "Fit to screen height"
 #~ msgstr "Prispôsobiť šírke obrazovky"
 
+#~ msgid "Flag"
+#~ msgstr "Značka"
+
 #~ msgid "Flag #%d"
 #~ msgstr "Značka #%d"
 
@@ -13898,6 +13042,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Follow the instructions and install the updater."
 #~ msgstr "Nasledujte inštrukcie a nainštalujte aktualizátor."
+
+#~ msgid "Font name"
+#~ msgstr "Názov písma"
 
 #~ msgid "Font size"
 #~ msgstr "Veľkosť písma"
@@ -13942,6 +13089,9 @@ msgstr "Pridať na %s"
 #~ msgid "Fri"
 #~ msgstr "Pia"
 
+#~ msgid "Friday"
+#~ msgstr "Piatok"
+
 #~ msgid "From %s"
 #~ msgstr "Od %s"
 
@@ -13976,6 +13126,10 @@ msgstr "Pridať na %s"
 
 #~ msgid "Gambia"
 #~ msgstr "Gambia"
+
+#, fuzzy
+#~ msgid "General info"
+#~ msgstr "Všeobecné"
 
 #~ msgid "Georgia"
 #~ msgstr "Gruzínsko"
@@ -14153,6 +13307,10 @@ msgstr "Pridať na %s"
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "Svätá stolica (Vatikánsky mestský štát)"
 
+#~ msgctxt "address"
+#~ msgid "Home"
+#~ msgstr "Domov"
+
 #~ msgid "Honduras"
 #~ msgstr "Honduras"
 
@@ -14316,6 +13474,9 @@ msgstr "Pridať na %s"
 #~ msgid "Incorrect input."
 #~ msgstr "Neplatný vstup."
 
+#~ msgid "India"
+#~ msgstr "India"
+
 #, fuzzy
 #~| msgid "Undone"
 #~ msgid "Indonesia"
@@ -14335,9 +13496,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Infoitem"
 #~ msgstr "InfoPoložka"
-
-#~ msgid "Information about account recovery..."
-#~ msgstr "Informácie o obnovení účtu..."
 
 #~ msgid "Infostore"
 #~ msgstr "InfoÚložisko"
@@ -14452,6 +13610,9 @@ msgstr "Pridať na %s"
 #~ msgid "Is at most"
 #~ msgstr "Je najviac"
 
+#~ msgid "Is not exactly"
+#~ msgstr "Je približne"
+
 #~ msgid "Isle of Man"
 #~ msgstr "Man"
 
@@ -14506,6 +13667,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Kazakhstan"
 #~ msgstr "Kazachstan"
+
+#~ msgid "Keep the draft."
+#~ msgstr "Zachovať v Rozpísaných."
 
 #~ msgid "Kenya"
 #~ msgstr "Keňa"
@@ -14614,6 +13778,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Location:"
 #~ msgstr "Umiestnenie:"
+
+#~ msgid "Login"
+#~ msgstr "Prihlásiť sa"
 
 #~ msgctxt "username"
 #~ msgid "Login"
@@ -14838,6 +14005,9 @@ msgstr "Pridať na %s"
 #~ msgid "Monaco"
 #~ msgstr "Monako"
 
+#~ msgid "Monday"
+#~ msgstr "Pondelok"
+
 #~ msgid "Mongolia"
 #~ msgstr "Mongolsko"
 
@@ -14857,6 +14027,11 @@ msgstr "Pridať na %s"
 
 #~ msgid "Morocco"
 #~ msgstr "Maroko"
+
+#, fuzzy
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "Použiť na všetky podpriečinky"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "Presúvajú sa emaily... To môže niekoľko sekúnd trvať."
@@ -15026,14 +14201,23 @@ msgstr "Pridať na %s"
 #~ msgid "No mails"
 #~ msgstr "Žiadna pošta."
 
+#~ msgid "No mails at all!"
+#~ msgstr "Vôbec žiadne poštové správy!"
+
 #~ msgid "No mails found for \"%s\""
 #~ msgstr "Pre „%s“ neboli nájdené žiadne emaily"
+
+#~ msgid "No mails in this folder"
+#~ msgstr "Žiadne emaily v tomto priečinku"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "Žiadne zodpovedajúce šablóny na tomto serveri"
 
 #~ msgid "No participants available"
 #~ msgstr "Žiadni účastníci nie sú dostupní"
+
+#~ msgid "No recurrence"
+#~ msgstr "Bez opakovania"
 
 #~ msgid "No resources available"
 #~ msgstr "Žiadne zdroje nie sú dostupné"
@@ -15064,6 +14248,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "No text"
 #~ msgstr "Bez textu"
+
+#~ msgid "No versions available"
+#~ msgstr "Žiadne dostupné verzie"
 
 #~ msgid "No wall posts yet."
 #~ msgstr "Zatiaľ žiadne príspevky na nástenke."
@@ -15134,6 +14321,9 @@ msgstr "Pridať na %s"
 #~ msgid "Number of days in custom view"
 #~ msgstr "Počet dní vo vlastnom zobrazení"
 
+#~ msgid "Number of days in work week"
+#~ msgstr "Počet dní v pracovnom týždni"
+
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Počet riadkov, ktorý sa má zobraziť v zobrazení vizitiek:"
 
@@ -15197,6 +14387,11 @@ msgstr "Pridať na %s"
 #~ "Nepoužívajte túto možnosť, keď pracujte na počítači inej osoby (napr. v "
 #~ "internetovej kaviarni)."
 
+#, fuzzy
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "Otvoriť"
+
 #~ msgid "Open in new tab"
 #~ msgstr "Otvoriť na novej karte"
 
@@ -15211,6 +14406,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "Otvorenie nastavenia emailov"
+
+#~ msgid "Opening the settings"
+#~ msgstr "Otvorenie nastavení"
 
 #~ msgid "Optional %d"
 #~ msgstr "Voliteľné %d"
@@ -15522,11 +14720,6 @@ msgstr "Pridať na %s"
 #~ msgid "Principal:"
 #~ msgstr "Riaditeľ:"
 
-#, fuzzy
-#~| msgid "Private contacts"
-#~ msgid "Printout of contacts"
-#~ msgstr "Súkromné kontakty"
-
 #~ msgid "Priority:"
 #~ msgstr "Priorita:"
 
@@ -15535,6 +14728,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Private computer"
 #~ msgstr "Súkromný počítač"
+
+#~ msgid "Private contacts"
+#~ msgstr "Súkromné kontakty"
 
 #~ msgid "Private:"
 #~ msgstr "Súkromné:"
@@ -15617,6 +14813,9 @@ msgstr "Pridať na %s"
 #~ msgid "Read own"
 #~ msgstr "Čítať vlastné"
 
+#~ msgid "Read-only mode"
+#~ msgstr "Režim len na čítanie"
+
 #~ msgid "Read/Unread"
 #~ msgstr "Prečítané/neprečítané"
 
@@ -15628,6 +14827,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Received:"
 #~ msgstr "Prijaté:"
+
+#~ msgid "Recurrence"
+#~ msgstr "Opakovanie"
 
 #~ msgid "Recurrence Pattern"
 #~ msgstr "Vzor opakovania"
@@ -15826,6 +15028,9 @@ msgstr "Pridať na %s"
 #~ msgid "Sat"
 #~ msgstr "Sob"
 
+#~ msgid "Saturday"
+#~ msgstr "Sobota"
+
 #~ msgid "Saudi Arabia"
 #~ msgstr "Saudská Arábia"
 
@@ -15867,6 +15072,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Searched in"
 #~ msgstr "Vyhľadané v"
+
+#~ msgid "Searched in all folders"
+#~ msgstr "Vyhľadané vo všetkých priečinkoch"
 
 #~ msgid "Searching for objects"
 #~ msgstr "Hľadanie objektov"
@@ -15964,6 +15172,9 @@ msgstr "Pridať na %s"
 #~ msgid "Send feedback"
 #~ msgstr "Poslať spätnú väzbu"
 
+#~ msgid "Sender"
+#~ msgstr "Odosielateľ"
+
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Poslanie emailu kontaktu"
 
@@ -15987,6 +15198,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Service"
 #~ msgstr "Služba"
+
+#~ msgid "Set as default"
+#~ msgstr "Nastaviť ako predvolené"
 
 #~ msgid "Seychelles"
 #~ msgstr "Seychely"
@@ -16133,11 +15347,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Simple Pad"
 #~ msgstr "Simple Pad"
-
-#, fuzzy
-#~| msgid "Phone list"
-#~ msgid "Simple phone list"
-#~ msgstr "Telefónny zoznam"
 
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr ""
@@ -16381,6 +15590,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Sun"
 #~ msgstr "Ned"
+
+#~ msgid "Sunday"
+#~ msgstr "Nedeľa"
 
 #~ msgid "Superscript"
 #~ msgstr "Horný index"
@@ -16642,6 +15854,11 @@ msgstr "Pridať na %s"
 #~ "Zadaná hodnota %s nie je v povolenom rozsahu. Prosím, použite hodnotu "
 #~ "medzi -130000 a 130000."
 
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr "Súbor „%1$s“ nie je možné nahrať, pretože prekračuje kvótu %2$s"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "Súbor je k dispozícii na %1$s"
 
@@ -16873,6 +16090,11 @@ msgstr "Pridať na %s"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "Táto správa obsahuje URL k publikácii."
 
+#, fuzzy
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "Tento email nemá žiadny obsah"
+
 #~ msgid "This may take some seconds"
 #~ msgstr "Môže to trvať niekoľko sekúnd"
 
@@ -16898,6 +16120,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "Thu"
 #~ msgstr "Štv"
+
+#~ msgid "Thursday"
+#~ msgstr "Štvrtok"
 
 #~ msgid "Tile"
 #~ msgstr "Dláždiť"
@@ -17194,6 +16419,9 @@ msgstr "Pridať na %s"
 #~ msgid "Tue"
 #~ msgstr "Uto"
 
+#~ msgid "Tuesday"
+#~ msgstr "Utorok"
+
 #~ msgid "Tunisia"
 #~ msgstr "Tunisko"
 
@@ -17300,6 +16528,12 @@ msgstr "Pridať na %s"
 
 #~ msgid "Unread only"
 #~ msgstr "Iba neprečítané"
+
+#~ msgid "Unselect all"
+#~ msgstr "Zrušiť výber všetkých"
+
+#~ msgid "Unset default signature"
+#~ msgstr "Nebol nastavený predvolený podpis"
 
 #~ msgid "Until:"
 #~ msgstr "Do:"
@@ -17476,11 +16710,17 @@ msgstr "Pridať na %s"
 #~ msgid "Wed"
 #~ msgstr "Str"
 
+#~ msgid "Wednesday"
+#~ msgstr "Streda"
+
 #~ msgid "Week View"
 #~ msgstr "Zobrazenie týždňa"
 
 #~ msgid "Week(s) on"
 #~ msgstr "Týždne"
+
+#~ msgid "Weekend Day"
+#~ msgstr "Deň víkendu"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "Vitajte. Prosím, uveďte vašu spätnú väzbu ohľadne tohto produktu"
@@ -17576,6 +16816,9 @@ msgstr "Pridať na %s"
 #~ msgid "Work"
 #~ msgstr "Práca"
 
+#~ msgid "Work week starts on"
+#~ msgstr "Pracovný týždeň začína"
+
 #~ msgid "Workweek View"
 #~ msgstr "Zobrazenie pracovného týždňa"
 
@@ -17609,11 +16852,6 @@ msgstr "Pridať na %s"
 #~ msgstr ""
 #~ "Pretiahnutím a pustením súborov z vášho počítača sem môžete pridať nový "
 #~ "súbor alebo novú verziu súboru."
-
-#~ msgid ""
-#~ "You can manage desktop notifications at any time, by vitising your "
-#~ "settings"
-#~ msgstr "Oznámenia môžete spravovať kedykoľvek vo vašich Nastaveniach."
 
 #~ msgid "You can't create a new recurrence in a modified appointment."
 #~ msgstr "Nemôžete vytvoriť nové opakovanie v zmenenej schôdzke."
@@ -17843,6 +17081,9 @@ msgstr "Pridať na %s"
 #~ msgid "booked"
 #~ msgstr "zajednané"
 
+#~ msgid "by %1$s until %2$s"
+#~ msgstr "%1$s do %2$s"
+
 #~ msgid "bytes"
 #~ msgstr "bajtov"
 
@@ -17899,6 +17140,9 @@ msgstr "Pridať na %s"
 
 #~ msgid "february"
 #~ msgstr "Február"
+
+#~ msgid "files"
+#~ msgstr "súbory"
 
 #~ msgid "forward"
 #~ msgstr "preposlať"
