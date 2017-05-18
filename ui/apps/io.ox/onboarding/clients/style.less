@@ -23,6 +23,7 @@
 
 .mixin-expanded {
     .content { display: block; }
+    .config { display: flex; }
     .fa-chevron-right { display: none; }
     .fa-chevron-down { display: inline-block; }
 }
@@ -61,7 +62,7 @@
         margin: 0;
         &.config {
             font-size: 14px;
-            display: flex;
+            display: none;
             .title, .property, .value { padding: 4px 8px 0 0; }
             .title {
                 font-style: italic;
