@@ -85,8 +85,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-search-minus',
-                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 label: gt('Zoom out'),
+                section: 'zoom',
+                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
                         role: 'button',
@@ -99,6 +100,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-search-plus',
                 label: gt('Zoom in'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
@@ -111,15 +113,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen width'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
-                        sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
-                    this.before(sectionLabel);
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitwidth')
+                    this.addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            role: 'button',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -128,12 +126,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen size'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitheight').attr({
-                            role: 'button',
+                    this.addClass('viewer-toolbar-fitheight')
+                        .attr({
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -482,7 +479,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomIn();
         }
     });
@@ -492,7 +488,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomOut();
         }
     });
@@ -503,8 +498,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -515,8 +508,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
