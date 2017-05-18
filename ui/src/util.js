@@ -716,7 +716,17 @@
             return node;
         },
 
-        // $.when-like api that returns { resolved: [], rejected: [] }
+        // deferred helpers
+
+        allResolved: function () {
+            return _.whenSome.apply(undefined, arguments).then(function (data) { return data.resolved; });
+        },
+
+        allRejected: function () {
+            return _.whenSome.apply(undefined, arguments).then(function (data) { return data.rejected; });
+        },
+
+        // $.when-like api that always resolved with { resolved: [], rejected: [] }
         whenSome: function () {
             var def = $.Deferred(),
                 args = Array.prototype.slice.call(arguments),
