@@ -716,6 +716,25 @@
             return node;
         },
 
+        // $.when-like api that returns { resolved: [], rejected: [] }
+        whenSome: function () {
+            var def = $.Deferred(),
+                args = Array.prototype.slice.call(arguments),
+                resp = { resolved: [], rejected: [] };
+
+            _.each(args, function (item) {
+                // wrap to support non-deferred objects
+                $.when(item).always(_.partial(process, _, item));
+            });
+
+            function process(data, item) {
+                var state = item.state ? item.state() : 'resolved';
+                resp[state].push(data);
+                if ((resp.resolved.length + resp.rejected.length) === args.length) def.resolve(resp);
+            }
+            return def.promise();
+        },
+
         // makes sure you have an array
         getArray: function (o) {
             return _.isArray(o) ? o : [o];
