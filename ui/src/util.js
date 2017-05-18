@@ -730,17 +730,23 @@
         whenSome: function () {
             var def = $.Deferred(),
                 args = Array.prototype.slice.call(arguments),
-                resp = { resolved: [], rejected: [] };
+                resp = { resolved: [], rejected: [] },
+                remaining = args.length;
 
-            _.each(args, function (item) {
+            _.each(args, function (item, index) {
                 // wrap to support non-deferred objects
-                $.when(item).always(_.partial(process, _, item));
+                $.when(item).always(_.partial(process, _, item, index));
             });
 
-            function process(data, item) {
+            function process(data, item, index) {
                 var state = item.state ? item.state() : 'resolved';
-                resp[state].push(data);
-                if ((resp.resolved.length + resp.rejected.length) === args.length) def.resolve(resp);
+                // keep order and remove invalid afterwards
+                resp[state][index] = data;
+                if (--remaining) return;
+                def.resolve({
+                    resolved: _.compact(resp.resolved),
+                    rejected: _.compact(resp.rejected)
+                });
             }
             return def.promise();
         },
