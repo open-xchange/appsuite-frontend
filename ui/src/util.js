@@ -739,7 +739,7 @@
             });
 
             function process(data, item, index) {
-                var state = item.state ? item.state() : 'resolved';
+                var state = item && _.isFunction(item.state) ? item.state() : 'resolved';
                 // keep order and remove invalid afterwards
                 resp[state][index] = data;
                 if (--remaining) return;
