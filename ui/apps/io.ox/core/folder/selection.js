@@ -194,7 +194,7 @@ define('io.ox/core/folder/selection', [], function () {
             var width = this.view.$el.width();
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 0 })
-                .find('.folder-label').each(function () {
+                .find('.folder-label:first').each(function () {
                     // special handling for settings for now
                     if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
                     var left = $(this).position().left, maxWidth = width - left - 76;
