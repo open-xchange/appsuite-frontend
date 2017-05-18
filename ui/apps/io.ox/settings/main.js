@@ -76,7 +76,9 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
                 'virtual/settings/io.ox/timezones': 'ox.appsuite.user.sect.calendar.settings.html#ox.appsuite.user.reference.calendar.settings.timezones',
                 'virtual/settings/io.ox/tasks': 'ox.appsuite.user.sect.tasks.settings.html',
-                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html'
+                'virtual/settings/io.ox/files': 'ox.appsuite.user.sect.files.settings.html',
+                'virtual/settings/administration/groups': 'ox.appsuite.user.sect.calendar.groups.html',
+                'virtual/settings/administration/resources': 'ox.appsuite.user.sect.calendar.resources.html'
             });
         }
     });
