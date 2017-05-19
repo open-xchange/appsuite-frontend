@@ -10661,7 +10661,6 @@ msgid "ZB"
 msgstr "ZB"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
 msgstr "Zoom"
 
