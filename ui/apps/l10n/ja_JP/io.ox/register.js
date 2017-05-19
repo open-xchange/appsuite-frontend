@@ -86,9 +86,13 @@ define('l10n/ja_JP/io.ox/register', [
     _(['io.ox/core/user', 'io.ox/contacts']).each(function (ref) {
 
         // Edit view
-        ext.point(ref + '/edit/personal')
-            .replace({ id: 'last_name', index: 200 })
-            .replace({ id: 'first_name', index: 300 });
+        // change order only if language is set to japanese
+        // this file is also loaded for other languages if the setting alwaysShowFurigana is set to true
+        if (ox.language === 'ja_JP') {
+            ext.point(ref + '/edit/personal')
+                .replace({ id: 'last_name', index: 200 })
+                .replace({ id: 'first_name', index: 300 });
+        }
 
         yomiField('personal', 'last_name', 'yomiLastName');
         yomiField('personal', 'first_name', 'yomiFirstName');
@@ -255,6 +259,9 @@ define('l10n/ja_JP/io.ox/register', [
         ],
         kana = _.map(letters, function (c) { return String.fromCharCode(c); });
 
+    // add japanese labels and thumbindex only if language is set to japanese
+    // this file is also loaded for other languages if the setting alwaysShowFurigana is set to true
+    if (ox.language !== 'ja_JP') return;
     ext.point('io.ox/contacts/getLabel').extend({
         id: 'furigana',
         getLabel: function (data) {
