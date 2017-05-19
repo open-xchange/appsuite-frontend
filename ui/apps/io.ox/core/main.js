@@ -30,13 +30,14 @@ define('io.ox/core/main', [
     'io.ox/core/folder/api',
     'io.ox/core/a11y',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
 
     'use strict';
 
@@ -1823,6 +1824,10 @@ define('io.ox/core/main', [
                                         feedback.show();
                                     });
                                 });
+                            }
+
+                            if (contactsSettings.get('features/furigana', false)) {
+                                require(['l10n/ja_JP/io.ox/register']);
                             }
                         });
                         if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
