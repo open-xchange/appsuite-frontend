@@ -498,7 +498,7 @@ define('io.ox/calendar/invitations/register', [
 
         onActionSuccess: function (action, updated) {
 
-            var data = this.appointment || this.task,
+            var data = this[this.type] || this.appointment || this.task,
                 reminder = this.reminder,
                 tempdata;
 
@@ -556,7 +556,7 @@ define('io.ox/calendar/invitations/register', [
                 action = $(e.currentTarget).attr('data-action'),
                 hash = { accept: 1, decline: 2, tentative: 3 },
                 confirmation = hash[action],
-                data = this.appointment || this.task,
+                data = this[this.type] || this.appointment || this.task,
                 status = util.getConfirmationStatus(data),
                 accepted = status === 1,
                 comment = this.getUserComment();
