@@ -646,21 +646,16 @@ define('io.ox/core/main', [
         }
 
         function quit(model) {
-            var quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', getCloseIconLabel(model.get('title'))).tooltip({
-                title: function () {
-                    return getCloseIconLabel(model.get('title'));
-                },
-                placement: 'bottom'
-            })
-                    .append($('<i class="fa fa-times" aria-hidden="true">'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                        model.getWindow().app.quit();
-                    })
-                    .on('focus', function () {
-                        quitApp.attr('aria-label', getCloseIconLabel(model.get('title')));
-                    });
+            var quitApp = $('<a href="#" class="closelink" role="button">').attr('title', getCloseIconLabel(model.get('title')))
+                .append($('<i class="fa fa-times" aria-hidden="true">'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    model.getWindow().app.quit();
+                })
+                .on('focus', function () {
+                    quitApp.attr('title', getCloseIconLabel(model.get('title')));
+                });
             return quitApp;
         }
 
@@ -771,7 +766,7 @@ define('io.ox/core/main', [
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
             launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
-            $('a.closelink', node).attr('aria-label', getCloseIconLabel(value));
+            $('a.closelink', node).attr('title', getCloseIconLabel(value));
 
             tabManager();
         });
