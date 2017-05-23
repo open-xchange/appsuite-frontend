@@ -116,6 +116,10 @@ define('io.ox/settings/accounts/views', [
                 var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
                     self = this;
 
+                if (account.accountType === 'fileStorage') {
+                    account.filestorageService = this.model.get('filestorageService');
+                }
+
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({
                         async: true,
@@ -127,9 +131,11 @@ define('io.ox/settings/accounts/views', [
                     .addCancelButton()
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
-                        var popup = this;
+                        var popup = this,
+                            // require correct api
+                            req = account.accountType === 'fileStorage' ? 'io.ox/core/api/filestorage' : 'io.ox/keychain/api';
                         settingsUtil.yellOnReject(
-                            require(['io.ox/keychain/api']).then(function (api) {
+                            require([req]).then(function (api) {
                                 return api.remove(account);
                             }).then(
                                 function success() {
