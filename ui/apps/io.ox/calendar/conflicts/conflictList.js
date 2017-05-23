@@ -195,7 +195,7 @@ define('io.ox/calendar/conflicts/conflictList', [
     return {
 
         dialog: function (conflicts) {
-            return new ModalDialog({ title: gt('Conflicts detected'), width: '640px' })
+            return new ModalDialog({ title: gt('Conflicts detected'), width: _.device('smartphone') ? 'auto' : '640px' })
                 .build(function () {
                     // look for hard conflicts
                     var hardConflict = !!_.find(conflicts, function (conflict) { return conflict.hard_conflict === true; });
