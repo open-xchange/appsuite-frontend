@@ -1,13 +1,13 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.5. ファイルの検索</title>
+<title>9.6. ファイルの検索</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="第9章 ドライブ">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.4.11. バージョンの操作">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.6. WebDAV によるファイルへのアクセス">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.versions.html" title="9.5.10. バージョンの操作">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.html" title="9.7. WebDAVによるファイルへのアクセス">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,25 +32,11 @@
   <h1 class="sr-only"><span class="phrase">ドライブ</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.search"></a>9.5. ファイルの検索</h2></div></div></div>
-<a class="indexterm" name="id-1.10.11.2"></a><a class="indexterm" name="id-1.10.11.3"></a><div class="concept">
+<a name="ox.appsuite.user.sect.files.search"></a>9.6. ファイルの検索</h2></div></div></div>
+<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><div class="concept">
 <a name="ox.appsuite.user.concept.files.search"></a><p>目的のファイルを検索するには、次の条件を使用できます。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>ファイル名、ファイルの説明を対象に検索します。</p></li>
-<li class="listitem">
-<p>時間範囲の条件を検索します。特定の期間に作成または編集されたファイルを検索します。次の事項で有効な時間範囲を定義します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
-<li class="listitem"><p>キーワード <span class="guilabel"><strong>今日</strong></span>、<span class="guilabel"><strong>昨日</strong></span>、<span class="guilabel"><strong>先週</strong></span>、<span class="guilabel"><strong>先月</strong></span>、<span class="guilabel"><strong>昨年</strong></span></p></li>
-<li class="listitem"><p>間隔のキーワード：<span class="guilabel"><strong>過去７日間</strong></span>、<span class="guilabel"><strong>過去３０日</strong></span>、<span class="guilabel"><strong>過去３６５日</strong></span></p></li>
-<li class="listitem"><p>曜日、例　<span class="guilabel"><strong>月曜日</strong></span></p></li>
-<li class="listitem"><p>月、例　<span class="guilabel"><strong>７月</strong></span></p></li>
-<li class="listitem"><p>４桁の日付、例 <span class="guilabel"><strong>2015</strong></span></p></li>
-<li class="listitem"><p>日付、例 <span class="guilabel"><strong>1/31/2015</strong></span></p></li>
-<li class="listitem"><p>日付の間隔、例 <span class="guilabel"><strong>12/1/2014 - 1/31/2015</strong></span></p></li>
-</ul></div>
-<p>
-          </p>
-</li>
 <li class="listitem"><p>ファイルタイプ：すべて、ドキュメント、画像、その他、動画</p></li>
 <li class="listitem"><p>ファイルサイズ</p></li>
 <li class="listitem"><p>フォルダタイプ：全て、プライベート、パブリック、共有</p></li>
@@ -62,7 +48,7 @@
 <a name="ox.appsuite.user.task.files.search"></a><p class="title">ファイルを検索する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step">
-<p><span class="guibutton"><strong>検索を開始</strong></span> アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span> をクリックするか、検索バーに入力フィールドをクリックしてください。フォルダボタンは、検索するフォルダーを表示します。<span class="guibutton"><strong>オプション</strong></span>ドロップダウンメニューが検索対象を指定する機能を提供します。</p>
+<p><span class="guibutton"><strong>検索を開始</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search"></a><img src="../../images/appsuite_user_icon_toolbar_search.png"></span>をクリックするか、検索バーに入力フィールドをクリックしてください。フォルダボタンは、検索するフォルダーを表示します。<span class="guibutton"><strong>オプション</strong></span>ドロップダウンメニューが検索対象を指定する機能を提供します。</p>
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.files.search.start"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_click.png" alt="入力フィールド"></div></div>
 </div>
@@ -81,37 +67,34 @@
 <div class="informalfigure">
 <a name="ox.appsuite.user.fig.files.search.searchmenue"></a><div class="screenshot"><div class="mediaobject"><img src="../../images/appsuite_user_task_files_search_searchmenue.png" alt="検索メニュー"></div></div>
 </div>
-<p>検索メニューの項目をクリックして検索対象のデータ ソースを指定します。</p>
+<p>検索メニューの項目をクリックして検索対象のデータソースを指定します。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>検索条件をクリックする、または Enter キーを押すことによって、次のデータ ソースが検索対象になります：ファイル名、説明</p></li>
-<li class="listitem"><p>特定の時間範囲のファイルを検索するには、検索条件として有効時間軸を使用してください。入力に有効な時間軸が認識されるとすぐに時間軸が検索メニューに表示されます。期間をクリックします。</p></li>
+<li class="listitem"><p>検索条件をクリックする、または Enterキーを押すことによって、次のデータソースが検索対象になります：ファイル名、説明</p></li>
 <li class="listitem">
-<p>ファイル名のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象: ファイル名</strong></span> をクリックします。</p>
+<p>ファイル名のみを検索するには、検索メニューで、<span class="guibutton"><strong>検索対象；ファイル名</strong></span>をクリックします。</p>
 <p>また、検索対象をファイルの説明にすることもできます。</p>
 </li>
 </ul></div>
 <p>
           </p>
-<p>結果:</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none"><p>検索結果は、表示エリアに一覧で表示されます。</p></li></ul></div>
-<p>
-          </p>
+<p>検索結果は、表示エリアに一覧で表示されます。</p>
 </li>
 <li class="step">
 <p>検索結果を絞り込むために次のオプションがあります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>検索結果を変更するには、さらに検索条件を入力します。検索条件を削除するには、検索条件横の <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>アイコンをクリックします。</p></li>
+<li class="listitem"><p>検索結果を変更するには、さらに検索条件を入力します。検索条件を削除するには、検索条件横の<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.remove"></a><img src="../../images/appsuite_user_icon_close.png"></span>アイコンをクリックします。</p></li>
 <li class="listitem"><p>別のフォルダを検索するには、フォルダボタンをクリックします。フォルダを選択します。</p></li>
 <li class="listitem"><p>検索する対象をプライベートフォルダ、パブリックフォルダ、または共有フォルダに限定するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。フォルダを選択します。</p></li>
 <li class="listitem"><p>特定のファイルの検索を制限するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。タイプを選択します。</p></li>
-<li class="listitem"><p>特定のサイズのファイルの検索を制限するには、<span class="guibutton"><strong>オプションをクリックします。</strong></span>ファイルサイズを選択します。</p></li>
+<li class="listitem"><p>特定のサイズのファイルの検索を制限するには、<span class="guibutton"><strong>オプション</strong></span>をクリックします。ファイルサイズを選択します。</p></li>
 </ul></div>
 <p>
           </p>
 </li>
-<li class="step"><p>検索を終了するには、 <span class="guibutton"><strong>検索をキャンセル</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>をクリックします。</p></li>
+<li class="step"><p>検索を終了するには、<span class="guibutton"><strong>検索をキャンセル</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.search.close"></a><img src="../../images/appsuite_user_icon_cancelsearch.png"></span>をクリックします。</p></li>
 </ol></div>
 </div>
+<p><a name="ox.appsuite.user.concept.files.search.parent"></a>親記事：<a class="xref" href="ox.appsuite.user.chap.files.html" title="第9章 ドライブ"><i><span class="phrase">ドライブ</span></i></a></p>
 </div>
           </div>
         </body>

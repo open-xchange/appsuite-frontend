@@ -1,13 +1,13 @@
 <html lang="ja">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.4.11. バージョンの操作</title>
+<title>9.5.10. バージョンの操作</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
-<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">
-<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.4.10. ファイルのロックおよびロックの解除">
-<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.5. ファイルの検索">
+<link rel="up" href="ox.appsuite.user.sect.files.manage.html" title="9.5. ファイルの整理">
+<link rel="prev" href="ox.appsuite.user.sect.files.manage.lock.html" title="9.5.9. ファイルのロックおよびロックの解除">
+<link rel="next" href="ox.appsuite.user.sect.files.search.html" title="9.6. ファイルの検索">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -30,177 +30,89 @@
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">ドライブ</span></h1>
-<h2 class="sr-only">ファイルの管理</h2>
+<h2 class="sr-only">ファイルの整理</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.4.11. バージョンの操作</h3></div></div></div>
-<a class="indexterm" name="id-1.10.10.15.2"></a><a class="indexterm" name="id-1.10.10.15.3"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files.versions"></a><p>バージョンの操作には、次のようなオプションの機能があります。</p>
+<a name="ox.appsuite.user.sect.files.manage.versions"></a>9.5.10. バージョンの操作</h3></div></div></div>
+<a class="indexterm" name="id-1.10.11.15.2"></a><a class="indexterm" name="id-1.10.11.15.3"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files.manage.versions"></a><p>バージョンの操作には、次のようなオプションの機能があります。</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">新規バージョンのアップロード</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="新規バージョンをアップロードする">最新のバージョンの表示と保存</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">新規バージョンのアップロード</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="特定のファイル バージョンを最新のバージョンに設定する">特定のバージョンを最新のバージョンに設定</a></p></li>
-<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="特定のバージョンを削除する">特定のバージョンの削除</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.manage.versions.open" title="特定のバージョンを表示、開く">新規バージョンのアップロード</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.manage.versions.add" title="新規バージョンをアップロードする">最新のバージョンの表示と保存</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.manage.versions.open" title="特定のバージョンを表示、開く">新規バージョンのアップロード</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.manage.versions.current" title="特定のファイルバージョンを最新のバージョンに設定する">特定のバージョンを最新のバージョンに設定</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.manage.versions.delete" title="特定のバージョンを削除する">特定のバージョンの削除</a></p></li>
 </ul></div>
 <p>
       </p>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.opencurrent"></a><p class="title">最新のバージョンを表示、保存する</p>
+<a name="ox.appsuite.user.task.files.manage.versions.opencurrent"></a><p class="title">最新のバージョンを表示、保存する</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>表示エリアで、ファイルを選択します。ツールバーで、<span class="guibutton"><strong>ダウンロード</strong></span> アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.download"></a><img src="../../images/appsuite_user_icon_download.png"></span>をクリックします。</p></li>
+<li class="step"><p>表示エリアで、ファイルを選択します。ツールバーで、<span class="guibutton"><strong>ダウンロード</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.task.files.manage.download"></a><img src="../../images/appsuite_user_icon_download.png"></span>をクリックします。</p></li>
 <li class="step"><p>手順に従い、ファイルを表示またはダウンロードします。</p></li>
 </ol></div>
-<div class="taskrelated">
-          <div class="itemizedlist">
-<a name="ox.appsuite.user.task.files.versions.opencurrent.related"></a><p class="title">詳細は、 を参照してください。</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="新規バージョンをアップロードする">新規バージョンをアップロードする</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">特定のバージョンを表示、開く</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="特定のファイル バージョンを最新のバージョンに設定する">特定のファイル バージョンを最新のバージョンに設定する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="特定のバージョンを削除する">特定のバージョンを削除する</a></td></tr>
-</table>
-<p>
-              </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
-</ul>
-</div>
-        </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.add"></a><p class="title">新規バージョンをアップロードする</p>
+<a name="ox.appsuite.user.task.files.manage.versions.add"></a><p class="title">新規バージョンをアップロードする</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>表示エリアで、ファイルを選択します。サイドバーが表示されない場合は、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>をクリックします。<span class="guibutton"><strong>ファイルの詳細</strong></span>を有効にします。</p></li>
 <li class="step"><p>サイドバーで、<span class="guibutton"><strong>新規バージョンをアップロード</strong></span>をクリックします。目的のファイルを選択します。</p></li>
 <li class="step"><p>バージョンに関するコメントを入力します。</p></li>
-<li class="step"><p><span class="guibutton"><strong>アップロード</strong></span> をクリックします。</p></li>
+<li class="step"><p><span class="guibutton"><strong>アップロード</strong></span>をクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="guilabel"><strong>ビューア</strong></span>のサイドバーでも機能を使用できます。</p>
-          <p><span class="phrase"><strong>ヒント：</strong></span> ファイル ブラウザやデスクトップからファイルをビューアのサイドバーにドラッグし、ドロップしてもファイルをアップロードできます。</p>
-          <div class="itemizedlist">
-<a name="ox.appsuite.user.task.files.versions.add.related"></a><p class="title">詳細は、 を参照してください。</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.opencurrent" title="最新のバージョンを表示、保存する">最新のバージョンを表示、保存する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">特定のバージョンを表示、開く</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="特定のファイル バージョンを最新のバージョンに設定する">特定のファイル バージョンを最新のバージョンに設定する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="特定のバージョンを削除する">特定のバージョンを削除する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="閲覧者">閲覧者</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.add.html#ox.appsuite.user.task.files.create" title="ファイルを追加する：">ファイルを追加する：</a></td></tr>
-</table>
-<p>
-              </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
-</ul>
-</div>
-</div>
+          <p><span class="phrase"><strong>ヒント：</strong></span>ファイルブラウザやデスクトップからファイルをビューアのサイドバーにドラッグし、ドロップしてもファイルをアップロードできます。</p>
+        </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.open"></a><p class="title">特定のバージョンを表示、開く</p>
+<a name="ox.appsuite.user.task.files.manage.versions.open"></a><p class="title">特定のバージョンを表示、開く</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>表示エリアで、ファイルを選択します。サイドバーが表示されない場合は、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>をクリックします。<span class="guibutton"><strong>ファイルの詳細</strong></span>を有効にします。</p></li>
 <li class="step">
-<p>サイドバーで、<span class="guilabel"><strong>バージョン</strong></span>の横の<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>アイコンをクリックします。バージョンの一覧が表示されます。</p>
+<p>サイドバーで<span class="guilabel"><strong>バージョン</strong></span>横の<span class="guibutton"><strong>パネルオン／オフ</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.manage.versions.open.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>をクリックします。バージョンの一覧が表示されます。</p>
 <p>バージョンをクリックします。<span class="guibutton"><strong>ダウンロード</strong></span>メニュー項目をクリックします。</p>
 </li>
 <li class="step"><p>手順に従い、ファイルを表示またはダウンロードします。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="guilabel"><strong>ビューア</strong></span>のサイドバーでも機能を使用できます。</p>
-          <div class="itemizedlist">
-<a name="ox.appsuite.user.task.files.versions.open.related"></a><p class="title">詳細は、 を参照してください。</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.opencurrent" title="最新のバージョンを表示、保存する">最新のバージョンを表示、保存する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="新規バージョンをアップロードする">新規バージョンをアップロードする</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="特定のファイル バージョンを最新のバージョンに設定する">特定のファイル バージョンを最新のバージョンに設定する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="特定のバージョンを削除する">特定のバージョンを削除する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="閲覧者">閲覧者</a></td></tr>
-</table>
-<p>
-              </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
-</ul>
-</div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.current"></a><p class="title">特定のファイル バージョンを最新のバージョンに設定する</p>
+<a name="ox.appsuite.user.task.files.manage.versions.current"></a><p class="title">特定のファイルバージョンを最新のバージョンに設定する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>表示エリアで、ファイルを選択します。サイドバーが表示されない場合は、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>をクリックします。<span class="guibutton"><strong>ファイルの詳細</strong></span>を有効にします。</p></li>
 <li class="step">
-<p>サイドバーで、<span class="guilabel"><strong>バージョン</strong></span>の横の<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>アイコンをクリックします。バージョンの一覧が表示されます。</p>
-<p>バージョンをクリックします。メニューから <span class="guibutton"><strong>これを最新のバージョンにする</strong></span> をクリックします。</p>
+<p>サイドバーで<span class="guilabel"><strong>バージョン</strong></span>横の<span class="guibutton"><strong>パネルオン／オフ</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.manage.versions.current.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>をクリックします。バージョンの一覧が表示されます。</p>
+<p>バージョンをクリックします。メニューから<span class="guibutton"><strong>これを最新のバージョンにする</strong></span>をクリックします。</p>
 </li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="guilabel"><strong>ビューア</strong></span>のサイドバーでも機能を使用できます。</p>
-          <div class="itemizedlist">
-<a name="ox.appsuite.user.task.files.versions.current.related"></a><p class="title">詳細は、 を参照してください。</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.opencurrent" title="最新のバージョンを表示、保存する">最新のバージョンを表示、保存する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="新規バージョンをアップロードする">新規バージョンをアップロードする</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">特定のバージョンを表示、開く</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.delete" title="特定のバージョンを削除する">特定のバージョンを削除する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="閲覧者">閲覧者</a></td></tr>
-</table>
-<p>
-              </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
-</ul>
-</div>
         </div>
 </div>
 <div class="task">
-<a name="ox.appsuite.user.task.files.versions.delete"></a><p class="title">特定のバージョンを削除する</p>
+<a name="ox.appsuite.user.task.files.manage.versions.delete"></a><p class="title">特定のバージョンを削除する</p>
 <div class="procedure"><ol class="procedure" type="1">
 <li class="step"><p>表示エリアで、ファイルを選択します。サイドバーが表示されない場合は、ツールバーの<span class="guibutton"><strong>ビュー</strong></span>をクリックします。<span class="guibutton"><strong>ファイルの詳細</strong></span>を有効にします。</p></li>
-<li class="step"><p>サイドバーで、<span class="guilabel"><strong>バージョン</strong></span>の横の<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>アイコンをクリックします。バージョンの一覧が表示されます。</p></li>
+<li class="step"><p>サイドバーで<span class="guilabel"><strong>バージョン</strong></span>横の<span class="guibutton"><strong>パネルオン／オフ</strong></span>アイコン<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.files.manage.versions.delete.togglepanel"></a><img src="../../images/appsuite_user_icon_toggle_right.png"></span>をクリックします。バージョンの一覧が表示されます。</p></li>
 <li class="step"><p>バージョンをクリックします。メニューから<span class="guibutton"><strong>バージョンを削除</strong></span>をクリックします。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="guilabel"><strong>ビューア</strong></span>のサイドバーでも機能を使用できます。</p>
-          <div class="itemizedlist">
-<a name="ox.appsuite.user.task.files.versions.delete.related"></a><p class="title">詳細は、 を参照してください。</p>
-<ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none">
-<p>
-                </p>
-<table border="0" summary="Simple list" class="simplelist">
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.opencurrent" title="最新のバージョンを表示、保存する">最新のバージョンを表示、保存する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.add" title="新規バージョンをアップロードする">新規バージョンをアップロードする</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.open" title="特定のバージョンを表示、開く">特定のバージョンを表示、開く</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.manage.versions.html#ox.appsuite.user.task.files.versions.current" title="特定のファイル バージョンを最新のバージョンに設定する">特定のファイル バージョンを最新のバージョンに設定する</a></td></tr>
-<tr><td><a class="xref" href="ox.appsuite.user.sect.files.gui.html#ox.appsuite.user.reference.files.gui.viewer" title="閲覧者">閲覧者</a></td></tr>
-</table>
-<p>
-              </p>
-</li>
-<li class="listitem" style="list-style-type: none"><p>親記事<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.4. ファイルの管理">ファイルの管理</a></p></li>
-</ul>
-</div>
         </div>
 </div>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.concept.files.manage.versions.related"></a><p class="title">詳細は、次を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p><a class="xref" href="ox.appsuite.user.sect.files.gui.content.html" title="9.1.5. ドライブ表示エリア"><span class="phrase">ドライブ</span>表示エリア</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.files.gui.details.html" title="9.1.6. ファイルの詳細">ファイルの詳細</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.files.gui.viewer.html" title="9.1.7. 閲覧者">閲覧者</a></p>
+</li></ul>
+</div>
+<p><a name="ox.appsuite.user.concept.files.manage.versions.parent"></a>親記事：<a class="xref" href="ox.appsuite.user.sect.files.manage.html" title="9.5. ファイルの整理">ファイルの整理</a></p>
 </div>
           </div>
         </body>
