@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <psf version="2.0">
 <provider id="org.eclipse.egit.core.GitProvider">
-<project reference="1.0,https://gitlab.open-xchange.com/frontend/core,release-7.8.4,ui"/>
-<project reference="1.0,https://gitlab.open-xchange.com/frontend/core,release-7.8.4,update-themes"/>
+<project reference="1.0,https://gitlab.open-xchange.com/frontend/core,master,ui"/>
+<project reference="1.0,https://gitlab.open-xchange.com/frontend/core,master,update-themes"/>
 </provider>
 </psf>
