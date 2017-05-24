@@ -212,7 +212,7 @@ define('io.ox/core/folder/extensions', [
             return _(keychainApi.submodules).filter(function (submodule) {
                 if (services.indexOf(submodule.id) < 0) return false;
                 // we need support for both accounts, Oauth accounts and filestorage accounts.
-                return (!submodule.canAdd || submodule.canAdd.apply(this)) && availableFilestorageServices.indexOf(submodule.id) >= 0;
+                return availableFilestorageServices.indexOf(submodule.id) >= 0;
             });
         });
     }
