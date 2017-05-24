@@ -47,7 +47,7 @@ define('io.ox/mail/detail/content', [
             if (baton.source !== '') return;
             // stop any further processing
             baton.stopPropagation();
-            baton.source = '<div class="no-content">' + gt('This mail has no content') + '</div>';
+            baton.source = baton.isHTML ? '<div class="no-content">' + gt('This mail has no content') + '</div>' : gt('This mail has no content');
         },
 
         images: function (baton) {
