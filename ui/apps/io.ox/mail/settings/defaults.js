@@ -32,6 +32,7 @@ define('io.ox/mail/settings/defaults', [], function () {
         'allowHtmlImages': false,
         'displayEmoticons': false,
         'isColorQuoted': false,
+        'beautifyPlainText': false,
         'defaultSignature': false,
         'defaultReplyForwardSignature': false,
         'mobileSignature': undefined,
@@ -44,7 +45,10 @@ define('io.ox/mail/settings/defaults', [], function () {
         'unread': false,
         'simpleLineBreaks': true,
         'notificationSoundName': 'bell',
-        'playSound': true
+        'playSound': true,
+        'confirmReplyToMailingLists': true,
+        'unseenMessagesFolder': true,
+        'showCheckboxes': true  // show checkboxes in mail list as default
     };
 
     return settingsDefaults;

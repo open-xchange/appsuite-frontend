@@ -46,10 +46,11 @@ define('io.ox/core/settings/user', [
             .addPrimaryButton('save', gt('Save'), 'save')
             .addButton('discard', gt('Discard'), 'discard');
 
+            var guid = _.uniqueId('form-control-label-');
             dialog.getContentControls()
                 .prepend(
-                    $('<label class="checkbox-inline pull-left">').append(
-                        $('<input type="checkbox" class="toggle-check">')
+                    $('<label class="checkbox-inline pull-left">').attr('for', guid).append(
+                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
                             .on('change', function (e) {
                                 e.preventDefault();
                                 view.toggle.call(view.$el);

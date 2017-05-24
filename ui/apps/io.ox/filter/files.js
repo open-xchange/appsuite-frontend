@@ -24,7 +24,7 @@ define('io.ox/filter/files', [
             return fileSettings.get('showHidden', false) !== true;
         },
         isVisible: function (file) {
-            var title = (file ? file.title : '');
+            var title = (file || {}).title || '';
             return title.indexOf('.') !== 0;
         }
     });

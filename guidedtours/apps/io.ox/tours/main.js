@@ -26,7 +26,8 @@ define('io.ox/tours/main', [
         id: 'tours',
         index: 1000,
         run: function () {
-            if (_.device('smartphone')) {//tablets are fine just disable phones
+            if (_.device('smartphone')) {
+                //tablets are fine just disable phones
                 return $.when();
             }
 
@@ -55,7 +56,8 @@ define('io.ox/tours/main', [
             var node = this,
                 link = $('<li>', { 'class': 'io-ox-specificHelp' }).appendTo(node);
 
-            if (_.device('smartphone')) {//tablets are fine just disable phones
+            if (_.device('smartphone')) {
+                //tablets are fine just disable phones
                 return;
             }
 

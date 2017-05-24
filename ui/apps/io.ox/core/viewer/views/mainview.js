@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'io.ox/core/a11y',
     'less!io.ox/core/viewer/style',
     // prefetch file actions
     'io.ox/files/actions'
-], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings) {
+], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y) {
 
     'use strict';
 
@@ -54,7 +55,7 @@ define('io.ox/core/viewer/views/mainview', [
             // create the event aggregator of this view.
             this.viewerEvents = _.extend({}, Backbone.Events);
             // create children views
-            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true };
+            var childViewParams = { collection: this.collection, viewerEvents: this.viewerEvents, standalone: this.standalone, app: this.app, opt: this.opt, isViewer: true, openedBy: this.openedBy };
             this.toolbarView = new ToolbarView(childViewParams);
             this.displayerView = new DisplayerView(childViewParams);
             this.sidebarView = new SidebarView(childViewParams);
@@ -114,7 +115,7 @@ define('io.ox/core/viewer/views/mainview', [
                 if (!metrics.isEnabled()) return;
                 var toolbar = self.$el.find('.viewer-toolbar');
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'core',
                         target: 'viewer/toolbar',
@@ -131,16 +132,16 @@ define('io.ox/core/viewer/views/mainview', [
                 self = this,
                 handleChangeSlide = _.throttle(function (direction) {
                     if (direction === 'right') {
-                        self.displayerView.swiper.slideNext();
+                        self.displayerView.slideNext();
                     } else {
-                        self.displayerView.swiper.slidePrev();
+                        self.displayerView.slidePrev();
                     }
                     self.displayerView.focusActiveSlide();
                 }, 200);
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = viewerRootEl.find('[tabindex]:not([tabindex^="-"]):visible'),
+                var tabableActions = a11y.getTabbable(viewerRootEl),
                     tabableActionsCount = tabableActions.length;
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
@@ -154,10 +155,11 @@ define('io.ox/core/viewer/views/mainview', [
                     nextElementIndex = 0;
                 }
                 // focus next action candidate
-                tabableActions.eq(nextElementIndex).focus();
+                tabableActions.eq(nextElementIndex).visibleFocus();
             }
             switch (event.which) {
                 case 9: // TAB key
+                    if (this.standalone) return;
                     tabHandler(event);
                     break;
                 case 27: // ESC key
@@ -170,10 +172,14 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    handleChangeSlide('left');
+                    if ($(event.target).hasClass('swiper-slide-active')) {
+                        handleChangeSlide('left');
+                    }
                     break;
                 case 39: // right arrow
-                    handleChangeSlide('right');
+                    if ($(event.target).hasClass('swiper-slide-active')) {
+                        handleChangeSlide('right');
+                    }
                     break;
                 case 33: // page up
                     event.preventDefault();

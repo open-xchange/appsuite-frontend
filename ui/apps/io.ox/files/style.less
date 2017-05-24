@@ -58,8 +58,8 @@
 
     .list-item-content.attachment-view {
         .list-item-column {
-            &.column-2 { width: 30%; padding-right: 10px; }
-            &.column-5 { width: 20%; padding-right: 10px; text-align: left; }
+            &.column-2 { width: 40%; padding-right: 10px; }
+            &.column-5 { width: 30%; padding-right: 10px; text-align: left; }
         }
     }
 
@@ -84,29 +84,48 @@
     }
 }
 
+//:not(.icon-layout):not(.tile-layout) {
+//    .file-type-icon {
+//        &:before {
+//            color: #767676;
+//        }
+//    }
+//}
 .file-type-icon {
     font-size: 14px;
     width: 16px;
     text-align: center;
 
-    &:before { content: '\f016'; color: #aaa; } // default: fa-file-o
-
-    .file-type-image  &:before { content: '\f03e'; } // fa-image
-    .file-type-audio  &:before { content: '\f028'; } // fa-volume-up
-    .file-type-video  &:before { content: '\f008'; } // fa-film
-    .file-type-doc    &:before { content: '\f15c'; color: #376CB8; } // fa-file-text
-    .file-type-xls    &:before { content: '\f0ce'; color: #26935D; } // fa-table
-    .file-type-ppt    &:before { content: '\f022'; color: #F4502A; } // fa-list-alt
-    .file-type-pdf    &:before { content: '\f15c'; color: #C01E07; } // fa-file
-    .file-type-zip    &:before { content: '\f187'; color: #FF940A; } // fa-archive
-    .file-type-txt    &:before { content: '\f0f6'; } // fa-file-text-o
-    .file-type-guard  &:before { content: '\f023'; } // fa-lock
-    .file-type-folder &:before { content: '\f07b'; color: #777; } // fa-folder
+    &:before {
+        content: '\f016';                                             // default: fa-file-o
+        color: #afafaf;
+      //color: #767676;
+    }
+    .file-type-image  &:before { content: '\f03e'; }                  // fa-image
+    .file-type-audio  &:before { content: '\f028'; }                  // fa-volume-up
+    .file-type-video  &:before { content: '\f008'; }                  // fa-film
+    .file-type-doc    &:before { content: '\f15c'; color: #376CB8; }  // fa-file-text
+    .file-type-xls    &:before { content: '\f0ce'; color: #26935D; }  // fa-table
+    .file-type-ppt    &:before { content: '\f022'; color: #F4502A; }  // fa-list-alt
+    .file-type-pdf    &:before { content: '\f15c'; color: #C01E07; }  // fa-file
+    .file-type-zip    &:before { content: '\f187'; color: #FF940A; }  // fa-archive
+    .file-type-svg    &:before { content: '\f1c9'; color: #F4502A; }  // fa-file-code-o
+    .file-type-txt    &:before { content: '\f0f6'; }                  // fa-file-text-o
+    .file-type-guard  &:before { content: '\f023'; }                  // fa-lock
+    .file-type-folder &:before { content: '\f07b'; color: #767676; }  // fa-folder
 }
 
 .file-list-view, .myshares-list, .myfavorites-list {
 
     &.visible-selection.has-focus .list-item.selected .file-type-icon:before { color: white; }
+
+    &:not(.grid-layout):not(.tile-layout) {
+        > li.list-item {
+            + .tooltip {
+                display: none !important;
+            }
+        }
+    }
 
     //
     // Grid layout
@@ -116,14 +135,178 @@
 
         padding: @default-padding 0 0 @default-padding;
 
-        & > li.list-item {
+        > li.list-item {
             padding: 0;
             display: inline-block;
             border: solid white;
             border-width: 0 @default-padding @default-padding 0;
             overflow: hidden;
             float: left;
+
+            //+ .tooltip {
+            //    display: none !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+            //}
         }
+        &.icon-layout,
+        &.tile-layout {
+            > li.list-item {
+                &.selected {
+
+                    + .tooltip {
+                        display: none;
+                    }
+                    &:hover {
+                        + .tooltip {
+                            display: inherit !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+                        }
+                    }
+                }
+            }
+        }
+        &.icon-layout,
+        &.tile-layout {
+            > li.list-item {
+                border-width: 0 @default-padding (@default-padding - @base-padding) 0;
+
+                + .tooltip {
+                    display: inherit !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+
+                    padding: 0 5px;
+                    margin-top: 16px;
+
+                    &.right {
+                        margin-left: -18px;
+                    }
+                    &.left {
+                        margin-left: 2px;
+                    }
+
+                    &.bottom {
+                        margin-top: -76px;
+                        margin-left: -8px;
+                        max-width: 100%;
+                        width: auto;
+
+                        .tooltip-arrow {
+                            z-index: -1;
+                            top: -5px;
+                            //box-shadow: 0 0 7px #fff;
+                            //box-shadow: 0 0 7px 0 #fff;
+                        }
+                        //.tooltip-inner {
+                        //    box-shadow: none;
+                        //}
+                    }
+                    .tooltip-inner {
+                      //max-width: 307px;
+                        max-width: 100%;
+                        padding: 4px 8px;
+                      //box-shadow: 0 0 7px 0 #fff;
+                    }
+                }
+            }
+        }
+        &.tile-layout {
+            > li.list-item {
+
+                + .tooltip {
+                    &.bottom {
+                        margin-top: -88px;
+
+                        .tooltip-arrow {
+                            display: none;
+                          //box-shadow: 0 0 7px 0 #fff;
+                        }
+                    }
+                    .tooltip-inner {
+                        box-shadow: 0 0 7px 0 #fff;
+                    }
+                }
+            }
+        }
+        //&.icon-layout {   // NOTE: keep this block until 1 week before release date.
+        //  //
+        //  //                                                      // due to an additional hidden 1st node within a grid
+        //  //  &[grid-count="5"] > li.list-item:nth-child(5n-2),   // ... 5n-2 instead of 5n-3 // with: [grid-count="5"]
+        //  //  &[grid-count="4"] > li.list-item:nth-child(4n-2),   // ... 4n-2 instead of 4n-3 // with: [grid-count="4"]
+        //  //  &[grid-count="4"] > li.list-item:nth-child(4n-1),   // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
+        //  //  &[grid-count="3"] > li.list-item:nth-child(3n-1),   // ... 3n-1 instead of 3n-2 // with: [grid-count="3"]
+        //  //  &[grid-count="3"] > li.list-item:nth-child(3n),     // ... 3n   instead of 3n-1 // with: [grid-count="3"]
+        //  //  &[grid-count="2"] > li.list-item:nth-child(2n) {    // ... 2n   instead of 2n-1 // with: [grid-count="2"]
+        //  //
+        //  //      + .tooltip.left {
+        //  //          margin-left: 324px;
+        //  //          left: 0!important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+        //  //
+        //  //          //.tooltip.right .tooltip-arrow {
+        //  //          //    top: 50%;
+        //  //          //    left: 0;
+        //  //          //    margin-top: -5px;
+        //  //          //    border-width: 5px 5px 5px 0;
+        //  //          //    border-right-color: #000000;
+        //  //          //}
+        //  //          //
+        //  //          //.tooltip.left .tooltip-arrow {
+        //  //          //    top: 50%;
+        //  //          //    right: 0;
+        //  //          //    margin-top: -5px;
+        //  //          //    border-width: 5px 0 5px 5px;
+        //  //          //    border-left-color: #000000;
+        //  //          //}
+        //  //
+        //  //          .tooltip-arrow { // turn it into a ".right" tooltip
+        //  //              left: 0;
+        //  //              right: auto;
+        //  //              border-width: 5px 5px 5px 0;
+        //  //              border-right-color: #000000;
+        //  //            //border-left-color: transparent;
+        //  //          }
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="4"] > li.list-item:nth-child(4n-1) {  // ... 4n-1 instead of 4n-2 // with: [grid-count="4"]
+        //  //      + .tooltip.left {
+        //  //          margin-left: 321px;
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="4"] > li.list-item:nth-child(4n-2) {  // ... 4n-2 instead of 4n-3 // with: [grid-count="4"]
+        //  //      + .tooltip.left {
+        //  //          margin-left: 160px;
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="3"] > li.list-item:nth-child(3n-1) {  // ... 3n-1 instead of 3n-2 // with: [grid-count="3"]
+        //  //      + .tooltip.left {
+        //  //          margin-left: 171px;
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="3"] > li.list-item:nth-child(3n) {    // ... 3n   instead of 3n-1 // with: [grid-count="3"]
+        //  //      + .tooltip {
+        //  //          &.left {
+        //  //              margin-left: 344px;
+        //  //          }
+        //  //          .tooltip-inner {
+        //  //              max-width: 167px;
+        //  //          }
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="2"] > li.list-item {
+        //  ////&[grid-count="1"] > li.list-item {
+        //  //      + .tooltip {
+        //  //          .tooltip-inner {
+        //  //              max-width: 167px;
+        //  //          }
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="2"] > li.list-item:nth-child(2n) {    // ... 2n   instead of 2n-1 // with: [grid-count="2"]
+        //  //      + .tooltip.left {
+        //  //          margin-left: 194px;
+        //  //      }
+        //  //  }
+        //  //  &[grid-count="1"] > li.list-item {
+        //  //      + .tooltip {
+        //  //          display: none!important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+        //  //      }
+        //  //  }
+        //}
 
         &.grid-1  > li { width: 100% /  1; }
         &.grid-2  > li { width: 100% /  2; }
@@ -139,9 +322,28 @@
         &.grid-12 > li { width: 100% / 12; }
     }
 
+    .thumbnail-support-structure(@height) {
+      //.thumbnail-effects-box,             // please do not remove this line.
+        .thumbnail-masking-box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: @height;
+        }
+        .thumbnail-masking-box {
+            box-shadow: inset 0 0 4px #000;
+            opacity: .15;
+        }
+      //.thumbnail-effects-box {            // please do not remove this block.
+      //    background-color: #2f5984;
+      //    opacity: .3;
+      //    display:none;
+      //}
+    }
+
     .thumbnail(@height) {
         height: @height;
-        background-color: #eee;
         background-size: cover;
         background-repeat: no-repeat;
         // top is necessary for documents; images override this to "center center"
@@ -158,27 +360,57 @@
         }
     }
 
+    &.icon-layout,
+    &.tile-layout {
+
+        .list-item {
+            &:not(.selected):not(.file-type-folder):not(.file-type-image):not(.file-type-doc):not(.file-type-xls):not(.file-type-ppt):not(.file-type-pdf):not(.file-type-txt) {
+
+                .icon-thumbnail {
+                    background-color: #f8f8f8;
+                }
+            }
+        }
+    }
+
     &.icon-layout {
 
         // width is > 120px, so assuming a 4/3 format, we're around 90px
         // since it's not equal but more than 120px we add a bit (just looks better on average)
         @thumbnail_width: 120px;
         @thumbnail_height: 96px;
-        @filename_rows: 2;
+        @filename_rows: 3;
         @filename_line_height: 16px;
         @filename_height: @filename_rows * @filename_line_height;
         @filename_margin: 12px;
         @height: @thumbnail_height + 2 * @filename_margin + @filename_height;
 
-        .list-item-checkmark { top: 60px; }
-
         .list-item-content {
             width: 100%;
-            height: @height;
+            height: @height - (1 * @base-padding);
+
+            .thumbnail-support-structure(@thumbnail_height);
+        }
+        .list-item.selectable:hover {
+            overflow: visible;
+
+            .list-item-content {
+              //box-shadow: 0 0 7px 0 #eee;     // please do not remove both blocks.
+
+                //.thumbnail-effects-box {
+                //    display: block;
+                //}
+                .filename {
+                    padding-top: ((@filename_line_height / 2) - 3px);
+                    margin-top: 1px;
+                    border-top: 2px solid #2f5984;
+                }
+            }
         }
 
         .icon-thumbnail {
             .thumbnail(@thumbnail_height);
+          //background-color: transparent;
         }
 
         .icon-thumbnail.default-icon {
@@ -198,17 +430,32 @@
                 }
             }
 
-            .folder-icon i.fa:before { color: #ccc; }
+            .folder-icon i.fa:before {
+                color: #fff;
+                text-shadow: 0 0 1px #000;
+            }
+        }
+
+        .filename-file-icon {
+            position: absolute;
+            margin: (2 * @base-padding) 0 @filename_margin 0;
+            height: @filename_height;
+            line-height: @filename_line_height;
+            font-size: 14px;
+            top: auto;
+            left: 5px;
         }
 
         .filename {
             line-height: @filename_line_height;
-            height: @filename_height;
+            height: (@filename_height - (@filename_line_height / 2));
             overflow: hidden;
-            margin: @filename_margin 0;
+            margin: 0;
             text-align: left;
-            padding: 0 4px 0 32px;
-            word-break: break-word;
+            padding: (@filename_line_height / 2) 5px 0 28px;
+            white-space: normal;
+            word-wrap: break-word;
+            word-break: break-all;
         }
 
         .busy-indicator(@thumbnail_height, left);
@@ -218,22 +465,70 @@
         //
 
         .list-item-checkmark {
-            top: auto;
-            bottom: 7px;
-            left: -8px;
-            height: 48px;
-            width: 40px;
+            top: 56px;
+            height: 40px;
+            right: 0;
+            left: auto;
+            width: 46px;
+            z-index: 5; // chrome bug: checkmark can't be clicked, it's below the thumbnail when the thumb has opacity due to selection
+
+            .fa-checkmark {
+              //color: #fdfdfd;
+                color: #fff;
+                text-shadow: 0 0 2px #666;
+              //text-shadow: 0 0 1px #000;
+              //text-shadow: 0 0 3px #000;
+                &:before { content: '\f0c8'; } // empty square
+            }
         }
 
-        &.hide-checkboxes .filename {
-            text-align: center;
-            padding: 0 8px;
+        li.selected .list-item-checkmark .fa-checkmark { color: #fff; }
+
+        .file-type-folder .list-item-checkmark .fa-checkmark {
+            color: #e6e6e6;
+          //color: #eee;
+          //color: #ccc;
+          //text-shadow: none;
+        }
+        .file-type-folder {
+
+            .icon-thumbnail {
+                background-color: #e6e6e6;
+              //background-color: #eee;
+            }
+            .filename-file-icon {
+                display: none;
+            }
+            .filename {
+                text-align: center;
+                padding-left: 5px;
+              //padding: (@filename_line_height / 2) 5px 0 5px;
+            }
         }
     }
 
     &.tile-layout {
 
-        & > li.list-item { border-width: 0 @default-padding @default-padding 0; }
+        > li.list-item {
+
+            border-width: 0 @default-padding @default-padding 0;
+            overflow: visible;
+
+            + .tooltip {
+                display: inherit !important; // has to be used that way since the jQuey tooltip needs to be partly overruled.
+            }
+
+            &:hover:after {
+                content: "";
+                display: block;
+                position: absolute;
+                bottom: -3px;
+                left: 0;
+                width: 100%;
+                height: 2px;
+                background-color: #2f5984;
+            }
+        }
 
         // width is > 160px, so assuming a 4/3 format, we're around 120px (see above)
         @thumbnail_height: 128px;
@@ -241,6 +536,8 @@
         .list-item-content {
             width: 100%;
             height: @thumbnail_height;
+
+            .thumbnail-support-structure(@thumbnail_height);
         }
 
         .icon-thumbnail {
@@ -262,7 +559,33 @@
             }
         }
 
-        .file-type-folder .folder-icon { display: none; }
+        .file-type-folder {
+
+            .icon-thumbnail {
+                background-color: #e6e6e6;
+              //background-color: #eee;
+
+                .folder-name {
+                    width: 100%;
+                }
+                .folder-icon {
+                    position: absolute;
+                    left: 14px;
+                    right: auto;
+                    top: auto;
+                    bottom: 6px;
+
+                    .file-type-icon {
+                        font-size: 21px;
+
+                        &:before {
+                            color: #fff;
+                            text-shadow: 0 0 1px #000;
+                        }
+                    }
+                }
+            }
+        }
 
         .busy-indicator(@thumbnail_height, left);
 
@@ -277,19 +600,47 @@
             left: auto;
 
             .fa-checkmark {
+              //color: #fdfdfd;
                 color: #fff;
-                text-shadow: 0 0 3px #000;
+                text-shadow: 0 0 2px #666;
+              //text-shadow: 0 0 1px #000;
+              //text-shadow: 0 0 3px #000;
                 &:before { content: '\f0c8'; } // empty square
             }
         }
 
-        .file-type-folder .list-item-checkmark .fa-checkmark {
-            color: #ccc;
-            text-shadow: none;
-        }
+        .file-type-folder {
 
-        li.selected .list-item-checkmark .fa-checkmark { color: #fff; }
+            .list-item-checkmark {
+                .fa-checkmark {
+                    color: #e6e6e6;
+                  //color: #eee;
+                  //color: #ccc;
+                  //text-shadow: none;
+                }
+            }
+        }
+        //:not(.file-type-folder) {     // please do not remove this block - work in progress.
+        //
+        //    .list-item-checkmark {
+        //        .fa-checkmark {
+        //
+        //            &:before { content: '\f0c8'; } // empty square
+        //        }
+        //    }
+        //}
+
+        li.selected {
+
+            .list-item-checkmark {
+                .fa-checkmark {
+
+                    color: #fff;
+                }
+            }
+        }
     }
+
 
     //
     // Selection handling
@@ -302,15 +653,16 @@
         &.has-focus .selected .icon-thumbnail {
             background-color: darken(@selected-background, 15%);
 
-            .folder-icon i.fa:before { color: rgba(0, 0, 0, 0.50); }
+          //.folder-icon i.fa:before { color: rgba(0, 0, 0, 0.50); }
         }
     }
 
     &.tile-layout {
 
         .selected:not(.file-type-folder) .icon-thumbnail {
-            border: 4px solid #ddd;
-            box-shadow: 0 0 1px 2px white inset;
+            border: 2px solid #ddd;
+            box-shadow: 0 0 0 1px white inset;
+            opacity: .8;
         }
 
         .selected.file-type-folder .icon-thumbnail { background-color: #ddd; }
@@ -322,6 +674,21 @@
                 background-color: @selected-background;
 
                 .folder-name { color: white; }
+            }
+            > li.list-item.selected:not(.file-type-folder) {
+                &:hover {
+
+                    .icon-thumbnail {
+                      //box-shadow: 0 0 0 2px white inset;
+                        box-shadow: none;
+                      //border-color: #2f5984;
+                    }
+
+                    &:after {
+                        display: none;
+                      //bottom: -2px;
+                    }
+                }
             }
         }
     }
@@ -402,7 +769,10 @@
         white-space: normal;
         height: 3em;
         line-height: 1em;
-        word-break: break-word;
+      //word-break: break-word;
+
+        word-wrap: break-word;  // Note: - check back with David Bauer for any possible breaking effects
+        word-break: break-all;  //         changing the invalid line above to this block.
     }
 }
 
@@ -444,8 +814,8 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
         max-height: 100%;
 
         .modal-body {
-            max-height: auto;
-
+            max-height: auto;   // Note: - approach David Bauer for why there is an invalid property values used.
+                                //       - are there any breaking effects if it will be changed to a valid 'none' or 'initial' value.
             .row textarea.col-lg-12 { max-height: 100px; }
             .fileupload .uneditable-input { width: 130px; }
         }
@@ -545,7 +915,7 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
             &.thumbnail-pane { display: none; }
         }
 
-        .wrapper { padding: 0px 16px; }
+        .wrapper { padding: 0 16px; }
 
         .sidebar-panel-body { padding: 12px 0 5px 0; }
 
@@ -577,40 +947,3 @@ ul.breadcrumb li.prefix { white-space: nowrap; }
 }
 
 .filestorage-conflict-warning { padding-top: 8px; }
-
-// add storage account dialog
-.select-storage-account-dialog .modal-body {
-    padding: 16px 16px 0 16px;
-
-    .add-acc-label {
-        color: #555;
-        margin: 0;
-    }
-
-    .storage-account-item {
-
-        display: inline-block;
-        padding: 0;
-        line-height: 28px;
-        margin: 0 16px 16px 0;
-
-        &:last-child { margin-right: 0; }
-
-        &:focus, &:active { background-color: white; }
-
-        &:hover { background-color: #f5f5f5; }
-
-        .icon {
-            margin: 15px 20px 0;
-            text-align: center;
-            width: 64px;
-            height: 64px;
-            background-size: cover;
-        }
-
-        &.logo-google   .icon { background-image: url(apps/themes/default/googledrive_logo128.png); }
-        &.logo-boxcom   .icon { background-image: url(apps/themes/default/box_logo128.png);         }
-        &.logo-onedrive .icon { background-image: url(apps/themes/default/onedrive_logo128.png);    }
-        &.logo-dropbox  .icon { background-image: url(apps/themes/default/dropbox_logo128.png);     }
-    }
-}

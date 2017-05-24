@@ -13,10 +13,11 @@
 define('io.ox/contacts/widgets/pictureUpload', [
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/core/util',
     'gettext!io.ox/contacts',
     'settings!io.ox/contacts',
     'less!io.ox/contacts/widgets/widgets'
-], function (notifications, api, gt, settings) {
+], function (notifications, api, util, gt, settings) {
 
     'use strict';
 
@@ -49,6 +50,12 @@ define('io.ox/contacts/widgets/pictureUpload', [
             handleFileSelect: function (e, input) {
 
                 var fileData = {}, $input = $(input);
+
+                // check for valid image type. especially, svg is not allowed (see Bug 50748)
+                if (input.files.length > 0 && !/(jpg|jpeg|gif|bmp|png)/i.test(input.files[0].type)) {
+                    notifications.yell('error', gt('This filetype is not supported as contact picture. Only image types (JPG, GIF, BMP or PNG) are supported.'));
+                    return;
+                }
 
                 if (this.oldMode) {
                     if ($input.val()) {
@@ -141,7 +148,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
-                    imageUrl = imageUrl.replace(/^\/ajax/, ox.apiRoot);
+                    imageUrl = util.getShardingRoot(util.replacePrefix(imageUrl));
                     hasImage = true;
                 } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images
@@ -157,11 +164,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                             .on('click', function (e) { self.resetImage(e); })[hasImage ? 'show' : 'hide'](),
                         this.addImgText = $('<div class="add-img-text">')
                             .append(
-                                $('<span>').text(gt('Click to upload image'))
+                                $('<span>').text(gt('Upload image'))
                             )[hasImage ? 'hide' : 'show']()
                     ),
                     $('<form>').append(
-                        $('<label class="sr-only">').attr('for', guid).text(gt('Click to upload image')),
+                        $('<label class="sr-only">').attr('for', guid).text(gt('Upload image')),
                         self.fileInput = $('<input type="file" name="file" accept="image/*">').attr('id', guid)
                             .on('change', function (e) {
                                 self.handleFileSelect(e, this);

@@ -12,7 +12,6 @@
  */
 
 define('io.ox/calendar/main', [
-    'settings!io.ox/core',
     'io.ox/core/commons',
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
@@ -31,7 +30,7 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
-], function (coreConfig, commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
+], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
 
     'use strict';
 
@@ -265,13 +264,20 @@ define('io.ox/calendar/main', [
         'vgrid': function (app) {
 
             var gridOptions = {
-                settings: settings,
-                showToggle: _.device('smartphone'),
-                hideTopbar: _.device('smartphone'),
-                hideToolbar: _.device('smartphone'),
-                // if it's shown, it should be on the top
-                toolbarPlacement: 'top'
-            };
+                    settings: settings,
+                    showToggle: _.device('smartphone'),
+                    hideTopbar: _.device('smartphone'),
+                    hideToolbar: _.device('smartphone'),
+                    // if it's shown, it should be on the top
+                    toolbarPlacement: 'top'
+                },
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             // show "load more" link
             gridOptions.tail = function () {
@@ -311,6 +317,67 @@ define('io.ox/calendar/main', [
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
+        },
+
+        'folderview-toolbar': function (app) {
+            if (_.device('smartphone')) return;
+
+            app.toggleFolderView = function (e) {
+                e.preventDefault();
+                app.folderView.toggle(e.data.state);
+            };
+
+            function onFolderViewOpen(app) {
+                app.left.removeClass('bottom-toolbar');
+                // for perspectives other than list
+                app.getWindow().nodes.body.removeClass('bottom-toolbar-visible');
+            }
+
+            function onFolderViewClose(app) {
+                app.left.addClass('bottom-toolbar');
+                // for perspectives other than list
+                app.getWindow().nodes.body.addClass('bottom-toolbar-visible');
+            }
+
+            // create extension point for second toolbar
+            ext.point('io.ox/calendar/vgrid/second-toolbar').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    this.addClass('visual-focus').append(
+                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
+                        .attr('aria-label', gt('Open folder view'))
+                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
+                        .on('click', { state: true }, app.toggleFolderView)
+                    );
+                }
+            });
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'toggle-folderview',
+                index: 1000,
+                draw: function () {
+                    this.addClass('bottom-toolbar').append(
+                        $('<div class="generic-toolbar bottom visual-focus">').append(
+                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
+                            .append(
+                                $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
+                            )
+                            .on('click', { app: app, state: false }, app.toggleFolderView)
+                        )
+                    );
+                }
+            });
+
+            app.on({
+                'folderview:open': onFolderViewOpen.bind(null, app),
+                'folderview:close': onFolderViewClose.bind(null, app)
+            });
+
+            var grid = app.getGrid(), topbar = grid.getTopbar();
+            ext.point(app.get('name') + '/vgrid/second-toolbar').invoke('draw', topbar, ext.Baton({ grid: grid }));
+            onFolderViewClose(app);
+            if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
         },
 
         'premium-area': function (app) {
@@ -382,7 +449,7 @@ define('io.ox/calendar/main', [
          * Default application properties
          */
         'props': function (app) {
-            var view = settings.get('viewView', 'week:week');
+            var view = settings.get('viewView') || 'week:week';
             // introduce shared properties
             app.props = new Backbone.Model({
                 'layout': view,
@@ -524,9 +591,18 @@ define('io.ox/calendar/main', [
 
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list',
-                find = app.get('find');
-            // additional handler: switch to list perspective (and back)
+                find = app.get('find'),
+                emptyMessage = function findResultEmptyMessage() { return gt('No matching items found.'); };
+
             if (find) {
+                // WORKAROUND: no suitable way other of wrapping getEmptyMessage
+                app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
+                    if (app.grid.getMode() === 'search') return emptyMessage;
+                    // return function set by grid.setEmptyMessage
+                    return fn.apply(fn);
+                });
+
+                // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
                         // hide sort options
@@ -629,7 +705,7 @@ define('io.ox/calendar/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'toolbar',
@@ -637,19 +713,33 @@ define('io.ox/calendar/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
+                // vgrid toolbar
+                nodes.main.on('mousedown', '.vgrid-toolbar a[data-name], .vgrid-toolbar a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
                     });
                 });
                 // detail view
-                nodes.outer.delegate('.participants-view .io-ox-action-link', 'mousedown', function (e) {
+                nodes.outer.on('mousedown', '.participants-view .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'detail/toolbar',
@@ -658,7 +748,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // detail view as sidepopup
-                nodes.outer.delegate('.io-ox-sidepopup .io-ox-action-link', 'mousedown', function (e) {
+                nodes.outer.on('mousedown', '.io-ox-sidepopup .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'detail/toolbar',
@@ -667,7 +757,7 @@ define('io.ox/calendar/main', [
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder/context-menu',
@@ -675,8 +765,18 @@ define('io.ox/calendar/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'calendar',
+                        target: 'folder/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
                 // folder permissions action
-                sidepanel.find('.folder-tree').delegate('.folder-shared', 'mousedown', function () {
+                sidepanel.find('.folder-tree').on('mousedown', '.folder-shared, .fa.folder-sub', function () {
                     metrics.trackEvent({
                         app: 'calendar',
                         target: 'folder',

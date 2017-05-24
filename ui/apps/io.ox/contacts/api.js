@@ -18,10 +18,11 @@ define('io.ox/contacts/api', [
     'io.ox/core/notifications',
     'io.ox/core/cache',
     'io.ox/contacts/util',
+    'io.ox/core/util',
     'l10n/ja_JP/io.ox/collation',
     'settings!io.ox/contacts',
     'io.ox/core/capabilities'
-], function (ext, http, apiFactory, notifications, cache, util, collation, settings, capabilities) {
+], function (ext, http, apiFactory, notifications, cache, util, coreUtil, collation, settings, capabilities) {
 
     'use strict';
 
@@ -635,8 +636,9 @@ define('io.ox/contacts/api', [
                     // remove host
                     if (data.image1_url) {
                         data.image1_url = data.image1_url
-                            .replace(/^https?\:\/\/[^\/]+/i, '')
-                            .replace(/^\/ajax/, ox.apiRoot);
+                            .replace(/^https?\:\/\/[^\/]+/i, '');
+                        data.image1_url = coreUtil.replacePrefix(data.image1_url);
+                        data.image1_url = coreUtil.getShardingRoot(data.image1_url);
                     }
                     // use first contact
                     return fetchCache.add(address, data);
@@ -707,6 +709,7 @@ define('io.ox/contacts/api', [
         return function (node, data, options) {
 
             var params,
+                useApi = options.api || 'contact',
                 url,
                 opt = _.extend({
                     width: 48,
@@ -717,7 +720,7 @@ define('io.ox/contacts/api', [
                     effect: 'show',
                     urlOnly: false
                 }, options);
-
+            delete opt.api;
             // use copy of data object because of delete-statements
             data = _.clone(data);
 
@@ -753,7 +756,8 @@ define('io.ox/contacts/api', [
                     context: ox.context_id,
                     sequence: data.last_modified
                 });
-                url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(params);
+                url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
+                url = coreUtil.getShardingRoot(url);
 
             } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;
@@ -801,7 +805,7 @@ define('io.ox/contacts/api', [
                 }
             }
 
-            url = ox.apiRoot + '/halo/contact/picture?' + $.param(params);
+            url = coreUtil.getShardingRoot((useApi === 'user' ? '/image/user/picture?' : '/halo/contact/picture?') + $.param(params));
 
             // cached?
             if (cachesURLs[url]) {

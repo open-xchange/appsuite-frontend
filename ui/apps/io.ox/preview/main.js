@@ -76,8 +76,8 @@ define('io.ox/preview/main', [
                 if (!options.omitClick) {
                     $node = clickableLink(file);
                     var label = supportsDragOut ?
-                        gt('Click to open. Drag to your desktop to download.') :
-                        gt('Click to open.');
+                        gt('Open file. Drag to your desktop to download.') :
+                        gt('Open file');
                     $node.attr({
                         'title': label,
                         'aria-label': $node.attr('aria-label') || label

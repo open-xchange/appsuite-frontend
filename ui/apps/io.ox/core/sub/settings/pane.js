@@ -113,8 +113,16 @@ define('io.ox/core/sub/settings/pane', [
             notail: true,
             isLast: true
         });
-        breadcrumb.handler = function (id) {
-            // launch files and set/change folder
+        breadcrumb.handler = function (id, module) {
+            // launch app and set/change folder
+            if (module === 'contacts' || module === 'calendar') {
+                ox.launch('io.ox/' + module + '/main', { folder: id }).done(function () {
+                    this.folder.set(id);
+                });
+                return;
+            }
+
+            // launch files as default/fallback
             ox.launch('io.ox/files/main', { folder: id }).done(function () {
                 this.folder.set(id);
             });
@@ -282,7 +290,10 @@ define('io.ox/core/sub/settings/pane', [
         },
         onRemove: function (e) {
             e.preventDefault();
-            this.model.destroy();
+            this.model.destroy().done(function () {
+                //remove cloud icon
+                folderAPI.refresh();
+            });
         },
         close: function () {
             this.stopListening();

@@ -16,14 +16,15 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
+    'io.ox/core/notifications',
     'io.ox/calendar/view-detail',
     'io.ox/calendar/conflicts/conflictList',
     'io.ox/core/print',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, detailView, conflictView, print, folderAPI, settings, gt, printStyle) {
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, gt, printStyle) {
 
     'use strict';
 
@@ -114,37 +115,22 @@ define('io.ox/calendar/month/perspective', [
             });
 
             var apiUpdate = function (obj) {
-                api.update(obj).fail(function (con) {
-                    if (con.conflicts) {
-                        var dialog = new dialogs.ModalDialog({
-                            top: '20%',
-                            center: false,
-                            container: self.main
-                        });
+                api.update(obj).fail(function (error) {
+                    if (!error.conflicts) return notifications.yell(error);
 
-                        dialog.append(conflictView.drawList(con.conflicts, dialog))
-                            .addDangerButton('ignore', gt('Ignore conflicts'), 'ignore')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') {
-                                    self.update();
-                                    return;
-                                }
-                                if (action === 'ignore') {
-                                    obj.ignore_conflicts = true;
-                                    apiUpdate(obj);
-                                }
+                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                        conflictView.dialog(error.conflicts)
+                            .on('cancel', function () { self.update(); })
+                            .on('ignore', function () {
+                                obj.ignore_conflicts = true;
+                                apiUpdate(obj);
                             });
-                    }
+                    });
                 });
             };
 
             if (obj.recurrence_type > 0) {
-                new dialogs.ModalDialog()
-                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series. Do you want to continue?'))
-                    .addButton('appointment', gt('Yes'), 'appointment')
-                    .addButton('cancel', gt('No'), 'cancel')
+                util.getRecurrenceChangeDialog()
                     .show()
                     .done(function (action) {
                         if (action === 'appointment') {
@@ -236,6 +222,7 @@ define('io.ox/calendar/month/perspective', [
                     folder: self.folder,
                     pane: this.pane,
                     app: this.app,
+                    perspective: this,
                     weekType: monthDelimiter ? 'last' : ''
                 });
                 views.push(view.render().el);
@@ -255,6 +242,7 @@ define('io.ox/calendar/month/perspective', [
                             folder: self.folder,
                             pane: this.pane,
                             app: this.app,
+                            perspective: this,
                             weekType: 'first'
                         }).render().el);
                     }
@@ -291,8 +279,9 @@ define('io.ox/calendar/month/perspective', [
         },
 
         updateColor: function (model) {
+            if (!model) return;
             $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
-                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + (model.get('meta') ? model.get('meta').color_label || '1' : '1'));
             });
         },
 
@@ -320,15 +309,16 @@ define('io.ox/calendar/month/perspective', [
          * update global 'tops' object with current positions of all first days of all months
          */
         getFirsts: function () {
-            this.tops = {};
+            if (!this.pane) return;
+
             var self = this;
-            if (this.pane) {
-                $('.day.first', this.pane).each(function (i, el) {
-                    var elem = $(el);
-                    // >> 0 parses a floating point number to an integer
-                    self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
-                });
-            }
+            this.tops = {};
+
+            $('.day.first', this.pane).each(function (i, el) {
+                var elem = $(el);
+                // >> 0 parses a floating point number to an integer
+                self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
+            });
         },
 
         /**
@@ -338,9 +328,7 @@ define('io.ox/calendar/month/perspective', [
             // See Bug 36417 - calendar jumps to wrong month with IE10
             // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
             // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
-            if (_.keys(this.tops).length <= 1) {
-                this.getFirsts();
-            }
+            if (_.keys(this.tops).length <= 1) this.getFirsts();
         },
 
         /**
@@ -593,8 +581,12 @@ define('io.ox/calendar/month/perspective', [
                             // enter
                             $(e.target).click();
                             break;
-                        default:
+                        case 32:
+                            // space
+                            e.preventDefault();
+                            $(e.target).click();
                             break;
+                        // no default
                     }
                 });
 

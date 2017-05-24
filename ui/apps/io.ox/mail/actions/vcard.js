@@ -18,7 +18,7 @@ define('io.ox/mail/actions/vcard', [
     'gettext!io.ox/mail',
     'io.ox/contacts/api',
     'io.ox/core/http'
-], function (notifications, coreConfig, gt, contactAPI, http) {
+], function (notifications, coreSettings, gt, contactAPI, http) {
 
     'use strict';
 
@@ -46,7 +46,7 @@ define('io.ox/mail/actions/vcard', [
                         return;
                     }
 
-                    var contact = data[0], folder = coreConfig.get('folder/contacts');
+                    var contact = data[0], folder = coreSettings.get('folder/contacts');
 
                     function preloadParticipants() {
                         var dfd = $.Deferred();

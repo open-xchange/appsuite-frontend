@@ -14,10 +14,10 @@
 define('io.ox/mail/autoforward/settings/view-form', [
     'io.ox/mail/autoforward/settings/model',
     'io.ox/backbone/views',
+    'io.ox/core/settings/util',
     'io.ox/core/extensions',
-    'io.ox/backbone/mini-views',
     'less!io.ox/mail/autoforward/settings/style'
-], function (model, views, ext, mini) {
+], function (model, views, util, ext) {
 
     'use strict';
 
@@ -32,9 +32,15 @@ define('io.ox/mail/autoforward/settings/view-form', [
             index: 50,
             id: 'headline',
             draw: function () {
-                this.append($('<div>').append(
-                    $('<h1>').text(model.fields.headline)
-                ));
+                this.append(util.header(model.fields.headline));
+            }
+        });
+
+        ext.point(ref + '/edit/view').extend({
+            index: 100,
+            id: ref + '/edit/view/active',
+            draw: function (baton) {
+                this.append(util.checkbox('active', model.fields.active, baton.model));
             }
         });
 
@@ -42,12 +48,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
             index: 150,
             id: ref + '/edit/view/forwardmail',
             draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label for="forwardmail">').text(model.fields.forwardmail),
-                        new mini.InputView({ name: 'forwardmail', model: baton.model, className: 'form-control', id: 'forwardmail' }).render().$el
-                    )
-                );
+                this.append(util.input('forwardmail', model.fields.forwardmail, baton.model));
             }
         });
 
@@ -55,31 +56,15 @@ define('io.ox/mail/autoforward/settings/view-form', [
             index: 250,
             id: ref + '/edit/view/keep',
             draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').text(model.fields.keep).prepend(
-                                new mini.CheckboxView({ name: 'keep', model: baton.model }).render().$el
-                            )
-                        )
-                    )
-                );
+                this.append(util.checkbox('keep', model.fields.keep, baton.model));
             }
         });
 
         ext.point(ref + '/edit/view').extend({
             index: 350,
-            id: ref + '/edit/view/active',
+            id: ref + '/edit/view/stop',
             draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').text(model.fields.active).prepend(
-                                new mini.CheckboxView({ name: 'active', model: baton.model }).render().$el
-                            )
-                        )
-                    )
-                );
+                this.append(util.checkbox('processSub', model.fields.processSub, baton.model));
             }
         });
 

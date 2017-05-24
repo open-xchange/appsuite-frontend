@@ -50,10 +50,14 @@ define('io.ox/find/view-placeholder', ['io.ox/backbone/disposable'], function (D
 
         disable: function () {
             this.ui.field.attr('disabled', true);
+            this.ui.action.attr('disabled', true);
+            this.ui.field.find('input.token-input.tt-input').removeAttr('tabindex');
         },
 
         enable: function () {
             this.ui.field.removeAttr('disabled');
+            this.ui.action.removeAttr('disabled');
+            this.ui.field.find('input.token-input.tt-input').attr('tabindex', 0);
         },
 
         focused: function () {

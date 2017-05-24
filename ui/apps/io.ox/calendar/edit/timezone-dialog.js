@@ -37,9 +37,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label>')
-                        .attr('for', guid)
-                        .text(gt('Start date timezone')),
+                    $('<label>').attr('for', guid).text(gt('Start date timezone')),
                     new TimezonePicker({
                         id: guid,
                         name: 'startTimezone',
@@ -59,9 +57,7 @@ define('io.ox/calendar/edit/timezone-dialog', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="form-group">').append(
-                    $('<label>')
-                        .attr('for', guid)
-                        .text(gt('End date timezone')),
+                    $('<label>').attr('for', guid).text(gt('End date timezone')),
                     new TimezonePicker({
                         id: guid,
                         name: 'endTimezone',
@@ -100,11 +96,12 @@ define('io.ox/calendar/edit/timezone-dialog', [
         id: 'keep-utc',
         index: 400,
         draw: function (baton) {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="form-group">').append(
                     $('<div class="checkbox">').append(
-                        $('<label>').text(gt('Convert the entered start and end dates to match the modified timezones')).prepend(
-                            new mini.CheckboxView({ name: 'convertTime', model: baton.model }).render().$el
+                        $('<label>').attr('for', guid).text(gt('Convert the entered start and end dates to match the modified timezones')).prepend(
+                            new mini.CheckboxView({ id: guid, name: 'convertTime', model: baton.model }).render().$el
                         )
                     )
                 )

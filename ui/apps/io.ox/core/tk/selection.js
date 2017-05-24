@@ -87,6 +87,7 @@ define('io.ox/core/tk/selection', [
             isRange,
             getIndex,
             getNode,
+            markFirst,
             selectFirst,
             selectPrevious,
             selectLast,
@@ -129,9 +130,9 @@ define('io.ox/core/tk/selection', [
             return _.size(selectedItems) > 1;
         };
 
-        changed = function () {
+        changed = function (opt) {
             var list = self.get();
-            self.trigger('change', list);
+            self.trigger('change', list, opt);
             if (list.length === 0) {
                 self.trigger('empty');
             }
@@ -174,6 +175,23 @@ define('io.ox/core/tk/selection', [
                 selectOnly();
             } else {
                 apply(id, e);
+            }
+        };
+
+        markFirst = function (e) {
+            if (bHasIndex && observedItems.length) {
+                var
+                    item = observedItems[0],
+                    obj = item.data;
+
+                clear(e);
+                mark(obj);
+
+                var
+                    key = self.serialize(obj),
+                    $node = getNode(key);
+
+                $node.focus();
             }
         };
 
@@ -236,6 +254,12 @@ define('io.ox/core/tk/selection', [
                     } else {
                         selectPrevious(e);
                     }
+                    break;
+                case 36:
+                    selectFirst(e);
+                    break;
+                case 35:
+                    selectLast(e);
                     break;
                 case 32:
                     // last is the current selected/focussed
@@ -402,6 +426,7 @@ define('io.ox/core/tk/selection', [
         };
 
         select = function (id, silent) {
+            // `id` is not an identifier at all but the very selected object.
             if (id) {
                 fastSelect(id).intoViewport(options.scrollpane);
                 last = id;
@@ -411,7 +436,8 @@ define('io.ox/core/tk/selection', [
                     lastValidIndex = lastIndex;
                 }
                 if (silent !== true) {
-                    self.trigger('select', self.serialize(id));
+                    // append additional argument - the selected object that is named `id`.
+                    self.trigger('select', self.serialize(id), id); // 'select', fileId, fileObject
                 }
             }
         };
@@ -521,7 +547,8 @@ define('io.ox/core/tk/selection', [
                         lastValidIndex = lastIndex;
                     }
                     if (silent !== true) {
-                        self.trigger('mark', self.serialize(id));
+                        // append additional argument - the marked object that is named `id`.
+                        self.trigger('mark', self.serialize(id), id);
                     }
                 }
             };
@@ -778,6 +805,7 @@ define('io.ox/core/tk/selection', [
          * Select item
          */
         this.select = function (id) {
+            // `id` is not an identifier at all but the very selected object.
             select(id);
             changed();
             return this;
@@ -838,8 +866,8 @@ define('io.ox/core/tk/selection', [
 
             hash = null;
 
-            // event?
-            if (!_.isEqual(previous, this.get()) && silent !== true) changed();
+            // event?: check ids type-independet (strings vs. integer)
+            if (!_.isEqual(_(previous).map(self.serialize), _(this.get()).map(self.serialize)) && silent !== true) changed();
 
             return this;
         };
@@ -875,8 +903,18 @@ define('io.ox/core/tk/selection', [
             return this;
         };
 
+        this.markFirst = function () {
+            markFirst();
+            return this;
+        };
+
         this.selectFirst = function () {
             selectFirst();
+            return this;
+        };
+
+        this.selectLast = function () {
+            selectLast();
             return this;
         };
 
@@ -990,7 +1028,7 @@ define('io.ox/core/tk/selection', [
 
         this.retriggerUnlessEmpty = function () {
             if (this.get().length) {
-                changed();
+                changed({ retriggerUnlessEmpty: true });
             }
         };
 

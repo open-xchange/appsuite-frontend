@@ -16,13 +16,16 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/api/user',
     'io.ox/core/capabilities',
     'io.ox/contacts/api',
+    'io.ox/core/settings/util',
     'io.ox/mail/util',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
     'gettext!io.ox/mail',
     'io.ox/core/api/account',
-    'io.ox/backbone/mini-views'
-], function (settings, userAPI, capabilities, contactsAPI, mailUtil, ext, notifications, gt, api, mini) {
+    'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/colorpicker'
+], function (settings, userAPI, capabilities, contactsAPI, util, mailUtil, ext, notifications, gt, api, mini, Dropdown, Colorpicker) {
 
     'use strict';
 
@@ -47,6 +50,36 @@ define('io.ox/mail/settings/pane', [
             { label: gt('3 minutes'), value: '3_minutes' },
             { label: gt('5 minutes'), value: '5_minutes' },
             { label: gt('10 minutes'), value: '10_minutes' }
+        ],
+
+        optionsFontName = [
+            { label: gt('Use browser default'), value: 'browser-default' },
+            { label: 'Andale Mono', value: '"andale mono", monospace' },
+            { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
+            { label: 'Arial Black', value: '"arial black", sans-serif' },
+            { label: 'Book Antiqua', value: '"book antiqua", palatino, serif' },
+            { label: 'Comic Sans MS', value: '"comic sans ms", sans-serif' },
+            { label: 'Courier New', value: '"courier new", courier, monospace' },
+            { label: 'Georgia', value: 'georgia, palatino, serif' },
+            { label: 'Helvetica', value: 'helvetica, arial, sans-serif' },
+            { label: 'Impact', value: 'impact, sans-serif' },
+            { label: 'Symbol', value: 'symbol' },
+            { label: 'Tahoma', value: 'tahoma, arial, helvetica, sans-serif' },
+            { label: 'Terminal', value: 'terminal, monaco, monospace' },
+            { label: 'Times New Roman', value: '"times new roman", times, serif' },
+            { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
+            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
+        ],
+
+        optionsFontsize = [
+            { label: gt('Use browser default'), value: 'browser-default' },
+            { label: '8pt', value: '8pt' },
+            { label: '10pt', value: '10pt' },
+            { label: '11pt', value: '11pt' },
+            { label: '12pt', value: '12pt' },
+            { label: '13pt', value: '13pt' },
+            { label: '14pt', value: '14pt' },
+            { label: '16pt', value: '16pt' }
         ];
 
     // not possible to set nested defaults, so do it here
@@ -152,92 +185,130 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
-    function fieldset(text) {
-        var args = _(arguments).toArray();
-        return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
-    }
-
-    function checkbox(id, label) {
-        var args = _(arguments).toArray();
-        if (!isConfigurable(id)) return $();
-        return $('<div class="checkbox">').append(
-            $('<label class="control-label">').text(label).prepend(args.slice(2))
-        );
-    }
-
     function isConfigurable(id) {
         return settings.isConfigurable(id);
     }
 
     ext.point(POINT + '/pane').extend({
         index: 200,
+        id: 'display',
+        draw: function () {
+            this.append(util.fieldset(
+                gt('Display'),
+                // html
+                util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
+                // images
+                util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
+                // emojis
+                util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
+                // colored quotes
+                util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
+                // fixed width
+                util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
+                // // beautify plain text
+                // hidden until bug 52294 gets fixed
+                // util.checkbox('beautifyPlainText',
+                //     //#. prettify or beautify
+                //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                //     gt('Prettify plain text mails'),
+                //     settings
+                // ),
+                // read receipts
+                util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings)
+            ));
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 300,
         id: 'common',
         draw: function () {
 
             var contactCollect = !!capabilities.has('collect_email_addresses');
 
             this.append(
-                fieldset(
+                util.fieldset(
                     gt('Common'),
-                    checkbox(
-                        'removeDeletedPermanently',
-                        gt('Permanently remove deleted emails'),
-                        new mini.CheckboxView({ name: 'removeDeletedPermanently', model: settings }).render().$el
-                    ),
-                    contactCollect ? checkbox(
-                        'contactCollectOnMailTransport',
-                        gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
-                        new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: settings }).render().$el
-                    ) : [],
-                    contactCollect ? checkbox(
-                        'contactCollectOnMailAccess',
-                        gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
-                        new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: settings }).render().$el
-                    ) : [],
-                    // fixed width
-                    checkbox(
-                        'useFixedWidthFont',
-                        gt('Use fixed-width font for text mails'),
-                        new mini.CheckboxView({ name: 'useFixedWidthFont', model: settings }).render().$el
-                    ),
+                    util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
+                    contactCollect ? util.checkbox('contactCollectOnMailTransport', gt('Automatically collect contacts in the folder "Collected addresses" while sending'), settings) : [],
+                    contactCollect ? util.checkbox('contactCollectOnMailAccess', gt('Automatically collect contacts in the folder "Collected addresses" while reading'), settings) : [],
                     // mailto handler registration
-                    checkbox(
-                        'features/registerProtocolHandler',
-                        gt('Ask for mailto link registration'),
-                        new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: settings }).render().$el
-                    )
+                    util.checkbox('features/registerProtocolHandler', gt('Ask for mailto link registration'), settings)
                     .append(
                         // if supported add register now link
                         navigator.registerProtocolHandler ?
-                        $('<a href="#" >').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
+                        $('<a href="#" role="button">').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
                             e.preventDefault();
                             var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                             navigator.registerProtocolHandler(
                                 'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
                             );
                         }) : []
-                    )
+                    ),
+                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ? util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
                 )
             );
         }
     });
 
     ext.point(POINT + '/pane').extend({
-        index: 300,
+        index: 400,
         id: 'compose',
         draw: function () {
+            var update = function () {
+                    var $ul = this.$ul,
+                        li = $ul.find('[data-name="' + this.options.name + '"]'),
+                        self = this;
+                    // clear check marks
+                    li.children('i').attr('class', 'fa fa-fw fa-none');
+                    // loop over list items also allow compare non-primitive values
+                    li.each(function () {
+                        var node = $(this);
+                        node.filter('[role=menuitemcheckbox][aria-checked]').attr({ 'aria-checked': _.isEqual(node.data('value'), self.model.get(self.options.name)) });
+                        if (_.isEqual(node.data('value'), self.model.get(self.options.name))) node.children('i').attr('class', 'fa fa-fw fa-check');
+                    });
+                    // update drop-down toggle
+                    self.label();
+                },
+                fontFamilySelect,
+                fontSizeSelect,
+                exampleText,
+                defaultStyleSection,
+                getCSS = function () {
+                    var css = {
+                        'font-size': settings.get('defaultFontStyle/size', 'browser-default'),
+                        'font-family': settings.get('defaultFontStyle/family', 'browser-default'),
+                        'color': settings.get('defaultFontStyle/color', 'transparent')
+                    };
+
+                    // using '' as a value removes the attribute and thus any previous styling
+                    if (css['font-size'] === 'browser-default') css['font-size'] = '';
+                    if (css['font-family'] === 'browser-default') css['font-family'] = '';
+                    if (css.color === 'transparent') css.color = '';
+
+                    return css;
+                };
+
+            if (!_.device('smartphone')) {
+                fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' });
+                fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' });
+
+                _(optionsFontName).each(function (item, index) {
+                    if (index === 1) fontFamilySelect.divider();
+                    fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
+                });
+                _(optionsFontsize).each(function (item, index) {
+                    if (index === 1) fontSizeSelect.divider();
+                    fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
+                });
+            }
+
+
             this.append(
-                fieldset(gt('Compose'),
-                    checkbox(
-                        'appendVcard',
-                        gt('Append vCard'),
-                        new mini.CheckboxView({ name: 'appendVcard', model: settings }).render().$el
-                    ),
-                    checkbox(
-                        'appendMailTextOnReply',
-                        gt('Insert the original email text to a reply'),
-                        new mini.CheckboxView({ name: 'appendMailTextOnReply', model: settings }).render().$el
-                    )
+                util.fieldset(gt('Compose'),
+                    util.checkbox('appendVcard', gt('Append vCard'), settings),
+                    util.checkbox('appendMailTextOnReply', gt('Insert the original email text to a reply'), settings),
+                    util.checkbox('confirmReplyToMailingLists', gt('Confirm recipients when replying to a mailing list'), settings)
                     // $('<div class="checkbox">').append(
                     //     //#. this setting is about what happens when the user presses <enter>
                     //     //#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
@@ -246,27 +317,41 @@ define('io.ox/mail/settings/pane', [
                     //     )
                     // )
                 ),
-                isConfigurable('forwardMessageAs') ? fieldset(gt('Forward emails as'),
+                isConfigurable('forwardMessageAs') ? util.fieldset(
+                    gt('Forward emails as'),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: settings }).render().$el
                 ) : [],
 
-                isConfigurable('messageFormat') && _.device('!smartphone') ? fieldset(
+                isConfigurable('messageFormat') && _.device('!smartphone') ? util.fieldset(
                     gt('Format emails as'),
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
                 ) : [],
 
-                $('<div>').addClass('settings sectiondelimiter'),
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle sr-only').append(
-                        $('<h2>').text(gt('Additional settings'))
-                    ),
+                (_.device('smartphone') ? '' : defaultStyleSection = [
+                    $('<div class="settings sectiondelimiter">'),
+                    util.fieldset(gt('Default font style'),
+                        $('<dev class="col-xs-12 col-md-12">').append(
+                            $('<div class="row">').append(
+                                fontFamilySelect.render().$el,
+                                fontSizeSelect.render().$el,
+                                $('<div class="fontcolorButton">').append(
+                                    new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
+                                )
+                            ),
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look like.')).css(getCSS()))
+                        )
+                    )]
+                ),
+
+                $('<div class="settings sectiondelimiter">'),
+                util.fieldset(gt('Additional settings'),
                     $('<dev class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
+                            $('<label for="defaultSendAddress">').text(gt('Default sender address')),
                             new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: settings, id: 'defaultSendAddress', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
+                            $('<label for="autoSaveDraftsAfter">').text(gt('Auto-save email drafts')),
                             new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: settings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(
@@ -276,41 +361,30 @@ define('io.ox/mail/settings/pane', [
                     )
                 )
             );
-        }
-    });
 
-    ext.point(POINT + '/pane').extend({
-        index: 400,
-        id: 'display',
-        draw: function () {
-            this.append(fieldset(
-                gt('Display'),
-                checkbox(
-                    'allowHtmlMessages',
-                    gt('Allow html formatted emails'),
-                    new mini.CheckboxView({ name: 'allowHtmlMessages', model: settings }).render().$el
-                ),
-                checkbox(
-                    'allowHtmlImages',
-                    gt('Allow pre-loading of externally linked images'),
-                    new mini.CheckboxView({ name: 'allowHtmlImages', model: settings }).render().$el
-                ),
-                checkbox(
-                    'displayEmoticons',
-                    gt('Display emoticons as graphics in text emails'),
-                    new mini.CheckboxView({ name: 'displayEmoticons', model: settings }).render().$el
-                ),
-                checkbox(
-                    'isColorQuoted',
-                    gt('Color quoted lines'),
-                    new mini.CheckboxView({ name: 'isColorQuoted', model: settings }).render().$el
-                ),
-                checkbox(
-                    'sendDispositionNotification',
-                    gt('Show requests for read receipts'),
-                    new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
-                )
-            ));
+            if (!_.device('smartphone')) {
+                settings.on('change:defaultFontStyle/size change:defaultFontStyle/family change:defaultFontStyle/color', function () {
+                    exampleText.css(getCSS());
+
+                    settings.save();
+                });
+
+                _(fontFamilySelect.$ul.find('a')).each(function (item, index) {
+                    // index 0 is browser default
+                    if (index === 0) return;
+                    $(item).css('font-family', $(item).data('value'));
+                });
+
+                _(defaultStyleSection).each(function (obj) {
+                    obj.toggle(settings.get('messageFormat') !== 'text');
+                });
+
+                settings.on('change:messageFormat', function (value) {
+                    _(defaultStyleSection).each(function (obj) {
+                        obj.toggle(value !== 'text');
+                    });
+                });
+            }
         }
     });
 

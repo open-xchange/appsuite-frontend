@@ -25,8 +25,8 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device).to.be.a('function');
         });
 
-        it('should return an object if no param was given', function () {
-            expect(_.device()).to.be.an('object');
+        it('should return an object if debug param was given', function () {
+            expect(_.device('debug')).to.be.an('object');
         });
 
         it('should extend underscore with some helper functions and objects', function () {
@@ -78,7 +78,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
 
         _(userAgents.invalid).each(function (a, number) {
             it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
-                var spy = sinon.stub(console, 'warn', function () {});
+                var spy = sinon.stub(console, 'warn').callsFake(function () {});
                 _.device.loadUA(userAgents.invalid[number]);
                 //FIXME: really test spy
                 //expect(spy).toHaveBeenCalledWithMatch('Could not detect browser, using fallback');

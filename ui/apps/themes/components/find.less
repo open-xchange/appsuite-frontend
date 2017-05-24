@@ -34,8 +34,7 @@
         // adjust tokenfield (8 = outer padding, 1 = border)
         @placeholder-padding: @default-padding - 8 - 1;
         @placeholder-color: #aaa;
-        @action-color: #777;
-        @action-hover-color: #aaa;
+        @action-color: #767676;
 
         padding: 4px 8px;
         line-height: 20px;
@@ -104,10 +103,15 @@
             .action {
                 pointer-events: auto;
                 color: @action-color;
-                // overwrite fa line-height
-                line-height: 30px;
+                padding-right: 23px;
 
-                &:hover { color: @action-hover-color; }
+                &:hover { color: @link-color; }
+                &:focus {
+                    outline: 0;
+                    background: @selected-background;
+                    color: @selected-color;
+                    border-radius: 0 3px 3px 0;
+                }
             }
         }
 
@@ -172,7 +176,13 @@
                 }
             }
 
-            .search-box-filter { display: block; }
+            .search-box-filter {
+                display: block;
+                .classic-toolbar {
+                    // max-width (.search-box) + padding (.io-ox-find)
+                    width: calc(~"100% - 566px");
+                }
+            }
         }
     }
 }

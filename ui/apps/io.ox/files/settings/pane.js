@@ -16,16 +16,20 @@ define('io.ox/files/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
-    'io.ox/backbone/mini-views'
-], function (settings, ext, capabilities, gt, mini) {
+    'io.ox/backbone/mini-views',
+    'io.ox/core/settings/util'
+], function (settings, ext, capabilities, gt, mini, util) {
 
     'use strict';
 
     // not really relevant for guests (as of today)
     if (capabilities.has('guest')) return;
 
-    function isConfigurable(id) {
-        return settings.isConfigurable(id);
+    function optionsAutoplayPause() {
+        return _.map([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 50, 60], function (i) {
+            i = String(i);
+            return { label: i, value: i };
+        });
     }
 
     var POINT = 'io.ox/files/settings/detail';
@@ -44,7 +48,7 @@ define('io.ox/files/settings/pane', [
         index: 100,
         id: 'filessettings',
         draw: function () {
-            var holder = $('<div>').css('max-width', '800px');
+            var holder = $('<div class="io-ox-drive-settings">');
             this.append(holder);
             ext.point(POINT + '/pane').invoke('draw', holder);
         }
@@ -54,9 +58,7 @@ define('io.ox/files/settings/pane', [
         index: 100,
         id: 'header',
         draw: function () {
-            this.append(
-                $('<h1>').text(gt.pgettext('app', 'Drive'))
-            );
+            this.append(util.header(gt.pgettext('app', 'Drive')));
         }
     });
 
@@ -64,18 +66,13 @@ define('io.ox/files/settings/pane', [
         index: 200,
         id: 'common',
         draw: function () {
-
-            if (!isConfigurable('showHidden')) return;
+            if (!settings.isConfigurable('showHidden')) return;
 
             this.append(
                 $('<div class="form-group">').append(
                     $('<div class="row">').append(
                         $('<div class="col-sm-8">').append(
-                            $('<div class="checkbox">').append(
-                                $('<label class="control-label">').text(gt('Show hidden files and folders')).prepend(
-                                    new mini.CheckboxView({ name: 'showHidden', model: settings }).render().$el
-                                )
-                            )
+                            util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
                         )
                     )
                 )
@@ -94,11 +91,31 @@ define('io.ox/files/settings/pane', [
 
             ];
             this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle').append(
-                        $('<h2>').text(gt('Adding files with identical names'))
-                    ),
+                util.fieldset(gt('Adding files with identical names'),
                     new mini.RadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
+                )
+            );
+        }
+    });
+
+    ext.point(POINT + '/pane').extend({
+        index: 400,
+        id: 'displayerviewAutoplay',
+        draw: function () {
+            var preferences = [
+                { label: gt('Show all images just once'), value: 'loopOnceOnly' },
+                { label: gt('Repeat slideshow'), value: 'loopEndlessly' }
+            ];
+            this.append(
+                util.fieldset(gt('Slideshow / Autoplay mode for images'),
+                    new mini.RadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
+
+                    $('<div class="form-group expertmode">').append(
+                        $('<div class="row" style="margin: auto">').append(
+                            //.# Used as settings label, User can select a numeric value of seconds. Final "sentence" i.e. "show all images for 5 seconds"
+                            util.inlineSelect('autoplayPause', gt('Show all images for'), gt('seconds'), settings, optionsAutoplayPause())
+                        )
+                    )
                 )
             );
         }

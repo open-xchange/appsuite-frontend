@@ -21,6 +21,10 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
             this.wizard = new Wizard();
         });
 
+        afterEach(function () {
+            this.wizard.close();
+        });
+
         describe('Adding steps.', function () {
 
             it('has no steps', function () {
@@ -45,11 +49,7 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
         describe('Navigation.', function () {
 
             beforeEach(function () {
-                this.wizard = new Wizard().step().end().step().end();
-            });
-
-            afterEach(function () {
-                this.wizard.close();
+                this.wizard.step().end().step().end();
             });
 
             it('offers "next"', function () {
@@ -100,16 +100,26 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
                 expect(spyBack.called, 'step:back event').to.be.true;
                 expect(spyClose.called, 'step:close event').to.be.true;
             });
+
+            it('should not fail with resize events sent shortly before wizard closed', function () {
+                var timer = sinon.useFakeTimers();
+                this.wizard
+                    .step({ referTo: '#io-ox-core' })
+                    .end()
+                    .start();
+                $(window).trigger('resize.wizard-step');
+                this.wizard.close();
+
+                //enough time for all timers to timeout
+                timer.tick(60000);
+                timer.restore();
+            });
         });
 
         describe('Execution.', function () {
 
             beforeEach(function () {
-                this.wizard = new Wizard().step().end().step().end();
-            });
-
-            afterEach(function () {
-                this.wizard.close();
+                this.wizard.step().end().step().end();
             });
 
             it('shows up in the DOM', function () {
@@ -122,10 +132,10 @@ define(['io.ox/core/tk/wizard'], function (Wizard) {
                 expect($('.wizard-step').length).to.equal(0);
             });
 
-            it.skip('shows proper content', function () {
+            it('shows proper content', function () {
                 this.wizard.steps[0].content('Lorem ipsum');
                 this.wizard.start();
-                expect($('.wizard-step .content').text()).to.equal('Lorem ipsum');
+                expect($('.wizard-step .wizard-content').text()).to.equal('Lorem ipsum');
             });
 
             it('has proper "start" button', function () {

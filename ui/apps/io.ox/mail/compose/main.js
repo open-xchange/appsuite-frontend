@@ -55,6 +55,10 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         };
 
         app.failRestore = function (point) {
+            if (point.restoreById) {
+                delete point.restoreById;
+                return compose('edit')(point);
+            }
             point.initial = false;
             // special flag/handling for 'replace' cause we want
             // to keep the attachments that will be removed otherwise
@@ -63,12 +67,13 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.email.gui.html#ox.appsuite.user.reference.email.gui.create';
+            return 'ox.appsuite.user.sect.email.gui.create.html';
         };
 
         function compose(type) {
 
             return function (obj) {
+
                 var def = $.Deferred();
                 _.url.hash('app', 'io.ox/mail/compose:' + type);
 
@@ -83,15 +88,20 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                 win.busy().show(function () {
                     require(['io.ox/mail/compose/bundle']).then(function () {
                         return require(['io.ox/mail/compose/view', 'io.ox/mail/compose/model']);
-                    }).then(function (MailComposeView, MailComposeModel) {
-                        var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type');
+                    })
+                    .then(function (MailComposeView, MailComposeModel) {
+                        var data = keepData(obj) ? obj : _.pick(obj, 'id', 'folder_id', 'mode', 'csid', 'content_type', 'security');
                         app.model = new MailComposeModel(data);
                         app.view = new MailComposeView({ app: app, model: app.model });
-                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
                         return app.view.fetchMail(data);
-                    }).then(function () {
+                    })
+                    .then(function () {
+                        win.nodes.main.addClass('scrollable').append(app.view.render().$el);
+                    })
+                    .then(function () {
                         return app.view.setMail();
-                    }).done(function () {
+                    })
+                    .done(function () {
                         // calculate right margin for to field (some languages like chinese need extra space for cc bcc fields)
                         win.nodes.main.find('.tokenfield').css('padding-right', 14 + win.nodes.main.find('.recipient-actions').width() + win.nodes.main.find('[data-extension-id="to"] .has-picker').length * 20);
                         // Set window and toolbars visible again
@@ -105,6 +115,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'gettext!io.ox/mail'], func
                     .fail(function (e) {
                         require(['io.ox/core/notifications'], function (notifications) {
                             notifications.yell(e);
+                            // makes no sense to show discard changes popup here
+                            app.model.dirty(false);
                             app.quit();
                             def.reject();
                         });

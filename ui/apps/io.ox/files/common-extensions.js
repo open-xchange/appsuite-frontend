@@ -56,16 +56,49 @@ define('io.ox/files/common-extensions', [
         },
 
         filename: function (baton, ellipsis) {
-            var name = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
+            var
+                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '',
+                isWrapFilename = false;
+
             // add suffix for locked files
-            if (baton.model.isLocked()) name += ' (' + gt('Locked') + ')';
+            if (baton.model.isLocked()) {
+
+                filename += ' (' + gt('Locked') + ')';
+            }
             // fix long names
-            if (ellipsis) name = _.ellipsis(name, ellipsis);
-            // make underscore wrap as well
-            name = name.replace(/_/g, '_\u200B');
+            if (ellipsis) {
+
+                filename = _.ellipsis(filename, ellipsis);
+
+                if (ellipsis.optimizeWordbreak !== true) {
+                    isWrapFilename = true;
+                }
+            } else {
+                isWrapFilename = true;
+            }
+            if (isWrapFilename) {
+
+                // make underscore wrap as well
+                filename = filename.replace(/_/g, '_\u200B');
+            }
             this.append(
-                $('<div class="filename">').text(name)
+                $('<div class="filename">').text(filename)
             );
+        },
+        filenameTooltip: function (baton) {
+            var
+                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
+
+            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
+                title: _.breakWord(filename),
+                trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
+              //placement: 'right auto',                // top | bottom | left | right | auto.
+                placement: 'bottom auto',               // top | bottom | left | right | auto.
+                animation: true,                        // false
+              //delay: { 'show': 400, 'hide': 50000 },
+                delay: { 'show': 400 },
+                viewport: { selector: '.list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
+            });
         },
 
         mailSubject: function (baton, ellipsis) {
@@ -184,7 +217,7 @@ define('io.ox/files/common-extensions', [
                     var retina = false,
                         width = retina ? 400 : 200,
                         height = retina ? 300 : 150,
-                        url = baton.model.getUrl(preview, { width: width, height: height, scaletype: 'cover' }),
+                        url = baton.model.getUrl(preview, { width: width, height: height, scaleType: 'cover' }),
                         img = $('<img class="dummy-image invisible">').data('retry', 0);
 
                     // fix URL - would be cool if we had just one call for thumbnails ...

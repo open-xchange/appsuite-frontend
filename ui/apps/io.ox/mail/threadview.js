@@ -49,7 +49,7 @@ define('io.ox/mail/threadview', [
                             $('<i class="fa fa-chevron-down" aria-hidden="true">')
                         )
                     )
-                ).attr('role', 'toolbar')
+                ).attr('role', 'navigation')
             );
         }
     });
@@ -256,6 +256,19 @@ define('io.ox/mail/threadview', [
         },
 
         autoSelectMail: function () {
+            // automatic selection of first seen mail on mailapp start
+            if (this.autoSelect) {
+                for (var a = 0, mail; mail = this.collection.at(a); a++) {
+                    // last or first seen?
+                    if (a === this.collection.length - 1 || !util.isUnseen(mail.toJSON())) {
+                        this.showMail(mail.cid);
+                        break;
+                    }
+                }
+                delete this.autoSelect;
+                return;
+            }
+
             for (var i = this.collection.length - 1, model; model = this.collection.at(i); i--) {
                 // most recent or first unseen?
                 if (i === 0 || util.isUnseen(model.toJSON())) {
@@ -282,6 +295,10 @@ define('io.ox/mail/threadview', [
             // use new model
             this.model = model;
             this.threaded = !!threaded;
+            if (!this.threaded) {
+                // autoselect after mail app start
+                delete this.autoSelect;
+            }
             // listen for changes
             this.listenTo(this.model, 'change:thread', this.onChangeModel);
             // reset collection
@@ -309,6 +326,9 @@ define('io.ox/mail/threadview', [
             this.$messages.empty();
             this.$el.scrollTop(0);
 
+            // clear timeout of previous rendering to prevent race conditions
+            clearTimeout(this.renderItemTimoutId);
+
             this.updateHeader();
 
             this.$el.find('.thread-view-list').show();
@@ -316,16 +336,24 @@ define('io.ox/mail/threadview', [
             // draw thread list
             var self = this,
                 threadId = this.collection.first().get('cid'),
+                autoOpenModel;
+            // used on mailapp start
+            if (this.autoSelect) {
+                autoOpenModel = this.collection.reduce(function (acc, model) {
+                    return !util.isUnseen(model.toJSON()) ? model : acc;
+                }, this.collection.last());
+            } else {
                 autoOpenModel = this.collection.reduce(function (acc, model) {
                     return util.isUnseen(model.toJSON()) ? model : acc;
                 }, this.collection.first());
+            }
 
             function renderItem(list, finalCallback) {
                 var model = list.shift();
                 if (threadChanged()) return;
                 self.$messages.append(self.renderListItem(model));
                 if (autoOpenModel === model) self.autoSelectMail();
-                if (list.length) setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
+                if (list.length) self.renderItemTimoutId = setTimeout(renderItem, 0, list, finalCallback); else finalCallback();
             }
 
             function threadChanged() {
@@ -479,6 +507,9 @@ define('io.ox/mail/threadview', [
                     $(e.target).closest('article').focus();
                 });
             }
+
+            // store app if in options. needed by the mail detailview to access sort options
+            if (options.app) this.app = options.app;
         },
 
         // return alls items of this list
@@ -494,11 +525,11 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ app: this.app, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });
-            return view.render().$el.attr({ tabindex: '0' });
+            return view.render().$el.attr({ tabindex: -1 });
         },
 
         // update zIndex for all list-items (descending)
@@ -562,7 +593,7 @@ define('io.ox/mail/threadview', [
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
                     'io.ox/mail/detail/header': ['paper-clip'],
-                    'io.ox/mail/detail/header/row1': ['flag-picker']
+                    'io.ox/mail/detail/header/row1': ['color-picker', 'flag-toggle', 'security']
                 }
             });
 

@@ -77,7 +77,7 @@
 
 @outline-color:                         #006897;
 @defaultBorderColor:                    #ddd;
-
+@error-text-color:                      #a94442; // for validation error, etc.
 // Button colors
 //----------------------
 @btn-primary-bg:                @link-color;
@@ -116,9 +116,9 @@
 
 // badge
 @notification-icon-color:               rgba(255, 255, 255, 1);
-@notification-icon-background: 			rgba(200, 0, 0, 1);
+@notification-icon-background:          rgba(200, 0, 0, 1);
 @notification-icon-color-active:        #333;
-@notification-icon-background-active: 	#fff; 	// alt. bright orange: #ff4700
+@notification-icon-background-active:   #fff;   // alt. bright orange: #ff4700
 @notification-pane-background:          rgba(255, 255, 255, 1);
 @notification-pane-item-background:     rgba(0, 0, 0, 0.10);
 
@@ -150,12 +150,12 @@
 @topbar-background:                     #3C73AA;
 
 // toolbar
-@toolbar:                               #08c;
+@toolbar:                               #3C73AA;
 @toolbar-button-accent:                 lighten(@link-color, 0%);
 @toolbar-button-color:                  #bbb;
 @toolbar-link-color:                    lighten(@toolbar, 25%);
 @toolbar-link-disabled-color:           @link-disabled-color;
-@toolbar-focus-color:                   #08c;
+@toolbar-focus-color:                   #3C73AA;
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
@@ -203,7 +203,8 @@
 
 @weekview-appointment-lasso:            #D0EAFF;    /* light blue */
 @weekview-background:                   #fff;       /* white */
-@weekview-border:                       #ccc;
+@weekview-border:                       #c0c0c0;
+@weekview-border-light:                 #e6e6e6;
 @weekview-time-width:                   80px;
 @weekview-footer-height:                34px;
 @weekview-working-time-border:          #333;
@@ -277,3 +278,7 @@
 @premium-toolbar-header-background:     lighten(@premium-toolbar-background, 10%);
 @premium-toolbar-link-color:            #fff;
 @premium-toolbar-header-color:          lighten(@premium-toolbar-header-background, 35%);
+
+// onboarding app icons
+@onboarding-mailapp:                    'apps/themes/icons/default/apps/mailapp.png';
+@onboarding-driveapp:                   'apps/themes/icons/default/apps/driveapp.png';

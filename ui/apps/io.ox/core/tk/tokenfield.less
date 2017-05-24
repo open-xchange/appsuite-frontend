@@ -17,6 +17,15 @@
 
 .tokenfield {
 
+    .drag-counter {
+        top: -10px;
+        bottom: auto;
+        right: -16px;
+        left: auto;
+        min-width: 30px;
+        width: auto;
+    }
+
     &.form-control {
         padding: 3px 3px 0 3px;
         height: auto;
@@ -53,16 +62,23 @@
     }
 
     .twitter-typeahead {
+        // there is a special case where this is needed: chinese UI + firefox + mailto link registration bar open
+        max-width: 100%;
 
         & > .token-input.tt-input,
         & > .token-input.tt-hint {
             height: 22px;
             border: 0;
             padding: 0 5px;
+            // there is a special case where this is needed: chinese UI + firefox + mailto link registration bar open
+            max-width: 100%;
+            margin: 0;
         }
 
-        & > .token-input.tt-hint,
-        & > .token-input.tt-input { min-width: @tokenfield-menu-width !important; }
+        .tt-hint {
+            // don't cut of hints in firefox
+            width: 100% !important;
+        }
 
         .tt-dropdown-menu {
             width: @tokenfield-menu-width;

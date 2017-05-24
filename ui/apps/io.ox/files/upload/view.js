@@ -103,7 +103,7 @@ define('io.ox/files/upload/view', [
 
                 if (this.model.get('progress') < 1) {
                     removeIcon.append(
-                        $('<a href=# class="remove-link">').text('Cancel')
+                        $('<a href=# class="remove-link">').text(gt('Cancel'))
                     );
                 } else {
                     removeIcon.append(

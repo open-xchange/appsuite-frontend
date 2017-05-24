@@ -11,7 +11,10 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
+define('io.ox/backbone/mini-views/help', [
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (settings, gt) {
 
     'use strict';
 
@@ -81,9 +84,12 @@ define('io.ox/backbone/mini-views/help', ['gettext!io.ox/core'], function (gt) {
             if (!_.isString(this.options.content)) {
                 this.options.content.addClass(this.options.iconClass);
             }
+
+            if (!settings.get('features/showHelpLinks', true)) this.$el.addClass('hidden');
         },
 
         render: function () {
+            if (this.$el.hasClass('hidden')) return this;
             this.$el
                 .append(this.options.content)
                 .attr({

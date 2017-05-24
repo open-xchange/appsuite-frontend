@@ -74,8 +74,8 @@ define('io.ox/calendar/actions/delete', [
                     if (hasRec) {
                         new dialogs.ModalDialog()
                             .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('appointment', gt('Delete appointment'), 'appointment')
-                            .addPrimaryButton('series', gt('Delete whole series'), 'series')
+                            .addPrimaryButton('series', gt('Series'), 'series')
+                            .addButton('appointment', gt('Appointment'), 'appointment')
                             .addButton('cancel', gt('Cancel'), 'cancel')
                             .show()
                             .done(function (action) {

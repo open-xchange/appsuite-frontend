@@ -33,7 +33,11 @@ define('io.ox/participants/detail', [
         return 'mailaddress' in obj && 'description' in obj;
     }
 
-    function drawParticipant(obj, hash) {
+    function drawParticipant(obj, hash, options) {
+        options = _.extend({
+            //halo views
+            halo: true
+        }, options);
         // initialize vars
         var key = obj.mail || obj.id,
             conf = hash[key] || { status: 0, comment: '' },
@@ -65,17 +69,19 @@ define('io.ox/participants/detail', [
         }
 
         var isResource = looksLikeResource(obj);
-        node = $('<li class="participant" tabindex="0">')
-            .addClass(isResource ? 'halo-resource-link' : 'halo-link')
-            .on('keydown', function (e) {
-                if (e.which === 13) {
-                    $(this).click();
-                }
-            });
+
+        node = $('<li class="participant">');
+        if (options.halo) {
+            node.attr('tabindex', 0)
+                .addClass(isResource ? 'halo-resource-link' : 'halo-link')
+                .on('keydown', function (e) {
+                    if (e.which === 13) $(this).click();
+                });
+        }
 
         if (isResource) {
             node.append(
-                $('<a href="#">').addClass(personClass + ' ' + statusClass).append(text)
+                options.halo ? $('<a href="#">').addClass(personClass + ' ' + statusClass).attr('title', text).append(text) : text
             );
         } else {
             node.append(
@@ -85,7 +91,7 @@ define('io.ox/participants/detail', [
                 // has confirmation icon?
                 confirm !== '' ? $('<span class="status" aria-hidden="true">').addClass(statusClass).append(confirm) : '',
                 // has confirmation comment?
-                comment !== '' ? $('<div class="comment">').text(gt.noI18n(conf.comment)) : ''
+                comment !== '' ? $('<div class="comment">').text(conf.comment) : ''
             );
         }
 
@@ -94,13 +100,30 @@ define('io.ox/participants/detail', [
         return node;
     }
 
+    function filterParticipants(e) {
+        e.preventDefault();
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active').attr('aria-pressed', false);
+            $('.participant', e.data.participants).show();
+        } else {
+            $('.participant', e.data.participants)
+                .show()
+                .find('span.person:not(.' + e.data.res.css + ')')
+                .parent()
+                .toggle();
+            $(this).addClass('active').attr('aria-pressed', true);
+        }
+    }
+
     function ParticipantsView(baton, options) {
 
         options = _.extend({
             //show summary
             summary: true,
             //no inline links (provide extensionpoint id here to make them show)
-            inlineLinks: false
+            inlineLinks: false,
+            //halo views
+            halo: true
         }, options);
 
         this.draw = function () {
@@ -114,7 +137,7 @@ define('io.ox/participants/detail', [
             var list = baton.data.participants || {},
                 $i = list.length,
                 MIN = 0,
-                participants = $i > MIN ? $('<div>').addClass('participants-view') : $(),
+                participants = $i > MIN ? $('<div class="participants-view">') : $(),
                 confirmations = {};
 
             // has participants? should always be true for appointments. Was $i > 1 (see bug #23295).
@@ -176,10 +199,10 @@ define('io.ox/participants/detail', [
                     if (userList.length > 0) {
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').append(
+                                $('<legend class="io-ox-label">').append(
                                     $('<h2>').text(gt('Participants'))
                                 ),
-                                intList = $('<ul>').addClass('participant-list list-inline')
+                                intList = $('<ul class="participant-list list-inline">')
                             )
                         );
                     }
@@ -194,7 +217,7 @@ define('io.ox/participants/detail', [
                             return obj.sort_name;
                         })
                         .each(function (obj) {
-                            intList.append(drawParticipant(obj, confirmations));
+                            intList.append(drawParticipant(obj, confirmations, options));
                         });
 
                     //external Participants get their own section
@@ -202,16 +225,16 @@ define('io.ox/participants/detail', [
                     if (external.length > 0) {
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').append(
+                                $('<legend class="io-ox-label">').append(
                                     $('<h2>').text(gt('External participants'))
                                 ),
-                                extList = $('<ul>').addClass('participant-list list-inline')
+                                extList = $('<ul class="participant-list list-inline">')
                             )
                         );
                     }
                     // loop over external participants
                     _(external).each(function (obj) {
-                        extList.append(drawParticipant(obj, confirmations));
+                        extList.append(drawParticipant(obj, confirmations, options));
                     });
 
                     // loop over groups
@@ -234,10 +257,10 @@ define('io.ox/participants/detail', [
                                 // new section
                                 participants.append(
                                     $('<fieldset>').append(
-                                        $('<legend>').addClass('group io-ox-label').append(
-                                            $('<h2>').text(gt.noI18n(obj.display_name + ':'))
+                                        $('<legend class="group io-ox-label">').append(
+                                            $('<h2>').text(obj.display_name + ':')
                                         ),
-                                        glist = $('<ul>').addClass('participant-list list-inline')
+                                        glist = $('<ul class="participant-list list-inline">')
                                     )
                                 );
 
@@ -265,10 +288,10 @@ define('io.ox/participants/detail', [
                         var plist;
                         participants.append(
                             $('<fieldset>').append(
-                                $('<legend>').addClass('io-ox-label').append(
+                                $('<legend class="io-ox-label">').append(
                                     $('<h2>').text(gt('Resources'))
                                 ),
-                                plist = $('<ul>').addClass('participant-list list-inline')
+                                plist = $('<ul class="participant-list list-inline">')
                             )
                         );
                         // loop over resources
@@ -278,7 +301,7 @@ define('io.ox/participants/detail', [
                                 return obj.display_name;
                             })
                             .each(function (obj) {
-                                plist.append(drawParticipant(obj, confirmations));
+                                plist.append(drawParticipant(obj, confirmations, options));
                             });
                     }
                 })
@@ -286,55 +309,28 @@ define('io.ox/participants/detail', [
                     // add summary
                     var sumData = util.getConfirmationSummary(confirmations);
                     if (options.summary && sumData.count > 3) {
-                        var sum = $('<ul>').attr('aria-label', gt('Summary')).addClass('summary list-inline');
-                        _.each(sumData, function (res) {
-                            if (res.count > 0) {
-                                sum.append(
-                                    $('<li>').append(
-                                        $('<a>')
-                                            .attr({
-                                                href: '#',
-                                                'aria-label': res.title + ' ' + res.count,
-                                                role: 'button',
-                                                'aria-pressed': false
-                                            })
-                                            .addClass('countgroup')
-                                            .text(res.count)
-                                            .prepend(
-                                                $('<span>')
-                                                    .addClass('status ' + res.css)
-                                                    .append(res.icon)
-                                            )
-                                            .on('click', function (e) {
-                                                e.preventDefault();
-                                                if ($(this).hasClass('badge')) {
-                                                    $(this).removeClass('badge').attr('aria-pressed', false);
-                                                    $('.participant', participants)
-                                                        .show();
-                                                } else {
-                                                    $('.participant', participants)
-                                                        .show()
-                                                        .find('span.person:not(.' + res.css + ')')
-                                                        .parent()
-                                                        .toggle();
-                                                    $('.countgroup', participants).removeClass('badge');
-                                                    $(this).addClass('badge').attr('aria-pressed', true);
-                                                }
-                                            })
-                                    )
-                                );
-                            }
-                        });
-                        participants.find('legend').first().append(sum);
+                        participants.find('legend').first().append(
+                            $('<ul class="summary list-inline pull-right">').attr('aria-label', gt('Summary')).append(
+                                _.map(sumData, function (res) {
+                                    if (!_.isNumber(res.count) || res.count <= 0) return;
+
+                                    return $('<li>').append(
+                                        $('<a href="#" role="button" aria-pressed="false">').text(res.count).attr('aria-label', res.title + ' ' + res.count).prepend(
+                                            $('<span class="status">').addClass(res.css).append(res.icon)
+                                        )
+                                        .on('click', { participants: participants, res: res }, filterParticipants)
+                                    );
+                                })
+                            )
+                        );
                     }
-                    if (changedBaton) {
-                        //remove temporary changes
-                        delete baton.data;
-                    }
+
+                    //remove temporary changes
+                    if (changedBaton) delete baton.data;
+
                     // draw action links if extension point is provided
-                    if (options.inlineLinks) {
-                        ext.point(options.inlineLinks).invoke('draw', participants, baton);
-                    }
+                    if (options.inlineLinks) ext.point(options.inlineLinks).invoke('draw', participants, baton);
+
                     // finish
                     participants.idle();
                 });

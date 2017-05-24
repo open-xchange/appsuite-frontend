@@ -40,9 +40,7 @@ define('io.ox/core/notifications/badgeview', [
             var count = this.model.get('count'),
                 //#. %1$d number of notifications in notification area
                 //#, c-format
-                a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count),
-                //#. open closed state of the notification area, used in aria label
-                a11yState = this.$el.attr('aria-pressed') !== 'false' ? gt('expanded') : gt('collapsed');
+                a11y = gt.format(gt.ngettext('%1$d notification.', '%1$d notifications.', count), count);
             if (count === 0) {
                 this.$el.addClass('no-notifications');
             } else {
@@ -52,7 +50,7 @@ define('io.ox/core/notifications/badgeview', [
             this.model.set('a11y', a11y, { silent: true });
             this.nodes.badge.toggleClass('empty', count === 0);
             this.nodes.icon.attr('title', a11y);
-            this.$el.attr('aria-label', a11y + ' ' + a11yState);
+            this.$el.attr('aria-label', a11y);
             this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
             // don't alert if there is no notification or the number did not change
             if (count !== 0 && this.model.previous('count') !== count) {
@@ -60,12 +58,8 @@ define('io.ox/core/notifications/badgeview', [
             }
         },
         onToggle: function (open) {
-            //#. open closed state of the notification area, used in aria label
-            var a11yState = open ? gt('expanded') : gt('collapsed');
-
             this.$el.attr({
-                'aria-pressed': !!open,
-                'aria-label': this.model.get('a11y') + ' ' + a11yState
+                'aria-expanded': !!open
             });
         },
         render: function () {
@@ -73,7 +67,8 @@ define('io.ox/core/notifications/badgeview', [
             this.$el.attr({
                 href: '#',
                 role: 'button',
-                'aria-pressed': false
+                'aria-expanded': false,
+                'aria-controls': 'io-ox-notifications-display'
             })
             .append(
                 this.nodes.icon = $('<i class="fa fa-bell launcher-icon" aria-hidden="true">'),

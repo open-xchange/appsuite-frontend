@@ -18,90 +18,100 @@ define('io.ox/core/api/mailfilter', [
 
     'use strict';
 
-    var api = {
+    var configHash = {},
 
-        /**
-         * delete rule
-         * @param  {string} ruleId
-         * @return { deferred }
-         */
-        deleteRule: function (ruleId) {
+        api = {
 
-            return http.PUT({
-                module: 'mailfilter',
-                params: { action: 'delete' },
-                data: { id: ruleId }
-            });
-        },
+            /**
+             * delete rule
+             * @param  {string} ruleId
+             * @return { deferred }
+             */
+            deleteRule: function (ruleId) {
 
-        /**
-         * create rule
-         * @param  {object} data
-         * @return { deferred }
-         */
-        create: function (data) {
+                return http.PUT({
+                    module: 'mailfilter/v2',
+                    params: { action: 'delete' },
+                    data: { id: ruleId }
+                });
+            },
 
-            return http.PUT({
-                module: 'mailfilter',
-                params: { action: 'new' },
-                data: data
-            });
-        },
+            /**
+             * create rule
+             * @param  {object} data
+             * @return { deferred }
+             */
+            create: function (data) {
 
-        /**
-         * get rules
-         * @param  {string} flag (filters list)
-         * @return { deferred }
-         */
-        getRules: function (flag) {
+                return http.PUT({
+                    module: 'mailfilter/v2',
+                    params: { action: 'new' },
+                    data: data
+                });
+            },
 
-            return http.GET({
-                module: 'mailfilter',
-                params: {
-                    action: 'list',
-                    flag: flag
-                }
-            });
-        },
+            /**
+             * get rules
+             * @param  {string} flag (filters list)
+             * @return { deferred }
+             */
+            getRules: function (flag) {
 
-        /**
-         * update rule
-         * @param  {object} data
-         * @return { deferred }
-         */
-        update: function (data) {
+                return http.GET({
+                    module: 'mailfilter/v2',
+                    params: {
+                        action: 'list',
+                        flag: flag
+                    }
+                });
+            },
 
-            return http.PUT({
-                module: 'mailfilter',
-                params: { action: 'update' },
-                data: data
-            });
-        },
+            /**
+             * update rule
+             * @param  {object} data
+             * @return { deferred }
+             */
+            update: function (data) {
 
-        /**
-         * get config
-         * @return { deferred }
-         */
-        getConfig: function () {
-            return http.PUT({
-                module: 'mailfilter',
-                params: { action: 'config' }
-            });
-        },
+                return http.PUT({
+                    module: 'mailfilter/v2',
+                    params: { action: 'update' },
+                    data: data
+                });
+            },
 
-        /**
-         * reorder rules
-         * @param  {array} data
-         * @return { deferred }
-         */
-        reorder: function (data) {
-            return http.PUT({
-                module: 'mailfilter',
-                params: { action: 'reorder' },
-                data: data
-            });
-        }
-    };
+            /**
+             * get config
+             * @return { deferred }
+             */
+            getConfig: function () {
+
+                var getter = function () {
+                    return http.GET({
+                        module: 'mailfilter/v2',
+                        params: { action: 'config' }
+                    }).then(function (config) {
+                        configHash = config;
+                        return configHash;
+                    });
+                };
+
+                return !_.isEmpty(configHash) ? $.Deferred().resolve(configHash) : getter();
+            },
+
+            /**
+             * reorder rules
+             * @param  {array} data
+             * @return { deferred }
+             */
+            reorder: function (data) {
+                return http.PUT({
+                    module: 'mailfilter/v2',
+                    params: { action: 'reorder' },
+                    data: data
+                });
+            }
+        };
 
     Events.extend(api);
 

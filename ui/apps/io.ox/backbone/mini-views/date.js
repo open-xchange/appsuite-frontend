@@ -77,9 +77,10 @@ define('io.ox/backbone/mini-views/date', [
             var d = this.getDate();
             if (d !== null && d !== undefined) {
                 // check if date is invalid (like feb 30) and prevent month jump
-                // phantomjs doesn't handle invalid dates in YYYY-MM-DD so we use MM/DD/YYYY
                 if (!d.isValid()) {
                     // jump back to last valid day of previous month
+                    // invalid date cannot be fixed by changing days. use valid date before change month
+                    d = moment(d.valueOf());
                     d.date(0);
                     // set date field to right day
                     // needs to be done or an invalid date can be selected

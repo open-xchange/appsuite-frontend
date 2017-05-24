@@ -16,8 +16,9 @@ define('io.ox/mail/view-options', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
-    'io.ox/core/commons'
-], function (ext, Dropdown, account, gt, commons) {
+    'io.ox/core/commons',
+    'settings!io.ox/mail'
+], function (ext, Dropdown, account, gt, commons, settings) {
 
     'use strict';
 
@@ -27,14 +28,23 @@ define('io.ox/mail/view-options', [
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
         index: 100,
-        draw: function (batton) {
+        draw: function (baton) {
+            this.data('view').listenTo(baton.app, 'folder:change', function () {
+                var link = this.$('a[data-value="from-to"]'),
+                    textNode = link.contents().last();
+                textNode.replaceWith(account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'));
+            });
             this.data('view')
                 .option('sort', 610, gt('Date'), { radio: true })
-                .option('sort', 'from-to', account.is('sent|drafts', batton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
+                .option('sort', 'from-to', account.is('sent|drafts', baton.app.folder.get()) ? gt('To') : gt('From'), { radio: true })
                 .option('sort', 651, gt('Unread'), { radio: true })
                 .option('sort', 608, gt('Size'), { radio: true })
-                .option('sort', 607, gt('Subject'), { radio: true })
-                .option('sort', 102, gt('Color'), { radio: true });
+                .option('sort', 607, gt('Subject'), { radio: true });
+            // color flags
+            if (settings.get('features/flag/color')) this.data('view').option('sort', 102, gt('Color'), { radio: true });
+            // sort by /flagged messages, internal namin is "star"
+            //#. Sort by messages which are flagged, "Flag" is used in dropdown
+            if (settings.get('features/flag/star')) this.data('view').option('sort', 660, gt('Flag'), { radio: true });
         }
     });
 
@@ -66,7 +76,7 @@ define('io.ox/mail/view-options', [
         index: 1000,
         draw: function (baton) {
 
-            var app = baton.app, model = app.props, self = this;
+            var app = baton.app, model = app.props;
 
             var dropdown = new Dropdown({
                 caret: true,
@@ -81,13 +91,6 @@ define('io.ox/mail/view-options', [
             }
 
             app.on('folder:change', toggle);
-
-            // ensure, that container is always in front (see Bug 50300)
-            dropdown.$el.on('shown.bs.dropdown', function () {
-                self.closest('.leftside').css('z-index', 3);
-            }).on('hidden.bs.dropdown', function () {
-                self.closest('.leftside').css('z-index', '');
-            });
 
             ext.point('io.ox/mail/view-options').invoke('draw', dropdown.$el, baton);
             this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right').on('dblclick', function (e) {
@@ -117,7 +120,7 @@ define('io.ox/mail/view-options', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" role ="checkbox" aria-checked="false">').append(
+                $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
                     $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )

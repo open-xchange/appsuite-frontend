@@ -342,6 +342,40 @@ define('io.ox/core/settings', [
             });
         };
 
+        /**
+         * Save settings to backend.
+         *
+         * Does the same .save(null, { force: true })
+         * but assign a 'merge' action instead of 'set'
+         *
+         * @return The deffered object of the request sent
+         *
+         */
+        this.merge = function (custom) {
+            if (detached) console.warn('Not merging/saving detached settings.', path);
+            if (detached || (!custom && _.isEqual(saved, tree))) return $.when();
+
+            var treeData = custom || tree;
+
+            // don't save undefined
+            if (treeData === undefined) return $.when();
+
+            pending[path] = this;
+
+            return http.PUT({
+                module: 'jslob',
+                params: { action: 'update', id: path },
+                data: treeData
+            })
+            .done(function () {
+                saved = JSON.parse(JSON.stringify(treeData));
+                self.trigger('save');
+            })
+            .always(function () {
+                delete pending[path];
+            });
+        };
+
         _.extend(this, Backbone.Events);
     };
 

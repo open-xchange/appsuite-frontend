@@ -23,7 +23,6 @@ define('io.ox/mail/print', [
 
     'use strict';
 
-    var regImageSrc = /(<img[^>]+src=")\/ajax/g;
 
     function getType() {
         return settings.get('allowHtmlMessages', true) ? 'html' : 'text';
@@ -34,7 +33,8 @@ define('io.ox/mail/print', [
         if (getType() === 'text') {
             var source = String(data.attachments[0].content || '');
             // replace images on source level
-            source = source.replace(regImageSrc, '$1' + ox.apiRoot);
+            // look if /ajax needs do be replaced
+            source = util.replaceImagePrefix(source);
             return $.trim(source.replace(/\n/g, '').replace(/<br[ ]?\/?>/g, '\n'));
         }
         return content.get(data, { autoCollapseBlockquotes: false }).content.innerHTML;

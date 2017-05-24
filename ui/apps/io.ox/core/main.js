@@ -20,6 +20,7 @@ define('io.ox/core/main', [
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/dropdown',
     // defines jQuery plugin
     'io.ox/core/commons',
     'io.ox/core/upsell',
@@ -35,7 +36,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
 
     'use strict';
 
@@ -851,12 +852,13 @@ define('io.ox/core/main', [
             index: 300,
             draw: function () {
                 if (_.device('smartphone')) return;
-
+                var helpView = new HelpView({
+                    iconClass: 'launcher-icon',
+                    href: getHelp
+                });
+                if (helpView.$el.hasClass('hidden')) return;
                 this.append(
-                    addLauncher('right', new HelpView({
-                        iconClass: 'launcher-icon',
-                        href: getHelp
-                    }).render().$el)
+                    addLauncher('right', helpView.render().$el)
                 );
             }
         });
@@ -904,7 +906,6 @@ define('io.ox/core/main', [
             id: 'onboarding',
             index: 120,
             draw: function () {
-                if (_.device('smartphone')) return;
                 if (capabilities.has('!client-onboarding')) return;
 
                 this.append(
@@ -975,14 +976,18 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 //replaced by module
-                var node = this;
+                var node = this,
+                    helpView = new HelpView({
+                        content: gt('Help'),
+                        href: getHelp
+                    });
                 node.append(
-                    $('<li class="divider" role="separator"></li>'),
+                    $('<li class="divider" role="separator"></li>')
+                );
+                if (helpView.$el.hasClass('hidden')) return;
+                node.append(
                     $('<li class="io-ox-specificHelp" role="presentation">').append(
-                        new HelpView({
-                            content: gt('Help'),
-                            href: getHelp
-                        }).render().$el.attr('role', 'menuitem')
+                        helpView.render().$el.attr('role', 'menuitem')
                     )
                 );
             }
@@ -1037,17 +1042,20 @@ define('io.ox/core/main', [
             id: 'dropdown',
             index: 1000,
             draw: function () {
-                var ul, a;
+                var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">'),
+                    a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                        $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
+                    );
                 this.append(
-                    $('<li id="io-ox-topbar-dropdown-icon" class="launcher dropdown" role="presentation">').append(
-                        a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
-                            $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
-                        ),
-                        ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">')
-                    )
+                    new Dropdown({
+                        tagName: 'li',
+                        id: 'io-ox-topbar-dropdown-icon',
+                        className: 'launcher dropdown',
+                        $ul: ul,
+                        $toggle: a
+                    }).render().$el
                 );
                 ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
-                a.dropdown();
             }
         });
 
@@ -1122,6 +1130,38 @@ define('io.ox/core/main', [
                 }
             });
         })();
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'client-onboarding-hint',
+            index: 2200,
+            draw: function () {
+                if (capabilities.has('!client-onboarding')) return;
+                if (!_.device('smartphone')) return;
+                // exit: tab reload with autologin
+                if (_.device('reload') && session.isAutoLogin()) return;
+
+                var conf = _.extend({ enabled: true, remaining: 2 }, settings.get('features/clientOnboardingHint', {}));
+                // server prop
+                if (!conf.enabled || !conf.remaining) return;
+                // banner action, topbar action, dropdown action
+                var link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // popover
+                link.popover({
+                    content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                    template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
+                    placement: 'bottom'
+                });
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+                // close on any click
+                document.body.addEventListener('click', close, true);
+                function close() {
+                    settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
+                    link.popover('destroy');
+                    document.body.removeEventListener('click', close, true);
+                }
+            }
+        });
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
@@ -1298,6 +1338,16 @@ define('io.ox/core/main', [
                         target: 'banner/logo',
                         type: 'click',
                         action: 'noop'
+                    });
+
+                    $(document.documentElement).on('mousedown', '.halo-link', function () {
+                        var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                        metrics.trackEvent({
+                            app: 'core',
+                            type: 'click',
+                            action: 'halo',
+                            detail: _.last(app.get('name').split('/'))
+                        });
                     });
                 });
             }
@@ -1559,17 +1609,19 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
-                            $('<div class="header">').append(
-                                $('<h1>').text(gt('Restore applications')),
-                                $('<div>').text(
-                                    gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="-1" role="dialog" aria-labelledby="restore-heading" aria-describedby="restore-description">').append(
+                            $('<div role="document">').append(
+                                $('<div class="header">').append(
+                                    $('<h1 id="restore-heading">').text(gt('Restore applications')),
+                                    $('<div id="restore-description">').text(
+                                        gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                                    )
+                                ),
+                                $('<ul class="list-unstyled content">'),
+                                $('<div class="footer">').append(
+                                    btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                    btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                                 )
-                            ),
-                            $('<ul class="list-unstyled content">'),
-                            $('<div class="footer">').append(
-                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
-                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1596,7 +1648,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i>').addClass(item.icon) : $(),
+                                    item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )
@@ -1741,7 +1793,15 @@ define('io.ox/core/main', [
                                 });
                             }
                             // non-app deeplinks
-                            var id = _.url.hash('reg');
+                            var id = _.url.hash('reg'),
+                                // be case insensitive
+                                showFeedback = _(_.url.hash()).reduce(function (memo, value, key) {
+                                    if (key.toLowerCase() === 'showfeedbackdialog') {
+                                        return value;
+                                    }
+                                    return memo;
+                                });
+
                             if (id && ox.registry.get(id)) {
                                 // normalise args
                                 var list = (_.url.hash('regopt') || '').split(','),
@@ -1754,6 +1814,14 @@ define('io.ox/core/main', [
                                 // call after app is ready
                                 launch.done(function () {
                                     ox.registry.call(id, 'client-onboarding', { data: data });
+                                });
+                            }
+
+                            if (showFeedback === 'true' && capabilities.has('feedback')) {
+                                launch.done(function () {
+                                    require(['plugins/core/feedback/register'], function (feedback) {
+                                        feedback.show();
+                                    });
                                 });
                             }
                         });
@@ -1862,6 +1930,11 @@ define('io.ox/core/main', [
             // INUSE (see bug 37218)
             // falls through
             case 'MSG-1031':
+            case 'MSG-0114':
+            case 'OAUTH-0013':
+            case 'OAUTH-0042':
+            case 'OAUTH-0043':
+            case 'OAUTH-0044':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':
@@ -1872,7 +1945,7 @@ define('io.ox/core/main', [
         }
     });
 
-    // white list warninff codes
+    // white list warning codes
     var isValidWarning = (function () {
         var check = function (code, regex) { return regex.test(code); },
             reCodes = [

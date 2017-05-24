@@ -229,6 +229,12 @@
                 left: 0px;
                 margin-left: 0px;
             }
+
+            &.modified {
+                > span {
+                    display: block;
+                }
+            }
         }
 
         .versiontable {
@@ -481,6 +487,41 @@
         .item,
         .swiper-container { height: 100%; }
 
+        #viewer-carousel,
+        .swiper-container {
+
+            // copied directly from 'io.ox/presenter/style.less' ... see line 278
+            //
+            .fullscreen() {
+                top: 0;
+                background-color: black;
+
+                // #49797 - Presenting in full screen mode shows scroll bar
+                .swiper-container .swiper-wrapper .swiper-slide {
+                    overflow: hidden;
+                }
+            }
+
+            // The selectors for full screen need to be kept in separate declarations.
+            // For example if Firefox discovers ":-webkit-full-screen" it ignores the whole selector, same if Chrome discovers ":-moz-full-screen".
+            //
+            &:-webkit-full-screen {
+                .fullscreen()
+            }
+            &:-moz-full-screen {
+                .fullscreen()
+            }
+            &:-ms-fullscreen {
+                .fullscreen()
+            }
+            &:full-screen {
+                .fullscreen()
+            }
+            &:fullscreen {
+                .fullscreen()
+            }
+        }
+
         .swiper-container {
             width: 100%;
 
@@ -497,7 +538,6 @@
                 -ms-flex-align: center;
                 -webkit-align-items: center;
                 align-items: center;
-                outline: none;
                 .user-select(none);
 
                 &.swiper-slide-document {
@@ -507,6 +547,25 @@
             }
 
             .io-ox-busy::before { color: @viewer-busy-color; }
+
+            &.autoplay-controls-visible {
+                > .autoplay-button {
+
+                    opacity: 1;
+                }
+            }
+            &.autoplay-controls-disabled {
+                > .autoplay-button {
+
+                    display: none!important;
+                }
+            }
+        }
+        &.fullscreen-mode {
+            .fullscreen-button {
+
+                display: block;
+            }
         }
 
         .viewer-displayer-item-container { max-height: 100%; }
@@ -629,9 +688,10 @@
             &.smartphone { bottom: 6px; }
         }
 
+        .autoplay-button,
         .swiper-button-control {
             display: none;
-            margin-top: -50px;
+            margin-top: -25px;
             color: @viewer-displayer-navigation-color;
             background: @viewer-displayer-navigation-bgcolor;
             outline: none;
@@ -647,6 +707,35 @@
 
             &:hover,
             &:focus { color: #FFFFFF; }
+        }
+        .autoplay-button {
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            right: auto;
+            bottom: auto;
+            margin-left: -25px;
+            z-index: 10;
+            cursor: pointer;
+            opacity: 0;
+            transition-property: opacity;
+            transition-duration: 0.5s;
+        }
+        .fullscreen-button {
+          //display: block;
+            display: none;
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            width: 40px;
+            height: 40px;
+            padding: 10px 0 0 0;
+            text-align: center;
+            font-size: 18px;
+            line-height: 18px;
+            color: #999;
+            z-index: 1;
         }
 
         .viewer-displayer-notification {
@@ -694,10 +783,12 @@
             background-color: @viewer-sidebar-uploadnewversion-bgcolor;
             border-color: @viewer-sidebar-uploadnewversion-bordercolor;
 
+            &.active,
             &:active,
             &:hover {
                 border-color: @viewer-sidebar-uploadnewversion-hovercolor;
             }
+            &.active,
             &:focus {
                 outline: 0;
                 color: @viewer-sidebar-active-color;

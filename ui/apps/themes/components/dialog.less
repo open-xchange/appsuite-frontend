@@ -25,6 +25,14 @@
         float: left;
         margin-top: 6px;
         margin-bottom: 0;
+
+        &.checkbox-block {
+            float: none;
+            text-align: left;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            margin: 0 0 8px 0;
+        }
     }
 }
 
@@ -114,7 +122,10 @@
 
     .modal-footer > .btn { min-width: 5em; }
 
-    .modal-footer .help-block { text-align: left; }
+    .modal-footer .help-block {
+        text-align: left;
+        &:empty { display: none; }
+    }
 
     .io-ox-sidepopup {
         &.right { .border-radius(0 5px 5px 0); }
@@ -136,13 +147,14 @@
 
 // filepicker should always be 100% in width, also in landscape mode
 .ios.smartphone, .android.smartphone .picker-pc-container .modal-body {
-    & > div,
-    & > ul { width: 100%; }
+    > div,
+    > ul { width: 100%; }
 }
 // filepicker mobile
 .picker-pc-container .io-ox-pagecontroller.page { padding-top: 40px; }
 
 .add-infostore-file {
+
     .picker-pc-container {
         position: relative;
         height: 350px;
@@ -190,24 +202,92 @@
         padding: 0;
         overflow: hidden;
 
-        & > div, & > ul {
+        > div,
+        > ul {
             display: inline-block;
+            overflow: auto;
             width: 50%;
             height: 100%;
-            vertical-align: top;
-            overflow: auto;
             margin: 0;
+            vertical-align: top;
+          //transition: width;
+          //transition-duration: .1s;
+        }
+
+        // - user story DOCS-589 :: User can see image preview in file picker
+        // - https://jira.open-xchange.com/browse/DOCS-589
+        // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
+        //
+        > :first-child:nth-last-child(3),   // - model agnostic rules do work without css class names but depend entirely on structure then.
+        > :nth-child(2):nth-last-child(2),  //
+        > :nth-child(3):last-child {        //
+
+            width: 33%;
+        }
+        > .preview-pane {
+
+            padding: 10px 3px 10px 10px;
+            border-left: 1px solid #ddd;
+
+            text-align: center;
+
+            > .preview {
+                position: relative;
+                display: block;
+
+                width: 100%;
+                height: 140px;
+
+                margin: 0 0 10px 0;
+
+                background-size: contain;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-attachment: scroll;
+
+                .file-type-icon {
+                    position: absolute;
+                    bottom: 25px;
+                    margin-left: -50px;
+                    width: 100px;
+                    font-size: 70px;
+                    font-weight: 100;
+                }
+            }
+            > .fileinfo {
+
+                //.sidebar-panel-body {
+                //
+                //}
+
+                dl {
+                    margin: 0;
+                }
+                dt {
+                    margin: 2px 0 -2px 0;
+                }
+                dd {
+                    &.file-name {
+                        word-wrap: break-word;
+                        word-break: break-all;
+                    }
+                    &.modified {
+                        > span {
+                            display: block;
+                        }
+                    }
+                }
+            }
         }
 
         @media all and (max-width: 480px), all and (max-device-width: 480px) {
-            & > div,
-            & > ul { width: 100%; }
+            > div,
+            > ul { width: 100%; }
         }
 
         .folder-tree { border-right: 1px solid #ddd; }
 
         .io-ox-fileselection {
-
             li.file {
                 outline: none;
                 line-height: 30px;
@@ -221,7 +301,10 @@
                     float: left;
                 }
 
-                .name { .ellipsis(); }
+                .name {
+                    .ellipsis();
+                     padding-left: 0.5em;
+                }
 
                 &.selected {
                     background-color: @foldertree-selected-focus-background;
@@ -234,9 +317,24 @@
 
                     * { color: @foldertree-focused-label-color; }
                 }
+
+                .checkbox-inline { display: none; }
             }
 
-            &.singleselect li.file .name { padding-left: 0.5em; }
+            .touch &.multiselect li.file {
+                 .checkbox-inline {
+                    display: block;
+                    height: 20px;
+                    background: transparent;
+                    margin-top: 2px;
+
+                    input[type=checkbox] {
+                        height: 20px;
+                        cursor: pointer;
+                    }
+                }
+                .name { padding-left: 0; }
+            }
         }
     }
 
@@ -286,19 +384,23 @@
 //
 .modal.flex {
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block;
     overflow: hidden;
 
     .modal-dialog {
-        margin: 0;
-        padding: 16px 0;
+        margin: 0 auto;
         width: 500px;
+        height: 100%;
+        display: flex;
+        align-items: center;
     }
 
     .modal-content {
         border: 0;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-height: ~"calc(100vh - 48px)";
     }
 
     .modal-title {
@@ -307,9 +409,10 @@
         margin: -3px 0 2px 0;
     }
 
-    .modal-body {
-        min-height: 60px;
-        overflow-y: auto;
+    .modal-subtitle {
+        line-height: 16px;
+        padding-top: 4px;
+        margin-bottom: 4px;
     }
 
     .modal-header, .modal-body, .modal-footer {
@@ -317,17 +420,15 @@
         flex-grow: 0;
     }
 
-    .modal-header {
-        // helps against flex grow pushing the headline out of the dialog
-        min-height: 56px;
+    .modal-body {
+        min-height: 60px;
+        overflow-y: auto;
+        flex-grow: 1;
     }
 
     .modal-footer {
         .btn.pull-left { margin-right: 8px; }
         .btn.pull-right { margin-left: 8px; }
-
-        // helps against flex grow pushing the buttons out of the dialog
-        min-height: 63px;
     }
 
     &.maximize {
@@ -350,7 +451,7 @@
             margin-right: 40px;
         }
         .io-ox-context-help {
-            padding: 16px;
+            padding: 16px 16px 0 16px;
             position: absolute;
             top: 0;
             right: 0;

@@ -39,12 +39,15 @@ Jun 16 | 7.8.2   | Started to resolve identified issues from recent audit
 Aug 16 | 7.8.3   | Finally fixed remaining tabindex issues
 Sep 16 | 7.8.3   | Added new accessible date picker
 Oct 16 | 7.8.3   | Resolving remaining issues from recent audit
+Dec 16 | 7.8.3   | Retest accessibility audit by [the Paciello Group][TPG]
+Jan 17 | 7.8.4   | Fixed newly identified minor issues from Dec 16 TPG retest
+Feb 17 | 7.8.4   | (Address book) Thumb index is now accessible by keyboard
 
 # Roadmap
 
 Date   | Version | Activity
 -------| --------| -----------------------------------------------------------------------
-Dec 16 | 7.8.3   | Retest accessibility audit by [the Paciello Group][TPG]
+Mar 17 | 7.8.4   | Focussing on JAWs issues
 Q1 17  | 7.8.4   | Working on open issues (see below)
 Q2 17  | 7.8.4   | New accessibility audit
 
@@ -52,12 +55,8 @@ Q2 17  | 7.8.4   | New accessibility audit
 
 - (Calendar) Timezone popup cannot be explored by screen reader users
 - (General) Tokenfield and autocomplete keyboard interaction and screen reader supports needs improvement
-- (Drive) Keyboard support improvements for icon and tile view in drive
-- (Help) Help partially lacks proper semantic markup
 - (General) Folder tree context menu does not respond properly in JAWS (when toggled by button)
 - (General) Folder tree aria markup needs improvement for screen readers (is too verbose)
-- (General) Dropdown menus do not consistently focus first or last element on cursor up/down/space/enter
-- (Address book) Thumb index is not accessible by keyboard
 
 [WCAG-TR]: https://www.w3.org/TR/WCAG20/
 [WCAG-WAI]: https://www.w3.org/WAI/WCAG2AA-Conformance

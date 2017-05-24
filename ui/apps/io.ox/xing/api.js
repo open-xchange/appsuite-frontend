@@ -149,14 +149,15 @@ define('io.ox/xing/api', ['io.ox/core/http'], function (http) {
             'io.ox/core/sub/model',
             'io.ox/core/folder/api',
             'io.ox/keychain/api',
-            'io.ox/core/notifications'
-        ], function (subAPI, subModel, folderAPI, keychainAPI, notifications) {
+            'io.ox/core/notifications',
+            'settings!io.ox/core'
+        ], function (subAPI, subModel, folderAPI, keychainAPI, notifications, settings) {
             subAPI.sources.getAll().done(function (subscriptions) {
                 var subs = _(subscriptions).filter(function (s) { return s.id.match('.*xing.*') && s.module === 'contacts'; });
 
                 if (subs.length > 0) {
                     var sub = subs[0],
-                        folder = require('settings!io.ox/core').get('folder/' + sub.module);
+                        folder = settings.get('folder/' + sub.module);
 
                     folderAPI.create(folder, {
                         title: sub.displayName || 'XING'

@@ -52,7 +52,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '652': 'account_name',
                 '654': 'original_id',
                 '655': 'original_folder_id',
-                '656': 'content_type'
+                '656': 'content_type',
+                '660': 'flagged'
             },
             'contacts': {
                 '500': 'display_name',
@@ -274,6 +275,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '316': 'standard_folder_type',
                 '317': 'supported_capabilities',
                 '318': 'account_id',
+                '319': 'folder_name',
                 '3010': 'com.openexchange.publish.publicationFlag',
                 '3020': 'com.openexchange.subscribe.subscriptionFlag',
                 '3030': 'com.openexchange.folderstorage.displayName',

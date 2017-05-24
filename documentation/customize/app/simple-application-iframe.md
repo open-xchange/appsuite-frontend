@@ -55,7 +55,7 @@ define('com.example/main', [
 });
 ```
 
-The provided token can be used to generate a valid session with the [redeem token login process](http://oxpedia.org/wiki/index.php?title=HTTP_API#Redeem_Token_.28since_7.4.0.29).
+The provided token can be used to generate a valid session with the [redeem token login process](/components/middleware/http{{ site.baseurl }}/index.html#!/Login/redeemToken).
 
 # Add app to the launcher (since 7.8)
 

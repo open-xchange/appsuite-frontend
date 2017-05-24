@@ -6,9 +6,14 @@ BuildRequires:  ant
 BuildRequires:  ant-nodeps
 %endif
 BuildRequires:  java-devel >= 1.6.0
+%if 0%{?suse_version}
+BuildRequires:  nodejs6
+BuildRequires:  npm6
+%else
 BuildRequires:  nodejs >= 0.10.0
+%endif
 Version:        @OXVERSION@
-%define         ox_release 21
+%define         ox_release 3
 Release:        %{ox_release}_<CI_CNT>.<B_CNT>
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
@@ -51,38 +56,14 @@ ant -Dbasedir=build -DdestDir=%{buildroot} -DpackageName=%{name} -DkeepCache=tru
 /opt/open-xchange/etc/settings/guidedtours.properties
 
 %changelog
-* Tue May 09 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-05-15 (4132)
-* Wed Apr 26 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-05-02 (4113)
-* Thu Apr 06 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-04-18 (4084)
-* Wed Mar 29 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-04-03 (4050)
-* Tue Mar 14 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-03-20 (4016)
-* Mon Mar 13 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-03-17 (4020)
-* Mon Mar 06 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-03-06 (3985)
-* Wed Feb 22 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-02-22 (3969)
-* Fri Feb 17 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-02-20 (3952)
-* Fri Jan 27 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-02-06 (3918)
-* Mon Jan 16 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-01-23 (3879)
-* Mon Jan 09 2017 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-01-12 (3866)
-* Thu Dec 22 2016 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2017-01-09 (3849)
-* Wed Dec 14 2016 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2016-12-19 (3814)
-* Tue Dec 13 2016 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2016-12-14 (3806)
-* Tue Dec 06 2016 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2016-12-12 (3775)
+* Fri May 19 2017 Marcus Klein <marcus.klein@open-xchange.com>
+First candidate for 7.8.4 release
+* Thu May 04 2017 Marcus Klein <marcus.klein@open-xchange.com>
+Second preview of 7.8.4 release
+* Mon Apr 03 2017 Marcus Klein <marcus.klein@open-xchange.com>
+First preview of 7.8.4 release
+* Fri Dec 02 2016 Marcus Klein <marcus.klein@open-xchange.com>
+prepare for 7.8.4 release
 * Tue Nov 29 2016 Marcus Klein <marcus.klein@open-xchange.com>
 Second release candidate for 7.8.3 release
 * Thu Nov 24 2016 Marcus Klein <marcus.klein@open-xchange.com>
@@ -136,7 +117,7 @@ prepare for 7.8.1 release
 * Tue Oct 06 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Sixth candidate for 7.8.0 release
 * Wed Sep 30 2015 Marcus Klein <marcus.klein@open-xchange.com>
-Build for patch 2015-10-12 (2784)
+Build for patch  2015-10-12 (2784)
 * Fri Sep 25 2015 Marcus Klein <marcus.klein@open-xchange.com>
 Fith candidate for 7.8.0 release
 * Thu Sep 24 2015 Marcus Klein <marcus.klein@open-xchange.com>

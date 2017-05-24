@@ -12,86 +12,12 @@
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
 define([
-    'io.ox/mail/util',
-    'spec/shared/capabilities'
-], function (util, caputil) {
+    'io.ox/mail/util'
+], function (util) {
 
     'use strict';
 
-    var capabilities = caputil.preset('common').init('io.ox/mail/util', util);
-
     describe('Mail Utilities:', function () {
-
-        describe('has some capability depending msisdn methods that', function () {
-
-            beforeEach(function (done) {
-                capabilities.reset().done(function () {
-                    done();
-                });
-            });
-
-            describe('work with disabled capability and', function () {
-
-                beforeEach(function () {
-                    capabilities.enable('msisdn');
-                });
-
-                it('should correctly identify channel "email" or "phone"', function () {
-                    expect(util.getChannel('017012345678')).to.equal('phone');
-                    expect(util.getChannel('+17012345678')).to.equal('phone');
-                    expect(util.getChannel('(01701) 23456-78')).to.equal('phone');
-                });
-
-                it('should correctly remove "' + util.getChannelSuffixes().msisdn + '" typesuffix from data', function () {
-
-                    var suffix = util.getChannelSuffixes().msisdn,
-                        mail = {
-                            from: [
-                                ['017012345678', '017012345678' + suffix]
-                            ],
-                            to: [
-                                ['017012345678', '017012345678' + suffix],
-                                ['017012345678', '017012345678' + suffix]
-                            ]
-                        };
-                    expect(util.removeChannelSuffix('017012345678' + suffix + ',asdadjaldk,017012345678' + suffix + ',asduhadsasd'))
-                    .to.deep.equal('017012345678,asdadjaldk,017012345678,asduhadsasd');
-                    expect(util.removeChannelSuffix(mail))
-                    .to.deep.equal({
-                        from: [
-                            ['017012345678', '017012345678']
-                        ],
-                        to: [
-                            ['017012345678', '017012345678'],
-                            ['017012345678', '017012345678']
-                        ]
-                    });
-                });
-                it('should handle empty from fields', function () {
-                    var mail = {
-                        from: [],
-                        to: [
-                            ['017012345678', '017012345678' + util.getChannelSuffixes().msisdn]
-                        ]
-                    };
-                    expect(util.removeChannelSuffix(mail))
-                        .to.deep.equal({ from: [], to: [['017012345678', '017012345678']] });
-                });
-            });
-
-            describe('work with enabled capability and', function () {
-
-                beforeEach(function () {
-                    capabilities.disable('msisdn');
-                });
-
-                it('should correctly identify channel "email" or "phone"', function () {
-                    expect(util.getChannel('017012345678')).to.equal('email');
-                    expect(util.getChannel('+17012345678')).to.equal('email');
-                    expect(util.getChannel('(01701) 23456-78')).to.equal('email');
-                });
-            });
-        });
 
         describe('has some capability independent msisdn methods and', function () {
 
@@ -265,6 +191,7 @@ define([
             });
 
             it('should return a date string for valid date', function () {
+                moment.tz.setDefault('Europe/Berlin');
                 expect(util.getTime(1379508350), 'getTime').to.be.equal('17.1.1970');
                 expect(util.getDateTime(1379508350), 'getDateTime').to.be.equal('17.1.1970 00:11');
                 expect(util.getFullDate(1379508350), 'getFullDate').to.be.equal('17.1.1970 00:11');
@@ -322,35 +249,6 @@ define([
                 expect(util.count([{}, {}, { thread: [1, 2] }]))
                     .to.be.a('number').and
                     .to.equal(4);
-            });
-        });
-
-        describe('signature handling', function () {
-            describe('for HTML mails', function () {
-                it('should clean plain text signatures containing < and >', function () {
-                    var clean = util.signatures.cleanAdd('Test <test@example.com>', true);
-                    expect(clean).to.equal('Test &lt;test@example.com&gt;');
-                });
-                it('should clean HTML signatures', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>', true);
-                    expect(clean).to.equal('<p>Test &lt;test@example.com&gt;</p>');
-                });
-            });
-            describe('for text mails', function () {
-                it('should clean plain text signatures containing < and >', function () {
-                    var clean = util.signatures.cleanAdd('Test <test@example.com>', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
-
-                it('should clean HTML signatures', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
-
-                it('should "trim" signatures (remove trailing white-space)', function () {
-                    var clean = util.signatures.cleanAdd('<p>Test &lt;test@example.com&gt;</p>\n ', false);
-                    expect(clean).to.equal('Test <test@example.com>');
-                });
             });
         });
     });

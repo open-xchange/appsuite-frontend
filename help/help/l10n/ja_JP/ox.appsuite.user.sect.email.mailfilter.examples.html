@@ -1,0 +1,93 @@
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>5.6.4. メールフィルタに大文字を使用</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="ユーザ ガイド">
+<link rel="up" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. メールフィルタの使用">
+<link rel="prev" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. ルールの変更">
+<link rel="next" href="ox.appsuite.user.sect.email.search.html" title="5.7. メールの検索">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.email.mailfilter.change.html">戻る</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.email.search.html">次へ</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only"><span class="phrase">メール</span></h1>
+<h2 class="sr-only">メールフィルタの使用</h2>
+<div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. メールフィルタに大文字を使用</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>次の方法で、条件を作成できます。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>メールの要素（例：「件名」）を選択</p></li>
+<li class="listitem"><p>判定基準（例：「次の文字列と完全に一致」）を選択</p></li>
+<li class="listitem"><p>引数（例：「minutes」）を入力</p></li>
+</ul></div>
+<p>上記の場合、メールの件名が引数の文字（「minutes」）に完全に一致するかどうかが検証されます。判定基準や文字列を変更して、条件を調整できます。各判定基準の違いは、次の例で説明します。ここでは、メールの絞り込みとして件名を使用します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>判定基準；「次の文字列を含む」引数の文字が件名に含まれる場合、条件を満たします。例：引数を「minutes」とします。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合も、条件を満たします。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+<li class="listitem">
+<p>判定基準；「次の文字列と完全に一致」件名が引数の文字列に完全に一致する場合、条件を満たします。例：引数を「minutes」とします。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合、条件を満たしません。</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>判定基準：「次の文字列と一致」件名が引数の文字に完全に一致する場合、条件を満たします。この文字列には、ワイルドカードを含めることができます。例：因数を「minutes」とします。「*」の文字は、任意の文字を示すワイルドカードです。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合、条件を満たしません。</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>判定基準：「次の文字列と一致（正規表現)」正規表現の形で引数に入力した文字が件名に含まれる場合、条件を満たします。正規表現を使用すれば、複雑な絞込みも可能になります。詳細は、インターネットの関連サイトを参照してください。正規表現の非常に簡単な例を次に示します。引数に「organi(z|s)ation」を設定します。「(z|s)」の表現は、「z」または「s」のいずれかの文字を表します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「organisation」の場合も条件を満たします。</p></li>
+<li class="listitem" style="list-style-type: none"><p>件名が「Organic」の場合、条件は満たしません。</p></li>
+</ul></div>
+<p>
+            </p>
+</li>
+</ul></div>
+<p>
+      </p>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">詳細は、次を参照してください。</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. 新規のルールの作成">新規のルールの作成</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. 移動中に新規のルールを作成">移動中に新規のルールを作成</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. ルールの変更">ルールの変更</a></p>
+</li></ul>
+</div>
+<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>親記事：<a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. メールフィルタの使用">メールフィルタの使用</a></p>
+</div>
+          </div>
+        </body>
+</html>

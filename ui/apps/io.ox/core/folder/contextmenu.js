@@ -18,8 +18,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, settings, gt) {
 
     'use strict';
 
@@ -70,7 +71,7 @@ define('io.ox/core/folder/contextmenu', [
         update: function () {
             //toggle active class
             $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + this.model.get('meta').color_label, this.$el).addClass('active').attr('aria-checked', true);
+            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
         },
         select: function (e) {
             var meta = _.extend({},
@@ -307,7 +308,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.folder(e.data.id);
+                    move.folder(e.data.id, settings);
                 });
             }
 
@@ -437,6 +438,8 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (_.device('smartphone')) return;
+                // trash or subfolders do not support sharing or permission changes
+                if (api.is('trash', baton.data)) return;
 
                 if (account.isDSC(baton.data.id)) return;
 
@@ -466,56 +469,14 @@ define('io.ox/core/folder/contextmenu', [
                     });
                 }
 
-                // "Get link" doesn't work for mail folders
+                // "Create sharing link" doesn't work for mail folders
                 if (showGetLink) {
                     addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: getALink,
-                        text: gt('Get link')
-                    });
-                }
-            };
-        }()),
-
-        //
-        // Subscribe folder
-        //
-        subscribe: (function () {
-
-            function handler(e) {
-                e.preventDefault();
-                require(['io.ox/core/sub/subscriptions'], function (subscriptions) {
-                    subscriptions.buildSubscribeDialog(e.data);
-                });
-            }
-
-            return function (baton) {
-
-                if (!api.can('subscribe', baton.data) || api.is('trash', baton.data)) return;
-
-                var tempLink, node, self = this;
-
-                node = $('<li role="presentation">').append(
-                    tempLink = a('subscriptions', gt('New subscription'))
-                );
-
-                if (capabilities.has('subscription')) {
-                    tempLink.on('click', { folder: baton.data.folder_id, module: baton.data.module, app: baton.app }, handler);
-                    this.append(node);
-                } else {
-                    require(['io.ox/core/upsell'], function (upsell) {
-                        if (upsell.enabled(['subscription'])) {
-                            tempLink.on('click', function () {
-                                upsell.trigger({
-                                    type: 'inline-action',
-                                    id: 'io.ox/core/foldertree/contextmenu/default/subscribe',
-                                    missing: upsell.missing(['subscription'])
-                                });
-                            });
-                            self.append(node);
-                        }
+                        text: gt('Create sharing link')
                     });
                 }
             };
@@ -559,8 +520,6 @@ define('io.ox/core/folder/contextmenu', [
                 e.preventDefault();
                 // hide/show
                 api.toggle(e.data.id, e.data.state);
-                // dropdown menu needs a redraw
-                e.data.view.renderContextMenuItems();
             }
 
             return function (baton) {
@@ -591,7 +550,7 @@ define('io.ox/core/folder/contextmenu', [
                 if (!api.is('private', baton.data)) return;
 
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
-                    var listItem;
+                    var listItem, container = this.parent();
 
                     this.append(
                         listItem = $('<li role="presentation">')
@@ -603,6 +562,8 @@ define('io.ox/core/folder/contextmenu', [
                                 model: api.pool.getModel(baton.data.id)
                             }).render(calendarUtil).$el
                         );
+                        // trigger ready to recompute bounds of smart dropdown
+                        container.trigger('ready');
                     });
                 }
             };

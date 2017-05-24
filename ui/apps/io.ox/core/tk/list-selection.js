@@ -199,7 +199,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         isMultiple: function (e) {
-            return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
+            return e && (e.metaKey || e.ctrlKey || /35|36/.test(e.which) || this.isCheckmark(e));
         },
 
         isEmpty: function () {
@@ -224,13 +224,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return !!nodes.length;
         },
 
-        focus: function (index, items) {
+        focus: function (index, items, focus) {
             items = items || this.getItems();
             var node = items.eq(index).attr('tabindex', '0');
             // call focus deferred due to some issues in internet explorer
-            _.defer(function () {
-                node.focus();
-            });
+            if (focus !== false) {
+                _.defer(function () {
+                    node.focus();
+                });
+            }
             // workaround for chrome's CSS bug:
             // styles of "selected" class are not applied if focus triggers scrolling.
             // idea taken from http://forrst.com/posts/jQuery_redraw-BGv
@@ -238,7 +240,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             return node;
         },
 
-        pick: function (index, items, e) {
+        pick: function (index, items, e, focus) {
             var node;
 
             items = items || this.getItems();
@@ -249,7 +251,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             } else {
                 // single select
                 items.removeClass('precursor');
-                node = this.focus(index, items).addClass('precursor');
+                node = this.focus(index, items, focus).addClass('precursor');
                 if (this.isMultiple(e)) this.pickMultiple(node, items); else this.pickSingle(node);
             }
         },
@@ -281,12 +283,12 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         // just select one item (no range; no multiple)
-        select: function (index, items) {
+        select: function (index, items, focus) {
             items = items || this.getItems();
             if (index >= items.length) return;
             this.resetCheckmark(items);
             this.resetTabIndex(items, items.eq(index));
-            this.pick(index, items);
+            this.pick(index, items, null, focus);
             this.selectEvents(items);
         },
 
@@ -341,21 +343,22 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 last = items.index(selected.last()),
                 tail = items.length - 1,
                 apply = this.select.bind(this),
-                direction = this.getDirection();
+                direction = this.getDirection(),
+                focus = $.contains(this.view.el, document.activeElement);
 
             // All: if all items are selected we dodge by clearing the entire selection
             if (items.length === length) return this.clear();
 
             // up and enough room
-            if (direction === 'up' && first > 0) return apply(first - 1, items);
+            if (direction === 'up' && first > 0) return apply(first - 1, items, focus);
 
             // down and enough room
-            if (direction === 'down' && last < tail) return apply(last + 1, items);
+            if (direction === 'down' && last < tail) return apply(last + 1, items, focus);
 
             // otherwise: iterate over list to find a free spot
             items.slice(first).each(function (index) {
                 if (!$(this).hasClass('selected')) {
-                    apply(first + index, items);
+                    apply(first + index, items, focus);
                     return false;
                 }
             });
@@ -365,7 +368,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // cursor left/right have no effect in a list
             var grid = this.view.$el.hasClass('grid-layout'),
-                cursorLeftRight = e.which === 37 || e.which === 39;
+                cursorLeftRight = /37|39/.test(e.which);
             if (!grid && cursorLeftRight) return;
 
             // get current index
@@ -373,19 +376,17 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 current = $(document.activeElement),
                 index = (items.index(current) || 0);
 
-            // don't cross the edge on cursor left/right
             var width = parseInt(this.view.$el.attr('grid-count') || 1, 10),
                 column = index % width;
-            if ((column === 0 && e.which === 37) || (column === width - 1 && e.which === 39)) return;
 
             // compute new index
-            var cursorUpDown = e.which === 38 || e.which === 40,
-                cursorBack = e.which === 37 || e.which === 38,
+            var cursorUpDown = /38|40|35|36/.test(e.which),
+                cursorBack = /37|38|36/.test(e.which),
                 step = grid && cursorUpDown ? width : 1;
             index += cursorBack ? -step : +step;
 
-            // move to very last element on cursor down?
-            if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
+            // move to very last element on cursor down or end?
+            if (step > 1 && /40|35/.test(e.which) && index >= items.length && column >= (items.length % width)) index = items.length - 1;
 
             // out of bounds?
             index = this.outOfBounds(index, items);
@@ -396,7 +397,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // jump to top/bottom OR range select / single select
             if (this.isMultiple(e)) {
-                index = (e.which === 38 ? 0 : -1);
+                index = (/38|36/.test(e.which) ? 0 : -1);
             }
 
             this.resetTabIndex(items, items.eq(index));
@@ -467,7 +468,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.view.trigger('selection:delete', this.get());
                     break;
 
-                // cursor left/right up/down
+                // home/end cursor left/right up/down
+                case 35:
+                case 36:
                 case 37:
                 case 38:
                 case 39:
@@ -1060,6 +1063,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onSpace: function (e) {
             // actually same as a click
             this.onClick(e);
+            e.preventDefault();
         },
 
         onCursor: function (e) {

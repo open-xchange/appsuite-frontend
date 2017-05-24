@@ -28,7 +28,7 @@ define('io.ox/mail/autoforward/settings/filter', [
 
             api.getRules('autoforward').done(function (data) {
 
-                var autoForwardData = { userMainEmail: userMainEmail },
+                var autoForwardData = { userMainEmail: userMainEmail, processSub: true },
                     ForwardEdit = ViewForm.protectedMethods.createAutoForwardEdit('io.ox/core/autoforward'),
                     autoForward;
 
@@ -63,14 +63,23 @@ define('io.ox/mail/autoforward/settings/filter', [
                     _.extend(autoForwardData, {
                         id: data[0].id,
                         active: data[0].active,
-                        keep: false
+                        keep: false,
+                        processSub: true
                     });
 
                     _(data[0].actioncmds).each(function (value) {
-                        if (value.id === 'redirect') {
-                            autoForwardData.forwardmail = value.to;
-                        } else if (value.id === 'keep') {
-                            autoForwardData.keep = true;
+                        switch (value.id) {
+                            case 'redirect':
+                                autoForwardData.forwardmail = value.to;
+                                break;
+                            case 'keep':
+                                autoForwardData.keep = true;
+                                break;
+                            case 'stop':
+                                autoForwardData.processSub = false;
+                                break;
+                            default:
+                                if (ox.debug) console.log('wrong actioncmds');
                         }
                     });
 

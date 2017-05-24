@@ -12,8 +12,8 @@
  */
 
 define([
-    'io.ox/contacts/distrib/main', 'io.ox/contacts/api', 'gettext!io.ox/contacts'
-], function (main, api, gt) {
+    'io.ox/contacts/distrib/main'
+], function (main) {
 
     'use strict';
 
@@ -67,15 +67,15 @@ define([
 
         it('should paint some form components', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist'),
-                header = app.getWindow().nodes.header;
+                footer = app.getWindow().nodes.footer;
             expect(createForm.find('input.add-participant.tt-input').length, 'find input for name').to.equal(1);
-            expect(header.find('button.btn.btn-primary:disabled').length, 'find disabled save button').to.equal(1);
+            expect(footer.find('button.btn.btn-primary:disabled').length, 'find disabled save button').to.equal(1);
             expect(createForm.find('[data-extension-id="displayname"] input').length, 'find display name').to.equal(1);
         });
 
         it('should paint the empty list message', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
-            expect(createForm.find('[data-extension-id="participants_list"] li').text(), 'find empty list message').to.equal(gt('This list has no contacts yet'));
+            expect(createForm.find('[data-extension-id="participants_list"] li').text(), 'find empty list message').to.equal('Diese Liste hat noch keine Mitglieder');
         });
 
         it('fills the namefield ', function () {

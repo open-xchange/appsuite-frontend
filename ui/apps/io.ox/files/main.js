@@ -203,7 +203,8 @@ define('io.ox/files/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                title: gt('File quota'),
+                //#. Quota means a general quota for mail and files
+                title: coreSettings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('File quota'),
                 renderUnlimited: false,
                 module: 'file',
                 upsell: {
@@ -274,8 +275,13 @@ define('io.ox/files/main', [
 
             app.getViewOptions = function (folder) {
                 var options = app.settings.get(['viewOptions', folder], {}),
-                    defaultSort = folder === 'virtual/myshares' ? 5 : 702,
-                    defaultOrder = folder === 'virtual/myshares' ? 'desc' : 'asc';
+                    defaultSort = 702,
+                    defaultOrder = 'asc';
+
+                if (folder === 'virtual/myshares' || folderAPI.is('attachmentView', { id: folder })) {
+                    defaultSort = 5;
+                    defaultOrder = 'desc';
+                }
 
                 if (!/^(list|icon|tile)/.test(options.layout)) options.layout = 'list';
                 return _.extend({ sort: defaultSort, order: defaultOrder, layout: 'list' }, options);
@@ -292,7 +298,7 @@ define('io.ox/files/main', [
             // introduce shared properties
             app.props = new Backbone.Model({
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
-                'filter': 'none',
+                'filter': 'all',
                 'layout': layout,
                 'folderEditMode': false,
                 'details': _.device('touch') ? false : app.settings.get('showDetails', true)
@@ -306,7 +312,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, scrollto: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, scrollto: false }); // #bug 53151: scrollto = false to prevent a jumping selection when using shift+arrow to select multiple files
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -668,18 +674,17 @@ define('io.ox/files/main', [
                     );
                 } else {
 
-                    var item = app.listView.selection.get()[0], folder, model;
+                    var item = app.listView.selection.get()[0];
+                    var model;
 
                     if (/^folder\./.test(item)) {
                         // get folder
-                        folder = folderAPI.pool.getModel(item.replace(/^folder\./, ''));
-                        model = new api.Model(folder.attributes);
+                        model = new api.Model(folderAPI.pool.getModel(item.replace(/^folder\./, '')).attributes);
                     } else {
                         model = app.listView.collection.get(item);
                     }
 
                     sidebarView.render(model);
-                    sidebarView.renderSections();
                     sidebarView.$('img').trigger('appear.lazyload');
                     sidebarView.$('.sidebar-panel-thumbnail').attr('aria-label', gt('thumbnail'));
                 }
@@ -696,16 +701,30 @@ define('io.ox/files/main', [
          * Respond to changed filter
          */
         'change:filter': function (app) {
-
+            var ignoreFolderChange = false;
             app.props.on('change:filter', function (model, value) {
                 app.listView.selection.selectNone();
-                if (value === 'none') app.listView.setFilter();
-                else app.listView.setFilter('.file-type-' + value);
+                if (api.collectionLoader.setMimeTypeFilter(value === 'all' ? null : [value])) {
+                    var id = app.listView.model.get('folder');
+                    _(api.pool.getByFolder(id)).each(function (collection) {
+                        collection.expired = true;
+                    });
+                    app.listView.empty();
+                    var options = app.getViewOptions(id);
+                    app.props.set(options);
+                    app.listView.model.set('folder', null, { silent: true });
+                    ignoreFolderChange = true;
+                    app.listView.model.set('folder', id);
+                    ignoreFolderChange = false;
+                }
             });
 
             // reset filter on folder change
             app.on('folder:change', function () {
-                app.props.set('filter', 'none');
+                if (!ignoreFolderChange) {
+                    api.collectionLoader.setMimeTypeFilter(null);
+                    app.props.set('filter', 'all');
+                }
             });
         },
 
@@ -831,7 +850,7 @@ define('io.ox/files/main', [
             });
         },
 
-        //open on pressing enter
+        //open on pressing enter / space
         'selection-enter': function (app) {
             if (_.device('smartphone')) {
                 return;
@@ -839,7 +858,8 @@ define('io.ox/files/main', [
 
             // folders
             app.listView.$el.on('keydown', '.file-type-folder', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     // simple id check for folders, prevents errors if folder id contains '.'
                     var id = $(e.currentTarget).attr('data-cid').replace(/^folder./, '');
 
@@ -852,7 +872,8 @@ define('io.ox/files/main', [
 
             // files
             app.listView.$el.on('keydown', '.list-item:not(.file-type-folder)', function (e) {
-                if (e.which === 13) {
+                if (/13|32/.test(e.which)) {
+                    e.preventDefault();
                     var cid = app.listView.selection.get()[0],
                         selectedModel = _(api.resolve([cid], false)).invoke('toJSON'),
                         baton = ext.Baton({ data: selectedModel[0], collection: app.listView.collection, app: app, options: { eventname: 'selection-enter' } });
@@ -866,8 +887,8 @@ define('io.ox/files/main', [
          * Respond to API events that need a reload
          */
         'requires-reload': function (app) {
-            // listen to events that affect the filename, add files, or remove files
-            api.on('rename add:version remove:version change:version', _.debounce(function () {
+            // listen to events that affect the filename, description add files, or remove files
+            api.on('rename description add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
@@ -1101,7 +1122,7 @@ define('io.ox/files/main', [
             side.find('.foldertree-container').addClass('bottom-toolbar');
             side.find('.foldertree-sidepanel').append(
                 $('<div class="generic-toolbar bottom visual-focus">').append(
-                    $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
+                    $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                     .append(
                         $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                     )
@@ -1161,6 +1182,7 @@ define('io.ox/files/main', [
             app.get('find').on({
                 'find:query:result': function (response) {
                     api.pool.add('detail', response.results);
+                    app.props.set('filter', 'all');
                 }
             });
         },
@@ -1255,7 +1277,7 @@ define('io.ox/files/main', [
                     action: 'add'
                 });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
@@ -1263,20 +1285,21 @@ define('io.ox/files/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-tracking-id') || node.attr('data-name') || node.attr('data-action'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
-
                 // list view control toolbar dropdown
-                control.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
+                control.on('mousedown', 'a[data-name], a[data-action]', function (e) {
                     var node =  $(e.target).closest('a'),
                         action = node.attr('data-name'),
                         detail = node.attr('data-value');
@@ -1287,17 +1310,27 @@ define('io.ox/files/main', [
                     }
                     metrics.trackEvent({
                         app: 'drive',
-                        target: 'list-view-toolbar',
+                        target: 'list/toolbar',
                         type: 'click',
                         action: action,
                         detail: detail
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'drive',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'drive',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

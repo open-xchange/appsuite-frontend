@@ -59,7 +59,7 @@ Sometimes you manage to build a portal widgets that messes up all kinds of thing
 ```javascript
 require(['settings!io.ox/portal'], function(settings) {
  settings.set('widgets/user', '').save();
-}); 
+});
 ```
 
 # Debug relogin
@@ -78,7 +78,7 @@ Just add the parameter "cap" to URL hash. A leading minus disables a capability.
 
 # Changes do not apply while developing
 
-You did changes in your code and they don't simply don't apply? 
+You did changes in your code and they don't simply don't apply?
 There are several possibilites, you should check in order to find a solution.
 
 - Reload OX App Suite with cleared Browser Cache. Using Firefox on Linux-Distributions you can simply press Ctrl+F5. Please check the documentation of your Browser for Shortcuts and how to clear the cache.
@@ -90,7 +90,7 @@ There are several possibilites, you should check in order to find a solution.
 
 # Debug a specific folder
 
-If you want to get details of a specific folder, just inspect it via dev tools and look for data-obj-id="...". 
+If you want to get details of a specific folder, just inspect it via dev tools and look for data-obj-id="...".
 Copy the id and run the following in console:
 
 ```javascript

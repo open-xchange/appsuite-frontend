@@ -489,12 +489,12 @@ define('io.ox/portal/widgets', [
         });
 
     // add or remove upsell widget to portal
-    require(['io.ox/core/upsell', 'settings!io.ox/core'], function (upsell, settings) {
+    require(['io.ox/core/upsell', 'settings!io.ox/core'], function (upsell, coreSettings) {
 
         var options = _.extend({
                 enabled: true,
                 requires: 'active_sync || caldav || carddav'
-            }, settings.get('features/upsell/portal-widget')),
+            }, coreSettings.get('features/upsell/portal-widget')),
             hasWidget = api.containsType('upsell'),
             showWidget = options.enabled && !upsell.has(options.requires) && upsell.enabled(options.requires);
 

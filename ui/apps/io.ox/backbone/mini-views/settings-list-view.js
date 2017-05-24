@@ -180,6 +180,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
         },
 
         onKeydownDragHandle: function (e) {
+            if ($(e.target).is('a')) return;
             var self = this,
                 current = $(e.currentTarget),
                 items = self.$el.children('.draggable'),

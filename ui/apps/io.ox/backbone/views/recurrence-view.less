@@ -1,0 +1,53 @@
+.recurrence-view {
+
+    .checkbox {
+        margin-top: 0;
+    }
+
+    label {
+        margin-right: 5px;
+    }
+}
+
+.recurrence-view-dialog {
+
+    .text-group {
+        padding-top: 16px;
+        padding-bottom: 16px;
+
+        .simple-text-view {
+            padding-top: 5px;
+            font-weight: 500;
+        }
+    }
+
+    .radio {
+        display: inline-block;
+        margin-right: 32px;
+    }
+
+    .extra-label {
+        padding-left: 10px;
+    }
+
+    .form-control.small {
+        max-width: 50px;
+        display: inline-block;
+    }
+
+    .btn-group .btn.focus {
+        z-index: 10;
+
+        &:not(.active) {
+            background-color: transparent;
+        }
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) {
+        .btn-group .btn {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+
+}

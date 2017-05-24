@@ -11,6 +11,16 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+.io-ox-mail-compose-window {
+    .inline-yell {
+        display: inline-block;
+        float: right;
+        color: #447f00;
+        font-weight: 500;
+        margin: 0 8px;
+        padding-top: 6px;
+    }
+}
 .io-ox-mail-compose {
     // baseline adjustment
     padding-top: @default-padding;
@@ -84,7 +94,7 @@
         a {
             margin-right: 4px;
             padding: 2px;
-            color: @label-default-bg;
+            color: @hc-gray;
             text-decoration: none;
         }
 
@@ -96,11 +106,12 @@
     }
 
     .open-addressbook-popup {
+        font-size: 18px;
         position: absolute;
-        top: 5px;
+        top: 2px;
         right: 24px;
         padding: 2px;
-        color: @label-default-bg;
+        color: @hc-gray;
         text-decoration: none;
     }
 
@@ -304,13 +315,18 @@
 
     }
 
-    .show-share-attachments .toggle-mode {
-        padding-top: 16px;
+    .show-share-attachments {
+
+        margin-top: -12px;
+
+        .toggle-mode {
+            padding-top: 12px;
+        }
     }
 
     .mail-attachment-list header .toggle-details {
-            padding-top: 3px;
-        }
+        padding-top: 3px;
+    }
 
 }
 
@@ -357,6 +373,11 @@
             &[data-extension-id=composetoolbar] {
                 padding-top:8px;
                 padding-bottom:4px;
+                .btn-link {
+                    margin-bottom: 5px;
+                    padding: 0;
+                    font-size: 16px;
+                }
             }
 
             .maillabel.col-xs-1 {

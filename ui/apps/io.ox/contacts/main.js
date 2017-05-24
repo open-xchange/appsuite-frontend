@@ -132,7 +132,7 @@ define('io.ox/contacts/main', [
             app.pages.addPage({
                 name: 'listView',
                 container: app.getWindow().nodes.main,
-                classes: 'leftside'
+                classes: 'leftside border-right'
             });
             app.pages.addPage({
                 name: 'detailView',
@@ -178,14 +178,21 @@ define('io.ox/contacts/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target')
                 .attr({
-                    'tabindex': 0,
+                    'tabindex': -1,
                     'role': 'main',
                     'aria-label': gt('Contact Details')
                 }).scrollable();
         },
 
         'vgrid': function (app) {
-            var grid = app.grid;
+            var grid = app.grid,
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
+
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.parent().css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
 
             app.left.append(
                 // grid container
@@ -243,7 +250,21 @@ define('io.ox/contacts/main', [
 
             // The label function can be overwritten by an extension.
             var getLabel = function (data) {
-                return $.trim(data.sort_name || '').slice(0, 1).toUpperCase();
+                return $.trim(data.sort_name || 'Ω').slice(0, 1).toUpperCase()
+                    // 'ß'.toUpperCase() === 'SS'
+                    .slice(0, 1)
+                    .replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
+                    .replace(/[Ç]/g, 'C')
+                    .replace(/[ÈÉÊË]/g, 'E')
+                    .replace(/[ÌÍÎÏ]/g, 'I')
+                    .replace(/[Ñ]/g, 'N')
+                    .replace(/[ÖÒÓÔÕØ]/g, 'O')
+                    .replace(/[ß]/g, 'S')
+                    .replace(/[ÜÙÚÛ]/g, 'U')
+                    .replace(/[ÝŸ]/g, 'Y')
+                    // digits, punctuation and others
+                    .replace(/[[\u0000-\u0040\u005B-\u017E]/g, '#')
+                    .replace(/[^A-Z#]/, 'Ω');
             };
             ext.point('io.ox/contacts/getLabel').each(function (extension) {
                 if (extension.getLabel) getLabel = extension.getLabel;
@@ -264,9 +285,6 @@ define('io.ox/contacts/main', [
             grid.requiresLabel = function (i, data, current) {
                 if (!data) { return false; }
                 var prefix = getLabel(data);
-                prefix = prefix.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 return (i === 0 || prefix !== current) ? prefix : false;
             };
 
@@ -277,7 +295,7 @@ define('io.ox/contacts/main', [
 
             // A11y: This needs some work!
 
-            var fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            var fullIndex = '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
             /**
              * Thumb index
@@ -295,12 +313,13 @@ define('io.ox/contacts/main', [
             }
 
             Thumb.prototype.draw = function (baton) {
-                var node = $('<div class="thumb-index" aria-hidden="true">')
+                var node = $('<li class="thumb-index" role="option">')
+                    .attr('id', _.uniqueId('ti_'))
                     .text(this.label || _.noI18n(this.text));
                 if (this.enabled(baton)) {
                     node.data('text', this.text);
                 } else {
-                    node.addClass('thumb-index-disabled');
+                    node.addClass('thumb-index-disabled').attr('aria-disabled', true);
                 }
                 return node;
             };
@@ -328,9 +347,10 @@ define('io.ox/contacts/main', [
 
             app.Thumb = Thumb;
 
-            app.left.append(
+            app.left.prepend(
                 // thumb index
-                app.thumbs = $('<div class="atb contact-grid-index">')
+                app.thumbs = $('<ul class="atb contact-grid-index listbox" tabindex="0" role="listbox">')
+                    .attr('aria-label', 'Thumb index')
                     .on('click', '.thumb-index', thumbClick)
                     .on('touchmove', thumbMove)
             );
@@ -355,7 +375,16 @@ define('io.ox/contacts/main', [
                     });
                 },
                 getIndex: function (baton) {
+                    var keys = _(baton.labels).keys();
                     baton.data = _.map(fullIndex, baton.Thumb);
+
+                    // add omaga thumb for any other leading chars
+                    if (!_(keys).any(function (char) { return char === 'Ω'; })) return;
+                    baton.data.push(new baton.Thumb({
+                        label: _.noI18n('Ω'),
+                        text: 'Ω',
+                        enabled: _.constant(true)
+                    }));
                 }
             });
         },
@@ -861,7 +890,7 @@ define('io.ox/contacts/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'toolbar',
@@ -869,22 +898,46 @@ define('io.ox/contacts/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
+                    if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
+                // vgrid toolbar
+                nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'contacts',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'contacts',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });
@@ -904,7 +957,8 @@ define('io.ox/contacts/main', [
                 });
                 // selection in listview
                 app.grid.selection.on({
-                    'change': function (event, list) {
+                    'change': function (event, list, opt) {
+                        if (opt && opt.retriggerUnlessEmpty) return;
                         metrics.trackEvent({
                             app: 'contacts',
                             target: 'list',

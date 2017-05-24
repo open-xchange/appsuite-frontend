@@ -40,6 +40,12 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
         extend: function (extensions) {
             // check if the point has been closed
             if (closed[this.point.id]) return this;
+            // show warning if using extend with empty point.id
+            // if you do that in modal dialogs it will bind to almost every modal dialog
+            // be sure this is what you want
+            if (ox.debug && !this.point.id) {
+                console.warn('Using extend on extensible view without point.id. Be sure this is what you want. Function will be called in every extensible view without point.id (most modal dialogs for example)');
+            }
             var index = 100;
             _(extensions).each(function (fn, id) {
                 this.point.extend({ id: id, index: index, render: fn });

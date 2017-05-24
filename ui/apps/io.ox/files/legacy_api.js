@@ -24,7 +24,7 @@ define('io.ox/files/legacy_api', [
     'settings!io.ox/files',
     'gettext!io.ox/files',
     'io.ox/filter/files'
-], function (http, ext, apiFactory, folderAPI, coreConfig, cache, mediasupport, settings, gt) {
+], function (http, ext, apiFactory, folderAPI, coreSettings, cache, mediasupport, settings, gt) {
 
     'use strict';
 
@@ -241,7 +241,7 @@ define('io.ox/files/legacy_api', [
         requests: {
             all: {
                 action: 'all',
-                folder: coreConfig.get('folder/infostore'),
+                folder: coreSettings.get('folder/infostore'),
                 columns: allColumns,
                 extendColumns: 'io.ox/files/api/all',
                 sort: '702',
@@ -410,7 +410,7 @@ define('io.ox/files/legacy_api', [
 
         // alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: coreConfig.get('folder/infostore')
+            folder: coreSettings.get('folder/infostore')
         }, options || {});
 
         function fixOptions() {
@@ -487,7 +487,7 @@ define('io.ox/files/legacy_api', [
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: coreConfig.get('folder/infostore')
+            folder: coreSettings.get('folder/infostore')
         }, options || {});
 
         var formData = new FormData();
@@ -546,7 +546,7 @@ define('io.ox/files/legacy_api', [
     api.uploadNewVersionOldSchool = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: coreConfig.get('folder/infostore')
+            folder: coreSettings.get('folder/infostore')
         }, options || {});
 
         //missing arguments / argument properties
@@ -748,7 +748,7 @@ define('io.ox/files/legacy_api', [
      * @return { string} url
      */
     api.getUrl = function (file, mode, options) {
-        options = $.extend({ scaletype: 'contain' }, options || {});
+        options = $.extend({ scaleType: 'contain' }, options || {});
         var url = ox.apiRoot + '/files',
             // basic URL
             query = '?action=document&folder=' + file.folder_id + '&id=' + file.id +
@@ -757,7 +757,7 @@ define('io.ox/files/legacy_api', [
             name = (file.filename ? '/' + encodeURIComponent(file.filename) : ''),
             // scaling options
             thumbnail = 'thumbnailWidth' in options && 'thumbnailHeight' in options ?
-                '&scaleType=' + options.scaletype + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
+                '&scaleType=' + options.scaleType + '&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight : '',
             // avoid having identical URLs across contexts (rather edge case)
             userContext = '&' + $.param({
                 context: [String(ox.user_id), '_', String(ox.context_id)].join()

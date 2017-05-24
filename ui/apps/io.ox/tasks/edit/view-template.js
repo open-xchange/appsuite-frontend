@@ -18,7 +18,7 @@ define('io.ox/tasks/edit/view-template', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/tasks/edit/util',
-    'io.ox/calendar/edit/recurrence-view',
+    'io.ox/backbone/views/recurrence-view',
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/tk/attachments',
@@ -232,10 +232,11 @@ define('io.ox/tasks/edit/view-template', [
         index: 700,
         className: 'col-md-6 collapsed',
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div>').addClass('checkbox').append(
-                    $('<label class="control-label">').append(
-                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
                         $.txt(gt('All day'))
                     )
                 )
@@ -243,12 +244,18 @@ define('io.ox/tasks/edit/view-template', [
         }
     }, { row: '5' });
 
-    point.extend(new RecurrenceView({
+    point.extend({
         id: 'recurrence',
-        className: 'col-sm-12 collapsed',
+        className: 'col-xs-12 collapsed',
         tabindex: 0,
-        index: 800
-    }), { row: '6' });
+        index: 800,
+        render: function () {
+            this.$el.append(new RecurrenceView({
+                model: this.model
+            }).render().$el);
+            this.$el.find('.recurrence-view checkbox').attr('tabindex', 0);
+        }
+    }, { row: 6 });
 
     //reminder selection
     point.basicExtend({
@@ -448,12 +455,12 @@ define('io.ox/tasks/edit/view-template', [
             // private flag only works in private folders
             var folder_id = this.model.get('folder_id');
             if (!folderAPI.pool.getModel(folder_id).is('private')) return;
-
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('simple').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').append(
-                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                    $('<legend class="simple">').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
                         $.txt(gt('Private'))
                     )
                 )
@@ -469,7 +476,8 @@ define('io.ox/tasks/edit/view-template', [
             this.append(
                 new pViews.UserContainer({
                     collection: baton.model.getParticipants(),
-                    baton: baton
+                    baton: baton,
+                    empty: gt('This task has no participants yet')
                 }).render().$el.addClass('collapsed')
             );
         }
@@ -478,6 +486,7 @@ define('io.ox/tasks/edit/view-template', [
     point.basicExtend({
         id: 'add_participant',
         index: 1700,
+        className: 'row',
         row: '11',
         draw: function (baton) {
             var view = new AddParticipantView({
@@ -488,12 +497,14 @@ define('io.ox/tasks/edit/view-template', [
                     resources: false,
                     distributionlists: true
                 },
+                placeholder: gt('Add contact') + ' \u2026',
+                label: gt('Add contact'),
                 collection: baton.model.getParticipants()
             });
             this.append(
                 view.$el
             );
-            view.render().$el.addClass('col-xs-12 collapsed');
+            view.render().$el.addClass('col-md-6 collapsed');
             view.$el.find('input.add-participant').addClass('task-participant-input-field');
 
             view.typeahead.on('typeahead-custom:dropdown-rendered', function () {
@@ -771,7 +782,7 @@ define('io.ox/tasks/edit/view-template', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
                         app: 'task',

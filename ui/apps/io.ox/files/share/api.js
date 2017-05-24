@@ -133,22 +133,6 @@ define('io.ox/files/share/api', [
         collection: new SharesCollection(),
 
         /**
-         * invite ot share
-         * @param  { object } o
-         * @return { deferred } returns share
-         */
-        invite: function (o) {
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'invite',
-                    timezone: 'UTC'
-                },
-                data: o
-            });
-        },
-
-        /**
          * get a temporary link and related token
          * @param  { object } data
          * @return { deferred } returns related token
@@ -217,21 +201,6 @@ define('io.ox/files/share/api', [
                 api.trigger('remove:link', data);
                 api.trigger('remove:link:' + data.module + ':' + data.folder + (data.item ? ':' + data.item : ''));
                 return result;
-            });
-        },
-
-        /**
-         * get all shares by share/management API
-         * @return { deferred } an array with share data
-         */
-        allShares: function (module) {
-            return http.GET({
-                module: 'share/management',
-                params: {
-                    action: 'all',
-                    timezone: 'UTC',
-                    module: module
-                }
             });
         },
 
@@ -352,24 +321,6 @@ define('io.ox/files/share/api', [
                     timezone: 'UTC',
                     token: token
                 }
-            });
-        },
-
-        /**
-         * delete shares
-         * @param  { array }   shares
-         * @return { deferred } empty data and timestamp
-         */
-        remove: function (shares) {
-            if (_.isString(shares)) {
-                shares = [shares];
-            }
-            return http.PUT({
-                module: 'share/management',
-                params: {
-                    action: 'delete'
-                },
-                data: shares
             });
         },
 

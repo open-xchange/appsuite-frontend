@@ -194,7 +194,16 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 'iframe, object, applet, input, textarea, button, select, ' +
                 'canvas, script, noscript, audio, video, img'
                 )
-                .filter(':not(img.emoji,img[src*="' + ox.abs + ox.root + '/api/file"],img[data-pending="true"])').remove();
+                .filter(':not(' +
+                    [
+                        'img.emoji',
+                        'img[src*="' + ox.abs + ox.root + '/api/file"]',
+                        'img[src*="' + ox.root + '/api/file"]',
+                        'img[src*="' + ox.abs + ox.root + '/api/image"]',
+                        'img[src*="' + ox.root + '/api/image"]',
+                        'img[data-pending="true"]'
+                    ].join(', ') + ')'
+                ).remove();
             // beautify SUP tags
             node.find('sup').css('lineHeight', '0');
             // unwrap
@@ -309,21 +318,22 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             function replaceLists(html) {
 
                 html = html.replace(/<(ul|ol)\b[^>]*>([\s\S]*?)<\/\1>/gi, function (str, listType, innerHTML) {
+
                     var lis = innerHTML.split('</li>');
                     lis.splice(lis.length - 1, 1);
 
                     function fixupList(str, innerHTML) {
                         innerHTML = innerHTML
-                            .replace(/^\s+/, '')
-                            .replace(/\n\n/g, '\n\n    ')
+                            .replace(/(^\s+|\n$)/g, '')
+                            .replace(/\n\n/g, '\n ')
                             // indent nested lists
-                            .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1    $2 ');
+                            .replace(/\n([ ]*)+(\*|\d+\.) /g, '\n$1  $2 ');
                         return innerHTML;
                     }
 
                     for (var i = 0, len = lis.length; i < len; i++) {
                         if (lis[i]) {
-                            var prefix = (listType === 'ol') ? (i + 1) + '.  ' : '*   ';
+                            var prefix = (listType === 'ol') ? (i + 1) + '. ' : '* ';
                             lis[i] = prefix + lis[i].replace(/\s*<li[^>]*>([\s\S]*)/i, fixupList);
                         }
                         lis[i] = lis[i].replace(/(.) +$/m, '$1');

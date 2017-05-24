@@ -3,7 +3,7 @@ title: Settings
 ---
 
 ```
-namespace:  io.ox/settings 
+namespace:  io.ox/settings
 settings:   io.ox/settings
 ```
 
@@ -67,4 +67,12 @@ You have to provide a unique sectionID and a unique subgroupID to create a secti
 
 ```javascript
 'io.ox/settings/pane/mySectionId'
+```
+
+
+## Disable settings entry
+
+```
+// remove address book entry in tree
+ext.point('io.ox/settings/pane/main').disable('io.ox/contacts')
 ```

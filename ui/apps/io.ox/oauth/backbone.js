@@ -27,8 +27,12 @@ define('io.ox/oauth/backbone', [
     var Account = {};
 
     Account.Model = Backbone.Model.extend({
-        hasScope: function (scope) {
-            return _(this.get('enabledScopes')).contains(scope);
+        hasScopes: function (scopes) {
+            var self = this;
+            scopes = [].concat(scopes);
+            return _(scopes).reduce(function (memo, scope) {
+                return memo || _(self.get('enabledScopes')).contains(scope);
+            }, false);
         },
         enableScopes: function (scopes) {
             var wanted = this.get('wantedScopes') || this.get('enabledScopes') || [];
@@ -49,7 +53,7 @@ define('io.ox/oauth/backbone', [
             options = _.extend({ force: true }, options);
             var account = this,
                 needsReauth = options.force || (this.get('wantedScopes') || []).reduce(function (acc, scope) {
-                    return acc || !account.hasScope(scope);
+                    return acc || !account.hasScopes(scope);
                 }, false);
             if (!needsReauth) return $.when();
 
@@ -172,6 +176,36 @@ define('io.ox/oauth/backbone', [
                     }).done(options.success).fail(options.error);
                 default:
             }
+        },
+        fetchRelatedAccounts: function () {
+            var self = this;
+            return require([
+                'io.ox/core/api/account',
+                'io.ox/core/api/filestorage'
+            ]).then(function (accountAPI, filestorageAPI) {
+                return $.when(accountAPI.all(), filestorageAPI.getAllAccounts());
+            }).then(function (accounts, storageAccounts) {
+                return [].concat(
+                    storageAccounts.toJSON().filter(function (account) {
+                        return account.configuration
+                            && String(account.configuration.account) === String(self.get('id'));
+                    }).map(function addAccountType(model) {
+                        model.accountType = model.accountType || 'fileStorage';
+
+                        // handle possible error messages for fileStorage accounts
+                        if (model.error) model.status = { message: model.error };
+
+                        return model;
+                    }),
+                    accounts.filter(function isRelated(account) {
+                        return account.mail_oauth === self.get('id');
+                    })
+                ).map(function (account) {
+                    // add serviceId to related account
+                    account.serviceId = self.get('serviceId');
+                    return account;
+                });
+            });
         }
     });
 
@@ -186,34 +220,31 @@ define('io.ox/oauth/backbone', [
         }
     });
 
-    var iconsForService = {
-        'com.openexchange.oauth.google': 'fa-google',
-        'com.openexchange.oauth.yahoo': 'fa-yahoo'
-    };
-
     var ServiceItemView = Backbone.View.extend({
         tagName: 'li',
         className: 'service-item',
         render: function () {
-            this.$el.attr({
-                role: 'button',
-                tabindex: '0'
-            }).append(
-                $('<i class="service-icon fa">')
-                    .addClass(this.model.get('icon') || iconsForService[this.model.id] || 'fa-envelope'),
-                this.model.get('displayName')
-            ).data({
-                cid: this.model.cid
-            });
+            var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
+            this.$el.append(
+                $('<button>').addClass('btn btn-default').append(
+                    $('<i class="service-icon fa">')
+                        .addClass('logo-' + shortId),
+                    $('<div>')
+                        .addClass('service-label')
+                        .text(this.model.get('displayName'))
+                ).data({
+                    cid: this.model.cid
+                })
+            );
             return this;
         }
     });
     var ServicesListView = Backbone.View.extend({
         tagName: 'ul',
-        className: 'form-group list-unstyled services-list-view',
+        className: 'list-unstyled services-list-view',
         events: {
-            'keypress li': 'select',
-            'click li': 'select'
+            'keypress button': 'select',
+            'click button': 'select'
         },
         ItemView: ServiceItemView,
         render: function () {

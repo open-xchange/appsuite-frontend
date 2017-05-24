@@ -11,18 +11,63 @@
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
 
+/* dialog attributes for phones */
+.smartphone {
+    .share-permissions-dialog, .get-link-dialog {
+        .modal-footer {
+            button.btn {
+                width: 100%;
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: 4px;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+        }
+    }
+}
+
+/* dialog attributes for phones and tablets */
+.touch {
+    &.ios, &.android {
+        .share-permissions-dialog, .get-link-dialog {
+            .modal-dialog {
+                max-width: 100%;
+
+                .modal-content {
+                    textarea { resize: none; }
+                }
+            }
+        }
+    }
+}
+
 .share-wizard {
 
     .tokenfield {
         .border-radius(@border-radius-small @border-radius-small 0px 0px);
-        .twitter-typeahead .tt-dropdown-menu { max-height: 150px; }
+        .twitter-typeahead .tt-dropdown-menu { max-height: 125px; }
         // ensure all inputs share same blank space on the left
         &.form-control { padding-left: 7px; }
     }
 
-    textarea {
-        margin-top: -16px;
-        .border-radius(0px 0px @border-radius-small @border-radius-small);
+    .message {
+        textarea {
+            margin-top: -16px;
+            .border-radius(0px 0px @border-radius-small @border-radius-small);
+            resize: vertical;
+            max-height: ~"calc(50vh - 64px)";
+            min-height: 8em;
+        }
+
+        &.IE {
+            min-width: 100%;
+            max-width: 100%;
+            min-height: 8em;
+            max-height: ~"calc(50vh - 64px)";
+
+            .resize-polyfill.resize-polyfill-br { cursor: ns-resize; }
+        }
     }
 
     .link-group { width: 100%; }
@@ -35,6 +80,13 @@
             .date { margin-left: 5px; }
             .dropdown { vertical-align: middle; }
         }
+
+        // resize-polyfill sets z-index 2 onto the parent div of the textarea
+        // this would hide the reciepints dropdown behind it
+        &.recipients.IE {
+            z-index: 3;
+            position: relative;
+        }
     }
 
     a.sharelink { word-break: break-all; }
@@ -42,6 +94,8 @@
     &.invite .passwordgroup { display: none; }
 
 }
+
+.smartphone .form-group.recipients > .input-group { width: 100%; }
 
 .list-view-control:not(.upside-down).toolbar-top-visible .list-view.myshares-list { top: 80px; }
 
@@ -89,14 +143,18 @@
     }
 }
 
-.share-permissions-dialog {
+.modal.share-permissions-dialog {
+
+    .modal-content {
+        min-height: 450px;
+    }
 
     .modal-header {
+
         *zoom: 1;
 
         .btn {
             float: right;
-
             &.btn-primary { margin-left: 13px; }
         }
 
@@ -109,13 +167,19 @@
 
         &:after { clear: both; }
 
-        .autocomplete-controls {
-            width: 402px;
-            float: left;
+        .form-group {
+            margin: 8px 0 0 0;
         }
     }
 
-    .modal-body { padding: 16px 0; }
+    .modal-body {
+        padding: 16px 0;
+        min-height: 184px;
+
+        &.IE11 {
+            max-height: 184px; /* workaround for IE11 with resizing the contact list */
+        }
+    }
 
     .modal-footer {
 
@@ -130,15 +194,35 @@
 
         .share-options {
             text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+            margin-left: -16px;
+            width: ~"calc(100% + 32px)";
 
-            textarea { margin-top: -16px; }
+            textarea {
+                resize: vertical;
+                height: 96px;
+                min-height: 80px;
+                max-height: ~"calc(100vh - 410px)";
+                border: none;
+                box-shadow: none;
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            &.IE {
+                min-height: 80px;
+                max-height: ~"calc(100vh - 410px)";
+                min-width: ~"calc(100% + 32px)";
+                max-width: ~"calc(100% + 32px)";
+
+                textarea {
+                    height: 100%;
+                    min-height: 100%;
+                }
+
+                .resize-polyfill.resize-polyfill-br { cursor: ns-resize; }
+            }
         }
-    }
-
-    // fix border radius for a compact widget
-    .form-control{
-        &.tt-input     { .border-radius(@border-radius-small @border-radius-small 0px 0px); }
-        &.message-text { .border-radius(0px 0px @border-radius-small @border-radius-small); }
     }
 
     .permission {
@@ -158,7 +242,6 @@
                 line-height: @picture-height;
                 color: #eee;
             }
-
         }
 
         .role, .detail-dropdown, .entity-actions {
@@ -180,6 +263,10 @@
             font-weight: bold;
 
             .title, .first_name { font-weight: normal; }
+        }
+
+        .dropdown.open {
+            overflow: hidden;
         }
 
         .halo-link:hover {
@@ -237,4 +324,25 @@
 .touch .permissions-dialog .modal-body {
     height: auto;
     min-height: 200px;
+}
+.smartphone .share-permissions-dialog {
+
+    .entity-actions { text-align: center; font-size: 20px; }
+
+    .modal-header {
+        .modal-title { .ellipsis(); }
+        .input-group { width: 100%; }
+    }
+
+    .modal-footer {
+
+        .form-group {
+            text-align: left;
+            label { .ellipsis(); }
+        }
+     }
+}
+
+.smart-dropdown-container.open.dropup ul {
+    bottom: initial;
 }

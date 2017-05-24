@@ -19,9 +19,8 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
     'io.ox/files/util',
     'io.ox/core/extensions',
     'io.ox/files/upload/main',
-    'settings!io.ox/files',
     'gettext!io.ox/core/viewer'
-], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, fileUpload, settings, gt) {
+], function (DisposableView, FilesAPI, folderApi, Dialogs, util, ext, fileUpload, gt) {
 
     'use strict';
 
@@ -150,13 +149,27 @@ define('io.ox/core/viewer/views/sidebar/uploadnewversionview', [
 
         render: function () {
             if (!this.model || !this.model.isFile()) return this;
+            var self = this;
+
             // check if the user has permission to upload new versions
             folderApi.get(this.model.get('folder_id')).done(function (folderData) {
 
                 if (this.disposed) return;
-                if (!folderApi.can('write', folderData)) return;
                 if (util.hasStatus('lockedByOthers', { context: this.model.attributes })) return;
                 if (!folderApi.can('add:version', folderData)) return;
+
+                // try to find available permissions
+                if (!folderApi.can('write', folderData)) {
+                    var array = self.model.get('object_permissions') || self.model.get('com.openexchange.share.extendedObjectPermissions') || [],
+                        myself = _(array).findWhere({ entity: ox.user_id });
+                    // check if there is a permission for a group, the user is a member of
+                    // use max permissions available
+                    if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+                        // use rampup data so this is not deferred
+                        myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+                    }
+                    if (!(myself && (myself.bits >= 2))) return;
+                }
 
                 // add file upload widget
                 var $el = this.$el;

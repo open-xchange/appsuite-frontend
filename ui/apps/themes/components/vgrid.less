@@ -15,6 +15,12 @@
 /* vGrid */
 .vgrid {
     outline: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: -1px;
+
     .user-select(none);
 
     .vgrid-scrollpane {
@@ -45,6 +51,19 @@
                 * { color: #fff !important; }
             }
         }
+    }
+
+    .resizebar {
+        background: transparent;
+        width: 5px;
+        height: 100%;
+        position: relative;
+        z-index: 10000;
+        float: right;
+        cursor: e-resize;
+        cursor: ew-resize;
+        cursor: col-resize;
+        right: -3px;
     }
 
     @toolbar-height: 45px;
@@ -124,7 +143,7 @@
             padding-left: 16px;
             display: none;
             i {
-                color: #ccc;
+                color: #767676;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
@@ -228,19 +247,19 @@
         padding: 12px 0 0 16px;
 
         i.fa:before {
-            color: #ccc;
+            color: #767676;
             font-size: 18px;
             content: "\f096"; // fa-check-square-o
         }
     }
 
     &.selected .vgrid-cell-checkbox i.fa:before {
-        color: #aaa;
+        color: #767676;
         content: "\f14a"; // fa-check-square-o
     }
 
     .has-focus &.selected .vgrid-cell-checkbox i.fa:before {
-        color: rgba(255, 255, 255, 0.5);
+        color: #fff;
     }
 
     .swipeDelete {
@@ -251,7 +270,7 @@
         line-height: 61px;
         height: 100%;
         background-color: #FF4105;
-        color: #FFF;
+        color: #fff;
         font-size: 22px;
         width: 80px;
         text-align: center;

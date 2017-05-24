@@ -45,8 +45,8 @@ span.hint {
 
 /* model.trigger('invalid:... */
 .help-block.error {
-    font-weight: bold;
-    color: red;
+    //font-weight: bold;
+    color: @error-text-color;
 }
 
 /* fail handling */
@@ -270,9 +270,24 @@ div.hopscotch-bubble {
     -webkit-tap-highlight-color: transparent;
 }
 
-.scrollable[tabindex] {
-    &:focus {
-        box-shadow: inset 0 0 0 2px @link-color;
+html:not(.internet-explorer) {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            box-shadow: inset 0 0 0 2px @link-color;
+        }
+    }
+}
+
+// Apparently IE does not manage to draw box shadows without leaving artifacts when scrolling
+// So we have to use boder and change the padding so the content does not move on focus. IE strikes again!
+.internet-explorer {
+    .scrollable[tabindex], .listbox[tabindex] {
+        &:focus {
+            border: 2px solid @link-color;
+            &.default-content-padding:not(.no-padding-adjustment) {
+                padding: 18px 28px;
+            }
+        }
     }
 }
 
@@ -310,11 +325,8 @@ div.hopscotch-bubble {
     right: 0;
 }
 
-.abs-lr {
-    position: absolute;
-    left: 0;
-    right: 0;
-}
+.abs-r { right: 0; }
+.abs-l { left: 0; }
 
 .bright-text {
     color: #888;
@@ -326,11 +338,16 @@ div.hopscotch-bubble {
 
 }
 
+.ellipsis { .ellipsis(); }
+
 .person, .person-link {
     color: @person-link-color;
     word-break: normal;
-    cursor: pointer;
     white-space: nowrap;
+}
+
+.person-link {
+    cursor: pointer;
 }
 
 .default-content-padding { padding: 20px 30px; }
@@ -370,7 +387,8 @@ div.hopscotch-bubble {
 }
 
 @media (max-width: 900px) {
-    .default-content-padding { padding: 26px 13px 26px 13px; }
+    .default-content-padding { padding: 26px 13px; }
+    .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 24px 11px; }
 }
 
 .form-spacer { margin-top: 32px; }
@@ -378,14 +396,44 @@ div.hopscotch-bubble {
 // ensure visibility for tooltips
 .tooltip { z-index: 100000; }
 
+.center-childs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-container {
+    // space for toggle action and caps-lock indicator
+    input.form-control { padding-right: 50px; }
+    .toggle-asterisks.form-control-feedback {
+        display: none;
+        height: 22px;
+        padding: 0px 16px;
+        top: 4px;
+        right: 4px;
+        bottom: 4px;
+        z-index: 3;
+        pointer-events: all;
+        background-color: #e6e6e6;
+        font-size: 16px;
+        &:focus {
+            color: #ffffff;
+            background-color: #3c73aa;
+        }
+    }
+    &.has-focus .toggle-asterisks {
+        display: flex;
+    }
+}
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
 @media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
-    .default-content-padding { padding: 5px 10px 5px 10px; }
-
+    .default-content-padding { padding: 5px 10px; }
+    .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 3px 8px; }
     .form-control {padding: 4px; }
 
     // flat input fields

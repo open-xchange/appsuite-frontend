@@ -26,7 +26,7 @@ define('io.ox/mail/toolbar', [
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailsettings, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -50,6 +50,12 @@ define('io.ox/mail/toolbar', [
             mobile: 'lo',
             label: gt('Edit draft'),
             ref: 'io.ox/mail/actions/edit'
+        },
+        'edit-copy': {
+            prio: 'hi',
+            mobile: 'lo',
+            label: gt('Edit copy'),
+            ref: 'io.ox/mail/actions/edit-copy'
         },
         'reply': {
             prio: 'hi',
@@ -116,8 +122,17 @@ define('io.ox/mail/toolbar', [
             label: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
+                if (!mailSettings.get('features/flag/color')) return;
                 flagPicker.attach(this, { data: baton.data });
             }
+        },
+        'flag': {
+            prio: 'hi',
+            mobile: 'lo',
+            icon: 'fa fa-star-o',
+            //#. Verb: (to) flag messages
+            label: gt.pgettext('verb', 'Flag'),
+            ref: 'io.ox/mail/actions/flag'
         },
         'archive': {
             prio: 'hi',
@@ -207,7 +222,9 @@ define('io.ox/mail/toolbar', [
     });
 
     new actions.Action('io.ox/mail/actions/color', {
-        requires: 'some',
+        requires: function (e) {
+            return mailSettings.get('features/flag/color') && e.collection.has('some');
+        },
         action: $.noop
     });
 

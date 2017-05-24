@@ -48,7 +48,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
                 // use case: reload on new messages; race-conditions with external clients
                 var first = _(data).first(), last = collection.last().toJSON();
                 // use "head" item to compare threads
-                if (last.head) last = last.head;
+                if (last && last.head) last = last.head;
+                if (first && first.head) first = first.head;
                 // compare
                 if (_.cid(first) !== _.cid(last)) {
                     if (ox.debug) console.warn('paginate compare fail', _.cid(first), _.cid(last), data);

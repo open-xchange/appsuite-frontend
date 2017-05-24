@@ -283,6 +283,11 @@ define('io.ox/calendar/freetime/timeView', [
                         appointmentNode = $('<div class="appointment" draggable="false">')
                             .addClass(availabilityClasses[appointment.shown_as])
                             .css({ left: left + '%', right: right + '%' });
+
+                    // appointment has a width of 0 it doesn't need to be drawn (happens if appointment is in non-working-times and the option to display them is deactivated)
+                    if (100 - left - right === 0) {
+                        return;
+                    }
                     appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
 
                     if (appointment.title) {
@@ -544,9 +549,13 @@ define('io.ox/calendar/freetime/timeView', [
 
         // utility function to get the position in percent for a given time
         timeToPosition: function (timestamp) {
-            var start,
-                end,
+            var start = moment(this.model.get('currentWeek')).startOf('day'),
+                end = moment(start).add(1, 'days'),
                 day = 0,
+                // if we have a daylight saving time change within the week we need to compensate the loss/addition of an hour
+                dstOffset = this.model.get('onlyWorkingHours') ? 24 - end.diff(start, 'hours') : 0,
+                width = 100 / (7 * (this.model.get('endHour') - this.model.get('startHour') + 1)),
+                prevStart,
                 percent = 100 / 7,
                 notOnScale = false;
 
@@ -572,11 +581,16 @@ define('io.ox/calendar/freetime/timeView', [
                     day++;
                     break;
                 }
+
+                prevStart = start.clone();
                 start.add(1, 'days');
+                if (this.model.get('onlyWorkingHours') && dstOffset === 0) {
+                    dstOffset = 24 - start.diff(prevStart, 'hours');
+                }
                 end.add(1, 'days');
             }
 
-            return day * percent + (notOnScale ? 0 : ((timestamp - start.valueOf()) / (end.valueOf() - start.valueOf()) * percent));
+            return day * percent + (notOnScale ? 0 : ((timestamp - start.valueOf()) / (end.valueOf() - start.valueOf()) * percent) + dstOffset * width);
         },
 
         // utility function, position is given in %

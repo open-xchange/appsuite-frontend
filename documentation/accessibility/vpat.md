@@ -3,15 +3,12 @@ title: VPAT 1.3
 description: Voluntary Product Accessibility Template (VPAT™) Version 1.3 (July 12, 2016)
 ---
 
-<div class="alert alert-warning" style="max-width: 700px"><p style="color:red">This VPAT is based on release <strong>7.8.3</strong>, the revised document for our newer release <strong>7.8.4</strong> can be found here:<br>
-<a href="https://documentation.open-xchange.com/7.8.4/ui/accessibility/vpat.html">https://documentation.open-xchange.com/7.8.4/ui/accessibility/vpat.html</a></p>
-</div>
 The purpose of the Voluntary Product Accessibility Template, or VPAT™, is to assist Federal contracting officials and other buyers in making preliminary assessments regarding the availability of commercial “Electronic and Information Technology” products and services with features that support accessibility.  It is assumed and recommended that offerers will provide additional contact information to facilitate more detailed inquiries.
 The first table of the Template provides a summary view of the Section 508 Standards.  The subsequent tables provide more detailed views of each subsection.  There are three columns in each table.  Column one of the Summary Table describes the subsections of subparts B and C of the Standards.  The second column describes the supporting features of the product or refers you to the corresponding detailed table, e.g., “equivalent facilitation."  The third column contains any additional remarks and explanations regarding the product.  In the subsequent tables, the first column contains the lettered paragraphs of the subsections.  The second column describes the supporting features of the product with regard to that paragraph.  The third column contains any additional remarks and explanations regarding the product.
 
 **Date:** May 5, 2017
 
-**Name of product:** Open-Xchange App Suite UI (Core) 7.8.3
+**Name of product:** Open-Xchange App Suite UI (Core) 7.8.4
 
 **Contact for more information:** <a href="mailto:info@open-xchange.com">info@open-xchange.com</a>
 
@@ -80,10 +77,9 @@ Exempt from the scope is user content e.g. HTML mails, as we can not modify user
             </td>
             <td class="support supports-with-exceptions">Supports with exceptions</td>
             <td class="comments"><p>
-                Most of App Suite UI's core functionality is keyboard accessible, with some exceptions:
-                    - Some instances of drag and drop functionality, which have no keyboard equivalents.
-                    - Some instances of partial implementation of custom and standard keyboard interaction.
-                    - The thumbnail index in addressbook and the cancel search button is not accessible via keyboard
+                Most of App Suite UI's core functionality is keyboard accessible, with some exceptions:<br>
+                    - Some instances of drag and drop functionality, which have no keyboard equivalents.<br>
+                    - Isolated instances of partial implementation of custom and standard keyboard interaction.
                 </p>
             </td>
         </tr>
@@ -125,11 +121,8 @@ Exempt from the scope is user content e.g. HTML mails, as we can not modify user
                 program element, the information conveyed by the image must also
                 be available in text.
             </td>
-            <td class="support supports-with-exceptions">Supports with exceptions</td>
-            <td class="comments"><p>WAI-ARIA is used to expose role and state information on most elements, with some exceptions:<br>
-            - In folder tree views the information conveyed to screen readers is overly verbose and sometimes the level of the current active element is misrepresented<br>
-            - In some instances tooltips or aria-labels are missing from elements that are displayed as an icon
-            </p></td>
+            <td class="support supports">Supports</td>
+            <td class="comments">WAI-ARIA is used to expose role and state information on most elements.</td>
         </tr>
         <tr>
             <td class="criterion">
@@ -212,11 +205,8 @@ Exempt from the scope is user content e.g. HTML mails, as we can not modify user
                 elements, and functionality required for completion and
                 submission of the form, including all directions and cues.
             </td>
-            <td class="support supports-with-exceptions">Supports with exceptions</td>
-            <td class="comments"><p>Most forms in App Suite UI should always have accessible form controls, with some exceptions:<br>
-                - The search form does not have a visible label<br>
-                - Autocompletion in tokenfield input fields is not correctly conveyed to assistive technology
-            </p></td>
+            <td class="support supports">Supports</td>
+            <td class="comments">Forms in App Suite UI should always have accessible form controls.</td>
         </tr>
     </tbody>
 </table>
@@ -263,7 +253,7 @@ Exempt from the scope is user content e.g. HTML mails, as we can not modify user
             <td class="support supports-with-exceptions">Supports with exceptions</td>
             <td class="comments">
                 <p>
-                The state of an active app in the application launcher (top bar) and the focus of items in action menus, list views, portal tiles and dropdown menus is only indicated via an aria-label other than the change of the background color.
+                The state of an active app in the application launcher (top bar) and the focus of items in action menus, list views, portal tiles and dropdown menus is only indicated via the browser tooltip and an aria-label other than the change of the background color.
                 In list views, list-view actions and dropdown menus the focus on items is also indicated by inverting the text color.
                 </p>
             </td>

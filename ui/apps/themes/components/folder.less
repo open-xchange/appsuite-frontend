@@ -29,10 +29,14 @@
     // width fix
     .tree-container {
         min-width: 100%;
-        display: table;
+        display: block;
         padding: 0;
         margin: 0;
         outline: 0;
+    }
+
+    a[role="treeitem"] {
+        text-decoration: underline;
     }
 
     .folder {
@@ -44,7 +48,7 @@
         cursor: pointer;
         outline: 0;
 
-        &.selected > .folder-node > .folder-options {
+        &.selected > .folder-node .folder-options {
             display: inline-block;
         }
 
@@ -54,8 +58,11 @@
 
         &.disabled > .folder-node > .folder-label,
         &.no-select > .folder-node > .folder-label {
-            opacity: 0.5;
+            color: #707070;
             font-style: italic;
+        }
+        &.selected.no-select:not(:focus) > .folder-node > .folder-label {
+            color: #616161;
         }
     }
 
@@ -120,13 +127,14 @@
             width: @indentation;
         }
 
-        .folder-label, .folder-counter, .folder-options {
+        .folder-label, .folder-counter, .folder-options, .folder-buttons {
             font-weight: @normal;
             display: inline-block;
             -webkit-font-smoothing: antialiased;
             margin: 0 @default-padding 0 0;
             &:empty { margin: 0; }
         }
+        .folder-options { margin-right: 0; }
 
         .folder-label {
             font-size: @fontSize;
@@ -223,7 +231,7 @@
         display: block;
     }
 
-    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders {
+    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders {
         margin-bottom: @default-padding;
         @media (max-width: 480px), (max-device-width: 480px) {
             margin-bottom: 0;
@@ -250,9 +258,7 @@
     .selected > .folder-node > .folder-label {
         font-weight: @bold;
         vertical-align: top;
-        div {
-            .ellipsis();
-        }
+        .ellipsis();
     }
 
     .flat-tree {
@@ -359,8 +365,8 @@
 // subscribe dialog
 .io-ox-dialog-popup {
     .has-error .btn-new-account {
-        color: #a94442;
-        border-color: #a94442;
+        color: @error-text-color;
+        border-color: @error-text-color;
         box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     }
 }
@@ -416,6 +422,11 @@
                 }
             }
         }
+
+        .folder.section + .links {
+            margin-left: 0px;
+        }
+
         .links {
             font-size: @font-size-touch;
         }

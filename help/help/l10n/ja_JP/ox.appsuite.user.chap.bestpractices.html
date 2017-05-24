@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="ユーザ ガイド">
 <link rel="up" href="index.html" title="ユーザ ガイド">
-<link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html" title="12.1.1.3. iCal インポートの実行">
+<link rel="prev" href="ox.appsuite.user.sect.datainterchange.export.html" title="12.2. データのエクスポート">
 <link rel="next" href="ox.appsuite.user.index.html" title="索引">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律上の通知">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
@@ -22,7 +22,7 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html">戻る</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.datainterchange.export.html">戻る</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">ホーム</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目次</a></li>
 <li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.index.html">次へ</a></li>
@@ -66,10 +66,6 @@
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
 </dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
-</dt>
 </dl></dd>
 <dt>13.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">仕事、予定表、アポイントに関する質問</a>
 </dt>
@@ -93,8 +89,6 @@
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">外部のパートナーが特定の連絡先を利用できるようにする方法を教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">特定のドキュメントを外部のパートナーと共有する方法を教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">他のユーザとフォルダを共有したいのですが、どの権限を設定すればよいのでしょうか？</a>
 </dt>
 </dl></dd>
 </dl></dd>
@@ -131,10 +125,6 @@
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
 </dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
-</dt>
 </dl></dd>
 <dt>13.3  <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.calendar">仕事、予定表、アポイントに関する質問</a>
 </dt>
@@ -158,8 +148,6 @@
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">外部のパートナーが特定の連絡先を利用できるようにする方法を教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">特定のドキュメントを外部のパートナーと共有する方法を教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">他のユーザとフォルダを共有したいのですが、どの権限を設定すればよいのでしょうか？</a>
 </dt>
 </dl></dd>
 </dl>
@@ -250,7 +238,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>新規のメールやアポイントを受け取ると、メニューバーの右側にある <span class="guilabel"><strong>未読バッジ</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> に新規オブジェクトの数が表示されます。このアイコンをクリックすると、<span class="guilabel"><strong>通知エリア</strong></span> が表示され、このエリアに新規のオブジェクトに関する情報が表示されます。ここから、さまざまな機能を直接起動することもできます。ここから、さまざまな機能を直接起動することもできます。例えば、新規のメールを閲覧したり、新規のアポイントを確認したりできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. ユーザ インターフェース">ユーザ インターフェース</a>を参照してください。</p></td>
+<td align="left" valign="top"><p>新規のメールやアポイントを受け取ると、メニュー バーの右側にある <span class="guilabel"><strong>未読バッジ</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.unreadbadge"></a><img src="../../images/appsuite_user_icon_unreadbadge.png"></span> に新規オブジェクトの数が表示されます。このアイコンをクリックすると、<span class="guilabel"><strong>通知エリア</strong></span> が表示され、このエリアに新規のオブジェクトに関する情報が表示されます。ここから、さまざまな機能を直接起動することもできます。例えば、新規のメールを閲覧したり、新規のアポイントを確認したりできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.firststeps.gui.html" title="3.1. ユーザインターフェース">ユーザインターフェース</a>を参照してください。</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -279,10 +267,6 @@
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.autoforward">別のメール アドレスにメールを自動転送する方法を教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.unifiedmail">複数のメール アカウントの受信トレイを一覧表示する方法を教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.mailfilter.conditions">メール フィルタのルールに使用する条件について教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.subscribe.socialnetworks">ソーシャル ネットワークの連絡先を使用する方法を教えてください。</a>
 </dt>
 </dl></td></tr>
 <tr class="question">
@@ -338,7 +322,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>メールを下書きとして保存する機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.8. メールの下書きの作成">メールの下書きの作成</a>を参照してください。</p></td>
+<td align="left" valign="top"><p>メールを下書きとして保存する機能を使用します。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.draft.html" title="5.5.8. メールの下書きの作成">メールの下書きの作成</a> を参照してください。</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -351,7 +335,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>Google を含む、さまざまなメールサービス プロバイダのメールアカウントをセットアップできます。この際に必要になるのは、各プロバイダのアカウント情報だけです。外部メール アカウントのセットアップが完了すれば、すぐにフォルダ ツリー内からそのアカウントのメールにアクセスできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.externalaccounts.html" title="5.8. メール アカウント">メール アカウント</a>を参照してください。</p></td>
+<td align="left" valign="top"><p>Google を含む、さまざまなメール サービス プロバイダのメール アカウントをセットアップできます。この際に必要になるのは、各プロバイダのアカウント情報だけです。外部メール アカウントのセットアップが完了すれば、すぐにフォルダ ツリー内からそのアカウントのメールにアクセスできます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.accounts.html" title="5.9. メールアカウント">メールアカウント</a> を参照してください。</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -364,7 +348,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>設定で、<span class="guilabel"><strong>自動転送</strong></span> の機能を有効にします。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.4. メールの自動転送">メールの自動転送</a> を参照してください。</p></td>
+<td align="left" valign="top"><p>設定で、<span class="guilabel"><strong>自動転送</strong></span> の機能を有効にします。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.send.autoforward.html" title="5.4.10. メールの自動転送">メールの自動転送</a> を参照してください。</p></td>
 </tr>
 <tr class="question">
 <td align="left" valign="top">
@@ -377,74 +361,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>統合メールを使用すると、複数のメールアカウントの受信トレイを一つのフォルダで表示できます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.18. 統合メールの使用">統合メールの使用</a>を参照してください。</p></td>
-</tr>
-<tr class="question">
-<td align="left" valign="top">
-<a name="ox.appsuite.user.practice.mailfilter.conditions"></a><a name="id-1.14.4.2.8.1"></a><p><b>問：</b></p>
-</td>
-<td align="left" valign="top">
-<p>メール フィルタのルールに使用する条件について教えてください。</p>
-<a class="indexterm" name="id-1.14.4.2.8.1.2"></a>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p>次の方法で、条件を作成できます。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>メールの要素 (例: 「件名」) を選択</p></li>
-<li class="listitem"><p>判定基準 (例: 「次の文字列と完全に一致」) を選択</p></li>
-<li class="listitem"><p>引数 (例: 「minutes」) を入力</p></li>
-</ul></div>
-<p>上記の場合、メールの件名が引数の文字 (「minutes」) に完全に一致するかどうかが検証されます。判定基準や文字列を変更して、条件を調整できます。各判定基準の違いは、次の例で説明します。ここでは、メールの絞り込みとして件名を使用します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem">
-<p>判定基準: 「次の文字列を含む」 引数の文字が件名に含まれる場合、条件を満たします。例: 引数を「minutes」とします。</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
-<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合も、条件を満たします。</p></li>
-</ul></div>
-</li>
-<li class="listitem">
-<p>判定基準: 「次の文字列と完全に一致」件名が引数の文字列に完全に一致する場合、条件を満たします。例: 引数を「minutes」とします。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>件名が「minutes」の場合、条件を満たします。</p></li>
-<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合、条件を満たしません。</p></li>
-</ul></div>
-</li>
-<li class="listitem">
-<p>判定基準：「次の文字列と一致」 件名が引数の文字に完全に一致する場合、条件を満たします。この文字列には、ワイルドカードを含めることができます。例：因数を「minutes」とします。「*」の文字は、任意の文字を示すワイルドカードです。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>「minutes update」の場合、条件を満たします。</p></li>
-<li class="listitem" style="list-style-type: none"><p>件名が「meeting minutes」の場合、条件を満たしません。</p></li>
-</ul></div>
-</li>
-<li class="listitem">
-<p>判定基準：「次の文字列と一致 (正規表現)」 正規表現の形で引数に入力した文字が件名に含まれる場合、条件を満たします。正規表現を使用すれば、複雑な絞込みも可能になります。詳細は、インターネットの関連サイトを参照してください。正規表現の非常に簡単な例を次に示します。 引数に「organi(z|s)ation」を設定します。「(z|s)」の表現は、「z」または「s」のいずれかの文字を表します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>「minutes update」の場合、条件を満たします。</p></li>
-<li class="listitem" style="list-style-type: none"><p>件名が「organisation」の場合も条件を満たします。</p></li>
-<li class="listitem" style="list-style-type: none"><p>件名が「Organic」の場合、条件は満たしません。</p></li>
-</ul></div>
-</li>
-</ul></div>
-<p>
-          </p>
-</td>
-</tr>
-<tr class="question">
-<td align="left" valign="top">
-<a name="ox.appsuite.user.practice.subscribe.socialnetworks"></a><a name="id-1.14.4.2.9.1"></a><p><b>問：</b></p>
-</td>
-<td align="left" valign="top">
-<p>ソーシャル ネットワークの連絡先を使用する方法を教えてください。</p>
-<a class="indexterm" name="id-1.14.4.2.9.1.2"></a>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>連絡先の登録機能を使用すれば、ソーシャル ネットワークの連絡先を使用できます。詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html" title="11.4.1. データの登録">データの登録</a>を参照してください。</p></td>
+<td align="left" valign="top"><p>統合メールを使用すると、複数のメール アカウントの受信トレイを一つのフォルダで表示できます。詳細は、<a class="xref" href="ox.appsuite.user.sect.email.manage.unifiedmail.html" title="5.5.18. 統合メールの使用">統合メールの使用</a> を参照してください。</p></td>
 </tr>
 <tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
 <a name="ox.appsuite.user.practice.calendar"></a>13.3. 仕事、予定表、アポイントに関する質問</h3></td></tr>
@@ -534,61 +451,72 @@
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>例1：</strong></span>アポイントまたは仕事が第２曜日ごとに行われます。開始日を 2013 年 1 月 7 日に設定し、５回繰り返します。</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>開始日を 2013 年 1 月 7 日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>[毎日] を選択</p></li>
-<li class="listitem" style="list-style-type: none"><p>繰り返しを 2 日ごとに設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>5 回で終了に設定</p></li>
+<p><span class="phrase"><strong>例1：</strong></span>アポイントまたは仕事が第２曜日ごとに行われます。開始日を 2017 年 1 月 4 日に設定5回繰り返します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>毎日</strong></span>繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p>間隔<span class="guibutton"><strong>2</strong></span>日</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>何回も発生した後</strong></span>終了</p></li>
+<li class="listitem" style="list-style-type: none"><p>発生回数5回</p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>例：</strong></span>2013 年 1 月 8 日から毎週火曜日と金曜日に行われる開始日を 2013 年 1 月 8 日に設定</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>開始日を 2013 年 1 月 8 日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>[毎週] を選択</p></li>
-<li class="listitem" style="list-style-type: none"><p>繰り返しを毎週火曜日と金曜日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>期限なしに設定</p></li>
+<p><span class="phrase"><strong>例：</strong></span>2013 年 1 月 8 日から毎週火曜日と金曜日に行われる開始日を 2017 年 1 月 10日に設定</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>毎週</strong></span>繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p>稼働日<span class="guibutton"><strong>火</strong></span>、<span class="guibutton"><strong>金</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>間隔<span class="guibutton"><strong>1</strong></span>週間</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>期限なし</strong></span>で終了</p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>例3：</strong></span>2013 年 1 月 9 日から第 2 水曜日ごとに行われます。開始日を 2013 年 1 月 8 日に設定します。最後のアポイントは、2013年3月27日に設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>開始日を 2013 年 1 月 9 日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>[毎週] を選択</p></li>
-<li class="listitem" style="list-style-type: none"><p>繰り返しを 2 週間ごとの水曜日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>2013 年 3 月 27 日に終了に設定</p></li>
+<p><span class="phrase"><strong>例3：</strong></span>2013 年 1 月 9 日から第 2 水曜日ごとに行われます。開始日を 2017 年 1 月 11日に設定最後のアポイントは、2017年3月08日に設定します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>毎週</strong></span>繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p>稼働日 <span class="guibutton"><strong>水</strong></span></p></li>
+<li class="listitem" style="list-style-type: none"><p>間隔<span class="guibutton"><strong>2</strong></span>週間</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>特定の日</strong></span>に終了</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>2017年3月8日</strong></span>に終了</p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>例 4: </strong></span>アポイントまたは仕事を毎月第 1 月曜日に行われます。開始日を 2013 年 2月 4 日に設定します。イベントは12回繰り返します。</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>開始日を 2013 年 2 月 4 日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>[毎月] を選択</p></li>
-<li class="listitem" style="list-style-type: none"><p>繰り返しを毎月の第 1 月曜日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>12 回で終了に設定</p></li>
+<p><span class="phrase"><strong>例 4: </strong></span>アポイントまたは仕事を毎月第 1 月曜日に行われます。開始日を 2017年2月6日に設定イベントは12回繰り返します。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>毎月</strong></span>繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>日</strong></span>毎に繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p>間隔<span class="guibutton"><strong>1</strong></span>ヶ月</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>何回も発生した後</strong></span>終了</p></li>
+<li class="listitem" style="list-style-type: none"><p>発生回数<span class="guibutton"><strong>12</strong></span>回</p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p><span class="phrase"><strong>例 5: </strong></span>アポイントまたは仕事が毎年11月の最後の金曜日に行われます。開始日を 2013 年 11 月 29 日に設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>開始日を 2013 年 11 月 29 日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>[毎年] を選択</p></li>
-<li class="listitem" style="list-style-type: none"><p>繰り返しを毎年 11 月の最後の金曜日に設定</p></li>
-<li class="listitem" style="list-style-type: none"><p>期限なしに設定</p></li>
+<p><span class="phrase"><strong>例 5: </strong></span>アポイントまたは仕事が毎年11月の最後の金曜日に行われます。開始日を2017年11月24日に設定</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>毎年</strong></span>繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>曜日</strong></span>毎に繰り返し</p></li>
+<li class="listitem" style="list-style-type: none"><p><span class="guibutton"><strong>期限なし</strong></span>で終了</p></li>
 </ul></div>
+<p>
+          </p>
 </td>
 </tr>
 <tr class="question">
@@ -602,7 +530,7 @@
 </tr>
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top"><p>アポイントの作成時に、<span class="guibutton"><strong>空き時間を検索</strong></span> をクリックするか、ツールバーで <span class="guibutton"><strong>スケジューリング</strong></span> アイコン <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.practice.scheduling"></a><img src="../../images/appsuite_user_icon_toolbar_schedule.png"></span> をクリックします。詳細は、<a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.2. 複数の出席者とのアポイントのスケジューリング">複数の出席者とのアポイントのスケジューリング</a>を参照してください。</p></td>
+<td align="left" valign="top"><p>アポイントの作成時に、<span class="guibutton"><strong>空き時間を検索</strong></span> をクリックするか、ツールバーで <span class="guibutton"><strong>スケジューリング</strong></span>をクリックします。詳細は、<a class="xref" href="ox.appsuite.user.sect.calendar.add.scheduling.html" title="7.4.7. スケジューリングビューの使用">スケジューリングビューの使用</a>を参照してください。</p></td>
 </tr>
 <tr class="qandadiv"><td align="left" valign="top" colspan="2"><h3 class="title">
 <a name="ox.appsuite.user.practice.dataexchange"></a>13.4. データの整理とチームでの作業に関する質問</h3></td></tr>
@@ -610,8 +538,6 @@
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.contacts">外部のパートナーが特定の連絡先を利用できるようにする方法を教えてください。</a>
 </dt>
 <dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.publish.files">特定のドキュメントを外部のパートナーと共有する方法を教えてください。</a>
-</dt>
-<dt>問： <a href="ox.appsuite.user.chap.bestpractices.html#ox.appsuite.user.practice.rights">他のユーザとフォルダを共有したいのですが、どの権限を設定すればよいのでしょうか？</a>
 </dt>
 </dl></td></tr>
 <tr class="question">
@@ -626,11 +552,11 @@
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p>グループウェアのアドレス帳にある連絡先や、LinkedIn などの現在利用中のソーシャル ネットワークの連絡先にアクセスできるよう、外部パートナーに権限を付与できます。これを行うには、次の手順に従います。</p>
+<p>グループウェアのアドレス帳にある連絡先や、LinkedIn などの現在利用中のソーシャル ネットワークの連絡先にアクセスできるよう、外部のパートナーに権限を付与できます。これを行うには、次の手順に従います。</p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p>ソーシャル ネットワークの連絡先をアドレス帳に追加します。</p></li>
 <li class="listitem"><p>新規の連絡先フォルダを作成します。共有するすべての連絡先をアドレス帳から新規の連絡先フォルダにコピーします。</p></li>
-<li class="listitem"><p>この連絡先フォルダを共有します。詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 共有">共有</a>を参照してください。</p></li>
+<li class="listitem"><p>この連絡先フォルダを共有します。詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 共有">共有</a> を参照してください。</p></li>
 </ol></div>
 <p>
           </p>
@@ -648,77 +574,13 @@
 <tr class="answer">
 <td align="left" valign="top"><p><b>答：</b></p></td>
 <td align="left" valign="top">
-<p>ドキュメント フォルダの内容を外部パートナーと共有できます。これを行うには、次の手順に従います。</p>
+<p>ドキュメント フォルダの内容を外部のパートナーと共有できます。これを行うには、次の手順に従います。</p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem"><p><span class="phrase"><span class="guilabel"><strong>ドライブ</strong></span></span> アプリケーションで、別に準備したフォルダに対象のドキュメントを集約します。</p></li>
 <li class="listitem"><p>このフォルダを共有します。詳細は、<a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.3. 共有">共有</a>を参照してください。</p></li>
 </ol></div>
 <p>
           </p>
-</td>
-</tr>
-<tr class="question">
-<td align="left" valign="top">
-<a name="ox.appsuite.user.practice.rights"></a><a name="id-1.14.4.4.4.1"></a><p><b>問：</b></p>
-</td>
-<td align="left" valign="top">
-<p>他のユーザとフォルダを共有したいのですが、どの権限を設定すればよいのでしょうか？</p>
-<a class="indexterm" name="id-1.14.4.4.4.1.2"></a>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p><span class="phrase"><strong>例 1: </strong></span>ユーザにフォルダ内のオブジェクトの表示を許可するが、オブジェクトの変更と削除は許可しません。新規オブジェクトの作成は許可しない場合、次のように設定します設定</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: フォルダを表示</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、編集権限なし、削除権限なし</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
-</ul></div>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p><span class="phrase"><strong>例 2: </strong></span>ユーザにフォルダ内のオブジェクトの表示を許可するが、オブジェクトの変更と削除は許可しません。オブジェクトの変更と削除は許可しない場合、次のように設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: フォルダを表示</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、編集権限なし、削除権限なし</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
-</ul></div>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p><span class="phrase"><strong>例 3: </strong></span>ユーザにフォルダ内のオブジェクトの表示を許可しません。オブジェクトの変更と削除は許可しない場合、次のように設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: オブジェクトを作成</p></li>
-<li class="listitem"><p>オブジェクト権限: 自分のオブジェクトを表示、自分のオブジェクトを編集、自分のオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
-</ul></div>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p><span class="phrase"><strong>例 4: </strong></span>ユーザにフォルダ内のオブジェクトの表示および編集を許可します。サブフォルダや自分のオブジェクトの作成と編集も許可する場合、次のように設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: いいえ</p></li>
-</ul></div>
-</td>
-</tr>
-<tr class="answer">
-<td align="left" valign="top"><p><b>答：</b></p></td>
-<td align="left" valign="top">
-<p><span class="phrase"><strong>例 5:</strong></span> ユーザに全ての権限を許可します。他のユーザにも権限を付与できるようにする場合、次のように設定します。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>フォルダ権限: オブジェクトとサブフォルダを作成</p></li>
-<li class="listitem"><p>オブジェクト権限: すべてのオブジェクトを表示、すべてのオブジェクトを編集、すべてのオブジェクトを削除</p></li>
-<li class="listitem"><p>管理者権限の付与: はい</p></li>
-</ul></div>
 </td>
 </tr>
 </tbody>

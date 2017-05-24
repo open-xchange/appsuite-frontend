@@ -9,75 +9,82 @@
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
+ * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 
 define('io.ox/files/actions/share', [
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/files/share/wizard',
     'io.ox/core/notifications',
     'gettext!io.ox/files'
-], function (dialogs, ShareWizard, notifications, gt) {
+], function (ModalDialog, ShareWizard, notifications, gt) {
 
     'use strict';
 
-    function share(array, type) {
+    function link(array) {
 
         if (!array) return;
 
         var header = '',
             count = array.length,
             first = array[0],
-            filler = count === 1 ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
-            view = new ShareWizard({ files: array, type: type });
+            filler = (count === 1) ? _.ellipsis(first.getDisplayName(), { max: 40, charpos: 'middle' }) : count,
+            view = new ShareWizard({ files: array });
+
+        function toggleButtons(sendVisible) {
+            dialog.$footer.find('.btn[data-action="cancel"]').toggle(sendVisible);
+            dialog.$footer.find('.btn[data-action="share"]').text(sendVisible ? gt('Send link') : gt('Close'));
+        }
 
         // build header
         if (first.isFile()) {
             //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for file "%1$d"', 'Sharing link created for %1$d items', count), filler);
         } else if (first.isFolder()) {
-            header = gt.format(gt.ngettext('Share the folder "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for folder "%1$d"', 'Sharing link created for %1$d items', count), filler);
         }
 
-        var dialog = new dialogs.ModalDialog({ width: 600, async: true })
-            .header($('<h4>').text(header))
-            .append(view.render().$el);
-
-        if (type === 'invite') {
-            // invite guests
-            dialog
-                .addPrimaryButton('share', gt('Invite'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel');
-        } else {
-            // get a link (anonymouse)
-            dialog
-                .addPrimaryButton('share', gt('Close'), 'share')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .addAlternativeButton('remove', gt('Remove link'), 'remove');
-        }
-
-        function toggleButtons(sendVisible) {
-            var footer = dialog.getFooter();
-            footer.find('.btn[data-action="cancel"]').toggle(sendVisible);
-            footer.find('.btn[data-action="share"]').text(sendVisible ? gt('Send link') : gt('Close'));
-        }
-
-        dialog.getContentNode().addClass('invisible')
-            .parent().busy()
-            .find('.btn-primary').prop('disabled', true);
-
-        view.listenTo(view.model, 'change:url', function (value) {
-            if (!value) return;
-            dialog.getContentNode().removeClass('invisible')
-                .parent().idle()
-                .find('.btn-primary').prop('disabled', false);
+        // create dialog
+        var dialog = new ModalDialog({
+            async: true,
+            focus: '.link-group>input[type=text]',
+            title: header,
+            help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
+            smartphoneInputFocus: true,
+            width: 600
         });
 
-        view.listenTo(view.model, 'change:recipients', function (model, value) {
-            toggleButtons(value.length);
-        });
+        dialog.$el.addClass('get-link-dialog');
+
+        // render share wizard into dialog body
+        dialog.$body.append(
+            view.render().$el
+        );
+
+        // add dialog buttons
+        dialog
+            .addCancelButton()
+            .addButton({ label: gt('Close'), action: 'share' })
+            .addAlternativeButton({ label: gt('Remove link'), action: 'remove' });
 
         // initial state is "no send"
         toggleButtons(false);
+
+        // basic setup
+        dialog.busy(true);
+        dialog.$footer.find('.btn-primary').prop('disabled', true);
+
+        // add event listeners
+        view.listenTo(view.model, 'change:url', function (value) {
+            if (!value) return;
+
+            dialog.idle();
+            dialog.$footer.find('.btn-primary').prop('disabled', false);
+        });
+
+        view.listenTo(view.model, 'change:recipients', function (model, value) {
+            toggleButtons(value.length > 0);
+        });
 
         dialog
             .on('share', function () {
@@ -87,12 +94,9 @@ define('io.ox/files/actions/share', [
                 view.removeLink();
                 notifications.yell('success', gt('The link has been removed'));
                 this.close();
-            })
-            .on('cancel', function () {
-                this.close();
             });
 
-        dialog.show();
+        dialog.open();
 
         return dialog;
     }
@@ -109,8 +113,6 @@ define('io.ox/files/actions/share', [
             });
         },
 
-        link: function (array) {
-            return share(array, 'link');
-        }
+        link: link
     };
 });

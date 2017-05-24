@@ -31,29 +31,23 @@ define('io.ox/mail/vacationnotice/settings/model', [
 
             preparedData = {
                 'actioncmds': [newAttributes]
-            };
+            },
 
-        if (attributes.from) newAttributes.from = attributes.from;
+            addresses = [attributes.primaryMail];
+
+        if (attributes.from && attributes.from[0] !== 'default') newAttributes.from = attributes.from;
 
         if (attributes.id !== undefined) {
             preparedData.id = attributes.id;
         }
 
-        var addresses = [];
         _(attributes).each(function (value, attribute) {
-            if (value === true && attribute !== 'activateTimeFrame') {
+            if (value === true && attribute !== 'activateTimeFrame' && attribute !== 'active') {
                 addresses.push(attribute);
-                preparedData.active = true;
             }
         });
 
-        if (!_.isEmpty(addresses)) {
-            newAttributes.addresses = addresses;
-
-        } else {
-            newAttributes.addresses = [attributes.primaryMail];
-            preparedData.active = false;
-        }
+        newAttributes.addresses = addresses;
 
         var testForTimeframe = {
             'id': 'allof',
@@ -93,6 +87,8 @@ define('io.ox/mail/vacationnotice/settings/model', [
         if (attributes.position !== undefined) {
             preparedData.position = attributes.position;
         }
+
+        preparedData.active = attributes.active;
 
         return preparedData;
     }
@@ -181,7 +177,11 @@ define('io.ox/mail/vacationnotice/settings/model', [
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),
         dateUntil: gt('End'),
-        activateTimeFrame: gt('Send vacation notice during this time only')
+        activateTimeFrame: gt('Send vacation notice during this time only'),
+        active: gt('Enable'),
+        placeholder: gt('Add contact') + ' \u2026',
+        label: gt('Add contact'),
+        sendFrom: gt('Send from')
     };
 
     return {

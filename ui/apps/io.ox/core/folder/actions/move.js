@@ -15,11 +15,10 @@ define('io.ox/core/folder/actions/move', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/picker',
     'io.ox/core/notifications',
-    'io.ox/core/tk/dialogs',
     'gettext!io.ox/core',
     'io.ox/mail/api',
     'io.ox/core/api/account'
-], function (api, picker, notifications, dialogs, gt, mailAPI, accountAPI) {
+], function (api, picker, notifications, gt, mailAPI, accountAPI) {
 
     'use strict';
 
@@ -55,6 +54,7 @@ define('io.ox/core/folder/actions/move', [
                 // input is either source folder (move all) or a list of items (move)
                 input = options.source || options.list,
                 isMove = /^move/.test(type),
+                onlyFolder = false,
                 multiple = type === 'moveAll' || options.list.length > 1,
                 current = options.source || options.list[0].folder_id;
 
@@ -110,6 +110,13 @@ define('io.ox/core/folder/actions/move', [
                 return;
             }
 
+            if (type !== 'moveAll') {
+                onlyFolder = true;
+                _(options.list).each(function (item) {
+                    if (!onlyFolder) return;
+                    onlyFolder = item.folder_id === 'folder';
+                });
+            }
             picker({
 
                 button: options.button,
@@ -132,7 +139,7 @@ define('io.ox/core/folder/actions/move', [
 
                 disable: function (data, options) {
                     var same = isMove && data.id === current,
-                        create = api.can('create', data);
+                        create = onlyFolder ? api.can('create:folder', data) : api.can('create', data);
                     return same || !create || (options && /^virtual/.test(options.folder));
                 }
             });
@@ -143,7 +150,7 @@ define('io.ox/core/folder/actions/move', [
             this.item(_.extend({ api: mailAPI, module: 'mail', type: 'moveAll', title: gt('Move all messages') }, options));
         },
 
-        folder: function (id) {
+        folder: function (id, settings) {
 
             var model = api.pool.getModel(id),
                 module = model.get('module'),
@@ -175,7 +182,9 @@ define('io.ox/core/folder/actions/move', [
                 root: module === 'infostore' ? '9' : '1',
                 title: gt('Move folder') + ': ' + model.get('title'),
                 context: context,
-                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX'
+                folderBase: accountAPI.getDSCRootFolderForId(accountAPI.getIdForDSCFolder(id)) + mailAPI.separator + 'INBOX',
+                persistent: 'folderpopup',
+                settings: settings
             });
         }
     };

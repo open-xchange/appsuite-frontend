@@ -199,8 +199,8 @@ define('io.ox/core/folder/api', [
         supportsInternalSharing: function () {
             // drive: always enabled
             if (this.is('drive')) return true;
-            // mail: check gab (webmail, PIM, PIM+infostore)
-            if (this.is('mail')) return capabilities.has('gab');
+            // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
+            if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
@@ -340,6 +340,33 @@ define('io.ox/core/folder/api', [
             if (options.reset) collection.trigger('reset');
         },
 
+        removeCollection: function (id, options) {
+            options = options || {};
+            var collection = this.collections[id],
+                self = this,
+                models = collection ? collection.models : [];
+
+            if (!collection) return;
+
+            // delete collection before recursion to avoid loops, just in case
+            collection = null;
+            delete this.collections[id];
+
+            _(models).each(function (model) {
+                removeFromAllCollections(model.id);
+                self.removeCollection(model.id, options);
+            });
+
+            if (options.removeModels && this.models[id]) {
+                var data = this.models[id].toJSON();
+                this.models[id] = null;
+                delete this.models[id];
+                api.trigger('remove', id, data);
+                api.trigger('remove:' + id, data);
+                api.trigger('remove:' + data.module, data);
+            }
+        },
+
         getModel: function (id) {
             return this.models[id] || (this.models[id] = new FolderModel({ id: id }));
         },
@@ -423,7 +450,7 @@ define('io.ox/core/folder/api', [
         // only define if the user actually has mail
         // otherwise the folder refresh tries to fetch 'default0'
         pool.addModel({
-            folder_id: 'default0',
+            folder_id: 'default0/INBOX',
             id: 'virtual/all-unseen',
             module: 'mail',
             title: gt('Unread messages')
@@ -495,7 +522,11 @@ define('io.ox/core/folder/api', [
     VirtualFolder.prototype.list = function () {
         var id = this.id;
         return this.getter().done(function (array) {
-            _(array).each(injectIndex.bind(null, id));
+            _(array).chain().map(function (folder) {
+                // use current data of virtual folders (for example, unread count could be updated in the meantime)
+                if (isVirtual(folder.id)) return _.extend(folder, pool.getModel(folder.id).toJSON());
+                return folder;
+            }).each(injectIndex.bind(null, id)).value();
             pool.addCollection(getCollectionId(id), array);
             pool.getModel(id).set('subscr_subflds', array.length > 0);
         });
@@ -905,6 +936,8 @@ define('io.ox/core/folder/api', [
         options = _.extend({ silent: false }, options);
         var model = pool.getModel(id).set(changes, { silent: options.silent });
 
+        if (isVirtual(id)) return $.when();
+
         // build data object
         var data = { folder: changes };
 
@@ -1102,7 +1135,8 @@ define('io.ox/core/folder/api', [
         params = {
             action: 'delete',
             failOnError: true,
-            tree: tree(ids[0])
+            tree: tree(ids[0]),
+            extendedResponse: true
         };
 
         if (options && options.isDSC) params.hardDelete = true;
@@ -1114,12 +1148,30 @@ define('io.ox/core/folder/api', [
             data: ids,
             appendColumns: false
         })
-        .done(function () {
-            _(ids).each(function (id) {
+        .done(function (response) {
+            response = response || [];
+            _(ids).each(function (id, index) {
                 var data = hash[id];
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
+                // get refreshed the model data for folders moved to the trash folder. If they are removed completely we remove the collection
+                // flat models don't have a collection, so no need to remove here
+                if (!isFlat(data.module)) {
+                    // see if this folder was moved to trash or deleted completely
+                    if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
+                        api.pool.removeCollection(id, { removeModels: true });
+                    } else {
+                        // use new path if available, else use id
+                        var pathOrId = (response[index] ? response[index].new_path : id);
+                        api.get(pathOrId, { cache: false }).fail(function (error) {
+                            // folder does not exist
+                            if (error.code === 'FLD-0008') {
+                                api.pool.removeCollection(id, { removeModels: true });
+                            }
+                        });
+                    }
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 if (account.is('trash', id)) api.trigger('cleared-trash');
             });

@@ -59,6 +59,7 @@
 
     html.high-contrast & {
         background-color: @black; //HC
+        color: @white;
     }
 
     #io-ox-notifications-display {
@@ -70,6 +71,11 @@
         .span-to-div {
             display: block;
             line-height: 24px;
+
+            &.location,&.title {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
         }
 
         .items{
@@ -81,12 +87,14 @@
         .desktop-notification-info {
             padding: 5px 14px 10px 14px;
             background-color: rgba(0, 0, 0, 0.05);
-            .enable-button, .disable-button {
-                float: right;
-                margin-left: 5px;
+
+            .button-wrapper {
+                display: flex;
+                justify-content: space-between;
             }
-            .later-button {
-                float: right;
+            .enable-button, .disable-button, .later-button {
+                // smaller padding so all buttons fit into one line
+                padding: 4px 8px;
             }
             &.clickable {
                 cursor: pointer;
@@ -100,7 +108,6 @@
         }
 
         .notification-area-title {
-            font-family: "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
             font-weight: 300;
             font-size: 16px;
             line-height: 20px;
@@ -190,7 +197,7 @@
                 border-bottom: 0;
             }
 
-            &:focus {
+            &.has-focus {
                 outline: 1px solid rgba(0, 0, 0, 0.30);
                 background-color: rgba(0, 0, 0, 0.05);
                 .clear-single-button {

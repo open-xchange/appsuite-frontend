@@ -16,8 +16,9 @@ define('io.ox/files/view-options', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/folder/api',
+    'io.ox/core/capabilities',
     'gettext!io.ox/files'
-], function (ext, Dropdown, BreadcrumbView, FolderAPI, gt) {
+], function (ext, Dropdown, BreadcrumbView, FolderAPI, Capabilities, gt) {
 
     'use strict';
 
@@ -121,19 +122,21 @@ define('io.ox/files/view-options', [
                 .header(gt('Select'))
                 .link('all', gt('All'))
                 .link('files', gt('All files'))
-                .link('none', gt('None'))
-                .divider()
-                //#. Verb: (to) filter documents by file type
-                .header(gt.pgettext('verb', 'Filter'))
-                .option('filter', 'pdf', gt('PDFs'), { radio: true })
-                .option('filter', 'doc', gt('Documents'), { radio: true })
-                .option('filter', 'xls', gt('Spreadsheets'), { radio: true })
-                .option('filter', 'ppt', gt('Presentations'), { radio: true })
-                .option('filter', 'image', gt('Images'), { radio: true })
-                .option('filter', 'audio', gt('Music'), { radio: true })
-                .option('filter', 'video', gt('Videos'), { radio: true })
-                .option('filter', 'none', gt('None'), { radio: true });
-
+                .link('none', gt('None'));
+            if (Capabilities.has('search')) {
+                this.data('view')
+                    .divider()
+                    //#. Verb: (to) filter documents by file type
+                    .header(gt.pgettext('verb', 'Filter'))
+                    .option('filter', 'pdf', gt('PDFs'), { radio: true })
+                    .option('filter', 'doc-text', gt('Text documents'), { radio: true })
+                    .option('filter', 'doc-spreadsheet', gt('Spreadsheets'), { radio: true })
+                    .option('filter', 'doc-presentation', gt('Presentations'), { radio: true })
+                    .option('filter', 'image', gt('Images'), { radio: true })
+                    .option('filter', 'audio', gt('Music'), { radio: true })
+                    .option('filter', 'video', gt('Videos'), { radio: true })
+                    .option('filter', 'all', gt('All'), { radio: true });
+            }
             this.data('view').$ul.on('click', 'a', { list: baton.app.listView }, changeSelection);
         }
     });
@@ -148,7 +151,8 @@ define('io.ox/files/view-options', [
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Select'),
                 model: baton.app.props,
-                caret: true
+                caret: true,
+                dataAction: 'select'
             });
 
             ext.point('io.ox/files/select/options').invoke('draw', dropdown.$el, baton);
@@ -201,7 +205,6 @@ define('io.ox/files/view-options', [
         id: 'breadcrumb',
         index: 300,
         draw: function (baton) {
-
             var node = this;
             if (_.device('smartphone')) return;
 
@@ -244,7 +247,7 @@ define('io.ox/files/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item">').attr('aria-label', gt('Open folder view')).append(
+                $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );

@@ -14,9 +14,10 @@
 define('io.ox/core/api/attachment', [
     'io.ox/core/http',
     'io.ox/core/event',
+    'io.ox/core/util',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (http, Events, coreConfig, gt) {
+], function (http, Events, util, coreSettings, gt) {
 
     'use strict';
 
@@ -172,9 +173,10 @@ define('io.ox/core/api/attachment', [
          * @return { string} url
          */
         getUrl: function (data, mode, options) {
+
             options = options || {};
 
-            var url = ox.apiRoot + '/attachment',
+            var url = '/attachment',
                 // scaling options
                 scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '';
 
@@ -193,12 +195,15 @@ define('io.ox/core/api/attachment', [
             switch (mode) {
                 case 'view':
                 case 'open':
-                    return url + '&delivery=view' + scaling;
+                    url += '&delivery=view' + scaling;
+                    break;
                 case 'download':
-                    return url + '&delivery=download';
+                    url += '&delivery=download';
+                    break;
                 default:
-                    return url;
+                    break;
             }
+            return util.getShardingRoot(url);
         },
 
         /**
@@ -220,9 +225,9 @@ define('io.ox/core/api/attachment', [
             };
 
             //make sure we have a string or target + api.DELIM results in NaN
-            target = (target || coreConfig.get('folder/infostore')).toString();
+            target = (target || coreSettings.get('folder/infostore')).toString();
 
-            http.PUT({
+            return http.PUT({
                 module: 'files',
                 params: {
                     action: 'saveAs',

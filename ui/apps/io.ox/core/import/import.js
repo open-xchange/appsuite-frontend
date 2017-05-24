@@ -119,11 +119,11 @@ define('io.ox/core/import/import', [
 
             // show option only for calendar and tasks
             if (!(baton.module === 'calendar' || baton.module === 'tasks')) return;
-
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="checkbox">').append(
-                    $('<label>').append(
-                        $('<input type="checkbox" name="ignore_uuids">'),
+                    $('<label>').attr('for', guid).append(
+                        $('<input type="checkbox" name="ignore_uuids">').attr('id', guid),
                         baton.module === 'calendar' ?
                             gt('Ignore existing events. Helpful to import public holiday calendars, for example.') :
                             gt('Ignore existing events')
@@ -170,7 +170,7 @@ define('io.ox/core/import/import', [
             folderAPI.get(id).done(function () {
 
                 new dialogs.ModalDialog({
-                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html#ox.appsuite.user.sect.datainterchange.import.contactscsv'
+                    help: 'ox.appsuite.user.sect.datainterchange.import.contactscsv.html'
                 })
                 .build(function () {
 
@@ -215,18 +215,7 @@ define('io.ox/core/import/import', [
                         if (_.isArray(data)) {
                             data = _(data)
                             .chain()
-                            .map(function (item) {
-                                if (!item) return false;
-                                var message = item.code === 'CON-0600' ?
-                                    // append first value which caused conversion error (csv import)
-                                    item.error + '\n' + item.error_stack[0] :
-                                    // otherwise use error description (see bug 47378); fallback is still error
-                                    item.error_desc || item.error;
-                                return item.line_number ?
-                                    //#. %1$d is line number, %2$s is an error message
-                                    gt('Line %1$d: %2$s', item.line_number, message) :
-                                    message;
-                            })
+                            .map(function (item) { return (item || {}).error; })
                             .compact()
                             .value();
                             message = data.length ? data.join('\n\n') : getDefautMessage(module);

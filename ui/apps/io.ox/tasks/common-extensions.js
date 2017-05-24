@@ -12,12 +12,13 @@
  */
 
 define('io.ox/tasks/common-extensions', [
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/tasks/util',
     'io.ox/mail/util',
     'io.ox/tasks/api',
     'io.ox/core/strings',
     'gettext!io.ox/tasks'
-], function (util, mailUtil, api, strings, gt) {
+], function (Dropdown, util, mailUtil, api, strings, gt) {
 
     'use strict';
 
@@ -104,6 +105,10 @@ define('io.ox/tasks/common-extensions', [
             }
 
             return function (baton) {
+                var $ul = $('<ul class="dropdown-menu pull-right" role="menu">').append(
+                        util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
+                    )
+                    .on('click', 'li > a:not([data-action="close-menu"])', { data: baton.data }, onClick);
 
                 this.attr({
                     'aria-haspopup': 'true',
@@ -114,12 +119,11 @@ define('io.ox/tasks/common-extensions', [
 
                 this.append($('<i class="fa fa-caret-down" aria-hidden="true">'));
 
-                this.after(
-                    $('<ul class="dropdown-menu pull-right" role="menu">').append(
-                        util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
-                    )
-                    .on('click', 'li > a:not([data-action="close-menu"])', { data: baton.data }, onClick)
-                );
+                new Dropdown({
+                    el: this.parent(),
+                    $toggle: this,
+                    $ul: $ul
+                }).render();
 
                 this.parent().addClass('dropdown');
             };

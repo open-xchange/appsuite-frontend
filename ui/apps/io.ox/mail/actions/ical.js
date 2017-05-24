@@ -16,7 +16,7 @@ define('io.ox/mail/actions/ical', [
     'settings!io.ox/core',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (coreConfig, notifications, gt) {
+], function (coreSettings, notifications, gt) {
 
     'use strict';
 
@@ -36,8 +36,8 @@ define('io.ox/mail/actions/ical', [
                 {
                     identifier: 'com.openexchange.ical',
                     args: [
-                        { 'com.openexchange.groupware.calendar.folder': coreConfig.get('folder/calendar') },
-                        { 'com.openexchange.groupware.task.folder': coreConfig.get('folder/tasks') }
+                        { 'com.openexchange.groupware.calendar.folder': coreSettings.get('folder/calendar') },
+                        { 'com.openexchange.groupware.task.folder': coreSettings.get('folder/tasks') }
                     ]
                 }
             )

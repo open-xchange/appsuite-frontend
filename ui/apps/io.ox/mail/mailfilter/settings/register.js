@@ -31,7 +31,7 @@ define('io.ox/mail/mailfilter/settings/register', [
         index: 100,
         draw: function (baton) {
             var $node = this,
-                $container = $('<div>').addClass('io-ox-mailfilter-settings');
+                $container = $('<div class="io-ox-mailfilter-settings">');
 
             $node.append($container);
 

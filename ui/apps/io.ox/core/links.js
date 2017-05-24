@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
+define('io.ox/core/links', [
+    'io.ox/core/yell',
+    'io.ox/core/capabilities'
+], function (yell, capabilities) {
 
     'use strict';
 
@@ -150,35 +153,36 @@ define('io.ox/core/links', ['io.ox/core/yell'], function (yell) {
     //
     // Mail
     //
-    $(document).on('click', '.mailto-link', function (e) {
+    if (capabilities.has('webmail')) {
+        $(document).on('click', '.mailto-link', function (e) {
+            e.preventDefault();
 
-        e.preventDefault();
+            var node = $(this), data = node.data(), address, name, tmp, params = {};
 
-        var node = $(this), data = node.data(), address, name, tmp, params = {};
+            // has data?
+            if (data.address) {
+                // use existing address and name
+                address = data.address;
+                name = data.name || data.address;
+            } else {
+                // parse mailto string
+                // cut off leading "mailto:" and split at "?"
+                tmp = node.attr('href').substr(7).split(/\?/, 2);
+                // address
+                address = tmp[0];
+                // use link text as display name
+                name = node.text();
+                // process additional parameters; all lower-case (see bug #31345)
+                params = _.deserialize(tmp[1]);
+                for (var key in params) params[key.toLowerCase()] = params[key];
+            }
 
-        // has data?
-        if (data.address) {
-            // use existing address and name
-            address = data.address;
-            name = data.name || data.address;
-        } else {
-            // parse mailto string
-            // cut off leading "mailto:" and split at "?"
-            tmp = node.attr('href').substr(7).split(/\?/, 2);
-            // address
-            address = tmp[0];
-            // use link text as display name
-            name = node.text();
-            // process additional parameters; all lower-case (see bug #31345)
-            params = _.deserialize(tmp[1]);
-            for (var key in params) params[key.toLowerCase()] = params[key];
-        }
-
-        // go!
-        ox.registry.call('mail-compose', 'compose', {
-            to: [[name, address]],
-            subject: params.subject || '',
-            attachments: [{ content: params.body || '', disp: 'inline' }]
+            // go!
+            ox.registry.call('mail-compose', 'compose', {
+                to: [[name, address]],
+                subject: params.subject || '',
+                attachments: [{ content: params.body || '', disp: 'inline' }]
+            });
         });
-    });
+    }
 });

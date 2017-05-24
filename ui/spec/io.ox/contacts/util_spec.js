@@ -32,15 +32,6 @@ define(['io.ox/contacts/util'], function (util) {
             first_name: 'Georg',
             last_name: 'Tester'
         };
-    /*
-    testDistList = {
-        mark_as_distributionlist: true
-    },
-
-    testPersonHttps = {
-        image1_url: 'https://www.test.de/ajax/image/contact/picture?folder=11179&id=510778&timestamp=1379590562489',
-    };
-    */
 
     describe('Contact util', function () {
 
@@ -105,6 +96,16 @@ define(['io.ox/contacts/util'], function (util) {
         it('should correctly convert birthdays to Julian calendar', function () {
             expect(util.gregorianToJulian(-62122636800000))//May 31 Year 1
                 .to.equal(-62122809600000);//May 29 Year 1
+        });
+        it('should correctly choose correct format for birthdays in year 1', function () {
+            expect(util.getBirthday(-62122809600000))
+                .to.equal(moment.utc(-62122809600000).format(
+                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+            ));
+            expect(util.getBirthday(-62135856000000))
+                .to.equal(moment.utc(-62135856000000).format(
+                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+            ));
         });
     });
 });

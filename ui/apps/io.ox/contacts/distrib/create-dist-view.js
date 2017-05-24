@@ -111,7 +111,8 @@ define('io.ox/contacts/distrib/create-dist-view', [
             this.$el.append(new pViews.UserContainer({
                 collection: this.baton.member,
                 baton: this.baton,
-                isMail: true
+                isMail: true,
+                empty: gt('This list has no members yet')
             }).render().$el);
         }
     });
@@ -120,6 +121,7 @@ define('io.ox/contacts/distrib/create-dist-view', [
     point.extend({
         id: 'add-participant',
         index: 400,
+        className: 'row',
         render: function () {
             var view = new AddParticipantView({
                 apiOptions: {
@@ -134,15 +136,20 @@ define('io.ox/contacts/distrib/create-dist-view', [
             this.$el.append(
                 view.$el
             );
-            view.render();
+            view.render().$el.addClass('col-md-6');
         }
     });
 
     point.extend({
         id: 'notice',
         index: 400,
+        className: 'row',
         render: function () {
-            this.$el.addClass('help-block').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'));
+            this.$el.append(
+                $('<div class="col-md-6">').append(
+                    $('<div class="help-block">').text(gt('To add contacts manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'))
+                )
+            );
         }
     });
 
@@ -152,10 +159,10 @@ define('io.ox/contacts/distrib/create-dist-view', [
             var self = this;
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;
-                self.baton.app.getWindow().nodes.footer.delegate('[data-action]', 'mousedown', function (e) {
+                self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
-                        app: 'calendar',
+                        app: 'contacts',
                         target: 'edit/distribution-list/toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),

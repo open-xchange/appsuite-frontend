@@ -62,7 +62,7 @@ define('io.ox/contacts/util', [
             copy = {};
             _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
                 if (!$.trim(obj[id])) return;
-                var tagName = id === 'last_name' ? 'b' : 'span';
+                var tagName = id === 'last_name' ? 'strong' : 'span';
                 copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
             });
         }
@@ -239,7 +239,7 @@ define('io.ox/contacts/util', [
         getJob: function (obj) {
             // combine position and company
             var list = _([obj.company, obj.position]).compact();
-            return list.length ? list.join(', ') : (obj.email1 || '');
+            return list.length ? list.join(', ') : (obj.email1 || obj.email2 || obj.email3 || '');
         },
 
         nameSort: function (a, b) {
@@ -293,7 +293,7 @@ define('io.ox/contacts/util', [
             birthday = moment.utc(birthday);
             // Year 0 is special for birthdays without year (backend changes this to 1, however ...)
             // therefore, return full date if year is not 1
-            if (birthday.year() !== 1) return birthday.format('l');
+            if (birthday.year() > 1) return birthday.format('l');
             // get localized format without the year otherwise
             // i.e. remove dashes and slashes but keep dots
             return birthday.format(
@@ -315,7 +315,10 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            return arg.replace(/^https?\:\/\/[^\/]+/i, '').replace(/^\/ajax/, ox.apiRoot) + '&' + $.param(options);
+            var url = arg.replace(/^https?\:\/\/[^\/]+/i, '');
+            url = util.replacePrefix(url);
+
+            return util.getShardingRoot(url + '&' + $.param(options));
         },
 
         getInitials: (function () {

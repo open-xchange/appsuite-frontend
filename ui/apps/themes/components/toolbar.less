@@ -163,6 +163,7 @@
 
 .classic-toolbar-visible .window-content, .abs.below-toolbar { top: @toolbar-height; }
 
+.bottom-toolbar.bottom-toolbar-visible .window-content { bottom: @toolbar-height; }
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
 .chromeless-window .window-body.mobile-toolbar-visible { bottom: @toolbar-height; }
 .chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
@@ -189,9 +190,11 @@
         display: inline-block;
         padding: 0;
         float: left; // to support pull-right while keeping items in-order (a11y)
+        height: 100%;
 
         & > a {
 
+            height: 100%;
             display: inline-block;
             line-height: @toolbar-line-height - 2;
             padding: @toolbar-vertical-padding @default-padding;
@@ -269,7 +272,6 @@
     @height-small: 30px;
 
     position: absolute;
-    z-index: 2;
 
     width: 100%;
     height: @height-default;
@@ -288,13 +290,14 @@
     &.bottom {
         bottom: 0;
         border-top-width: 1px;
+        z-index: 1;
     }
 
     .toolbar-item {
         color: #333;
         display: inline-block;
         float: left;
-        line-height: @height-default - 2;
+        line-height: @height-default - 1;
         padding: 0 @default-padding;
         text-decoration: none;
 

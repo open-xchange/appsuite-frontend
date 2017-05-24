@@ -230,7 +230,7 @@ define('io.ox/tasks/main', [
             app.left = left;
             app.right = right.addClass('default-content-padding f6-target task-detail-container')
             .attr({
-                'tabindex': 0,
+                'tabindex': -1,
                 'role': 'main',
                 'aria-label': gt('Task Details')
             })
@@ -241,8 +241,14 @@ define('io.ox/tasks/main', [
 
             var grid = app.grid,
                 allRequest,
-                listRequest;
+                listRequest,
+                savedWidth = app.settings.get('vgrid/width/' + _.display());
 
+            // do not apply on touch devices. it's not possible to change the width there
+            if (!_.device('touch') && savedWidth) {
+                app.right.parent().css('left', savedWidth + 'px');
+                app.left.css('width', savedWidth + 'px');
+            }
             app.left.append(app.gridContainer);
             app.left.attr({
                 role: 'navigation',
@@ -660,7 +666,7 @@ define('io.ox/tasks/main', [
                     toolbar = nodes.body.find('.classic-toolbar-container'),
                     sidepanel = nodes.sidepanel;
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link:not(.dropdown-toggle)', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link:not(.dropdown-toggle)', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'toolbar',
@@ -668,23 +674,46 @@ define('io.ox/tasks/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
+                    });
+                });
+                // vgrid toolbar
+                nodes.main.find('.vgrid-toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'tasks',
                         target: 'folder/context-menu',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'tasks',
+                        target: 'folder/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
                     });

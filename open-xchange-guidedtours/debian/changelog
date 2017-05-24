@@ -1,98 +1,26 @@
-open-xchange-guidedtours (7.8.3-21) stable; urgency=medium
+open-xchange-guidedtours (7.8.4-3) stable; urgency=medium
 
-  * Build for patch 2017-05-15 (4132)
+  * First candidate for 7.8.4 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 09 May 2017 09:54:08 +0000
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 19 May 2017 12:46:09 +0000
 
-open-xchange-guidedtours (7.8.3-20) stable; urgency=medium
+open-xchange-guidedtours (7.8.4-2) stable; urgency=medium
 
-  * Build for patch 2017-05-02 (4113)
+  * Second preview of 7.8.4 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 26 Apr 2017 12:21:11 +0000
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 04 May 2017 14:08:02 +0000
 
-open-xchange-guidedtours (7.8.3-19) stable; urgency=medium
+open-xchange-guidedtours (7.8.4-1) stable; urgency=medium
 
-  * Build for patch 2017-04-18 (4084)
+  * First preview of 7.8.4 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 06 Apr 2017 15:19:14 +0000
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 03 Apr 2017 15:55:20 +0000
 
-open-xchange-guidedtours (7.8.3-18) stable; urgency=medium
+open-xchange-guidedtours (7.8.4-0) unstable; urgency=medium
 
-  * Build for patch 2017-04-03 (4050)
+  * prepare for 7.8.4 release
 
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 29 Mar 2017 15:52:02 +0000
-
-open-xchange-guidedtours (7.8.3-17) stable; urgency=medium
-
-  * Build for patch 2017-03-20 (4016)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 14 Mar 2017 15:53:12 +0000
-
-open-xchange-guidedtours (7.8.3-16) stable; urgency=medium
-
-  * Build for patch 2017-03-17 (4020)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 13 Mar 2017 08:44:14 +0000
-
-open-xchange-guidedtours (7.8.3-15) stable; urgency=medium
-
-  * Build for patch 2017-03-06 (3985)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 06 Mar 2017 11:28:07 +0000
-
-open-xchange-guidedtours (7.8.3-14) stable; urgency=medium
-
-  * Build for patch 2017-02-22 (3969)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 22 Feb 2017 12:51:52 +0000
-
-open-xchange-guidedtours (7.8.3-13) stable; urgency=medium
-
-  * Build for patch 2017-02-20 (3952)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 17 Feb 2017 09:21:22 +0000
-
-open-xchange-guidedtours (7.8.3-12) stable; urgency=medium
-
-  * Build for patch 2017-02-06 (3918)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 27 Jan 2017 15:45:43 +0000
-
-open-xchange-guidedtours (7.8.3-11) stable; urgency=medium
-
-  * Build for patch 2017-01-23 (3879)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 16 Jan 2017 18:38:14 +0000
-
-open-xchange-guidedtours (7.8.3-10) stable; urgency=medium
-
-  * Build for patch 2017-01-12 (3866)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Mon, 09 Jan 2017 11:35:13 +0000
-
-open-xchange-guidedtours (7.8.3-9) stable; urgency=medium
-
-  * Build for patch 2017-01-09 (3849)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Thu, 22 Dec 2016 13:21:36 +0000
-
-open-xchange-guidedtours (7.8.3-8) stable; urgency=medium
-
-  * Build for patch 2016-12-19 (3814)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Wed, 14 Dec 2016 12:34:19 +0000
-
-open-xchange-guidedtours (7.8.3-7) stable; urgency=medium
-
-  * Build for patch 2016-12-14 (3806)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 13 Dec 2016 15:55:25 +0000
-
-open-xchange-guidedtours (7.8.3-6) stable; urgency=medium
-
-  * Build for patch 2016-12-12 (3775)
-
- -- Marcus Klein <marcus.klein@open-xchange.com>  Tue, 06 Dec 2016 09:47:09 +0000
+ -- Marcus Klein <marcus.klein@open-xchange.com>  Fri, 02 Dec 2016 14:01:39 +0100
 
 open-xchange-guidedtours (7.8.3-5) stable; urgency=medium
 

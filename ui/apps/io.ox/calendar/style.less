@@ -425,39 +425,102 @@
     }
 }
 
+.shown_as {
+    &.reserved  { color: @appointment-reserved;  }
+    &.temporary { color: @appointment-temporary; }
+    &.absent    { color: @appointment-absent;    }
+    &.free      { color: @appointment-free;      }
+}
+
 // Conflicts
-.additional-info {
+.calendar-detail.conflict-overview {
 
-    .vgrid-cell.calendar {
-        padding: 7px 0;
+    font-size: 13px;
+    line-height: 16px;
+    padding-top: 3px;
 
-        &:last-child { border: none; }
+    .pointer {
+        cursor: pointer;
     }
 
-    .buttons {
-        display: inline-block;
-        width: 100%;
-        margin: 10px 0;
-
-        .col-md-12 { position: relative; }
+    h2 {
+        font-size: 13px;
+        line-height: 16px;
+        font-weight: bold;
+        margin: 0;
+        padding: 0;
+        display: inline;
     }
 
-    .conflicts .person-link {
+    .detail-toggle {
+        width: 16px;
+        display: block;
+        margin-left: -24px;
+        position: absolute;
+        line-height: 16px;
 
-        &.accepted { color: #5C7F31; }
+        i.fa-angle-right { padding-left: 6px; }
+        i.fa-angle-down { padding-left: 4px; }
 
-        &.declined {
-            text-decoration: line-through;
-            color: #913F3F;
+        &:focus {
+            outline:0;
+            background: @selected-background;
+            color: #fff;
         }
+    }
 
-        &.tentative { color: #c80; }
+    .conflict-details {
+        margin: 16px 16px 16px 0;
+        padding: 16px;
+        .box-shadow(0 4px 24px #ccc);
+    }
+
+    & > li { padding-bottom: 32px; margin-left: 16px; }
+    & > li:last-child { padding-bottom: 0; }
+
+    .note { padding: 0 0 8px 0; margin: 0 0 16px 0; font-size: 13px; }
+
+    .date-time { height: 16px; float:right; }
+
+    .time {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    .date { white-space: nowrap; padding-right: 8px; }
+
+    .location { margin:0; display: block; line-height: 16px; margin-bottom: 16px; }
+
+    dt, dd { text-align:left; }
+
+    .expandable > legend { border-bottom:0; }
+
+    .expandable {
+        legend { margin-bottom: 0; padding-top: 0; line-height: 16px; font-weight: normal; }
+    }
+
+    .expandable-content {
+        padding: 16px 32px 0 32px;
+    }
+
+    .participants-view {
+        margin-bottom: 16px;
+        .participant-list {
+            margin-bottom: 0;
+            .participant {
+                width: 50%;
+                margin: 0 0 8px 0;
+            }
+        }
+    }
+
+    .conflicts {
+        color: #767676;
     }
 }
 
 // Detail view
 .calendar-detail {
-    font-weight: 300;
 
     @media (max-width: 480px), (max-device-width: 480px) {
         margin: 8px 10px 55px 10px;
@@ -823,5 +886,24 @@ li {
 
     &.open .expandable-indicator:before {
         content: "\f0d7"; // fa-caret-down
+    }
+
+    .table {
+        width: auto;
+        tr td, tr th {
+            padding-left: 0;
+            border: 0;
+            vertical-align: middle;
+        }
+    }
+}
+
+.details-table {
+    th {
+        padding-right: 16px;
+        font-weight: normal;
+    }
+    td, th {
+        line-height: 16px;
     }
 }

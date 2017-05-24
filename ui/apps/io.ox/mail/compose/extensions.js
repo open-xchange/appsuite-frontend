@@ -29,7 +29,7 @@ define('io.ox/mail/compose/extensions', [
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, settingsCore, settingsContacts) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, settings, gt, links, coreSettings, settingsContacts) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -68,7 +68,7 @@ define('io.ox/mail/compose/extensions', [
                 return (
                     $('<button type="button" class="btn btn-default" data-action="discard">')
                         .on('click', function () { baton.view.app.quit(); })
-                        .text(gt('Discard'))
+                        .text(baton.model.keepDraftOnClose() ? gt('Delete') : gt('Discard'))
                         .appendTo(this)
                 );
             },
@@ -91,6 +91,11 @@ define('io.ox/mail/compose/extensions', [
                     })
                     .text(gt('Send')));
             }
+        },
+
+        inlineYell: function () {
+            // role log is a special kind of live region for status messages, errors etc.
+            this.append($('<div role="log" aria-live="polite" class="inline-yell">'));
         },
 
         sender: function (baton) {
@@ -134,7 +139,7 @@ define('io.ox/mail/compose/extensions', [
 
                         function redraw() {
                             var from = _(baton.model.get('from')).first();
-                            dropdown.$('ul').empty();
+                            dropdown.$ul.empty();
                             drawOptions();
                             dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             // re-focus element otherwise the bootstap a11y closes the drop-down
@@ -276,7 +281,7 @@ define('io.ox/mail/compose/extensions', [
                     popup.open(function (result) {
                         var list = model.get(attr) || [];
                         model.set(attr, list.concat(_(result).pluck('array')));
-                    }, { isMail: true });
+                    });
                 });
             }
 
@@ -293,12 +298,13 @@ define('io.ox/mail/compose/extensions', [
                         extPoint: POINT,
                         isMail: true,
                         apiOptions: {
+                            limit: 20,
                             contacts: true,
                             distributionlists: true,
                             msisdn: true,
                             emailAutoComplete: true
                         },
-                        maxResults: 20,
+                        maxResults: 30,
                         placeholder: tokenfieldTranslations[attr], // for a11y and easy access for custom dev when they want to display placeholders (these are made transparent via less)
                         ariaLabel: tokenfieldTranslations['aria' + attr]
                     });
@@ -313,13 +319,13 @@ define('io.ox/mail/compose/extensions', [
 
                 if (usePicker) {
                     node.addClass('has-picker').append(
-                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-plus" aria-hidden="true"></i></a>')
-                        .attr('aria-label', gt('Click to select contacts'))
+                        $('<a href="#" role="button" class="open-addressbook-popup"><i class="fa fa-address-book" aria-hidden="true"></i></a>')
+                        .attr('aria-label', gt('Select contacts'))
                         .on('click', { attr: attr, model: baton.model }, openAddressBookPicker)
                     );
                 }
 
-                var title = gt('Click to select contacts');
+                var title = gt('Select contacts');
 
                 this.append(
                     extNode = $('<div data-extension-id="' + attr + '">').addClass(cls)
@@ -346,8 +352,11 @@ define('io.ox/mail/compose/extensions', [
                 tokenfieldView.render().$el.on('tokenfield:createdtoken', function (e) {
                     // extension point for validation etc.
                     ext.point(POINT + '/createtoken').invoke('action', this, _.extend(baton, { event: e }));
+
                 }).on('tokenfield:next', function () {
                     extNode.nextAll().find('input.tt-input,input[name="subject"]').filter(':visible').first().focus();
+                }).on('tokenfield:removetoken', function (e) {
+                    ext.point(POINT + '/removetoken').invoke('action', this, _.extend(baton, { event: e }));
                 });
 
                 // bind mail-model to collection
@@ -355,11 +364,13 @@ define('io.ox/mail/compose/extensions', [
                     if (redrawLock) return;
                     var recArray = _(recipients).map(function (recipient) {
                         var display_name = util.removeQuotes(recipient[0]),
-                            email = recipient[1];
+                            email = recipient[1],
+                            image = recipient[2];
                         return {
                             type: 5,
                             display_name: display_name,
                             email1: email,
+                            image1_url: image,
                             token: { label: display_name, value: email }
                         };
                     });
@@ -380,6 +391,24 @@ define('io.ox/mail/compose/extensions', [
                     baton.model.set(attr, recipients);
                     redrawLock = false;
                 }.bind(tokenfieldView.collection)), 20);
+
+                baton.view.on('updateTokens', function () {
+                    var recipients = this.map(function (model) {
+                        var token = model.get('token'),
+                            display_name = util.removeQuotes(token.label),
+                            email = token.value;
+                        return [display_name, email];
+                    });
+                    redrawLock = true;
+                    baton.model.set(attr, recipients);
+                    redrawLock = false;
+                }.bind(tokenfieldView.collection));
+
+                baton.view.app.getWindow().one('idle', function () {
+                    // idle event is triggered, after the view is visible
+                    // call update when visible to correctly calculate tokefield dimensions (see Bug 52137)
+                    tokenfieldView.$el.data('bs.tokenfield').update();
+                });
             };
         },
 
@@ -387,11 +416,9 @@ define('io.ox/mail/compose/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div data-extension-id="subject" class="row subject">').append(
-                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr({
-                        'for': guid
-                    }),
+                    $('<label class="maillabel hidden-xs col-sm-1">').text(gt('Subject')).attr('for', guid),
                     $('<div class="col-xs-12 col-sm-11">').append(
-                        new mini.InputView({ model: baton.model, id: guid, name: 'subject' }).render().$el.attr({ placeholder: gt('Subject') })
+                        new mini.InputView({ model: baton.model, id: guid, name: 'subject', autocomplete: false }).render().$el.attr('placeholder', gt('Subject'))
                     )
                 )
             );
@@ -406,14 +433,13 @@ define('io.ox/mail/compose/extensions', [
             if (_.device('smartphone')) return;
 
             var self = this,
-                container = $('<div class="dropdown signatures text-left">');
+                dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true });
 
-            // IEDA: move to view to have a reference or trigger a refresh?!
+            // IDEA: move to view to have a reference or trigger a refresh?!
 
             function draw() {
-                var dropdown = new Dropdown({ model: baton.model, label: gt('Signatures'), caret: true, el: container })
-                    .option('signatureId', '', gt('No signature'));
-
+                dropdown.prepareReuse();
+                dropdown.option('signatureId', '', gt('No signature'));
                 ext.point(POINT + '/signatures').invoke('draw', dropdown.$el, baton);
                 dropdown.$ul.addClass('pull-right');
                 baton.view.signaturesLoading.done(function () {
@@ -427,8 +453,6 @@ define('io.ox/mail/compose/extensions', [
                     dropdown.$ul.addClass('pull-right');
                     dropdown.render();
                 });
-
-                container.empty().append(dropdown.$el);
             }
 
             require(['io.ox/core/api/snippets'], function (snippetAPI) {
@@ -438,7 +462,7 @@ define('io.ox/mail/compose/extensions', [
 
                 draw();
             });
-            self.append(container);
+            self.append(dropdown.$el.addClass('signatures text-left'));
         },
 
         optionsmenu: function (baton) {
@@ -454,7 +478,7 @@ define('io.ox/mail/compose/extensions', [
             var $el = this,
                 def = $.Deferred();
 
-            require(['io.ox/core/attachments/view'], function (Attachments) {
+            require(['io.ox/core/attachments/view', 'io.ox/core/yell'], function (Attachments, yell) {
                 var view = new Attachments.List({
                     point: 'io.ox/mail/compose/attachment/header',
                     collection: baton.model.get('attachments'),
@@ -464,6 +488,11 @@ define('io.ox/mail/compose/extensions', [
                 });
 
                 if (settings.get('compose/shareAttachments/enabled', false)) {
+                    var locked = false;
+
+                    if (settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
+                        baton.model.get('attachments').on('add remove reset', view.shareAttachmentsIsActive);
+                    }
 
                     new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
                         capabilities: 'infostore',
@@ -481,6 +510,12 @@ define('io.ox/mail/compose/extensions', [
                             return options.baton.view.shareAttachmentsIsActive();
                         },
                         multiple: function (list, baton) {
+                            // only uncheck if allowed (server setting can enforce drivemail if attachments are to large)
+                            if (locked) {
+                                //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                                yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
+                                return;
+                            }
                             baton.model.set('enable', false);
                         }
                     });
@@ -502,39 +537,128 @@ define('io.ox/mail/compose/extensions', [
                         })
                     );
 
-                    var ShareModel = Backbone.Model.extend({}),
-                        requiredExpiration = settings.get('compose/shareAttachments/requiredExpiration', false);
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'options',
+                        index: 100,
+                        draw: function (baton) {
+                            var now = _.now(),
+                                defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
+                                durationSeed = settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']);
 
-                    view.settingsModel = new ShareModel({
-                        'instruction_language': settingsCore.get('language'),
+                            _(durationSeed).each(function (seed) {
+                                var count = seed.slice(0, seed.length - 1),
+                                    unit = seed.slice(seed.length - 1, seed.length),
+                                    timestamp = moment(now).add(count, unit).valueOf(),
+                                    text = '';
+
+                                switch (unit) {
+                                    case 'd':
+                                        text = gt.format(gt.ngettext('%1$d day', '%1$d days', count), count);
+                                        break;
+                                    case 'w':
+                                        text = gt.format(gt.ngettext('%1$d week', '%1$d weeks', count), count);
+                                        break;
+                                    case 'M':
+                                        text = gt.format(gt.ngettext('%1$d month', '%1$d months', count), count);
+                                        break;
+                                    case 'y':
+                                        text = gt.format(gt.ngettext('%1$d year', '%1$d years', count), count);
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                baton.dropdown.option('expiry_date', timestamp, text);
+                                if (seed === defaultVal) {
+                                    baton.view.model.set('expiry_date', timestamp);
+                                }
+                            });
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'none-option',
+                        index: 200,
+                        draw: function (baton) {
+                            if (settings.get('compose/shareAttachments/requiredExpiration', false)) return;
+
+                            var defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M');
+                            if (!defaultVal && defaultVal === 'none') {
+                                baton.view.model.set('expiry_date', '');
+                            }
+
+                            baton.dropdown.option('expiry_date', '', gt('no expiry date'));
+                            if (!settings.get('compose/shareAttachments/forceAutoDelete', false)) {
+                                baton.view.model.on('change:expiry_date', function (settingsModel, value) {
+                                    // autodelete makes no sense if links cannot expire
+                                    if (value === '') baton.view.model.set('autodelete', false);
+                                });
+                            }
+                        }
+                    });
+
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                        id: 'delete-option',
+                        index: 300,
+                        draw: function (baton) {
+                            baton.dropdown.divider()
+                                .option('autodelete', true, gt('delete if expired'));
+
+                            if (baton.view.model.get('autodelete')) {
+                                // show disabled so user knows that the drive files are deleted, even if it cannot be changed
+                                baton.dropdown.$ul.find('[data-name="autodelete"]').attr('disabled', 'disabled').addClass('disabled');
+                            }
+                        }
+                    });
+
+                    ext.point(POINT + '/createtoken').extend({
+                        id: 'scrolltop',
+                        index: 10,
+                        action: function (baton) {
+                            if (_.device('!smartphone')) return;
+                            if (baton && baton.view) {
+                                setTimeout(function () {
+                                    if (baton.view.$el[0].scrollIntoView) baton.view.$el[0].scrollIntoView();
+                                }, 10);
+                            }
+                        }
+                    });
+
+                    view.model = new Backbone.Model({
+                        'instruction_language': coreSettings.get('language'),
                         'enable':  false,
                         'autodelete': settings.get('compose/shareAttachments/forceAutoDelete', false)
                     });
 
-                    view.notificationModel = new ShareModel({});
+                    view.notificationModel = new Backbone.Model();
                     view.shareAttachmentsIsActive = function () {
                         if (_.isEmpty(view.getValidModels())) return false;
                         var actualAttachmentSize = 0,
                             threshold = settings.get('compose/shareAttachments/threshold', 0),
+                            driveMailLimit = settings.get('compose/shareAttachments/driveLimit', -1),
                             thresholdExceeded;
 
                         _.each(baton.model.get('attachments').models, function (model) {
                             actualAttachmentSize = actualAttachmentSize + model.getSize();
                         });
 
-                        thresholdExceeded = threshold === 0 ? false : actualAttachmentSize > threshold;
-                        return thresholdExceeded || view.settingsModel.get('enable');
+                        thresholdExceeded = threshold <= 0 ? false : (actualAttachmentSize > threshold);
+                        locked = thresholdExceeded;
+                        if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
+                            yell('warning', gt('Attachment size too large. Please remove attachments or reduce the file size.'));
+                        }
+                        return thresholdExceeded || view.model.get('enable');
                     };
 
                     view.toggleShareAttachments = function () {
 
                         _.each(view.point.keys(), function (id) {
                             if (view.shareAttachmentsIsActive()) {
-                                view.settingsModel.set('enable', true);
+                                view.model.set('enable', true);
                                 view.point.enable(id);
                                 view.$el.addClass('show-share-attachments');
                             } else if (id !== 'renderSwitch') {
-                                view.settingsModel.set('enable', false);
+                                view.model.set('enable', false);
                                 view.point.disable(id);
                                 view.$el.removeClass('show-share-attachments');
                             }
@@ -543,6 +667,7 @@ define('io.ox/mail/compose/extensions', [
                         view.$header.empty();
                         this.renderHeader();
                         view.invoke('render');
+                        view.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
                     };
 
                     view.extend({
@@ -554,7 +679,7 @@ define('io.ox/mail/compose/extensions', [
                                     ref: 'io.ox/mail/attachment/shareAttachments'
                                 });
                                 view.shareAttachmentsIsActive();
-                                return extension.draw.call(node, ext.Baton({ model: view.settingsModel, data: data, view: view }));
+                                return extension.draw.call(node, ext.Baton({ model: view.model, data: data, view: view }));
                             }
 
                             var models = baton.view.getValidModels(), $links = baton.view.$header.find('.links').empty().addClass('shareAttachments');
@@ -566,24 +691,9 @@ define('io.ox/mail/compose/extensions', [
                         },
                         renderOptions: function (baton) {
                             var $links = baton.view.$header.find('.links'),
-                                defaultMoment = moment(_.now()).add(1, 'M').format('x'),
-                                dropdown = new Dropdown({ model: baton.view.settingsModel, label: gt('Expiration'), tagName: 'div', caret: true })
-                                .option('expiry_date', moment(_.now()).add(1, 'd').format('x'), gt('1 day'))
-                                .option('expiry_date', moment(_.now()).add(1, 'w').format('x'), gt('1 week'))
-                                .option('expiry_date', defaultMoment, gt('1 month'))
-                                .option('expiry_date', moment(_.now()).add(3, 'M').format('x'), gt('3 months'))
-                                .option('expiry_date', moment(_.now()).add(6, 'M').format('x'), gt('6 months'))
-                                .option('expiry_date', moment(_.now()).add(1, 'y').format('x'), gt('1 year'));
+                                dropdown = new Dropdown({ model: baton.view.model, label: gt('Expiration'), tagName: 'div', caret: true });
 
-                            if (baton.view.settingsModel.get('autodelete') || requiredExpiration) {
-                                baton.view.settingsModel.set('expiry_date', defaultMoment);
-                            } else {
-                                dropdown
-                                .option('expiry_date', '', gt('none'))
-                                .divider()
-                                .option('autodelete', true, gt('delete if expired'));
-                                baton.view.settingsModel.set('expiry_date', '');
-                            }
+                            ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: baton.view, dropdown: dropdown }));
 
                             $links.append(dropdown.render().$el);
                         },
@@ -595,47 +705,42 @@ define('io.ox/mail/compose/extensions', [
                                     .option('expired', true, gt('when the link is expired'))
                                     .option('visit', true, gt('when the receivers have accessed the files'));
 
-                                // if (!/^en_/.test(settingsCore.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+                                // if (!/^en_/.test(coreSettings.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
 
                                 $links.append(dropdown.render().$el);
                             }
                         },
                         renderPassword: function (baton) {
-                            var $links = baton.view.$header.find('.links'),
-                                passwordField = new mini.PasswordView({ name: 'password', model: baton.view.settingsModel, placeholder: gt('Password') });
+                            var model = baton.view.model, passContainer;
 
-                            $links.append(
+                            function toggleState() {
+                                if (model.get('usepassword')) return passContainer.find('input').removeAttr('disabled');
+                                passContainer.find('input').attr('disabled', 'disabled');
+                            }
+
+                            baton.view.$header.find('.links').append(
                                 $('<div class="input-group">').append(
                                     $('<span class="input-group-addon">').append(
-                                        new mini.CheckboxView({ name: 'usepassword', model: baton.view.settingsModel }).render().$el
+                                        new mini.CheckboxView({ name: 'usepassword', model: model }).render().$el
                                     ),
-                                    passwordField.render().$el.attr({ autocomplete: 'new-password' }).removeAttr('name')
+                                    passContainer = new mini.PasswordViewToggle({ name: 'password', model: model, placeholder: gt('Password'), autocomplete: false }).render().$el
                                 )
                             );
-
-                            if (!baton.view.settingsModel.get('usepassword')) passwordField.$el.attr('disabled', 'disabled');
-
-                            baton.view.settingsModel.on('change:usepassword', function () {
-                                if (baton.view.settingsModel.get('usepassword')) {
-                                    passwordField.$el.removeAttr('disabled');
-                                } else {
-                                    passwordField.$el.attr('disabled', 'disabled');
-                                }
-                            });
+                            model.on('change:usepassword', toggleState);
+                            toggleState();
                         }
                     });
 
                     // updates mail model
-                    view.listenTo(view.settingsModel, 'change', function () {
-                        if (!this.settingsModel.get('enable')) return baton.model.unset('share_attachments');
+                    view.listenTo(view.model, 'change', function () {
+                        if (!this.model.get('enable')) return baton.model.unset('share_attachments');
                         var blacklist = ['usepassword'];
-
                         // don't save password if the field is empty or disabled.
-                        if (!this.settingsModel.get('usepassword') || _.isEmpty(this.settingsModel.get('password'))) blacklist.push('password');
-                        baton.model.set('share_attachments', _.omit(this.settingsModel.attributes, blacklist));
+                        if (!this.model.get('usepassword') || _.isEmpty(this.model.get('password'))) blacklist.push('password');
+                        baton.model.set('share_attachments', _.omit(this.model.attributes, blacklist));
                     });
 
-                    view.listenTo(view.settingsModel, 'change:enable', function () {
+                    view.listenTo(view.model, 'change:enable', function () {
                         this.toggleShareAttachments();
                     });
 
@@ -644,7 +749,7 @@ define('io.ox/mail/compose/extensions', [
                     });
 
                     view.listenTo(view.notificationModel, 'change', function () {
-                        this.settingsModel.set('notifications', _.allKeys(this.notificationModel.attributes));
+                        this.model.set('notifications', _.allKeys(this.notificationModel.attributes));
                     });
                 }
 
@@ -710,12 +815,26 @@ define('io.ox/mail/compose/extensions', [
 
                     id = node.attr('data-id');
                     data = view.collection.get(id).toJSON();
+
+                    if (data.group === 'localFile') {
+                        data.fileObj = view.collection.get(id).fileObj;
+                        // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                        data.id = 'localFileAttachment-' + id;
+                    }
+
                     list = view.collection.filter(function (a) {
                         return a.get('disp') === 'attachment';
                     }).map(function (a) {
-                        return a.toJSON();
+                        var obj = a.toJSON();
+                        if (obj.group === 'localFile') {
+                            obj.fileObj = a.fileObj;
+                            // generate pseudo id so multiple localFile attachments do not overwrite themselves in the Viewer collection
+                            obj.id = 'localFileAttachment-' + a.cid;
+                        }
+                        return obj;
                     });
-                    baton = ext.Baton({ startItem: data, data: list });
+
+                    baton = ext.Baton({ startItem: data, data: list, openedBy: 'io.ox/mail/compose' });
 
                     actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                 });

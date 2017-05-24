@@ -25,6 +25,8 @@ define('io.ox/mail/util', [
     'use strict';
 
     var that,
+        prefix = ox.serverConfig.prefix || '/ajax',
+        regImageSrc = new RegExp('(<img[^>]+src=")' + prefix, 'g'),
 
         ngettext = function (s, p, n) {
             return n > 1 ? p : s;
@@ -93,6 +95,13 @@ define('io.ox/mail/util', [
     });
 
     that = {
+
+        replaceImagePrefix: function (data, replacement) {
+            data = data || '';
+            replacement = replacement || '$1' + ox.apiRoot;
+
+            return data.replace(regImageSrc, replacement);
+        },
 
         /**
          * currently registred types
@@ -274,13 +283,11 @@ define('io.ox/mail/util', [
                     delivery: 'download'
                 });
                 tmp = tmp.add(
-                    $('<a>', { href: href, target: '_blank' })
-                    .addClass('attachment-link').text(_.noI18n(filename))
+                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(_.noI18n(filename))
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span>').addClass('delimiter')
-                            .append($.txt(_.noI18n('\u00A0\u2022 ')))
+                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 ')))
                     );
                 }
             }
@@ -305,14 +312,13 @@ define('io.ox/mail/util', [
 
             var name = pair[0], email = String(pair[1] || '').toLowerCase(), display_name = name;
 
-            if (options.unescapeDisplayName === true) {
+            if (options.unescapeDisplayName) {
                 display_name = util.unescapeDisplayName(name);
             }
-
-            if (options.showDisplayName === false) return email;
+            if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
@@ -489,6 +495,11 @@ define('io.ox/mail/util', [
             return _.isNumber(data) ? (data & 32) !== 32 : undefined;
         },
 
+        isFlagged: function (data) {
+            data = _.isObject(data) ? data.flags : data;
+            return _.isNumber(data) ? (data & 8) === 8 : undefined;
+        },
+
         isDeleted: function (data) {
             return data && _.isNumber(data.flags) ? (data.flags & 2) === 2 : undefined;
         },
@@ -501,6 +512,10 @@ define('io.ox/mail/util', [
             return _.chain(arguments || []).flatten().compact().reduce(function (memo, data) {
                 return memo || (data.flags & 1) === 1;
             }, false).value();
+        },
+
+        isDecrypted: function (data) {
+            return data && data.security && data.security.decrypted;
         },
 
         isForwarded: function () {
@@ -518,6 +533,16 @@ define('io.ox/mail/util', [
             if (!_.isObject(data)) return false;
             return data.folder_id === undefined && data.filename !== undefined;
         },
+
+        isMalicious: (function () {
+            if (!settings.get('maliciousCheck')) return _.constant(false);
+            var blacklist = settings.get('maliciousFolders');
+            if (!_.isArray(blacklist)) return _.constant(false);
+            return function (data) {
+                if (!_.isObject(data)) return false;
+                return accountAPI.isMalicious(data.folder_id, blacklist);
+            };
+        })(),
 
         byMyself: function (data) {
             data = data || {};
@@ -549,9 +574,10 @@ define('io.ox/mail/util', [
         },
 
         fixInlineImages: function (data) {
+            // look if /ajax needs do be replaced
             return data
-                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1/ajax')
-                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1/ajax')
+                .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1' + prefix)
+                .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1' + prefix)
                 .replace(/on(mousedown|contextmenu)="return false;"\s?/g, '')
                 .replace(/data-mce-src="[^"]+"\s?/, '');
         },
@@ -600,7 +626,7 @@ define('io.ox/mail/util', [
                             content_type: 'message/rfc822',
                             filename: obj.filename ||
                                 // remove consecutive white-space
-                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), { max: 50 }),
+                                (obj.subject || gt('message')).replace(/\s+/g, ' ') + '.eml',
                             title: obj.filename || obj.subject || '',
                             mail: mail,
                             parent: data.parent || mail,

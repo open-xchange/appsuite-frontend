@@ -12,14 +12,61 @@
  */
 define(function () {
     describe('require static files', function () {
-        it('should fetch static files via backend', function (done) {
-            var def = require(['apps/file/doesnt/exist.js']);
+        var fakeServer;
 
-            def.fail(function (err) {
-                expect(err.requireType).to.equal('define');
-                expect(err.message).to.equal('Could not read \'file/doesnt/exist.js\'');
-                done();
-            }).done(done);
+        function mkModule(name) {
+            return 'define("' + name.replace(/\.js$/, '') + '", function() { return true; });';
+        }
+
+        it('should fetch static files via apps/load api', function () {
+            var recordAppsLoad = sinon.spy();
+            fakeServer = sinon.fakeServer.create();
+            fakeServer.autoRespond = true;
+            sinon.FakeXMLHttpRequest.useFilters = false;
+            fakeServer.respondWith('GET', /api\/apps\/load/, function (xhr) {
+                var modules = xhr.url.split(',');
+                modules.shift();
+                recordAppsLoad();
+                xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
+            });
+
+            return require(['file/doesnt/exist']).then(function () {
+                sinon.FakeXMLHttpRequest.useFilters = true;
+                fakeServer.restore();
+                expect(recordAppsLoad.calledOnce).to.be.true;
+            });
+        });
+
+        describe('respects url limits', function () {
+            var testModules;
+            it('should split requests larger than the limit', function () {
+                var recordAppsLoad = sinon.spy();
+                fakeServer = sinon.fakeServer.create();
+                fakeServer.autoRespond = true;
+                sinon.FakeXMLHttpRequest.useFilters = false;
+                fakeServer.respondWith('GET', /api\/apps\/load/, function (xhr) {
+                    var modules = xhr.url.split(',');
+                    modules.shift();
+                    recordAppsLoad(modules.length);
+                    xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, modules.map(mkModule).join('\n/*:oxsep:*/\n'));
+                });
+
+                ox.serverConfig.limitRequestLine = 100;
+                testModules = ['tests/longList1', 'tests/longList2', 'tests/longList3'];
+                testModules.push('tests/longList4', 'tests/longList5');
+
+                return ox.clearFileCache().then(function () {
+                    return require(testModules);
+                }).then(function () {
+                    sinon.FakeXMLHttpRequest.useFilters = true;
+                    fakeServer.restore();
+                    delete ox.serverConfig.limitRequestLine;
+
+                    expect(recordAppsLoad.calledWith(3), 'Loaded 3 modules').to.be.true;
+                    expect(recordAppsLoad.calledWith(2), 'Loaded 2 modules').to.be.true;
+                    expect(recordAppsLoad.calledTwice, 'apps/load called two times').to.be.true;
+                });
+            });
         });
 
         describe('with fixture plugin', function () {

@@ -6,35 +6,47 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
-], function (util, gt, moment) {
+
+define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment', 'settings!io.ox/core'
+], function (util, gt, moment, coreSettings) {
     describe('Tasks Utilities', function () {
         var options = {
             testData: {
-                'status': 2,
-                'title': undefined
+                status: 2,
+                title: undefined,
+                start_time: 0,
+                end_time: 1484031600000,
+                alarm: 1484024400000
+            },
+            testDataFulltime: {
+                status: 2,
+                title: 'Fulltime Task',
+                start_time: 1484006400000,
+                end_time: 1484092800000,
+                alarm: 1484024400000,
+                full_time: true
             },
             testDataArray: [
                 {
-                    'status': 3,
-                    'title': 'Top Test'
+                    status: 3,
+                    title: 'Top Test'
                 }, {
-                    'end_time': 1895104800000,
-                    'status': 1,
-                    'title': 'Blabla'
+                    end_time: 1895104800000,
+                    status: 1,
+                    title: 'Blabla'
                 },
                 {
-                    'end_time': 1895104800000,
-                    'status': 1,
-                    'title': 'Abc'
+                    end_time: 1895104800000,
+                    status: 1,
+                    title: 'Abc'
                 }, {
-                    'status': 1,
-                    'title': 'Test Title',
-                    'end_time': 1384999200000
+                    end_time: 1384999200000,
+                    status: 1,
+                    title: 'Test Title'
                 }
             ]
         };
@@ -59,6 +71,30 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                 var result = util.interpretTask(options.testData);
                 expect(result.title).to.equal('\u2014');
             });
+
+            it('should handle 1.1.1970 correctly', function () {
+                var result = util.interpretTask(options.testData);
+                expect(result.title).to.equal('\u2014');
+            });
+
+            it('should format times correctly', function () {
+                var result = util.interpretTask(options.testData), oldTimezone = coreSettings.get('timezone');
+                expect(result.end_time).to.equal(moment.tz(1484031600000, coreSettings.get('timezone')).format('l, LT'));
+                // timestamp 0
+                expect(result.start_time).to.equal(moment.tz(0, coreSettings.get('timezone')).format('l, LT'));
+                expect(result.alarm).to.equal(moment.tz(1484024400000, coreSettings.get('timezone')).format('l, LT'));
+
+                // set to timezone with negative offset. This way we can see if start and end time are treated timezone independent in fulltime mode (negative offset changes date if it is applied)
+                // see Bug 50918
+                coreSettings.set('timezone', 'Etc/GMT-8');
+                result = util.interpretTask(options.testDataFulltime);
+
+                expect(result.end_time).to.equal(moment.utc(1484092800000).format('l'));
+                expect(result.start_time).to.equal(moment.utc(1484006400000).format('l'));
+                expect(result.alarm).to.equal(moment.tz(1484024400000, coreSettings.get('timezone')).format('l, LT'));
+
+                coreSettings.set('timezone', oldTimezone);
+            });
         });
 
         describe('buildOptionArray', function () {
@@ -72,89 +108,6 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                 expect(result[5]).not.to.exist;
                 result = _.object(util.buildOptionArray());
                 expect(result[5]).to.equal(gt('in 5 minutes'));
-            });
-
-            it('should not contain past daytimes', function () {
-                var myDate = moment(),
-                    result, stub;
-
-                myDate.hours(7);
-                //super special UI time hack
-                stub = sinon.stub(window, 'moment');
-                stub.returns(myDate);
-
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.key('d0');
-                expect(result).to.include.key('5');
-
-                myDate.hours(13);
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.key('d1');
-                expect(result).to.include.key('5');
-
-                myDate.hours(16);
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.key('d2');
-                expect(result).to.include.key('5');
-
-                myDate.hours(19);
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.key('d3');
-                expect(result).to.include.key('5');
-
-                myDate.hours(23);
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.key('d4');
-                expect(result).to.include.key('5');
-
-                stub.restore();
-            });
-
-            it('should set weekdays correctly', function () {
-                var myDate = moment(),
-                    result, stub;
-
-                //super special UI time hack
-                stub = sinon.stub(window, 'moment');
-                stub.returns(myDate);
-
-                //today and tomorrow are special and should not be included in standard next ...day
-                myDate.day(0);//sunday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w0', 'w1']);
-                expect(result).to.include.keys(['w2', 'w3', 'w4', 'w5', 'w6']);
-
-                myDate.day(1);//monday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w1', 'w2']);
-                expect(result).to.include.keys(['w0', 'w3', 'w4', 'w5', 'w6']);
-
-                myDate.day(2);//tuesday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w2', 'w3']);
-                expect(result).to.include.keys(['w0', 'w1', 'w4', 'w5', 'w6']);
-
-                myDate.day(3);//wednesday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w3', 'w4']);
-                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w5', 'w6']);
-
-                myDate.day(4);//thursday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w4', 'w5']);
-                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w6']);
-
-                myDate.day(5);//friday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w5', 'w6']);
-                expect(result).to.include.keys(['w0', 'w1', 'w2', 'w3', 'w4']);
-
-                myDate.day(6);//saturday
-                result = _.object(util.buildOptionArray());
-                expect(result).not.to.include.keys(['w6', 'w0']);
-                expect(result).to.include.keys(['w1', 'w2', 'w3', 'w4', 'w5']);
-
-                stub.restore();
             });
         });
 
@@ -172,6 +125,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                 expect(result[0].is('li')).to.be.true;
             });
         });
+
         describe('computePopupTime', function () {
 
             it('should only return full days', function () {
@@ -183,6 +137,7 @@ define(['io.ox/tasks/util', 'gettext!io.ox/tasks', 'io.ox/core/moment'
                 expect(result.milliseconds()).to.equal(0);
             });
         });
+
         describe('sortTasks', function () {
 
             it('should work on a copy', function () {

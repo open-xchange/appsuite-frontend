@@ -240,7 +240,9 @@ define('io.ox/core/tk/doc-converter-utils', [
             return {
                 id: originalModel.mail.id,
                 source: 'mail',
-                attached: model.get('id')
+                attached: model.get('id'),
+                cryptoAuth: originalModel.auth ? originalModel.auth : '',
+                decrypt: originalModel && originalModel.security && originalModel.security.decrypted
             };
 
         } else if (model.isPIMAttachment()) {
@@ -255,8 +257,6 @@ define('io.ox/core/tk/doc-converter-utils', [
             var file_options_params = file_options ? file_options.params : null;
             return {
                 source: 'guard',
-                // guardUrl being used for access of mail attachments
-                guardUrl: model.get('guardUrl') ? model.get('guardUrl') : null,
                 cryptoAuth: file_options_params ? file_options_params.cryptoAuth : null,
                 cryptoAction: file_options_params ? file_options_params.cryptoAction : null,
                 mimetype: model.get('meta').OrigMime || model.get('file_mimetype')

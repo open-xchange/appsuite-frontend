@@ -128,10 +128,10 @@ define('io.ox/core/folder/actions/imap-subscription', [
                     disabled = virtual || !api.can('read', data) || !api.can('subscribe:imap', data);
 
                 previous[data.id] = data.subscribed;
-
+                var guid = _.uniqueId('form-control-label-');
                 this.find('.folder-label').before(
-                    $('<label class="folder-checkbox">').append(
-                        $('<input type="checkbox">')
+                    $('<label class="folder-checkbox">').attr('for', guid).append(
+                        $('<input type="checkbox">').attr('id', guid)
                             .prop({ checked: data.subscribed, disabled: disabled })
                             .on('change', change).val(data.id)
                     )

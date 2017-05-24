@@ -66,7 +66,7 @@
         var memoize = function (key) {
             var cache = memoize.cache;
             var address = '' + (hasher ? hasher.apply(this, arguments) : key);
-            if (!_.has(cache, address)) cache[address] = func.apply(this, arguments);
+            if (!hasOwnProperty.call(cache || {}, address)) cache[address] = func.apply(this, arguments);
             return cache[address];
         };
         memoize.cache = {};
@@ -94,7 +94,8 @@
             Android = (ua.indexOf('Android') > -1) ? ua.split('Android')[1].split(';')[0].trim() : undefined;
 
             iOS = (ua.match(/(iPad|iPhone|iPod)/i)) ? ua.split('like')[0].split('OS')[1].trim().replace(/_/g, '.') : undefined;
-            standalone = ('standalone' in nav) && nav.standalone;
+            // ios vs. chrome
+            standalone = (('standalone' in nav) && nav.standalone) || (window.matchMedia('(display-mode: standalone)').matches);
             uiwebview = ua.indexOf('AppleWebKit/') > -1 && ua.indexOf('Mobile/11B508') > -1;
             chromeIOS = ua.indexOf('CriOS/') > -1;
             firefoxIOS = ua.indexOf('FxiOS/') > -1;
@@ -192,15 +193,15 @@
     // first detection
     detectBrowser(navigator);
 
-    var detectTouch = memoize(function () {
-        // Windows 8 Chrome does report touch events which leads to
-        // a wrong feature set (disabled stuff) as AppSuite thinks
-        // this is a Smartphone or tablet without a mouse.
-        if (us.browser.chrome && us.browser.windows8) return false;
-        // don't report desktop browsers with pointerevent to be touch devices
-        if ('onpointerdown' in window && !us.browser.android && !us.browser.ios) return false;
-        return ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
-    });
+    var isTouch = (function () {
+        var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
+        // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
+        if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
+            if (window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
+            return false;
+        }
+        return reportsTouch;
+    }());
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -210,7 +211,7 @@
         large: '(min-width: 1025px)',
         landscape: '(orientation: landscape)',
         portrait: '(orientation: portrait)',
-        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)'
+        retina: 'only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5), only screen and (min-resolution: 2dppx)'
     };
 
     var display = {};
@@ -233,10 +234,9 @@
             stockBrowser = android && android[1] < 537,
             ratio = stockBrowser ? (window.devicePixelRatio || 1) : 1,
             size = Math.min(screen.width / ratio, screen.height / ratio) < 540,
-            touch = detectTouch(),
             razrHD = navigator.userAgent.indexOf('RAZR 4G') >= 0;
 
-        return (size && touch && mobileOS) || razrHD;
+        return (size && isTouch && mobileOS) || razrHD;
     }
 
     var mobileOS = !!(us.browser.ios || us.browser.android || us.browser.blackberry || us.browser.windowsphone);
@@ -286,13 +286,15 @@
             var misc = {}, lang = (ox.language || 'en_US').toLowerCase();
             misc[lang] = true;
             misc[lang.split('_')[0] + '_*'] = true;
-            misc.touch = detectTouch();
+            misc.touch = isTouch;
             misc.standalone = standalone;
             misc.emoji = underscoreExtends.hasNativeEmoji();
             misc.reload = (window.performance && window.performance.navigation.type === 1);
             // debug
             if (condition === 'debug' || condition === 1337) {
-                return Object.assign({}, browserLC, display, misc);
+                // fallback to _.extend if Object.assign does not exist
+                var assign = Object.assign || _.extend;
+                return assign({}, browserLC, display, misc);
             }
             // true for undefined, null, empty string
             if (!condition) return true;

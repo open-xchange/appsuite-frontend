@@ -50,6 +50,12 @@
     }
 
     .window-content .rightside > .scrollable-pane {
+
+        // A11y: TODO This will be removed after the default for links include text-decoration underline
+        a:not(.action):not([role="tab"]):not(.dropdown-toggle):not([data-toggle="dropdown"]), a[target="_blank"] { text-decoration: underline; }
+        li > a, .dropdown a { text-decoration: none; }
+        .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
+
         max-width: 780px;
 
         .settings-list-view {
@@ -57,17 +63,12 @@
                 .flex-wrap(wrap);
 
                 .account-icon {
+                    margin-left: 6px;
                     margin-top: 2px;
-                    padding-right: 0;
-                }
-
-                .account-error-message {
-                    width: 100%;
-                    text-align: right;
-                    color: #FF0000;
-                    padding-top: 0;
-                    padding-right: 63px;
-                    margin-top: -8px;
+                    background-size: 26px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    width: 40px;
                 }
 
                 .remove-placeholder {
@@ -83,6 +84,30 @@
             }
         }
 
+        .fontnameSelectbox {
+            display: inline-block;
+            padding-right: 24px;
+            vertical-align: text-bottom;
+        }
+        .fontsizeSelectbox {
+            display: inline-block;
+            padding-right: 24px;
+            vertical-align: text-bottom;
+        }
+        .fontcolorButton {
+            display: inline-block;
+            vertical-align: text-bottom;
+
+            .colorpicker-button {
+                width: 100%;
+            }
+        }
+
+        .example-text {
+            height: auto;
+            margin-top: 11px;
+        }
+
         .io-ox-accounts-settings {
 
             .widget-settings-view .widget-title {
@@ -93,18 +118,6 @@
                 right: 15px;
                 left: auto;
             }
-
-            .account-error-wrapper {
-                    color: #333;
-                    flex: 1 100%;
-                    padding: 0px 1px 12px 1px;
-                    order: 4;
-                .account-error-icon {
-                    padding: 3px 12px;
-                    float: left;
-                }
-            }
-
         }
 
         .widget-list {
@@ -187,11 +200,6 @@
             .action {
                 padding: 0;
                 margin-top: 1px;
-                margin-right: 2em;
-            }
-
-            .account-error-message {
-                color: #FF0000;
                 margin-right: 2em;
             }
 
@@ -400,9 +408,11 @@
         }
 
         .hint {
-            margin: 14px 0;
-            padding: 14px 14px 0 14px;
-            max-width: 500px;
+            &.recover {
+                display: block;
+                margin: 8px 0;
+            }
+            padding-left: 0;
         }
     }
 

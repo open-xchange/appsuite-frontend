@@ -130,6 +130,12 @@ define('io.ox/core/boot/main', [
                 gettext.enable();
                 return response[0];
             })
+            .then(function (response) {
+                require(['io.ox/core/boot/warning'], function () {
+                    ext.point('io.ox/core/boot/warning').invoke('draw');
+                });
+                return response;
+            })
             .done(function (load) {
                 util.restore();
                 load();

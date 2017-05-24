@@ -1,0 +1,125 @@
+<html lang="zh_tw">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>11.2.1. 可以授權那些權限？</title>
+<link rel="stylesheet" type="text/css" href="../../help.css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
+<link rel="home" href="index.html" title="使用者指南&gt;">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. 權限">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. 權限">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.permissions.folder.html" title="11.2.2. 針對已存在文件夾的權限">
+<link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="法律聲明">
+<link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
+<link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="../../jquery.min.js"></script> 
+
+   <script src="../../bootstrap.min.js"></script> 
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<div class="oxhelp-navigation-top"><nav class="navbar navbar-inverse" role="navigation"><div class="container-fluid">
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only"></span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
+</div>
+<div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.permissions.html">前一頁</a></li>
+<li><a accesskey="h" href="index.html" class="oxhelp-home-link">起始頁</a></li>
+<li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">目錄</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.permissions.folder.html">下一頁</a></li>
+</ul></div>
+</div></nav></div>
+<div class="oxhelp-content">
+  <h1 class="sr-only">管理資料</h1>
+<h2 class="sr-only">權限</h2>
+<div class="sect2">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="ox.appsuite.user.sect.dataorganisation.permissions.defined"></a>11.2.1. 可以授權那些權限？</h3></div></div></div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles"></a><p>為了簡化所授予的邏輯權限組合，有下列使用者角色:</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.roles.administrator" title="管理員">管理員</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.roles.viewer" title="檢視者">檢視者</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.roles.editor" title="審核者">審核者</a></p></li>
+<li class="listitem"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.roles.author" title="作者">作者</a></p></li>
+</ul></div>
+<p>您可以透過授予 <a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.detail" title="詳細權限">詳細權限</a> 來變更權限。</p>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.administrator"></a><h4 class="title">管理員</h4>
+<p>資料夾的管理員擁有該資料夾的所有權限。管理員可以向其他用戶授予文件夾權限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.viewer"></a><h4 class="title">檢視者</h4>
+<p>檢視者可讀取所有現有物件。檢視者沒有其他權限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 檢視資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.editor"></a><h4 class="title">審核者</h4>
+<p>審核者可讀取與編輯現有物件。但審核者無法建立新物件。審核者無法刪除物件。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 檢視資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.author"></a><h4 class="title">作者</h4>
+<p>作者可以修改或刪除現有物件、建立並編輯新物件、並建立子資料夾。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>資料夾權限: 建立物件與子資料夾</p></li>
+<li class="listitem"><p>物件權限: 讀取所有物件、編輯所有物件、刪除所有物件</p></li>
+</ul></div>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.dataorganisation.permissions.detail"></a><h4 class="title">詳細權限</h4>
+<p>不同使用者角色的預設權限可修改。可以授權下列權限。</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
+<p>資料夾</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>檢視資料夾</p></li>
+<li class="listitem"><p>建立物件</p></li>
+<li class="listitem"><p>建立物件與子資料夾</p></li>
+</ul></div>
+<p>
+              </p>
+</li>
+<li class="listitem">
+<p>讀取權限</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>無</p></li>
+<li class="listitem"><p>讀取自己的物件</p></li>
+<li class="listitem"><p>讀取所有物件</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>寫入權限</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>無</p></li>
+<li class="listitem"><p>編輯自己的物件</p></li>
+<li class="listitem"><p>編輯所有物件</p></li>
+</ul></div>
+</li>
+<li class="listitem">
+<p>刪除權限</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; ">
+<li class="listitem"><p>無</p></li>
+<li class="listitem"><p>刪除自己的物件</p></li>
+<li class="listitem"><p>刪除所有物件</p></li>
+</ul></div>
+</li>
+</ul></div>
+<p>
+        </p>
+</div>
+<p><a name="ox.appsuite.user.concept.dataorganisation.permissions.defined.parent"></a>父主題:<a class="xref" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. 權限">權限</a></p>
+</div>
+          </div>
+        </body>
+</html>

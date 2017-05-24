@@ -16,7 +16,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
     describe('Mail Compose', function () {
         describe('draft mails', function () {
 
-            var app, pictureHalo, snippetsGetAll, getValidAddress;
+            var app, pictureHalo, snippetsGetAll, getValidAddress, throttle;
 
             var editors = {
                     text: 'io.ox/core/tk/text-editor',
@@ -25,7 +25,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 pluginStub;
 
             beforeEach(function () {
-                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
+                pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor').callsFake(function (namespace) {
                     namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
                     return require([editors[namespace]]);
                 });
@@ -41,9 +41,11 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     'io.ox/core/api/account',
                     'settings!io.ox/mail'
                 ], function (snippetAPI, contactsAPI, accountAPI, settings) {
-                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll', function () { return $.when([]); });
-                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
-                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
+                    snippetsGetAll = sinon.stub(snippetAPI, 'getAll').callsFake(function () { return $.when([]); });
+                    pictureHalo = sinon.stub(contactsAPI, 'pictureHalo').callsFake(_.noop);
+                    getValidAddress = sinon.stub(accountAPI, 'getValidAddress').callsFake(function (d) { return $.when(d); });
+                    //disable throttling (throttled event listeners might cause random tests to fail)
+                    throttle = sinon.stub(_, 'throttle').callsFake(function (f) { return f; });
                     //load plaintext editor, much faster than spinning up tinymce all the time
                     settings.set('messageFormat', 'text');
                 }).then(function () {
@@ -65,6 +67,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 snippetsGetAll.restore();
                 pictureHalo.restore();
                 getValidAddress.restore();
+                throttle.restore();
                 return app.quit();
             });
 
@@ -86,10 +89,11 @@ define(['io.ox/mail/compose/main'], function (compose) {
 
                     this.server.respondWith('PUT', /api\/mail\?action=autosave/, function (xhr) {
                         callback();
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: {}
                         }));
                     });
+                    app.view.stopAutoSave();
                     clock = sinon.useFakeTimers(new Date().getTime());
                     //initialize timer (again) _after_ setting up fake timer
                     app.view.initAutoSaveAsDraft();
@@ -107,10 +111,11 @@ define(['io.ox/mail/compose/main'], function (compose) {
 
                     this.server.respondWith('PUT', /api\/mail\?action=autosave/, function (xhr) {
                         callback();
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: {}
                         }));
                     });
+                    app.view.stopAutoSave();
                     clock = sinon.useFakeTimers(new Date().getTime());
                     //initialize timer (again) _after_ setting up fake timer
                     app.view.initAutoSaveAsDraft();
@@ -149,7 +154,7 @@ define(['io.ox/mail/compose/main'], function (compose) {
                     expect(app.view.autosave.timer).not.to.be.a('number');
                 });
                 it('should send the request on click on save button', function () {
-                    var btn = app.getWindow().nodes.header.find('button[data-action="save"]').first();
+                    var btn = app.getWindow().nodes.outer.find('button[data-action="save"]').first();
                     var api = require('io.ox/mail/api');
                     var spy = sinon.spy(api, 'send');
 
@@ -166,12 +171,12 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 });
                 it('should send correct data when clicking compose, save, save, send', function () {
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: 'default0/INBOX/Drafts/666'
                         }));
                     });
                     this.server.respondWith('GET', /api\/mail\?action=get/, function (xhr) {
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: {
                                 id: '666',
                                 folder_id: 'default0/INBOX/Drafts',
@@ -226,12 +231,12 @@ define(['io.ox/mail/compose/main'], function (compose) {
                 });
                 it('should overwrite attachments with backend response after save', function () {
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: 'default0/INBOX/Drafts/666'
                         }));
                     });
                     this.server.respondWith('GET', /api\/mail\?action=get/, function (xhr) {
-                        xhr.respond(200, 'content-type:text/javascript;', JSON.stringify({
+                        xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: {
                                 id: '666',
                                 folder_id: 'default0/INBOX/Drafts',

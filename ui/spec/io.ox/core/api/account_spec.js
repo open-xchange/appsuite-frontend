@@ -300,6 +300,7 @@ define([
             ).then(function (settings, accounts) {
                 expect(accounts.length).to.equal(1);
                 settings.set('defaultSendAddress');
+                api.cache = {};
             });
         });
     });

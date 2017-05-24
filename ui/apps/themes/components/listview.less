@@ -67,16 +67,12 @@
             cursor: pointer;
             white-space: nowrap;
             i {
-                color: #ccc;
+                color: #767676;
                 margin-right: 8px;
                 width: 16px;
                 font-size: 18px;
                 position: relative;
                 top: 2px;
-            }
-            @media (max-width: 900px) {
-
-                padding-right: 0px;
             }
         }
 
@@ -109,9 +105,10 @@
 
     &:not(.upside-down) {
         &.toolbar-top-visible .list-view { top: @height-default; }
-        &.toolbar-top-visible .list-view>.message-empty-container  { padding-bottom: @height-default; }
         &.toolbar-bottom-visible .list-view { bottom: @height-small; }
-        &.toolbar-bottom-visible .list-view>.message-empty-container { padding-top: @height-small; }
+        // consider some padding to get better alignment with the detail view
+        &.toolbar-top-visible .list-view > .notification  { padding-bottom: @height-default; }
+        &.toolbar-bottom-visible .list-view > .notification { padding-top: @height-small; }
     }
 
     &.upside-down {
@@ -197,6 +194,7 @@
     }
 
     .list-item .list-item-checkmark {
+        z-index: 1;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -204,7 +202,7 @@
         width: @list-view-padding + 30;
 
         .fa-checkmark {
-            color: #ccc;
+            color: #767676;
             position: absolute;
             left: @default-padding;
             top: 12px;
@@ -213,22 +211,17 @@
         }
     }
 
-    .message-empty-container {
-        display: none;
-        &:only-child {
-            display: table;
-            height: 100%;
-            width: 100%;
-            .message-empty {
-                color: #777;
-                font-weight: 300;
-                font-size: 16px;
-                display: table-cell;
-                text-align: center;
-                vertical-align: middle;
-                padding-left: 8px;
-                padding-right: 8px;
-            }
+    .notification {
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        color: #767676;
+
+        i.fa-exclamation-triangle {
+            font-size: 42px;
+            margin-bottom: 8px;
         }
     }
 
@@ -262,14 +255,14 @@
         background-color: #ddd;
         -webkit-font-smoothing: antialiased;
         .fa-checkmark {
-            color: #aaa;
+            color: #626262;
         }
     }
 
     &.visible-selection.has-focus .list-item.selected {
-        color: white;
+        color: #fff;
         background-color: @selected-background;
-        i { color: rgba(255, 255, 255, 0.50); }
+        i { color: #fff; }
         html.high-contrast & {
             background-color: @hc-link-color;
         }

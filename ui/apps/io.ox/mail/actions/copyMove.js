@@ -63,7 +63,7 @@ define('io.ox/mail/actions/copyMove', [
 
                             args.data.obj.set('test', preparedTest);
 
-                            ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                            ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config);
                         });
                     });
                 }
@@ -76,6 +76,15 @@ define('io.ox/mail/actions/copyMove', [
                 })
                 .uniq()
                 .value();
+
+                var infoText = gt.format(
+                    //#. informs user about the consequences when creating a rule for selected mails
+                    //#. %1$s represents a email address
+                    gt.ngettext(
+                        'All future messages from %1$s will be moved to the selected folder.',
+                        'All future messages from the senders of the selected mails will be moved to the selected folder.',
+                        senderList.length
+                    ), _.escape(senderList[0]));
 
                 move.item({
                     all: o.list,
@@ -91,41 +100,28 @@ define('io.ox/mail/actions/copyMove', [
                     type: o.type,
                     pickerInit: function (dialog, tree) {
 
-                        var notification = $('<div class="help-block">'),
-                            singleSenderText = gt('All future messages from %1$s will be moved to the selected folder.', senderList[0]),
-                            multipleSenderText = gt('All future messages from the senders of the selected mails will be moved to the selected folder.'),
-                            infoText = senderList.length <= 1 ? singleSenderText : multipleSenderText,
-                            checkbox;
+                        dialog.on('ok', function () { folderId = tree.selection.get(); });
 
-                        if (capabilities.has('mailfilter') && o.type === 'move') {
-                            dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
+                        if (!capabilities.has('mailfilter') || o.type !== 'move') return;
 
-                            checkbox = dialog.getFooter().find('[data-action="create-rule"]');
-                            tree.on('change', function (id) {
-                                if (id.split('/')[0] !== 'default0') {
-                                    checkbox.prop({ 'checked': false, 'disabled': true }).trigger('change');
-                                    checkbox.closest('.checkbox').addClass('disabled');
-                                    notification.empty();
-                                } else {
-                                    checkbox.prop('disabled', false);
-                                    checkbox.closest('.checkbox').removeClass('disabled');
-                                }
-                            });
-
-                            checkbox.on('change', function () {
-                                createRule = $(this).prop('checked');
-
-                                if (createRule) {
-                                    notification.text(infoText);
-                                } else {
-                                    notification.empty();
-                                }
-                            });
-                        }
-
-                        dialog.getFooter().prepend(notification);
-                        dialog.on('ok', function () {
-                            folderId = tree.selection.get();
+                        dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
+                        var checkbox = dialog.getFooter().find('[data-action="create-rule"]'),
+                            infoblock = $('<div class="help-block">');
+                        // modify footer and place infoblock
+                        checkbox.closest('.checkbox').addClass('checkbox-block text-left')
+                                .after(infoblock);
+                        // change listeners
+                        checkbox.on('change', function onStateChange() {
+                            createRule = $(this).prop('checked');
+                            if (createRule) return infoblock.text(infoText);
+                            infoblock.empty();
+                        });
+                        tree.on('change', function onFolderChange(id) {
+                            var isDefaultAccount = id.split('/')[0] === 'default0';
+                            checkbox.closest('.checkbox').toggleClass('disabled', !isDefaultAccount);
+                            if (isDefaultAccount) return checkbox.prop('disabled', false);
+                            checkbox.prop({ 'checked': false, 'disabled': true }).trigger('change');
+                            infoblock.empty();
                         });
                     },
                     pickerClose: function () {

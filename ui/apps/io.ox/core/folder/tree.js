@@ -13,6 +13,7 @@
 
 define('io.ox/core/folder/tree', [
     'io.ox/backbone/disposable',
+    'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/folder/selection',
     'io.ox/core/folder/api',
     'io.ox/core/extensions',
@@ -21,7 +22,7 @@ define('io.ox/core/folder/tree', [
     'gettext!io.ox/core',
     'io.ox/core/folder/favorites',
     'io.ox/core/folder/extensions'
-], function (DisposableView, Selection, api, ext, a11y, settings, gt) {
+], function (DisposableView, Dropdown, Selection, api, ext, a11y, settings, gt) {
 
     'use strict';
 
@@ -32,7 +33,8 @@ define('io.ox/core/folder/tree', [
         events: {
             'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
-            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys'
+            'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys',
+            'keydown .folder.selectable': 'onKeydown'
         },
 
         initialize: function (options) {
@@ -47,7 +49,8 @@ define('io.ox/core/folder/tree', [
                 root: 'default0/INBOX',
                 highlight: _.device('!smartphone'),
                 highlightclass: 'visible-selection',
-                hideTrashfolder: false
+                hideTrashfolder: false,
+                realNames: false
             }, options);
 
             this.all = !!options.all;
@@ -57,20 +60,17 @@ define('io.ox/core/folder/tree', [
             this.module = options.module;
             this.open = options.open;
             this.root = options.root;
+            this.realNames = options.realNames;
+            this.id = _.uniqueId('folder-tree-');
 
             this.$el.data('view', this);
-            this.$container = $('<ul class="tree-container f6-target" role="tree">');
-            this.$dropdown = $();
+            this.$container = $('<ul class="tree-container f6-target" role="tree">').attr('id', this.id);
+
             this.$dropdownMenu = $();
             this.options = options;
 
             this.$el.toggleClass(options.highlightclass, !!options.highlight);
             this.$el.append(this.$container);
-
-            this.$el.attr({
-                'role': 'navigation',
-                'aria-label': gt('Folders')
-            });
 
             this.selection = new Selection(this);
 
@@ -89,9 +89,10 @@ define('io.ox/core/folder/tree', [
 
         // counter-part
         onAppear: function (id, handler) {
-            id = String(id).replace(/\s/g, '_');
             var node = this.getNodeView(id);
             if (node) return handler.call(this, node);
+            // to avoid evil trap: path might contains spaces
+            id = String(id).replace(/\s/g, '_');
             this.once('appear:' + id, handler);
         },
 
@@ -173,14 +174,8 @@ define('io.ox/core/folder/tree', [
         toggleContextMenu: function (target, top, left) {
 
             // return early on close
-            var isOpen = this.$dropdown.hasClass('open');
+            var isOpen = this.dropdown.$el.hasClass('open');
             if (isOpen || _.device('smartphone')) return;
-
-            // copy contextmenu id
-            var contextmenu = target.is('.contextmenu-control') ?
-                target.attr('data-contextmenu') :
-                target.find('.contextmenu-control').first().attr('data-contextmenu');
-            this.$dropdown.attr('data-contextmenu', contextmenu);
 
             _.defer(function () {
 
@@ -189,11 +184,8 @@ define('io.ox/core/folder/tree', [
                 if (api.isVirtual(id)) return;
 
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
-                this.$dropdown
-                    // helps to restore focus (see renderContextMenu)
-                    .data('previous-focus', target)
-                    // use official method
-                    .find('.dropdown-toggle').dropdown('toggle');
+                this.dropdown.$toggle = target;
+                this.$dropdownToggle.dropdown('toggle');
 
             }.bind(this));
         },
@@ -205,7 +197,19 @@ define('io.ox/core/folder/tree', [
                 top = offset.top - 7,
                 left = offset.left + target.outerWidth() + 7;
 
+            target.data('preventFocus', true);
             this.toggleContextMenu(target, top, left);
+        },
+
+        onKeydown: function (e) {
+            // home / end support
+            if (!/35|36/.test(e.which)) return;
+
+            if (e.which === 36) {
+                this.$el.find('li.folder.selectable:visible:first').trigger('click');
+            } else if (e.which === 35) {
+                this.$el.find('li.folder.selectable:visible:last').trigger('click');
+            }
         },
 
         onKeydownMenuKeys: function (e) {
@@ -214,8 +218,8 @@ define('io.ox/core/folder/tree', [
                 var shiftF10 = (e.shiftKey && e.which === 121),
                     menuKey = (_.device('windows') && e.which === 93);
                 if (/13|32|38|40/.test(e.which) || shiftF10 || menuKey) {
-                    this.focusFirst = true;
-                    if (/38|40/.test(e.which) && $(e.target).is('a')) this.onToggleContextMenu(e);
+                    this.focus = /38/.test(e.which) ? 'li:last > a' : 'li:first > a';
+
                     // e.preventDefault() is needed here to surpress browser menu
                     if (shiftF10 || menuKey) {
                         e.preventDefault();
@@ -229,18 +233,13 @@ define('io.ox/core/folder/tree', [
             // clicks bubbles. right-click not
             // DO NOT ADD e.preventDefault() HERE (see bug 42409)
             e.stopPropagation();
-            var target = $(e.currentTarget), top = e.pageY - 20, left = e.pageX + 30;
+            var target = $(e.currentTarget).data('fixed', true), top = e.pageY - 20, left = e.pageX + 30;
             if (target.is('.contextmenu-control')) {
                 top = target.offset().top;
                 left = target.offset().left + 40;
+                target.removeData('fixed');
             }
             this.toggleContextMenu(target, top, left);
-        },
-
-        onCloseContextMenu: function (e) {
-            e.preventDefault();
-            if (!this.$dropdown.hasClass('open')) return;
-            this.$dropdown.find('.dropdown-toggle').dropdown('toggle');
         },
 
         getContextMenuId: function (id) {
@@ -279,14 +278,12 @@ define('io.ox/core/folder/tree', [
                     // remove leading, subsequent, and tailing dividers
                     if (node.prev().length === 0 || next.hasClass('divider') || next.length === 0) node.remove();
                 });
-                // check if menu exceeds viewport
-                if (!_.device('smartphone') && ul.offset().top + ul.outerHeight() > $(window).height() - 20) {
-                    ul.css({ top: 'auto', bottom: '20px' });
+                if (!_.device('smartphone')) view.dropdown.setDropdownOverlay();
+
+                if (view.focus) {
+                    ul.find(view.focus).focus();
                 }
-                if (view.focusFirst) {
-                    ul.find('li:first > a').focus();
-                    view.focusFirst = false;
-                }
+                view.focus = false;
             });
         },
 
@@ -305,24 +302,21 @@ define('io.ox/core/folder/tree', [
                 this.$dropdownMenu.attr('role', 'menu');
             }
 
-            function hide() {
-                // restore focus
-                var node = $(this).data('previous-focus');
-                if (node) node.parent().focus();
-            }
-
             return function () {
+                this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options'));
+                this.$dropdownMenu = $('<ul class="dropdown-menu">');
+                this.dropdown = new Dropdown({
+                    smart: false,
+                    className: 'context-dropdown dropdown',
+                    $toggle: this.$dropdownToggle,
+                    $ul: this.$dropdownMenu,
+                    margin: 24
+                });
 
                 this.$el.after(
-                    this.$dropdown = $('<div class="context-dropdown dropdown" data-action="context-menu" data-contextmenu="default">').append(
-                        $('<div class="abs context-dropdown-overlay">').on('contextmenu', this.onCloseContextMenu.bind(this)),
-                        this.$dropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr('aria-label', gt('Folder options')),
-                        this.$dropdownMenu = $('<ul class="dropdown-menu">')
-                    )
+                    this.dropdown.render().$el
                     .on('show.bs.dropdown', show.bind(this))
-                    .on('hidden.bs.dropdown', hide.bind(this))
                 );
-                this.$dropdownToggle.dropdown();
                 this.$dropdownMenu.removeAttr('role');
             };
         }()),

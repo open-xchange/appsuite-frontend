@@ -11,11 +11,183 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, settings) {
+define(['io.ox/mail/detail/content'], function (content) {
 
     'use strict';
 
     describe('Mail content processing', function () {
+
+        describe('Text to HTML', function () {
+
+            function process(str) {
+                return content.text2html(str);
+            }
+
+            // LINE BREAKS
+
+            it('does not change plain text', function () {
+                var html = process('Lorem ipsum');
+                expect(html).to.equal('Lorem ipsum');
+            });
+
+            it('transforms new lines', function () {
+                var html = process('Lorem ipsum\ndolor sit amet');
+                expect(html).to.equal('Lorem ipsum<br>dolor sit amet');
+            });
+
+            it('transforms trailing new lines', function () {
+                var html = process('Lorem ipsum\ndolor\nsit\n');
+                expect(html).to.equal('Lorem ipsum<br>dolor<br>sit<br>');
+            });
+
+            it('transforms a single new line', function () {
+                var html = process('\n');
+                expect(html).to.equal('<br>');
+            });
+
+            // LINKS & ADDRESSES
+
+            it('transforms links', function () {
+                var html = process('Lorem http://ip.sum! dolor');
+                expect(html).to.equal('Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor');
+            });
+
+            it('transforms mail addresses', function () {
+                var html = process('Lorem <ipsum@dolor.amet>');
+                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&gt;');
+            });
+
+            // QUOTES
+
+            it('transforms quotes', function () {
+                var html = process('> Lorem ipsum');
+                expect(html).to.equal('<blockquote type="cite">Lorem ipsum</blockquote>');
+            });
+
+            it('transforms quotes across multiple lines', function () {
+                var html = process('\n> Lorem ipsum\n> dolor sit');
+                expect(html).to.equal('<br><blockquote type="cite">Lorem ipsum<br>dolor sit</blockquote>');
+            });
+
+            it('transforms nested quotes', function () {
+                var html = process('\n> Lorem ipsum\n> > dolor sit\n> amet');
+                expect(html).to.equal('<br><blockquote type="cite">Lorem ipsum<blockquote type="cite">dolor sit</blockquote>amet</blockquote>');
+            });
+
+            it('transforms nested quotes (2/1/2)', function () {
+                var html = process('> > Lorem ipsum\n> dolor sit\n> > amet');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>dolor sit<blockquote type="cite">amet</blockquote></blockquote>');
+            });
+
+            it('transforms nested quotes with consecutive brackets', function () {
+                var html = process('>> Lorem\n>> ipsum');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>');
+            });
+
+            it('transforms quotes with trailing new line', function () {
+                var html = process('> Lorem\n>\n> ipsum\n>\n');
+                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br>');
+            });
+
+            // UNORDERED LISTS
+
+            it('transforms unordered lists', function () {
+                var html = process('* Lorem ipsum');
+                expect(html).to.equal('<ul><li>Lorem ipsum</li></ul>');
+            });
+
+            it('transforms unordered lists across multiple lines', function () {
+                var html = process('\n* Lorem ipsum\n* dolor sit');
+                expect(html).to.equal('<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>');
+            });
+
+            it('transforms unordered lists with dashes', function () {
+                var html = process('\n- Lorem ipsum\n- dolor sit');
+                expect(html).to.equal('<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>');
+            });
+
+            it('transforms unordered lists with links', function () {
+                var html = process('- Lorem http://yeah.com\n- ipsum\n- dolor');
+                expect(html).to.equal('<ul><li>Lorem <a href="http://yeah.com" rel="noopener" target="_blank">http://yeah.com</a></li><li>ipsum</li><li>dolor</li></ul>');
+            });
+
+            it('transforms nested unordered lists', function () {
+                var html = process('* Lorem\n  * ipsum\n  * dolor sit\n* amet');
+                expect(html).to.equal('<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>');
+            });
+
+            it('transforms nested unordered lists (1/2/3/1)', function () {
+                var html = process('* One\n  * Two\n    * Three\n* One');
+                expect(html).to.equal('<ul><li>One<ul><li>Two<ul><li>Three</li></ul></li></ul></li><li>One</li></ul>');
+            });
+
+            // ORDERED LISTS
+
+            it('transforms ordered lists', function () {
+                var html = process('1. Lorem ipsum');
+                expect(html).to.equal('<ol start="1"><li>Lorem ipsum</li></ol>');
+            });
+
+            it('transforms ordered lists across multiple lines', function () {
+                var html = process('1. Lorem ipsum\n2. dolor sit');
+                expect(html).to.equal('<ol start="1"><li>Lorem ipsum</li><li>dolor sit</li></ol>');
+            });
+
+            it('transforms ordered lists starting with specific number', function () {
+                var html = process('29. Lorem ipsum\n30. dolor sit');
+                expect(html).to.equal('<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>');
+            });
+        });
+
+        describe('Link Processor', function () {
+
+            var cases = {
+                local: '<a href  =  "#some-anchor">',
+                common: '<a href="www.ox.io" target="_blank">',
+                styled: '<a href="http://ox.io" style = "color: #333; text-decoration: underline">',
+                different: "<a style='text-decoration:   underline;background-color:#333;color:#333' href='http://ox.io'>"
+            };
+
+            it('sets proper protocol and target', function () {
+                var baton = { source: cases.common };
+                content.extensions.linkTarget(baton);
+                expect(baton.source)
+                    .to.match(/href="http:\/\/www\.ox\.io"/g)
+                    .to.match(/target="_blank"/g);
+            });
+
+            it('sets proper disabled state', function () {
+                _(cases).each(function (source) {
+                    expect(content.extensions.linkDisable(source)).to.match(/\sdisabled="disabled" aria-disabled="true"/g);
+                });
+            });
+
+            it('removes the hypertext reference', function () {
+                _(cases).each(function (source) {
+                    expect(content.extensions.linkRemoveRef(source)).to.match(/href[\s]*=[\s]*["']#["']/g);
+                });
+            });
+
+            it('removes related inline style properties', function () {
+                _(cases).each(function (source) {
+                    expect(content.extensions.linkRemoveStyle(source))
+                        .to.not.match(/text-decoration/g)
+                        .to.not.match(/[^-]color/g);
+                });
+            });
+        });
+
+        describe('Image Processor', function () {
+
+            it('ensures ox.apiRoot is used', function () {
+                var baton = { source: '<img src="/ajax">' };
+                content.extensions.images(baton);
+                expect(baton.source).to.equal('<img src="/api">');
+            });
+
+        });
+
+        var settings = require('settings!io.ox/mail');
 
         beforeEach(function () {
             //prevent settings from being stored on server
@@ -60,30 +232,36 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
             expect(/fixed-width-font/.test(result.content.className)).to.be.true;
         });
 
-        it('should remove leading <br> tags', function () {
-            var result = process(' <br/> <br />  <br >text', 'text/plain');
+        it('should remove leading white-space', function () {
+            var result = process(' \n \n  \ntext', 'text/plain');
             expect(result.content.innerHTML).to.equal('text');
         });
 
-        it('should reduce long <br> sequences', function () {
-            var result = process('text<br><br><br><br>text<br><br>', 'text/plain');
-            expect(result.content.innerHTML).to.equal('text<br><br>text<br><br>');
+        it('should reduce long \n sequences', function () {
+            var result = process('text\n\n\n\ntext\n\n', 'text/plain');
+            expect(result.content.innerHTML).to.equal('text<br><br>text');
         });
 
         it('should simplify links', function () {
             var result = process('text <a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a> &lt;<a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a>&gt; text');
-            expect(result.content.innerHTML).to.equal('text <a href="http://localhost/path?query" target="_blank">http://localhost/path?query</a> text');
+            expect(result.content.innerHTML).to.equal('text <a href="http://localhost/path?query" target="_blank" rel="noopener">http://localhost/path?query</a> text');
         });
 
         describe('mail addresses', function () {
+
             it('should detect email addresses (text/plain)', function () {
-                var result = process('test<br>otto.xantner@open-xchange.com<br>test', 'text/plain');
+                var result = process('test\notto.xantner@open-xchange.com\ntest', 'text/plain');
                 expect(result.content.innerHTML).to.equal('test<br><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a><br>test');
             });
 
             it('should detect email addresses (text/html; @)', function () {
                 var result = process('<p><a href="mailto:otto.xantner@open-xchange.com">otto.xantner@open-xchange.com</a></p>');
                 expect(result.content.innerHTML).to.equal('<p><a href="mailto:otto.xantner@open-xchange.com" class="mailto-link" target="_blank">otto.xantner@open-xchange.com</a></p>');
+            });
+
+            it('should skip mailto as part of a domain name', function () {
+                var result = process('<p><a href="http://mailtool.somehwere.tld">http://mailtool.somehwere.tld</a></p>');
+                expect(result.content.innerHTML).to.equal('<p><a href="http://mailtool.somehwere.tld" target="_blank" rel="noopener">http://mailtool.somehwere.tld</a></p>');
             });
 
             it('should detect email addresses (text/html; &#64;)', function () {
@@ -94,6 +272,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
         });
 
         describe('folders', function () {
+
             it('should detect folder links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234">http://localhost/appsuite/?foo#m=infostore&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234" target="_blank" class="deep-link deep-link-files" role="button">Ordner</a>.</p>');
@@ -111,6 +290,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
         });
 
         describe('files', function () {
+
             it('should detect file links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&f=1234&i=0">http://localhost/appsuite/?foo#m=infostore&f=1234&i=0</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=infostore&amp;f=1234&amp;i=0" target="_blank" class="deep-link deep-link-files" role="button">Datei</a>.</p>');
@@ -128,11 +308,12 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
 
             it('should detect external file links (html)', function () {
                 var result = process('<p>Link: <a href="http://foobar/appsuite/#app=io.ox/files&folder=1337&id=0">http://foobar/appsuite/#app=io.ox/files&folder=1337&id=0</a>.</p>');
-                expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://foobar/appsuite/#app=io.ox/files&amp;folder=1337&amp;id=0" target="_blank" class="deep-link" role="button">Datei</a>.</p>');
+                expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://foobar/appsuite/#app=io.ox/files&amp;folder=1337&amp;id=0" target="_blank" class="deep-link" role="button" rel="noopener">Datei</a>.</p>');
             });
         });
 
         describe('appointments', function () {
+
             it('should detect appointment links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&i=0&f=1234">http://localhost/appsuite/?foo#m=calendar&i=0&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=calendar&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-calendar" role="button">Termin</a>.</p>');
@@ -145,6 +326,7 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
         });
 
         describe('tasks', function () {
+
             it('should detect task links (html, old-school)', function () {
                 var result = process('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&i=0&f=1234">http://localhost/appsuite/?foo#m=tasks&i=0&f=1234</a>.</p>');
                 expect(result.content.innerHTML).to.equal('<p>Link: <a href="http://localhost/appsuite/?foo#m=tasks&amp;i=0&amp;f=1234" target="_blank" class="deep-link deep-link-tasks" role="button">Aufgabe</a>.</p>');
@@ -156,4 +338,5 @@ define(['io.ox/mail/detail/content', 'settings!io.ox/mail'], function (content, 
             });
         });
     });
+
 });

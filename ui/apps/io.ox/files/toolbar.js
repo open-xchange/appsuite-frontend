@@ -40,12 +40,8 @@ define('io.ox/files/toolbar', [
                 title: gt('New file'),
                 ref: 'io.ox/files/dropdown/new',
                 customize: function (baton) {
-                    var self = this;
-
-                    this.append('<i class="fa fa-caret-down">');
-
-                    this.after(
-                        links.DropdownLinks({
+                    var self = this,
+                        $ul = links.DropdownLinks({
                             ref: 'io.ox/files/links/toolbar/default',
                             wrap: false,
                             //function to call when dropdown is empty
@@ -54,16 +50,23 @@ define('io.ox/files/toolbar', [
                                     .attr({ 'aria-disabled': true })
                                     .removeAttr('href');
                             }
-                        }, baton)
-                    );
+                        }, baton);
+
+                    this.append('<i class="fa fa-caret-down">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',
                         'data-toggle': 'dropdown',
                         'role': 'button'
-                    }).dropdown();
+                    });
 
                     this.parent().addClass('dropdown');
+
+                    new Dropdown({
+                        el: this.parent(),
+                        $toggle: this,
+                        $ul: $ul
+                    }).render();
                 }
             },
             'edit': {
@@ -79,27 +82,31 @@ define('io.ox/files/toolbar', [
                 label: gt('Share'),
                 ref: 'io.ox/files/dropdown/share',
                 customize: function (baton) {
-                    var self = this;
-                    this.append('<i class="fa fa-caret-down">');
-
-                    this.after(
-                        links.DropdownLinks({
+                    var self = this,
+                        $ul = links.DropdownLinks({
                             ref: 'io.ox/files/links/toolbar/share',
                             wrap: false,
                             //function to call when dropdown is empty
                             emptyCallback: function () {
                                 self.remove();
                             }
-                        }, baton)
-                    );
+                        }, baton);
+
+                    this.append('<i class="fa fa-caret-down">');
 
                     this.addClass('dropdown-toggle').attr({
                         'aria-haspopup': 'true',
                         'data-toggle': 'dropdown',
                         'role': 'button'
-                    }).dropdown();
+                    });
 
                     this.parent().addClass('dropdown');
+
+                    new Dropdown({
+                        el: this.parent(),
+                        $toggle: this,
+                        $ul: $ul
+                    }).render();
 
                     // set proper tooltip
                     var folders = 0, files = 0;
@@ -151,13 +158,6 @@ define('io.ox/files/toolbar', [
                 label: gt('View'),
                 ref: 'io.ox/files/actions/viewer'
             },
-            'presenter': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-play-circle-o',
-                label: gt('Present'),
-                ref: 'io.ox/files/actions/launchpresenter'
-            },
             'download': {
                 prio: 'hi',
                 mobile: 'lo',
@@ -208,20 +208,6 @@ define('io.ox/files/toolbar', [
                 mobile: 'lo',
                 label: gt('Send by mail'),
                 ref: 'io.ox/files/actions/send',
-                section: 'share'
-            },
-            'sendlink': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Send as internal link'),
-                ref: 'io.ox/files/actions/sendlink',
-                section: 'share'
-            },
-            'showlink': {
-                prio: 'lo',
-                mobile: 'lo',
-                label: gt('Show internal link'),
-                ref: 'io.ox/files/actions/showlink',
                 section: 'share'
             },
             'add-to-portal': {

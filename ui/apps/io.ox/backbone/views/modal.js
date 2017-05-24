@@ -20,7 +20,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     //
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
-    // - container: parent DOM element of the dialog
+    // - backdrop: include a backdrop element - default is 'static': backdrop is rendered but non-clickable,
+    //       see http://getbootstrap.com/javascript/#modals-options
     // - enter: this action is triggered on <enter>
     // - focus: set initial focus on this element
     // - help: link to online help article
@@ -35,7 +36,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         className: 'modal flex',
 
         events: {
-            'click [data-action]': 'onAction',
+            'click .modal-footer [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
             'keydown': 'onKeydown'
         },
@@ -45,10 +46,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // ensure options
             options = _.extend({
                 async: false,
-                container: 'body',
                 context: {},
                 keyboard: true,
-                maximize: false
+                maximize: false,
+                smartphoneInputFocus: false
             }, options);
             this.context = options.context;
             // the original constructor will call initialize()
@@ -61,11 +62,11 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 .append(
                     $('<div class="modal-dialog" role="document">').width(options.width).append(
                         $('<div class="modal-content">').append(
-                            $('<div class="modal-header">').append(
+                            this.$header = $('<div class="modal-header">').append(
                                 $('<h1 class="modal-title">').attr('id', title_id).text(options.title || '\u00A0')
                             ),
                             this.$body = $('<div class="modal-body">'),
-                            $('<div class="modal-footer">')
+                            this.$footer = $('<div class="modal-footer">')
                         )
                     )
                 );
@@ -76,14 +77,51 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
             // apply max height if maximize is given as number
-            if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
+            if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
-                    this.$('.modal-header').addClass('help').append(
+                    this.$header.addClass('help').append(
                         new HelpView({ href: options.help }).render().$el
                     );
                 }.bind(this));
+            }
+
+            // scroll inputs into view when smartphone keyboard shows up
+            if (_.device('smartphone') && options.smartphoneInputFocus) {
+                // make sure scrolling actually works
+                this.$el.find('.modal-content').css('overflow-y', 'auto');
+                $(window).on('resize', this.scrollToInput);
+            }
+
+            // track focusin
+            $(document).on('focusin', $.proxy(this.keepFocus, this));
+            this.on('dispose', function () {
+                $(document).off('focusin', this.keepFocus);
+                $(window).off('resize', this.scrollToInput);
+            });
+        },
+
+        scrollToInput: function () {
+            if ($(document.activeElement).filter('input[type="email"],input[type="text"],textarea').length === 1) {
+                document.activeElement.scrollIntoView();
+            }
+        },
+
+        keepFocus: function (e) {
+            var target = $(e.target);
+            // if child is target of this dialog, event handling is done by bootstrap
+            if (this.$el.has(target).length) return;
+
+            // we have to consider that two popups might be open
+            // so we cannot just refocus the current popup
+            var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
+            // should not keep focus if smart dropdown is open
+            var smartDropdown = $('body > .smart-dropdown-container').length > 0;
+
+            // stop immediate propagation to prevent bootstrap modal event listener from getting the focus
+            if (insidePopup || smartDropdown) {
+                e.stopImmediatePropagation();
             }
         },
 
@@ -93,13 +131,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
         open: function () {
             var o = this.options;
-            this.render().$el.appendTo(o.container);
+            this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
-            this.$el.modal({ keyboard: false }).modal('show');
-            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', true);
+            this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
+            this.toggleAriaHidden(true);
             this.trigger('open');
             // set initial focus
             var elem = this.$(o.focus);
@@ -108,7 +146,14 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 this.activeElement = elem[0];
                 elem[0].focus();
             }
+            // track open instances
+            open.add(this);
             return this;
+        },
+
+        toggleAriaHidden: function (state) {
+            // require for proper screen reader use
+            this.$el.siblings(':not(script,noscript)').attr('aria-hidden', !!state);
         },
 
         disableFormElements: function () {
@@ -143,8 +188,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             var o = _.extend({ placement: 'right', className: 'btn-primary', label: gt('Close'), action: 'cancel' }, options),
                 left = o.placement === 'left', fn = left ? 'prepend' : 'append';
             if (left) o.className += ' pull-left';
-            this.$('.modal-footer')[fn](
-                $('<button class="btn">')
+            this.$footer[fn](
+                $('<button type="button" class="btn">')
                     .addClass(o.className)
                     .attr('data-action', o.action)
                     .text(o.label)
@@ -200,6 +245,19 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         onTab: function (e) {
             if (e.which !== 9) return;
             a11y.trapFocus(this.$el, e);
+        },
+
+        // hide dialog without disposing it
+        pause: function () {
+            $(document).off('focusin', this.keepFocus);
+            this.$el.next().addBack().hide();
+            this.toggleAriaHidden(false);
+        },
+
+        resume: function () {
+            $(document).on('focusin', $.proxy(this.keepFocus, this));
+            this.$el.next().addBack().show();
+            this.toggleAriaHidden(true);
         }
     });
 
@@ -207,17 +265,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.trigger('before:close');
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');
-        if (!e || e.type !== 'hidden') {
-            this.$el.modal('hide');
-        }
-        this.$el.siblings(':not(script,noscript)').removeAttr('aria-hidden');
+        if (!e || e.type !== 'hidden') this.$el.modal('hide');
+        this.toggleAriaHidden(false);
         this.trigger('close');
-        if (this.previousFocus) this.previousFocus.focus();
+        var previousFocus = this.previousFocus;
         this.$el.remove();
-        // if multiple modal dialogs are open, set the modal-open class correctly
-        if ($(document.body).children().hasClass('modal')) {
-            $(document.body).addClass('modal-open');
-        }
+        open.remove(this);
+        if (previousFocus) previousFocus.focus();
         return this;
     }
 
@@ -242,6 +296,24 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.activeElement = null;
         return this;
     }
+
+    // track open instances
+
+    var open = {
+
+        queue: [],
+
+        add: function (dialog) {
+            if (this.queue.indexOf(dialog) > -1) return;
+            if (this.queue.length) _(this.queue).last().pause();
+            this.queue.push(dialog);
+        },
+
+        remove: function (dialog) {
+            this.queue = _(this.queue).without(dialog);
+            if (this.queue.length) _(this.queue).last().resume();
+        }
+    };
 
     /*
 

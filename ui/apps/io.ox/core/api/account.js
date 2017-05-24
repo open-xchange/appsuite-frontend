@@ -189,7 +189,6 @@ define('io.ox/core/api/account', [
     api.hasDSCAccount = function () {
         return !_.isEmpty(dscHash);
     };
-
     /**
      * get unified mailbox name
      * @return { deferred} returns array or null
@@ -287,6 +286,15 @@ define('io.ox/core/api/account', [
         return typeHash[id] !== undefined;
     };
 
+    api.isMalicious = function (id, blacklist) {
+        // includes simple subfolder checks
+        if (api.is('spam', id)) return true;
+        if (api.is('confirmed_spam', id)) return true;
+        return _(blacklist).some(function (folder) {
+            return folder === id || (id).indexOf(folder + separator) === 0;
+        });
+    };
+
     api.getType = function (id) {
         if (id === 'virtual/all-unseen') return 'unseen';
         return typeHash[id];
@@ -358,11 +366,9 @@ define('io.ox/core/api/account', [
     };
 
     api.getDefaultAddress = function () {
-        return require(['settings!io.ox/mail']).then(function (settings) {
-            return api.get(0).then(ensureDisplayName).then(function (account) {
-                var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
-                return [account.personal, defaultSendAddress || account.primary_address];
-            });
+        return api.get(0).then(ensureDisplayName).then(function (account) {
+            var defaultSendAddress = $.trim(settings.get('defaultSendAddress', ''));
+            return [account.personal, defaultSendAddress || account.primary_address];
         });
     };
 
@@ -561,7 +567,7 @@ define('io.ox/core/api/account', [
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam archive'.split(' ')).each(function (type) {
+                _('sent drafts trash spam archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
                     var short_name = account[type], full_name = account[type + '_fullname'];
                     typeHash[full_name || short_name] = type;

@@ -15,9 +15,8 @@ define('io.ox/mail/categories/picker', [
     'io.ox/mail/categories/api',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/extPatterns/actions',
-    'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (api, Dropdown, actions, settings, gt) {
+], function (api, Dropdown, actions, gt) {
 
     function getLabel() {
         return [$('<i class="fa fa-folder-open-o" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Move to category'))];

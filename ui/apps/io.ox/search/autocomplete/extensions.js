@@ -14,12 +14,13 @@
 define('io.ox/search/autocomplete/extensions', [
     'io.ox/core/extensions',
     'io.ox/contacts/api',
+    'io.ox/core/util',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/tk/tokenfield',
     'less!io.ox/search/style',
     'less!io.ox/find/style'
-], function (ext, api, settings, gt, Tokenfield) {
+], function (ext, api, util, settings, gt, Tokenfield) {
     'use strict';
 
     var POINT = 'io.ox/search/autocomplete';
@@ -31,7 +32,7 @@ define('io.ox/search/autocomplete/extensions', [
 
             // input group and dropdown
             this.append(
-                $('<input type="text" class="form-control search-field" role="search">')
+                $('<input type="text" class="form-control search-field">')
             );
         },
 
@@ -235,8 +236,8 @@ define('io.ox/search/autocomplete/extensions', [
 
             // construct url
             image = (baton.data.item && baton.data.item.image_url ? baton.data.item.image_url + '&height=42&scaleType=contain' : image)
-                .replace(/^https?\:\/\/[^\/]+/i, '')
-                .replace(/^\/ajax/, ox.apiRoot);
+                .replace(/^https?\:\/\/[^\/]+/i, '');
+            image = util.replacePrefix(image, ox.apiRoot);
 
             // add image node
             this.append(

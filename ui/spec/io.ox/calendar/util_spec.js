@@ -59,7 +59,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('one week difference', function () {
                 var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('11.–18. Nov. 2012');
+                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -118,27 +118,37 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
         describe('should translate recurrence strings', function () {
 
             var data = {
-                day_in_month: 13,
-                days: 1,
-                interval: 1,
-                month: 1,
-                recurrence_type: 1
-            };
+                    day_in_month: 13,
+                    days: 1,
+                    interval: 1,
+                    month: 1,
+                    recurrence_type: 1
+                },
+                localeWeek = {
+                    dow: moment.localeData().firstDayOfWeek(),
+                    doy: moment.localeData().firstDayOfYear()
+                };
 
-            it('Only works for en_US', function () {
+            afterEach(function () {
+                moment.updateLocale('de', {
+                    week: localeWeek
+                });
+            });
+
+            it('Only works for de_DE', function () {
                 expect(ox.language).to.equal('de_DE');
             });
 
             // Daily
             it('Every day', function () {
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Tag');
+                expect(str).to.equal('Täglich.');
             });
 
             it('Every 10 days', function () {
                 data.interval = 10;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 10 Tage');
+                expect(str).to.equal('Alle 10 Tage.');
             });
 
             // Weekly
@@ -147,32 +157,38 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.recurrence_type = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Wöchentlich am Montag');
+                expect(str).to.equal('Jeden Montag.');
             });
 
             it('Weekly on Monday and Tuesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Wöchentlich am Montag und Dienstag');
+                expect(str).to.equal('Jeden Montag und Dienstag.');
             });
 
             it('Weekly on Monday, Tuesday, Wednesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Wöchentlich am Montag, Dienstag, Mittwoch');
+                expect(str).to.equal('Jeden Montag, Dienstag, Mittwoch.');
             });
 
-            it('On work days', function () {
+            it('On workdays', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('An Arbeitstagen');
+                expect(str).to.equal('An Werktagen.');
+            });
+
+            it('On weekends', function () {
+                data.days = 1 + 64;
+                var str = util.getRecurrenceString(data);
+                expect(str).to.equal('Jedes Wochenende.');
             });
 
             it('Weekly on all days -> Every day', function () {
                 data.interval = 1;
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden Tag');
+                expect(str).to.equal('Täglich.');
             });
 
             // Weekly - interval > 1
@@ -180,25 +196,40 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.MONDAY;
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Wochen am Montag');
+                expect(str).to.equal('Alle 2 Wochen am Montag.');
+            });
+
+            // test if superessive days and start of the week work well together
+            it('Every 2 weeks on Monday with start of week = 3', function () {
+                moment.updateLocale('de', { week: { dow: 3, doy: localeWeek.doy } });
+                data.days = util.days.MONDAY;
+                data.interval = 2;
+                var str = util.getRecurrenceString(data);
+                expect(str).to.equal('Alle 2 Wochen am Montag.');
             });
 
             it('Every 2 weeks on Monday, Tuesday, Wednesday', function () {
                 data.days = util.days.MONDAY | util.days.TUESDAY | util.days.WEDNESDAY;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Wochen am Montag, Dienstag, Mittwoch');
+                expect(str).to.equal('Alle 2 Wochen am Montag, Dienstag, Mittwoch.');
             });
 
-            it('Every 2 weeks on work days', function () {
+            it('Every 2 weeks on workdays', function () {
                 data.days = 2 + 4 + 8 + 16 + 32;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Wochen an Arbeitstagen');
+                expect(str).to.equal('Alle 2 Wochen an Werktagen.');
+            });
+
+            it('Every 2 weeks on weekends', function () {
+                data.days = 1 + 64;
+                var str = util.getRecurrenceString(data);
+                expect(str).to.equal('Alle 2 Wochen am Wochenende.');
             });
 
             it('Every 2 weeks on all days', function () {
                 data.days = 127;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Wochen an allen Tagen');
+                expect(str).to.equal('Täglich alle 2 Wochen.');
             });
 
             // Monthly
@@ -208,13 +239,13 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.recurrence_type = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jeden 11. Tag im Monat');
+                expect(str).to.equal('Monatlich am 11.');
             });
 
             it('Every 2 months on day 11', function () {
                 data.interval = 2;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Monate am 11. Tag');
+                expect(str).to.equal('Alle 2 Monate am 11.');
             });
 
             // Monthly - specific days
@@ -223,7 +254,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.FRIDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Am ersten Freitag jeden Monats');
+                expect(str).to.equal('Monatlich am ersten Freitag.');
             });
 
             it('Monthly on the last Sunday', function () {
@@ -231,7 +262,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.SUNDAY;
                 data.interval = 1;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Am letzten Sonntag jeden Monats');
+                expect(str).to.equal('Monatlich am fünften / letzten Sonntag.');
             });
 
             // Monthly - specific days - interval > 1
@@ -240,15 +271,15 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.days = util.days.FRIDAY;
                 data.interval = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 3 Monate am ersten Freitag');
+                expect(str).to.equal('Alle 3 Monate am ersten Freitag.');
             });
 
             it('Every 3 months on the last Sunday', function () {
                 data.days = util.days.SUNDAY;
-                data.day_in_month = -1;
+                data.day_in_month = 5;
                 data.interval = 3;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 3 Monate am letzten Sonntag');
+                expect(str).to.equal('Alle 3 Monate am fünften / letzten Sonntag.');
             });
 
             // Yearly
@@ -259,13 +290,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.month = 0;
                 data.recurrence_type = 4;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jährlich am 29. Januar');
-            });
-
-            it('Every 2 years on January 29', function () {
-                data.interval = 2;
-                var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Jahre am 29. Januar');
+                expect(str).to.equal('Jährlich am 29. Januar.');
             });
 
             // Yearly - specific days
@@ -275,17 +300,9 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 data.interval = 1;
                 data.month = 6;
                 var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Jährlich am ersten Freitag im Juli');
+                expect(str).to.equal('Jährlich am ersten Freitag im Juli.');
             });
 
-            it('Every 2 years on the first Friday of July', function () {
-                data.day_in_month = 1;
-                data.days = util.days.FRIDAY;
-                data.interval = 2;
-                data.month = 6;
-                var str = util.getRecurrenceString(data);
-                expect(str).to.equal('Alle 2 Jahre am ersten Freitag im Juli');
-            });
         });
 
         describe.skip('can resolve group ids to user arrays', function () {
@@ -386,26 +403,26 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('resolve appointment color class', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0 };
+                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6 };
+                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0 };
+                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5 };
+                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
                 });
@@ -417,7 +434,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 });
                 it('with public folder', function () {
                     var folder = { meta: { color_label: 2 }, type: 2 },
-                        appointment = { color_label: 0, created_by: 377 };
+                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
@@ -425,26 +442,26 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0 };
+                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6 };
+                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0 };
+                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5 };
+                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });

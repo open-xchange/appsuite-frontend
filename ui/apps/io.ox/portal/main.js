@@ -516,7 +516,7 @@ define('io.ox/portal/main', [
                             $('<br>'),
                             // retry
                             e.retry !== false ?
-                                $('<a class="solution">').text(gt('Click to try again.')).on('click', function () {
+                                $('<a class="solution">').text(gt('Try again.')).on('click', function () {
                                     node.find('.decoration').addClass('pending');
                                     loadAndPreview(point, node, baton);
                                 }) : $()
@@ -653,7 +653,7 @@ define('io.ox/portal/main', [
         }));
 
         win.nodes.main.addClass('io-ox-portal f6-target').attr({
-            'tabindex': '0',
+            'tabindex': -1,
             role: 'main',
             'aria-label': gt('Portal widgets')
         });

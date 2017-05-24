@@ -34,7 +34,12 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/*', '!tinymce.min.js'],
+                        src: [
+                            'jquery.tinymce.js',
+                            'jquery.tinymce.min.js',
+                            '{plugins,skins,themes}/**/*',
+                            'tinymce.js'
+                        ],
                         cwd: 'bower_components/tinymce-dist',
                         dest: 'build/apps/3rd.party/tinymce/'
                     },
@@ -64,7 +69,8 @@ module.exports = function (grunt) {
                             'marked/lib/marked.js',
                             'clipboard/dist/clipboard.min.js',
                             'velocity/velocity.min.js',
-                            'moment/moment.js'
+                            'moment/moment.js',
+                            'resize-polyfill/lib/polyfill-resize.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
@@ -115,7 +121,10 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['**/*'],
+                        src: [
+                            'build/pdf.combined.js',
+                            'web/images/*'
+                        ],
                         cwd: 'bower_components/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/'
                         // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)

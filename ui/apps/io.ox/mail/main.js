@@ -35,6 +35,7 @@ define('io.ox/mail/main', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
+    'settings!io.ox/core',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -42,7 +43,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -371,7 +372,8 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                title: gt('Mail quota'),
+                //#. Quota means a general quota for mail and files
+                title: coreSettings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('Mail quota'),
                 renderUnlimited: false,
                 upsell: {
                     title: gt('Need more space?'),
@@ -394,13 +396,20 @@ define('io.ox/mail/main', [
             );
         },
 
+        'select-all-actions': function () {
+            // otherwise user would have wait for 'auto refresh'
+            api.on('move deleted-mails archive', function () {
+                if (!app.listView.collection.length) app.listView.reload();
+            });
+        },
+
         /*
          * Default application properties
          */
         'props': function (app) {
 
             function getLayout() {
-                // enforece vertical on smartphones
+                // enforce vertical on smartphones
                 if (_.device('smartphone')) return 'vertical';
                 var layout = app.settings.get('layout', 'vertical');
                 // 'compact' only works on desktop properly
@@ -448,12 +457,14 @@ define('io.ox/mail/main', [
                 params = loader.getQueryParams({ folder: 'virtual/all-unseen' }),
                 collection = loader.getCollection(params);
 
+            // set special attributes
+            collection.gc = false;
+            collection.preserve = true;
+            collection.CUSTOM_PAGE_SIZE = 250;
+
             // register load listener which triggers complete
-            collection.on('load', function () {
-                this.gc = false;
+            collection.on('load reload', function () {
                 this.complete = true;
-                this.preserve = true;
-                this.CUSTOM_PAGE_SIZE = 250;
                 this.trigger('complete');
             });
 
@@ -462,6 +473,32 @@ define('io.ox/mail/main', [
             api.on('all-unseen', function (e, count) {
                 virtualAllSeen.set('unread', count);
             });
+
+            function loadAllUnseenMessages() {
+                api.getAllUnseenMessages().done(function success(list) {
+                    var folders = _(list).chain().filter(function (data) {
+                        // rewrite folder_id and id
+                        data.id = data.original_id;
+                        data.folder_id = data.original_folder_id;
+                        // drop messages from spam and trash
+                        return !accountAPI.is('spam|trash', data.folder_id);
+                    }).pluck('folder_id').uniq().value();
+                    folderAPI.multiple(folders);
+                });
+            }
+
+            function initAllMessagesFolder() {
+                loadAllUnseenMessages();
+                ox.on('refresh^', loadAllUnseenMessages);
+            }
+
+            if (settings.get('features/unseenFolder')) {
+                if (settings.get('unseenMessagesFolder')) {
+                    initAllMessagesFolder();
+                } else {
+                    settings.once('change:features/unseenFolder', initAllMessagesFolder);
+                }
+            }
 
             // make virtual folder clickable
             app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-unseen');
@@ -554,13 +591,6 @@ define('io.ox/mail/main', [
                     // set proper order first
                     model.set('order', (/^(610|608)$/).test(value) ? 'desc' : 'asc', { silent: true });
                     app.props.set('order', model.get('order'));
-                    // turn off conversation mode for any sort order but date (610)
-                    if (value !== 610) app.props.set('thread', false);
-                }
-                if (value === 610 && !app.props.get('thread')) {
-                    // restore thread when it was disabled by force
-                    var options = app.getViewOptions(app.folder.get());
-                    app.props.set('thread', options.threadrestore || false);
                 }
                 // now change sort columns
                 model.set({ sort: value });
@@ -580,18 +610,11 @@ define('io.ox/mail/main', [
          * Respond to conversation mode changes
          */
         'change:thread': function (app) {
-            app.props.on('change:thread', function (model, value, opt) {
+            app.props.on('change:thread', function (model, value) {
                 if (!app.changingFolders && app.listView.collection) {
                     app.listView.collection.expired = true;
                 }
-                if (value === true) {
-                    app.props.set('sort', 610);
-                    app.listView.model.set('thread', true);
-                } else {
-                    // remember/remove thread state for restoring
-                    opt.viewOptions = app.props.get('sort') === 610 ? { threadrestore: undefined } : { threadrestore: true };
-                    app.listView.model.set('thread', false);
-                }
+                app.listView.model.set('thread', !!value);
             });
         },
 
@@ -656,7 +679,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 
@@ -740,9 +763,7 @@ define('io.ox/mail/main', [
                 // marker so the change:sort listener does not change other attributes (which would be wrong in that case)
                 app.changingFolders = true;
 
-                var options = app.getViewOptions(id),
-                    fromTo = $(app.left[0]).find('.dropdown.grid-options .dropdown-menu [data-value="from-to"] span'),
-                    showTo = account.is('sent|drafts', id);
+                var options = app.getViewOptions(id);
 
                 app.props.set(_.pick(options, 'sort', 'order', 'thread'));
 
@@ -753,7 +774,6 @@ define('io.ox/mail/main', [
 
                 app.listView.model.set('folder', id);
                 app.folder.getData();
-                fromTo.text(showTo ? gt('To') : gt('From'));
                 app.changingFolders = false;
             });
         },
@@ -819,6 +839,8 @@ define('io.ox/mail/main', [
             function show() {
                 // check if message is still within the current collection
                 if (!app.listView.collection.get(latestMessage)) return;
+                app.threadView.autoSelect = app.autoSelect;
+                delete app.autoSelect;
                 app.threadView.show(latestMessage, app.isThreaded());
                 // a11y: used keyboard?
                 if (openMessageByKeyboard || app.props.get('layout') === 'list') {
@@ -1004,30 +1026,41 @@ define('io.ox/mail/main', [
                     .addClass(className);
             }
 
+            function resetLeft(className) {
+                return app.left
+                    .removeClass('selection-empty selection-one selection-multiple'.replace(className, ''))
+                    .addClass(className);
+            }
+
             var react = _.debounce(function (type, list) {
 
                 if (app.props.get('layout') === 'list' && type === 'action') {
                     resetRight('selection-one preview-visible');
+                    resetLeft('selection-one');
                     app.showMail(list[0]);
                     return;
                 } else if (app.props.get('layout') === 'list' && type === 'one') {
                     //don't call show mail (an invisible detailview would be drawn which marks it as read)
                     resetRight('selection-one');
+                    resetLeft('selection-one');
                     return;
                 }
 
                 switch (type) {
                     case 'empty':
                         resetRight('selection-empty');
+                        resetLeft('selection-empty');
                         app.showEmpty();
                         break;
                     case 'one':
                     case 'action':
                         resetRight('selection-one');
+                        resetLeft('selection-one');
                         app.showMail(list[0]);
                         break;
                     case 'multiple':
                         resetRight('selection-multiple');
+                        resetLeft('selection-multiple');
                         app.showMultiple(list);
                         break;
                     // no default
@@ -1051,6 +1084,7 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // no debounce for showMultiple or screenreaders read old number of selected messages
                     resetRight('selection-multiple');
+                    resetLeft('selection-multiple');
                     app.showMultiple(list);
                 },
                 'selection:action': function (list) {
@@ -1138,8 +1172,12 @@ define('io.ox/mail/main', [
             };
 
             app.props.on('change:layout', function () {
+                // check if view dropdown has focus and restore the focus after rendering
+                var body = app.getWindow().nodes.body,
+                    focus = body.find('*[data-dropdown="view"] a:first').is(':focus');
                 app.applyLayout();
                 app.listView.redraw();
+                if (focus) body.find('*[data-dropdown="view"] a:first').focus();
             });
 
             app.getWindow().on('show:initial', function () {
@@ -1169,7 +1207,8 @@ define('io.ox/mail/main', [
                 _.defer(function () {
                     app.listView.collection.find(function (model) {
                         if (!util.isUnseen(model.get('flags'))) {
-                            app.listView.selection.set([model.cid]);
+                            app.autoSelect = true;
+                            app.listView.selection.set([model.cid], false);
                             return true;
                         }
                     });
@@ -1562,7 +1601,7 @@ define('io.ox/mail/main', [
             // detail view: return back to list view via <escape>
             app.threadView.$el.attr('tabindex', -1).on('keydown', function (e) {
                 if (e.which !== 27) return;
-                if ($(e.target).is('.smart-dropdown, .dropdown-toggle, :input')) return;
+                if ($(e.target).is('.dropdown-toggle, :input')) return;
                 // make sure the detail view closes in list layout
                 app.right.removeClass('preview-visible');
                 app.listView.restoreFocus(true);
@@ -1700,7 +1739,7 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.delegate('.detail-view-header .dropdown-menu a', 'mousedown', function (e) {
+                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
@@ -1708,8 +1747,21 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
+                // listview toolbar
+                nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action,
+                        detail: node.attr('data-value')
+                    });
+                });
                 // toolbar actions
-                toolbar.delegate('.io-ox-action-link', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1717,7 +1769,7 @@ define('io.ox/mail/main', [
                         action: $(e.currentTarget).attr('data-action')
                     });
                 });
-                toolbar.delegate('.category', 'mousedown', function (e) {
+                toolbar.on('mousedown', '.category', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
@@ -1726,25 +1778,45 @@ define('io.ox/mail/main', [
                         detail: $(e.currentTarget).attr('data-id')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.delegate('.dropdown-menu a:not(.io-ox-action-link)', 'mousedown', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action
-                sidepanel.find('.context-dropdown').delegate('li>a', 'mousedown', function (e) {
+                sidepanel.find('.context-dropdown').on('mousedown', 'a', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'folder/context-menu',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'drop',
+                        detail: baton.data.length ? 'single' : 'multiple'
                     });
                 });
                 // check for clicks in folder trew
@@ -1804,10 +1876,10 @@ define('io.ox/mail/main', [
                             folder = folderAPI.pool.models[model.get('folder_id')];
                             // check if we are in the unified folder
                             if (folder && folder.is('unifiedfolder')) {
-                                originalFolderId = model.get('id').replace(/\/\w*$/, '');
+                                originalFolderId = model.get('original_folder_id');
                                 unifiedSubfolderId = model.get('folder_id') + '/' + originalFolderId;
                                 // unified folder has special mail ids
-                                var id = model.get('id').replace(originalFolderId + '/', '');
+                                var id = model.get('original_id');
 
                                 return [{ folder_id: originalFolderId, id: id }, { folder_id: unifiedSubfolderId, id: id }];
                             }
@@ -1820,7 +1892,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: originalFolderId + '/' + model.get('id') }, { folder_id: originalFolderId, id: model.get('id') }];
                             }
-                            return $.Deferred().reject();
                         // check if we are in a standard folder that needs to be synced to a unified folder
                         } else if (accountData.unified_inbox_enabled) {
                             folder = folderAPI.pool.models[model.get('folder_id')];
@@ -1833,8 +1904,6 @@ define('io.ox/mail/main', [
 
                                 return [{ folder_id: unifiedFolderId, id: model.get('folder_id') + '/' + model.get('id') }, { folder_id: unifiedSubfolderId, id: model.get('id') }];
                             }
-
-                            return $.Deferred().reject();
                         }
                         return $.Deferred().reject();
                     });

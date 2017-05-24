@@ -31,7 +31,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             this.rootAlwaysVisible = options.rootAlwaysVisible;
             // render folder as link although the user has only a read right
             this.linkReadOnly = options.linkReadOnly;
-            // this is allways the first path element of the breadcrumb
+            // this is always the first path element of the breadcrumb
             this.defaultRootPath = options.defaultRootPath;
 
             // last item is a normal item (not a unclickable tail node)
@@ -166,7 +166,7 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
             else if (!this.handler || isDisabled) node = $('<span class="breadcrumb-item">');
             else node = $('<a href="#" role="button" class="breadcrumb-link">').attr('href', api.getDeepLink(data));
 
-            node.attr('data-id', data.id).text(
+            node.attr({ 'data-id': data.id, 'data-module': data.module }).text(
                 isLast ? data.title : _.ellipsis(data.title, { max: 20 })
             );
 
@@ -177,8 +177,9 @@ define('io.ox/core/folder/breadcrumb', ['io.ox/core/folder/api'], function (api)
 
         onClickLink: function (e) {
             e.preventDefault();
-            var id = $(e.target).attr('data-id');
-            if (this.handler) this.handler(id);
+            var id = $(e.target).attr('data-id'),
+                module = $(e.target).attr('data-module');
+            if (this.handler) this.handler(id, module);
         },
 
         onFolderChange: function () {

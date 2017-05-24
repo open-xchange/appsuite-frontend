@@ -199,15 +199,18 @@ define('io.ox/core/tk/vgrid', [
         var left = $(this).closest('.leftside'),
             right = left.siblings('.rightside'),
             base = e.pageX - left.width(),
-            limitX = $(document).width() - 250;
+            limitX = $(document).width() - 250,
+            width;
+
         $(document).on({
             'mousemove.resize': function (e) {
-                var width = Math.max(250, Math.min(e.pageX, limitX) - base);
+                width = Math.max(250, Math.min(e.pageX, limitX) - base);
                 left.css('width', width);
                 right.css('left', width);
             },
             'mouseup.resize': function () {
                 $(this).off('mousemove.resize mouseup.resize');
+                e.data.updateSettings('width/' + _.display(), width);
             }
         });
     };
@@ -294,7 +297,7 @@ define('io.ox/core/tk/vgrid', [
                     // show checkbox
                     options.showCheckbox === false ?
                         [] :
-                        $('<a href="#" class="select-all" role ="checkbox" aria-checked="false">').append(
+                        $('<a href="#" class="select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
                             $('<i class="fa fa-square-o" aria-hidden="true">')
                         )
                         .attr('title', gt('Select all'))
@@ -306,6 +309,36 @@ define('io.ox/core/tk/vgrid', [
         if (options.templateOptions) {
             templateOptions = _.extend(templateOptions, options.templateOptions);
         }
+        container.on('keydown', function (e) {
+            switch (e.which) {
+
+                // [Ctrl|Cmd + A] > select all
+                case 65:
+                case 97:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        // Select last element for correct scroll position
+                        self.selection.selectLast();
+                        _.defer(function () {
+                            self.selection.selectAll();
+                            updateSelectAll(self.selection.get());
+                        });
+                    }
+                    break;
+
+                // [Ctrl|Cmd + D] > Deselect all
+                case 68:
+                case 100:
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();
+                        self.selection.clear();
+                    }
+                    break;
+
+                // no default
+            }
+        });
+
         var template = new Template(templateOptions),
             // label template
             label = new Template({ tempDrawContainer: container }),
@@ -382,7 +415,7 @@ define('io.ox/core/tk/vgrid', [
         // make resizalbe (unless touch device)
         if (!_.device('touch')) {
             node.append(
-                $('<div class="resizebar">').on('mousedown', onResize)
+                $('<div class="resizebar">').on('mousedown', this, onResize)
             );
         }
 
@@ -470,16 +503,12 @@ define('io.ox/core/tk/vgrid', [
                 // draw
                 clone = label.getClone();
                 clone.node.addClass('vgrid-label').data('label-index', i);
+                // data, index, id, prev, grid
                 defs = defs.concat(clone.update(all[obj.pos], obj.pos, '', all[obj.pos - 1] || {}, self));
                 text = clone.node.text();
-                // convert Umlauts
-                text = text.replace(/[ÄÀÁÂÃÄÅ]/g, 'A')
-                    .replace(/[ÖÒÓÔÕÖ]/g, 'O')
-                    .replace(/[ÜÙÚÛÜ]/g, 'U');
                 // add node
                 labels.nodes = labels.nodes.add(clone.node.appendTo(container));
                 // meta data
-                obj.text = text;
                 labels.index[obj.pos] = i;
                 labels.textIndex[text] = i;
             }
@@ -548,7 +577,7 @@ define('io.ox/core/tk/vgrid', [
             for (; i < $i; i++) {
                 tmp = self.requiresLabel(i, all[i], current, $i);
                 if (tmp !== false) {
-                    labels.list.push({ top: 0, text: '', pos: i });
+                    labels.list.push({ top: 0, pos: i });
                     current = tmp;
                 }
             }
@@ -725,6 +754,7 @@ define('io.ox/core/tk/vgrid', [
             if (list.length === 0 && loaded) {
                 detachPool();
                 self.selection.trigger('change', []);
+                var emptyMessage = self.getEmptyMessage();
                 scrollpane.append(
                     $.fail(emptyMessage ?
                         emptyMessage(self.getMode()) :

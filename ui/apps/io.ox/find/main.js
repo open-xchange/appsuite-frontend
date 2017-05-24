@@ -164,20 +164,12 @@ define('io.ox/find/main', [
                 });
 
                 // events
-                var emptyMessageOriginal;
                 app.on({
                     'find:query': function () {
                         grid.setMode('search');
-                        emptyMessageOriginal = emptyMessageOriginal || grid.getEmptyMessage();
-                        grid.setEmptyMessage(function () {
-                            return gt('No matching items found.');
-                        });
                     },
                     'find:idle': function () {
-                        if (grid.getMode() !== 'all') {
-                            grid.setMode('all');
-                            grid.setEmptyMessage(emptyMessageOriginal);
-                        }
+                        if (grid.getMode() !== 'all') grid.setMode('all');
                     }
                 });
             },
@@ -185,14 +177,48 @@ define('io.ox/find/main', [
             'listview-empty-message': function (app) {
                 if (!app.get('parent').listView) return;
                 var ref = app.get('parent').listView.ref;
-                ext.point(ref + '/empty').extend({
+                ext.point(ref + '/notification/empty').extend({
                     id: 'search',
                     index: 100,
                     draw: function (baton) {
                         if (!baton.app.props.get('find-result')) return;
-                        baton.stopPropagation();
                         //#. search feature returns an empty result
                         this.text(gt('No matching items found.'));
+                    }
+                });
+            },
+
+            'listview-empty-message-action': function (app) {
+                // non-listview app OR no 'all folders' option
+                if (!app.get('parent').listView || app.isMandatory('folder')) return;
+                var ref = app.get('parent').listView.ref;
+                ext.point(ref + '/notification/empty').extend({
+                    id: 'search-action',
+                    index: 200,
+                    draw: function (baton) {
+                        // is listview currently in 'search mode'?
+                        if (!baton.app.props.get('find-result')) return;
+                        var manager = baton.app.get('find').model.manager;
+                        // already searched in all folders?
+                        if (manager.get('folder') && manager.get('folder').get('values').get('custom').getOption().id === 'disabled') return;
+
+                        this.append(
+                            //#. text link action to run current search again wihout any folder limitations
+                            $('<button type="button" class="btn btn-link" data-action="search-button">')
+                                .text(gt('Search in all folders'))
+                                .on('click', function () {
+                                    manager.activate('folder', 'custom', 'disabled');
+                                    require(['io.ox/metrics/main'], function (metrics) {
+                                        var name = baton.app.get('name') || 'unknown',
+                                            apptitle = _.last(name.split('/'));
+                                        metrics.trackEvent({
+                                            app: apptitle,
+                                            target: 'list/empty/search/filter/folder',
+                                            action: 'remove'
+                                        });
+                                    });
+                                })
+                        );
                     }
                 });
             },
@@ -393,7 +419,8 @@ define('io.ox/find/main', [
         // register event listeners
         function register() {
             var model = app.model,
-                manager = model.manager;
+                manager = model.manager,
+                isDrive = app.getModuleParam() === 'files';
 
             /**
              * find:query   list of active facets changed
@@ -403,6 +430,7 @@ define('io.ox/find/main', [
                 'active': _.debounce(function (count) {
                     // ignore folder facet not combined with another facet
                     if (app.model.manager.isFolderOnly()) count = 0;
+                    if (isDrive && app.model.manager.isAccountOnly()) count = 0;
                     app.trigger(count ? 'find:query' : 'find:idle');
                 }, 10)
             });
@@ -413,13 +441,13 @@ define('io.ox/find/main', [
                     require(['io.ox/metrics/main'], function (metrics) {
                         var name = app.get('parent').get('name') || 'unknown',
                             apptitle = _.last(name.split('/')),
-                            facet = model.get('facet').get('id').split(':')[0];
+                            facet = model.get('facet').get('id').split(':')[0],
+                            isDisabled = state === 'deactivate' || model.get('facet') && model.get('facet').getValue().getOption().id === 'disabled';
                         // toolbar actions
                         metrics.trackEvent({
                             app: apptitle,
-                            target: apptitle + '/search/facet/' + facet,
-                            action: 'search',
-                            value: facet
+                            target: 'search/filter/' + facet,
+                            action: isDisabled ? 'remove' : 'add'
                         });
                     });
                 }, 10)
@@ -553,6 +581,11 @@ define('io.ox/find/main', [
                     app.trigger('find:config-updated');
                     // manager knows all mandatory facets now and will add them to all calls
                     app.configReady.resolve();
+                }, function (error) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell(error);
+                    });
+                    app.cancel();
                 });
         };
 

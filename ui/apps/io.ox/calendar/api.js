@@ -20,7 +20,7 @@ define('io.ox/calendar/api', [
     'io.ox/core/folder/api',
     'io.ox/core/api/factory',
     'io.ox/core/capabilities'
-], function (http, Events, coreConfig, notifications, folderAPI, factory, capabilities) {
+], function (http, Events, coreSettings, notifications, folderAPI, factory, capabilities) {
 
     'use strict';
 
@@ -154,7 +154,7 @@ define('io.ox/calendar/api', [
                 };
 
             if (o.folder !== 'all') {
-                params.folder = o.folder || coreConfig.get('folder/calendar');
+                params.folder = o.folder || coreSettings.get('folder/calendar');
             }
 
             // do not know if cache is a good idea
@@ -436,8 +436,8 @@ define('io.ox/calendar/api', [
                 module: 'calendar',
                 params: {
                     action: 'all',
-                    // id, created_by, folder_id, private_flag, title, start_date, end_date,users, location, shown_as
-                    columns: '1,2,20,101,200,201,202,221,400,402',
+                    // id, created_by, folder_id, private_flag, title, start_date, end_date, recurrence_position, users, location, shown_as
+                    columns: '1,2,20,101,200,201,202,207,221,400,402',
                     start: start,
                     end: appointment.end_date,
                     showPrivate: true,
@@ -716,6 +716,10 @@ define('io.ox/calendar/api', [
                     // clear caches
                     api.caches.all = {};
                     api.caches.get = {};
+                    // clear freebusy cache too
+                    if (capabilities.has('freebusy')) {
+                        api.caches.freebusy = {};
+                    }
                     // trigger local refresh
                     api.trigger('refresh.all');
                 });
@@ -789,6 +793,19 @@ define('io.ox/calendar/api', [
             });
         }
     };
+
+    // removes entries from the freebusy cache that belong to the current user
+    var cleanupFreeBusyCache = function () {
+        api.caches.freebusy = _(api.caches.freebusy).pick(function (value, key) {
+            //keys start with '1-', '3-' etc depending on type, so the id is at index 2
+            return key.indexOf(ox.user_id) !== 2;
+        });
+    };
+
+    // clear freebusy cache for current user
+    if (capabilities.has('freebusy')) {
+        api.on('create update delete', cleanupFreeBusyCache);
+    }
 
     api.on('create update', function (e, obj) {
         // has participants?

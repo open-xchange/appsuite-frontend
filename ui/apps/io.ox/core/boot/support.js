@@ -28,7 +28,7 @@ define('io.ox/core/boot/support', [
 
         util.debug('Check device support', _.device());
 
-        if (window.isBrowserSupported()) {
+        if (window.isBrowserSupported() && window.isPlatformSupported()) {
             // handle supported devices
             ext.point('io.ox/core/boot/supported').invoke('draw', null, ext.Baton());
         } else {
@@ -57,7 +57,7 @@ define('io.ox/core/boot/support', [
                 util.feedback('info', function () {
                     return $.txt(
                         //#. %n in the lowest version of Android
-                        gt('You need to use Android %n or higher.', _.browserSupport.Android)
+                        gt('You need to use Android %n or higher.', _.plaformSupport.Android)
                     );
                 });
 
@@ -79,7 +79,7 @@ define('io.ox/core/boot/support', [
                 util.feedback('info', function () {
                     return $.txt(
                         //#. %n is the lowest version of iOS
-                        gt('You need to use iOS %n or higher.', _.browserSupport.iOS)
+                        gt('You need to use iOS %n or higher.', _.platformSupport.iOS)
                     );
                 });
 

@@ -57,7 +57,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                             null,
                         // filename
                         $('<span class="filename-label">').text(displayName)
-                    ).attr('aria-label', displayName);
+                    ).attr({
+                        role: 'button',
+                        'aria-label': displayName
+                    });
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
@@ -65,8 +68,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (baton.model.isFile()) {
                         ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
                             function yep() {
-                                this.attr('data-original-title', gt('File name, click to rename'));
-                                this.attr({ 'data-placement': 'bottom' });
+                                this.attr({
+                                    'data-original-title': gt('Rename File'),
+                                    'data-placement': 'bottom'
+                                });
                                 this.tooltip();
                             }.bind(this),
                             function nope() {
@@ -84,7 +89,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 label: gt('Zoom out'),
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -97,7 +102,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -114,7 +119,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -128,23 +133,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
                     this.prepend(checkIcon)
                         .addClass('viewer-toolbar-fitheight').attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Fit to screen size')
                         });
-                }
-            },
-            'launchpresenter': {
-                prio: 'hi',
-                mobile: 'lo',
-                label: /*#. launch the presenter app */ gt.pgettext('presenter', 'Present'),
-                icon: 'fa fa fa-play-circle-o',
-                ref: TOOLBAR_ACTION_ID + '/launchpresenter',
-                customize: function () {
-                    this.addClass('viewer-toolbar-launchpresenter')
-                    .attr({
-                        tabindex: '0',
-                        'aria-label': /*#. launch the presenter app */ gt.pgettext('presenter', 'Present')
-                    });
                 }
             },
             'togglesidebar': {
@@ -156,7 +147,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('View details')
                         });
                 }
@@ -170,7 +161,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -184,7 +175,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
@@ -210,7 +201,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'download': {
                     prio: 'hi',
-                    mobile: 'lo',
+                    mobile: _.device('ios') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
@@ -218,7 +209,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'open': {
                     prio: 'lo',
-                    mobile: 'hi',
+                    mobile: _.device('android') ? 'lo' : 'hi',
                     icon: 'fa fa-download',
                     label: gt('Open attachment'),
                     section: 'export',
@@ -231,9 +222,9 @@ define('io.ox/core/viewer/views/toolbarview', [
                     section: 'export',
                     ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
+                // on smartphones the separate dropdown is broken up and the options are added to the actions dropdown
                 'share': {
                     prio: 'hi',
-                    mobile: 'hi',
                     icon: 'fa fa-user-plus',
                     label: gt('Share'),
                     title: gt('Share this file'),
@@ -242,24 +233,30 @@ define('io.ox/core/viewer/views/toolbarview', [
                         var self = this;
                         this.append('<i class="fa fa-caret-down" aria-hidden="true">');
 
-                        this.after(
-                            LinksPattern.DropdownLinks({
+                        new Dropdown({
+                            el: this.parent().addClass('dropdown'),
+                            $toggle: this,
+                            $ul: LinksPattern.DropdownLinks({
                                 ref: 'io.ox/files/links/toolbar/share',
                                 wrap: false,
                                 emptyCallback: function () {
                                     self.parent().hide();
                                 }
                             }, baton)
-                        );
-
-                        this.addClass('dropdown-toggle').attr({
-                            'aria-haspopup': 'true',
-                            'data-toggle': 'dropdown',
-                            'role': 'button'
-                        }).dropdown();
-
-                        this.parent().addClass('dropdown');
+                        }).render();
                     }
+                },
+                'invite': {
+                    mobile: 'lo',
+                    label: gt('Invite people'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/invite'
+                },
+                'sharelink': {
+                    mobile: 'lo',
+                    label: gt('Create sharing link'),
+                    section: 'share',
+                    ref: 'io.ox/files/actions/getalink'
                 },
                 'sendbymail': {
                     prio: 'lo',
@@ -460,7 +457,7 @@ define('io.ox/core/viewer/views/toolbarview', [
         requires: function () {
             var currentApp = ox.ui.App.getCurrentApp().getName();
             // detail is the target of popoutstandalone, no support for mail attachments
-            return currentApp !== 'io.ox/files/detail';
+            return currentApp !== 'io.ox/mail/compose' && currentApp !== 'io.ox/files/detail';
         },
         action: function (baton) {
             var fileModel;
@@ -472,25 +469,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             }
 
             ox.launch('io.ox/files/detail/main', fileModel);
-        }
-    });
-
-    new Action(TOOLBAR_ACTION_ID + '/launchpresenter', {
-        capabilities: 'presenter document_preview',
-        requires: function (e) {
-            if (!e.collection.has('one', 'read')) {
-                return false;
-            }
-
-            var model = e.baton.model;
-            var meta = model.get('meta');
-            var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
-
-            return (!isError && model.isFile() && (model.isPresentation() || model.isPDF()));
-        },
-        action: function (baton) {
-            var fileModel = baton.model;
-            ox.launch('io.ox/presenter/main', fileModel);
         }
     });
 
@@ -702,7 +680,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 this.currentlyDrawn = model;
                 // draw toolbar
                 var origData = model.get('origData'),
-                    toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                    toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                     isDriveFile = model.isFile(),
                     baton = Ext.Baton({
@@ -710,7 +688,8 @@ define('io.ox/core/viewer/views/toolbarview', [
                         $el: toolbar,
                         model: model,
                         models: isDriveFile ? [model] : null,
-                        data: isDriveFile ? model.toJSON() : origData
+                        data: isDriveFile ? model.toJSON() : origData,
+                        openedBy: this.openedBy
                     }),
                     appName = model.get('source'),
                     self = this,
@@ -766,10 +745,10 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Renders the document page navigation controls.
          */
         renderPageNavigation: function () {
-            var prev = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+            var prev = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
                     .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
-                next = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+                next = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
                     .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" role="textbox">'),

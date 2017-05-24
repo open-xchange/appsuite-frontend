@@ -89,10 +89,9 @@ define('io.ox/contacts/print', [
         return fn;
     }
 
-    return {
+    var printContacts = {
 
-        open: function (selection, win) {
-
+        getOptions: function (selection, win) {
             var listType = settings.get('features/printList', 'phone');
 
             var options = {
@@ -123,7 +122,6 @@ define('io.ox/contacts/print', [
                 selector: listType === 'phone' ? '.phonelist' : '.contacts',
                 sortBy: 'sort_name',
                 window: win,
-
                 thumbIndex: createThumbIndex()
             };
 
@@ -135,7 +133,13 @@ define('io.ox/contacts/print', [
                 };
             }
 
-            print.smart(options);
+            return options;
+        },
+
+        open: function (selection, win) {
+            print.smart(printContacts.getOptions(selection, win));
         }
     };
+
+    return printContacts;
 });

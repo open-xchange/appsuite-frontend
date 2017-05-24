@@ -13,11 +13,11 @@
 
 define('io.ox/find/extensions-facets', [
     'io.ox/core/extensions',
-    'settings!io.ox/core',
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/help',
     'gettext!io.ox/core'
-], function (ext, settings, Toolbar, Dropdown, gt) {
+], function (ext, Toolbar, Dropdown, HelpView, gt) {
 
     'use strict';
 
@@ -70,6 +70,7 @@ define('io.ox/find/extensions-facets', [
             if (advanced.length) {
                 ext.point('io.ox/find/facets/dropdown/default').invoke('draw', this, baton, advanced);
             }
+            ext.point('io.ox/find/facets/help').invoke('draw', this, baton, advanced);
         },
 
         dropdownDefault: function (baton, list) {
@@ -207,7 +208,26 @@ define('io.ox/find/extensions-facets', [
             this.append(
                 dropdown.render().$el.addClass('pull-left').attr('data-dropdown', 'view')
             );
-        }
+        },
+
+        help: (function () {
+            var links = {
+                'mail': 'ox.appsuite.user.sect.email.search.html',
+                'contacts': 'ox.appsuite.user.sect.contacts.search.html',
+                'calendar': 'ox.appsuite.user.sect.calendar.search.html',
+                'tasks': 'ox.appsuite.user.sect.tasks.search.html',
+                'files': 'ox.appsuite.user.sect.files.search.html'
+            };
+            return function (baton) {
+                var target = links[baton.app.getModuleParam()];
+                if (!target) return;
+                var helpView = new HelpView({ href: target });
+                if (helpView.$el.hasClass('hidden')) return;
+                this.append($('<li class="pull-right">').append(
+                    helpView.render().$el
+                ));
+            };
+        })()
     };
 
     return extensions;

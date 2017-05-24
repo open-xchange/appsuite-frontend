@@ -53,7 +53,7 @@ define('io.ox/core/tk/list', [
         busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
 
         // disabled by default via 'hidden class'
-        messageEmpty: $('<li class="message-empty-container hidden"><div class="message-empty"></div></li>'),
+        notification: $('<li class="abs notification hidden" role="presentation"></li>'),
 
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
@@ -62,7 +62,7 @@ define('io.ox/core/tk/list', [
         ),
 
         onItemFocus: function () {
-            this.$el.removeAttr('tabindex');
+            this.$el.attr('tabindex', -1);
             this.$el.addClass('has-focus');
         },
 
@@ -170,14 +170,24 @@ define('io.ox/core/tk/list', [
             this.$el.scrollTop(0);
         },
 
-        updateEmptyMessage: function () {
-            var baton = ext.Baton({ app: this.app, options: this.options }),
-                point = ext.point(this.ref + '/empty'),
-                isEmpty = !this.collection.length;
+        renderNotification: function (type) {
+            var baton = ext.Baton({ app: this.app, options: this.options, listView: this }),
+                point = ext.point(this.ref + '/notification/' + type),
+                isEmpty = !this.collection.length,
+                $notification = this.$('.notification').attr('role', type === 'error' ? 'alert' : 'presentation').empty();
             if (isEmpty && point.keys().length) {
-                point.invoke('draw', this.$('.message-empty'), baton);
+                point.invoke('draw', $notification, baton);
             }
-            this.$('.message-empty-container').toggleClass('hidden', !isEmpty);
+            $notification.toggleClass('hidden', !isEmpty);
+        },
+
+        renderEmpty: function () {
+            this.renderNotification('empty');
+        },
+
+        renderError: function () {
+            this.idle();
+            this.renderNotification('error');
         },
 
         onReset: function () {
@@ -256,14 +266,15 @@ define('io.ox/core/tk/list', [
             var selected = items.filter('.selected')[0];
 
             // get affected DOM nodes and remove them
-            items.filter(function () {
-                var cid = $(this).attr('data-cid');
-                return !!hash[cid];
-            })
+            items
+                .filter(function () {
+                    var cid = $(this).attr('data-cid');
+                    return !!hash[cid];
+                })
                 .remove();
 
             // manage the empty message
-            this.updateEmptyMessage();
+            this.renderEmpty();
 
             if (!selected) return;
 
@@ -280,31 +291,22 @@ define('io.ox/core/tk/list', [
                 return node && parseInt(node.getAttribute('data-index'), 10);
             }
 
+            // fix for bugs #51594 and #51596
+            // [L3] Drive opens wrong files directly after upload - wrong link in UI
+            //
             return function () {
                 // needless cause added models not drawn yet (debounced renderListItems)
                 if (this.queue.list.length) return;
 
-                var dom, sorted, i, j, length, node, reference, index, done = {};
+                var items, detached, sorted;
 
                 // sort all nodes by index
-                dom = this.getItems().toArray();
-                sorted = _(dom).sortBy(getIndex);
+                items = this.getItems();
+                if (items.length > 1) {
+                    detached = items.detach();
+                    sorted = _.sortBy(detached, getIndex);
 
-                // apply sorting (step by step to keep focus)
-                // the arrays "dom" and "sorted" always have the same length
-                for (i = 0, j = 0, length = sorted.length; i < length; i++) {
-                    node = sorted[i];
-                    reference = dom[j];
-                    // mark as processed
-                    done[i] = true;
-                    // same element?
-                    if (node === reference) {
-                        // fast forward "j" if pointing at processed items
-                        do { index = getIndex(dom[++j]); } while (done[index]);
-                    } else if (reference) {
-                        // change position in dom
-                        this.el.insertBefore(node, reference);
-                    }
+                    this.$el.append(sorted);
                 }
             };
         }()),
@@ -326,7 +328,6 @@ define('io.ox/core/tk/list', [
             var touches = e.originalEvent.touches[0],
                 currentY = touches.pageY,
                 distance = currentY - this.pullToRefreshStartY;
-
 
             if (this.pullToRefreshStartY && !this.isPulling && !this.isSwiping) {
                 if ((currentY - this.pullToRefreshStartY) >= PTR_START) {
@@ -472,11 +473,17 @@ define('io.ox/core/tk/list', [
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',
                     'click': 'onKeepFocus',
-                    'keydown .list-item': 'onItemKeydown',
-                    'touchstart': 'onTouchStart',
-                    'touchend': 'onTouchEnd',
-                    'touchmove': 'onTouchMove'
+                    'keydown .list-item': 'onItemKeydown'
                 };
+
+                if (_.device('smartphone')) {
+                    _.extend(events, {
+                        'touchstart': 'onTouchStart',
+                        'touchend': 'onTouchEnd',
+                        'touchmove': 'onTouchMove'
+                    });
+                }
+
                 // set special class if not on smartphones (different behavior)
                 if (_.device('!smartphone')) this.$el.addClass('visible-selection');
                 // enable drag & drop
@@ -534,17 +541,19 @@ define('io.ox/core/tk/list', [
             if (_.device('smartphone')) {
                 var timer,
                     scrollPos = 0;
-                this.selection.isScrolling = false;
-                this.$el.scroll(function () {
-                    if (self.$el.scrollTop() !== scrollPos) {
-                        self.selection.isScrolling = true;
-                        scrollPos = self.$el.scrollTop();
-                    }
-                    if (timer) clearTimeout(timer);
-                    timer = setTimeout(function () {
-                        self.selection.isScrolling = false;
-                    }, 500);
-                });
+                if (this.selection) {
+                    this.selection.isScrolling = false;
+                    this.$el.scroll(function () {
+                        if (self.$el.scrollTop() !== scrollPos) {
+                            self.selection.isScrolling = true;
+                            scrollPos = self.$el.scrollTop();
+                        }
+                        if (timer) clearTimeout(timer);
+                        timer = setTimeout(function () {
+                            self.selection.isScrolling = false;
+                        }, 500);
+                    });
+                }
             }
 
             if (this.options.pagination) {
@@ -572,8 +581,14 @@ define('io.ox/core/tk/list', [
                 render: _.debounce(this.renderListItems.bind(this), 10),
 
                 iterate: function (fn) {
-                    this.list.forEach(fn.bind(self));
-                    this.list = [];
+                    try {
+                        this.list.forEach(fn.bind(self));
+                    } catch (e) {
+                        if (ox.debug) console.error('ListView.iterate', e);
+                    } finally {
+                        // use try/finally to ensure the queue get cleared
+                        this.list = [];
+                    }
                 }
             };
         },
@@ -602,7 +617,7 @@ define('io.ox/core/tk/list', [
                 // load
                 'before:load': this.busy,
                 'load': this.onLoad,
-                'load:fail': this.idle,
+                'load:fail': this.renderError,
                 // paginate
                 'before:paginate': this.busy,
                 'paginate': this.idle,
@@ -613,9 +628,9 @@ define('io.ox/core/tk/list', [
             });
             this.listenTo(collection, {
                 // backbone
-                'add': this.updateEmptyMessage,
-                'remove': this.updateEmptyMessage,
-                'reset': this.updateEmptyMessage
+                'add': this.renderEmpty,
+                'remove': this.renderEmpty,
+                'reset': this.renderEmpty
             });
             if (this.selection) this.selection.reset();
             this.trigger('collection:set');
@@ -698,7 +713,7 @@ define('io.ox/core/tk/list', [
                 });
             }
             this.$el.attr('data-ref', this.ref);
-            this.addMessageEmpty();
+            this.addNotification();
             // fix evil CSS transition issue with phantomJS
             if (_.device('phantomjs')) this.$el.addClass('no-transition');
             return this;
@@ -778,8 +793,8 @@ define('io.ox/core/tk/list', [
             return this.$el.find('.busy-indicator');
         },
 
-        addMessageEmpty: function () {
-            this.messageEmpty.clone().appendTo(this.$el);
+        addNotification: function () {
+            this.notification.clone().appendTo(this.$el);
         },
 
         addBusyIndicator: function () {
@@ -795,6 +810,7 @@ define('io.ox/core/tk/list', [
 
         busy: function () {
             if (this.isBusy) return;
+            this.$('.notification').addClass('hidden');
             this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
             this.isBusy = true;
             return this;

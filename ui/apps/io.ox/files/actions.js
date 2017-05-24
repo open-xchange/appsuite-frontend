@@ -12,25 +12,27 @@
  */
 /* global blankshield */
 define('io.ox/files/actions', [
-
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
-
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-
     'settings!io.ox/files',
     'gettext!io.ox/files'
-
 ], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
     var Action = links.Action,
-        COMMENTS = settings.get('features/comments', true);
+        COMMENTS = settings.get('features/comments', true),
+        // used by text editor
+        allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
+
+    if (capabilities.has('guard-drive')) {
+        allowedFileExtensions.push('pgp');
+    }
 
     // actions
     new Action('io.ox/files/actions/upload', {
@@ -79,12 +81,19 @@ define('io.ox/files/actions', [
         new Action('io.ox/files/actions/editor', {
             requires: function (e) {
                 return api.versions.getCurrentState(e.baton.data).then(function (currentVersion) {
+                    var model = _.first(e.baton.models);
+                    var isEncrypted = model && model.isEncrypted();
+                    var encryptionPart = isEncrypted ? '\\.pgp' : '';
+                    // the pgp extension is added separately to the regex, remove it from the file extension list
+                    var fileExtensions = _.without(allowedFileExtensions, 'pgp');
+                    // build regex from list, pgp is added if guard is available
+                    var regex = new RegExp('\\.(' + fileExtensions.join('|') + '?)' + encryptionPart + '$', 'i');
+
                     return util.conditionChain(
                         currentVersion,
                         e.collection.has('one', 'modify'),
                         !util.hasStatus('lockedByOthers', e),
-                        (/\.(csv|txt|js|css|md|tmpl|html?)(\.pgp)?$/i).test(e.context.filename),
-                        (!(/\.pgp$/i).test(e.context.filename) || capabilities.has('guard-drive')),  // if has .pgp, must have Guard capability
+                        regex.test(e.context.filename),
                         (e.baton.openedBy !== 'io.ox/mail/compose'),
                         util.isFolderType('!trash', e.baton)
                     );
@@ -99,7 +108,7 @@ define('io.ox/files/actions', [
                         }
                         return;
                     }
-                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({}, params) }).done(function () {
+                    ox.launch('io.ox/editor/main', { folder: baton.data.folder_id, id: baton.data.id, params: _.extend({ allowedFileExtensions: allowedFileExtensions }, params) }).done(function () {
                         // if this was opened from the viewer, close it now
                         if (baton.context && baton.context.viewerEvents) {
                             baton.context.viewerEvents.trigger('viewer:close');
@@ -108,7 +117,8 @@ define('io.ox/files/actions', [
                 };
 
                 // Check if Guard file.  If so, do auth then call with parameters
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) && capabilities.has('guard-drive')) {
+                // do not use endsWith because of IE11
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard-drive')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
@@ -143,7 +153,7 @@ define('io.ox/files/actions', [
             },
             action: function (baton) {
                 ox.launch('io.ox/editor/main').done(function () {
-                    this.create({ folder: baton.app.folder.get() });
+                    this.create({ folder: baton.app.folder.get(), params: { allowedFileExtensions: allowedFileExtensions } });
                 });
             }
         });
@@ -154,18 +164,25 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
 
+            function isValid(file) {
+                // locally added but not yet uploaded,   'description only' items
+                return ((file.group !== 'localFile') && (!_.isEmpty(file.filename) || file.file_size > 0));
+            }
+
             if (e.collection.has('multiple')) {
                 var result = true;
                 _.each(e.baton.data, function (obj) {
-                    if (!obj.filename || !obj.file_size) {
+                    if (!isValid(obj)) {
                         result = false;
                     }
                 });
                 return result;
+            } else if (_(e.baton.data).has('internal_userid')) {
+                // check if this is a contact not a file, happens when contact is send as vcard
+                return false;
             }
 
-            // 'description only' items
-            return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
+            return isValid(e.baton.data);
         },
         multiple: function (list) {
             ox.load(['io.ox/files/actions/download']).done(function (action) {
@@ -179,7 +196,9 @@ define('io.ox/files/actions', [
             // no file-system, no download
             if (_.device('ios')) return false;
             // single folders only
-            return e.collection.has('one', 'folders');
+            if (!e.collection.has('one', 'folders')) return false;
+            //disable for external storages
+            return !filestorageApi.isExternal(e.baton.data);
         },
         action: function (baton) {
             require(['io.ox/files/api'], function (api) {
@@ -230,35 +249,22 @@ define('io.ox/files/actions', [
         requires: function (e) {
             if (e.collection.has('multiple')) return false;
             if (e.collection.has('folders')) return false;
-            // no 'open' menu entry for office documents, PDF and plain text
-            if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
-            if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
-            if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
+            // check if this is a contact not a file, happens when contact is send as vcard
+            if (_(e.baton.data).has('internal_userid')) return false;
+            // locally added but not yet uploaded
+            if (e.baton.data.group === 'localFile') { return false; }
+            if (e.baton.data.file_mimetype) {
+                // no 'open' menu entry for office documents, PDF and plain text
+                if (api.Model.prototype.isOffice.call(this, e.baton.data.file_mimetype)) return false;
+                if (api.Model.prototype.isPDF.call(this, e.baton.data.file_mimetype)) return false;
+                if (api.Model.prototype.isText.call(this, e.baton.data.file_mimetype)) return false;
+            }
             // 'description only' items
             return !_.isEmpty(e.baton.data.filename) || e.baton.data.file_size > 0;
         },
         multiple: function (list) {
             _(list).each(function (file) {
                 blankshield.open(api.getUrl(file, 'open'));
-            });
-        }
-    });
-
-    new Action('io.ox/files/actions/sendlink', {
-        capabilities: 'webmail !alone',
-        requires: function (e) {
-            return util.conditionChain(
-                _.device('!smartphone'),
-                !_.isEmpty(e.baton.data),
-                e.collection.has('some', 'items'),
-                e.baton.openedBy !== 'io.ox/mail/compose',
-                util.isFolderType('!attachmentView', e.baton),
-                util.isFolderType('!trash', e.baton)
-            );
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/files/actions/sendlink']).done(function (action) {
-                action(list);
             });
         }
     });
@@ -285,24 +291,6 @@ define('io.ox/files/actions', [
                 var filtered_list = _.filter(list, function (o) { return o.file_size !== 0; });
                 if (filtered_list.length === 0) return;
                 ox.registry.call('mail-compose', 'compose', { infostore_ids: filtered_list });
-            });
-        }
-    });
-
-    new Action('io.ox/files/actions/showlink', {
-        requires: function (e) {
-            return util.conditionChain(
-                capabilities.has('!alone !guest'),
-                _.device('!smartphone'),
-                !_.isEmpty(e.baton.data),
-                e.collection.has('some', 'items'),
-                util.isFolderType('!attachmentView', e.baton),
-                util.isFolderType('!trash', e.baton)
-            );
-        },
-        multiple: function (list) {
-            ox.load(['io.ox/files/actions/showlink']).done(function (action) {
-                action(list);
             });
         }
     });
@@ -343,36 +331,6 @@ define('io.ox/files/actions', [
                     viewer.launch({ selection: _(selection).first(), files: baton.collection.models });
                 }
             });
-        }
-    });
-
-    new Action('io.ox/files/actions/launchpresenter', {
-        capabilities: 'presenter document_preview',
-        requires: function (e) {
-            if (!e.collection.has('one')) {
-                return false;
-            }
-            var model = e.baton.models[0];
-            var type = model.isEncrypted() ? model.getGuardMimeType() : model.getMimeType();
-            return ((model.isPresentation(type) || model.isPDF(type)) && model.isFile(type));
-        },
-        action: function (baton) {
-            var fileModel = baton.models[0];
-            if (fileModel.isEncrypted()) {
-                require(['io.ox/guard/auth/authorizer'], function (authorizer) {
-                    authorizer.authorize().then(function (auth) {
-                        var params = {
-                            cryptoAction: 'Decrypt',
-                            cryptoAuth: auth,
-                        };
-                        fileModel.set('file_options', { params: params });
-                        ox.launch('io.ox/presenter/main', fileModel);
-                    });
-                });
-            } else {
-                ox.launch('io.ox/presenter/main', fileModel);
-            }
-
         }
     });
 
@@ -432,6 +390,8 @@ define('io.ox/files/actions', [
         requires: function (e) {
             return util.conditionChain(
                 e.collection.has('one', 'items'),
+                // check if this is a contact not a file, happens when contact is send as vcard
+                !_(e.baton.data).has('internal_userid'),
                 !_.isEmpty(e.baton.data),
                 util.isFolderType('!trash', e.baton)
             );
@@ -448,6 +408,14 @@ define('io.ox/files/actions', [
         if (!_.isObject(data)) return false;
         var array = data.object_permissions || data['com.openexchange.share.extendedObjectPermissions'],
             myself = _(array).findWhere({ entity: ox.user_id });
+
+        // check if there is a permission for a group, the user is a member of
+        // use max permissions available
+        if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
+            // use rampup data so this is not deferred
+            myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+        }
+
         return !!(myself && (myself.bits >= 2));
     }
 
@@ -566,8 +534,8 @@ define('io.ox/files/actions', [
                         success: success,
                         successCallback: function (response, apiInput) {
                             if (!_.isString(response)) {
-                                var filesLeft = [],
-                                    conflicts = { warnings: [] };
+                                var conflicts = { warnings: [] },
+                                    filesLeft = [];
 
                                 if (!_.isArray(response)) {
                                     response = [response];
@@ -641,6 +609,8 @@ define('io.ox/files/actions', [
         var id, model;
         // not possible for multi-selection
         if (e.collection.has('multiple')) return false;
+        // check if this is a contact not a file, happens when contact is send as vcard
+        if (e.baton.data && _(e.baton.data).has('internal_userid')) return false;
         // get folder id
         if (e.collection.has('one')) {
             // use selected file or folders
@@ -654,6 +624,7 @@ define('io.ox/files/actions', [
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
         if (!model.isShareable()) return false;
+        if (model.is('trash')) return false;
         return type === 'invite' ? model.supportsInviteGuests() : true;
     }
 
@@ -788,9 +759,10 @@ define('io.ox/files/actions', [
     });
 
     new Action('io.ox/files/premium/actions/synchronize', {
-        capabilities: 'client-onboarding (boxcom || google || msliveconnect)',
+        capabilities: 'boxcom || google || msliveconnect',
         requires: function () {
-            return _.device('!smartphone');
+            // use client onboarding here, since it is a setting and not a capability
+            return capabilities.has('client-onboarding');
         },
         action: function () {
             require(['io.ox/onboarding/clients/wizard'], function (wizard) {
@@ -837,7 +809,7 @@ define('io.ox/files/actions', [
     new links.ActionLink('io.ox/files/links/toolbar/share', {
         index: 200,
         id: 'getalink',
-        label: gt('Get link'),
+        label: gt('Create sharing link'),
         //#. sharing: a link will be created
         description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
         ref: 'io.ox/files/actions/getalink'
@@ -876,11 +848,14 @@ define('io.ox/files/actions', [
     // add another link for the viewer
     ext.point('io.ox/core/viewer/toolbar/links/drive').extend(new links.Link({
         id: 'editor',
-        index: 100,
+        index: 110,
         prio: 'hi',
         mobile: 'lo',
         label: gt('Edit'),
-        ref: 'io.ox/files/actions/editor'
+        ref: 'io.ox/files/actions/editor',
+        customize: function () {
+            this.attr('role', 'button');
+        }
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -922,26 +897,6 @@ define('io.ox/files/actions', [
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'sendlink',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Send as internal link'),
-        ref: 'io.ox/files/actions/sendlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: 'showlink',
-        index: index += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        label: gt('Show internal link'),
-        ref: 'io.ox/files/actions/showlink',
-        section: 'share'
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'add-to-portal',
         index: index += 100,
         prio: 'lo',
@@ -966,7 +921,7 @@ define('io.ox/files/actions', [
         index: index += 100,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('Get link'),
+        label: gt('Create sharing link'),
         ref: 'io.ox/files/actions/getalink',
         section: 'share'
     }));

@@ -13,33 +13,58 @@
 
 define('plugins/core/feedback/register', [
     'io.ox/backbone/views/modal',
+    'io.ox/core/api/apps',
     'gettext!io.ox/core',
     'io.ox/core/yell',
     'io.ox/backbone/disposable',
     'settings!io.ox/core',
     'io.ox/core/api/user',
     'io.ox/core/extensions',
+    'io.ox/core/http',
     'less!plugins/core/feedback/style'
-], function (ModalDialog, gt, yell, DisposableView, settings, api, ext) {
+], function (ModalDialog, appApi, gt, yell, DisposableView, settings, api, ext, http) {
 
     'use strict';
 
     var captions = {
-        //#. 1 of 5 star rating
-        1: gt.pgettext('rating', 'It\'s really bad'),
-        //#. 2 of 5 star rating
-        2: gt.pgettext('rating', 'I don\'t like it'),
-        //#. 3 of 5 star rating
-        3: gt.pgettext('rating', 'It\'s ok'),
-        //#. 4 of 5 star rating
-        4: gt.pgettext('rating', 'I like it'),
-        //#. 5 of 5 star rating
-        5: gt.pgettext('rating', 'It\'s awesome')
-    };
+            //#. 1 of 5 star rating
+            1: gt.pgettext('rating', 'It\'s really bad'),
+            //#. 2 of 5 star rating
+            2: gt.pgettext('rating', 'I don\'t like it'),
+            //#. 3 of 5 star rating
+            3: gt.pgettext('rating', 'It\'s ok'),
+            //#. 4 of 5 star rating
+            4: gt.pgettext('rating', 'I like it'),
+            //#. 5 of 5 star rating
+            5: gt.pgettext('rating', 'It\'s awesome')
+        },
+        appWhiteList = [
+            'mail',
+            'contacts',
+            'calendar',
+            'files'
+        ];
+
+    function getAppOptions(useWhitelist) {
+        var currentApp,
+            apps = _(appApi.getFavorites()).map(function (app) {
+                app.id = app.id.replace(/io\.ox\/(office\/portal\/|office\/)?/, '');
+
+                if (useWhitelist && !_(appWhiteList).contains(app.id)) return;
+                // suport for edit dialogs
+                if (ox.ui.App.getCurrentApp() && ox.ui.App.getCurrentApp().get('name').replace(/io\.ox\/(office\/portal\/|office\/)?/, '').indexOf(app.id) === 0) {
+                    currentApp = app;
+                }
+                return $('<option>').val(app.id).text(/*#, dynamic*/gt.pgettext('app', app.title));
+            });
+        apps = _(apps).compact();
+        return { currentApp: currentApp, apps: apps };
+    }
 
     var StarRatingView = DisposableView.extend({
 
-        className: 'star-rating',
+        className: 'star-rating rating-view',
+        name: 'simple-star-rating-v1',
 
         events: {
             'change input': 'onChange',
@@ -73,7 +98,8 @@ define('plugins/core/feedback/register', [
             this.$('.star').each(function (index) {
                 $(this).toggleClass('checked', index < value);
             });
-            this.$('caption').text(captions[value]);
+
+            this.$('caption').text(captions[value] || '\u00a0');
         },
 
         getValue: function () {
@@ -98,6 +124,75 @@ define('plugins/core/feedback/register', [
         }
     });
 
+    var ModuleRatingView = StarRatingView.extend({
+        name: 'star-rating-v1',
+        render: function (popupBody) {
+
+            var apps = getAppOptions(true);
+
+            if (settings.get('feedback/showModuleSelect', true)) {
+                //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
+                apps.apps.unshift($('<option>').val('general').text(gt('General')));
+                popupBody.append(
+                    this.appSelect = $('<select class="feedback-select-box form-control">').append(apps.apps)
+                );
+                this.appSelect.val((apps.currentApp ? apps.currentApp.id : apps.apps[0].val()));
+            } else if (apps.currentApp) {
+                popupBody.append(
+                    $('<div class="form-control">').text(/*#, dynamic*/gt.pgettext('app', apps.currentApp.title)),
+                    this.appSelect = $('<div aria-hidden="true">').val(apps.currentApp.id).hide()
+                );
+            } else {
+                popupBody.append(
+                    //#. used in feedback dialog for general feedback. Would be "Allgemein" in German for example
+                    $('<div class="form-control">').text(gt('General')),
+                    this.appSelect = $('<div aria-hidden="true">').val('general').hide()
+                );
+            }
+
+            ModuleRatingView.__super__.render.call(this);
+            return this;
+        }
+    });
+
+    var NpsRatingView = StarRatingView.extend({
+
+        className: 'nps-rating rating-view',
+        name: 'nps-rating-v1',
+
+        render: function () {
+
+            this.$el.append(
+                $('<caption>').text(gt('Not likely at all')),
+                $('<div>').append(
+                    _.range(0, 11).map(function (i) {
+                        return $('<label>').append(
+                            $('<input type="radio" name="nps-rating" class="sr-only">').val(i)
+                                .attr('title', gt('%1$d of 10 points.', i)),
+                            $('<i class="fa fa-circle score" aria-hidden="true">'),
+                            (i % 5 === 0 ? $('<div class="score-number" aria-hidden="true">').text(i) : '')
+                        );
+                    })
+                ),
+                $('<caption>').text(gt('Extremely likely'))
+            );
+
+            return this;
+        },
+
+        renderRating: function (value) {
+            this.$('.score').each(function (index) {
+                $(this).toggleClass('checked', index <= value);
+            });
+        },
+
+        setValue: function (value) {
+            if (value < 0 || value > 11) return;
+            this.value = value;
+            this.renderRating(value);
+        }
+    });
+
     var feedbackService;
 
     ext.point('plugins/core/feedback').extend({
@@ -106,15 +201,43 @@ define('plugins/core/feedback/register', [
         initialize: function () {
             feedbackService = {
                 sendFeedback: function (data) {
-                    console.log('Feedback API must be implemented. Use the extension point "plugins/core/feedback" and implement "sendFeedback".');
-                    console.log(data);
-                    // return a Deferred Object here ($.ajax)
-                    // which sends data to your backend
-                    return $.Deferred().resolve();
+                    if (!data) return $.when();
+
+                    return http.PUT({
+                        module: 'userfeedback',
+                        params: {
+                            action: 'store',
+                            //type is always star-rating-v1 for now (all UI implementations still work)
+                            type: settings.get('feedback/mode', 'star-rating-v1')
+                        },
+                        data: data
+                    });
                 }
             };
         }
     });
+
+    var modes = {
+            nps: {
+                ratingView: NpsRatingView,
+                //#. %1$s is the product name, for example 'OX App Suite'
+                title: gt('How likely is it that you would recommend %1$s to a friend?', ox.serverConfig.productName)
+            },
+            stars: {
+                ratingView: StarRatingView,
+                title: gt('Please rate this product')
+            },
+            modules: {
+                ratingView: ModuleRatingView,
+                title: gt('Please rate the following application:')
+            }
+        },
+        dialogMode = settings.get('feedback/dialog', 'modules');
+
+    // make sure dialogMode is valid
+    if (_(_(modes).keys()).indexOf(dialogMode) === -1) {
+        dialogMode = 'modules';
+    }
 
     function sendFeedback(data) {
         return feedbackService ? feedbackService.sendFeedback(data) : $.when();
@@ -123,19 +246,32 @@ define('plugins/core/feedback/register', [
     var feedback = {
 
         show: function () {
+            var options = {
+                async: true,
+                enter: 'send',
+                point: 'plugins/core/feedback',
+                title: gt('Your feedback'),
+                class: dialogMode + '-feedback-view'
+            };
 
-            new ModalDialog({ enter: 'send', point: 'plugins/core/feedback', title: gt('Your feedback') })
+            // nps view needs more space
+            if (dialogMode === 'nps') {
+                options.width = 600;
+            }
+            new ModalDialog(options)
                 .extend({
                     title: function () {
                         this.$body.append(
-                            $('<div class="feedback-welcome-text">').text(gt('Please rate this product'))
+                            $('<div class="feedback-welcome-text">').text(modes[dialogMode].title)
                         );
                     },
-                    starView: function () {
-                        this.starRatingView = new StarRatingView({ hover: settings.get('feeback/showHover', true) });
-                        this.$body.append(this.starRatingView.render().$el);
+                    ratingView: function () {
+                        this.ratingView = new modes[dialogMode].ratingView({ hover: settings.get('feedback/showHover', true) });
+
+                        this.$body.append(this.ratingView.render(this.$body).$el);
                     },
                     comment: function () {
+                        if (dialogMode === 'nps') return;
                         var guid = _.uniqueId('feedback-note-');
                         this.$body.append(
                             $('<label>').attr('for', guid).text(gt('Comments and suggestions')),
@@ -143,6 +279,8 @@ define('plugins/core/feedback/register', [
                         );
                     },
                     infotext: function () {
+                        // without comment field infotext makes no sense
+                        if (dialogMode === 'nps') return;
                         this.$body.append(
                             $('<div>').text(
                                 gt('Please note that support requests cannot be handled via the feedback form. If you have questions or problems please contact our support directly.')
@@ -155,41 +293,111 @@ define('plugins/core/feedback/register', [
                             $('<a>').attr('href', settings.get('feedback/supportlink', ''))
                         );
                     }
+
                 })
                 .addCancelButton()
                 .addButton({ action: 'send', label: gt('Send') })
                 .on('send', function () {
 
-                    var data = {
-                        feedback: {
-                            rating: this.starRatingView.getValue(),
-                            text: this.$('.feedback-note').val()
-                        },
-                        client: {
-                            ua: window.navigator.userAgent,
-                            browser: _(_.browser).pick(function (val) { return !!val; }),
-                            lang: ox.language
-                        },
-                        meta: {
-                            serverVersion: ox.serverConfig.serverVersion,
-                            uiVersion: ox.serverConfig.version,
-                            productName: ox.serverConfig.productName,
-                            path: ox.abs
-                        }
-                    };
+                    if (this.ratingView.getValue() === 0) {
+                        yell('error', gt('Please select a rating.'));
+                        this.idle();
+                        return;
+                    }
 
+                    var currentApp = getAppOptions().currentApp,
+                        found = false,
+                        OS = ['iOS', 'MacOS', 'Android', 'Windows', 'Windows8'],
+                        data = {
+                            // feedback
+                            score: this.ratingView.getValue(),
+                            app: this.ratingView.appSelect ? this.ratingView.appSelect.val() : 'general',
+                            entry_point: (currentApp ? currentApp.id : 'general'),
+                            comment: this.$('.feedback-note').val() || '',
+                            // system info
+                            operating_system: 'Other',
+                            browser: 'Other',
+                            browser_version: 'Unknown',
+                            user_agent: window.navigator.userAgent,
+                            screen_resolution: screen.width + 'x' + screen.height,
+                            language: ox.language,
+                            client_version: ox.serverConfig.version + '-' + (ox.serverConfig.revision ? ox.serverConfig.revision : ('Rev' + ox.revision))
+                        };
+
+                    _(_.browser).each(function (val, key) {
+                        if (val && _(OS).indexOf(key) !== -1) {
+                            data.operating_system = key;
+                        }
+                        if (!found && _.isNumber(val)) {
+                            found = true;
+                            data.browser = key;
+                            data.browser_version = val;
+                        }
+                    });
+
+                    // Add additional version information for some OS
+                    switch (data.operating_system) {
+                        case 'MacOS':
+                            if (!navigator.userAgent.match(/Mac OS X (\d+_?)*/)) break;
+                            data.operating_system = navigator.userAgent.match(/Mac OS X (\d+_?)*/)[0];
+                            break;
+                        case 'iOS':
+                            if (!navigator.userAgent.match(/iPhone OS (\d+_?)*/)) break;
+                            data.operating_system = navigator.userAgent.match(/iPhone OS (\d+_?)*/)[0];
+                            break;
+                        case 'Android':
+                            data.operating_system = 'Android ' + _.browser.Android;
+                            break;
+                        case 'Windows':
+                            if (navigator.userAgent.match(/Windows NT 5\.1/)) {
+                                data.operating_system = 'Windows XP';
+                                break;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.0/)) {
+                                data.operating_system = 'Windows Vista';
+                                break;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.1/)) {
+                                data.operating_system = 'Windows 7';
+                                break;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.2/)) {
+                                data.operating_system = 'Windows 8';
+                                break;
+                            }
+                            if (navigator.userAgent.match(/Windows NT 6\.3/)) {
+                                data.operating_system = 'Windows 8.1';
+                                break;
+                            }
+                            if (navigator.userAgent.match(/Windows NT [10\.0|6\.4]?/)) {
+                                data.operating_system = 'Windows 10';
+                                break;
+                            }
+                            break;
+                        case 'Other':
+                            // maybe a linux system
+                            if (!navigator.userAgent.match(/Linux/)) break;
+                            data.operating_system = 'Linux';
+                            break;
+                        // no default
+                    }
                     sendFeedback(data)
                         .done(function () {
+                            //#. popup info message
                             yell('success', gt('Thank you for your feedback'));
                         })
-                        .fail(yell);
+                        .fail(function () {
+                            //#. popup error message
+                            yell('error', gt('Feedback could not be sent'));
+                        });
+                    this.close();
                 })
                 .open();
         },
 
         drawButton: function () {
             $('#io-ox-core').append(
-                $('<button role="button" class="feedback-button">')
+                $('<button type="button" class="feedback-button">')
                 .text(gt('Feedback'))
                 .addClass(settings.get('feedback/position', 'right') + 'side-button')
                 .on('click', this.show)
@@ -201,7 +409,7 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         index: 250,
         draw: function () {
-            var currentSetting = settings.get('feeback/show', 'both');
+            var currentSetting = settings.get('feedback/show', 'both');
             if (currentSetting === 'both' || currentSetting === 'topbar') {
                 this.append(
                     $('<li role="presentation">').append(
@@ -220,7 +428,7 @@ define('plugins/core/feedback/register', [
         id: 'feedback',
         draw: function () {
             if (_.device('smartphone')) return;
-            var currentSetting = settings.get('feeback/show', 'both');
+            var currentSetting = settings.get('feedback/show', 'both');
             if (!(currentSetting === 'both' || currentSetting === 'side')) return;
             feedback.drawButton();
         }

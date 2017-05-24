@@ -17,20 +17,13 @@ define('io.ox/files/share/model', [
     'gettext!io.ox/core'
 ], function (api, yell, gt) {
 
-
     'use strict';
 
     var WizardShare = Backbone.Model.extend({
 
-        TYPES: {
-            INVITE: 'invite',
-            LINK: 'link'
-        },
-
         defaults: function () {
             return {
                 files: [],
-                type: this.TYPES.INVITE,
                 recipients: [],
                 message: '',
                 edit: false,
@@ -44,8 +37,7 @@ define('io.ox/files/share/model', [
 
         idAttribute: 'entity',
 
-        initialize: function (attributes) {
-            this.set('edit', attributes.type === this.TYPES.INVITE);
+        initialize: function () {
             this.setOriginal();
         },
 
@@ -89,8 +81,7 @@ define('io.ox/files/share/model', [
         toJSON: function () {
 
             // default invite data
-            var self = this,
-                targets = [],
+            var targets = [],
                 data = {};
 
             // collect target data
@@ -109,100 +100,47 @@ define('io.ox/files/share/model', [
                 targets.push(target);
             });
 
-            // secial data for invite request
-            if (this.get('type') === this.TYPES.INVITE) {
-
-                // set message data
-                data.message = this.get('message', '');
-                data.targets = targets;
-
-                // collect recipients data
-                data.recipients = [];
-                _(this.get('recipients')).each(function (recipientModel) {
-                    var recipientData = {
-                        bits: 33026
-                    };
-
-                    if (self.get('secured')) {
-                        recipientData.password = self.get('password');
-                    }
-
-                    switch (recipientModel.get('type')) {
-                        // internal user
-                        case 1:
-                            recipientData.type = 'user';
-                            recipientData.entity = recipientModel.get('id');
-                            break;
-                        // user group
-                        case 2:
-                            recipientData.type = 'group';
-                            recipientData.entity = recipientModel.get('id');
-                            break;
-                        // external user
-                        case 5:
-                            recipientData.type = 'guest';
-                            if (recipientModel.get('folder_id')) {
-                                recipientData.contact_folder = recipientModel.get('folder_id');
-                                recipientData.contact_id = recipientModel.get('id');
-                            }
-                            recipientData.email_address = recipientModel.get('token').value;
-                            break;
-                        // no default
-
-                    }
-                    data.recipients.push(recipientData);
-                });
-                return data;
-            }
-
             // secial data for getlink request
-            if (this.get('type') === this.TYPES.LINK) {
-                data = targets[0];
+            data = targets[0];
 
-                if (this.get('secured') && this.get('password') !== '') {
-                    data.password = this.get('password');
-                } else {
-                    data.password = null;
-                }
-
-                // collect recipients data
-                data.recipients = [];
-                _(this.get('recipients')).each(function (recipientModel) {
-                    // model values might be outdated (token edit) so we act like mail compose
-                    data.recipients.push([
-                        recipientModel.get('token').label || recipientModel.getDisplayName(),
-                        recipientModel.get('token').value || recipientModel.getTarget()
-                    ]);
-                });
-                if (data.recipients.length === 0) {
-                    delete data.recipients;
-                }
-
-                if (this.get('message') && this.get('message') !== '') {
-                    data.message = this.get('message');
-                }
-
-                // create or update ?
-                if (!this.has('url')) return data;
-
-                if (this.get('temporary')) {
-                    data.expiry_date = this.getExpiryDate();
-                } else {
-                    data.expiry_date = null;
-                }
-                return data;
+            if (this.get('secured') && this.get('password') !== '') {
+                data.password = this.get('password');
+            } else {
+                data.password = null;
             }
+
+            // collect recipients data
+            data.recipients = [];
+            _(this.get('recipients')).each(function (recipientModel) {
+                // model values might be outdated (token edit) so we act like mail compose
+                data.recipients.push([
+                    recipientModel.get('token').label || recipientModel.getDisplayName(),
+                    recipientModel.get('token').value || recipientModel.getTarget()
+                ]);
+            });
+            if (data.recipients.length === 0) {
+                delete data.recipients;
+            }
+
+            if (this.get('message') && this.get('message') !== '') {
+                data.message = this.get('message');
+            }
+
+            // create or update ?
+            if (!this.has('url')) return data;
+
+            if (this.get('temporary')) {
+                data.expiry_date = this.getExpiryDate();
+            } else {
+                data.expiry_date = null;
+            }
+            return data;
 
         },
 
         sync: function (action, model) {
             var self = this;
-            if (this.get('type') === this.TYPES.INVITE) {
-                action = 'invite';
-            }
             switch (action) {
-                case 'invite':
-                    return api.invite(model.toJSON()).fail(yell);
                 case 'read':
                     return api.getLink(this.toJSON()).then(function (data, timestamp) {
                         self.set(_.extend(data, { lastModified: timestamp }), { '_inital': true });
@@ -229,15 +167,11 @@ define('io.ox/files/share/model', [
         },
 
         send: function () {
-            if (this.get('type') !== this.TYPES.LINK) return;
             if (_.isEmpty(this.get('recipients'))) return;
             api.sendLink(this.toJSON()).fail(yell);
         },
 
         validate: function (attr) {
-            if (attr.type === this.TYPES.INVITE && attr.recipients.length === 0) {
-                return 'Empty receipient list';
-            }
             if (attr.secured === true && _.isEmpty(attr.password)) {
                 return gt('Please set password');
             }

@@ -11,125 +11,46 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
 define([
-    'io.ox/mail/compose/main',
-    'settings!io.ox/mail',
-    'fixture!io.ox/mail/compose/signatures.json'
-], function (compose, settings, signatures) {
+    'io.ox/mail/compose/model',
+    'settings!io.ox/mail'
+], function (MailModel, settings) {
     'use strict';
 
     describe('Mail Compose', function () {
-        var app, pictureHalo, getValidAddress;
-
-        var editors = {
-                text: 'io.ox/core/tk/text-editor',
-                html: 'io.ox/core/tk/contenteditable-editor'
-            },
-            pluginStub;
-
-        beforeEach(function () {
-            pluginStub = sinon.stub(ox.manifests, 'loadPluginsFor', function (namespace) {
-                namespace = namespace.replace(/^io.ox\/mail\/compose\/editor\//, '');
-                return require([editors[namespace]]);
-            });
-        });
-        afterEach(function () {
-            pluginStub.restore();
-        });
-
-        beforeEach(function () {
-            return require([
-                'io.ox/contacts/api',
-                'io.ox/core/api/account'
-            ], function (contactsAPI, accountAPI) {
-                pictureHalo = sinon.stub(contactsAPI, 'pictureHalo', _.noop);
-                getValidAddress = sinon.stub(accountAPI, 'getValidAddress', function (d) { return $.when(d); });
-            }).then(function () {
-                app = compose.getApp();
-                return app.launch();
-            });
-        });
-        afterEach(function () {
-            if (app.view && app.view.model) {
-                app.view.model.dirty(false);
-            }
-            pictureHalo.restore();
-            getValidAddress.restore();
-            return app.quit();
-        });
-
         describe('signatures', function () {
-            describe('in HTML mode', function () {
-                beforeEach(function () {
-                    this.server.respondWith('GET', /api\/snippet\?action=all/, function (xhr) {
-                        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(signatures.current));
-                    });
-                    settings.set('messageFormat', 'html');
-                });
-                afterEach(function () {
-                    settings.set('defaultSignature', '');
-                });
-                it('should add the default signature to a new mail', function () {
-                    settings.set('defaultSignature', '1337');
-                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        return app.view.signaturesLoading;
-                    }).then(function () {
-                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
-                        var $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        ).find('p.io-ox-signature');
-                        expect($el.text()).to.equal('elite signature');
-                    });
-                });
-                it('should not add any signature if no default set', function () {
-                    settings.set('defaultSignature', '');
-                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('defaultSignatureId')).to.be.empty;
-                        var $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        ).find('p.io-ox-signature');
-                        expect($el).to.have.length(0);
-                    });
-                });
-                it('should support switching between different signatures', function () {
-                    settings.set('defaultSignature', '1337');
-                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
-                        var $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        ).find('p.io-ox-signature');
-                        expect($el.text()).to.equal('elite signature');
-                        app.view.model.set('defaultSignatureId', '');
-                        expect(app.view.model.get('defaultSignatureId')).to.be.empty;
-                        $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        ).find('p.io-ox-signature');
-                        expect($el, 'number of signature paragraphs').to.have.length(0);
-                    });
-                });
-                it('should support switching between complicated, long signatures and short ones', function () {
-                    settings.set('defaultSignature', '1338');
-                    return app.compose({ folder_id: 'default0/INBOX' }).then(function () {
-                        expect(app.view.model.get('defaultSignatureId')).to.equal('1338');
-                        var $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        );
-                        expect($el.text()).to.have.length.above(20);
-                        app.view.model.set('defaultSignatureId', '1337');
-                        expect(app.view.model.get('defaultSignatureId')).to.equal('1337');
-                        $el = $('<div>').append(
-                            app.view.editor.getContent()
-                        );
-                        expect($el, 'number of signature paragraphs').to.have.length(1);
-                        expect($el.text()).to.equal('elite signature');
-                    });
-                });
+            beforeEach(function () {
+                settings.set('defaultSignature', { value: 42, label: 'Default Signature' });
+                settings.set('defaultReplyForwardSignature', { value: 24, label: 'Default reply/forward signature' });
             });
-            describe('in plain text mode', function () {
-                beforeEach(function () {
-                    settings.set('messageFormat', 'text');
+            afterEach(function () {
+                //restore default values
+                settings.set('defaultSignature', false);
+                settings.set('defaultReplyForwardSignature', false);
+            });
+            it('should use default signature on compose', function () {
+                var model = new MailModel({
+                    mode: 'compose'
                 });
-
-                it('should');
+                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultSignature'));
+            });
+            //FIXME: do we still need reply/forward signatures?
+            it.skip('should use reply/forward on reply', function () {
+                var model = new MailModel({
+                    mode: 'reply'
+                });
+                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+            });
+            it.skip('should use reply/forward on reply', function () {
+                var model = new MailModel({
+                    mode: 'forward'
+                });
+                expect(model.get('defaultSignatureId')).to.deep.equal(settings.get('defaultReplyForwardSignature'));
+            });
+            it.skip('should use no signature on edit', function () {
+                var model = new MailModel({
+                    mode: 'edit'
+                });
+                expect(model.get('defaultSignatureId')).to.deep.equal('');
             });
         });
     });

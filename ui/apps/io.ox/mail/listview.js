@@ -19,9 +19,10 @@ define('io.ox/mail/listview', [
     'io.ox/core/api/account',
     'io.ox/core/tk/list',
     'io.ox/core/folder/api',
+    'gettext!io.ox/mail',
     'io.ox/mail/view-options',
     'less!io.ox/mail/style'
-], function (extensions, ext, util, api, account, ListView, folderAPI) {
+], function (extensions, ext, util, api, account, ListView, folderAPI, gt) {
 
     'use strict';
 
@@ -69,6 +70,11 @@ define('io.ox/mail/listview', [
             draw: extensions.unreadClass
         },
         {
+            id: 'flagged',
+            index: 115,
+            draw: extensions.flaggedClass
+        },
+        {
             id: 'deleted',
             index: 120,
             draw: extensions.deleted
@@ -86,12 +92,8 @@ define('io.ox/mail/listview', [
             id: 'col2',
             index: 200,
             draw: function (baton) {
-                var column = $('<div class="list-item-column column-2">');
-                extensions.answered.call(column, baton);
-                if (column.children().length === 0) {
-                    // horizontal view: only show forwarded icon if answered flag not set
-                    extensions.forwarded.call(column, baton);
-                }
+                var column = $('<div class="list-item-column column-3">');
+                extensions.paperClip.call(column, baton);
                 this.append(column);
             }
         },
@@ -118,7 +120,11 @@ define('io.ox/mail/listview', [
             index: 500,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-5">');
-                ext.point('io.ox/mail/listview/item/small/col5').invoke('draw', column, baton);
+                extensions.answered.call(column, baton);
+                if (column.children().length === 0) {
+                    // horizontal view: only show forwarded icon if answered flag not set
+                    extensions.forwarded.call(column, baton);
+                }
                 this.append(column);
             }
         },
@@ -130,6 +136,15 @@ define('io.ox/mail/listview', [
                 ext.point('io.ox/mail/listview/item/small/col6').invoke('draw', column, baton);
                 this.append(column);
             }
+        },
+        {
+            id: 'col7',
+            index: 700,
+            draw: function (baton) {
+                var column = $('<div class="list-item-column column-7">');
+                ext.point('io.ox/mail/listview/item/small/col7').invoke('draw', column, baton);
+                this.append(column);
+            }
         }
     );
 
@@ -139,7 +154,7 @@ define('io.ox/mail/listview', [
         draw: extensions.from
     });
 
-    ext.point('io.ox/mail/listview/item/small/col5').extend(
+    ext.point('io.ox/mail/listview/item/small/col6').extend(
         {
             id: 'account',
             index: 100,
@@ -171,14 +186,14 @@ define('io.ox/mail/listview', [
             draw: extensions.threadSize
         },
         {
-            id: 'paper-clip',
-            index: 400,
-            draw: extensions.paperClip
-        },
-        {
             id: 'shared-attachement',
             index: 450,
             draw: extensions.sharedAttachement
+        },
+        {
+            id: 'colorflag',
+            index: 200,
+            draw: extensions.colorflag
         },
         {
             id: 'pgp-encrypted',
@@ -197,7 +212,7 @@ define('io.ox/mail/listview', [
         }
     );
 
-    ext.point('io.ox/mail/listview/item/small/col6').extend({
+    ext.point('io.ox/mail/listview/item/small/col7').extend({
         id: 'date',
         index: 100,
         draw: extensions.date
@@ -228,6 +243,11 @@ define('io.ox/mail/listview', [
             id: 'unread',
             index: 110,
             draw: extensions.unreadClass
+        },
+        {
+            id: 'flagged',
+            index: 115,
+            draw: extensions.flaggedClass
         },
         {
             id: 'deleted',
@@ -275,8 +295,13 @@ define('io.ox/mail/listview', [
             draw: extensions.folderName
         },
         {
-            id: 'flag',
+            id: 'colorflag',
             index: 200,
+            draw: extensions.colorflag
+        },
+        {
+            id: 'flag',
+            index: 210,
             draw: extensions.flag
         },
         {
@@ -327,10 +352,29 @@ define('io.ox/mail/listview', [
         }
     );
 
-    ext.point('io.ox/mail/listview/empty').extend({
+    ext.point('io.ox/mail/listview/notification/empty').extend({
         id: 'default',
         index: 100,
         draw: extensions.empty
+    });
+
+    ext.point('io.ox/mail/listview/notification/error').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+
+            function retry(e) {
+                e.data.baton.listView.load();
+            }
+
+            this.append(
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
+                $.txt(gt('Error: Failed to load messages')),
+                $('<button type="button" class="btn btn-link">')
+                    .text(gt('Retry'))
+                    .on('click', { baton: baton }, retry)
+            );
+        }
     });
 
     var MailListView = ListView.extend({
@@ -388,13 +432,17 @@ define('io.ox/mail/listview', [
         },
 
         reprocessThread: function (model) {
+
             // only used when in thread mode
             if (!(this.app && this.app.isThreaded())) return;
 
             // get full thread objects (instead of cids)
             var threadlist = api.threads.get(model.cid);
 
-            // up to date
+            // return to avoid runtime errors if we have no thread data (see OXUI-304)
+            if (!threadlist.length) return;
+
+            // return if thread is up to date
             if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
 
             // remove head property to avid accidently using old date when processThreadMessage
@@ -437,6 +485,11 @@ define('io.ox/mail/listview', [
                 return memo || util.isUnseen(obj);
             }, false);
             data.flags = unseen ? data.flags & ~32 : data.flags | 32;
+            // get flagged flag for entire thread
+            var flagged = _(thread).reduce(function (memo, obj) {
+                return memo || util.isFlagged(obj);
+            }, false);
+            data.flags = flagged ? data.flags | 8 : data.flags & ~8;
             // get color_label for entire thread
             var color = _(thread).reduce(function (memo, obj) {
                 return memo || parseInt(obj.color_label || 0, 10);

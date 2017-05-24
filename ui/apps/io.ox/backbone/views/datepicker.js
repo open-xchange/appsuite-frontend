@@ -137,11 +137,11 @@ define('io.ox/backbone/views/datepicker', [
                 maxHeight = this.$parent.height();
             // exceeds screen bottom?
             if ((offset.top + targetHeight + this.$el.outerHeight()) > maxHeight) {
-                // above
-                this.$el.css({ top: 'auto', bottom: maxHeight - offset.top });
+                // above but in viewport
+                this.$el.css({ top: Math.max(0, offset.top - this.$el.outerHeight()) });
             } else {
                 // below
-                this.$el.css({ top: offset.top + targetHeight, bottom: 'auto' });
+                this.$el.css({ top: offset.top + targetHeight });
             }
             this.$el.css({ left: offset.left }).addClass('open');
             this.$target.attr('aria-expanded', true);
@@ -182,13 +182,13 @@ define('io.ox/backbone/views/datepicker', [
             var headerId = _.uniqueId('header');
             this.$el.attr({ 'aria-labelledby': headerId, 'role': 'region', 'tabindex': 0 }).append(
                 $('<div class="navigation">').append(
-                    $('<button role="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
+                    $('<button type="button" class="btn-prev pull-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
                     $('<span role="header" aria-live="assertive" aria-atomic="true">').attr('id', headerId),
-                    $('<button role="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
+                    $('<button type="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 ),
                 this.$grid = $('<table class="grid" role="grid" tabindex="0">')
                     .attr('aria-label', gt('Use cursor keys to navigate, press enter to select a date')),
-                $('<button role="button" class="btn-today">')
+                $('<button type="button" class="btn-today">')
                     .attr('aria-label', 'Go to today')
                     .text(gt('Today: %1$s', moment().format('l')))
             );
@@ -221,7 +221,7 @@ define('io.ox/backbone/views/datepicker', [
                 m = current.clone();
 
             this.renderHeader(
-                $('<button role="button" class="switch-mode">')
+                $('<button type="button" class="switch-mode">')
                     .attr({
                         'data-mode': 'year',
                         'data-value': m.year()
@@ -293,7 +293,7 @@ define('io.ox/backbone/views/datepicker', [
                 m = this.date.clone().month(0);
 
             this.renderHeader(
-                $('<button role="button" class="switch-mode">')
+                $('<button type="button" class="switch-mode">')
                     .attr({
                         'data-mode': 'decade',
                         'data-value': m.year()
@@ -373,7 +373,7 @@ define('io.ox/backbone/views/datepicker', [
                 case 'year': date[fn](1, 'year'); break;
                 default: date[fn](1, 'month'); break;
             }
-            this.setDate(date);
+            this.setDate(date, true);
         },
 
         onToday: function () {
@@ -549,7 +549,7 @@ define('io.ox/backbone/views/datepicker', [
             this.setDate(date);
         },
 
-        setDate: function (date) {
+        setDate: function (date, forceRender) {
 
             date = moment(date || this.date);
             // valid?
@@ -569,16 +569,21 @@ define('io.ox/backbone/views/datepicker', [
                     this.setActiveDescedant(node.attr('id'));
                 }.bind(this);
 
-            // currently visible?
-            switch (this.mode) {
-                case 'decade': selector = '#year_' + this.date.year(); break;
-                case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
-                case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
-                // no default
+            // in some cases we want to force the view to draw new (looks strange if the month doesn't switch when the next months 1st is also visible. See Bug 52026)
+            if (forceRender) {
+                this.render();
+            } else {
+                // currently visible?
+                switch (this.mode) {
+                    case 'decade': selector = '#year_' + this.date.year(); break;
+                    case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
+                    case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
+                    // no default
+                }
+                // found?
+                var node = this.$grid.find(selector);
+                if (node.length) select(node); else this.render();
             }
-            // found?
-            var node = this.$grid.find(selector);
-            if (node.length) select(node); else this.render();
             if (!isSame) this.trigger('change', this.date);
         }
     });

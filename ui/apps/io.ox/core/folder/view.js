@@ -111,6 +111,7 @@ define('io.ox/core/folder/view', [
                 sidepanel.addClass('visible');
                 app.trigger('folderview:open');
                 populateResize();
+                sidepanel.css('display', 'flex');
             },
 
             hide: function () {
@@ -250,12 +251,12 @@ define('io.ox/core/folder/view', [
                 // edit mode?
                 if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
-                    if ($(e.target).parent().hasClass('folder-label')) {
-                        tree.$dropdown.find('.dropdown-toggle').trigger('click', 'foldertree');
+                    if ($(e.target).hasClass('folder-label')) {
+                        tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                     }
                     return;
-                } else if (targetFolder.is('.virtual')) {
-                    // return here as we can not change the page to a virtual folder
+                } else if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) {
+                    // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
                     return;
                 }
                 // otherwise
@@ -315,34 +316,34 @@ define('io.ox/core/folder/view', [
             options = _.extend(obj, options || {});
         });
 
+        function showFolder(id, index, path) {
+            // ignore system root
+            if (index === 0) return;
+            // expand parents
+            if (index !== (path.length - 1)) {
+                return this.onAppear(id, function (node) {
+                    if (!node.isOpen()) node.toggle(true);
+                });
+            }
+            // scroll leaf into view
+            this.onAppear(id, function (node) {
+                // cause folder node contains all sub folder nodes and can become quite large
+                node.$el.intoView(this.$el, { ignore: 'bottom:partial' });
+            });
+        }
+
         // respond to folder change events
 
         (function folderChangeEvents() {
 
             var ignoreChangeEvent = false;
 
-            function show(id, index, path) {
-                // ignore system root
-                if (index === 0) return;
-                // expand parents
-                if (index !== (path.length - 1)) {
-                    return this.onAppear(id, function (node) {
-                        if (!node.isOpen()) node.toggle(true);
-                    });
-                }
-                // scroll leaf into view
-                this.onAppear(id, function (node) {
-                    // cause folder node contains all sub folder nodes and can become quite large
-                    node.$el.intoView(this.$el, { ignore: 'bottom:partial' });
-                });
-            }
-
             // on change via app.folder.set
             app.on('folder:change', function (id) {
                 if (ignoreChangeEvent) return;
                 // updates selection manager
                 tree.selection.set(id);
-                tree.traversePath(id, show);
+                tree.traversePath(id, showFolder);
             });
 
             // on selection change
@@ -360,7 +361,7 @@ define('io.ox/core/folder/view', [
 
             api.on('create', _.debounce(function (data) {
                 // compare folder/node.js onSort delay
-                tree.traversePath(data.id, show);
+                tree.traversePath(data.id, showFolder);
             }, 15));
 
         }());
@@ -374,6 +375,7 @@ define('io.ox/core/folder/view', [
 
         // respond to folder move
         api.on('move', function (id, newId) {
+            tree.traversePath(newId, showFolder);
             tree.selection.set(newId);
         });
 

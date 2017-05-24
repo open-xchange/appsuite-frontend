@@ -42,6 +42,8 @@ define.async('io.ox/mail/compose/model', [
                 autosavedAsDraft: false,
                 // Autodismiss confirmation dialog
                 autoDismiss: false,
+                // enable auto-remove on "discard"
+                autoDiscard: true,
                 preferredEditorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 editorMode: _.device('smartphone') ? 'html' : settings.get('messageFormat', 'html'),
                 attachments: new Attachments.Collection(),
@@ -55,7 +57,10 @@ define.async('io.ox/mail/compose/model', [
                 signatureId: '',
                 csid: mailAPI.csid(),
                 vcard: settings.get('appendVcard', false) ? 1 : 0,
-                infostore_ids_saved: []
+                infostore_ids_saved: [],
+                security: {
+                    encrypt: settings.get('defaultEncrypt', false)
+                }
             };
         },
 
@@ -115,7 +120,8 @@ define.async('io.ox/mail/compose/model', [
                 }.bind(this));
             }
 
-            this.set('autoDismiss', this.get('mode') === 'edit');
+            // disable auto remove on discard for draft mails
+            this.set('autoDiscard', this.get('mode') !== 'edit');
 
             if (!this.get('signatures')) this.set('signatures', this.getSignatures());
 
@@ -139,6 +145,8 @@ define.async('io.ox/mail/compose/model', [
         },
 
         dirty: function (flag) {
+            var previous = !_.isEqual(this._shadowAttributes, this.getCopy()),
+                current;
             // sync mail editor content to model
             this.trigger('needsync');
             if (flag === true) {
@@ -147,7 +155,13 @@ define.async('io.ox/mail/compose/model', [
             } else if (flag === false) {
                 this.updateShadow();
             }
-            return !_.isEqual(this._shadowAttributes, this.getCopy());
+            current = !_.isEqual(this._shadowAttributes, this.getCopy());
+            if (!current && previous) {
+                // model changed to not dirty force next restorepoint save to have up to date data
+                this.forceNextFailSave = true;
+            }
+            previous = null;
+            return current;
         },
 
         getContentType: function () {
@@ -187,8 +201,8 @@ define.async('io.ox/mail/compose/model', [
 
             // image URL fix
             if (mode === 'html') {
-                content = content.replace(/(<img[^>]+src=")\/ajax/g, '$1' + ox.apiRoot);
-
+                // look if prefix needs do be replaced
+                content = mailUtil.replaceImagePrefix(content);
                 // Remove wrapping div
                 content = content.replace(/^<div\sid="ox-\S+">/, '').replace(/<\/div>$/, '');
             }
@@ -208,7 +222,9 @@ define.async('io.ox/mail/compose/model', [
         },
 
         getFailSave: function () {
-            if (!this.dirty()) return false;
+            // a model may not be dirty anymore but still needs currenct data for the restore point (happens on autosave/save as draft)
+            if (!this.forceNextFailSave && !this.dirty()) return false;
+            this.forceNextFailSave = false;
             var content = this.get('attachments').at(0).get('content');
             // Fails silently if content size is over 512kb
             if (strings.size(content) > 524288) return false;
@@ -274,7 +290,8 @@ define.async('io.ox/mail/compose/model', [
                 'initial',
                 'msgref',
                 'disp_notification_to',
-                'share_attachments'
+                'share_attachments',
+                'security'
             );
             result = _.extend(result, {
                 attachments:    _(attachmentCollection.mailAttachments()).reject(function (o) { return o.source === 'drive'; }),  // get all attachments without files from drive
@@ -327,9 +344,8 @@ define.async('io.ox/mail/compose/model', [
         },
 
         discard: function () {
-            // never delete on edit
+            if (!this.get('autoDiscard')) return;
             // only delete autosaved drafts that are not saved manually and have a msgref
-            if (this.get('autoDismiss')) return;
             if (this.get('autosavedAsDraft') && this.get('msgref')) mailAPI.remove([mailUtil.parseMsgref(mailAPI.separator, this.get('msgref'))]);
         },
 
@@ -339,8 +355,8 @@ define.async('io.ox/mail/compose/model', [
         }),
         attachFiles: function attachFiles(files) {
             this.get('attachments').add(files);
-
         },
+
         keepDraftOnClose: function () {
             if (settings.get('features/deleteDraftOnClose') !== true) return false;
             return this.get('sendtype') === mailAPI.SENDTYPE.EDIT_DRAFT || (this.get('flags') & 4) > 0;

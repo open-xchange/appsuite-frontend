@@ -1,10 +1,11 @@
 .DS_Store
+ui/.project
 ui/watch.sh
 ui/node_modules
+ui/lib/bootstrap/node_modules
 *.sublime-*
 *~
 *.swp
 *.kate-swp
-ui/lib/bootstrap/node_modules
 npm-debug.log
 nbproject

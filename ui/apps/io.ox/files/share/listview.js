@@ -14,14 +14,13 @@
 define('io.ox/files/share/listview', [
     'io.ox/files/share/api',
     'io.ox/core/extensions',
-    'io.ox/files/share/model',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, sModel, BreadcrumbView, ListView, extensions, gt) {
+], function (api, ext, BreadcrumbView, ListView, extensions, gt) {
 
     'use strict';
 

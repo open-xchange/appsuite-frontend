@@ -20,8 +20,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
-    'io.ox/core/capabilities'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/settings/util'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util) {
 
     'use strict';
 
@@ -171,6 +172,11 @@ define.async('io.ox/mail/accounts/view-form', [
                     });
                 }
 
+                // setting mail_protocol default if dsc account
+                if (settings.get('dsc/enabled', false) && self.model.get('id') === undefined) {
+                    model.set('mail_protocol', 'imap');
+                }
+
                 function syncLogin(model, value) {
                     model.set('login', value, { validate: true });
                 }
@@ -220,7 +226,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 } else {
 
                     //primary account does not allow editing besides display name and unified mail
-                    self.$el.find('input, select').not('#personal, [name="unified_inbox_enabled"]').prop('disabled', true);
+                    self.$el.find('input, select').not('#personal, #name, [name="unified_inbox_enabled"]').prop('disabled', true);
                 }
 
                 var isMail_oauth = _.isNumber(model.get('mail_oauth')) && model.get('mail_oauth') > -1,
@@ -349,6 +355,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                             .css('margin', '10px')
                                             .text(warn.error);
                                 });
+                                self.dialog.pause();
 
                                 new dialogs.ModalDialog()
                                     .header(
@@ -361,6 +368,7 @@ define.async('io.ox/mail/accounts/view-form', [
                                     .addButton('cancel', gt('Cancel'))
                                     .show()
                                     .done(function (action) {
+                                        self.dialog.resume();
                                         if (action === 'proceed') {
                                             saveAccount();
                                         } else {
@@ -381,7 +389,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             onFolderSelect: function (e) {
 
-                this.dialog.getPopup().hide();
+                this.dialog.pause();
 
                 var accountId = 'default' + this.model.get('id'),
                     property = $(e.currentTarget).attr('data-property'),
@@ -392,13 +400,13 @@ define.async('io.ox/mail/accounts/view-form', [
                     context: 'account',
                     done: function (target) {
                         self.model.set(property, target, { validate: true });
-                        self.$el.find('input[name="' + property + '"]').val(target);
                     },
                     close: function () {
-                        self.dialog.getPopup().show();
+                        self.dialog.resume();
                     },
                     folder: id,
                     module: 'mail',
+                    realNames: true,
                     root: accountId
                 });
             }
@@ -419,12 +427,9 @@ define.async('io.ox/mail/accounts/view-form', [
         return $('<div class="col-sm-7">').append(args);
     }
 
-    function checkbox(text) {
-        var args = _(arguments).toArray();
+    function checkbox(id, text, model) {
         return $('<div class="col-sm-offset-4 col-sm-7">').append(
-            $('<div class="checkbox">').append(
-                $('<label class="control-label">').text(text).prepend(args.slice(1))
-            )
+            util.checkbox(id, text, model)
         );
     }
 
@@ -438,7 +443,7 @@ define.async('io.ox/mail/accounts/view-form', [
             //
             var serverSettingsIn = $('<fieldset class="data_incoming">').append(
                 $('<legend class="sectiontitle">').text(gt('Incoming server')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // server type
                     group(
                         label('mail_protocol', gt('Server type')),
@@ -450,7 +455,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'mail_server' }).render().$el
+                            new InputView({ model: model, id: 'mail_server', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // secure
@@ -464,21 +469,21 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('mail_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'mail_port' }).render().$el
+                            new InputView({ model: model, id: 'mail_port', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // login
                     group(
                         label('login', gt('Username')),
                         div(
-                            new InputView({ model: model, id: 'login' }).render().$el
+                            new InputView({ model: model, id: 'login', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // password
                     group(
                         label('password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'password' }).render().$el
+                            new PasswordView({ model: model, id: 'password', mandatory: model.get('id') === undefined, autocomplete: false }).render().$el
                         )
                     ),
                     // refresh rate (pop3 only)
@@ -491,18 +496,12 @@ define.async('io.ox/mail/accounts/view-form', [
                     .addClass('pop3'),
                     // expunge (pop3 only)
                     group(
-                        checkbox(
-                            gt('Remove copy from server after retrieving a message'),
-                            new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
-                        )
+                        checkbox('pop3_expunge_on_quit', gt('Remove copy from server after retrieving a message'), model)
                     )
                     .addClass('pop3'),
                     // delete write-through (pop3)
                     group(
-                        checkbox(
-                            gt('Deleting messages on local storage also deletes them on server'),
-                            new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
-                        )
+                        checkbox('pop3_delete_write_through', gt('Deleting messages on local storage also deletes them on server'), model)
                     )
                     .addClass('pop3')
                 )
@@ -510,12 +509,12 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var serverSettingsOut = $('<fieldset class="data_outgoing">').append(
                 $('<legend class="sectiontitle">').text(gt('Outgoing server (SMTP)')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // server
                     group(
                         label('transport_server', gt('Server name')),
                         div(
-                            new InputView({ model: model, id: 'transport_server' }).render().$el
+                            new InputView({ model: model, id: 'transport_server', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // secure
@@ -529,7 +528,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_port', gt('Server port')),
                         $('<div class="col-sm-3">').append(
-                            new InputView({ model: model, id: 'transport_port' }).render().$el
+                            new InputView({ model: model, id: 'transport_port', mandatory: model.get('id') !== 0 }).render().$el
                         )
                     ),
                     // Auth type
@@ -550,7 +549,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     group(
                         label('transport_password', gt('Password')),
                         div(
-                            new PasswordView({ model: model, id: 'transport_password' }).render().$el
+                            new PasswordView({ model: model, id: 'transport_password', autocomplete: false }).render().$el
                         )
                     )
                 )
@@ -571,7 +570,7 @@ define.async('io.ox/mail/accounts/view-form', [
 
             var serverSettingsFolder = $('<fieldset class="data_folders">').append(
                 $('<legend class="sectiontitle">').text(gt('Standard folders')),
-                $('<form class="form-horizontal" role="form">').append(
+                $('<form class="form-horizontal">').append(
                     // add four input fields
                     _('sent trash drafts spam archive'.split(' ')).map(function (folder) {
 
@@ -581,14 +580,17 @@ define.async('io.ox/mail/accounts/view-form', [
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
                         var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
-
+                        /* eslint-disable */
                         return group(
                             label(folder, text),
                             $('<div class="col-sm-7">').append(
                                 enabled ?
                                 // show controls
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
-                                    new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
+                                    new InputView({ model: model, id: folder })
+                                        .on('update', function (node) {
+                                            if (node && _.isString(this.model.get(folder))) node.val(this.model.get(folder).replace(/^default\d+\D/, ''));
+                                        }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
                                         $('<button type="button" class="btn btn-default">').text(gt('Select'))
                                     )
@@ -605,12 +607,12 @@ define.async('io.ox/mail/accounts/view-form', [
             this.append(
                 $('<fieldset class="data_account">').append(
                     $('<legend class="sectiontitle">').text(gt('Account settings')),
-                    $('<form class="form-horizontal" role="form">').append(
+                    $('<form class="form-horizontal">').append(
                         // account name
                         group(
                             label('name', gt('Account name')),
                             div(
-                                new InputView({ model: model, id: 'name' }).render().$el
+                                new InputView({ model: model, id: 'name', mandatory: true }).render().$el
                             )
                         ),
                         // personal
@@ -624,17 +626,14 @@ define.async('io.ox/mail/accounts/view-form', [
                         group(
                             label('primary_address', gt('Email address')),
                             div(
-                                new InputView({ model: model, id: 'primary_address' }).render().$el
+                                new InputView({ model: model, id: 'primary_address', mandatory: true }).render().$el
                             )
                         ),
                         // unified inbox, disabled for DSC as well
                         capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
                         $() :
                         group(
-                            checkbox(
-                                gt('Use unified mail for this account'),
-                                new mini.CheckboxView({ id: 'unified_inbox_enabled', model: model }).render().$el
-                            )
+                            checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
                         )
                     )
                 )
@@ -669,13 +668,14 @@ define.async('io.ox/mail/accounts/view-form', [
             }
 
             // don't show folder settings if this is a new account or we are in a DSC environment
-            if (model.get('id') !== undefined && !settings.get('dsc/enabled')) {
+            if (model.get('id') !== undefined && (model.get('id') === 0 || !settings.get('dsc/enabled'))) {
                 this.append(serverSettingsFolder);
             }
         }
     });
 
-    ext.point(POINT + '/pane').extend({
+    // debugging
+    /*ext.point(POINT + '/pane').extend({
         index: 200,
         id: 'dsc',
         draw: function (baton) {
@@ -683,7 +683,7 @@ define.async('io.ox/mail/accounts/view-form', [
             console.log('draw', this, baton);
 
         }
-    });
+    });*/
 
     return accountAPI.getDefaultDisplayName().then(function (name) {
         defaultDisplayName = name;

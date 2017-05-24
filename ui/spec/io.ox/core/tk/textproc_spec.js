@@ -22,7 +22,7 @@ define([
 
             it('should convert unordered lists', function () {
                 var text = textproc.htmltotext('<ul><li>Element 1</li><li>Element 2</li></ul>');
-                expect(text).to.equal('*   Element 1\n*   Element 2');
+                expect(text).to.equal('* Element 1\n* Element 2');
             });
 
             it('should preserve <> characters', function () {

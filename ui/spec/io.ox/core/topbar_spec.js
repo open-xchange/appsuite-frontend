@@ -29,7 +29,7 @@ define([
                         'help': { 'target': 'ox.appsuite.user.chap.email.html' }
                     };
                     var openStub = sinon.stub(window, 'open'),
-                        currentAppStub = sinon.stub(ox.ui.App, 'getCurrentApp', function () {
+                        currentAppStub = sinon.stub(ox.ui.App, 'getCurrentApp').callsFake(function () {
                             return { getName: function () { return 'io.ox/mail'; } };
                         });
 
@@ -42,7 +42,7 @@ define([
 
                 it('should not fail without currentApp', function () {
                     var openStub = sinon.stub(window, 'open'),
-                        currentAppStub = sinon.stub(ox.ui.App, 'getCurrentApp', function () {
+                        currentAppStub = sinon.stub(ox.ui.App, 'getCurrentApp').callsFake(function () {
                             return null;
                         });
 

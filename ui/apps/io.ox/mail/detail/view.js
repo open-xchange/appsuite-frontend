@@ -21,12 +21,13 @@ define('io.ox/mail/detail/view', [
     'io.ox/mail/detail/content',
     'io.ox/core/extPatterns/links',
     'io.ox/core/emoji/util',
+    'io.ox/core/a11y',
     'gettext!io.ox/mail',
     'less!io.ox/mail/detail/content',
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, gt, shadowStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, shadowStyle) {
 
     'use strict';
 
@@ -36,6 +37,12 @@ define('io.ox/mail/detail/view', [
         id: 'unread-class',
         index: INDEX += 100,
         draw: extensions.unreadClass
+    });
+
+    ext.point('io.ox/mail/detail').extend({
+        id: 'flagged-class',
+        index: INDEX += 100,
+        draw: extensions.flaggedClass
     });
 
     ext.point('io.ox/mail/detail').extend({
@@ -94,6 +101,8 @@ define('io.ox/mail/detail/view', [
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
         noCaret: true,
+        // lfo breaks thread toolbars under certan conditions see ( bug 50939)
+        noLfo: true,
         ref: 'io.ox/mail/links/inline',
         smart: true
     }));
@@ -130,16 +139,6 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row1').extend(
         {
-            id: 'date',
-            index: INDEX_header += 100,
-            draw: extensions.fulldate
-        },
-        {
-            id: 'priority',
-            index: INDEX_header += 100,
-            draw: extensions.priority
-        },
-        {
             // from is last one in the list for proper ellipsis effect
             id: 'from',
             index: INDEX_header += 100,
@@ -152,7 +151,27 @@ define('io.ox/mail/detail/view', [
             }
         },
         {
-            id: 'flag-picker',
+            id: 'priority',
+            index: INDEX_header += 100,
+            draw: extensions.priority
+        },
+        {
+            id: 'security',
+            index: INDEX_header += 100,
+            draw: extensions.security
+        },
+        {
+            id: 'date',
+            index: INDEX_header += 100,
+            draw: extensions.fulldate
+        },
+        {
+            id: 'flag-toggle',
+            index: INDEX_header += 100,
+            draw: extensions.flagToggle
+        },
+        {
+            id: 'color-picker',
             index: INDEX_header += 100,
             draw: extensions.flagPicker
         }
@@ -271,14 +290,22 @@ define('io.ox/mail/detail/view', [
     });
 
     ext.point('io.ox/mail/detail').extend({
+        id: 'error',
+        index: INDEX += 100,
+        draw: function () {
+            this.append($('<section class="error">').hide());
+        }
+    });
+
+    ext.point('io.ox/mail/detail').extend({
         id: 'body',
         index: INDEX += 100,
         draw: function () {
             var $body;
             this.append(
                 $('<section class="attachments">'),
-                // must have tabindex=0, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text focusable" tabindex="0">')
+                // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
+                $body = $('<section class="body user-select-text focusable" tabindex="-1">')
             );
             // rendering mails in chrome is slow if we do not use a shadow dom
             if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
@@ -388,12 +415,14 @@ define('io.ox/mail/detail/view', [
 
         events: {
             'keydown': 'onToggle',
-            'click .detail-view-header': 'onToggle'
+            'click .detail-view-header': 'onToggle',
+            'click a[data-action="retry"]': 'onRetry'
         },
 
         onChangeFlags: function () {
             // update unread state
             this.$el.toggleClass('unread', util.isUnseen(this.model.get('flags')));
+            this.$el.toggleClass('flagged', util.isFlagged(this.model.get('flags')));
         },
 
         onChangeAttachments: function () {
@@ -416,6 +445,18 @@ define('io.ox/mail/detail/view', [
                 this.model.previous('attachments')[0].content !== this.model.get('attachments')[0].content) this.onChangeContent();
         },
 
+        onChangeSecurity: function () {
+            var data = this.model.toJSON(),
+                baton = ext.Baton({
+                    view: this,
+                    model: this.model,
+                    data: data,
+                    attachments: util.getAttachments(data)
+                }),
+                node = this.$el.find('header.detail-view-header').empty();
+            ext.point('io.ox/mail/detail/header').invoke('draw', node, baton);
+        },
+
         getEmptyBodyNode: function () {
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
@@ -426,7 +467,7 @@ define('io.ox/mail/detail/view', [
 
         onChangeSubject: function () {
             var subject = this.$el.find('h1.subject');
-            subject.text(this.model.get('subject'));
+            subject.text(util.getSubject(this.model.get('subject')));
             return subject;
         },
 
@@ -462,10 +503,16 @@ define('io.ox/mail/detail/view', [
 
         onToggle: function (e) {
 
-            if (e.type === 'keydown' && e.which !== 13) return;
+            if (e.type === 'keydown' && e.which !== 13 && e.which !== 32) return;
 
             // ignore click on/inside <a> tags
+            // this is required even if a-tags are tabbable elements since some links are removed from dom on click
             if ($(e.target).closest('a').length) return;
+
+            // ignore clicks on tabbable elements
+            var tabbable = a11y.getTabbable(this.$el);
+            if (tabbable.index(e.target) >= 0) return;
+            if (tabbable.find($(e.target)).length) return;
 
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
@@ -484,9 +531,18 @@ define('io.ox/mail/detail/view', [
             this.toggle(cid);
         },
 
+        onRetry: function (e) {
+            e.preventDefault();
+            this.$('section.error').hide();
+            this.$('section.body').show();
+            this.toggle(true);
+        },
+
         onUnseen: function () {
             var data = this.model.toJSON();
-            if (util.isToplevel(data)) api.markRead(data);
+            if (!util.isToplevel(data)) return;
+            if (this.options.app && this.options.app.props.get('sort') === 651) return;
+            api.markRead(data);
         },
 
         onLoad: function (data) {
@@ -503,7 +559,6 @@ define('io.ox/mail/detail/view', [
             // done
             this.$el.find('section.body').removeClass('loading');
             this.trigger('load:done');
-
             // draw
             // nested mails do not have a subject before loading, so trigger change as well
             this.onChangeSubject();
@@ -520,22 +575,19 @@ define('io.ox/mail/detail/view', [
         },
 
         onLoadFail: function (e) {
+            if (!this.$el) return;
             this.trigger('load:fail');
             this.trigger('load:done');
-            if (!this.$el) return;
             this.$el.attr('data-loaded', false);
-            this.getEmptyBodyNode().empty().append(
-                $('<div class="mail-detail-content">').append(
-                    $('<div class="loading-error">').append(
-                        $('<h4>').text(gt('Error while loading message content')),
-                        $('<div>').text(e.error)
-                    )
-                )
+            this.$('section.error').empty().show().append(
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
+                $('<h4>').text(gt('Error: Failed to load message content')),
+                $('<p>').text(e.error),
+                $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
             );
         },
 
         toggle: function (state) {
-
             var $li = this.$el;
 
             if (state === undefined) {
@@ -565,7 +617,9 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).then(
+                        var data = { id: this.model.get('id'), folder_id: this.model.get('folder_id') };
+                        if (this.options.app && this.options.app.props.get('sort') === 651) data.unseen = true;
+                        api.get(data).then(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
@@ -591,10 +645,13 @@ define('io.ox/mail/detail/view', [
 
             this.on({
                 'load': function () {
-                    this.$el.find('section.body').empty().busy();
+                    this.$('section.body').empty().busy();
                 },
                 'load:done': function () {
-                    this.$el.find('section.body').idle();
+                    this.$('section.body').idle();
+                },
+                'load:fail': function () {
+                    this.$('section.body').hide();
                 }
             });
         },
@@ -633,7 +690,6 @@ define('io.ox/mail/detail/view', [
                 'data-cid': this.model.cid,
                 'aria-expanded': 'false',
                 'data-loaded': 'false',
-                'role': 'article',
                 'aria-label': title
             });
 

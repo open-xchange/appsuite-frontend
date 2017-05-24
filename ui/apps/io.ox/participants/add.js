@@ -21,9 +21,12 @@ define('io.ox/participants/add', [
     'io.ox/core/util',
     'io.ox/core/yell',
     'gettext!io.ox/core',
+    'io.ox/core/capabilities',
+    'settings!io.ox/contacts',
+    'io.ox/backbone/mini-views/addresspicker',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -83,7 +86,7 @@ define('io.ox/participants/add', [
     }
 
     function getAddress(item) {
-        // string, data, or model
+        // string, data or model
         if (_.isString(item)) item = { email1: item };
         else if (item instanceof Backbone.Model) item = item.toJSON();
         return contactsUtil.getMail(item);
@@ -100,8 +103,8 @@ define('io.ox/participants/add', [
         typeahead: null,
 
         options: {
-            placeholder: gt('Add participant/resource'),
-            label: gt('Add participant/resource'),
+            placeholder: gt('Add contact/resource') + ' \u2026',
+            label: gt('Add contact/resource'),
             extPoint: 'io.ox/participants/add',
             blacklist: false
         },
@@ -176,13 +179,14 @@ define('io.ox/participants/add', [
                 var address = getAddress(item);
                 if (coreUtil.isValidMailAddress(address)) return true;
                 //#. %1$s is an email address
-                yell('error', gt('Cannot add participant/member with an invalid mail address: %1$s', address));
+                yell('error', gt('Cannot add contact with an invalid mail address: %1$s', address));//
                 return false;
             });
         },
 
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('form-control-label-'),
+                self = this;
             this.typeahead = new Typeahead(this.options);
             this.$el.append(
                 $('<label class="sr-only">').attr({ for: guid }).text(this.options.label),
@@ -201,6 +205,19 @@ define('io.ox/participants/add', [
                         container.scrollTop(container.scrollTop() + pos - 16);
                     }
                 });
+            }
+            this.options.usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
+            if (this.options.usePicker) {
+                this.addresspicker = new AddressPickerView({
+                    process: function (e, member) {
+                        self.options.collection.add(member);
+                    }
+                });
+                this.$el.append(
+                    this.addresspicker.render().$el
+                );
+                this.$el.wrapInner($('<div class="input-group has-picker">'));
+
             }
             return this;
         }

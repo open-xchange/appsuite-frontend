@@ -29,10 +29,12 @@ define('io.ox/core/tk/dialogs', [
     function getPopup() {
         return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header" id="dialog-title">'),
-                $('<div class="modal-body">'),
-                $('<div class="clearfix">'),
-                $('<div class="modal-footer">')
+                $('<div role="document">').append(
+                    $('<div class="modal-header" id="dialog-title">'),
+                    $('<div class="modal-body">'),
+                    $('<div class="clearfix">'),
+                    $('<div class="modal-footer">')
+                )
             );
     }
 
@@ -49,7 +51,8 @@ define('io.ox/core/tk/dialogs', [
                 noBusy: false,
                 maximize: false,
                 top: '50%',
-                container: $('#io-ox-core'),
+                // sidepopups may be in body node under certain circumstances. Prevent new dialogs from hiding under them
+                container: ($('body>.io-ox-sidepopup-overlay').length ? $('body') : $('#io-ox-core')),
                 tabTrap: true,
                 focus: true
             }, options),
@@ -71,8 +74,11 @@ define('io.ox/core/tk/dialogs', [
             keepFocus = function (e) {
                 // we have to consider that two popups might be open
                 // so we cannot just refocus the current popup
-                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
+                var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker, .addressbook-popup').length > 0;
                 if (insidePopup) return;
+                // should not keep focus if smart dropdown is open
+                var smartDropdown = $('body > .smart-dropdown-container').length > 0;
+                if (smartDropdown) return;
                 if (nodes.popup.is(':visible')) {
                     e.stopPropagation();
                     nodes.popup.focus();
@@ -290,9 +296,14 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.text = function (str) {
-            var p = nodes.body;
+            var p = nodes.body,
+                id = _.uniqueId('label-');
             p.find('.plain-text').remove();
-            p.append($('<h4 class="plain-text">').text(str || ''));
+            p.append($('<h4 class="plain-text">').attr('id', id).text(str || ''));
+            nodes.popup.attr({
+                'aria-labelledby': id,
+                role: 'alertdialog'
+            });
             return this;
         };
 
@@ -332,7 +343,6 @@ define('io.ox/core/tk/dialogs', [
             var button = $.button(opt);
             nodes.buttons.push(button);
             return button.addClass(options.classes).attr({
-                role: 'button',
                 type: 'button'
             });
         };
@@ -646,13 +656,18 @@ define('io.ox/core/tk/dialogs', [
 
             sidepopuppane = $('<div class="io-ox-sidepopup-pane f6-target default-content-padding abs">'),
 
+            id = _.uniqueId('sidepopup-'),
+
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                $('<a href="#" class="close" data-action="close" role="button">').attr('aria-label', gt('Close')).append(
+                $('<a href="#" class="close" data-action="close" role="button">').attr({
+                    'aria-label': gt('Close'),
+                    'aria-controls': id
+                }).append(
                     $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
                 )
             ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').attr('role', 'complementary').append(closer, sidepopuppane),
+            popup = $('<div class="io-ox-sidepopup abs" role="dialog">').attr('id', id).append($('<div role="document">').append(closer, sidepopuppane)),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(

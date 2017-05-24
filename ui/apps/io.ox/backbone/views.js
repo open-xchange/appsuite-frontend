@@ -31,7 +31,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             this.$el.attr({
                 'data-extension-id': extOptions.id || id,
                 'data-extension-point': options.ref || '',
-                'data-composite-id': (this.model && this.model.getCompositeId) ? this.model.getCompositeId() : ''
+                'data-composite-id': (this.model && this.model.getCompositeId) ? this.model.getCompositeId() : null
             });
 
             this.baton = ext.Baton(this.options);

@@ -51,7 +51,7 @@ define.async('plugins/wizards/mandatory/main', [
                 .mandatory()
                 .title(gt.format(gt('Welcome to %s'), ox.serverConfig.productName))
                 .content(gt('Before you can continue using the product, you have to enter some basic information. It will take less than a minute.'))
-                .footer($('<button class="btn wizard-close pull-left">')
+                .footer($('<button class="btn pull-left">')
                     .text(gt('Back to sign in'))
                     .on('click', function () {
                         def.reject();
@@ -79,8 +79,14 @@ define.async('plugins/wizards/mandatory/main', [
                 .beforeShow(function () {
                     var step = this;
                     step.toggleNext(false);
+                    step.parent.options.model.set('paused', [1]);
                     user.on('change', function () {
-                        step.toggleNext(!_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name'))));
+                        var isComplete = !_.isEmpty($.trim(user.get('first_name'))) && !_.isEmpty($.trim(user.get('last_name')));
+                        if (isComplete && _.device('smartphone')) {
+                            step.parent.options.model.set('paused', []);
+                            return;
+                        }
+                        step.toggleNext(isComplete);
                     });
                 })
                 .on('show', function () {

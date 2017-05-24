@@ -25,12 +25,13 @@ define('io.ox/settings/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/util',
     'io.ox/core/api/mailfilter',
-    'io.ox/core/notifications',
+    'io.ox/core/yell',
+    'io.ox/keychain/api',
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'less!io.ox/settings/style'
-], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, notifications) {
+], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
     'use strict';
 
@@ -69,7 +70,7 @@ define('io.ox/settings/main', [
                 'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
                 'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',
                 'virtual/settings/io.ox/autoforward': 'ox.appsuite.user.sect.email.send.autoforward.html',
-                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.manage.mailfilter.html',
+                'virtual/settings/io.ox/mailfilter': 'ox.appsuite.user.sect.email.mailfilter.html',
                 'virtual/settings/io.ox/mail/settings/signatures': 'ox.appsuite.user.sect.email.settings.html#ox.appsuite.user.reference.email.settings.signatures',
                 'virtual/settings/io.ox/contacts': 'ox.appsuite.user.sect.contacts.settings.html',
                 'virtual/settings/io.ox/calendar': 'ox.appsuite.user.sect.calendar.settings.html',
@@ -219,16 +220,19 @@ define('io.ox/settings/main', [
 
             if (capabilities.has('mailfilter')) {
                 mailfilterAPI.getConfig().done(function (config) {
+
+                    // disable autoforward or vacationnotice if the needed actions are not available
                     _.each(actionPoints, function (val, key) {
-                        if (_.indexOf(config.actioncommands, key) === -1) disabledSettingsPanes.push(val);
+                        if (_.findIndex(config.actioncommands, function (obj) { return obj.action === key; }) === -1) disabledSettingsPanes.push(val);
                     });
+
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
                     });
 
                     appsInitialized.fail(def.reject);
                 }).fail(function (response) {
-                    notifications.yell('error', response.error_desc);
+                    yell('error', response.error_desc);
                 }).always(function () {
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
@@ -287,7 +291,8 @@ define('io.ox/settings/main', [
         tree.preselect(_.url.hash('folder'));
 
         // select tree node on expand
-        tree.on('open', function (id) {
+        tree.on('open', function (id, autoOpen) {
+            if (autoOpen) return;
             if (_.device('smartphone')) return;
             select(id, undefined, undefined, { focus: true, focusPane: true });
         });
@@ -472,7 +477,7 @@ define('io.ox/settings/main', [
                                 }
                             }).done(function (resp) {
                                 fillUpURL.resolve(declaration.url.replace('[token]', resp.token));
-                            }).fail(require('io.ox/core/notifications').yell);
+                            }).fail(yell);
                         });
                     } else {
                         fillUpURL.resolve(declaration.url);
@@ -518,7 +523,13 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
-        if (!capabilities.has('guest')) {
+        var submodules = _(keychainAPI.submodules).filter(function (submodule) {
+            return !submodule.canAdd || submodule.canAdd.apply(this);
+        });
+        // do not show accounts for guest
+        // show accounts if user has webmail
+        // show accounts if user has submodules which can be added
+        if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
                 index: 200,
@@ -612,7 +623,7 @@ define('io.ox/settings/main', [
             .fail(function fail(result) {
                 var errorMsg = (result && result.error) ? result.error + ' ' : '';
                 errorMsg += gt('Application may not work as expected until this problem is solved.');
-                notifications.yell('error', errorMsg);
+                yell('error', errorMsg);
             });
     });
 

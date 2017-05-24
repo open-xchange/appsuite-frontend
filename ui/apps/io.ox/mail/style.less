@@ -13,13 +13,21 @@
 
 // definitions
 @icon-size: 16px;
+@flag-color: #ffb300;
+@flag-icon: "\f005"; // fa-star
+@flag-icon-unset: "\f006"; // fa-star-o
 
 // phone
 @phone-font-size: 16px;
 @phone-line-height: 26px;
 
-// preview panes
+// helper
+.fixed-width {
+    width: 1.28571429em;
+    text-align: center;
+}
 
+// preview panes
 .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height; }
 .window-container.mail-categories-visible .rightside.classic-toolbar-visible .thread-view-control { top: @toolbar-height * 2; }
 
@@ -101,6 +109,30 @@
     }
 }
 
+.io-ox-mail-window .list-view-control.toolbar-top-visible .toolbar.top,
+.io-ox-mail-window .list-view-control.toolbar-bottom-visible .toolbar.bottom {
+    display: flex;
+    // button label ellipsis
+    .dropdown {
+        // disable flexbox auto calculation
+        min-width: 0;
+        // pull right
+        margin-left: auto;
+        & > a {
+            display: flex;
+            align-items: baseline;
+            span { .ellipsis(); }
+            padding-left: 8px;
+        }
+    }
+    // toolbar elements won't shrink
+    & > *:not('.dropdown') {
+        min-width: 0;
+        flex: 0 0 auto;
+        padding-right: 8px;
+    }
+}
+
 .list-item.small {
     padding-top: 7px;
     padding-bottom: 7px;
@@ -132,8 +164,9 @@
         &.column-2 { width: @icon-width; text-align: center; }
         &.column-3 { width: @icon-width; text-align: center; }
         &.column-4 { width: 35%; padding-right: 10px; }
-        &.column-5 { width: 55%; padding-right: 10px; }
-        &.column-6 { width: 140px; text-align: right; }
+        &.column-5 { width: @icon-width; text-align: center; }
+        &.column-6 { width: 55%; padding-right: 10px; }
+        &.column-7 { width: 140px; text-align: right; }
     }
 
     &.list-view .list-item {
@@ -248,14 +281,39 @@
     }
 
     section.attachments,
-    section.notifications { display: none; }
+    section.notifications,
+    section.error { display: none; }
 
     &.expanded section {
         &.attachments,
-        &.notifications { display: block; }
+        &.notifications,
+        &.error { display: block; }
         // for proper overflow behavior (see bug 45248)
         &.body { display: table; }
         &.attachments:empty { display: none;  }
+    }
+
+    section.error {
+        color: #767676;
+        position: relative;
+        font-size: 13px;
+        line-height: 16px;
+        padding: 16px 16px 16px 72px;
+        h4 {
+            margin: 3px 0 1px 0;
+            font-size: inherit;
+            line-height: inherit;
+            font-weight: bold;
+        }
+        p {
+            margin-bottom: 8px;
+        }
+        i.fa {
+            position: absolute;
+            left: 20px;
+            top: 19px;
+            font-size: 32px;
+        }
     }
 
     section.warnings {
@@ -397,7 +455,8 @@
 
         position: relative;
         line-height: 16px;
-        padding: (@default-padding + 3) @default-padding (@default-padding - 5) (@picture-padding + @default-padding + 24px);
+        padding: (@default-padding + 3) 0 8px (@picture-padding + @default-padding + 24px);
+
         min-height: 64px;
 
         .fa-paperclip.has-attachments {
@@ -415,28 +474,38 @@
     .detail-view-row {
         position: relative;
 
-        .date { float: right; margin-left: 16px; margin-right: 27px; }
         .recipients { float: left; }
         .priority { font-size: 14px; }
         .flag-picker {
-            float: none;
-            position: absolute;
-            top: 0;
-            right: 1px;
-            width: 12px; // to match fa-bars
             text-align: right;
             a { color: #333; }
         }
         .actions {
-            font-size: 13px;
-            margin: 8px 0 0 0;
+            margin: 5px 8px 0 0;
             & > li {
                 display: inline-block;
+                a {
+                    display: inline-block;
+                    &:focus {
+                        background: #3C73AA;
+                        color: #fff;
+                        outline: 0;
+                        text-decoration: none;
+                    }
+                }
+                &:not(.dropdown) a, &.dropdown i { padding: 4px 8px; }
             }
             .fa-bars {
                 font-size: 14px;
             }
         }
+    }
+
+    .detail-view-row.row-1 {
+        display: flex;
+        margin-right: @default-padding;
+        .from { flex: 1; }
+        & > *:not(:first-child) { margin-left: @default-padding; }
     }
 
     &:not(.expanded) {
@@ -501,8 +570,6 @@
     }
 }
 
-// ListView
-
 .mail-item {
 
     .contact-picture {
@@ -547,12 +614,6 @@
         html.high-contrast & { opacity: 1; }
     }
 
-    .actions {
-        font-size: 14px;
-
-        a { padding-left: @default-padding; }
-    }
-
     @item-line-height: 20px;
 
     .list-item-content {
@@ -580,7 +641,7 @@
 
         .drag-title {opacity: 0.75; }
 
-        i.flag {
+        i.color-flag, .flag .fa {
             font-size: 18px;
             padding: 0;
             margin: 0 0 0 (@default-padding / 2);
@@ -617,17 +678,17 @@
 
     .list-item.deleted {
         text-decoration: line-through;
-        color: rgba(0, 0, 0, 0.20);
+        color: #767676;
+        .date, .drag-title { opacity: 1; }
     }
 
+    &.visible-selection .list-item.selected.deleted {
+        color: #626262;
+    }
 
     &.visible-selection.has-focus .list-item.selected {
-        i {
-            opacity: 0.9;
-            &:not(.flag):not(.has-attachments) { color: rgba(255, 255, 255, 0.50); }
-        }
         .fa-paperclip.has-attachments { opacity: 1; }
-        &.deleted { color: rgba(255, 255, 255, 0.50); }
+        &.deleted { color: #f4f4f4; }
     }
 
     .priority {
@@ -658,9 +719,7 @@
         max-width: 50%;
 
         .breadcrumb-link {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            .ellipsis();
             width: 100%;
         }
     }
@@ -810,6 +869,21 @@
             .flex(0 0 auto);
             .align-self(flex-start);
         }
+    }
+}
+
+//
+// Flag
+//
+
+.list-item {
+    .flag {
+        color: rgba(0, 0, 0, 0.5);
+        .fa:before { content: @flag-icon-unset; }
+    }
+    &.flagged .flag {
+        color: @flag-color;
+        .fa:before { content: @flag-icon; }
     }
 }
 
@@ -978,6 +1052,7 @@ textarea.inplace-editor {
 // Detail view
 
 .rightside.mail-detail-pane {
+    z-index:1;
     background-color: #eee;
 
     .thread-view-control,
@@ -1015,11 +1090,6 @@ textarea.inplace-editor {
     .description {
         padding-left: 34px;
         padding-bottom: 6px;
-    }
-
-    .center-childs {
-        display: flex;
-        align-items: center;
     }
 
     .category-item {
@@ -1080,7 +1150,10 @@ textarea.inplace-editor {
 }
 
 body.dragging .categories-toolbar-container {
-    .link { line-height: 20px; }
+    .link {
+        line-height: 20px;
+        height: 20px;
+    }
     .category-drop-helper {
         display: block;
         padding: 0 16px;
@@ -1120,15 +1193,16 @@ body.dragging .categories-toolbar-container {
         max-width: 160px;
         min-width: 0;
 
-        &.selected { background: white; }
+        &.selected {
+            background: white;
+            a { font-weight: 500; }
+        }
 
         .link {
             padding: 0 16px;
             display: flex;
             width: 100%;
             color: inherit;
-
-            &:focus { background-color: inherit; }
 
             .category-icon { padding-right: 8px; }
 
@@ -1147,11 +1221,7 @@ body.dragging .categories-toolbar-container {
         }
     }
 
-    .truncate {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+    .truncate { .ellipsis(); }
 }
 
 @media (max-width: 768px) {
@@ -1252,9 +1322,11 @@ body.dragging .categories-toolbar-container {
         .mail-detail:not(.expanded) .recipients { max-height: initial; }
     }
 
-    .mail-item  {
-
+    .mail-detail {
         .subject { margin-right: 32px; }
+    }
+
+    .mail-item  {
 
         .unread-toggle {
             display: inline-block;
@@ -1351,25 +1423,31 @@ body.dragging .categories-toolbar-container {
                 li.item { line-height: 35px; }
                 &.preview li.item .file { display: block; }
             }
-            .list-unstyled.io-ox-inline-links { display:none; }
-            .links { display: block; }
+            .links { display:none; }
         }
 
         &:not(.expanded) .recipients { opacity: 1; }
 
         & > header {
             &.mobile-detail-view-mail {
+                // use fa-fw for mobile
+                .fa { .fixed-width; }
                 .date {
                     margin-left: 0;
                     display: inline-block;
                     float: none;
                 }
-
-                .flag-picker {
+                .flags {
                     display: inline-block;
-                    float: none;
-                    position: absolute;
-                    right: @default-padding;
+                    float: right;
+                    margin-right: @default-padding;
+                    & > * {
+                        margin-left: 8px;
+                        float: none;
+                    }
+                }
+                .priority {
+                    margin-right: @default-padding;
                 }
             }
         }
@@ -1380,20 +1458,42 @@ body.dragging .categories-toolbar-container {
 
 // simple workaround in case people try to print the entire window
 
-@media print {
+@media print{
+    // none or one mail selected
     // avoid absolute positioning; <body> needs to be the scrollpane otherwise we get no multipage print outs
-    .abs, .atb, .window-container, .window-body, .rightside { position: static; }
+    .abs, .atb, .window-container, .window-body, .rightside.selection-one, .rightside.selection-empty { position: static; }
     // hide everything we don't need
     #io-ox-banner, #io-ox-topbar, .window-sidepanel, .categories-toolbar-container, .classic-toolbar-container,
-    .leftside, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
+    .leftside.selection-one, .leftside.selection-empty, .back-navigation, ul.actions, .toggle-all, .contact-picture, .unread-toggle, .show-all-recipients {
         display: none !important;
     }
-    .thread-view-list, .rightside { padding: 0 !important; overflow: visible !important; }
-    .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
-    .detail-view-header {
+    .rightside.selection-empty .thread-view-list, .rightside.selection-one .thread-view-list, .rightside.selection-one, .rightside.selection-empty { padding: 0 !important; overflow: visible !important; }
+    .rightside.selection-empty .thread-view.list-view .list-item, .rightside.selection-one .thread-view.list-view .list-item { margin-bottom: 0; border-bottom: 1px solid #ddd; }
+    .rightside.selection-empty .detail-view-header, .rightside.selection-one .detail-view-header {
         padding-left: 16px !important;
         .recipients {
             .io-ox-label, .person-link, .delimiter { display: inline-block !important; }
         }
+    }
+
+    // multiple mails selected
+    .rightside.selection-multiple {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple {
+        position: static !important;
+        width: 100% !important;
+        border-right: none !important;
+    }
+
+    .leftside.selection-multiple .toolbar, .leftside.selection-multiple .list-item, .leftside.selection-multiple .list-item-checkmark {
+        display: none !important;
+    }
+
+    .leftside.selection-multiple .list-item.selected {
+        display: block !important;
+        padding-left: 16px;
+        padding-right: 16px;
     }
 }

@@ -41,6 +41,17 @@ define('io.ox/core/folder/node', [
             'keydown':                 'onKeydown'
         },
 
+        addA11yDescription: function (str) {
+            this.options.a11yDescription.push(str);
+            this.options.a11yDescription = _.uniq(this.options.a11yDescription);
+            this.renderTooltip();
+        },
+
+        getA11yDescription: function () {
+            if (_.isEmpty(this.options.a11yDescription)) return '';
+            return '. ' + this.options.a11yDescription.join('.');
+        },
+
         list: function () {
             var o = this.options;
             return api.list(o.model_id, { all: o.tree.all });
@@ -151,7 +162,7 @@ define('io.ox/core/folder/node', [
             this.repaint();
         },
 
-        toggle: function (state) {
+        toggle: function (state, autoOpen) {
             // for whatever reason, this.options might be nulled (see bug 37483)
             if (this.options === null) return;
             var isChange = (this.options.open !== state);
@@ -159,7 +170,7 @@ define('io.ox/core/folder/node', [
             this.onChangeSubFolders();
             this.renderCounter();
             if (!isChange) return;
-            this.options.tree.trigger(state ? 'open' : 'close', this.folder);
+            this.options.tree.trigger(state ? 'open' : 'close', this.folder, autoOpen);
         },
 
         // open/close folder
@@ -238,23 +249,23 @@ define('io.ox/core/folder/node', [
 
         // respond to cursor left/right
         onKeydown: function (e) {
-            // already processed?
-            if (e.isDefaultPrevented()) return;
-            // not cursor right/left?
-            if (e.which !== 37 && e.which !== 39) return;
-            // avoid further processing
+            // already processed or not cursor right/left
+            if (e.isDefaultPrevented() || !/37|39/.test(e.which)) return;
+
             e.preventDefault();
-            // skip unless folder has subfolders
-            if (!this.hasSubFolders()) return;
-            // cursor right?
+            // skip cursor right unless folder has subfolders
+            if (!this.hasSubFolders() && e.which === 39) return;
             var o = this.options;
-            if (e.which === 39 && !o.open) {
-                o.open = true;
-                this.onChangeSubFolders();
-            } else if (e.which === 37 && o.open) {
-                // cursor left?
-                o.open = false;
-                this.onChangeSubFolders();
+
+            // cursor right
+            if (e.which === 39) {
+                if (!o.open && e.which === 39) this.toggle(true); // open subfolders if subfolders are closed
+                else this.$el.find('ul.subfolders:first > li:first-child').trigger('click'); // select first subfolder if folder has subfolder and subfolders are open
+
+            // cursor left
+            } else if (e.which === 37) {
+                if (o.open) this.toggle(false); // close folder with subfolders
+                else if (o.indent && o.level > 0) o.parent.$el.trigger('click'); // move up one folder (parent)
             }
         },
 
@@ -328,7 +339,8 @@ define('io.ox/core/folder/node', [
             this.isVirtual = this.options.virtual || /^virtual/.test(this.folder);
             this.collection = api.pool.getCollection(o.model_id, o.tree.all);
             this.isReset = false;
-
+            this.realNames = options.tree.realNames;
+            this.id = _.uniqueId(o.tree.id + '-node-');
             this.$ = {};
 
             // make accessible via DOM
@@ -366,36 +378,26 @@ define('io.ox/core/folder/node', [
                 offset = 22;
             }
 
-            if (!_.isEmpty(o.a11yDescription)) {
-                var uid = _.uniqueId('description-');
-                this.$el.attr('aria-describedby', uid);
-            }
-
-            // folder
-            this.$.selectable = $('<div class="folder-node" aria-hidden="true">')
-                .css('padding-left', (o.level * this.indentation) + offset).append(
-                    this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
-                    this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
-                    $('<div class="folder-label">').append(
-                        this.$.label = $('<div>')
-                    ),
-                    this.$.counter = $('<div class="folder-counter">')
-            );
-
-            var a11yuid = _.uniqueId('description-');
             var dsc = !!this.model.get('isDSC');
 
             // draw scaffold
             this.$el
                 .attr({
+                    'id': this.id,
                     'data-id': this.folder,
                     'data-model': o.model_id,
-                    'data-contextmenu-id': o.contextmenu_id
+                    'data-contextmenu-id': o.contextmenu_id,
+                    'aria-label': this.getTitle()
                 })
                 .append(
-                    this.$.selectable,
-                    // tag for screenreader only (aria-description)
-                    this.$.a11y = $('<span class="sr-only">').attr('id', a11yuid),
+                    this.$.selectable = $('<div class="folder-node" aria-hidden="true">').css('padding-left', (o.level * this.indentation) + offset).append(
+                        this.$.arrow = o.arrow ? $('<div class="folder-arrow invisible"><i class="fa fa-fw"></i></div>') : [],
+                        this.$.icon = $('<div class="folder-icon"><i class="fa fa-fw"></i></div>'),
+                        this.$.label = $('<div class="folder-label">').text(this.getTitle()),
+                        this.$.counter = $('<div class="folder-counter">'),
+                        this.$.buttons = $('<div class="folder-buttons">')
+                    ),
+
                     // subfolders
                     this.$.subfolders = $('<ul class="subfolders" role="group">')
                 );
@@ -404,23 +406,13 @@ define('io.ox/core/folder/node', [
             if (o.headless) {
                 this.$el.removeClass('selectable');
                 this.$.selectable.remove();
-                this.$el.attr({
-                    'role': 'presentation'
-                });
+                this.$.subfolders.attr('role', 'presentation');
             } else {
                 this.$el.attr({
-                    'aria-describedby': a11yuid,
-                    'aria-level': o.level + 1,
                     'aria-selected': false,
                     'role': 'treeitem',
                     'tabindex': '-1'
                 });
-            }
-
-            // Remove useless a11y nodes
-            if (_.isEmpty(this.options.a11yDescription)) {
-                this.$.a11y.remove();
-                this.$el.removeAttr('aria-describedby');
             }
 
             // sortable
@@ -436,7 +428,6 @@ define('io.ox/core/folder/node', [
 
             // add contextmenu (only if 'app' is defined; should not appear in modal dialogs, for example)
             if ((!this.isVirtual || o.contextmenu) && o.tree.options.contextmenu && o.tree.app && _.device('!smartphone')) {
-                this.$el.attr({ 'aria-haspopup': true });
                 this.renderContextControl();
             }
 
@@ -500,63 +491,55 @@ define('io.ox/core/folder/node', [
         renderCounter: function () {
             var value = this.getCounter();
             this.$.selectable.toggleClass('show-counter', value > 0);
-            if (value > 99) value = '99+';
+            if (value > 999) value = '999+';
             this.$.counter.text(value === 0 ? '' : value);
         },
 
         getTitle: function () {
-            return this.model.get('display_title') || this.options.title || this.model.get('title') || '';
-        },
-
-        renderTitle: function () {
-            var title = this.getTitle();
-            this.$.label.text(title);
-        },
-
-        renderA11yNode: function () {
-            //draw even if there is no description or old descriptions cannot be cleared
-            if (!_.isEmpty(this.options.a11yDescription)) {
-                this.$.a11y.text(this.options.a11yDescription.join('. '));
-            } else {
-                this.$.a11y.remove();
-                this.$el.removeAttr('aria-describedby');
-            }
+            var title = this.model.get('display_title') || this.options.title || this.model.get('title') || '';
+            return (this.realNames === true ? this.model.get('folder_name') || title : title);
         },
 
         renderTooltip: function () {
             // don't overwrite custom title
             if (this.options.title) return;
             if (!this.model.has('title')) return;
-            var summary = [];
+            var summary = [], a11ysummary = [];
 
             if (this.model.supports('count_total')) {
                 var data = this.model.toJSON();
                 // wrong counts for unifiedroot folder
                 if (account.isUnifiedRoot(this.model.get('id'))) data = _.pick(data, 'title');
-                if (_.isNumber(data.total) && data.total >= 0) summary.push(gt('Total: %1$d', data.total));
-                if (_.isNumber(data.unread) && data.unread >= 0) summary.push(gt('Unread: %1$d', data.unread));
+                if (_.isNumber(data.total) && data.total >= 0) {
+                    //.# Used for the total count of objects or mails in a folder
+                    summary.push(gt('Total: %1$d', data.total));
+                    if (data.total > 0) a11ysummary.push(gt('%1$d total', data.total));
+                }
+                if (_.isNumber(data.unread) && data.unread >= 0) {
+                    //.# Used for the count of unread mails in a folder
+                    summary.push(gt('Unread: %1$d', data.unread));
+                    if (data.unread > 0) a11ysummary.push(gt('%1$d unread', data.unread));
+                }
                 summary = summary.join(', ');
+                a11ysummary = a11ysummary.reverse().join(', ');
                 if (summary) summary = ' (' + summary + ')';
+                if (a11ysummary) a11ysummary = ', ' + a11ysummary;
             }
-
-            this.$el.attr({
-                'title': this.model.get('title') + summary
-            });
+            this.$el.attr('aria-label', this.getTitle() + a11ysummary + this.getA11yDescription());
+            this.$.selectable.attr('title', this.getTitle() + summary);
         },
 
         renderContextControl: function () {
+            var title = this.getTitle();
+            this.$el.attr('aria-haspopup', true);
             this.$.selectable.append(
-                $('<a href="#" role="button" class="folder-options contextmenu-control">')
-                .attr({
+                $('<a tabindex="-1" href="#" role="button" class="folder-options contextmenu-control" data-toggle="dropdown">').attr({
                     'data-contextmenu': this.options.contextmenu || 'default',
-                    'aria-label': this.options.title || !this.model.has('title') ?
-                        gt('Folder-specific actions') :
+                    'title': !title ? gt('Folder-specific actions') :
                         //#. %1$s is the name of the folder
-                        gt('Folder-specific actions for %1$s', this.model.get('title'))
+                        gt('Actions for %1$s', title)
                 })
-                .append(
-                    $('<i class="fa fa-bars" aria-hidden="true">')
-                )
+                .append($('<i class="fa fa-bars" aria-hidden="true">'))
             );
         },
 
@@ -592,7 +575,6 @@ define('io.ox/core/folder/node', [
             }
 
             if (!iconClass) {
-
                 infostoreDefaultFolder = String(api.getDefaultFolder('infostore'));
                 attachmentView = settings.get('folder/mailattachments', {});
                 allAttachmentsFolder = String(attachmentView.all);
@@ -622,13 +604,11 @@ define('io.ox/core/folder/node', [
         render: function () {
             this.renderAttributes();
             this.renderEmpty();
-            this.renderTitle();
             this.renderTooltip();
             this.renderCounter();
             this.renderIcon();
             this.onChangeSubFolders();
             ext.point('io.ox/core/foldertree/node').invoke('draw', this.$el, ext.Baton({ view: this, data: this.model.toJSON() }));
-            this.renderA11yNode();
             return this;
         },
 

@@ -23,46 +23,45 @@ define('io.ox/metrics/adapters/context', [
     // localstorage event 'database'
     var point = ext.point('io.ox/metrics/adapter'),
         maxlength = 10,
-        store = {};
+        store = {},
+        list;
 
     _.extend(store, {
         init: function () {
-            if (store.list) return;
-            store.list = JSON.parse(
+            if (list) return;
+            list = JSON.parse(
                 localStorage.getItem('metrics.adapter.context.storage') || '[]'
             );
         },
         show: function () {
             if (!console.table) return;
-            console.table(
-              _.map(store.list)
-            );
+            console.table(list);
         },
         get: function () {
-            return _.clone(store.list);
+            return _.clone(list);
         },
         save: function () {
             localStorage.setItem(
                 'metrics.adapter.context.storage',
-                JSON.stringify(store.list)
+                JSON.stringify(list)
             );
         },
         reset: function () {
-            store.list = [];
+            list = [];
             store.save();
         },
         add: function (type, baton) {
             baton = baton || {};
             var id = baton.id || type;
             // add to store
-            store.list = store.list || [];
+            list = list || [];
             // queue with max length
-            store.list.unshift({
+            list.unshift({
                 time: moment(moment.now()).format('HH:mm:ss:SS'),
                 id: id,
                 type: type
             });
-            store.list.splice(maxlength, 1);
+            list.splice(maxlength, 1);
             // save to localstorage
             store.save();
         }

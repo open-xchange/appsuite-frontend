@@ -21,10 +21,12 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
+    'io.ox/core/util',
+    'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -34,7 +36,7 @@ define('io.ox/files/api', [
     // Backbone Model & Collection for Files
     //
 
-    var regUnusableType = /^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i;
+    var regUnusableType = (/^application\/(force-download|binary|x-download|octet-stream|vnd|vnd.ms-word.document.12|odt|x-pdf)$/i);
 
     // basic model with custom cid
     api.Model = backbone.Model.extend({
@@ -72,8 +74,13 @@ define('io.ox/files/api', [
                     source: 'pim'
                 };
 
-            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive')) {
+            } else if (_.isString(attributes.guardUrl) || (attributes.source === 'guardDrive') || (attributes.source === 'guardMail')) {
                 normalizedAttrs = attributes;
+                // map content_type to file_mimetype for mail attachments
+                if (attributes.content_type && !normalizedAttrs.file_mimetype) {
+                    normalizedAttrs.file_mimetype = attributes.content_type;
+                }
+
             } else {
                 // drive
                 normalizedAttrs = attributes;
@@ -100,52 +107,71 @@ define('io.ox/files/api', [
         isFolder: function () {
             return this.has('standard_folder');
         },
-
         isFile: function () {
             // we cannot check for "filename", because there are files without a file; yep!
             // so we rather check if it's not a folder
             return !this.isFolder() && (this.get('source') === 'drive' || this.get('source') === 'guardDrive');
         },
 
+        isSVG: function (type) {
+            return (/^image\/svg/).test(type || this.getMimeType());
+        },
         isImage: function (type) {
-            // bypass SVG as they can contain malicious XML
-            // See Bug #50748
-            if ((/^image\/svg/).test(type)) return false;
-            return (/^image\//).test(type || this.getMimeType());
+            return (
+                (/^image\//).test(type || this.getMimeType()) &&
+
+                // bypass SVG as they can contain malicious XML
+                // See Bug #50748
+                !this.isSVG(type)
+            );
         },
 
         isAudio: function (type) {
-            return /^audio\//.test(type || this.getMimeType());
+            return (/^audio\//).test(type || this.getMimeType());
         },
-
         isVideo: function (type) {
-            return /^video\//.test(type || this.getMimeType());
+            return (/^video\//).test(type || this.getMimeType());
         },
 
         isOffice: function (type) {
-            return /^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/.test(type || this.getMimeType());
+            return (/^application\/(msword|excel|powerpoint|vnd\.(ms-word|ms-excel|ms-powerpoint|oasis|openxmlformats))/).test(type || this.getMimeType());
         },
 
         isPDF: function (type) {
-            return /^application\/pdf$/.test(type || this.getMimeType());
+            return (/^application\/pdf$/).test(type || this.getMimeType());
+        },
+
+        isZIP: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+            return (/^application\/zip$/).test(type || this.getMimeType());
         },
 
         isText: function (type) {
             return /^(text\/plain|application\/rtf|text\/rtf)$/.test(type || this.getMimeType());
         },
 
+        isWordprocessing: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/(?:msword|vnd\.(?:ms-word|openxmlformats-officedocument\.wordprocessingml|oasis\.opendocument\.text))/).test(type || this.getMimeType());
+        },
+        isSpreadsheet: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPresentation` that already did exist.
+            return (/^application\/(?:excel|vnd\.(?:ms-excel|openxmlformats-officedocument\.spreadsheetml|oasis\.opendocument\.spreadsheet))/).test(type || this.getMimeType());
+        },
         isPresentation: function (type) {
-            return /^application\/(powerpoint|vnd.(ms-powerpoint|openxmlformats-officedocument.presentationml|oasis.opendocument.presentation))/.test(type || this.getMimeType());
+            return (/^application\/(?:powerpoint|vnd\.(?:ms-powerpoint|openxmlformats-officedocument\.presentationml|oasis\.opendocument\.presentation))/).test(type || this.getMimeType());
         },
 
+        isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
+            return (/^application\/pgp(?:\-encrypted)*$/).test(type) || this.isGuard();
+        },
         isGuard: function () {
-            return /guard/.test(this.get('source'));
+            return (/^guard/).test(this.get('source'));
         },
 
         isEncrypted: function () {
-            if (this.isGuard()) return (true);
-            // check if file has "guard" file extension
-            return /\.(grd|grd2|pgp)$/.test(this.get('filename'));
+            return (
+                this.isPgp() ||
+                // check if file has "guard" file extension
+                (/\.(grd|grd2|pgp)$/).test(this.get('filename'))
+            );
         },
 
         isLocked: function () {
@@ -153,7 +179,7 @@ define('io.ox/files/api', [
         },
 
         isMailAttachment: function () {
-            return this.get('source') === 'mail';
+            return (this.get('source') === 'mail' || this.get('source') === 'guardMail');
         },
 
         isPIMAttachment: function () {
@@ -171,6 +197,20 @@ define('io.ox/files/api', [
         getExtension: function () {
             var parts = String(this.get('filename') || '').split('.');
             return parts.length === 1 ? '' : parts.pop().toLowerCase();
+        },
+
+        getGuardExtension: function () {
+            var extension;
+            var parts = String(this.get('filename') || '').split('.');
+
+            // If has extension .xyz.pgp, remove the pgp and return extension
+            if ((parts.length > 2) && (parts.pop().toLowerCase() === 'pgp')) {
+                extension = parts[parts.length - 1];
+            } else {
+                extension = '';
+            }
+
+            return extension;
         },
 
         getMimeType: function () {
@@ -192,8 +232,16 @@ define('io.ox/files/api', [
         },
 
         getGuardMimeType: function () {
-            if (this.get('meta') && this.get('meta').OrigMime) return this.get('meta').OrigMime;
-            return this.getMimeType();
+            var meta = this.get('meta');
+            var origMime = meta && meta.OrigMime;
+
+            // no original mime or unusable mime type?
+            if (!origMime || regUnusableType.test(origMime)) {
+                // return mime type based on file extension
+                origMime = api.mimeTypes[this.getGuardExtension()] || this.getMimeType();
+            }
+
+            return origMime;
         },
 
         getFileType: function () {
@@ -207,30 +255,27 @@ define('io.ox/files/api', [
         },
 
         getGuardType: function () {
-            var parts = String(this.get('filename') || '').split('.');
-            if (parts.length < 3) return this.getFileType();
-            // If has extension .xyz.pgp, remove the pgp and test extension
-            if (parts.pop().toLowerCase() === 'pgp') {
-                var extension = parts[parts.length - 1];
+            var extension = this.getGuardExtension();
+            if (extension) {
                 for (var type in this.types) {
-                    if (this.types[type].test(extension)) return type;
+                    if (this.types[type].test(extension)) { return type; }
                 }
             }
             return this.getFileType();
         },
 
         types: {
-            image: /^(gif|bmp|tiff|jpe?g|gmp|png)$/,
-            audio: /^(aac|mp3|m4a|m4b|ogg|opus|wav)$/,
-            video: /^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/,
-            vcf:   /^(vcf)$/,
-            doc:   /^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/,
-            xls:   /^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/,
-            ppt:   /^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/,
-            pdf:   /^pdf$/,
-            zip:   /^(zip|tar|gz|rar|7z|bz2)$/,
-            txt:   /^(txt|md)$/,
-            guard: /^(grd|grd2|pgp)$/
+            image: (/^(gif|bmp|tiff|jpe?g|gmp|png)$/),
+            audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
+            video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
+            vcf:   (/^(vcf)$/),
+            doc:   (/^(docx|docm|dotx|dotm|odt|ott|doc|dot|rtf)$/),
+            xls:   (/^(csv|xlsx|xlsm|xltx|xltm|xlam|xls|xlt|xla|xlsb|ods|ots)$/),
+            ppt:   (/^(pptx|pptm|potx|potm|ppsx|ppsm|ppam|odp|otp|ppt|pot|pps|ppa|odg|otg)$/),
+            pdf:   (/^pdf$/),
+            zip:   (/^(zip|tar|gz|rar|7z|bz2)$/),
+            txt:   (/^(txt|md)$/),
+            guard: (/^(grd|grd2|pgp)$/)
         },
 
         supportsPreview: function () {
@@ -248,7 +293,18 @@ define('io.ox/files/api', [
 
         hasWritePermissions: function () {
             var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
-                myself = _(array).findWhere({ entity: ox.user_id });
+                myself = _(array).findWhere({ entity: ox.user_id, group: false });
+
+            // check if there is a permission for a group, the user is a member of
+            // use max permissions available
+            if ((!myself || (myself && myself.bits < 2))) {
+                return array.filter(function (perm) {
+                    // use rampup data so this is not deferred
+                    return perm.group === true && _.contains(ox.rampup.user.groups, perm.entity);
+                }).reduce(function (acc, perm) {
+                    return acc || perm.bits >= 2;
+                }, false);
+            }
             return !!(myself && (myself.bits >= 2));
         }
     });
@@ -331,15 +387,15 @@ define('io.ox/files/api', [
 
     // get URL to open, download, or preview a file
     // options:
-    // - scaletype: contain or cover or auto
+    // - scaleType: contain or cover or auto
     // - height: image height in pixels
-    // - widht: image widht in pixels
+    // - width: image widht in pixels
     // - version: true/false. if false no version will be appended
     api.getUrl = function (file, type, options) {
 
-        options = _.extend({ scaletype: 'contain' }, options);
+        options = _.extend({ scaleType: 'contain' }, options);
 
-        var url = ox.apiRoot + '/files',
+        var url = '/files',
             folder = encodeURIComponent(file.folder_id),
             id = encodeURIComponent(file.id),
             sessionData = '&user=' + ox.user_id + '&context=' + ox.context_id + '&sequence=' + (file.last_modified || 1),
@@ -349,7 +405,7 @@ define('io.ox/files/api', [
             // file name
             name = file.filename ? '/' + encodeURIComponent(file.filename) : '',
             // scaling options
-            scaling = options.width && options.height ? '&scaleType=' + options.scaletype + '&width=' + options.width + '&height=' + options.height : '',
+            scaling = options.width && options.height ? '&scaleType=' + options.scaleType + '&width=' + options.width + '&height=' + options.height : '',
             // avoid having identical URLs across contexts (rather edge case)
             // also inject last_modified if available; needed for "revisionless save"
             // the content might change without creating a new version (which would be part of the URL)
@@ -361,19 +417,33 @@ define('io.ox/files/api', [
 
         switch (type) {
             case 'download':
-                return (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                url = (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
+                break;
             case 'thumbnail':
-                return (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                if (options.noSharding) {
+                    url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                    break;
+                }
+                return util.getShardingRoot((file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling);
             case 'preview':
-                return (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                if (options.noSharding) {
+                    url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                    break;
+                }
+                return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
-                return ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                break;
             case 'play':
-                return url + query + '&delivery=view';
+                url = url + query + '&delivery=view';
+                break;
             // open/view
             default:
-                return url + name + query + '&delivery=view';
+                url = url + name + query + '&delivery=view';
+                break;
         }
+
+        return ox.apiRoot + url;
     };
 
     //
@@ -383,8 +453,10 @@ define('io.ox/files/api', [
     var pool = Pool.create('files', { Collection: api.Collection, Model: api.Model });
 
     // guess 23 is "meta"
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040',
-        allVersionColumns = http.getAllColumns('files', true);
+    // 711 is "number of versions", needed for fixing Bug 52006,
+    // number of versions often changes when editing files
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040';
+    var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
     if (!_.isEmpty(attachmentView)) {
@@ -425,7 +497,7 @@ define('io.ox/files/api', [
                 type: 'error',
                 text: gt('This file could not be uploaded.') +
                     // add native error message unless generic "0 An unknown error occurred"
-                    (!/^0 /.test(e.error) ? '\n' + e.error : '')
+                    (!(/^0 /).test(e.error) ? '\n' + e.error : '')
             };
         }
         return e;
@@ -440,7 +512,9 @@ define('io.ox/files/api', [
         module: 'files',
         getQueryParams: function (params) {
             // Exit early on virtual folders
-            if (/^virtual\//.test(params.folder)) return false;
+            if ((/^virtual\//).test(params.folder)) {
+                return false;
+            }
             return {
                 action: 'all',
                 folder: params.folder || coreSettings.get('folder/infostore'),
@@ -474,6 +548,8 @@ define('io.ox/files/api', [
                     params.parent = params.folder;
                     module = 'folders';
                     params.action = 'list';
+                    // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
+                    params.columns = '1,2,3,5,20,23';
                 }
             }
             if (virtual) {
@@ -481,10 +557,18 @@ define('io.ox/files/api', [
             }
 
             return http.wait().then(function () {
+                if (self.mimeTypeFilter) {
+                    return self.filterByMimeType(params).then(function (data) {
+                        // apply filter
+                        if (self.filter) data = _(data).filter(self.filter);
+                        // useSlice helps if server request doesn't support "limit"
+                        return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                    });
+                }
                 return $.when(self.httpGet(module, params), ox.manifests.loadPluginsFor('io.ox/files/filter'));
             }).then(function (data) {
                 // apply custom filter
-                if (self.filter) data = _(data).filter(self.filter);
+                if (_.isFunction(self.filter)) data = _(data).filter(self.filter);
                 // apply filter extensions
                 data = data.filter(function (file) {
                     return ext.point('io.ox/files/filter').filter(function (p) {
@@ -506,29 +590,39 @@ define('io.ox/files/api', [
 
             if (params.folder === '9') {
                 var folders = [];
+
                 // add all folders and favorites for the "Drive" folder list view
-                return folderAPI.get('virtual/favorites/infostore').then(function (favorites) {
-                    folders.push(favorites);
-                    return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
-                        folders = folders.concat(driveFolders);
-                        switch (String(params.sort)) {
-                            // Name
-                            case '702':
-                                folders = _(folders).sortBy('title');
-                                break;
-                            // Date
-                            case '5':
-                                folders = _.sortBy(folders, function (folder) {
-                                    return folder.last_modified ? folder.last_modified : 0;
+                return folderAPI.get('virtual/favorites/infostore').then(function (favoriteFolder) {
+                    return folderAPI.list('virtual/favorites/infostore').then(function (favorites) {
+                        if (favorites.length) {
+                            folders.push(favoriteFolder);
+                        }
+                        return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                            if (!capabilities.has('share_links || invite_guests')) {
+                                driveFolders = _.filter(driveFolders, function (folder) {
+                                    return folder.id !== 'virtual/myshares';
                                 });
-                                break;
-                            default:
-                                // do nothing
-                        }
-                        if (params.order === 'desc') {
-                            folders.reverse();
-                        }
-                        return folders;
+                            }
+                            folders = folders.concat(driveFolders);
+                            switch (String(params.sort)) {
+                                // Name
+                                case '702':
+                                    folders = _(folders).sortBy('title');
+                                    break;
+                                // Date
+                                case '5':
+                                    folders = _.sortBy(folders, function (folder) {
+                                        return folder.last_modified ? folder.last_modified : 0;
+                                    });
+                                    break;
+                                default:
+                                    // do nothing
+                            }
+                            if (params.order === 'desc') {
+                                folders.reverse();
+                            }
+                            return folders;
+                        });
                     });
                 });
             }
@@ -585,6 +679,91 @@ define('io.ox/files/api', [
                 );
             });
         },
+        filterByMimeType: function (params) {
+            var self = this;
+            return folderAPI.get(params.folder).then(function (folder) {
+                return folderAPI.list(params.folder).then(function (folders) {
+                    // sort by date client-side
+                    if (String(params.sort) === '5') {
+                        folders = _(folders).sortBy('last_modified');
+                    }
+                    if (params.order === 'desc') folders.reverse();
+                    // get remaining limit for files
+                    var split = params.limit.split(/,/),
+                        start = Number(split[0]),
+                        stop = Number(split[1]);
+                    // folders exceed upper limit?
+                    if (folders.length >= stop) return folders.slice(start, stop);
+                    var opt = {
+                        data: {
+                            facets: [
+                                {
+                                    facet: 'folder',
+                                    filter: null,
+                                    value: params.folder
+                                },
+                                {
+                                    facet: 'account',
+                                    filter: null,
+                                    value: folder.account_id
+                                },
+                                {
+                                    facet: 'file_type',
+                                    filter: {
+                                        fields: ['file_extension'],
+                                        queries: self.mimeTypeFilter
+                                    },
+                                    value: self.mimeTypeFilter
+                                }
+                            ],
+                            options: {
+                                includeSubfolders: false,
+                                sort: params.sort,
+                                order: params.order
+                            },
+                            size: stop,
+                            start: start
+                        },
+                        params: {
+                            module: 'files'
+                        }
+                    };
+
+                    // fetch files
+                    return FindAPI.query(opt).then(
+                        function (files) {
+                            files = files.results;
+                            // build virual response of folders, placeholders, and files
+                            // simple solution to get proper slice
+                            var unified = [].concat(
+                                folders,
+                                // fill up with placeholders
+                                new Array(Math.max(0, start - folders.length)),
+                                files
+                            );
+
+                            var result = unified.slice(start, stop);
+                            result.forEach(function (el, index) {
+                                result[index] = mergeDetailInPool(el);
+                            });
+                            self.addIndex(start, params, result);
+                            self.done();
+                            return result;
+                        },
+                        function fail(e) {
+                            if (e.code === 'IFO-0400' && e.error_params.length === 0) {
+                                // IFO-0400 is missing the folder in the error params -> adding this manually
+                                e.error_params.push(params.folder);
+                            }
+                            api.trigger('error error:' + e.code, e);
+                            // this one might fail due to lack of permissions; error are transformed to empty array
+                            if (ox.debug) console.warn('files.filter', e.error, e);
+                            return [];
+                        }
+                    );
+                });
+            });
+        },
         // set higher limit; works much faster than mail
         // we pick a number that looks ok for typical columns, so 5 * 6 * 7 = 210
         PRIMARY_PAGE_SIZE: 210,
@@ -601,12 +780,20 @@ define('io.ox/files/api', [
         api.pool.add('detail', data);
     };
 
+    api.collectionLoader.setMimeTypeFilter = function (mimeTypeFilter) {
+        if (_.isEqual(api.collectionLoader.mimeTypeFilter, mimeTypeFilter)) {
+            return false;
+        }
+        api.collectionLoader.mimeTypeFilter = mimeTypeFilter;
+        return true;
+    };
+
     // resolve a list of composite keys
     api.resolve = (function () {
 
         function map(cid) {
             // return either folder or file models
-            if (/^folder\./.test(cid)) {
+            if ((/^folder\./).test(cid)) {
                 // convert folder model to file model
                 var data = folderAPI.pool.getModel(cid.substr(7)).toJSON();
                 data.folder_id = 'folder';
@@ -1048,7 +1235,10 @@ define('io.ox/files/api', [
         })
         .then(function (response) {
             // if id changes after update (e.g. rename files of some storage systems) update model id
-            if (_.isObject(response) && model && model.get('id') !== response.id) model.set('id', response.id);
+            if (_.isObject(response) && model && model.get('id') !== response.id) {
+                model.set('id', response.id);
+                file.id = response.id;
+            }
         })
         .always(_.lfo(process, prev, model))
         .done(function () {
@@ -1263,6 +1453,10 @@ define('io.ox/files/api', [
          * @return {Deferred} with a boolean
          */
         getCurrentState: function (file, options) {
+
+            //workaround for Bug 53002
+            if (typeof file.current_version === 'boolean') { return $.when(file.current_version); }
+
             return api.versions.load(file, options).then(function (versions) {
                 var currentVersion = false;
                 if (_.isArray(versions)) {
@@ -1338,7 +1532,7 @@ define('io.ox/files/api', [
             // get another copy for array support
             // move, copy, lock, unlock, remove:file handle multiple files at once
             var list = _.isArray(file) ? file : [file];
-
+            folderAPI.isExternalFileStorage(file);
             // reduce attributes
             file = _(file).pick('folder', 'folder_id', 'id', 'version');
 
@@ -1370,6 +1564,7 @@ define('io.ox/files/api', [
                     var changes = arguments[2] || {};
                     if ('title' in changes || 'filename' in changes) api.propagate('rename', file);
                     if ('object_permissions' in changes) api.propagate('permissions', file);
+                    if ('description' in changes) api.propagate('description', file);  //Bug 51571
                     break;
 
                 case 'change:version':
@@ -1426,11 +1621,21 @@ define('io.ox/files/api', [
                     });
 
                 case 'rename':
-                    api.trigger('rename', _.cid(file));
-                    break;
-
+                    return folderAPI.get(file.folder_id).then(function (fileModel) {
+                        // reload the version if it is an external storage file
+                        if (folderAPI.isExternalFileStorage(fileModel)) {
+                            return reloadVersions(file).done(function () {
+                                api.trigger('rename', _.cid(file));
+                            });
+                        }
+                        api.trigger('rename', _.cid(file));
+                    });
                 case 'permissions':
                     api.trigger('change:permissions', _.cid(file));
+                    break;
+
+                case 'description':  //Bug 51571
+                    api.trigger('description', _.cid(file));
                     break;
 
                 case 'unlock':

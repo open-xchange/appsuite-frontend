@@ -80,17 +80,19 @@ define('io.ox/backbone/mini-views/listutils', [
         },
         controlProcessSub: function (opt) {
             opt = _.extend({
-                href: '#',
-                role: 'button',
-                'data-action': 'toggle-process-subsequent',
                 title: gt('Process subsequent rules')
             }, opt);
-            return $('<a>').append($('<i>').addClass('fa ' + opt.faClass)).attr(_.omit(opt, 'faClass'));
+            return $('<a href="#" role="button" data-action="toggle-process-subsequent" class="action">').attr('title', opt.title).append(
+                $('<i class="fa" aria-hidden="true">').addClass(opt.faClass)
+            );
         },
         drawError: function (account) {
             if (!account || !account.get('hasError')) return '';
 
-            return $('<div class="account-error-message">').text(account.get('error'));
+            return $('<div class="error-message">').text(account.get('error'));
+        },
+        drawWarning: function (text) {
+            return $('<div class="warning-message">').text(text);
         }
     };
 });

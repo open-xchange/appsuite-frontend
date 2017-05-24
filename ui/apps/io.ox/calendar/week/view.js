@@ -45,7 +45,6 @@ define('io.ox/calendar/week/view', [
         className:      'week',
 
         columns:        7,      // default value for day columns
-        fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
         minCellHeight:  24,     // min height of one single fragment in px
@@ -58,7 +57,6 @@ define('io.ox/calendar/week/view', [
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
         mode:           0,      // view mode {1: day, 2: workweek, 3: week }
-        workWeekStart:  1,      // workweek start (0=Sunday, 1=Monday, ..., 6=Saturday)
         showDeclined:   false,  // show declined appointments
         limit:          1000,   // limit for number of appointments. If there are more appointments resize drag and opacity functions are disabled for performace resons
 
@@ -70,8 +68,8 @@ define('io.ox/calendar/week/view', [
         folderData:     {},     // current folder object
         restoreCache:   null,   // object, which contains data for save and restore functions
         extPoint:       null,   // appointment extension
-        dayLabelRef:    null,	// used to manage redraw on daychange
-        startLabelRef:  null,	// used to manage redraw on weekchange
+        dayLabelRef:    null,   // used to manage redraw on daychange
+        startLabelRef:  null,   // used to manage redraw on weekchange
 
         // startup options
         options:        {
@@ -81,7 +79,7 @@ define('io.ox/calendar/week/view', [
             allowLasso: true
         },
 
-        // init values from prespective
+        // init values from perspective
         initialize: function (opt) {
             var self = this;
 
@@ -120,7 +118,7 @@ define('io.ox/calendar/week/view', [
 
             // initialize main objects
             _.extend(this, {
-                pane:         $('<div class="scrollpane f6-target" tabindex="0">').on('scroll', this.updateHiddenIndicators.bind(this)),
+                pane:         $('<div class="scrollpane f6-target" tabindex="-1">').on('scroll', this.updateHiddenIndicators.bind(this)),
                 fulltimePane: $('<div class="fulltime">'),
                 fulltimeCon:  $('<div class="fulltime-container">'),
                 fulltimeNote: $('<div class="node">'),
@@ -136,6 +134,7 @@ define('io.ox/calendar/week/view', [
             });
 
             this.app = opt.app;
+            this.perspective = opt.perspective;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
             this.refDate = opt.refDate || moment();
@@ -147,7 +146,7 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 'workweek':
                     this.$el.addClass('workweekview');
-                    this.columns = 5;
+                    this.columns = settings.get('numDaysWorkweek');
                     break;
                 default:
                 case 'week':
@@ -169,7 +168,49 @@ define('io.ox/calendar/week/view', [
                         .on('select', function (date) {
                             self.setStartDate(date);
                             self.trigger('onRefresh');
+                        })
+                        .on('before:open', function () {
+                            this.setDate(self.startDate);
                         });
+                });
+            }
+
+            if (this.mode === 'workweek') {
+                this.listenTo(settings, 'change:numDaysWorkweek change:workweekStart', function () {
+                    function reset() {
+                        var scrollTop = self.pane.scrollTop();
+                        // clean up
+                        self.pane.empty();
+                        self.fulltimePane.empty();
+                        self.fulltimeCon.empty();
+                        self.fulltimeNote.empty();
+                        self.timeline.empty();
+                        self.weekCon.empty();
+                        self.moreAppointmentsIndicators.empty();
+                        // render again
+                        self.columns = settings.get('numDaysWorkweek');
+                        self.setStartDate();
+                        self.render();
+                        self.renderAppointments();
+                        self.perspective.refresh();
+                        // reset pane
+                        self.pane.scrollTop(scrollTop);
+                        self.pane.on('scroll', self.updateHiddenIndicators.bind(self));
+                        if (_.device('!smartphone')) {
+                            self.kwInfo.on('click', $.preventDefault);
+                            require(['io.ox/backbone/views/datepicker'], function (Picker) {
+                                new Picker({ date: self.startDate })
+                                    .attachTo(self.kwInfo)
+                                    .on('select', function (date) {
+                                        self.setStartDate(date);
+                                        self.trigger('onRefresh');
+                                    });
+                            });
+                        }
+                    }
+
+                    if ($('.time:visible', self.pane).length === 0) self.app.getWindow().one('show', reset);
+                    else reset();
                 });
             }
         },
@@ -206,7 +247,7 @@ define('io.ox/calendar/week/view', [
                     console.warn('Too many appointments. There are ' + this.collection.length + ' appointments. The limit is ' + this.limit + '. Resize, drag and opacity are disabled due to performance reasons.');
                     require(['io.ox/core/yell'], function (yell) {
                         //#. %1$n is the maximum number of appointments
-                        yell('warning', gt('There are more than %n appointments in the current calendar. Some features are disabled to due to performance reasons.', self.limit));
+                        yell('warning', gt('There are more than %n appointments in the current calendar. Some features are disabled due to performance reasons.', self.limit));
                     });
                 }
                 this.renderAppointments();
@@ -250,7 +291,7 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 'workweek':
                     // settings independent, set startDate to Monday of the current week
-                    this.startDate.startOf('week').day(this.workWeekStart);
+                    this.startDate.startOf('week').day(settings.get('workweekStart'));
                     break;
                 default:
                 case 'week':
@@ -281,12 +322,33 @@ define('io.ox/calendar/week/view', [
             // init settings
             var self = this;
             this.gridSize = 60 / settings.get('interval', 30);
-            this.workStart = settings.get('startTime', this.workStart);
-            this.workEnd = settings.get('endTime', this.workEnd);
+            this.workStart = settings.get('startTime', this.workStart) * 1;
+            this.workEnd = settings.get('endTime', this.workEnd) * 1;
             settings.on('change', function (key) {
                 switch (key) {
                     case 'interval':
+                        var calculateTimescale = function () {
+                            // save scroll ratio
+                            var scrollRatio = (self.pane.scrollTop() + self.pane.height() / 2) / self.height();
+                            // reset height of .time fields, since the initial height comes from css
+                            $('.time', self.pane).css('height', '');
+                            self.adjustCellHeight(false);
+                            self.renderAppointments();
+                            // restore scroll position from ratio
+                            self.pane.scrollTop(scrollRatio * self.height() - self.pane.height() / 2);
+                        };
+
                         self.gridSize = 60 / settings.get('interval', 30);
+                        self.renderTimeslots();
+                        self.applyTimeScale();
+
+                        // if this function is called while the calendar app is not visible we get wrong height measurements
+                        // so wait until the next show event, to calculate correctly
+                        if ($('.time:visible', self.pane).length === 0) {
+                            self.app.getWindow().one('show', calculateTimescale);
+                        } else {
+                            calculateTimescale();
+                        }
                         break;
                     case 'startTime':
                     case 'endTime':
@@ -428,6 +490,11 @@ define('io.ox/calendar/week/view', [
                     break;
                 case 13:
                     // enter
+                    this.onClickAppointment(e);
+                    break;
+                case 32:
+                    // space
+                    e.preventDefault();
                     this.onClickAppointment(e);
                     break;
                 default:
@@ -622,7 +689,7 @@ define('io.ox/calendar/week/view', [
                         this.lasso = $('<div>')
                             .addClass('appointment lasso')
                             .css({
-                                height: this.gridHeight(),
+                                height: this.cellHeight,
                                 minHeight: 0,
                                 top: this.roundToGrid(mouseY, 'n')
                             })
@@ -752,6 +819,7 @@ define('io.ox/calendar/week/view', [
                     }),
                     model = new TimezoneModel(favorites),
                     dropdown = new Dropdown({
+                        className: 'dropdown timezone-label-dropdown',
                         model: model,
                         label: moment().tz(coreSettings.get('timezone')).zoneAbbr(),
                         tagName: 'div'
@@ -865,7 +933,14 @@ define('io.ox/calendar/week/view', [
 
             // mattes: guess we don't need this any more in week and work week view
             if (!_.device('touch') && this.columns === 1) {
-                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment')).attr('unselectable', 'on'));
+                this.fulltimePane.empty().append(this.fulltimeNote.text(gt('Doubleclick in this row for whole day appointment'))
+                    .addClass('day')
+                    .css('width', '100%')
+                    .attr({
+                        unselectable: 'on',
+                        // only used in dayview, so date is always  0
+                        date: 0
+                    }));
             }
 
             this.fulltimePane.css({ height: (this.options.showFulltime ? 21 : 1) + 'px' });
@@ -887,18 +962,10 @@ define('io.ox/calendar/week/view', [
                 this.fulltimePane
                     .append(day.clone());
 
-                // create timeslots and add days to week container
-                for (var i = 1; i <= this.slots * this.fragmentation; i++) {
-                    day.append(
-                        $('<div>')
-                        .addClass('timeslot')
-                        .addClass((i <= (this.workStart * this.fragmentation) || i > (this.workEnd * this.fragmentation)) ? 'out' : '')
-                        .addClass((i === (this.workStart * this.fragmentation) || i === (this.workEnd * this.fragmentation)) ? 'working-time-border' : '')
-                    );
-                }
-
                 this.weekCon.append(day);
             }
+
+            this.renderTimeslots();
 
             var nextStr = this.columns === 1 ? gt('Next Day') : gt('Next Week'),
                 prevStr = this.columns === 1 ? gt('Previous Day') : gt('Previous Week');
@@ -931,7 +998,7 @@ define('io.ox/calendar/week/view', [
                         self.weekCon
                     ),
                     this.moreAppointmentsIndicators
-                )
+                ).addClass('time-scale-' + this.gridSize)
             );
 
             var renderSecondaryTimeLabels = _.throttle(function () {
@@ -965,6 +1032,34 @@ define('io.ox/calendar/week/view', [
             return this;
         },
 
+        applyTimeScale: function () {
+            var weekViewContainer = $('.week-view-container', this.$el);
+            // remove all classes like time-scale-*
+            weekViewContainer.removeClass(function (index, css) {
+                return (css.match(/(^|\s)time-scale-\S+/g) || []).join(' ');
+            });
+            weekViewContainer.addClass('time-scale-' + this.gridSize);
+        },
+
+        renderTimeslots: function () {
+            var self = this;
+            this.weekCon.children('.day').each(function () {
+                var day = $(this);
+
+                day.empty();
+
+                // create timeslots and add days to week container
+                for (var i = 1; i <= self.slots * self.gridSize; i++) {
+                    day.append(
+                        $('<div>')
+                        .addClass('timeslot')
+                        .addClass((i <= (self.workStart * self.gridSize) || i > (self.workEnd * self.gridSize)) ? 'out' : '')
+                        .addClass((i === (self.workStart * self.gridSize) || i === (self.workEnd * self.gridSize)) ? 'working-time-border' : '')
+                    );
+                }
+            });
+        },
+
         rerenderWorktime: function () {
             this.weekCon.find('.day').each(function () {
                 $(this).find('.timeslot').each(function (i, el) {
@@ -980,7 +1075,7 @@ define('io.ox/calendar/week/view', [
          */
         setScrollPos: function () {
             this.adjustCellHeight();
-            var slotHeight = this.cellHeight * this.fragmentation,
+            var slotHeight = this.cellHeight * this.gridSize,
             // see bug 40297
                 timelineTop = parseFloat(this.timeline[0].style.top) * slotHeight * 0.24;
 
@@ -998,14 +1093,23 @@ define('io.ox/calendar/week/view', [
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
-                Math.max(this.paneHeight / (cells * this.fragmentation),
+                Math.max(this.paneHeight / (cells * this.gridSize),
                 this.minCellHeight)
             );
 
             // only update if height differs from CSS default
             if (this.cellHeight !== this.minCellHeight) {
-                $('.timeslot', this.pane).height(this.cellHeight - 1);
-                $('.time', this.pane).height((this.cellHeight * this.fragmentation) - 1);
+                var timeslots = $('.timeslot', this.pane),
+                    timeLabel = $('.time', this.pane);
+                timeslots.height(this.cellHeight - 1);
+                // compute the label height according to the actual height of the timeslot
+                // this can be different to 1 when dealing with scaled screen resolutions (see Bug 50195)
+                var timeslotHeight = timeslots.get(0).getBoundingClientRect().height,
+                    borderWidth = parseFloat(timeLabel.css('border-bottom-width'), 10);
+                timeLabel.height(timeslotHeight * this.gridSize - borderWidth);
+                // get actual cellHeight from timeslot. This can be different to the computed size due to scaling inside the browser (see Bug 50976)
+                // it is important to use getBoundingClientRect as this contains the decimal places of the actual height ($.fn.height does not)
+                this.cellHeight = timeslots.get(0).getBoundingClientRect().height;
                 // if the cell height changes we also need to redraw all appointments
                 if (redraw) this.renderAppointments();
             }
@@ -1022,7 +1126,7 @@ define('io.ox/calendar/week/view', [
                 today = moment().startOf('day'),
                 tmpDate = moment(this.startDate);
             // something new?
-            if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef) {
+            if (this.startDate.valueOf() === this.startLabelRef && today.valueOf() === this.dayLabelRef && this.columnsRef === this.columns) {
                 if (this.options.todayClass && this.columns > 1) {
                     var weekViewContainer = $('.week-view-container', this.$el);
                     weekViewContainer.find('.' + this.options.todayClass, this.$el).removeClass(this.options.todayClass);
@@ -1037,6 +1141,7 @@ define('io.ox/calendar/week/view', [
 
             this.dayLabelRef = today.valueOf();
             this.startLabelRef = this.startDate.valueOf();
+            this.columnsRef = this.columns;
 
             // refresh dayLabel, timeline and today-label
             this.timeline.hide();
@@ -1128,11 +1233,16 @@ define('io.ox/calendar/week/view', [
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
                     if (model.get('full_time') && this.options.showFulltime) {
+
+                        appointmentStartDate = moment.utc(model.get('start_date')).local(true);
+                        // make sure we have full days when calculating the difference or we might get wrong results
+                        appointmentStartDate.startOf('day');
+
                         fulltimeCount++;
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment(model.get('end_date')).utc().diff(appointmentStartDate.utc(), 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max((moment.utc(model.get('end_date')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
@@ -1321,11 +1431,13 @@ define('io.ox/calendar/week/view', [
             $('.week-container .day>.appointment.modify', this.$el)
                 .resizable({
                     handles: 'n, s',
-                    grid: [0, self.gridHeight()],
+                    grid: [0, self.cellHeight],
                     // see Bug 32753 - Not possible to reduce an appointment to 30 minutes using drag&drop
-                    minHeight: self.gridHeight() - 2,
+                    minHeight: self.cellHeight - 2,
                     containment: 'parent',
                     start: function (e, ui) {
+                        // close sidepopup so it doesn't interfere with dragging/resizing
+                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
                         var d = $(this).data('ui-resizable');
                         // get fresh dimensions as window size and/or timezone favorites might change
                         colWidth = self.$('.day:first').outerWidth();
@@ -1504,7 +1616,7 @@ define('io.ox/calendar/week/view', [
                     }
                 })
                 .draggable({
-                    grid: [colWidth, self.gridHeight()],
+                    grid: [colWidth, self.cellHeight],
                     distance: 10,
                     delay: 300,
                     scroll: true,
@@ -1520,6 +1632,8 @@ define('io.ox/calendar/week/view', [
                         return false;
                     },
                     start: function (e, ui) {
+                        // close sidepopup so it doesn't interfere with dragging/resizing
+                        if (self.perspective && self.perspective.dialog) self.perspective.dialog.close();
                         // write all appointment divs to draggable object
                         var d = $(this).data('ui-draggable');
                         d.my = {
@@ -1798,7 +1912,7 @@ define('io.ox/calendar/week/view', [
          * @return { number }     rounded value
          */
         roundToGrid: function (pos, typ) {
-            var h = this.gridHeight();
+            var h = this.cellHeight;
             switch (typ) {
                 case 'n':
                     typ = 'floor';
@@ -1858,15 +1972,7 @@ define('io.ox/calendar/week/view', [
          * @return { number } height of the grid
          */
         height: function () {
-            return this.cellHeight * this.slots * this.fragmentation;
-        },
-
-        /**
-         * calculate height of a single grid fragment
-         * @return { number } height of a single grid fragment
-         */
-        gridHeight: function () {
-            return this.cellHeight * this.fragmentation / this.gridSize;
+            return this.cellHeight * this.slots * this.gridSize;
         },
 
         /**

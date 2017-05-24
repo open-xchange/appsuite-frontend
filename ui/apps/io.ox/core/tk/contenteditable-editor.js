@@ -13,7 +13,7 @@
 
 /* global tinyMCE: true */
 
-define.async('io.ox/core/tk/contenteditable-editor', [
+define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
@@ -187,6 +187,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         ed.selection.select(dummySpan);
         // and delete it
         ed.execCommand('Delete', false, null);
+        if (!_.device('smartphone')) {
+            // apply default font styles
+            if (mailSettings.get('defaultFontStyle/size') && mailSettings.get('defaultFontStyle/size') !== 'browser-default') ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
+
+            if (mailSettings.get('defaultFontStyle/family') && mailSettings.get('defaultFontStyle/family') !== 'browser-default') ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
+
+            if (mailSettings.get('defaultFontStyle/color') && mailSettings.get('defaultFontStyle/color') !== 'transparent') ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
+        }
     }
 
     function isInsideBlockquote(range) {
@@ -205,8 +213,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         // inside blockquote?
         if (!isInsideBlockquote(range)) return;
         if (!range.startContainer) return;
-        if (_.device('IE')) return;
-        // split; W3C-compliant strategy; older IEs needed a different strategy
         splitContent_W3C(ed);
         ed.dom.events.cancel(e);
     }
@@ -304,6 +310,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
             entity_encoding: 'raw',
 
+            fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
+
             // simpleLineBreaks = true -> false -> enter insert <br>
             // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
             // this one is stored in mail settings
@@ -350,13 +358,20 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
+                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    _.defer(function () {
+                        // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
+                        toolbar.find('span.mce-txt').attr('tabindex', -1);
+                    });
                 });
             }
         };
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
 
-        editor.tinymce(options);
+        require(['3rd.party/tinymce/jquery.tinymce.min']).then(function () {
+            editor.tinymce(options);
+        });
 
         function trimEnd(str) {
             return String(str || '').replace(/[\s\xA0]+$/g, '');
@@ -379,11 +394,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                     return;
                 } else if (_.device('smartphone')) {
-                    composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-                    var topBarHeight = $('#io-ox-topbar').height(),
-                        windowHeaderHeight = el.parents().find('.window-header').height(),
-                        editorPadding = 30;
-                    editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
+
+                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
                     return;
                 }
 
@@ -495,11 +507,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // clean up
             str = trimEnd(str);
             if (!str) return;
-            return textproc.texttohtml(str).then(function (content) {
-                if (/^<blockquote\>/.test(content)) {
-                    content = '<p><br></p>' + content;
-                }
-                set(content);
+            require(['io.ox/mail/detail/content'], function (proc) {
+                set(proc.text2html(str));
                 ed.undoManager.clear();
             });
         };
@@ -683,18 +692,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     editor.css('margin-top', 0);
                 }
             });
+            scrollPane.on('scroll', _.debounce(function () { $('body').click(); }, 1000, true));
         }());
 
         this.destroy = function () {
             this.hide();
             clearKeepalive();
-            if (editor.tinymce()) {
-                //empty node before removing because tiny saves the contents before.
-                //this might cause server errors if there were inline images (those only exist temporarily and are already removed)
-                editor.empty();
-                editor.tinymce().remove();
-            }
-            el = editor = editor.tinymce = initialized = rendered = ed = null;
+            tinyMCE.EditorManager.remove(ed);
+            ed = undefined;
         };
 
         var intervals = [];
@@ -711,9 +716,5 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
     }
 
-    if (!window.tinyMCE) {
-        return require(['3rd.party/tinymce/jquery.tinymce.min'])
-            .then(function () { return Editor; });
-    }
-    return $.Deferred().resolve(Editor);
+    return Editor;
 });

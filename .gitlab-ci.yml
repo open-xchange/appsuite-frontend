@@ -1,0 +1,193 @@
+image: docker:latest
+
+stages:
+  - prepare
+  - build
+  - test
+  - docker
+  - deploy
+
+variables:
+  PROXY_HOST: npm.open-xchange.com
+
+.use_proxy_template: &use_npm_proxy
+  before_script:
+    - export HTTP_PROXY=http://${PROXY_HOST}:8123/
+    - export HTTPS_PROXY=http://${PROXY_HOST}:8123/
+    # custom registry sometimes breaks yarn, deactivate until clarification
+    #- npm config set registry http://${PROXY_HOST}:8080/
+
+.install_deps_template: &install_deps
+  <<: *use_npm_proxy
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  stage: prepare
+  script:
+    - cd ${PROJECT_PATH}
+    - yarn
+    - yarn clean
+    - bower i --silent
+  cache:
+    # use one cache per project and branch
+    # ex.: ui_feature/gitlab_ci
+    key: ${PROJECT_PATH}_${CI_BUILD_REF_NAME}
+    paths:
+      - "${PROJECT_PATH}/node_modules"
+      - "${PROJECT_PATH}/bower_components"
+  artifacts:
+    name: ${PROJECT_PATH}_dependencies
+    expire_in: 2 hours
+    paths:
+      - ${PROJECT_PATH}/node_modules
+      - ${PROJECT_PATH}/bower_components
+
+install_deps_ui:
+  variables:
+    PROJECT_PATH: ui
+  <<: *install_deps
+
+install_deps_help:
+  variables:
+    PROJECT_PATH: help
+  <<: *install_deps
+
+install_deps_saml:
+  variables:
+    PROJECT_PATH: open-xchange-appsuite-saml
+  <<: *install_deps
+
+install_deps_dynamic-theme:
+  variables:
+    PROJECT_PATH: open-xchange-dynamic-theme
+  <<: *install_deps
+
+install_deps_spamexperts:
+  variables:
+    PROJECT_PATH: open-xchange-appsuite-spamexperts
+  <<: *install_deps
+
+install_deps_guidedtours:
+  variables:
+    PROJECT_PATH: guidedtours
+  <<: *install_deps
+
+.build_ui: &build_ui
+  <<: *use_npm_proxy
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  dependencies:
+    - install_deps_ui
+  script:
+    - cd ui
+    - grunt ${CI_BUILD_NAME}
+  stage: build
+  artifacts:
+    expire_in: 2hours
+    paths:
+      - ui/build
+      - ui/dist
+
+# split build_ui into 2 build jobs (running on 2 different runners in parallel)
+# this distributes workload onto 2 runners instead of one and basically halves build time
+lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
+  <<: *build_ui
+
+copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
+  <<: *build_ui
+
+docker_image_ui:
+  script:
+    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ui/
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_BUILD_REF_SLUG}
+  stage: docker
+  dependencies:
+    - install_deps_ui
+    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
+    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+
+test_ui:
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  script:
+    - cd ui
+    - /app/run.sh test
+  stage: test
+  dependencies:
+    - install_deps_ui
+    - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
+    - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+
+.tag docker image: &add_tag
+  stage: deploy
+  dependencies: [] # none
+  script:
+    - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker push ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+
+tag latest:
+  # create a tag on the docker registry, :latest always means last build on develop branch
+  <<: *add_tag
+  only:
+    - develop
+
+tag stable:
+  <<: *add_tag
+  only:
+    - master
+
+tag tags:
+  <<: *add_tag
+  variables:
+    TAG_NAME: ${CI_COMMIT_TAG}
+  only:
+    - tags
+
+.build_ui_plugin_template: &build_ui_plugin
+  <<: *use_npm_proxy
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  stage: build
+  script:
+    - cd ${PROJECT_PATH}
+    - grunt dist:build
+  artifacts:
+    expire_in: 2hours
+    paths:
+      - ${PROJECT_PATH}/build
+      - ${PROJECT_PATH}/dist
+
+build_help:
+  dependencies:
+    - install_deps_help
+  variables:
+    PROJECT_PATH: help
+  <<: *build_ui_plugin
+
+build_guidedtours:
+  dependencies:
+    - install_deps_guidedtours
+  variables:
+    PROJECT_PATH: guidedtours
+  <<: *build_ui_plugin
+
+build_saml:
+  dependencies:
+    - install_deps_saml
+  variables:
+    PROJECT_PATH: open-xchange-appsuite-saml
+  <<: *build_ui_plugin
+
+build_spamexperts:
+  dependencies:
+    - install_deps_spamexperts
+  variables:
+    PROJECT_PATH: open-xchange-appsuite-spamexperts
+  <<: *build_ui_plugin
+
+build_dynamic-theme:
+  dependencies:
+    - install_deps_dynamic-theme
+  variables:
+    PROJECT_PATH: open-xchange-dynamic-theme
+  <<: *build_ui_plugin

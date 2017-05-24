@@ -64,15 +64,15 @@ html.baseline {
     #background-loader {
         display: block !important;
         background-color: transparent;
-        background-image: url(/apps/themes/default/baseline_8_cyan.png);
+        background-image: url('../../default/baseline_8_cyan.png');
         opacity: 0.50;
     }
     &.red #background-loader {
-        background-image: url(/apps/themes/default/baseline_8_red.png);
+        background-image: url('../../default/baseline_8_red.png');
         opacity: 0.30;
     }
     &.gray #background-loader {
-        background-image: url(/apps/themes/default/baseline_8_gray.png);
+        background-image: url('../../default/baseline_8_gray.png');
         opacity: 0.80;
     }
 }
@@ -223,7 +223,7 @@ html.baseline {
     }
 
     .btn-primary {
-        background-color: #3d7dbb;
+        background-color: #3774A8;
         border-color: #1f6da1;
     }
 
@@ -425,4 +425,16 @@ html.baseline {
 @keyframes fa-spin {
   0%    { transform: rotate(0deg);          }
   100%  { transform: rotate(359deg);        }
+}
+
+// a11y placeholder (AA compliant)
+.form-control::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #666666;
+}
+.form-control::-moz-placeholder { /* Mozilla Firefox */
+   color: #666666;
+   opacity: 1;
+}
+.form-control::-ms-input-placeholder { /* Internet Explorer 10-11 */
+   color: #666666;
 }

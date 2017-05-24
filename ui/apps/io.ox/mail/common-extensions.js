@@ -24,13 +24,14 @@ define('io.ox/mail/common-extensions', [
     'io.ox/core/folder/title',
     'io.ox/core/notifications',
     'io.ox/contacts/api',
+    'io.ox/core/api/user',
     'io.ox/core/api/collection-pool',
     'io.ox/core/tk/flag-picker',
     'io.ox/core/capabilities',
     'settings!io.ox/mail',
     'io.ox/core/attachments/view',
     'gettext!io.ox/mail'
-], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
+], function (ext, links, actions, emoji, util, api, account, strings, folderAPI, shortTitle, notifications, contactsAPI, userAPI, Pool, flagPicker, capabilities, settings, attachment, gt) {
 
     'use strict';
 
@@ -50,6 +51,8 @@ define('io.ox/mail/common-extensions', [
                 a11yLabel;
 
             if (util.isUnseen(data)) parts.push(gt('Unread'));
+            if (util.isFlagged(data)) parts.push(gt('Flagged'));
+            if (baton.data.color_label && settings.get('features/flag/color')) parts.push(flagPicker.colorName(baton.data.color_label));
             parts.push(util.getDisplayName(fromlist[0]), data.subject, util.getTime(data.received_date));
             if (size > 1) parts.push(gt.format('Thread contains %1$d messages', size));
             if (data.attachment) parts.push(gt('has attachments'));
@@ -75,31 +78,61 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
+                self = this,
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
                 // search result: use image based on 'addresses'
                 picture = isSearchResult ? undefined : data.picture;
 
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: picture || (addresses && addresses[0] && addresses[0][1]) },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            if (picture) {
+                this.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        { email: picture },
+                        { width: 40, height: 40, effect: 'fadeIn' }
+                    )
+                );
+                return;
+            }
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         senderPicture: function (baton) {
             // shows picture of sender see Bug 41023
-            var addresses = baton.data.from;
-            this.append(
-                contactsAPI.pictureHalo(
-                    $('<div class="contact-picture" aria-hidden="true">'),
-                    { email: addresses && addresses[0] && addresses[0][1] },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                )
-            );
+            var addresses = baton.data.from,
+                self = this;
+
+            // user should be in cache from rampup data
+            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+            userAPI.get({ id: ox.user_id }).then(function (user) {
+                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                    address = addresses && addresses[0] && addresses[0][1],
+                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+
+                self.append(
+                    contactsAPI.pictureHalo(
+                        $('<div class="contact-picture" aria-hidden="true">'),
+                        (useUserApi ? { id: ox.user_id } : { email: address }),
+                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+                    )
+                );
+            });
         },
 
         date: function (baton, options) {
@@ -129,7 +162,8 @@ define('io.ox/mail/common-extensions', [
             // push options through fromPipeline
             _.each(extensions.fromPipeline, function (fn) { fn.call(this, baton, opt); });
             this.append(
-                $('<div class="from">').append(
+                $('<div class="from">').attr('title', opt.mailAddress).append(
+                    $('<span class="flags">'),
                     util.getFrom(baton.data, _.pick(opt, 'field', 'reorderDisplayName', 'showDisplayName', 'unescapeDisplayName'))
                 )
             );
@@ -154,7 +188,11 @@ define('io.ox/mail/common-extensions', [
                 // get folder data to check capabilities:
                 // if bit 4096 is set, the server sorts by display name; if unset, it sorts by local part.
                 var capabilities = folderAPI.pool.getModel(opt.folder).get('capabilities') || 0;
-                opt.showDisplayName = (capabilities & 4096);
+                opt.showDisplayName = !!(capabilities & 4096);
+            },
+            // mailAddress
+            address: function (baton, opt) {
+                opt.mailAddress = util.getFrom(baton.data, { field: opt.field, showDisplayName: false }).text();
             }
         },
 
@@ -179,16 +217,66 @@ define('io.ox/mail/common-extensions', [
             this.parent().toggleClass('deleted', util.isDeleted(baton.data));
         },
 
-        flag: function (baton) {
-
+        colorflag: function (baton) {
+            if (!settings.get('features/flag/color')) return;
             var color = baton.data.color_label;
             // 0 and a buggy -1
             if (color <= 0) return;
-
             this.append(
-                $('<i class="flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
+                $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
             );
         },
+
+        flag: function (baton) {
+            if (!settings.get('features/flag/star') || !util.isFlagged(baton.data)) return;
+            this.append($('<span class="flag">').append(
+                extensions.flagIcon.call(this).attr('title', gt('Flagged'))
+            ));
+        },
+
+        flagIcon: function () {
+            // icon is set via css
+            return $('<i class="fa" aria-hidden="true">');
+        },
+
+        // list view
+        flaggedClass: function (baton) {
+            if (!settings.get('features/flag/star')) return;
+            this.closest('.list-item').toggleClass('flagged', util.isFlagged(baton.data));
+        },
+
+        flagToggle: (function () {
+
+            function makeAccessible(data, index, node) {
+                var label = util.isFlagged(data) ? gt('Flagged') : gt('Not flagged');
+                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isFlagged(data) })
+                       .find('.fa').attr('title', label);
+            }
+
+            function toggle(e) {
+                e.preventDefault();
+                var data = e.data.model.toJSON();
+                // toggle 'flagged' bit
+                if (util.isFlagged(data)) api.flag(data, false); else api.flag(data, true);
+                $(this).each(_.partial(makeAccessible, data));
+            }
+
+            return function (baton) {
+                if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
+                if (util.isEmbedded(baton.data)) return;
+                var self = this;
+                folderAPI.get(baton.data.folder_id).done(function (data) {
+                    // see if the user is allowed to modify the flag status - always allows for unified folder
+                    if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
+                    self.append(
+                        $('<a href="#" role="button" class="flag io-ox-action-link" data-action="flag">')
+                        .append(extensions.flagIcon.call(this))
+                        .each(_.partial(makeAccessible, baton.data))
+                        .on('click', { model: baton.view.model }, toggle)
+                    );
+                });
+            };
+        }()),
 
         threadSize: function (baton) {
             // only consider thread-size if app is in thread-mode
@@ -223,7 +311,8 @@ define('io.ox/mail/common-extensions', [
         pgp: {
             encrypted: function (baton) {
                 //simple check for encrypted mail
-                if (!/^multipart\/encrypted/.test(baton.data.content_type)) return;
+                if (!/^multipart\/encrypted/.test(baton.data.content_type) &&
+                        !(baton.model.get('security') && baton.model.get('security').decrypted)) return;
 
                 this.append(
                     $('<i class="fa fa-lock encrypted" aria-hidden="true">')
@@ -231,7 +320,8 @@ define('io.ox/mail/common-extensions', [
             },
             signed: function (baton) {
                 //simple check for signed mail
-                if (!/^multipart\/signed/.test(baton.data.content_type)) return;
+                if (!/^multipart\/signed/.test(baton.data.content_type) &&
+                    !(baton.model.get('security') && baton.model.get('security').signatures)) return;
 
                 this.append(
                     $('<i class="fa fa-pencil-square-o signed" aria-hidden="true">')
@@ -240,21 +330,20 @@ define('io.ox/mail/common-extensions', [
         },
 
         priority: function (baton) {
-            var data = baton.data;
+            var node = util.getPriority(baton.data);
+            if (!node.length) return;
             this.append(
-                $('<span class="priority" aria-hidden="true">').append(
-                    util.getPriority(data)
-                )
+                $('<span class="priority" aria-hidden="true">').append(node)
             );
         },
 
         envelope: function () {
-            this.append($('<i class="fa seen-unseen-indicator" aria-hidden="true">'));
+            return $('<i class="fa seen-unseen-indicator" aria-hidden="true">').appendTo(this);
         },
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope.call(this);
+            if (isUnseen) extensions.envelope.call(this).attr('title', 'Unread');
         },
 
         answered: function (baton) {
@@ -415,7 +504,7 @@ define('io.ox/mail/common-extensions', [
                     container.children().slice(4).hide();
                     container.append(
                         //#. %1$d - number of other recipients (names will be shown if string is clicked)
-                        $('<a href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
+                        $('<a role="button" href="#" class="show-all-recipients">').text(gt('and %1$d others', items.length - 2))
                         .on('click', showAllRecipients)
                     );
                 }
@@ -445,34 +534,6 @@ define('io.ox/mail/common-extensions', [
                         ref: 'io.ox/mail/attachment/links'
                     })
                     .draw.call(node, ext.Baton({ context: this.model.collection.toJSON(), data: data, $el: node }));
-
-                    // support for fixed position
-                    // TODO: introduce as general solution
-                    node.on('show.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget),
-                            offset = link.offset(),
-                            // need to use siblings() instead of next() due to funky backdrop injection on mobile devices (see bug 35863)
-                            menu = link.siblings('.dropdown-menu'),
-                            top, overlay;
-                        top = offset.top + link.height();
-                        menu.css({ top: offset.top + link.height(), bottom: 'auto', left: offset.left });
-                        if ((top + menu.height()) > $(window).height()) menu.css({ top: 'auto', bottom: '20px' });
-                        overlay = $('<div class="dropdown-overlay">').append(menu);
-                        // catch click manually (same idea as boostrap's dropdown-backdrop)
-                        if (_.device('touch')) {
-                            overlay.on('click', { link: link }, function (e) {
-                                e.data.link.dropdown('toggle');
-                            });
-                        }
-                        link.data('overlay', overlay);
-                        $('body').append(overlay);
-                    });
-
-                    node.on('hide.bs.dropdown', function (e) {
-                        var link = $(e.relatedTarget), overlay = link.data('overlay');
-                        link.parent().append(overlay.children());
-                        overlay.remove();
-                    });
 
                     url = api.getUrl(data, 'download');
                     contentType = (this.model.get('content_type') || 'unknown').split(/;/)[0];
@@ -552,13 +613,16 @@ define('io.ox/mail/common-extensions', [
         }()),
 
         flagPicker: function (baton) {
-            flagPicker.draw(this, baton, true);
+            if (!settings.get('features/flag/color')) return;
+            flagPicker.draw(this, baton);
         },
 
         unreadToggle: (function () {
 
-            function getAriaLabel(data) {
-                return util.isUnseen(data) ? gt('Unread') : gt('Read');
+            function makeAccessible(data, index, node) {
+                var label = util.isUnseen(data) ? gt('Unread') : gt('Read');
+                $(node).attr({ 'aria-label': label, 'aria-pressed': util.isUnseen(data) })
+                       .find('.fa').attr('title', label);
             }
 
             function toggle(e) {
@@ -566,10 +630,7 @@ define('io.ox/mail/common-extensions', [
                 var data = e.data.model.toJSON();
                 // toggle 'unseen' bit
                 if (util.isUnseen(data)) api.markRead(data); else api.markUnread(data);
-                $(this).attr({
-                    'aria-label': getAriaLabel(data),
-                    'aria-pressed': util.isUnseen(data)
-                });
+                $(this).each(_.partial(makeAccessible, data));
             }
 
             return function (baton) {
@@ -582,12 +643,9 @@ define('io.ox/mail/common-extensions', [
                     var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
                     if (!showUnreadToggle) return;
                     self.append(
-                        $('<a href="#" role="button" class="unread-toggle">')
-                        .attr({
-                            'aria-label': getAriaLabel(baton.data),
-                            'aria-pressed': util.isUnseen(baton.data)
-                        })
+                        $('<a href="#" role="button" class="unread-toggle io-ox-action-link" data-action="unread-toggle">')
                         .append('<i class="fa" aria-hidden="true">')
+                        .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
                     );
                 });
@@ -606,6 +664,7 @@ define('io.ox/mail/common-extensions', [
                     view.trigger('load:done');
                     view.model.set(data);
                 });
+                return false;
             }
 
             function draw(model) {

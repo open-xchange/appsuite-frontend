@@ -15,7 +15,7 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define.async('io.ox/oauth/keychain', [
+define('io.ox/oauth/keychain', [
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/core/event',
@@ -27,8 +27,7 @@ define.async('io.ox/oauth/keychain', [
 
     'use strict';
 
-    var moduleDeferred = $.Deferred(),
-        accounts = new OAuth.Account.Collection(),
+    var accounts = new OAuth.Account.Collection(),
         point = ext.point('io.ox/keychain/api'),
         ServiceModel = Backbone.Model.extend({
             initialize: function () {
@@ -94,11 +93,16 @@ define.async('io.ox/oauth/keychain', [
                 names[account.displayName] = 1;
             });
 
-            name = 'My ' + service.displayName + ' account';
+            //#. %1$s is the display name of the account
+            //#. e.g. My Xing account
+            name = gt('My %1$s account', service.displayName);
 
             while (names[name]) {
                 counter++;
-                name = 'My ' + service.displayName + ' account (' + counter + ')';
+                //#. %1$s is the display name of the account
+                //#. %2$d number, if more than one account of the same service
+                //#. e.g. My Xing account
+                name = gt('My %1$s account (%2$d)', service.displayName, counter);
             }
             return name;
         }
@@ -215,62 +219,23 @@ define.async('io.ox/oauth/keychain', [
         }
     }
 
-    function getAll() {
-        // Fetch services & accounts
-        return $.when(
-            http.GET({
-                module: 'oauth/services',
-                params: {
-                    action: 'all'
-                }
-            }),
-            http.GET({
-                module: 'oauth/accounts',
-                params: {
-                    action: 'all'
-                }
-            }))
-            .then(function (s, a) {
-                services.add(s[0]);
-                accounts.add(a[0]);
-                return $.when(services, accounts);
-            });
-    }
+    // services & accounts are part of the rampup data
+    services.add(ox.rampup.oauth.services);
+    accounts.add(ox.rampup.oauth.accounts);
 
-    getAll().done(function (services, accounts) {
-
-        accounts.listenTo(accounts, 'add remove', function (model) {
-            var service = services.forAccount(model);
-            service.keychainAPI.trigger('refresh.all refresh.list', model.toJSON());
-            // Some standard event handlers
-            require(['plugins/halo/api'], function (haloAPI) {
-                haloAPI.halo.refreshServices();
-            });
+    accounts.listenTo(accounts, 'add remove', function (model) {
+        var service = services.forAccount(model);
+        service.keychainAPI.trigger('refresh.all refresh.list', model.toJSON());
+        // Some standard event handlers
+        require(['plugins/halo/api'], function (haloAPI) {
+            haloAPI.halo.refreshServices();
         });
+    });
 
-        // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
-        filestorageApi.rampup().then(function () {
-            // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
-            // we delay it so it doesn't prolong appsuite startup
-            _.delay(filestorageApi.consistencyCheck, 5000);
-        }).always(function () {
-            // Resolve loading
-            moduleDeferred.resolve({
-                message: 'Done with oauth keychain',
-                services: services,
-                accounts: accounts,
-                serviceIDs: services.map(function (service) { return simplifyId(service.id); })
-            });
-        });
-    })
-    .fail(function () {
-
-        console.error('Could not initialize OAuth keyring!');
-        // rampup filestorageApi. Success or failure is unimportant here. Resolve loading in any case
-        filestorageApi.rampup().always(function () {
-            // Resolve on fail
-            moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
-        });
+    filestorageApi.rampup().then(function () {
+        // perform consistency check for filestorage accounts (there might be cases were they are out of sync)
+        // we delay it so it doesn't prolong appsuite startup
+        _.delay(filestorageApi.consistencyCheck, 5000);
     });
 
     ox.on('http:error:OAUTH-0040', function (err) {
@@ -294,15 +259,17 @@ define.async('io.ox/oauth/keychain', [
                 label: gt('Reauthorize')
             })
             .on('reauthorize', function () {
-                var service = services.get(err.error_params[4]),
-                    account = accounts.get(err.error_params[1]),
-                    api = new OAuthKeychainAPI(service.toJSON());
+                var account = accounts.get(err.error_params[1]);
 
-                api.reauthorize(account.toJSON());
+                account.reauthorize();
             })
             .open();
         });
     });
 
-    return moduleDeferred;
+    return {
+        services: services,
+        accounts: accounts,
+        serviceIDs: services.map(function (service) { return simplifyId(service.id); })
+    };
 });

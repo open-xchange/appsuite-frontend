@@ -66,12 +66,11 @@
     //
 
     .list-container, .preview-container {
-        margin-top: 10px;
         position: relative;
         display: none;
     }
 
-    &.open .list-container { display: block; }
+    &.open .list-container { display: block; margin-top: 10px; }
     &.open.show-preview .list-container { display: none; }
     &.open.show-preview .preview-container { display: block; }
     &.open.show-preview ul.inline-items li.item { display: inline-block; }
@@ -81,13 +80,12 @@
 
     .scroll-left, .scroll-right {
         position: absolute;
-        top: 0;
+        top: 10px;
         width: 20px;
         height: 120px;
         z-index: 2;
         background-color: #888;
         border: 0;
-        outline: 0;
 
         i.fa {
             position: absolute;
@@ -186,8 +184,10 @@
             line-height: 24px;
 
             span.file {
-                width:210px;
+                width:170px;
                 float:left;
+                overflow-x: hidden;
+                text-overflow: ellipsis;
             }
 
             span.filesize {
@@ -227,11 +227,12 @@
     ul.inline-items.preview {
 
         // no clue but helps keeping proper scrollHeight
-        height: 120px;
+        height: 140px;
         // yep, 20 + 1
         margin: 0 21px;
         white-space: nowrap;
         overflow: hidden;
+        padding: 10px 0;
 
         li.item {
             position: relative;
@@ -245,6 +246,11 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+
+            &:focus {
+                position: relative;
+                z-index: 1;
+            }
 
             .file {
                 z-index:1;
@@ -296,20 +302,5 @@
         .file { padding-right: 30px; }
 
         &:hover .control { display: block; }
-    }
-}
-
-.dropdown-overlay {
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.01);
-
-    .dropdown-menu {
-        position: absolute;
-        display: block;
     }
 }

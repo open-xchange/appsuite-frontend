@@ -11,11 +11,28 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
+define([
+    'io.ox/core/extensions',
+    'io.ox/mail/mailfilter/settings/filter/tests/register',
+    'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'fixture!io.ox/mail/mailfilter/config.json'
+], function (ext, conditionsExtensions, actionsExtensions, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
     describe('Mailfilter defaults', function () {
+
+        beforeEach(function () {
+
+            conditionsExtensions.processConfig(fixtureMailfilterConfig);
+            actionsExtensions.processConfig(fixtureMailfilterConfig);
+
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+
+        });
+
 
         it('should return a object', function () {
             defaults.should.be.a('object');
@@ -28,43 +45,43 @@ define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
         });
 
         it('should provide defaults for test From', function () {
-            defaults.tests.should.have.a.property('From');
-            defaults.tests.From.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['From'], 'id': 'header', 'values': [''] });
+            defaults.tests.should.have.a.property('from');
+            defaults.tests.from.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['From'], 'id': 'from', 'values': [''] });
         });
 
         it('should provide defaults for test any', function () {
-            defaults.tests.should.have.a.property('any');
-            defaults.tests.any.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To', 'Cc'], 'id': 'header', 'values': [''] });
+            defaults.tests.should.have.a.property('anyRecipient');
+            defaults.tests.anyRecipient.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To', 'Cc'], 'id': 'anyRecipient', 'values': [''] });
         });
 
         it('should provide defaults for test Subject', function () {
-            defaults.tests.should.have.a.property('Subject');
-            defaults.tests.Subject.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['Subject'], 'id': 'header', 'values': [''] });
+            defaults.tests.should.have.a.property('subject');
+            defaults.tests.subject.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['Subject'], 'id': 'subject', 'values': [''] });
         });
 
         it('should provide defaults for test mailingList', function () {
             defaults.tests.should.have.a.property('mailingList');
-            defaults.tests.mailingList.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'header', 'values': [''] });
+            defaults.tests.mailingList.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'mailingList', 'values': [''] });
         });
 
         it('should provide defaults for test To', function () {
-            defaults.tests.should.have.a.property('To');
-            defaults.tests.To.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To'], 'id': 'header', 'values': [''] });
+            defaults.tests.should.have.a.property('to');
+            defaults.tests.to.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To'], 'id': 'to', 'values': [''] });
         });
 
         it('should provide defaults for test Cc', function () {
-            defaults.tests.should.have.a.property('Cc');
-            defaults.tests.Cc.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['Cc'], 'id': 'header', 'values': [''] });
+            defaults.tests.should.have.a.property('cc');
+            defaults.tests.cc.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['Cc'], 'id': 'cc', 'values': [''] });
         });
 
-        it('should provide defaults for test cleanHeader', function () {
+        it('should provide defaults for test Header', function () {
             defaults.tests.should.have.a.property('cleanHeader');
             defaults.tests.cleanHeader.should.be.deep.equal({ 'comparison': 'matches', 'headers': [''], 'id': 'header', 'values': [''] });
         });
 
         it('should provide defaults for test envelope', function () {
             defaults.tests.should.have.a.property('envelope');
-            defaults.tests.envelope.should.be.deep.equal({ 'comparison': 'matches', 'headers': ['To'], 'id': 'envelope', 'values': [''] });
+            defaults.tests.envelope.should.be.deep.equal({ 'comparison': 'is', 'headers': ['To'], 'addresspart': 'all', 'id': 'envelope', 'values': [''] });
         });
 
         it('should provide defaults for test true', function () {
@@ -75,6 +92,21 @@ define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
         it('should provide defaults for test size', function () {
             defaults.tests.should.have.a.property('size');
             defaults.tests.size.should.be.deep.equal({ 'comparison': 'over', 'id': 'size', 'size': '' });
+        });
+
+        it('should provide defaults for test address', function () {
+            defaults.tests.should.have.a.property('address');
+            defaults.tests.address.should.be.deep.equal({ 'id': 'address', 'addresspart': 'all', 'comparison': 'is', 'headers': ['From'], 'values': [''] });
+        });
+
+        it('should provide defaults for test exists', function () {
+            defaults.tests.should.have.a.property('exists');
+            defaults.tests.exists.should.be.deep.equal({ 'headers': [], 'id': 'exists' });
+        });
+
+        it('should provide defaults for test date', function () {
+            defaults.tests.should.have.a.property('date');
+            defaults.tests.date.should.be.deep.equal({ 'id': 'date', 'comparison': 'ge', 'zone': 'original', 'header': 'Date', 'datepart': 'date', 'datevalue': [] });
         });
 
         //actions
@@ -121,6 +153,11 @@ define(['io.ox/mail/mailfilter/settings/filter/defaults'], function (defaults) {
         it('should provide defaults for actions flag', function () {
             defaults.actions.should.have.a.property('flag');
             defaults.actions.flag.should.be.deep.equal({ 'flags': ['$cl_1'], 'id': 'addflags' });
+        });
+
+        it('should provide defaults for actions copy', function () {
+            defaults.actions.should.have.a.property('copy');
+            defaults.actions.copy.should.be.deep.equal({ 'id': 'copy', 'into': 'default0/INBOX', 'copy': true });
         });
 
     });

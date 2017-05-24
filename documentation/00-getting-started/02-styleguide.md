@@ -236,4 +236,4 @@ This helps QA a lot.
 
 # Accessibility
 
-Every plugin, module or package released for OX App Suite should be accessible.
+Every plugin, module or package released for OX App Suite should be [accessible](../accessibility.html).

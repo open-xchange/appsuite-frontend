@@ -32,47 +32,56 @@ define([
     }
     describe('Core Collection', function () {
         describe('loader', function () {
+            var loader;
 
             beforeEach(function () {
-                this.loader = new CollectionLoader({ PRIMARY_PAGE_SIZE: 3, SECONDARY_PAGE_SIZE: 3 });
-                this.loader.fetch = fetch;
+                loader = new CollectionLoader({
+                    PRIMARY_PAGE_SIZE: 3,
+                    SECONDARY_PAGE_SIZE: 3,
+                    getQueryParams: function () {
+                        return {
+                            folder: 'default0/INBOX'
+                        };
+                    }
+                });
+                loader.fetch = fetch;
             });
 
             describe('cid()', function () {
 
                 it('is a function', function () {
-                    expect(this.loader.cid).to.be.a('function');
+                    expect(loader.cid).to.be.a('function');
                 });
 
                 it('handles missing parameters correctly', function () {
-                    expect(this.loader.cid()).to.equal('default');
+                    expect(loader.cid()).to.equal('default');
                 });
 
                 it('handles empty object correctly', function () {
-                    expect(this.loader.cid({})).to.equal('default');
+                    expect(loader.cid({})).to.equal('default');
                 });
 
                 it('returns correct composite ID', function () {
-                    expect(this.loader.cid({ a: 1, b: 2 })).to.equal('a=1&b=2');
+                    expect(loader.cid({ a: 1, b: 2 })).to.equal('a=1&b=2');
                 });
             });
 
             describe('addIndex()', function () {
 
                 it('is a function', function () {
-                    expect(this.loader.addIndex).to.be.a('function');
+                    expect(loader.addIndex).to.be.a('function');
                 });
 
                 it('injects index property', function () {
                     var data = [{ a: 10 }];
-                    this.loader.addIndex(0, {}, data);
+                    loader.addIndex(0, {}, data);
                     expect(data).to.deep.equal([{ a: 10, index: 0 }]);
                 });
 
                 it('calls each()', function () {
                     var data = [{ a: 10 }];
-                    this.loader.each = function (obj) { obj.test = true; };
-                    this.loader.addIndex(0, {}, data);
+                    loader.each = function (obj) { obj.test = true; };
+                    loader.addIndex(0, {}, data);
                     expect(data).to.deep.equal([{ a: 10, index: 0, test: true }]);
                 });
             });
@@ -80,17 +89,17 @@ define([
             describe('Instance', function () {
 
                 it('returns a collection', function () {
-                    expect(this.loader.getDefaultCollection()).to.be.an.instanceof(Backbone.Collection);
-                    expect(this.loader.getCollection()).to.be.an.instanceof(Backbone.Collection);
+                    expect(loader.getDefaultCollection()).to.be.an.instanceof(Backbone.Collection);
+                    expect(loader.getCollection()).to.be.an.instanceof(Backbone.Collection);
                 });
 
                 it('has a load method that returns a collection', function () {
-                    var collection = this.loader.load();
+                    var collection = loader.load();
                     expect(collection).to.be.an.instanceof(Backbone.Collection);
                 });
 
                 it('has a load method that loads initial data', function (done) {
-                    var collection = this.loader.load();
+                    var collection = loader.load();
                     collection.once('load', function () {
                         expect(this.pluck('id')).to.deep.equal([10, 20, 30]);
                         expect(this.pluck('index')).to.deep.equal([0, 1, 2]);
@@ -99,7 +108,6 @@ define([
                 });
 
                 it('has a paginate method that loads more data', function (done) {
-                    var loader = this.loader;
                     loader.load().once('load', function () {
                         expect(this.pluck('id')).to.deep.equal([10, 20, 30]);
                         expect(this.pluck('index')).to.deep.equal([0, 1, 2]);
@@ -112,7 +120,6 @@ define([
                 });
 
                 it('has a reload method that reloads data', function (done) {
-                    var loader = this.loader;
                     loader.load().once('load', function () {
                         loader.fetch = fetchAlternative;
                         loader.reload().once('reload', function () {

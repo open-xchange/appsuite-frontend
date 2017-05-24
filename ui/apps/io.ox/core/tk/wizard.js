@@ -721,7 +721,7 @@ define('io.ox/core/tk/wizard', [
         align: function (selector) {
 
             // fall back to selector from referTo() or spotlight()
-            if (!selector) {
+            if (!selector && this.options) {
                 if (this.options.referTo) return this.align(this.options.referTo);
                 if (this.options.spotlight) return this.align(this.options.spotlight.selector);
                 return;

@@ -262,13 +262,10 @@ define('io.ox/contacts/edit/view-form', [
             index: 300,
             id: 'showall',
             draw: function (baton) {
+                var guid = _.uniqueId('form-control-label-');
                 this.append(
-                    $('<label class="checkbox-inline">').append(
-                        $('<input>')
-                            .addClass('toggle-check')
-                            .attr({
-                                type: 'checkbox'
-                            })
+                    $('<label class="checkbox-inline">').attr('for', guid).append(
+                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
                             .on('change', function (e) {
                                 e.preventDefault();
                                 toggle.call(baton.parentView.$el);
@@ -287,10 +284,10 @@ define('io.ox/contacts/edit/view-form', [
                 require(['io.ox/metrics/main'], function (metrics) {
                     if (!metrics.isEnabled()) return;
                     // buttons
-                    self.delegate('[data-action]', 'mousedown', function (e) {
+                    self.on('mousedown', '[data-action]', function (e) {
                         var node =  $(e.target);
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: node.attr('data-action') || node.attr('data-name'),
@@ -298,9 +295,9 @@ define('io.ox/contacts/edit/view-form', [
                         });
                     });
                     // toggle
-                    self.delegate('.checkbox-inline', 'mousedown', function () {
+                    self.on('mousedown', '.checkbox-inline', function () {
                         metrics.trackEvent({
-                            app: 'calendar',
+                            app: 'contacts',
                             target: 'edit/contact/toolbar',
                             type: 'click',
                             action: 'show-all-fields'
@@ -541,10 +538,11 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawCheckbox(options, model) {
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 $('<div class="col-lg-12 checkbox">').append(
-                    $('<label>').append(
-                        new mini.CheckboxView({ name: options.field, model: model }).render().$el,
+                    $('<label>').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: options.field, model: model }).render().$el,
                         $.txt(' '),
                         $.txt(options.label)
                     )

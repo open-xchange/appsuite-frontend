@@ -24,18 +24,10 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         // sort by index
         indexSorter = function (a, b) {
-            if (a.index === 'first') {
-                return -1;
-            }
-            if (b.index === 'first') {
-                return 1;
-            }
-            if (a.index === 'last') {
-                return 1;
-            }
-            if (b.index === 'last') {
-                return -1;
-            }
+            if (a.index === 'first') return -1;
+            if (b.index === 'first') return 1;
+            if (a.index === 'last') return 1;
+            if (b.index === 'last') return -1;
             return a.index - b.index;
         };
 
@@ -174,6 +166,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                 // skip duplicates (= same id)
                 if (!has(extension.id)) {
 
+                    if ('enabled' in extension) {
+                        if (_.isObject(extension.enabled)) {
+                            return console.error("Extending of '" + this.id + "' with '" + extension.id + "' failed. Ensure extensions 'enabled' property is a primitive.");
+                        }
+                        if (!extension.enabled) this.disable(extension.id);
+                        delete extension.enabled;
+                    }
+
                     extension.invoke = createInvoke(this, extension);
 
                     if (replacements[extension.id]) {
@@ -183,6 +183,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
                     extensions.push(extension);
                     sort();
+
 
                     if (!extension.metadata) {
                         extension.metadata = function (name, args) {
@@ -442,6 +443,10 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
 
         stopPropagation: function () {
             this.isPropagationStopped = returnTrue;
+        },
+
+        resumePropagation: function () {
+            this.isPropagationStopped = returnFalse;
         },
 
         first: function () {

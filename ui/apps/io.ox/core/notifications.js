@@ -19,8 +19,9 @@ define('io.ox/core/notifications', [
     'io.ox/core/yell',
     'io.ox/core/desktopNotifications',
     'settings!io.ox/core',
-    'gettext!io.ox/core'
-], function (ext, badgeview, yell, desktopNotifications, settings, gt) {
+    'gettext!io.ox/core',
+    'io.ox/core/a11y'
+], function (ext, badgeview, yell, desktopNotifications, settings, gt, a11y) {
 
     'use strict';
 
@@ -37,13 +38,36 @@ define('io.ox/core/notifications', [
         id: 'io-ox-notifications-display',
         events: {
             'click .clear-area-button': 'hide',
-            'click .hide-area-button': 'hideAll'
+            'click .hide-area-button': 'hideAll',
+            'keydown': 'onKeydown',
+            'focus *': 'focusHover'
         },
         initialize: function () {
             var self = this;
             self.bannerHeight = 0;
             self.handledNotificationInfo = false;
             this.badgeview = new badgeview.view({ model: new badgeview.model() });
+            this.badgeview.$el.on('keydown', function (e) {
+                // open on space key, up and down arrow, just like a dropdown
+                // if already open, focus first item (last on arrow up)
+                if (e.which === 32 || e.which === 40) {
+                    e.stopPropagation();
+                    if (self.isOpen()) {
+                        // try to focus first item
+                        var firstItem = a11y.getTabbable(self.nodes.main).first();
+                        if (firstItem.length > 0) firstItem.focus();
+                    }
+                    self.show();
+                } else if (e.which === 38) {
+                    e.stopPropagation();
+                    if (self.isOpen()) {
+                        // try to focus last item
+                        var lastItem = a11y.getTabbable(self.nodes.main).last();
+                        if (lastItem.length > 0) lastItem.focus();
+                    }
+                    self.show({ focus: 'last' });
+                }
+            });
             //close when clicked outside, since we don't have the overlay anymore
             //does not work with some dropdowns though (they prevent event bubbling), but the notification popup is in the background then
             $(document.body).on('click', function (e) {
@@ -109,8 +133,9 @@ define('io.ox/core/notifications', [
                 self.$el.prepend(
                     $('<div class=notification-area-header>').append(
                         $('<h1 class="notification-area-title">').text(gt('Notifications')),
-                        $('<button class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
-                        $('<a role=button class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
+                        $('<button type="button" class="btn btn-link clear-area-button fa fa-times">').attr('aria-label', gt('Close notification area')),
+                        //#. Hides all current notifications (invitations, reminder etc.) for half an hour.
+                        $('<button type="button" class="btn btn-link hide-area-button">').text(gt('Notify me again later'))
                     )
                 );
             }
@@ -128,12 +153,14 @@ define('io.ox/core/notifications', [
                     laterButton = $('<button class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
-                    }),                                                                      //#. declines the use of desktop notifications
+                    }),
+                    //#. declines the use of desktop notifications
                     disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Never')).on('click', function (e) {
                         settings.set('showDesktopNotifications', false).save();
                         e.stopPropagation();
                         cleanup();
-                    }),                                                                     //#. Opens popup to decide if desktop notifications should be shown
+                    }),
+                    //#. Opens popup to decide if desktop notifications should be shown
                     enableButton = $('<button class="enable-button btn btn-success">').text(gt('Decide now')).on('click', function (e) {
                         e.stopPropagation();
                         desktopNotifications.requestPermission(function (result) {
@@ -159,7 +186,7 @@ define('io.ox/core/notifications', [
                         disableButton.remove();
                         self.hideNotificationInfo = true;
                     },
-                    containerNode = $('<div class="desktop-notification-info clearfix">').append(textNode, enableButton, disableButton, laterButton);
+                    containerNode = $('<div class="desktop-notification-info clearfix">').append(textNode, $('<div class="button-wrapper">').append(enableButton, disableButton, laterButton));
 
                 if (self.hideNotificationInfo) {
                     cleanup();
@@ -223,7 +250,58 @@ define('io.ox/core/notifications', [
             } else {
                 cont();
             }
+        },
 
+        onKeydown: function (e) {
+            var items = [],
+                closest = null;
+            switch (e.which) {
+                // left or up arrow
+                case 37:
+                case 38:
+                    items = this.nodes.main.find('.item');
+                    closest = $(e.target).closest('.item', this.nodes.main);
+                    var prevIndex = items.length - 1;
+                    if (closest.length) {
+                        // add length once to avoid negative modulo operation, javascript has some issues with these
+                        prevIndex = (_(items).indexOf(closest[0]) - 1 + items.length) % items.length;
+                    }
+
+                    items[prevIndex].focus();
+                    break;
+                // right or down arrow
+                case 39:
+                case 40:
+                    items = this.nodes.main.find('.item');
+                    closest = $(e.target).closest('.item', this.nodes.main);
+                    var nextIndex = 0;
+                    if (closest.length) {
+                        nextIndex = (_(items).indexOf(closest[0]) + 1) % items.length;
+                    }
+                    items[nextIndex].focus();
+                    break;
+                // tab
+                case 9:
+                    // build a tabTrap so the menu behaves like a dropdown
+                    items = a11y.getTabbable(this.nodes.main);
+                    if (e.shiftKey && items[0] === e.target) {
+                        e.preventDefault();
+                        items[items.length - 1].focus();
+                    }
+                    if (!e.shiftKey && items.length && items[items.length - 1] === e.target) {
+                        e.preventDefault();
+                        items[0].focus();
+                    }
+                    break;
+                // no default
+            }
+            items = null;
+        },
+
+        // focus on an element inside an item should highlight the item as if the mouse hovers over it
+        focusHover: function (e) {
+            this.nodes.main.find('.item').removeClass('has-focus');
+            $(e.target).closest('.item', this.nodes.main).addClass('has-focus');
         },
 
         onCloseSidepopup: function () {
@@ -277,7 +355,8 @@ define('io.ox/core/notifications', [
             if (this.isOpen()) this.hide(); else this.show();
         },
 
-        show: function () {
+        show: function (options) {
+            options = options || {};
             // if it's open already we're done
             if (this.isOpen()) return;
 
@@ -303,15 +382,20 @@ define('io.ox/core/notifications', [
             this.badgeview.onToggle(true);
 
             $(document).on('keydown.notification', $.proxy(function (e) {
-                if (e.which === 27 && !(this.model.get('sidepopup'))) {
-                    // escapekey and no open sidepopup (escapekey closes the sidepopup then)
+                // if esc is pressed inside a dropdown menu we close the dropdown menu not the notificion are. Same goes for the sidepopup
+                if (e.which === 27 && !(this.model.get('sidepopup')) && !$(e.target).closest('.dropdown-menu', this.nodes.main).length) {
                     this.hide();
                 }
             }, this));
 
-            // try to focus first item; focus badge otherwise
-            var firstItem = this.nodes.main.find('[tabindex="0"]').first();
-            if (firstItem.length > 0) firstItem.focus(); else this.badgeview.$el.focus();
+            // set initial focus on first or last item; focus badge otherwise
+            var focusItem = a11y.getTabbable(this.nodes.main);
+            if (options.focus === 'last') {
+                focusItem = focusItem.last();
+            } else {
+                focusItem = focusItem.first();
+            }
+            if (focusItem.length > 0) focusItem.focus(); else this.badgeview.$el.focus();
 
             this.model.set('status', 'open');
             this.trigger('show');

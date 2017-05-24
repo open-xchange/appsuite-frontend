@@ -52,23 +52,31 @@ define('io.ox/core/folder/actions/add', [
 
     function open(folder, opt) {
 
-        return new ModalDialog({
+        var def = $.Deferred();
+
+        new ModalDialog({
             async: true,
             context: { folder: folder, module: opt.module, supportsPublicFolders: opt.supportsPublicFolders },
             enter: 'add',
             focus: 'input[name="name"]',
             previousFocus: $(document.activeElement),
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html',
             point: 'io.ox/core/folder/add-popup',
-            width: 400
+            width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })
         .inject({
             addFolder: addFolder,
             getTitle: function () {
-                return this.context.module === 'calendar' ? gt('Add new calendar') : gt('Add new folder');
+                var module = this.context.module;
+                if (module === 'calendar') return gt('Add new calendar');
+                else if (module === 'contacts') return gt('Add new address book');
+                return gt('Add new folder');
             },
             getName: function () {
-                return this.context.module === 'calendar' ? gt('New calendar') : gt('New folder');
+                var module = this.context.module;
+                if (module === 'calendar') return gt('New calendar');
+                else if (module === 'contacts') return gt('New address book');
+                return gt('New folder');
             }
         })
         .extend({
@@ -92,13 +100,13 @@ define('io.ox/core/folder/actions/add', [
                 if (!this.context.supportsPublicFolders) return;
 
                 var label = this.context.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
-
+                var guid = _.uniqueId('form-control-label-');
                 this.$body.append(
                     // public
                     $('<div class="form-group checkbox">').append(
                         // checkbox
-                        $('<label>').append(
-                            $('<input type="checkbox" name="public">'),
+                        $('<label>').attr('for', guid).append(
+                            $('<input type="checkbox" name="public">').attr('id', guid),
                             $.txt(label)
                         )
                     ),
@@ -119,13 +127,18 @@ define('io.ox/core/folder/actions/add', [
                 var name = this.$('input[name="name"]').val(),
                     isPublic = this.$('input[name="public"]').prop('checked');
                 this.busy(true);
-                this.addFolder(isPublic ? '2' : folder, this.context.module, name).then(this.close, this.idle);
+                this.addFolder(isPublic ? '2' : folder, this.context.module, name)
+                    .then(def.resolve.bind(def))
+                    .then(this.close, this.idle).fail(this.idle);
             },
+            close: def.reject.bind(def),
             open: function () {
                 this.$('input[name="name"]').val(this.getName()).focus().select();
             }
         })
         .open();
+
+        return def;
     }
 
     /**
@@ -134,20 +147,19 @@ define('io.ox/core/folder/actions/add', [
      * to folder API
      */
     return function (folder, opt) {
-
-        if (!folder) return;
-
-        folder = String(folder);
         opt = opt || {};
 
-        if (/^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders')) {
-            // only address book, calendar, and tasks do have a "public folder" section
-            api.get('2').done(function (public_folder) {
-                opt.supportsPublicFolders = api.can('create:folder', public_folder);
-                open(folder, opt);
-            });
-        } else {
-            open(folder, opt);
-        }
+        if (!folder || !opt.module) return $.when().reject();
+
+        // only address book, calendar, and tasks do have a "public folder" section
+        var hasPublic = /^(contacts|calendar|tasks)$/.test(opt.module) && capabilities.has('edit_public_folders');
+
+        // resolves with created folder-id
+        return $.when(hasPublic ? api.get('2') : undefined)
+                .then(function (public_folder) {
+                    if (public_folder) opt.supportsPublicFolders = api.can('create:folder', public_folder);
+                    // returns deferred
+                    return open(String(folder), opt);
+                });
     };
 });

@@ -75,26 +75,31 @@ define('io.ox/core/attachments/view', [
 
         render: function () {
 
+            var listId = _.uniqueId('list-container-'),
+                previewId = _.uniqueId('preview-container-');
+
             this.renderHeader();
 
             this.$el.append(
                 // header
                 this.$header,
                 // short list
-                $('<div class="list-container">').append(
+                $('<div class="list-container">').attr('id', listId).append(
                     this.$list
                 ),
                 // preview list
-                $('<div class="preview-container">').append(
+                $('<div class="preview-container">').attr('id', previewId).append(
                     $('<button type="button" class="scroll-left"><i class="fa fa-chevron-left" aria-hidden="true"></i></button>'),
-                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>'),
-                    this.$preview
+                    this.$preview,
+                    $('<button type="button" class="scroll-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 )
             );
 
             if (this.openByDefault) this.toggleDetails();
 
             this.updateScrollControls();
+            this.updateAriaControls();
+            this.$header.find('.toggle-mode').attr('aria-controls', [listId, previewId].join(' '));
 
             return this;
         },
@@ -102,14 +107,14 @@ define('io.ox/core/attachments/view', [
         renderHeader: function () {
 
             this.$header.append(
-                $('<a href="#" class="pull-right toggle-mode">')
-                    .append('<i class="fa" aria-hidden="true">'),
-                $('<a href="#" class="toggle-details">').append(
+                $('<a href="#" class="toggle-details" aria-expanded="false" role="button">').append(
                     $('<i class="fa toggle-caret" aria-hidden="true">'),
                     $('<i class="fa fa-paperclip" aria-hidden="true">'),
                     $('<span class="summary">')
                 ),
-                $('<span class="links">')
+                $('<span class="links">'),
+                $('<a href="#" class="pull-right toggle-mode" role="button">')
+                    .append('<i class="fa" aria-hidden="true">')
             );
 
             this.renderSummary();
@@ -156,8 +161,16 @@ define('io.ox/core/attachments/view', [
             return this.collection.filter(this.filter, this);
         },
 
+        updateAriaControls: function () {
+            var id;
+            if (this.$el.hasClass('show-preview')) id = this.$('.preview-container').attr('id');
+            else id = this.$('.list-container').attr('id');
+            this.$header.find('.toggle-details').attr('aria-controls', id);
+        },
+
         toggleDetails: function () {
             this.$el.toggleClass('open');
+            this.$header.find('.toggle-details').attr('aria-expanded', this.$el.hasClass('open'));
             if (!this.isListRendered) this.renderList();
         },
 
@@ -174,6 +187,7 @@ define('io.ox/core/attachments/view', [
             // to provoke lazyload
             this.$preview.trigger('scroll');
             this.updateScrollControls();
+            this.updateAriaControls();
             $(window).trigger('resize');
         },
 
@@ -197,7 +211,7 @@ define('io.ox/core/attachments/view', [
 
         getScrollIndex: function () {
             // make sure we're always at a multiple of 120 (this.scrollStep)
-            return Math.round(this.$preview.scrollLeft() / this.scrollStep);
+            return Math.ceil(this.$preview.scrollLeft() / this.scrollStep);
         },
 
         getMaxScrollIndex: function () {
@@ -216,6 +230,10 @@ define('io.ox/core/attachments/view', [
     var Preview = Backbone.View.extend({
 
         className: 'preview',
+
+        events: {
+            'keydown': 'onKeydown'
+        },
 
         initialize: function () {
             this.listenTo(this.model, 'change:meta', function () {
@@ -265,8 +283,17 @@ define('io.ox/core/attachments/view', [
             } else {
                 this.fallback();
             }
+            this.$el.attr('tabindex', '0');
             return this;
+        },
+
+        onKeydown: function (e) {
+            if (e.which !== 13 && e.which !== 32) return;
+            $(e.target).trigger('click');
+            e.preventDefault();
+            e.stopPropagation();
         }
+
     });
 
     var View = Backbone.View.extend({
@@ -279,7 +306,8 @@ define('io.ox/core/attachments/view', [
         },
 
         attributes: function () {
-            return { 'data-id': this.model.get('id') };
+            //previews don't have an id. use cid instead. Otherwise preview in mail compose breaks.
+            return { 'data-id': this.model.get('id') || this.model.cid };
         },
 
         initialize: function (options) {
@@ -336,7 +364,7 @@ define('io.ox/core/attachments/view', [
         renderContent: function () {
             this.$('.file')
                 .attr('title', this.model.getTitle())
-                .text(this.model.getShortTitle(50));
+                .text(this.model.getShortTitle(_.device('smartphone') ? 23 : 50));
         },
 
         renderControls: function () {

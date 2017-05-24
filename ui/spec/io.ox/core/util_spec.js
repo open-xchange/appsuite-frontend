@@ -194,55 +194,78 @@ define(['io.ox/core/util'], function (util) {
             });
         });
 
-        // describe('getAddresses', function () {
+        describe('getAddresses', function () {
 
-        // test: function () {
+            it('recognizes comma-separated addresses', function () {
+                expect(util.getAddresses('email1@domain.tld,email2@domain.tld,email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     var addresses, result;
+            it('recognizes semi-colon-separated addresses', function () {
+                expect(util.getAddresses('email1@domain.tld;email2@domain.tld;email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld,email2@domain.tld,email3@domain.tld');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes comma-separated addresses', _.isEqual(addresses, result));
+            it('recognizes tab-separated addresses', function () {
+                expect(util.getAddresses('email1@domain.tld\temail2@domain.tld\temail3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld;email2@domain.tld;email3@domain.tld');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes semi-colon-separated addresses', _.isEqual(addresses, result));
+            it('recognizes newline-separated addresses', function () {
+                expect(util.getAddresses('email1@domain.tld\nemail2@domain.tld\nemail3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld\temail2@domain.tld\temail3@domain.tld');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes tab-separated addresses', _.isEqual(addresses, result));
+            it('recognizes space-separated addresses', function () {
+                expect(util.getAddresses('email1@domain.tld email2@domain.tld email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld\nemail2@domain.tld\nemail3@domain.tld');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes newline-separated addresses', _.isEqual(addresses, result));
+            it('recognizes addresses with display name without quotes', function () {
+                expect(util.getAddresses('email1@domain.tld display name <email2@domain.tld> email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', '"display name" <email2@domain.tld>', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld email2@domain.tld email3@domain.tld');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes space-separated addresses', _.isEqual(addresses, result));
+            it('recognizes addresses with display name with quotes', function () {
+                expect(util.getAddresses('email1@domain.tld "display name" <email2@domain.tld> email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', '"display name" <email2@domain.tld>', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld display name <email2@domain.tld> email3@domain.tld');
-        //     result = ['email1@domain.tld', 'display name <email2@domain.tld>', 'email3@domain.tld'];
-        //     console.log('recognizes addresses with display name without quotes', _.isEqual(addresses, result));
+            it('recognizes addresses with display name with quotes that contain delimiters', function () {
+                expect(util.getAddresses('email1@domain.tld "name, display" <email2@domain.tld> email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', '"name, display" <email2@domain.tld>', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld "display name" <email2@domain.tld> email3@domain.tld');
-        //     result = ['email1@domain.tld', '"display name" <email2@domain.tld>', 'email3@domain.tld'];
-        //     console.log('recognizes addresses with display name with quotes', _.isEqual(addresses, result));
+            it('recognizes addresses with bareword display names', function () {
+                expect(util.getAddresses('name <email1@domain.tld>, another-name <email2@domain.tld>, AND another-näme <email3@domain.tld>'))
+                    .to.deep.equal(['"name" <email1@domain.tld>', '"another-name" <email2@domain.tld>', '"AND another-näme" <email3@domain.tld>']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld "name, display" <email2@domain.tld> email3@domain.tld');
-        //     result = ['email1@domain.tld', '"name, display" <email2@domain.tld>', 'email3@domain.tld'];
-        //     console.log('recognizes addresses with display name with quotes that contain delimiters', _.isEqual(addresses, result));
+            it('recognizes addresses with special characters in local part', function () {
+                // full list: . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
+                expect(util.getAddresses('email.1@x, email!2@x, email#3@x, email$4@x, email\'5@x, email/6@x, email{7}@x, email|8@x, email~9@x'))
+                    .to.deep.equal(['email.1@x', 'email!2@x', 'email#3@x', 'email$4@x', 'email\'5@x', 'email/6@x', 'email{7}@x', 'email|8@x', 'email~9@x']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld "email2"@domain.tld email3@domain.tld');
-        //     result = ['email1@domain.tld', '"email2"@domain.tld', 'email3@domain.tld'];
-        //     console.log('recognizes addresses with escaped local part', _.isEqual(addresses, result));
+            it('recognizes addresses with escaped local part', function () {
+                expect(util.getAddresses('email1@domain.tld "email2"@domain.tld email3@domain.tld'))
+                    .to.deep.equal(['email1@domain.tld', '"email2"@domain.tld', 'email3@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld email2@domain.tld email3@8.8.8.8');
-        //     result = ['email1@domain.tld', 'email2@domain.tld', 'email3@8.8.8.8'];
-        //     console.log('recognizes addresses with IP address as domain part', _.isEqual(addresses, result));
+            it('recognizes addresses with only one character in local part', function () {
+                expect(util.getAddresses('a@domain.tld'))
+                    .to.deep.equal(['a@domain.tld']);
+            });
 
-        //     addresses = this.getAddresses('email1@domain.tld "quoted" <email2@domain.tld> display name <email3@domain.tld>\t"email4"@domain.tld email5@[8.8.8.8],email6@domain.tld');
-        //     result = ['email1@domain.tld', '"quoted" <email2@domain.tld>', 'display name <email3@domain.tld>', '"email4"@domain.tld', 'email5@[8.8.8.8]', 'email6@domain.tld'];
-        //     console.log('recognizes complex addresses', _.isEqual(addresses, result));
-        // }
+            it('recognizes addresses with IP address as domain part', function () {
+                expect(util.getAddresses('email1@domain.tld email2@domain.tld email3@8.8.8.8'))
+                    .to.deep.equal(['email1@domain.tld', 'email2@domain.tld', 'email3@8.8.8.8']);
+            });
+
+            it('recognizes complex addresses', function () {
+                expect(util.getAddresses('email1@domain.tld "quoted" <email2@domain.tld>, display name <email3@domain.tld>\t"email4"@domain.tld email5@[8.8.8.8],email6@domain.tld; bäre wörd <email7@domain.tld>'))
+                    .to.deep.equal(['email1@domain.tld', '"quoted" <email2@domain.tld>', '"display name" <email3@domain.tld>', '"email4"@domain.tld', 'email5@[8.8.8.8]', 'email6@domain.tld', '"bäre wörd" <email7@domain.tld>']);
+            });
+        });
     });
 });

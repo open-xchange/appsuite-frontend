@@ -11,7 +11,15 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function (model, gt) {
+define([
+    'io.ox/mail/mailfilter/settings/model',
+    'gettext!io.ox/mail',
+    'io.ox/mail/mailfilter/settings/filter/tests/register',
+    'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/core/extensions',
+    'io.ox/mail/mailfilter/settings/filter/defaults',
+    'fixture!io.ox/mail/mailfilter/config.json'
+], function (mailfilterModel, gt, conditionsExtensions, actionsExtensions, ext, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
@@ -24,7 +32,8 @@ define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function 
             'flags': [],
             'active': true
         },
-        returnedModel = model.protectedMethods.provideEmptyModel();
+        returnedModel = mailfilterModel.protectedMethods.provideEmptyModel(),
+        factory = mailfilterModel.protectedMethods.buildFactory('io.ox/core/mailfilter/model', mailfilterModel.api);
 
     describe('Mailfilter model provide empty model', function () {
 
@@ -81,4 +90,68 @@ define(['io.ox/mail/mailfilter/settings/model', 'gettext!io.ox/mail'], function 
         });
 
     });
+
+    describe('Mailfilter model title', function () {
+
+        var model;
+
+        beforeEach(function () {
+            model = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
+
+            conditionsExtensions.processConfig(fixtureMailfilterConfig);
+            actionsExtensions.processConfig(fixtureMailfilterConfig);
+
+            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+
+        });
+
+        it('should change for default values', function () {
+            model.get('rulename').should.equal(gt('New rule'));
+            model.set({
+                test: {
+                    'comparison': 'contains',
+                    'headers': ['From'],
+                    'id': 'from',
+                    'values': ['test@open-xchange.com']
+                },
+                actioncmds: [{ 'id': 'keep' }]
+            });
+            model.get('rulename').should.equal(gt('Keep mails from %1$s', 'test@open-xchange.com'));
+            model.set('actioncmds', [{ 'id': 'discard' }]);
+            model.get('rulename').should.equal(gt('Discard mails from %1$s', 'test@open-xchange.com'));
+        });
+
+        it('should change if still titled new rule', function () {
+            model.get('rulename').should.equal(gt('New rule'));
+            model.set({
+                test: {
+                    'comparison': 'contains',
+                    'headers': ['From'],
+                    'id': 'from',
+                    'values': ['test@open-xchange.com']
+                },
+                actioncmds: [{ 'id': 'keep' }]
+            });
+            model.set('rulename', gt('New rule'));
+            model.set('actioncmds', [{ 'id': 'discard' }]);
+            model.get('rulename').should.equal(gt('Discard mails from %1$s', 'test@open-xchange.com'));
+        });
+
+        it('should not changed if custom titled', function () {
+            model.set('rulename', 'My custom rulename');
+            model.set({
+                test: {
+                    'comparison': 'contains',
+                    'headers': ['From'],
+                    'id': 'from',
+                    'values': ['test@open-xchange.com']
+                },
+                actioncmds: [{ 'id': 'keep' }]
+            });
+            model.get('rulename').should.equal('My custom rulename');
+        });
+
+    });
+
 });

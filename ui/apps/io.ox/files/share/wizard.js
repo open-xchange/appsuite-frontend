@@ -21,17 +21,17 @@ define('io.ox/files/share/wizard', [
     'io.ox/core/tk/tokenfield',
     'io.ox/core/yell',
     'gettext!io.ox/files',
+    'settings!io.ox/contacts',
+    'io.ox/core/capabilities',
+    'io.ox/backbone/mini-views/addresspicker',
+    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt) {
+], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
     'use strict';
 
     var INDEX = 0,
-        POINT = 'io.ox/files/share/wizard',
-        trans = {
-            invite: gt('Invite people via email. Every recipient will get an individual link to access the shared files.'),
-            link: gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.')
-        };
+        POINT = 'io.ox/files/share/wizard';
 
     /*
      * extension point descriptive text
@@ -39,9 +39,9 @@ define('io.ox/files/share/wizard', [
     ext.point(POINT + '/fields').extend({
         id: 'description',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
             this.append(
-                $('<span>').addClass('help-block').text(trans[baton.model.get('type', 'invite')])
+                $('<span>').addClass('help-block').text(gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.'))
             );
         }
     });
@@ -53,9 +53,6 @@ define('io.ox/files/share/wizard', [
         id: 'link',
         index: INDEX += 100,
         draw: function (baton) {
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
-
             var linkNode,
                 link = baton.model.get('url', ''),
                 formID = _.uniqueId('form-control-label-');
@@ -88,11 +85,9 @@ define('io.ox/files/share/wizard', [
     ext.point(POINT + '/fields').extend({
         id: 'link-to-clipboard',
         index: INDEX += 100,
-        draw: function (baton) {
+        draw: function () {
             // unsupported: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
             if (_.device('safari')) return;
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
 
             var group = this.find('.link-group'),
                 target = '#' + group.find('input').attr('id'),
@@ -105,7 +100,7 @@ define('io.ox/files/share/wizard', [
             // copy-to-clipboard button
             group.append(
                 $('<span class="input-group-btn">').append(
-                    button = $('<button class="btn btn-default" type="button" disabled="disabled">')
+                    button = $('<button class="btn btn-default" type="button">')
                     .append($('<i class="fa fa-clipboard clippy">'))
                     .attr({
                         'data-clipboard-target': target,
@@ -135,13 +130,27 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
+     * extension point for share options
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'defaultOptions',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var optionGroup = $('<div>').addClass('form-group shareoptions');
+            ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
+            this.append(optionGroup);
+        }
+    });
+
+    /*
      * extension point for recipients autocomplete input field
      */
     ext.point(POINT + '/fields').extend({
         id: 'recipients-tokenfield',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('form-control-label-'),
+                usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true);
 
             // add autocomplete
             var tokenfieldView = new Tokenfield({
@@ -151,24 +160,43 @@ define('io.ox/files/share/wizard', [
                 apiOptions: {
                     contacts: true,
                     users: true,
-                    // only availiable for invite autocomplete
-                    groups: baton.model.get('type') === 'invite'
+                    groups: false
                 },
                 leftAligned: true
             });
 
             this.append(
-                $('<div class="form-group">').append(
-                    $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
-                    tokenfieldView.$el
+                $('<div class="form-group recipients">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
+                    $('<div class="input-group has-picker">').append(
+                        $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
+                        tokenfieldView.$el,
+                        usePicker ? new AddressPickerView({
+                            isPermission: true,
+                            process: function (e, member, singleData) {
+                                var token = {
+                                        label: singleData.array[0],
+                                        value: singleData.array[1]
+                                    }, list = baton.model.get('recipients') || [];
+                                member.set('token', token);
+                                baton.model.set('recipients', list.concat([member]));
+                            }
+                        }).render().$el : []
+                    )
                 )
             );
 
             tokenfieldView.render();
 
+            tokenfieldView.listenTo(baton.model, 'change:recipients', function (mailModel, recipients) {
+                if (tokenfieldView.redrawLock) return;
+                tokenfieldView.collection.reset(recipients);
+            });
+
             // bind collection to share model
             tokenfieldView.collection.on('change add remove sort', function () {
+                tokenfieldView.redrawLock = true;
                 baton.model.set('recipients', this.toArray());
+                tokenfieldView.redrawLock = false;
             });
         }
     });
@@ -181,33 +209,27 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-');
+            var $textView;
+
             this.append(
-                $('<div>').addClass('form-group').append(
+                $('<div class="message">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
                     $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid }),
-                    new miniViews.TextView({
+                    $textView = new miniViews.TextView({
                         name: 'message',
                         model: baton.model
                     }).render().$el.attr({
                         id: guid,
-                        rows: 3,
                         //#. placeholder text in share dialog
                         placeholder: gt('Message (optional)')
                     })
                 )
             );
-        }
-    });
 
-    /*
-     * extension point for share options
-     */
-    ext.point(POINT + '/fields').extend({
-        id: 'defaultOptions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var optionGroup = $('<div>').addClass('shareoptions');
-            ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
-            this.append(optionGroup);
+            // apply polyfill for CSS resize which IE doesn't support natively
+            if (_.browser.IE) {
+                window.resizeHandlerPolyfill($textView[0]);
+            }
+
         }
     });
 
@@ -218,9 +240,6 @@ define('io.ox/files/share/wizard', [
         id: 'temporary',
         index: INDEX += 100,
         draw: function (baton) {
-            // only available for type link
-            if (baton.model.get('type') !== baton.model.TYPES.LINK) return;
-
             //#. options for terminal element of a sentence starts with "Expires in"
             var typeTranslations = {
                 0: gt('one day'),
@@ -244,10 +263,11 @@ define('io.ox/files/share/wizard', [
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
+            var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div>').addClass('form-group expiresgroup').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
-                        new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
+                $('<div class="form-group expiresgroup">').append(
+                    $('<label class="checkbox-inline">').attr('for', guid).text(gt('Expires in')).prepend(
+                        new miniViews.CheckboxView({ id: guid, name: 'temporary', model: baton.model }).render().$el
                     ),
                     $.txt(' '),
                     dropdown.render().$el.addClass('dropup')
@@ -261,33 +281,21 @@ define('io.ox/files/share/wizard', [
             });
 
             baton.model.on('change:expires', function (model) {
-                model.set({
-                    'temporary': true,
-                    'expiry_date': model.getExpiryDate()
-                });
+                if (baton.model.get('expires') !== null) {
+                    model.set({
+                        'temporary': true,
+                        'expiry_date': model.getExpiryDate()
+                    });
+                }
+
             });
 
-        }
-    });
+            baton.model.once('change', function () {
+                if (baton.model.get('expiry_date')) {
+                    baton.model.set('expires', null);
+                }
+            });
 
-    /*
-     * extension point for write permissions checkbox
-     */
-    ext.point(POINT + '/options').extend({
-        id: 'write-permissions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            // only available for type invite
-            if (baton.model.get('type') !== baton.model.TYPES.INVITE) return;
-            this.append(
-                $('<div>').addClass('form-group editgroup').append(
-                    $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
-                            new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
-                        )
-                    )
-                )
-            );
         }
     });
 
@@ -298,23 +306,24 @@ define('io.ox/files/share/wizard', [
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'), passInput;
+            var guid, passContainer;
             this.append(
-                $('<div>').addClass('form-inline passwordgroup').append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('checkbox-inline').text(gt('Password required')).prepend(
-                            new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                $('<div class="form-inline passwordgroup">').append(
+                    $('<div class="form-group">').append(
+                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password required')).prepend(
+                            new miniViews.CheckboxView({ id: guid, name: 'secured', model: baton.model }).render().$el
                         )
                     ),
                     $.txt(' '),
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
-                        passInput = new miniViews.PasswordView({ name: 'password', model: baton.model })
-                            .render().$el
+                    $('<div class="form-group">').append(
+                        $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('form-control-label-') }),
+                        passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
+                            .render().$el.find('input')
                             // see bug 49639
-                            .attr({ id: guid, placeholder: gt('Password'), autocomplete: 'new-password' })
+                            .attr({ id: guid, placeholder: gt('Password') })
                             .removeAttr('name')
                             .prop('disabled', !baton.model.get('secured'))
+                            .end()
                     )
                 )
             );
@@ -324,7 +333,9 @@ define('io.ox/files/share/wizard', [
                 }
             });
             baton.view.listenTo(baton.model, 'change:secured', function (model, val, opt) {
+                var passInput = passContainer.find('input');
                 passInput.prop('disabled', !val);
+                passContainer.prop('disabled', !val);
                 if (!opt._inital) passInput.focus();
             });
         }
@@ -339,7 +350,7 @@ define('io.ox/files/share/wizard', [
 
         initialize: function (options) {
 
-            this.model = new sModel.WizardShare({ files: options.files, type: options.type });
+            this.model = new sModel.WizardShare({ files: options.files });
 
             this.baton = ext.Baton({ model: this.model, view: this });
 
@@ -361,14 +372,27 @@ define('io.ox/files/share/wizard', [
         share: function () {
             // we might have new addresses
             contactsAPI.trigger('maybeNewContact');
+            var result;
 
-            // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
-            var result = this.model.save();
+            // Bug 52046: When the password checkbox is enable and the password could not be validated (e.g. it's empty) in the set function from the model,
+            // we have the previous, not up-to-date model data, but also an validationError to indicate that there was a error.
+            // So the validation in the save function would work with the old model data. Therefore don't call save() when there
+            // is an validationError, because it would work with an old model.
+            if (this.model.get('secured') && _.isString(this.model.validationError)) {
+                // reject so that the dialog is not closed later and pass the yell message for the fail handler
+                result = $.Deferred().reject('error', this.model.validationError);
 
-            //  to unify the return type, we always want to return a deferred
-            if (result === false) {
-                return $.Deferred().reject();
+            } else {
+                // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
+                result = this.model.save();
+
+                //  to unify the return type for later functions, we must return a deferred
+                if (result === false) {
+                    // no yell message needed, therefore return directly, the yell is called in the save function above
+                    return $.Deferred().reject();
+                }
             }
+
             return result.fail(yell);
 
         },

@@ -124,7 +124,7 @@ define('io.ox/contacts/edit/main', [
                         });
 
                         function fnToggleSave(isDirty) {
-                            var node = win.nodes.header.find('.btn[data-action="save"]');
+                            var node = win.nodes.footer.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
                             if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
                         }
@@ -136,8 +136,8 @@ define('io.ox/contacts/edit/main', [
                                 fnToggleSave(isDirty);
                             });
 
-                            if (contact.id === undefined && _.keys(contact.attributes).length <= 1) {
-                                win.nodes.header.find('.btn[data-action="save"]').prop('disabled', true);
+                            if (contact.id === undefined && _.values(_(contact.attributes).compact()).length <= 1) {
+                                win.nodes.footer.find('.btn[data-action="save"]').prop('disabled', true);
                             }
 
                             container.find('input[type="text"]').on('keyup', _.debounce(function () {
@@ -298,7 +298,7 @@ define('io.ox/contacts/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.contacts.gui.html#ox.appsuite.user.reference.contacts.gui.create';
+            return 'ox.appsuite.user.sect.contacts.gui.create.html';
         };
 
         ext.point('io.ox/contacts/edit/main/model').extend({
