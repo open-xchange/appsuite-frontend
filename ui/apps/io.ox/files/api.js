@@ -89,14 +89,14 @@ define('io.ox/files/api', [
             // call parent constructor
             backbone.Model.call(this, normalizedAttrs, options);
 
-            this.listenTo(this, 'change:filename', function (m, newName) {
+            this.listenTo(this, 'change:com.openexchange.file.sanitizedFilename', function (m, newName) {
                 //maybe update versions if filename is changed
                 var versions = this.get('versions');
                 if (!versions) return;
 
                 for (var i = 0; i < versions.length; i++) {
                     if (versions[i].version === m.get('version')) {
-                        versions[i].filename = newName;
+                        versions[i]['com.openexchange.file.sanitizedFilename'] = newName;
                         break;
                     }
                 }
