@@ -79,7 +79,14 @@ define('io.ox/core/sub/subscriptions', [
                             if (fd.widget !== 'oauthAccount') return true;
 
                             var accountType = getAccountType(fd.options.type),
-                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type }).filter(function (account) {
+                                    if (!self.app.subscription || !_.isArray(self.app.subscription.wantedOAuthScopes)) {
+                                        return true;
+                                    }
+                                    return self.app.subscription.wantedOAuthScopes.reduce(function (acc, scope) {
+                                        return acc && account.availableScopes.indexOf(scope) >= 0;
+                                    }, true);
+                                });
 
                             // process when at least one account exists
                             if (accounts.length) return true;
