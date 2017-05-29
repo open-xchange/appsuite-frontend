@@ -474,7 +474,8 @@ define('io.ox/calendar/month/perspective', [
             this.app = app;
             this.current = moment(app.refDate || moment()).startOf('month');
             this.previous = moment(this.current).subtract(1, 'month');
-            this.firstWeek = moment(this.previous).startOf('week');
+            // yes subtract another month. Otherwise the previous month has a scrolltop off 0 => scroll to previous month results in endless scrolling because scrolltop 0 cannot be reached ( endless scrolling )
+            this.firstWeek = moment(this.previous).subtract(1, 'month').startOf('week');
             this.lastWeek = this.firstWeek.clone();
 
             this.main
