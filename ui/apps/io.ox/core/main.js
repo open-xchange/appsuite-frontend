@@ -255,6 +255,8 @@ define('io.ox/core/main', [
     gt.pgettext('app', 'Conversations');
 
     var tabManager = function () {
+        launchers.append(launcherDropdownTab);
+
         var items = launchers.children('.launcher'),
             secondaryLauncher = topbar.find('.launchers-secondary'),
             forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
@@ -262,7 +264,6 @@ define('io.ox/core/main', [
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
             items.hide();
-            launchers.append(launcherDropdownTab);
             return;
         }
 
@@ -279,8 +280,6 @@ define('io.ox/core/main', [
             launcherDropDownIcon = topbar.find('.launcher-dropdown');
 
         if (launcherDropDownIcon.length) viewPortWidth -= launcherDropDownIcon[0].getBoundingClientRect().width;
-
-        launcherDropdownTab.detach();
 
         itemsVisible.each(function () {
             // use native bounding client rect function to compute the width as floating point
@@ -301,7 +300,6 @@ define('io.ox/core/main', [
         $('li', launcherDropdown).attr('role', 'menuitem').hide();
 
         if (hidden > 0) {
-            launchers.append(launcherDropdownTab);
             for (i = hidden; i > 0; i--) {
                 $('li', launcherDropdown).eq(-i).show();
             }
