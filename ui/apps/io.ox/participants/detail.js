@@ -116,16 +116,18 @@ define('io.ox/participants/detail', [
 
     function filterParticipants(e) {
         e.preventDefault();
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active').attr('aria-pressed', false);
+        if ($(this).parent().hasClass('active')) {
+            $(this).attr('aria-pressed', false);
+            $('.active', e.data.participants).removeClass('active');
             $('.participant', e.data.participants).show();
         } else {
             $('.participant', e.data.participants)
                 .show()
-                .find('span.person:not(.' + e.data.res.css + ')')
+                .find('a.person:not(.' + e.data.res.css + ')')
                 .parent()
                 .toggle();
-            $(this).addClass('active').attr('aria-pressed', true);
+            $('.active', e.data.participants).removeClass('active');
+            $(this).attr('aria-pressed', true).parent().addClass('active');
         }
     }
 
