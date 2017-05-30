@@ -328,12 +328,15 @@ define('io.ox/calendar/main', [
             };
 
             function onFolderViewOpen(app) {
+                app.getWindow().nodes.sidepanel.show();
                 app.left.removeClass('bottom-toolbar');
                 // for perspectives other than list
                 app.getWindow().nodes.body.removeClass('bottom-toolbar-visible');
             }
 
             function onFolderViewClose(app) {
+                // hide sidepanel so invisible objects are not tabbable
+                app.getWindow().nodes.sidepanel.hide();
                 app.left.addClass('bottom-toolbar');
                 // for perspectives other than list
                 app.getWindow().nodes.body.addClass('bottom-toolbar-visible');
