@@ -36,7 +36,8 @@ define('io.ox/calendar/freetime/main', [
 
         initialize: function (options) {
 
-            var self = this;
+            var self = this,
+                refresh = self.refresh.bind(this);
 
             this.options = options || {};
             this.parentModel = options.parentModel;
@@ -61,11 +62,11 @@ define('io.ox/calendar/freetime/main', [
             this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
             this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
 
-            api.on('refresh.all update', self.refresh.bind(this));
+            api.on('refresh.all update', refresh);
             this.on('dispose', function () {
                 self.timeSubview.dispose();
                 self.participantsSubview.dispose();
-                api.off('refresh.all update', self.refresh);
+                api.off('refresh.all update', refresh);
             });
             this.timeSubview.bodyNode.on('scroll', function () {
                 if (self.participantsSubview.bodyNode[0].scrollTop === 0 && this.scrollTop === 0) {
