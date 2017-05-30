@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-04-21 09:33+0200\n"
+"PO-Revision-Date: 2017-05-17 14:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -868,7 +868,7 @@ msgstr[0] "%1$d 回のアポイント"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click to close the recurrence view"
-msgstr ""
+msgstr "繰り返しビューを閉じるには、クリックしてください。"
 
 #: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 msgid "Click on the links to change the values."
@@ -1548,6 +1548,8 @@ msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series. Do you want to continue?"
 msgstr ""
+"アポイントの日付を変更すると、定期的なアポイントにアポイントの例外が作成され"
+"ます。続行しますか。"
 
 #. folder permissions - Is Admin? YES
 #: apps/io.ox/calendar/month/perspective.js module:io.ox/calendar
@@ -1935,30 +1937,30 @@ msgstr "と"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every day"
-msgstr ""
+msgstr "毎日"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d days"
-msgstr ""
+msgstr "%1$d 日ごとに"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on all days"
-msgstr ""
+msgstr "%1$d 週間ごとのすべての曜日"
 
 #. recurrence string
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "On work days"
-msgstr ""
+msgstr "稼働日"
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on work days"
-msgstr ""
+msgstr "%1$d 週間ごとの稼働日"
 
 #. recurrence string
 #. %1$s day string, e.g. "work days" or "Friday" or "Monday, Tuesday, Wednesday"
@@ -1971,7 +1973,7 @@ msgstr "毎週 %1$s"
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d weeks on %2$s"
-msgstr ""
+msgstr "%1$d 週間ごとの %2$s"
 
 #. recurrence string
 #. %1$d: numeric, day in month
@@ -1984,7 +1986,7 @@ msgstr "毎月 %1$d 日"
 #. %1$d: numeric, day in month
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on day %2$d"
-msgstr ""
+msgstr "%1$d 月ごとの %2$d 日"
 
 #. recurrence string
 #. %1$s: count string, e.g. first, second, or last
@@ -1999,7 +2001,7 @@ msgstr "毎月 %1$s %2$s"
 #. %3$s: day string, e.g. Monday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d months on the %2$s %3$s"
-msgstr ""
+msgstr "%1$d か月ごとの %2$s %3$s"
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -2031,16 +2033,16 @@ msgstr "毎年 %3$d の %1$s %2$s"
 #. %4$s: month nane, e.g. January
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Every %1$d years on the %2$s %3$s of %4$d"
-msgstr ""
+msgstr "%1$d 年ごとの %4$d の %2$s %3$s"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends on %1$s"
-msgstr ""
+msgstr "データ系列は%1$sで終了します。"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after %1$d appointment"
 msgid_plural "The series ends after %1$d appointments"
-msgstr[0] ""
+msgstr[0] "データ系列は %1$d アポイントの後に終了します。"
 
 #. File and folder details
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
@@ -2115,6 +2117,8 @@ msgid ""
 "There are more than %n appointments in the current calendar. Some features "
 "are disabled to due to performance reasons."
 msgstr ""
+"現在のカレンダーには %n以上アポイントがあります。性能上の問題でいくつかの機能"
+"が無効です。"
 
 #: apps/io.ox/calendar/week/view.js module:io.ox/calendar
 msgid "Manage favorites"
@@ -2950,7 +2954,7 @@ msgstr "この連絡先の添付ファイルを読み込めませんでした。
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "This list has no contacts yet"
-msgstr ""
+msgstr "このリストにはメンバが今のところ追加されていません。"
 
 #: apps/io.ox/contacts/view-detail.js module:io.ox/contacts
 msgid "Messenger"
@@ -3564,6 +3568,14 @@ msgid "CalDAV URL"
 msgstr "CalDAV URL"
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"フォルダを削除できませんでした。ごみ箱フォルダの権限が不十分か、削除ができな"
+"い特別なフォルダの可能性があります。"
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
 msgstr "フォルダ \"%s\" を削除しますか？"
 
@@ -3643,7 +3655,7 @@ msgstr "ゴミ箱を空にする"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Delete all messages"
-msgstr "すべてのファイルを削除する"
+msgstr "すべてのメッセージを削除する"
 
 #: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
 msgid "Download entire folder"
@@ -4289,7 +4301,7 @@ msgstr "ダウンロード"
 #: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Save to %1$s"
-msgstr "%1$sへ保存 ()"
+msgstr "%1$sへ保存 "
 
 #: apps/io.ox/core/print.js module:io.ox/core
 msgid "Printout"
@@ -5776,7 +5788,7 @@ msgstr "アカウントを追加できませんでした。"
 #. %1$s is the account name like Dropbox, Google Drive, or OneDrive
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
 msgid "Add %1$s account"
-msgstr ""
+msgstr "アカウント %1$s を追加"
 
 #: apps/io.ox/files/actions/add-to-portal.js module:io.ox/files
 msgid "This file has been added to the portal"
@@ -5831,7 +5843,7 @@ msgstr "ファイル: %1$s"
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the file \"%1$d\""
 msgid_plural "Share %1$d items"
-msgstr[0] ""
+msgstr[0] "ファイル\"%1$d\"を共有"
 
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Share the folder \"%1$d\""
@@ -6078,7 +6090,7 @@ msgstr "パブリックリンク"
 
 #: apps/io.ox/files/share/model.js module:io.ox/core
 msgid "Please set password"
-msgstr "パスワードを入力してください。"
+msgstr "パスワードを設定してください"
 
 #. Role: view folder + read all
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -6206,15 +6218,15 @@ msgstr "出席依頼を再送する"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Send notification"
-msgstr ""
+msgstr "通知を送信"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Share \"%1$s\""
-msgstr ""
+msgstr "\"%1$s\"共有"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Permissions for \"%1$s\""
-msgstr ""
+msgstr "\"%1$s\"に対する権限"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Add people"
@@ -6979,7 +6991,6 @@ msgid "unknown sender"
 msgstr "差出人が不明です。"
 
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
-#, fuzzy
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgstr "%1$s からのこれからのメッセージは選択したフォルダへ移動します。"
 
@@ -7158,7 +7169,7 @@ msgstr "添付ファイルあります"
 #: apps/io.ox/mail/print.js
 msgctxt "CC"
 msgid "Copy"
-msgstr "コピー"
+msgstr "CC"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Blind copy"
@@ -7167,7 +7178,7 @@ msgstr "ブラインドコピー"
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "and %1$d others"
-msgstr "残り %1$d 個の添付ファイル"
+msgstr "他 %1$d名の受信者"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Read"
@@ -7320,11 +7331,11 @@ msgstr "1週間"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 month"
-msgstr ""
+msgstr "1ヶ月"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "3 months"
-msgstr ""
+msgstr "3ヶ月"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "6 months"
@@ -7332,7 +7343,7 @@ msgstr "6ヶ月"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "1 year"
-msgstr ""
+msgstr "1年"
 
 #. text of a user list that shows the names of presenting user and participants.
 #. the text to display as presenter name if no user is presenting yet.
@@ -7543,7 +7554,7 @@ msgstr "%1$s からのメール: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error while loading message content"
-msgstr ""
+msgstr "メッセージの読み込み中にエラーが発生しました。"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Mail has been imported"
@@ -7900,7 +7911,7 @@ msgstr "下書きを編集"
 #: apps/io.ox/mail/print.js module:io.ox/mail
 msgctxt "BCC"
 msgid "Blind copy"
-msgstr "ブラインドコピー"
+msgstr "BCC"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Inline"
@@ -8305,7 +8316,7 @@ msgstr "表示名"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Click to show or hide actions for advanced users."
-msgstr ""
+msgstr "クリックして、上級ユーザーのアクションを表示または隠します。"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Expert user?"
@@ -8321,7 +8332,7 @@ msgstr "CalDAV ログイン"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV URL"
-msgstr ""
+msgstr "CardDAV URL"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "CardDAV Login"
@@ -8333,7 +8344,7 @@ msgstr "SMTP サーバ"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Port"
-msgstr ""
+msgstr "SMTP ポート"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "SMTP Login"
@@ -8349,7 +8360,7 @@ msgstr "IMAP サーバ"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Port"
-msgstr ""
+msgstr "IMAP ポート"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "IMAP Login"
@@ -8361,7 +8372,7 @@ msgstr "セキュリティ保護された IMAP"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS URL"
-msgstr ""
+msgstr "EAS URL"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "EAS Login"
@@ -8403,7 +8414,7 @@ msgstr "自動構成"
 msgid ""
 "Let´s automatically configure your device, by clicking the button below. It"
 "´s that simple!"
-msgstr ""
+msgstr "デバイスの自動構成は下のボタンをクリックしてください。簡単です！"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
 msgid "Configure now"
@@ -8507,12 +8518,12 @@ msgstr[0] "このメールアドレスは、使用できません。"
 
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Add participant/resource"
-msgstr ""
+msgstr "出席者/設備を追加"
 
 #. %1$s is an email address
 #: apps/io.ox/participants/add.js module:io.ox/core
 msgid "Cannot add participant/member with an invalid mail address: %1$s"
-msgstr ""
+msgstr "無効なメールアドレス%1$sの出席者/メンバーを追加できません。"
 
 #: apps/io.ox/participants/detail.js module:io.ox/core
 msgid "External participants"
@@ -8613,7 +8624,7 @@ msgstr "エラーが発生しました。"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Click to try again."
-msgstr ""
+msgstr "クリックして再試行"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal widgets"
@@ -8992,6 +9003,7 @@ msgstr "プレゼンターツールバー"
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open. Drag to your desktop to download."
 msgstr ""
+"クリックすると開きます。ダウンロードするには、デスクトップにドラッグします。"
 
 #: apps/io.ox/preview/main.js module:io.ox/core
 msgid "Click to open."
@@ -9051,6 +9063,10 @@ msgid ""
 "accounts might stop working. In this case, you can use your old password to "
 "recover all account passwords:"
 msgstr ""
+"セキュリティ上の理由のため、すべての認証情報は既定のアカウントパスワードで暗"
+"号化されています。既定のパスワードを変更すると、外部アカウントの動作が停止す"
+"る可能性があります。この場合、ご利用のパスワードを使用してすべてのアカウント"
+"パスワードの暗号化を解除してください。"
 
 #: apps/io.ox/settings/accounts/settings/pane.js module:io.ox/settings/accounts
 msgid "Delete %1$s"
@@ -10136,7 +10152,7 @@ msgstr "LinkedIn が次のエラーを報告しました:"
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
 msgid "Click to authorize your account again"
-msgstr ""
+msgstr "クリックしてアカウントを再認証"
 
 #: apps/plugins/portal/linkedIn/register.js module:plugins/portal
 #: apps/plugins/portal/twitter/register.js
@@ -10199,7 +10215,7 @@ msgstr "１件の未読メッセージがあります。"
 
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 msgid "You have %1$d unread messages"
-msgstr ""
+msgstr "%1$d 件の未読メッセージがあります。"
 
 #: apps/plugins/portal/oxdriveclients/register.js module:plugins/portal
 msgid "your platform"
@@ -10362,7 +10378,7 @@ msgstr "Twitter が次のエラーを報告しました:"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry later."
-msgstr ""
+msgstr "後で再試行"
 
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Click to retry"
@@ -10709,882 +10725,19 @@ msgstr "%s に出席依頼"
 msgid "Add on %s"
 msgstr "%s に追加"
 
-#~ msgid "Burnt orange"
-#~ msgstr "バーントオレンジ"
-
-#~ msgid "Dark olive"
-#~ msgstr "濃いオリーブ"
-
-#~ msgid "Dark green"
-#~ msgstr "濃い緑"
-
-#~ msgid "Dark azure"
-#~ msgstr "濃い青"
-
-#~ msgid "Navy Blue"
-#~ msgstr "ネイビーブルー"
-
-#~ msgid "Indigo"
-#~ msgstr "インディゴ"
-
-#~ msgid "Very dark gray"
-#~ msgstr "濃灰色"
-
-#~ msgid "Maroon"
-#~ msgstr "栗色"
-
-#~ msgid "Olive"
-#~ msgstr "オリーブ"
-
-#~ msgid "Teal"
-#~ msgstr "青緑"
-
-#~ msgid "Grayish blue"
-#~ msgstr "グレイッシュブルー"
-
-#~ msgid "Amber"
-#~ msgstr "琥珀色"
-
-#~ msgid "Yellow green"
-#~ msgstr "黄緑"
-
-#~ msgid "Sea green"
-#~ msgstr "シーグリーン"
-
-#~ msgid "Turquoise"
-#~ msgstr "ターコイズ"
-
-#~ msgid "Royal blue"
-#~ msgstr "ロイヤルブルー"
-
-#~ msgid "Medium gray"
-#~ msgstr "ミディアムグレー"
-
-#~ msgid "Magenta"
-#~ msgstr "マゼンタ"
-
-#~ msgid "Gold"
-#~ msgstr "ゴールド"
-
-#~ msgid "Sky blue"
-#~ msgstr "スカイブルー"
-
-#~ msgid "Red violet"
-#~ msgstr "赤紫"
-
-#~ msgid "Light sky blue"
-#~ msgstr "薄いスカイブルー"
-
-#~ msgid "Plum"
-#~ msgstr "プラム"
-
-#~ msgid "No color"
-#~ msgstr "色なし"
-
-#~ msgid "toggle password visibility"
-#~ msgstr "パスワードの表示を切り替える"
-
-#~ msgid "Daily"
-#~ msgstr "[毎日] を選択"
-
-#~ msgid "Daily on workdays"
-#~ msgstr "稼働日は毎日"
-
-#~ msgid "Weekly"
-#~ msgstr "[毎週] を選択"
-
-#~ msgid "Monthly"
-#~ msgstr "[毎月] を選択"
-
-#~ msgid "Yearly"
-#~ msgstr "[毎年] を選択"
-
-#~ msgid "Weekday"
-#~ msgstr "稼働日"
-
-#~ msgid "Repeat by"
-#~ msgstr "毎に繰り返し"
-
-#~ msgid "day(s)"
-#~ msgstr "日"
-
-#~ msgid "week(s)"
-#~ msgstr "週"
-
-#~ msgid "month(s)"
-#~ msgstr "月"
-
-#~ msgid "year(s)"
-#~ msgstr "年"
-
-#~ msgid "Interval"
-#~ msgstr "間隔"
-
-#~ msgid "After a number of occurrences"
-#~ msgstr "何回も発生した後"
-
-#~ msgid "On specific date"
-#~ msgstr "特定の日"
-
-#~ msgid "Ends"
-#~ msgstr "終了"
-
-#~ msgid "Occurrences"
-#~ msgstr "発生"
-
-#~ msgid "Please enter a positive number"
-#~ msgstr "正数を入力してください。"
-
-#~ msgid "Please insert a date after the start date"
-#~ msgstr "開始日より後に日付を挿入してください。"
-
-#~ msgid "Please select at least one day"
-#~ msgstr "少なくとも1日を指定してください。"
-
-#~ msgid "Edit recurrence"
-#~ msgstr "繰り返しを編集"
-
-#~ msgid "Apply"
-#~ msgstr "適用"
-
-#~ msgid "Calendar workweek view"
-#~ msgstr "予定表稼働週ビュー"
-
-#~ msgid "Number of days in work week"
-#~ msgstr "稼働日数"
-
-#~ msgid "Work week starts on"
-#~ msgstr "稼働日の開始曜日"
-
-#~ msgid "fifth / last"
-#~ msgstr "５番目/最後"
-
-#~ msgctxt "superessive"
-#~ msgid "Sunday"
-#~ msgstr "日曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Monday"
-#~ msgstr "月曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Tuesday"
-#~ msgstr "火曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Wednesday"
-#~ msgstr "水曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Thursday"
-#~ msgstr "木曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Friday"
-#~ msgstr "金曜日"
-
-#~ msgctxt "superessive"
-#~ msgid "Saturday"
-#~ msgstr "土曜日"
-
-#~ msgid " and "
-#~ msgstr " と "
-
-#~ msgid ", "
-#~ msgstr ", "
-
-#~ msgctxt "daily"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d days."
-#~ msgstr[0] "毎日"
-
-#~ msgctxt "weekly"
-#~ msgid "Every day."
-#~ msgid_plural "Every %1$d weeks on all days."
-#~ msgstr[0] "毎日"
-
-#~ msgctxt "weekly"
-#~ msgid "On workdays."
-#~ msgid_plural "Every %1$d weeks on workdays."
-#~ msgstr[0] "稼働日"
-
-#~ msgctxt "weekly"
-#~ msgid "Every weekend."
-#~ msgid_plural "Every %1$d weeks on weekends."
-#~ msgstr[0] "毎週"
-
-#~ msgid "Never."
-#~ msgstr "期限なし"
-
-#~ msgctxt "weekly"
-#~ msgid "Every %2$s."
-#~ msgid_plural "Every %1$d weeks on %2$s."
-#~ msgstr[0] "毎 %2$s"
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on day %2$d."
-#~ msgid_plural "Every %1$d months on day %2$d."
-#~ msgstr[0] "毎月の %2$d 日"
-
-#~ msgctxt "monthly"
-#~ msgid "Every month on the %2$s %3$s."
-#~ msgid_plural "Every %1$d months on the %2$s %3$s."
-#~ msgstr[0] "毎月の%2$s%3$s"
-
-#~ msgid "Every year in %1$s on day %2$d."
-#~ msgstr "毎年の%1$sの%2$d日"
-
-#~ msgid "Every year on the %1$s %2$s in %3$d."
-#~ msgstr "毎年の%1$s月%2$s%3$d日"
-
-#~ msgid "The series ends on %1$s."
-#~ msgstr "データ系列は%1$sで終了します。"
-
-#~ msgid "The series ends after one occurrence."
-#~ msgid_plural "The series ends after %1$d occurences."
-#~ msgstr[0] "データ系列は１回のアポイントの後に終了します。"
-
-#~ msgid "The series never ends."
-#~ msgstr "期限なしに設定"
-
 #~ msgid ""
-#~ "By changing the date of this appointment you are creating an appointment "
-#~ "exception to the series."
+#~ "There are %1$d messages in this folder; not all messages are displayed in "
+#~ "the list. If you want to move or delete all messages, you find "
+#~ "corresponding actions in the folder context menu."
 #~ msgstr ""
-#~ "アポイントの日付を変更すると、定期的なアポイントにアポイントの例外が作成さ"
-#~ "れます。"
-
-#~ msgid "Create exception"
-#~ msgstr "例外を作成"
+#~ "このフォルダにメッセージが %1$d 通あります；メッセージがすべてリストに表示"
+#~ "されるわけではありません。すべてのメッセージを移動または削除したい場合は、"
+#~ "フォルダのコンテキストメニューで対応するアクションを選んでください。"
 
 #~ msgid ""
-#~ "This appointment is an exception. Changing the series does not affect "
-#~ "exceptions."
-#~ msgstr "このアポイントは例外です。シリーズの変更は例外に影響しません。"
-
-#~ msgid "Print preview"
-#~ msgstr "印刷プレビュー"
-
-#~ msgctxt "contact-print-dialog"
-#~ msgid "Details"
-#~ msgstr "次に示す詳細情報。"
-
-#~ msgid "Select print layout"
-#~ msgstr "印刷の選択"
-
-#~ msgid "This list has no members yet"
-#~ msgstr "このリストにはメンバが今のところ追加されていません。"
-
-#~ msgid "Business"
-#~ msgstr "ビジネス"
-
-#~ msgid "Home"
-#~ msgstr "自宅"
-
-#~ msgid ""
-#~ "This filetype is not supported as contact picture. Only image types (JPG, "
-#~ "GIF, BMP or PNG) are supported."
-#~ msgstr ""
-#~ "このファイルタイプは連絡先画像としてサポートされていません。画像ファイル "
-#~ "(JPG、GIF、BMP、PNG) のみサポートされます。"
-
-#~ msgid "Upload image"
-#~ msgstr "画像をアップロード"
-
-#~ msgid "Warning!"
-#~ msgstr "警告！"
-
-#~ msgid ""
-#~ "This is a browser feature for developers. If you were asked to copy and "
-#~ "paste anything here, somebody might want to take over your account. Do "
-#~ "not enter any script code without knowing what it does."
-#~ msgstr ""
-#~ "これは開発者用のブラウザの特徴です。ここに何かをコピーして貼り付けるように"
-#~ "依頼された場合、誰かによってアカウントを乗っ取られる可能性があります。スク"
-#~ "リプトコードが不明な場合は入力しないようにしてください。"
-
-#~ msgid "Add new address book"
-#~ msgstr "新規アドレス帳を追加"
-
-#~ msgid "New address book"
-#~ msgstr "新規アドレス帳"
-
-#~ msgid "Create sharing link"
-#~ msgstr "共有リンクを作成"
-
-#~ msgid "Subscribe address book"
-#~ msgstr "アドレス帳を登録"
-
-#~ msgid "Subscribe calendar"
-#~ msgstr "予定表を登録"
-
-#~ msgid "Actions for %1$s"
-#~ msgstr "%1$s用アクション"
-
-#~ msgid "Create folder"
-#~ msgstr "フォルダを作成"
-
-#~ msgid ""
-#~ "Did you know that you can take OX App Suite with you? Just click this "
-#~ "icon and choose 'Connect your device' from the menu."
-#~ msgstr ""
-#~ "OX App Suiteを使えることを知っていますか？アイコンをクリックして、メニュー"
-#~ "から'デバイスの接続'を選んでください。"
-
-#~ msgid "Use accessibility improvements"
-#~ msgstr "アクセスのしやすさの向上を使用"
-
-#~ msgid "My %1$s calendar"
-#~ msgstr "予定表%1$s"
-
-#~ msgid "My %1$s contacts"
-#~ msgstr "連絡先%1$s"
-
-#~ msgid "My %1$s account"
-#~ msgstr "アカウント%1$s"
-
-#~ msgid "Configure %1$s"
-#~ msgstr "%1$sを構成"
-
-#~ msgid "Added %1$s."
-#~ msgstr "%1$sを追加しました。"
-
-#~ msgid "Removed %1$s."
-#~ msgstr "%1$sを削除しました。"
-
-#~ msgid "Run auto-play mode"
-#~ msgstr "自動再生モードを実行"
-
-#~ msgid "Pause auto-play mode"
-#~ msgstr "自動再生モードを一時停止"
-
-#~ msgid "Rename File"
-#~ msgstr "ファイル名を変更"
-
-#~ msgid "Start video"
-#~ msgstr "動画を開始"
-
-#~ msgid "Close this notification"
-#~ msgstr "この通知を隠す"
-
-#~ msgid "Sharing link created for file \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "ファイル\"%1$d\"用に共有リンクが作成されました。"
-
-#~ msgid "Sharing link created for folder \"%1$d\""
-#~ msgid_plural "Sharing link created for %1$d items"
-#~ msgstr[0] "フォルダ\"%1$d\"用に共有リンクが作成されました。"
-
-#~ msgid "Loop once only"
-#~ msgstr "一度だけ繰り返し"
-
-#~ msgid "Keep looping endlessly"
-#~ msgstr "永遠に繰り返し"
-
-#~ msgid "Slideshow / Autoplay mode"
-#~ msgstr "スライドショー / 自動再生モード"
-
-#~ msgid "Autoplay pause in seconds"
-#~ msgstr "数秒後に自動再生を一時停止"
-
-#~ msgid "Share %1$s \"%2$s\""
-#~ msgstr "%1$s\"%2$s\"を共有する"
-
-#~ msgid "file"
-#~ msgstr "ファイル"
-
-#~ msgid "folder"
-#~ msgstr "フォルダ"
-
-#~ msgid "Permissions for %1$s \"%2$s\""
-#~ msgstr "%1$sに対する権限\"%2$s\""
-
-#~ msgid "Send notification by email"
-#~ msgstr "メールで通知を送信"
-
-#~ msgid "Text documents"
-#~ msgstr "テキストドキュメント"
-
-#~ msgid "Search in all folders"
-#~ msgstr "すべてのフォルダを検索"
-
-#~ msgid "This field is mandatory"
-#~ msgstr "このフィールドは必須です。"
-
-#~ msgid "[Copy] %1$s"
-#~ msgstr "%1$s の［コピー］"
-
-#~ msgid "Reply all"
-#~ msgstr "全員に返信"
-
-#~ msgctxt "verb"
-#~ msgid "Flag"
-#~ msgstr "フラグ"
-
-#~ msgid ""
-#~ "The file \"%1$s\" cannot be uploaded because it exceeds the total "
-#~ "attachment size limit of %2$s"
-#~ msgstr ""
-#~ "ファイル \"%1$s\" が総添付サイズ量の上限 %2$s を超えたため、アップロードで"
-#~ "きません。"
-
-#~ msgid "Flagged"
-#~ msgstr "フラグ"
-
-#~ msgid "Not flagged"
-#~ msgstr "未フラグ"
-
-#~ msgid "Draft saved at %1$s"
-#~ msgstr "下書きが%1$sに保存されました。"
-
-#~ msgid "Reply to mailing list"
-#~ msgstr "メーリング リストに返信"
-
-#~ msgid "This message was sent via the mailing list %1$s."
-#~ msgstr "このメッセージはメーリングリスト%1$sで送信されました。"
-
-#~ msgid "This message was sent via a mailing list."
-#~ msgstr "このメッセージはメーリングリストで送信されました。"
-
-#~ msgid "Do you really want to reply all or just %1$s?"
-#~ msgstr "全員に返信しますか、それとも%1$sだけに返信しますか？"
-
-#~ msgid ""
-#~ "Attachment file size too large. You have to use %1$s or reduce the "
-#~ "attachment file size."
-#~ msgstr ""
-#~ "添付ファイルサイズが大きすぎます。%1$sを使用するか、添付ファイルサイズを縮"
-#~ "小してください。"
-
-#~ msgid "%1$d month"
-#~ msgid_plural "%1$d months"
-#~ msgstr[0] "%1$d か月"
-
-#~ msgid "%1$d year"
-#~ msgid_plural "%1$d years"
-#~ msgstr[0] "%1$d 年"
-
-#~ msgid "no expiry date"
-#~ msgstr "期限がありません。"
-
-#~ msgid ""
-#~ "Attachment size too large. Please remove attachments or reduce the file "
-#~ "size."
-#~ msgstr ""
-#~ "添付ファイルサイズが大きすぎます。添付ファイルを削除するか、サイズを縮小し"
-#~ "てください。"
-
-#~ msgctxt "dialog"
-#~ msgid "Delete draft"
-#~ msgstr "下書きを削除"
-
-#~ msgid "Keep draft"
-#~ msgstr "下書きを保持"
-
-#~ msgid "Do you really want to delete this draft?"
-#~ msgstr "この下書きを本当に削除しますか？"
-
-#~ msgid "[Copy] "
-#~ msgstr "[コピー] "
-
-#~ msgid "Couldn't load editor"
-#~ msgstr "エディタを読み込めませんでした。"
-
-#~ msgid "Error: Failed to load message content"
-#~ msgstr "エラー：メッセージの内容を読み込めませんでした。"
-
-#~ msgid "Error: Failed to load messages"
-#~ msgstr "エラー：メッセージを読み込めませんでした。"
-
-#~ msgid "This rule contains unsupported properties. "
-#~ msgstr "このルールには、サポートされていないプロパティが含まれます。 "
-
-#~ msgid "Add IMAP keyword"
-#~ msgstr "IMAPキーワードを追加"
-
-#~ msgid "Set color flag"
-#~ msgstr "カラーフラグを設定"
-
-#~ msgid "flagged"
-#~ msgstr "フラグ"
-
-#~ msgid "Remove IMAP keyword"
-#~ msgstr "IMAPキーワードを削除"
-
-#~ msgid "Copy message to folder"
-#~ msgstr "メッセージをフォルダにコピー"
-
-#~ msgid "Nested condition"
-#~ msgstr "ネスト化条件"
-
-#~ msgid "continue if all of these conditions are met"
-#~ msgstr "この条件全てを満たす時に継続"
-
-#~ msgid "continue if any of these condition is met."
-#~ msgstr "この条件のいずれかを満たす時に継続"
-
-#~ msgid "continue if all conditions are met"
-#~ msgstr "全条件を満たす時に継続"
-
-#~ msgid "Body"
-#~ msgstr "本文"
-
-#~ msgid "Current date"
-#~ msgstr "現在の日付"
-
-#~ msgid "original timezone"
-#~ msgstr "元のタイムゾーン"
-
-#~ msgid "Rule applies from"
-#~ msgstr "からルールが適用されます:"
-
-#~ msgid "Rule applies until"
-#~ msgstr "までルールが適用されます。"
-
-#~ msgid "Rule applies on"
-#~ msgstr "にルールが適用されます。"
-
-#~ msgid "Rule applies not on"
-#~ msgstr "にルールが適用されません。"
-
-#~ msgid "Rule applies not from"
-#~ msgstr "からルールが適用されません。"
-
-#~ msgid "Rule applies not until"
-#~ msgstr "までルールが適用されません。"
-
-#~ msgid "Sent date"
-#~ msgstr "送信日"
-
-#~ msgid "Envelope"
-#~ msgstr "エンベロープ"
-
-#~ msgid "Address"
-#~ msgstr "アドレス"
-
-#~ msgid "Cc"
-#~ msgstr "Cc"
-
-#~ msgid "Bcc"
-#~ msgstr "Bcc"
-
-#~ msgid "Sender"
-#~ msgstr "差出人"
-
-#~ msgid "Resent-From"
-#~ msgstr "から再送信"
-
-#~ msgid "Resent-To"
-#~ msgstr "に再送信"
-
-#~ msgid "Exists"
-#~ msgstr "存在"
-
-#~ msgid "Part"
-#~ msgstr "部分"
-
-#~ msgid "Contains not"
-#~ msgstr "次の文字列を含まない"
-
-#~ msgid "Is not exactly"
-#~ msgstr "次の数値以外"
-
-#~ msgid "Matches not"
-#~ msgstr "次の文字列と不一致"
-
-#~ msgid "Starts with"
-#~ msgstr "で開始"
-
-#~ msgid "Starts not with"
-#~ msgstr "で開始しない"
-
-#~ msgid "Ends with"
-#~ msgstr "で終了"
-
-#~ msgid "Ends not with"
-#~ msgstr "で終了しない"
-
-#~ msgid "Not Regex"
-#~ msgstr "次の文字列と不一致 (正規表現)"
-
-#~ msgid "Keep mails from %1$s"
-#~ msgstr "%1$sからのメールを保持"
-
-#~ msgid "Discard mails from %1$s"
-#~ msgstr "%1$sからのメールを破棄"
-
-#~ msgid "Move mails from %1$s into folder %2$s"
-#~ msgstr "%1$sからのメールを%2$sフォルダに移動"
-
-#~ msgid "Redirect mails from %1$s to %2$s"
-#~ msgstr "%1$sからのメールを%2$sにリダイレクト"
-
-#~ msgid "Reject mails from %1$s with reason %2$s"
-#~ msgstr "%1$sからのメールを%2$sの理由で拒否"
-
-#~ msgid "Mark mails from %1$s as seen"
-#~ msgstr "%1$sからのメールに既読の印をつける"
-
-#~ msgid "Mark mails from %1$s as deleted"
-#~ msgstr "%1$sからのメールに削除済みの印をつける"
-
-#~ msgid "Flag mails from %1$s with a color"
-#~ msgstr "%1$sからのメールに色でフラグをつける"
-
-#~ msgid "Tag mails from %1$s with %2$s"
-#~ msgstr "%1$sからのメールを%2$sでタグ付けする"
-
-#~ msgid "Keep mails to %1$s"
-#~ msgstr "%1$sへのメールを保持"
-
-#~ msgid "Discard mails to %1$s"
-#~ msgstr "%1$sへのメールを破棄"
-
-#~ msgid "Move mails to %1$s into folder %2$s"
-#~ msgstr "%1$sへのメールを%2$sフォルダに移動"
-
-#~ msgid "Redirect mails to %1$s to %2$s"
-#~ msgstr "%1$sへのメールを%2$sにリダイレクト"
-
-#~ msgid "Reject mails to %1$s with reason %2$s"
-#~ msgstr "%1$sへのメールを%2$sの理由で拒否"
-
-#~ msgid "Mark mails to %1$s as seen"
-#~ msgstr "%1$sへのメールに既読の印をつける"
-
-#~ msgid "Mark mails to %1$s as deleted"
-#~ msgstr "%1$sへのメールに削除済みの印をつける"
-
-#~ msgid "Flag mails to %1$s with a color"
-#~ msgstr "%1$sへのメールに色でフラグをつける"
-
-#~ msgid "Tag mails to %1$s with %2$s"
-#~ msgstr "%1$sへのメールを%2$sでタグ付けする"
-
-#~ msgid "Keep mails with subject %1$s"
-#~ msgstr "件名%1$sのメールを保持"
-
-#~ msgid "Discard mails with subject %1$s"
-#~ msgstr "件名%1$sのメールを破棄"
-
-#~ msgid "Move mails with subject %1$s into folder %2$s"
-#~ msgstr "件名%1$sのメールをフォルダ%2$sに移動"
-
-#~ msgid "Redirect mails with subject %1$s to %2$s"
-#~ msgstr "件名%1$sのメールを%2$sにリダイレクト"
-
-#~ msgid "Reject mails with subject %1$s with reason %2$s"
-#~ msgstr "件名%1$sのメールを%2$sの理由で拒否"
-
-#~ msgid "Mark mails with subject %1$s as seen"
-#~ msgstr "件名%1$sのメールに既読の印をつける"
-
-#~ msgid "Mark mails with subject %1$s as deleted"
-#~ msgstr "件名%1$sのメールに削除済みの印をつける"
-
-#~ msgid "Flag mails with subject %1$s with a color"
-#~ msgstr "件名%1$sのメールに色でフラグをつける"
-
-#~ msgid "Tag mails with subject %1$s with %2$s"
-#~ msgstr "件名%1$sのメールを%2$sでタグ付けする"
-
-#~ msgid "Use browser default"
-#~ msgstr "既定のブラウザを使用"
-
-#~ msgid "Prettify plain text mails"
-#~ msgstr "テキストメールを修飾"
-
-#~ msgid "Show folder with all unseen messages"
-#~ msgstr "未表示の全メッセージ付きでフォルダを表示"
-
-#~ msgid "Font"
-#~ msgstr "フォント"
-
-#~ msgid "Confirm recipients when replying to a mailing list"
-#~ msgstr "メーリングリストに返信時に宛先を確認"
-
-#~ msgid "Default font style"
-#~ msgstr "既定のフォントスタイル"
-
-#~ msgid "This is how your message text will look like."
-#~ msgstr "メッセージテキストは次のように表示されます。"
-
-#~ msgid "Default signature"
-#~ msgstr "既定署名"
-
-#~ msgid "Edit copy"
-#~ msgstr "コピーを編集"
-
-#~ msgid "message"
-#~ msgstr "メッセージ"
-
-#~ msgid "Send from"
-#~ msgstr "から送信"
-
-#~ msgid "default sender"
-#~ msgstr "既定の差出人"
-
-#~ msgid "unselect all"
-#~ msgstr "すべてを選択解除"
-
-#~ msgid "select all"
-#~ msgstr "すべてを選択"
-
-#~ msgid ""
-#~ "The Notice is sent out for messages received by %1$s. You may choose to "
-#~ "send it out for other recipient addresses too:"
-#~ msgstr ""
-#~ "%1$sが受信したメッセージに対して通知が送信されます。他の宛先アドレスにも送"
-#~ "信するように選択できます。"
-
-#~ msgid "Flag"
-#~ msgstr "フラグ"
-
-#~ msgid "My %1$s account (%2$d)"
-#~ msgstr " %1$s アカウント (%2$d)"
-
-#~ msgid "Account Name"
-#~ msgstr "アカウント名"
-
-#~ msgid "Get the App from %1$s."
-#~ msgstr "%1$s からアプリケーションを入手してください。"
-
-#~ msgid ""
-#~ "Let´s automatically configure your device, by clicking the button below."
-#~ msgstr "デバイスの自動構成は下のボタンをクリックしてください。"
-
-#~ msgid "CalDAV"
-#~ msgstr "CalDAV"
-
-#~ msgid "Login"
-#~ msgstr "ログイン"
-
-#~ msgid "CardDAV"
-#~ msgstr "CardDAV"
-
-#~ msgid "IMAP"
-#~ msgstr "IMAP"
-
-#~ msgid "Server Name"
-#~ msgstr "サーバ名"
-
-#~ msgid "Port"
-#~ msgstr "ポート"
-
-#~ msgid "User Name"
-#~ msgstr "ユーザ名"
-
-#~ msgid "Connection"
-#~ msgstr "接続"
-
-#~ msgid "SMTP"
-#~ msgstr "SMTP"
-
-#~ msgid "EAS"
-#~ msgstr "EAS"
-
-#~ msgid "Show or hide actions for advanced users."
-#~ msgstr "上級ユーザーのアクションを表示または隠す"
-
-#~ msgid "Manual Configuration"
-#~ msgstr "手動構成"
-
-#~ msgid "Install"
-#~ msgstr "インストール"
-
-#~ msgid "Connect your device"
-#~ msgstr "デバイスの接続"
-
-#~ msgid "Add contact/resource"
-#~ msgstr "連絡先/設備を追加"
-
-#~ msgid "Cannot add contact with an invalid mail address: %1$s"
-#~ msgstr "無効なメールアドレス%1$sの連絡先を追加できません。"
-
-#~ msgid "This list has no participants yet"
-#~ msgstr "このリストにはまだ出席者が追加されていません。"
-
-#~ msgid "Members (%1$d)"
-#~ msgstr "メンバー (%1$d)"
-
-#~ msgid "Try again."
-#~ msgstr "再試行"
-
-#~ msgid "Open file. Drag to your desktop to download."
-#~ msgstr ""
-#~ "ファイルを開きます。ダウンロードするには、デスクトップにドラッグします。"
-
-#~ msgid "Open file"
-#~ msgstr "ファイルを開きます。"
-
-#~ msgid "Show information about account recovery"
-#~ msgstr "アカウント復元についての情報を表示"
-
-#~ msgid ""
-#~ "For security reasons, all credentials are encrypted with your primary "
-#~ "account password. If you change your primary password, your external "
-#~ "accounts might stop working. In this case, you can use your old password "
-#~ "to recover all account passwords."
-#~ msgstr ""
-#~ "セキュリティ上の理由のため、すべての認証情報は既定のアカウントパスワードで"
-#~ "暗号化されています。既定のパスワードを変更すると、外部アカウントの動作が停"
-#~ "止する可能性があります。この場合、ご利用のパスワードを使用してすべてのアカ"
-#~ "ウントパスワードの復元してください。"
-
-#~ msgid "This task has no participants yet"
-#~ msgstr "この仕事への出席者が今のところ追加されていません。"
-
-#~ msgid "General"
-#~ msgstr "全般"
-
-#~ msgid "Not likely at all"
-#~ msgstr "全く気に入りません。"
-
-#~ msgid "%1$d of 10 points."
-#~ msgstr "10ポイント中%1$d "
-
-#~ msgid "Extremely likely"
-#~ msgstr "大変気に入っています。"
-
-#~ msgid "How likely is it that you would recommend %1$s to a friend?"
-#~ msgstr "友達への%1$sのオススメ度はどれくらいですか？"
-
-#~ msgid "Please rate the following application:"
-#~ msgstr "次のアプリケーションを評価してください。"
-
-#~ msgid "Please select a rating."
-#~ msgstr "評価を選択してください。"
-
-#~ msgid "Feedback could not be sent"
-#~ msgstr "フィードバックを送信できませんでした。"
-
-#~ msgid ""
-#~ "Your default reminder could not be set for this appointment due to "
-#~ "insufficient permissions"
-#~ msgstr ""
-#~ "権限が不十分なため、既定のアラームをこのアポイントに設定できません。"
-
-#~ msgid "Overdue Task %1$s."
-#~ msgstr "期限が過ぎた仕事%1$s期限が過ぎた仕事"
-
-#~ msgid "Authorize your account again"
-#~ msgstr "アカウントを再認証してくてください。"
-
-#~ msgid "You have %1$d unread message"
-#~ msgid_plural "You have %1$d unread messages"
-#~ msgstr[0] "%1$d 件の未読メッセージがあります。"
-
-#~ msgid "PowerDNS parental control"
-#~ msgstr "PowerDNS ペアレンタル・コントロール"
-
-#~ msgid "Open parental control settings"
-#~ msgstr "ペアレンタル・コントロール設定を表示します。"
-
-#~ msgid "Retry later."
-#~ msgstr "後で再試行"
-
-#~ msgid "Leave empty if you have none"
-#~ msgstr "パスワードがなければそのままにしてください。"
+#~ "You can manage desktop notifications at any time, by vitising your "
+#~ "settings"
+#~ msgstr "設定を開くことでいつでもデスクトップ通知を管理できます。"
 
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
@@ -11732,6 +10885,9 @@ msgstr "%s に追加"
 #~ msgid "(may be slow on old machines)"
 #~ msgstr "(古いマシン上では速度が低下する場合があります)"
 
+#~ msgid ", "
+#~ msgstr ", "
+
 #~ msgid "--"
 #~ msgstr "--"
 
@@ -11764,6 +10920,9 @@ msgstr "%s に追加"
 
 #~ msgid "2 hour"
 #~ msgstr "2 時間"
+
+#~ msgid "2 weeks"
+#~ msgstr "2 週間"
 
 #~ msgid "20"
 #~ msgstr "20"
@@ -12431,6 +11590,13 @@ msgstr "%s に追加"
 #~ msgid "Applications"
 #~ msgstr "アプリケーション"
 
+#~ msgid "Apply"
+#~ msgstr "ロールを割り当てる"
+
+#~| msgid "Email from %1$s: %2$s"
+#~ msgid "Apply for mails from %1$s"
+#~ msgstr "%1$s からのメール: %2$s"
+
 #~ msgid "Apply to all messages?"
 #~ msgstr "すべてのメッセージに適用されますか。"
 
@@ -12537,6 +11703,9 @@ msgstr "%s に追加"
 
 #~ msgid "Are you sure?"
 #~ msgstr "続行しますか？"
+
+#~ msgid "Argentina"
+#~ msgstr "アルゼンチン"
 
 #~ msgid "Armenia"
 #~ msgstr "アルメニア"
@@ -12905,8 +12074,14 @@ msgstr "%s に追加"
 #~ msgid "Bars"
 #~ msgstr "バー"
 
+#~ msgid "Based on mailing list"
+#~ msgstr "メーリング リスト"
+
 #~ msgid "Based on sender"
 #~ msgstr "差出人"
+
+#~ msgid "Bcc"
+#~ msgstr "Bcc"
 
 #~ msgid "Bcc..."
 #~ msgstr "Bcc..."
@@ -13048,6 +12223,9 @@ msgstr "%s に追加"
 #~ msgid "Cambodia"
 #~ msgstr "カンボジア"
 
+#~ msgid "Cameroon"
+#~ msgstr "カメルーン"
+
 #~ msgid "Can not create appointment in a folder other than appointment folder"
 #~ msgstr "アポイント フォルダ以外のフォルダには、アポイントを作成できません。"
 
@@ -13086,6 +12264,9 @@ msgstr "%s に追加"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "ケイマン諸島"
+
+#~ msgid "Cc"
+#~ msgstr "Cc"
 
 #~ msgid "Cc..."
 #~ msgstr "Cc..."
@@ -13230,10 +12411,6 @@ msgstr "%s に追加"
 #~ msgid "Close quick config"
 #~ msgstr "クイック構成を閉じる"
 
-#~| msgid "Click to close the recurrence view"
-#~ msgid "Close recurrence view"
-#~ msgstr "繰り返しビューを閉じるには、クリックしてください。"
-
 #~ msgid "Close search"
 #~ msgstr "検索を閉じる"
 
@@ -13357,6 +12534,9 @@ msgstr "%s に追加"
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "連絡先の画像を一部読み込めませんでした。"
 
+#~ msgid "Couldn't load file data."
+#~ msgstr "ファイル データを読み込めませんでした。"
+
 #~ msgid "Couldn't load folders."
 #~ msgstr "フォルダを読み込めませんでした。"
 
@@ -13413,6 +12593,9 @@ msgstr "%s に追加"
 
 #~ msgid "Created from:"
 #~ msgstr "作成元:"
+
+#~ msgid "Created on"
+#~ msgstr "作成日:"
 
 #~ msgid "Created on %1$s by %2$s, last changed on %3$s by %4$s"
 #~ msgstr "作成日: %1$s 作成者: %2$s 最終更新日: %3$s 最終更新者: %4$s"
@@ -13552,6 +12735,9 @@ msgstr "%s に追加"
 #~ msgid "Decline counter proposal"
 #~ msgstr "新しい提案を拒否"
 
+#~ msgid "Default E-Mail font size?"
+#~ msgstr "既定のメール フォント サイズを使用"
+
 #~ msgid "Default E-Mail font?"
 #~ msgstr "既定のメールフォントを使用"
 
@@ -13679,10 +12865,6 @@ msgstr "%s に追加"
 
 #~ msgid "Detail information for publication"
 #~ msgstr "公開するための詳細情報"
-
-#~| msgid "Delete contact"
-#~ msgid "Detailed contact list"
-#~ msgstr "連絡先を削除"
 
 #~ msgid ""
 #~ "Detailed guides for all modules are located in the help section of the "
@@ -13988,6 +13170,9 @@ msgstr "%s に追加"
 #~ msgid "Edit categories"
 #~ msgstr "利用可能なカテゴリ:"
 
+#~ msgid "Edit document"
+#~ msgstr "ドキュメントを編集"
+
 #~ msgid "Edit feed"
 #~ msgstr "フィードを編集"
 
@@ -14203,6 +13388,9 @@ msgstr "%s に追加"
 #~ msgid "Entire thread"
 #~ msgstr "スレッド全体"
 
+#~ msgid "Envelope"
+#~ msgstr "エンベロープ"
+
 #~ msgid "Equatorial Guinea"
 #~ msgstr "赤道ギニア"
 
@@ -14359,27 +13547,6 @@ msgstr "%s に追加"
 #~ msgid "Every"
 #~ msgstr "毎"
 
-#~ msgid "Every %1$d days."
-#~ msgstr "%1$d 日ごと"
-
-#~ msgid "Every %1$d months on day %2$d."
-#~ msgstr "%1$d 月ごとの %2$d 日"
-
-#~ msgid "Every %1$d months on the %2$s %3$s."
-#~ msgstr "%1$d か月ごとの %2$s %3$s"
-
-#~ msgid "Every %1$d weeks on %2$s."
-#~ msgstr "%1$d 週間ごとの %2$s"
-
-#~ msgid "Every %1$d weeks on all days."
-#~ msgstr "%1$d 週間ごとのすべての曜日"
-
-#~ msgid "Every %1$d weeks on weekends."
-#~ msgstr "%1$d 週間ごとの週末"
-
-#~ msgid "Every %1$d weeks on workdays."
-#~ msgstr "%1$d 週間ごとの稼働日"
-
 #~ msgid "Exception caught:"
 #~ msgstr "次の例外が発生しました:"
 
@@ -14429,6 +13596,9 @@ msgstr "%s に追加"
 #~ msgctxt "app"
 #~ msgid "Favorite timezone"
 #~ msgstr "お気に入りのタイムゾーン"
+
+#~ msgid "Fax (Business)"
+#~ msgstr "FAX (ビジネス)"
 
 #~ msgid "Fax (business)"
 #~ msgstr "FAX (ビジネス)"
@@ -14504,6 +13674,9 @@ msgstr "%s に追加"
 #~ msgid "Fit to screen height"
 #~ msgstr "Fit to screen width"
 
+#~ msgid "Flag"
+#~ msgstr "フラグ"
+
 #~ msgid "Flag #%d"
 #~ msgstr "フラグ #%d"
 
@@ -14545,6 +13718,9 @@ msgstr "%s に追加"
 
 #~ msgid "Follow the instructions and install the updater."
 #~ msgstr "指示に従って、Updater をインストールください。"
+
+#~ msgid "Font name"
+#~ msgstr "フォント名"
 
 #~ msgid "Font size"
 #~ msgstr "フォント サイズ"
@@ -14588,6 +13764,9 @@ msgstr "%s に追加"
 #~ msgid "Fri"
 #~ msgstr "金"
 
+#~ msgid "Friday"
+#~ msgstr "金曜日"
+
 #~ msgid "From %s"
 #~ msgstr "差出人 %s"
 
@@ -14625,6 +13804,9 @@ msgstr "%s に追加"
 
 #~ msgid "Gambia"
 #~ msgstr "ガンビア"
+
+#~ msgid "General info"
+#~ msgstr "全般について"
 
 #~ msgid "Georgia"
 #~ msgstr "ジョージア"
@@ -14812,6 +13994,10 @@ msgstr "%s に追加"
 #~ msgid "Holy See (Vatican City State)"
 #~ msgstr "教皇庁 (バチカン市国州)"
 
+#~ msgctxt "address"
+#~ msgid "Home"
+#~ msgstr "自宅"
+
 #~ msgid "Honduras"
 #~ msgstr "ホンジュラス"
 
@@ -14976,6 +14162,9 @@ msgstr "%s に追加"
 #~ msgid "Incorrect input."
 #~ msgstr "入力が正しくありません。"
 
+#~ msgid "India"
+#~ msgstr "インド"
+
 #~ msgid "Indian/Antananarivo"
 #~ msgstr "インディアン/アンタナナリボ"
 
@@ -15029,9 +14218,6 @@ msgstr "%s に追加"
 
 #~ msgid "Infoitem"
 #~ msgstr "インフォアイテム"
-
-#~ msgid "Information about account recovery..."
-#~ msgstr "アカウント復元についての情報"
 
 #~ msgid "Infostore"
 #~ msgstr "インフォストア"
@@ -15146,6 +14332,9 @@ msgstr "%s に追加"
 #~ msgid "Is at most"
 #~ msgstr "最大"
 
+#~ msgid "Is not exactly"
+#~ msgstr "次の数値以外"
+
 #~ msgid "Isle of Man"
 #~ msgstr "マン島"
 
@@ -15198,6 +14387,9 @@ msgstr "%s に追加"
 
 #~ msgid "Kazakhstan"
 #~ msgstr "カザフスタン"
+
+#~ msgid "Keep the draft."
+#~ msgstr "下書きを保存"
 
 #~ msgid "Kenya"
 #~ msgstr "ケニヤ"
@@ -15328,6 +14520,9 @@ msgstr "%s に追加"
 
 #~ msgid "Lock object"
 #~ msgstr "オブジェクトをロック"
+
+#~ msgid "Login"
+#~ msgstr "ログイン:"
 
 #
 #~ msgctxt "username"
@@ -15485,6 +14680,9 @@ msgstr "%s に追加"
 #~ msgid "Mediaplayer"
 #~ msgstr "メディア プレーヤー"
 
+#~ msgid "Member"
+#~ msgstr "メンバ"
+
 #~ msgid "Members of group"
 #~ msgstr "グループのメンバ"
 
@@ -15561,6 +14759,9 @@ msgstr "%s に追加"
 #~ msgid "Monaco"
 #~ msgstr "モナコ"
 
+#~ msgid "Monday"
+#~ msgstr "月曜日"
+
 #~ msgid "Mongolia"
 #~ msgstr "モンゴル"
 
@@ -15579,6 +14780,10 @@ msgstr "%s に追加"
 
 #~ msgid "Morocco"
 #~ msgstr "モロッコ"
+
+#~| msgid "Apply to all subfolders"
+#~ msgid "Move all mails from a sender"
+#~ msgstr "全てのサブフォルダに適用"
 
 #~ msgid "Moving mails ... This may take a few seconds."
 #~ msgstr "メールを移動しています... 数秒かかる場合があります。"
@@ -15759,14 +14964,23 @@ msgstr "%s に追加"
 #~ msgid "No mails"
 #~ msgstr "メールはありません。"
 
+#~ msgid "No mails at all!"
+#~ msgstr "メールがありません。"
+
 #~ msgid "No mails found for \"%s\""
 #~ msgstr "\"%s\" のメールは見つかりませんでした。"
+
+#~ msgid "No mails in this folder"
+#~ msgstr "このフォルダにメールはありません。"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "このサーバには、一致するテンプレートがありません。"
 
 #~ msgid "No participants available"
 #~ msgstr "出席者はいません。"
+
+#~ msgid "No recurrence"
+#~ msgstr "定期的なアポイントはありません。"
 
 #~ msgid "No resources available"
 #~ msgstr "利用可能な設備はありません。"
@@ -15803,6 +15017,9 @@ msgstr "%s に追加"
 
 #~ msgid "No unread E-Mail."
 #~ msgstr "未読のメールはありません。"
+
+#~ msgid "No versions available"
+#~ msgstr "利用可能なバージョンはありません。"
 
 #~ msgid "No wall posts yet."
 #~ msgstr "ウォール ポストは今のところありません。"
@@ -15873,6 +15090,9 @@ msgstr "%s に追加"
 #~ msgid "Number of days in custom view"
 #~ msgstr "カスタム ビューで表示される日数"
 
+#~ msgid "Number of days in work week"
+#~ msgstr "稼働日数"
+
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "カード ビューで表示される列の数:"
 
@@ -15940,6 +15160,10 @@ msgstr "%s に追加"
 #~ "部のコンピュータ (例えば、インターネットカフェ内) を使用している場合には、"
 #~ "このオプションを使用しないでください。"
 
+#~| msgid "Open"
+#~ msgid "Open "
+#~ msgstr "開く"
+
 #~ msgid "Open in new tab"
 #~ msgstr "新規タブで開く"
 
@@ -15960,6 +15184,9 @@ msgstr "%s に追加"
 
 #~ msgid "Opening the E-Mail settings"
 #~ msgstr "メール設定を開く"
+
+#~ msgid "Opening the settings"
+#~ msgstr "設定を開く"
 
 #~ msgid "Optional %d"
 #~ msgstr "オプション %d"
@@ -16407,10 +15634,6 @@ msgstr "%s に追加"
 #~ msgid "Print the selected tasks"
 #~ msgstr "選択された仕事を印刷"
 
-#~| msgid "Private contacts"
-#~ msgid "Printout of contacts"
-#~ msgstr "プライベート連絡先"
-
 #~ msgid "Priority:"
 #~ msgstr "優先度:"
 
@@ -16419,6 +15642,9 @@ msgstr "%s に追加"
 
 #~ msgid "Private computer"
 #~ msgstr "プライベート コンピュータ"
+
+#~ msgid "Private contacts"
+#~ msgstr "プライベート連絡先"
 
 #~ msgid ""
 #~ "Private folders are under your control and by default no other user has "
@@ -16550,6 +15776,9 @@ msgstr "%s に追加"
 #~ msgid "Read rights"
 #~ msgstr "読み取り権限"
 
+#~ msgid "Read-only mode"
+#~ msgstr "読み取り専用モード"
+
 #~ msgid "Read/Unread"
 #~ msgstr "既読/未読"
 
@@ -16561,6 +15790,9 @@ msgstr "%s に追加"
 
 #~ msgid "Received:"
 #~ msgstr "受信日時:"
+
+#~ msgid "Recurrence"
+#~ msgstr "定期的なアポイント"
 
 #~ msgid "Recurrence Pattern"
 #~ msgstr "繰り返しパターン"
@@ -16757,6 +15989,9 @@ msgstr "%s に追加"
 #~ msgid "Sat"
 #~ msgstr "土曜日"
 
+#~ msgid "Saturday"
+#~ msgstr "土曜日"
+
 #~ msgid "Saudi Arabia"
 #~ msgstr "サウジアラビア"
 
@@ -16799,6 +16034,9 @@ msgstr "%s に追加"
 
 #~ msgid "Searched in"
 #~ msgstr "検索先:"
+
+#~ msgid "Searched in all folders"
+#~ msgstr "すべてのフォルダを検索しました。"
 
 #~ msgid "Searching for objects"
 #~ msgstr "オブジェクトの検索"
@@ -16897,6 +16135,9 @@ msgstr "%s に追加"
 #~ msgid "Send feedback"
 #~ msgstr "フィードバックを送信"
 
+#~ msgid "Sender"
+#~ msgstr "差出人"
+
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "連絡先へのメールの送信"
 
@@ -16937,6 +16178,9 @@ msgstr "%s に追加"
 
 #~ msgid "Service"
 #~ msgstr "サービス"
+
+#~ msgid "Set as default"
+#~ msgstr "既定として設定"
 
 #~ msgid "Seychelles"
 #~ msgstr "セイシェル"
@@ -17108,10 +16352,6 @@ msgstr "%s に追加"
 
 #~ msgid "Simple Pad"
 #~ msgstr "簡易パッド"
-
-#~| msgid "Phone list"
-#~ msgid "Simple phone list"
-#~ msgstr "電話リスト"
 
 #~ msgid "Since the appointment is recurring, it may cause further conflicts."
 #~ msgstr "定期的なアポイントのため、今後競合が発生する可能性があります。"
@@ -17378,6 +16618,9 @@ msgstr "%s に追加"
 #~ msgstr "敬称（後）:"
 
 #~ msgid "Sun"
+#~ msgstr "日曜日"
+
+#~ msgid "Sunday"
 #~ msgstr "日曜日"
 
 #~ msgid "Superscript"
@@ -17703,6 +16946,13 @@ msgstr "%s に追加"
 #~ "%s に入力した値は許容範囲を超えています。-130000 から 130000 の範囲の数字"
 #~ "を使用してください。"
 
+#~ msgid ""
+#~ "The file \"%1$s\" cannot be uploaded because it exceeds the quota limit "
+#~ "of %2$s"
+#~ msgstr ""
+#~ "ファイル \"%1$s\" が割当量の上限 %2$s を超えたため、アップロードできませ"
+#~ "ん。"
+
 #~ msgid "The file is available at %1$s"
 #~ msgstr "このファイルは %1$s にあります。"
 
@@ -17922,6 +17172,10 @@ msgstr "%s に追加"
 #~ msgid "This mail contains an URL to a publication."
 #~ msgstr "このメールには公開への URL があります。"
 
+#~| msgid "This mail has no content"
+#~ msgid "This mail was moved to %1$s."
+#~ msgstr "このメールには内容がありません。"
+
 #~ msgid "This may take some seconds"
 #~ msgstr "この処理には数秒かかる場合があります。"
 
@@ -17953,6 +17207,9 @@ msgstr "%s に追加"
 
 #~ msgid "Thu"
 #~ msgstr "木"
+
+#~ msgid "Thursday"
+#~ msgstr "木曜日"
 
 #~ msgid "Tile"
 #~ msgstr "タイル"
@@ -18268,6 +17525,9 @@ msgstr "%s に追加"
 #~ msgid "Tue"
 #~ msgstr "火"
 
+#~ msgid "Tuesday"
+#~ msgstr "火曜日"
+
 #~ msgid "Tunisia"
 #~ msgstr "チュニジア"
 
@@ -18379,6 +17639,12 @@ msgstr "%s に追加"
 
 #~ msgid "Unread only"
 #~ msgstr "未読のみ"
+
+#~ msgid "Unselect all"
+#~ msgstr "すべてを選択解除"
+
+#~ msgid "Unset default signature"
+#~ msgstr "既定の署名を設定解除"
 
 #~ msgid "Unthreaded E-Mail view"
 #~ msgstr "非スレッド メール ビュー"
@@ -18607,11 +17873,17 @@ msgstr "%s に追加"
 #~ msgid "Wed"
 #~ msgstr "水"
 
+#~ msgid "Wednesday"
+#~ msgstr "水曜日"
+
 #~ msgid "Week View"
 #~ msgstr "週ビュー"
 
 #~ msgid "Week(s) on"
 #~ msgstr "週間おき"
+
+#~ msgid "Weekend Day"
+#~ msgstr "週末"
 
 #~ msgid "Welcome. Please provide your feedback about this product"
 #~ msgstr "ようこそこの製品のフィードバックをお送りください。"
@@ -18701,6 +17973,9 @@ msgstr "%s に追加"
 #~ msgid "Work"
 #~ msgstr "職場"
 
+#~ msgid "Work week starts on"
+#~ msgstr "稼働日の開始曜日"
+
 #~ msgid "Workweek View"
 #~ msgstr "稼働日ビュー"
 
@@ -18734,11 +18009,6 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "ご利用のコンピュータからファイルをドラッグし、ここにドロップすると、新規"
 #~ "ファイルまたはファイルの最新バージョンとしてアップロードされます。"
-
-#~ msgid ""
-#~ "You can manage desktop notifications at any time, by vitising your "
-#~ "settings"
-#~ msgstr "設定を開くことでいつでもデスクトップ通知を管理できます。"
 
 #~ msgid "You can't create a new recurrence in a modified appointment."
 #~ msgstr "変更されたアポイントに新しい定期的なアポイントを作成できません。"
@@ -18988,6 +18258,9 @@ msgstr "%s に追加"
 #~ msgid "but you can upgrade your account right now!"
 #~ msgstr "今すぐアカウントをアップグレードできます。"
 
+#~ msgid "by %1$s until %2$s"
+#~ msgstr "作成者 %1$s 期限 %2$s"
+
 #~ msgid "bytes"
 #~ msgstr "bytes"
 
@@ -19048,6 +18321,9 @@ msgstr "%s に追加"
 
 #~ msgid "february"
 #~ msgstr "2 月"
+
+#~ msgid "files"
+#~ msgstr "ファイル"
 
 #~ msgid "forward"
 #~ msgstr "進む"

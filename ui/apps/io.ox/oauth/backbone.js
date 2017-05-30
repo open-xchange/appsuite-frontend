@@ -64,7 +64,14 @@ define('io.ox/oauth/backbone', [
 
             params.scopes = (_([].concat(this.get('enabledScopes'), this.get('wantedScopes'))).uniq()).join(' ');
             var popupWindow = window.open(ox.base + '/busy.html', '_blank', 'height=800, width=1200, resizable=yes, scrollbars=yes');
-            popupWindow.focus();
+
+            try {
+                // popup might have been blocked (see Bug 53686)
+                popupWindow.focus();
+            } catch (e) {
+                return $.Deferred().reject({ model: {} });
+            }
+
 
             return http.GET({
                 module: 'oauth/accounts',
