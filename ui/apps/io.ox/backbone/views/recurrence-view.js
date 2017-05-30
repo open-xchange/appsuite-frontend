@@ -662,7 +662,7 @@ define('io.ox/backbone/views/recurrence-view', [
             var self = this;
             new ModalDialog({
                 title: gt('Edit recurrence'),
-                width: _.device('smartphone') ? window.innerWidth - 30 : 560,
+                width: 560,
                 point: 'io.ox/backbone/views/recurrence-view/dialog',
                 async: true,
                 model: new RecurrenceModel(this.model.pick(
