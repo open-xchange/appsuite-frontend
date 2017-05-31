@@ -287,6 +287,8 @@ define('io.ox/core/folder/extensions', [
             function getAvailableServices() {
                 var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
 
+                ext.point('io.ox/core/folder/storage-accounts/list').invoke('customize', services);
+
                 return require(['io.ox/keychain/api', 'io.ox/core/api/filestorage']).then(function (keychainApi, filestorageApi) {
                     var availableFilestorageServices = _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });
                     return _(keychainApi.submodules).filter(function (submodule) {
