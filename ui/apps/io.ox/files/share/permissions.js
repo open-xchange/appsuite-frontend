@@ -829,6 +829,8 @@ define('io.ox/files/share/permissions', [
                         gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
                         gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
 
+            options.point = 'io.ox/files/share/permissions/dialog';
+
             var dialog = new ModalDialog(options);
 
             var DialogConfigModel = Backbone.Model.extend({
