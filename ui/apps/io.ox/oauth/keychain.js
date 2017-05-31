@@ -245,13 +245,9 @@ define('io.ox/oauth/keychain', [
 
         require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
             new ModalDialog({ title: gt('Error') })
-            .extend({
-                default: function () {
-                    this.$el.addClass('oauth-reauthorize');
-                },
-                text: function () {
-                    this.$body.append(err.error);
-                }
+            .build(function () {
+                this.$el.addClass('oauth-reauthorize');
+                this.$body.append(err.error);
             })
             .addCancelButton()
             .addButton({
