@@ -316,11 +316,11 @@ define('io.ox/contacts/addressbook/popup', [
 
                 item = {
                     caption: _(item.members).pluck('display_name').join(', '),
-                    cid: 'label.' + item.id + '.' + i,
+                    cid: 'virtual/label.' + item.id + '.' + i,
                     display_name: item.display_name,
                     email: addresses,
                     first_name: '',
-                    folder_id: 'label',
+                    folder_id: 'virtual/label',
                     full_name: full_name,
                     full_name_html: util.getFullName(item, true),
                     image: '',
@@ -431,7 +431,7 @@ define('io.ox/contacts/addressbook/popup', [
             getDepartments: function (items) {
                 var departments = {};
                 _(items).each(function (item) {
-                    if (item.department.length <= 1) return;
+                    if (!item.department || item.department.length <= 1) return;
                     departments[item.department] = (departments[item.department] || 0) + 1;
                 });
                 return _(departments)
