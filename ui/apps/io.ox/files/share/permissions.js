@@ -812,22 +812,24 @@ define('io.ox/files/share/permissions', [
                 title,
                 guid;
 
-            options = _.extend({ nested: nested, share: false }, options);
-
-            title = options.share ?
-                        //#. %1$s determines whether setting permissions for a file or folder
-                        //#. %2$s is the file or folder name
-                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName());
-
-            var dialog = new ModalDialog({
+            // options must be given to modal dialog. Custom dev uses them.
+            options = _.extend({
                 async: true,
                 focus: '.form-control.tt-input',
                 help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html',
                 title: title,
                 smartphoneInputFocus: true,
-                width: 800
-            });
+                width: 800,
+                nested: nested,
+                share: false }, options);
+
+            options.title = options.title || (options.share ?
+                        //#. %1$s determines whether setting permissions for a file or folder
+                        //#. %2$s is the file or folder name
+                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
+
+            var dialog = new ModalDialog(options);
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
