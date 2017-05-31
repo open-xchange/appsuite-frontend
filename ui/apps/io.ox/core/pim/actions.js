@@ -32,7 +32,7 @@ define('io.ox/core/pim/actions', [
             multiple: function (baton) {
                 require(['io.ox/core/viewer/main'], function (Viewer) {
                     var viewer = new Viewer();
-                    viewer.launch({ files: baton });
+                    viewer.launch({ files: baton, opt: { disableFolderInfo: true, disableFileDetail: true } });
                 });
             }
         },
