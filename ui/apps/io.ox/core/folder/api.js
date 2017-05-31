@@ -1205,7 +1205,13 @@ define('io.ox/core/folder/api', [
             data: [id]
         })
         .done(function () {
-            if (account.is('trash', id)) {
+            if ((api.pool.models[id] && api.pool.models[id].is('trash')) || account.is('trash', id)) {
+                // clear collections
+                if (api.pool.collections[id]) {
+                    api.pool.collections[id].each(function (model) {
+                        api.pool.removeCollection(model.id, { removeModels: true });
+                    });
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 api.trigger('cleared-trash');
             }
