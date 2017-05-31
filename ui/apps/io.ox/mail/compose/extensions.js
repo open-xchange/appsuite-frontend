@@ -777,7 +777,7 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                var fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
+                var fileInput = $('<input type="file" name="file">').css('display', 'none')
                         .on('change', addLocalFile.bind(this, baton.model))
                         // multiple is off on smartphones in favor of camera roll/capture selection
                         .prop('multiple', _.device('!smartphone'));
