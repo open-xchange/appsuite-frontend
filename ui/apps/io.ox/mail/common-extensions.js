@@ -219,11 +219,22 @@ define('io.ox/mail/common-extensions', [
 
         colorflag: function (baton) {
             if (!settings.get('features/flag/color')) return;
-            var color = baton.data.color_label;
+            var color = baton.data.color_label,
+                icon = 'fa-bookmark';
             // 0 and a buggy -1
             if (color <= 0) return;
+            // show bookmark with outline only, if thread color does not coincide with most recent mail
+            var isThreaded = baton.app && baton.app.isThreaded();
+            if ((isThreaded || baton.options.threaded) &&
+                baton.data.thread &&
+                color !== baton.data.thread[0].color_label) {
+                icon = 'fa-bookmark-o';
+                color = 0;
+            }
             this.append(
-                $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
+                $('<i class="color-flag fa" aria-hidden="true">')
+                    .addClass(icon)
+                    .addClass(color > 0 ? 'flag_' + color : 'multiple-colors')
             );
         },
 
