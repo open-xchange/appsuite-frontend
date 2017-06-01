@@ -443,11 +443,15 @@ define('io.ox/calendar/util', [
                 trigger: opt.trigger
             }).on('blur dispose', function () {
                 $(this).popover('hide');
+                // set correct state or toggle doesn't work on next click
+                $(this).data('bs.popover').inState.click = false;
             });
 
             if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
                 parent.scrollParent().on('scroll', function () {
                     parent.popover('hide');
+                    // set correct state or toggle doesn't work on next click
+                    parent.data('bs.popover').inState.click = false;
                 });
             }
 
