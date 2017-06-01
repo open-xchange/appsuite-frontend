@@ -885,7 +885,8 @@ define('io.ox/mail/compose/extensions', [
                         primaryButtonText: gt('Add'),
                         cancelButtonText: gt('Cancel'),
                         header: gt('Add attachments'),
-                        multiselect: true
+                        multiselect: true,
+                        extension: 'io.ox/mail/mobile/navbar'
                     })
                     .done(function (files) {
                         self.trigger('aria-live-update', gt('Added %s to attachments.', _(files).map(function (file) { return file.filename; }).join(', ')));

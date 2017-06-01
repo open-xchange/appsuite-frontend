@@ -304,7 +304,8 @@ define('io.ox/files/filepicker', [
             acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
             cancel: $.noop,
             initialize: $.noop,
-            createFolderButton: true
+            createFolderButton: true,
+            extension: 'io.ox/files/mobile/navbar'
         }, options);
 
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
@@ -326,7 +327,7 @@ define('io.ox/files/filepicker', [
             name: 'folderTree',
             navbar: new Bars.NavbarView({
                 title: gt('Folders'),
-                extension: 'io.ox/mail/mobile/navbar' //save to use as this is very generic
+                extension: options.extension //save to use as this is very generic
             }),
             startPage: true
         });
@@ -335,7 +336,7 @@ define('io.ox/files/filepicker', [
             name: 'fileList',
             navbar: new Bars.NavbarView({
                 title: gt('Files'),
-                extension: 'io.ox/mail/mobile/navbar'
+                extension: options.extension
             })
         });
 
