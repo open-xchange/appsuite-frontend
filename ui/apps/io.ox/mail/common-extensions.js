@@ -400,32 +400,11 @@ define('io.ox/mail/common-extensions', [
 
         // add orignal folder as label to search result items
         folder: function (baton) {
-            // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !isSearchResult(baton)) return;
-            // add container
-            var node = $('<span class="original-folder">').appendTo(this);
-            // add breadcrumb
-            require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
-                var view = new BreadcrumbView({
-                        folder: baton.data.original_folder_id,
-                        app: baton.app,
-                        exclude: ['default0']
-                    }), renderPathOrig;
-                // not need for this here
-                view.computeWidth = $.noop;
-                // show only folder paths tail
-                renderPathOrig = view.renderPath;
-                view.renderPath = function (path) {
-                    return renderPathOrig.call(this, [].concat(_.last(path)));
-                };
-                // append to dom
-                node.append(view.render().$el);
-            });
-        },
-
-        folderName: function (baton) {
-            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
-
+            // missing data
+            if (!baton.data.original_folder_id) return;
+            var isUnseenFolder = baton.app && baton.app.folder && baton.app.folder.get() === 'virtual/all-unseen';
+            // apply only for search results and for unseen folder
+            if (!isSearchResult(baton) && !isUnseenFolder) return;
             this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
         },
 
