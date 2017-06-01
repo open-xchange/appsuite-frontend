@@ -92,6 +92,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 availableHeight = $(window).height(),
                 topbar = $('#io-ox-topbar');
 
+            // hides this.$el?
+            positions.top = Math.max(positions.top, this.$el.offset().top + this.$el.height());
+
             // hits bottom ?
             if (bounds.top + bounds.height > availableHeight + this.margin) {
                 // left or right?
