@@ -115,8 +115,10 @@ define('io.ox/mail/inplace-reply', [
                 view.renderSuccess();
                 if (!view.disposed) {
                     setTimeout(function () {
-                        $el.fadeOut();
-                        $el = view = null;
+                        $el.fadeOut(function () {
+                            $el.remove();
+                            $el = view = null;
+                        });
                     }, 4000);
                 }
             }, 1000);
