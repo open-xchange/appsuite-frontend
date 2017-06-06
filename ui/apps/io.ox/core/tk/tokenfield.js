@@ -73,6 +73,24 @@ define('io.ox/core/tk/tokenfield', [
         return this.$element.get(0);
     };
 
+    // needs overwrite because of bug 54034
+    $.fn.tokenfield.Constructor.prototype.blur = function (e) {
+        this.focused = false;
+        this.$wrapper.removeClass('focus');
+
+        if (!this.preventDeactivation && !this.$element.is(document.activeElement)) {
+            this.$wrapper.find('.active').removeClass('active').attr({ tabindex: -1, 'aria-selected': false });
+            this.$firstActiveToken = null;
+        }
+
+        if ((!this.preventCreateTokens && (this.$input.data('edit') && !this.$input.is(document.activeElement))) || this.options.createTokensOnBlur) {
+            this.createTokensFromInput(e);
+        }
+
+        this.preventDeactivation = false;
+        this.preventCreateTokens = false;
+    };
+
     var uniqPModel = pModel.Participant.extend({
         setPID: function () {
             uniqPModel.__super__.setPID.call(this);
