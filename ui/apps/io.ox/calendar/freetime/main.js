@@ -16,12 +16,13 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/freetime/model',
     'io.ox/calendar/freetime/participantsView',
     'io.ox/calendar/freetime/timeView',
+    'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, gt, settings, settingsCore) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -35,7 +36,8 @@ define('io.ox/calendar/freetime/main', [
 
         initialize: function (options) {
 
-            var self = this;
+            var self = this,
+                refresh = self.refresh.bind(this);
 
             this.options = options || {};
             this.parentModel = options.parentModel;
@@ -60,9 +62,11 @@ define('io.ox/calendar/freetime/main', [
             this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
             this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
 
+            api.on('refresh.all update', refresh);
             this.on('dispose', function () {
                 self.timeSubview.dispose();
                 self.participantsSubview.dispose();
+                api.off('refresh.all update', refresh);
             });
             this.timeSubview.bodyNode.on('scroll', function () {
                 if (self.participantsSubview.bodyNode[0].scrollTop === 0 && this.scrollTop === 0) {
@@ -119,6 +123,11 @@ define('io.ox/calendar/freetime/main', [
             return this.body;
         },
 
+        // use debouce since we don't want to refresh to often
+        refresh: _.debounce(function () {
+            this.timeSubview.getAppointmentsInstant();
+        }, 200),
+
         render: function () {
             this.renderHeader();
             this.renderBody();
@@ -142,7 +151,7 @@ define('io.ox/calendar/freetime/main', [
                 var appointment = this.createAppointment();
 
                 if (appointment) {
-                    appointment.folder = settingsCore.get('folder/calendar');
+                    appointment.folder = coreSettings.get('folder/calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {
                             this.create(appointment);
@@ -262,12 +271,23 @@ define('io.ox/calendar/freetime/main', [
         };
 
         app.failRestore = function (point) {
-            this.view.model.get('participants').add(point.participants);
-            this.view.timeSubview.setDate(point.currentWeek);
+
             this.view.timeSubview.lassoStart = point.lassoStart;
             this.view.timeSubview.lassoEnd = point.lassoEnd;
+            this.view.timeSubview.setDate(point.currentWeek);
             this.view.timeSubview.updateLasso(true);
+            if (!point.lassoStart) {
+                this.view.timeSubview.keepScrollpos = 'today';
+            } else {
+                this.view.timeSubview.keepScrollpos = this.view.timeSubview.lassoStartTime;
+            }
+            this.view.model.get('participants').add(point.participants);
+
             return $.when();
+        };
+
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.calendar.add.scheduling.html';
         };
 
         return app;

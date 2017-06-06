@@ -18,10 +18,11 @@ define('io.ox/core/viewer/views/mainview', [
     'io.ox/core/tk/nodetouch',
     'io.ox/core/viewer/util',
     'io.ox/core/viewer/settings',
+    'io.ox/core/a11y',
     'less!io.ox/core/viewer/style',
     // prefetch file actions
     'io.ox/files/actions'
-], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings) {
+], function (ToolbarView, DisplayerView, SidebarView, DisposableView, NodeTouch, Util, Settings, a11y) {
 
     'use strict';
 
@@ -140,7 +141,7 @@ define('io.ox/core/viewer/views/mainview', [
 
             // manual TAB traversal handler. 'Traps' TAB traversal inside the viewer root component.
             function tabHandler(event) {
-                var tabableActions = viewerRootEl.find('[tabindex]:not([tabindex^="-"]):visible'),
+                var tabableActions = a11y.getTabbable(viewerRootEl),
                     tabableActionsCount = tabableActions.length;
                 // quit immediately if no tabable actions are found
                 if (tabableActionsCount === 0) { return; }
@@ -154,10 +155,11 @@ define('io.ox/core/viewer/views/mainview', [
                     nextElementIndex = 0;
                 }
                 // focus next action candidate
-                tabableActions.eq(nextElementIndex).focus();
+                tabableActions.eq(nextElementIndex).visibleFocus();
             }
             switch (event.which) {
                 case 9: // TAB key
+                    if (this.standalone) return;
                     tabHandler(event);
                     break;
                 case 27: // ESC key
@@ -170,10 +172,14 @@ define('io.ox/core/viewer/views/mainview', [
                     }
                     break;
                 case 37: // left arrow
-                    handleChangeSlide('left');
+                    if ($(event.target).hasClass('swiper-slide-active')) {
+                        handleChangeSlide('left');
+                    }
                     break;
                 case 39: // right arrow
-                    handleChangeSlide('right');
+                    if ($(event.target).hasClass('swiper-slide-active')) {
+                        handleChangeSlide('right');
+                    }
                     break;
                 case 33: // page up
                     event.preventDefault();

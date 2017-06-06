@@ -19,6 +19,9 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
         // helper
         getRight = function (folder, owner, offset) {
+            // no folder, no permissions
+            if (!folder) return false;
+
             // get bits
             var bits = api.bits(folder, offset);
             // check
@@ -107,6 +110,7 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
 
                     item = collection[i];
                     objectPermission = item && item.object_permissions && _(item.object_permissions).find(findUserPermissions);
+                    folder = hash[getFolderId(item)];
 
                     // Check for Guard files or folders
                     if (item.meta && item.meta.Encrypted) props.guard = true;
@@ -124,20 +128,15 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                         // we unify delete; otherwise the action checks are too complicated
                         props['delete'] = props['delete'] && api.can('delete:folder', item);
 
-                    } else if (objectPermission || (folder = hash[getFolderId(item)])) {
+                    } else if (objectPermission || folder) {
 
                         // get properties
                         items = true;
-                        // item-specific
-                        if (objectPermission) {
-                            props.read = props.read && objectPermission.bits >= 1;
-                            props.modify = props.modify && objectPermission.bits >= 2;
-                            props['delete'] = props['delete'] && objectPermission.bits >= 4;
-                        } else {
-                            props.read = props.read && getRight(folder, item.created_by, 7);
-                            props.modify = props.modify && getRight(folder, item.created_by, 14);
-                            props['delete'] = props['delete'] && getRight(folder, item.created_by, 21);
-                        }
+                        // bug #52825, check if permission is granted by the folder or by the object
+                        props.read = props.read && ((objectPermission && objectPermission.bits >= 1) || getRight(folder, item.created_by, 7));
+                        props.modify = props.modify && ((objectPermission && objectPermission.bits >= 2) || getRight(folder, item.created_by, 14));
+                        props['delete'] = props['delete'] && ((objectPermission && objectPermission.bits >= 4) || getRight(folder, item.created_by, 21));
+
                         if (folder) {
                             // create new objects
                             props.create = props.create && (folder.own_rights & 127) >= 2;

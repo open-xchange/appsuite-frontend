@@ -14,7 +14,7 @@
 define('io.ox/backbone/mini-views/common', [
     'io.ox/backbone/mini-views/abstract',
     'io.ox/backbone/mini-views/dropdown',
-    'gettext!io.ox/core',
+    'gettext!io.ox/core'
 ], function (AbstractView, Dropdown, gt) {
 
     'use strict';
@@ -50,12 +50,15 @@ define('io.ox/backbone/mini-views/common', [
             // update model too or the the left spaces are still in the model data. They would be saved when the model is saved, creating inconsistent data
             // infinite loops are not possible because the change event is only triggered if the new value is different
             this.model.set(this.name, val);
+            // trigger extra update event on view
+            this.trigger('update', this.$el);
         },
         render: function () {
             this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr('id', this.id);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             if (this.options.mandatory) this.$el.attr('aria-required', true);
+            if (_.isBoolean(this.options.autocomplete) && !this.options.autocomplete) this.$el.attr('autocomplete', 'off');
             this.update();
             return this;
         }
@@ -203,6 +206,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.options.id) this.$el.attr('id', this.options.id);
             this.update();
             return this;
         }
@@ -344,7 +348,8 @@ define('io.ox/backbone/mini-views/common', [
             var self = this;
             Dropdown.prototype.render.apply(this, arguments);
             _(this.options.values).each(function (name, value) {
-                self.option(self.name, value, name, { radio: true });
+                var tooltip = self.options.tooltips && self.options.tooltips[value] ? self.options.tooltips[value] : name;
+                self.option(self.name, value, name, { radio: true, title: tooltip });
             });
             this.updateLabel();
             return this;

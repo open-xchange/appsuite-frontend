@@ -616,7 +616,7 @@ define('io.ox/portal/main', [
             // don't refresh widgets with loading errors automatically so logs don't get spammed (see bug 41740)
             // also handle ignoreGlobalRefresh option (See Bug 49562)
             var options = model.attributes.baton && model.attributes.baton.options;
-            return !options.loadingError && !model.get('ignoreGlobalRefresh');
+            return (!options && !model.get('ignoreGlobalRefresh')) || (!options.loadingError && !model.get('ignoreGlobalRefresh'));
         }).each(app.refreshWidget);
     }, 30000);
 

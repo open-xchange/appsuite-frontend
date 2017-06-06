@@ -21,7 +21,7 @@ define('io.ox/mail/actions/attachmentSave', [
     'settings!io.ox/files',
     'settings!io.ox/core',
     'gettext!io.ox/mail'
-], function (api, notifications, dialogs, picker, folderAPI, settings, settingsCore, gt) {
+], function (api, notifications, dialogs, picker, folderAPI, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -63,7 +63,7 @@ define('io.ox/mail/actions/attachmentSave', [
 
         multiple: function (list) {
 
-            var id = settings.get('folderpopup/last') || settingsCore.get('folder/infostore');
+            var id = settings.get('folderpopup/last') || coreSettings.get('folder/infostore');
 
             picker({
 

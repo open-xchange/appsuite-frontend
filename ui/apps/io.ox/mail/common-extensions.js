@@ -219,11 +219,22 @@ define('io.ox/mail/common-extensions', [
 
         colorflag: function (baton) {
             if (!settings.get('features/flag/color')) return;
-            var color = baton.data.color_label;
+            var color = baton.data.color_label,
+                icon = 'fa-bookmark';
             // 0 and a buggy -1
             if (color <= 0) return;
+            // show bookmark with outline only, if thread color does not coincide with most recent mail
+            var isThreaded = baton.app && baton.app.isThreaded();
+            if ((isThreaded || baton.options.threaded) &&
+                baton.data.thread &&
+                color !== baton.data.thread[0].color_label) {
+                icon = 'fa-bookmark-o';
+                color = 0;
+            }
             this.append(
-                $('<i class="color-flag flag_' + color + ' fa fa-bookmark" aria-hidden="true">')
+                $('<i class="color-flag fa" aria-hidden="true">')
+                    .addClass(icon)
+                    .addClass(color > 0 ? 'flag_' + color : 'multiple-colors')
             );
         },
 
@@ -269,7 +280,7 @@ define('io.ox/mail/common-extensions', [
                     // see if the user is allowed to modify the flag status - always allows for unified folder
                     if (!folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data)) return;
                     self.append(
-                        $('<a href="#" role="button" class="flag">')
+                        $('<a href="#" role="button" class="flag io-ox-action-link" data-action="flag">')
                         .append(extensions.flagIcon.call(this))
                         .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
@@ -400,32 +411,11 @@ define('io.ox/mail/common-extensions', [
 
         // add orignal folder as label to search result items
         folder: function (baton) {
-            // missing data or find currently inactive
-            if (!baton.data.original_folder_id || !isSearchResult(baton)) return;
-            // add container
-            var node = $('<span class="original-folder">').appendTo(this);
-            // add breadcrumb
-            require(['io.ox/core/folder/breadcrumb'], function (BreadcrumbView) {
-                var view = new BreadcrumbView({
-                        folder: baton.data.original_folder_id,
-                        app: baton.app,
-                        exclude: ['default0']
-                    }), renderPathOrig;
-                // not need for this here
-                view.computeWidth = $.noop;
-                // show only folder paths tail
-                renderPathOrig = view.renderPath;
-                view.renderPath = function (path) {
-                    return renderPathOrig.call(this, [].concat(_.last(path)));
-                };
-                // append to dom
-                node.append(view.render().$el);
-            });
-        },
-
-        folderName: function (baton) {
-            if (!baton.app || !baton.app.folder || baton.app.folder.get() !== 'virtual/all-unseen') return;
-
+            // missing data
+            if (!baton.data.original_folder_id) return;
+            var isUnseenFolder = baton.app && baton.app.folder && baton.app.folder.get() === 'virtual/all-unseen';
+            // apply only for search results and for unseen folder
+            if (!isSearchResult(baton) && !isUnseenFolder) return;
             this.append($('<span class="original-folder">').append(folderAPI.getTextNode(baton.data.original_folder_id)));
         },
 
@@ -643,7 +633,7 @@ define('io.ox/mail/common-extensions', [
                     var showUnreadToggle = folderAPI.can('write', data) || folderAPI.is('unifiedfolder', data);
                     if (!showUnreadToggle) return;
                     self.append(
-                        $('<a href="#" role="button" class="unread-toggle">')
+                        $('<a href="#" role="button" class="unread-toggle io-ox-action-link" data-action="unread-toggle">')
                         .append('<i class="fa" aria-hidden="true">')
                         .each(_.partial(makeAccessible, baton.data))
                         .on('click', { model: baton.view.model }, toggle)
@@ -717,6 +707,27 @@ define('io.ox/mail/common-extensions', [
                 baton.view.listenTo(baton.model, 'change:headers', draw.bind(this));
             };
 
+        }()),
+
+        plainTextFallback: (function () {
+
+            function draw(model) {
+                // avoid duplicates
+                if (this.find('.warnings').length) return;
+
+                if (model.get('warnings')) {
+
+                    this.append(
+                        $('<div class="alert alert-error warnings">')
+                        .text(model.get('warnings').error)
+                    );
+                }
+            }
+
+            return function (baton) {
+                draw.call(this, baton.model);
+                baton.view.listenTo(baton.model, 'change:warnings', draw.bind(this));
+            };
         }()),
 
         dispositionNotification: (function () {

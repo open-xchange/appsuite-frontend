@@ -15,10 +15,9 @@ define('io.ox/mail/compose/actions/save', [
     'io.ox/core/extensions',
     'io.ox/mail/compose/actions/extensions',
     'io.ox/mail/api',
-    'settings!io.ox/mail',
     'io.ox/core/notifications',
     'gettext!io.ox/mail'
-], function (ext, extensions, mailAPI, settings, notifications, gt) {
+], function (ext, extensions, mailAPI, notifications, gt) {
 
     'use strict';
 
@@ -61,6 +60,7 @@ define('io.ox/mail/compose/actions/save', [
                 return mailAPI.send(baton.mail, baton.mail.files);
             }
         },
+        // Placeholder for Guard auth check, index 1050
         {
             id: 'error',
             index: 1100,
@@ -124,6 +124,7 @@ define('io.ox/mail/compose/actions/save', [
 
                 baton.model.set('msgref', baton.resultData);
                 baton.model.set('sendtype', mailAPI.SENDTYPE.EDIT_DRAFT);
+                baton.model.set('autosavedAsDraft', false);
                 baton.model.dirty(baton.model.previous('sendtype') !== mailAPI.SENDTYPE.EDIT_DRAFT);
                 //#. %1$s is the time, the draft was saved
                 //#, c-format

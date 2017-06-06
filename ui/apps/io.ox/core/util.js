@@ -240,7 +240,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // the local part is either a quoted string or latin (see above) plus . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
         // returns array of addresses
         getAddresses: function (str) {
-            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-\/=?^_`{|}~]+)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-\/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });
@@ -260,6 +260,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 if (url.indexOf('//' + defaultUrl) === 0) url = url.substr(defaultUrl.length + 2);
                 if (hosts.length > 1) index = sum(url) % hosts.length;
                 if (!/^\//.test(url)) url = '/' + url;
+                // do not use sharding when on development system
+                if (ox.debug) return '//' + defaultUrl + url;
                 return '//' + hosts[index] + url;
             };
         }())

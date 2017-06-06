@@ -2,6 +2,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
+    'io.ox/core/settings/util',
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/snippets',
     'io.ox/backbone/mini-views',
@@ -12,7 +13,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, dialogs, snippets, mini, http, config, notifications, listutils, mailutil, ListView) {
+], function (ext, gt, settings, util, dialogs, snippets, mini, http, config, notifications, listutils, mailutil, ListView) {
 
     'use strict';
 
@@ -230,11 +231,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         dialog.header($('<h4>').text(gt('Import signatures')))
         .append(
             $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation.')),
-            $('<div>').addClass('checkbox').append(
-                $('<label>').text(gt('Delete old signatures after import')).prepend(
-                    new mini.CheckboxView({ name: 'check', model: model }).render().$el
-                )
-            ),
+            util.checkbox('check', gt('Delete old signatures after import'), model),
             $('<ul class="io-ox-signature-import">').append(
                 _(signatures).map(function (sig) {
                     //replace div and p elements to br's and remove all other tags.

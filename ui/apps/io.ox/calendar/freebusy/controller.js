@@ -29,7 +29,7 @@ define('io.ox/calendar/freebusy/controller', [
     'settings!io.ox/calendar',
     'less!io.ox/calendar/week/style',
     'less!io.ox/calendar/freebusy/style'
-], function (dialogs, WeekView, templates, folderAPI, AddParticipantView, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, settings, settingsCalendar) {
+], function (dialogs, WeekView, templates, folderAPI, AddParticipantView, pModel, pView, userAPI, contactsUtil, api, notifications, detailView, gt, coreSettings, calendarSettings) {
 
     'use strict';
 
@@ -307,7 +307,7 @@ define('io.ox/calendar/freebusy/controller', [
                         // temporary
                         .addClass(model.get('shown_as') === 2 ? 'striped' : '')
                         // no read access when in strict mode: disable (no click handler, default pointer, no hover)
-                        .addClass(!model.get('folder_id') && settingsCalendar.get('freeBusyStrict', true) ? 'disabled' : '');
+                        .addClass(!model.get('folder_id') && calendarSettings.get('freeBusyStrict', true) ? 'disabled' : '');
                     return $el;
                 };
 
@@ -460,7 +460,7 @@ define('io.ox/calendar/freebusy/controller', [
             folderAPI.get(options.folder).always(function (data) {
                 // pass folder data over to view (needs this for permission checks)
                 // use fallback data on error
-                var fallback = { folder_id: 1, id: settings.get('folder/calendar'), own_rights: 403710016 };
+                var fallback = { folder_id: 1, id: coreSettings.get('folder/calendar'), own_rights: 403710016 };
                 if (data.error) {
                     data = fallback;
                     options.folder = fallback.id;

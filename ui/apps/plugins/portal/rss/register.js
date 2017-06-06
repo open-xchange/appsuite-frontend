@@ -41,6 +41,12 @@ define('plugins/portal/rss/register', [
             return rss.getMany(urls).done(function (data) {
                 //limit data manually till api call can be limited
                 data = data.slice(0, 100);
+
+                // fix some special characters
+                _(data).each(function (item) {
+                    item.subject = item.subject.replace(/&nbsp;/g, ' ');
+                });
+
                 baton.data = {
                     items: data,
                     title: '',

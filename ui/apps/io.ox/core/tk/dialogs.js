@@ -29,10 +29,12 @@ define('io.ox/core/tk/dialogs', [
     function getPopup() {
         return $('<div class="io-ox-dialog-popup" tabindex="-1" role="dialog" aria-labelledby="dialog-title">').hide()
             .append(
-                $('<div class="modal-header" id="dialog-title">'),
-                $('<div class="modal-body">'),
-                $('<div class="clearfix">'),
-                $('<div class="modal-footer">')
+                $('<div role="document">').append(
+                    $('<div class="modal-header" id="dialog-title">'),
+                    $('<div class="modal-body">'),
+                    $('<div class="clearfix">'),
+                    $('<div class="modal-footer">')
+                )
             );
     }
 
@@ -300,7 +302,7 @@ define('io.ox/core/tk/dialogs', [
             p.append($('<h4 class="plain-text">').attr('id', id).text(str || ''));
             nodes.popup.attr({
                 'aria-labelledby': id,
-                role: 'alertdialog',
+                role: 'alertdialog'
             });
             return this;
         };
@@ -665,10 +667,7 @@ define('io.ox/core/tk/dialogs', [
                 )
             ),
 
-            popup = $('<div class="io-ox-sidepopup abs">').attr({
-                role: 'dialog',
-                id: id
-            }).append(closer, sidepopuppane),
+            popup = $('<div class="io-ox-sidepopup abs" role="dialog">').attr('id', id).append($('<div role="document">').append(closer, sidepopuppane)),
 
             arrow = options.arrow === false ? $() :
                 $('<div class="io-ox-sidepopup-arrow">').append(

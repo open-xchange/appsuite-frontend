@@ -54,30 +54,31 @@ define('plugins/portal/files/register', [
         },
 
         preview: function (baton) {
+            var filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename;
             //#. %1$s is a filename
             var content = $('<div class="content pointer" tabindex="0" role="button">')
-                .attr('aria-label', gt.format('Press [enter] to jump to %1$s', baton.data.filename)),
+                .attr('aria-label', gt.format('Press [enter] to jump to %1$s', filename)),
                 data, options, url;
 
-            if (_.isEmpty(baton.data.filename)) {
+            if (_.isEmpty(filename)) {
                 //old 'description only files'
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 content.html(_.escape(baton.data.description).replace(/\n/g, '<br>'));
-            } else if ((/(png|jpe?g|gif|bmp)$/i).test(baton.data.filename)) {
+            } else if ((/(png|jpe?g|gif|bmp)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 options = { width: 300, height: 300, scaleType: 'cover' };
                 url = api.getUrl(data, 'view') + '&' + $.param(options);
                 this.addClass('photo-stream');
                 content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
-            } else if ((/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(baton.data.filename)) {
+            } else if ((/(mpeg|m4a|mp3|ogg|oga|x-m4a)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 options = { width: 300, height: 300 };
                 url = api.getUrl(data, 'cover', options);
                 this.addClass('photo-stream');
                 content.addClass('decoration');
                 content.css('backgroundImage', 'url(' + url + ')');
-            } else if ((/(txt|json|md|csv)$/i).test(baton.data.filename)) {
+            } else if ((/(txt|json|md|csv)$/i).test(filename)) {
                 data = { folder_id: baton.data.folder_id, id: baton.data.id };
                 $.ajax({ type: 'GET', url: api.getUrl(data, 'view') + '&' + _.now(), dataType: 'text' }).done(function (filecontent) {
                     content.html(_.escape(filecontent).replace(/\n/g, '<br>'));

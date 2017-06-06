@@ -1,13 +1,13 @@
 <html lang="pl">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>9.6. Uzyskiwanie dostępu do plików przy użyciu WebDAV</title>
+<title>9.7. Uzyskiwanie dostępu do plików przy użyciu WebDAV</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="podręcznik użytkownika">
 <link rel="up" href="ox.appsuite.user.chap.files.html" title="Rozdział 9. Pliki">
-<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.5. Wyszukiwanie plików">
-<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. Konfiguracja WebDAV w systemie Linux">
+<link rel="prev" href="ox.appsuite.user.sect.files.search.html" title="9.6. Wyszukiwanie plików">
+<link rel="next" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.7.1. Konfiguracja WebDAV w systemie Linux">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Informacja Prawna">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -32,24 +32,25 @@
   <h1 class="sr-only"><span class="phrase">Pliki</span></h1>
 <div class="sect1">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
-<a name="ox.appsuite.user.sect.files.webdav"></a>9.6. Uzyskiwanie dostępu do plików przy użyciu WebDAV</h2></div></div></div>
-<a class="indexterm" name="id-1.10.12.2"></a><a class="indexterm" name="id-1.10.12.3"></a><a class="indexterm" name="id-1.10.12.4"></a><div class="concept">
-<a name="ox.appsuite.user.concept.files.webdav"></a><p>Za pomocą WebDAV możesz uzyskiwać dostęp do plików aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span> tak samo jak do lokalnych plików na dysku. W porównaniu z interfejsem graficznym oprogramowania do pracy grupowej standard WebDAV ma swoje zalety i wady:</p>
+<a name="ox.appsuite.user.sect.files.webdav"></a>9.7. Uzyskiwanie dostępu do plików przy użyciu WebDAV</h2></div></div></div>
+<a class="indexterm" name="id-1.10.13.2"></a><a class="indexterm" name="id-1.10.13.3"></a><a class="indexterm" name="id-1.10.13.4"></a><div class="concept">
+<a name="ox.appsuite.user.concept.files.webdav"></a><p>Za pomocą WebDAV możesz używać plików aplikacji <span class="phrase"> <span class="guilabel"><strong>Pliki</strong></span> </span>   tak samo, jak plików na dysku. W porównaniu z interfejsem graficznym programu Groupware standard WebDAV ma szereg zalet i wad:</p>
 <div class="itemizedlist"><ul class="itemizedlist compact" style="list-style-type: disc; ">
-<li class="listitem"><p>Zaletą jest szybki i bezpośredni dostęp z przeglądarki plików, np. Eksploratora Windows. Nie trzeba się logować do interfejsu oprogramowania do pracy grupowej.</p></li>
+<li class="listitem"><p>Zaletą jest szybki i bezpośredni dostęp z przeglądarki plików, np. Eksploratora Windows. Nie musisz się logować do interfejsu Groupware.</p></li>
 <li class="listitem"><p>Wadą jest możliwość wyświetlenia wyłącznie bieżącej wersji dokumentu. Nie masz dostępu do historii wersji ani żadnych dodatkowych informacji, np. komentarzy.</p></li>
 </ul></div>
-<p> <span class="phrase"><strong>Ostrzeżenie:</strong></span> usunięcie pliku przy użyciu WebDAV powoduje skasowanie wszystkich jego wersji, a nie tylko wersji bieżącej. <span class="phrase"><strong>Uwaga:</strong></span> aby utworzyć obiekty przy użyciu WebDAV w folderze publicznym lub udostępnionym, musisz mieć przynajmniej następujące uprawnienia do danego folderu: tworzenie obiektów, edycja własnych obiektów. Aby odczytać własne obiekty, trzeba mieć też uprawnienie do odczytu własnych obiektów. Informacje o uprawnieniach można znaleźć w sekcji <a class="xref" href="ox.appsuite.user.sect.dataorganisation.rights.html" title="11.2. Uprawnienia">11.2: Uprawnienia</a>.</p>
+<p> <span class="phrase"><strong>Ostrzeżenie:</strong></span> Usunięcie pliku w WebDAV powoduje skasowanie wszystkich jego wersji, a nie tylko bieżącej. <span class="phrase"><strong>Uwaga:</strong></span> Aby utworzyć obiekty za pomocą WebDAV w folderze publicznym lub udostępnionym, potrzebujesz mieć przynajmniej następujące uprawnienia do wybranego folderu: tworzenie obiektów, edycja własnych obiektów. Aby przeczytać własne obiekty, potrzebujesz także następującego uprawnienia: odczyt własnych obiektów. Informacje o uprawnieniach znajdują się w dokumencie <a class="xref" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. Uprawnienia">11.2: Uprawnienia</a>.</p>
 </div>
 <div class="concept">
 <a name="ox.appsuite.user.concept.files.webdav.setup"></a><p>Przed próbą uzyskania dostępu do plików aplikacji <span class="phrase"><span class="guilabel"><strong>Pliki</strong></span></span> za pomocą przeglądarki plików, np. Eksploratora Windows, należy skonfigurować dostęp przy użyciu WebDAV. Procedura wygląda różnie w zależności od oprogramowania systemu:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.6.1. Konfiguracja WebDAV w systemie Linux">Konfiguracja WebDAV w systemie Linux</a></p></li>
-<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.6.2. Konfiguracja WebDAV w systemie Windows 7">Konfiguracja WebDAV w systemie Windows 7</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.webdav.linux.html" title="9.7.1. Konfiguracja WebDAV w systemie Linux">Konfiguracja WebDAV w systemie Linux</a></p></li>
+<li class="listitem"><p><a class="xref" href="ox.appsuite.user.sect.files.webdav.win7.html" title="9.7.2. Konfiguracja WebDAV w systemie Windows 7">Konfiguracja WebDAV w systemie Windows 7</a></p></li>
 </ul></div>
 <p>
     </p>
 </div>
+<p><a name="ox.appsuite.user.concept.files.webdav.parent"></a>Temat nadrzędny: <a class="xref" href="ox.appsuite.user.chap.files.html" title="Rozdział 9. Pliki"><i><span class="phrase">Pliki</span></i></a></p>
 </div>
           </div>
         </body>

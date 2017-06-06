@@ -28,7 +28,7 @@ define('io.ox/core/boot/support', [
 
         util.debug('Check device support', _.device());
 
-        if (window.isBrowserSupported()) {
+        if (window.isBrowserSupported() && window.isPlatformSupported()) {
             // handle supported devices
             ext.point('io.ox/core/boot/supported').invoke('draw', null, ext.Baton());
         } else {
@@ -50,13 +50,14 @@ define('io.ox/core/boot/support', [
             index: 100,
             draw: function (baton) {
 
-                if (!_.device('android')) return;
+                // only show this if android version is too low
+                if (!_.device('android') || (window.isPlatformSupported() && !window.isBrowserSupported())) return;
 
                 // special info for not supported android
                 util.feedback('info', function () {
                     return $.txt(
                         //#. %n in the lowest version of Android
-                        gt('You need to use Android %n or higher.', _.browserSupport.Android)
+                        gt('You need to use Android %n or higher.', _.plaformSupport.Android)
                     );
                 });
 
@@ -71,13 +72,14 @@ define('io.ox/core/boot/support', [
             index: 300,
             draw: function (baton) {
 
-                if (!_.device('ios')) return;
+                // only show this if ios version is too low
+                if (!_.device('ios') || window.isPlatformSupported() && !window.isBrowserSupported()) return;
 
                 // special info for not supported iOS
                 util.feedback('info', function () {
                     return $.txt(
                         //#. %n is the lowest version of iOS
-                        gt('You need to use iOS %n or higher.', _.browserSupport.iOS)
+                        gt('You need to use iOS %n or higher.', _.platformSupport.iOS)
                     );
                 });
 
@@ -100,6 +102,25 @@ define('io.ox/core/boot/support', [
                         .add($.txt(_.noI18n('\xa0')))
                         //#. Should tell the user that his combination of browser and operating system is not supported
                         .add($('<div>').text(gt('This browser is not supported on your current platform.')));
+                });
+
+                baton.stopPropagation();
+            }
+        },
+         //
+        // unsupported platform
+        //
+        {
+            id: 'unsupported-platform',
+            index: 500,
+            draw: function (baton) {
+                if (!_.device('windowsphone')) return;
+
+                util.feedback('info', function () {
+                    return $('<b>').text(gt('Your platform is not supported!'))
+                        .add($.txt(_.noI18n('\xa0')))
+                        //#. Should tell the user that his combination of browser and operating system is not supported
+                        .add($('<div>').text(gt('This platform is currently not supported.')));
                 });
 
                 baton.stopPropagation();

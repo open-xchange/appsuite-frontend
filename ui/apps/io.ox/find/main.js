@@ -289,11 +289,10 @@ define('io.ox/find/main', [
                             },
                             cid: searchcid
                         });
-                        // collection cache used: trigger event ususally trigger by apiproxy
-                        parent.listView.on('collection:cache', function () {
-                            if (this.loader.mode === 'search') {
-                                app.trigger('find:query:result', { results: this.loader.collection.toJSON() });
-                            }
+                        // disable cache also for modules with collection loader
+                        parent.listView.on('collection:load', function () {
+                            if (this.loader.mode !== 'search') return;
+                            this.collection.expired = true;
                         });
                         app.trigger('collectionLoader:created', collectionLoader);
                         var register = function () {
@@ -581,6 +580,11 @@ define('io.ox/find/main', [
                     app.trigger('find:config-updated');
                     // manager knows all mandatory facets now and will add them to all calls
                     app.configReady.resolve();
+                }, function (error) {
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell(error);
+                    });
+                    app.cancel();
                 });
         };
 

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-03-12 18:43+0100\n"
+"PO-Revision-Date: 2017-05-11 23:38+0200\n"
 "Last-Translator: Andres Herrera <andres@bureau-cornavin.com>\n"
 "Language-Team: Spanish <es@bureau-cornavin.com>\n"
 "Language: es_ES\n"
@@ -203,6 +203,14 @@ msgstr[1] "%1$d segundos"
 msgid "%1$d selected"
 msgstr "%1$d seleccionados"
 
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d total"
+msgstr "%1$d en total"
+
+#: apps/io.ox/core/folder/node.js module:io.ox/core
+msgid "%1$d unread"
+msgstr "%1$d no leídos"
+
 #. %1$d number of notifications
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "%1$d unread mails"
@@ -366,9 +374,9 @@ msgstr "%1$s a %2$s"
 msgid "%1$s updated the profile:"
 msgstr "%1$s ha actualizado su perfil:"
 
-#: apps/plugins/portal/xing/activities.js module:plugins/portal
-msgid "%1$s updated their profile:"
-msgstr "%1$s ha actualizado su perfil:"
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "%1$s. Press backspace to delete."
+msgstr "%1$s. Presione retroceso para eliminar."
 
 #. %1$s is the folder owner
 #. %2$s is the folder title
@@ -728,6 +736,11 @@ msgstr "Duración real en minutos"
 msgid "Add"
 msgstr "Añadir"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Add IMAP keyword"
+msgstr "Añadir clave IMAP"
+
 #: apps/io.ox/core/viewer/views/sidebar/filedescriptionview.js
 #: module:io.ox/core/viewer
 msgid "Add a description"
@@ -751,6 +764,8 @@ msgstr "Añadir como carpeta pública"
 msgid "Add attachments"
 msgstr "Añadir adjuntos"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Add condition"
@@ -758,6 +773,7 @@ msgstr "Añadir condición"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Añadir contacto"
@@ -923,9 +939,17 @@ msgstr "Añadir su cuenta"
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the added search query
+#. %2$s is the context of the added search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Added %1$s, %2$s."
 msgstr "Añadido %1$s, %2$s."
+
+#. %1$s is the display name of an added user or mail recipient
+#. %1$s is the added search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "Added %1$s."
+msgstr "Añadido %1$s."
 
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
@@ -960,6 +984,11 @@ msgstr "Añadir archivos con nombres idénticos"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Additional settings"
 msgstr "Ajustes adicionales"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Address"
+msgstr "Dirección"
 
 #: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
@@ -1011,8 +1040,8 @@ msgstr "Después de varias repeticiones"
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/find/extensions-api.js module:io.ox/core
 #: apps/io.ox/find/manager/value-model.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "All"
 msgstr "Todos"
 
@@ -1150,8 +1179,8 @@ msgstr "Se ha producido un error desconocido"
 msgid "Anniversary"
 msgstr "Aniversario"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Any recipient"
 msgstr "Cualquier destinatario"
 
@@ -1201,8 +1230,8 @@ msgstr "Aplicar regla si se cumplen todas las condiciones"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Apply rule if any condition is met."
-msgstr "Aplicar regla si se cumple alguna condición"
+msgid "Apply rule if any condition is met"
+msgstr "Aplicar regla si se cumple cualquier condición"
 
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/permissions.js
@@ -1210,10 +1239,10 @@ msgid "Apply to all subfolders"
 msgstr "Aplicar a todas las subcarpetas"
 
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/edit/main.js module:io.ox/calendar/edit/main
-#: apps/io.ox/calendar/list/perspective.js apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/view-detail.js apps/io.ox/mail/detail/links.js
-#: module:io.ox/mail
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/edit/main.js
+#: module:io.ox/calendar/edit/main apps/io.ox/calendar/list/perspective.js
+#: apps/io.ox/calendar/util.js apps/io.ox/calendar/view-detail.js
+#: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Appointment"
 msgstr "Cita"
 
@@ -1258,10 +1287,6 @@ msgstr "Aprobado: "
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Apps"
 msgstr "Aplicaciones"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "April"
-msgstr "abril"
 
 #. Archive folder
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -1322,8 +1347,8 @@ msgstr "Adjunto"
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
-"Attachment file size to large. You have to use %1$s or reduce the attachment "
-"file size."
+"Attachment file size too large. You have to use %1$s or reduce the "
+"attachment file size."
 msgstr ""
 "Tamaño de archivo adjunto demasiado grande. Debe utilizar %1$s o reducir el "
 "tamaño del archivo adjunto."
@@ -1336,7 +1361,7 @@ msgstr[1] "Los adjuntos se han guardado"
 
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid ""
-"Attachment size to large. Please remove attachments or reduce the file size."
+"Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 "Tamaño de adjunto demasiado grande. Por favor, elimine adjuntos o reduzca el "
 "tamaño del archivo."
@@ -1354,10 +1379,6 @@ msgstr "Adjuntos"
 msgid "Attachments have been saved!"
 msgstr "Los adjuntos han sido guardados"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "August"
-msgstr "agosto"
-
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Authentication"
 msgstr "Autentificación"
@@ -1367,6 +1388,11 @@ msgstr "Autentificación"
 #: apps/io.ox/files/share/permissions.js
 msgid "Author"
 msgstr "Autor"
+
+#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
+#: apps/plugins/portal/twitter/register.js
+msgid "Authorize your account again"
+msgstr "Autorizar su cuenta de nuevo"
 
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/autoforward/settings/register.js
@@ -1425,10 +1451,6 @@ msgstr ""
 "Borrar automáticamente el correo de invitación después de que la cita haya "
 "sido aceptada o rechazada"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Autoplay pause in seconds"
-msgstr "Detención de reproducción automática en segundos"
-
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Average time: %1$s ms"
 msgstr "Tiempo medio: %1$s ms"
@@ -1469,6 +1491,11 @@ msgstr "Volver a la identificación"
 msgid "Basic settings"
 msgstr "Configuración básica"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Bcc"
+msgstr "Cco"
+
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
@@ -1508,11 +1535,16 @@ msgstr "Copia oculta"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Blue"
 msgstr "Azul"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Body"
+msgstr "Cuerpo"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Branches"
@@ -1527,10 +1559,12 @@ msgstr "Navegador"
 msgid "Burnt orange"
 msgstr "Naranja tostado"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Business"
 msgstr "Profesional"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Business Address"
@@ -1554,21 +1588,15 @@ msgid "Buy now!"
 msgstr "¡Comprar ahora!"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid ""
-#| "By changing the date of this appointment you are creating an appointment "
-#| "exception to the series. Do you want to continue?"
 msgid ""
 "By changing the date of this appointment you are creating an appointment "
 "exception to the series."
 msgstr ""
-"Al modificar la fecha de esta cita, está creando una excepción en la serie "
-"recurrente. ¿Desea continuar?"
+"Al modificar la fecha de esta cita, está creando una cita de excepción en la "
+"serie recurrente."
 
 #. %1$s is the name of the inputfield (To, CC, BCC)
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "CC"
 msgstr "CC"
 
@@ -1589,11 +1617,10 @@ msgid "CW %1$d"
 msgstr "Sem %1$d"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CalDAV Login"
-msgstr "Acceder a CalDAV"
+msgid "CalDAV"
+msgstr "CalDAV"
 
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "CalDAV URL"
 msgstr "URL de CalDAV"
 
@@ -1666,7 +1693,6 @@ msgstr "Calendarios"
 #: apps/io.ox/files/actions/delete.js module:io.ox/files
 #: apps/io.ox/files/actions/edit-description.js
 #: apps/io.ox/files/actions/rename.js apps/io.ox/files/actions/save-as-pdf.js
-#: apps/io.ox/files/actions/share.js
 #: apps/io.ox/files/actions/upload-new-version.js
 #: apps/io.ox/files/actions/versions-delete.js apps/io.ox/files/main.js
 #: apps/io.ox/files/upload/main.js apps/io.ox/files/upload/view.js
@@ -1752,17 +1778,19 @@ msgid "Capacity"
 msgstr "Capacidad"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV Login"
-msgstr "Acceder a CardDAV"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "CardDAV URL"
-msgstr "URL de CardDAV"
+msgid "CardDAV"
+msgstr "CardDAV"
 
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Cart is empty."
 msgstr "La cesta esta vacía."
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Cc"
+msgstr "Cc"
+
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/io.ox/contacts/print.js
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
@@ -1784,12 +1812,10 @@ msgstr "Cambiar suscripciones IMAP"
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change confirmation status"
 msgstr "Cambiar estado de confirmación"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Change due date"
 msgstr "Cambiar fecha de vencimiento"
 
@@ -1833,7 +1859,7 @@ msgstr "Carácter"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Checkboxes"
 msgstr "Casillas de verificación"
 
@@ -1870,10 +1896,6 @@ msgstr "Borrar"
 msgid "Clear field"
 msgstr "Borrar campo"
 
-#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-msgid "Clear selection"
-msgstr "Borrar selección"
-
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Haga clic aquí para salir del centro de ayuda"
@@ -1883,62 +1905,9 @@ msgid "Click here to reconnect to your xing account to see activities."
 msgstr ""
 "Presione aquí para reconectar a su cuenta de Xing para ver actividades."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on a sentence to choose when to repeat the appointment."
-msgstr "Presione en una frase para elegir cuándo repetir la cita."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click on the links to change the values."
-msgstr "Presione en los enlaces para cambiar los valores."
-
-#: apps/plugins/portal/linkedIn/register.js module:plugins/portal
-#: apps/plugins/portal/twitter/register.js
-msgid "Click to authorize your account again"
-msgstr "Presione para autorizar su cuenta de nuevo"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Click to close the recurrence view"
-msgstr "Presione para cerrar la vista de recurrencia"
-
-#: apps/io.ox/core/yell.js module:io.ox/core
-msgid "Click to close this notification"
-msgstr "Presione para cerrar esta notificación"
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open."
-msgstr "Presione para abrir."
-
-#: apps/io.ox/preview/main.js module:io.ox/core
-msgid "Click to open. Drag to your desktop to download."
-msgstr "Presione para abrir. Arrastre a su escritorio para descargar."
-
 #: apps/io.ox/core/viewer/views/types/audioview.js module:io.ox/core
 msgid "Click to play audio file"
 msgstr "Presione para reproducir archivo de audio"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry"
-msgstr "Presione para reintentarlo"
-
-#: apps/plugins/portal/twitter/register.js module:plugins/portal
-msgid "Click to retry later."
-msgstr "Presione para reintentarlo más tarde."
-
-#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-msgid "Click to show or hide actions for advanced users."
-msgstr "Presione para mostrar u ocultar acciones para usuarios avanzados."
-
-#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
-msgid "Click to start video"
-msgstr "Presione para comenzar el vídeo"
-
-#: apps/io.ox/portal/main.js module:io.ox/portal
-msgid "Click to try again."
-msgstr "Presione para intentarlo otra vez."
-
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Click to upload image"
-msgstr "Presione para subir una imagen"
 
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "Client onboarding"
@@ -1980,6 +1949,12 @@ msgstr "Cerrar panel de descripción"
 msgid "Close folder view"
 msgstr "Cerrar la vista de carpeta"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "close for %1$s"
+msgid "Close for %1$s"
+msgstr "cerrar por %1$s"
+
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Close notification area"
 msgstr "Cerrar área de notificaciones"
@@ -1992,6 +1967,10 @@ msgstr "Cerrar las características premium"
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Close reminder for %1$s"
 msgstr "Cerrar recordatorio de %1$s"
+
+#: apps/io.ox/core/yell.js module:io.ox/core
+msgid "Close this notification"
+msgstr "Cerrar esta notificación"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Close viewer"
@@ -2104,8 +2083,8 @@ msgid "Configure"
 msgstr "Configurar"
 
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-msgid "Configure %1$s"
-msgstr "Configurar %1$s"
+msgid "Configure %s"
+msgstr "Configurar %s"
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Configure categories"
@@ -2157,10 +2136,12 @@ msgid "Connect your Device"
 msgstr "Conectar su dispositivo"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Connect your Device"
 msgid "Connect your device"
 msgstr "Conectar su dispositivo"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Connection"
+msgstr "Conexión"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Connection security"
@@ -2212,15 +2193,15 @@ msgstr "Los contactos se han movido"
 msgid "Contacts toolbar"
 msgstr "Barra de herramientas Contactos"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Contains"
 msgstr "Contiene"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Content"
-msgstr "Contenido"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Contains not"
+msgstr "No contiene"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
 #: module:io.ox/mail
@@ -2265,6 +2246,12 @@ msgctxt "CC"
 msgid "Copy"
 msgstr "Copiar"
 
+#. Copy a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Copy into"
+msgstr "Copiar en"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Copy to clipboard"
 msgstr "Copiar al portapapeles"
@@ -2280,6 +2267,15 @@ msgstr "Los costes deben estar entre -%1$d y %1$d."
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Costs must only have two decimal places."
 msgstr "Los costes han de tener sólo 2 decimales."
+
+#: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
+msgid ""
+"Could not delete folder. This can be due to insufficient permissions in your "
+"trash folder or this might be a special folder that cannot be deleted."
+msgstr ""
+"No se pudo eliminar la carpeta. Esto puede deberse a unos permisos "
+"insuficientes en la carpeta papelera o puede tratarse de una carpeta "
+"especial que no se puede eliminar."
 
 #: apps/io.ox/core/desktop.js module:io.ox/core
 msgid "Could not get a default folder for this application."
@@ -2391,10 +2387,8 @@ msgid "Create distribution list"
 msgstr "Crear lista de distribución"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "No delete exceptions"
 msgid "Create exception"
-msgstr "Sin excepciones de borrado"
+msgstr "Crear excepción"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/actions/copyMove.js
@@ -2442,6 +2436,12 @@ msgstr "Crear objetos y subcarpetas"
 msgid "Create reminder"
 msgstr "Crear recordatorio"
 
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
+#: module:io.ox/files
+msgid "Create sharing link"
+msgstr "Crear enlace de compartido"
+
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/edit/view.js
@@ -2460,6 +2460,11 @@ msgstr "Creación de archivos"
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Currency"
 msgstr "Moneda"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Current date"
+msgstr "Fecha actual"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
@@ -2524,9 +2529,8 @@ msgstr "Datos importados sólo parcialmente (%1$s de %2$s registros)"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: apps/io.ox/files/favorite/view-options.js
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/view-options.js module:io.ox/mail
+#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
+#: module:io.ox/mail
 msgid "Date"
 msgstr "Fecha"
 
@@ -2535,6 +2539,7 @@ msgstr "Fecha"
 msgid "Date completed"
 msgstr "Fecha completada"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js apps/plugins/halo/xing/register.js
 #: module:plugins/portal
@@ -2550,10 +2555,6 @@ msgstr "Día"
 #: apps/io.ox/core/tk/mobiscroll.js module:io.ox/core
 msgid "Days"
 msgstr "Días"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "December"
-msgstr "Diciembre"
 
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -2603,10 +2604,8 @@ msgid "Default sender for vacation notice"
 msgstr "Remitente predeterminado para el aviso de ausencia"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "Unset default signature"
 msgid "Default signature"
-msgstr "Firma predeterminada no definida"
+msgstr "Firma predeterminada"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for new messages"
@@ -2668,8 +2667,7 @@ msgstr "Eliminar todos los mensajes"
 msgid "Delete all objects"
 msgstr "Borrar todos los objetos"
 
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Delete appointment"
 msgstr "Borrar cita"
 
@@ -2703,7 +2701,7 @@ msgstr "Permisos de borrado"
 msgid "Delete resource"
 msgstr "Borrar recurso"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Delete task"
 msgstr "Borrar tarea"
 
@@ -2711,10 +2709,6 @@ msgstr "Borrar tarea"
 #: apps/io.ox/files/actions/versions-delete.js
 msgid "Delete version"
 msgstr "Borrar versión"
-
-#: apps/io.ox/calendar/actions/delete.js module:io.ox/calendar
-msgid "Delete whole series"
-msgstr "Borrar series completas"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -2770,8 +2764,8 @@ msgstr "La descripción ha sido copiada"
 msgid "Description text"
 msgstr "Texto de la descripción"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Detail"
 msgstr "Detalle"
 
@@ -2801,9 +2795,11 @@ msgstr "Detalles"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid ""
-"Did you now that you can take OX App Suite with you? Just click this icon "
+"Did you know that you can take OX App Suite with you? Just click this icon "
 "and choose 'Connect your device' from the menu."
 msgstr ""
+"¿Sabe que puede llevar OX App Suite con usted? presione este icono y elija "
+"'Conectar a su dispositivo' en el menú."
 
 #: apps/io.ox/calendar/view-detail.js module:io.ox/calendar
 msgid "Direct link"
@@ -2831,8 +2827,8 @@ msgstr "Desactivar widget"
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
 #: apps/io.ox/contacts/edit/view-form.js apps/io.ox/core/settings/user.js
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/tasks/edit/view-template.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit
 msgid "Discard"
 msgstr "Descartar"
@@ -2847,21 +2843,23 @@ msgctxt "dialog"
 msgid "Discard changes"
 msgstr "Descartar cambios"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Discard mails from %1$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Descartar correos de %1$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "This file is locked by %1$s"
 msgid "Discard mails to %1$s"
-msgstr "El fichero está bloqueado por %1$s"
+msgstr "Descartar correos a %1$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Discard mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Discard mails with subject %1$s"
-msgstr ""
+msgstr "Descartar correos con el asunto %1$s"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgctxt "dialog"
@@ -3085,8 +3083,8 @@ msgctxt "app"
 msgid "Documents"
 msgstr "Documentos"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Domain"
 msgstr "Dominio"
 
@@ -3095,8 +3093,8 @@ msgstr "Dominio"
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/util.js
-#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
+#: apps/io.ox/tasks/util.js apps/plugins/notifications/tasks/register.js
+#: module:plugins/notifications
 msgid "Done"
 msgstr "Completada"
 
@@ -3228,10 +3226,8 @@ msgid "Drop here!"
 msgstr "¡Soltar aquí!"
 
 #: apps/io.ox/core/tk/contenteditable-editor.js module:io.ox/core
-#, fuzzy
-#| msgid "Insert inline image"
 msgid "Drop inline images here"
-msgstr "Insertar imagen incrustada"
+msgstr "Deposite imágenes insertadas aquí"
 
 #. %1$s is the filename of the current file
 #: apps/io.ox/core/viewer/views/sidebarview.js module:io.ox/core/viewer
@@ -3244,7 +3240,6 @@ msgstr "Dejar sólo un único archivo como nueva versión."
 
 #. Task: "Due" like in "Change due date"
 #: apps/io.ox/tasks/print.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Due"
 msgstr "Vencimiento"
 
@@ -3265,12 +3260,8 @@ msgid "Due on %1$s"
 msgstr "Vence el %1$s"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS Login"
-msgstr "Acceder a EAS"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "EAS URL"
-msgstr "URL de EAS"
+msgid "EAS"
+msgstr "EAS"
 
 #. Exabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -3396,7 +3387,7 @@ msgstr "Editar firma"
 
 #: apps/io.ox/tasks/edit/main.js module:io.ox/tasks
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
-#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/edit/view.js apps/io.ox/tasks/toolbar.js
 msgid "Edit task"
 msgstr "Editar tarea"
 
@@ -3409,6 +3400,7 @@ msgstr "Editar para definir un nombre."
 msgid "Editor"
 msgstr "Editor"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Email"
@@ -3501,6 +3493,7 @@ msgstr "Vaciar la papelera"
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 #: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter.js
+#: apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "Activar"
@@ -3530,10 +3523,22 @@ msgstr "Fin de jornada laboral"
 msgid "Ends"
 msgstr "Finaliza"
 
+#. a given string does not end with a specified pattern
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Ends not with"
+msgstr "No finaliza con"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/extensions.js
 msgid "Ends on"
 msgstr "Termina el"
+
+#. a given string does end with a specified pattern
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Ends with"
+msgstr "Finaliza con"
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Enter Password"
@@ -3552,10 +3557,10 @@ msgstr "Indique el título del documento aquí"
 msgid "Entrepreneur"
 msgstr "Empresario"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Envelope - To"
-msgstr "Sobre - Para"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Envelope"
+msgstr "Sobre"
 
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
@@ -3591,16 +3596,12 @@ msgid "Error:"
 msgstr "Error:"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
-#, fuzzy
-#| msgid "Error while loading message content"
 msgid "Error: Failed to load message content"
-msgstr "Error al cargar el contenido del mensaje"
+msgstr "Error: Hubo un error al cargar el contenido del mensaje"
 
 #: apps/io.ox/mail/listview.js module:io.ox/mail
-#, fuzzy
-#| msgid "Error while loading message content"
 msgid "Error: Failed to load messages"
-msgstr "Error al cargar el contenido del mensaje"
+msgstr "Error: Hubo un error al cargar mensajes"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Errors"
@@ -3623,48 +3624,40 @@ msgstr "Duración estimada en minutos"
 #. %2$s: day string, e.g. "Friday" or "Monday, Tuesday, Wednesday"
 #. day string will be in "superessive" form if %1$d >= 2; nominative if %1$d == 1
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every %1$s."
 msgctxt "weekly"
 msgid "Every %2$s."
 msgid_plural "Every %1$d weeks on %2$s."
-msgstr[0] "Cada %1$s."
-msgstr[1] "Cada %1$s."
+msgstr[0] "Cada %2$s."
+msgstr[1] "Cada %1$d semanas los %2$s."
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every day."
 msgctxt "daily"
 msgid "Every day."
 msgid_plural "Every %1$d days."
 msgstr[0] "Todos los días."
-msgstr[1] "Todos los días."
+msgstr[1] "Cada %1$d días."
 
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every day."
 msgctxt "weekly"
 msgid "Every day."
 msgid_plural "Every %1$d weeks on all days."
 msgstr[0] "Todos los días."
-msgstr[1] "Todos los días."
+msgstr[1] "Cada %1$d semanas todos los días."
 
 #. recurrence string
 #. %1$d: numeric, interval
 #. %2$d: numeric, day in month
 #. Example: Every 5 months on day 18
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every month on day %1$d."
 msgctxt "monthly"
 msgid "Every month on day %2$d."
 msgid_plural "Every %1$d months on day %2$d."
-msgstr[0] "Todos los meses el día %1$d."
-msgstr[1] "Todos los meses el día %1$d."
+msgstr[0] "Todos los meses el día %2$d."
+msgstr[1] "Cada %1$d meses el día %2$d."
 
 #. recurrence string
 #. %1$d: numeric, interval
@@ -3672,13 +3665,11 @@ msgstr[1] "Todos los meses el día %1$d."
 #. %3$s: day string, e.g. Monday
 #. Example Every 3 months on the second Tuesday
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every month on the %1$s %2$s."
 msgctxt "monthly"
 msgid "Every month on the %2$s %3$s."
 msgid_plural "Every %1$d months on the %2$s %3$s."
-msgstr[0] "Todos los meses el %1$s %2$s."
-msgstr[1] "Todos los meses el %1$s %2$s."
+msgstr[0] "Todos los meses el %2$s %3$s."
+msgstr[1] "Cada %1$d meses el %2$s %3$s."
 
 #. sharing: a guest user will be created for the owner of that email address
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -3692,13 +3683,11 @@ msgstr ""
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Every weekend."
 msgctxt "weekly"
 msgid "Every weekend."
 msgid_plural "Every %1$d weeks on weekends."
-msgstr[0] "Todas los fines de semana."
-msgstr[1] "Todas los fines de semana."
+msgstr[0] "Todos los fines de semana."
+msgstr[1] "Cada %1$d semanas los fines de semana."
 
 #. recurrence string
 #. %1$s: Month nane, e.g. January
@@ -3799,7 +3788,7 @@ msgid "External participants"
 msgstr "Participantes externos"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
-msgid "Extremly likely"
+msgid "Extremely likely"
 msgstr "Extremadamente probable"
 
 #. Emoji category
@@ -3903,10 +3892,6 @@ msgstr "Fax (Casa)"
 msgid "Fax (alt)"
 msgstr "Fax (alternativo)"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "February"
-msgstr "febrero"
-
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Feed URL"
 msgstr "URL del Feed"
@@ -3914,6 +3899,11 @@ msgstr "URL del Feed"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Feedback"
 msgstr "Comentario"
+
+#. popup error message
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Feedback could not be sent"
+msgstr "No se pudo enviar la retroalimentación."
 
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
@@ -3946,14 +3936,17 @@ msgstr "El archivo se ha copiado"
 msgid "File has been moved"
 msgstr "El archivo se ha movido"
 
+#. File a message into a folder
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "File into"
+msgstr "Archivar en"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "File name"
 msgstr "Nombre de archivo"
 
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
-msgid "File name, click to rename"
-msgstr "Nombre del archivo, presionar para renombrar"
-
+#. Quota means a general quota for mail and files
 #: apps/io.ox/files/main.js module:io.ox/files
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "File quota"
@@ -4034,30 +4027,34 @@ msgstr "Ajustar al tamaño de la pantalla"
 msgid "Fit to screen width"
 msgstr "Ajustar al ancho de la pantalla"
 
+#. Sort by messages which are flagged, "Flag" is used in dropdown
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Flag"
+msgstr "Marca"
+
 #. Verb: (to) flag messages
-#: apps/io.ox/mail/actions.js module:io.ox/mail apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgctxt "verb"
 msgid "Flag"
 msgstr "Marca"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Flag mail with"
-msgstr "Marcar correo con"
-
+#. This is a summary for a mail filter rule
+#. Example: Flag mails from test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails from %1$s with a color"
-msgstr ""
+msgstr "Marcar correos de %1$s con un color"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails to test@invalid with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Flag mail with"
 msgid "Flag mails to %1$s with a color"
-msgstr "Marcar correo con"
+msgstr "Marcar correos de %1$s con un color"
 
+#. This is a summary for a mail filter rule
+#. Example: Flag mails with subject Some subject with a color
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Flag mails with subject %1$s with a color"
-msgstr ""
+msgstr "Marcar correos con el asunto %1$s con un color"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Flagged"
@@ -4098,7 +4095,7 @@ msgstr "Tipo de carpeta"
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 #: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
 #: apps/io.ox/files/toolbar.js module:io.ox/files apps/io.ox/mail/toolbar.js
-#: module:io.ox/mail apps/io.ox/tasks/toolbar.js
+#: module:io.ox/mail apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Folder view"
 msgstr "Vista de carpeta"
 
@@ -4117,10 +4114,10 @@ msgstr "Acciones específicas de carpeta"
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/contacts/main.js module:io.ox/contacts
-#: apps/io.ox/core/folder/tree.js module:io.ox/core
-#: apps/io.ox/core/folder/view.js apps/io.ox/files/filepicker.js
-#: module:io.ox/files apps/io.ox/files/main.js apps/io.ox/mail/main.js
-#: module:io.ox/mail apps/io.ox/tasks/main.js module:io.ox/tasks
+#: apps/io.ox/core/folder/view.js module:io.ox/core
+#: apps/io.ox/files/filepicker.js module:io.ox/files apps/io.ox/files/main.js
+#: apps/io.ox/mail/main.js module:io.ox/mail apps/io.ox/tasks/main.js
+#: module:io.ox/tasks
 msgid "Folders"
 msgstr "Carpetas"
 
@@ -4207,16 +4204,15 @@ msgstr "Trabajador independiente"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Friday"
 msgctxt "superessive"
 msgid "Friday"
-msgstr "viernes"
+msgstr "Viernes"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/view-options.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/view-options.js
 msgid "From"
 msgstr "De"
 
@@ -4253,12 +4249,6 @@ msgstr "Obtener %s"
 msgid "Get free upgrade"
 msgstr "Obtener actualización gratuita"
 
-#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
-#: apps/io.ox/core/viewer/views/toolbarview.js apps/io.ox/files/actions.js
-#: module:io.ox/files
-msgid "Get link"
-msgstr "Obtener enlace"
-
 #: apps/plugins/portal/xing/register.js module:plugins/portal
 msgid ""
 "Get news from your XING network delivered to you. Stay in touch and find out "
@@ -4278,10 +4268,8 @@ msgstr "Consiga la aplicación en %1$s"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Get the App from %1$s"
 msgid "Get the App from %1$s."
-msgstr "Consiga la aplicación en %1$s"
+msgstr "Consiga la aplicación en %1$s."
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Get your device configured by email."
@@ -4339,8 +4327,8 @@ msgstr "Google Play"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Gray"
 msgstr "Gris"
@@ -4349,10 +4337,22 @@ msgstr "Gris"
 msgid "Grayish blue"
 msgstr "Azul grisáceo"
 
+#. greater than the given value
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Greater"
+msgstr "Mayor"
+
+#. greater than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Greater equals"
+msgstr "Los mayores o iguales"
+
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Green"
 msgstr "Verde"
@@ -4389,10 +4389,16 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML y texto sencillo"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Header"
 msgstr "Cabecera"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Header exists"
+msgstr "Existe encabezado"
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Hello %s"
@@ -4517,10 +4523,12 @@ msgstr "Prioridad alta"
 msgid "Hobby"
 msgstr "Afición"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 msgid "Home"
 msgstr "Casa"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Home Address"
@@ -4549,7 +4557,7 @@ msgstr "¿Cómo funciona esto?"
 #. %1$s is the product name, for example 'OX App Suite'
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "How likely is it that you would recommend %1$s to a friend?"
-msgstr "¿Qué tan probable es que recomiende %1$s a un amigo?"
+msgstr "¿Cómo de probable es que recomiende %1$s a un amigo?"
 
 #. 2 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
@@ -4564,20 +4572,8 @@ msgid "I like it"
 msgstr "Me gusta"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Login"
-msgstr "Acceder a IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Port"
-msgstr "Puerto IMAP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Secure"
-msgstr "IMAP seguro"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "IMAP Server"
-msgstr "Servidor IMAP"
+msgid "IMAP"
+msgstr "IMAP"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4715,13 +4711,6 @@ msgstr "Índigo"
 msgid "Info"
 msgstr "Información"
 
-#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-#: apps/io.ox/settings/accounts/settings/pane.js
-#: module:io.ox/settings/accounts
-msgid "Information about account recovery..."
-msgstr "Información sobre la recuperación de la cuenta..."
-
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid ""
 "Informs about the current status of Emails and appointments without having "
@@ -4757,10 +4746,8 @@ msgid "Insert the original email text to a reply"
 msgstr "Insertar el texto original del correo en la respuesta"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Installation"
 msgid "Install"
-msgstr "Instalación"
+msgstr "Instalar"
 
 #. %1$s is the name of the platform
 #. %2$s is an the "add to home" icon
@@ -4841,18 +4828,25 @@ msgstr "Invitar a la cita"
 msgid "Invite to new appointment"
 msgstr "Invitar a nueva cita"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Es mayor que"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 msgid "Is exactly"
 msgstr "Es exactamente"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+msgid "Is not exactly"
+msgstr "No es exactamente"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Is smaller than"
 msgstr "Es menor que"
 
@@ -4896,10 +4890,6 @@ msgstr "Opciones de la lista de elementos"
 msgid "Items without a file can not be downloaded."
 msgstr "No se pueden descargar elementos sin archivo."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "January"
-msgstr "enero"
-
 #. Emoji collection. Emoji icons that work across Japanese (telecom) carriers.
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Japanese Carrier"
@@ -4913,14 +4903,6 @@ msgstr "Empleo"
 msgid "Job description"
 msgstr "Descripción del trabajo"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "July"
-msgstr "julio"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "June"
-msgstr "junio"
-
 #. Just disable portal widget - in contrast to delete
 #: apps/io.ox/portal/main.js module:io.ox/portal
 #: apps/io.ox/portal/settings/widgetview.js
@@ -4932,8 +4914,8 @@ msgstr "Sólo desactivar widget"
 msgid "KB"
 msgstr "KB"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Keep"
 msgstr "Mantener"
 
@@ -4945,27 +4927,23 @@ msgstr "Mantener una copia del mensaje"
 msgid "Keep draft"
 msgstr "Conservar borrador"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Keep looping endlessly"
-msgstr "Repetir indefinidamente"
-
+#. This is a summary for a mail filter rule
+#. Example: Keep mails from test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Keep mails from %1$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Conservar correos de %1$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails to test@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Keep mails to %1$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Mantener los correos en %1$s"
 
+#. This is a summary for a mail filter rule
+#. Example: Keep mails with subject Some subject
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Yes, send without subject"
 msgid "Keep mails with subject %1$s"
-msgstr "Sí, enviarlo sin asunto"
+msgstr "Conservar los correos con el asunto %1$s"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -5037,6 +5015,11 @@ msgstr "Disposición"
 msgid "Learn more"
 msgstr "Aprenda más"
 
+#. Hint to leave an input field empty if the user does not already have a password
+#: apps/plugins/portal/userSettings/register.js module:io.ox/core
+msgid "Leave empty if you have none"
+msgstr "Dejar vacío si no tiene ninguno"
+
 #. Emoji category
 #. Japanese should include "Katakana Middle Dot". Unicode: 30FB
 #. Japanese: 文字・記号
@@ -5047,15 +5030,10 @@ msgid "Letters • Symbols"
 msgstr "Letras • Símbolos"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid ""
-#| "Let´s automatically configure your device, by clicking the button below. "
-#| "It´s that simple!"
 msgid ""
 "Let´s automatically configure your device, by clicking the button below."
 msgstr ""
-"Configure automáticamente su dispositivo presionando el botón inferior. ¡Es "
-"así de simple!"
+"Configure automáticamente su dispositivo presionando el botón inferior."
 
 #. Emoji category
 #. Japanese: 日常
@@ -5065,15 +5043,15 @@ msgid "Life"
 msgstr "Vida"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light blue"
 msgstr "Azul claro"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Light green"
 msgstr "Verde claro"
@@ -5090,11 +5068,6 @@ msgstr "Me gusta"
 #: apps/plugins/portal/xing/actions.js module:plugins/portal
 msgid "Liked comment"
 msgstr "Marcó \"Me gusta\" en el comentario"
-
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Línea %1$d: %2$s"
 
 #: apps/io.ox/mail/detail/links.js module:io.ox/mail
 msgid "Link"
@@ -5138,8 +5111,8 @@ msgstr "Cargar correo completo"
 msgid "Loading the full mail might lead to performance problems."
 msgstr "La carga completa del correo podría generar problemas de rendimiento."
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Localpart"
 msgstr "Parte local"
 
@@ -5157,9 +5130,9 @@ msgstr "Bloquear"
 msgid "Locked"
 msgstr "Bloqueado"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Loop once only"
-msgstr "Repetir solo una vez"
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Login"
+msgstr "Nombre de usuario"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Loss"
@@ -5192,6 +5165,18 @@ msgstr "Baja prioridad"
 msgctxt "E-Mail"
 msgid "Low priority"
 msgstr "Prioridad baja"
+
+#. lower than the given value
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower"
+msgstr "Menor"
+
+#. lower than or equal to
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Lower equals"
+msgstr "Los menores o iguales"
 
 #. Megabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -5274,6 +5259,7 @@ msgstr "El correo tiene el asunto vacío. ¿Desea enviarlo de todos modos?"
 msgid "Mail has no recipient."
 msgstr "El correo no tiene destinatario."
 
+#. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
 msgid "Mail quota"
@@ -5300,8 +5286,8 @@ msgstr "Fuente de correo"
 msgid "Mail was not imported. Only .eml files are supported."
 msgstr "No se importó el correo. Sólo se admiten archivos .eml"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Mailing list"
 msgstr "Lista de correo"
 
@@ -5345,26 +5331,20 @@ msgstr "Gerente"
 #: apps/io.ox/files/guidance/main.js module:io.ox/files
 msgctxt "help"
 msgid "Managing Files"
-msgstr "Gestión de archivos"
+msgstr "Administración de archivos"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Manual"
 msgstr "Manual"
 
 #: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
-#, fuzzy
-#| msgid "Automatic Configuration"
 msgid "Manual Configuration"
-msgstr "Configuración automática"
+msgstr "Configuración manual"
 
 #. Text that is displayed in a select box for task reminders, when the user does not use a predefined time, like in 15minutes
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Manual input"
 msgstr "Entrada manual"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "March"
-msgstr "marzo"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Marimba"
@@ -5388,8 +5368,7 @@ msgstr "Marcar como lista de distribución"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail apps/plugins/notifications/tasks/register.js
-#: module:plugins/notifications
+#: apps/plugins/notifications/tasks/register.js module:plugins/notifications
 msgid "Mark as done"
 msgstr "Marcar como completada"
 
@@ -5404,7 +5383,6 @@ msgstr "Marcar como no deseado"
 
 #: apps/io.ox/tasks/actions.js module:io.ox/tasks
 #: apps/io.ox/tasks/mobile-toolbar-actions.js apps/io.ox/tasks/toolbar.js
-#: module:io.ox/mail
 msgid "Mark as undone"
 msgstr "Marcar como no completado"
 
@@ -5413,53 +5391,60 @@ msgstr "Marcar como no completado"
 msgid "Mark as unread"
 msgstr "Marcar como no leído"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Mark mail as"
 msgstr "Marcar correo como"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail from %1$s, %2$s"
 msgid "Mark mails from %1$s as deleted"
-msgstr "Correo de %1$s, %2$s"
+msgstr "Marcar correos de %1$s como eliminados"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails from test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Apply to all subfolders"
 msgid "Mark mails from %1$s as seen"
-msgstr "Aplicar a todas las subcarpetas"
+msgstr "Marcar correos de %1$s como vistos"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails to %1$s as deleted"
-msgstr ""
+msgstr "Marcar correos de %1$s como eliminados"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails to test@invalid as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mark mail as"
 msgid "Mark mails to %1$s as seen"
-msgstr "Marcar correo como"
+msgstr "Marcar correos de %1$s como vistos"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as deleted
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as deleted"
-msgstr ""
+msgstr "Marcar correos con el asunto %1$s como eliminados"
 
+#. This is a summary for a mail filter rule
+#. Example: Mark mails with subject Some subject as seen
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Mark mails with subject %1$s as seen"
-msgstr ""
+msgstr "Marcar correos con el asunto %1$s como vistos"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Maroon"
 msgstr "Granate"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Matches"
 msgstr "Cumple"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "May"
-msgstr "mayo"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Matches not"
+msgstr "No coincide"
 
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Medium"
@@ -5516,6 +5501,7 @@ msgstr "Opciones de mensajes"
 msgid "Messaging"
 msgstr "Mensajería"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Messenger"
@@ -5561,11 +5547,9 @@ msgstr "Modificado"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Monday"
 msgctxt "superessive"
 msgid "Monday"
-msgstr "lunes"
+msgstr "Lunes"
 
 #: apps/io.ox/backbone/mini-views/date.js module:io.ox/core
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -5622,29 +5606,35 @@ msgstr "Mover todos los mensajes"
 msgid "Move folder"
 msgstr "Mover carpeta"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails from test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Mail from %1$s, %2$s"
 msgid "Move mails from %1$s into folder %2$s"
-msgstr "Correo de %1$s, %2$s"
+msgstr "Mover correos de %1$s a la carpeta %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A folder selected by the user
+#. Example: Move mails to test@invalid into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "No mails in this folder"
 msgid "Move mails to %1$s into folder %2$s"
-msgstr "No hay correos en esta carpeta"
+msgstr "Mover los correos de %1$s a la carpeta %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A folder selected by the user
+#. Example: Move mails with subject Some subject into folder INBOX
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Move mails with subject %1$s into folder %2$s"
-msgstr ""
+msgstr "Mover correos con el asunto %1$s a la carpeta %2$s"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
 msgid "Move to category"
 msgstr "Mover a la categoría"
 
 #: apps/io.ox/mail/categories/picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Move to folder"
 msgstr "Mover a la carpeta"
 
@@ -5725,8 +5715,8 @@ msgstr "Mis tareas"
 #: module:io.ox/core/viewer apps/io.ox/files/favorite/view-options.js
 #: module:io.ox/core apps/io.ox/files/share/view-options.js module:io.ox/files
 #: apps/io.ox/files/view-options.js apps/io.ox/mail/categories/edit.js
-#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Nombre"
 
@@ -5744,6 +5734,11 @@ msgstr "Azul marino"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "¿Necesita más espacio?"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Nested condition"
+msgstr "Condición anidada"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -5851,7 +5846,7 @@ msgstr "Nueva contraseña"
 msgid "New rule"
 msgstr "Nueva regla"
 
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
 msgstr "Nueva tarea"
 
@@ -6041,7 +6036,8 @@ msgstr "Sin título."
 #: module:io.ox/mail apps/io.ox/files/share/permissions.js
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "None"
 msgstr "Ninguno"
 
@@ -6055,6 +6051,11 @@ msgstr "Ninguna"
 msgctxt "E-Mail priority"
 msgid "Normal"
 msgstr "Normal"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Not Regex"
+msgstr "No coincide con la expresión"
 
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
 msgid "Not flagged"
@@ -6127,10 +6128,6 @@ msgstr "Notificar a todos los participantes por correo."
 msgid "Notify me again later"
 msgstr "Notificarme de nuevo más tarde"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "November"
-msgstr "noviembre"
-
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Number of days between vacation notices to the same sender"
 msgstr "Número de días entre avisos de ausencia al mismo destinatario"
@@ -6167,10 +6164,6 @@ msgstr "Objetos"
 msgid "Occurrences"
 msgstr "Repeticiones"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "October"
-msgstr "octubre"
-
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Offline"
 msgstr "Desconectado"
@@ -6201,13 +6194,11 @@ msgstr "En una fecha determinada"
 #. recurrence string
 #. %1$d: numeric
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "On workdays."
 msgctxt "weekly"
 msgid "On workdays."
 msgid_plural "Every %1$d weeks on workdays."
 msgstr[0] "Los días laborables."
-msgstr[1] "Los días laborables."
+msgstr[1] "Cada %1$d semanas los días laborables."
 
 #. %1$d is the number of search results in the autocomplete field
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
@@ -6261,6 +6252,14 @@ msgstr "Abrir panel de descripción"
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Open external link"
 msgstr "Abrir enlace externo"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+msgid "Open file"
+msgstr "Abrir archivo"
+
+#: apps/io.ox/preview/main.js module:io.ox/core
+msgid "Open file. Drag to your desktop to download."
+msgstr "Abrir archivo. Arrastre a su escritorio para descargar."
 
 #: apps/io.ox/calendar/main.js module:io.ox/calendar
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -6388,14 +6387,14 @@ msgstr "Opcional 20"
 #: apps/io.ox/find/extensions-facets.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/toolbar.js
-#: apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Options"
 msgstr "Opciones"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Orange"
 msgstr "Naranja"
@@ -6413,11 +6412,13 @@ msgstr "Organizador"
 msgid "Original mail"
 msgstr "Correo original"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 msgid "Other"
 msgstr "Otro"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/view-detail.js
 msgid "Other Address"
@@ -6471,6 +6472,11 @@ msgstr "Página %1$d de %2$d"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Pager"
 msgstr "Buscapersonas"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Part"
+msgstr "Parte"
 
 #: apps/io.ox/calendar/print-compact.js module:io.ox/calendar
 #: apps/io.ox/participants/detail.js module:io.ox/core
@@ -6556,10 +6562,8 @@ msgid "Permissions"
 msgstr "Permisos"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Permissions for \"%1$s\""
 msgid "Permissions for %1$s \"%2$s\""
-msgstr "Permisos para \"%1$s\""
+msgstr "Permisos para %1$s \"%2$s\""
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "Permissions:"
@@ -6569,6 +6573,7 @@ msgstr "Permisos:"
 msgid "Personal"
 msgstr "Personal"
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 #: apps/io.ox/contacts/print-details.js
 msgid "Personal information"
@@ -6583,6 +6588,7 @@ msgstr ""
 "Mensaje personal (opcional). Este mensaje se envía a todas las personas "
 "recién invitadas."
 
+#. vcard (electronic business card) field
 #: apps/io.ox/contacts/print-details.js module:io.ox/contacts
 #: apps/io.ox/contacts/print.js
 msgid "Phone"
@@ -6639,8 +6645,8 @@ msgstr "Escoja una hora aquí"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Pink"
 msgstr "Rosa"
@@ -6691,10 +6697,6 @@ msgstr ""
 "Siga las instrucciones del correo electrónico y vuelva al widget para "
 "completar la configuración de la cuenta."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "Please choose a sentence below."
-msgstr "Por favor, a continuación elija una frase."
-
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
 msgid "Please comment your confirmation status."
 msgstr "Por favor, comente su estado de confirmación."
@@ -6735,8 +6737,8 @@ msgstr "Por favor, indique un término de búsqueda"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 #: apps/io.ox/backbone/validation.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Please enter a valid date"
 msgstr "Por favor, indique una fecha válida"
 
@@ -6847,6 +6849,8 @@ msgid ""
 "Please only drop images here. If you want to send other files, you can send "
 "them as attachments."
 msgstr ""
+"Por favor, deposite aquí solo imágenes. Si desea enviar otros archivos, "
+"puede enviarlos como adjuntos."
 
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid ""
@@ -6866,6 +6870,10 @@ msgstr "Por favor, califique este producto"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Por favor, seleccione un archivo a importar"
+
+#: apps/plugins/core/feedback/register.js module:io.ox/core
+msgid "Please select a rating."
+msgstr "Por favor, seleccione una puntuación."
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/main.js module:io.ox/calendar
@@ -6946,6 +6954,10 @@ msgstr "Mostrar aparte"
 msgid "Pop out standalone viewer"
 msgstr "Mostrar aparte en visor independiente"
 
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Port"
+msgstr "Puerto"
+
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Portal"
 msgstr "Portal"
@@ -7022,12 +7034,6 @@ msgstr "Presione [Intro] para saltar al flujo de Twitter."
 #: module:plugins/notifications apps/plugins/notifications/tasks/register.js
 msgid "Press to open Details"
 msgstr "Presione para abrir Detalles"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Embellecer correos de texto sencillo"
 
 #: apps/io.ox/core/tk/attachmentsUtil.js module:io.ox/core
 #: apps/io.ox/preview/main.js
@@ -7132,6 +7138,7 @@ msgid "Private address"
 msgstr "Dirección privada"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
+#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7215,8 +7222,8 @@ msgstr "Confirmación de la compra"
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Purple"
 msgstr "Morado"
@@ -7230,7 +7237,10 @@ msgstr "Respuesta rápida"
 msgid "Quit"
 msgstr "Salir"
 
-#: apps/plugins/portal/quota/register.js module:plugins/portal
+#. Quota means a general quota for mail and files
+#: apps/io.ox/files/main.js module:io.ox/files apps/io.ox/mail/main.js
+#: module:io.ox/mail apps/plugins/portal/quota/register.js
+#: module:plugins/portal
 msgid "Quota"
 msgstr "Cuota"
 
@@ -7338,10 +7348,6 @@ msgstr "Archivos modificados recientemente"
 msgid "Recently used"
 msgstr "Usados recientemente"
 
-#: apps/io.ox/files/share/wizard.js module:io.ox/files
-msgid "Recipients can edit"
-msgstr "Los destinatarios pueden editar"
-
 #: apps/io.ox/keychain/secretRecoveryDialog.js module:io.ox/keychain
 msgid "Recover"
 msgstr "Recuperar"
@@ -7366,8 +7372,8 @@ msgstr "Las tareas periódicas necesitan de una fecha de inicio válida."
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/portal/settings/pane.js
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Red"
 msgstr "Rojo"
@@ -7376,24 +7382,32 @@ msgstr "Rojo"
 msgid "Red violet"
 msgstr "Rojo violeta"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails from test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails from %1$s to %2$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Redirigir correos de %1$s a %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails to test@invalid to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Redirect mails to %1$s to %2$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Redirigir los correos de %1$s a %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s user input (expected a mail address) where the messages are redirected to
+#. Example: Redirect mails with subject Some subject to another@invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Redirect mails with subject %1$s to %2$s"
-msgstr ""
+msgstr "Redirigir correos con el asunto %1$s a %2$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Redirect to"
 msgstr "Redirigir a"
 
@@ -7414,8 +7428,8 @@ msgstr "Intervalo de actualización"
 msgid "Refresh rate in minutes"
 msgstr "Intervalo de refresco en minutos"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
 msgid "Regex"
 msgstr "Expresión regular"
 
@@ -7427,24 +7441,32 @@ msgstr "Registrarse ahora"
 msgid "Reject changes"
 msgstr "Rechazar cambios"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails from test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Reject mails from %1$s with reason %2$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Rechazar correos de %1$s con el motivo %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s A user input (usually a mail address)
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails to test@invalid with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Reject with reason"
 msgid "Reject mails to %1$s with reason %2$s"
-msgstr "Rechazar con motivo"
+msgstr "Rechazar los correos de %1$s con el motivo %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A reason which is entered by the user
+#. Example: Reject mails with subject Some subject with reason Invalid
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Reject mails with subject %1$s with reason %2$s"
-msgstr ""
+msgstr "Rechazar correos con el asunto %1$s con el motivo %2$s"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Reject with reason"
 msgstr "Rechazar con motivo"
 
@@ -7472,7 +7494,7 @@ msgstr "Recordarme"
 
 #: apps/io.ox/core/tk/reminder-util.js module:io.ox/core
 msgid "Remind me again"
-msgstr "Recordar otra vez"
+msgstr "Recordarme de nuevo"
 
 #. %1$s is something like "in 5 minutes"
 #. don't know if that works for all languages but it has been
@@ -7527,6 +7549,11 @@ msgstr "Eliminar"
 msgid "Remove %1$s"
 msgstr "Eliminar a %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Remove IMAP keyword"
+msgstr "Eliminar clave IMAP"
+
 #: apps/io.ox/backbone/mini-views/attachments.js module:io.ox/core
 #: apps/io.ox/core/attachments/view.js apps/io.ox/core/tk/attachments.js
 #: apps/io.ox/core/tk/attachmentsUtil.js
@@ -7556,9 +7583,17 @@ msgstr "Eliminar miembro"
 
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
+#. %1$s is the removed search query
+#. %2$s is the context of the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 msgid "Removed %1$s, %2$s."
 msgstr "Eliminado %1$s, %2$s."
+
+#. %1$s is the display name of a removed user or mail recipient
+#. %1$s is the removed search query
+#: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
+msgid "Removed %1$s."
+msgstr "Eliminado %1$s."
 
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 #: apps/io.ox/core/folder/contextmenu.js
@@ -7568,12 +7603,16 @@ msgstr "Eliminado %1$s, %2$s."
 msgid "Rename"
 msgstr "Renombrar"
 
+#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
+msgid "Rename File"
+msgstr "Renombrar archivo"
+
 #: apps/io.ox/core/folder/actions/rename.js module:io.ox/core
 msgid "Rename folder"
 msgstr "Renombrar carpeta"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
-#: module:io.ox/calendar/edit/main apps/io.ox/calendar/edit/recurrence-view.js
+#: module:io.ox/calendar/edit/main
 msgid "Repeat"
 msgstr "Repetir"
 
@@ -7588,6 +7627,10 @@ msgstr "Repetir cada"
 msgid "Repeat new password"
 msgstr "Repita la nueva contraseña"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Repeat slideshow"
+msgstr "Repetir presentación"
+
 #. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
@@ -7596,10 +7639,7 @@ msgid "Reply"
 msgstr "Responder"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "Reply All"
-msgstr "Responder a todos"
-
-#: apps/io.ox/mail/compose/checks.js module:io.ox/mail
+#: apps/io.ox/mail/compose/checks.js
 msgid "Reply all"
 msgstr "Responder a todos"
 
@@ -7635,6 +7675,18 @@ msgstr "Solicitar confirmación de lectura"
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "Reenviar invitación"
+
+#. header entry - needs no different translation
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Resent-From"
+msgstr "Reenviado-desde"
+
+#. header entry - needs no different translation
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Resent-To"
+msgstr "Reenviado-a"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
@@ -7679,8 +7731,13 @@ msgstr "Jubilado"
 
 #: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Reintentar"
+
+#: apps/plugins/portal/twitter/register.js module:plugins/portal
+msgid "Retry later."
+msgstr "Reintentar más tarde."
 
 #: apps/plugins/portal/twitter/util.js module:plugins/portal
 msgid "Retweet"
@@ -7740,22 +7797,6 @@ msgstr "Azul real"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
-msgid "Rule applies from"
-msgstr "La regla se aplica desde"
-
-#. The filter rule will be applied on a specific date, which can be selected by the user
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies on"
-msgstr "La regla se aplica el"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Rule applies until"
-msgstr "La regla se aplica hasta"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
 msgid "Rule name"
 msgstr "Nombre de la regla"
 
@@ -7765,20 +7806,8 @@ msgid "Run auto-play mode"
 msgstr "Ejecutar el modo de reproducción automática"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Login"
-msgstr "Acceder a SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Port"
-msgstr "Puerto SMTP"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Secure"
-msgstr "SMTP seguro"
-
-#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
-msgid "SMTP Server"
-msgstr "Servidor SMTP"
+msgid "SMTP"
+msgstr "SMTP"
 
 #. Connection security. SSL/TLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7792,11 +7821,9 @@ msgstr "Volumen de ventas"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Saturday"
 msgctxt "superessive"
 msgid "Saturday"
-msgstr "sábado"
+msgstr "Sábado"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/contacts/distrib/create-dist-view.js module:io.ox/contacts
@@ -7914,10 +7941,8 @@ msgid "Search facets"
 msgstr "Buscar facetas"
 
 #: apps/io.ox/find/main.js module:io.ox/core
-#, fuzzy
-#| msgid "Search in all folders?"
 msgid "Search in all folders"
-msgstr "¿Buscar en todas las carpetas?"
+msgstr "Buscar en todas las carpetas"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Search results"
@@ -7987,8 +8012,8 @@ msgstr "Seleccionar archivo"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/util.js
+#: module:io.ox/mailfilter
 msgid "Select folder"
 msgstr "Seleccionar carpeta"
 
@@ -8023,6 +8048,10 @@ msgstr "Enviar como vCard"
 msgid "Send by mail"
 msgstr "Enviar por correo"
 
+#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+msgid "Send from"
+msgstr "Enviar desde"
+
 #: apps/io.ox/files/actions/share.js module:io.ox/files
 msgid "Send link"
 msgstr "Enviar enlace"
@@ -8042,24 +8071,17 @@ msgid "Send new mail"
 msgstr "Enviar nuevo correo electrónico"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Send notification"
 msgid "Send notification by email"
-msgstr "Enviar notificación"
+msgstr "Enviar notificación por correo electrónico"
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Enviar aviso de ausencia sólo durante este período de tiempo"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender address"
-msgstr "Dirección de remite"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Sender/From"
-msgstr "Remitente/De"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Sender"
+msgstr "Remitente"
 
 #. %1$d is number of messages; %2$d is progress in percent
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -8072,6 +8094,11 @@ msgstr[1] "Enviando %1$d mensajes ... %2$d%"
 #: module:io.ox/core/viewer
 msgid "Sent"
 msgstr "Enviado"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "Sent date"
+msgstr "Fecha de envío"
 
 #. %s is the product name
 #: apps/io.ox/mail/compose/signatures.js module:io.ox/mail
@@ -8088,15 +8115,15 @@ msgctxt "folder"
 msgid "Sent messages"
 msgstr "Mensajes enviados"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "September"
-msgstr "septiembre"
-
 #. Use singular in this context
 #: apps/io.ox/calendar/actions/acceptdeny.js module:io.ox/calendar
-#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/actions/delete.js apps/io.ox/calendar/util.js
 msgid "Series"
 msgstr "Serie"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "Server Name"
+msgstr "Nombre del servidor"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Server name"
@@ -8129,8 +8156,12 @@ msgstr "Asignar categoría"
 msgid "Set color"
 msgstr "Asignar color"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "Set color flag"
+msgstr "Asignar marca coloreada"
+
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/settings/main.js
-#: apps/plugins/core/feedback/register.js
 msgid "Settings"
 msgstr "Configuración"
 
@@ -8149,10 +8180,8 @@ msgstr "Compartir"
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Share \"%1$s\""
 msgid "Share %1$s \"%2$s\""
-msgstr "Compartir \"%1$s\""
+msgstr "Compartir %1$s \"%2$s\""
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share current folder"
@@ -8173,19 +8202,6 @@ msgstr[1] "Compartir las carpetas seleccionadas"
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Share selected objects"
 msgstr "Compartir objetos seleccionados"
-
-#. if only one item -> insert filename / on more than one item -> item count
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the file \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "Compartir el archivo \"%1$d\""
-msgstr[1] "Compartir %1$d elementos"
-
-#: apps/io.ox/files/actions/share.js module:io.ox/files
-msgid "Share the folder \"%1$d\""
-msgid_plural "Share %1$d items"
-msgstr[0] "Compartir la carpeta \"%1$d\""
-msgstr[1] "Compartir %1$d elementos"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Share this file"
@@ -8234,6 +8250,19 @@ msgstr "Comparticiones"
 msgid "Sharing"
 msgstr "Compartición"
 
+#. if only one item -> insert filename / on more than one item -> item count
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+msgid "Sharing link created for file \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "Enlace a compartido creado para el archivo \"%1$d\""
+msgstr[1] "Enlace a compartido creado para %1$d elementos"
+
+#: apps/io.ox/files/actions/share.js module:io.ox/files
+msgid "Sharing link created for folder \"%1$d\""
+msgid_plural "Sharing link created for %1$d items"
+msgstr[0] "Enlace a compartido creado para la carpeta \"%1$d\""
+msgstr[1] "Enlace a compartido creado para %1$d elementos"
+
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Shopping cart"
 msgstr "Cesta de la compra"
@@ -8246,6 +8275,14 @@ msgstr "Mostrar"
 #: apps/io.ox/core/settings/user.js
 msgid "Show all fields"
 msgstr "Mostrar todos los campos"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Show all images for"
+msgstr "Mostrar todas las imágenes de"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Show all images just once"
+msgstr "Mostrar todas las imágenes de una vez"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
 msgid "Show all items"
@@ -8304,9 +8341,11 @@ msgstr "Mostrar iconos"
 msgid "Show images"
 msgstr "Mostrar imágenes"
 
+#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
 #: apps/io.ox/settings/accounts/settings/pane.js
 #: module:io.ox/settings/accounts
-msgid "Show infos about account recovery"
+msgid "Show information about account recovery"
 msgstr "Mostrar información sobre la recuperación de la cuenta"
 
 #: apps/io.ox/files/mobile-toolbar-actions.js module:io.ox/mail
@@ -8320,6 +8359,10 @@ msgstr "Mostrar nombres"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show next day"
 msgstr "Mostrar día siguiente"
+
+#: apps/io.ox/onboarding/clients/extensions.js module:io.ox/core/onboarding
+msgid "Show or hide actions for advanced users."
+msgstr "Mostrar u ocultar acciones para usuarios avanzados."
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Show previous day"
@@ -8399,8 +8442,8 @@ msgstr "Conectado como:"
 msgid "Size"
 msgstr "Tamaño"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "Size (bytes)"
 msgstr "Tamaño (bytes)"
 
@@ -8409,8 +8452,8 @@ msgid "Sky blue"
 msgstr "Azul cielo"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Slideshow / Autoplay mode"
-msgstr "Modo de presentación / Reproducción automática"
+msgid "Slideshow / Autoplay mode for images"
+msgstr "Presentación / Modo reproducción automática para imágenes"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "Slow requests"
@@ -8559,14 +8602,28 @@ msgstr "Comenzar visita"
 msgid "Start typing to search for user names"
 msgstr "Comience a escribir para buscar nombres de usuario"
 
+#: apps/io.ox/core/viewer/views/types/videoview.js module:io.ox/core
+msgid "Start video"
+msgstr "Comenzar vídeo"
+
 #. Connection security. StartTLS.
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "StartTLS"
 msgstr "StartTLS"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Starts not with"
+msgstr "No comienza con"
+
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Starts on"
 msgstr "Comienza el"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Starts with"
+msgstr "Comienza con"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "State"
@@ -8600,8 +8657,8 @@ msgstr "Estudiante"
 #: module:io.ox/core/viewer apps/io.ox/mail/actions/reminder.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8661,11 +8718,9 @@ msgstr "Resumen"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Sunday"
 msgctxt "superessive"
 msgid "Sunday"
-msgstr "domingo"
+msgstr "Domingo"
 
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Switch to parent folder"
@@ -8709,26 +8764,29 @@ msgstr "TB"
 msgid "TTY/TDD"
 msgstr "DTS"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
-msgid "Tag mail with"
-msgstr "Etiquetar correo con"
-
+#. This is a summary for a mail filter rule
+#. %1$s User input (usually a mail address)
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails from test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Tag mails from %1$s with %2$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Etiquetar correos de %1$s con %2$s."
 
+#. This is a summary for a mail filter rule
+#. %1$s User input
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails to test@invalid with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
-#, fuzzy
-#| msgid "Email from %1$s: %2$s"
 msgid "Tag mails to %1$s with %2$s"
-msgstr "Correo de %1$s: %2$s"
+msgstr "Etiquetar correos de %1$s con %2$s"
 
+#. This is a summary for a mail filter rule
+#. %1$s User input for mail subjects to filter for
+#. %2$s A tag, which is entered by the user via a text input
+#. Example: Tag mails with subject Some subject with SoccerTeam
 #: apps/io.ox/mail/mailfilter/settings/util.js module:io.ox/mail
 msgid "Tag mails with subject %1$s with %2$s"
-msgstr ""
+msgstr "Etiquetar correos con el asunto %1$s con %2$s"
 
 #. title for 1st and snd step of the client onboarding wizard
 #. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
@@ -8852,6 +8910,7 @@ msgstr "Texto"
 msgid "Text documents"
 msgstr "Documentos de texto"
 
+#. popup info message
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Thank you for your feedback"
 msgstr "Gracias por su comentario"
@@ -8871,6 +8930,14 @@ msgstr ""
 msgctxt "help"
 msgid "The Drive App"
 msgstr "La aplicación Drive"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid ""
+"The Notice is sent out for messages received by %1$s. You may choose to send "
+"it out for other recipient addresses too:"
+msgstr ""
+"El aviso se envía para los mensajes recibidos por %1$s. Puede elegir "
+"enviarlo también a otras direcciones de destinatarios:"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
 msgid "The account must be named"
@@ -8895,82 +8962,6 @@ msgstr "La cita ha sido borrada"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "The appointment has been updated"
 msgstr "La cita se ha actualizado"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> days</"
-"a>."
-msgstr ""
-"La cita se repite <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\">cada <span class=\"number-control\">2</span> días</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> weeks</"
-"a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">monday</a>."
-msgstr ""
-"La cita se repite <a href=\"#\"  data-widget=\"number\" data-attribute="
-"\"interval\">cada <span class=\"number-control\">2</span> semanas</a> los <a "
-"href=\"#\"  data-widget=\"days\" data-attribute=\"days\">lunes</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType\" "
-"data-widget=\"options\">weekly</a>."
-msgstr ""
-"La cita se repite <a href=\"#\" data-attribute=\"recurrenceType\" data-"
-"widget=\"options\">semanalmente</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget=\"options\" "
-"data-attribute=\"month\">October</a>."
-msgstr ""
-"La cita se repite cada <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">primer</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">miércoles</a> de <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"month\">octubre</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated every year on day <a href=\"#\" data-widget="
-"\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
-"span></a> of <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
-"\">October</a>."
-msgstr ""
-"La cita se repite todos los años el día <a href=\"#\" data-widget=\"number\" "
-"data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> "
-"de <a href=\"#\" data-widget=\"options\" data-attribute=\"month\">octubre</"
-"a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated on day <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
-"href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every <span "
-"class=\"number-control\">2</span> months</a>."
-msgstr ""
-"La cita se repite el día <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"dayInMonth\"><span class=\"number-control\">10</span></a> <a href=\"#\" "
-"data-widget=\"number\" data-attribute=\"interval\">cada <span class=\"number-"
-"control\">2</span> meses</a>. "
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The appointment is repeated the <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options\" data-"
-"attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number\" data-"
-"attribute=\"interval\">every <span class=\"number-control\">2</span> months</"
-"a>."
-msgstr ""
-"La cita se repite el <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"ordinal\">segundo</a> <a href=\"#\" data-widget=\"options\" data-attribute="
-"\"day\">miércoles</a> <a href=\"#\" data-widget=\"number\" data-attribute="
-"\"interval\">de cada <span class=\"number-control\">2</span> meses</a>. "
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid ""
@@ -9161,34 +9152,6 @@ msgstr ""
 msgid "The sending of the message has been canceled."
 msgstr "El envío del mensaje ha sido cancelado."
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget=\"number"
-"\">after <span class=\"number-control\">2</span> appointments</a>."
-msgstr ""
-"La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">finaliza</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
-"\"number\">después de <span class=\"number-control\">2</span> citas</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-msgstr ""
-"La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">finaliza</a> el <a href=\"#\" data-attribute=\"until\" data-widget="
-"\"datePicker\">11/03/2013</a>."
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid ""
-"The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">never ends</a>."
-msgstr ""
-"La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
-"\">nunca finaliza</a>."
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "The series ends after one occurrence."
 msgid_plural "The series ends after %1$d occurences."
@@ -9280,6 +9243,15 @@ msgstr ""
 "Hay %1$d mensajes en esta carpeta; no se muestran todos los mensajes en la "
 "lista actual."
 
+#. %1$n is the maximum number of appointments
+#: apps/io.ox/calendar/week/view.js module:io.ox/calendar
+msgid ""
+"There are more than %n appointments in the current calendar. Some features "
+"are disabled due to performance reasons."
+msgstr ""
+"Hay más de %n citas en el calendario actual. Algunas características están "
+"deshabilitadas por motivos de rendimiento."
+
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
 "There are no external applications/services which can access your account."
@@ -9353,6 +9325,8 @@ msgid ""
 "This appointment is an exception. Changing the series does not affect "
 "exceptions."
 msgstr ""
+"Esta cita es una excepción. El cambio en las series no afectará a las "
+"excepciones."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "This browser is not supported on your current platform."
@@ -9510,7 +9484,9 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Esta es una carpeta estándar, que no puede ser renombrada."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look like."
+#, fuzzy
+#| msgid "This is how your message text will look like."
+msgid "This is how your message text will look."
 msgstr "Así es como se verá el texto del mensaje."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9574,7 +9550,7 @@ msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "This rule contains unsupported properties. "
-msgstr ""
+msgstr "Esta regla contiene propiedades no permitidas."
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "This task has no participants yet"
@@ -9603,11 +9579,9 @@ msgstr "Miniaturas"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Thursday"
 msgctxt "superessive"
 msgid "Thursday"
-msgstr "jueves"
+msgstr "Jueves"
 
 #: apps/io.ox/files/toolbar.js module:io.ox/files
 msgid "Tiles"
@@ -9638,8 +9612,8 @@ msgstr "Tratamiento"
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/mail/common-extensions.js
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings apps/io.ox/mail/print.js
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/print.js
 #: apps/io.ox/mail/view-options.js
 msgid "To"
 msgstr "Para"
@@ -9724,6 +9698,10 @@ msgstr "Total: %1$s peticiones"
 msgid "Town"
 msgstr "Ciudad"
 
+#: apps/io.ox/portal/main.js module:io.ox/portal
+msgid "Try again."
+msgstr "Inténtelo otra vez."
+
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Try now!"
 msgstr "¡Pruébelo ahora!"
@@ -9735,11 +9713,9 @@ msgstr "Intentar configurar automáticamente su cuenta de correo"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Tuesday"
 msgctxt "superessive"
 msgid "Tuesday"
-msgstr "martes"
+msgstr "Martes"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Tumblr"
@@ -9769,6 +9745,7 @@ msgid "UI version"
 msgstr "Versión del interfaz de usuario"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 #: apps/plugins/portal/rss/register.js module:io.ox/portal
 msgid "URL"
 msgstr "URL"
@@ -9808,7 +9785,7 @@ msgid "Unconfirmed"
 msgstr "No confirmada"
 
 #. Task: Undone like in "Mark as undone"
-#: apps/io.ox/tasks/toolbar.js module:io.ox/mail
+#: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "Undone"
 msgstr "Sin completar"
 
@@ -9897,6 +9874,10 @@ msgstr "Subir"
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Upload file"
 msgstr "Subir archivo"
+
+#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
+msgid "Upload image"
+msgstr "Subir imagen"
 
 #: apps/io.ox/files/filepicker.js module:io.ox/files
 msgid "Upload local file"
@@ -10013,10 +9994,14 @@ msgstr ""
 
 #. object permissions - user role
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "User"
 msgstr "Usuario"
+
+#: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
+msgid "User Name"
+msgstr "Nombre de usuario"
 
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "User data"
@@ -10080,7 +10065,7 @@ msgstr "Vídeos"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
-#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js
+#: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "View"
 msgstr "Vista"
 
@@ -10158,11 +10143,9 @@ msgstr "Tiempo • Estación"
 #. superessive of the weekday
 #. will only be used in a form like “Happens every week on $weekday”
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
-#, fuzzy
-#| msgid "Wednesday"
 msgctxt "superessive"
 msgid "Wednesday"
-msgstr "miércoles"
+msgstr "Miércoles"
 
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
@@ -10286,8 +10269,8 @@ msgid "Years"
 msgstr "Años"
 
 #: apps/io.ox/core/tk/flag-picker.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "Yellow"
 msgstr "Amarillo"
 
@@ -10726,7 +10709,6 @@ msgid "ZB"
 msgstr "ZB"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
-#: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Zoom"
 msgstr "Acercar"
 
@@ -10752,15 +10734,19 @@ msgstr "[Copia]"
 msgid "[Copy] %1$s"
 msgstr "[Copia] %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "a full match (allows DOS-style wildcards)"
+msgstr "una coincidencia total (permite comodines estilo DOS)"
+
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "accepted"
 msgstr "aceptada"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "after %1$d appointment"
-msgid_plural "after %1$d appointments"
-msgstr[0] "tras la %1$d cita"
-msgstr[1] "después de %1$d citas"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "an exact, full match"
+msgstr "un exacto, coincidencia total"
 
 #. %1$d - number of other recipients (names will be shown if string is clicked)
 #: apps/io.ox/mail/common-extensions.js module:io.ox/mail
@@ -10799,10 +10785,22 @@ msgstr "seleccione una plataforma diferente"
 msgid "choose a different scenario"
 msgstr "seleccione un escenario diferente"
 
-#. %1$s is app title/name
-#: apps/io.ox/core/main.js module:io.ox/core
-msgid "close for %1$s"
-msgstr "cerrar por %1$s"
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "continue if all conditions are met"
+msgstr "continuar si se cumplen todas las condiciones"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "continue if all of these conditions are met"
+msgstr "continuar si se cumplen todas estas condiciones"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+#, fuzzy
+#| msgid "continue if all of these conditions are met"
+msgid "continue if any of these conditions are met"
+msgstr "continuar si se cumplen todas estas condiciones"
 
 #. folder permissions
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -10814,11 +10812,6 @@ msgstr "crear objetos"
 msgid "create objects and subfolders"
 msgstr "crear objetos y subcarpetas"
 
-#. recurring appointment: the appointment is repeated daily
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "daily"
-msgstr "diaria"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "dark blue"
 msgstr "azul oscuro"
@@ -10827,18 +10820,10 @@ msgstr "azul oscuro"
 msgid "dark green"
 msgstr "verde oscuro"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 msgid "datepicker"
 msgstr "selector de fechas"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the week"
-msgstr "día de la semana"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "day of the weekend"
-msgstr "día de fin de semana"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -10852,6 +10837,10 @@ msgstr "dd"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "rechazada"
+
+#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
+msgid "default sender"
+msgstr "remitente predeterminado"
 
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
@@ -10867,8 +10856,8 @@ msgstr "borrar si está caducado"
 msgid "delete only own objects"
 msgstr "borrar sólo los objetos propios"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "deleted"
 msgstr "borrado"
 
@@ -10880,6 +10869,11 @@ msgstr "desactivar"
 msgid "disabled"
 msgstr "desactivado"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "does not match a substring"
+msgstr "no coincide con una subcadena"
+
 #. object permissions - edit/modify
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "edit all objects"
@@ -10890,64 +10884,10 @@ msgstr "editar todos los objetos"
 msgid "edit own objects"
 msgstr "editar objetos propios"
 
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends"
-msgstr "finaliza"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends after a certain number of appointments"
-msgstr "finaliza después de cierto número de citas"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "ends on a specific date"
-msgstr "finaliza en una fecha determinada"
-
 #. followed by date or time to mark the enddate of a task
 #: apps/io.ox/tasks/view-grid-template.js module:io.ox/tasks
 msgid "ends:"
 msgstr "finaliza:"
-
-#. as in: The appointment is repeated every day, or The appointment is repeated every %1$d days.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d day"
-msgid_plural "every %1$d days"
-msgstr[0] "cada %1$s día"
-msgstr[1] "cada %1$s días"
-
-#. as in: The appointment is repeated on day 12 every month, or The appointment is repeated on day 12 every %1$d months.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d month"
-msgid_plural "every %1$d months"
-msgstr[0] "cada %1$d mes"
-msgstr[1] "cada %1$d meses"
-
-#. as in: The appointment is repeated every week, or The appointment is repeated every %1$d weeks.
-#. This is inserted into an HTML construct.
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every %1$d week"
-msgid_plural "every %1$d weeks"
-msgstr[0] "cada %1$d semana"
-msgstr[1] "cada %1$d semanas"
-
-#. as in: The appointment is repeated every day
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every day"
-msgstr "todos los días"
-
-#. as in: The appointment is repeated every month
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every month"
-msgstr "todos los meses"
-
-#. as in: The appointment is repeated every week
-#. This is inserted into an HTML construct and is the form without the number
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "every week"
-msgstr "todas las semanas"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fifth / last"
@@ -10956,17 +10896,17 @@ msgstr "quinto / último"
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "files"
 msgid "file"
-msgstr "ficheros"
+msgstr "archivo"
 
-#. As in first monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: first week or first Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "first"
 msgstr "primer"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
+msgid "flagged"
+msgstr "marcado"
 
 #: apps/plugins/portal/flickr/register.js module:plugins/portal
 msgid "flickr.people.getPublicPhotos"
@@ -10979,14 +10919,9 @@ msgstr "flickr.photos.search"
 #. %1$s determines whether setting permissions for a file or folder
 #. %2$s is the file or folder name
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#, fuzzy
-#| msgid "Folder"
 msgid "folder"
-msgstr "Carpeta"
+msgstr "carpeta"
 
-#. As in fourth monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: fourth week or fourth Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "fourth"
 msgstr "cuarto"
@@ -11040,12 +10975,6 @@ msgstr "en una hora"
 msgid "in one week"
 msgstr "en una semana"
 
-#. As in last monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: last week or last Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "last"
-msgstr "último"
-
 #: apps/io.ox/tasks/util.js module:io.ox/tasks
 msgid "late in the evening"
 msgstr "de madrugada"
@@ -11077,6 +11006,11 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "ubicación %1$s"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "matches a substring"
+msgstr "coincide con una subcadena"
+
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "message"
 msgstr "mensaje"
@@ -11089,15 +11023,6 @@ msgstr "modificado"
 #: module:io.ox/calendar/edit/main
 msgid "month(s)"
 msgstr "mes(es)"
-
-#. recurring appointment: the appointment is repeated monthly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "monthly"
-msgstr "mensual"
-
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "never ends"
-msgstr "nunca finaliza"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "no color"
@@ -11122,6 +11047,16 @@ msgstr "sin fecha de caducidad"
 msgid "no read permissions"
 msgstr "no hay permiso de lectura"
 
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not a full match (allows DOS-style wildcards)"
+msgstr "una coincidencia no total (permite comodines estilo DOS)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "not an exact, full match "
+msgstr "un no exacto, coincidencia total"
+
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "of %1$d"
 msgstr "de %1$d"
@@ -11145,6 +11080,11 @@ msgstr "un año"
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "orange"
 msgstr "naranja"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
+msgid "original time zone"
+msgstr "zona horaria original"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "pink"
@@ -11172,17 +11112,22 @@ msgstr "leer objetos propios"
 msgid "red"
 msgstr "rojo"
 
-#. As in second monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: second week or second Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "second"
 msgstr "segundo"
 
-#: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
-#: module:io.ox/settings
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "seconds"
+msgstr "segundos"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
+#: module:io.ox/mailfilter
 msgid "seen"
 msgstr "visto"
+
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid "select all"
+msgstr "seleccionar todo"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
@@ -11201,9 +11146,6 @@ msgstr "tamaño"
 msgid "tentative"
 msgstr "provisional"
 
-#. As in third monday, tuesday, wednesday ... , day of the week, day of the weekend
-#. as in: third week or third Monday
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "third"
 msgstr "tercer"
@@ -11255,6 +11197,10 @@ msgstr "remitente desconocido"
 msgid "unlimited"
 msgstr "ilimitado"
 
+#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+msgid "unselect all"
+msgstr "deseleccionar todo"
+
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
 msgstr "vCard"
@@ -11278,11 +11224,6 @@ msgstr "ver la carpeta"
 msgid "week(s)"
 msgstr "semana(s)"
 
-#. recurring appointment: the appointment is repeated weekly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "weekly"
-msgstr "semanal"
-
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the link is expired"
 msgstr "cuando el enlace haya caducado"
@@ -11299,11 +11240,6 @@ msgstr "cuando los receptores hayan terminado de descargar los archivos"
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
 msgstr "año(s)"
-
-#. recurring appointment: the appointment is repeated yearly
-#: apps/io.ox/calendar/edit/recurrence-view.js module:io.ox/calendar/edit/main
-msgid "yearly"
-msgstr "anual"
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "yellow"
@@ -11471,6 +11407,9 @@ msgstr "yyyy"
 
 #~ msgid "%1$s sets the status to 'none' for: %1$s"
 #~ msgstr "%1$s ha fijado el estado a 'ninguno' para: %1$s"
+
+#~ msgid "%1$s updated their profile:"
+#~ msgstr "%1$s ha actualizado su perfil:"
 
 #~ msgid ""
 #~ "%1$s would like to be brought up to date about the appointment %2$s. "
@@ -12946,6 +12885,9 @@ msgstr "yyyy"
 #~ msgid "Apply a Template (optional)"
 #~ msgstr "Aplicar una plantilla (opcional)"
 
+#~ msgid "Apply rule if any condition is met."
+#~ msgstr "Aplicar regla si se cumple alguna condición"
+
 #~ msgid "Apply to all messages?"
 #~ msgstr "¿Aplicar a todos los mensajes?"
 
@@ -13002,6 +12944,9 @@ msgstr "yyyy"
 
 #~ msgid "Apr"
 #~ msgstr "abr"
+
+#~ msgid "April"
+#~ msgstr "abril"
 
 #~ msgid "Arctic/Longyearbyen"
 #~ msgstr "Arctic/Longyearbyen"
@@ -13430,6 +13375,9 @@ msgstr "yyyy"
 #~ msgid "Aug"
 #~ msgstr "ago"
 
+#~ msgid "August"
+#~ msgstr "agosto"
+
 #~ msgid "Australia"
 #~ msgstr "Australia"
 
@@ -13537,6 +13485,9 @@ msgstr "yyyy"
 #~ msgid "Automatically wrap plain text after character:"
 #~ msgstr "Dividir el texto plano automáticamente tras el carácter:"
 
+#~ msgid "Autoplay pause in seconds"
+#~ msgstr "Detención de reproducción automática en segundos"
+
 #~ msgid "Autorefresh:"
 #~ msgstr "Autorefresco:"
 
@@ -13590,9 +13541,6 @@ msgstr "yyyy"
 
 #~ msgid "Based on sender"
 #~ msgstr "Basado en el remitente"
-
-#~ msgid "Bcc"
-#~ msgstr "Cco"
 
 #~ msgid "Bcc..."
 #~ msgstr "Cco..."
@@ -13749,6 +13697,9 @@ msgstr "yyyy"
 #~ msgid "CSV (Contacts)"
 #~ msgstr "CSV (Contactos)"
 
+#~ msgid "CalDAV Login"
+#~ msgstr "Acceder a CalDAV"
+
 #~ msgid "Calendar custom view"
 #~ msgstr "Vista personalizada del calendario"
 
@@ -13800,6 +13751,9 @@ msgstr "yyyy"
 #~ msgid "Cape Verde"
 #~ msgstr "Cabo Verde"
 
+#~ msgid "CardDAV Login"
+#~ msgstr "Acceder a CardDAV"
+
 #~ msgid "Cards"
 #~ msgstr "Tarjetas"
 
@@ -13820,9 +13774,6 @@ msgstr "yyyy"
 
 #~ msgid "Cayman Islands"
 #~ msgstr "Islas Caimán"
-
-#~ msgid "Cc"
-#~ msgstr "Cc"
 
 #~ msgid "Cc..."
 #~ msgstr "Cc..."
@@ -13926,6 +13877,9 @@ msgstr "yyyy"
 #~ msgid "Clear cache"
 #~ msgstr "Limpiar caché"
 
+#~ msgid "Clear selection"
+#~ msgstr "Borrar selección"
+
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Pulse para cita de todo el día"
 
@@ -13943,8 +13897,29 @@ msgstr "yyyy"
 #~ "mostrar los contactos correspondientes de la libreta de direcciones "
 #~ "seleccionada."
 
+#~ msgid "Click on a sentence to choose when to repeat the appointment."
+#~ msgstr "Pulse en una frase para elegir cuándo repetir la cita."
+
+#~ msgid "Click on the links to change the values."
+#~ msgstr "Pulse en los enlaces para cambiar los valores."
+
+#~ msgid "Click to close this notification"
+#~ msgstr "Pulse para cerrar esta notificación"
+
+#~ msgid "Click to open."
+#~ msgstr "Pulse para abrir."
+
+#~ msgid "Click to retry"
+#~ msgstr "Pulse para reintentarlo"
+
 #~ msgid "Click to select contacts"
 #~ msgstr "Pulse para seleccionar contactos"
+
+#~ msgid "Click to start video"
+#~ msgstr "Pulse para comenzar el vídeo"
+
+#~ msgid "Click to upload image"
+#~ msgstr "Pulse para subir una imagen"
 
 #~ msgid ""
 #~ "Client PC operating system: Latest Versions of Windows XP, Windows 7 "
@@ -13976,6 +13951,11 @@ msgstr "yyyy"
 
 #~ msgid "Close quick config"
 #~ msgstr "Cerrar configuración rápida"
+
+#, fuzzy
+#~| msgid "Click to close the recurrence view"
+#~ msgid "Close recurrence view"
+#~ msgstr "Pulse para cerrar la vista de recurrencia"
 
 #~ msgid "Close search"
 #~ msgstr "Cerrar búsqueda"
@@ -14050,6 +14030,9 @@ msgstr "yyyy"
 #~ msgid "Configuration damaged, please inform the administrator."
 #~ msgstr "Configuración dañada. Por favor, informe al administrador."
 
+#~ msgid "Configure %1$s"
+#~ msgstr "Configurar %1$s"
+
 #~ msgid "Configure your inbox tabs"
 #~ msgstr "Configure sus pestañas de la bandeja de entrada"
 
@@ -14083,6 +14066,9 @@ msgstr "yyyy"
 #~ msgid "Contact overview"
 #~ msgstr "Vista general de contacto"
 
+#~ msgid "Content"
+#~ msgstr "Contenido"
+
 #~ msgid "Content-Type:"
 #~ msgstr "Content-Type:"
 
@@ -14101,6 +14087,9 @@ msgstr "yyyy"
 
 #~ msgid "Copy (CC) to"
 #~ msgstr "Copia (CC) para "
+
+#~ msgid "Copy message to folder"
+#~ msgstr "Copiar mensaje a la carpeta"
 
 #~ msgid "Copy to"
 #~ msgstr "Copiar a"
@@ -14313,6 +14302,9 @@ msgstr "yyyy"
 #~ msgid "Debug"
 #~ msgstr "Depurar"
 
+#~ msgid "December"
+#~ msgstr "Diciembre"
+
 #~ msgid "Decline counter proposal"
 #~ msgstr "Rechazar contrapropuesta"
 
@@ -14406,6 +14398,9 @@ msgstr "yyyy"
 
 #~ msgid "Delete the draft after sending."
 #~ msgstr "Eliminar el borrador después de enviar."
+
+#~ msgid "Delete whole series"
+#~ msgstr "Borrar series completas"
 
 #, fuzzy
 #~| msgid "Return Receipt"
@@ -14670,6 +14665,9 @@ msgstr "yyyy"
 
 #~ msgid "E-Mail:"
 #~ msgstr "E-Mail:"
+
+#~ msgid "EAS Login"
+#~ msgstr "Acceder a EAS"
 
 #~ msgid "EEE, %s"
 #~ msgstr "EEE, %s"
@@ -14984,8 +14982,8 @@ msgstr "yyyy"
 #~ msgid "Entire thread"
 #~ msgstr "Hilo completo"
 
-#~ msgid "Envelope"
-#~ msgstr "Sobre"
+#~ msgid "Envelope - To"
+#~ msgstr "Sobre - Para"
 
 #~ msgid "Equatorial Guinea"
 #~ msgstr "Guinea Ecuatorial"
@@ -15227,6 +15225,9 @@ msgstr "yyyy"
 #~ msgid "Existing shares"
 #~ msgstr "Comparticiones existentes"
 
+#~ msgid "Exists"
+#~ msgstr "Existe"
+
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Salir del modo de pantalla completa"
 
@@ -15290,8 +15291,14 @@ msgstr "yyyy"
 #~ msgid "Feb"
 #~ msgstr "feb"
 
+#~ msgid "February"
+#~ msgstr "febrero"
+
 #~ msgid "Fiji"
 #~ msgstr "Fiji"
+
+#~ msgid "File name, click to rename"
+#~ msgstr "Nombre del fichero, pulsar para renombrar"
 
 #~ msgid "File name:"
 #~ msgstr "Nombre de fichero:"
@@ -15355,6 +15362,9 @@ msgstr "yyyy"
 
 #~ msgid "Flag #%d"
 #~ msgstr "Marca #%d"
+
+#~ msgid "Flag mail with"
+#~ msgstr "Marcar correo con"
 
 #~ msgid "Flags"
 #~ msgstr "Marcas"
@@ -15488,6 +15498,9 @@ msgstr "yyyy"
 
 #~ msgid "Get directions"
 #~ msgstr "Obtener indicaciones"
+
+#~ msgid "Get link"
+#~ msgstr "Obtener enlace"
 
 #~ msgid "Get started here!"
 #~ msgstr "¡Empezar aquí!"
@@ -15700,8 +15713,17 @@ msgstr "yyyy"
 #~ msgid "IM (private):"
 #~ msgstr "MI (privado):"
 
+#~ msgid "IMAP Login"
+#~ msgstr "Acceder a IMAP"
+
 #~ msgid "IMAP Mail Server"
 #~ msgstr "Servidor de correo IMAP"
+
+#~ msgid "IMAP Secure"
+#~ msgstr "IMAP seguro"
+
+#~ msgid "IMAP Server"
+#~ msgstr "Servidor IMAP"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Suscripción a carpeta IMAP"
@@ -15899,6 +15921,9 @@ msgstr "yyyy"
 #~ msgid "Infoitem"
 #~ msgstr "Elemento de información"
 
+#~ msgid "Information about account recovery..."
+#~ msgstr "Información sobre la recuperación de la cuenta..."
+
 #~ msgid "Infostore"
 #~ msgstr "Almacén de información"
 
@@ -16023,9 +16048,6 @@ msgstr "yyyy"
 #~ msgid "Is at most"
 #~ msgstr "Es como máximo"
 
-#~ msgid "Is not exactly"
-#~ msgstr "No es exactamente"
-
 #~ msgid "Isle of Man"
 #~ msgstr "Isla of Man"
 
@@ -16055,6 +16077,9 @@ msgstr "yyyy"
 #~ msgid "Jan"
 #~ msgstr "ene"
 
+#~ msgid "January"
+#~ msgstr "enero"
+
 #~ msgid "Japan"
 #~ msgstr "Japón"
 
@@ -16082,11 +16107,17 @@ msgstr "yyyy"
 #~ msgid "Jul"
 #~ msgstr "jul"
 
+#~ msgid "July"
+#~ msgstr "julio"
+
 #~ msgid "Jump to slide"
 #~ msgstr "Saltar a diapositiva"
 
 #~ msgid "Jun"
 #~ msgstr "jun"
+
+#~ msgid "June"
+#~ msgstr "junio"
 
 #, fuzzy
 #~| msgid "Due on %1$s"
@@ -16098,6 +16129,9 @@ msgstr "yyyy"
 
 #~ msgid "Kazakhstan"
 #~ msgstr "Kazajstán"
+
+#~ msgid "Keep looping endlessly"
+#~ msgstr "Repetir indefinidamente"
 
 #~ msgid "Kenya"
 #~ msgstr "Kenia"
@@ -16190,6 +16224,9 @@ msgstr "yyyy"
 #~ msgid "Liked a link: %s"
 #~ msgstr "Marcó \"Me gusta\" en un enlace: %s"
 
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Línea %1$d: %2$s"
+
 #~ msgid "Line Spacing"
 #~ msgstr "Espaciado entre líneas"
 
@@ -16228,9 +16265,6 @@ msgstr "yyyy"
 #~ msgid "Location: %1$s"
 #~ msgstr "Ubicación: %1$s"
 
-#~ msgid "Login"
-#~ msgstr "Nombre de usuario"
-
 #
 #~ msgctxt "username"
 #~ msgid "Login"
@@ -16258,6 +16292,9 @@ msgstr "yyyy"
 
 #~ msgid "Long"
 #~ msgstr "Largo"
+
+#~ msgid "Loop once only"
+#~ msgstr "Repetir solo una vez"
 
 #~ msgid "Luxembourg"
 #~ msgstr "Luxemburgo"
@@ -16358,6 +16395,9 @@ msgstr "yyyy"
 #~ msgid "Mar"
 #~ msgstr "mar"
 
+#~ msgid "March"
+#~ msgstr "marzo"
+
 #~ msgid "Marital status:"
 #~ msgstr "Estado civil:"
 
@@ -16393,6 +16433,9 @@ msgstr "yyyy"
 
 #~ msgid "Maximum"
 #~ msgstr "Máximo"
+
+#~ msgid "May"
+#~ msgstr "mayo"
 
 #~ msgid "Mayotte"
 #~ msgstr "Mayotte"
@@ -16834,6 +16877,9 @@ msgstr "yyyy"
 #~ msgid "Nov"
 #~ msgstr "nov"
 
+#~ msgid "November"
+#~ msgstr "noviembre"
+
 #~ msgid "Nr:"
 #~ msgstr "Núm:"
 
@@ -16870,6 +16916,9 @@ msgstr "yyyy"
 
 #~ msgid "Oct"
 #~ msgstr "oct"
+
+#~ msgid "October"
+#~ msgstr "octubre"
 
 #~ msgid "Of the following conditions:"
 #~ msgstr "De las siguientes condiciones:"
@@ -16947,11 +16996,6 @@ msgstr "yyyy"
 #~ "de trabajo. Puede utilizar varias ventanas del navegador para trabajar "
 #~ "con el software colaborativo. No emplee esta opción si trabaja desde un "
 #~ "ordenador de terceros (por ejemplo, desde un cibercafé)"
-
-#, fuzzy
-#~| msgid "Open"
-#~ msgid "Open "
-#~ msgstr "Abrir"
 
 #~ msgid "Open in new tab"
 #~ msgstr "Abrir en nueva pestaña"
@@ -17297,6 +17341,9 @@ msgstr "yyyy"
 #~ msgid "Please choose a file!"
 #~ msgstr "¡Por favor, elija un fichero!"
 
+#~ msgid "Please choose a sentence below."
+#~ msgstr "Por favor, a continuación elija una frase."
+
 #~ msgid "Please enter a correct number."
 #~ msgstr "Por favor, indique un número correcto."
 
@@ -17474,6 +17521,9 @@ msgstr "yyyy"
 #~ "Pulse [Intro] para seleccionar el momento en que desea que se le recuerde "
 #~ "de nuevo"
 
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Embellecer correos de texto sencillo"
+
 #~ msgid "Prev"
 #~ msgstr "Anterior"
 
@@ -17642,6 +17692,9 @@ msgstr "yyyy"
 #~ msgid "Received:"
 #~ msgstr "Recibido:"
 
+#~ msgid "Recipients can edit"
+#~ msgstr "Los destinatarios pueden editar"
+
 #~ msgid "Recurrence Pattern"
 #~ msgstr "Patrón de recurrencia"
 
@@ -17700,6 +17753,9 @@ msgstr "yyyy"
 
 #~ msgid "Renminbi"
 #~ msgstr "Yuan"
+
+#~ msgid "Reply All"
+#~ msgstr "Responder a todos"
 
 #~ msgid "Reply to"
 #~ msgstr "Responder a"
@@ -17767,6 +17823,24 @@ msgstr "yyyy"
 #~ msgid "Route Planning"
 #~ msgstr "Planificación de rutas"
 
+#~ msgid "Rule applies from"
+#~ msgstr "La regla se aplica desde"
+
+#~ msgid "Rule applies not from"
+#~ msgstr "La regla no se aplica desde"
+
+#~ msgid "Rule applies not on"
+#~ msgstr "La regla no se aplica a"
+
+#~ msgid "Rule applies not until"
+#~ msgstr "La regla no se aplica hasta"
+
+#~ msgid "Rule applies on"
+#~ msgstr "La regla se aplica el"
+
+#~ msgid "Rule applies until"
+#~ msgstr "La regla se aplica hasta"
+
 #~ msgid "Rules"
 #~ msgstr "Reglas"
 
@@ -17801,6 +17875,15 @@ msgstr "yyyy"
 #~| msgid "RSS"
 #~ msgid "SMS"
 #~ msgstr "RSS"
+
+#~ msgid "SMTP Login"
+#~ msgstr "Acceder a SMTP"
+
+#~ msgid "SMTP Secure"
+#~ msgstr "SMTP seguro"
+
+#~ msgid "SMTP Server"
+#~ msgstr "Servidor SMTP"
 
 #~ msgid "SMTP login"
 #~ msgstr "Usuario SMTP"
@@ -18015,8 +18098,11 @@ msgstr "yyyy"
 #~ msgid "Send feedback"
 #~ msgstr "Enviar comentario"
 
-#~ msgid "Sender"
-#~ msgstr "Remitente"
+#~ msgid "Sender address"
+#~ msgstr "Dirección de remite"
+
+#~ msgid "Sender/From"
+#~ msgstr "Remitente/De"
 
 #~ msgid "Sending an E-Mail to a contact"
 #~ msgstr "Envío de un correo electrónico a un contacto"
@@ -18038,6 +18124,9 @@ msgstr "yyyy"
 
 #~ msgid "Separator"
 #~ msgstr "Separador"
+
+#~ msgid "September"
+#~ msgstr "septiembre"
 
 #~ msgid "Serbia"
 #~ msgstr "Serbia"
@@ -18073,6 +18162,11 @@ msgstr "yyyy"
 
 #~ msgid "Share link by email"
 #~ msgstr "Compartir enlace por correo"
+
+#~ msgid "Share the folder \"%1$d\""
+#~ msgid_plural "Share %1$d items"
+#~ msgstr[0] "Compartir la carpeta \"%1$d\""
+#~ msgstr[1] "Compartir %1$d elementos"
 
 #~ msgid "Shared"
 #~ msgstr "Compartida"
@@ -18265,6 +18359,9 @@ msgstr "yyyy"
 
 #~ msgid "Slideshow"
 #~ msgstr "Presentación"
+
+#~ msgid "Slideshow / Autoplay mode"
+#~ msgstr "Modo de presentación / Reproducción automática"
 
 #~ msgid "Slovakia"
 #~ msgstr "Eslovaquia"
@@ -18627,6 +18724,9 @@ msgstr "yyyy"
 #~ msgid "Tabs example"
 #~ msgstr "Ejemplo de pestañas"
 
+#~ msgid "Tag mail with"
+#~ msgstr "Etiquetar correo con"
+
 #~ msgid "Tags"
 #~ msgstr "Etiquetas"
 
@@ -18769,6 +18869,77 @@ msgstr "yyyy"
 
 #~ msgid "The appointment has a new description: %1$s."
 #~ msgstr "La cita tiene una nueva descripción: %1$s."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "days</a>."
+#~ msgstr ""
+#~ "La cita se repite <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">cada <span class=\"number-control\">2</span> días</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
+#~ "attribute=\"interval\">every <span class=\"number-control\">2</span> "
+#~ "weeks</a> on <a href=\"#\"  data-widget=\"days\" data-attribute=\"days"
+#~ "\">monday</a>."
+#~ msgstr ""
+#~ "La cita se repite <a href=\"#\"  data-widget=\"number\" data-attribute="
+#~ "\"interval\">cada <span class=\"number-control\">2</span> semanas</a> los "
+#~ "<a href=\"#\"  data-widget=\"days\" data-attribute=\"days\">lunes</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated <a href=\"#\" data-attribute=\"recurrenceType"
+#~ "\" data-widget=\"options\">weekly</a>."
+#~ msgstr ""
+#~ "La cita se repite <a href=\"#\" data-attribute=\"recurrenceType\" data-"
+#~ "widget=\"options\">semanalmente</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated every <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">first</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> in <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">October</a>."
+#~ msgstr ""
+#~ "La cita se repite cada <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"ordinal\">primer</a> <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"day\">miércoles</a> de <a href=\"#\" data-widget="
+#~ "\"options\" data-attribute=\"month\">octubre</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated every year on day <a href=\"#\" data-widget="
+#~ "\"number\" data-attribute=\"dayInMonth\"><span class=\"number-control"
+#~ "\">10</span></a> of <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"month\">October</a>."
+#~ msgstr ""
+#~ "La cita se repite todos los años el día <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"dayInMonth\"><span class=\"number-control\">10</"
+#~ "span></a> de <a href=\"#\" data-widget=\"options\" data-attribute=\"month"
+#~ "\">octubre</a>."
+
+#~ msgid ""
+#~ "The appointment is repeated on day <a href=\"#\" data-widget=\"number\" "
+#~ "data-attribute=\"dayInMonth\"><span class=\"number-control\">10</span></"
+#~ "a> <a href=\"#\" data-widget=\"number\" data-attribute=\"interval\">every "
+#~ "<span class=\"number-control\">2</span> months</a>."
+#~ msgstr ""
+#~ "La cita se repite el día <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"dayInMonth\"><span class=\"number-control\">10</span></a> <a "
+#~ "href=\"#\" data-widget=\"number\" data-attribute=\"interval\">cada <span "
+#~ "class=\"number-control\">2</span> meses</a>. "
+
+#~ msgid ""
+#~ "The appointment is repeated the <a href=\"#\" data-widget=\"options\" "
+#~ "data-attribute=\"ordinal\">second</a> <a href=\"#\" data-widget=\"options"
+#~ "\" data-attribute=\"day\">Wednesday</a> <a href=\"#\" data-widget=\"number"
+#~ "\" data-attribute=\"interval\">every <span class=\"number-control\">2</"
+#~ "span> months</a>."
+#~ msgstr ""
+#~ "La cita se repite el <a href=\"#\" data-widget=\"options\" data-attribute="
+#~ "\"ordinal\">segundo</a> <a href=\"#\" data-widget=\"options\" data-"
+#~ "attribute=\"day\">miércoles</a> <a href=\"#\" data-widget=\"number\" data-"
+#~ "attribute=\"interval\">de cada <span class=\"number-control\">2</span> "
+#~ "meses</a>. "
 
 #~ msgid "The appointment takes place in a new location: %1$s."
 #~ msgstr "La cita tiene lugar en una nueva ubicación: %1$s."
@@ -19005,6 +19176,31 @@ msgstr "yyyy"
 #~ msgid "The selected filter rule refers to an unknown folder '%s'."
 #~ msgstr ""
 #~ "La regla de filtro seleccionada se refiere a una carpeta '%s' desconocida."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">after <span class=\"number-control\">2</span> appointments</a>."
+#~ msgstr ""
+#~ "La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">finaliza</a> <a href=\"#\" data-attribute=\"occurrences\" data-widget="
+#~ "\"number\">después de <span class=\"number-control\">2</span> citas</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">ends</a> on <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+#~ msgstr ""
+#~ "La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">finaliza</a> el <a href=\"#\" data-attribute=\"until\" data-widget="
+#~ "\"datePicker\">11/03/2013</a>."
+
+#~ msgid ""
+#~ "The series <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">never ends</a>."
+#~ msgstr ""
+#~ "La serie <a href=\"#\" data-attribute=\"ending\" data-widget=\"options"
+#~ "\">nunca finaliza</a>."
 
 #~ msgid "The server didn't respond!"
 #~ msgstr "¡El servidor no respondió!"
@@ -20007,9 +20203,6 @@ msgstr "yyyy"
 #~ msgid "Unread only"
 #~ msgstr "No leidos sólo"
 
-#~ msgid "Unselect all"
-#~ msgstr "Deseleccionar todo"
-
 #~ msgid "Until:"
 #~ msgstr "Hasta:"
 
@@ -20821,6 +21014,11 @@ msgstr "yyyy"
 #~ msgid "after"
 #~ msgstr "después de"
 
+#~ msgid "after %1$d appointment"
+#~ msgid_plural "after %1$d appointments"
+#~ msgstr[0] "tras la %1$d cita"
+#~ msgstr[1] "después de %1$d citas"
+
 #~ msgid "all"
 #~ msgstr "todas"
 
@@ -20873,6 +21071,12 @@ msgstr "yyyy"
 #~ msgid "confirmed-spam"
 #~ msgstr "correo no deseado confirmado"
 
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continuar si alguna de estas condiciones se cumple"
+
+#~ msgid "continue if any of these condition is met."
+#~ msgstr "continuar si se cumple cualquiera de estas condiciones."
+
 #~ msgid "created by %s"
 #~ msgstr "creado por %s"
 
@@ -20885,11 +21089,20 @@ msgstr "yyyy"
 #~ msgid "d.MM.yy"
 #~ msgstr "d.MM.aa"
 
+#~ msgid "daily"
+#~ msgstr "diaria"
+
 #~ msgid "date range"
 #~ msgstr "intervalo de fechas"
 
 #~ msgid "day every"
 #~ msgstr "día cada"
+
+#~ msgid "day of the week"
+#~ msgstr "día de la semana"
+
+#~ msgid "day of the weekend"
+#~ msgstr "día de fin de semana"
 
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-aa"
@@ -20920,11 +21133,44 @@ msgstr "yyyy"
 #~ msgid "end date "
 #~ msgstr "fecha de fin"
 
+#~ msgid "ends"
+#~ msgstr "finaliza"
+
+#~ msgid "ends after a certain number of appointments"
+#~ msgstr "finaliza después de cierto número de citas"
+
 #~ msgid "ends on"
 #~ msgstr "termina el"
 
+#~ msgid "ends on a specific date"
+#~ msgstr "finaliza en una fecha determinada"
+
 #~ msgid "estimated costs"
 #~ msgstr "costes estimados"
+
+#~ msgid "every %1$d day"
+#~ msgid_plural "every %1$d days"
+#~ msgstr[0] "cada %1$s día"
+#~ msgstr[1] "cada %1$s días"
+
+#~ msgid "every %1$d month"
+#~ msgid_plural "every %1$d months"
+#~ msgstr[0] "cada %1$d mes"
+#~ msgstr[1] "cada %1$d meses"
+
+#~ msgid "every %1$d week"
+#~ msgid_plural "every %1$d weeks"
+#~ msgstr[0] "cada %1$d semana"
+#~ msgstr[1] "cada %1$d semanas"
+
+#~ msgid "every day"
+#~ msgstr "todos los días"
+
+#~ msgid "every month"
+#~ msgstr "todos los meses"
+
+#~ msgid "every week"
+#~ msgstr "todas las semanas"
 
 #~ msgid "expanded"
 #~ msgstr "expandido"
@@ -20979,6 +21225,9 @@ msgstr "yyyy"
 #~ msgid "june"
 #~ msgstr "junio"
 
+#~ msgid "last"
+#~ msgstr "último"
+
 #~ msgid "later"
 #~ msgstr "más tarde"
 
@@ -20998,11 +21247,17 @@ msgstr "yyyy"
 #~ msgid "mm"
 #~ msgstr "mm"
 
+#~ msgid "monthly"
+#~ msgstr "mensual"
+
 #~ msgid "more"
 #~ msgstr "más"
 
 #~ msgid "nd"
 #~ msgstr "º"
+
+#~ msgid "never ends"
+#~ msgstr "nunca finaliza"
 
 #~ msgid "new"
 #~ msgstr "nuevo"
@@ -21057,6 +21312,9 @@ msgstr "yyyy"
 
 #~ msgid "organized by %s"
 #~ msgstr "organizado por %s"
+
+#~ msgid "original timezone"
+#~ msgstr "zona horaria original"
 
 #~ msgid "predefined"
 #~ msgstr "predefinido"
@@ -21161,8 +21419,14 @@ msgstr "yyyy"
 #~ msgid "waiting"
 #~ msgstr "en espera"
 
+#~ msgid "weekly"
+#~ msgstr "semanal"
+
 #~ msgid "work days"
 #~ msgstr "días laborables"
+
+#~ msgid "yearly"
+#~ msgstr "anual"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "aa/MM/dd"

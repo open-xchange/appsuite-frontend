@@ -170,6 +170,7 @@ define('io.ox/calendar/week/perspective', [
                                         // calculate new dates if old dates are available
                                         data.start_date += (obj.start_date - obj.old_start_date);
                                         data.end_date += (obj.end_date - obj.old_end_date);
+                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
                                         apiUpdate(data);
                                     });
                                 }
@@ -241,8 +242,9 @@ define('io.ox/calendar/week/perspective', [
         },
 
         updateColor: function (model) {
+            if (!model) return;
             $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
-                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + (model.get('meta') ? model.get('meta').color_label || '1' : '1'));
             });
         },
 

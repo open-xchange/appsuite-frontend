@@ -26,7 +26,7 @@ define('io.ox/mail/toolbar', [
     'io.ox/mail/actions',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailsettings, gt) {
+], function (ext, links, actions, flagPicker, api, capabilities, Dropdown, Toolbar, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -122,7 +122,7 @@ define('io.ox/mail/toolbar', [
             label: gt('Set color'),
             ref: 'io.ox/mail/actions/color',
             customize: function (baton) {
-                if (!mailsettings.get('features/flag/color')) return;
+                if (!mailSettings.get('features/flag/color')) return;
                 flagPicker.attach(this, { data: baton.data });
             }
         },
@@ -223,7 +223,7 @@ define('io.ox/mail/toolbar', [
 
     new actions.Action('io.ox/mail/actions/color', {
         requires: function (e) {
-            return mailsettings.get('features/flag/color') && e.collection.has('some');
+            return mailSettings.get('features/flag/color') && e.collection.has('some');
         },
         action: $.noop
     });

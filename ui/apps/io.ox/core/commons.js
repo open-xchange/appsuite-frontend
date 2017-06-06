@@ -20,7 +20,7 @@ define('io.ox/core/commons', [
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/capabilities'
-], function (ext, links, gt, /*FolderView,*/ folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
+], function (ext, links, gt, folderAPI, accountAPI, coreSettings, UpsellView, capabilities) {
 
     'use strict';
 
@@ -621,10 +621,13 @@ define('io.ox/core/commons', [
             }
 
             function onFolderViewOpen(app) {
+                app.getWindow().nodes.sidepanel.show();
                 app.getWindow().nodes.main.find('.vgrid').removeClass('bottom-toolbar');
             }
 
             function onFolderViewClose(app) {
+                // hide sidepanel so invisible objects are not tabbable
+                app.getWindow().nodes.sidepanel.hide();
                 app.getWindow().nodes.main.find('.vgrid').addClass('bottom-toolbar');
             }
 
@@ -634,7 +637,7 @@ define('io.ox/core/commons', [
                 index: 100,
                 draw: function () {
                     this.addClass('visual-focus').append(
-                        $('<a href="#" class="toolbar-item">')
+                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
                         .attr('aria-label', gt('Open folder view'))
                         .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
                         .on('click', { app: app, state: true }, toggleFolderView)
@@ -648,7 +651,7 @@ define('io.ox/core/commons', [
                 draw: function () {
                     this.addClass('bottom-toolbar').append(
                         $('<div class="generic-toolbar bottom visual-focus">').append(
-                            $('<a href="#" class="toolbar-item" role="button">').attr('aria-label', gt('Close folder view'))
+                            $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )

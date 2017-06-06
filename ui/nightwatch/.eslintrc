@@ -1,0 +1,16 @@
+{
+    extends: [
+        '../.eslintrc'
+    ],
+
+    env: {
+        // adds all of the Mocha testing global variables.
+        'mocha': true,
+    },
+
+    rules: {
+        'no-unused-expressions': 0,
+        'dot-notation': 0,
+        'max-nested-callbacks': [2, 9]
+    }
+}

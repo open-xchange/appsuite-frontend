@@ -17,7 +17,7 @@ define('io.ox/mail/view-options', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'io.ox/core/commons',
-    'settings!io.ox/mail',
+    'settings!io.ox/mail'
 ], function (ext, Dropdown, account, gt, commons, settings) {
 
     'use strict';
@@ -41,8 +41,10 @@ define('io.ox/mail/view-options', [
                 .option('sort', 608, gt('Size'), { radio: true })
                 .option('sort', 607, gt('Subject'), { radio: true });
             // color flags
-            if (!settings.get('features/flag/color')) return;
-            this.data('view').option('sort', 102, gt('Color'), { radio: true });
+            if (settings.get('features/flag/color')) this.data('view').option('sort', 102, gt('Color'), { radio: true });
+            // sort by /flagged messages, internal namin is "star"
+            //#. Sort by messages which are flagged, "Flag" is used in dropdown
+            if (settings.get('features/flag/star')) this.data('view').option('sort', 660, gt('Flag'), { radio: true });
         }
     });
 
@@ -118,7 +120,7 @@ define('io.ox/mail/view-options', [
         index: 100,
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="toolbar-item select-all" role="checkbox" aria-checked="false">').append(
+                $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
                     $('<i class="fa fa-square-o" aria-hidden="true">'),
                     $.txt(gt('Select all'))
                 )
@@ -153,10 +155,13 @@ define('io.ox/mail/view-options', [
     }
 
     function onFolderViewOpen(app) {
+        app.getWindow().nodes.sidepanel.show();
         app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose(app) {
+        // hide sidepanel so invisible objects are not tabbable
+        app.getWindow().nodes.sidepanel.hide();
         app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
     }
 

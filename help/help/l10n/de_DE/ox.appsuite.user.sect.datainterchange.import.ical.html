@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="Benutzeranleitung">
 <link rel="up" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. Daten importieren">
 <link rel="prev" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. Daten importieren">
-<link rel="next" href="ox.appsuite.user.sect.datainterchange.import.ical.objects.html" title="12.1.1.1. Welche iCal-Objekte werden importiert?">
+<link rel="next" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html" title="12.1.2. Kontakte im vCard-Format importieren">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -25,7 +25,7 @@
 <li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.datainterchange.import.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.datainterchange.import.ical.objects.html">Weiter</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">Weiter</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
@@ -34,19 +34,502 @@
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="ox.appsuite.user.sect.datainterchange.import.ical"></a>12.1.1. Termine und Aufgaben im iCal-Format importieren</h3></div></div></div>
-<a class="indexterm" name="id-1.13.4.4.2"></a><a class="indexterm" name="id-1.13.4.4.3"></a><a class="indexterm" name="id-1.13.4.4.4"></a><a class="indexterm" name="id-1.13.4.4.5"></a><p><a name="ox.appsuite.user.concept.datainterchange.import.ical"></a>Die folgenden Informationen helfen Ihnen, Daten im iCal-Format erfolgreich zu importieren: </p>
+<a class="indexterm" name="id-1.13.4.5.2"></a><a class="indexterm" name="id-1.13.4.5.3"></a><a class="indexterm" name="id-1.13.4.5.4"></a><a class="indexterm" name="id-1.13.4.5.5"></a><div class="concept">
+<a name="ox.appsuite.user.concept.datainterchange.import.ical"></a><p>Die folgende Tabelle zeigt, welche iCal-Objekte importiert werden und welche nicht. Die
+        Angaben in den Spalten "Termine" und "Aufgaben" haben folgende Bedeutung: </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>
-              <a class="xref" href="ox.appsuite.user.sect.datainterchange.import.ical.objects.html" title="12.1.1.1. Welche iCal-Objekte werden importiert?">Welche iCal-Objekte werden importiert?</a>
-            </p></li>
-<li class="listitem"><p>
-              <a class="xref" href="ox.appsuite.user.sect.datainterchange.import.ical.properties.html" title="12.1.1.2. Welche iCal-Objekteigenschaften werden nicht unterstützt?">Welche iCal-Objekteigenschaften werden nicht unterstützt?</a>
-            </p></li>
-<li class="listitem"><p>
-              <a class="xref" href="ox.appsuite.user.sect.datainterchange.import.ical.accomplish.html" title="12.1.1.3. iCal-Import ausführen">iCal-Import ausführen</a>
-            </p></li>
+<li class="listitem"><p>Die Angabe "X" bedeutet, dass das Objekt importiert wird. Der Wert des Objekts ist in RFC2445 festgelegt.</p></li>
+<li class="listitem"><p>Eine Zahl wie "255" bedeutet, dass das Objekt importiert wird. Die Zahl gibt die maximale Anzahl von Zeichen an.</p></li>
+<li class="listitem"><p>Die Angabe "unbegrenzt" bedeutet, dass das Objekt importiert wird. Die maximale Anzahl von Zeichen ist nicht begrenzt.</p></li>
+<li class="listitem"><p>Die Angabe "-" bedeutet, dass das Objekt nicht importiert wird.</p></li>
 </ul></div>
 <p>
+        Eine Beschreibung aller iCal-Objekte finden Sie im Dokument <a class="ulink" href="http://tools.ietf.org/html/rfc2445" target="_top">RFC2445</a>.
+      </p>
+</div>
+<div class="reference">
+<a name="ox.appsuite.user.reference.datainterchange.import.ical"></a><p>
+        </p>
+<div class="informaltable">
+<a name="ox.appsuite.user.tab.import.ical"></a><table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th style="border-bottom: 0.5pt solid ; ">Kategorie</th>
+<th style="border-bottom: 0.5pt solid ; ">iCal-Objekt</th>
+<th style="border-bottom: 0.5pt solid ; ">Termine</th>
+<th style="border-bottom: 0.5pt solid ; ">Aufgaben</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="">Calendar Properties</td>
+<td style="">CALSCALE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">METHOD</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PRODID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VERSION</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style="">Calendar Components</td>
+<td style="">VALARM</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VEVENT</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VFREEBUSY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VJOURNAL</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VTIMEZONE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VTODO</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style="">Component Properties</td>
+<td style="">ATTACH</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ATTENDEE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CATEGORIES</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CLASS</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">COMMENT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">COMPLETED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CONTACT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">CREATED</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DESCRIPTION</td>
+<td style="" align="center">Unbegrenzt</td>
+<td style="" align="center">Unbegrenzt</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTEND</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTSTAMP</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DTSTART</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DUE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DURATION</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">EXDATE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">EXRULE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FREEBUSY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">GEO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LAST-MODIFIED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LOCATION</td>
+<td style="" align="center">255</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ORGANIZER</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PERCENT-COMPLETE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PRIORITY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RDATE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RECURRENCE-ID</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELATED-TO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">REPEAT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">REQUEST-STATUS</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RESOURCES</td>
+<td style="" align="center">X</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RRULE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SEQUENCE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">STATUS</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SUMMARY</td>
+<td style="" align="center">255</td>
+<td style="" align="center">255</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TRANSP</td>
+<td style="" align="center">-</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TRIGGER</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZNAME</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZOFFSETFROM</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZOFFSETTO</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZURL</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">UID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">URL</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style="">Property Parameters</td>
+<td style="">CUTYPE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DELEGATED-FROM</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DELEGATED-TO</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">DIR</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ENCODING</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FMTTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">FBTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">LANGUAGE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">MEMBER</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">PARTSTAT</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RANGE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELATED</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RELTYPE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">ROLE</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">RSVP</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">SENT-BY</td>
+<td style="" align="center">-</td>
+<td style="" align="center">-</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">TZID</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+<tr>
+<td style=""> </td>
+<td style="">VALUE</td>
+<td style="" align="center">X</td>
+<td style="" align="center">X</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
+      </p>
+</div>
+<div class="concept">
+<a name="ox.appsuite.user.concept.datainterchange.import.ical.restrictions"></a><p>Beachten Sie die folgenden Einschränkungen.</p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p>Unterstützt werden Termine wie zum Beispiel: "Der letzte Sonntag in einem Monat". Nicht unterstützt werden Termine, bei denen Tage vom Monatsende aus
+            gezählt werden. Beispiel: "Der vorletzte Sonntag in einem Monat". Enthält ein Termin eine solche Angabe, wird der Termin nicht importiert.</p></li>
+<li class="listitem"><p>Alarmwiederholung wird nicht unterstützt. Beispiel für eine solche Angabe: "Erinnere mich viermal". Enthält ein Termin eine solche Angabe, wird diese
+            Angabe ignoriert.</p></li>
+<li class="listitem"><p>Stellen Sie sicher, dass die Datei, die Sie importieren, korrekte iCal-Daten enthält.</p></li>
+</ul></div>
+<p>
+      </p>
+</div>
+<div class="task">
+<a name="ox.appsuite.user.task.datainterchange.import.ical"></a><p class="title">So importieren Sie Termine oder Aufgaben im iCal-Format:</p>
+<div class="procedure"><ol class="procedure" type="1">
+<li class="step"><p>Starten Sie die App 
+              <span class="phrase"><span class="guilabel"><strong>Kalender</strong></span></span>
+              oder 
+              <span class="phrase"><span class="guilabel"><strong>Aufgaben</strong></span></span>.</p></li>
+<li class="step"><p><a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select" title="So öffnen oder wählen Sie einen Ordner:">Wählen</a> Sie im Ordnerbaum den Ordner, in den Sie die Termine oder Aufgaben importieren
+              wollen.</p></li>
+<li class="step"><p>Klicken Sie neben dem Ordnernamen auf das Symbol <span class="guibutton"><strong>Ordnerspezifische Aktionen</strong></span>
+              <span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.import.ical"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span> . Klicken Sie auf <span class="guibutton"><strong>Importieren</strong></span>.</p></li>
+<li class="step"><p>Im Fenster <span class="guilabel"><strong>Importieren nach</strong></span> klicken Sie auf <span class="guibutton"><strong>Datei wählen</strong></span>. Wählen Sie eine Datei im iCal-Format.</p></li>
+<li class="step"><p>Klicken Sie auf <span class="guibutton"><strong>Importieren</strong></span>.</p></li>
+</ol></div>
+<div class="taskrelated">
+          <p><span class="phrase"><strong>Ergebnis:</strong></span> Die Termine oder Aufgaben werden dem Ordner hinzugefügt.</p>
+        </div>
+</div>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.concept.datainterchange.import.ical.related"></a><p class="title">Siehe auch</p>
+<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html" title="12.1.2. Kontakte im vCard-Format importieren">Kontakte im vCard-Format importieren</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html" title="12.1.3. Kontakte im CSV-Format importieren">Kontakte im CSV-Format importieren</a></p>
+</li></ul>
+</div>
+<p><a name="ox.appsuite.user.concept.datainterchange.import.ical.parent"></a>Übergeordnetes Thema:
+        <a class="xref" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. Daten importieren">Daten importieren</a>
       </p>
 </div>
           </div>

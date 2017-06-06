@@ -134,7 +134,7 @@ define('io.ox/core/tk/tokenfield', [
                         contactAPI.pictureHalo(
                             $('<div class="contact-image" aria-hidden="true">'),
                             model.toJSON(),
-                            { width: 16, height: 16, scaleType: 'contain' }
+                            { width: 16, height: 16, scaleType: 'contain', lazyload: true }
                         )
                     );
                 }
@@ -342,9 +342,26 @@ define('io.ox/core/tk/tokenfield', [
                         value: e.attrs.value
                     }, { silent: true });
                     e.attrs.value = e.attrs.model.cid;
-                    //#. %1$s is the display name of an added user or mail recipient
-                    //#. %2$s is the email address of the user or mail recipient
-                    self.$el.trigger('aria-live-update', gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value));
+                    var message;
+                    if (e.attrs.model.get('display_name')) {
+                        if (e.attrs.model.value && e.attrs.model.value !== e.attrs.model.get('display_name')) {
+                            //#. %1$s is the display name of an added user or mail recipient
+                            //#. %2$s is the email address of the user or mail recipient
+                            message = gt('Added %1$s, %2$s.', e.attrs.model.get('display_name'), e.attrs.model.value);
+                        } else {
+                            //#. %1$s is the display name of an added user or mail recipient
+                            message = gt('Added %1$s.', e.attrs.model.get('display_name'));
+                        }
+                    } else if (e.attrs.model.get('name') && e.attrs.model.get('detail')) {
+                        //#. %1$s is the added search query
+                        //#. %2$s is the context of the added search query
+                        message = gt('Added %1$s, %2$s.', e.attrs.model.get('name'), e.attrs.model.get('detail'));
+                    } else if (e.attrs.model.get('name')) {
+                        //#. %1$s is the added search query
+                        message = gt('Added %1$s.', e.attrs.model.get('name'));
+                    }
+
+                    if (message) self.$el.trigger('aria-live-update', message);
                     // add model to the collection and save cid to the token
                     self.collection.add(e.attrs.model);
                 },
@@ -361,13 +378,14 @@ define('io.ox/core/tk/tokenfield', [
                             label.css('max-width', label.width() - 16 + 'px');
                         }
                         // a11y: set title
-                        node.attr('title', function () {
+                        node.attr('aria-label', function () {
                             var token = model.get('token'),
                                 title = token.label;
                             if (token.label !== token.value) {
-                                title = token.label ? token.label + ' <' + token.value + '>' : token.value;
+                                title = token.label ? token.label + ' ' + token.value : token.value;
                             }
-                            return title;
+                            //.# Variable will be an contact or email address in a tokenfield. Text is used for screenreaders to provide a hint how to delete the token
+                            return gt('%1$s. Press backspace to delete.', title);
                         });
                         // customize token
                         ext.point(self.options.extPoint + '/token').invoke('draw', e.relatedTarget, model, e);
@@ -407,9 +425,28 @@ define('io.ox/core/tk/tokenfield', [
                     _([].concat(e.attrs)).each(function (el) {
                         var model = self.getModelByCID(el.value);
                         if (!model) return;
-                        //#. %1$s is the display name of a removed user or mail recipient
-                        //#. %2$s is the email address of the user or mail recipient
-                        self.$el.trigger('aria-live-update', gt('Removed %1$s, %2$s.', model.get('display_name'), model.value));
+
+                        var message;
+                        if (model.get('display_name')) {
+                            if (model.value && model.value !== model.get('display_name')) {
+                                //#. %1$s is the display name of a removed user or mail recipient
+                                //#. %2$s is the email address of the user or mail recipient
+                                message = gt('Removed %1$s, %2$s.', model.get('display_name'), model.value);
+                            } else {
+                                //#. %1$s is the display name of a removed user or mail recipient
+                                message = gt('Removed %1$s.', model.get('display_name'));
+                            }
+                        } else if (model.get('name') && model.get('detail')) {
+                            //#. %1$s is the removed search query
+                            //#. %2$s is the context of the removed search query
+                            message = gt('Removed %1$s, %2$s.', model.get('name'), model.get('detail'));
+                        } else if (model.get('name')) {
+                            //#. %1$s is the removed search query
+                            message = gt('Removed %1$s.', model.get('name'));
+                        }
+
+                        if (message) self.$el.trigger('aria-live-update', message);
+
                         self.collection.remove(model);
                     });
                 }
@@ -447,7 +484,7 @@ define('io.ox/core/tk/tokenfield', [
             // add non-public api;
             this.hiddenapi = this.input.data('ttTypeahead');
 
-            // calculate postion for typeahead dropdown (tt-dropdown-menu)
+            // calculate position for typeahead dropdown (tt-dropdown-menu)
             if (_.device('smartphone') || o.leftAligned) {
                 // non-public api of typeahead
                 this.hiddenapi.dropdown._show = function () {
@@ -551,7 +588,7 @@ define('io.ox/core/tk/tokenfield', [
                 });
             }
 
-            this.$el.closest('div.tokenfield').on('copy', function (e) {
+            this.$el.closest('div.tokenfield').attr('role', 'application').on('copy', function (e) {
                 // value might contain more than one id so split
                 var values = e.target.value.split(', ');
 
@@ -567,14 +604,6 @@ define('io.ox/core/tk/tokenfield', [
                 if (result !== '') {
                     e.originalEvent.clipboardData.setData('text/plain', result);
                     e.preventDefault();
-                }
-            }).on('keydown', function (e) {
-                //Remove on cut
-                if ((e.ctrlKey || e.metaKey) && e.which === 88) {
-                    $(this).find('.token.active').each(function () {
-                        self.collection.remove($(this).data().attrs.model);
-                    });
-                    self.redrawTokens();
                 }
             });
 

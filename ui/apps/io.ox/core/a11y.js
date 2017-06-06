@@ -143,7 +143,7 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
     // Accessibility F6 jump
     // do not focus nodes with negative tabindex, or hidden nodes
     $(document).on('keydown.f6', function (e) {
-        var tabindexSelector = '[tabindex]:visible';
+        var tabindexSelector = 'input, select, textarea, button, .launcher a[href], [tabindex]:visible';
 
         if (e.which === 117 && (_.device('macos') || e.ctrlKey)) {
 
@@ -163,13 +163,13 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
                 nextItem = items.eq(newIndex);
 
                 if (nextItem.is(tabindexSelector)) {
-                    nextItem.focus();
+                    nextItem.visibleFocus();
                     break;
                 }
 
-                nextItem = nextItem.find(tabindexSelector).first();
+                nextItem = getTabbable(nextItem).first();
                 if (nextItem.length) {
-                    nextItem.focus();
+                    nextItem.visibleFocus();
                     break;
                 }
             } while (oldIndex !== newIndex);
@@ -285,7 +285,6 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
     }
 
     function use() {
-        // focusFirstTabbable
         return !!settings.get('features/accessibility', true);
     }
 

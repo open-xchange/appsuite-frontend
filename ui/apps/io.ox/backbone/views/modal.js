@@ -20,6 +20,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     //
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
+    // - backdrop: include a backdrop element - default is 'static': backdrop is rendered but non-clickable,
+    //       see http://getbootstrap.com/javascript/#modals-options
     // - enter: this action is triggered on <enter>
     // - focus: set initial focus on this element
     // - help: link to online help article
@@ -46,8 +48,13 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 async: false,
                 context: {},
                 keyboard: true,
-                maximize: false
+                maximize: false,
+                smartphoneInputFocus: false
             }, options);
+            // ensure correct width on smartphone
+            if (_.device('smartphone') && options.width >= 320) {
+                options.width = '95%';
+            }
             this.context = options.context;
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);
@@ -74,7 +81,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             // when clicking next to the popup the modal dialog only hides by default. Remove it fully instead, causes some issues otherwise.
             this.$el.on('hidden.bs.modal', this.close);
             // apply max height if maximize is given as number
-            if (_.isNumber(options.maximize)) this.$('.modal-dialog').css('max-height', options.maximize);
+            if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
@@ -83,11 +90,26 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 }.bind(this));
             }
+
+            // scroll inputs into view when smartphone keyboard shows up
+            if (_.device('smartphone') && options.smartphoneInputFocus) {
+                // make sure scrolling actually works
+                this.$el.find('.modal-content').css('overflow-y', 'auto');
+                $(window).on('resize', this.scrollToInput);
+            }
+
             // track focusin
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.on('dispose', function () {
                 $(document).off('focusin', this.keepFocus);
+                $(window).off('resize', this.scrollToInput);
             });
+        },
+
+        scrollToInput: function () {
+            if ($(document.activeElement).filter('input[type="email"],input[type="text"],textarea').length === 1) {
+                document.activeElement.scrollIntoView();
+            }
         },
 
         keepFocus: function (e) {
@@ -118,7 +140,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
-            this.$el.modal({ keyboard: false }).modal('show');
+            this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.toggleAriaHidden(true);
             this.trigger('open');
             // set initial focus

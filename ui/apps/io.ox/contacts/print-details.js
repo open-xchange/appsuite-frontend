@@ -51,17 +51,29 @@ define('io.ox/contacts/print-details', [
                 title: selection.length === 1 ? selection[0].display_name : undefined,
 
                 i18n: {
+                    //#. vcard (electronic business card) field
                     phone: gt('Phone'),
+                    //#. vcard (electronic business card) field
                     cellphone: gt('Cell phone'),
+                    //#. vcard (electronic business card) field
                     email: gt('Email'),
+                    //#. vcard (electronic business card) field
                     businessAddress: gt('Business Address'),
+                    //#. vcard (electronic business card) field
                     homeAddress: gt('Home Address'),
+                    //#. vcard (electronic business card) field
                     otherAddress: gt('Other Address'),
+                    //#. vcard (electronic business card) field
                     business: gt('Business'),
+                    //#. vcard (electronic business card) field
                     home: gt('Home'),
+                    //#. vcard (electronic business card) field
                     otherPhone: gt('Other'),
+                    //#. vcard (electronic business card) field
                     messenger: gt('Messenger'),
+                    //#. vcard (electronic business card) field
                     personalInformation: gt('Personal information'),
+                    //#. vcard (electronic business card) field
                     birthday: gt('Date of birth')
                 },
 

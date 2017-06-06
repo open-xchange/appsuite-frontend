@@ -26,9 +26,8 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities',
-    'io.ox/core/util'
-], function (http, cache, coreConfig, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, coreUtil) {
+    'io.ox/core/capabilities'
+], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -277,7 +276,9 @@ define('io.ox/mail/api', [
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         // do not process plain text if we prettify text client-side
-        obj.process_plain_text = !settings.get('beautifyPlainText');
+        // was !settings.get('beautifyPlainText');
+        // false until bug 52294 is fixed
+        obj.process_plain_text = false;
 
         // never use factory's internal cache, therefore always 'false' at this point
         return get.call(api, obj, false).done(function (data) {
@@ -293,8 +294,7 @@ define('io.ox/mail/api', [
                     attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
                 }
             });
-            // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
-            data.id = decodeURIComponent(data.id);
+
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -522,12 +522,16 @@ define('io.ox/mail/api', [
                 // backend tells us the if the archive folder is new and its id
                 if (_(_(data).pluck('created')).contains(true)) {
                     // update account data
-                    accountAPI.reload().done(function () {
-                        // refresh all folders because the archive folder might be new
-                        folderAPI.refresh();
-                        // reload mail views
-                        api.trigger('refresh.all');
-                    });
+                    accountAPI.reload()
+                        .then(function () {
+                            // reload  settings for virtual folder 'virtual/standard' first (bug 52608)
+                            return settings.reload();
+                        }).done(function () {
+                            // refresh all folders because the archive folder might be new
+                            folderAPI.refresh();
+                            // reload mail views
+                            api.trigger('refresh.all');
+                        });
                 } else {
                     folderAPI.reload(_(data).pluck('id'));
                 }
@@ -618,6 +622,7 @@ define('io.ox/mail/api', [
             _(list).each(function (obj) {
                 api.trigger('update:' + _.ecid(obj), obj);
             });
+            if (move) api.trigger('move');
             if (apiAction === 'copy' || move) {
                 //give response if its a copy action (to look if there was an error)
                 //not doing this as a standardaction to prevent errors with functions looking only for the list parameter
@@ -720,8 +725,7 @@ define('io.ox/mail/api', [
             unsetSorted(list, 102);
         });
     };
-
-     /**
+    /**
      * marks list of mails as flagged/unflagged
      * @param {array} list
      * @fires api#refresh.list
@@ -969,13 +973,15 @@ define('io.ox/mail/api', [
     api.autosave = function (obj) {
         api.trigger('before:autosave', { data: obj });
         try {
+            var params = {
+                action: 'autosave',
+                lineWrapAfter: 0
+            };
+            if (obj.security && obj.security.decrypted) params.decrypt = true;  // Guard flag, send decrypt if orig E-mail decrypted
             return http.wait(
                 http.PUT({
                     module: 'mail',
-                    params: {
-                        action: 'autosave',
-                        lineWrapAfter: 0
-                    },
+                    params: params,
                     data: obj,
                     appendColumns: false
                 })
@@ -1383,23 +1389,28 @@ define('io.ox/mail/api', [
      */
     api.saveAttachments = function (list, target) {
         // be robust
-        target = target || coreConfig.get('folder/infostore');
+        target = target || coreSettings.get('folder/infostore');
         // support for multiple attachments
         list = _.isArray(list) ? list : [list];
 
         http.pause();
         // loop
         _(list).each(function (data) {
+            var params = {
+                action: 'attachment',
+                id: data.mail.id,
+                folder: data.mail.folder_id,
+                dest_folder: target,
+                attachment: data.id,
+                decrypt: (data.security && data.security.decrypted)
+            };
+            // Guard actions.  If it was from decrypted email, must be decrypted
+            if (data.security && data.security.decrypted) params.decrypt = true;
+            // If saving encrypted copy, but be re-encrypted from original email
+            if (data.reEncrypt) params.encrypt = true;
             http.PUT({
                 module: 'mail',
-                params: {
-                    action: 'attachment',
-                    id: data.mail.id,
-                    folder: data.mail.folder_id,
-                    dest_folder: target,
-                    attachment: data.id,
-                    decrypt: (data.security && data.security.decrypted)
-                },
+                params: params,
                 data: { folder_id: target, description: gt('Saved mail attachment') },
                 appendColumns: false
             });
@@ -1421,18 +1432,18 @@ define('io.ox/mail/api', [
     api.getUrl = function (data, mode, options) {
 
         var opt = _.extend({ scaleType: 'contain' }, options),
-            url = '/mail', first;
+            url = ox.apiRoot + '/mail', first;
 
         if (mode === 'zip') {
             first = _(data).first();
-            return coreUtil.getShardingRoot(url + '?' + $.param({
+            return url + '?' + $.param({
                 action: 'zip_attachments',
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
                 // required here!
                 session: ox.session
-            }));
+            });
         } else if (mode === 'eml:reference') {
             //if eml stored as reference use parent object
             return this.getUrl(_([].concat(data)).first().parent, 'eml');
@@ -1442,12 +1453,12 @@ define('io.ox/mail/api', [
             // multiple?
             if (data.length > 1) {
                 // zipped
-                return coreUtil.getShardingRoot(url + '?' + $.param({
+                return url + '?' + $.param({
                     action: 'zip_messages',
                     folder: first.folder_id,
                     id: _(data).pluck('id').join(','),
                     session: ox.session
-                }));
+                });
             }
             // single EML
             url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
@@ -1457,7 +1468,8 @@ define('io.ox/mail/api', [
                     save: 1,
                     session: ox.session
                 }));
-            return coreUtil.getShardingRoot(url);
+
+            return url;
         }
 
         // inject filename for more convenient file downloads
@@ -1487,7 +1499,7 @@ define('io.ox/mail/api', [
             default:
                 break;
         }
-        return coreUtil.getShardingRoot(url);
+        return url;
     };
 
     /**
@@ -1880,6 +1892,25 @@ define('io.ox/mail/api', [
         return !accountAPI.is('spam|trash', data.folder_id);
     }
 
+    api.allMessagesFolder = settings.get('allMessagesFolder', 'default0/virtual/all');
+
+    api.getAllUnseenMessages = function () {
+        return http.GET({
+            module: 'mail',
+            params: {
+                action: 'all',
+                folder: api.allMessagesFolder,
+                // need original_id and original_folder_id
+                columns: '600,654,655',
+                sort: '610',
+                order: 'desc',
+                unseen: true,
+                deleted: false,
+                timezone: 'utc'
+            }
+        });
+    };
+
     // collection loader
     api.collectionLoader = new CollectionLoader({
         module: 'mail',
@@ -1888,11 +1919,13 @@ define('io.ox/mail/api', [
             if (params.folder === 'virtual/all-unseen') {
                 return {
                     action: 'all',
-                    folder: settings.get('allMessagesFolder', 'default0/virtual/all'),
+                    folder: api.allMessagesFolder,
                     // need original_id and original_folder_id
                     columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,654,655,656',
-                    sort: '651',
-                    order: 'asc',
+                    sort: '610',
+                    order: 'desc',
+                    unseen: true,
+                    deleted: false,
                     timezone: 'utc'
                 };
             }
@@ -1929,7 +1962,7 @@ define('io.ox/mail/api', [
         },
         httpGet: function (module, params) {
             // apply static limit for all-unseen
-            var isAllUnseen = params.folder === 'default0/virtual/all' && params.sort === '651';
+            var isAllUnseen = params.folder === api.allMessagesFolder && params.unseen === true;
             if (isAllUnseen) params.limit = '0,250';
             return http.GET({ module: module, params: params }).then(function (data) {
                 // drop all seen messages for all-unseen
@@ -2009,8 +2042,7 @@ define('io.ox/mail/api', [
             obj.headers = { 'X-Open-Xchange-Share-URL': obj['X-Open-Xchange-Share-URL'] };
             delete obj['X-Open-Xchange-Share-URL'];
         }
-        // fixup strange mail ids for unified mail folders (remove when bug 47261 is fixed)
-        obj.id = decodeURIComponent(obj.id);
+
         if (params.action === 'threadedAll') api.processThreadMessage(obj); else api.pool.add('detail', obj);
     };
 

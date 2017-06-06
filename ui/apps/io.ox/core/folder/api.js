@@ -199,8 +199,8 @@ define('io.ox/core/folder/api', [
         supportsInternalSharing: function () {
             // drive: always enabled
             if (this.is('drive')) return true;
-            // mail: check gab (webmail, PIM, PIM+infostore)
-            if (this.is('mail')) return capabilities.has('gab');
+            // mail: check gab (webmail, PIM, PIM+infostore) and folder capability (bit 0), see Bug 47229
+            if (this.is('mail')) return capabilities.has('gab') && this.supportsShares();
             // contacts, calendar, tasks
             if (this.is('public')) return capabilities.has('edit_public_folders');
             // non-public foldes
@@ -514,15 +514,20 @@ define('io.ox/core/folder/api', [
     }
 
     VirtualFolder.prototype.concat = function () {
-        return $.when.apply($, arguments).then(function () {
-            return _(arguments).chain().flatten().compact().value();
+        return _.whenSome.apply(undefined, arguments).then(function (data) {
+            if (data.rejected.length) _.each(data.rejected, function (data) { console.error(data); });
+            return _(data.resolved).chain().flatten().compact().value();
         });
     };
 
     VirtualFolder.prototype.list = function () {
         var id = this.id;
         return this.getter().done(function (array) {
-            _(array).each(injectIndex.bind(null, id));
+            _(array).chain().map(function (folder) {
+                // use current data of virtual folders (for example, unread count could be updated in the meantime)
+                if (isVirtual(folder.id)) return _.extend(folder, pool.getModel(folder.id).toJSON());
+                return folder;
+            }).each(injectIndex.bind(null, id)).value();
             pool.addCollection(getCollectionId(id), array);
             pool.getModel(id).set('subscr_subflds', array.length > 0);
         });
@@ -1131,7 +1136,8 @@ define('io.ox/core/folder/api', [
         params = {
             action: 'delete',
             failOnError: true,
-            tree: tree(ids[0])
+            tree: tree(ids[0]),
+            extendedResponse: true
         };
 
         if (options && options.isDSC) params.hardDelete = true;
@@ -1143,8 +1149,9 @@ define('io.ox/core/folder/api', [
             data: ids,
             appendColumns: false
         })
-        .done(function () {
-            _(ids).each(function (id) {
+        .done(function (response) {
+            response = response || [];
+            _(ids).each(function (id, index) {
                 var data = hash[id];
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
@@ -1152,11 +1159,13 @@ define('io.ox/core/folder/api', [
                 // get refreshed the model data for folders moved to the trash folder. If they are removed completely we remove the collection
                 // flat models don't have a collection, so no need to remove here
                 if (!isFlat(data.module)) {
-                    // if this folder is in the trash folder it was removed completely, so no need to for fresh data
-                    if (api.is('trash', data)) {
+                    // see if this folder was moved to trash or deleted completely
+                    if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
                         api.pool.removeCollection(id, { removeModels: true });
                     } else {
-                        api.get(id, { cache: false }).fail(function (error) {
+                        // use new path if available, else use id
+                        var pathOrId = (response[index] ? response[index].new_path : id);
+                        api.get(pathOrId, { cache: false }).fail(function (error) {
                             // folder does not exist
                             if (error.code === 'FLD-0008') {
                                 api.pool.removeCollection(id, { removeModels: true });
@@ -1172,6 +1181,9 @@ define('io.ox/core/folder/api', [
             _(ids).each(function (id) {
                 api.trigger('remove:fail', id);
             });
+
+            // use refresh to rollback the folderdata
+            refresh();
         });
     }
 
@@ -1193,7 +1205,13 @@ define('io.ox/core/folder/api', [
             data: [id]
         })
         .done(function () {
-            if (account.is('trash', id)) {
+            if ((api.pool.models[id] && api.pool.models[id].is('trash')) || account.is('trash', id)) {
+                // clear collections
+                if (api.pool.collections[id]) {
+                    api.pool.collections[id].each(function (model) {
+                        api.pool.removeCollection(model.id, { removeModels: true });
+                    });
+                }
                 // if this is a trash folder trigger special event (quota updates)
                 api.trigger('cleared-trash');
             }
@@ -1408,7 +1426,7 @@ define('io.ox/core/folder/api', [
     function getExistingFolder(type) {
         var defaultId = util.getDefaultFolder(type);
         if (defaultId) return $.Deferred().resolve(defaultId);
-        if (type === 'mail') return $.Deferred().resolve('default0' + getMailFolderSeparator() + 'INBOX');
+        if (type === 'mail') return $.Deferred().resolve('default0' + getDefaultSeparator() + 'INBOX');
         if (type === 'infostore') return $.Deferred().resolve(10);
         return flat({ module: type }).then(function (data) {
             for (var section in data) {
@@ -1420,8 +1438,17 @@ define('io.ox/core/folder/api', [
         });
     }
 
-    function getMailFolderSeparator() {
+    function getDefaultSeparator() {
         return mailSettings.get('defaultseparator', '/');
+    }
+
+    function getMailFolderSeparator(id) {
+        var base = id.split(getDefaultSeparator())[0],
+            separators = mailSettings.get('separators') || {};
+        if (!/^default\d+$/.test(base)) return '/';
+        base = base.replace('default', '');
+        if (separators[base]) return separators[base];
+        return getDefaultSeparator();
     }
 
     // publish api
@@ -1459,6 +1486,7 @@ define('io.ox/core/folder/api', [
         getDefaultFolder: util.getDefaultFolder,
         getExistingFolder: getExistingFolder,
         getStandardMailFolders: getStandardMailFolders,
+        getDefaultSeparator: getDefaultSeparator,
         getMailFolderSeparator: getMailFolderSeparator,
         getTextNode: getTextNode,
         getDeepLink: getDeepLink,

@@ -22,6 +22,7 @@ define('io.ox/files/upload/dropzone', [
 
     ext.point('io.ox/files/dropzone').extend({
         id: 'default',
+        index: 100,
         getDropZones: function (baton) {
             var app = baton.app,
                 zone = new dropzone.Inplace({

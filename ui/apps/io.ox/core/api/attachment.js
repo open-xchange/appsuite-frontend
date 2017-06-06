@@ -17,7 +17,7 @@ define('io.ox/core/api/attachment', [
     'io.ox/core/util',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (http, Events, util, coreConfig, gt) {
+], function (http, Events, util, coreSettings, gt) {
 
     'use strict';
 
@@ -225,7 +225,7 @@ define('io.ox/core/api/attachment', [
             };
 
             //make sure we have a string or target + api.DELIM results in NaN
-            target = (target || coreConfig.get('folder/infostore')).toString();
+            target = (target || coreSettings.get('folder/infostore')).toString();
 
             return http.PUT({
                 module: 'files',

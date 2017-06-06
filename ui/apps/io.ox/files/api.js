@@ -20,12 +20,13 @@ define('io.ox/files/api', [
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
     'io.ox/core/capabilities',
+    'io.ox/core/extensions',
     'io.ox/core/util',
     'io.ox/find/api',
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -88,14 +89,14 @@ define('io.ox/files/api', [
             // call parent constructor
             backbone.Model.call(this, normalizedAttrs, options);
 
-            this.listenTo(this, 'change:filename', function (m, newName) {
+            this.listenTo(this, 'change:com.openexchange.file.sanitizedFilename', function (m, newName) {
                 //maybe update versions if filename is changed
                 var versions = this.get('versions');
                 if (!versions) return;
 
                 for (var i = 0; i < versions.length; i++) {
                     if (versions[i].version === m.get('version')) {
-                        versions[i].filename = newName;
+                        versions[i]['com.openexchange.file.sanitizedFilename'] = newName;
                         break;
                     }
                 }
@@ -190,7 +191,7 @@ define('io.ox/files/api', [
         },
 
         getDisplayName: function () {
-            return this.get('filename') || this.get('title') || '';
+            return this.get('com.openexchange.file.sanitizedFilename') || this.get('filename') || this.get('title') || '';
         },
 
         getExtension: function () {
@@ -264,7 +265,7 @@ define('io.ox/files/api', [
         },
 
         types: {
-            image: (/^(gif|bmp|tiff|jpe?g|gmp|png)$/),
+            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd)$/),
             audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
             video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
             vcf:   (/^(vcf)$/),
@@ -292,13 +293,17 @@ define('io.ox/files/api', [
 
         hasWritePermissions: function () {
             var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
-                myself = _(array).findWhere({ entity: ox.user_id });
+                myself = _(array).findWhere({ entity: ox.user_id, group: false });
 
             // check if there is a permission for a group, the user is a member of
             // use max permissions available
-            if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
-                // use rampup data so this is not deferred
-                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            if ((!myself || (myself && myself.bits < 2))) {
+                return array.filter(function (perm) {
+                    // use rampup data so this is not deferred
+                    return perm.group === true && _.contains(ox.rampup.user.groups, perm.entity);
+                }).reduce(function (acc, perm) {
+                    return acc || perm.bits >= 2;
+                }, false);
             }
             return !!(myself && (myself.bits >= 2));
         }
@@ -415,11 +420,17 @@ define('io.ox/files/api', [
                 url = (file.meta && file.meta.downloadUrl) || url + name + query + '&delivery=download';
                 break;
             case 'thumbnail':
-                url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
-                break;
+                if (options.noSharding) {
+                    url = (file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling;
+                    break;
+                }
+                return util.getShardingRoot((file.meta && file.meta.thumbnailUrl) || url + query + '&delivery=view' + scaling);
             case 'preview':
-                url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
-                break;
+                if (options.noSharding) {
+                    url = (file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg';
+                    break;
+                }
+                return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
                 url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
                 break;
@@ -432,7 +443,7 @@ define('io.ox/files/api', [
                 break;
         }
 
-        return util.getShardingRoot(url);
+        return ox.apiRoot + url;
     };
 
     //
@@ -444,7 +455,7 @@ define('io.ox/files/api', [
     // guess 23 is "meta"
     // 711 is "number of versions", needed for fixing Bug 52006,
     // number of versions often changes when editing files
-    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711';
+    var allColumns = '1,2,3,5,20,23,108,700,702,703,704,705,707,711,7040';
     var allVersionColumns = http.getAllColumns('files', true);
 
     var attachmentView = coreSettings.get('folder/mailattachments', {});
@@ -537,6 +548,8 @@ define('io.ox/files/api', [
                     params.parent = params.folder;
                     module = 'folders';
                     params.action = 'list';
+                    // use correct columns for folders (causes errors in backend otherwise, UI just get's null values)
+                    params.columns = '1,2,3,5,20,23';
                 }
             }
             if (virtual) {
@@ -552,13 +565,24 @@ define('io.ox/files/api', [
                         return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
                     });
                 }
-                return self.httpGet(module, params).then(function (data) {
-                    // apply filter
-                    if (self.filter) data = _(data).filter(self.filter);
-                    // useSlice helps if server request doesn't support "limit"
-                    return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
+                return $.when(self.httpGet(module, params), ox.manifests.loadPluginsFor('io.ox/files/filter'));
+            }).then(function (data) {
+                // apply custom filter
+                if (_.isFunction(self.filter)) data = _(data).filter(self.filter);
+                // apply filter extensions
+                data = data.filter(function (file) {
+                    return ext.point('io.ox/files/filter').filter(function (p) {
+                        return p.invoke('isEnabled', this, file) !== false;
+                    })
+                    .map(function (p) {
+                        return p.invoke('isVisible', this, file);
+                    })
+                    .reduce(function (acc, isVisible) {
+                        return acc && isVisible;
+                    }, true);
                 });
-
+                // useSlice helps if server request doesn't support "limit"
+                return self.useSlice ? Array.prototype.slice.apply(data, params.limit.split(',')) : data;
             });
         },
 
@@ -574,6 +598,11 @@ define('io.ox/files/api', [
                             folders.push(favoriteFolder);
                         }
                         return folderAPI.multipleLists(['virtual/drive/private', 'virtual/drive/public', 'virtual/filestorage']).then(function (driveFolders) {
+                            if (!capabilities.has('share_links || invite_guests')) {
+                                driveFolders = _.filter(driveFolders, function (folder) {
+                                    return folder.id !== 'virtual/myshares';
+                                });
+                            }
                             folders = folders.concat(driveFolders);
                             switch (String(params.sort)) {
                                 // Name
@@ -681,7 +710,7 @@ define('io.ox/files/api', [
                                 {
                                     facet: 'file_type',
                                     filter: {
-                                        fields: ['file_mimetype'],
+                                        fields: ['file_extension'],
                                         queries: self.mimeTypeFilter
                                     },
                                     value: self.mimeTypeFilter
@@ -1424,6 +1453,10 @@ define('io.ox/files/api', [
          * @return {Deferred} with a boolean
          */
         getCurrentState: function (file, options) {
+
+            //workaround for Bug 53002
+            if (typeof file.current_version === 'boolean') { return $.when(file.current_version); }
+
             return api.versions.load(file, options).then(function (versions) {
                 var currentVersion = false;
                 if (_.isArray(versions)) {

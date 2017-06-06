@@ -15,9 +15,10 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
     'io.ox/backbone/mini-views',
+    'io.ox/core/settings/util',
     'settings!io.ox/calendar',
     'io.ox/core/notifications'
-], function (ext, gt, mini, settings, notifications) {
+], function (ext, gt, mini, util, settings, notifications) {
 
     'use strict';
 
@@ -64,10 +65,9 @@ define('io.ox/calendar/settings/pane', [
         index: 100,
         id: 'calendarsettings',
         draw: function () {
-            var self = this,
-                pane = $('<div class="io-ox-calendar-settings">');
-            self.append($('<div>').addClass('section').append(pane));
-            ext.point(POINT + '/pane').invoke('draw', pane);
+            var holder = $('<div class="io-ox-calendar-settings">');
+            this.append(holder);
+            ext.point(POINT + '/pane').invoke('draw', holder);
         }
     });
 
@@ -75,9 +75,7 @@ define('io.ox/calendar/settings/pane', [
         index: 100,
         id: 'header',
         draw: function () {
-            this.append(
-                $('<h1>').text(gt.pgettext('app', 'Calendar'))
-            );
+            this.append(util.header(gt.pgettext('app', 'Calendar')));
         }
     });
 
@@ -104,36 +102,23 @@ define('io.ox/calendar/settings/pane', [
         draw: function () {
             this.append(
                 $('<fieldset>').append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'interval').addClass('control-label col-sm-4').text(gt('Time scale in minutes')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsInterval(), name: 'interval', model: settings, id: 'interval', className: 'form-control' }).render().$el
-                            )
+                    $('<div class="form-group">').append(
+                        $('<div class="row">').append(
+                            util.select('interval', gt('Time scale in minutes'), settings, optionsInterval())
                         )
                     ),
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'startTime').addClass('control-label col-sm-4').text(gt('Start of working time')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsTime(), name: 'startTime', model: settings, id: 'startTime', className: 'form-control' }).render().$el
-                            )
+                    $('<div class="form-group">').append(
+                        $('<div class="row">').append(
+                            util.select('startTime', gt('Start of working time'), settings, optionsTime())
                         )
                     ),
-                    $('<div>').addClass('form-group').append(
-                        $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'endTime').addClass('control-label col-sm-4').text(gt('End of working time')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsTime(), name: 'endTime', model: settings, id: 'endTime', className: 'form-control' }).render().$el
-                            )
+                    $('<div class="form-group">').append(
+                        $('<div class="row">').append(
+                            util.select('endTime', gt('End of working time'), settings, optionsTime())
                         )
                     ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Show declined appointments')).prepend(
-                                new mini.CheckboxView({ name: 'showDeclinedAppointments', model: settings }).render().$el
-                            )
-                        )
+                    $('<div class="form-group expertmode">').append(
+                        util.checkbox('showDeclinedAppointments', gt('Show declined appointments'), settings)
                     )
                 )
             );
@@ -145,24 +130,14 @@ define('io.ox/calendar/settings/pane', [
         id: 'appointment',
         draw: function () {
             this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('New appointment'))
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('row').append(
-                            $('<label>').attr('for', 'defaultReminder').addClass('control-label col-sm-4').text(gt('Default reminder')),
-                            $('<div>').addClass('col-sm-4').append(
-                                new mini.SelectView({ list: optionsReminder(), name: 'defaultReminder', model: settings, id: 'defaultReminder', className: 'form-control' }).render().$el
-                            )
+                util.fieldset(gt('New appointment'),
+                    $('<div class="form-group expertmode">').append(
+                        $('<div class="row">').append(
+                            util.select('defaultReminder', gt('Default reminder'), settings, optionsReminder())
                         )
                     ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Mark all day appointments as free')).prepend(
-                                new mini.CheckboxView({ name: 'markFulltimeAppointmentsAsFree', model: settings }).render().$el
-                            )
-                        )
+                    $('<div class="form-group expertmode">').append(
+                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
                     )
                 )
             );
@@ -174,31 +149,12 @@ define('io.ox/calendar/settings/pane', [
         id: 'notifications',
         draw: function () {
             this.append(
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle expertmode').append(
-                        $('<h2>').text(gt('Email notifications'))
-                    ),
-                    $('<div>').addClass('form-group expertmode').append(
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notification for appointment changes')).prepend(
-                                new mini.CheckboxView({ name: 'notifyNewModifiedDeleted', model: settings }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notification as appointment creator when participants accept or decline')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsCreator', model: settings }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Receive notification as appointment participant when other participants accept or decline')).prepend(
-                                new mini.CheckboxView({ name: 'notifyAcceptedDeclinedAsParticipant', model: settings }).render().$el
-                            )
-                        ),
-                        $('<div>').addClass('checkbox').append(
-                            $('<label>').addClass('control-label').text(gt('Automatically delete the invitation email after the appointment has been accepted or declined')).prepend(
-                                new mini.CheckboxView({ name: 'deleteInvitationMailAfterAction', model: settings }).render().$el
-                            )
-                        )
+                util.fieldset(gt('Email notifications'),
+                    $('<div class="form-group expertmode">').append(
+                        util.checkbox('notifyNewModifiedDeleted', gt('Receive notification for appointment changes'), settings),
+                        util.checkbox('notifyAcceptedDeclinedAsCreator', gt('Receive notification as appointment creator when participants accept or decline'), settings),
+                        util.checkbox('notifyAcceptedDeclinedAsParticipant', gt('Receive notification as appointment participant when other participants accept or decline'), settings),
+                        util.checkbox('deleteInvitationMailAfterAction', gt('Automatically delete the invitation email after the appointment has been accepted or declined'), settings)
                     )
                 )
             );
@@ -214,13 +170,13 @@ define('io.ox/calendar/settings/pane', [
                     var weekday = m.weekday(index);
                     return {
                         value: weekday.day(),
-                        label: weekday.format('dddd'),
+                        label: weekday.format('dddd')
                     };
                 }),
                 counts = _(new Array(7)).map(function (num, index) {
                     return {
                         value: index + 1,
-                        label: index + 1,
+                        label: index + 1
                     };
                 }),
                 NumberSelectView = mini.SelectView.extend({
@@ -230,24 +186,15 @@ define('io.ox/calendar/settings/pane', [
                 });
             return function () {
                 this.append(
-                    $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle expertmode').append(
-                            $('<h2>').text(gt('Calendar workweek view'))
-                        ),
-                        $('<div>').addClass('form-group expertmode').append(
-                            $('<div>').addClass('row').append(
-                                $('<label>').attr('for', 'num-days-workweek').addClass('control-label col-sm-4').text(gt('Number of days in work week')),
-                                $('<div>').addClass('col-sm-4').append(
-                                    new NumberSelectView({ list: counts, name: 'numDaysWorkweek', model: settings, id: 'num-days-workweek', className: 'form-control' }).render().$el
-                                )
+                    util.fieldset(gt('Calendar workweek view'),
+                        $('<div class="form-group expertmode">').append(
+                            $('<div class="row">').append(
+                                util.select('numDaysWorkweek', gt('Number of days in work week'), settings, counts, NumberSelectView)
                             )
                         ),
-                        $('<div>').addClass('form-group expertmode').append(
-                            $('<div>').addClass('row').append(
-                                $('<label>').attr('for', 'workweek-start').addClass('control-label col-sm-4').text(gt('Work week starts on')),
-                                $('<div>').addClass('col-sm-4').append(
-                                    new NumberSelectView({ list: days, name: 'workweekStart', model: settings, id: 'workweek-start', className: 'form-control' }).render().$el
-                                )
+                        $('<div class="form-group expertmode">').append(
+                            $('<div class="row">').append(
+                                util.select('workweekStart', gt('Work week starts on'), settings, days, NumberSelectView)
                             )
                         )
                     )

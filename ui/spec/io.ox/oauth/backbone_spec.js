@@ -54,7 +54,7 @@ define(['io.ox/oauth/backbone'], function (OAuth) {
                     var m = new Model(),
                         server = ox.fakeServer.create(),
                         globalCallbackSpy = sinon.spy(),
-                        windowOpen = sinon.stub(window, 'open', function () {
+                        windowOpen = sinon.stub(window, 'open').callsFake(function () {
                             return {
                                 focus: _.noop,
                                 close: _.noop

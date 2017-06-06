@@ -20,9 +20,8 @@ define('io.ox/settings/accounts/views', [
     'io.ox/settings/util',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/disposable',
-    'settings!io.ox/mail',
     'gettext!io.ox/settings/accounts'
-], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, mailSettings, gt) {
+], function (ext, accounts, filestorageApi, folderAPI, settingsUtil, listUtils, DisposableView, gt) {
     'use strict';
 
     var createExtpointForSelectedAccount = function (args) {
@@ -51,7 +50,7 @@ define('io.ox/settings/accounts/views', [
             if ((typeof model.get('status') === 'undefined') || model.get('status') === 'ok') return;
 
             return $('<div class="error-wrapper">').append(
-                $('<i class="error-icon fa fa-exclamation-triangle">'),
+                $('<i class="error-icon fa fa-exclamation-triangle" aria-hidden="true">'),
                 $('<div class="error-message">').text(model.get('status').message)
             );
         },
@@ -78,7 +77,7 @@ define('io.ox/settings/accounts/views', [
             },
 
             renderSubTitle: function () {
-                var el = $('<div>').addClass('list-item-subtitle');
+                var el = $('<div class="list-item-subtitle">');
                 ext.point('io.ox/settings/accounts/' + this.model.get('accountType') + '/settings/detail').invoke('renderSubtitle', el, this.model);
                 return el;
             },
@@ -117,23 +116,26 @@ define('io.ox/settings/accounts/views', [
                 var account = { id: this.model.get('id'), accountType: this.model.get('accountType') },
                     self = this;
 
+                if (account.accountType === 'fileStorage') {
+                    account.filestorageService = this.model.get('filestorageService');
+                }
+
                 require(['io.ox/backbone/views/modal'], function (ModalDialog) {
                     new ModalDialog({
                         async: true,
                         title: gt('Delete account')
                     })
-                    .extend({
-                        id: 'default',
-                        draw: function () {
-                            this.$body.append(gt('Do you really want to delete this account?'));
-                        }
+                    .build(function () {
+                        this.$body.append(gt('Do you really want to delete this account?'));
                     })
                     .addCancelButton()
                     .addButton({ action: 'delete', label: gt('Delete account') })
                     .on('delete', function () {
-                        var popup = this;
+                        var popup = this,
+                            // require correct api
+                            req = account.accountType === 'fileStorage' ? 'io.ox/core/api/filestorage' : 'io.ox/keychain/api';
                         settingsUtil.yellOnReject(
-                            require(['io.ox/keychain/api']).then(function (api) {
+                            require([req]).then(function (api) {
                                 return api.remove(account);
                             }).then(
                                 function success() {

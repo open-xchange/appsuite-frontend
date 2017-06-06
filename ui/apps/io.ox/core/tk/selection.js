@@ -87,6 +87,7 @@ define('io.ox/core/tk/selection', [
             isRange,
             getIndex,
             getNode,
+            markFirst,
             selectFirst,
             selectPrevious,
             selectLast,
@@ -177,6 +178,23 @@ define('io.ox/core/tk/selection', [
             }
         };
 
+        markFirst = function (e) {
+            if (bHasIndex && observedItems.length) {
+                var
+                    item = observedItems[0],
+                    obj = item.data;
+
+                clear(e);
+                mark(obj);
+
+                var
+                    key = self.serialize(obj),
+                    $node = getNode(key);
+
+                $node.focus();
+            }
+        };
+
         selectFirst = function (e) {
             if (bHasIndex && observedItems.length) {
                 var item = observedItems[0];
@@ -236,6 +254,12 @@ define('io.ox/core/tk/selection', [
                     } else {
                         selectPrevious(e);
                     }
+                    break;
+                case 36:
+                    selectFirst(e);
+                    break;
+                case 35:
+                    selectLast(e);
                     break;
                 case 32:
                     // last is the current selected/focussed
@@ -413,7 +437,7 @@ define('io.ox/core/tk/selection', [
                 }
                 if (silent !== true) {
                     // append additional argument - the selected object that is named `id`.
-                    self.trigger('select', self.serialize(id), id);
+                    self.trigger('select', self.serialize(id), id); // 'select', fileId, fileObject
                 }
             }
         };
@@ -879,8 +903,18 @@ define('io.ox/core/tk/selection', [
             return this;
         };
 
+        this.markFirst = function () {
+            markFirst();
+            return this;
+        };
+
         this.selectFirst = function () {
             selectFirst();
+            return this;
+        };
+
+        this.selectLast = function () {
+            selectLast();
             return this;
         };
 

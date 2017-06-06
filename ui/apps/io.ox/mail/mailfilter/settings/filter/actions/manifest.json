@@ -1,0 +1,7 @@
+{
+    "namespace": ["core"],
+    "requires": "mailfilter",
+    "device": "!small"
+}
+
+

@@ -26,10 +26,19 @@ define('io.ox/metrics/adapters/console', [
     function log(type, baton) {
         baton = baton || {};
         var id = baton.id || type,
-            data = baton.data,
-            entry = [type, id, JSON.stringify(data)];
+            data = baton.data, entry,
+            level = settings.get('tracking/console/verbosity', 'DEBUG').toLowerCase();
+        // verbosity level
+        switch (level) {
+            case 'debug':
+                entry = [type, id, JSON.stringify(data)];
+                break;
+            case 'info':
+            default:
+                entry = type + ': ' + id;
+        }
         // output
-        console.log(entry);
+        return _.isString(entry) ? console.log('%c' + entry, 'color: white; background-color: grey') : console.log(entry);
     }
 
     point.extend({

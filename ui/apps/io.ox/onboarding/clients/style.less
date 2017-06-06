@@ -23,9 +23,23 @@
 
 .mixin-expanded {
     .content { display: block; }
+    .config { display: flex; }
     .fa-chevron-right { display: none; }
     .fa-chevron-down { display: inline-block; }
 }
+
+/**
+ * :SPECIAL
+ */
+
+// reserve extra space for bars on ios
+.ios:not(.standalone) .client-onboarding.mobile .modal-content {
+    max-height: calc(~"100vh - 88px");
+}
+
+/**
+ * :GENERAL
+ */
 
 .client-onboarding {
 
@@ -48,9 +62,13 @@
         margin: 0;
         &.config {
             font-size: 14px;
-            display: flex;
-            .property, .value { padding: 4px 8px 0 0; }
-            .property { font-weight: 700; }
+            display: none;
+            .title, .property, .value { padding: 4px 8px 0 0; }
+            .title {
+                font-style: italic;
+                &:not(:first-child) { padding-top: 24px; }
+            }
+            .value { font-weight: 700; }
         }
     }
 
@@ -157,9 +175,7 @@
         &[data-type="scenario"] {
             min-height: 400px;
             // align option icons on same main axis
-            .title {
-                min-height: 32px;
-            }
+            .link .title {  min-height: 32px; }
         }
 
         /**

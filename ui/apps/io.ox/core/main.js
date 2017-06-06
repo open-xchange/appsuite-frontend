@@ -30,13 +30,14 @@ define('io.ox/core/main', [
     'io.ox/core/folder/api',
     'io.ox/core/a11y',
     'settings!io.ox/core',
+    'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, gt) {
+], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
 
     'use strict';
 
@@ -297,7 +298,6 @@ define('io.ox/core/main', [
             }
         }
         $('li', launcherDropdown).attr('role', 'menuitem').hide();
-
 
         if (hidden > 0) {
             launchers.append(launcherDropdownTab);
@@ -646,19 +646,16 @@ define('io.ox/core/main', [
         }
 
         function quit(model) {
-            var ariaBasicLabel =
-                    //#. %1$s is app title/name
-                    _.escape(gt('close for %1$s', model.get('title'))),
-                quitApp = $('<a href="#" class="closelink" role="button">').attr('aria-label', ariaBasicLabel)
-                    .append($('<i class="fa fa-times" aria-hidden="true">').attr('title', ariaBasicLabel))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        e.stopImmediatePropagation();
-                        model.getWindow().app.quit();
-                    })
-                    .on('focus', function () {
-                        quitApp.attr('aria-label', ariaBasicLabel);
-                    });
+            var quitApp = $('<a href="#" class="closelink" role="button">').attr('title', getCloseIconLabel(model.get('title')))
+                .append($('<i class="fa fa-times" aria-hidden="true">'))
+                .on('click', function (e) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    model.getWindow().app.quit();
+                })
+                .on('focus', function () {
+                    quitApp.attr('title', getCloseIconLabel(model.get('title')));
+                });
             return quitApp;
         }
 
@@ -697,6 +694,10 @@ define('io.ox/core/main', [
             return manifest;
         }
 
+        function getCloseIconLabel(docTitle) {
+            return _.escape(gt('Close for %1$s', docTitle));
+        }
+
         ox.ui.apps.on('add', function (model) {
 
             if (model.get('title') === undefined) return;
@@ -709,7 +710,6 @@ define('io.ox/core/main', [
 
             model.set('topbarNode', node);
             add(node, launchers, model);
-
             // call extensions to customize
             name = model.get('name') || model.id;
             ext.point('io.ox/core/topbar/launcher').invoke('draw', node, ext.Baton({ model: model, name: name }));
@@ -718,23 +718,26 @@ define('io.ox/core/main', [
             addUserContent(model, node, true);
 
             // add list item
-            node = $('<li>').append(
+            var launchernode = $('<li>').append(
                 $('<a href="#">').addClass(closable ? 'closable' : '').attr({
                     'data-app-name': name,
                     'data-app-guid': model.guid
                 }).text(/*#, dynamic*/gt.pgettext('app', title))
             );
+            // also store dropdown node in app model
+            model.set('launcherNode', launchernode);
 
             //add close button
-            if (closable) node.append(quit(model));
+            if (closable) launchernode.append(quit(model));
 
             launcherDropdown.append(
-                node.on('click', function (e) {
+                launchernode.on('click', function (e) {
                     e.preventDefault();
                     model.launch();
                 })
             );
-            add(node, launcherDropdown, model);
+            add(launchernode, launcherDropdown, model);
+
             tabManager();
         });
 
@@ -763,6 +766,8 @@ define('io.ox/core/main', [
             $('a.apptitle', node).text(_.noI18n(value));
             addUserContent(model, node);
             launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
+            $('a.closelink', node).attr('title', getCloseIconLabel(value));
+
             tabManager();
         });
 
@@ -851,12 +856,13 @@ define('io.ox/core/main', [
             index: 300,
             draw: function () {
                 if (_.device('smartphone')) return;
-
+                var helpView = new HelpView({
+                    iconClass: 'launcher-icon',
+                    href: getHelp
+                });
+                if (helpView.$el.hasClass('hidden')) return;
                 this.append(
-                    addLauncher('right', new HelpView({
-                        iconClass: 'launcher-icon',
-                        href: getHelp
-                    }).render().$el)
+                    addLauncher('right', helpView.render().$el)
                 );
             }
         });
@@ -974,14 +980,18 @@ define('io.ox/core/main', [
             index: 200,
             draw: function () {
                 //replaced by module
-                var node = this;
+                var node = this,
+                    helpView = new HelpView({
+                        content: gt('Help'),
+                        href: getHelp
+                    });
                 node.append(
-                    $('<li class="divider" role="separator"></li>'),
+                    $('<li class="divider" role="separator"></li>')
+                );
+                if (helpView.$el.hasClass('hidden')) return;
+                node.append(
                     $('<li class="io-ox-specificHelp" role="presentation">').append(
-                        new HelpView({
-                            content: gt('Help'),
-                            href: getHelp
-                        }).render().$el.attr('role', 'menuitem')
+                        helpView.render().$el.attr('role', 'menuitem')
                     )
                 );
             }
@@ -1141,7 +1151,7 @@ define('io.ox/core/main', [
                 var link = this.find('#io-ox-topbar-dropdown-icon > a');
                 // popover
                 link.popover({
-                    content: gt("Did you now that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                    content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
                     template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
                     placement: 'bottom'
                 });
@@ -1332,6 +1342,16 @@ define('io.ox/core/main', [
                         target: 'banner/logo',
                         type: 'click',
                         action: 'noop'
+                    });
+
+                    $(document.documentElement).on('mousedown', '.halo-link', function () {
+                        var app = ox.ui.App.getCurrentApp() || new Backbone.Model({ name: 'unknown' });
+                        metrics.trackEvent({
+                            app: 'core',
+                            type: 'click',
+                            action: 'halo',
+                            detail: _.last(app.get('name').split('/'))
+                        });
                     });
                 });
             }
@@ -1593,17 +1613,19 @@ define('io.ox/core/main', [
                         btn1, btn2;
 
                     $('#io-ox-core').append(
-                        dialog = $('<div class="io-ox-restore-dialog" tabindex="0" role="dialog">').append(
-                            $('<div class="header">').append(
-                                $('<h1>').text(gt('Restore applications')),
-                                $('<div>').text(
-                                    gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                        dialog = $('<div class="io-ox-restore-dialog" tabindex="-1" role="dialog" aria-labelledby="restore-heading" aria-describedby="restore-description">').append(
+                            $('<div role="document">').append(
+                                $('<div class="header">').append(
+                                    $('<h1 id="restore-heading">').text(gt('Restore applications')),
+                                    $('<div id="restore-description">').text(
+                                        gt('The following applications can be restored. Just remove the restore point if you don\'t want it to be restored.')
+                                    )
+                                ),
+                                $('<ul class="list-unstyled content">'),
+                                $('<div class="footer">').append(
+                                    btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
+                                    btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                                 )
-                            ),
-                            $('<ul class="list-unstyled content">'),
-                            $('<div class="footer">').append(
-                                btn1 = $('<button type="button" class="cancel btn btn-default">').text(gt('Cancel')),
-                                btn2 = $('<button type="button" class="continue btn btn-primary">').text(gt('Continue'))
                             )
                         )
                     );
@@ -1630,7 +1652,7 @@ define('io.ox/core/main', [
                                     $('<a href="#" role="button" class="remove">').data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
-                                    item.icon ? $('<i>').addClass(item.icon) : $(),
+                                    item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
                                     $('<span>').text(gt.noI18n(info)),
                                     versionInfo
                                 )
@@ -1806,6 +1828,10 @@ define('io.ox/core/main', [
                                     });
                                 });
                             }
+
+                            if (contactsSettings.get('features/furigana', false)) {
+                                require(['l10n/ja_JP/io.ox/register']);
+                            }
                         });
                         if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
                             var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
@@ -1914,6 +1940,9 @@ define('io.ox/core/main', [
             case 'MSG-1031':
             case 'MSG-0114':
             case 'OAUTH-0013':
+            case 'OAUTH-0042':
+            case 'OAUTH-0043':
+            case 'OAUTH-0044':
                 notifications.yell(error);
                 break;
             case 'LGI-0016':

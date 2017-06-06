@@ -193,11 +193,14 @@ define('io.ox/core/dropzone', [], function () {
         // firefox only. Firefox has the strange behavior of only triggering this when no file is dragged
         // so it can be used to clear the dropzones (firefox does not trigger the dragleave event on window leave)
         onMouseenter: function (e) {
+            if (!this.visible) return;
             var from = e.relatedTarget || e.toElement;
             if (!from) {
-                this.leaving = true;
-                clearTimeout(this.timeout);
-                this.onLeave(e);
+                _.delay(function () {
+                    this.leaving = true;
+                    clearTimeout(this.timeout);
+                    this.onLeave(e);
+                }.bind(this), 50);
             }
         },
 

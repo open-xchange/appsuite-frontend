@@ -22,8 +22,6 @@ define('io.ox/backbone/mini-views/upsell', [
 
         tagName: 'div',
 
-        className: 'io-ox-upsell-link',
-
         events: {
             'click a': 'onClick'
         },
@@ -44,6 +42,15 @@ define('io.ox/backbone/mini-views/upsell', [
                 enabled: true
             }, opt, settings.get('features/upsell/' + opt.id), settings.get('features/upsell/' + opt.id + '/i18n/' + ox.language));
 
+            // A11y: Links in foldertree need to be nested in li with role presentation
+            if (/^folderview\//.test(opt.id)) {
+                this.setElement('<li role="presentation">');
+                this.$el.addClass(this.className);
+            }
+
+            // ensure io-ox-upsell-link class
+            this.$el.addClass('io-ox-upsell-link');
+
             this.customize = this.opt.customize;
             this.icon = this.opt.icon;
             this.visible = this.opt.enabled && !upsell.has(this.opt.requires) && upsell.enabled(this.opt.requires);
@@ -51,32 +58,29 @@ define('io.ox/backbone/mini-views/upsell', [
 
         render: function () {
             if (this.visible) {
-                var self = this;
-
-                this.$el.append(
-                    $('<a href="#">').css('color', this.opt.color).append(
-                        this.opt.title,
+                var self = this,
+                    node = $('<a href="#">').css('color', this.opt.color).text(this.opt.title).append(
                         _(this.icon.split(/ /)).map(function (icon, index) {
                             if (icon === '') return;
 
-                            return $('<i class="fa" aria-hidden="true">')
-                                .addClass(icon)
+                            return $('<i class="fa" aria-hidden="true">').addClass(icon)
                                 .css({
                                     'margin-left': (index === 0 && self.opt.title && self.opt.title.length > 0) ? '0.5em' : '',
                                     'color': self.opt.color
                                 });
                         })
-                    )
-                );
+                    );
+                // A11y: Links in foldertree need to be role treeitem
+                if (/^folderview\//.test(this.opt.id)) node.attr('role', 'treeitem');
+
+                this.$el.append(node);
 
                 if (this.customize && _.isFunction(this.customize)) this.customize();
             } else {
                 this.$el.hide();
             }
-
             return this;
         }
-
     });
 
     return UpsellView;

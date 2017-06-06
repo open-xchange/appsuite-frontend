@@ -20,8 +20,9 @@ define.async('io.ox/mail/accounts/view-form', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
     'io.ox/core/folder/picker',
-    'io.ox/core/capabilities'
-], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/core/settings/util'
+], function (notifications, accountAPI, settings, gt, ext, mini, picker, capabilities, util) {
 
     'use strict';
 
@@ -399,13 +400,13 @@ define.async('io.ox/mail/accounts/view-form', [
                     context: 'account',
                     done: function (target) {
                         self.model.set(property, target, { validate: true });
-                        self.$el.find('input[name="' + property + '"]').val(target);
                     },
                     close: function () {
                         self.dialog.resume();
                     },
                     folder: id,
                     module: 'mail',
+                    realNames: true,
                     root: accountId
                 });
             }
@@ -426,12 +427,9 @@ define.async('io.ox/mail/accounts/view-form', [
         return $('<div class="col-sm-7">').append(args);
     }
 
-    function checkbox(text) {
-        var args = _(arguments).toArray();
+    function checkbox(id, text, model) {
         return $('<div class="col-sm-offset-4 col-sm-7">').append(
-            $('<div class="checkbox">').append(
-                $('<label class="control-label">').text(text).prepend(args.slice(1))
-            )
+            util.checkbox(id, text, model)
         );
     }
 
@@ -498,18 +496,12 @@ define.async('io.ox/mail/accounts/view-form', [
                     .addClass('pop3'),
                     // expunge (pop3 only)
                     group(
-                        checkbox(
-                            gt('Remove copy from server after retrieving a message'),
-                            new mini.CheckboxView({ name: 'pop3_expunge_on_quit', model: model }).render().$el
-                        )
+                        checkbox('pop3_expunge_on_quit', gt('Remove copy from server after retrieving a message'), model)
                     )
                     .addClass('pop3'),
                     // delete write-through (pop3)
                     group(
-                        checkbox(
-                            gt('Deleting messages on local storage also deletes them on server'),
-                            new mini.CheckboxView({ name: 'pop3_delete_write_through', model: model }).render().$el
-                        )
+                        checkbox('pop3_delete_write_through', gt('Deleting messages on local storage also deletes them on server'), model)
                     )
                     .addClass('pop3')
                 )
@@ -588,14 +580,17 @@ define.async('io.ox/mail/accounts/view-form', [
                         // offer folder selector if id is not undefined (i.e. while creating a new account)
                         var text = folderLabels[folder], id = model.get('id'), enabled = id !== undefined;
                         folder = folder + '_fullname';
-
+                        /* eslint-disable */
                         return group(
                             label(folder, text),
                             $('<div class="col-sm-7">').append(
                                 enabled ?
                                 // show controls
                                 $('<div class="input-group folderselect enabled">').attr('data-property', folder).append(
-                                    new InputView({ model: model, id: folder }).render().$el.prop('disabled', true),
+                                    new InputView({ model: model, id: folder })
+                                        .on('update', function (node) {
+                                            if (node && _.isString(this.model.get(folder))) node.val(this.model.get(folder).replace(/^default\d+\D/, ''));
+                                        }).render().$el.prop('disabled', true),
                                     $('<span class="input-group-btn">').append(
                                         $('<button type="button" class="btn btn-default">').text(gt('Select'))
                                     )
@@ -638,10 +633,7 @@ define.async('io.ox/mail/accounts/view-form', [
                         capabilities.has('!multiple_mail_accounts') || capabilities.has('!unified-mailbox') || settings.get('dsc/enabled') ?
                         $() :
                         group(
-                            checkbox(
-                                gt('Use unified mail for this account'),
-                                new mini.CheckboxView({ id: 'unified_inbox_enabled', model: model }).render().$el
-                            )
+                            checkbox('unified_inbox_enabled', gt('Use unified mail for this account'), model)
                         )
                     )
                 )
@@ -676,7 +668,7 @@ define.async('io.ox/mail/accounts/view-form', [
             }
 
             // don't show folder settings if this is a new account or we are in a DSC environment
-            if (model.get('id') !== undefined && !settings.get('dsc/enabled')) {
+            if (model.get('id') !== undefined && (model.get('id') === 0 || !settings.get('dsc/enabled'))) {
                 this.append(serverSettingsFolder);
             }
         }

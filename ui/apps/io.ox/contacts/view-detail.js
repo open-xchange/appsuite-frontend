@@ -108,7 +108,7 @@ define('io.ox/contacts/view-detail', [
         id: 'inline-actions',
         draw: function (baton) {
             if (api.looksLikeResource(baton.data)) return;
-            if (coreSettings.set('features/hideAddressBook')) return;
+            if (coreSettings.get('features/hideAddressBook')) return;
             ext.point('io.ox/contacts/detail/actions').invoke('draw', this, baton);
         }
     });
@@ -752,7 +752,7 @@ define('io.ox/contacts/view-detail', [
 
             // this is also used by halo, so we might miss a folder id
             if (!id) return;
-            if (coreSettings.set('features/hideAddressBook')) return;
+            if (coreSettings.get('features/hideAddressBook')) return;
 
             // don't show folders path for folder 6 if global address book is disabled
             if (String(id) === '6' && !capabilities.has('gab')) return;

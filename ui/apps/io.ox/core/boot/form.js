@@ -210,8 +210,8 @@ define('io.ox/core/boot/form', [
         language.render();
 
         // update header
-        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ');
-        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0');
+        $('#io-ox-login-header-prefix').text((sc.pageHeaderPrefix || '\u00A0') + ' ').attr('aria-hidden', false);
+        $('#io-ox-login-header-label').text(sc.pageHeader || '\u00A0').attr('aria-hidden', false);
 
         // update footer
         var footer = sc.copyright ? sc.copyright + ' ' : '';

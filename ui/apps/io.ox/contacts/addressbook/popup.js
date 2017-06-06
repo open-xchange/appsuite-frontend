@@ -20,10 +20,11 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/contacts/util',
     'io.ox/contacts/api',
     'gettext!io.ox/contacts',
+    'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, settings, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, gtCore, settings, mailSettings) {
 
     'use strict';
 
@@ -268,12 +269,20 @@ define('io.ox/contacts/addressbook/popup', [
                 initial_color: util.getInitialsColor(useInitialsColor && initials),
                 keywords: (full_name + ' ' + address + ' ' + department).toLowerCase(),
                 last_name: item.last_name,
-                list: item.mark_as_distributionlist ? item.distribution_list : false,
+                list: processLists(item),
                 mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title
             };
+        }
+
+        function processLists(item) {
+            // avoid needless pmodel display name lookups/redraws after 'select' (bug 51755)
+            if (!item.mark_as_distributionlist) return false;
+            return _.map(item.distribution_list, function (listitem) {
+                return _.extend(listitem, { mail_full_name: util.getMailFullName(listitem) });
+            });
         }
 
         function getDisplayName(str) {
@@ -311,11 +320,11 @@ define('io.ox/contacts/addressbook/popup', [
 
                 item = {
                     caption: _(item.members).pluck('display_name').join(', '),
-                    cid: 'label.' + item.id + '.' + i,
+                    cid: 'virtual/label.' + item.id + '.' + i,
                     display_name: item.display_name,
                     email: addresses,
                     first_name: '',
-                    folder_id: 'label',
+                    folder_id: 'virtual/label',
                     full_name: full_name,
                     full_name_html: util.getFullName(item, true),
                     image: '',
@@ -386,6 +395,7 @@ define('io.ox/contacts/addressbook/popup', [
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
+            help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
             useGABOnly: useGABOnly
         })
@@ -433,7 +443,7 @@ define('io.ox/contacts/addressbook/popup', [
             getDepartments: function (items) {
                 var departments = {};
                 _(items).each(function (item) {
-                    if (item.department.length <= 1) return;
+                    if (!item.department || item.department.length <= 1) return;
                     departments[item.department] = (departments[item.department] || 0) + 1;
                 });
                 return _(departments)
@@ -492,11 +502,6 @@ define('io.ox/contacts/addressbook/popup', [
                 });
                 this.$body.append(this.listView.render().$el);
             },
-            footer: function () {
-                this.$('.modal-footer').prepend(
-                    $('<div class="selection-summary">').hide()
-                );
-            },
             onOpen: function () {
 
                 // hide body initially / add busy animation
@@ -506,7 +511,7 @@ define('io.ox/contacts/addressbook/popup', [
                     if (this.disposed) return;
                     cachedResponse = response;
                     this.items = response.items.sort(sorter);
-                    this.hash = response.hash;
+                    this.store.setHash(response.hash);
                     this.index = response.index;
                     this.search('');
                     this.idle();
@@ -562,6 +567,71 @@ define('io.ox/contacts/addressbook/popup', [
                     this.renderItems(result, { isSearch: isSearch });
                 };
             },
+            tokenview: function () {
+                this.tokenview = new TokenView({ useLabels: useLabels });
+                // handle remove
+                this.tokenview.on('remove', function (cid) {
+                    // remove selected (non-visible)
+                    this.store.remove(cid);
+                    // remove selected (visible)
+                    var selection = this.listView.selection;
+                    selection.uncheck(selection.getNode(cid));
+                    selection.triggerChange();
+                }.bind(this));
+                // handle clear
+                this.tokenview.on('clear', function () {
+                    this.store.clear();
+                    this.listView.selection.clear();
+                    this.listView.selection.triggerChange();
+                }.bind(this));
+            },
+            store: function () {
+                this.store = createStore();
+                this.listenTo(this.listView, 'selection:clear', this.store.clear);
+                this.listenTo(this.listView, 'selection:add', this.store.add);
+                this.listenTo(this.listView, 'selection:remove', this.store.remove);
+
+                function createStore() {
+                    var hash = {}, selection = {};
+                    return {
+                        setHash: function (data) {
+                            // full data
+                            hash = data;
+                        },
+                        add: function (list) {
+                            _(list).each(function (id) { selection[id] = true; });
+                        },
+                        remove: function (list) {
+                            list = [].concat(list);
+                            _(list).each(function (id) {
+                                delete selection[id];
+                            });
+                        },
+                        clear: function () {
+                            selection = {};
+                        },
+                        getIds: function () {
+                            return _(selection).keys();
+                        },
+                        get: function () {
+                            return _(selection)
+                                .chain()
+                                .keys()
+                                .map(function (cid) { return hash[cid]; }, this)
+                                .compact()
+                                .value();
+                        },
+                        resolve: function (cid) {
+                            return hash[cid];
+                        }
+                    };
+                }
+            },
+            footer: function () {
+                this.$('.modal-footer').prepend(
+                    this.tokenview.$el
+                );
+            },
             onInput: function () {
                 var view = this;
                 var onInput = _.debounce(function () {
@@ -594,42 +664,17 @@ define('io.ox/contacts/addressbook/popup', [
             },
             onSelectionChange: function () {
 
-                var selection = this.selection = {};
-
-                function clearSelection(e) {
-                    e.preventDefault();
-                    selection = this.selection = {};
-                    this.listView.selection.clear();
-                    this.listView.selection.triggerChange();
-                }
+                if (!this.tokenview) return;
 
                 this.listenTo(this.listView, 'selection:change', function () {
 
-                    var array = this.flattenItems(_(selection).keys()),
-                        summary = this.$('.selection-summary').empty(),
-                        n = array.length,
-                        hasItems = !!n;
+                    var list = this.store.get();
+                    // pick relavant values
+                    this.tokenview.render(_.map(list, function (obj) {
+                        return { title: obj.email, cid: obj.cid };
+                    }));
 
-                    if (!hasItems) return summary.hide();
-
-                    var addresses = _(array).pluck('email').join(', ');
-                    summary.append(
-                        $('<div>').append(
-                            $('<span class="count pull-left">').text(
-                                useLabels ?
-                                //#. %1$d is number of selected items (addresses/groups) in the list
-                                gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', n), n) :
-                                //#. %1$d is number of selected addresses
-                                gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', n), n)
-                            ),
-                            $('<a href="#" class="pull-right" role="button">')
-                            .text(gt('Clear selection'))
-                            .on('click', $.proxy(clearSelection, this))
-                        ),
-                        $('<div class="addresses">').attr('title', addresses).text(addresses)
-                    );
-
-                    summary.show();
+                    if (!list.length) return;
 
                     // adjust scrollTop to avoid overlapping of last item (bug 49035)
                     var focus = this.listView.$('.list-item:focus');
@@ -640,15 +685,7 @@ define('io.ox/contacts/addressbook/popup', [
                         height = this.listView.$el.outerHeight();
 
                     if (bottom > height) this.listView.el.scrollTop += bottom - height;
-                });
-
-                this.listenTo(this.listView, 'selection:add', function (array) {
-                    _(array).each(function (id) { selection[id] = true; });
-                });
-
-                this.listenTo(this.listView, 'selection:remove', function (array) {
-                    _(array).each(function (id) { delete selection[id]; });
-                });
+                }.bind(this));
             }
         })
         .build(function () {
@@ -711,7 +748,7 @@ define('io.ox/contacts/addressbook/popup', [
                     if (appeared[url]) node.css('background-image', 'url(' + url + ')'); else node.lazyload();
                 });
                 // restore selection
-                var ids = _(this.selection).keys();
+                var ids = this.store.getIds();
                 this.listView.selection.set(ids);
             };
 
@@ -757,7 +794,7 @@ define('io.ox/contacts/addressbook/popup', [
             this.resolveItems = function (ids) {
                 return _(ids)
                     .chain()
-                    .map(function (cid) { return this.hash[cid]; }, this)
+                    .map(function (cid) { return this.store.resolve(cid); }, this)
                     .compact()
                     .value();
             };
@@ -793,7 +830,7 @@ define('io.ox/contacts/addressbook/popup', [
                 this.$body.empty().addClass('error').text(e.error || e);
             },
             'select': function () {
-                var ids = _(this.selection).keys();
+                var ids = this.store.getIds();
                 if (ox.debug) console.log('select', ids, this.flattenItems(ids));
                 if (_.isFunction(callback)) callback(this.flattenItems(ids));
             }
@@ -812,10 +849,220 @@ define('io.ox/contacts/addressbook/popup', [
     void require(['io.ox/contacts/addressbook/popup'], function (popup) { popup.open(_.inspect); });
     */
 
+    function getTemplate() {
+        return _.template(
+            // toolbar
+            '<% var actionlabel = gt("Clear selection"); %>' +
+            '<div class="toolbar">' +
+            '    <span role="header" aria-live="polite class="count pull-left">' +
+            '       <%= statuslabel %>' +
+            '    </span>' +
+            '    <a href="#" class="pull-right clear" role="button">' +
+            '       <%= actionlabel %>' +
+            '    </a>' +
+            '</div>' +
+            // list
+            '<% var arialabel = gtCore("Use cursor keys to navigate"); %>' +
+            '<% var tokenlabel = gtCore("Press backspace to remove"); %>' +
+            '<% var actionlabel = gtCore("Remove"); %>' +
+            '<ul class="addresses unstyled" tabindex="0" aria-label="<%= arialabel %>" aria-activedescendant="">' +
+            '<% _(list).each(function (item, index) { %>' +
+            '  <% var id = _.uniqueId("token") ;%>' +
+            '  <li class="token" id="<%= id %>" data-cid="<%= item.cid %>" data-index="<%= index %>" title="<%= item.title %>" aria-label="<%= tokenlabel %>">' +
+            '    <span class="token-label" aria-hidden=true><%= item.title %></span>' +
+            '    <a href="#" class="token-action remove" tabindex="-1" aria-hidden=true title="<%= actionlabel%>">' +
+            '      <i class="fa fa-times" aria-hidden=true></i>' +
+            '    </a>' +
+            '  </li>' +
+            '<% }); %>' +
+            '</ul>'
+        );
+    }
+
+    function Iterator(context) {
+        function get(index) {
+            return context.$list.get(index);
+        }
+        return {
+            first: function () {
+                return get(0);
+            },
+            last: function () {
+                return get(context.$list.length - 1);
+            },
+            next: function () {
+                if (context.$selected.is(':last-child')) return this.first();
+                var index = this.current();
+                return index < 0 ? this.first() : get(index + 1);
+            },
+            prev: function () {
+                if (context.$selected.is(':first-child')) return this.last();
+                var index = this.current();
+                return index < 0 ? this.last() : get(index - 1);
+            },
+            current: function () {
+                return context.$list.index(context.$selected);
+            }
+        };
+    }
+
+    /**
+    * - summary of an externally managed selection
+    * - minimal set of actions (remove single item, clear whole selection)
+    * - external logic has to trigger render() on selection change
+    * - external logic has to process triggered events: 'remove' and 'clear'
+    */
+
+    var TokenView = Backbone.DisposableView.extend({
+
+        className: 'selection-summary',
+
+        initialize: function (opt) {
+            this.opt = _.extend({
+                selector: '.addresses',
+                template: getTemplate(),
+                useLabels: false
+            }, opt);
+            // references
+            this.$list = $();
+            this.$selected = $();
+            // listen
+            this.$el
+                .attr({ role: 'region', tabindex: 0 })
+                .on('focusin', this.opt.selector, this.onFocus.bind(this))
+                .on('focusout', this.opt.selector, this.onBlur.bind(this))
+                .on('keydown', this.opt.selector, this.onKeydown.bind(this))
+                .on('click', '.token', this.onClick.bind(this))
+                .on('click', '.remove', this.onRemove.bind(this))
+                .on('click', '.clear', this.onClear.bind(this));
+            // iterator
+            this.iterator = Iterator(this);
+        },
+
+        getContainer: function () {
+            return this.$(this.opt.selector);
+        },
+
+        // param: index or node
+        select: function (node) {
+            // reset old
+            this.$selected
+                .removeAttr('aria-selected')
+                .removeClass('selected');
+            // set new
+            this.$selected = $(node)
+                .attr('aria-selected', true)
+                .addClass('selected');
+            // update container
+            this.getContainer().attr('aria-activedescendant', this.$selected.attr('id'));
+        },
+
+        remove: function (node) {
+            if (!node || !node.length) node = this.$selected;
+            // propagate
+            this.trigger('remove', node.attr('data-cid'));
+            // restore focus after remove/render was triggered
+            if (this.$list.length) this.getContainer().focus();
+        },
+
+        render: function (list) {
+            var length = list.length;
+
+            this.$el.empty();
+
+            if (!length) {
+                this.$el.hide();
+                return this;
+            }
+
+            var statuslabel = this.opt.useLabels ?
+                //#. %1$d is number of selected items (addresses/groups) in the list
+                gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', length), length) :
+                //#. %1$d is number of selected addresses
+                gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', length), length);
+
+            this.$el.append(
+                this.opt.template({
+                    list: list,
+                    statuslabel: statuslabel,
+                    gt: gt,
+                    gtCore: gtCore
+                })
+            );
+
+            // update references
+            this.$list = this.getContainer().children();
+            // restore selection
+            this.restore();
+            this.$el.show();
+
+            return this;
+        },
+
+        restore: function () {
+            var node;
+            if (!this.$list.length || this.$list.index(this.$selected) > -1) return;
+            // redraw of previously selected
+            if (this.$selected.attr('data-cid')) {
+                node = this.$list.filter('[data-cid="' + this.$selected.attr('data-cid') + '"]');
+                if (node.length) return this.select(node);
+            }
+            // restore index of removed token
+            if (this.$selected.attr('data-index')) {
+                node = this.$list.get(parseInt(this.$selected.attr('data-index'), 10));
+                if (node) return this.select(node);
+                return this.select(this.iterator.last());
+            }
+            this.select(this.iterator.first());
+        },
+
+        onFocus: function () {
+            this.getContainer().addClass('active');
+        },
+
+        onBlur: function () {
+            this.getContainer().removeClass('active');
+        },
+
+        onClick: function (e) {
+            this.select($(e.target).closest('.token'));
+        },
+
+        onRemove: function (e) {
+            this.remove($(e.target).closest('.token'));
+        },
+
+        onClear: function (e) {
+            e.preventDefault();
+            this.trigger('clear');
+        },
+
+        onKeydown: function (e) {
+            switch (e.which) {
+                case 37:
+                case 38:
+                    this.select(this.iterator.prev());
+                    break;
+                case 39:
+                case 40:
+                    this.select(this.iterator.next());
+                    break;
+                case 8:
+                    this.remove();
+                    break;
+                default:
+                    return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+
     return {
         buildIndex: buildIndex,
         searchIndex: searchIndex,
         getAllMailAddresses: getAllMailAddresses,
+        TokenView: TokenView,
         open: open
     };
 });

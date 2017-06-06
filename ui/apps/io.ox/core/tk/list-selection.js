@@ -199,7 +199,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         },
 
         isMultiple: function (e) {
-            return e && (e.metaKey || e.ctrlKey || this.isCheckmark(e));
+            return e && (e.metaKey || e.ctrlKey || /35|36/.test(e.which) || this.isCheckmark(e));
         },
 
         isEmpty: function () {
@@ -368,7 +368,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // cursor left/right have no effect in a list
             var grid = this.view.$el.hasClass('grid-layout'),
-                cursorLeftRight = e.which === 37 || e.which === 39;
+                cursorLeftRight = /37|39/.test(e.which);
             if (!grid && cursorLeftRight) return;
 
             // get current index
@@ -380,13 +380,13 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 column = index % width;
 
             // compute new index
-            var cursorUpDown = e.which === 38 || e.which === 40,
-                cursorBack = e.which === 37 || e.which === 38,
+            var cursorUpDown = /38|40|35|36/.test(e.which),
+                cursorBack = /37|38|36/.test(e.which),
                 step = grid && cursorUpDown ? width : 1;
             index += cursorBack ? -step : +step;
 
-            // move to very last element on cursor down?
-            if (step > 1 && e.which === 40 && index >= items.length && column >= (items.length % width)) index = items.length - 1;
+            // move to very last element on cursor down or end?
+            if (step > 1 && /40|35/.test(e.which) && index >= items.length && column >= (items.length % width)) index = items.length - 1;
 
             // out of bounds?
             index = this.outOfBounds(index, items);
@@ -397,7 +397,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             // jump to top/bottom OR range select / single select
             if (this.isMultiple(e)) {
-                index = (e.which === 38 ? 0 : -1);
+                index = (/38|36/.test(e.which) ? 0 : -1);
             }
 
             this.resetTabIndex(items, items.eq(index));
@@ -468,7 +468,9 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     this.view.trigger('selection:delete', this.get());
                     break;
 
-                // cursor left/right up/down
+                // home/end cursor left/right up/down
+                case 35:
+                case 36:
                 case 37:
                 case 38:
                 case 39:
@@ -1061,6 +1063,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         onSpace: function (e) {
             // actually same as a click
             this.onClick(e);
+            e.preventDefault();
         },
 
         onCursor: function (e) {

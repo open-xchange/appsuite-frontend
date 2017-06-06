@@ -25,6 +25,12 @@ define('io.ox/mail/categories/mediator', [
 
     'use strict';
 
+    /**
+    * mail app property 'categories': feature toggle
+    * mail listview model property 'category_id': mail api requests param
+    * mail app property 'category_id': stores last selected category
+    */
+
     // helpers
     var DEFAULT_CATEGORY = 'general',
         INBOX = settings.get('folder/inbox'),
@@ -95,10 +101,10 @@ define('io.ox/mail/categories/mediator', [
                 if (!app.queues.importEML) return;
                 app.queues.importEML.on('stop', function (e, last, position, files) {
                     var source = helper.getInitialCategoryId(),
-                        target = app.props.get('category_id'),
+                        target = app.listView.model.get('category_id'),
                         imported;
-                    // stop when diabled or imported to 'general'
-                    if (!target || (source === target)) return;
+                    // stop when not active or imported to 'general'
+                    if (!helper.isVisible() || !target || (source === target)) return;
                     // pick successful reponses
                     imported = _(files).chain()
                                 .pluck('response')

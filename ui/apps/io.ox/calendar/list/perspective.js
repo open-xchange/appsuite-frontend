@@ -35,8 +35,9 @@ define('io.ox/calendar/list/perspective', [
     };
 
     perspective.updateColor = function (model) {
+        if (!model) return;
         $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
-            this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + model.get('meta').color_label);
+            this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + (model.get('meta') ? model.get('meta').color_label || '1' : '1'));
         });
     };
 

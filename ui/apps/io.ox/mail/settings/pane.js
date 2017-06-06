@@ -16,6 +16,7 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/api/user',
     'io.ox/core/capabilities',
     'io.ox/contacts/api',
+    'io.ox/core/settings/util',
     'io.ox/mail/util',
     'io.ox/core/extensions',
     'io.ox/core/notifications',
@@ -24,7 +25,7 @@ define('io.ox/mail/settings/pane', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/colorpicker'
-], function (settings, userAPI, capabilities, contactsAPI, mailUtil, ext, notifications, gt, api, mini, Dropdown, Colorpicker) {
+], function (settings, userAPI, capabilities, contactsAPI, util, mailUtil, ext, notifications, gt, api, mini, Dropdown, Colorpicker) {
 
     'use strict';
 
@@ -184,19 +185,6 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
-    function fieldset(text) {
-        var args = _(arguments).toArray();
-        return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
-    }
-
-    function checkbox(id, label) {
-        var args = _(arguments).toArray();
-        if (!isConfigurable(id)) return $();
-        return $('<div class="checkbox">').append(
-            $('<label class="control-label">').text(label).prepend(args.slice(2))
-        );
-    }
-
     function isConfigurable(id) {
         return settings.isConfigurable(id);
     }
@@ -205,52 +193,28 @@ define('io.ox/mail/settings/pane', [
         index: 200,
         id: 'display',
         draw: function () {
-            this.append(fieldset(
+            this.append(util.fieldset(
                 gt('Display'),
                 // html
-                checkbox(
-                    'allowHtmlMessages',
-                    gt('Allow html formatted emails'),
-                    new mini.CheckboxView({ name: 'allowHtmlMessages', model: settings }).render().$el
-                ),
+                util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
                 // images
-                checkbox(
-                    'allowHtmlImages',
-                    gt('Allow pre-loading of externally linked images'),
-                    new mini.CheckboxView({ name: 'allowHtmlImages', model: settings }).render().$el
-                ),
+                util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
                 // emojis
-                checkbox(
-                    'displayEmoticons',
-                    gt('Display emoticons as graphics in text emails'),
-                    new mini.CheckboxView({ name: 'displayEmoticons', model: settings }).render().$el
-                ),
+                util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
                 // colored quotes
-                checkbox(
-                    'isColorQuoted',
-                    gt('Color quoted lines'),
-                    new mini.CheckboxView({ name: 'isColorQuoted', model: settings }).render().$el
-                ),
+                util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
                 // fixed width
-                checkbox(
-                    'useFixedWidthFont',
-                    gt('Use fixed-width font for text mails'),
-                    new mini.CheckboxView({ name: 'useFixedWidthFont', model: settings }).render().$el
-                ),
-                // beautify plain text
-                checkbox(
-                    'beautifyPlainText',
-                    //#. prettify or beautify
-                    //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-                    gt('Prettify plain text mails'),
-                    new mini.CheckboxView({ name: 'beautifyPlainText', model: settings }).render().$el
-                ),
+                util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
+                // // beautify plain text
+                // hidden until bug 52294 gets fixed
+                // util.checkbox('beautifyPlainText',
+                //     //#. prettify or beautify
+                //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                //     gt('Prettify plain text mails'),
+                //     settings
+                // ),
                 // read receipts
-                checkbox(
-                    'sendDispositionNotification',
-                    gt('Show requests for read receipts'),
-                    new mini.CheckboxView({ name: 'sendDispositionNotification', model: settings }).render().$el
-                )
+                util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings)
             ));
         }
     });
@@ -263,33 +227,17 @@ define('io.ox/mail/settings/pane', [
             var contactCollect = !!capabilities.has('collect_email_addresses');
 
             this.append(
-                fieldset(
+                util.fieldset(
                     gt('Common'),
-                    checkbox(
-                        'removeDeletedPermanently',
-                        gt('Permanently remove deleted emails'),
-                        new mini.CheckboxView({ name: 'removeDeletedPermanently', model: settings }).render().$el
-                    ),
-                    contactCollect ? checkbox(
-                        'contactCollectOnMailTransport',
-                        gt('Automatically collect contacts in the folder "Collected addresses" while sending'),
-                        new mini.CheckboxView({ name: 'contactCollectOnMailTransport', model: settings }).render().$el
-                    ) : [],
-                    contactCollect ? checkbox(
-                        'contactCollectOnMailAccess',
-                        gt('Automatically collect contacts in the folder "Collected addresses" while reading'),
-                        new mini.CheckboxView({ name: 'contactCollectOnMailAccess', model: settings }).render().$el
-                    ) : [],
+                    util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
+                    contactCollect ? util.checkbox('contactCollectOnMailTransport', gt('Automatically collect contacts in the folder "Collected addresses" while sending'), settings) : [],
+                    contactCollect ? util.checkbox('contactCollectOnMailAccess', gt('Automatically collect contacts in the folder "Collected addresses" while reading'), settings) : [],
                     // mailto handler registration
-                    checkbox(
-                        'features/registerProtocolHandler',
-                        gt('Ask for mailto link registration'),
-                        new mini.CheckboxView({ name: 'features/registerProtocolHandler', model: settings }).render().$el
-                    )
+                    util.checkbox('features/registerProtocolHandler', gt('Ask for mailto link registration'), settings)
                     .append(
                         // if supported add register now link
                         navigator.registerProtocolHandler ?
-                        $('<a href="#" >').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
+                        $('<a href="#" role="button">').text(gt('Register now')).css('margin-left', '8px').on('click', function (e) {
                             e.preventDefault();
                             var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
                             navigator.registerProtocolHandler(
@@ -297,11 +245,7 @@ define('io.ox/mail/settings/pane', [
                             );
                         }) : []
                     ),
-                    settings.get('features/unseenFolder', false) ? checkbox(
-                        'unseenMessagesFolder',
-                        gt('Show folder with all unseen messages'),
-                        new mini.CheckboxView({ name: 'unseenMessagesFolder', model: settings }).render().$el
-                    ) : []
+                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ? util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
                 )
             );
         }
@@ -361,22 +305,10 @@ define('io.ox/mail/settings/pane', [
 
 
             this.append(
-                fieldset(gt('Compose'),
-                    checkbox(
-                        'appendVcard',
-                        gt('Append vCard'),
-                        new mini.CheckboxView({ name: 'appendVcard', model: settings }).render().$el
-                    ),
-                    checkbox(
-                        'appendMailTextOnReply',
-                        gt('Insert the original email text to a reply'),
-                        new mini.CheckboxView({ name: 'appendMailTextOnReply', model: settings }).render().$el
-                    ),
-                    checkbox(
-                        'confirmReplyToMailingLists',
-                        gt('Confirm recipients when replying to a mailing list'),
-                        new mini.CheckboxView({ name: 'confirmReplyToMailingLists', model: settings }).render().$el
-                    )
+                util.fieldset(gt('Compose'),
+                    util.checkbox('appendVcard', gt('Append vCard'), settings),
+                    util.checkbox('appendMailTextOnReply', gt('Insert the original email text to a reply'), settings),
+                    util.checkbox('confirmReplyToMailingLists', gt('Confirm recipients when replying to a mailing list'), settings)
                     // $('<div class="checkbox">').append(
                     //     //#. this setting is about what happens when the user presses <enter>
                     //     //#. in mail compose: either simple line breaks (<br> tags) or paragraphs (<p> tags)
@@ -385,21 +317,19 @@ define('io.ox/mail/settings/pane', [
                     //     )
                     // )
                 ),
-                isConfigurable('forwardMessageAs') ? fieldset(gt('Forward emails as'),
+                isConfigurable('forwardMessageAs') ? util.fieldset(
+                    gt('Forward emails as'),
                     new mini.RadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: settings }).render().$el
                 ) : [],
 
-                isConfigurable('messageFormat') && _.device('!smartphone') ? fieldset(
+                isConfigurable('messageFormat') && _.device('!smartphone') ? util.fieldset(
                     gt('Format emails as'),
                     new mini.RadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
                 ) : [],
 
                 (_.device('smartphone') ? '' : defaultStyleSection = [
-                    $('<div>').addClass('settings sectiondelimiter'),
-                    $('<fieldset>').append(
-                        $('<legend>').addClass('sectiontitle').append(
-                            $('<h2>').text(gt('Default font style'))
-                        ),
+                    $('<div class="settings sectiondelimiter">'),
+                    util.fieldset(gt('Default font style'),
                         $('<dev class="col-xs-12 col-md-12">').append(
                             $('<div class="row">').append(
                                 fontFamilySelect.render().$el,
@@ -408,23 +338,20 @@ define('io.ox/mail/settings/pane', [
                                     new Colorpicker({ name: 'defaultFontStyle/color', model: settings, className: 'dropdown', label: gt('Color'), caret: true }).render().$el
                                 )
                             ),
-                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look like.')).css(getCSS()))
+                            $('<div class="row">').append(exampleText = $('<div class="example-text">').text(gt('This is how your message text will look.')).css(getCSS()))
                         )
                     )]
                 ),
 
-                $('<div>').addClass('settings sectiondelimiter'),
-                $('<fieldset>').append(
-                    $('<legend>').addClass('sectiontitle sr-only').append(
-                        $('<h2>').text(gt('Additional settings'))
-                    ),
+                $('<div class="settings sectiondelimiter">'),
+                util.fieldset(gt('Additional settings'),
                     $('<dev class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'defaultSendAddress' }).text(gt('Default sender address')),
+                            $('<label for="defaultSendAddress">').text(gt('Default sender address')),
                             new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: settings, id: 'defaultSendAddress', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'autoSaveDraftsAfter' }).addClass('control-label').text(gt('Auto-save email drafts')),
+                            $('<label for="autoSaveDraftsAfter">').text(gt('Auto-save email drafts')),
                             new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: settings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
                         ),
                         $('<div class="row">').append(

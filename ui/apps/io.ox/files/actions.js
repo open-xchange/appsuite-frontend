@@ -12,19 +12,15 @@
  */
 /* global blankshield */
 define('io.ox/files/actions', [
-
     'io.ox/core/folder/api',
     'io.ox/files/api',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
-
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/capabilities',
-
     'settings!io.ox/files',
     'gettext!io.ox/files'
-
 ], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';
@@ -596,6 +592,9 @@ define('io.ox/files/actions', [
                             } else {
                                 require(['io.ox/core/yell'], function (yell) {
                                     yell('error', response);
+                                    // bug 53498: refresh the list to display the not moved elements again after a failed move,
+                                    // when it's working without this sometimes, it's due to a side effect from pagination
+                                    api.trigger('reload:listview');
                                 });
                             }
                         }
@@ -813,7 +812,7 @@ define('io.ox/files/actions', [
     new links.ActionLink('io.ox/files/links/toolbar/share', {
         index: 200,
         id: 'getalink',
-        label: gt('Get link'),
+        label: gt('Create sharing link'),
         //#. sharing: a link will be created
         description: gt('Everybody gets the same link. The link just allows to view the file or folder.'),
         ref: 'io.ox/files/actions/getalink'
@@ -852,11 +851,14 @@ define('io.ox/files/actions', [
     // add another link for the viewer
     ext.point('io.ox/core/viewer/toolbar/links/drive').extend(new links.Link({
         id: 'editor',
-        index: 100,
+        index: 110,
         prio: 'hi',
         mobile: 'lo',
         label: gt('Edit'),
-        ref: 'io.ox/files/actions/editor'
+        ref: 'io.ox/files/actions/editor',
+        customize: function () {
+            this.attr('role', 'button');
+        }
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
@@ -922,7 +924,7 @@ define('io.ox/files/actions', [
         index: index += 100,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('Get link'),
+        label: gt('Create sharing link'),
         ref: 'io.ox/files/actions/getalink',
         section: 'share'
     }));

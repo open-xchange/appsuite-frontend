@@ -59,7 +59,7 @@ define('io.ox/core/notifications/badgeview', [
         },
         onToggle: function (open) {
             this.$el.attr({
-                'aria-expanded': !!open,
+                'aria-expanded': !!open
             });
         },
         render: function () {

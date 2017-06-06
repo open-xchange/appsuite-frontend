@@ -45,6 +45,9 @@ define('io.ox/calendar/util', [
         superessiveWeekdays = [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
+            gt.pgettext('superessive', 'Sunday'),
+            //#. superessive of the weekday
+            //#. will only be used in a form like “Happens every week on $weekday”
             gt.pgettext('superessive', 'Monday'),
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
@@ -60,10 +63,7 @@ define('io.ox/calendar/util', [
             gt.pgettext('superessive', 'Friday'),
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
-            gt.pgettext('superessive', 'Saturday'),
-            //#. superessive of the weekday
-            //#. will only be used in a form like “Happens every week on $weekday”
-            gt.pgettext('superessive', 'Sunday')
+            gt.pgettext('superessive', 'Saturday')
         ];
 
     var that = {
@@ -443,11 +443,15 @@ define('io.ox/calendar/util', [
                 trigger: opt.trigger
             }).on('blur dispose', function () {
                 $(this).popover('hide');
+                // set correct state or toggle doesn't work on next click
+                $(this).data('bs.popover').inState.click = false;
             });
 
             if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
                 parent.scrollParent().on('scroll', function () {
                     parent.popover('hide');
+                    // set correct state or toggle doesn't work on next click
+                    parent.data('bs.popover').inState.click = false;
                 });
             }
 
@@ -490,7 +494,7 @@ define('io.ox/calendar/util', [
                         var mask = 1 << ((index + firstDayOfWeek) % 7);
                         if ((days & mask) !== 0) {
                             return options.superessive ?
-                                superessiveWeekdays[index] :
+                                superessiveWeekdays[(index + firstDayOfWeek) % 7] :
                                 moment().weekday(index).format('dddd');
                         }
                     }).compact().value();
@@ -617,6 +621,44 @@ define('io.ox/calendar/util', [
             var str = that.getRecurrenceDescription(data);
             if (data.recurrence_type > 0 && (data.until || data.occurrences)) str += ' ' + that.getRecurrenceEnd(data);
             return str;
+        },
+        // basically the same as in recurrence-view, just without model
+        // used to fix reccurence information when Ïging
+        updateRecurrenceDate: function (appointment, old_start_date) {
+            if (!appointment || !old_start_date) return;
+
+            var type = appointment.recurrence_type;
+            if (type === 0) return;
+            var oldDate = moment(old_start_date),
+                date = moment(appointment.start_date);
+
+            // if weekly and only single day selected
+            if (type === 2 && appointment.days === 1 << oldDate.day()) {
+                appointment.days = 1 << date.day();
+            }
+
+            // if monthly or yeary, adjust date/day of week
+            if (type === 3 || type === 4) {
+                if (_(appointment).has('days')) {
+                    // repeat by weekday
+                    appointment.day_in_month = ((date.date() - 1) / 7 >> 0) + 1;
+                    appointment.days = 1 << date.day();
+                } else {
+                    // repeat by date
+                    appointment.day_in_month = date.date();
+                }
+            }
+
+            // if yearly, adjust month
+            if (type === 4) {
+                appointment.month = date.month();
+            }
+
+            // change until
+            if (appointment.until && moment(appointment.until).isBefore(date)) {
+                appointment.until = date.add(1, ['d', 'w', 'M', 'y'][appointment.recurrence_type - 1]).valueOf();
+            }
+            return appointment;
         },
 
         getNote: function (data) {

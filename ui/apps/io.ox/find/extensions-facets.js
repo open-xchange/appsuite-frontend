@@ -13,12 +13,11 @@
 
 define('io.ox/find/extensions-facets', [
     'io.ox/core/extensions',
-    'settings!io.ox/core',
     'io.ox/backbone/mini-views/toolbar',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/help',
     'gettext!io.ox/core'
-], function (ext, settings, Toolbar, Dropdown, HelpView, gt) {
+], function (ext, Toolbar, Dropdown, HelpView, gt) {
 
     'use strict';
 
@@ -217,15 +216,15 @@ define('io.ox/find/extensions-facets', [
                 'contacts': 'ox.appsuite.user.sect.contacts.search.html',
                 'calendar': 'ox.appsuite.user.sect.calendar.search.html',
                 'tasks': 'ox.appsuite.user.sect.tasks.search.html',
-                'files': 'ox.appsuite.user.sect.files.search.html',
+                'files': 'ox.appsuite.user.sect.files.search.html'
             };
             return function (baton) {
                 var target = links[baton.app.getModuleParam()];
                 if (!target) return;
+                var helpView = new HelpView({ href: target });
+                if (helpView.$el.hasClass('hidden')) return;
                 this.append($('<li class="pull-right">').append(
-                    $('<a href="#">').append(
-                        new HelpView({ href: target }).render().$el
-                    )
+                    helpView.render().$el
                 ));
             };
         })()

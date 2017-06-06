@@ -318,7 +318,7 @@ define('io.ox/mail/util', [
             if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
@@ -540,7 +540,8 @@ define('io.ox/mail/util', [
             if (!_.isArray(blacklist)) return _.constant(false);
             return function (data) {
                 if (!_.isObject(data)) return false;
-                return accountAPI.isMalicious(data.folder_id, blacklist);
+                // nested mails don't have their own folder id. So use the parent mails folder id
+                return accountAPI.isMalicious(data.folder_id || data.parent.folder_id, blacklist);
             };
         })(),
 
@@ -575,7 +576,6 @@ define('io.ox/mail/util', [
 
         fixInlineImages: function (data) {
             // look if /ajax needs do be replaced
-            console.log('add ajax?');
             return data
                 .replace(new RegExp('(<img[^>]+src=")' + ox.abs + ox.apiRoot), '$1' + prefix)
                 .replace(new RegExp('(<img[^>]+src=")' + ox.apiRoot, 'g'), '$1' + prefix)
@@ -648,7 +648,7 @@ define('io.ox/mail/util', [
                     if (obj.disp === 'attachment' || /^image/.test(obj.content_type)) {
                         fixIds(data, obj);
                         attachments.push(
-                            _.extend(obj, { mail: mail, title: obj.filename || '', parent: data.parent || mail })
+                            _.extend({}, obj, { cid: null, mail: mail, title: obj.filename || '', parent: data.parent || mail })
                         );
                     }
                 }

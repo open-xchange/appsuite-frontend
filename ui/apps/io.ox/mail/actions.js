@@ -80,7 +80,7 @@ define('io.ox/mail/actions', [
                 link = view.$('[data-ref="io.ox/mail/actions/inplace-reply"]').hide();
 
             require(['io.ox/mail/inplace-reply'], function (InplaceReplyView) {
-                view.$('section.body').before(
+                view.$('section.attachments').after(
                     new InplaceReplyView({ tagName: 'section', cid: cid, numberOfRecipients: numberOfRecipients })
                     .on('send', function (cid) {
                         view.$el.closest('.thread-view-control').data('open', cid);
@@ -267,7 +267,7 @@ define('io.ox/mail/actions', [
                         preparedTest = {
                             id: 'allof',
                             tests: [
-                                _.copy(opt.filterDefaults.tests.Subject),
+                                _.copy(opt.filterDefaults.tests.subject),
                                 opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
                             ]
                         };
@@ -277,7 +277,7 @@ define('io.ox/mail/actions', [
 
                     args.data.obj.set('test', preparedTest);
 
-                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config[0]);
+                    ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', undefined, args, config);
                 });
             });
         }
@@ -656,7 +656,7 @@ define('io.ox/mail/actions', [
         prio: 'hi',
         id: 'reply-all',
         mobile: 'lo',
-        label: gt('Reply All'),
+        label: gt('Reply all'),
         ref: 'io.ox/mail/actions/reply-all',
         drawDisabled: true,
         section: 'standard'
@@ -716,17 +716,6 @@ define('io.ox/mail/actions', [
         id: 'nospam',
         label: gt('Not spam'),
         ref: 'io.ox/mail/actions/nospam',
-        section: 'flags'
-    }));
-
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: INDEX += 100,
-        prio: 'lo',
-        mobile: 'lo',
-        id: 'flag',
-        //#. Verb: (to) flag messages
-        label: gt.pgettext('verb', 'Flag'),
-        ref: 'io.ox/mail/actions/flag',
         section: 'flags'
     }));
 

@@ -63,7 +63,12 @@ define('io.ox/core/folder/selection', [], function () {
 
         // returns true if successful
         preselect: function (id) {
-            return this.check(this.byId(id)).length > 0;
+            var node = this.check(this.byId(id));
+            if (node.length > 0) {
+                this.view.$container.attr('aria-activedescendant', node.attr('id'));
+                return true;
+            }
+            return false;
         },
 
         scrollIntoView: function (id) {
@@ -85,7 +90,7 @@ define('io.ox/core/folder/selection', [], function () {
             e.preventDefault();
 
             // only select in mobile edit mode when clicking on the label
-            if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).parent().hasClass('folder-label')) return;
+            if (this.view.app && this.view.app.props && this.view.app.props.get('mobileFolderSelectMode') === true && !$(e.target).hasClass('folder-label')) return;
 
             if (e.type === 'contextmenu') e.stopPropagation();
 
@@ -129,6 +134,9 @@ define('io.ox/core/folder/selection', [], function () {
             if (e.isDefaultPrevented()) return;
             e.preventDefault();
 
+            // trigger action event
+            this.view.trigger('selection:action', items, index);
+
             // sort?
             if (e.altKey && current.parent().parent().attr('data-sortable') === 'true') {
                 return this.move(current, up);
@@ -157,6 +165,7 @@ define('io.ox/core/folder/selection', [], function () {
             var opt = _.extend({ focus: true }, options);
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
+            this.view.$container.attr('aria-activedescendant', node.attr('id'));
             this.triggerChange(items);
         },
 
@@ -167,7 +176,7 @@ define('io.ox/core/folder/selection', [], function () {
 
         resetTabIndex: function (items, skip) {
             items = items.filter('[tabindex="0"]');
-            items.not(skip).attr('tabindex', '-1');
+            items.not(skip).attr('tabindex', -1);
         },
 
         focus: function (index, items) {
@@ -185,10 +194,10 @@ define('io.ox/core/folder/selection', [], function () {
             var width = this.view.$el.width();
             return nodes.addClass('selected')
                 .attr({ 'aria-selected': true, tabindex: 0 })
-                .find('.folder-label').each(function () {
+                .find('.folder-label:first').each(function () {
                     // special handling for settings for now
                     if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
-                    var left = $(this).position().left, maxWidth = width - left - 64 - 8;
+                    var left = $(this).position().left, maxWidth = width - left - 76;
                     $(this).css('max-width', Math.max(maxWidth, 80));
                 })
                 .end();
@@ -197,7 +206,7 @@ define('io.ox/core/folder/selection', [], function () {
         uncheck: function (items) {
             items = items || this.getItems();
             items.filter('.selected')
-                .removeClass('selected').attr({ 'aria-selected': false, tabindex: '-1' })
+                .removeClass('selected').attr({ 'aria-selected': false, tabindex: -1 })
                 .find('.folder-label').css('max-width', 'initial');
             return this;
         },

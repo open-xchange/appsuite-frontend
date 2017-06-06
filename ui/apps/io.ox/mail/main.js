@@ -35,6 +35,7 @@ define('io.ox/mail/main', [
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
+    'settings!io.ox/core',
     'io.ox/mail/actions',
     'io.ox/mail/mobile-navbar-extensions',
     'io.ox/mail/mobile-toolbar-actions',
@@ -42,7 +43,7 @@ define('io.ox/mail/main', [
     'io.ox/mail/import',
     'less!io.ox/mail/style',
     'io.ox/mail/folderview-extensions'
-], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings) {
+], function (util, api, commons, MailListView, ListViewControl, ThreadView, ext, actions, links, account, notifications, Bars, PageController, capabilities, TreeView, FolderView, folderAPI, QuotaView, categories, accountAPI, gt, settings, coreSettings) {
 
     'use strict';
 
@@ -371,7 +372,8 @@ define('io.ox/mail/main', [
             if (_.device('smartphone')) return;
 
             var quota = new QuotaView({
-                title: gt('Mail quota'),
+                //#. Quota means a general quota for mail and files
+                title: coreSettings.get('quotaMode', 'default') === 'unified' ? gt('Quota') : gt('Mail quota'),
                 renderUnlimited: false,
                 upsell: {
                     title: gt('Need more space?'),
@@ -392,6 +394,13 @@ define('io.ox/mail/main', [
             app.treeView.$el.append(
                 quota.render().$el
             );
+        },
+
+        'select-all-actions': function () {
+            // otherwise user would have wait for 'auto refresh'
+            api.on('move deleted-mails archive', function () {
+                if (!app.listView.collection.length) app.listView.reload();
+            });
         },
 
         /*
@@ -454,7 +463,7 @@ define('io.ox/mail/main', [
             collection.CUSTOM_PAGE_SIZE = 250;
 
             // register load listener which triggers complete
-            collection.on('load', function () {
+            collection.on('load reload', function () {
                 this.complete = true;
                 this.trigger('complete');
             });
@@ -464,6 +473,32 @@ define('io.ox/mail/main', [
             api.on('all-unseen', function (e, count) {
                 virtualAllSeen.set('unread', count);
             });
+
+            function loadAllUnseenMessages() {
+                api.getAllUnseenMessages().done(function success(list) {
+                    var folders = _(list).chain().filter(function (data) {
+                        // rewrite folder_id and id
+                        data.id = data.original_id;
+                        data.folder_id = data.original_folder_id;
+                        // drop messages from spam and trash
+                        return !accountAPI.is('spam|trash', data.folder_id);
+                    }).pluck('folder_id').uniq().value();
+                    folderAPI.multiple(folders);
+                });
+            }
+
+            function initAllMessagesFolder() {
+                loadAllUnseenMessages();
+                ox.on('refresh^', loadAllUnseenMessages);
+            }
+
+            if (settings.get('features/unseenFolder')) {
+                if (settings.get('unseenMessagesFolder')) {
+                    initAllMessagesFolder();
+                } else {
+                    settings.once('change:features/unseenFolder', initAllMessagesFolder);
+                }
+            }
 
             // make virtual folder clickable
             app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-unseen');
@@ -644,7 +679,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop();
+            app.threadView = new ThreadView.Desktop({ app: app });
             app.right.append(app.threadView.render().$el);
         },
 
@@ -1704,12 +1739,25 @@ define('io.ox/mail/main', [
                     action: 'add'
                 });
                 // detail view actions
-                app.getWindow().nodes.main.on('mousedown', '.detail-view-header .dropdown-menu a', function (e) {
+                app.right.on('mousedown', '.detail-view-header .io-ox-action-link', function (e) {
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'detail/toolbar',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                // listview toolbar
+                nodes.main.find('.list-view-control .toolbar').on('mousedown', 'a[data-name], a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    var action = node.attr('data-name') || node.attr('data-action');
+                    if (!action) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'list/toolbar',
+                        type: 'click',
+                        action: action,
+                        detail: node.attr('data-value')
                     });
                 });
                 // toolbar actions
@@ -1730,16 +1778,17 @@ define('io.ox/mail/main', [
                         detail: $(e.currentTarget).attr('data-id')
                     });
                 });
-                // toolbar options dropfdown
-                toolbar.on('mousedown', '.dropdown-menu a:not(.io-ox-action-link)', function (e) {
-                    var node =  $(e.target).closest('a');
+                // toolbar options dropdown
+                toolbar.on('mousedown', '.dropdown a:not(.io-ox-action-link)', function (e) {
+                    var node =  $(e.target).closest('a'),
+                        isToggle = node.attr('data-toggle') === 'true';
                     if (!node.attr('data-name')) return;
                     metrics.trackEvent({
                         app: 'mail',
                         target: 'toolbar',
                         type: 'click',
                         action: node.attr('data-name'),
-                        detail: node.attr('data-value')
+                        detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
                 // folder tree action
@@ -1749,6 +1798,25 @@ define('io.ox/mail/main', [
                         target: 'folder/context-menu',
                         type: 'click',
                         action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                sidepanel.find('.bottom').on('mousedown', 'a[data-action]', function (e) {
+                    var node = $(e.currentTarget);
+                    if (!node.attr('data-action')) return;
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder/toolbar',
+                        type: 'click',
+                        action: $(e.currentTarget).attr('data-action')
+                    });
+                });
+                app.getWindow().nodes.outer.on('selection:drop', function (e, baton) {
+                    metrics.trackEvent({
+                        app: 'mail',
+                        target: 'folder',
+                        type: 'click',
+                        action: 'drop',
+                        detail: baton.data.length ? 'single' : 'multiple'
                     });
                 });
                 // check for clicks in folder trew

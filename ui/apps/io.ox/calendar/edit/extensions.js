@@ -209,11 +209,11 @@ define('io.ox/calendar/edit/extensions', [
         id: 'title',
         index: 200,
         render: function () {
-            var self = this, input;
+            var self = this, input, guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label class="control-label col-xs-12">').append(
+                $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ name: 'title', model: self.model }).render().$el,
+                    input = new mini.InputView({ id: guid, name: 'title', model: self.model }).render().$el,
                     new mini.ErrorView({ name: 'title', model: self.model }).render().$el
                 )
             );
@@ -229,11 +229,12 @@ define('io.ox/calendar/edit/extensions', [
         id: 'location',
         index: 300,
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label class="control-label col-xs-12">').append(
+                $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Location')),
                     // only trim on save
-                    new mini.InputView({ name: 'location', model: this.model }).render().$el
+                    new mini.InputView({ id: guid, name: 'location', model: this.model }).render().$el
                 )
             );
         }
@@ -339,10 +340,11 @@ define('io.ox/calendar/edit/extensions', [
         index: 600,
         className: 'col-sm-6',
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div>').addClass('checkbox').append(
-                    $('<label class="control-label">').append(
-                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
                         $.txt(gt('All day'))
                     )
                 )
@@ -371,7 +373,7 @@ define('io.ox/calendar/edit/extensions', [
         index: recurrenceIndex,
         render: function () {
             this.$el.append(new RecurrenceView({
-                model: this.model,
+                model: this.model
             }).render().$el);
         }
     }, {
@@ -424,10 +426,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label>').attr({
-                    class: 'control-label',
-                    for: guid
-                }).text(gt('Reminder')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+                $('<label class="control-label">').attr('for', guid).text(gt('Reminder')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
                 $('<div>').append(
                     new mini.SelectView({
                         list: _.map(calendarUtil.getReminderOptions(), function (key, val) { return { label: key, value: val }; }),
@@ -457,10 +456,7 @@ define('io.ox/calendar/edit/extensions', [
                     { label: gt('Free'), value: 4 }
                 ];
             this.$el.append(
-                $('<label>').attr({
-                    class: 'control-label',
-                    for: guid
-                }).text(gt('Shown as')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
+                $('<label class="control-label">').attr('for', guid).text(gt('Shown as')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
                 $('<div>').append(
                     new mini.SelectView({
                         list: options,
@@ -534,11 +530,12 @@ define('io.ox/calendar/edit/extensions', [
             var folder_id = this.model.get('folder_id');
             if (!folderAPI.pool.getModel(folder_id).is('private')) return;
 
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('simple').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').append(
-                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                    $('<legend class="simple">').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
                         $.txt(gt('Private'))
                     )
                 )
@@ -593,9 +590,10 @@ define('io.ox/calendar/edit/extensions', [
         index: 1510,
         className: 'col-md-6',
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label class="checkbox-inline control-label">').append(
-                    new mini.CheckboxView({ name: 'notification', model: this.model }).render().$el,
+                $('<label class="checkbox-inline control-label">').attr('for', guid).append(
+                    new mini.CheckboxView({ id: guid, name: 'notification', model: this.model }).render().$el,
                     $.txt(gt('Notify all participants by email.'))
                 )
             );

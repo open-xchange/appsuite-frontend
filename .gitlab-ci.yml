@@ -115,18 +115,34 @@ test_ui:
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
 
-docker_develop_image_ui:
-  # create a tag on the docker registry, :latest always means last build on develop branch
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
-    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:latest
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker push ${CI_REGISTRY_IMAGE}:latest
-  only:
-    - develop
+.tag docker image: &add_tag
   stage: deploy
   dependencies: [] # none
+  script:
+    - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker push ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+
+tag latest:
+  # create a tag on the docker registry, :latest always means last build on develop branch
+  <<: *add_tag
+  only:
+    - develop
+
+tag stable:
+  <<: *add_tag
+  only:
+    - master
+
+tag tags:
+  <<: *add_tag
+  variables:
+    TAG_NAME: ${CI_COMMIT_TAG}
+  only:
+    - tags
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy

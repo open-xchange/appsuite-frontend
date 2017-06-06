@@ -240,12 +240,14 @@ define('io.ox/files/share/permissions', [
 
             className: 'permission row',
 
+            /* doesn't work on mobile phones
             events: {
                 'click a.bit': 'updateDropdown',
                 'click a[data-name="edit"]': 'onEdit',
                 'click a[data-name="resend"]': 'onResend',
                 'click a[data-name="revoke"]': 'onRemove'
             },
+            */
 
             initialize: function (options) {
                 if (this.model.get('type') === 'anonymous') {
@@ -309,6 +311,12 @@ define('io.ox/files/share/permissions', [
                 this.$el.attr({ 'aria-label': this.ariaLabel + '.', 'role': 'group' });
                 var baton = ext.Baton({ model: this.model, view: this, parentModel: this.parentModel });
                 ext.point(POINT + '/entity').invoke('draw', this.$el.empty(), baton);
+
+                // The menu node is moved outside the PermissionEntityView root node. That's why Backbone event delegate seems to have problems on mobile phones.
+                this.$el.find('a[data-name="edit"]').on('click', this.onEdit.bind(this));
+                this.$el.find('a[data-name="resend"]').on('click', this.onResend.bind(this));
+                this.$el.find('a[data-name="revoke"]').on('click', this.onRemove.bind(this));
+
                 return this;
             },
 
@@ -393,7 +401,7 @@ define('io.ox/files/share/permissions', [
                 var bits = this.model.get('bits'), bitmask;
                 if (this.parentModel.isFile()) {
                     if (bits === 2 || bits === 4) return 'reviewer';
-                } else if (this.model.get('entity') === this.parentModel.get('created_by')) {
+                } else if (this.model.get('entity') === this.parentModel.get('created_by') || this.model.get('entity') === this.parentModel.getOwner()) {
                     return 'owner';
                 } else {
                     bitmask = folderAPI.Bitmask(this.model.get('bits'));
@@ -548,21 +556,6 @@ define('io.ox/files/share/permissions', [
                 node.append(
                     $('<span class="post-description">').text(' (' + id + ')')
                 );
-            }
-        },
-        //
-        // Halo link
-        //
-        {
-            index: 220,
-            id: 'halo',
-            draw: function (baton) {
-                if (!baton.model.isPerson()) return;
-                if (!capabilities.has('contacts')) return;
-                var email = baton.model.getEmail();
-                this.find('.display_name, .image').each(function (index, node) {
-                    $(node).addClass('halo-link').data({ email1: email });
-                });
             }
         },
 
@@ -741,6 +734,7 @@ define('io.ox/files/share/permissions', [
                 var isFolderAdmin = folderAPI.Bitmask(baton.parentModel.get('own_rights')).get('admin') >= 1;
                 if (!baton.parentModel.isAdmin()) return;
                 if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.get('created_by')) return;
+                if (isFolderAdmin && baton.model.get('entity') === baton.parentModel.getOwner()) return;
 
                 var dropdown = new DropdownView({ label: $('<i class="fa fa-bars" aria-hidden="true">'), smart: true, title: gt('Actions') }),
                     type = baton.model.get('type'),
@@ -816,27 +810,34 @@ define('io.ox/files/share/permissions', [
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
                 notificationDefault = !folderUtil.is('public', objModel.attributes),
-                title;
+                title,
+                guid;
 
-            options = _.extend({ nested: nested, share: false }, options);
+            // options must be given to modal dialog. Custom dev uses them.
+            options = _.extend({
+                async: true,
+                focus: '.form-control.tt-input',
+                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html',
+                title: title,
+                smartphoneInputFocus: true,
+                width: 800,
+                nested: nested,
+                share: false }, options);
 
-            title = options.share ?
+            options.title = options.title || (options.share ?
                         //#. %1$s determines whether setting permissions for a file or folder
                         //#. %2$s is the file or folder name
                         gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName());
+                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
 
-            var dialog = new ModalDialog({
-                async: true,
-                focus: '.form-control.tt-input',
-                help: 'ox.appsuite.user.sect.dataorganisation.sharing.invitation.html#ox.appsuite.user.concept.sharing.invitation',
-                title: title,
-                width: 800
-            });
+            options.point = 'io.ox/files/share/permissions/dialog';
+
+            var dialog = new ModalDialog(options);
 
             var DialogConfigModel = Backbone.Model.extend({
                 defaults: {
-                    cascadePermissions: true,
+                    // default is true for nested and false for flat folder tree, #53439
+                    cascadePermissions: nested,
                     message: '',
                     sendNotifications: notificationDefault,
                     disabled: false
@@ -893,12 +894,12 @@ define('io.ox/files/share/permissions', [
                 }
 
             });
-
             if (objModel.isAdmin()) {
+
                 dialog.$footer.prepend(
                     $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                        $('<label class="checkbox-inline">').text(gt('Send notification by email')).prepend(
-                            new miniViews.CheckboxView({ name: 'sendNotifications', model: dialogConfig }).render().$el
+                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Send notification by email')).prepend(
+                            new miniViews.CheckboxView({ id: guid, name: 'sendNotifications', model: dialogConfig }).render().$el
                             .on('click', function (e) {
                                 dialogConfig.set('byHand', e.currentTarget.checked);
                             })
@@ -914,7 +915,7 @@ define('io.ox/files/share/permissions', [
             dialog.$el.addClass('share-permissions-dialog');
 
             // add permissions view
-            dialog.$body.append(
+            dialog.$body.addClass(_.browser.IE < 12 ? 'IE11' : '').append(
                 permissionsView.render().$el
             );
 
@@ -1004,24 +1005,22 @@ define('io.ox/files/share/permissions', [
                 if (objModel.isFolder() && options.nested) {
                     dialog.$footer.append(
                         $('<div class="form-group">').addClass(_.device('smartphone') ? '' : 'cascade').append(
-                            $('<label class="checkbox-inline">').text(gt('Apply to all subfolders')).prepend(
-                                new miniViews.CheckboxView({ name: 'cascadePermissions', model: dialogConfig }).render().$el
+                            $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Apply to all subfolders')).prepend(
+                                new miniViews.CheckboxView({ id: guid, name: 'cascadePermissions', model: dialogConfig }).render().$el
                             )
                         )
                     );
                 }
 
-                var guid = _.uniqueId('form-control-label-');
-
                 dialog.$header.append(
                     $('<div class="row">').append(
                         $('<div class="form-group col-sm-6">').append(
                             $('<div class="input-group">').toggleClass('has-picker', usePicker).append(
-                                $('<label class="sr-only">', { 'for': guid }).text(gt('Start typing to search for user names')),
+                                $('<label class="sr-only">', { 'for': guid = _.uniqueId('form-control-label-') }).text(gt('Start typing to search for user names')),
                                 typeaheadView.$el.attr({ id: guid }),
                                 usePicker ? new AddressPickerView({
                                     isPermission: true,
-                                    process: click,
+                                    process: click
                                 }).render().$el : []
                             )
                         )

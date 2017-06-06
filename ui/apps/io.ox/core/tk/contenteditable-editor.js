@@ -13,7 +13,7 @@
 
 /* global tinyMCE: true */
 
-define.async('io.ox/core/tk/contenteditable-editor', [
+define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/emoji/util',
     'io.ox/core/capabilities',
     'io.ox/core/extensions',
@@ -213,8 +213,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         // inside blockquote?
         if (!isInsideBlockquote(range)) return;
         if (!range.startContainer) return;
-        if (_.device('IE')) return;
-        // split; W3C-compliant strategy; older IEs needed a different strategy
         splitContent_W3C(ed);
         ed.dom.events.cancel(e);
     }
@@ -360,13 +358,20 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                 ext.point(POINT + '/setup').invoke('draw', this, ed);
                 ed.on('BeforeRenderUI', function () {
                     rendered.resolve();
+                    // toolbar is rendere immediatly after the BeforeRenderUI event. So defer should be invoked after the toolbar is rendered
+                    _.defer(function () {
+                        // Somehow, this span (without a tabindex) is focussable in firefox (see Bug 53258)
+                        toolbar.find('span.mce-txt').attr('tabindex', -1);
+                    });
                 });
             }
         };
 
         ext.point(POINT + '/options').invoke('config', options, opt.oxContext);
 
-        editor.tinymce(options);
+        require(['3rd.party/tinymce/jquery.tinymce.min']).then(function () {
+            editor.tinymce(options);
+        });
 
         function trimEnd(str) {
             return String(str || '').replace(/[\s\xA0]+$/g, '');
@@ -389,11 +394,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
                     editor.css('min-height', containerHeight - composeFieldsHeight - 32);
                     return;
                 } else if (_.device('smartphone')) {
-                    composeFieldsHeight = el.parent().find('.mail-compose-fields').height();
-                    var topBarHeight = $('#io-ox-topbar').height(),
-                        windowHeaderHeight = el.parents().find('.window-header').height(),
-                        editorPadding = 30;
-                    editor.css('min-height', window.innerHeight - (composeFieldsHeight + topBarHeight + windowHeaderHeight + editorPadding));
+
+                    editor.css('min-height', window.innerHeight - 232); // sum of standard toolbars etc. calculating this does not work here as most elements are not yet drawn and return falsy values
                     return;
                 }
 
@@ -552,11 +554,23 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             var content = '';
             // normalise
             data = _.isString(data) ? { content: data } : data;
+            data.content = data.content.replace(/^(<p><br><\/p>)+/, '').replace(/(<p><br><\/p>){2,}$/, '');
             // concat content parts
             if (data.content) content += data.content;
-            if (type === 'above' && data.cite) content += ('\n\n' + data.cite);
-            if (data.quote) content += ('\n\n' + data.quote || '');
-            if (type === 'below' && data.cite) content += ('\n\n' + data.cite);
+            else content += '<p><br></p>';
+            if (type === 'above' && data.cite) content += data.cite;
+            if (data.quote) {
+                // backend appends &nbsp; to the quote which are wrapped in a paragraph by the ui. remove those.
+                data.quote = data.quote.replace(/<p><br>(&nbsp;|&#160;)<\/p>/, '');
+                content += (data.quote || '');
+            }
+            if (type === 'below' && data.cite) {
+                // add a blank line between the quoted text and the signature below
+                // but only, if the sigature is directly after the quoted text
+                // then, the user can always insert text between the quoted text and the signature but has no unnecessary empty lines
+                if (!/<p><br><\/p>$/i.test(content) && /<\/blockquote>$/.test(content)) content += '<p><br></p>';
+                content += data.cite;
+            }
             this.setContent(content);
         };
 
@@ -583,6 +597,14 @@ define.async('io.ox/core/tk/contenteditable-editor', [
             // add cite
             data.cite = str;
             this.setContentParts(data, 'above');
+        };
+
+        this.insertPostCite = function (str) {
+            var data = this.getContentParts();
+            str = (/^<p/i).test(str) ? str : '<p>' + ln2br(str) + '</p>';
+            // add cite
+            data.cite = str;
+            this.setContentParts(data, 'below');
         };
 
         this.replaceParagraph = function (str, rep) {
@@ -696,6 +718,8 @@ define.async('io.ox/core/tk/contenteditable-editor', [
         this.destroy = function () {
             this.hide();
             clearKeepalive();
+            // have to unset active editor manually. may be removed for future versions of tinyMCE
+            delete tinyMCE.EditorManager.activeEditor;
             tinyMCE.EditorManager.remove(ed);
             ed = undefined;
         };
@@ -713,5 +737,6 @@ define.async('io.ox/core/tk/contenteditable-editor', [
 
         editor.on('addInlineImage', function (e, id) { addKeepalive(id); });
     }
-    return $.Deferred().resolve(Editor);
+
+    return Editor;
 });

@@ -232,10 +232,11 @@ define('io.ox/tasks/edit/view-template', [
         index: 700,
         className: 'col-md-6 collapsed',
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div>').addClass('checkbox').append(
-                    $('<label class="control-label">').append(
-                        new mini.CheckboxView({ name: 'full_time', model: this.model }).render().$el,
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'full_time', model: this.model }).render().$el,
                         $.txt(gt('All day'))
                     )
                 )
@@ -250,7 +251,7 @@ define('io.ox/tasks/edit/view-template', [
         index: 800,
         render: function () {
             this.$el.append(new RecurrenceView({
-                model: this.model,
+                model: this.model
             }).render().$el);
             this.$el.find('.recurrence-view checkbox').attr('tabindex', 0);
         }
@@ -454,12 +455,12 @@ define('io.ox/tasks/edit/view-template', [
             // private flag only works in private folders
             var folder_id = this.model.get('folder_id');
             if (!folderAPI.pool.getModel(folder_id).is('private')) return;
-
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<fieldset>').append(
-                    $('<legend>').addClass('simple').text(gt('Type')),
-                    $('<label class="checkbox-inline control-label">').append(
-                        new mini.CheckboxView({ name: 'private_flag', model: this.model }).render().$el,
+                    $('<legend class="simple">').text(gt('Type')),
+                    $('<label class="checkbox-inline control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
                         $.txt(gt('Private'))
                     )
                 )

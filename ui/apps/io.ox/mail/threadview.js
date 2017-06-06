@@ -507,6 +507,9 @@ define('io.ox/mail/threadview', [
                     $(e.target).closest('article').focus();
                 });
             }
+
+            // store app if in options. needed by the mail detailview to access sort options
+            if (options.app) this.app = options.app;
         },
 
         // return alls items of this list
@@ -522,7 +525,7 @@ define('io.ox/mail/threadview', [
 
         // render an email
         renderListItem: function (model) {
-            var self = this, view = new detail.View({ tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
+            var self = this, view = new detail.View({ app: this.app, tagName: 'article', data: model.toJSON(), disable: { 'io.ox/mail/detail': 'subject' } });
             view.on('mail:detail:body:render', function (data) {
                 self.trigger('mail:detail:body:render', data);
             });
@@ -590,7 +593,7 @@ define('io.ox/mail/threadview', [
                 disable: {
                     'io.ox/mail/detail': ['subject', 'actions'],
                     'io.ox/mail/detail/header': ['paper-clip'],
-                    'io.ox/mail/detail/header/row1': ['color-picker', 'flag-toggle']
+                    'io.ox/mail/detail/header/row1': ['color-picker', 'flag-toggle', 'security']
                 }
             });
 

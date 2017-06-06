@@ -12,29 +12,21 @@
  */
 
 define('io.ox/files/filepicker', [
-
     'io.ox/core/cache',
     'io.ox/core/extensions',
-
     'io.ox/core/tk/selection',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/upload',
-
     'io.ox/core/folder/api',
     'io.ox/core/folder/picker',
-
     'io.ox/core/viewer/views/sidebar/fileinfoview',
-
     'io.ox/files/api',
     'io.ox/files/common-extensions',
-
     'io.ox/core/notifications',
     'io.ox/core/page-controller',
     'io.ox/core/toolbars-mobile',
-
     'settings!io.ox/core',
     'gettext!io.ox/files'
-
 ], function (cache, ext, Selection, dialogs, upload, folderAPI, picker, FileInfoView, filesAPI, filesExtensions, notifications, PageController, Bars, settings, gt) {
 
     'use strict';
@@ -311,7 +303,9 @@ define('io.ox/files/filepicker', [
             },
             acceptLocalFileType: '', //e.g.  '.jpg,.png,.doc', 'audio/*', 'image/*' see@ https://developer.mozilla.org/de/docs/Web/HTML/Element/Input#attr-accept
             cancel: $.noop,
-            initialize: $.noop
+            initialize: $.noop,
+            createFolderButton: true,
+            extension: 'io.ox/files/mobile/navbar'
         }, options);
 
         var filesPane = $('<ul class="io-ox-fileselection list-unstyled">'),
@@ -333,7 +327,7 @@ define('io.ox/files/filepicker', [
             name: 'folderTree',
             navbar: new Bars.NavbarView({
                 title: gt('Folders'),
-                extension: 'io.ox/mail/mobile/navbar' //save to use as this is very generic
+                extension: options.extension //save to use as this is very generic
             }),
             startPage: true
         });
@@ -342,7 +336,7 @@ define('io.ox/files/filepicker', [
             name: 'fileList',
             navbar: new Bars.NavbarView({
                 title: gt('Files'),
-                extension: 'io.ox/mail/mobile/navbar'
+                extension: options.extension
             })
         });
 
@@ -442,17 +436,31 @@ define('io.ox/files/filepicker', [
 
             filesPane.empty();
             filesAPI.getAll(id, { cache: false }).done(function (files) {
-                filesPane.append(
-                    _.chain(files)
-                    .filter(options.filter)
-                    .sortBy(options.sorter)
-                    .map(function (file) {
-                        var title = (file.filename || file.title),
+                /**
+                 *  fixing Bug 50949: 'Insert image' from drive offers non image file
+                 *  fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
+                 *
+                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50949]
+                 *  [https://bugs.open-xchange.com/show_bug.cgi?id=50501]
+                 */
+                files = _.chain(files)                                  // - 1stly, really do what the original intention was:
+                    .filter(options.filter)                             //
+                    .sortBy(options.sorter)                             //   ... filter and sort the model and not the view.
+                    .value();                                           //
+
+                if (files.length <= 0) {                                // (additional win: change view acoording to the filtered model)
+
+                    deletePreviewPane();
+                } else {                                                // - 2ndly, use human readable variable names
+                    var paneItems = files.map(function (file) {         //   in order to show other developers what
+                                                                        //   direction you are heading to.
+                        var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
+                        var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
                                 $('<label class="checkbox-inline sr-only">')
-                                    .attr('title', title)
+                                    .attr({ 'title': title, 'for': guid })
                                     .append(
-                                        $('<input type="checkbox" tabindex="-1">')
+                                        $('<input type="checkbox" tabindex="-1">').attr('id', guid)
                                             .val(file.id).data('file', file)
                                     ),
                                 $('<div class="name">').text(title)
@@ -461,12 +469,19 @@ define('io.ox/files/filepicker', [
                             ext.point(options.point + '/filelist/filePicker/customizer').invoke('customize', $div, file);
                         }
                         return $div;
-                    })
-                    .value()
-                );
+                    });
+                                                                        // - 3rd, you provide a result that got processed stepwise
+                    filesPane.append(                                   //   (and not by spaghetti code), thus other devs much easear
+                        paneItems                                       //   recognize its creation process, thus they will be able changing
+                    );                                                  //   this process' control flow (better refactoring/maintaining of code).
+                }                                                       // - last: sticking to some simple coding rules, most probably had prevented creating this bugs.
                 self.selection.clear();
-                self.selection.init(files);
-                self.selection.selectFirst();
+                self.selection.init(files); // - provide the filtered model ... see 1st point above.
+                if (options.multiselect) {
+                    self.selection.markFirst();
+                } else {
+                    self.selection.selectFirst();
+                }
                 currentFolder = id;
                 hub.trigger('folder:changed');
             });
@@ -528,16 +543,26 @@ define('io.ox/files/filepicker', [
             });
         }
 
-        // function deletePreviewPane() {
-        //     if ($previewPane) {
+        // support for
+        // - fixing Bug 50949: 'Insert image' from drive offers non image file
+        // - fixing Bug 50501: File picker:Travelling through file name list with keyboard seems random
         //
-        //         $previewPane.remove();
-        //         $previewPane = null;
-        //     }
-        // }
+        function deletePreviewPane() {
+            if ($previewPane) {
+
+                $previewPane.remove();
+                $previewPane = null;
+            }
+        }
 
         function focusButtons() {
             this.getFooter().find('button').first().focus();
+        }
+
+        function onResize() {
+            var height = $(window).height() - 200;
+            pcContainer.css('height', height)
+                .find('.modal-body').css('height', height);
         }
 
         picker({
@@ -556,6 +581,7 @@ define('io.ox/files/filepicker', [
             abs: false,
             folder: options.folder || undefined,
             hideTrashfolder: options.hideTrashfolder || undefined,
+            createFolderButton: options.createFolderButton,
 
             done: function (id, dialog) {
                 def.resolve(
@@ -597,6 +623,11 @@ define('io.ox/files/filepicker', [
                     pcContainer.css('height', containerHeight + 'px');
                     pcContainer.append(navbar, toolbar);
                     pcContainer.insertAfter('.clearfix', container);
+
+                    $(window).on('resize', onResize);
+                    dialog.on('close', function () {
+                        $(window).off('resize', onResize);
+                    });
 
                     // always change pages on click, do not wait for folder-change
                     dialog.getBody().on('click', 'li .folder.selectable.open', function (e) {

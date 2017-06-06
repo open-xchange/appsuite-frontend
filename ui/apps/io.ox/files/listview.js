@@ -131,6 +131,9 @@ define('io.ox/files/listview', [
             index: 200,
             draw: function (baton) {
                 var column = $('<div class="list-item-column column-2">');
+
+                this.parent().tooltip('destroy');
+
                 extensions.filename.call(column, baton);
                 this.append(column);
             }
@@ -192,7 +195,12 @@ define('io.ox/files/listview', [
         {
             id: 'thumbnail',
             index: 100,
-            draw: extensions.thumbnail
+            draw: function () {
+                extensions.thumbnail.apply(this, arguments);
+
+              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                this.prepend($('<div class="thumbnail-masking-box"></div>'));
+            }
         },
         {
             id: 'locked',
@@ -215,6 +223,9 @@ define('io.ox/files/listview', [
             draw: function (baton) {
                 // use inner ellipsis for too long filenames
                 extensions.filename.call(this, baton, { max: 36, charpos: 'middle', suppressExtension: true, optimizeWordbreak: true });
+
+                // additionally render a long version filename tooltip on hover
+                extensions.filenameTooltip.call(this, baton);
             }
         }
     );
@@ -230,12 +241,25 @@ define('io.ox/files/listview', [
         {
             id: 'thumbnail',
             index: 100,
-            draw: extensions.thumbnail
+            draw: function () {
+                extensions.thumbnail.apply(this, arguments);
+
+              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                this.prepend($('<div class="thumbnail-masking-box"></div>'));
+            }
         },
         {
             id: 'locked',
             index: 200,
             draw: extensions.locked
+        },
+        {
+            id: 'filename',
+            index: 400,
+            draw: function (baton) {
+                // render a long version filename tooltip on hover
+                extensions.filenameTooltip.call(this, baton);
+            }
         }
     );
 

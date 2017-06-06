@@ -232,7 +232,7 @@ define('io.ox/core/attachments/view', [
         className: 'preview',
 
         events: {
-            'keydown': 'onKeydown',
+            'keydown': 'onKeydown'
         },
 
         initialize: function () {
@@ -292,7 +292,7 @@ define('io.ox/core/attachments/view', [
             $(e.target).trigger('click');
             e.preventDefault();
             e.stopPropagation();
-        },
+        }
 
     });
 
@@ -364,7 +364,7 @@ define('io.ox/core/attachments/view', [
         renderContent: function () {
             this.$('.file')
                 .attr('title', this.model.getTitle())
-                .text(this.model.getShortTitle(50));
+                .text(this.model.getShortTitle(_.device('smartphone') ? 23 : 50));
         },
 
         renderControls: function () {

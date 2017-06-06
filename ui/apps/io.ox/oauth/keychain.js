@@ -130,7 +130,8 @@ define('io.ox/oauth/keychain', [
         this.createInteractively = function (popupWindow, scopes) {
             scopes = [].concat(scopes || []);
 
-            var def = $.Deferred();
+            var def = $.Deferred(),
+                self = this;
 
             // the popup must exist already, otherwise we run into the popup blocker
             if (!popupWindow) return def.reject();
@@ -145,6 +146,8 @@ define('io.ox/oauth/keychain', [
 
             return newAccount.save().then(function (account) {
                 accounts.add(newAccount);
+                // needed for some portal plugins (xing, twitter, for example)
+                self.trigger('create', account);
                 ox.trigger('refresh-portal');
                 notifications.yell('success', gt('Account added successfully'));
                 return account;
@@ -242,13 +245,9 @@ define('io.ox/oauth/keychain', [
 
         require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
             new ModalDialog({ title: gt('Error') })
-            .extend({
-                default: function () {
-                    this.$el.addClass('oauth-reauthorize');
-                },
-                text: function () {
-                    this.$body.append(err.error);
-                }
+            .build(function () {
+                this.$el.addClass('oauth-reauthorize');
+                this.$body.append(err.error);
             })
             .addCancelButton()
             .addButton({

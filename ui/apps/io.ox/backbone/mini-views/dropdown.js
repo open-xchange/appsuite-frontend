@@ -179,6 +179,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                         nextValue = this.model.get(name) === value ? toggleValue : value;
                     }
                 }
+                if (this.options.saveAsArray) nextValue = [nextValue];
                 this.model.set(name, nextValue);
             }
         },
@@ -246,7 +247,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
                     'data-toggle': _.isBoolean(value) || options.toggleValue !== undefined,
                     'data-toggle-value': options.toggleValue,
-                    'aria-label': ariaLabel
+                    'aria-label': ariaLabel,
+                    'title': options.title
                 })
                 // in firefox draggable=false is not enough to prevent dragging...
                 .on('dragstart', false)

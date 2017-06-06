@@ -98,6 +98,11 @@ define('io.ox/find/view-token', [
                     }
                 });
 
+            // fixes dropdown position
+            dropdown.$el.on('show.bs.dropdown', function () {
+                $(this).find('.dropdown-menu').css('top', $(this).offset().top + $(this).height() + 'px');
+            });
+
             this.ui.dropdown = dropdown;
 
             // ensure (in case option is not set yet)

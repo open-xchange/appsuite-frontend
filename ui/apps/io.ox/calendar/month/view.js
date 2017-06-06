@@ -33,6 +33,7 @@ define('io.ox/calendar/month/view', [
         clicks:         0,      // click counter
         pane:           $(),
         type:           '',
+        limit:          1000,
 
         events: {
             'click .appointment':      'onClickAppointment',
@@ -64,7 +65,7 @@ define('io.ox/calendar/month/view', [
                     self.pane.find('.appointment')
                         .removeClass('current opac')
                         .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
-                        .addClass(_.device('smartphone') ? '' : 'opac');
+                        .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
                     $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');
@@ -306,6 +307,11 @@ define('io.ox/calendar/month/view', [
                         start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }).valueOf(),
                         end = start + app.end_date - app.start_date;
                     if (app.start_date !== start || app.end_date !== end) {
+                        // save for update calculations
+                        if (app.recurrence_type > 0) {
+                            app.old_start_date = app.start_date;
+                            app.old_end_date = app.end_date;
+                        }
                         app.start_date = start;
                         app.end_date = end;
                         ui.draggable.busy().draggable('disable');

@@ -253,6 +253,22 @@ define('io.ox/mail/detail/view', [
         }
     });
 
+    ext.point('io.ox/mail/detail').extend({
+        id: 'warnings',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var section = $('<section class="warnings">');
+            ext.point('io.ox/mail/detail/warnings').invoke('draw', section, baton);
+            this.append(section);
+        }
+    });
+
+    ext.point('io.ox/mail/detail/warnings').extend({
+        id: 'plaintextfallback',
+        index: 100,
+        draw: extensions.plainTextFallback
+    });
+
     var INDEX_notifications = 0;
 
     ext.point('io.ox/mail/detail/notifications').extend({
@@ -277,7 +293,7 @@ define('io.ox/mail/detail/view', [
         id: 'error',
         index: INDEX += 100,
         draw: function () {
-            this.append($('<section class="error" role="dialog">').hide());
+            this.append($('<section class="error">').hide());
         }
     });
 
@@ -524,7 +540,9 @@ define('io.ox/mail/detail/view', [
 
         onUnseen: function () {
             var data = this.model.toJSON();
-            if (util.isToplevel(data)) api.markRead(data);
+            if (!util.isToplevel(data)) return;
+            if (this.options.app && this.options.app.props.get('sort') === 651) return;
+            api.markRead(data);
         },
 
         onLoad: function (data) {
@@ -546,9 +564,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-            if (data && data.security) {
-                this.onChangeSecurity();
-            }
+
             // process unseen flag
             if (unseen) {
                 this.onUnseen();
@@ -564,7 +580,7 @@ define('io.ox/mail/detail/view', [
             this.trigger('load:done');
             this.$el.attr('data-loaded', false);
             this.$('section.error').empty().show().append(
-                $('<i class="fa fa-exclamation-triangle">'),
+                $('<i class="fa fa-exclamation-triangle" aria-hidden="true">'),
                 $('<h4>').text(gt('Error: Failed to load message content')),
                 $('<p>').text(e.error),
                 $('<a href="#" role="button" data-action="retry">').text(gt('Retry'))
@@ -601,7 +617,9 @@ define('io.ox/mail/detail/view', [
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).then(
+                        var data = { id: this.model.get('id'), folder_id: this.model.get('folder_id') };
+                        if (this.options.app && this.options.app.props.get('sort') === 651) data.unseen = true;
+                        api.get(data).then(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );

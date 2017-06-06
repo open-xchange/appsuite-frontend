@@ -38,6 +38,10 @@ define('io.ox/contacts/distrib/main', [
             closable: true
         });
 
+        app.getContextualHelp = function () {
+            return 'ox.appsuite.user.sect.contacts.distributionlist.html';
+        };
+
         app.create = function (folderId, initdata) {
 
             initialDistlist = _.extend({ mark_as_distributionlist: true, last_name: '' }, data || {}, { folder_id: folderId });

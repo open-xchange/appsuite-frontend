@@ -19,7 +19,7 @@ define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/core/notifications',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (calApi, dialogs, folderAPI, util, notifications, calSettings, gt) {
+], function (calApi, dialogs, folderAPI, util, notifications, settings, gt) {
 
     'use strict';
 
@@ -37,7 +37,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 canModify,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
-                defaultReminder = calSettings.get('defaultReminder', 15),
+                defaultReminder = settings.get('defaultReminder', 15),
                 apiData = { folder: o.folder_id, id: o.id },
                 //appointments check for conflicts by default, tasks don't
                 checkConflicts = options.checkConflicts !== undefined ? options.checkConflicts : !options.taskmode;
@@ -80,7 +80,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                 return new dialogs.ModalDialog({
                     async: true,
-                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html#ox.appsuite.user.concept.calendar.changestatus'
+                    help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
                 })
                     .build(function () {
                         if (!series && o.recurrence_position) {

@@ -28,12 +28,11 @@ define('io.ox/mail/compose/view', [
     'io.ox/mail/actions/attachmentQuota',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
-    'io.ox/core/a11y',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil, a11y) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -290,9 +289,18 @@ define('io.ox/mail/compose/view', [
         }
     });
 
+    ext.point(POINT + '/autosave/error').extend({
+        id: 'default',
+        handler: function (baton) {
+            notifications.yell('error', baton.error);
+            baton.returnValue.reject(baton.error);
+        }
+    });
+
     // invoke extensions as a waterfall, but jQuery deferreds don't have an API for this
     // TODO: at the moment, this resolves with the result of the last extension point.
     // not sure if this is desired.
+    // TODO: factor this out into a library or util class
     function extensionCascade(point, baton) {
         return point.reduce(function (def, p) {
             if (!def || !def.then) def = $.when(def);
@@ -301,6 +309,8 @@ define('io.ox/mail/compose/view', [
                 if (newData) baton.newData = newData;
                 return $.when();
             }, function (result) {
+                //TODO: think about the naming, here
+                if (result) baton.result = result;
                 //handle errors/warnings in reject case
                 if (result && result.error) baton.error = result.error;
                 if (result && result.warnings) baton.warning = result.warnings;
@@ -310,9 +320,7 @@ define('io.ox/mail/compose/view', [
                 if (baton.isDisabled(point.id, p.id)) return;
                 return p.perform.apply(undefined, [baton]);
             });
-        }, $.when()).fail(function () {
-            baton.model.set('autoDismiss', false);
-        });
+        }, $.when());
     }
 
     // disable attachmentList by default
@@ -320,7 +328,7 @@ define('io.ox/mail/compose/view', [
 
     var MailComposeView = Backbone.View.extend({
 
-        className: 'io-ox-mail-compose container',
+        className: 'io-ox-mail-compose container f6-target',
 
         events: {
             'click [data-action="add"]': 'toggleTokenfield',
@@ -514,7 +522,7 @@ define('io.ox/mail/compose/view', [
                     // to keep the previews working we copy data from the original mail
                     if (mode === 'forward' || mode === 'edit') {
                         attachments.forEach(function (file) {
-                            _.extend(file, { group: 'mail', mail: mailReference });
+                            _.extend(file, { group: 'mail', mail: mailReference, security: obj.security });
                         });
                     }
 
@@ -608,6 +616,8 @@ define('io.ox/mail/compose/view', [
 
         saveDraft: function () {
             var win = this.app.getWindow();
+            // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
+            this.trigger('updateTokens');
             if (win) win.busy();
             // get mail
             var mail = this.model.getMailForDraft();
@@ -640,8 +650,12 @@ define('io.ox/mail/compose/view', [
 
             mailAPI.autosave(mail).always(function (result) {
                 if (result.error) {
-                    notifications.yell(result);
-                    def.reject(result);
+                    var baton = new ext.Baton(result);
+                    baton.model = model;
+                    baton.view = self;
+                    baton.returnValue = def;
+                    ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
+                    def = baton.returnValue;
                 } else {
                     model.set({
                         'autosavedAsDraft': true,
@@ -777,7 +791,6 @@ define('io.ox/mail/compose/view', [
 
         send: function () {
 
-            this.model.set('autoDismiss', true);
 
             //#. This is a prefix of a copied draft and will be removed
             //#. This string must equal the prefix, which is prepended before the subject on copy
@@ -788,7 +801,8 @@ define('io.ox/mail/compose/view', [
                 subject = subject.replace(str, '');
                 this.model.set('subject', subject);
             }
-
+            // make sure the tokenfields have created all tokens and updated the to cc, bcc attributes
+            this.trigger('updateTokens');
             var mail = this.model.getMail(),
                 view = this,
                 baton = new ext.Baton({
@@ -799,7 +813,13 @@ define('io.ox/mail/compose/view', [
                 }),
                 point = ext.point('io.ox/mail/compose/actions/send');
 
-            return extensionCascade(point, baton);
+            // don't ask wether the app can be closed if we have unsaved data, we just want to send
+            baton.model.set('autoDismiss', true);
+
+            return extensionCascade(point, baton).then(function () {
+                //app is re-opened; we want to be asked before any unsaved data is discarded
+                if (baton.error) baton.model.set('autoDismiss', false);
+            });
         },
 
         toggleTokenfield: function (e) {
@@ -985,13 +1005,6 @@ define('io.ox/mail/compose/view', [
 
             this.model.setInitialMailContentType();
 
-            // check if it is a draft. then do not set autoDismiss to true
-            if (this.model.keepDraftOnClose()) {
-                this.model.set('autoDismiss', false);
-            } else {
-                this.model.set('autoDismiss', this.model.get('mode') === 'edit');
-            }
-
             return this.toggleEditorMode().then(function () {
                 return self.signaturesLoading;
             })
@@ -999,9 +1012,7 @@ define('io.ox/mail/compose/view', [
                 var target, mode = self.model.get('mode');
                 // set focus in compose and forward mode to recipient tokenfield
                 if (_.device('!ios')) {
-                    if (a11y.use('focusFirstTabbable')) {
-                        target = self.$('a[data-toggle="dropdown"]:first');
-                    } else if (/(compose|forward)/.test(mode)) {
+                    if (/(compose|forward)/.test(mode)) {
                         target = self.$('.tokenfield:first .token-input');
                     } else {
                         target = self.editor;

@@ -60,9 +60,9 @@ define('io.ox/core/folder/actions/add', [
             enter: 'add',
             focus: 'input[name="name"]',
             previousFocus: $(document.activeElement),
-            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html#ox.appsuite.user.concept.folder.create',
+            help: 'ox.appsuite.user.sect.dataorganisation.folder.create.html',
             point: 'io.ox/core/folder/add-popup',
-            width: 400
+            width: _.device('smartphone') ? window.innerWidth - 30 : 400
         })
         .inject({
             addFolder: addFolder,
@@ -100,13 +100,13 @@ define('io.ox/core/folder/actions/add', [
                 if (!this.context.supportsPublicFolders) return;
 
                 var label = this.context.module === 'calendar' ? gt('Add as public calendar') : gt('Add as public folder');
-
+                var guid = _.uniqueId('form-control-label-');
                 this.$body.append(
                     // public
                     $('<div class="form-group checkbox">').append(
                         // checkbox
-                        $('<label>').append(
-                            $('<input type="checkbox" name="public">'),
+                        $('<label>').attr('for', guid).append(
+                            $('<input type="checkbox" name="public">').attr('id', guid),
                             $.txt(label)
                         )
                     ),
@@ -129,7 +129,7 @@ define('io.ox/core/folder/actions/add', [
                 this.busy(true);
                 this.addFolder(isPublic ? '2' : folder, this.context.module, name)
                     .then(def.resolve.bind(def))
-                    .then(this.close, this.idle);
+                    .then(this.close, this.idle).fail(this.idle);
             },
             close: def.reject.bind(def),
             open: function () {

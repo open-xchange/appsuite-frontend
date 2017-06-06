@@ -18,8 +18,9 @@ define('io.ox/core/folder/contextmenu', [
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
     'io.ox/core/api/filestorage',
+    'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (ext, actions, api, account, capabilities, filestorage, gt) {
+], function (ext, actions, api, account, capabilities, filestorage, settings, gt) {
 
     'use strict';
 
@@ -70,7 +71,7 @@ define('io.ox/core/folder/contextmenu', [
         update: function () {
             //toggle active class
             $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + this.model.get('meta').color_label, this.$el).addClass('active').attr('aria-checked', true);
+            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
         },
         select: function (e) {
             var meta = _.extend({},
@@ -307,7 +308,7 @@ define('io.ox/core/folder/contextmenu', [
 
             function handler(e) {
                 require(['io.ox/core/folder/actions/move'], function (move) {
-                    move.folder(e.data.id);
+                    move.folder(e.data.id, settings);
                 });
             }
 
@@ -468,14 +469,14 @@ define('io.ox/core/folder/contextmenu', [
                     });
                 }
 
-                // "Get link" doesn't work for mail folders
+                // "Create sharing link" doesn't work for mail folders
                 if (showGetLink) {
                     addLink(this, {
                         action: 'get-link',
                         data: { app: baton.app, id: id },
                         enabled: true,
                         handler: getALink,
-                        text: gt('Get link')
+                        text: gt('Create sharing link')
                     });
                 }
             };

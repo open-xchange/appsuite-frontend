@@ -58,6 +58,8 @@ define('io.ox/mail/vacationnotice/settings/register', [
 
                     function assembleFrom(aliases) {
                         var list = [];
+                        // default sender
+                        list.push({ 'value': 'default', 'label': gt('default sender') });
                         _.each(aliases, function (key, value) {
                             var assembledValue = userFullName.trim() === '' ? value : userFullName + ' <' + value + '>',
                                 assembledValueEscaped = userFullName.trim() === '' ? value : '"' + userFullName + '" <' + value + '>';
@@ -73,6 +75,7 @@ define('io.ox/mail/vacationnotice/settings/register', [
                             if (userFullName.trim() !== '') arrays[key].push(userFullName);
                             arrays[key].push(value);
                         });
+                        arrays.unshift(['default', 'default']);
                         return arrays;
                     }
 

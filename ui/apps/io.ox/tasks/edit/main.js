@@ -249,7 +249,7 @@ define('io.ox/tasks/edit/main', [
         };
 
         app.getContextualHelp = function () {
-            return 'ox.appsuite.user.sect.tasks.gui.html#ox.appsuite.user.reference.tasks.gui.create';
+            return 'ox.appsuite.user.sect.tasks.gui.create.html';
         };
 
         return app;

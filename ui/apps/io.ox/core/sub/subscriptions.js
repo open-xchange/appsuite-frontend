@@ -25,7 +25,7 @@ define('io.ox/core/sub/subscriptions', [
     'io.ox/oauth/keychain',
     'io.ox/core/a11y',
     'settings!io.ox/core'
-], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt, mini, OAuth, oauthAPI, a11y) {
+], function (ext, sub, api, folderAPI, notifications, dialogs, keychainAPI, gt, mini, OAuth, oauthAPI, a11y, settings) {
 
     'use strict';
 
@@ -79,7 +79,14 @@ define('io.ox/core/sub/subscriptions', [
                             if (fd.widget !== 'oauthAccount') return true;
 
                             var accountType = getAccountType(fd.options.type),
-                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type });
+                                accounts = _.where(keychainAPI.getAll(), { serviceId: fd.options.type }).filter(function (account) {
+                                    if (!self.app.subscription || !_.isArray(self.app.subscription.wantedOAuthScopes)) {
+                                        return true;
+                                    }
+                                    return self.app.subscription.wantedOAuthScopes.reduce(function (acc, scope) {
+                                        return acc && account.availableScopes.indexOf(scope) >= 0;
+                                    }, true);
+                                });
 
                             // process when at least one account exists
                             if (accounts.length) return true;
@@ -106,7 +113,7 @@ define('io.ox/core/sub/subscriptions', [
                 var self = this,
                     popup = new dialogs.ModalDialog({
                         async: true,
-                        help: 'ox.appsuite.user.sect.dataorganisation.pubsub.subscribe.html',
+                        help: 'ox.appsuite.user.sect.dataorganisation.subscribe.data.html',
                         width: 570
                     }),
                     title = gt('Subscribe');
@@ -226,7 +233,7 @@ define('io.ox/core/sub/subscriptions', [
 
     function subscribe(model, service) {
         var module = model.get('entityModule'),
-            folder = require('settings!io.ox/core').get('folder/' + module),
+            folder = settings.get('folder/' + module),
             title = gt('New Folder');
 
         if (service.displayName && module === 'calendar') title = gt('My %1$s calendar', service.displayName);
@@ -327,7 +334,7 @@ define('io.ox/core/sub/subscriptions', [
                 service = model.toJSON();
             baton.popup.getBody().empty().append(
                 $('<form class="form-horizontal">').append(
-                    $('<h4>').text(gt('Configure %1$s', model.get('displayName'))),
+                    $('<h4>').text(gt.format(gt('Configure %s'), model.get('displayName'))),
                     _(model.get('formDescription')).map(function (fd) {
                         var Input = fd.name === 'password' ? mini.PasswordView : mini.InputView;
                         return $('<div class="control-group">').append(

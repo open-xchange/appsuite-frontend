@@ -131,7 +131,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         index = 0;
     }
 
-    addAction(submenu, ['mark-read', 'mark-unread']);
+    addAction(submenu, ['mark-read', 'mark-unread', 'copy']);
 
     addAction(pointListView, ['compose']);
 

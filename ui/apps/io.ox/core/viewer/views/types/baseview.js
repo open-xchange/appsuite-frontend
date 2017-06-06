@@ -32,7 +32,7 @@ define('io.ox/core/viewer/views/types/baseview', [
 
         // create slide root node
         // <div class="swiper-slide" tabindex="-1" role="option" aria-selected="false">
-        className: 'swiper-slide scrollable',
+        className: 'swiper-slide scrollable focusable',
         attributes: { tabindex: -1, role: 'option', 'aria-selected': 'false' },
 
         /**
@@ -49,7 +49,7 @@ define('io.ox/core/viewer/views/types/baseview', [
             iconClass = iconClass || Util.getIconClass(this.model);
 
             return $('<div class="viewer-displayer-notification">').append(
-                $('<i class="fa">').addClass(iconClass),
+                $('<i class="fa" aria-hidden="true">').addClass(iconClass),
                 $('<p class="apology">').text(notification || '')
             );
         },
@@ -73,9 +73,13 @@ define('io.ox/core/viewer/views/types/baseview', [
          * @returns {String} previewURL
          */
         getPreviewUrl: function (options) {
+            // turn off sharding #53731
+            options = _.extend(options || {}, { noSharding: true });
+
             if (this.model.get('file_options')) {
                 options = _.extend(options, this.model.get('file_options'));
             }
+
             if (this.model.isFile()) {
                 var modelJSON = this.model.toJSON();
                 if (options && !_.isEmpty(options.version)) {

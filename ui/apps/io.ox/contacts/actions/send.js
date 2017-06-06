@@ -37,7 +37,7 @@ define('io.ox/contacts/actions/send', ['io.ox/contacts/api'], function (api) {
                             return [obj.display_name, obj.mail];
                         });
                     }
-                    return [[obj.display_name, obj.email1 || obj.email2 || obj.email3]];
+                    return [[obj.display_name, obj.email1 || obj.email2 || obj.email3, obj.image1_url]];
                 })
                 .flatten(true)
                 .filter(function (obj) {

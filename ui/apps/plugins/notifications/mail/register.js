@@ -18,6 +18,7 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/extensions',
     'gettext!plugins/notifications',
     'io.ox/mail/util',
+    'io.ox/core/settings/util',
     'io.ox/core/folder/api',
     'io.ox/core/api/account',
     'io.ox/core/capabilities',
@@ -25,7 +26,7 @@ define('plugins/notifications/mail/register', [
     'io.ox/core/desktopNotifications',
     'io.ox/contacts/api',
     'settings!io.ox/mail'
-], function (api, ext, gt, util, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, settings) {
+], function (api, ext, gt, util, formUtil, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, settings) {
 
     'use strict';
 
@@ -36,7 +37,6 @@ define('plugins/notifications/mail/register', [
         iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
         sound,
         type = _.device('!windows && !macos && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
-        settingsModel = settings,
         soundList = [
             { label: gt('Bell'), value: 'bell' },
             { label: gt('Marimba'), value: 'marimba' },
@@ -48,18 +48,6 @@ define('plugins/notifications/mail/register', [
         // ignore virtual/all (used by search, for example) and unsubscribed folders
         if (!model.get('subscribed') || (/^default0\/virtual/.test(model.id))) return false;
         return /^default0\D/.test(model.id) && !account.is('spam|trash|unseen', model.id) && (folderApi.getSection(model.get('type')) === 'private');
-    }
-
-    function fieldset(text) {
-        var args = _(arguments).toArray();
-        return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));
-    }
-
-    function checkbox(text) {
-        var args = _(arguments).toArray();
-        return $('<div class="checkbox">').append(
-            $('<label class="control-label">').text(text).prepend(args.slice(1))
-        );
     }
 
     // load a soundfile
@@ -111,9 +99,9 @@ define('plugins/notifications/mail/register', [
         if (sound) sound.play();
     }, 2000);
 
-    settingsModel.on('change:notificationSoundName', function () {
+    settings.on('change:notificationSoundName', function () {
         if (_.device('smartphone')) return;
-        var s = settingsModel.get('notificationSoundName');
+        var s = settings.get('notificationSoundName');
         loadSound(s).done(function (s) {
             // preview the selected sound by playing it on change
             if (s) {
@@ -121,12 +109,12 @@ define('plugins/notifications/mail/register', [
                 sound = s;
             }
         });
-        settingsModel.saveAndYell();
+        settings.saveAndYell();
     });
 
     // get and load stored sound
     if (_.device('!smartphone')) {
-        loadSound(settingsModel.get('notificationSoundName')).done(function (s) {
+        loadSound(settings.get('notificationSoundName')).done(function (s) {
             sound = s;
         });
     }
@@ -140,17 +128,14 @@ define('plugins/notifications/mail/register', [
             // copy new/other sounds to themefolder->sounds
             var sounds;
 
-            this.append(fieldset(
+            this.append(formUtil.fieldset(
                     //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
                     gt('Notification sounds'),
-                    checkbox(
-                        gt('Play sound on incoming mail'),
-                        new miniViews.CheckboxView({ name: 'playSound', model: settings }).render().$el
-                    ),
+                    formUtil.checkbox('playSound', gt('Play sound on incoming mail'), settings),
                     $('<div class="col-xs-12 col-md-6">').append(
                         $('<div class="row">').append(
                             $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Sound')),
-                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settingsModel, id: 'notificationSoundName', className: 'form-control' }).render().$el
+                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settings, id: 'notificationSoundName', className: 'form-control' }).render().$el
 
                         )
                     )

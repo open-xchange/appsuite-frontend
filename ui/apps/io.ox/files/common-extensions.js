@@ -57,8 +57,7 @@ define('io.ox/files/common-extensions', [
 
         filename: function (baton, ellipsis) {
             var
-                filename = baton.data.filename || baton.data.title || '',
-                tooltipTitle = filename,
+                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '',
                 isWrapFilename = false;
 
             // add suffix for locked files
@@ -82,21 +81,24 @@ define('io.ox/files/common-extensions', [
                 // make underscore wrap as well
                 filename = filename.replace(/_/g, '_\u200B');
             }
-
             this.append(
                 $('<div class="filename">').text(filename)
             );
+        },
+        filenameTooltip: function (baton) {
+            var
+                filename = baton.data['com.openexchange.file.sanitizedFilename'] || baton.data.filename || baton.data.title || '';
 
-            //  - not recommended since the black standard bootstrap tooltip
-            //    does not match with most of the icon views file preview images.
-            //
-            // this.tooltip({ // http://getbootstrap.com/javascript/#tooltips
-            //     title: tooltipTitle,
-            //     placement: 'right'
-            //   //viewport: { selector: '.list-item', padding: '10px' } // or callback function
-            // });
-
-            this.attr('title', tooltipTitle); // please go with the native tooltip, one gets for free from the operating system.
+            this.parent().tooltip({ // http://getbootstrap.com/javascript/#tooltips // https://codepen.io/jasondavis/pen/mlnEe
+                title: _.breakWord(filename),
+                trigger: 'hover',                       // click | hover | focus | manual. You may pass multiple triggers; separate them with a space.
+              //placement: 'right auto',                // top | bottom | left | right | auto.
+                placement: 'bottom auto',               // top | bottom | left | right | auto.
+                animation: true,                        // false
+              //delay: { 'show': 400, 'hide': 50000 },
+                delay: { 'show': 400 },
+                viewport: { selector: '.list-view-control.toolbar-top-visible', padding: 16 } // viewport: '#viewport' or { "selector": "#viewport", "padding": 0 } // or callback function
+            });
         },
 
         mailSubject: function (baton, ellipsis) {

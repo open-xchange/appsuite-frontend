@@ -57,7 +57,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                             null,
                         // filename
                         $('<span class="filename-label">').text(displayName)
-                    ).attr('aria-label', displayName);
+                    ).attr({
+                        role: 'button',
+                        'aria-label': displayName
+                    });
 
                     this.addClass('viewer-toolbar-filename').parent().addClass('pull-left');
 
@@ -65,8 +68,10 @@ define('io.ox/core/viewer/views/toolbarview', [
                     if (baton.model.isFile()) {
                         ActionsPattern.check('io.ox/files/actions/rename', [baton.data]).then(
                             function yep() {
-                                this.attr('data-original-title', gt('Rename File'));
-                                this.attr({ 'data-placement': 'bottom' });
+                                this.attr({
+                                    'data-original-title': gt('Rename File'),
+                                    'data-placement': 'bottom'
+                                });
                                 this.tooltip();
                             }.bind(this),
                             function nope() {
@@ -80,11 +85,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'hi',
                 mobile: 'lo',
                 icon: 'fa fa-search-minus',
-                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 label: gt('Zoom out'),
+                section: 'zoom',
+                ref: TOOLBAR_ACTION_ID + '/zoomout',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomout').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom out')
                     });
                 }
@@ -94,10 +100,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 mobile: 'lo',
                 icon: 'fa fa-search-plus',
                 label: gt('Zoom in'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomin',
                 customize: function () {
                     this.addClass('viewer-toolbar-zoomin').attr({
-                        tabindex: '0',
+                        role: 'button',
                         'aria-label': gt('Zoom in')
                     });
                 }
@@ -106,15 +113,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen width'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitwidth',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">'),
-                        sectionLabel = $('<li class="dropdown-header" role="sectionhead">').text(gt('Zoom'));
-                    this.before(sectionLabel);
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitwidth')
+                    this.addClass('viewer-toolbar-fitwidth')
                         .attr({
-                            tabindex: '0',
                             'aria-label': gt('Fit to screen width')
                         });
                 }
@@ -123,12 +126,11 @@ define('io.ox/core/viewer/views/toolbarview', [
                 prio: 'lo',
                 mobile: 'lo',
                 label: gt('Fit to screen size'),
+                section: 'zoom',
                 ref: TOOLBAR_ACTION_ID + '/zoomfitheight',
                 customize: function () {
-                    var checkIcon = $('<i class="fa fa-fw fa-check fitzoom-check" aria-hidden="true">');
-                    this.prepend(checkIcon)
-                        .addClass('viewer-toolbar-fitheight').attr({
-                            tabindex: '0',
+                    this.addClass('viewer-toolbar-fitheight')
+                        .attr({
                             'aria-label': gt('Fit to screen size')
                         });
                 }
@@ -142,7 +144,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-togglesidebar')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('View details')
                         });
                 }
@@ -156,7 +158,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-popoutstandalone')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Pop out standalone viewer')
                         });
                 }
@@ -170,7 +172,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 customize: function () {
                     this.addClass('viewer-toolbar-close')
                         .attr({
-                            tabindex: '0',
+                            role: 'button',
                             'aria-label': gt('Close viewer')
                         })
                         .parent().addClass('pull-right');
@@ -249,7 +251,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 },
                 'sharelink': {
                     mobile: 'lo',
-                    label: gt('Get link'),
+                    label: gt('Create sharing link'),
                     section: 'share',
                     ref: 'io.ox/files/actions/getalink'
                 },
@@ -477,7 +479,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomIn();
         }
     });
@@ -487,7 +488,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return model.isOffice() || model.isPDF() || model.isText();
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').hide();
             baton.context.onZoomOut();
         }
     });
@@ -498,8 +498,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitwidth');
         }
     });
@@ -510,8 +508,6 @@ define('io.ox/core/viewer/views/toolbarview', [
             return (model.isOffice() || model.isPDF() || model.isText()) && e.baton.context.standalone;
         },
         action: function (baton) {
-            baton.context.$el.find('.fitzoom-check').removeClass('fa-check').addClass('fa-none').css({ display: 'inline-block' });
-            $(this).find('.fitzoom-check').removeClass('fa-none').addClass('fa-check');
             baton.context.viewerEvents.trigger('viewer:zoom:fitheight');
         }
     });
@@ -675,7 +671,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                 this.currentlyDrawn = model;
                 // draw toolbar
                 var origData = model.get('origData'),
-                    toolbar = this.$el.attr({ role: 'menu', 'aria-label': gt('Viewer Toolbar') }),
+                    toolbar = this.$el.attr({ role: 'toolbar', 'aria-label': gt('Viewer Toolbar') }),
                     pageNavigation = toolbar.find('.viewer-toolbar-navigation'),
                     isDriveFile = model.isFile(),
                     baton = Ext.Baton({
@@ -740,10 +736,10 @@ define('io.ox/core/viewer/views/toolbarview', [
          * Renders the document page navigation controls.
          */
         renderPageNavigation: function () {
-            var prev = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+            var prev = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Previous page'), 'title': gt('Previous page') })
                     .append($('<i class="fa fa-arrow-up" aria-hidden="true">')),
-                next = $('<a class="viewer-toolbar-navigation-button" role="menuitem">')
+                next = $('<a class="viewer-toolbar-navigation-button" role="button">')
                     .attr({ 'aria-label': gt('Next page'), 'title': gt('Next page') })
                     .append($('<i class="fa fa-arrow-down" aria-hidden="true">')),
                 pageInput = $('<input type="text" class="viewer-toolbar-page" role="textbox">'),

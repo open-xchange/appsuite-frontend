@@ -27,7 +27,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 var value = this.$el.val();
                 if (value.match(/^\d+$/)) value = parseInt(value, 10);
                 this.model.set(this.name, value, { validate: true });
-            },
+            }
         });
 
     ext.point('io.ox/backbone/views/recurrence-view/dialog').extend({
@@ -55,7 +55,7 @@ define('io.ox/backbone/views/recurrence-view', [
                     // special handling for weekly on weekdays
                     if (this.model.get('every-weekday')) this.$el.val('2:1');
                     else this.$el.val(value);
-                },
+                }
             });
 
             return function () {
@@ -261,10 +261,12 @@ define('io.ox/backbone/views/recurrence-view', [
                         var self = this;
                         this.$el.attr('data-toggle', 'buttons').append(
                             _(this.list).map(function (obj) {
-                                var view = new BitmaskCheckbox(_.extend({
-                                    model: self.model
-                                }, obj.options)).render();
-                                return $('<label class="btn btn-default">').toggleClass('active', view.$el.prop('checked')).append(
+                                var guid = _.uniqueId('form-control-label-'),
+                                    view = new BitmaskCheckbox(_.extend({
+                                        id: guid,
+                                        model: self.model
+                                    }, obj.options)).render();
+                                return $('<label class="btn btn-default">').attr('for', guid).toggleClass('active', view.$el.prop('checked')).append(
                                     view.$el,
                                     obj.label
                                 );
@@ -565,6 +567,7 @@ define('io.ox/backbone/views/recurrence-view', [
     });
 
     var SerializeCheckboxView = mini.CheckboxView.extend({
+
             onChange: function () {
                 var val = this.$el.prop('checked'),
                     old = this.model.get('recurrence_type') > 0;
@@ -699,10 +702,12 @@ define('io.ox/backbone/views/recurrence-view', [
         },
 
         render: function () {
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<div class="checkbox">').append(
-                    $('<label>').append(
+                    $('<label>').attr('for', guid).append(
                         new SerializeCheckboxView({
+                            id: guid,
                             model: this.model,
                             name: 'recurrence_type'
                         }).render().$el,

@@ -39,17 +39,22 @@ define('io.ox/files/actions/share', [
         // build header
         if (first.isFile()) {
             //#. if only one item -> insert filename / on more than one item -> item count
-            header = gt.format(gt.ngettext('Share the file "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for file "%1$d"', 'Sharing link created for %1$d items', count), filler);
         } else if (first.isFolder()) {
-            header = gt.format(gt.ngettext('Share the folder "%1$d"', 'Share %1$d items', count), filler);
+            header = gt.format(gt.ngettext('Sharing link created for folder "%1$d"', 'Sharing link created for %1$d items', count), filler);
         }
 
         // create dialog
         var dialog = new ModalDialog({
             async: true,
+            focus: '.link-group>input[type=text]',
             title: header,
+            help: 'ox.appsuite.user.sect.dataorganisation.sharing.link.html',
+            smartphoneInputFocus: true,
             width: 600
         });
+
+        dialog.$el.addClass('get-link-dialog');
 
         // render share wizard into dialog body
         dialog.$body.append(
@@ -78,7 +83,7 @@ define('io.ox/files/actions/share', [
         });
 
         view.listenTo(view.model, 'change:recipients', function (model, value) {
-            toggleButtons(value.length);
+            toggleButtons(value.length > 0);
         });
 
         dialog
@@ -86,9 +91,13 @@ define('io.ox/files/actions/share', [
                 view.share().then(this.close, this.idle);
             })
             .on('remove', function () {
-                view.removeLink();
-                notifications.yell('success', gt('The link has been removed'));
-                this.close();
+                view.removeLink()
+                    .done(function () {
+                        notifications.yell('success', gt('The link has been removed'));
+                        this.close();
+                    }.bind(this))
+                    .fail(notifications.yell)
+                    .always(dialog.idle.bind(dialog));
             });
 
         dialog.open();

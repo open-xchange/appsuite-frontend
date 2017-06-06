@@ -11,21 +11,16 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/views/displayerview', [
-
     'io.ox/files/api',
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
-
     'static/3rd.party/bigscreen/bigscreen.min.js',
-
     'settings!io.ox/files',
     'gettext!io.ox/core',
-
     'static/3rd.party/swiper/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
-
-], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, FilesSettings, gt) {
+], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, filesSettings, gt) {
 
     'use strict';
 
@@ -316,10 +311,10 @@ define('io.ox/core/viewer/views/displayerview', [
     function requireAutoplayUserSettings() {
         // from user settings or by default/fallback according to https://jira.open-xchange.com/browse/DOCS-670
 
-        IS_LOOP_ENDLESSLY = (String(FilesSettings.get('autoplayLoopMode')).toLowerCase() === 'loopendlessly'); // default value equals true.
+        IS_LOOP_ENDLESSLY = (String(filesSettings.get('autoplayLoopMode')).toLowerCase() === 'loopendlessly'); // default value equals true.
         IS_LOOP_ONCE_ONLY = !IS_LOOP_ENDLESSLY;
 
-        AUTOPLAY_PAUSE__WHILST_RUNNING = (Number(FilesSettings.get('autoplayPause')) * 1000); // value of 'autoplayPause' in seconds
+        AUTOPLAY_PAUSE__WHILST_RUNNING = (Number(filesSettings.get('autoplayPause')) * 1000); // value of 'autoplayPause' in seconds
         if (!isFinite(AUTOPLAY_PAUSE__WHILST_RUNNING)) {
             AUTOPLAY_PAUSE__WHILST_RUNNING = 5000; // default/fallback value.
         }
@@ -447,8 +442,8 @@ define('io.ox/core/viewer/views/displayerview', [
 
             var carouselRoot = $('<div id="viewer-carousel" class="swiper-container" role="listbox">'),
                 carouselInner = $('<div class="swiper-wrapper">'),
-                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
-                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
+                prevSlide = $('<a href="#" role="button" class="swiper-button-prev swiper-button-control left" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-left" aria-hidden="true"></i></a>'),
+                nextSlide = $('<a href="#" role="button" class="swiper-button-next swiper-button-control right" aria-controls="viewer-carousel" tabindex="-1"><i class="fa fa-angle-right" aria-hidden="true"></i></a>'),
                 autoplay,
                 fullscreen,
                 caption = $('<div class="viewer-displayer-caption">'),
@@ -675,7 +670,7 @@ define('io.ox/core/viewer/views/displayerview', [
                             view.$el.attr('data-swiper-slide-index', swiperIndex);
                             view.$el.addClass(additionalClasses);
                             if (active) {
-                                view.$el.focus();
+                                view.$el.attr('tabindex', 0).focus();
                             }
 
                             if (self.swiper.wrapper.find('*[data-index=' + index + '].swiper-slide-duplicate').length) {
@@ -788,7 +783,7 @@ define('io.ox/core/viewer/views/displayerview', [
             var self = this,
                 duplicate = arguments.length > 1,
                 dummy = {
-                    $el: duplicate ? arguments[0] : $('<div class="dummy-slide swiper-slide scrollable">').attr('data-index', index).attr('data-index', index),
+                    $el: duplicate ? arguments[0] : $('<div class="dummy-slide swiper-slide scrollable focusable">').attr('data-index', index).attr('data-index', index),
                     show: function () {
                         // allow chaining
                         return this;
@@ -1081,7 +1076,8 @@ define('io.ox/core/viewer/views/displayerview', [
          * Focuses the swiper's current active slide.
          */
         focusActiveSlide: function () {
-            this.getActiveSlideNode().focus();
+            this.swiper.slides.attr('tabindex', -1);
+            this.getActiveSlideNode().attr('tabindex', 0).visibleFocus();
         },
 
         /**
@@ -1292,7 +1288,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 }),
                 fileModelList = this.collection.models,
                 activeFileId = fileModelList[this.activeIndex].attributes.id,
-                activeIndex = imageFileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                activeIndex = _.findIndex(imageFileModelList, function (fileModel/*, idx, list*/) { // due to MSIE 11 not supporting `findIndex` natively.
                     return (fileModel.attributes.id === activeFileId);
                 });
 
@@ -1334,7 +1330,7 @@ define('io.ox/core/viewer/views/displayerview', [
                 imageFileModelList = this.collection.models,
                 fileModelList = this.collectionBackup.models,
                 activeFileId = imageFileModelList[this.activeIndex].attributes.id,
-                activeIndex = fileModelList.findIndex(function (fileModel/*, idx, list*/) {
+                activeIndex = _.findIndex(fileModelList, function (fileModel/*, idx, list*/) { // due to MSIE 11 not supporting `findIndex` natively.
                     return (fileModel.attributes.id === activeFileId);
                 });
 

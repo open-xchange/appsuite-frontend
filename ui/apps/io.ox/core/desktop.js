@@ -26,7 +26,7 @@ define('io.ox/core/desktop', [
     'io.ox/find/main',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreConfig, gt) {
+], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreSettings, gt) {
 
     'use strict';
 
@@ -44,7 +44,7 @@ define('io.ox/core/desktop', [
 
     function supportsFind(name) {
         // enabled apps
-        var list = coreConfig.get('search/modules') || [];
+        var list = coreSettings.get('search/modules') || [];
 
         name = name.replace(/^io\.ox\//, '')
             .replace(/files/, 'drive'); // drive alias
@@ -290,8 +290,8 @@ define('io.ox/core/desktop', [
                     },
 
                     setDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
-                            var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
+                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
+                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
                             }
@@ -307,8 +307,8 @@ define('io.ox/core/desktop', [
                     },
 
                     isDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailConfig) {
-                            var defaultFolder = type === 'mail' ? mailConfig.get('folder/inbox') : coreConfig.get('folder/' + type);
+                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
+                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
                             return String(folder) === String(defaultFolder);
                         });
                     },
@@ -651,7 +651,7 @@ define('io.ox/core/desktop', [
             var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
                 // mail compose has a separate setting
-                if (this.get('name') === 'io.ox/mail/compose' && !coreConfig.get('features/storeMailSavePoints', true)) return $.when();
+                if (this.get('name') === 'io.ox/mail/compose' && !coreSettings.get('features/storeMailSavePoints', true)) return $.when();
 
                 return ox.ui.App.getSavePoints().then(function (list) {
                     // might be null, so:
@@ -692,7 +692,7 @@ define('io.ox/core/desktop', [
         removeRestorePoint: function () {
             var uniqueID = this.get('uniqueID');
             ox.ui.App.removeRestorePoint(uniqueID);
-        },
+        }
 
     });
 
@@ -703,8 +703,7 @@ define('io.ox/core/desktop', [
 
         return urlForceOn ||
             !urlForceOff &&
-            _.device('!smartphone') &&
-            coreConfig.get('features/storeSavePoints', true);
+            coreSettings.get('features/storeSavePoints', true);
     }
     // static methods
     _.extend(ox.ui.App, {
@@ -736,7 +735,7 @@ define('io.ox/core/desktop', [
             return appCache.get('savepoints').then(function (list) {
                 list = list || [];
                 // get restorepoints by Id too (those are saved in jslob so they survive logouts), don't return standard savepoints from jslob (those are artefacts from old versions, they are removed on the next save)
-                var savepointsById = coreConfig.get('savepoints', []).filter(function (savepoint) { return savepoint.restoreById; });
+                var savepointsById = coreSettings.get('savepoints', []).filter(function (savepoint) { return savepoint.restoreById; });
                 list = [].concat(list, savepointsById);
 
                 return _(list || []).filter(function (obj) {
@@ -762,7 +761,7 @@ define('io.ox/core/desktop', [
                 return !point.restoreById;
             });
             // set both types of savepoints
-            coreConfig.set('savepoints', pointsById);
+            coreSettings.set('savepoints', pointsById);
             return appCache.add('savepoints', list);
         },
 
@@ -783,12 +782,12 @@ define('io.ox/core/desktop', [
                 }
                 // if this is a point that's restored by id we need to remove it in the settings
                 if (point && point.restoreById) {
-                    var pointsById = coreConfig.get('savepoints', []);
+                    var pointsById = coreSettings.get('savepoints', []);
                     ids = _(pointsById).pluck('id');
                     pos = _(ids).indexOf(id);
                     if (pos > -1) {
                         pointsById.splice(pos, 1);
-                        coreConfig.set('savepoints', pointsById).save();
+                        coreSettings.set('savepoints', pointsById).save();
                     }
                 }
                 return self.setSavePoints(list).then(function () {
@@ -1214,7 +1213,7 @@ define('io.ox/core/desktop', [
                 }
 
                 this.setHeader = function (node) {
-                    var position = _.device('!desktop') ? 'top' : coreConfig.get('features/windowHeaderPosition', 'bottom');
+                    var position = _.device('!desktop') ? 'top' : coreSettings.get('features/windowHeaderPosition', 'bottom');
                     if (position === 'top') {
                         this.nodes.header.append(node.addClass('container'));
                         this.nodes.outer.addClass('header-top');
@@ -1653,30 +1652,18 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         baton.$.group.append(
                             // search
-                            $('<i>')
+                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
-                                    'tabindex': '-1',
-                                    'class': 'fa fa-search form-control-feedback action action-show',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search')
-                                })
+                                }).append($('<i class="fa fa-search" aria-hidden="true">'))
                                 .tooltip(),
                             // cancel/reset
-                            $('<i>')
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-cancel" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
-                                    'tabindex': '-1',
-                                    'class': 'fa fa-times-circle form-control-feedback action action-cancel',
-                                    'data-toggle': 'tooltip',
-                                    'data-placement': 'bottom',
-                                    'data-animation': 'false',
-                                    'data-container': 'body',
                                     'data-original-title': gt('Cancel search'),
                                     'aria-label': gt('Cancel search')
-                                })
+                                }).append($('<i class="fa fa-times-circle" aria-hidden="true">'))
                                 .tooltip()
                         );
                     }

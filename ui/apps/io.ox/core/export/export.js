@@ -71,11 +71,11 @@ define('io.ox/core/export/export', [
         draw: function (baton) {
 
             if (baton.module !== 'contacts') return;
-
+            var guid = _.uniqueId('form-control-label-');
             this.append(
                 // checkbox
-                $('<label class="checkbox include_distribution_lists">').append(
-                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">'),
+                $('<label class="checkbox include_distribution_lists">').attr('for', guid).append(
+                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">').attr('id', guid),
                     $.txt(gt('Include distribution lists'))
                 )
             );

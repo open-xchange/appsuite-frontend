@@ -12,16 +12,12 @@
  */
 
 define('io.ox/files/actions/save-as-pdf', [
-
     'io.ox/core/folder/api',
     'io.ox/files/api',
-
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/tk/doc-converter-utils',
-
     'gettext!io.ox/files'
-
 ], function (FolderApi, FilesApi, ext, dialogs, ConverterUtils, gt) {
 
     'use strict';

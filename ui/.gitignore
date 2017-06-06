@@ -17,3 +17,4 @@ local.conf*
 !local.conf.default.json
 npm-debug.log
 /bower_components
+/nightwatch-reports

@@ -11,6 +11,15 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+
+@media all and (max-width: 480px) {
+    .modal.flex[data-point="plugins/core/feedback"] {
+        .modal-dialog {
+            width: auto;
+        }
+    }
+}
+
 .rating-view {
     display: -webkit-flex;
     display: flex;
@@ -106,6 +115,7 @@
     line-height: 32px;
     padding: 0 16px;
     text-align: center;
+    white-space: nowrap;
     position: absolute;
     cursor: pointer;
     border-radius: @border-radius-base @border-radius-base 0 0;
@@ -120,11 +130,11 @@
     transform: rotate(-90deg);
     -webkit-transform-origin: bottom left;
     transform-origin: bottom left;
-    bottom: 32px;
+    bottom: 96px;
 }
 
 .leftside-button {
-    right: 100;
+    right: 100%;
     -webkit-transform: rotate(90deg); /* Safari and Chrome */
     transform: rotate(90deg);
     -webkit-transform-origin: bottom right;

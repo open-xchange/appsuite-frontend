@@ -14,6 +14,7 @@
 define('io.ox/files/share/wizard', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
+    'io.ox/files/share/api',
     'io.ox/files/share/model',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
@@ -24,8 +25,9 @@ define('io.ox/files/share/wizard', [
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
+    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
     'less!io.ox/files/share/style'
-], function (DisposableView, ext, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
+], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
     'use strict';
 
@@ -99,7 +101,7 @@ define('io.ox/files/share/wizard', [
             // copy-to-clipboard button
             group.append(
                 $('<span class="input-group-btn">').append(
-                    button = $('<button class="btn btn-default" type="button" disabled="disabled">')
+                    button = $('<button class="btn btn-default" type="button">')
                     .append($('<i class="fa fa-clipboard clippy">'))
                     .attr({
                         'data-clipboard-target': target,
@@ -129,6 +131,19 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
+     * extension point for share options
+     */
+    ext.point(POINT + '/fields').extend({
+        id: 'defaultOptions',
+        index: INDEX += 100,
+        draw: function (baton) {
+            var optionGroup = $('<div>').addClass('form-group shareoptions');
+            ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
+            this.append(optionGroup);
+        }
+    });
+
+    /*
      * extension point for recipients autocomplete input field
      */
     ext.point(POINT + '/fields').extend({
@@ -152,7 +167,7 @@ define('io.ox/files/share/wizard', [
             });
 
             this.append(
-                $('<div class="form-group">').append(
+                $('<div class="form-group recipients">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
                     $('<div class="input-group has-picker">').append(
                         $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
                         tokenfieldView.$el,
@@ -195,33 +210,27 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function (baton) {
             var guid = _.uniqueId('form-control-label-');
+            var $textView;
+
             this.append(
-                $('<div>').addClass('form-group').append(
+                $('<div class="message">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
                     $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid }),
-                    new miniViews.TextView({
+                    $textView = new miniViews.TextView({
                         name: 'message',
                         model: baton.model
                     }).render().$el.attr({
                         id: guid,
-                        rows: 3,
                         //#. placeholder text in share dialog
                         placeholder: gt('Message (optional)')
                     })
                 )
             );
-        }
-    });
 
-    /*
-     * extension point for share options
-     */
-    ext.point(POINT + '/fields').extend({
-        id: 'defaultOptions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            var optionGroup = $('<div>').addClass('shareoptions');
-            ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
-            this.append(optionGroup);
+            // apply polyfill for CSS resize which IE doesn't support natively
+            if (_.browser.IE) {
+                window.resizeHandlerPolyfill($textView[0]);
+            }
+
         }
     });
 
@@ -255,10 +264,11 @@ define('io.ox/files/share/wizard', [
                 dropdown.option('expires', parseInt(key, 10), val);
             });
 
+            var guid = _.uniqueId('form-control-label-');
             this.append(
-                $('<div>').addClass('form-group expiresgroup').append(
-                    $('<label>').addClass('checkbox-inline').text(gt('Expires in')).prepend(
-                        new miniViews.CheckboxView({ name: 'temporary', model: baton.model }).render().$el
+                $('<div class="form-group expiresgroup">').append(
+                    $('<label class="checkbox-inline">').attr('for', guid).text(gt('Expires in')).prepend(
+                        new miniViews.CheckboxView({ id: guid, name: 'temporary', model: baton.model }).render().$el
                     ),
                     $.txt(' '),
                     dropdown.render().$el.addClass('dropup')
@@ -291,42 +301,23 @@ define('io.ox/files/share/wizard', [
     });
 
     /*
-     * extension point for write permissions checkbox
-     */
-    ext.point(POINT + '/options').extend({
-        id: 'write-permissions',
-        index: INDEX += 100,
-        draw: function (baton) {
-            this.append(
-                $('<div>').addClass('form-group editgroup').append(
-                    $('<div>').addClass('checkbox').append(
-                        $('<label>').addClass('control-label').text(gt('Recipients can edit')).prepend(
-                            new miniViews.CheckboxView({ name: 'edit', model: baton.model }).render().$el
-                        )
-                    )
-                )
-            );
-        }
-    });
-
-    /*
      * extension point for password protection
      */
     ext.point(POINT + '/options').extend({
         id: 'secured',
         index: INDEX += 100,
         draw: function (baton) {
-            var guid = _.uniqueId('form-control-label-'), passContainer;
+            var guid, passContainer;
             this.append(
-                $('<div>').addClass('form-inline passwordgroup').append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('checkbox-inline').text(gt('Password required')).prepend(
-                            new miniViews.CheckboxView({ name: 'secured', model: baton.model }).render().$el
+                $('<div class="form-inline passwordgroup">').append(
+                    $('<div class="form-group">').append(
+                        $('<label class="checkbox-inline">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Password required')).prepend(
+                            new miniViews.CheckboxView({ id: guid, name: 'secured', model: baton.model }).render().$el
                         )
                     ),
                     $.txt(' '),
-                    $('<div>').addClass('form-group').append(
-                        $('<label>').addClass('control-label sr-only').text(gt('Enter Password')).attr({ for: guid }),
+                    $('<div class="form-group">').append(
+                        $('<label class="control-label sr-only">').text(gt('Enter Password')).attr({ for: guid = _.uniqueId('form-control-label-') }),
                         passContainer = new miniViews.PasswordViewToggle({ name: 'password', model: baton.model, autocomplete: false })
                             .render().$el.find('input')
                             // see bug 49639
@@ -382,24 +373,35 @@ define('io.ox/files/share/wizard', [
         share: function () {
             // we might have new addresses
             contactsAPI.trigger('maybeNewContact');
+            var result;
 
-            // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
-            var result = this.model.save();
+            // Bug 52046: When the password checkbox is enable and the password could not be validated (e.g. it's empty) in the set function from the model,
+            // we have the previous, not up-to-date model data, but also an validationError to indicate that there was a error.
+            // So the validation in the save function would work with the old model data. Therefore don't call save() when there
+            // is an validationError, because it would work with an old model.
+            if (this.model.get('secured') && _.isString(this.model.validationError)) {
+                // reject so that the dialog is not closed later and pass the yell message for the fail handler
+                result = $.Deferred().reject('error', this.model.validationError);
 
-            //  to unify the return type, we always want to return a deferred
-            if (result === false) {
-                return $.Deferred().reject();
+            } else {
+                // function 'save' returns a jqXHR if validation is successful and false otherwise (see backbone api)
+                result = this.model.save();
+
+                //  to unify the return type for later functions, we must return a deferred
+                if (result === false) {
+                    // no yell message needed, therefore return directly, the yell is called in the save function above
+                    return $.Deferred().reject();
+                }
             }
+
             return result.fail(yell);
 
         },
 
         removeLink: function () {
             var model = this.model;
-            require(['io.ox/files/share/api'], function (api) {
-                api.deleteLink(model.toJSON(), model.get('lastModified')).fail(yell);
-                model.destroy();
-            });
+            return api.deleteLink(model.toJSON(), model.get('lastModified'))
+                .done(model.destroy.bind(model));
         }
     });
 

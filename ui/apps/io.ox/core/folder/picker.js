@@ -47,6 +47,7 @@ define('io.ox/core/folder/picker', [
     //     title        {string}    dialog title / can also be DOM element(s)
     //     width        {number}    dialog width in px
     //     open         [array]     Folders to be open by default; array of IDs
+    //     createFolderButton   {bool} default is true
     //
     //   Callbacks:
     //     always       {function}  Called on "ok" / no matter if a folder is selected
@@ -90,7 +91,9 @@ define('io.ox/core/folder/picker', [
             show: $.noop,
             alternative: $.noop,
             cancel: $.noop,
-            create: $.noop
+            create: $.noop,
+            createFolderButton: true,
+            realNames: false
         }, options);
 
         function create() {
@@ -131,8 +134,11 @@ define('io.ox/core/folder/picker', [
                 )
             )
             .addPrimaryButton('ok', o.button, 'ok')
-            .addButton('cancel', gt('Cancel'), 'cancel')
-            .addAlternativeButton('create', gt('Create folder'), 'create', { click: create });
+            .addButton('cancel', gt('Cancel'), 'cancel');
+
+        if (o.createFolderButton) {
+            dialog.addAlternativeButton('create', gt('Create folder'), 'create', { click: create });
+        }
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
@@ -166,6 +172,7 @@ define('io.ox/core/folder/picker', [
             hideTrashfolder: o.hideTrashfolder,
             // highlight current selection
             highlight: true,
+            realNames: options.realNames,
             highlightclass: _.device('smartphone') ? 'visible-selection-smartphone' : 'visible-selection'
         });
 
@@ -226,7 +233,7 @@ define('io.ox/core/folder/picker', [
                     .always(function () {
                         dialog.getBody().idle().prepend(tree.render().$el);
                         // focus and trigger click on first element for proper keyboard a11y
-                        tree.$('.tree-container .selectable:first').focus().trigger('click');
+                        tree.$('.tree-container .selectable:visible:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
             })
