@@ -785,7 +785,7 @@ define('io.ox/tasks/edit/view-template', [
                 self.baton.app.getWindow().nodes.footer.on('mousedown', '[data-action]', function (e) {
                     var node =  $(e.target);
                     metrics.trackEvent({
-                        app: 'task',
+                        app: 'tasks',
                         target: 'edit/toolbar',
                         type: 'click',
                         action: node.attr('data-action') || node.attr('data-name'),
@@ -797,7 +797,7 @@ define('io.ox/tasks/edit/view-template', [
                         // metrics
                         require(['io.ox/metrics/main'], function (metrics) {
                             metrics.trackEvent({
-                                app: 'task',
+                                app: 'tasks',
                                 target: 'edit',
                                 type: 'click',
                                 action: 'add-attachment'
