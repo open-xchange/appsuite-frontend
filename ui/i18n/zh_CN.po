@@ -3501,7 +3501,7 @@ msgstr "信封"
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "错误"
 
@@ -7144,8 +7144,8 @@ msgstr "读取拥有的对象"
 msgid "Read permissions"
 msgstr "读取权限"
 
-#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "再认证"
 

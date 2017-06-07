@@ -5571,7 +5571,7 @@ msgstr ""
 #: apps/io.ox/core/yell.js
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js
+#: apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr ""
 
@@ -10744,7 +10744,7 @@ msgstr ""
 msgid "My %1$s account (%2$d)"
 msgstr ""
 
-#: apps/io.ox/oauth/keychain.js
+#: apps/io.ox/oauth/reauth_handler.js
 #: module:io.ox/core
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings

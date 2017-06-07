@@ -3645,7 +3645,7 @@ msgstr "Zarf"
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Hata"
 
@@ -7476,8 +7476,8 @@ msgstr "kendi objelerinizi okuyun "
 msgid "Read permissions"
 msgstr "okuma izni yok"
 
-#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Yeniden Yetkilendirme"
 
