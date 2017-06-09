@@ -59,6 +59,7 @@
     "node": ">=0.10"
   },
   "dependencies": {
+    "@open-xchange/hopscotch": "0.0.1",
     "@open-xchange/tinymce": "4.6.3-1"
   }
 }

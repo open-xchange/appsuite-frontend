@@ -45,14 +45,11 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['tinymce/{langs,plugins,skins,themes}/**/*'],
+                        src: [
+                            'tinymce/{langs,plugins,skins,themes}/**/*',
+                            'hopscotch/*'
+                        ],
                         cwd: 'node_modules/@open-xchange/',
-                        dest: 'build/apps/3rd.party/'
-                    },
-                    {
-                        expand: true,
-                        src: ['hopscotch/*'],
-                        cwd: 'lib/',
                         dest: 'build/apps/3rd.party/'
                     },
                     {
