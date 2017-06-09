@@ -211,7 +211,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 300,
             id: ref + '/edit/view/addresses',
             draw: function (baton) {
-                var primaryMail = baton.multiValues.aliases[0],
+                var primaryMail = baton.model.get('primaryMail'),
                     actionlink = $('<a href="#" role="button" data-action="selectall">'),
                     self = this,
                     all;
