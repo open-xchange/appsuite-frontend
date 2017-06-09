@@ -66,7 +66,6 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
-                            'velocity/velocity.min.js',
                             'moment/moment.js',
                             'resize-polyfill/lib/polyfill-resize.js'
                         ],
@@ -137,6 +136,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         expand: true,
                         src: [
+                            'velocity/velocity.min.js',
                             'chart.js/dist/Chart.js',
                             'clipboard/dist/clipboard.min.js'
                         ],
