@@ -9,8 +9,8 @@ define('io.ox/files/guidance/statistics', [
     'io.ox/files/api',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
-    'static/3rd.party/Chart.js/Chart.js'
-], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities) {
+    'static/3rd.party/Chart.js'
+], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities, Chart) {
 
     'use strict';
 
@@ -117,6 +117,34 @@ define('io.ox/files/guidance/statistics', [
 
         // attribute notation does not work! don't know why. maybe retina whatever.
         return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '" style="width:' + WIDTH + 'px; height:' + HEIGHT + 'px;"></canvas>');
+    }
+
+    function createBarChart(canvas, data) {
+        var ctx = canvas.get(0).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                legend: { display: false },
+                tooltips: { enabled: false },
+                elements: {
+                    line: {
+                        backgroundColor: 'rgba(0, 136, 204, 0.15)',
+                        borderColor: 'rgba(0, 136, 204, 0.80)',
+                        borderWidth: 2
+                    },
+                    point: {
+                        backgroundColor: 'rgba(0, 136, 204, 1)',
+                        borderColor: '#fff',
+                        radius: 4
+                    },
+                    rectangle: {
+                        backgroundColor: 'rgba(0, 136, 204, 0.15)',
+                        borderColor: 'rgba(0, 136, 204, 0.80)'
+                    }
+                }
+            }
+        });
     }
 
     function getExtension(filename) {
@@ -247,7 +275,6 @@ define('io.ox/files/guidance/statistics', [
                 var files = _(_(arguments).toArray()).flatten(),
                     data,
                     chart,
-                    ctx,
                     options,
                     scale = 1,
                     scaledData;
@@ -272,16 +299,13 @@ define('io.ox/files/guidance/statistics', [
                     chart = {
                         labels: '1 2 3 4 5 6 7 8 9 10'.split(' '),
                         datasets: [{
-                            fillColor: 'rgba(0, 136, 204, 0.15)',
-                            strokeColor: 'rgba(0, 136, 204, 0.80)',
                             data: scaledData
                         }]
                     };
 
                     node.idle();
 
-                    ctx = canvas.get(0).getContext('2d');
-                    new window.Chart(ctx).Bar(chart, {});
+                    createBarChart(canvas, chart);
 
                     options = {
                         handler: function (id) {
@@ -341,8 +365,7 @@ define('io.ox/files/guidance/statistics', [
                     data,
                     scaledData,
                     scale = 1,
-                    chart,
-                    ctx;
+                    chart;
 
                 if (files.length > 0) {
                     _(files).each(function (file) {
@@ -376,8 +399,7 @@ define('io.ox/files/guidance/statistics', [
                     node.idle();
 
                     //append data as chart to the canvas
-                    ctx = canvas.get(0).getContext('2d');
-                    new window.Chart(ctx).Bar(chart, {});
+                    createBarChart(canvas, chart);
 
                     node.append(
                         $('<ol>').append(

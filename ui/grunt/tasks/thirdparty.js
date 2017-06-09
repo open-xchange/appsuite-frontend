@@ -63,7 +63,6 @@ module.exports = function (grunt) {
                             'bigscreen/bigscreen.min.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'jquery-imageloader/jquery.imageloader.js',
-                            'Chart.js/Chart.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',
@@ -134,6 +133,13 @@ module.exports = function (grunt) {
                         src: ['unorm.js'],
                         cwd: 'bower_components/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
+                    },
+                    {
+                        flatten: true,
+                        expand: true,
+                        src: ['chart.js/dist/Chart.js'],
+                        cwd: 'bower_components/',
+                        dest: 'build/static/3rd.party/'
                     }
                 ]
             }
