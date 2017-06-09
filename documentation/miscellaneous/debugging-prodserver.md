@@ -133,7 +133,8 @@ Instead of creating an `openssl.cnf` from scratch you can also copy your existin
 openssl req -newkey rsa:4096 -nodes -keyout host.key \
         -out host.csr -config openssl.cnf
 openssl x509 -req -in host.csr -CA rootCA.crt -CAkey rootCA.key \
-        -CAcreateserial -out host.crt -days 365
+        -CAcreateserial -out host.crt -days 365 \
+        -extfile openssl.cnf -extensions v3_req
 ```
 
 `host.csr` is temporary and can be deleted now.
