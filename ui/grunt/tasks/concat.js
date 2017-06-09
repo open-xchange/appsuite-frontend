@@ -38,7 +38,7 @@ module.exports = function (grunt) {
                             'src/util.js',
                             'bower_components/velocity/velocity.min.js',
                             'bower_components/requirejs/require.js',
-                            'lib/require-fix.js',
+                            'src/require-fix.js',
                             'lib/modernizr.js',
                             'src/lazyload.js',
                             'src/browser.js',

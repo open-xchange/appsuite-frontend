@@ -15,7 +15,7 @@
             cb();
         }, 4);
     };
-    _.each(require.s.contexts, function(context) {
+    _.each(require.s.contexts, function (context) {
         context.nextTick = require.nextTick;
     });
 }());
@@ -25,7 +25,7 @@ require({
     // inject version
     baseUrl: ox.base + '/apps',
     // use 15 seconds as base or hash param to tweak the timeout
-    waitSeconds: document.cookie.indexOf('selenium=true') != -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15)
+    waitSeconds: document.cookie.indexOf('selenium=true') !== -1 ? (60 * 10) : (_.url.hash('waitSeconds') || 15)
 });
 
 // jQuery AMD fix
@@ -38,7 +38,7 @@ define('jquery', function () { return $; });
 define.async = (function () {
 
     var getLoader = function (name, deps, callback) {
-        return function (n, req, onLoad, config) {
+        return function (n, req, onLoad) {
             // resolve module dependencies
             req(deps, function () {
                 // get module (must return deferred object)
