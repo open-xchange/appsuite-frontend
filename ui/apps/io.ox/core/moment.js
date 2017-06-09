@@ -16,6 +16,10 @@ define('moment', ['static/3rd.party/moment/moment.js'], function (m) {
     return (window.moment = m);
 });
 
+define('../moment', ['static/3rd.party/moment/moment.js'], function (m) {
+    return (window.moment = m);
+});
+
 // this is defined globaly in boot.js
 define('static/3rd.party/moment/moment.js', function () {
     return window.moment;

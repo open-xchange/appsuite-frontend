@@ -141,7 +141,7 @@ module.exports = function (grunt) {
                 options: {
                     process: function (content, srcPath) {
                         var defineName = (srcPath.split('.').shift()).replace('bower_components/', '');
-                        return content.replace(/define\(\['moment'\]/, 'define(\'' + defineName + '\', [\'moment\']');
+                        return content.replace(/define\(\['\.\.\/moment'\]/, 'define(\'' + defineName + '\', [\'moment\']');
                     }
                 },
                 files: [{
