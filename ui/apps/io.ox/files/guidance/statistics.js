@@ -9,7 +9,7 @@ define('io.ox/files/guidance/statistics', [
     'io.ox/files/api',
     'gettext!io.ox/files',
     'io.ox/core/capabilities',
-    'static/3rd.party/Chart.js'
+    'static/3rd.party/Chart.min.js'
 ], function (strings, folderAPI, getBreadcrumb, api, gt, capabilities, Chart) {
 
     'use strict';

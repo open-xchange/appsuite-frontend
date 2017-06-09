@@ -137,7 +137,7 @@ module.exports = function (grunt) {
                         src: [
                             'bigscreen/bigscreen.min.js',
                             'velocity/velocity.min.js',
-                            'chart.js/dist/Chart.js',
+                            'chart.js/dist/Chart.min.js',
                             'clipboard/dist/clipboard.min.js'
                         ],
                         cwd: 'bower_components/',
