@@ -61,7 +61,6 @@ module.exports = function (grunt) {
                         expand: true,
                         src: [
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
-                            'jquery-imageloader/jquery.imageloader.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'typeahead.js/dist/typeahead.jquery.js',
                             'marked/lib/marked.js',

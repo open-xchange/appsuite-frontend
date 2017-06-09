@@ -19,7 +19,6 @@
     "bootstrap-tokenfield": "https://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#37aefdd25d6102b3b2cd27b6fb60348ec8a899cc",
     "font-awesome": "4.7.0",
     "jquery": "2.2.4",
-    "jquery-imageloader": "https://github.com/beatak/jquery-imageloader.git#3e616c19ad3bb32e4e62679a348f8b18a80790d2",
     "marked": "0.3.5",
     "mediaelement": "2.23.4",
     "mobiscroll": "2.17.2",
