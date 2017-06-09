@@ -40,7 +40,6 @@
     "grunt-modernizr": "~1.0.2",
     "grunt-nightwatch": "^0.5.4",
     "grunt-require-check": "^0.1.1",
-    "grunt-zip": "~0.16.2",
     "karma": "^1.6.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.0.0",
@@ -59,5 +58,8 @@
   },
   "engines": {
     "node": ">=0.10"
+  },
+  "dependencies": {
+    "@open-xchange/tinymce": "4.6.3-1"
   }
 }

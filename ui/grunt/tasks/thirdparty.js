@@ -35,13 +35,19 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'jquery.tinymce.js',
-                            'jquery.tinymce.min.js',
-                            '{plugins,skins,themes}/**/*',
-                            'tinymce.js'
+                            'tinymce/jquery.tinymce.js',
+                            'tinymce/jquery.tinymce.min.js',
+                            'tinymce/{plugins,skins,themes}/**/*',
+                            'tinymce/tinymce.js'
                         ],
-                        cwd: 'bower_components/tinymce-dist',
-                        dest: 'build/apps/3rd.party/tinymce/'
+                        cwd: 'node_modules/',
+                        dest: 'build/apps/3rd.party/'
+                    },
+                    {
+                        expand: true,
+                        src: ['tinymce/{langs,plugins,skins,themes}/**/*'],
+                        cwd: 'node_modules/@open-xchange/',
+                        dest: 'build/apps/3rd.party/'
                     },
                     {
                         expand: true,
