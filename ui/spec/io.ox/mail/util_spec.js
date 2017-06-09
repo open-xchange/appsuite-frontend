@@ -93,8 +93,8 @@ define([
                 expect(util.hasFrom('')).to.be.empty;
                 expect(util.hasFrom(null)).to.be.null;
                 expect(util.hasFrom(undefined)).to.be.undefined;
-                expect(util.hasFrom({})).to.be.empty;
-                expect(util.hasFrom([])).to.be.empty;
+                expect(util.hasFrom({})).to.be.false;
+                expect(util.hasFrom([])).to.be.false;
                 expect(util.hasFrom({ from: [[undefined, '']] })).to.be.false;
                 //valid
                 expect(util.hasFrom({ from: [[undefined, 'some email']] })).to.be.true;
