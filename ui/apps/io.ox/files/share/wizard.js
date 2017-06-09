@@ -116,7 +116,7 @@ define('io.ox/files/share/wizard', [
             );
 
             // load lib
-            require(['static/3rd.party/clipboard/dist/clipboard.min.js']).then(function (ClipBoard) {
+            require(['static/3rd.party/clipboard.min.js']).then(function (ClipBoard) {
                 new ClipBoard(button.get(0));
                 button.removeAttr('disabled');
             });

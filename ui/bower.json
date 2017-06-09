@@ -35,7 +35,7 @@
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "velocity": "1.2.2",
-    "clipboard": "1.5.10",
+    "clipboard": "1.7.1",
     "unorm": "1.4.1",
     "blankshield": "^0.6.0",
     "resize-polyfill": "https://github.com/CezaryDanielNowak/css-resize-polyfill.git#1.1.1",
