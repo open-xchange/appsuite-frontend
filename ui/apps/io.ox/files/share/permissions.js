@@ -32,7 +32,7 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
-    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
+    'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
 ], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 

@@ -58,14 +58,18 @@ module.exports = function (grunt) {
                     },
                     {
                         // static bower_components
+                        flatten: true,
                         expand: true,
                         src: [
+                            'bigscreen/bigscreen.min.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
-                            'typeahead.js/dist/typeahead.jquery.js',
+                            'chart.js/dist/Chart.min.js',
+                            'clipboard/dist/clipboard.min.js',
                             'marked/lib/marked.js',
-                            'moment/moment.js',
-                            'resize-polyfill/lib/polyfill-resize.js'
+                            'resize-polyfill/lib/polyfill-resize.js',
+                            'swiper/dist/js/swiper.jquery.js',
+                            'typeahead.js/dist/typeahead.jquery.js'
                         ],
                         cwd: 'bower_components',
                         dest: 'build/static/3rd.party/'
@@ -75,6 +79,7 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: [
+                            'moment/moment.js',
                             'moment-timezone/builds/moment-timezone-with-data.js',
                             'moment-interval/moment-interval.js'
                         ],
@@ -104,12 +109,6 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['swiper.jquery.js'],
-                        cwd: 'bower_components/swiper/dist/js/',
-                        dest: 'build/static/3rd.party/swiper'
-                    },
-                    {
-                        expand: true,
                         src: ['*.css'],
                         cwd: 'bower_components/swiper/dist/css/',
                         dest: 'build/apps/3rd.party/swiper'
@@ -129,18 +128,6 @@ module.exports = function (grunt) {
                         src: ['unorm.js'],
                         cwd: 'bower_components/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
-                    },
-                    {
-                        flatten: true,
-                        expand: true,
-                        src: [
-                            'bigscreen/bigscreen.min.js',
-                            'velocity/velocity.min.js',
-                            'chart.js/dist/Chart.min.js',
-                            'clipboard/dist/clipboard.min.js'
-                        ],
-                        cwd: 'bower_components/',
-                        dest: 'build/static/3rd.party/'
                     }
                 ]
             }

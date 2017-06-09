@@ -18,7 +18,7 @@ define('io.ox/core/viewer/views/displayerview', [
     'static/3rd.party/bigscreen.min.js',
     'settings!io.ox/files',
     'gettext!io.ox/core',
-    'static/3rd.party/swiper/swiper.jquery.js',
+    'static/3rd.party/swiper.jquery.js',
     'css!3rd.party/swiper/swiper.css'
 ], function (FilesAPI, TypesRegistry, DisposableView, Util, BigScreen, filesSettings, gt) {
 

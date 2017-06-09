@@ -36,6 +36,7 @@ module.exports = function (grunt) {
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
                             'build/static/3rd.party/moment/moment-interval.js',
                             'src/util.js',
+                            'bower_components/velocity/velocity.min.js',
                             'bower_components/requirejs/require.js',
                             'lib/require-fix.js',
                             'lib/modernizr.js',
@@ -305,9 +306,9 @@ module.exports = function (grunt) {
                     footer: '\n' +
                             '  define.amd = _amd;\n' +
                             '});\n\n' +
-                            'define("static/3rd.party/typeahead.js/dist/typeahead.jquery.js", _.noop);\n' +
+                            'define("static/3rd.party/typeahead.jquery.js", _.noop);\n' +
                             'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
-                            'define("static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js", _.noop);\n'
+                            'define("static/3rd.party/bootstrap-tokenfield.js", _.noop);\n'
                 },
                 files: [
                     {
@@ -330,8 +331,8 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/tk/textproc.js',
                             'bower_components/tinymce-dist/jquery.tinymce.min.js',
                             'build/static/3rd.party/jquery-ui.min.js',
-                            'build/static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-                            'build/static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
+                            'build/static/3rd.party/typeahead.jquery.js',
+                            'build/static/3rd.party/bootstrap-tokenfield.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true

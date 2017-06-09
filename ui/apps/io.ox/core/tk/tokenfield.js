@@ -20,7 +20,7 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/core/http',
     'io.ox/core/util',
     'gettext!io.ox/core',
-    'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+    'static/3rd.party/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'

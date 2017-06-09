@@ -25,7 +25,7 @@ define('io.ox/files/share/wizard', [
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
-    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
+    'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
 ], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 

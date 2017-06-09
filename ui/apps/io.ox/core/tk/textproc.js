@@ -388,7 +388,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         texttohtml: function (string) {
             var noop = { exec: $.noop },
                 def = $.Deferred();
-            require(['static/3rd.party/marked/lib/marked.js']).then(function (marked) {
+            require(['static/3rd.party/marked.js']).then(function (marked) {
 
                 marked.prototype.constructor.Parser.prototype.parse = function (src) {
                     this.inline = new marked.InlineLexer(src.links, this.options, this.renderer);
