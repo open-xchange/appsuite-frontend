@@ -1134,7 +1134,7 @@ define('io.ox/core/desktop', [
                 this.options = options || {};
                 this.id = options.id;
                 this.name = options.name || 'generic';
-                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $(), disabled: $() };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = false;
@@ -1358,8 +1358,7 @@ define('io.ox/core/desktop', [
                     return this;
                 };
 
-                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button',
-                    TOGGLE_CLASS = 'toggle-disabled';
+                var BUSY_SELECTOR = 'input:not([type="file"], [type="hidden"]), select, textarea, button';
 
                 this.busy = function (pct, sub, callback) {
                     // use self instead of this to make busy/idle robust for callback use
@@ -1368,8 +1367,8 @@ define('io.ox/core/desktop', [
                         blocker = self.nodes.blocker;
                         // steal focus
                         $('body').focus();
-                        self.nodes.main.find(BUSY_SELECTOR)
-                            .not(':disabled').prop('disabled', true).addClass(TOGGLE_CLASS);
+                        self.nodes.disabled = self.nodes.main.find(BUSY_SELECTOR)
+                            .not(':disabled').prop('disabled', true);
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
                             blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
@@ -1397,8 +1396,8 @@ define('io.ox/core/desktop', [
                         self.nodes.blocker.find('.progress').hide()
                             .end().idle().hide()
                             .find('.header, .footer').empty();
-                        self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
-                            .prop('disabled', false).removeClass(TOGGLE_CLASS);
+                        self.nodes.disabled.prop('disabled', false);
+                        self.nodes.disabled = $();
                         self.trigger('idle');
                     }
                     return this;
