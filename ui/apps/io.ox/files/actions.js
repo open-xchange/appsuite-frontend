@@ -610,8 +610,10 @@ define('io.ox/files/actions', [
                                                 api[type](filesLeft, baton.target || apiInput.target, true);
                                             },
                                             callbackCancel: function () {
-                                                if (baton.data[0].folder_id) {
-                                                    folderAPI.reload(baton.data[0].folder_id);
+                                                // note: drag&drop and actions via menu use a different baton, see b53498
+                                                var folder_id = _.isArray(baton.data) ? baton.data[0].folder_id : baton.data.folder_id;
+                                                if (folder_id) {
+                                                    folderAPI.reload(folder_id);
                                                 }
                                             }
                                         });
