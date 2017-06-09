@@ -11,7 +11,7 @@
     "tests"
   ],
   "dependencies": {
-    "backbone": "https://github.com/jashkenas/backbone.git#fda02db428c464badb12010c990622ee91f28a48",
+    "backbone": "1.3.3",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",
     "bootstrap": "3.3.7",
