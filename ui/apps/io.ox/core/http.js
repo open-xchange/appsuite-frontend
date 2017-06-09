@@ -790,6 +790,13 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 var status = (xhr && xhr.status) || 200;
                 if (isLoss(status)) log.loss();
 
+                // translate 503 error message cause mw isn't able at that time
+                if (status === 503 && error && error.error === '503 Server shutting down...') {
+                    var gt = require('gettext!io.ox/core');
+                    //#. server message for a special 503 mw response (service unavailable)
+                    error.error = gt('Server shutting down.');
+                }
+
                 if (isUnreachable(xhr)) {
                     that.trigger('unreachable');
                     ox.trigger('connection:down', error, r.o);
