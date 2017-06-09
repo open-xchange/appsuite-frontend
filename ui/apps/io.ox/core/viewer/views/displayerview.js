@@ -15,7 +15,7 @@ define('io.ox/core/viewer/views/displayerview', [
     'io.ox/core/viewer/views/types/typesregistry',
     'io.ox/backbone/disposable',
     'io.ox/core/viewer/util',
-    'static/3rd.party/bigscreen/bigscreen.min.js',
+    'static/3rd.party/bigscreen.min.js',
     'settings!io.ox/files',
     'gettext!io.ox/core',
     'static/3rd.party/swiper/swiper.jquery.js',
