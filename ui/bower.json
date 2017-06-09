@@ -41,7 +41,6 @@
     "chart.js": "^2.6.0"
   },
   "resolutions": {
-    "backbone": "fda02db428c464badb12010c990622ee91f28a48",
     "jquery": "2.2.4"
   }
 }
