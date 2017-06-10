@@ -28,7 +28,7 @@ module.exports = function (grunt) {
                             'open-sans-fontface/fonts/Light/*',
                             '!**/*.otf'
                         ],
-                        cwd: 'bower_components/',
+                        cwd: 'node_modules/',
                         dest: 'build/apps/3rd.party/',
                         filter: 'isFile'
                     },
@@ -60,7 +60,6 @@ module.exports = function (grunt) {
                         dest: 'build/static/3rd.party/'
                     },
                     {
-                        // static bower_components
                         flatten: true,
                         expand: true,
                         src: [
@@ -74,25 +73,24 @@ module.exports = function (grunt) {
                             'swiper/dist/js/swiper.jquery.js',
                             'typeahead.js/dist/typeahead.jquery.js'
                         ],
-                        cwd: 'bower_components',
+                        cwd: 'node_modules',
                         dest: 'build/static/3rd.party/'
                     },
                     {
-                        // static bower_components
                         expand: true,
                         flatten: true,
                         src: [
                             'moment/moment.js',
                             'moment-timezone/builds/moment-timezone-with-data.js',
-                            'moment-interval/moment-interval.js'
+                            '@open-xchange/moment-interval/moment-interval.js'
                         ],
-                        cwd: 'bower_components',
+                        cwd: 'node_modules',
                         dest: 'build/static/3rd.party/moment'
                     },
                     {
                         expand: true,
                         src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],
-                        cwd: 'bower_components/mediaelement/build/',
+                        cwd: 'node_modules/mediaelement/build/',
                         dest: 'build/apps/3rd.party/mediaelement/',
                         filter: 'isFile'
                     },
@@ -100,14 +98,14 @@ module.exports = function (grunt) {
                         // js file of mediaelement goes to static path for caching
                         expand: true,
                         src: ['*.js', '!{jquery,*.min}.js'],
-                        cwd: 'bower_components/mediaelement/build/',
+                        cwd: 'node_modules/mediaelement/build/',
                         dest: 'build/static/3rd.party/mediaelement/',
                         filter: 'isFile'
                     },
                     {
                         expand: true,
                         src: ['*.css'],
-                        cwd: 'bower_components/swiper/dist/css/',
+                        cwd: 'node_modules/swiper/dist/css/',
                         dest: 'build/apps/3rd.party/swiper'
                     },
                     {
@@ -116,14 +114,14 @@ module.exports = function (grunt) {
                             'build/pdf.combined.js',
                             'web/images/*'
                         ],
-                        cwd: 'bower_components/pdfjs-dist',
+                        cwd: 'node_modules/pdfjs-dist',
                         dest: 'build/apps/pdfjs-dist/'
                         // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)
                     },
                     {
                         expand: true,
                         src: ['unorm.js'],
-                        cwd: 'bower_components/unorm/lib/',
+                        cwd: 'node_modules/unorm/lib/',
                         dest: 'build/static/3rd.party/unorm'
                     }
                 ]
@@ -137,14 +135,14 @@ module.exports = function (grunt) {
             build_moment_locales: {
                 options: {
                     process: function (content, srcPath) {
-                        var defineName = (srcPath.split('.').shift()).replace('bower_components/', '');
+                        var defineName = (srcPath.split('.').shift()).replace('node_modules/', '');
                         return content.replace(/define\(\['\.\.\/moment'\]/, 'define(\'' + defineName + '\', [\'moment\']');
                     }
                 },
                 files: [{
                     expand: true,
                     src: ['moment/locale/*'],
-                    cwd: 'bower_components',
+                    cwd: 'node_modules',
                     dest: 'build/static/3rd.party/'
                 }]
             }
@@ -157,13 +155,13 @@ module.exports = function (grunt) {
                 options: {
                     lessrc: '.lessrc',
                     process: function (src) {
-                        return src.replace(/@import "..\/bower_components\/(.*)";/g, '');
+                        return src.replace(/@import "..\/node_modules\/(.*)";/g, '');
                     }
                 },
                 files: [{
                     expand: true,
                     ext: '.css',
-                    cwd: 'bower_components/bootstrap-tokenfield/less/',
+                    cwd: 'node_modules/bootstrap-tokenfield/less/',
                     src: ['*.less'],
                     dest: 'build/apps/3rd.party/bootstrap-tokenfield/css/'
                 }]

@@ -1,5 +1,6 @@
 {
   "name": "open-xchange-appsuite",
+  "description": "",
   "version": "7.10.0-0",
   "repository": {
     "type": "git",
@@ -24,8 +25,7 @@
     "grunt-jsonlint": "^1.0.1",
     "grunt-newer": "^1.1.0",
     "grunt-require-gettext": "^0.8.0",
-    "open-xchange-shared-grunt-config": "^0.14.4",
-    "underscore": "^1.8.0"
+    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8"
   },
   "devDependencies": {
     "appserver": "^0.6",
@@ -56,6 +56,32 @@
   "dependencies": {
     "@open-xchange/emoji": "0.0.1",
     "@open-xchange/hopscotch": "0.0.1",
-    "@open-xchange/tinymce": "4.6.3-1"
+    "@open-xchange/moment-interval": "0.0.1",
+    "@open-xchange/tinymce": "4.6.3-1",
+    "backbone": "1.3.3",
+    "backbone-validation": "0.11.5",
+    "bigscreen": "2.0.5",
+    "blankshield": "0.6.1",
+    "bootstrap": "3.3.7",
+    "bootstrap-datepicker": "git://github.com/Open-Xchange-Frontend/bootstrap-datepicker.git#tag-1.3.1",
+    "bootstrap-tokenfield": "git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07",
+    "chart.js": "2.6.0",
+    "clipboard": "1.7.1",
+    "font-awesome": "4.7.0",
+    "jquery": "2.2.4",
+    "marked": "0.3.6",
+    "mediaelement": "2.23.5",
+    "mobiscroll": "git://github.com/acidb/mobiscroll.git#v2.17.3",
+    "moment": "2.18.1",
+    "moment-timezone": "0.5.13",
+    "open-sans-fontface": "1.4.0",
+    "pdfjs-dist": "1.4.20",
+    "requirejs": "2.3.3",
+    "resize-polyfill": "1.1.1",
+    "swiper": "3.0.6",
+    "typeahead.js": "0.10.5",
+    "underscore": "1.8.3",
+    "unorm": "1.4.1",
+    "velocity-animate": "1.5.0"
   }
 }
