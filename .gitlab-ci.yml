@@ -25,20 +25,17 @@ variables:
     - cd ${PROJECT_PATH}
     - yarn
     - yarn clean
-    - bower i --silent
   cache:
     # use one cache per project and branch
     # ex.: ui_feature/gitlab_ci
     key: ${PROJECT_PATH}_${CI_BUILD_REF_NAME}
     paths:
       - "${PROJECT_PATH}/node_modules"
-      - "${PROJECT_PATH}/bower_components"
   artifacts:
     name: ${PROJECT_PATH}_dependencies
     expire_in: 2 hours
     paths:
       - ${PROJECT_PATH}/node_modules
-      - ${PROJECT_PATH}/bower_components
 
 install_deps_ui:
   variables:
