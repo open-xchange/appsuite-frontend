@@ -1,31 +1,36 @@
 {
   "name": "update-themes",
   "version": "7.8.4-3",
+  "repository": {
+    "type": "git",
+    "url": "https://code.open-xchange.com/git/wd/frontend/web"
+  },
+  "license": "CC-BY-NC-SA-2.5",
   "description": "A tool to manually update a set of themes for Open-Xchange Appsuite",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Julian B??ume",
-  "license": "CC-BY-NC",
   "dependencies": {
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt": "^1.0.1",
     "assemble-less": "^0.7.0",
-    "underscore": "^1.8.0",
+    "underscore": "^1.8.3",
     "less": "^1.7.5"
   },
   "optionalDependencies": {
-    "grunt-bump": "^0.7.0",
-    "grunt-check-dependencies": "^0.9.0",
-    "grunt-contrib-concat": "^1.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-open-xchange-appsuite": "^0.2.0",
+    "grunt-bump": "^0.8.0",
+    "grunt-check-dependencies": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-jscs": "^2.8.0",
-    "grunt-jsonlint": "^1.0.7",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-eslint": "^19.0.0",
+    "grunt-jsonlint": "^1.0.1",
     "grunt-newer": "^1.1.2",
     "grunt-require-gettext": "^0.8.0",
-    "open-xchange-shared-grunt-config": "^0.11.4"
+    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8"
   }
 }

@@ -1,6 +1,10 @@
 {
   "name": "open-xchange-appsuite-spamexperts",
-  "version": "7.8.4-3",
+  "version": "7.10.0-0",
+  "repository": {
+    "type": "git",
+    "url": "https://code.open-xchange.com/git/wd/frontend/web"
+  },
   "author": {
     "name": "Viktor Pracht",
     "email": "viktor.pracht@open-xchange.com"
@@ -8,27 +12,29 @@
   "summary": "Configuration UI for SpamExperts",
   "description": "Configuration UI for SpamExperts",
   "license": "CC-BY-NC-SA-3.0",
-  "dependencies": {},
   "optionalDependencies": {
     "assemble-less": "^0.7.0",
-    "grunt": "^0.4.5",
-    "grunt-bump": "^0.7.0",
-    "grunt-check-dependencies": "^0.9.0",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.0",
+    "eslint": "^3.19.0",
+    "eslint-config-open-xchange-appsuite": "^0.2.0",
+    "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
+    "grunt-check-dependencies": "^1.0.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-jscs": "^2.8.0",
-    "grunt-jsonlint": "^1.0.7",
-    "grunt-newer": "^1.1.2",
+    "grunt-contrib-uglify": "~3.0.1",
+    "grunt-eslint": "^19.0.0",
+    "grunt-jsonlint": "^1.0.1",
+    "grunt-newer": "^1.1.0",
     "grunt-require-gettext": "^0.8.0",
-    "open-xchange-shared-grunt-config": "^0.12.3",
+    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "appserver": "^0.6",
+    "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-watch": "^1.0.0",
-    "grunt-karma": "^0.8.2",
-    "grunt-contrib-connect": "^1.0.0"
+    "grunt-karma": "^2.0.0",
+    "karma": "^1.6.0"
   }
 }

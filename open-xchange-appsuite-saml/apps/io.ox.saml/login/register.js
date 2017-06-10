@@ -28,7 +28,7 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
 
     if (ox.serverConfig.samlLogin && noSessionSet()) {
         if (!ox.busy) {
-             ox.busy = function (block) {
+            ox.busy = function (block) {
                 // init screen blocker
                 $('#background-loader')[block ? 'busy' : 'idle']()
                     .show()
@@ -36,13 +36,13 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
             };
         }
         var samlPath = '/saml';
-            if (ox.serverConfig.samlPath) {
-                samlPath = '/saml/' + ox.serverConfig.samlPath;
-            }
+        if (ox.serverConfig.samlPath) {
+            samlPath = '/saml/' + ox.serverConfig.samlPath;
+        }
         $.get(ox.apiRoot + samlPath + '/init?flow=login').done(function (data) {
-            var baton = new ext.Baton({data: data});
+            var baton = new ext.Baton({ data: data });
             ext.point('io.ox.saml/login').invoke('handle', baton, baton);
-        }).fail(function(jqXHR, textStatus, errorThrown) {
+        }).fail(function (jqXHR, textStatus, errorThrown) {
             if (ox.serverConfig.samlLoginErrorRedirect) {
                 _.url.redirect(ox.serverConfig.samlLoginErrorRedirectURL +
                     '#&' + _.serialize({ language: ox.language, statusCode: jqXHR.status || 'undefined', statusText: textStatus, error: errorThrown }));
@@ -60,7 +60,7 @@ define('io.ox.saml/login/register', ['io.ox/core/extensions', 'io.ox.saml/handle
             $('#background-loader').fadeOut(250);
             console.warn('Server is down.');
             return {};
-        } else {        
+        } else {
             hideLogin();
             return {};
         }

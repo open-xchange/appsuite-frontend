@@ -19,7 +19,7 @@ module.exports = function (grunt) {
                 src: 'lib/**/*',
                 dest: 'dist/dynamic-theme/'
             }]
-         }
+        }
     });
 };
 

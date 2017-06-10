@@ -10,7 +10,7 @@
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
- 
+
 define('com.spamexperts/settings/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
@@ -25,7 +25,7 @@ define('com.spamexperts/settings/register', [
         loadSettingPane: false,
         index: 'last'
     });
-    
+
     ext.point('com.spamexperts/settings/detail').extend({
         draw: function () {
             var self = this;

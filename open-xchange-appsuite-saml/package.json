@@ -1,30 +1,33 @@
 {
   "name": "open-xchange-appsuite-saml",
-  "version": "7.8.4-3",
-  "dependencies": {
+  "version": "7.10.0-0",
+  "description": "App Suite UI SAML",
+  "repository": {
+    "type": "git",
+    "url": "https://code.open-xchange.com/git/wd/frontend/web"
   },
+  "license": "CC-BY-NC-SA-2.5",
   "optionalDependencies": {
-    "open-xchange-shared-grunt-config": "^0.10.2",
-    "grunt": "^0.4.5",
     "assemble-less": "^0.7.0",
-    "grunt-bower-task": "^0.4.0",
-    "grunt-check-dependencies": "^0.9.0",
-    "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-uglify": "^0.8.0",
-    "grunt-contrib-concat": "^0.5.0",
-    "grunt-contrib-copy": "^0.8.0",
-    "grunt-newer": "^1.1.0",
-    "grunt-jsonlint": "^1.0.1",
-    "grunt-require-gettext": "^0.6.0",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-jscs": "^1.5.0",
-    "grunt-bump": "^0.3.0",
-    "underscore": "^1.8.0"
+    "eslint": "^3.19.0",
+    "eslint-config-open-xchange-appsuite": "^0.2.0",
+    "grunt": "^1.0.1",
+    "grunt-bump": "^0.8.0",
+    "grunt-eslint": "^19.0.0",
+    "grunt-check-dependencies": "^1.0.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "~3.0.1",
+    "grunt-jsonlint": "^1.0.4",
+    "grunt-newer": "^1.1.1",
+    "grunt-require-gettext": "^0.8.1",
+    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "appserver": "^0.5.0",
-    "grunt-contrib-connect": "^0.9.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-karma": "^0.10.1"
+    "appserver": "^0.6",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-watch": "^1.0.0"
   }
 }

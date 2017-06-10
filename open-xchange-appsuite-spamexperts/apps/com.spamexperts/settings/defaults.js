@@ -11,6 +11,6 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define('com.spamexperts/settings/defaults', { 
-	name: 'Spampanel' 
+define('com.spamexperts/settings/defaults', {
+    name: 'Spampanel'
 });

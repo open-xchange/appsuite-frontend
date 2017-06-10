@@ -10,7 +10,7 @@
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
- 
+
 define('com.spamexperts/register', [
     'io.ox/core/extensions',
     'io.ox/core/upsell',
