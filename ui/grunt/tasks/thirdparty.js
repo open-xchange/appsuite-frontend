@@ -47,7 +47,7 @@ module.exports = function (grunt) {
                         expand: true,
                         src: [
                             'tinymce/{langs,plugins,skins,themes}/**/*',
-                            'hopscotch/*'
+                            '{hopscotch,emoji}/*.{js,css,png}'
                         ],
                         cwd: 'node_modules/@open-xchange/',
                         dest: 'build/apps/3rd.party/'
@@ -103,12 +103,6 @@ module.exports = function (grunt) {
                         cwd: 'bower_components/mediaelement/build/',
                         dest: 'build/static/3rd.party/mediaelement/',
                         filter: 'isFile'
-                    },
-                    {
-                        expand: true,
-                        src: ['*.{js,css,png}'],
-                        cwd: 'lib/node_modules/emoji/lib',
-                        dest: 'build/apps/3rd.party/emoji'
                     },
                     {
                         expand: true,
