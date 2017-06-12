@@ -28,7 +28,7 @@
     "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8"
   },
   "devDependencies": {
-    "appserver": "^0.6",
+    "appserver": "git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8",
     "chai": "^4.0.2",
     "chromedriver": "^2.25.1",
     "grunt-contrib-connect": "^1.0.2",
@@ -40,7 +40,7 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-junit-reporter": "^1.2.0",
     "karma-mocha": "^1.3.0",
-    "karma-ox-ui": "^0.1.0",
+    "karma-ox-ui": "git://github.com/Open-Xchange-Frontend/karma-ox-ui.git#c1f3ab272e498297659e8a4642c7844ca59eba0a",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.31",
