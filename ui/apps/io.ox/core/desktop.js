@@ -1367,8 +1367,8 @@ define('io.ox/core/desktop', [
                         blocker = self.nodes.blocker;
                         // steal focus
                         $('body').focus();
-                        self.nodes.disabled = self.nodes.main.find(BUSY_SELECTOR)
-                            .not(':disabled').prop('disabled', true);
+                        self.nodes.disabled = self.nodes.disabled.add(self.nodes.main.find(BUSY_SELECTOR)
+                            .not(':disabled').prop('disabled', true));
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
                             blocker.idle().find('.progress-bar').eq(0).css('width', (pct * 100) + '%').parent().show();
