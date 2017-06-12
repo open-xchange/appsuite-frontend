@@ -13,6 +13,7 @@
 'use strict';
 
 module.exports = function (grunt) {
+    if (!grunt.isPeerDependencyInstalled('nightwatch')) return;
 
     var nightwatch = require('nightwatch');
     nightwatch.initGrunt(grunt);
