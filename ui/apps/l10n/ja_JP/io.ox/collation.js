@@ -30,9 +30,10 @@ define('l10n/ja_JP/io.ox/collation', function () {
             'ヴ',                   // Katakana with dakuten uncommon (vu)
           // ka ki ku ke ko
             'か き く け こ ' +      // Hiragana
+            'ゕ ゖ ' +              // Hiragana small
             'が ぎ ぐ げ ご ' +      // Hiragana with dakuten (ga gi gu ge go)
             'カ キ ク ケ コ ' +      // Katakana
-            'ゕ ゖ ヵ ヶ ' +          // Katakana small
+            'ヵ ヶ ' +              // Katakana small
             'ｶ ｷ ｸ ｹ ｺ ' +          // Katakana half width
             'ガ ギ グ ゲ ゴ',       // Katakana with dakuten (ga gi gu ge go)
          // sa shi su se so
