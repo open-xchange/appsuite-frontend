@@ -55,7 +55,7 @@ module.exports = function (grunt) {
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js', 'socket.io.js'],
+                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js'],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },
@@ -63,6 +63,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         expand: true,
                         src: [
+                            'socket.io-client/dist/socket.io.js',
                             'bigscreen/bigscreen.min.js',
                             'bootstrap-datepicker/js/bootstrap-datepicker.js',
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
