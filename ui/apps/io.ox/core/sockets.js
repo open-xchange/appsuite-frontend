@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/sockets', ['static/3rd.party/socket.io.js', 'io.ox/core/capabilities'], function (io, cap) {
+define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/capabilities'], function (io, cap) {
     'use strict';
 
     var socket,
