@@ -22,7 +22,7 @@
     "grunt-jsonlint": "^1.0.4",
     "grunt-newer": "^1.1.1",
     "grunt-require-gettext": "^0.8.1",
-    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#972be5d5a00ac53d91c3686051bb9f194cecd0e8",
+    "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#master",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
