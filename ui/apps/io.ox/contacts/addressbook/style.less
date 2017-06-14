@@ -167,13 +167,13 @@
             .token-action {
                 margin-left: 5px;
                 padding-right: 4px;
-                color: #000;
-                opacity: 0.2;
+                color: #666;
             }
-            &.active .selected {
-                border-color: rgba(82,168,236,.8);
+            &.listbox:focus {
+                // disable a11y listbox style
+                box-shadow: none;
+                .selected { border-color: rgba(82,168,236,.8); }
             }
-
         }
     }
 }
