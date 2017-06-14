@@ -126,7 +126,7 @@ define('io.ox/contacts/edit/main', [
                         function fnToggleSave(isDirty) {
                             var node = win.nodes.footer.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-                            if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
+                            node.prop('disabled', !isDirty);
                         }
 
                         if (!data.id) {

@@ -143,7 +143,7 @@ define('io.ox/search/autocomplete/extensions', [
             // some shortcuts
             ui = {
                 copyhelper: tokenview.$el.data('bs.tokenfield').$copyHelper || $(),
-                field: tokenview.input.attr('autofocus', true)
+                field: tokenview.input.prop('autofocus', true)
             };
 
             var updateState = function (e) {
@@ -153,13 +153,13 @@ define('io.ox/search/autocomplete/extensions', [
                 if (!node.val()) {
                     container.addClass('empty');
                     $('.tokenfield > .twitter-typeahead').show();
-                    ui.copyhelper.removeAttr('disabled');
+                    ui.copyhelper.prop('disabled', false);
                     return;
                 }
                 // token exists
                 if (e.type === 'tokenfield:createdtoken') {
                     $('.tokenfield > .twitter-typeahead').hide();
-                    ui.copyhelper.attr('disabled', true);
+                    ui.copyhelper.prop('disabled', true);
                 }
                 // at least some chars are entered
                 container.removeClass('empty');

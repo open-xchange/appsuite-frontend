@@ -420,7 +420,7 @@ define('io.ox/files/filepicker', [
             if (options.uploadButton) {
                 folderAPI.get(id).done(function (folder) {
                     $('[data-action="alternative"]', filesPane.closest('.add-infostore-file'))
-                    .attr('disabled', !folderAPI.can('create', folder));
+                    .prop('disabled', !folderAPI.can('create', folder));
                 });
             }
             if (_.device('smartphone')) {

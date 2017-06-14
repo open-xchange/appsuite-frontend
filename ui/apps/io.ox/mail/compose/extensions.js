@@ -609,7 +609,7 @@ define('io.ox/mail/compose/extensions', [
 
                             if (baton.view.model.get('autodelete')) {
                                 // show disabled so user knows that the drive files are deleted, even if it cannot be changed
-                                baton.dropdown.$ul.find('[data-name="autodelete"]').attr('disabled', 'disabled').addClass('disabled');
+                                baton.dropdown.$ul.find('[data-name="autodelete"]').prop('disabled', true).addClass('disabled');
                             }
                         }
                     });
@@ -717,8 +717,8 @@ define('io.ox/mail/compose/extensions', [
                             var model = baton.view.model, passContainer;
 
                             function toggleState() {
-                                if (model.get('usepassword')) return passContainer.find('input').removeAttr('disabled');
-                                passContainer.find('input').attr('disabled', 'disabled');
+                                if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
+                                passContainer.find('input').prop('disabled', true);
                             }
 
                             baton.view.$header.find('.links').append(

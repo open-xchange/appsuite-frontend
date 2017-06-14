@@ -909,7 +909,7 @@ define('io.ox/files/share/permissions', [
             }
 
             dialogConfig.on('change:disabled', function () {
-                dialog.$footer.find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
+                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
             });
 
             dialog.$el.addClass('share-permissions-dialog');

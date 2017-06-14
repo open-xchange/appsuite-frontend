@@ -686,7 +686,7 @@ define('io.ox/core/extPatterns/links', [
                                 a.tooltip({ trigger: 'hover' });
                             }
                         } else {
-                            a.addClass('disabled').attr({ 'aria-disabled': true }).on('click', preventDefault);
+                            a.addClass('disabled').attr('aria-disabled', true).on('click', preventDefault);
                         }
                     }
                 });

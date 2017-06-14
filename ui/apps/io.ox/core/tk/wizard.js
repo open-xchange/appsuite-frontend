@@ -502,10 +502,7 @@ define('io.ox/core/tk/wizard', [
         // enable/disable 'next' button
         toggleNext: function (state) {
             if (_.device('smartphone')) {
-                return this.parent.container.find('[data-action="next"]').attr({
-                    'disabled': !state,
-                    'aria-disabled': !state
-                });
+                return this.parent.container.find('[data-action="next"]').prop('disabled', !state).attr('aria-disabled', !state);
             }
             this.$('.btn[data-action="next"]').prop('disabled', !state);
             return this;

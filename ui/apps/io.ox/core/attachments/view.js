@@ -222,8 +222,8 @@ define('io.ox/core/attachments/view', [
         updateScrollControls: function (index) {
             if (index === undefined) index = this.getScrollIndex();
             var max = this.getMaxScrollIndex();
-            this.$('.scroll-left').attr('disabled', index <= 0 ? 'disabled' : null);
-            this.$('.scroll-right').attr('disabled', index >= max ? 'disabled' : null);
+            this.$('.scroll-left').prop('disabled', index <= 0);
+            this.$('.scroll-right').prop('disabled', index >= max);
         }
     });
 
