@@ -30,6 +30,7 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/errorlog/settings/pane',
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
+    'io.ox/settings/sessions/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 
@@ -535,6 +536,12 @@ define('io.ox/settings/main', [
             index: 400,
             subgroup: 'io.ox/settings/pane/external'
         });
+
+        // ext.point('io.ox/settings/pane').extend({
+        //     id: 'sessions',
+        //     index: 500,
+        //     subgroup: 'io.ox/settings/pane/sessionlist'
+        // });
 
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
