@@ -621,10 +621,13 @@ define('io.ox/core/commons', [
             }
 
             function onFolderViewOpen(app) {
+                app.getWindow().nodes.sidepanel.show();
                 app.getWindow().nodes.main.find('.vgrid').removeClass('bottom-toolbar');
             }
 
             function onFolderViewClose(app) {
+                // hide sidepanel so invisible objects are not tabbable
+                app.getWindow().nodes.sidepanel.hide();
                 app.getWindow().nodes.main.find('.vgrid').addClass('bottom-toolbar');
             }
 

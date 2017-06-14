@@ -294,6 +294,10 @@ define('io.ox/core/api/filestorage', [
                     }
                 );
             },
+            // convenience method
+            remove: function (data, o) {
+                return api.deleteAccount(data, o);
+            },
             // utility function to find storage accounts for a given oauth account, also used to limit storage accounts to one per oauth account
             // fails if rampup was not done before (configscache empty)
             getAccountForOauth: function (oauthAccount) {

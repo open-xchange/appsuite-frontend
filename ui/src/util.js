@@ -307,22 +307,15 @@
          * Redirect
          */
         redirect: function (path) {
-
-            var current = location.pathname;
-
-            if ((/^http/i).test(path)) {
+            // absolute or relative url
+            if (!(/^#/).test(path)) {
                 location.href = path;
                 return;
             }
-
-            // clear hash first
-            location.hash = '#';
+            // simple hash change
             location.replace(_.url.get(path));
-
-            // enforce page reload if path is still the same
-            _.defer(function () {
-                if (location.pathname === current) location.reload(true);
-            });
+            // enforce page reload
+            _.defer(location.reload.bind(location, true));
         },
 
         get: function (path) {

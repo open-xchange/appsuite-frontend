@@ -155,10 +155,13 @@ define('io.ox/mail/view-options', [
     }
 
     function onFolderViewOpen(app) {
+        app.getWindow().nodes.sidepanel.show();
         app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
     }
 
     function onFolderViewClose(app) {
+        // hide sidepanel so invisible objects are not tabbable
+        app.getWindow().nodes.sidepanel.hide();
         app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
     }
 
