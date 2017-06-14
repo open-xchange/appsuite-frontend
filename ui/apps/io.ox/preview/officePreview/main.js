@@ -98,7 +98,7 @@ define('io.ox/preview/officePreview/main', [
             return $.ajax({
                 url: file.dataURL + '&format=preview_filtered&pages=' + numberOfPages + '&previewForceDiv=true&view=html',
                 dataType: 'json'
-            }).pipe(function (response) {
+            }).then(function (response) {
                 stoppedLoading();
                 app.document = response.data.document.map(function ($page) {
                     $page = $($page);

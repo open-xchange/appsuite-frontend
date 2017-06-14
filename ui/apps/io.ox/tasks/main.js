@@ -281,7 +281,7 @@ define('io.ox/tasks/main', [
                 } else {
                     column = 317;
                 }
-                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
+                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).then(function (data) {
                     if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -298,7 +298,7 @@ define('io.ox/tasks/main', [
             };
 
             listRequest = function (ids) {
-                return api.getList(ids).pipe(function (list) {
+                return api.getList(ids).then(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                     var listcopy = _.copy(_.compact(list), true);
 

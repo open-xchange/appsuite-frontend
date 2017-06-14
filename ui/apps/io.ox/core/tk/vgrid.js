@@ -513,7 +513,7 @@ define('io.ox/core/tk/vgrid', [
                 labels.textIndex[text] = i;
             }
             // reloop to get proper height
-            return $.when.apply($, defs).pipe(function () {
+            return $.when.apply($, defs).then(function () {
                 var i, obj, node, top,
                     //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
                     isVisible = $i > 0 ? container.show().is(':visible') : undefined,

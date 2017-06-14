@@ -44,7 +44,7 @@ define('plugins/portal/twitter/network', ['io.ox/oauth/proxy'], function (proxy)
 
     network.loadFromTwitter = function (params) {
         var def = proxy.request({ api: 'twitter', url: 'https://api.twitter.com/1.1/statuses/home_timeline.json', params: params });
-        return def.pipe(function (response) {
+        return def.then(function (response) {
             if (response) {
                 var jsonResponse = JSON.parse(response);
 

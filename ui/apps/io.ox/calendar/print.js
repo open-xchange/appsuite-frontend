@@ -84,7 +84,7 @@ define('io.ox/calendar/print', [
 
     function unify(data, userList, groupList, resourceList, externalContacts) {
         var usersInGroups = _.chain(groupList).pluck('members').flatten().uniq().value();
-        return userAPI.getList(usersInGroups).pipe(function (resolvedUsers) {
+        return userAPI.getList(usersInGroups).then(function (resolvedUsers) {
             // inject confirmations
             var confirmations = util.getConfirmations(data),
                 internal = injectInternalConfirmations([].concat(userList, resolvedUsers), confirmations),
@@ -149,7 +149,7 @@ define('io.ox/calendar/print', [
         var fetchUsers = users.length ? userAPI.getList(users) : $.Deferred().resolve([]);
 
         return $.when(fetchUsers, groupAPI.getList(groups), resourceAPI.getList(resources))
-            .pipe(function (userList, groupList, resourceList) {
+            .then(function (userList, groupList, resourceList) {
                 return unify(data, userList, groupList, resourceList, external);
             });
     }
@@ -165,7 +165,7 @@ define('io.ox/calendar/print', [
     }
 
     function process(data) {
-        return load(data).pipe(function (unified) {
+        return load(data).then(function (unified) {
             return _.extend(unified, {
                 original: data,
                 subject: data.title,

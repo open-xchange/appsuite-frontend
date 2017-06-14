@@ -471,7 +471,7 @@ define('io.ox/files/legacy_api', [
             return http.FORM({
                 form: options.form,
                 data: options.json
-            }).pipe(success, failedUpload);
+            }).then(success, failedUpload);
         }
     };
 
@@ -682,7 +682,7 @@ define('io.ox/files/legacy_api', [
                 list = get = versions = ready;
             }
 
-            return $.when(all, list, get, versions).pipe(function () {
+            return $.when(all, list, get, versions).then(function () {
                 if (!silent) {
                     if (type === 'change') {
                         return api.get(obj).done(function (data) {
@@ -722,7 +722,7 @@ define('io.ox/files/legacy_api', [
         if (error) return $.Deferred().reject(error).promise();
 
         var id = String(options.id);
-        return api.caches.versions.get(id).pipe(function (data) {
+        return api.caches.versions.get(id).then(function (data) {
             if (data !== null) {
                 return data;
             } else {
@@ -816,7 +816,7 @@ define('io.ox/files/legacy_api', [
             data: [version.version],
             appendColumns: false
         })
-        .pipe(function () {
+        .then(function () {
             return api.propagate('change', { folder_id: version.folder_id, id: version.id });
         })
         .done(function () {
@@ -853,7 +853,7 @@ define('io.ox/files/legacy_api', [
         });
         // resume & trigger refresh
         return http.resume()
-            .pipe(function () {
+            .then(function () {
                 return $.when.apply($,
                     _(list).map(function (o) {
                         return $.when(

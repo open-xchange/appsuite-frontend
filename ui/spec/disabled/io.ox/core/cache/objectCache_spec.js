@@ -262,8 +262,8 @@ define([
             });
 
             it('merging objects', function (done) {
-                testStorage.add(testData1).pipe(function () {
-                    return testStorage.merge(testData2).pipe(function () {
+                testStorage.add(testData1).then(function () {
+                    return testStorage.merge(testData2).then(function () {
                         return testStorage.get(testData1);
                     });
                 }).done(function (value) {

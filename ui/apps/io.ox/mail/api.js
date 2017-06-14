@@ -1107,7 +1107,7 @@ define('io.ox/mail/api', [
                 folder: obj.parent.folder || obj.parent.folder_id,
                 view: 'html'
             }, false)
-            .pipe(function (data) {
+            .then(function (data) {
                 return _.chain(data.nested_msgs)
                     .filter(function (obj) {
                         if (obj.id === id) {

@@ -37,7 +37,7 @@ define('io.ox/calendar/actions/delete', [
         });
 
         $.when.apply($, apiCalls)
-            .pipe(function () {
+            .then(function () {
                 return _.chain(arguments)
                     .flatten(true)
                     .filter(function (app) {

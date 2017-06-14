@@ -43,7 +43,7 @@ define('io.ox/calendar/print-compact', [
         });
 
         return groupAPI.getList(groups)
-            .pipe(function (groupList) {
+            .then(function (groupList) {
                 var usersInGroups = _.chain(groupList).pluck('members').flatten().uniq().value(),
                     all = _.chain().union(usersInGroups, participants).uniq().value();
                 // if the current user is the only participant we don't show the number
@@ -55,7 +55,7 @@ define('io.ox/calendar/print-compact', [
     }
 
     function process(data) {
-        return load(data).pipe(function (participants) {
+        return load(data).then(function (participants) {
             return {
                 original: data,
                 subject: data.title,

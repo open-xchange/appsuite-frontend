@@ -22,7 +22,7 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 }
 
 // not document.ready cause we wait for CSS to be loaded
-$(window).load(function () {
+$(window).on('load', function () {
 
     'use strict';
 

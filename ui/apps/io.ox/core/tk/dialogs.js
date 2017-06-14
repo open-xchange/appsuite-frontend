@@ -386,7 +386,7 @@ define('io.ox/core/tk/dialogs', [
                 $('<div class="checkbox">').append(
                     $('<div class="controls">'),
                     $('<label>').text(label).prepend(
-                        $('<input type="checkbox">').attr({ 'data-action': action, 'checked': status })
+                        $('<input type="checkbox">').attr('data-action', action).prop('checked', status)
                     )
                 )
             );

@@ -602,7 +602,7 @@ define('io.ox/core/desktop', [
                 $(window).trigger('resize.lazyload');
             }
 
-            return deferred.pipe(function () {
+            return deferred.then(function () {
                 return $.Deferred().resolveWith(self, arguments);
             });
         },
@@ -803,7 +803,7 @@ define('io.ox/core/desktop', [
                     _(data).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
-                        return ox.load(requirements).pipe(function (m) {
+                        return ox.load(requirements).then(function (m) {
                             return m.getApp().launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
