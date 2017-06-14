@@ -614,6 +614,9 @@ define('io.ox/files/actions', [
                                                 var folder_id = _.isArray(baton.data) ? baton.data[0].folder_id : baton.data.folder_id;
                                                 if (folder_id) {
                                                     folderAPI.reload(folder_id);
+                                                    // bug 53498: refresh the list to display the not moved elements again after a failed move,
+                                                    // when it's working without this sometimes, it's due to a side effect from pagination
+                                                    api.trigger('reload:listview');
                                                 }
                                             }
                                         });
