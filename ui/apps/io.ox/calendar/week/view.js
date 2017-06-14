@@ -79,13 +79,7 @@ define('io.ox/calendar/week/view', [
             allowLasso: true
         },
 
-        // init values from perspective
-        initialize: function (opt) {
-            var self = this;
-
-            // init options
-            this.options = _.extend({}, this.options, opt);
-
+        events: (function () {
             // define view events
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
@@ -96,8 +90,8 @@ define('io.ox/calendar/week/view', [
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'swipeleft .timeslot': 'onControlView',
-                    'swiperight .timeslot': 'onControlView'
+                    'swipeleft': 'onControlView',
+                    'swiperight': 'onControlView'
                 });
             } else {
                 _.extend(events, {
@@ -113,8 +107,15 @@ define('io.ox/calendar/week/view', [
                     });
                 }
             }
+            return events;
+        }()),
 
-            this.delegateEvents(events);
+        // init values from perspective
+        initialize: function (opt) {
+            var self = this;
+
+            // init options
+            this.options = _.extend({}, this.options, opt);
 
             // initialize main objects
             _.extend(this, {
@@ -391,12 +392,11 @@ define('io.ox/calendar/week/view', [
          */
         onControlView: function (e) {
             e.preventDefault();
-            var cT = $(e.currentTarget),
-                t = $(e.target);
-            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
+            var cT = $(e.currentTarget);
+            if (cT.hasClass('next') || (e.type === 'swipeleft' && !this.lasso)) {
                 this.setStartDate('next');
             }
-            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
+            if (cT.hasClass('prev') || (e.type === 'swiperight' && !this.lasso)) {
                 this.setStartDate('prev');
             }
             this.trigger('onRefresh');
