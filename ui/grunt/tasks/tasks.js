@@ -31,7 +31,7 @@ module.exports = function (grunt) {
     // steps to build the ui (ready for development)
     grunt.registerTask('build', ['lint', 'copy_build', 'compile_po', 'concat', 'newer:less']);
     // create a package ready version of the ui (aka what jenkins does)
-    grunt.registerTask('dist', ['clean', 'checkDependencies:build', 'build', 'uglify', 'copy_dist', 'create_i18n_properties']);
+    grunt.registerTask('dist', ['clean', 'copy_build', 'compile_po', 'concat', 'newer:less', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
     grunt.registerTask('refresh', 'force an update and reload the browser', ['force_update', 'send_livereload']);
 };
