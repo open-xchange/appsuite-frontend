@@ -15,11 +15,9 @@ var util = require('util');
 /**
  * Waits until an element specified by the selector has the focus
  * @param selector {string}
- * @param timeout {number} optional, the maximum time to wait for the selector to have the focus. Default is 500
+ * @param timeout {number} optional, the maximum time to wait for the selector to have the focus. Default is global waitForConditionTimeout setting (5000)
  */
 exports.command = function (selector, timeout) {
-
-    timeout = timeout || 500;
 
     this.waitForStatement(function (selector) {
         return $(selector).is(':focus');

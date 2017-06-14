@@ -20,7 +20,7 @@ exports.command = function (opt) {
         .url(this.launch_url)
         .execute(function (options) {
             if (options.userAgent) _.device.loadUA(options.userAgent);
-        },[opt])
+        }, [opt])
         .waitForElementFocus('#io-ox-login-username', 10000);
 
     return this;
