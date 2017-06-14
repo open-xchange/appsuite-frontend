@@ -80,29 +80,6 @@ msgstr[0] "%1$d день"
 msgstr[1] "%1$d дня"
 msgstr[2] "%1$d дней"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d день, %2$s"
-msgstr[1] "%1$d дня, %2$s"
-msgstr[2] "%1$d дней, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d день, %2$s"
-msgstr[1] "%1$d дня, %2$s"
-msgstr[2] "%1$d дней, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "В последнее время было изменено %1$d файлов"
@@ -114,29 +91,6 @@ msgid_plural "%1$d hours"
 msgstr[0] "%1$d час"
 msgstr[1] "%1$d часа"
 msgstr[2] "%1$d часов"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d час %2$s"
-msgstr[1] "%1$d часа %2$s"
-msgstr[2] "%1$d часов %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d час %2$s"
-msgstr[1] "%1$d часа %2$s"
-msgstr[2] "%1$d часов %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -423,8 +377,7 @@ msgstr "%3$s %2$s %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -432,80 +385,12 @@ msgstr[0] "%d день"
 msgstr[1] "%d дня"
 msgstr[2] "%d дней"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d день"
-msgstr[1] "%d дня"
-msgstr[2] "%d дней"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d час"
-msgstr[1] "%d часа"
-msgstr[2] "%d часов"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d час"
-msgstr[1] "%d часа"
-msgstr[2] "%d часов"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d минута"
 msgstr[1] "%d минуты"
 msgstr[2] "%d минут"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d минуту"
-msgstr[1] "%d минуты"
-msgstr[2] "%d минут"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d неделя"
-msgstr[1] "%d недели"
-msgstr[2] "%d недель"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d неделю"
-msgstr[1] "%d недели"
-msgstr[2] "%d недель"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -5190,10 +5075,6 @@ msgstr "Меньше или равно"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "МБ"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "мм"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -10790,10 +10671,6 @@ msgstr "выбор даты"
 msgid "day(s)"
 msgstr "дн."
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "дд"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "отклонено"
@@ -11210,13 +11087,6 @@ msgstr "желтый"
 msgid "your platform"
 msgstr "вашей платформы"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "гггг"
-
 #~| msgid "is not a valid user or group."
 #~ msgid " is not a valid user or group."
 #~ msgstr "не является допустимым пользователем или группой."
@@ -11230,6 +11100,32 @@ msgstr "гггг"
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr ""
 #~ "Обнаружено контактов: %1$d. Максимальное число элементов в списке: %2$d."
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d день, %2$s"
+#~ msgstr[1] "%1$d дня, %2$s"
+#~ msgstr[2] "%1$d дней, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d день, %2$s"
+#~ msgstr[1] "%1$d дня, %2$s"
+#~ msgstr[2] "%1$d дней, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d час %2$s"
+#~ msgstr[1] "%1$d часа %2$s"
+#~ msgstr[2] "%1$d часов %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d час %2$s"
+#~ msgstr[1] "%1$d часа %2$s"
+#~ msgstr[2] "%1$d часов %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d из %2$d"
@@ -11269,6 +11165,46 @@ msgstr "гггг"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d день"
+#~ msgstr[1] "%d дня"
+#~ msgstr[2] "%d дней"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d час"
+#~ msgstr[1] "%d часа"
+#~ msgstr[2] "%d часов"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d час"
+#~ msgstr[1] "%d часа"
+#~ msgstr[2] "%d часов"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d минуту"
+#~ msgstr[1] "%d минуты"
+#~ msgstr[2] "%d минут"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d неделя"
+#~ msgstr[1] "%d недели"
+#~ msgstr[2] "%d недель"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d неделю"
+#~ msgstr[1] "%d недели"
+#~ msgstr[2] "%d недель"
 
 #~ msgid "(Default)"
 #~ msgstr "(по умолчанию)"
@@ -12526,6 +12462,9 @@ msgstr "гггг"
 
 #~ msgid "Loop once only"
 #~ msgstr "Проиграть один раз"
+
+#~ msgid "MM"
+#~ msgstr "мм"
 
 #, fuzzy
 #~| msgid "March"
@@ -14245,6 +14184,9 @@ msgstr "гггг"
 #~ msgid "day of the weekend"
 #~ msgstr "выходной день"
 
+#~ msgid "dd"
+#~ msgstr "дд"
+
 #, fuzzy
 #~| msgid "Edit signature"
 #~ msgid "edit share"
@@ -14446,3 +14388,6 @@ msgstr "гггг"
 
 #~ msgid "yearly"
 #~ msgstr "каждый год"
+
+#~ msgid "yyyy"
+#~ msgstr "гггг"

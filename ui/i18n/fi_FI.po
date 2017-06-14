@@ -71,27 +71,6 @@ msgid_plural "%1$d days"
 msgstr[0] "%1$d päivää"
 msgstr[1] "%1$d päivää"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d päivä, %2$s"
-msgstr[1] "%1$d päivää, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d päivä, %2$s"
-msgstr[1] "%1$d päivää, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$s tiedostoa on hiljattain muutettu"
@@ -102,27 +81,6 @@ msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d tuntia"
 msgstr[1] "%1$d tuntia"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d tunti ja %2$s"
-msgstr[1] "%1$d tuntia ja %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d tunti ja %2$s"
-msgstr[1] "%1$d tuntia ja %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -399,81 +357,18 @@ msgstr "%3$s %1$s, %2$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d päivä"
 msgstr[1] "%d päivää"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d päivä"
-msgstr[1] "%d päivää"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d tunti"
-msgstr[1] "%d tuntia"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d tunti"
-msgstr[1] "%d tuntia"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minuutti"
 msgstr[1] "%d minuuttia"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d minuutti"
-msgstr[1] "%d minuuttia"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d viikko"
-msgstr[1] "%d viikkoa"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d viikko"
-msgstr[1] "%d viikkoa"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -5140,10 +5035,6 @@ msgstr "yhtä suuri tai pienempi kuin"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MT"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "KK"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -10742,10 +10633,6 @@ msgstr "päivämääränvalitsin"
 msgid "day(s)"
 msgstr "päivää"
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "pp"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "hylännyt"
@@ -11161,13 +11048,6 @@ msgstr "Keltainen"
 msgid "your platform"
 msgstr "Alustasi"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "vvvv"
-
 #~ msgid " characters"
 #~ msgstr " merkin jälkeen"
 
@@ -11181,6 +11061,28 @@ msgstr "vvvv"
 
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr "%1$d yhteystietoa löydetty. Luettelo on rajattu  %2$d kohteeseen."
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d päivä, %2$s"
+#~ msgstr[1] "%1$d päivää, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d päivä, %2$s"
+#~ msgstr[1] "%1$d päivää, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d tunti ja %2$s"
+#~ msgstr[1] "%1$d tuntia ja %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d tunti ja %2$s"
+#~ msgstr[1] "%1$d tuntia ja %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$s/%2$s"
@@ -11218,6 +11120,40 @@ msgstr "vvvv"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d päivä"
+#~ msgstr[1] "%d päivää"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d tunti"
+#~ msgstr[1] "%d tuntia"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d tunti"
+#~ msgstr[1] "%d tuntia"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minuutti"
+#~ msgstr[1] "%d minuuttia"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d viikko"
+#~ msgstr[1] "%d viikkoa"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d viikko"
+#~ msgstr[1] "%d viikkoa"
 
 #~ msgid "(Default)"
 #~ msgstr "(Oletus)"
@@ -12272,6 +12208,9 @@ msgstr "vvvv"
 
 #~ msgid "Loop once only"
 #~ msgstr "Toista vain kerran"
+
+#~ msgid "MM"
+#~ msgstr "KK"
 
 #, fuzzy
 #~| msgid "March"
@@ -13811,6 +13750,9 @@ msgstr "vvvv"
 #~ msgid "day of the weekend"
 #~ msgstr "viikonlopun päivä"
 
+#~ msgid "dd"
+#~ msgstr "pp"
+
 #, fuzzy
 #~| msgid "Edit signature"
 #~ msgid "edit share"
@@ -13973,3 +13915,6 @@ msgstr "vvvv"
 
 #~ msgid "yearly"
 #~ msgstr "vuosittain"
+
+#~ msgid "yyyy"
+#~ msgstr "vvvv"

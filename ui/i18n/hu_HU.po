@@ -73,27 +73,6 @@ msgid_plural "%1$d days"
 msgstr[0] "%1$d nap"
 msgstr[1] "%1$d nap"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d nap, %2$s"
-msgstr[1] "%1$d nap, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d nap, %2$s"
-msgstr[1] "%1$d nap, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$d fájl változott mostanság"
@@ -104,27 +83,6 @@ msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d óra"
 msgstr[1] "%1$d óra"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d óra és %2$s"
-msgstr[1] "%1$d óra és %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d óra és %2$s"
-msgstr[1] "%1$d óra és %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -401,81 +359,18 @@ msgstr "%3$s %2$s %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d nap"
 msgstr[1] "%d nap"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d nap"
-msgstr[1] "%d nap"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d óra"
-msgstr[1] "%d óra"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d óra"
-msgstr[1] "%d óra"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d perc"
 msgstr[1] "%d perc"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d perc"
-msgstr[1] "%d perc"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d hét"
-msgstr[1] "%d hét"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d hét"
-msgstr[1] "%d hét"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -5170,10 +5065,6 @@ msgstr "Kisebb vagy egyenlő"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "MM"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -10781,10 +10672,6 @@ msgstr "dátumválasztó"
 msgid "day(s)"
 msgstr "nap"
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "dd"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "elutasítva"
@@ -11200,18 +11087,33 @@ msgstr "sárga"
 msgid "your platform"
 msgstr "az Ön rendszere"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "yyyy"
-
 #~ msgid "%1$d %"
 #~ msgstr "%1$d %"
 
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr "%1$d névjegy található. Ez a lista csak %2$d elemet tartalmazhat."
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d nap, %2$s"
+#~ msgstr[1] "%1$d nap, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d nap, %2$s"
+#~ msgstr[1] "%1$d nap, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d óra és %2$s"
+#~ msgstr[1] "%1$d óra és %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d óra és %2$s"
+#~ msgstr[1] "%1$d óra és %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d / %2$d"
@@ -11239,6 +11141,40 @@ msgstr "yyyy"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d nap"
+#~ msgstr[1] "%d nap"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d óra"
+#~ msgstr[1] "%d óra"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d óra"
+#~ msgstr[1] "%d óra"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d perc"
+#~ msgstr[1] "%d perc"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d hét"
+#~ msgstr[1] "%d hét"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d hét"
+#~ msgstr[1] "%d hét"
 
 #~ msgid "1 day"
 #~ msgstr "1 nap"
@@ -11760,6 +11696,9 @@ msgstr "yyyy"
 
 #~ msgid "Loop once only"
 #~ msgstr "Egyszeri lejátszás"
+
+#~ msgid "MM"
+#~ msgstr "MM"
 
 #, fuzzy
 #~| msgid "March"
@@ -12469,6 +12408,9 @@ msgstr "yyyy"
 #~ msgid "day of the weekend"
 #~ msgstr "nap a hétvégén"
 
+#~ msgid "dd"
+#~ msgstr "dd"
+
 #~ msgid "end date "
 #~ msgstr "befejező dátum"
 
@@ -12571,3 +12513,6 @@ msgstr "yyyy"
 
 #~ msgid "yearly"
 #~ msgstr "évente"
+
+#~ msgid "yyyy"
+#~ msgstr "yyyy"

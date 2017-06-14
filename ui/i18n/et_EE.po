@@ -73,27 +73,6 @@ msgid_plural "%1$d days"
 msgstr[0] "%1$d päev"
 msgstr[1] "%1$d päeva"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d päev, %2$s"
-msgstr[1] "%1$d päeva, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d päev, %2$s"
-msgstr[1] "%1$d päeva, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$d faili on hiljuti muudetud"
@@ -104,27 +83,6 @@ msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d tund"
 msgstr[1] "%1$d tundi"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d tund ja %2$s"
-msgstr[1] "%1$d tundi ja %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d tund ja %2$s"
-msgstr[1] "%1$d tundi ja %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -406,81 +364,18 @@ msgstr "%3$s %2$s, %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d päev"
 msgstr[1] "%d päeva"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d päev"
-msgstr[1] "%d päeva"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d tund"
-msgstr[1] "%d tundi"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d tund"
-msgstr[1] "%d tundi"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minut"
 msgstr[1] "%d minutit"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d minut"
-msgstr[1] "%d minutit"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d nädal"
-msgstr[1] "%d nädalat"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d nädal"
-msgstr[1] "%d nädalat"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -5158,10 +5053,6 @@ msgstr ""
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "KK"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -10764,10 +10655,6 @@ msgstr "kuupäevavalija"
 msgid "day(s)"
 msgstr ""
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "pp"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "keeldutud"
@@ -11187,15 +11074,30 @@ msgstr "kollane"
 msgid "your platform"
 msgstr "teie platvorm"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "aaaa"
-
 #~ msgid "%1$d %"
 #~ msgstr "%1$d %"
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d päev, %2$s"
+#~ msgstr[1] "%1$d päeva, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d päev, %2$s"
+#~ msgstr[1] "%1$d päeva, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d tund ja %2$s"
+#~ msgstr[1] "%1$d tundi ja %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d tund ja %2$s"
+#~ msgstr[1] "%1$d tundi ja %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d / %2$d"
@@ -11208,6 +11110,40 @@ msgstr "aaaa"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s värskendasid oma profiili:"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d päev"
+#~ msgstr[1] "%d päeva"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d tund"
+#~ msgstr[1] "%d tundi"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d tund"
+#~ msgstr[1] "%d tundi"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minut"
+#~ msgstr[1] "%d minutit"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d nädal"
+#~ msgstr[1] "%d nädalat"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d nädal"
+#~ msgstr[1] "%d nädalat"
 
 #~ msgid "1 day"
 #~ msgstr "1 päev"
@@ -11533,6 +11469,9 @@ msgstr "aaaa"
 
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "Rida %1$d: %2$s"
+
+#~ msgid "MM"
+#~ msgstr "KK"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-kiri salvestatud mustandina"
@@ -11914,6 +11853,9 @@ msgstr "aaaa"
 #~ msgid "day of the weekend"
 #~ msgstr "nädalavahetuse päev"
 
+#~ msgid "dd"
+#~ msgstr "pp"
+
 #~ msgid "ends"
 #~ msgstr "lõpeb"
 
@@ -11979,3 +11921,6 @@ msgstr "aaaa"
 
 #~ msgid "yearly"
 #~ msgstr "iga aasta"
+
+#~ msgid "yyyy"
+#~ msgstr "aaaa"

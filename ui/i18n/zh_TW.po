@@ -73,27 +73,6 @@ msgid_plural "%1$d days"
 msgstr[0] "%1$d 天"
 msgstr[1] "%1$d 天"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d 天，%2$s"
-msgstr[1] "%1$d 天、%2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d 天，%2$s"
-msgstr[1] "%1$d 天、%2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "最近有 %1$d 個被修改的檔案"
@@ -104,27 +83,6 @@ msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d 小時"
 msgstr[1] "%1$d 小時"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d 小時和 %2$s"
-msgstr[1] "%1$d 小時和 %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d 小時和 %2$s"
-msgstr[1] "%1$d 小時和 %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -397,81 +355,18 @@ msgstr "%2$s %1$s %3$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d 天"
 msgstr[1] "%d 天"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d 天"
-msgstr[1] "%d 天"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d 小時"
-msgstr[1] "%d 小時"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d 小時"
-msgstr[1] "%d 小時"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d 分鐘"
 msgstr[1] "%d 分鐘"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d 分鐘"
-msgstr[1] "%d 分鐘"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d 週"
-msgstr[1] "%d 週"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d 週"
-msgstr[1] "%d 週"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -5079,10 +4974,6 @@ msgstr "小於等於"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "月"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -10571,10 +10462,6 @@ msgstr "日期選擇器"
 msgid "day(s)"
 msgstr "天"
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "日"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "已拒絕"
@@ -10990,13 +10877,6 @@ msgstr "黃色"
 msgid "your platform"
 msgstr "您的平台"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "年"
-
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s)"
 
@@ -11030,6 +10910,28 @@ msgstr "年"
 
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr "找到 %1$d 位聯絡人，此清單僅能顯示 %2$d 個項目。"
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d 天，%2$s"
+#~ msgstr[1] "%1$d 天、%2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d 天，%2$s"
+#~ msgstr[1] "%1$d 天、%2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d 小時和 %2$s"
+#~ msgstr[1] "%1$d 小時和 %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d 小時和 %2$s"
+#~ msgstr[1] "%1$d 小時和 %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "第 %1$d 張，共 %2$d 張"
@@ -11085,10 +10987,44 @@ msgstr "年"
 #~ msgstr[0] "%d 個約會"
 #~ msgstr[1] "%d 個約會"
 
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d 天"
+#~ msgstr[1] "%d 天"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d 小時"
+#~ msgstr[1] "%d 小時"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d 小時"
+#~ msgstr[1] "%d 小時"
+
 #~ msgid "%d info item"
 #~ msgid_plural "%d info items"
 #~ msgstr[0] "%d 個資訊項目"
 #~ msgstr[1] "%d 個信息項"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d 分鐘"
+#~ msgstr[1] "%d 分鐘"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d 週"
+#~ msgstr[1] "%d 週"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d 週"
+#~ msgstr[1] "%d 週"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s，EEE"
@@ -13562,6 +13498,9 @@ msgstr "年"
 #~ msgid "Loop once only"
 #~ msgstr "僅重播一次"
 
+#~ msgid "MM"
+#~ msgstr "月"
+
 #, fuzzy
 #~| msgid "March"
 #~ msgid "Mac"
@@ -15431,6 +15370,9 @@ msgstr "年"
 #~ msgid "day of the weekend"
 #~ msgstr "周末日期"
 
+#~ msgid "dd"
+#~ msgstr "日"
+
 #, fuzzy
 #~| msgid "Edit signature"
 #~ msgid "edit share"
@@ -15641,3 +15583,6 @@ msgstr "年"
 
 #~ msgid "yearly"
 #~ msgstr "每年"
+
+#~ msgid "yyyy"
+#~ msgstr "年"
