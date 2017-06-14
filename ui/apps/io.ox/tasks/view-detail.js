@@ -240,7 +240,7 @@ define('io.ox/tasks/view-detail', [
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
                     }
-                    attachmentNode.delegate('a', 'click', function (e) { e.preventDefault(); });
+                    attachmentNode.on('click', 'a', function (e) { e.preventDefault(); });
                 }).fail(function () {
                     attachmentFail(attachmentNode, task);
                 });

@@ -409,10 +409,11 @@ define('io.ox/tasks/api', [
             }
             return $.when(
                     //api.get updates list and get caches
-                    api.removeFromCache(key)
+                    api.removeFromCache(key).then(function () {
                         //api.get updates list and get caches
-                        .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),
-                        sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
+                        return api.get({ id: task.id, folder_id: newFolder || useFolder });
+                    }),
+                    sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         })
         .then(function (data) {
             //return object with id and folder id needed to save the attachments correctly

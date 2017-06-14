@@ -253,10 +253,8 @@ define('io.ox/core/main', [
     gt.pgettext('app', 'Drive');
     gt.pgettext('app', 'Conversations');
 
-    var tabManager = _.throttle(function () {
-
+    var tabManager = function () {
         var items = launchers.children('.launcher'),
-            launcherDropDownIcon = $('.launcher-dropdown', topbar),
             secondaryLauncher = topbar.find('.launchers-secondary'),
             forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
@@ -276,8 +274,10 @@ define('io.ox/core/main', [
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = secondaryLauncher.length > 0 ? secondaryLauncher[0].getBoundingClientRect().width : 0,
-            launcherDropDownIconWidth = launcherDropDownIcon.width(),
-            viewPortWidth = topbar.width() - launcherDropDownIconWidth;
+            viewPortWidth = topbar[0].getBoundingClientRect().width,
+            launcherDropDownIcon = topbar.find('.launcher-dropdown');
+
+        if (launcherDropDownIcon.length) viewPortWidth -= launcherDropDownIcon[0].getBoundingClientRect().width;
 
         launcherDropdownTab.detach();
 
@@ -308,7 +308,7 @@ define('io.ox/core/main', [
             launcherDropdownTab.detach();
         }
 
-    }, 100);
+    };
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
@@ -738,14 +738,14 @@ define('io.ox/core/main', [
             );
             add(launchernode, launcherDropdown, model);
 
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ox.ui.apps.on('remove', function (model) {
             _([launchers, launcherDropdown]).each(function (node) {
                 node.children('[data-app-guid="' + model.guid + '"]').remove();
             });
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ox.ui.apps.on('launch resume', function (model) {
@@ -768,7 +768,7 @@ define('io.ox/core/main', [
             launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
             $('a.closelink', node).attr('title', getCloseIconLabel(value));
 
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ext.point('io.ox/core/topbar/right').extend({
@@ -805,12 +805,12 @@ define('io.ox/core/main', [
                     // so let's delay this for responsiveness!
                     // only requests are delayed by 5s, the badge is drawn normally
                     self.append(notifications.attach(addLauncher, DELAY));
-                    tabManager();
+                    ox.trigger('recalculate-topbarsize');
                 } else {
                     //lets wait till we are online
                     ox.once('connection:online', function () {
                         self.append(notifications.attach(addLauncher, DELAY));
-                        tabManager();
+                        ox.trigger('recalculate-topbarsize');
                     });
                 }
             }
@@ -1251,8 +1251,10 @@ define('io.ox/core/main', [
 
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
-                $(window).resize(tabManager);
-                ox.on('recalculate-topbarsize', tabManager);
+                $(window).on('resize', function () {
+                    ox.trigger('recalculate-topbarsize');
+                });
+                ox.on('recalculate-topbarsize', _.throttle(function () { tabManager(); }, 100));
             }
         });
 

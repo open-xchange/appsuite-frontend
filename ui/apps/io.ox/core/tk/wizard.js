@@ -310,7 +310,7 @@ define('io.ox/core/tk/wizard', [
             if (e.which !== 9 || !this.$el.is(':visible')) return;
 
             // get focusable items
-            var items = this.$('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible').andSelf(),
+            var items = this.$('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible').addBack(),
                 first = e.shiftKey && document.activeElement === items.get(0),
                 last = !e.shiftKey && document.activeElement === items.get(-1);
 

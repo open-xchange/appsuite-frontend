@@ -353,14 +353,14 @@ define('io.ox/calendar/freetime/timeView', [
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
             this.headerNodeRow1 = $('<div class="freetime-time-view-header row1">')
-                .delegate('.control.next,.control.prev,.control.today', 'click', self.onControlView.bind(this));
+                .on('click', '.control.next,.control.prev,.control.today', self.onControlView.bind(this));
             this.headerNodeRow2 = $('<div class="freetime-time-view-header row2">')
-                .delegate('.freetime-hour', 'click', self.onSelectHour.bind(this));
+                .on('click', '.freetime-hour', self.onSelectHour.bind(this));
             this.bodyNode = $('<div class="freetime-time-view-body">')
-                .delegate('.freetime-table', 'mousedown', self.onMouseDown.bind(this))
-                .delegate('.freetime-table', 'mouseup', self.onMouseUp.bind(this))
-                .delegate('.freetime-table', 'mousemove', self.onMouseMove.bind(this))
-                .delegate('.freetime-table-cell', 'dblclick', self.onSelectHour.bind(this))
+                .on('mousedown', '.freetime-table', self.onMouseDown.bind(this))
+                .on('mouseup', '.freetime-table', self.onMouseUp.bind(this))
+                .on('mousemove', '.freetime-table', self.onMouseMove.bind(this))
+                .on('dblclick', '.freetime-table-cell', self.onSelectHour.bind(this))
                 .on('scroll', self.onScroll.bind(this));
 
             // add some listeners

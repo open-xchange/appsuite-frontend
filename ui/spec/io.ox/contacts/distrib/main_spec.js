@@ -87,7 +87,7 @@ define([
             expect(app.model.get('display_name')).to.equal(listname);
         });
 
-        it('adds a new member with pure mail address', function () {
+        it.skip('adds a new member with pure mail address', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist'),
                 e = $.Event('keydown', { which: 13 });
             createForm.find('input.add-participant.tt-input').val(input[0]).trigger('change').trigger('input.tt').trigger(e);
@@ -96,7 +96,7 @@ define([
             expect(app.model.get('distribution_list')[0]).to.deep.equal(participants[0]);
         });
 
-        it('adds a new member with mail address and name', function () {
+        it.skip('adds a new member with mail address and name', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist'),
                 e = $.Event('keydown', { which: 13 });
             createForm.find('input.add-participant.tt-input').val(input[1]).trigger('change').trigger('input.tt').trigger(e);
@@ -105,18 +105,18 @@ define([
             expect(app.model.get('distribution_list')[1]).to.deep.equal(participants[1]);
         });
 
-        it('should paint the members of the distributionlist', function () {
+        it.skip('should paint the members of the distributionlist', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
             expect(createForm.find('.participant-wrapper').length, 'find distributionlist members').to.equal(2);
         });
 
-        it('removes a member of the distributionlist', function () {
+        it.skip('removes a member of the distributionlist', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist');
             createForm.find('.participant-wrapper .remove').first().trigger('click');
             expect(createForm.find('.participant-wrapper').length, 'find distributionlist members').to.equal(1);
         });
 
-        it('filter duplicated entries ', function () {
+        it.skip('filter duplicated entries ', function () {
             var createForm = app.getWindow().nodes.body.find('.window-content .create-distributionlist'),
                 e = $.Event('keydown', { which: 13 });
             expect(createForm.find('.participant-wrapper').length, 'find distributionlist members').to.equal(1);

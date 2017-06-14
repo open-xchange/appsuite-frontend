@@ -931,7 +931,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                     // create new request
                     r.def.always(function () {
                         // success or failure?
-                        var success = this.state() === 'resolved';
+                        var success = r.def.state() === 'resolved';
                         // at first, remove request from hash (see bug 37113)
                         var reqs = requests[hash];
                         delete requests[hash];
@@ -942,10 +942,9 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                             r.def[success ? 'resolve' : 'reject'].apply(r.def, args);
                             that.trigger('stop ' + (success ? 'done' : 'fail'), r.xhr);
                         });
-                        hash = null;
+                        r = hash = null;
                     });
                     limitedSend(r);
-                    r = null;
                 }
             } else {
                 limitedSend(r);

@@ -84,7 +84,7 @@ define('io.ox/search/facets/extensions', [
             },
 
             optionsHandler: function (baton) {
-                $('body').delegate('.facet-dropdown .option', 'click tap', function (e) {
+                $('body').on('click tap', '.facet-dropdown .option', function (e) {
                     // TODO: remove hack
                     e.stopImmediatePropagation();
                     e.stopPropagation();

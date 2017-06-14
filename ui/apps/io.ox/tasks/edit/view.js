@@ -157,7 +157,7 @@ define('io.ox/tasks/edit/view', [
                 node.prop('disabled', value === '');
             }
             //delegate some events
-            self.$el.delegate('.title-field', 'keyup blur', function () {
+            self.$el.on('keyup blur', '.title-field', function () {
                 var value = $(this).val(),
                     title = value;
                 if (!title) {

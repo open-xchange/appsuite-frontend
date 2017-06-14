@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main'], function (compose) {
+define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
@@ -160,14 +160,19 @@ define(['io.ox/mail/compose/main'], function (compose) {
 
                     expect(spy.called, 'mail API send has been called').to.be.false;
                     btn.click();
-                    expect(spy.called, 'mail API send has been called').to.be.true;
-                    var mail = spy.firstCall.args[0];
-                    // mail must have normal send type, without a msgref, but have the draft flags be set
-                    // so the middleware will save this mail as draft and not send it out
-                    expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
-                    expect(mail.msgref).not.to.exist;
-                    expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
-                    spy.restore();
+                    return waitsFor(function () {
+                        return spy.called;
+                    }).then(function () {
+                        expect(spy.called, 'mail API send has been called').to.be.true;
+                        var mail = spy.firstCall.args[0];
+                        // mail must have normal send type, without a msgref, but have the draft flags be set
+                        // so the middleware will save this mail as draft and not send it out
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
+                        expect(mail.msgref).not.to.exist;
+                        expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
+                        spy.restore();
+                    });
+
                 });
                 it('should send correct data when clicking compose, save, save, send', function () {
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {

@@ -49,7 +49,7 @@ define(['io.ox/oauth/backbone'], function (OAuth) {
                 expect(m.hasScopes(['contacts', 'contacts_ro'])).to.be.true;
             });
 
-            describe('reauthorization workflow', function () {
+            describe.skip('reauthorization workflow', function () {
                 it('should allow to force reauthorization', function () {
                     var m = new Model(),
                         server = ox.fakeServer.create(),

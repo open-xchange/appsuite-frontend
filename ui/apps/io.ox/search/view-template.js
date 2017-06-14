@@ -148,7 +148,7 @@ define('io.ox/search/view-template', [
             }
 
             // delegate handler
-            $('body').delegate('.app-dropdown a', 'click', function (e) {
+            $('body').on('click', '.app-dropdown a', function (e) {
                 var cell = $(e.target),
                     next = cell.closest('a').attr('data-app');
 

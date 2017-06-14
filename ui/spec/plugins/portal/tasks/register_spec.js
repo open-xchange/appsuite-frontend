@@ -32,9 +32,9 @@ define([
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 
@@ -45,12 +45,12 @@ define([
                 expect(this.node.children()).to.have.length(1);
                 expect(this.node.children().first().is('ul')).to.be.true;
             });
-            it.skip('draw all Tasks', function () {
+            it('draw all Tasks', function () {
                 expect(this.node.find('li.item')).to.have.length(2);
                 expect($(this.node.find('.bold')[0]).text()).to.equal('Pommes kaufen');
                 expect($(this.node.find('.bold')[1]).text()).to.equal('Nase putzen');
-                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am 17.5.2013 11:53');
-                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am 17.5.2013 11:53');
+                expect($(this.node.find('.accent')[0]).text()).to.equal('Fällig am 17.5.2013, 11:53');
+                expect($(this.node.find('.accent')[1]).text()).to.equal('Fällig am 17.5.2013, 11:53');
             });
         });
         describe('should not draw', function () {
@@ -61,9 +61,9 @@ define([
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 
@@ -91,9 +91,9 @@ define([
                 });
                 this.node = $('<div>');
                 this.baton = ext.Baton();
-                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton);
-                return def._wrapped[0].then(function () {
-                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton);
+                var def = ext.point('io.ox/portal/widget/tasks').invoke('load', this.node, this.baton)._wrapped[0];
+                return def.then(function () {
+                    return ext.point('io.ox/portal/widget/tasks').invoke('preview', this.node, this.baton).value();
                 }.bind(this));
             });
 
