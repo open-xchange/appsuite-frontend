@@ -1749,6 +1749,10 @@ msgstr "清空"
 msgid "Clear field"
 msgstr "清除字段"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "清除选择"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "点击此处离开帮助中心"
@@ -7289,6 +7293,7 @@ msgstr "任务 %1$s 提醒。"
 msgid "Reminder has been created"
 msgstr "已创建提醒"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "移除"
@@ -8837,6 +8842,10 @@ msgstr "提供的文件名称超过允许长度。"
 msgid "The requested application is not available at this moment."
 msgstr "现在请求的应用程序不可用。"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8848,6 +8857,10 @@ msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
 msgstr "选择的文件夹为虚拟和不能被搜寻的。请选择别的文件夹。"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11925,9 +11938,6 @@ msgstr "您的平台"
 
 #~ msgid "Clear cache"
 #~ msgstr "清除快取"
-
-#~ msgid "Clear selection"
-#~ msgstr "清除选择"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "单击查看全天约会"

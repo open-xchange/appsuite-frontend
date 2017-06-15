@@ -1803,6 +1803,11 @@ msgstr "Temizle "
 msgid "Clear field"
 msgstr "Alanı temizle"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+msgid "Clear selection"
+msgstr "Alanı temizle"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Yardım merkezinden çıkmak için tıklayınız"
@@ -7651,6 +7656,7 @@ msgstr "Hatırlatma Tarihi %1$s"
 msgid "Reminder has been created"
 msgstr "Hatırlatma oluşturuldu"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Kaldır"
@@ -9313,6 +9319,10 @@ msgstr "Girilen dosya adı izin verilen uzunluğu aşıyor."
 msgid "The requested application is not available at this moment."
 msgstr "Üzgünüz, %s da size uygun herhangi bir veri yok."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9328,6 +9338,10 @@ msgid ""
 msgstr ""
 "Seçilen klasör sanal olduğu için aratılamıyor. Lütfen başka bir klasör "
 "aratınız. "
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11681,10 +11695,6 @@ msgstr "Platformunuz"
 
 #~ msgid "Checking credentials ..."
 #~ msgstr "Bilgiler kontrol ediliyor ..."
-
-#, fuzzy
-#~ msgid "Clear selection"
-#~ msgstr "Alanı temizle"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Tüm gün görüşmesi için tıklayınız"

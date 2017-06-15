@@ -1804,6 +1804,10 @@ msgstr "Vyčistiť"
 msgid "Clear field"
 msgstr "Vyprázdniť pole"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Vymazať výber"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Kliknutím sem ukončíte centrum pomoci"
@@ -7439,6 +7443,7 @@ msgstr "Pripomenutie úlohy %1$s."
 msgid "Reminder has been created"
 msgstr "Pripomienka bola vytvorená"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Odstrániť"
@@ -9024,6 +9029,10 @@ msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
 msgid "The requested application is not available at this moment."
 msgstr "Požadovaná aplikácia momentálne nie je k dispozícii."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9039,6 +9048,10 @@ msgid ""
 msgstr ""
 "Vybraný priečinok je virtuálny a nie je možné v ňom vyhľadať. Prosím, "
 "vyberte iný priečinok."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -12270,9 +12283,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Clear cache"
 #~ msgstr "Vyčistiť vyrovnávaciu pamäť"
-
-#~ msgid "Clear selection"
-#~ msgstr "Vymazať výber"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Kliknutím zobrazíte celodennú schôdzku"

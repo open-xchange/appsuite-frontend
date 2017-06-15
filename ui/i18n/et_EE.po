@@ -1774,6 +1774,10 @@ msgstr "Tühjenda"
 msgid "Clear field"
 msgstr "Tühjenda väli"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Tühista valik"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Klõpsake siia abikeskusest väljumiseks"
@@ -7394,6 +7398,7 @@ msgstr "Ülesande %1$s meeldetuletus."
 msgid "Reminder has been created"
 msgstr "Meeldetuletus on loodud"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Eemalda"
@@ -8986,6 +8991,10 @@ msgstr "Pakutud faili nimi on lubatust pikem."
 msgid "The requested application is not available at this moment."
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9001,6 +9010,10 @@ msgid ""
 msgstr ""
 "Valitud kaust on virtuaalne ja selles ei saa sooritada otsingut. Palun "
 "valige mõni muu kaust."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11253,9 +11266,6 @@ msgstr "teie platvorm"
 
 #~ msgid "Checking credentials ..."
 #~ msgstr "Mandaadi kontrollimine ..."
-
-#~ msgid "Clear selection"
-#~ msgstr "Tühista valik"
 
 #~ msgid "Click on a sentence to choose when to repeat the appointment."
 #~ msgstr "Klõpsake lausel kohtumise kordamise aja valimiseks."

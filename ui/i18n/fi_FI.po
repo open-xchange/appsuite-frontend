@@ -1771,6 +1771,10 @@ msgstr "tyhjennä"
 msgid "Clear field"
 msgstr "Tyhjennä kenttä"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Tyhjennä kenttä"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Napsauta tästä sulkeaksesi help center"
@@ -7373,6 +7377,7 @@ msgstr "Muistutus %1$s"
 msgid "Reminder has been created"
 msgstr "Muistutus luotu"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Poista"
@@ -8945,6 +8950,10 @@ msgstr "Annettu tiedostonimi ylittää sallitun enimmäispituuden."
 msgid "The requested application is not available at this moment."
 msgstr "Sovellus ei ole tällä hetkellä saatavilla."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8959,6 +8968,10 @@ msgid ""
 "another folder."
 msgstr ""
 "Valittu kansio on virtuaalinen eikä siitä voi hakea. Valitse toinen kansio."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11446,9 +11459,6 @@ msgstr "Alustasi"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Siivotaan... Tämä voi kestää muutaman sekunnin."
-
-#~ msgid "Clear selection"
-#~ msgstr "Tyhjennä kenttä"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Valitse koko päivän tapaaminen"

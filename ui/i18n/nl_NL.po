@@ -1795,6 +1795,10 @@ msgstr "Leegmaken"
 msgid "Clear field"
 msgstr "Veld leegmaken"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Selectie leegmaken"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Klik hier om de helpschermen te sluiten"
@@ -7453,6 +7457,7 @@ msgstr "Herinnering voor taak %1$s."
 msgid "Reminder has been created"
 msgstr "Herinnering is aangemaakt"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Verwijderen"
@@ -9036,6 +9041,10 @@ msgstr "De gegeven bestandsnaam is langer dan de toegestane lengte."
 msgid "The requested application is not available at this moment."
 msgstr "De gevraagde applicatie is op dit moment niet beschikbaar."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9051,6 +9060,10 @@ msgid ""
 msgstr ""
 "De geselecteerde map is virtueel en kan niet doorzocht worden. Kies "
 "alstublieft een andere map."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11573,9 +11586,6 @@ msgstr "uw platform"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Opschonen ... Dit kan enkele seconden duren."
-
-#~ msgid "Clear selection"
-#~ msgstr "Selectie leegmaken"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Klik voor een dagafspraak"

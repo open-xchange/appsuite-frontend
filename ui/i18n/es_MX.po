@@ -1791,6 +1791,10 @@ msgstr "Borrar"
 msgid "Clear field"
 msgstr "Borrar campo"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Borrar selección"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Haga clic aquí para salir del centro de ayuda"
@@ -7429,6 +7433,7 @@ msgstr "Recordatorio de la tarea %1$s."
 msgid "Reminder has been created"
 msgstr "El recordatorio se ha creado"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Eliminar"
@@ -9013,6 +9018,10 @@ msgstr "El nombre de archivo indicado sobrepasa la longitud permitida."
 msgid "The requested application is not available at this moment."
 msgstr "La aplicación solicitada no está disponible en este momento."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9028,6 +9037,10 @@ msgid ""
 msgstr ""
 "La carpeta seleccionada es virtual y no se puede buscar en ella. Por favor, "
 "seleccione otra carpeta."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -13812,9 +13825,6 @@ msgstr "su plataforma"
 
 #~ msgid "Clear cache"
 #~ msgstr "Limpiar caché"
-
-#~ msgid "Clear selection"
-#~ msgstr "Borrar selección"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Pulse para cita de todo el día"

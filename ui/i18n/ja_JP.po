@@ -1749,6 +1749,10 @@ msgstr "クリア"
 msgid "Clear field"
 msgstr "フィールドをクリア"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "選択解除"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "ヘルプセンターを終了するには、ここをクリックします。"
@@ -7339,6 +7343,7 @@ msgstr "%1$s 仕事のアラーム。"
 msgid "Reminder has been created"
 msgstr "アラームを作成しました。"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "削除"
@@ -8900,6 +8905,10 @@ msgstr "入力したファイル名が最大文字数を超えています。"
 msgid "The requested application is not available at this moment."
 msgstr "要求されたアプリケーションは、現在利用できません。"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8915,6 +8924,10 @@ msgid ""
 msgstr ""
 "選択したフォルダは仮想フォルダです。検索できません。別のフォルダを選択してく"
 "ださい。"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -12734,9 +12747,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Clear cache"
 #~ msgstr "キャッシュをクリア"
-
-#~ msgid "Clear selection"
-#~ msgstr "選択解除"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "終日のアポイントを作成するには、クリックしてください。"

@@ -1786,6 +1786,10 @@ msgstr "Törlés"
 msgid "Clear field"
 msgstr "Mező törlése"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Kijelölés megszüntetése"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Kattintson ide a súgóközpontból kilépéshez"
@@ -7404,6 +7408,7 @@ msgstr "Emlékeztető a(z) %1$s feladathoz."
 msgid "Reminder has been created"
 msgstr "Az emlékeztető létrejött"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Eltávolítás"
@@ -8982,6 +8987,10 @@ msgstr "A megadott fájlnév hossza meghaladja az engedélyezett méretet."
 msgid "The requested application is not available at this moment."
 msgstr "A kért alkalmazás jelenleg nem elérhető."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8996,6 +9005,10 @@ msgid ""
 "another folder."
 msgstr ""
 "A kijelölt mappa virtuális és nem kereshető. Válasszon ki egy másik mappát."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11324,9 +11337,6 @@ msgstr "az Ön rendszere"
 #~| msgid "Children"
 #~ msgid "Chile"
 #~ msgstr "Gyermekek"
-
-#~ msgid "Clear selection"
-#~ msgstr "Kijelölés megszüntetése"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Egész napos találkozóért kattintson"

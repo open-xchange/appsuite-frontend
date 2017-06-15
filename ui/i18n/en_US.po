@@ -1747,6 +1747,10 @@ msgstr ""
 msgid "Clear field"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr ""
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr ""
@@ -7256,6 +7260,7 @@ msgstr ""
 msgid "Reminder has been created"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr ""
@@ -8791,6 +8796,10 @@ msgstr ""
 msgid "The requested application is not available at this moment."
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8801,6 +8810,10 @@ msgstr ""
 msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
 msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js

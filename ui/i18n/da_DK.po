@@ -1780,6 +1780,10 @@ msgstr "Ryd"
 msgid "Clear field"
 msgstr "Ryd felt"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Ryd markering"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Klik her for at afslutte hjælpecenteret"
@@ -7386,6 +7390,7 @@ msgstr "Påmindelse om opgaven %1$s."
 msgid "Reminder has been created"
 msgstr "Påmindelse blev oprettet"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Fjern"
@@ -8956,6 +8961,10 @@ msgstr "Det givne filnavn overskrider den tilladte længde."
 msgid "The requested application is not available at this moment."
 msgstr "Det ønskede program er ikke tilgængeligt lige nu."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8971,6 +8980,10 @@ msgid ""
 msgstr ""
 "Den valgte mappe er virtuel og kan ikke søges i.  Vælg venligst en anden "
 "mappe."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11517,9 +11530,6 @@ msgstr "din platform"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Rydder op... Dette kan tage nogle sekunder."
-
-#~ msgid "Clear selection"
-#~ msgstr "Ryd markering"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Klik for heldagsaftale"

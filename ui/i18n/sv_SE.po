@@ -1778,6 +1778,10 @@ msgstr "Rensa"
 msgid "Clear field"
 msgstr "Rensa fält"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Rensa markering"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Klicka här för att avsluta hjälpcentralen"
@@ -7379,6 +7383,7 @@ msgstr "Påminnelse för uppgiften %1$s."
 msgid "Reminder has been created"
 msgstr "Påminnelsen har skapats"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Ta bort"
@@ -8953,6 +8958,10 @@ msgstr "Angivet filnamn överskrider tillåten längd."
 msgid "The requested application is not available at this moment."
 msgstr "Det begärda programmet är inte tillgängligt just nu."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -8967,6 +8976,10 @@ msgid ""
 "another folder."
 msgstr ""
 "Den markerade mappen är virtuell och kan inte sökas i. Markera en annan mapp."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -12314,9 +12327,6 @@ msgstr "din plattform"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Städar... Det kan ta ett par sekunder."
-
-#~ msgid "Clear selection"
-#~ msgstr "Rensa markering"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Klicka för heldagsmöte"

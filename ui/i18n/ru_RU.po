@@ -1799,6 +1799,10 @@ msgstr "Очистить"
 msgid "Clear field"
 msgstr "Очистить поле"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Очистить выделение"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Нажмите для выхода из справочного центра"
@@ -7414,6 +7418,7 @@ msgstr "Напоминание о задаче %1$s."
 msgid "Reminder has been created"
 msgstr "Напоминание создано"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Удалить"
@@ -8991,6 +8996,10 @@ msgstr "Предоставленное имя файла превышает до
 msgid "The requested application is not available at this moment."
 msgstr "Запрашиваемое приложение в данный момент недоступно."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9004,6 +9013,10 @@ msgid ""
 "The selected folder is virtual and can not be searched. Please select "
 "another folder."
 msgstr "Поиск в виртуальных папках невозможен. Выберите другую папку."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11584,9 +11597,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Clear cache"
 #~ msgstr "Очистить кэш"
-
-#~ msgid "Clear selection"
-#~ msgstr "Очистить выделение"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Щелкните для создания встречи на весь день"

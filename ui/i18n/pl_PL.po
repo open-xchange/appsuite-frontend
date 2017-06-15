@@ -1809,6 +1809,10 @@ msgstr "Wyczyść"
 msgid "Clear field"
 msgstr "Wyczyść pole"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Wyczyść zaznaczenie"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Kliknij tutaj, aby zamknąć pomoc"
@@ -7453,6 +7457,7 @@ msgstr "Przypomnienie dla zadania %1$s."
 msgid "Reminder has been created"
 msgstr "Przypomnienie zostało utworzone"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Usuń"
@@ -9049,6 +9054,10 @@ msgstr "Podana nazwa pliku przekracza dozwoloną długość."
 msgid "The requested application is not available at this moment."
 msgstr "Żądana aplikacja jest w tej chwili niedostępna."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9063,6 +9072,10 @@ msgid ""
 "another folder."
 msgstr ""
 "Wybrano wirtualny folder. Nie można go przeszukać. Wybierz inny folder."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11647,9 +11660,6 @@ msgstr "Twoja platforma"
 
 #~ msgid "Cleaning up... This may take a few seconds."
 #~ msgstr "Czyszczenie... Może to zająć kilka sekund."
-
-#~ msgid "Clear selection"
-#~ msgstr "Wyczyść zaznaczenie"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Kliknij, aby zaplanować spotkanie całodniowe"

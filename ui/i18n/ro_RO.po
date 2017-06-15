@@ -1809,6 +1809,10 @@ msgstr "Golește "
 msgid "Clear field"
 msgstr "Golește câmpul"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Golește selecția"
+
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
 msgstr "Apăsați aici pentru a ieși din centrul de asistență"
@@ -7449,6 +7453,7 @@ msgstr "Memento pentru sarcina %1$s."
 msgid "Reminder has been created"
 msgstr "Mementoul a fost creat"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Elimină"
@@ -9037,6 +9042,10 @@ msgstr "Numele fișierului depășește lungimea permisă."
 msgid "The requested application is not available at this moment."
 msgstr "Aplicația cerută nu este disponibilă momentan."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9051,6 +9060,10 @@ msgid ""
 "another folder."
 msgstr ""
 "Dosarul selectat este virtual și nu poate fi căutat. Selectați un alt dosar."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -12311,9 +12324,6 @@ msgstr "platforma dumneavoastră"
 
 #~ msgid "Clear cache"
 #~ msgstr "Golire cache"
-
-#~ msgid "Clear selection"
-#~ msgstr "Golește selecția"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Clic pentru o întâlnire pentru întreaga zi"
