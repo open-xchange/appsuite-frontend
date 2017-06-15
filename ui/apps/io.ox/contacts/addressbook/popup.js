@@ -572,6 +572,7 @@ define('io.ox/contacts/addressbook/popup', [
                 // handle remove
                 this.tokenview.on('remove', function (cid) {
                     // remove selected (non-visible)
+                    // TODO: use custom global events
                     this.store.remove(cid);
                     // remove selected (visible)
                     var selection = this.listView.selection;
@@ -849,36 +850,21 @@ define('io.ox/contacts/addressbook/popup', [
     void require(['io.ox/contacts/addressbook/popup'], function (popup) { popup.open(_.inspect); });
     */
 
-    function getTemplate() {
-        return _.template(
-            // toolbar
-            '<% var actionlabel = gt("Clear selection"); %>' +
-            '<div class="toolbar">' +
-            '    <span role="header" aria-live="polite class="count pull-left">' +
-            '       <%= statuslabel %>' +
-            '    </span>' +
-            '    <a href="#" class="pull-right clear" role="button">' +
-            '       <%= actionlabel %>' +
-            '    </a>' +
-            '</div>' +
-            // list
-            '<% var arialabel = gtCore("Use cursor keys to navigate"); %>' +
-            '<% var tokenlabel = gtCore("Press backspace to remove"); %>' +
-            '<% var actionlabel = gtCore("Remove"); %>' +
-            '<ul class="addresses unstyled" tabindex="0" aria-label="<%= arialabel %>" aria-activedescendant="">' +
-            '<% _(list).each(function (item, index) { %>' +
-            '  <% var id = _.uniqueId("token") ;%>' +
-            '  <li class="token" id="<%= id %>" data-cid="<%= item.cid %>" data-index="<%= index %>" title="<%= item.title %>" aria-label="<%= tokenlabel %>">' +
-            '    <span class="token-label" aria-hidden=true><%= item.title %></span>' +
-            '    <a href="#" class="token-action remove" tabindex="-1" aria-hidden=true title="<%= actionlabel%>">' +
-            '      <i class="fa fa-times" aria-hidden=true></i>' +
-            '    </a>' +
-            '  </li>' +
-            '<% }); %>' +
-            '</ul>'
+    function addToken(item, index) {
+        return $('<li class="list-item selectable removable token" role="option">').attr({
+            'id': _.uniqueId('token'),
+            'data-cid': item.cid,
+            'data-index': index
+        }).append(
+            $('<span class="token-label">').text(item.title),
+            $('<a href="#" class="token-action remove" tabindex="-1" aria-hidden="true">').attr('title', gt('Remove')).append(
+                // TODO: title=remove
+                $('<i class="fa fa-times" aria-hidden="true">')
+            )
         );
     }
 
+    // TODO: core a11y
     function Iterator(context) {
         function get(index) {
             return context.$list.get(index);
@@ -917,10 +903,11 @@ define('io.ox/contacts/addressbook/popup', [
 
         className: 'selection-summary',
 
+        attributes: { role: 'region' },
+
         initialize: function (opt) {
             this.opt = _.extend({
                 selector: '.addresses',
-                template: getTemplate(),
                 useLabels: false
             }, opt);
             // references
@@ -928,10 +915,8 @@ define('io.ox/contacts/addressbook/popup', [
             this.$selected = $();
             // listen
             this.$el
-                .attr({ role: 'region', tabindex: 0 })
-                .on('focusin', this.opt.selector, this.onFocus.bind(this))
-                .on('focusout', this.opt.selector, this.onBlur.bind(this))
-                .on('keydown', this.opt.selector, this.onKeydown.bind(this))
+                // a11y.js
+                .on('remove', this.opt.selector, this.onRemove.bind(this))
                 .on('click', '.token', this.onClick.bind(this))
                 .on('click', '.remove', this.onRemove.bind(this))
                 .on('click', '.clear', this.onClear.bind(this));
@@ -947,26 +932,19 @@ define('io.ox/contacts/addressbook/popup', [
         select: function (node) {
             // reset old
             this.$selected
-                .removeAttr('aria-selected')
+                .attr('aria-checked', false)
                 .removeClass('selected');
             // set new
             this.$selected = $(node)
-                .attr('aria-selected', true)
+                .attr('aria-checked', true)
                 .addClass('selected');
             // update container
             this.getContainer().attr('aria-activedescendant', this.$selected.attr('id'));
         },
 
-        remove: function (node) {
-            if (!node || !node.length) node = this.$selected;
-            // propagate
-            this.trigger('remove', node.attr('data-cid'));
-            // restore focus after remove/render was triggered
-            if (this.$list.length) this.getContainer().focus();
-        },
-
         render: function (list) {
-            var length = list.length;
+            var length = list.length,
+                selectionLabel, description;
 
             this.$el.empty();
 
@@ -975,19 +953,28 @@ define('io.ox/contacts/addressbook/popup', [
                 return this;
             }
 
-            var statuslabel = this.opt.useLabels ?
+            // TODO: gt comment
+            if (this.opt.useLabels) {
                 //#. %1$d is number of selected items (addresses/groups) in the list
-                gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', length), length) :
+                selectionLabel = gt.format(gt.ngettext('%1$d item selected', '%1$d items selected', length), length);
+                description = gt('The selected items. Press Backspace or Delete to remove.');
+            } else {
                 //#. %1$d is number of selected addresses
-                gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', length), length);
+                selectionLabel = gt.format(gt.ngettext('%1$d address selected', '%1$d addresses selected', length), length);
+                description = gt('The selected addresses. Press Backspace or Delete to remove.');
+            }
 
             this.$el.append(
-                this.opt.template({
-                    list: list,
-                    statuslabel: statuslabel,
-                    gt: gt,
-                    gtCore: gtCore
-                })
+                // toolbar
+                $('<div class="toolbar">').append(
+                    $('<span role="header" aria-live="polite" class="count pull-left">').text(selectionLabel),
+                    $('<a href="#" class="pull-right clear" role="button">').text(gt('Clear selection'))
+                ),
+                // list
+                $('<div aria-live="polite" aria-relevant="removals" aria-hidden="false">').attr('aria-label', description).append(
+                    $('<ul class="addresses unstyled listbox" tabindex="0" role="listbox">')
+                        .append(_(list).map(addToken))
+                )
             );
 
             // update references
@@ -1007,6 +994,7 @@ define('io.ox/contacts/addressbook/popup', [
                 node = this.$list.filter('[data-cid="' + this.$selected.attr('data-cid') + '"]');
                 if (node.length) return this.select(node);
             }
+            // TODO: use memory instead of dom
             // restore index of removed token
             if (this.$selected.attr('data-index')) {
                 node = this.$list.get(parseInt(this.$selected.attr('data-index'), 10));
@@ -1016,45 +1004,22 @@ define('io.ox/contacts/addressbook/popup', [
             this.select(this.iterator.first());
         },
 
-        onFocus: function () {
-            this.getContainer().addClass('active');
-        },
-
-        onBlur: function () {
-            this.getContainer().removeClass('active');
-        },
-
         onClick: function (e) {
             this.select($(e.target).closest('.token'));
         },
 
         onRemove: function (e) {
-            this.remove($(e.target).closest('.token'));
+            var node = $(e.target).closest('.token');
+            if (!node || !node.length) node = this.$selected;
+            // propagate
+            this.trigger('remove', node.attr('data-cid'));
+            // restore focus after remove/render was triggered
+            if (this.$list.length) this.getContainer().focus();
         },
 
         onClear: function (e) {
             e.preventDefault();
             this.trigger('clear');
-        },
-
-        onKeydown: function (e) {
-            switch (e.which) {
-                case 37:
-                case 38:
-                    this.select(this.iterator.prev());
-                    break;
-                case 39:
-                case 40:
-                    this.select(this.iterator.next());
-                    break;
-                case 8:
-                    this.remove();
-                    break;
-                default:
-                    return;
-            }
-            e.preventDefault();
-            e.stopPropagation();
         }
     });
 

@@ -67,25 +67,6 @@ msgid "%1$d day"
 msgid_plural "%1$d days"
 msgstr[0] "%1$d gün%1$d gün"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d gün, %2$s%1$d gün, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d gün, %2$s%1$d gün, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$d Dosyalar değiştirildi"
@@ -95,25 +76,6 @@ msgstr "%1$d Dosyalar değiştirildi"
 msgid "%1$d hour"
 msgid_plural "%1$d hours"
 msgstr[0] "%1$d saat%1$d saat"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d saat ve %2$s%1$d saat ve %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d saat ve %2$s%1$d saat ve %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -392,73 +354,16 @@ msgstr "%3$s %2$s, %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] "%d gün%d gün"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d gün%d gün"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d saat%d saat"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d saat%d saat"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d dakika%d dakika"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d dakika%d dakika"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d hafta%d hafta"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d hafta%d hafta"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1896,6 +1801,11 @@ msgstr "Temizle "
 
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
+msgstr "Alanı temizle"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#, fuzzy
+msgid "Clear selection"
 msgstr "Alanı temizle"
 
 #: apps/io.ox/help/center.js module:io.ox/help
@@ -3645,7 +3555,7 @@ msgstr "Zarf"
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Hata"
 
@@ -5315,10 +5225,6 @@ msgstr ""
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "MM"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -7476,8 +7382,8 @@ msgstr "kendi objelerinizi okuyun "
 msgid "Read permissions"
 msgstr "okuma izni yok"
 
-#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Yeniden Yetkilendirme"
 
@@ -7750,6 +7656,7 @@ msgstr "Hatırlatma Tarihi %1$s"
 msgid "Reminder has been created"
 msgstr "Hatırlatma oluşturuldu"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Kaldır"
@@ -9412,6 +9319,10 @@ msgstr "Girilen dosya adı izin verilen uzunluğu aşıyor."
 msgid "The requested application is not available at this moment."
 msgstr "Üzgünüz, %s da size uygun herhangi bir veri yok."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9427,6 +9338,10 @@ msgid ""
 msgstr ""
 "Seçilen klasör sanal olduğu için aratılamıyor. Lütfen başka bir klasör "
 "aratınız. "
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -11159,10 +11074,6 @@ msgstr ""
 msgid "day(s)"
 msgstr ""
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "dd"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "reddedilmiş"
@@ -11603,16 +11514,27 @@ msgstr "Sarı"
 msgid "your platform"
 msgstr "Platformunuz"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "yyyy"
-
 #, fuzzy
 #~ msgid "%1$d %"
 #~ msgstr "%1$d %2$s"
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d gün, %2$s%1$d gün, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d gün, %2$s%1$d gün, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d saat ve %2$s%1$d saat ve %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d saat ve %2$s%1$d saat ve %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d of %2$d"
@@ -11642,6 +11564,34 @@ msgstr "yyyy"
 
 #~ msgid "%1$s, %2$s"
 #~ msgstr "%1$s, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d gün%d gün"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d saat%d saat"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d saat%d saat"
+
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d dakika%d dakika"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d hafta%d hafta"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d hafta%d hafta"
 
 #, fuzzy
 #~ msgid "1 day"
@@ -11745,10 +11695,6 @@ msgstr "yyyy"
 
 #~ msgid "Checking credentials ..."
 #~ msgstr "Bilgiler kontrol ediliyor ..."
-
-#, fuzzy
-#~ msgid "Clear selection"
-#~ msgstr "Alanı temizle"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Tüm gün görüşmesi için tıklayınız"
@@ -12012,6 +11958,9 @@ msgstr "yyyy"
 #, fuzzy
 #~ msgid "Line %1$d: %2$s"
 #~ msgstr "%1$d %2$s"
+
+#~ msgid "MM"
+#~ msgstr "MM"
 
 #~ msgid "Mail Details"
 #~ msgstr "E posta detayları"
@@ -12552,6 +12501,9 @@ msgstr "yyyy"
 #~ msgid "day of the weekend"
 #~ msgstr "haftasonu günü"
 
+#~ msgid "dd"
+#~ msgstr "dd"
+
 #~ msgid "ends"
 #~ msgstr "biter"
 
@@ -12633,3 +12585,6 @@ msgstr "yyyy"
 
 #~ msgid "yearly"
 #~ msgstr "Yıllık"
+
+#~ msgid "yyyy"
+#~ msgstr "yyyy"

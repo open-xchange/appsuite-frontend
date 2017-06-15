@@ -211,7 +211,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: 300,
             id: ref + '/edit/view/addresses',
             draw: function (baton) {
-                var primaryMail = baton.multiValues.aliases[0],
+                var primaryMail = baton.model.get('primaryMail'),
                     actionlink = $('<a href="#" role="button" data-action="selectall">'),
                     self = this,
                     all;
@@ -225,7 +225,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                 });
 
                 // skip primary mail since this is default
-                baton.multiValues.aliases.shift();
+                baton.multiValues.aliases.splice(_.indexOf(baton.multiValues.aliases, baton.model.get('primaryMail')), 1);
 
                 // check if all aliases are set
                 _.each(baton.multiValues.aliases, function (alias) {

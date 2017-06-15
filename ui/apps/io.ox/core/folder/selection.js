@@ -169,11 +169,6 @@ define('io.ox/core/folder/selection', [], function () {
             this.triggerChange(items);
         },
 
-        resetSelected: function (items) {
-            if (ox.debug) console.warn('resetSelected() is deprecated and will be removed with 7.10. Please use uncheck()');
-            return this.uncheck(items);
-        },
-
         resetTabIndex: function (items, skip) {
             items = items.filter('[tabindex="0"]');
             items.not(skip).attr('tabindex', -1);

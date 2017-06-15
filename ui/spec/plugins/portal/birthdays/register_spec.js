@@ -58,6 +58,7 @@ define([
                 expect(this.node.find('li')).to.have.length(5);
             });
             it('should not draw year if its year 1', function () {
+                //FIXME: this test fails every year at 12.06. +- 1 day
                 expect($(this.node.find('.accent')[4]).text()).to.equal('12.6.');
             });
             it('should recognize yesterday/today/tomorrow', function () {

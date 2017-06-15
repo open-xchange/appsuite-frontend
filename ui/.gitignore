@@ -18,3 +18,4 @@ local.conf*
 npm-debug.log
 /bower_components
 /nightwatch-reports
+selenium-debug.log

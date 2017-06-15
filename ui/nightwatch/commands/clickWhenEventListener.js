@@ -16,11 +16,9 @@
  * Example: .clickWhenEventListener('.some-link', 'click', 2500)
  * @param selector {string}
  * @param eventType {string} for example click or focus
- * @param timeout {number} optional, default is 500
+ * @param timeout {number} optional, default is global waitForConditionTimeout setting (5000)
  */
 exports.command = function (selector, eventType, timeout) {
-
-    timeout = timeout || 500;
 
     this.waitForStatement(function (selector, eventType) {
         var ev = $._data(document.querySelector(selector), 'events');

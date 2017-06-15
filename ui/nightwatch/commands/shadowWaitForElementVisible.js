@@ -15,11 +15,9 @@
  * The selector should contain the ::shadow selector somewhere. If that selector fails, this function will try to find
  * the target element without the ::shadow selector
  * @param selector {string}
- * @param timeout {number} default is 500
+ * @param timeout {number} default is global waitForConditionTimeout setting (5000)
  */
 exports.command = function (selector, timeout) {
-
-    timeout = timeout || 500;
 
     this
         .waitForStatement(function (selector) {

@@ -238,31 +238,6 @@ define('io.ox/oauth/keychain', [
         _.delay(filestorageApi.consistencyCheck, 5000);
     });
 
-    ox.on('http:error:OAUTH-0040', function (err) {
-        //do not yell
-        err.handled = true;
-        if ($('.modal.oauth-reauthorize').length > 0) return;
-
-        require(['io.ox/backbone/views/modal']).then(function (ModalDialog) {
-            new ModalDialog({ title: gt('Error') })
-            .build(function () {
-                this.$el.addClass('oauth-reauthorize');
-                this.$body.append(err.error);
-            })
-            .addCancelButton()
-            .addButton({
-                action: 'reauthorize',
-                label: gt('Reauthorize')
-            })
-            .on('reauthorize', function () {
-                var account = accounts.get(err.error_params[1]);
-
-                account.reauthorize();
-            })
-            .open();
-        });
-    });
-
     return {
         services: services,
         accounts: accounts,

@@ -10,14 +10,19 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
-var chromedriver = require('chromedriver');
-module.exports = {
-    before: function (done) {
-        if (this.test_settings.globals.environment !== 'local') chromedriver.start();
-        done();
-    },
-    after: function (done) {
-        if (this.test_settings.globals.environment !== 'local') return chromedriver.stop();
-        done();
-    }
+/**
+ * Simple helper command to show the loginpage
+ * via Option different user agents can be loaded
+ * { userAgent : STRING }
+ */
+exports.command = function (opt) {
+    this
+        .url(this.launch_url)
+        .execute(function (options) {
+            if (options.userAgent) _.device.loadUA(options.userAgent);
+        }, [opt])
+        .waitForElementFocus('#io-ox-login-username', 10000);
+
+    return this;
+
 };

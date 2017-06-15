@@ -13,11 +13,9 @@
 /**
  * This is a shorthand for .waitForElementVisible('...').click('...')
  * @param selector {string}
- * @param timeout {number} optional, default is 500
+ * @param timeout {number} optional, default is global waitForConditionTimeout setting (5000)
  */
 exports.command = function (selector, timeout) {
-
-    timeout = timeout || 500;
 
     this
         .waitForElementVisible(selector, timeout)

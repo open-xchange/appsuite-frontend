@@ -2106,13 +2106,8 @@ msgstr ""
 msgid "No reminder"
 msgstr ""
 
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js
 #: module:io.ox/calendar
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
@@ -2552,8 +2547,6 @@ msgstr ""
 #. %d is the number of days
 #: apps/io.ox/calendar/util.js
 #: module:io.ox/calendar
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -3042,6 +3035,13 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js
+#: module:io.ox/core
+msgid "Remove"
+msgstr ""
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -3050,6 +3050,11 @@ msgid_plural "%1$d items selected"
 msgstr[0] ""
 msgstr[1] ""
 
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -3057,6 +3062,16 @@ msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] ""
 msgstr[1] ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js
+#: module:io.ox/contacts
+msgid "Clear selection"
+msgstr ""
 
 #: apps/io.ox/contacts/detail/main.js
 #: module:io.ox/contacts
@@ -4212,134 +4227,6 @@ msgstr ""
 #: module:plugins/portal
 msgid "Retry"
 msgstr ""
-
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-msgid "yyyy"
-msgstr ""
-
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-msgid "MM"
-msgstr ""
-
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-msgid "dd"
-msgstr ""
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] ""
-msgstr[1] ""
-
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] ""
-msgstr[1] ""
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] ""
-msgstr[1] ""
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] ""
-msgstr[1] ""
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js
-#: module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] ""
-msgstr[1] ""
 
 #: apps/io.ox/core/desktop.js
 #: module:io.ox/core
@@ -5571,7 +5458,7 @@ msgstr ""
 #: apps/io.ox/core/yell.js
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
-#: apps/io.ox/oauth/keychain.js
+#: apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr ""
 
@@ -7745,11 +7632,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "User"
-msgstr ""
-
-#: apps/io.ox/files/share/permissions.js
-#: module:io.ox/core
-msgid "Remove"
 msgstr ""
 
 #: apps/io.ox/files/share/permissions.js
@@ -10744,7 +10626,7 @@ msgstr ""
 msgid "My %1$s account (%2$d)"
 msgstr ""
 
-#: apps/io.ox/oauth/keychain.js
+#: apps/io.ox/oauth/reauth_handler.js
 #: module:io.ox/core
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings

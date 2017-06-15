@@ -217,13 +217,17 @@ define('io.ox/core/cache/localstorage', ['io.ox/core/extensions'], function (ext
                     var permanentCache = localStorage.getItem('appsuite.office-fonts'),
                         savepointId = _(['appsuite.cache', ox.user, ox.language, 'app-cache.index.savepoints' || '']).compact().join('.'),
                         // keep savepoints after version update too.
-                        savepoints = localStorage.getItem(savepointId);
+                        savepoints = localStorage.getItem(savepointId),
+                        keys = localStorage.getItem('openpgp-private-keys');
 
                     localStorage.clear();
                     localStorage.setItem('appsuite-ui', JSON.stringify({ version: ox.version }));
 
                     // restore savepoints
                     if (savepoints) localStorage.setItem(savepointId, savepoints);
+
+                    // Restore saved private keys
+                    if (keys) localStorage.setItem('openpgp-private-keys', keys);
 
                     // Docs-392: Restore the permanentCache data after the localStorage was cleared. But only when the key existed (!== null) before.
                     if (permanentCache !== null) {

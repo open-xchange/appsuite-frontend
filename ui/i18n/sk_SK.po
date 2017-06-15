@@ -82,29 +82,6 @@ msgstr[0] "%1$d deň"
 msgstr[1] "%1$d dni"
 msgstr[2] "%1$d dní"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d deň, %2$s"
-msgstr[1] "%1$d dni, %2$s"
-msgstr[2] "%1$d dní, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d deň, %2$s"
-msgstr[1] "%1$d dni, %2$s"
-msgstr[2] "%1$d dní, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$d súbory boli nedávno zmenené"
@@ -116,29 +93,6 @@ msgid_plural "%1$d hours"
 msgstr[0] "%1$d hodina"
 msgstr[1] "%1$d hodiny"
 msgstr[2] "%1$d hodín"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d hodina a %2$s"
-msgstr[1] "%1$d hodiny a %2$s"
-msgstr[2] "%1$d hodín a %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d hodina a %2$s"
-msgstr[1] "%1$d hodiny a %2$s"
-msgstr[2] "%1$d hodín a %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -426,8 +380,7 @@ msgstr "%3$s %2$s, %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -435,80 +388,12 @@ msgstr[0] "%d deň"
 msgstr[1] "%d dni"
 msgstr[2] "%d dní"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d deň"
-msgstr[1] "%d dni"
-msgstr[2] "%d dní"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d hodina"
-msgstr[1] "%d hodiny"
-msgstr[2] "%d hodín"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d hodina"
-msgstr[1] "%d hodiny"
-msgstr[2] "%d hodín"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minúta"
 msgstr[1] "%d minúty"
 msgstr[2] "%d minút"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d minúta"
-msgstr[1] "%d minúty"
-msgstr[2] "%d minút"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d týždeň"
-msgstr[1] "%d týždne"
-msgstr[2] "%d týždňov"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d týždeň"
-msgstr[1] "%d týždne"
-msgstr[2] "%d týždňov"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1918,6 +1803,10 @@ msgstr "Vyčistiť"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Vyprázdniť pole"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Vymazať výber"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -3587,7 +3476,7 @@ msgstr "Obálka"
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Chyba"
 
@@ -5207,10 +5096,6 @@ msgstr "menší alebo rovný"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "MM"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -7294,8 +7179,8 @@ msgstr "Čítať vlastné objekty"
 msgid "Read permissions"
 msgstr "Oprávnenie čítať"
 
-#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Znovu autorizovať"
 
@@ -7558,6 +7443,7 @@ msgstr "Pripomenutie úlohy %1$s."
 msgid "Reminder has been created"
 msgstr "Pripomienka bola vytvorená"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Odstrániť"
@@ -9143,6 +9029,10 @@ msgstr "Poskytnutý názov súboru prekračuje povolenú dĺžku."
 msgid "The requested application is not available at this moment."
 msgstr "Požadovaná aplikácia momentálne nie je k dispozícii."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9158,6 +9048,10 @@ msgid ""
 msgstr ""
 "Vybraný priečinok je virtuálny a nie je možné v ňom vyhľadať. Prosím, "
 "vyberte iný priečinok."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -10850,10 +10744,6 @@ msgstr "výber dátumu"
 msgid "day(s)"
 msgstr "dní"
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "DD"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "zamietnuté"
@@ -11270,13 +11160,6 @@ msgstr "žltá"
 msgid "your platform"
 msgstr "vaša platforma"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "RRRR"
-
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
 
@@ -11310,6 +11193,32 @@ msgstr "RRRR"
 
 #~ msgid "%1$d contacts found. This list is limited to %2$d items."
 #~ msgstr "Našlo sa %1$d kontaktov. Tento zoznam je obmedzený na %2$d položky."
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d deň, %2$s"
+#~ msgstr[1] "%1$d dni, %2$s"
+#~ msgstr[2] "%1$d dní, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d deň, %2$s"
+#~ msgstr[1] "%1$d dni, %2$s"
+#~ msgstr[2] "%1$d dní, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d hodina a %2$s"
+#~ msgstr[1] "%1$d hodiny a %2$s"
+#~ msgstr[2] "%1$d hodín a %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d hodina a %2$s"
+#~ msgstr[1] "%1$d hodiny a %2$s"
+#~ msgstr[2] "%1$d hodín a %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d z %2$d"
@@ -11369,17 +11278,57 @@ msgstr "RRRR"
 #~ msgstr[1] "%d schôdzky"
 #~ msgstr[2] "%d schôdzok"
 
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d deň"
+#~ msgstr[1] "%d dni"
+#~ msgstr[2] "%d dní"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d hodina"
+#~ msgstr[1] "%d hodiny"
+#~ msgstr[2] "%d hodín"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d hodina"
+#~ msgstr[1] "%d hodiny"
+#~ msgstr[2] "%d hodín"
+
 #~ msgid "%d info item"
 #~ msgid_plural "%d info items"
 #~ msgstr[0] "%d info položka"
 #~ msgstr[1] "%d info položky"
 #~ msgstr[2] "%d info položiek"
 
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minúta"
+#~ msgstr[1] "%d minúty"
+#~ msgstr[2] "%d minút"
+
 #~ msgid "%d task"
 #~ msgid_plural "%d tasks"
 #~ msgstr[0] "%d úloha"
 #~ msgstr[1] "%d úlohy"
 #~ msgstr[2] "%d úloh"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d týždeň"
+#~ msgstr[1] "%d týždne"
+#~ msgstr[2] "%d týždňov"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d týždeň"
+#~ msgstr[1] "%d týždne"
+#~ msgstr[2] "%d týždňov"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
@@ -12334,9 +12283,6 @@ msgstr "RRRR"
 
 #~ msgid "Clear cache"
 #~ msgstr "Vyčistiť vyrovnávaciu pamäť"
-
-#~ msgid "Clear selection"
-#~ msgstr "Vymazať výber"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Kliknutím zobrazíte celodennú schôdzku"
@@ -14422,6 +14368,9 @@ msgstr "RRRR"
 
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
+
+#~ msgid "MM"
+#~ msgstr "MM"
 
 #~ msgid "MM/dd"
 #~ msgstr "dd.MM."
@@ -18018,6 +17967,9 @@ msgstr "RRRR"
 #~ msgid "day of the weekend"
 #~ msgstr "deň víkendu"
 
+#~ msgid "dd"
+#~ msgstr "DD"
+
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
 
@@ -18322,6 +18274,9 @@ msgstr "RRRR"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"
+
+#~ msgid "yyyy"
+#~ msgstr "RRRR"
 
 #~ msgid "yyyy-MM-dd"
 #~ msgstr "yyyy-MM-dd"

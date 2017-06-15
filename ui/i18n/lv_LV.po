@@ -79,29 +79,6 @@ msgstr[0] "%1$d diena"
 msgstr[1] "%1$d dienas"
 msgstr[2] "%1$d dienas"
 
-#. General duration (nominative case): X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d diena, %2$s"
-msgstr[1] "%1$d dienas, %2$s"
-msgstr[2] "%1$d dienas, %2$s"
-
-#. Reminder (objective case): in X days, Y hours and Z minutes
-#. %1$d is the number of days
-#. %2$s is the text for the remainder of the last day
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d day, %2$s"
-msgid_plural "%1$d days, %2$s"
-msgstr[0] "%1$d diena, %2$s"
-msgstr[1] "%1$d dienas, %2$s"
-msgstr[2] "%1$d dienas, %2$s"
-
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "%1$d files has been changed recently"
 msgstr "%1$d faili ir nesen izmainīti"
@@ -113,29 +90,6 @@ msgid_plural "%1$d hours"
 msgstr[0] "%1$d stunda"
 msgstr[1] "%1$d stundas"
 msgstr[2] "%1$d stundas"
-
-#. General duration (nominative case): X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d stunda un %2$s"
-msgstr[1] "%1$d stundas un %2$s"
-msgstr[2] "%1$d stundas un %2$s"
-
-#. Reminder (objective case): in X hours and Y minutes
-#. %1$d is the number of hours
-#. %2$s is the text for the remainder of the last hour
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%1$d hour and %2$s"
-msgid_plural "%1$d hours and %2$s"
-msgstr[0] "%1$d stunda un %2$s"
-msgstr[1] "%1$d stundas un %2$s"
-msgstr[2] "%1$d stundas un %2$s"
 
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
@@ -423,8 +377,7 @@ msgstr "%3$s %2$s, %1$s"
 
 #. General duration (nominative case): X days
 #. %d is the number of days
-#: apps/io.ox/calendar/util.js module:io.ox/calendar apps/io.ox/core/date.js
-#: module:io.ox/core
+#: apps/io.ox/calendar/util.js module:io.ox/calendar
 #, c-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -432,80 +385,12 @@ msgstr[0] "%d diena"
 msgstr[1] "%d dienas"
 msgstr[2] "%d dienas"
 
-#. Reminder (objective case): in X days
-#. %d is the number of days
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d day"
-msgid_plural "%d days"
-msgstr[0] "%d diena"
-msgstr[1] "%d dienas"
-msgstr[2] "%d dienas"
-
-#. General duration (nominative case): X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d stunda"
-msgstr[1] "%d stundas"
-msgstr[2] "%d stundas"
-
-#. Reminder (objective case): in X hours
-#. %d is the number of hours
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d hour"
-msgid_plural "%d hours"
-msgstr[0] "%d stunda"
-msgstr[1] "%d stundas"
-msgstr[2] "%d stundas"
-
-#. General duration (nominative case): X minutes
-#. %d is the number of minutes
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] "%d minūte"
 msgstr[1] "%d minūtes"
 msgstr[2] "%d minūtes"
-
-#. Reminder (objective case): in X minutes
-#. %d is the number of minutes
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d minute"
-msgid_plural "%d minutes"
-msgstr[0] "%d minūte"
-msgstr[1] "%d minūtes"
-msgstr[2] "%d minūtes"
-
-#. General duration (nominative case): X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d nedēļa"
-msgstr[1] "%d nedēļas"
-msgstr[2] "%d nedēļas"
-
-#. Reminder (objective case): in X weeks
-#. %d is the number of weeks
-#: apps/io.ox/core/date.js module:io.ox/core
-#, c-format
-msgctxt "in"
-msgid "%d week"
-msgid_plural "%d weeks"
-msgstr[0] "%d nedēļa"
-msgstr[1] "%d nedēļas"
-msgstr[2] "%d nedēļas"
 
 #: apps/io.ox/core/settings/downloads/pane.js module:io.ox/core
 msgid "%s client for Android"
@@ -1917,6 +1802,10 @@ msgstr "Tīrīt"
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "Clear field"
 msgstr "Tīrīt lauku"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Notīrīt izvēles"
 
 #: apps/io.ox/help/center.js module:io.ox/help
 msgid "Click here to quit the help center"
@@ -3591,7 +3480,7 @@ msgstr "Aploksne"
 #: apps/io.ox/core/print.js module:io.ox/core
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 #: apps/io.ox/core/yell.js apps/io.ox/mail/accounts/settings.js
-#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/keychain.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/oauth/reauth_handler.js
 msgid "Error"
 msgstr "Kļūda"
 
@@ -5208,10 +5097,6 @@ msgstr "Mazāks vienāds"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "MB"
 msgstr "MB"
-
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "MM"
-msgstr "MM"
 
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -7296,8 +7181,8 @@ msgstr "Lasīt paša objektus"
 msgid "Read permissions"
 msgstr "Lasīšanas tiesības"
 
-#: apps/io.ox/oauth/keychain.js module:io.ox/core apps/io.ox/oauth/settings.js
-#: module:io.ox/settings
+#: apps/io.ox/oauth/reauth_handler.js module:io.ox/core
+#: apps/io.ox/oauth/settings.js module:io.ox/settings
 msgid "Reauthorize"
 msgstr "Pārautorizēties"
 
@@ -7560,6 +7445,7 @@ msgstr "Atgādināt uzdevuman %1$s."
 msgid "Reminder has been created"
 msgstr "Atgādinājums ir izveidots"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Remove"
 msgstr "Noņemt"
@@ -9148,6 +9034,10 @@ msgstr "Norādītā faila vārda garums pārsniedz pieļaujamo limitu."
 msgid "The requested application is not available at this moment."
 msgstr "Pieprasītā aplikācija pašlaik nav pieejama."
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
 #: apps/io.ox/calendar/actions/create.js module:io.ox/calendar
 msgid ""
 "The selected calendar is shared by %1$s. Appointments in shared calendars "
@@ -9163,6 +9053,10 @@ msgid ""
 msgstr ""
 "Izvēlētā mape ir virtuāla un tajā nevar tikt veikta meklēšana. Lūdzu "
 "izvēlieties citu mapi."
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
@@ -10851,10 +10745,6 @@ msgstr "datepicker"
 msgid "day(s)"
 msgstr "diena(s)"
 
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "dd"
-msgstr "dd"
-
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "declined"
 msgstr "atteikts"
@@ -11271,13 +11161,6 @@ msgstr "dzeltens"
 msgid "your platform"
 msgstr "jūsu platforma"
 
-#. Strings to build input formats to be more accessible
-#. yyyy: 4-digit year | MM: 2-digit month | dd: 2-digit day
-#. Sample for de_DE: TT.MM.JJJJ
-#: apps/io.ox/core/date.js module:io.ox/core
-msgid "yyyy"
-msgstr "yyyy"
-
 #~ msgid " %1$s (%2$s) "
 #~ msgstr " %1$s (%2$s) "
 
@@ -11314,6 +11197,32 @@ msgstr "yyyy"
 #~ msgstr ""
 #~ "Atrastas %1$d kontaktpersonas. Šis saraksts ir ierobežots līdz %2$d "
 #~ "vienībām."
+
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d diena, %2$s"
+#~ msgstr[1] "%1$d dienas, %2$s"
+#~ msgstr[2] "%1$d dienas, %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d day, %2$s"
+#~ msgid_plural "%1$d days, %2$s"
+#~ msgstr[0] "%1$d diena, %2$s"
+#~ msgstr[1] "%1$d dienas, %2$s"
+#~ msgstr[2] "%1$d dienas, %2$s"
+
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d stunda un %2$s"
+#~ msgstr[1] "%1$d stundas un %2$s"
+#~ msgstr[2] "%1$d stundas un %2$s"
+
+#~ msgctxt "in"
+#~ msgid "%1$d hour and %2$s"
+#~ msgid_plural "%1$d hours and %2$s"
+#~ msgstr[0] "%1$d stunda un %2$s"
+#~ msgstr[1] "%1$d stundas un %2$s"
+#~ msgstr[2] "%1$d stundas un %2$s"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d no %2$d"
@@ -11373,17 +11282,57 @@ msgstr "yyyy"
 #~ msgstr[1] "%d tikšanās"
 #~ msgstr[2] "%d tikšanās"
 
+#~ msgctxt "in"
+#~ msgid "%d day"
+#~ msgid_plural "%d days"
+#~ msgstr[0] "%d diena"
+#~ msgstr[1] "%d dienas"
+#~ msgstr[2] "%d dienas"
+
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d stunda"
+#~ msgstr[1] "%d stundas"
+#~ msgstr[2] "%d stundas"
+
+#~ msgctxt "in"
+#~ msgid "%d hour"
+#~ msgid_plural "%d hours"
+#~ msgstr[0] "%d stunda"
+#~ msgstr[1] "%d stundas"
+#~ msgstr[2] "%d stundas"
+
 #~ msgid "%d info item"
 #~ msgid_plural "%d info items"
 #~ msgstr[0] "%d info vienība"
 #~ msgstr[1] "%d info vienības"
 #~ msgstr[2] "%d info vienības"
 
+#~ msgctxt "in"
+#~ msgid "%d minute"
+#~ msgid_plural "%d minutes"
+#~ msgstr[0] "%d minūte"
+#~ msgstr[1] "%d minūtes"
+#~ msgstr[2] "%d minūtes"
+
 #~ msgid "%d task"
 #~ msgid_plural "%d tasks"
 #~ msgstr[0] "%d uzdevums"
 #~ msgstr[1] "%d uzdevumi"
 #~ msgstr[2] "%d uzdevumi"
+
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d nedēļa"
+#~ msgstr[1] "%d nedēļas"
+#~ msgstr[2] "%d nedēļas"
+
+#~ msgctxt "in"
+#~ msgid "%d week"
+#~ msgid_plural "%d weeks"
+#~ msgstr[0] "%d nedēļa"
+#~ msgstr[1] "%d nedēļas"
+#~ msgstr[2] "%d nedēļas"
 
 #~ msgid "%s, EEE"
 #~ msgstr "%s, EEE"
@@ -12344,9 +12293,6 @@ msgstr "yyyy"
 
 #~ msgid "Clear cache"
 #~ msgstr "Tīrīt kešatmiņu"
-
-#~ msgid "Clear selection"
-#~ msgstr "Notīrīt izvēles"
 
 #~ msgid "Click for whole day appointment"
 #~ msgstr "Klikšķiniet, lai izveidotu visas dienas mītiņu"
@@ -14433,6 +14379,9 @@ msgstr "yyyy"
 
 #~ msgid "M/d/yy"
 #~ msgstr "M/d/yy"
+
+#~ msgid "MM"
+#~ msgstr "MM"
 
 #~ msgid "MM/dd"
 #~ msgstr "MM/dd"
@@ -18072,6 +18021,9 @@ msgstr "yyyy"
 #~ msgid "day of the weekend"
 #~ msgstr "izejamā diena"
 
+#~ msgid "dd"
+#~ msgstr "dd"
+
 #~ msgid "dd-MMM-yy"
 #~ msgstr "dd-MMM-yy"
 
@@ -18382,6 +18334,9 @@ msgstr "yyyy"
 
 #~ msgid "yy/MM/dd"
 #~ msgstr "yy/MM/dd"
+
+#~ msgid "yyyy"
+#~ msgstr "yyyy"
 
 #~ msgid "yyyy-MM-dd"
 #~ msgstr "yyyy-MM-dd"

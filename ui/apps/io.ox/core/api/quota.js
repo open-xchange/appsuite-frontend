@@ -108,7 +108,8 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
             var pool = new Backbone.Collection();
 
             return function (account, module, cache) {
-                var model = pool.find({ account_id: account, module: module });
+                // support accounts of form 123 and fileStoreService://123 (backend sends only the number)
+                var model = pool.find({ account_id: account.replace(/.*:\/\//, ''), module: module });
                 if (model && cache !== false) return $.when(model);
 
                 return http.GET({
@@ -118,6 +119,8 @@ define('io.ox/core/api/quota', ['io.ox/core/http', 'io.ox/core/capabilities', 's
                         module: module
                     }
                 }).then(function (data) {
+                    // data may be emtpy if account does not support it. So fill with default values to prevent js errors.
+                    data = data || { account_id: account.replace(/.*:\/\//, '') };
                     data.module = module;
                     return pool.add(data);
                 });

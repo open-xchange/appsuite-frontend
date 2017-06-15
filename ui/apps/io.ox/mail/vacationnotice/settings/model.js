@@ -42,7 +42,7 @@ define('io.ox/mail/vacationnotice/settings/model', [
         }
 
         _(attributes).each(function (value, attribute) {
-            if (value === true && attribute !== 'activateTimeFrame' && attribute !== 'active') {
+            if (value === true && attribute !== 'activateTimeFrame' && attribute !== 'active' && attribute !== 'selectall') {
                 addresses.push(attribute);
             }
         });
