@@ -79,12 +79,25 @@ $(window).load(function () {
 
     (function (require) {
 
+        // ultimate fallback to remove endless throbber and reload with longer timeout
+        function showTimeoutError() {
+            if ($('#background-loader').is(':visible')) {
+                $('.throbber').hide();
+                $('#timeout-error').show();
+                $('#timeout-reload').on('click', function (e) {
+                    e.preventDefault();
+                    _.url.hash({ 'waitSeconds': 30 });
+                    location.reload();
+                });
+            }
+        }
+
         function fallback(error) {
             console.error('require: Error in ' + error.requireModules, error.stack);
+            showTimeoutError();
         }
 
         window.require = function (deps, success, fail) {
-
             if (_.isArray(deps)) {
                 // use deferred object
                 _(deps).each(function (name) {

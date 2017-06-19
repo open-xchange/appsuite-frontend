@@ -294,6 +294,7 @@
         var queue = [];
         var deps = window.dependencies;
         window.dependencies = undefined;
+
         req.load = function (context, modulename, url) {
             var prefix = context.config.baseUrl;
             if (modulename.slice(0, 5) === 'apps/') {
