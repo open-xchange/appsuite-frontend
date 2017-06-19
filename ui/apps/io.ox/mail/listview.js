@@ -432,9 +432,6 @@ define('io.ox/mail/listview', [
             // return to avoid runtime errors if we have no thread data (see OXUI-304)
             if (!threadlist.length) return;
 
-            // return if thread is up to date
-            if (!model.get('thread') || threadlist.length === model.get('thread').length) return;
-
             // remove head property to avid accidently using old date when processThreadMessage
             _.each(threadlist, function (item) {
                 delete item.head;
