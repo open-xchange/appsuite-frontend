@@ -64,15 +64,15 @@ define('io.ox/tasks/view-detail', [
             var infoPanel = $('<div>').addClass('info-panel'),
                 task = baton.interpretedData,
                 title = $('<h1 class="title clear-title">').append(
-                        // lock icon
-                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
-                        // priority
-                        $('<span class="priority">').append(
-                            util.getPriority(task)
-                        ),
-                        // title
-                        $.txt(gt.noI18n(task.title))
-                    );
+                    // lock icon
+                    baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
+                    // priority
+                    $('<span class="priority">').append(
+                        util.getPriority(task)
+                    ),
+                    // title
+                    $.txt(gt.noI18n(task.title))
+                );
             this.append(
                 $('<header>').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
@@ -250,10 +250,10 @@ define('io.ox/tasks/view-detail', [
 
     var attachmentFail = function (container, task) {
         container.empty().append(
-                $.fail(gt('Could not load attachments for this task.'), function () {
-                    ext.point('io.ox/tasks/detail-attach').invoke('draw', container, task);
-                })
-            );
+            $.fail(gt('Could not load attachments for this task.'), function () {
+                ext.point('io.ox/tasks/detail-attach').invoke('draw', container, task);
+            })
+        );
     };
 
     var buildDropdown = function (container, label, data) {

@@ -168,7 +168,7 @@ define('plugins/portal/tumblr/register', [
                     postBody = function () {
                         var strippedHtml = post.body
                             .replace(/<(?!img\s*\/?)[^>]+>/g, '\n')
-                            .replace(/<img.+?src=[\'"]([^\'"]+)[\'"].*?>/i, '<img src="$1">');
+                            .replace(/<img.+?src=['"]([^'"]+)['"].*?>/i, '<img src="$1">');
                         if (post.type === 'chat') {
                             strippedHtml = strippedHtml.replace(/\n/g, '<br />');
                         }

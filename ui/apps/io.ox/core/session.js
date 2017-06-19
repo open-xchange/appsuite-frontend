@@ -114,22 +114,22 @@ define('io.ox/core/session', [
             // GET request
             return (
                 _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
-                // no auto-login for server-token-based logins
-                $.Deferred().reject({}) :
-                // try auto-login
-                withTimeout(http.GET, {
-                    module: 'login',
-                    appendColumns: false,
-                    appendSession: false,
-                    processResponse: false,
-                    params: {
-                        action: 'autologin',
-                        client: that.client(),
-                        rampup: true,
-                        rampupFor: CLIENT,
-                        version: that.version()
-                    }
-                })
+                    // no auto-login for server-token-based logins
+                    $.Deferred().reject({}) :
+                    // try auto-login
+                    withTimeout(http.GET, {
+                        module: 'login',
+                        appendColumns: false,
+                        appendSession: false,
+                        processResponse: false,
+                        params: {
+                            action: 'autologin',
+                            client: that.client(),
+                            rampup: true,
+                            rampupFor: CLIENT,
+                            version: that.version()
+                        }
+                    })
             )
             .then(
                 function success(data) {

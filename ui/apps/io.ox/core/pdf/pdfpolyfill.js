@@ -10,7 +10,7 @@ define('io.ox/core/pdf/pdfpolyfill', function () {
     (function () {
         var forEach = [].forEach,
             regex = /^data-(.+)/,
-            dashChar = /\-([a-z])/ig,
+            dashChar = /-([a-z])/ig,
             el = document.createElement('div'),
             mutationSupported = false,
             match;

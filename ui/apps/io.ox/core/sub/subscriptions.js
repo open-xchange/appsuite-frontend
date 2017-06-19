@@ -281,7 +281,8 @@ define('io.ox/core/sub/subscriptions', [
             });
             this.append(new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(baton.services)
-            }).on('select', function (model) {
+            })
+            .on('select', function (model) {
                 var fd = model.get('formDescription'),
                     bat = ext.Baton({ view: baton.view, subModel: baton.model, model: model, services: baton.services, popup: baton.popup, app: baton.app });
                 baton.model.setSource(model.toJSON());
@@ -299,7 +300,8 @@ define('io.ox/core/sub/subscriptions', [
         var serviceId = service.formDescription[0].options.type,
             account = oauthAPI.accounts.forService(serviceId).filter(function (account) {
                 return !account.hasScopes(scope);
-            })[0] || new OAuth.Account.Model({
+            })[0] ||
+            new OAuth.Account.Model({
                 serviceId: serviceId,
                 //#. %1$s is the display name of the account
                 //#. e.g. My Xing account

@@ -275,7 +275,8 @@ define('io.ox/mail/main', [
                     'aria-haspopup': 'true',
                     title: account.name,
                     'aria-expanded': 'false'
-                }).append(
+                })
+                .append(
                     $('<div class="folder-node" style="padding-left: 0px;">').attr('aria-hidden', 'true').append(
                         $('<div class="folder-arrow">').append(
                         ),
@@ -294,9 +295,8 @@ define('io.ox/mail/main', [
                         ),
                         $('<ul class="subfolders" role="group">')
                     )
-                ).on('dblclick', function (e) {
-                    e.stopImmediatePropagation();
-                });
+                )
+                .on('dblclick', function (e) { e.stopImmediatePropagation(); });
 
                 return fakeFolder;
             }
@@ -1678,7 +1678,7 @@ define('io.ox/mail/main', [
                                     $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
                                 )
                             )
-                       );
+                        );
                     api.queue.collection.on('progress', function (data) {
                         if (!data.count) {
                             // Workaround for Safari flex layout issue (see bug 46496)

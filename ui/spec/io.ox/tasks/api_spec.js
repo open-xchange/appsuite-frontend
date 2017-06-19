@@ -56,7 +56,7 @@ define(['shared/examples/for/api',
                 api.create(testCopy);
                 expect(testCopy).not.to.contain.key('alarm');
             });
-            it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
+            it('should be added to "Attachment upload in progress" list if attachments are present', function () {
                 //make copy of testData
                 var testCopy = _.copy(apiTestData.tempTestData, true);
                 testCopy.testDescr = this.description;
@@ -111,7 +111,7 @@ define(['shared/examples/for/api',
                 api.update(testCopy);
                 expect(testCopy).not.to.contain.key('tempAttachmentIndicator');
             });
-            it('should be added to \"Attachment upload in progress\" list if attachments are present', function () {
+            it('should be added to "Attachment upload in progress" list if attachments are present', function () {
                 //make copy of testData
                 var testCopy = _.copy(apiTestData.tempTestDataUpdate, true);
 

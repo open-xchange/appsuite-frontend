@@ -352,7 +352,7 @@ define('io.ox/calendar/week/perspective', [
 
                 // see if id is missing the folder
                 if (cid.indexOf('.') === -1) {
-                     // cid is missing folder appointment cannot be restored
+                    // cid is missing folder appointment cannot be restored
                     if (!_.url.hash('folder')) return;
                     // url has folder attribute. Add this
                     cid = _.url.hash('folder') + '.' + cid;

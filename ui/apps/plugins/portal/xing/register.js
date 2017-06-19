@@ -132,9 +132,7 @@ define('plugins/portal/xing/register', [
                         message: gt('Please check your inbox for a confirmation email.\n\nFollow the instructions in the email and then return to the widget to complete account setup.')
                     });
                 });
-            }
-        );
-
+            });
     };
 
     // addXingAccount = function (event) {

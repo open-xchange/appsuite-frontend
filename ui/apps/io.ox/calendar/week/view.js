@@ -951,7 +951,7 @@ define('io.ox/calendar/week/view', [
                 top: (this.options.showFulltime ? 21 : 1) + 'px'
             });
 
-             // create days
+            // create days
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -1094,8 +1094,7 @@ define('io.ox/calendar/week/view', [
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
-                Math.max(this.paneHeight / (cells * this.gridSize),
-                this.minCellHeight)
+                Math.max(this.paneHeight / (cells * this.gridSize), this.minCellHeight)
             );
 
             // only update if height differs from CSS default
@@ -1179,9 +1178,9 @@ define('io.ox/calendar/week/view', [
             this.kwInfo.empty().append(
                 $('<span>').text(
                     gt.noI18n(
-                        this.columns > 1 ?
-                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
-                        this.startDate.format('ddd, l')
+                        this.columns > 1
+                            ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                            : this.startDate.format('ddd, l')
                     )
                 ),
                 $.txt(' '),
@@ -1197,9 +1196,9 @@ define('io.ox/calendar/week/view', [
                 this.navbarDates = {
                     cw: gt('CW %1$d', this.startDate.format('w')),
                     date: gt.noI18n(
-                        this.columns > 1 ?
-                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
-                        this.startDate.format('l')
+                        this.columns > 1
+                            ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                            : this.startDate.format('l')
                     )
                 };
                 // bubbling event to get it in page controller

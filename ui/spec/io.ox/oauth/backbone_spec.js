@@ -68,15 +68,14 @@ define(['io.ox/oauth/backbone'], function (OAuth) {
                         globalCallbackSpy();
                         window['callback_' + cb]();
                     });
-                    return m.reauthorize({ force: false })
-                        .then(function () {
-                            expect(globalCallbackSpy.called).to.be.false;
-                            return m.reauthorize({ force: true });
-                        }).then(function () {
-                            expect(globalCallbackSpy.called).to.be.true;
-                            server.restore();
-                            windowOpen.restore();
-                        });
+                    return m.reauthorize({ force: false }).then(function () {
+                        expect(globalCallbackSpy.called).to.be.false;
+                        return m.reauthorize({ force: true });
+                    }).then(function () {
+                        expect(globalCallbackSpy.called).to.be.true;
+                        server.restore();
+                        windowOpen.restore();
+                    });
                 });
             });
         });

@@ -1,4 +1,4 @@
-    /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -228,13 +228,11 @@ define('io.ox/tasks/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target task-detail-container')
-            .attr({
+            app.right = right.addClass('default-content-padding f6-target task-detail-container').attr({
                 'tabindex': -1,
                 'role': 'main',
                 'aria-label': gt('Task Details')
-            })
-            .scrollable();
+            }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -889,7 +887,8 @@ define('io.ox/tasks/main', [
                     app.grid.refresh();
                 });
 
-            this.append($('<div class="grid-options dropdown">').append(
+            this.append(
+                $('<div class="grid-options dropdown">').append(
                     dropdown.render().$el.attr('data-dropdown', 'sort')
                 )
             );

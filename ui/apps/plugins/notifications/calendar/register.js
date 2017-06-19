@@ -99,15 +99,14 @@ define('plugins/notifications/calendar/register', [
                 'focus-id': 'calendar-invite-' + cid,
                 //#. %1$s Appointment title
                 //#, c-format
-                'aria-label': gt('Invitation for %1$s.',
-                        _.noI18n(model.get('title')))
+                'aria-label': gt('Invitation for %1$s.', model.get('title'))
             }).append(
                 $('<a class="notification-info" role="button">').append(
-                    $('<span class="span-to-div time">').text(_.noI18n(strings.timeStr)).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div date">').text(_.noI18n(strings.dateStr)).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
-                    $('<span class="span-to-div location">').text(_.noI18n(model.get('location'))),
-                    $('<span class="span-to-div organizer">').text(_.noI18n(model.get('organizer'))),
+                    $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
+                    $('<span class="span-to-div title">').text(model.get('title')),
+                    $('<span class="span-to-div location">').text(model.get('location')),
+                    $('<span class="span-to-div organizer">').text(model.get('organizer')),
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(

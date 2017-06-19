@@ -160,7 +160,7 @@ define('io.ox/files/api', [
         },
 
         isPgp: function (type) { // ... has been missing until Dec.2016 ... implemented similar to `isPDF` that already did exist.
-            return (/^application\/pgp(?:\-encrypted)*$/).test(type) || this.isGuard();
+            return (/^application\/pgp(?:-encrypted)*$/).test(type) || this.isGuard();
         },
         isGuard: function () {
             return (/^guard/).test(this.get('source'));

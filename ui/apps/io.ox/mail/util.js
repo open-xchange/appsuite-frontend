@@ -77,7 +77,7 @@ define('io.ox/mail/util', [
         // regex: remove delimiters/spaces
         rRecipientCleanup = /^[,;\s]+/,
         // regex: process single recipient
-        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^\>]+\>)$/,
+        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^>]+>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
         // regex: remove special characters from telephone number
@@ -318,7 +318,7 @@ define('io.ox/mail/util', [
             if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.()]+),\s([^,.()]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
@@ -406,7 +406,7 @@ define('io.ox/mail/util', [
 
             // remove mailing list stuff (optional)
             if (settings.get('features/cleanSubjects', false)) {
-                subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+                subject = subject.replace(/\[[^[]*\]\s*/g, '');
             }
 
             return keepFirstPrefix ?

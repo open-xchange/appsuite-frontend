@@ -236,7 +236,7 @@ define('io.ox/search/autocomplete/extensions', [
 
             // construct url
             image = (baton.data.item && baton.data.item.image_url ? baton.data.item.image_url + '&height=42&scaleType=contain' : image)
-                .replace(/^https?\:\/\/[^\/]+/i, '');
+                .replace(/^https?:\/\/[^/]+/i, '');
             image = util.replacePrefix(image, ox.apiRoot);
 
             // add image node

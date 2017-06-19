@@ -710,7 +710,7 @@ define('io.ox/contacts/view-detail', [
     // only applies to resource because they have a "description" field.
     // contacts just have a "note"
 
-    var regPhone = /(\+?[\d\x20\/()]{4,})/g,
+    var regPhone = /(\+?[\d\x20/()]{4,})/g,
         regClean = /[^+0-9]/g;
 
     ext.point('io.ox/contacts/detail/content').extend({

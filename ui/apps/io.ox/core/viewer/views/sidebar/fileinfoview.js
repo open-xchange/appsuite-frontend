@@ -83,7 +83,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             );
             if (!isAttachmentView) {
                 dl.append(
-                     // modified
+                    // modified
                     $('<dt>').text(gt('Modified')),
                     $('<dd class="modified">').append(
                         $('<span class="modifiedAt">').text(dateString),

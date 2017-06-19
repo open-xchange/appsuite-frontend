@@ -39,8 +39,8 @@ define('io.ox/contacts/model', [
                     if (file) {
                         delete data.pictureFile;
                         return yell(
-                                api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, data, file)
-                            );
+                            api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, data, file)
+                        );
                     }
                     return yell(
                         api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })

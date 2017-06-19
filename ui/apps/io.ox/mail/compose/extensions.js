@@ -827,7 +827,8 @@ define('io.ox/mail/compose/extensions', [
 
                     list = view.collection.filter(function (a) {
                         return a.get('disp') === 'attachment';
-                    }).map(function (a) {
+                    })
+                    .map(function (a) {
                         var obj = a.toJSON();
                         if (obj.group === 'localFile') {
                             obj.fileObj = a.fileObj;

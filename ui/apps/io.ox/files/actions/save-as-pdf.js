@@ -34,11 +34,11 @@ define('io.ox/files/actions/save-as-pdf', [
 
     return function (baton) {
 
-//      newFileName = oldFileName;
-//      title = gt('Save as PDF');
-//
-//      // create the dialog
-//      dialog = new Dialogs.SaveAsFileDialog({ title: title, value: newFileName, preselect: app.getFileParameters().folder_id });
+        //      newFileName = oldFileName;
+        //      title = gt('Save as PDF');
+        //
+        //      // create the dialog
+        //      dialog = new Dialogs.SaveAsFileDialog({ title: title, value: newFileName, preselect: app.getFileParameters().folder_id });
 
         var
         //  data     = baton.data,
@@ -55,19 +55,19 @@ define('io.ox/files/actions/save-as-pdf', [
 
         filename = filename.substring(0, ((idx >= 0) ? idx : len));
 
-      //console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
-      //console.log('+++ io.ox/files/actions/save-as-pdf :: isAccessWrite : ', isAccessWrite);
+        //console.log('+++ io.ox/files/actions/save-as-pdf :: data, model, filename : ', data, model, filename);
+        //console.log('+++ io.ox/files/actions/save-as-pdf :: isAccessWrite : ', isAccessWrite);
 
         function save(name) {
             return ConverterUtils.sendConverterRequest(model, {
 
                 documentformat: 'pdf',
                 saveas_filename: name + '.pdf',
-              //saveas_folder_id: model.get('folder_id')
+                //saveas_folder_id: model.get('folder_id')
                 saveas_folder_id: (isAccessWrite ? model.get('folder_id') : require('settings!io.ox/files').get('folder/documents'))
 
             }).done(function (response) {
-              //console.log('+++ save as pdf :: done - response : ', response);
+                //console.log('+++ save as pdf :: done - response : ', response);
 
                 if (('id' in response) && ('filename' in response)) {
 

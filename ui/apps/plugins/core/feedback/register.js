@@ -369,7 +369,7 @@ define('plugins/core/feedback/register', [
                                 data.operating_system = 'Windows 8.1';
                                 break;
                             }
-                            if (navigator.userAgent.match(/Windows NT [10\.0|6\.4]?/)) {
+                            if (navigator.userAgent.match(/Windows NT [10.0|6.4]?/)) {
                                 data.operating_system = 'Windows 10';
                                 break;
                             }

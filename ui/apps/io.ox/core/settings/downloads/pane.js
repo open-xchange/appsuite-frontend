@@ -62,20 +62,16 @@ define('io.ox/core/settings/downloads/pane', [
                             'You can download the updates from within the Updater.')
                         )
                     ),
-                    $('<section>')
-                        .addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden')
-                        .append(
-                            $('<h2>').text(gt('Connector for Microsoft Outlook®')),
-                            $('<p>').text(
-                                gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
+                    $('<section>').addClass(products['com.openexchange.outlook.updater.oxtender2'] ? '' : 'hidden').append(
+                        $('<h2>').text(gt('Connector for Microsoft Outlook®')),
+                        $('<p>').text(
+                            gt('Synchronization of Emails, Calendar, Contacts and Tasks, along with Public, Shared and System Folders to Microsoft Outlook® clients.')
                         )
                     ),
-                    $('<section>')
-                        .addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden')
-                        .append(
-                            $('<h2>').text(gt('Notifier')),
-                            $('<p>').text(
-                                gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
+                    $('<section>').addClass(products['com.openexchange.oxnotifier'] ? '' : 'hidden').append(
+                        $('<h2>').text(gt('Notifier')),
+                        $('<p>').text(
+                            gt('Informs about the current status of Emails and appointments without having to display the user interface or another Windows® client.')
                         )
                     )
                 );

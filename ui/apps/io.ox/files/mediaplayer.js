@@ -340,7 +340,8 @@ define('io.ox/files/mediaplayer', [
             $('#io-ox-topbar > ul.launchers-secondary').prepend(
                 minimizedPlayerLauncher = $('<li class="launcher minimizedmediaplayer">').append(
                     $('<a href="#">').append($('<i>').addClass('fa fa-play'))
-                ).one('click', function () {
+                )
+                .one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();
                     $(this).remove();

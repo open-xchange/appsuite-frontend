@@ -25,7 +25,7 @@ define('io.ox/files/favorite/listview', [
     'use strict';
 
     var LISTVIEW = 'io.ox/files/favorite/myfavorites/listview', ITEM = LISTVIEW + '/item';
-//    var id = 'virtual/favorites/infostore';
+    // var id = 'virtual/favorites/infostore';
     var MyFavoriteListView = ListView.extend({
 
         ref: LISTVIEW,

@@ -49,7 +49,8 @@ define('io.ox/onboarding/clients/view-mobile', [
         // DISPLAY: IMAP, SMTP and EAS
 
         block: function (action) {
-            this.append($('<pre class="config">').append(
+            this.append(
+                $('<pre class="config">').append(
                     $('<div>').append(_.map(action.data, function (prop) {
                         var isTitle = !('value' in prop);
                         return $('<div class="property">').addClass(isTitle ? 'title' : '').text(prop.name + (isTitle ? '' : ':'));
@@ -131,12 +132,14 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         badge: function (action) {
             if (!action.store.image) return;
-            this.append($('<a class="store" target="_blank">').attr('href', action.link).append(
+            this.append(
+                $('<a class="store" target="_blank">').attr('href', action.link).append(
                     $('<img class="store-icon action-call" role="button">').attr({
                         'data-detail': action.store.name,
                         'src': action.store.image
                     })
-            ));
+                )
+            );
         }
     };
 

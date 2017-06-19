@@ -100,11 +100,11 @@ define(['io.ox/contacts/util'], function (util) {
         it('should correctly choose correct format for birthdays in year 1', function () {
             expect(util.getBirthday(-62122809600000))
                 .to.equal(moment.utc(-62122809600000).format(
-                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+                moment.localeData().longDateFormat('l').replace(/[/-]*Y+[/-]*/, '')
             ));
             expect(util.getBirthday(-62135856000000))
                 .to.equal(moment.utc(-62135856000000).format(
-                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+                moment.localeData().longDateFormat('l').replace(/[/-]*Y+[/-]*/, '')
             ));
         });
     });

@@ -1,4 +1,4 @@
- /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -12,7 +12,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
- /* global DocumentTouch */
+/* global DocumentTouch */
 
 /**
  * This lib is dependency free, do not use underscore or some

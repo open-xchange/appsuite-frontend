@@ -23,7 +23,7 @@
             var i = 0, $l = pairs.length, pair, obj = {}, d = decodeURIComponent;
             for (; i < $l; i++) {
                 pair = pairs[i];
-                var keyValue = pair.split(/\=/), key = keyValue[0], value = keyValue[1];
+                var keyValue = pair.split('='), key = keyValue[0], value = keyValue[1];
                 if (key !== '' || value !== undefined) {
                     obj[d(key)] = value !== undefined ? d(value) : undefined;
                 }
@@ -289,7 +289,7 @@
                 // firefox has a bug and already decodes the hash string, so we use href
                 var hash = location.href.split(/#/)[1] || '';
                 url.data = url.decrypt(deserialize(
-                     hash.substr(0, 1) === '?' ? rot(decodeURIComponent(hash.substr(1)), -1) : hash
+                    hash.substr(0, 1) === '?' ? rot(decodeURIComponent(hash.substr(1)), -1) : hash
                 ));
             }
 
@@ -320,7 +320,7 @@
 
         get: function (path) {
             var l = location;
-            return l.protocol + '//' + l.host + l.pathname.replace(/\/[^\/]*$/, '/' + path);
+            return l.protocol + '//' + l.host + l.pathname.replace(/\/[^/]*$/, '/' + path);
         },
 
         // replace [variables] in a string; usually an URL. Values get escaped.
@@ -682,7 +682,7 @@
                 regXSearchWhitespaceGlobally = (/[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029]+/g),
                 regXSearchZeroWhitespaceGlobally = (/[\u200B\uFEFF]+/g),
 
-              //softHyphenChar = '\u00AD',
+                //softHyphenChar = '\u00AD',
                 nonBreakingHyphenChar = '\u2011',
                 nonBreakingWhitespaceChar = '\u00A0',
                 breakingZeroWhitespaceChar = '\u200B';
@@ -956,10 +956,10 @@
     _.unescapeHTML = function (html) {
         /*eslint no-nested-ternary: 0*/
         return (html || '').replace(/&(?:(\w+)|#x([0-9A-Fa-f]+)|#(\d+));/g,
-                            function (original, entity, hex, dec) {
-                                return entity ? _.unescapeHTML.entities[entity] || original :
-                                       hex ? String.fromCharCode(parseInt(hex, 16)) : String.fromCharCode(parseInt(dec, 10));
-                            });
+            function (original, entity, hex, dec) {
+                return entity ? _.unescapeHTML.entities[entity] || original :
+                    hex ? String.fromCharCode(parseInt(hex, 16)) : String.fromCharCode(parseInt(dec, 10));
+            });
     };
 
     /* jshint -W015 */

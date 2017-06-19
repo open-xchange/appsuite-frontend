@@ -304,7 +304,7 @@ define('io.ox/core/tk/vgrid', [
                         .on('click keydown', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
-        // item template
+            // item template
             templateOptions = { tempDrawContainer: container };
         if (options.templateOptions) {
             templateOptions = _.extend(templateOptions, options.templateOptions);

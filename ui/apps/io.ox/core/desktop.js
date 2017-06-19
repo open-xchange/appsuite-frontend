@@ -1574,7 +1574,7 @@ define('io.ox/core/desktop', [
 
                 // add default css class
                 if (opt.name) {
-                    win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                    win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
                 // draw window head
@@ -1651,7 +1651,7 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         baton.$.group.append(
                             // search
-                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search')

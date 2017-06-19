@@ -154,7 +154,8 @@ define('io.ox/backbone/basicModel', [
                         self.trigger('backendError', response, xhr);
                         self.trigger(action + ':fail', response);
                         self.trigger('sync:fail', response);
-                    }).always(function () {
+                    })
+                    .always(function () {
                         self.trigger(action + ':always');
                         self.trigger('sync:always');
                     });

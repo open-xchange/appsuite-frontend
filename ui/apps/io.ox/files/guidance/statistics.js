@@ -330,7 +330,7 @@ define('io.ox/files/guidance/statistics', [
                     node.append(
                         $('<div style="width: ' + WIDTH + 'px;">').text(
                             //#. %1$s name of the current folder
-                            gt('These statistics only include folders, which have a depth less than four in the folder structure from the folder \"%1$s\".',
+                            gt('These statistics only include folders, which have a depth less than four in the folder structure from the folder "%1$s".',
                                 baton.folder.title)
                         )
                     );
@@ -413,7 +413,7 @@ define('io.ox/files/guidance/statistics', [
                     node.append(
                         $('<div style="width: ' + WIDTH + 'px;">').text(
                             //#. %1$s name of the current folder
-                            gt('These statistics only include folders, which have a depth less than four in the folder structure from the folder \"%1$s\".',
+                            gt('These statistics only include folders, which have a depth less than four in the folder structure from the folder "%1$s".',
                                 baton.folder.title)
                         )
                     );

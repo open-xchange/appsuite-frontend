@@ -59,7 +59,8 @@ define('io.ox/contacts/actions/invite', [
                 check: function (obj) {
                     return obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3;
                 }
-            }).then(function (list) {
+            })
+            .then(function (list) {
                 // set participants
                 var participants = _.chain(filterForDistlists(list)).map(mapContact).flatten(true).filter(filterContact).value(),
                     externalParticipants = [];

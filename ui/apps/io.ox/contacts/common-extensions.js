@@ -32,9 +32,7 @@ define('io.ox/contacts/common-extensions', [
                 name = $.trim(util.getFullName(data) || data.yomiLastName || data.yomiFirstName || data.display_name || util.getMail(data));
             }
             this.append(
-                $('<div class="fullname">').append(
-                   name
-                )
+                $('<div class="fullname">').append(name)
             );
         },
 

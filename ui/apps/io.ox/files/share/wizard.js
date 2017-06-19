@@ -218,7 +218,8 @@ define('io.ox/files/share/wizard', [
                     $textView = new miniViews.TextView({
                         name: 'message',
                         model: baton.model
-                    }).render().$el.attr({
+                    }).render().$el
+                    .attr({
                         id: guid,
                         //#. placeholder text in share dialog
                         placeholder: gt('Message (optional)')

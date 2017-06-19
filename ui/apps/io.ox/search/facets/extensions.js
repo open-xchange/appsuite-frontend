@@ -219,13 +219,14 @@ define('io.ox/search/facets/extensions', [
                         // add option to open dialog
                         menu.append(
                             $('<li role="presentation">').append(
-                                 $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-action="dialog">').append(
+                                $('<a href="#" class="option more" role="menuitemcheckbox" tabindex="-1" data-action="dialog">').append(
                                     $('<i class="fa fa-fw fa-none" aria-hidden="true">'),
                                     $('<span>').text(gt('More') + ' ...')
                                 )
                             )
                         );
-                    }).then(function () {
+                    })
+                    .then(function () {
                         // add to dom
                         button.append(menu);
 

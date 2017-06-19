@@ -136,7 +136,7 @@ define('io.ox/wizards/upsell', [
                         $('<div class="upsell-product-image">').css({ 'background-image': 'url(' + p.get('image') + ')' }),
                         $('<div class="upsell-product-name">').text(p.get('title')),
                         $('<span class="upsell-product-price">').text(printPrice(p)),
-                    $('<div class="upsell-product-description">').html(p.get('description'))
+                        $('<div class="upsell-product-description">').html(p.get('description'))
                     )
                 );
             });

@@ -63,7 +63,8 @@ define('io.ox/calendar/actions/delete', [
                                 _.extend(options, { recurrence_position: obj.recurrence_position });
                             }
                             return options;
-                        }).uniq(function (obj) {
+                        })
+                        .uniq(function (obj) {
                             return JSON.stringify(obj);
                         }).value();
                         api.remove(data).fail(notifications.yell);

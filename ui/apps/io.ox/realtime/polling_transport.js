@@ -10,17 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define.async('io.ox/realtime/polling_transport',
-    [
-        'io.ox/core/extensions',
-        'io.ox/core/event',
-        'io.ox/core/capabilities',
-        'io.ox/core/uuids',
-        'io.ox/core/http',
-        'io.ox/realtime/stanza',
-        'io.ox/realtime/tab_id',
-        'io.ox/realtime/synchronized_http'
-    ],
+define.async('io.ox/realtime/polling_transport', [
+    'io.ox/core/extensions',
+    'io.ox/core/event',
+    'io.ox/core/capabilities',
+    'io.ox/core/uuids',
+    'io.ox/core/http',
+    'io.ox/realtime/stanza',
+    'io.ox/realtime/tab_id',
+    'io.ox/realtime/synchronized_http'
+],
 function (ext, Event, caps, uuids, http, stanza, tabId, synchronizedHTTP) {
 
     'use strict';

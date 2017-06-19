@@ -206,9 +206,8 @@ define('io.ox/search/view-template', [
         draw: function () {
             this.append(
                 $('<div class="row busy">').append(
-                    $('<div class="col-xs-12 io-ox-busy">')
-                        .css('min-height', '50px')
-                    )
+                    $('<div class="col-xs-12 io-ox-busy">').css('min-height', '50px')
+                )
             );
         }
     });

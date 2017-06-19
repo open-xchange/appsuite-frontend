@@ -82,7 +82,7 @@ define('io.ox/mail/detail/content', [
                 // fix missing protocol
                 .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
                 // fix targets
-                .replace(/<a[^>]*href=(?:\"|\')(https?:\/\/[^>]+)(?:\"|\')[^>]*>/g, setLinkTarget);
+                .replace(/<a[^>]*href=(?:"|')(https?:\/\/[^>]+)(?:"|')[^>]*>/g, setLinkTarget);
         },
 
         whitespace: function (baton) {
@@ -196,7 +196,7 @@ define('io.ox/mail/detail/content', [
                     // fix ID, i.e. replace the DOT (old notation) by a SLASH (new notation, 7.8.0)
                     if (/^\d+\./.test(data.id)) data.id = data.id.replace(/\./, '/');
                     link.addClass(data.className).data(data);
-                } else if (href.search(/^\s*mailto\:/i) > -1) {
+                } else if (href.search(/^\s*mailto:/i) > -1) {
                     // mailto:
                     link.addClass('mailto-link').attr('target', '_blank');
                     text = link.text();
@@ -685,7 +685,7 @@ define('io.ox/mail/detail/content', [
                     // convert <br> into newline
                     .replace(/<br\s?\/?>/gi, '\n')
                     // simply remove tags
-                    .replace(/<[a-z\/].*?>/gi, '')
+                    .replace(/<[a-z/].*?>/gi, '')
                     // replace entities
                     .replace(/&.*?;/g, decodeEntity);
             };
@@ -719,11 +719,11 @@ define('io.ox/mail/detail/content', [
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
+                regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /([^"\s<,:;\|\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regMailAddress = /([^"\s<,:;|()[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
-                regImage = /^!\([^\)]+\)$/gm,
+                regImage = /^!\([^)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
 
             function exec(regex, str) {

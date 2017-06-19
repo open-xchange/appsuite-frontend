@@ -108,7 +108,7 @@ define('io.ox/core/viewer/views/displayerview', [
             }
             displayerView.toggleSwiperOnlyExternalState(true);
 
-          //displayerView.carouselRoot.find('.fullscreen-button').focus();
+            //displayerView.carouselRoot.find('.fullscreen-button').focus();
             displayerView.$el.focus();
             displayerView.carouselRoot.removeClass('autoplay-controls-visible');
         }
@@ -180,14 +180,13 @@ define('io.ox/core/viewer/views/displayerview', [
     }
 
     function createDisplayNextAutoplaySlide(swiper) {
-        return function () {
-                                              // - for [s.slideNext] see "swiper.js" line 1586.
+        return function () {                  // - for [s.slideNext] see "swiper.js" line 1586.
             swiper.slideNext(true, 0, false); // - params{runCallbacks, speed, internal} ... for what {internal} does see "swiper.js" line 1513.
         };
     }
     function createKeepAutoplayAlive(displayerView) {
         return function () {
-          //displayerView.autoplayOverdriveSlideCount = null;
+            //displayerView.autoplayOverdriveSlideCount = null;
             displayerView.autoplaySlideCount = 0;
 
             displayerView.swiper.slideNext(true, 0, false);
@@ -245,9 +244,9 @@ define('io.ox/core/viewer/views/displayerview', [
         $carouselInner.on('mouseenter', '.viewer-displayer-item-container', enterHandler);
         $carouselInner.on('mouseleave', '.viewer-displayer-item-container', leaveHandler);
 
-      // - see line 361 - gets already handled there
-      // - the commented block above and also the next commented line are for another, more complex blending behavior of both navigation arrows.
-      //$carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
+        // - see line 361 - gets already handled there
+        // - the commented block above and also the next commented line are for another, more complex blending behavior of both navigation arrows.
+        //$carouselInner.on('mousemove click', '.viewer-displayer-item-container', displayerView.displayerviewMousemoveClickHandler);
     }
 
     function registerAutoplayEventHandlingForPreviousNextControl(displayerView) {
@@ -281,16 +280,16 @@ define('io.ox/core/viewer/views/displayerview', [
         if (displayerView.hasAutoplayStartAlreadyBeenTriggered()) { // only in case of autoplay start has already been triggered.
 
             window.clearTimeout(displayerView.captionTimeoutId);
-          //window.clearTimeout(displayerView.navigationTimeoutId);
+            //window.clearTimeout(displayerView.navigationTimeoutId);
 
             var
                 $viewElement = displayerView.$el,
 
                 $slideCaption = $viewElement.find('.viewer-displayer-caption');
-              //$navigationArrows = $viewElement.find('.swiper-button-control');
+                //$navigationArrows = $viewElement.find('.swiper-button-control');
 
             $slideCaption.hide();
-          //$navigationArrows.hide();
+            //$navigationArrows.hide();
         }
     }
 
@@ -1294,7 +1293,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             if (IS_LOOP_ONCE_ONLY) {
                 this.isAutoplayOverdrive = false;
-              //this.autoplayOverdriveSlideCount = null;
+                //this.autoplayOverdriveSlideCount = null;
                 this.autoplaySlideCount = -1;
             }
             this.collectionBackup = this.collection.clone();
@@ -1336,7 +1335,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             if (IS_LOOP_ONCE_ONLY) {
                 this.isAutoplayOverdrive = false;
-              //this.autoplayOverdriveSlideCount = null;
+                //this.autoplayOverdriveSlideCount = null;
                 this.autoplaySlideCount = null;
             }
             this.collection.reset(this.collectionBackup.models);
@@ -1437,7 +1436,7 @@ define('io.ox/core/viewer/views/displayerview', [
 
             this.collectionBackup = null;
             this.isAutoplayOverdrive = null;
-          //this.autoplayOverdriveSlideCount = null;
+            //this.autoplayOverdriveSlideCount = null;
             this.autoplaySlideCount = null;
 
             this.canAutoplayImages = null;

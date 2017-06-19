@@ -631,7 +631,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             ox.trigger('http:error:' + response.code, response, o);
             ox.trigger('http:error', response, o);
             // session expired?
-            var isSessionError = (/^SES\-/i).test(response.code),
+            var isSessionError = (/^SES-/i).test(response.code),
                 isLogin = o.module === 'login' && o.data && /^(login|autologin|store|tokens)$/.test(o.data.action);
             if (isSessionError && !isLogin) {
                 // login dialog

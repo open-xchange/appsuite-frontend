@@ -27,20 +27,29 @@ define('io.ox/tasks/actions/delete', [
                 .addPrimaryButton('deleteTask', gt('Delete'), 'deleteTask')
                 .addButton('cancel', gt('Cancel'), 'cancel');
             // Header
-            popup.getBody()
-                .append($('<h4>')
-                        .text(gt.ngettext('Do you really want to delete this task?',
-                                          'Do you really want to delete these tasks?', numberOfTasks)));
+            popup.getBody().append(
+                $('<h4>').text(
+                    gt.ngettext(
+                        'Do you really want to delete this task?',
+                        'Do you really want to delete these tasks?',
+                        numberOfTasks
+                    )
+                )
+            );
             // go
             popup.show();
             popup.on('deleteTask', function () {
                 require(['io.ox/tasks/api'], function (api) {
                     api.remove(data)
                         .done(function () {
-                            notifications.yell('success', gt.ngettext('Task has been deleted!',
-                                                                      'Tasks have been deleted!', numberOfTasks));
+                            notifications.yell('success', gt.ngettext(
+                                'Task has been deleted!',
+                                'Tasks have been deleted!',
+                                numberOfTasks
+                            ));
                             popup.close();
-                        }).fail(function (result) {
+                        })
+                        .fail(function (result) {
                             if (result.code === 'TSK-0019') { // task was already deleted somewhere else. everythings fine, just show info
                                 notifications.yell('info', gt('Task was already deleted!'));
                                 popup.close();
@@ -54,14 +63,16 @@ define('io.ox/tasks/actions/delete', [
                                 // show generic error message
                                 // show retrymessage and enable buttons again
                                 popup.idle();
-                                popup.getBody().empty().append($.fail(
-                                    gt.ngettext(
-                                        'The task could not be deleted.',
-                                        'The tasks could not be deleted.',
-                                        numberOfTasks
-                                    ), function () {
-                                    popup.trigger('deleteTask', data);
-                                })).find('h4').remove();
+                                popup.getBody().empty().append(
+                                    $.fail(
+                                        gt.ngettext(
+                                            'The task could not be deleted.',
+                                            'The tasks could not be deleted.',
+                                            numberOfTasks
+                                        ),
+                                        function () { popup.trigger('deleteTask', data); }
+                                    )
+                                ).find('h4').remove();
                             }
                         });
                 });

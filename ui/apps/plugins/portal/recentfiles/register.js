@@ -106,8 +106,8 @@ define('plugins/portal/recentfiles/register', [
                         if (filename.length > 20) {
                             // remove leading & tailing date stufff
                             filename = filename
-                                .replace(/^[0-9_\-\.]{5,}(\D)/i, '\u2026$1')
-                                .replace(/[0-9_\-\.]{5,}(\.\w+)?$/, '\u2026$1');
+                                .replace(/^[0-9_\-.]{5,}(\D)/i, '\u2026$1')
+                                .replace(/[0-9_\-.]{5,}(\.\w+)?$/, '\u2026$1');
                         }
                         return $('<li class="item" tabindex="0">')
                             .data('item', file)

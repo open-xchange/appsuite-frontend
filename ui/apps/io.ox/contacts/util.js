@@ -297,7 +297,7 @@ define('io.ox/contacts/util', [
             // get localized format without the year otherwise
             // i.e. remove dashes and slashes but keep dots
             return birthday.format(
-                moment.localeData().longDateFormat('l').replace(/[\/\-]*Y+[\/\-]*/, '')
+                moment.localeData().longDateFormat('l').replace(/[/-]*Y+[/-]*/, '')
             );
         },
 
@@ -315,7 +315,7 @@ define('io.ox/contacts/util', [
                 options.height *= 2;
             }
 
-            var url = arg.replace(/^https?\:\/\/[^\/]+/i, '');
+            var url = arg.replace(/^https?:\/\/[^/]+/i, '');
             url = util.replacePrefix(url);
 
             return util.getShardingRoot(url + '&' + $.param(options));

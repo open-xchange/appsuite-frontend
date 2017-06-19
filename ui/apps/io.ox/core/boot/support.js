@@ -107,7 +107,7 @@ define('io.ox/core/boot/support', [
                 baton.stopPropagation();
             }
         },
-         //
+        //
         // unsupported platform
         //
         {
@@ -167,13 +167,13 @@ define('io.ox/core/boot/support', [
                 // Offer Chrome to all non-chrome users on android
                 util.feedback('info', function () {
                     return $('<b>').text(
-                            //#. 'Google Chrome' is a brand and should not be translated
-                            gt('For best results we recommend using Google Chrome for Android.')
-                        )
-                        .add($.txt(_.noI18n('\xa0')))
-                        //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
-                        .add($.txt(gt('Get the latest version from the ')))
-                        .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
+                        //#. 'Google Chrome' is a brand and should not be translated
+                        gt('For best results we recommend using Google Chrome for Android.')
+                    )
+                    .add($.txt(_.noI18n('\xa0')))
+                    //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
+                    .add($.txt(gt('Get the latest version from the ')))
+                    .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
                 });
 
                 baton.stopPropagation();

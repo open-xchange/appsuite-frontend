@@ -155,13 +155,14 @@ define('io.ox/calendar/freetime/timeView', [
                     dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '').text(day.format('ddd, ll'))),
                     dayNode;
 
-                node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append($('<div class="daylabel-container">')
-                    .addClass(counter === 0 ? 'first' : '').append(
-                    dayLabel,
-                    dayLabel.clone().addClass('level-2'),
-                    dayLabel.clone().addClass('level-1'),
-                    dayLabel.clone().addClass('level-2')),
-                dayNode = $('<div class="day-hours">')));
+                node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append(
+                    $('<div class="daylabel-container">').addClass(counter === 0 ? 'first' : '').append(
+                        dayLabel,
+                        dayLabel.clone().addClass('level-2'),
+                        dayLabel.clone().addClass('level-1'),
+                        dayLabel.clone().addClass('level-2')
+                    ),
+                    dayNode = $('<div class="day-hours">')));
 
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
@@ -755,7 +756,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.set('currentWeek', week);
         },
 
-         /**
+        /**
          * handler for clickevents in toolbar
          * @param  { MouseEvent } e Clickevent
          */

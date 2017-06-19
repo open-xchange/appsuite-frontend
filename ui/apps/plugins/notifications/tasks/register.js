@@ -54,7 +54,8 @@ define('plugins/notifications/tasks/register', [
                 //#, c-format
                 'aria-label': gt('Overdue Task %1$s.', _.noI18n(data.title))
             })
-            .append($('<a class="notification-info" role="button">').append(
+            .append(
+                $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div title">').text(_.noI18n(data.title)),
                     $('<div class"clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(data.end_time)),
@@ -288,8 +289,9 @@ define('plugins/notifications/tasks/register', [
                     $('<span class="span-to-div title">').text(_.noI18n(task.title)),
                     $('<div class="clearfix">').append(
                         $('<span class="end_date">').text(_.noI18n(task.end_time)),
-                        $('<span class="status">').text(task.status).addClass(task.badge)),
-                        $('<span class="sr-only">').text(gt('Press to open Details'))
+                        $('<span class="status">').text(task.status).addClass(task.badge)
+                    ),
+                    $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(
                     $('<button type="button" class="accept-decline-button refocus btn btn-default" data-action="change_state">')

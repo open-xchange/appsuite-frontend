@@ -109,10 +109,7 @@ define('io.ox/find/extensions-facets', [
 
             // divider label
             dropdown.$ul.append(
-                $('<li class="dropdown-header">')
-                .text(
-                   facet.getName()
-                )
+                $('<li class="dropdown-header">').text(facet.getName())
             );
 
             _.each(facet.get('values').models, function (value) {
@@ -187,10 +184,7 @@ define('io.ox/find/extensions-facets', [
                     // divider label
                     if (option.item && option.item.detail) {
                         dropdown.$ul.append(
-                            $('<li class="dropdown-header">')
-                            .text(
-                               option.item.detail
-                            )
+                            $('<li class="dropdown-header">').text(option.item.detail)
                         );
                     }
                 }

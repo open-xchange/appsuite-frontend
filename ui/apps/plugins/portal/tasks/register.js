@@ -63,16 +63,16 @@ define('plugins/portal/tasks/register', [
 
                 sum.append(
                     $('<li class="item" tabindex="0">').data('item', task).append(
-                            $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
-                            task.end_time === '' ? $() :
-                                $('<span class="accent">').text(
-                                    //#. Due on date
-                                    gt('Due on %1$s', _.noI18n(task.end_time))
-                                ),
-                            $.txt(' '),
-                            $('<span class="status pull-right">').text(task.status).addClass(task.badge),
-                            $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, { max: 100 })))
-                        )
+                        $('<span class="bold">').text(gt.noI18n(_.ellipsis(task.title, { max: 50 }))), $.txt(' '),
+                        task.end_time === '' ? $() :
+                            $('<span class="accent">').text(
+                                //#. Due on date
+                                gt('Due on %1$s', _.noI18n(task.end_time))
+                            ),
+                        $.txt(' '),
+                        $('<span class="status pull-right">').text(task.status).addClass(task.badge),
+                        $('<span class="gray">').text(gt.noI18n(_.ellipsis(task.note, { max: 100 })))
+                    )
                 );
 
                 this.on('tap', 'h2', function (e) {

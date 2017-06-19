@@ -198,7 +198,7 @@ define('io.ox/files/listview', [
             draw: function () {
                 extensions.thumbnail.apply(this, arguments);
 
-              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
                 this.prepend($('<div class="thumbnail-masking-box"></div>'));
             }
         },
@@ -244,7 +244,7 @@ define('io.ox/files/listview', [
             draw: function () {
                 extensions.thumbnail.apply(this, arguments);
 
-              //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
+                //this.prepend($('<div class="thumbnail-effects-box"></div>')); // please do not remove.
                 this.prepend($('<div class="thumbnail-masking-box"></div>'));
             }
         },

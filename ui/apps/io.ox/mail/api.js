@@ -526,7 +526,8 @@ define('io.ox/mail/api', [
                         .then(function () {
                             // reload  settings for virtual folder 'virtual/standard' first (bug 52608)
                             return settings.reload();
-                        }).done(function () {
+                        })
+                        .done(function () {
                             // refresh all folders because the archive folder might be new
                             folderAPI.refresh();
                             // reload mail views
@@ -1461,7 +1462,7 @@ define('io.ox/mail/api', [
                 });
             }
             // single EML
-            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:\/]/g, '_') + '.eml') : '') + '?' +
+            url += (first.subject ? '/' + encodeURIComponent(first.subject.replace(/[\\:/]/g, '_') + '.eml') : '') + '?' +
                 $.param($.extend(api.reduce(first), {
                     action: 'get',
                     src: 1,
@@ -1473,7 +1474,7 @@ define('io.ox/mail/api', [
         }
 
         // inject filename for more convenient file downloads
-        var filename = data.filename ? data.filename.replace(/[\\:\/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
+        var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
             scaling = opt.width && opt.height ? '&scaleType=' + opt.scaleType + '&width=' + opt.width + '&height=' + opt.height : '';
         url += (data.filename ? '/' + encodeURIComponent(filename) : '') + '?' +

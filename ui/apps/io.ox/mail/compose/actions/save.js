@@ -134,7 +134,7 @@ define('io.ox/mail/compose/actions/save', [
                 return baton.resultData;
             }
         }
-        );
+    );
 
 });
 

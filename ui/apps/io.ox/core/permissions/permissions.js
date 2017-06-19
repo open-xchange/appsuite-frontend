@@ -238,7 +238,7 @@ define('io.ox/core/permissions/permissions', [
             this.append(
                 $('<div class="entity">').append(
                     node = $('<div>').append(
-                        $('<span class="name">').text(_.noI18n(baton.name)),
+                        $('<span class="name">').text(baton.name),
                         baton.model.get('entity') === baton.view.options.owner ? $('<span class="owner">').text(gt('Owner')) : $(),
                         // quick change
                         addRoles(baton)
@@ -248,16 +248,16 @@ define('io.ox/core/permissions/permissions', [
 
             options = $('<div>').append(
                 // folder rights
-                gt('Folder permissions'), $.txt(_.noI18n(': ')),
-                    addDropdown('folder', baton), $.txt(_.noI18n('. ')),
+                gt('Folder permissions'), $.txt(': '),
+                addDropdown('folder', baton), $.txt('. '),
                 // object rights
-                gt('Object permissions'), $.txt(_.noI18n(': ')),
-                addDropdown('read', baton), $.txt(_.noI18n(', ')),
-                addDropdown('write', baton), $.txt(_.noI18n(', ')),
-                addDropdown('delete', baton), $.txt(_.noI18n('. ')),
+                gt('Object permissions'), $.txt(': '),
+                addDropdown('read', baton), $.txt(', '),
+                addDropdown('write', baton), $.txt(', '),
+                addDropdown('delete', baton), $.txt('. '),
                 // admin
-                gt('The user has administrative rights'), $.txt(_.noI18n(': ')),
-                    addDropdown('admin', baton), $.txt(_.noI18n('. ')));
+                gt('The user has administrative rights'), $.txt(': '),
+                addDropdown('admin', baton), $.txt('. '));
             if (baton.admin) {
                 options.addClass('readwrite');
             } else {

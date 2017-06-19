@@ -51,9 +51,10 @@ define('io.ox/backbone/mini-views/colorpicker', [
                     for (var i = 0; i < this.options.itemsPerRow; i++) {
                         var color = this.options.defaultColors[row * this.options.itemsPerRow + i];
                         if (!color) break;
-                        rows[row].append($('<td>').append(
-                            $('<div tabindex="-1" class="colorpicker-item" role="option">').data('value', color.value).attr({ 'data-name': this.name, title: color.name })
-                                .css('background-color', color.value).toggleClass('fa fa-times', color.value === 'transparent')
+                        rows[row].append(
+                            $('<td>').append(
+                                $('<div tabindex="-1" class="colorpicker-item" role="option">').data('value', color.value).attr({ 'data-name': this.name, title: color.name })
+                                    .css('background-color', color.value).toggleClass('fa fa-times', color.value === 'transparent')
                             )
                         );
                     }

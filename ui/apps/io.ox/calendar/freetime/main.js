@@ -241,8 +241,16 @@ define('io.ox/calendar/freetime/main', [
             app.setWindow(win);
 
             app.view = new FreetimeView(options);
-            win.nodes.main.append($('<div class="scheduling-app-header">').append($('<h4 class="app-title">').text(gt('Scheduling')), app.view.timeSubview.headerNodeRow1, closeButton), app.view.header,
-                                     $('<div class="scheduling-app-body" draggable="false">').append(app.view.body), app.view.createFooter());
+            win.nodes.main.append(
+                $('<div class="scheduling-app-header">').append(
+                    $('<h4 class="app-title">').text(gt('Scheduling')),
+                    app.view.timeSubview.headerNodeRow1,
+                    closeButton
+                ),
+                app.view.header,
+                $('<div class="scheduling-app-body" draggable="false">').append(app.view.body),
+                app.view.createFooter()
+            );
             win.show();
             app.view.render();
 

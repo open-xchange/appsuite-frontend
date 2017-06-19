@@ -825,10 +825,10 @@ define('io.ox/files/share/permissions', [
                 share: false }, options);
 
             options.title = options.title || (options.share ?
-                        //#. %1$s determines whether setting permissions for a file or folder
-                        //#. %2$s is the file or folder name
-                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
+                //#. %1$s determines whether setting permissions for a file or folder
+                //#. %2$s is the file or folder name
+                gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
 
             options.point = 'io.ox/files/share/permissions/dialog';
 

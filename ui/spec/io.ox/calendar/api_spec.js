@@ -38,13 +38,9 @@ define(['io.ox/calendar/api'], function (api) {
         beforeEach(function () {
             this.server.autoRespond = true;
             this.server.respondWith('GET', /api\/calendar\?action=all/, function (xhr) {
-                xhr.respond(200, {
-                    'Content-Type': 'text/javascript;charset=UTF-8'
-                },
-                    JSON.stringify({
-                        timestamp: 1368791630910,
-                        data: responseData
-                    })
+                xhr.respond(200,
+                    { 'Content-Type': 'text/javascript;charset=UTF-8' },
+                    JSON.stringify({ timestamp: 1368791630910, data: responseData })
                 );
             });
         });

@@ -554,8 +554,8 @@ define('io.ox/core/pdf/pdfview', [
                 curPageZoom = _.isNumber(pageZoom) ? pageZoom : this.getPageZoom(pageNumber);
             if (_.isObject(pdfDocument)) {
                 pageSize = _.isNumber(pageNumber) ?
-                            pdfDocument.getOriginalPageSize(pageNumber) :
-                            pdfDocument.getDefaultPageSize();
+                    pdfDocument.getOriginalPageSize(pageNumber) :
+                    pdfDocument.getDefaultPageSize();
             }
             return _.isObject(pageSize) ? { width: Math.ceil(curPageZoom * pageSize.width), height: Math.ceil(curPageZoom * pageSize.height) } : { width: 0, height: 0 };
         };

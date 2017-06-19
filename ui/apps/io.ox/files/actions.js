@@ -465,9 +465,9 @@ define('io.ox/files/actions', [
 
             var
                 model         = e.baton.models[0];
-          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
-          //
-          //if (!isAccessWrite(e)) return false;
+            //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+            //
+            //if (!isAccessWrite(e)) return false;
 
             // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
             return (model.isFile() && (model.isOffice() || model.isText()));

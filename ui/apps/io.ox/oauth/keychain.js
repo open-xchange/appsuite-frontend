@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
- /**
+/**
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 

@@ -227,7 +227,8 @@ define('io.ox/core/main', [
     var launcherDropdownTab = $('<li class="launcher-dropdown dropdown" role="presentation">').append(
         launcherDropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr({
             'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.')
-        }).append(
+        })
+        .append(
             $('<i class="fa fa-angle-double-right" aria-hidden="true">'),
             $('<span class="sr-only">').text('Dropdown')
         ),
@@ -1922,8 +1923,8 @@ define('io.ox/core/main', [
     folderAPI.on('warn:hidden', function (folder) {
         if (folder) {
             notifications.yell('info',
-               //#. %1$s is the filename
-               gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
+                //#. %1$s is the filename
+                gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
             );
         }
     });

@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
- /* eslint no-throw-literal:0 */
+/* eslint no-throw-literal:0 */
 define([
     'io.ox/files/api',
     'settings!io.ox/core'

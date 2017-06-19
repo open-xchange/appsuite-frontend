@@ -76,31 +76,31 @@ define('plugins/portal/twitter/util', [
         }
 
         $.when(deferred).then(
-        function success(response) {
-            var jsonResponse = JSON.parse(response);
+            function success(response) {
+                var jsonResponse = JSON.parse(response);
 
-            tweet.favorited = !tweet.favorited;
-            if (!jsonResponse.errors) {
-                if (tweet.favorited) {
-                    $myTweet.find('.io-ox-twitter-favorite')
-                        .addClass('favorited')
-                        .attr({ 'aria-pressed': 'true' })
-                        .text(gt('Favorited'));
+                tweet.favorited = !tweet.favorited;
+                if (!jsonResponse.errors) {
+                    if (tweet.favorited) {
+                        $myTweet.find('.io-ox-twitter-favorite')
+                            .addClass('favorited')
+                            .attr({ 'aria-pressed': 'true' })
+                            .text(gt('Favorited'));
+                    } else {
+                        $myTweet.find('.io-ox-twitter-favorite')
+                            .removeClass('favorited')
+                            .attr({ 'aria-pressed': 'false' })
+                            .text(gt('Favorite'));
+                    }
+                } else if (_.isArray(jsonResponse.errors)) {
+                    notifications.yell('error', jsonResponse.errors[0].message);
                 } else {
-                    $myTweet.find('.io-ox-twitter-favorite')
-                        .removeClass('favorited')
-                        .attr({ 'aria-pressed': 'false' })
-                        .text(gt('Favorite'));
+                    notifications.yell('error', jsonResponse.errors);
                 }
-            } else if (_.isArray(jsonResponse.errors)) {
-                notifications.yell('error', jsonResponse.errors[0].message);
-            } else {
-                notifications.yell('error', jsonResponse.errors);
-            }
-        },
-        function fail() {
-            notifications.yell('error', gt('An internal error occurred'));
-        });
+            },
+            function fail() {
+                notifications.yell('error', gt('An internal error occurred'));
+            });
     };
 
     var showRetweet = function (tweet, $myTweet) {
@@ -122,24 +122,24 @@ define('plugins/portal/twitter/util', [
             .done(function (action) {
                 if (action === 'retweet') {
                     $.when(network.retweet(tweet.id_str)).then(
-                    function success(response) {
-                        var jsonResponse = JSON.parse(response);
+                        function success(response) {
+                            var jsonResponse = JSON.parse(response);
 
-                        if (!jsonResponse.errors) {
-                            $myTweet.find('.io-ox-twitter-retweet')
-                                .addClass('retweeted')
-                                .attr({ 'aria-pressed': 'true' })
-                                .text(gt('Retweeted'));
-                            tweet.retweeted = true;
-                        } else if (_.isArray(jsonResponse.errors)) {
-                            notifications.yell('error', jsonResponse.errors[0].message);
-                        } else {
-                            notifications.yell('error', jsonResponse.errors);
+                            if (!jsonResponse.errors) {
+                                $myTweet.find('.io-ox-twitter-retweet')
+                                    .addClass('retweeted')
+                                    .attr({ 'aria-pressed': 'true' })
+                                    .text(gt('Retweeted'));
+                                tweet.retweeted = true;
+                            } else if (_.isArray(jsonResponse.errors)) {
+                                notifications.yell('error', jsonResponse.errors[0].message);
+                            } else {
+                                notifications.yell('error', jsonResponse.errors);
+                            }
+                        },
+                        function fail() {
+                            notifications.yell('error', gt('An internal error occurred'));
                         }
-                    },
-                    function fail() {
-                        notifications.yell('error', gt('An internal error occurred'));
-                    }
                     );
                 }
             });
@@ -193,12 +193,14 @@ define('plugins/portal/twitter/util', [
         );
 
         if (hideLinks) {
-            $myTweet.append($('<div class="io-ox-twitter-details">').append(
-                $('<a class="io-ox-twitter-date" target="_blank" rel="noopener">').attr('href', tweetLink).text(tweeted),
+            $myTweet.append(
+                $('<div class="io-ox-twitter-details">').append(
+                    $('<a class="io-ox-twitter-date" target="_blank" rel="noopener">').attr('href', tweetLink).text(tweeted),
                     getReplyLink(tweet, $myTweet),
                     isCurrentUser ? getDeleteLink(tweet, $myTweet) : getRetweetLink(tweet, $myTweet),
                     getFavoriteLink(tweet, $myTweet)
-                ));
+                )
+            );
 
             if (tweet.favorited) {
                 $myTweet.find('.io-ox-twitter-favorite').addClass('favorited').text(gt('Favorited'));
@@ -212,23 +214,12 @@ define('plugins/portal/twitter/util', [
     };
 
     var getReplyLink = function (tweet) {
-        return $('<a>')
-            .attr({
-                'class': 'io-ox-twitter-reply',
-                'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str,
-                role: 'button'
-            })
-            .text(gt('Reply'));
+        return $('<a class="io-ox-twitter-reply" role="button">').text(gt('Reply'))
+            .attr('href', 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str);
     };
 
     var getRetweetLink = function (tweet, $myTweet) {
-        return $('<a>')
-            .attr({
-                'class': 'io-ox-twitter-retweet',
-                'href': '#',
-                role: 'button'
-            })
-            .text(gt('Retweet'))
+        return $('<a href="#" class="io-ox-twitter-retweet" role="button">').text(gt('Retweet'))
             .on('click', function (e) {
                 e.preventDefault();
 
@@ -256,36 +247,20 @@ define('plugins/portal/twitter/util', [
     };
 
     var getDeleteLink = function (tweet, $myTweet) {
-        return $('<a>')
-            .attr({
-                'class': 'io-ox-twitter-delete',
-                'href': '#',
-                role: 'button'
+        return $('<a href="#" class="io-ox-twitter-delete" role="button">').append(
+            $('<i class="fa fa-trash-o" aria-hidden="true">'),
+            $('<span>').text(gt('Delete')).on('click', function (e) {
+                e.preventDefault();
+                deleteTweetDialog(tweet, $myTweet);
             })
-            .append(
-                $('<i class="fa fa-trash-o" aria-hidden="true">'),
-                $('<span>').text(gt('Delete'))
-                .on('click', function (e) {
-                    e.preventDefault();
-
-                    deleteTweetDialog(tweet, $myTweet);
-                })
-            );
+        );
     };
 
     var getFavoriteLink = function (tweet, $myTweet) {
-        return $('<a>')
-            .attr({
-                'class': 'io-ox-twitter-favorite',
-                'href': '#',
-                role: 'button'
-            })
-            .text(gt('Favorite'))
-            .on('click', function (e) {
-                e.preventDefault();
-
-                showFavoriteTweed(tweet, $myTweet);
-            });
+        return $('<a href="#" class="io-ox-twitter-favorite" role="button">').text(gt('Favorite')).on('click', function (e) {
+            e.preventDefault();
+            showFavoriteTweed(tweet, $myTweet);
+        });
     };
 
     var updateFollowButtons = function (id_str, following) {
@@ -311,38 +286,27 @@ define('plugins/portal/twitter/util', [
         if (!following) {
             //display usual button
             btn.empty().append(
-                    $('<div>').text(
-                        //#. twitter: Follow this person
-                        gt('Follow')
-                    )
-                )
-                .removeClass('btn-primary btn-danger following')
-                .attr({ 'aria-pressed': 'false' });
+                //#. twitter: Follow this person
+                $('<div>').text(gt('Follow'))
+            ).removeClass('btn-primary btn-danger following').attr('aria-pressed', 'false');
+
         } else if (hover) {
             //display unfollow
-            btn.empty().text(
-                    //#. twitter: Stop following this person
-                    gt('Unfollow')
-                )
+            //#. twitter: Stop following this person
+            btn.empty().text(gt('Unfollow'))
                 .removeClass('btn-primary').addClass('btn-danger following')
                 .attr({ 'aria-pressed': 'true' });
         } else {
             //display following
-            btn.empty().text(
-                    //#. twitter: already following this person
-                    gt('Following')
-                )
+            //#. twitter: already following this person
+            btn.empty().text(gt('Following'))
                 .removeClass('btn-danger').addClass('btn-primary following')
                 .attr({ 'aria-pressed': 'true' });
         }
     };
 
     var followButton = function (tweet) {
-        var btn = $('<div>').addClass('io-ox-twitter-follow btn btn-default small')
-            .attr({
-                'user_id': tweet.user.id_str,
-                'role': 'button'
-            });
+        var btn = $('<div class="io-ox-twitter-follow btn btn-default small" role="button">').attr('user_id', tweet.user.id_str);
 
         //be robust
         tweet.following = tweet.following || false;
@@ -393,7 +357,7 @@ define('plugins/portal/twitter/util', [
             )
             .build(function () {
                 this.getContentNode().append(
-                    $('<div>').addClass('twitter').append(
+                    $('<div class="twitter">').append(
                         renderTweet(tweet, { hideLinks: true, hideFollowButton: true })
                     )
                 );
@@ -404,34 +368,29 @@ define('plugins/portal/twitter/util', [
             .done(function (action) {
                 if (action === 'delete') {
                     $.when(network.deleteTweet(tweet.id_str)).then(
-                    function success(response) {
-                        var jsonResponse = JSON.parse(response);
+                        function success(response) {
+                            var jsonResponse = JSON.parse(response);
 
-                        if (!jsonResponse.errors) {
-                            $myTweet.remove();
-                            tweetCache.remove(tweet.id_str);
-                        } else if (_.isArray(jsonResponse.errors)) {
-                            notifications.yell('error', jsonResponse.errors[0].message);
-                        } else {
-                            notifications.yell('error', jsonResponse.errors);
-                        }
-                    },
-                    function fail() {
-                        notifications.yell('error', gt('An internal error occurred'));
-                    });
+                            if (!jsonResponse.errors) {
+                                $myTweet.remove();
+                                tweetCache.remove(tweet.id_str);
+                            } else if (_.isArray(jsonResponse.errors)) {
+                                notifications.yell('error', jsonResponse.errors[0].message);
+                            } else {
+                                notifications.yell('error', jsonResponse.errors);
+                            }
+                        },
+                        function fail() {
+                            notifications.yell('error', gt('An internal error occurred'));
+                        });
                 }
             });
         });
     };
 
     var TwitterTextBox = function (title, options) {
-        var replyBoxContainer = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-container' }),
-            textArea = $('<textarea>')
-                .attr({
-                    'class': 'io-ox-twitter-tweet-textarea form-control',
-                    'aria-required': 'true',
-                    rows: '4'
-                })
+        var replyBoxContainer = $('<div class="io-ox-twitter-tweet-container">'),
+            textArea = $('<textarea class="io-ox-twitter-tweet-textarea form-control" aria-required="true" rows="4">')
                 .on('click', function (e) {
                     e.preventDefault();
                     if (options !== undefined && options.open !== undefined) {
@@ -457,10 +416,9 @@ define('plugins/portal/twitter/util', [
                     e.preventDefault();
                     updateTextLength();
                 }),
-            buttonContainer = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-button' }),
-            tweetCounter = $('<div>').attr({ 'class': 'io-ox-twitter-tweet-counter' }).text(140),
-            tweetButton = $('<a>').attr({ 'class': 'btn btn-default disabled', role: 'button' })
-                .text(title)
+            buttonContainer = $('<div class="io-ox-twitter-tweet-button">'),
+            tweetCounter = $('<div class="io-ox-twitter-tweet-counter">').text(140),
+            tweetButton = $('<a class="btn btn-default disabled" role="button">').text(title)
                 .on('click', function (e) {
                     var text = textArea.val();
 
@@ -482,10 +440,10 @@ define('plugins/portal/twitter/util', [
         replyBoxContainer.append(
             textArea,
             buttonContainer.append(
-                    tweetCounter,
-                    tweetButton
-                )
-            );
+                tweetCounter,
+                tweetButton
+            )
+        );
 
         applyOptions();
 

@@ -11,6 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+/* eslint no-useless-escape: 0 */
 
 define(['io.ox/core/util'], function (util) {
 

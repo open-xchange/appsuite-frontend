@@ -212,8 +212,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                 .addClass(this.itemClasses)
                 .append(
                     //file
-                    $('<div class="item file">')
-                        .addClass(this.fileClasses)
+                    $('<div class="item file">').addClass(this.fileClasses)
                         .append(
                             icon,
                             $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' }))),
@@ -222,7 +221,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                                 opt.showpreview ? createPreview(obj.file, opt.rightside) : $(),
                                 $.txt('\u00A0')
                             ),
-                             // remove
+                            // remove
                             $('<a href="#" class="remove">')
                             .attr('title', gt('Remove attachment'))
                             .append(
@@ -235,8 +234,8 @@ define('io.ox/core/tk/attachmentsUtil', [
                                 }
                                 caller.remove(obj);
                             })
-                    )
-            );
+                        )
+                );
 
             if (options.ref) {
                 var fileObj = JSON.parse(JSON.stringify(obj));

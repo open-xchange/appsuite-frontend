@@ -21,8 +21,7 @@ define('io.ox/files/upload/main', [
 
     'use strict';
 
-    var limits = [
-        {
+    var limits = [{
             limit: 1000,
             message: function (t) {
                 //#. estimated upload duration
@@ -305,7 +304,8 @@ define('io.ox/files/upload/main', [
 
                 return request;
             }
-        })).on('start', function () {
+        }))
+        .on('start', function () {
             mainView.addClass('toolbar-bottom-visible');
             $el = $('<div class="upload-wrapper">');
             ext.point('io.ox/files/upload/toolbar').invoke('draw', $el, ext.Baton({ fileupload: this }));

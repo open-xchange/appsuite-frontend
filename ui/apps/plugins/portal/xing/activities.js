@@ -205,9 +205,9 @@ define('plugins/portal/xing/activities', [
                 //#. But you could use '%1$s changes his/her profile:' depending on the language.
                 //#. %1$s the name of the user which changed his/her profile
                 $('<div class="actionDesc">').text(gt('%1$s updated the profile:', makeName(profile))),
-                    $('<div class="actionContent">').append(
-                        linkXingContact(profile)
-                    )
+                $('<div class="actionContent">').append(
+                    linkXingContact(profile)
+                )
             );
         }
     });

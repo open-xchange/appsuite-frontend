@@ -118,9 +118,9 @@ define('plugins/portal/xing/actions', [
             };
 
             return $('<div class="xing possible-action delete">').append(
-                    $('<i class="fa fa-trash-o" aria-hidden="true">'),
-                    $.txt(gt('Delete'))
-                ).on('click', handler);
+                $('<i class="fa fa-trash-o" aria-hidden="true">'),
+                $.txt(gt('Delete'))
+            ).on('click', handler);
         }
     });
 
@@ -207,9 +207,9 @@ define('plugins/portal/xing/actions', [
             };
 
             return $('<div class="xing possible-action share">').append(
-                    $('<i class="fa fa-share" aria-hidden="true">'),
-                    $.txt(gt('Share'))
-                ).on('click', handler);
+                $('<i class="fa fa-share" aria-hidden="true">'),
+                $.txt(gt('Share'))
+            ).on('click', handler);
         }
     });
 

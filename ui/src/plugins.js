@@ -15,7 +15,7 @@
  * LESS is distributed under the terms of the Apache License, Version 2.0
  */
 
- /* global assert */
+/* global assert */
 
 (function () {
 
@@ -276,12 +276,11 @@
     }
 
     function dirname(filename) {
-        return filename.replace(/(?:^|(\/))[^\/]+$/, '$1');
+        return filename.replace(/(?:^|(\/))[^/]+$/, '$1');
     }
 
     function relativeCSS(path, css) {
-        return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
-                           'url($1' + path);
+        return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*:)/g, 'url($1' + path);
     }
 
     function insert(name, css, selector, node) {
@@ -429,7 +428,8 @@
                                 }
                             })();
                         });
-                    }).fail(function loadingFailed() {
+                    })
+                    .fail(function loadingFailed() {
                         var modules = module.split(',');
                         if (modules.length > 1) {
                             console.warn('Problem loading concatenated modules, falling back to separate file loading');

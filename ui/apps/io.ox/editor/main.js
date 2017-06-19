@@ -126,7 +126,7 @@ define('io.ox/editor/main', [
                 //remove linebreaks
                 .replace(/(\r\n|\n|\r)/gm, '')
                 //remove unsupported characters
-                .replace(/[%&#\/$*!`´'"=:@+\^\\.+?{}|]/g, '_') || 'unnamed');
+                .replace(/[%&#/$*!`´'"=:@+^\\.+?{}|]/g, '_') || 'unnamed');
 
             // has file extension?
             if (!regex.test(filename)) {

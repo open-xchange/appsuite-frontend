@@ -187,7 +187,8 @@ define('io.ox/core/settings/pane', [
                 render: function () {
                     var options = _(availableThemes).chain().map(function (key, val) {
                         return { label: key, value: val };
-                    }).sortBy(function (obj) {
+                    })
+                    .sortBy(function (obj) {
                         return obj.label.toLowerCase();
                     }).value();
 

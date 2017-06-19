@@ -175,7 +175,7 @@ define('plugins/demo/customize/register', [
             '  background-color: ' + model.get('linkColor') + ';\n' +
             '  border-color: ' + model.get('linkColor') + ';\n' +
             '}\n' +
-             // wrong wrt a11y but works better for demo purposes
+            // wrong wrt a11y but works better for demo purposes
             '.list-view.visible-selection .list-item.selected  { ' +
             '  color: white;\n' +
             '  background-color: ' + model.get('selectionColor') + ';\n' +
@@ -214,9 +214,9 @@ define('plugins/demo/customize/register', [
         value = _.escape(value)
             .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
             .replace(/\*([^*]+)\*/g, '<i>$1</i>')
-            .replace(/\|\|\|([^\|]+)\|\|\|/g, '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
-            .replace(/\|\|([^\|]+)\|\|/g, '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
-            .replace(/\|([^\|]+)\|/g, '<span style="opacity: 0.5;">$1</span>');
+            .replace(/\|\|\|([^|]+)\|\|\|/g, '<span style="color: rgba(0, 0, 0, 0.5);">$1</span>')
+            .replace(/\|\|([^|]+)\|\|/g, '<span style="color: rgba(255, 255, 255, 0.5);">$1</span>')
+            .replace(/\|([^|]+)\|/g, '<span style="opacity: 0.5;">$1</span>');
         $('#io-ox-banner .banner-title').html(value);
         // empty > logo left?
         // $('#customize-text .logo').toggleClass('left', value === '');
