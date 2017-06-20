@@ -161,7 +161,7 @@ define('io.ox/core/export/export', [
                                 options = $.extend({ include: include }, baton.options);
 
                             require(['io.ox/core/download'], function (download) {
-                                download.url(api.getUrl(format, baton.folder, options));
+                                download.url(api.getURL(format, baton.folder, options));
                             });
                         } else {
                             dialog = null;

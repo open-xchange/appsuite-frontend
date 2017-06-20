@@ -29,13 +29,13 @@ define('io.ox/core/api/export', [
     });
 
     /**
-     * returns export url
+     * returns export url for complete folders
      * @param  {string} type/format
      * @param  {string} folder
      * @param  {object} options
      * @return { string} url
      */
-    api.getUrl = function (type, folder, options) {
+    api.getURL = function (type, folder, options) {
         var opt = $.extend({ include: true }, options || {});
         return ox.apiRoot + '/export' +
                 '?action=' + type +
