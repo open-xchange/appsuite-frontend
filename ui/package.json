@@ -73,7 +73,6 @@
     "jquery-migrate": "3.0.0",
     "jquery-touch-events": "git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9",
     "marked": "0.3.6",
-    "mediaelement": "2.23.5",
     "mobiscroll": "git://github.com/acidb/mobiscroll.git#v2.17.3",
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",

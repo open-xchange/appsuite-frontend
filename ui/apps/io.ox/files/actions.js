@@ -678,36 +678,6 @@ define('io.ox/files/actions', [
         }
     });
 
-    new Action('io.ox/files/icons/audioplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('audio', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
-            });
-        }
-    });
-
     // version specific actions
 
     new Action('io.ox/files/versions/actions/makeCurrent', {

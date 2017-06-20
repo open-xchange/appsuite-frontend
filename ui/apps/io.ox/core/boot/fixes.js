@@ -43,8 +43,7 @@ define('io.ox/core/boot/fixes', [], function () {
         '.fa-search',
         '.contact-grid-index',
         '.file-icon .wrap',
-        '.carousel',
-        '.mediaplayer'
+        '.carousel'
     ];
 
     $(document).on('contextmenu', contextmenu_blacklist.join(', '), function (e) {

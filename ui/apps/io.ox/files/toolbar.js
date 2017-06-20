@@ -137,20 +137,6 @@ define('io.ox/files/toolbar', [
                     this.attr({ 'aria-label': title, 'data-original-title': title });
                 }
             },
-            'mediaplayer-audio': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-music',
-                label: gt('Play audio files'),
-                ref: 'io.ox/files/icons/audioplayer'
-            },
-            'mediaplayer-video': {
-                prio: 'hi',
-                mobile: 'lo',
-                icon: 'fa fa-film',
-                label: gt('Play video files'),
-                ref: 'io.ox/files/icons/videoplayer'
-            },
             'viewer': {
                 prio: 'hi',
                 mobile: 'lo',
