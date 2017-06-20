@@ -124,7 +124,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 5000)
             // check if first signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[0].content)
             );
@@ -134,7 +135,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[1].content)
             );
@@ -144,7 +146,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[2].content)
             );
@@ -154,7 +157,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[3].content)
             );
@@ -164,14 +168,16 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.valueContains('.io-ox-mail-compose textarea.plain-text', '');
+            .assert
+            .valueContains('.io-ox-mail-compose textarea.plain-text', '');
 
         // select first signature
         client
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[0].content)
             );
@@ -181,7 +187,8 @@ describe('Mail Compose plain text signatures', function () {
             .moveTo('.io-ox-mail-compose textarea.plain-text', 2, 2)
             .mouseButtonClick()
             .keys('some user input')
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('some user input\n\n%s', signatures[0].content)
             );
@@ -191,7 +198,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('some user input\n\n%s', signatures[1].content)
             );
@@ -201,7 +209,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('some user input\n\n%s', signatures[2].content)
             );
@@ -211,7 +220,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('some user input\n\n%s', signatures[3].content)
             );
@@ -228,7 +238,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('some user input\n\n%s', signatures[0].content)
             );
@@ -264,7 +275,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 5000)
             // check if third signature is selected correctly
-            .assert.valueContains(
+            .assert
+            .valueContains(
                 '.io-ox-mail-compose textarea.plain-text',
                 util.format('\n\n%s', signatures[2].content)
             );
@@ -306,7 +318,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 5000)
             // check if first signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[0].content))
@@ -317,7 +330,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[1].content))
@@ -328,7 +342,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n(>[^\\n]*(\\n)?)+\\n\\n%s$', signatures[2].content))
@@ -339,7 +354,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n(>[^\\n]*(\\n)?)+\\n\\n%s$', signatures[3].content))
@@ -350,7 +366,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 /^\n\n(>[^\n]*(\n)?)+$/
@@ -361,7 +378,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[0].content))
@@ -372,7 +390,8 @@ describe('Mail Compose plain text signatures', function () {
             .moveTo('.io-ox-mail-compose textarea.plain-text', 2, 2)
             .mouseButtonClick()
             .keys('some user input')
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^some user input\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[0].content))
@@ -383,7 +402,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^some user input\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[1].content))
@@ -394,7 +414,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^some user input\\n\\n(>[^\\n]*(\\n)?)+\\n\\n%s$', signatures[2].content))
@@ -405,7 +426,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^some user input\\n\\n(>[^\\n]*(\\n)?)+\\n\\n%s$', signatures[3].content))
@@ -416,7 +438,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 /^some user input\n\n(>[^\n]*(\n)?)+$/
@@ -427,7 +450,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^some user input\\n\\n%s\\n\\n(>[^\\n]*(\\n)?)+$', signatures[0].content))
@@ -471,7 +495,8 @@ describe('Mail Compose plain text signatures', function () {
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 5000)
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose textarea.plain-text',
                 'value',
                 new RegExp(util.format('^\\n\\n(>[^\\n]*(\\n)?)+\\n\\n%s$', signatures[2].content))

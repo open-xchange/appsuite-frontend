@@ -33,6 +33,13 @@ module.exports = function (grunt) {
                         filter: 'isFile'
                     },
                     {
+                        flatten: true,
+                        expand: true,
+                        src: ['*.ttf'],
+                        dest: 'build/apps/3rd.party/fonts/',
+                        cwd: 'apps/io.ox/core/about/'
+                    },
+                    {
                         expand: true,
                         src: [
                             'tinymce/jquery.tinymce.js',

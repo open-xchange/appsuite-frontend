@@ -10,7 +10,7 @@
  * @author Richard Petersen <richard.petersen@open-xchange.com>
  */
 
- /**
+/**
   * Waits for an event listener to be registered.
   * @param selector {string}
   * @param eventType {string} for example click or focus

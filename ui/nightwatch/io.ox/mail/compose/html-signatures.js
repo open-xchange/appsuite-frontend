@@ -124,7 +124,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
             // check if first signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[0].content)
@@ -135,7 +136,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[1].content)
@@ -146,7 +148,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[2].content)
@@ -157,7 +160,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[3].content)
@@ -168,7 +172,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 '<p><br></p>'
@@ -179,7 +184,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[0].content)
@@ -188,7 +194,8 @@ describe('Mail Compose html signatures', function () {
         // insert some text
         client
             .setValue('.io-ox-mail-compose-window .editor .editable', 'some user input')
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p>some user input</p><div class="io-ox-signature"><p>%s</p></div>', signatures[0].content)
@@ -199,7 +206,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p>some user input</p><div class="io-ox-signature"><p>%s</p></div>', signatures[1].content)
@@ -210,7 +218,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p>some user input</p><div class="io-ox-signature"><p>%s</p></div>', signatures[2].content)
@@ -221,7 +230,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p>some user input</p><div class="io-ox-signature"><p>%s</p></div>', signatures[3].content)
@@ -232,7 +242,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 '<p>some user input</p>'
@@ -243,7 +254,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p>some user input</p><div class="io-ox-signature"><p>%s</p></div>', signatures[0].content)
@@ -280,7 +292,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
             // check if third signature is selected correctly
-            .assert.propEquals(
+            .assert
+            .propEquals(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 util.format('<p><br></p><div class="io-ox-signature"><p>%s</p></div>', signatures[2].content)
@@ -323,7 +336,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -334,7 +348,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -345,7 +360,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p><div class="io-ox-signature">.*<\/div>$/
@@ -356,7 +372,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p><div class="io-ox-signature">.*<\/div>$/
@@ -367,7 +384,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p>$/
@@ -378,7 +396,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -387,7 +406,8 @@ describe('Mail Compose html signatures', function () {
         // insert some text
         client
             .setValue('.io-ox-mail-compose-window .editor .editable', 'some user input')
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -398,7 +418,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(3) a')
             // check if second signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -409,7 +430,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(4) a')
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p><div class="io-ox-signature">.*<\/div>$/
@@ -420,7 +442,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(5) a')
             // check if fourth signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p><div class="io-ox-signature">.*<\/div>$/
@@ -431,7 +454,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(1) a')
             // check if no signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p>$/
@@ -442,7 +466,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-compose-window .signatures span')
             .clickWhenVisible('.dropdown.open li:nth-child(2) a')
             // check if first signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p>some user input<\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
@@ -486,7 +511,8 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
             // check if third signature is selected correctly
-            .assert.propRegexp(
+            .assert
+            .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
                 'innerHTML',
                 /^<p><br><\/p><blockquote type="cite">.*<\/blockquote><p><br><\/p><div class="io-ox-signature">.*<\/div>$/
