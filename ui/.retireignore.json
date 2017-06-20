@@ -4,10 +4,6 @@
 		"justification" : "This jQuery version is not used and comes as a resource of backbone-validation."
 	},
 	{
-		"path" : "node_modules/mediaelement/build/jquery.js",
-		"justification" : "This jQuery version is not used and comes as a resource of mediaelement."
-	},
-	{
 		"path" : "node_modules/bootstrap/dist/js/bootstrap.min.js",
 		"justification" : "The minified version of this file is not used."
 	},

@@ -90,21 +90,6 @@ module.exports = function (grunt) {
                     },
                     {
                         expand: true,
-                        src: ['*.{png,svg,swf,gif,xap,css}', '!{jquery,*.min}.js'],
-                        cwd: 'node_modules/mediaelement/build/',
-                        dest: 'build/apps/3rd.party/mediaelement/',
-                        filter: 'isFile'
-                    },
-                    {
-                        // js file of mediaelement goes to static path for caching
-                        expand: true,
-                        src: ['*.js', '!{jquery,*.min}.js'],
-                        cwd: 'node_modules/mediaelement/build/',
-                        dest: 'build/static/3rd.party/mediaelement/',
-                        filter: 'isFile'
-                    },
-                    {
-                        expand: true,
                         src: ['*.css'],
                         cwd: 'node_modules/swiper/dist/css/',
                         dest: 'build/apps/3rd.party/swiper'
