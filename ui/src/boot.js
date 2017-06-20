@@ -80,8 +80,10 @@ $(window).load(function () {
     (function (require) {
 
         // ultimate fallback to remove endless throbber and reload with longer timeout
-        function showTimeoutError() {
-            if ($('#background-loader').is(':visible')) {
+        function handleError(e) {
+            // check if it is a timeout on the login screen, otherwise other
+            // fail handlers will take over
+            if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
                 $('.throbber').hide();
                 $('#timeout-error').show();
                 $('#timeout-reload').on('click', function (e) {
@@ -93,8 +95,8 @@ $(window).load(function () {
         }
 
         function fallback(error) {
-            console.error('require: Error in ' + error.requireModules, error.stack);
-            showTimeoutError();
+            console.error('require.js: "' + error.requireType + '" for ' + error.requireModules, error.stack);
+            handleError(error);
         }
 
         window.require = function (deps, success, fail) {
