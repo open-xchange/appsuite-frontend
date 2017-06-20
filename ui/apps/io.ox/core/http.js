@@ -1187,6 +1187,11 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
             return _.clone(idMapping[module] || {});
         },
 
+        getRequestLengthLimit: function () {
+            // default to the value from apache documentation
+            return ox.serverConfig.limitRequestLine || 8190;
+        },
+
         /**
          * Transform objects with array-based columns into key-value-based columns
          * @param {Array} data Data
