@@ -1,8 +1,4 @@
 {
     "root": true,
-    "extends": ["open-xchange-appsuite"],
-    "rules": {
-        "indent": [2, 4, {"SwitchCase": 1, "MemberExpression": "off" }],
-        "no-multi-spaces": [2, { "ignoreEOLComments": true, "exceptions": { "VariableDeclarator": true } }],
-    }
+    "extends": ["open-xchange-appsuite"]
 }
