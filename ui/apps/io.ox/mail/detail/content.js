@@ -12,7 +12,6 @@
  */
 
 /* global blankshield:true */
-/*jshint scripturl:true*/
 
 define('io.ox/mail/detail/content', [
     'io.ox/mail/api',

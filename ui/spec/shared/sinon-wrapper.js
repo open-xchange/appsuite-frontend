@@ -10,7 +10,7 @@
  *
  * @author Frank Paczynski <frank.paczynski@open-xchange.com>
  */
-
+/* eslint requirejs/no-object-define: 0 */
 define('sinon-wrapper', {
 
     //wrapper for sinon spy/stub

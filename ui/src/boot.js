@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* eslint requirejs/no-assign-require: 0 */
 // change ms-viewport rule for WP8 devices
 // http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
 if (navigator.userAgent.match(/IEMobile\/10\.0/)) {

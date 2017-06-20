@@ -20,8 +20,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('bootjs', ['newer:copy:ox', 'newer:concat:bootjs']);
 
-    grunt.registerTask('lint', ['newer:eslint:all', 'newer:jsonlint:all']);
-    grunt.registerTask('lint:specs', ['newer:eslint:all', 'newer:jsonlint:specs']);
+    grunt.registerTask('lint', ['newer:eslint:all']);
+    grunt.registerTask('lint:specs', ['newer:eslint:all']);
 
     //Override the default tasks
 

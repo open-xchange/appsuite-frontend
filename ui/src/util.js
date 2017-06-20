@@ -962,7 +962,6 @@
             });
     };
 
-    /* jshint -W015 */
     _.unescapeHTML.entities = (function (es) {
         for (var i in es) {
             es[i] = String.fromCharCode(es[i]);
@@ -1012,6 +1011,5 @@
         sbquo: 8218, ldquo: 8220, rdquo: 8221, bdquo: 8222, dagger: 8224,
         Dagger: 8225, permil: 8240, lsaquo: 8249, rsaquo: 8250, euro: 8364
     }));
-    /* jshint +W015 */
 
 }());
