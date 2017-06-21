@@ -1,21 +1,4 @@
 {
     "root": true,
-    "extends": ["open-xchange-appsuite"],
-    "plugins": ["requirejs"],
-    "rules": {
-        "requirejs/amd-function-arity": [2, { "allowExtraDependencies": true }],
-        "requirejs/no-assign-exports": 2,
-        "requirejs/no-assign-require": 2,
-        "requirejs/no-commonjs-exports": 2,
-        "requirejs/no-commonjs-module-exports": 2,
-        "requirejs/no-commonjs-return": 2,
-        "requirejs/no-commonjs-wrapper": 2,
-        "requirejs/no-dynamic-require": 0,
-        "requirejs/no-invalid-define": 2,
-        "requirejs/no-invalid-require": 2,
-        "requirejs/no-js-extension": 0,
-        "requirejs/no-multiple-define": 0,
-        "requirejs/no-named-define": 0,
-        "requirejs/no-object-define": 2
-    }
+    "extends": ["open-xchange-appsuite"]
 }

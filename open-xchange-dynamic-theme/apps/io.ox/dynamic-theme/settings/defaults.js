@@ -1,3 +1,4 @@
+/* eslint requirejs/no-object-define: 0 */
 define('io.ox/dynamic-theme/settings/defaults', {
     frameColor: '#333',
     iconColor: '#bbb',
