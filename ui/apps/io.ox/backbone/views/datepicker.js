@@ -44,7 +44,7 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
-            this.date = moment(this.options.date);
+            this.date = moment(this.options.date).utc(true);
             this.mode = 'month';
             this.closing = false;
             // the original constructor will call initialize()
@@ -406,7 +406,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onSelectDate: function (e) {
-            var date = moment($(e.currentTarget).data('date'));
+            var date = moment($(e.currentTarget).data('date')).utc(true);
             this.trigger('select', date);
         },
 
@@ -551,13 +551,13 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onTargetInput: function () {
-            var val = this.$target.val(), date = moment(val, 'l');
+            var val = this.$target.val(), date = moment(val, 'l').utc(true);
             this.setDate(date);
         },
 
         setDate: function (date, forceRender) {
 
-            date = moment(date || this.date);
+            date = moment(date || this.date).utc(true);
             // valid?
             if (!date.isValid()) return;
             // avoid BC
@@ -599,7 +599,7 @@ define('io.ox/backbone/views/datepicker', [
     }
 
     function isToday(m) {
-        return isSame(m, moment());
+        return isSame(m, moment().utc(true));
     }
 
     return DatePickerView;

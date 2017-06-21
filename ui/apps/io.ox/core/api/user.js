@@ -275,9 +275,11 @@ define('io.ox/core/api/user', [
     };
 
     // auto-inject user_id to guarantee client-side caching
-    api.get = _.compose(api.get, function (id) {
-        return id !== undefined ? id : ox.user_id;
-    });
+    var getUser = api.get;
+    api.get = function () {
+        if (!arguments.length) return getUser({ id: ox.user_id });
+        return getUser.apply(this, arguments);
+    };
 
     // reload account API if current user gets changed
     api.on('update:' + _.ecid({ folder_id: 6, id: ox.user_id }), function () {

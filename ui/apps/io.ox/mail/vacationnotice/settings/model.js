@@ -42,14 +42,14 @@ define('io.ox/mail/vacationnotice/settings/model', [
 
             // use defaults
             if (!data || !data.actioncmds[0]) {
-                return _.extend(attr, {
-                    dateFrom: +moment(),
-                    dateUntil: +moment().add(1, 'week')
-                });
+                return _.extend(attr, this.getDefaultRange());
             }
 
             // copy all attributes from actioncmds[0], e.g. days, subject, text
             _.extend(attr, data.actioncmds[0]);
+
+            // from
+            if (!attr.from) attr.from = 'default';
 
             // addresses
             _(attr.addresses).each(function (address) {
@@ -63,32 +63,32 @@ define('io.ox/mail/vacationnotice/settings/model', [
             // active
             attr.active = !!data.active;
 
-            // time
-            if (_(data.test).size() === 2) {
+            this.parseTime(attr, data.test);
+
+            return attr;
+        },
+
+        parseTime: function (attr, test) {
+
+            if (_(test).size() === 2) {
                 // we do have a time frame
-                _(data.test.tests).each(function (value) {
-                    if (value.comparison === 'ge') {
-                        attr.dateFrom = value.datevalue[0];
-                    } else {
-                        attr.dateUntil = value.datevalue[0];
-                    }
-                });
+                _(test.tests).each(parseTest);
                 attr.activateTimeFrame = true;
-            } else if (data.test.id === 'currentdate') {
+            } else if (test.id === 'currentdate') {
                 // we do have just start or end date
-                if (data.test.comparison === 'ge') {
-                    attr.dateFrom = data.test.datevalue[0];
-                } else {
-                    attr.dateUntil = data.test.datevalue[0];
-                }
+                parseTest(test);
                 attr.activateTimeFrame = true;
             } else {
-                attr.dateFrom = +moment();
-                attr.dateUntil = +moment().add(1, 'week');
+                _.extend(attr, this.getDefaultRange());
             }
 
-            console.log('parse', attr);
-            return attr;
+            function parseTest(test) {
+                attr[test.comparison === 'ge' ? 'dateFrom' : 'dateUntil'] = test.datevalue[0];
+            }
+        },
+
+        getDefaultRange: function () {
+            return { dateFrom: +moment().utc(true), dateUntil: +moment().utc(true).add(1, 'week') };
         },
 
         toJSON: function () {

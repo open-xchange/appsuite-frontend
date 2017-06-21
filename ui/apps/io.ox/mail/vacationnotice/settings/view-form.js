@@ -32,7 +32,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
     var POINT = 'io.ox/mail/vacation-notice/edit',
         INDEX = 0,
-        INDEX_RANGE = 0;
+        INDEX_RANGE = 0,
+        INDEX_ADV = 0;
 
     function open() {
         return getData().then(openModalDialog, fail);
@@ -199,16 +200,41 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             }
         },
         //
-        // Days
+        // Advanced section
         //
         {
             index: INDEX += 100,
+            id: 'advanced',
+            render: function (baton) {
+
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<button type="button" class="btn btn-link">')
+                        .text('Show advanced options')
+                        .on('click', onClick)
+                    ),
+                    baton.branch('advanced', this, $('<div class="form-group">').hide())
+                );
+
+                function onClick() {
+                    $(this).parent().next().show().end().remove();
+                }
+            }
+        }
+    );
+
+    ext.point(POINT + '/advanced').extend(
+        //
+        // Days
+        //
+        {
+            index: INDEX_ADV += 100,
             id: 'days',
             render: function (baton) {
 
                 var days = _.range(1, 32).map(function (i) { return { label: i, value: i }; });
 
-                this.$body.append(
+                baton.$el.append(
                     $('<div class="form-group row">').append(
                         $('<label for="vacation_notice_days" class="col-md-12">').text(Model.fields.days),
                         $('<div class="col-md-4">').append(
@@ -222,28 +248,30 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
         // Sender
         //
         {
-            index: INDEX += 100,
+            index: INDEX_ADV += 100,
             id: 'sender',
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.get('features/setFromInVacationNotice', true)) return;
 
-                this.$body.append(
+                baton.$el.append(
                     $('<div class="form-group">').append(
                         $('<label for="days">').text(Model.fields.sendFrom),
                         new mini.SelectView({ list: this.getAddresses(), name: 'from', model: this.model, id: 'from' }).render().$el
                     )
                 );
 
+                console.log('from', this.model.get('from'), 'addresses', this.getAddresses());
+
                 // fix invalid address
-                if (!this.$('select[name="from"]').val()) this.$('select[name="from"]').val('default');
+                // if (!this.$('select[name="from"]').val()) this.$('select[name="from"]').val('default');
             }
         },
         // Aliases
         {
-            index: INDEX += 100,
+            index: INDEX_ADV += 100,
             id: 'aliases',
-            render: function () {
+            render: function (baton) {
 
                 if (this.data.aliases.length <= 1) return;
                 if (!settings.get('features/setAddressesInVacationNotice', true)) return;
@@ -254,7 +282,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);
 
-                this.$body.append(
+                baton.$el.append(
                     $('<div class="help-block">').text(
                         gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail)
                     ),
