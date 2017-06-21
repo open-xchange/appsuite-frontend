@@ -151,7 +151,7 @@ deploy preview app:
   script:
     - docker pull $DOCKER_IMAGE
     - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
-    - docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=http://10.20.28.164/appsuite/ $DOCKER_IMAGE
+    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=http://10.20.28.164/appsuite/ $DOCKER_IMAGE && break || counter=$((counter+1)); done
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
