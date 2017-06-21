@@ -23,9 +23,10 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'io.ox/core/yell',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
+    'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/vacationnotice/settings/style'
-], function (api, model, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, gt) {
+], function (api, Model, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -33,17 +34,24 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
         INDEX = 0,
         INDEX_RANGE = 0;
 
-    function open(model) {
+    function open() {
+        return getData().then(openModalDialog, fail);
+    }
+
+    function fail(e) {
+        yell('error', e.code === 'MAIL_FILTER-0015' ?
+            gt('Unable to load mail filter settings.') :
+            gt('Unable to load your vacation notice. Please retry later.')
+        );
+    }
+
+    function openModalDialog(data) {
 
         return new ModalView({
             async: true,
             focus: 'input[name="active"]',
-            model: model || new Backbone.Model({
-                active: true, activateTimeFrame: true, days: '2', from: 'default', subject: 'Out of office',
-                dateFrom: +moment(), dateUntil: +moment().add(1, 'week')
-            }),
+            model: data.model,
             point: POINT,
-            render: false,
             title: gt('Vacation notice'),
             width: 640
         })
@@ -56,27 +64,31 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             updateDateRange: function () {
                 var enabled = this.model.get('active') && this.model.get('activateTimeFrame');
                 this.$('.date-range .form-control').prop('disabled', !enabled);
+            },
+            getAddresses: function () {
+                var name = contactsUtil.getMailFullName(this.data.user).trim();
+                return [].concat(
+                    // default sender
+                    { value: 'default', label: gt('Default sender') },
+                    // aliases
+                    _(this.data.aliases).map(function (address) {
+                        address = name ? name + ' <' + address + '>' : address;
+                        return { value: address, label: address };
+                    })
+                );
             }
         })
         .build(function () {
-            this.$el.addClass('edit-vacation');
+            this.data = _(data).pick('aliases', 'config', 'user');
+            this.$el.addClass('rule-dialog');
         })
         .addCancelButton()
-        .addButton({ label: gt('Apply changes'), action: 'apply' })
+        .addButton({ label: gt('Apply changes'), action: 'save' })
         .on('open', function () {
-            var view = this;
-            this.busy();
-            getData().then(
-                function (data) {
-                    view.data = data;
-                    view.config = data.config;
-                    view.render().idle().updateActive();
-                },
-                function (e) {
-                    yell(e);
-                    view.close();
-                }
-            );
+            this.updateActive();
+        })
+        .on('save', function () {
+            this.model.save().done(this.close).fail(this.idle).fail(yell);
         })
         .open();
     }
@@ -106,7 +118,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             id: 'range',
             render: function (baton) {
                 // supports date?
-                if (!_(this.config.tests).findWhere({ test: 'currentdate' })) return;
+                if (!_(this.data.config.tests).findWhere({ test: 'currentdate' })) return;
                 this.$body.append(
                     baton.branch('range', this, $('<div class="form-group date-range">'))
                 );
@@ -128,7 +140,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                 });
 
                 baton.$el.append(
-                    util.checkbox('activateTimeFrame', model.fields.activateTimeFrame, baton.model)
+                    util.checkbox('activateTimeFrame', Model.fields.activateTimeFrame, baton.model)
                 );
             }
         },
@@ -143,7 +155,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     $('<div class="row">').append(
                         ['dateFrom', 'dateUntil'].map(function (id) {
                             return $('<div class="col-md-4">').append(
-                                $('<label>').attr('for', 'vacation_notice_' + id).text(model.fields[id]),
+                                $('<label>').attr('for', 'vacation_notice_' + id).text(Model.fields[id]),
                                 new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
                                     .render().$el
                                     .prop('disabled', !baton.model.get('activateTimeFrame'))
@@ -165,8 +177,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             render: function (baton) {
                 this.$body.append(
                     $('<div class="form-group">').append(
-                        $('<label for="vacation_notice_subject">').append(model.fields.subject),
-                        new mini.InputView({ name: 'subject', model: baton.model, className: 'form-control', id: 'vacation_notice_subject' }).render().$el
+                        $('<label for="vacation_notice_subject">').append(Model.fields.subject),
+                        new mini.InputView({ name: 'subject', model: baton.model, id: 'vacation_notice_subject' }).render().$el
                     )
                 );
             }
@@ -180,8 +192,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             render: function (baton) {
                 this.$body.append(
                     $('<div class="form-group">').append(
-                        $('<label for="vacation_notice_text">').text(model.fields.text),
-                        new mini.TextView({ name: 'text', model: baton.model, id: 'vacation_notice_text', rows: '8' }).render().$el
+                        $('<label for="vacation_notice_text">').text(Model.fields.text),
+                        new mini.TextView({ name: 'text', model: baton.model, id: 'vacation_notice_text', rows: 6 }).render().$el
                     )
                 );
             }
@@ -193,11 +205,14 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: INDEX += 100,
             id: 'days',
             render: function (baton) {
+
+                var days = _.range(1, 32).map(function (i) { return { label: i, value: i }; });
+
                 this.$body.append(
                     $('<div class="form-group row">').append(
-                        $('<label for="vacation_notice_days" class="col-md-12">').text(model.fields.days),
+                        $('<label for="vacation_notice_days" class="col-md-12">').text(Model.fields.days),
                         $('<div class="col-md-4">').append(
-                            new mini.SelectView({ list: this.data.days, name: 'days', model: baton.model, id: 'vacation_notice_days' }).render().$el
+                            new mini.SelectView({ list: days, name: 'days', model: baton.model, id: 'vacation_notice_days' }).render().$el
                         )
                     )
                 );
@@ -210,12 +225,18 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             index: INDEX += 100,
             id: 'sender',
             render: function () {
+
+                if (!settings.get('features/setFromInVacationNotice', true)) return;
+
                 this.$body.append(
                     $('<div class="form-group">').append(
-                        $('<label for="days">').text(model.fields.sendFrom),
-                        new mini.SelectView({ list: this.data.from, name: 'from', model: this.model, id: 'from' }).render().$el
+                        $('<label for="days">').text(Model.fields.sendFrom),
+                        new mini.SelectView({ list: this.getAddresses(), name: 'from', model: this.model, id: 'from' }).render().$el
                     )
                 );
+
+                // fix invalid address
+                if (!this.$('select[name="from"]').val()) this.$('select[name="from"]').val('default');
             }
         },
         // Aliases
@@ -224,23 +245,24 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             id: 'aliases',
             render: function () {
 
+                if (this.data.aliases.length <= 1) return;
+                if (!settings.get('features/setAddressesInVacationNotice', true)) return;
+
                 var model = this.model,
                     primaryMail = model.get('primaryMail') || this.data.aliases[0];
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);
 
-                if (!this.data.aliases.length) return;
-
                 this.$body.append(
                     $('<div class="help-block">').text(
                         gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail)
                     ),
                     _(this.data.aliases).map(function (alias) {
-                        return util.checkbox(alias, alias, model);
+                        return util.checkbox('alias_' + alias, alias, model);
                     }),
                     $('<div>').append(
-                        $('<button class="btn btn-link" data-action="select-all">')
+                        $('<button type="button" class="btn btn-link" data-action="select-all">')
                             .text('Select all')
                             .on('click', { view: this }, onSelectAll)
                     )
@@ -256,99 +278,16 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
         }
     );
 
-    // function createVacationEdit(ref, multiValues, activateTimeframe, config) {
-    //     ext.point(ref + '/edit/view').extend({
-    //         index: 250,
-    //         id: ref + '/edit/view/sender',
-    //         draw: function (baton) {
-    //             var SelectView = mini.SelectView.extend({
-    //                 onChange: function () {
-    //                     var valuePosition = _.findIndex(baton.multiValues.from, { value: this.$el.val() });
-    //                     this.model.set(this.name, baton.multiValues.fromArrays[valuePosition]);
-    //                 },
-    //                 update: function () {
-    //                     var valuePosition,
-    //                         modelValue = this.model.get(this.name);
-    //                     if (_.isArray(modelValue)) {
-    //                         this.$el.val(baton.multiValues.from[_.findIndex(baton.multiValues.fromArrays, modelValue)].value);
-    //                     } else {
-    //                         valuePosition = _.findIndex(baton.multiValues.from, { value: modelValue });
-    //                         if (valuePosition === -1) valuePosition = _.findIndex(baton.multiValues.from, { label: modelValue });
-    //                         this.$el.val(baton.multiValues.from[valuePosition].value);
-    //                     }
-    //                 }
-    //             });
-
-    //             this.append(
-    //                 $('<div>').addClass('form-group').append(
-    //                     $('<div class="row">').append(
-    //                         $('<label class="col-sm-2">').attr({ 'for': 'days' }).text(model.fields.sendFrom),
-    //                         $('<div class="col-sm-6">').append(
-    //                             new SelectView({ list: baton.multiValues.from, name: 'from', model: baton.model, id: 'from', className: 'form-control' }).render().$el
-    //                         )
-    //                     )
-    //                 )
-    //             );
-    //         }
-    //     });
-
     //
     // Get required data
     //
-    var getData = (function () {
+    function getData() {
+        var model = new Model();
+        return $.when(userAPI.get(), api.getConfig(), model.fetch()).then(function (user, config) {
+            return { model: model, aliases: user.aliases, config: config, user: user };
+        });
+    }
 
-        var userFullName = '';
-
-        function getDays() {
-            return _.range(1, 32).map(function (i) { return { label: i, value: i }; });
-        }
-
-        function getFrom(aliases) {
-            return [].concat(
-                // default sender
-                { value: 'default', label: gt('default sender') },
-                // aliases
-                _(aliases).map(function (key, value) {
-                    return {
-                        value: userFullName ? userFullName + ' <' + value + '>' : value,
-                        label: userFullName ? '"' + userFullName + '" <' + value + '>' : value
-                    };
-                })
-            );
-        }
-
-        function getFromArrays(aliases) {
-            return [].concat(
-                ['default', 'default'],
-                _(aliases).map(function (value) {
-                    return userFullName ? [userFullName, value] : [value];
-                })
-            );
-        }
-
-        return function () {
-
-            return $.when(userAPI.get(), api.getConfig()).then(function (user, config) {
-
-                userFullName = contactsUtil.getMailFullName(user).trim();
-                var aliases = _.object(user.aliases, user.aliases);
-
-                return {
-                    aliases: user.aliases,
-                    config: config,
-                    days: getDays(),
-                    from: getFrom(aliases),
-                    fromArrays: getFromArrays(aliases),
-                    user: user
-                };
-            });
-        };
-
-    }());
-
-    return {
-        getData: getData,
-        open: open
-    };
+    return { open: open };
 
 });

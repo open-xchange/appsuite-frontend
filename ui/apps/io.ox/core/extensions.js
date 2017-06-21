@@ -508,7 +508,7 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         branch: function (id, context, $el) {
             var previousElement = this.$el;
             this.$el = $el;
-            that.point(this.invoke.id + '/' + id).invoke(this.invoke.name, context, this);
+            that.point(this.invoke.id + '/' + id).invoke(this.invoke.name, context || $el, this);
             this.$el = previousElement;
             return $el;
         }

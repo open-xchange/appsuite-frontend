@@ -12,69 +12,113 @@
  */
 
 define('io.ox/mail/autoforward/settings/view-form', [
+    'io.ox/backbone/views/modal',
+    'io.ox/backbone/mini-views',
     'io.ox/mail/autoforward/settings/model',
-    'io.ox/backbone/views',
     'io.ox/core/settings/util',
     'io.ox/core/extensions',
-    'less!io.ox/mail/autoforward/settings/style'
-], function (model, views, util, ext) {
+    'io.ox/core/yell',
+    'gettext!io.ox/mail',
+    // yep, also use vacationnotice here
+    'less!io.ox/mail/vacationnotice/settings/style'
+], function (ModalView, mini, model, util, ext, yell, gt) {
 
     'use strict';
 
-    function createAutoForwardEdit(ref) {
-        var point = views.point(ref + '/edit/view'),
-            AutoforwardEditView = point.createView({
-                tagName: 'div',
-                className: 'edit-autoforward'
-            });
+    var POINT = 'io.ox/mail/auto-forward/edit',
+        INDEX = 0;
 
-        ext.point(ref + '/edit/view').extend({
-            index: 50,
-            id: 'headline',
-            draw: function () {
-                this.append(util.header(model.fields.headline));
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 100,
-            id: ref + '/edit/view/active',
-            draw: function (baton) {
-                this.append(util.switchView('active', model.fields.active, baton.model));
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 150,
-            id: ref + '/edit/view/forwardmail',
-            draw: function (baton) {
-                this.append(util.input('forwardmail', model.fields.forwardmail, baton.model));
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 250,
-            id: ref + '/edit/view/keep',
-            draw: function (baton) {
-                this.append(util.checkbox('keep', model.fields.keep, baton.model));
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 350,
-            id: ref + '/edit/view/stop',
-            draw: function (baton) {
-                this.append(util.checkbox('processSub', model.fields.processSub, baton.model));
-            }
-        });
-
-        return AutoforwardEditView;
+    function open() {
+        return getData().then(openModalDialog, yell);
     }
 
-    return {
-        protectedMethods: {
-            createAutoForwardEdit: createAutoForwardEdit
-        }
-    };
+    function openModalDialog(data) {
 
+        return new ModalView({
+            async: true,
+            focus: 'input[name="active"]',
+            model: new Backbone.Model({ active: false }),
+            point: POINT,
+            title: gt('Auto Forward'),
+            width: 640
+        })
+        .inject({
+            updateActive: function () {
+                var enabled = this.model.get('active');
+                this.$body.toggleClass('disabled', !enabled).find(':input').prop('disabled', !enabled);
+            }
+        })
+        .build(function () {
+            this.data = data;
+            this.$el.addClass('rule-dialog');
+        })
+        .addCancelButton()
+        .addButton({ label: gt('Apply changes'), action: 'apply' })
+        .on('open', function () {
+            this.updateActive();
+        })
+        .open();
+    }
+
+    ext.point(POINT).extend(
+        //
+        // switch
+        //
+        {
+            index: INDEX += 100,
+            id: 'switch',
+            render: function () {
+
+                this.$header.prepend(
+                    new mini.SwitchView({ name: 'active', model: this.model, label: '', size: 'large' })
+                        .render().$el.attr('title', gt('Enable or disable auto forward'))
+                );
+
+                this.listenTo(this.model, 'change:active', this.updateActive);
+            }
+        },
+        //
+        // Address
+        //
+        {
+            index: INDEX += 100,
+            id: 'address',
+            render: function () {
+                this.$body.append(util.input('forwardmail', model.fields.forwardmail, this.model));
+            }
+        },
+        //
+        // Keep
+        //
+        {
+            index: INDEX += 100,
+            id: 'keep',
+            render: function () {
+                this.$body.append(util.checkbox('keep', model.fields.keep, this.model));
+            }
+        },
+        //
+        // Stop
+        //
+        {
+            index: INDEX += 100,
+            id: 'stop',
+            render: function () {
+                this.$body.append(util.checkbox('processSub', model.fields.processSub, this.model));
+            }
+        }
+    );
+
+    //
+    // Get required data
+    //
+    var getData = (function () {
+
+        return function () {
+            return $.when();
+        };
+
+    }());
+
+    return { open: open };
 });

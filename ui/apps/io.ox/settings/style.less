@@ -299,11 +299,11 @@
 
 .settings-detail-pane {
 
-    @vertical-margin: 32px;
+    @vertical-margin: 24px;
     @horizontal-margin: 32px;
 
     &.default-content-padding {
-        padding: @vertical-margin @horizontal-margin;
+        padding: @horizontal-margin;
     }
 
     fieldset {
@@ -442,6 +442,19 @@
         .empty { padding: 0 13px; }
 
         .tab-content { min-height: 150px; }
+    }
+
+    .buttons {
+        margin-bottom: @vertical-margin;
+        .btn-link {
+            padding: 0;
+            margin-right: 16px;
+        }
+        .btn-default { margin-right: 8px; }
+        .fa {
+            color: #333;
+            margin-right: 8px;
+        }
     }
 }
 

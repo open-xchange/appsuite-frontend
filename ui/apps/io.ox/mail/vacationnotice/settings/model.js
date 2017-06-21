@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
+
 define('io.ox/mail/vacationnotice/settings/model', [
     'io.ox/backbone/modelFactory',
     'io.ox/backbone/validation',
@@ -21,153 +22,151 @@ define('io.ox/mail/vacationnotice/settings/model', [
 
     'use strict';
 
-    function providePreparedData(attributes) {
-        var newAttributes = {
-                days: attributes.days,
-                id: attributes.internal_id,
-                subject: attributes.subject,
-                text: attributes.text
-            },
+    var VacationNoticeModel = Backbone.Model.extend({
 
-            preparedData = {
-                'actioncmds': [newAttributes]
-            },
+        parse: function (response) {
 
-            addresses = [attributes.primaryMail];
+            // early return is required for model.save()
+            // server does not return usable data
+            if (!_.isArray(response)) return {};
 
-        if (attributes.from && attributes.from[0] !== 'default') newAttributes.from = attributes.from;
+            var data = response[0],
+                attr = {
+                    active: false,
+                    activateTimeFrame: false,
+                    days: '7',
+                    internal_id: 'vacation',
+                    subject: '',
+                    text: ''
+                };
 
-        if (attributes.id !== undefined) {
-            preparedData.id = attributes.id;
-        }
-
-        _(attributes).each(function (value, attribute) {
-            if (value === true && attribute !== 'activateTimeFrame' && attribute !== 'active' && attribute !== 'selectall') {
-                addresses.push(attribute);
-            }
-        });
-
-        newAttributes.addresses = addresses;
-
-        var testForTimeframe = {
-            'id': 'allof',
-            'tests': []
-        };
-
-        if (attributes.dateFrom) {
-            testForTimeframe.tests.push(
-                {
-                    'id': 'currentdate',
-                    'comparison': 'ge',
-                    'datepart': 'date',
-                    'datevalue': [attributes.dateFrom]
-                }
-            );
-        }
-
-        if (attributes.dateUntil) {
-            testForTimeframe.tests.push(
-                {
-                    'id': 'currentdate',
-                    'comparison': 'le',
-                    'datepart': 'date',
-                    'datevalue': [attributes.dateUntil]
-                }
-            );
-        }
-
-        if (testForTimeframe.tests.length === 1 && attributes.activateTimeFrame) {
-            testForTimeframe = testForTimeframe.tests[0];
-        } else if (testForTimeframe.tests.length === 0 || attributes.activateTimeFrame === false) {
-            testForTimeframe = { id: 'true' };
-        }
-
-        preparedData.test = testForTimeframe;
-
-        if (attributes.position !== undefined) {
-            preparedData.position = attributes.position;
-        }
-
-        preparedData.active = attributes.active;
-
-        return preparedData;
-    }
-
-    function buildFactory(ref, api) {
-        var factory = new ModelFactory({
-            api: api,
-            ref: ref,
-            model: {
-                idAttribute: 'id',
-
-                init: function () {
-
-                    // End date automatically shifts with start date
-                    var length = this.get('dateUntil') - this.get('dateFrom'),
-                        updatingStart = false,
-                        updatingEnd = false;
-                    this.on({
-                        'change:dateFrom': function (model, dateFrom) {
-                            if (length < 0 || updatingStart) {
-                                return;
-                            }
-                            updatingEnd = true;
-                            if (dateFrom && _.isNumber(length)) {
-                                model.set('dateUntil', dateFrom + length, { validate: true });
-                            }
-                            updatingEnd = false;
-                        },
-                        'change:dateUntil': function (model, dateUntil) {
-                            if (updatingEnd) {
-                                return;
-                            }
-                            var tmpLength = dateUntil - model.get('dateFrom');
-                            if (tmpLength < 0) {
-                                updatingStart = true;
-                                if (dateUntil && _.isNumber(length)) {
-                                    model.set('dateFrom', dateUntil - length, { validate: true });
-                                }
-                                updatingStart = false;
-                            } else {
-                                length = tmpLength;
-                            }
-                        }
-                    });
-                }
-            },
-            update: function (model) {
-                return settingsUtil.yellOnReject(
-                    api.update(providePreparedData(model.attributes))
-                );
-            },
-
-            create: function (model) {
-                var preparedData = providePreparedData(model.attributes);
-                preparedData.rulename = gt('vacation notice');
-                preparedData.flags = ['vacation'];
-
-                return settingsUtil.yellOnReject(
-                    api.create(preparedData)
-                );
+            // use defaults
+            if (!data || !data.actioncmds[0]) {
+                return _.extend(attr, {
+                    dateFrom: +moment(),
+                    dateUntil: +moment().add(1, 'week')
+                });
             }
 
-        });
+            // copy all attributes from actioncmds[0], e.g. days, subject, text
+            _.extend(attr, data.actioncmds[0]);
 
-        Validators.validationFor(ref, {
-            subject: { format: 'string' },
-            text: { format: 'string' },
-            days: { format: 'string' },
-            active: { format: 'boolean' },
-            addresses: { format: 'array' },
-            dateFrom: { format: 'date' },
-            dateUntil: { format: 'date' },
-            activateTimeFrame: { format: 'boolean' }
-        });
-        return factory;
+            // addresses
+            _(attr.addresses).each(function (address) {
+                attr['alias_' + address] = true;
+            });
 
+            // IDs
+            attr.internal_id = attr.id;
+            attr.id = data.id;
+
+            // active
+            attr.active = !!data.active;
+
+            // time
+            if (_(data.test).size() === 2) {
+                // we do have a time frame
+                _(data.test.tests).each(function (value) {
+                    if (value.comparison === 'ge') {
+                        attr.dateFrom = value.datevalue[0];
+                    } else {
+                        attr.dateUntil = value.datevalue[0];
+                    }
+                });
+                attr.activateTimeFrame = true;
+            } else if (data.test.id === 'currentdate') {
+                // we do have just start or end date
+                if (data.test.comparison === 'ge') {
+                    attr.dateFrom = data.test.datevalue[0];
+                } else {
+                    attr.dateUntil = data.test.datevalue[0];
+                }
+                attr.activateTimeFrame = true;
+            } else {
+                attr.dateFrom = +moment();
+                attr.dateUntil = +moment().add(1, 'week');
+            }
+
+            console.log('parse', attr);
+            return attr;
+        },
+
+        toJSON: function () {
+
+            var attr = this.attributes,
+                cmd = _(attr).pick('days', 'subject', 'text');
+
+            // copy internal_id as id
+            cmd.id = attr.internal_id;
+
+            // from
+            if (attr.from && attr.from !== 'default') {
+                cmd.from = parseAddress(attr.from);
+            }
+
+            // addresses
+            cmd.addresses = [attr.primaryMail];
+            _(attr).each(function (value, name) {
+                if (value === true && /^alias_.*@.*$/.test(name)) cmd.addresses.push(name.substr(6));
+            });
+
+            // position
+            if (attr.position !== undefined) cmd.position = attr.position;
+
+            // time
+            var testForTimeframe = { id: 'allof', tests: [] };
+
+            if (attr.dateFrom) {
+                testForTimeframe.tests.push({
+                    id: 'currentdate',
+                    comparison: 'ge',
+                    datepart: 'date',
+                    datevalue: [attr.dateFrom]
+                });
+            }
+
+            if (attr.dateUntil) {
+                testForTimeframe.tests.push({
+                    id: 'currentdate',
+                    comparison: 'le',
+                    datepart: 'date',
+                    datevalue: [attr.dateUntil]
+                });
+            }
+
+            if (testForTimeframe.tests.length === 1 && attr.activateTimeFrame) {
+                testForTimeframe = testForTimeframe.tests[0];
+            } else if (testForTimeframe.tests.length === 0 || attr.activateTimeFrame === false) {
+                testForTimeframe = { id: 'true' };
+            }
+
+            // get final json
+            var json = {
+                active: attr.active,
+                actioncmds: [cmd],
+                test: testForTimeframe
+            };
+
+            if (attr.id !== undefined) json.id = attr.id;
+
+            return json;
+        },
+
+        sync: function (method, module, options) {
+            switch (method) {
+                case 'read': return api.getRules('vacation').done(options.success).fail(options.error);
+                case 'update': return api.update(this.toJSON()).done(options.success).fail(options.error);
+                // no default
+            }
+        }
+    });
+
+    function parseAddress(address) {
+        var match = address.match(/^(.+)\s<(.+)>$/);
+        return match ? match.slice(1, 3) : address;
     }
 
-    var fields = {
+    VacationNoticeModel.fields = {
         headline: gt('Vacation Notice'),
         subject: gt('Subject'),
         text: gt('Text'),
@@ -185,12 +184,5 @@ define('io.ox/mail/vacationnotice/settings/model', [
         sendFrom: gt('Send from')
     };
 
-    return {
-        api: api,
-        fields: fields,
-        protectedMethods: {
-            buildFactory: buildFactory,
-            providePreparedData: providePreparedData
-        }
-    };
+    return VacationNoticeModel;
 });

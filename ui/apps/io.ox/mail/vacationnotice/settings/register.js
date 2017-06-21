@@ -37,14 +37,14 @@ define('io.ox/mail/vacationnotice/settings/register', [
             return arrayOfValues;
         };
 
-    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
-        id: 'io.ox/vacation',
-        title: gt('Vacation Notice'),
-        ref: 'io.ox/vacation',
-        loadSettingPane: false,
-        index: 100,
-        lazySaveSettings: true
-    });
+    // ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
+    //     id: 'io.ox/vacation',
+    //     title: gt('Vacation Notice'),
+    //     ref: 'io.ox/vacation',
+    //     loadSettingPane: false,
+    //     index: 100,
+    //     lazySaveSettings: true
+    // });
 
     ext.point('io.ox/vacation/settings/detail').extend({
         index: 100,

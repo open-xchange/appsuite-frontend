@@ -22,14 +22,14 @@ define('io.ox/mail/autoforward/settings/register', [
 
     var filterModel;
 
-    ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
-        id: 'io.ox/autoforward',
-        title: gt('Auto Forward'),
-        ref: 'io.ox/autoforward',
-        loadSettingPane: false,
-        index: 200,
-        lazySaveSettings: true
-    });
+    // ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
+    //     id: 'io.ox/autoforward',
+    //     title: gt('Auto Forward'),
+    //     ref: 'io.ox/autoforward',
+    //     loadSettingPane: false,
+    //     index: 200,
+    //     lazySaveSettings: true
+    // });
 
     ext.point('io.ox/autoforward/settings/detail').extend({
         index: 100,

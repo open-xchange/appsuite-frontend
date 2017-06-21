@@ -22,6 +22,6 @@ define('io.ox/mail/settings/compose/register', [
         id: 'io.ox/mail/settings/compose',
         title: gt('Compose'),
         ref: 'io.ox/mail/settings/compose',
-        index: 10
+        index: 100
     });
 });

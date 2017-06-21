@@ -22,7 +22,7 @@ define('io.ox/mail/settings/signatures/register', [
         id: 'io.ox/mail/settings/signatures',
         title: gt('Signatures'),
         ref: 'io.ox/mail/settings/signatures',
-        index: 400
+        index: 200
     });
 
 });

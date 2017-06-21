@@ -243,7 +243,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     });
 
     return {
-        editMailfilter: function ($node, baton) {
+        editMailfilter: function ($node) {
 
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
@@ -446,12 +446,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/vacation', {});
+                        require(['io.ox/mail/vacationnotice/settings/view-form'], function (view) {
+                            view.open();
+                        });
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/autoforward', {});
+                        require(['io.ox/mail/autoforward/settings/view-form'], function (view) {
+                            view.open();
+                        });
                     }
                 });
 

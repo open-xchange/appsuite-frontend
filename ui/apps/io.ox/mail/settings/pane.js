@@ -118,108 +118,185 @@ define('io.ox/mail/settings/pane', [
         }
     });
 
-    function changeIMAPSubscription() {
-        ox.load(['io.ox/core/folder/actions/imap-subscription']).done(function (subscribe) {
-            subscribe();
-        });
-    }
-
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'header',
-        draw: function () {
-            this.append(
-                $('<h1>').text(gt.pgettext('app', 'Mail'))
-            );
-        }
-    });
-
     function isConfigurable(id) {
         return settings.isConfigurable(id);
     }
 
-    ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'display',
-        draw: function () {
-            this.append(util.fieldset(
-                gt('Display'),
-                // html
-                util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
-                // images
-                util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
-                // emojis
-                util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
-                // colored quotes
-                util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
-                // fixed width
-                util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
-                // // beautify plain text
-                // hidden until bug 52294 gets fixed
-                // util.checkbox('beautifyPlainText',
-                //     //#. prettify or beautify
-                //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-                //     gt('Prettify plain text mails'),
-                //     settings
-                // ),
-                // read receipts
-                util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings)
-            ));
-        }
-    });
+    var INDEX = 0;
 
-    ext.point(POINT + '/pane').extend({
-        index: 300,
-        id: 'common',
-        draw: function () {
+    ext.point(POINT + '/pane').extend(
+        //
+        // Header
+        //
+        {
+            index: INDEX += 100,
+            id: 'header',
+            draw: function () {
+                this.append(
+                    $('<h1>').text(gt.pgettext('app', 'Mail'))
+                );
+            }
+        },
+        //
+        // Buttons
+        //
+        {
+            index: INDEX += 100,
+            id: 'buttons',
+            draw: function (baton) {
+                this.append(
+                    baton.branch('buttons', null, $('<div class="form-group buttons">'))
+                );
+            }
+        },
+        //
+        // Display
+        //
+        {
+            index: INDEX += 100,
+            id: 'display',
+            draw: function () {
+                this.append(util.fieldset(
+                    //#. not the verb but the noun (German "Anzeige")
+                    gt.pgettext('noun', 'Display'),
+                    // html
+                    util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
+                    // images
+                    util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
+                    // emojis
+                    util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
+                    // colored quotes
+                    util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
+                    // fixed width
+                    util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
+                    // // beautify plain text
+                    // hidden until bug 52294 gets fixed
+                    // util.checkbox('beautifyPlainText',
+                    //     //#. prettify or beautify
+                    //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                    //     gt('Prettify plain text mails'),
+                    //     settings
+                    // ),
+                    // read receipts
+                    util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings),
+                    // unseen folder
+                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ?
+                        util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
+                ));
+            }
+        },
+        //
+        // Behavior
+        //
+        {
+            index: INDEX += 100,
+            id: 'behavior',
+            draw: function () {
 
-            var contactCollect = !!capabilities.has('collect_email_addresses');
+                var contactCollect = !!capabilities.has('collect_email_addresses');
 
-            this.append(
-                util.fieldset(
-                    gt('Common'),
-                    util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
-                    contactCollect ? util.checkbox('contactCollectOnMailTransport', gt('Automatically collect contacts in the folder "Collected addresses" while sending'), settings) : [],
-                    contactCollect ? util.checkbox('contactCollectOnMailAccess', gt('Automatically collect contacts in the folder "Collected addresses" while reading'), settings) : [],
-                    // mailto handler registration
-                    util.checkbox('features/registerProtocolHandler', gt('Ask for mailto link registration'), settings)
-                    .find('label').css('margin-right', '8px').end()
-                    .append(
-                        // if supported add register now link
-                        navigator.registerProtocolHandler ?
-                            $('<a href="#" role="button">').text(gt('Register now')).on('click', function (e) {
-                                e.preventDefault();
-                                var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
-                                navigator.registerProtocolHandler(
-                                    'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
-                                );
-                            }) : []
-                    ),
-                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ? util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
-                )
-            );
-        }
-    });
-
-    // extension point with index 500 is in 'io.ox/mail/settings/signatures/register'
-    // and displays signature settings
-
-    ext.point(POINT + '/pane').extend({
-        index: 600,
-        id: 'imap-subscription',
-        draw: function () {
-
-            if (_.device('smartphone')) return;
-
-            this.append(
-                $('<fieldset>').append(
-                    $('<div class="sectioncontent">').append(
-                        $('<button type="button" class="btn btn-primary">')
-                        .on('click', changeIMAPSubscription)
-                        .text(gt('Change IMAP subscriptions'))
+                this.append(
+                    util.fieldset(
+                        gt('Verhalten'),
+                        util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
+                        contactCollect ? util.checkbox('contactCollectOnMailTransport', gt('Automatically collect contacts in the folder "Collected addresses" while sending'), settings) : [],
+                        contactCollect ? util.checkbox('contactCollectOnMailAccess', gt('Automatically collect contacts in the folder "Collected addresses" while reading'), settings) : [],
+                        // mailto handler registration
+                        util.checkbox('features/registerProtocolHandler', gt('Ask for mailto link registration'), settings)
+                        .find('label').css('margin-right', '8px').end()
+                        .append(
+                            // if supported add register now link
+                            navigator.registerProtocolHandler ?
+                                $('<a href="#" role="button">').text(gt('Register now')).on('click', function (e) {
+                                    e.preventDefault();
+                                    var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
+                                    navigator.registerProtocolHandler(
+                                        'mailto', url + '#app=' + ox.registry.get('mail-compose') + ':compose&mailto=%s', ox.serverConfig.productNameMail
+                                    );
+                                }) : []
+                        )
                     )
-                )
-            );
+                );
+            }
         }
-    });
+    );
+
+    //
+    // Buttons
+    //
+
+    ext.point(POINT + '/pane/buttons').extend(
+        //
+        // Vacation notice
+        //
+        {
+            id: 'vacation-notice',
+            index: 100,
+            draw: function () {
+
+                this.append(
+                    $('<button type="button" class="btn btn-default">')
+                    .on('click', openDialog)
+                    .append(
+                        $('<i class="fa fa-plane"></i>'),
+                        $.txt(gt('Edit vacation notice'))
+                    )
+                );
+
+                function openDialog() {
+                    ox.load(['io.ox/mail/vacationnotice/settings/view-form']).done(function (view) {
+                        view.open();
+                    });
+                }
+            }
+        },
+        //
+        // Auto Forward
+        //
+        {
+            id: 'auto-forward',
+            index: 200,
+            draw: function () {
+
+                this.append(
+                    $('<button type="button" class="btn btn-default">')
+                    .on('click', openDialog)
+                    .append(
+                        $('<i class="fa fa-mail-forward"></i>'),
+                        $.txt(gt('Auto forward'))
+                    )
+                );
+
+                function openDialog() {
+                    ox.load(['io.ox/mail/autoforward/settings/view-form']).done(function (view) {
+                        view.open();
+                    });
+                }
+            }
+        },
+        //
+        // IMAP subscription
+        //
+        {
+            id: 'imap-subscription',
+            index: 300,
+            draw: function () {
+
+                this.append(
+                    $('<button type="button" class="btn btn-default">')
+                    .on('click', openDialog)
+                    .append(
+                        $('<i class="fa fa-list"></i>'),
+                        $.txt(gt('Change IMAP subscriptions'))
+                    )
+                );
+
+                function openDialog() {
+                    ox.load(['io.ox/core/folder/actions/imap-subscription']).done(function (subscribe) {
+                        subscribe();
+                    });
+                }
+            }
+        }
+    );
 });
