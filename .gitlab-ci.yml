@@ -141,6 +141,37 @@ tag tags:
   only:
     - tags
 
+deploy preview app:
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+  script:
+    - docker pull $DOCKER_IMAGE
+    - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
+    - docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=http://10.20.28.164/appsuite/ $DOCKER_IMAGE
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
+    on_stop: stop_review
+  only:
+    - /^feature\//
+
+stop_review:
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+  script:
+    - docker stop $CI_ENVIRONMENT_SLUG
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy
   image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
