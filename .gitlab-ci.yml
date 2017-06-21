@@ -158,6 +158,8 @@ deploy preview app:
     on_stop: stop_review
   only:
     - /^feature\//
+    - /^bug\//
+    - /^poc\//
 
 stop_review:
   stage: deploy
