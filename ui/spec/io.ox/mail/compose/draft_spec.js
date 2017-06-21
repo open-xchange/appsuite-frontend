@@ -175,6 +175,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
                 });
                 it('should send correct data when clicking compose, save, save, send', function () {
+                    this.timeout = 10000;
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
                         xhr.respond(200, { 'Content-Type': 'text/javascript;' }, JSON.stringify({
                             data: 'default0/INBOX/Drafts/666'
