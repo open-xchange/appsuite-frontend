@@ -373,7 +373,7 @@ define('io.ox/files/actions', [
                 e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                util.hasStatus('lockedByMe', e);
+                (util.hasStatus('lockedByMe', e) || util.hasStatus('createdByMe', e));
 
             // only test the second condition when files are selected, so 'some' and 'items' must be checked in the preCondition
             return preCondition && folderAPI.get(_.first(e.baton.models).get('folder_id')).then(function (fileModel) { return !folderAPI.isExternalFileStorage(fileModel); });
