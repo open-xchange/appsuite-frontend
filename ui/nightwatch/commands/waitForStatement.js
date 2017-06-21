@@ -14,13 +14,14 @@
  * A custom command which
  * @param function The statement function. This function is executed in the page environment and the tests block until the function returns true.
  * @param args An array of arguments which should be passed to the function
- * @param timeout {number} optional, default is global waitForConditionTimeout setting (5000)
+ * @param timeout {number} optional, default is 5000
  * @param pollInterval {number} optional, default is 500
  * @param errorCallback {function} optional. For the case that the element has not been found, you can use the error callback for a specific error. If no callback is provided, a default error is thrown.
  */
 exports.command = function (func, args, timeout, pollInterval, errorCallback) {
 
     pollInterval = pollInterval || 500;
+    timeout = timeout || 5000;
 
     this
         .timeoutsAsyncScript(timeout + pollInterval)
