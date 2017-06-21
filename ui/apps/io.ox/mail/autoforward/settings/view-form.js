@@ -40,7 +40,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
             index: 100,
             id: ref + '/edit/view/active',
             draw: function (baton) {
-                this.append(util.checkbox('active', model.fields.active, baton.model));
+                this.append(util.switchView('active', model.fields.active, baton.model));
             }
         });
 

@@ -171,14 +171,15 @@ define('io.ox/mail/vacationnotice/settings/model', [
         headline: gt('Vacation Notice'),
         subject: gt('Subject'),
         text: gt('Text'),
-        days: gt('Number of days between vacation notices to the same sender'),
+        //#. Context: Vacation notices
+        days: gt('Days between notices to the same sender'),
         headlineAdresses: gt('Enable for the following addresses'),
         headlineSender: gt('Default sender for vacation notice'),
         addresses: gt('Email addresses'),
         dateFrom: gt('Start'),
         dateUntil: gt('End'),
         activateTimeFrame: gt('Send vacation notice during this time only'),
-        active: gt('Enable'),
+        active: gt('Enabled'),
         placeholder: gt('Add contact') + ' \u2026',
         label: gt('Add contact'),
         sendFrom: gt('Send from')

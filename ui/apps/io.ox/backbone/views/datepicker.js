@@ -471,7 +471,10 @@ define('io.ox/backbone/views/datepicker', [
                 all.eq(index + 1).focus();
             }
 
-            function handleEscape() {
+            function handleEscape(e) {
+                // we use preventDefault for nested handlers, e.g. picker in a modal dialog
+                e.preventDefault();
+                console.log('prevent default ...');
                 this.close();
             }
 
@@ -536,8 +539,11 @@ define('io.ox/backbone/views/datepicker', [
                     e.preventDefault();
                     this.$el.focus();
                     break;
-                case 13:
                 case 27:
+                    // we use preventDefault for nested handlers, e.g. picker in a modal dialog
+                    e.preventDefault();
+                    // falls through
+                case 13:
                     this.toggle();
                     break;
                 // no default

@@ -1,133 +1,146 @@
-.settings-list-view {
-    > li {
-        .flex-display(flex);
-        .flex-wrap(wrap);
-        align-items: center;
-        margin-bottom: 7px;
-        background-color: #f5f5f5;
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ */
+
+.settings-list-view > li {
+
+    .flex-display(flex);
+    .flex-wrap(wrap);
+
+    align-items: center;
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+
+    & > * {
+        .flex(0 0 auto);
+        padding: 15px;
+    }
+
+    &:focus {
+        outline: 2px solid #3c73aa;
+    }
+
+    .list-item-title {
+        .flex(1);
+        .ellipsis();
+    }
+    .list-item-subtitle {
+        color: #aaa;
+        .ellipsis();
+    }
+
+    .drag-handle {
+        width: 45px;
+        position: relative;
+
+        i {
+            height: 9px;
+            overflow: hidden;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -5px 0 0 -6px;
+            color: #aaa;
+        }
+    }
+
+    .list-item-controls {
+        padding: 0;
 
         & > * {
-            .flex(0 0 auto);
-            padding: 13px;
+            margin: 13px 14px;
+            display: inline-block;
         }
 
-        &:focus {
-            outline: 2px solid #3c73aa;
+        .dropdown-toggle, .action {
+            padding: 13px 16px;
+            margin:0;
+
+            &:focus {
+                outline: 2px solid #3c73aa;
+                text-decoration: underline;
+            }
         }
+
+        .remove {
+
+            padding: 13px 16px;
+            margin: 0;
+            margin-left: 10px;
+
+            &:hover, &:focus {
+                text-decoration: none;
+                background-color: #c00;
+
+                i { color: #fff; }
+            }
+            &:focus {
+                outline: 2px solid #3c73aa;
+            }
+
+            i { color: #aaa; }
+        }
+    }
+
+    &.default {
+        .list-item-title {
+            font-weight: bold;
+        }
+    }
+
+    &.disabled {
+        background-color: #eee;
 
         .list-item-title {
-            .flex(1);
-            .ellipsis();
-        }
-        .list-item-subtitle {
-            color: #aaa;
-            .ellipsis();
-        }
-
-        .drag-handle {
-            width: 45px;
-            position: relative;
-
-            i {
-                height: 9px;
-                overflow: hidden;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                margin: -5px 0 0 -6px;
-                color: #aaa;
-            }
-        }
-
-        .list-item-controls {
-            padding: 0;
-
-            & > * {
-                margin: 13px 14px;
-                display: inline-block;
-            }
-
-            .dropdown-toggle, .action {
-                padding: 13px 16px;
-                margin:0;
-
-                &:focus {
-                    outline: 2px solid #3c73aa;
-                    text-decoration: underline;
-                }
-            }
-
-            .remove {
-
-                padding: 13px 16px;
-                margin: 0;
-                margin-left: 10px;
-
-                &:hover, &:focus {
-                    text-decoration: none;
-                    background-color: #c00;
-
-                    i { color: #fff; }
-                }
-                &:focus {
-                    outline: 2px solid #3c73aa;
-                }
-
-                i { color: #aaa; }
-            }
-        }
-
-        &.default {
-            .list-item-title {
-                font-weight: bold;
-            }
-        }
-
-        &.disabled {
-            background-color: #eee;
-
-            .list-item-title {
-                font-style: italic;
-                font-weight: normal;
-                color: #888;
-            }
-        }
-
-        .error-wrapper {
-            color: #333;
-            .flex(100%);
-            .flex-display(flex);
-            align-items: center;
-            padding: 0 0 13px 0;
-
-            .error-message {
-                margin-right: 2em;
-            }
-
-            .error-icon {
-                padding: 3px 13px;
-                margin-left: 6px;
-            }
-        }
-
-        .warning-message {
+            font-style: italic;
+            font-weight: normal;
             color: #888;
+        }
+    }
+
+    .error-wrapper {
+        color: #333;
+        .flex(100%);
+        .flex-display(flex);
+        align-items: center;
+        padding: 0 0 13px 0;
+
+        .error-message {
             margin-right: 2em;
         }
 
-        @media (max-width: 480px), (max-device-width: 480px) {
-            .list-item-controls {
-                .remove {
-                    margin-left: 0;
-                }
+        .error-icon {
+            padding: 3px 13px;
+            margin-left: 6px;
+        }
+    }
+
+    .warning-message {
+        color: #888;
+        margin-right: 2em;
+    }
+
+    @media (max-width: 480px), (max-device-width: 480px) {
+        .list-item-controls {
+            .remove {
+                margin-left: 0;
             }
         }
+    }
 
-        @media (min-width: 1000px) {
-            .list-item-controls {
-                & > * {
-                    margin: 13px 25px;
-                }
+    @media (min-width: 1000px) {
+        .list-item-controls {
+            & > * {
+                margin: 13px 25px;
             }
         }
     }

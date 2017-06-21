@@ -426,6 +426,262 @@ html:not(.internet-explorer) {
     }
 }
 
+// custom checkboxes
+
+.checkbox.custom, .radio.custom {
+
+    @color: #333;
+    @background: #eee;
+    @focus: #03a9f4;
+
+    margin-bottom: 8px;
+    padding-left: 32px;
+    line-height: 24px;
+    position: relative;
+
+    label { padding: 0; }
+
+    input + i.toggle {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+        border: 1px solid #aaa;
+        background-color: white;
+        font: normal normal normal 12px/1 FontAwesome;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        left: 0;
+        top: 3px;
+        padding: 1px 0 0 1px;
+        transition: background-color 0.2s;
+    }
+
+    input + i.toggle:before {
+        display: none;
+    }
+
+    // checked
+
+    input:checked + i.toggle {
+        color: @color;
+        background-color: @background;
+    }
+
+    input:checked + i.toggle:before {
+        content: "\f00c";
+        display: inherit;
+    }
+
+    // focus
+
+    input:focus + i.toggle {
+        border-color: @focus;
+        box-shadow: 0 0 8px 1px fade(@focus, 60%);
+    }
+
+    // disabled
+
+    input:disabled + i.toggle {
+        opacity: 0.50;
+        cursor: not-allowed;
+        background-color: #eee;
+    }
+
+    input:checked:disabled + i.toggle {
+        border-color: #777;
+        background-color: #aaa;
+    }
+
+    .form-horizontal & {
+        padding-top: 0;
+        top: 5px;
+    }
+}
+
+.radio.custom {
+
+    input + i.toggle {
+        border-radius: 8px;
+        padding: 4px;
+    }
+
+    input:checked + i.toggle:before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 3px;
+        background-color: @black;
+    }
+}
+
+.checkbox.switch {
+
+    @accent: #7CB342;
+
+    margin-bottom: 8px;
+    padding-left: 72px;
+    position: relative;
+    display: inline-block;
+
+    label {
+        padding: 0;
+        line-height: 32px;
+    }
+
+    // inspired by http://abpetkov.github.io/switchery/
+
+    input + i.toggle {
+        position: absolute;
+        display: inline-block;
+        vertical-align: middle;
+        left: 0;
+        height: 32px;
+        width: 56px;
+        border: 1px solid #ccc;
+        border-radius: 16px;
+        margin-right: 16px;
+        background-color: white;
+        transition: border 0.2s, background-color 0.2s;
+    }
+
+    input + i.toggle:before {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 0;
+        left: 0;
+        border-radius: 16px;
+        background-color: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.40);
+        transition: left 0.2s;
+    }
+
+    input:checked + i.toggle {
+        border-color: transparent;
+        background-color: @accent;
+    }
+
+    input:checked + i.toggle:before {
+        left: 24px;
+    }
+
+    input:focus + i.toggle {
+        border-color: lighten(@accent, 20%);
+        box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+    }
+
+    input:disabled + i.toggle {
+        opacity: 0.50;
+        cursor: not-allowed;
+    }
+
+    input:checked:disabled + i.toggle {
+        border-color: #777;
+        background-color: #aaa;
+    }
+
+    // small
+
+    &.small {
+
+        padding-left: 56px;
+
+        label { line-height: 24px; }
+
+        input + i.toggle {
+            height: 24px;
+            width: 40px;
+            border-radius: 12px;
+            margin-right: 12px;
+        }
+
+        input + i.toggle:before {
+            width: 22px;
+            height: 22px;
+        }
+
+        input:checked + i.toggle:before {
+            left: 16px;
+        }
+    }
+}
+
+// .radio.custom {
+
+//     @accent: #7CB342;
+
+//     margin-bottom: 8px;
+
+//     label { padding: 0; }
+
+//     input + i.toggle {
+//         position: relative;
+//         display: inline-block;
+//         vertical-align: middle;
+//         height: 32px;
+//         width: 32px;
+//         border: 1px solid #aaa;
+//         border-radius: 16px;
+//         margin-right: 16px;
+//         background-color: white;
+//         transition: border 0.2s, background-color 0.2s;
+//     }
+
+//     input + i.toggle:before {
+//         content: "";
+//         position: absolute;
+//         width: 28px;
+//         height: 28px;
+//         top: 2px;
+//         left: 2px;
+//         border-radius: 14px;
+//         background-color: white;
+//     }
+
+//     input:checked + i.toggle {
+//         border-color: @accent;
+//         &:before {
+//             border-color: transparent;
+//             background-color: @accent;
+//         }
+//     }
+
+//     input:focus + i.toggle {
+//         border-color: lighten(@accent, 20%);
+//         box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+//     }
+
+//     input:disabled + i.toggle {
+//         opacity: 0.50;
+//         cursor: not-allowed;
+//     }
+
+//     input:checked:disabled + i.toggle {
+//         border-color: #777;
+//         background-color: #aaa;
+//     }
+
+//     // small
+
+//     &.small {
+
+//         input + i.toggle {
+//             height: 24px;
+//             width: 24px;
+//             border-radius: 12px;
+//             margin: 0 16px;
+//         }
+
+//         input + i.toggle:before {
+//             width: 18px;
+//             height: 18px;
+//             border-radius: 9px;
+//         }
+//     }
+// }
+
 // small screens (mobile)
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width

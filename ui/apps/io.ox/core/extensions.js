@@ -318,9 +318,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
             }
             // manual invoke to consider baton
             if (baton instanceof Baton) {
-                return o
-                    .map(function (ext) {
-                        try {
+                var previousInvoke = baton.invoke;
+                try {
+                    baton.invoke = { name: name, id: this.id };
+                    return o
+                        .map(function (ext) {
                             if (baton.isDisabled(self.id, ext.id) || !_.isFunction(ext[name])) return;
                             // stopped?
                             if (baton.isPropagationStopped()) return;
@@ -330,10 +332,12 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
                             baton.extension = ext;
                             // call
                             return ext[name].apply(context, args.slice(3));
-                        } catch (e) {
-                            error(e);
-                        }
-                    });
+                        });
+                } catch (e) {
+                    error(e);
+                } finally {
+                    baton.invoke = previousInvoke;
+                }
             }
             try {
                 return o.invoke.apply(o, args);
@@ -499,6 +503,14 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         isDisabled: function (pointId, extensionId) {
             var list = this.flow.disable[pointId];
             return list === undefined ? false : _(list).contains(extensionId);
+        },
+
+        branch: function (id, context, $el) {
+            var previousElement = this.$el;
+            this.$el = $el;
+            that.point(this.invoke.id + '/' + id).invoke(this.invoke.name, context, this);
+            this.$el = previousElement;
+            return $el;
         }
     };
 

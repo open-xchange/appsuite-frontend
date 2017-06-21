@@ -135,7 +135,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
         open: function () {
             var o = this.options;
-            this.render().$el.appendTo('body');
+            if (o.render !== false) this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
@@ -242,6 +242,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
         onEscape: function (e) {
             if (e.which !== 27) return;
+            console.log('onEscape', e.isDefaultPrevented());
             if (e.isDefaultPrevented()) return;
             this.close();
         },

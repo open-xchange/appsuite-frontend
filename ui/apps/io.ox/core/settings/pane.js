@@ -277,7 +277,7 @@ define('io.ox/core/settings/pane', [
             point.extend({
                 id: 'autoOpenNotification',
                 index: 700,
-                className: 'form-group',
+                className: 'row',
                 render: function () {
 
                     //change old settings values to new ones
@@ -298,13 +298,13 @@ define('io.ox/core/settings/pane', [
         point.extend({
             id: 'showDesktopNotifications',
             index: 800,
-            className: 'form-group',
+            className: 'row',
             render: function () {
                 // don't show setting if not supported, to not confuse users
                 var self = this,
                     // add ask now link (by design browsers only allow asking if there was no decision yet)
                     //#. Opens popup to decide if desktop notifications should be shown
-                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" role="button">').text(gt('Manage permission now')).css('margin-left', '8px').on('click', function (e) {
+                    requestLink = desktopNotifications.getPermissionStatus() === 'default' ? $('<a href="#" role="button">').text(gt('Manage permission now')).on('click', function (e) {
                         e.preventDefault();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {
@@ -317,23 +317,30 @@ define('io.ox/core/settings/pane', [
 
                 if (desktopNotifications.isSupported()) {
                     this.baton.model.on('change:showDesktopNotifications', function (value) {
-                        if (value === true) {
-                            desktopNotifications.requestPermission(function (result) {
-                                if (result !== 'denied') return;
-                                // revert if user denied the permission
-                                // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
-                                // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
-                                notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
-                                self.baton.model.set('showDesktopNotifications', false);
-                                if (requestLink) {
-                                    // remove request link because it is useless. We cannot trigger requestPermission if the user denied. It has to be enabled via the browser settings.
-                                    requestLink.remove();
-                                    requestLink = null;
-                                }
-                            });
-                        }
+                        if (value !== true) return;
+                        desktopNotifications.requestPermission(function (result) {
+                            if (result !== 'denied') return;
+                            // revert if user denied the permission
+                            // also yell message, because if a user pressed deny in the request permission dialog there is no way we can ask again.
+                            // The user has to do this in the browser settings, because the api blocks any further request permission dialogs.
+                            notifications.yell('info', gt('Please check your browser settings and enable desktop notifications for this domain'));
+                            self.baton.model.set('showDesktopNotifications', false);
+                            if (requestLink) {
+                                // remove request link because it is useless. We cannot trigger requestPermission if the user denied. It has to be enabled via the browser settings.
+                                requestLink.remove();
+                                requestLink = null;
+                            }
+                        });
                     });
-                    this.$el.append(checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.baton.model, requestLink));
+
+                    if (requestLink) requestLink = $('<br>').add(requestLink);
+
+                    this.$el.append(
+                        $('<div class="col-sm-offset-4 col-sm-8">').append(
+                            util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.baton.model)
+                            .append(requestLink)
+                        )
+                    );
                 }
             }
         });
@@ -344,7 +351,7 @@ define('io.ox/core/settings/pane', [
         point.extend({
             id: 'accessibilityFeatures',
             index: 900,
-            className: 'form-group',
+            className: 'row',
             render: function () {
                 var value = this.baton.model.get('features/accessibility');
                 if (value === '' || value === undefined) {

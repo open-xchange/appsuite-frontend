@@ -88,7 +88,7 @@ define('io.ox/contacts/settings/pane', [
             ];
             this.append(
                 util.fieldset(gt('Display of names'),
-                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: settings }).render().$el
+                    new mini.CustomRadioView({ list: preferences, name: 'fullNameFormat', model: settings }).render().$el
                 )
             );
         }
@@ -109,7 +109,7 @@ define('io.ox/contacts/settings/pane', [
 
             this.append(
                 util.fieldset(gt('Link postal addresses with map service'),
-                    new mini.RadioView({ list: options, name: 'mapService', model: settings }).render().$el
+                    new mini.CustomRadioView({ list: options, name: 'mapService', model: settings }).render().$el
                 )
             );
         }

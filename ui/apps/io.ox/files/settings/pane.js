@@ -92,7 +92,7 @@ define('io.ox/files/settings/pane', [
             ];
             this.append(
                 util.fieldset(gt('Adding files with identical names'),
-                    new mini.RadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
+                    new mini.CustomRadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
                 )
             );
         }
@@ -108,7 +108,7 @@ define('io.ox/files/settings/pane', [
             ];
             this.append(
                 util.fieldset(gt('Slideshow / Autoplay mode for images'),
-                    new mini.RadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
+                    new mini.CustomRadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
 
                     $('<div class="form-group expertmode">').append(
                         $('<div class="row" style="margin: auto">').append(

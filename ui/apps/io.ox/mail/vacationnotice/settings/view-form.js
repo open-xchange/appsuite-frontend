@@ -12,259 +12,343 @@
  */
 
 define('io.ox/mail/vacationnotice/settings/view-form', [
+    'io.ox/core/api/mailfilter',
     'io.ox/mail/vacationnotice/settings/model',
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/views/modal',
     'io.ox/core/settings/util',
     'io.ox/backbone/mini-views/datepicker',
+    'io.ox/core/yell',
+    'io.ox/core/api/user',
+    'io.ox/contacts/util',
     'gettext!io.ox/mail',
     'less!io.ox/mail/vacationnotice/settings/style'
-], function (model, views, ext, mini, util, DatePicker, gt) {
+], function (api, model, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, gt) {
 
     'use strict';
 
-    function createVacationEdit(ref, multiValues, activateTimeframe, config) {
+    var POINT = 'io.ox/mail/vacation-notice/edit',
+        INDEX = 0,
+        INDEX_RANGE = 0;
 
-        var point = views.point(ref + '/edit/view'),
-            VacationEditView = point.createView({
-                tagName: 'div',
-                className: 'edit-vacation',
-                render: function () {
-                    var baton = ext.Baton({ model: this.model, view: this, multiValues: multiValues });
-                    ext.point(ref + '/edit/view').invoke('draw', this.$el.empty(), baton);
-                    return this;
+    function open(model) {
 
-                }
+        return new ModalView({
+            async: true,
+            focus: 'input[name="active"]',
+            model: model || new Backbone.Model({
+                active: true, activateTimeFrame: true, days: '2', from: 'default', subject: 'Out of office',
+                dateFrom: +moment(), dateUntil: +moment().add(1, 'week')
             }),
-            hasCurrentDate = _.findIndex(config.tests, function (obj) { return obj.test === 'currentdate'; }) !== -1;
-
-        ext.point(ref + '/edit/view').extend({
-            index: 50,
-            id: 'headline',
-            draw: function () {
-                this.append(util.header(model.fields.headline));
+            point: POINT,
+            render: false,
+            title: gt('Vacation notice'),
+            width: 640
+        })
+        .inject({
+            updateActive: function () {
+                var enabled = this.model.get('active');
+                this.$body.toggleClass('disabled', !enabled).find(':input').prop('disabled', !enabled);
+                this.updateDateRange();
+            },
+            updateDateRange: function () {
+                var enabled = this.model.get('active') && this.model.get('activateTimeFrame');
+                this.$('.date-range .form-control').prop('disabled', !enabled);
             }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 75,
-            id: ref + '/edit/view/active',
-            draw: function (baton) {
-                this.append(
-                    $('<div class="form-group activate">').append(
-                        util.checkbox('active', model.fields.active, baton.model)
-                    )
-                );
-            }
-        });
-
-        if (hasCurrentDate) {
-
-            ext.point(ref + '/edit/view').extend({
-                index: 100,
-                id: ref + '/edit/view/timeframecheckbox',
-                draw: function (baton) {
-                    var checkboxView = new mini.CheckboxView({ name: 'activateTimeFrame', model: baton.model });
-
-                    // see bug 45187, ignore change events triggerd by the initial datepicker setup
-                    this.on('change', function (e) {
-                        if (e.target.disabled) e.stopPropagation();
-                    });
-
-                    baton.model.off('change:' + checkboxView.name, null, ext.point(ref + '/edit/view'));
-                    baton.model.on('change:' + checkboxView.name, function (model, checked) {
-                        $('.dateFrom').find('.form-control').prop('disabled', !checked);
-                        $('.dateUntil').find('.form-control').prop('disabled', !checked);
-                    }, ext.point(ref + '/edit/view'));
-
-                    this.append(
-                        util.checkbox('activateTimeFrame', model.fields.activateTimeFrame, baton.model)
-                    );
+        })
+        .build(function () {
+            this.$el.addClass('edit-vacation');
+        })
+        .addCancelButton()
+        .addButton({ label: gt('Apply changes'), action: 'apply' })
+        .on('open', function () {
+            var view = this;
+            this.busy();
+            getData().then(
+                function (data) {
+                    view.data = data;
+                    view.config = data.config;
+                    view.render().idle().updateActive();
+                },
+                function (e) {
+                    yell(e);
+                    view.close();
                 }
-            });
-
-            ext.point(ref + '/edit/view').extend({
-                index: 125,
-                id: ref + '/edit/view/start_date',
-                draw: function (baton) {
-                    var dateView = new DatePicker({
-                        model: baton.model,
-                        className: 'col-sm-6 dateFrom',
-                        display: 'DATE',
-                        attribute: 'dateFrom',
-                        label: model.fields.dateFrom
-                    });
-
-                    this.append(dateView.render().$el);
-                    dateView.$el.find('legend').removeClass('simple');
-
-                    if (!baton.model.get('activateTimeFrame')) {
-                        dateView.$el.find('.form-control').prop('disabled', true);
-                    }
-                }
-            });
-
-            ext.point(ref + '/edit/view').extend({
-                index: 150,
-                id: ref + '/edit/view/dates',
-                draw: function (baton) {
-                    var dateView = new DatePicker({
-                        model: baton.model,
-                        className: 'col-sm-6 dateUntil',
-                        display: 'DATE',
-                        attribute: 'dateUntil',
-                        label: model.fields.dateUntil
-                    });
-
-                    this.append(dateView.render().$el);
-                    dateView.$el.find('legend').removeClass('simple');
-
-                    if (!baton.model.get('activateTimeFrame')) {
-                        dateView.$el.find('.form-control').prop('disabled', true);
-                    }
-                }
-            });
-
-        }
-
-
-        ext.point(ref + '/edit/view').extend({
-            index: 175,
-            id: ref + '/edit/view/subject',
-            draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label for="subject">').append(model.fields.subject),
-                        new mini.InputView({ name: 'subject', model: baton.model, className: 'form-control', id: 'subject' }).render().$el
-                    )
-                );
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 200,
-            id: ref + '/edit/view/mailtext',
-            draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<label for="text">').text(model.fields.text),
-                        new mini.TextView({ name: 'text', model: baton.model, id: 'text', rows: '12' }).render().$el
-                    )
-                );
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 250,
-            id: ref + '/edit/view/days',
-            draw: function (baton) {
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'days' }).addClass('control-label col-md-8').text(model.fields.days),
-                            $('<div>').addClass('col-md-offset-2 col-md-2').append(
-                                new mini.SelectView({ list: baton.multiValues.days, name: 'days', model: baton.model, id: 'days', className: 'form-control' }).render().$el
-                            )
-                        )
-                    )
-                );
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 250,
-            id: ref + '/edit/view/sender',
-            draw: function (baton) {
-                var SelectView = mini.SelectView.extend({
-                    onChange: function () {
-                        var valuePosition = _.findIndex(baton.multiValues.from, { value: this.$el.val() });
-                        this.model.set(this.name, baton.multiValues.fromArrays[valuePosition]);
-                    },
-                    update: function () {
-                        var valuePosition,
-                            modelValue = this.model.get(this.name);
-                        if (_.isArray(modelValue)) {
-                            this.$el.val(baton.multiValues.from[_.findIndex(baton.multiValues.fromArrays, modelValue)].value);
-                        } else {
-                            valuePosition = _.findIndex(baton.multiValues.from, { value: modelValue });
-                            if (valuePosition === -1) valuePosition = _.findIndex(baton.multiValues.from, { label: modelValue });
-                            this.$el.val(baton.multiValues.from[valuePosition].value);
-                        }
-                    }
-                });
-
-                this.append(
-                    $('<div>').addClass('form-group').append(
-                        $('<div class="row">').append(
-                            $('<label class="col-sm-2">').attr({ 'for': 'days' }).text(model.fields.sendFrom),
-                            $('<div class="col-sm-6">').append(
-                                new SelectView({ list: baton.multiValues.from, name: 'from', model: baton.model, id: 'from', className: 'form-control' }).render().$el
-                            )
-                        )
-                    )
-                );
-            }
-        });
-
-        ext.point(ref + '/edit/view').extend({
-            index: 300,
-            id: ref + '/edit/view/addresses',
-            draw: function (baton) {
-                var primaryMail = baton.model.get('primaryMail'),
-                    actionlink = $('<a href="#" role="button" data-action="selectall">'),
-                    self = this,
-                    all;
-
-                // set default
-                baton.model.set('selectall', false);
-
-                baton.model.on('change:selectall', function (model, value) {
-                    actionlink.text(value ? gt('unselect all') : gt('select all'));
-                    self.trigger('change');
-                });
-
-                // skip primary mail since this is default
-                baton.multiValues.aliases.splice(_.indexOf(baton.multiValues.aliases, baton.model.get('primaryMail')), 1);
-
-                // check if all aliases are set
-                _.each(baton.multiValues.aliases, function (alias) {
-                    if (baton.model.has(alias)) all = true;
-                });
-
-                baton.model.set('selectall', all);
-
-                this.append(
-                    util.fieldset(gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail),
-                        actionlink
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            if (!baton.model.get('selectall')) {
-                                _.each(baton.multiValues.aliases, function (alias) {
-                                    baton.model.set(alias, true);
-                                });
-                                baton.model.set('selectall', true);
-                            } else {
-                                _.each(baton.multiValues.aliases, function (alias) {
-                                    baton.model.unset(alias);
-                                });
-                                baton.model.set('selectall', false);
-                            }
-                        })
-                    ).append(_(baton.multiValues.aliases).map(function (alias) {
-                        return util.checkbox(alias, alias, baton.model);
-                    }))
-                );
-            }
-        });
-
-        return VacationEditView;
+            );
+        })
+        .open();
     }
 
-    return {
-        protectedMethods: {
-            createVacationEdit: createVacationEdit
+    ext.point(POINT).extend(
+        //
+        // switch
+        //
+        {
+            index: INDEX += 100,
+            id: 'switch',
+            render: function () {
+
+                this.$header.prepend(
+                    new mini.SwitchView({ name: 'active', model: this.model, label: '', size: 'large' })
+                        .render().$el.attr('title', gt('Enable or disable vacation notice'))
+                );
+
+                this.listenTo(this.model, 'change:active', this.updateActive);
+            }
+        },
+        //
+        // Time range
+        //
+        {
+            index: INDEX += 100,
+            id: 'range',
+            render: function (baton) {
+                // supports date?
+                if (!_(this.config.tests).findWhere({ test: 'currentdate' })) return;
+                this.$body.append(
+                    baton.branch('range', this, $('<div class="form-group date-range">'))
+                );
+            }
         }
+    );
+
+    ext.point(POINT + '/range').extend(
+        //
+        // Date range / checkbox
+        //
+        {
+            index: INDEX_RANGE += 100,
+            id: 'checkbox',
+            render: function (baton) {
+
+                this.listenTo(baton.model, 'change:activateTimeFrame', function () {
+                    this.updateDateRange();
+                });
+
+                baton.$el.append(
+                    util.checkbox('activateTimeFrame', model.fields.activateTimeFrame, baton.model)
+                );
+            }
+        },
+        //
+        // Date range / from & until
+        //
+        {
+            index: INDEX_RANGE += 100,
+            id: 'from-util',
+            render: function (baton) {
+                baton.$el.append(
+                    $('<div class="row">').append(
+                        ['dateFrom', 'dateUntil'].map(function (id) {
+                            return $('<div class="col-md-4">').append(
+                                $('<label>').attr('for', 'vacation_notice_' + id).text(model.fields[id]),
+                                new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
+                                    .render().$el
+                                    .prop('disabled', !baton.model.get('activateTimeFrame'))
+                            );
+                        })
+                    )
+                );
+            }
+        }
+    );
+
+    ext.point(POINT).extend(
+        //
+        // Subject
+        //
+        {
+            index: INDEX += 100,
+            id: 'subject',
+            render: function (baton) {
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<label for="vacation_notice_subject">').append(model.fields.subject),
+                        new mini.InputView({ name: 'subject', model: baton.model, className: 'form-control', id: 'vacation_notice_subject' }).render().$el
+                    )
+                );
+            }
+        },
+        //
+        // Mail text
+        //
+        {
+            index: INDEX += 100,
+            id: 'text',
+            render: function (baton) {
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<label for="vacation_notice_text">').text(model.fields.text),
+                        new mini.TextView({ name: 'text', model: baton.model, id: 'vacation_notice_text', rows: '8' }).render().$el
+                    )
+                );
+            }
+        },
+        //
+        // Days
+        //
+        {
+            index: INDEX += 100,
+            id: 'days',
+            render: function (baton) {
+                this.$body.append(
+                    $('<div class="form-group row">').append(
+                        $('<label for="vacation_notice_days" class="col-md-12">').text(model.fields.days),
+                        $('<div class="col-md-4">').append(
+                            new mini.SelectView({ list: this.data.days, name: 'days', model: baton.model, id: 'vacation_notice_days' }).render().$el
+                        )
+                    )
+                );
+            }
+        },
+        //
+        // Sender
+        //
+        {
+            index: INDEX += 100,
+            id: 'sender',
+            render: function () {
+                this.$body.append(
+                    $('<div class="form-group">').append(
+                        $('<label for="days">').text(model.fields.sendFrom),
+                        new mini.SelectView({ list: this.data.from, name: 'from', model: this.model, id: 'from' }).render().$el
+                    )
+                );
+            }
+        },
+        // Aliases
+        {
+            index: INDEX += 100,
+            id: 'aliases',
+            render: function () {
+
+                var model = this.model,
+                    primaryMail = model.get('primaryMail') || this.data.aliases[0];
+
+                // remove primary mail from aliases
+                this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);
+
+                if (!this.data.aliases.length) return;
+
+                this.$body.append(
+                    $('<div class="help-block">').text(
+                        gt('The Notice is sent out for messages received by %1$s. You may choose to send it out for other recipient addresses too:', primaryMail)
+                    ),
+                    _(this.data.aliases).map(function (alias) {
+                        return util.checkbox(alias, alias, model);
+                    }),
+                    $('<div>').append(
+                        $('<button class="btn btn-link" data-action="select-all">')
+                            .text('Select all')
+                            .on('click', { view: this }, onSelectAll)
+                    )
+                );
+
+                function onSelectAll(e) {
+                    var view = e.data.view;
+                    _(view.data.aliases).each(function (alias) {
+                        view.model.set(alias, true);
+                    });
+                }
+            }
+        }
+    );
+
+    // function createVacationEdit(ref, multiValues, activateTimeframe, config) {
+    //     ext.point(ref + '/edit/view').extend({
+    //         index: 250,
+    //         id: ref + '/edit/view/sender',
+    //         draw: function (baton) {
+    //             var SelectView = mini.SelectView.extend({
+    //                 onChange: function () {
+    //                     var valuePosition = _.findIndex(baton.multiValues.from, { value: this.$el.val() });
+    //                     this.model.set(this.name, baton.multiValues.fromArrays[valuePosition]);
+    //                 },
+    //                 update: function () {
+    //                     var valuePosition,
+    //                         modelValue = this.model.get(this.name);
+    //                     if (_.isArray(modelValue)) {
+    //                         this.$el.val(baton.multiValues.from[_.findIndex(baton.multiValues.fromArrays, modelValue)].value);
+    //                     } else {
+    //                         valuePosition = _.findIndex(baton.multiValues.from, { value: modelValue });
+    //                         if (valuePosition === -1) valuePosition = _.findIndex(baton.multiValues.from, { label: modelValue });
+    //                         this.$el.val(baton.multiValues.from[valuePosition].value);
+    //                     }
+    //                 }
+    //             });
+
+    //             this.append(
+    //                 $('<div>').addClass('form-group').append(
+    //                     $('<div class="row">').append(
+    //                         $('<label class="col-sm-2">').attr({ 'for': 'days' }).text(model.fields.sendFrom),
+    //                         $('<div class="col-sm-6">').append(
+    //                             new SelectView({ list: baton.multiValues.from, name: 'from', model: baton.model, id: 'from', className: 'form-control' }).render().$el
+    //                         )
+    //                     )
+    //                 )
+    //             );
+    //         }
+    //     });
+
+    //
+    // Get required data
+    //
+    var getData = (function () {
+
+        var userFullName = '';
+
+        function getDays() {
+            return _.range(1, 32).map(function (i) { return { label: i, value: i }; });
+        }
+
+        function getFrom(aliases) {
+            return [].concat(
+                // default sender
+                { value: 'default', label: gt('default sender') },
+                // aliases
+                _(aliases).map(function (key, value) {
+                    return {
+                        value: userFullName ? userFullName + ' <' + value + '>' : value,
+                        label: userFullName ? '"' + userFullName + '" <' + value + '>' : value
+                    };
+                })
+            );
+        }
+
+        function getFromArrays(aliases) {
+            return [].concat(
+                ['default', 'default'],
+                _(aliases).map(function (value) {
+                    return userFullName ? [userFullName, value] : [value];
+                })
+            );
+        }
+
+        return function () {
+
+            return $.when(userAPI.get(), api.getConfig()).then(function (user, config) {
+
+                userFullName = contactsUtil.getMailFullName(user).trim();
+                var aliases = _.object(user.aliases, user.aliases);
+
+                return {
+                    aliases: user.aliases,
+                    config: config,
+                    days: getDays(),
+                    from: getFrom(aliases),
+                    fromArrays: getFromArrays(aliases),
+                    user: user
+                };
+            });
+        };
+
+    }());
+
+    return {
+        getData: getData,
+        open: open
     };
 
 });

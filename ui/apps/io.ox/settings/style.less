@@ -104,8 +104,10 @@
         }
 
         .example-text {
-            height: auto;
-            margin-top: 11px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 16px;
         }
 
         .io-ox-accounts-settings {
@@ -297,8 +299,11 @@
 
 .settings-detail-pane {
 
+    @vertical-margin: 32px;
+    @horizontal-margin: 32px;
+
     &.default-content-padding {
-        padding: 24px 32px;
+        padding: @vertical-margin @horizontal-margin;
     }
 
     fieldset {
@@ -306,34 +311,32 @@
         margin: 0;
         border: 0;
         min-width: 0;
-        margin-bottom: 32px;
+        margin-bottom: @vertical-margin;
     }
-
-    label, legend { cursor: default; }
-
-    label.checkbox, label.radio { cursor: pointer; }
 
     .section { max-width: 800px; }
 
     h1, h1.pane-headline {
+
         font-family: @light-font-family;
         font-weight: 200;
         font-size: 26px;
         line-height: 32px;
-        margin: 2em 0 1em 0;
+        margin: (2 * @vertical-margin) 0 @vertical-margin 0;
 
         &:first-child {
-            margin: 0;
-            padding-bottom: 18px;
-            line-height: 30px;
+            margin-top: 0;
+            line-height: 32px;
         }
+
         &.no-margin { margin: 0; }
     }
 
     h2, h2.pane-headline {
+
         font-size: 20px;
         line-height: 22px;
-        margin: 2em 0 1.5em 0;
+        margin: @vertical-margin 0 (@vertical-margin / 2) 0;
 
         &.no-margin { margin: 0; }
     }
@@ -346,58 +349,13 @@
         height: 32px;
         color: #333;
         margin: 0;
-        margin-bottom: 8px;
-
+        border: 0;
         h2 {
             font-weight: 700;
             font-size: 14px;
             margin: 0;
         }
     }
-
-    .form-group {
-        margin-bottom: 8px;
-
-        label {
-            margin-bottom: 4px;
-        }
-    }
-
-    .radio, .checkbox {
-        margin: 0;
-
-        label {
-            min-height: 24px;
-            margin: 0;
-            line-height: 22px;
-        }
-
-        input { margin-top: 5px; }
-    }
-
-    input, select, button {
-        margin-top: 4px;
-        margin-bottom: 6px;
-    }
-
-    .form-horizontal {
-        .form-group {
-            label {
-                margin-top: 4px;
-            }
-            .checkbox {
-                min-height: 0;
-                margin: 0;
-                padding: 0;
-                label {
-                    margin: 0;
-                    padding-top: 0;
-                }
-            }
-        }
-    }
-
-    .form-inline .controls input { width: 70px; }
 
     .io-ox-accounts-settings {
 
