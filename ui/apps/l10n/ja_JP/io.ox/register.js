@@ -309,13 +309,13 @@ define('l10n/ja_JP/io.ox/register', [
                 hasLatin = _(keys).any(function (char) { return char === 'A～Z'; }),
                 // add thumb index for other characters
                 otherThumb = new baton.Thumb({
-                    label: _.noI18n('その他'),
+                    label: 'その他',
                     text: 'その他',
                     enabled: function () { return hasOther; }
                 }),
                 // add thumb index for ABC
                 abcThumb = new baton.Thumb({
-                    label: _.noI18n('A～Z'),
+                    label: 'A～Z',
                     text: 'A～Z',
                     enabled: function () { return hasLatin; }
                 });

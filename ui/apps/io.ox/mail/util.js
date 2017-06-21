@@ -253,10 +253,10 @@ define('io.ox/mail/util', [
                     // only show if display names differ (otherwise it looks like a senseless duplicate)
                     if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
                         tmp.append(
-                            $.txt(_.noI18n(' ')),
+                            $.txt(' '),
                             //#. (From) email1 via email2. Appears in email detail view.
                             gt('via'),
-                            $.txt(_.noI18n(' ')),
+                            $.txt(' '),
                             this.serializeList({ sender: sender }, 'sender')
                         );
                     }
@@ -283,11 +283,11 @@ define('io.ox/mail/util', [
                     delivery: 'download'
                 });
                 tmp = tmp.add(
-                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(_.noI18n(filename))
+                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(filename)
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 ')))
+                        $('<span class="delimiter">').append($.txt('\u00A0\u2022 '))
                     );
                 }
             }

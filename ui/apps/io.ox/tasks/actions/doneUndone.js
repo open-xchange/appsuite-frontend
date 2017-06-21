@@ -50,7 +50,7 @@ define('io.ox/tasks/actions/doneUndone', [
                         notifications.yell('success', message);
                     })
                     .fail(function (result) {
-                        notifications.yell('error', gt.noI18n(result));
+                        notifications.yell('error', result);
                     });
             } else {
                 if (_.isArray(data)) data = data[0];

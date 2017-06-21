@@ -71,8 +71,8 @@ define('io.ox/core/viewer/util', [
 
             text = String(str || '').trim(),
 
-            normal = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxNormal }))),
-            short = _.noI18n(_.ellipsis(text, _.extend(opt, { max: opt.maxShort })));
+            normal = _.ellipsis(text, _.extend(opt, { max: opt.maxNormal })),
+            short = _.ellipsis(text, _.extend(opt, { max: opt.maxShort }));
 
         return {
             title: text,

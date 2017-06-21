@@ -20,7 +20,7 @@ define('com.spamexperts/settings/register', [
 
     ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
         id: 'com.spamexperts',
-        title: _.noI18n(settings.get('name')),
+        title: settings.get('name'),
         ref: 'com.spamexperts',
         loadSettingPane: false,
         index: 'last'

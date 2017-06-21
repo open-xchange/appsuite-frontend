@@ -39,7 +39,7 @@ define('io.ox/files/common-extensions', [
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(util.getDateTime(t, options)))
+                .text(util.getDateTime(t, options))
             );
         },
 

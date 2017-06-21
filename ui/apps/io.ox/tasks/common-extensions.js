@@ -30,7 +30,7 @@ define('io.ox/tasks/common-extensions', [
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(mailUtil.getDateTime(t, options)))
+                .text(mailUtil.getDateTime(t, options))
             );
         },
 

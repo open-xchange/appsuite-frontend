@@ -59,13 +59,11 @@ define('plugins/portal/xing/register', [
     };
 
     createXingAccount = function (e) {
-
         e.preventDefault();
 
         var email, firstname, lastname, language;
 
         new dialogs.ModalDialog()
-
             .build(function () {
                 var availableLangs;
 
@@ -76,20 +74,16 @@ define('plugins/portal/xing/register', [
                         $('<p>').text(
                             gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
                         ),
-                        $('<label>').append(
-                            $.txt(gt('Mail address')),
+                        $('<label>').text(gt('Mail address')).append(
                             email = $('<input type="text" name="email">')
                         ),
-                        $('<label>').append(
-                            $.txt(gt('First name')),
+                        $('<label>').text(gt('First name')).append(
                             firstname = $('<input type="text" name="firstname">')
                         ),
-                        $('<label>').append(
-                            $.txt(gt('Last name')),
+                        $('<label>').text(gt('Last name')).append(
                             lastname = $('<input type="text" name="lastname">')
                         ),
-                        $('<label>').append(
-                            $.txt(gt('Language')),
+                        $('<label>').text(gt('Language')).append(
                             language = $('<select name="language">').append(
                                 _(availableLangs).map(function (elem) { return $('<option>').val(elem).text(elem); })
                             )
@@ -148,9 +142,9 @@ define('plugins/portal/xing/register', [
     // };
 
     statusUpdateForm = function () {
-        var form = $('<div>').addClass('xing comment').append(
-            $('<textarea>').attr({ rows: 3, cols: 40 }),
-            $('<button>').addClass('btn btn-primary').text(gt('Post a status update'))
+        var form = $('<div class="xing comment">').append(
+            $('<textarea rows="3" cols "40">'),
+            $('<button class="btn btn-primary">').text(gt('Post a status update'))
         );
 
         form.on('click', '.btn', function (clickEvent) {
@@ -166,7 +160,6 @@ define('plugins/portal/xing/register', [
             }).done(function () {
                 container.remove();
                 notifications.yell('success', gt('Your status update has been successfully posted on %s', XING_NAME));
-
             });
         });
 
@@ -177,7 +170,7 @@ define('plugins/portal/xing/register', [
         options = options || {};
 
         var maxCount = options.maxCount;
-        var node = $('<div>').addClass('networkActivities'),
+        var node = $('<div class="networkActivities">'),
             newsItemCount = 0;
 
         if (networkActivities.length === 0) {
@@ -185,17 +178,11 @@ define('plugins/portal/xing/register', [
         }
 
         _(networkActivities).each(function (activity) {
-            if (activity.type !== 'activity') {
-                return;
-            }
+            if (activity.type !== 'activity' || (maxCount && newsItemCount >= maxCount)) return;
 
-            if (maxCount && newsItemCount >= maxCount) {
-                return;
-            }
-
-            var activityNode = $('<div>').addClass('activity').appendTo(node),
-                reactionNode = $('<div>').addClass('reactions'),
-                dateNode = $('<div>').addClass('date'),
+            var activityNode = $('<div class="activity">').appendTo(node),
+                reactionNode = $('<div class="reactions">'),
+                dateNode = $('<div class="date">'),
                 foundHandler = false,
                 id;
 

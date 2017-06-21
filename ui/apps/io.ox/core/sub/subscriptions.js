@@ -175,7 +175,7 @@ define('io.ox/core/sub/subscriptions', [
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(errors[0]));
+                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors[0]);
                     });
                     popup.idle();
                     popup.getContentNode().find('input').first().focus();
@@ -195,7 +195,7 @@ define('io.ox/core/sub/subscriptions', [
                             },
                             function refreshFail(error) {
                                 popup.idle();
-                                showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
+                                showErrorInline(popup.getBody(), gt('Error:'), error.error_html || error.error);
                                 api.subscriptions.destroy(id);
                                 self.model = self.model.clone();
                                 folderAPI.remove(self.model.get('folder'));
@@ -216,7 +216,7 @@ define('io.ox/core/sub/subscriptions', [
                     function saveFail(error) {
                         popup.idle();
                         if (error.error) {
-                            showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                            showErrorInline(popup.getBody(), gt('Error:'), error.error);
                         } else {
                             notifications.yell({
                                 type: 'error',

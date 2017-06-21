@@ -554,7 +554,7 @@ define('io.ox/portal/main', [
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
-                $title = node.find('h2 .title').text(_.noI18n(title)),
+                $title = node.find('h2 .title').text(title),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });

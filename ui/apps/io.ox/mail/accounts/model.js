@@ -41,7 +41,7 @@ define('io.ox/mail/accounts/model', [
                     required: true,
                     msg: gt('This field is mandatory')
                 }, {
-                    fn: _.noI18n('isMailAddress')
+                    fn: 'isMailAddress'
                 }
             ],
             login: function (value) {

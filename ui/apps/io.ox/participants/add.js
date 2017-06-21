@@ -76,7 +76,7 @@ define('io.ox/participants/add', [
                 //#. %1$d a list of email addresses
                 //#, c-format
                 gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-                gt.noI18n(invalid.join(', '))
+                invalid.join(', ')
             ));
         }
     };

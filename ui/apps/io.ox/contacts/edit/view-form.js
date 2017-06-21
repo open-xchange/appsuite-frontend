@@ -509,7 +509,7 @@ define('io.ox/contacts/edit/view-form', [
             if (_.indexOf(['title', 'first_name', 'last_name'], options.field) >= 0) {
                 input.on('keyup', function () {
                     // update model value silinet
-                    model.set(options.field, _.noI18n($(this).val()), { silent: true });
+                    model.set(options.field, $(this).val(), { silent: true });
                     if (model.changed.display_name) return;
                     var mod = model.toJSON();
                     delete mod.display_name;

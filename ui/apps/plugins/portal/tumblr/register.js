@@ -76,7 +76,7 @@ define('plugins/portal/tumblr/register', [
                 firstPost = _(firstPosts).first();
 
             if (title) {
-                this.find('h2 span.title').text(_.noI18n(title));
+                this.find('h2 span.title').text(title);
             }
 
             if (firstPost && _.isArray(firstPost.photos) && firstPost.photos.length && (sizes = firstPost.photos[0].alt_sizes)) {
@@ -100,7 +100,7 @@ define('plugins/portal/tumblr/register', [
                     if (post.title) {
                         titles.push(
                             $('<li class="paragraph">').append(
-                                $('<span class="bold">').html(_.noI18n(post.title)), $.txt('')
+                                $('<span class="bold">').html(post.title), $.txt('')
                             )
                         );
                     }
@@ -123,7 +123,7 @@ define('plugins/portal/tumblr/register', [
                 var sizes, url = '', width = 0,
                     node = $('<div class="post">').attr('data-post-type', post.type),
                     postTitle = function () {
-                        var title = $('<h2>').text(_.noI18n(post.title));
+                        var title = $('<h2>').text(post.title);
                         if (post.url || post.post_url) {
                             return $('<a target="_blank" rel="noopener">', { href: post.url || post.post_url }).append(title);
                         }
@@ -212,7 +212,7 @@ define('plugins/portal/tumblr/register', [
                     node = $('<div class="portal-feed tumblr">');
 
                 if (title) {
-                    node.append($('<h1>').text(_.noI18n(title)));
+                    node.append($('<h1>').text(title));
                 }
 
                 _(baton.data.posts).each(drawPost, node);

@@ -145,7 +145,7 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(util.getDateTime(t, options)))
+                .text(util.getDateTime(t, options))
             );
         },
 
@@ -300,7 +300,7 @@ define('io.ox/mail/common-extensions', [
 
             this.append(
                 $('<div class="thread-size" aria-hidden="true">').append(
-                    $('<span class="number drag-count">').text(_.noI18n(size))
+                    $('<span class="number drag-count">').text(size)
                 )
             );
         },
@@ -449,7 +449,7 @@ define('io.ox/mail/common-extensions', [
 
                 if (!show) {
                     // fix broken layout when mail has only 'to' and 'attachments'
-                    this.append(container.append($.txt(_.noI18n('\u00A0'))));
+                    this.append(container.append($.txt('\u00A0')));
                     return;
                 }
 
@@ -458,10 +458,10 @@ define('io.ox/mail/common-extensions', [
                         // TO
                         $('<span class="io-ox-label">').append(
                             $.txt(gt('To')),
-                            $.txt(_.noI18n('\u00A0\u00A0'))
+                            $.txt('\u00A0\u00A0')
                         ),
                         util.serializeList(data, 'to'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
                 if (showCC) {
@@ -469,10 +469,10 @@ define('io.ox/mail/common-extensions', [
                         // CC
                         $('<span class="io-ox-label">').append(
                             $.txt(gt.pgettext('CC', 'Copy')),
-                            _.noI18n('\u00A0\u00A0')
+                            '\u00A0\u00A0'
                         ),
                         util.serializeList(data, 'cc'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
                 if (showBCC) {
@@ -480,10 +480,10 @@ define('io.ox/mail/common-extensions', [
                         // BCC
                         $('<span class="io-ox-label">').append(
                             $.txt(gt('Blind copy')),
-                            _.noI18n('\u00A0\u00A0')
+                            '\u00A0\u00A0'
                         ),
                         util.serializeList(data, 'bcc'),
-                        $.txt(_.noI18n(' \u00A0 '))
+                        $.txt(' \u00A0 ')
                     );
                 }
 

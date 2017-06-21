@@ -112,11 +112,11 @@ define('plugins/portal/recentfiles/register', [
                         return $('<li class="item" tabindex="0">')
                             .data('item', file)
                             .append(
-                                $('<b>').text(_.noI18n(filename)), $.txt(' '),
+                                $('<b>').text(filename), $.txt(' '),
                                 $('<span class="gray">').text(
                                     type === 'recentfiles' ?
                                         // show WHO changed it
-                                        _.noI18n(file.modified_by.display_name) :
+                                        file.modified_by.display_name :
                                         // show WHEN it was changed
                                         moment.utc(file.last_modified).format('l LT')
                                 )

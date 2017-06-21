@@ -31,7 +31,7 @@ function (ext, upsell, gt, settings) {
                     $('<a href="#" data-action="com.spamexperts" tabindex="1" role="button">')
                         .text(
                             //#. %1$s is the name of the configuration panel
-                            gt('%1$s access', _.noI18n(settings.get('name'))))
+                            gt('%1$s access', settings.get('name')))
                         .on('click', goToSettings)
                 ));
             }

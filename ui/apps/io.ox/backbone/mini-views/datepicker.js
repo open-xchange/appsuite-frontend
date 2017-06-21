@@ -85,8 +85,8 @@ define('io.ox/backbone/mini-views/datepicker', [
 
                         // render timezone badge
                         var timezone = moment.tz(self.model.get(self.options.timezoneAttribute)),
-                            timezoneAbbreviation = gt.noI18n(timezone.zoneAbbr()),
-                            timezoneFullname = gt.noI18n((timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' '));
+                            timezoneAbbreviation = timezone.zoneAbbr(),
+                            timezoneFullname = (timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' ');
 
                         if (!self.options.timezoneButton && !self.mobileMode) {
                             timezoneContainer = self.nodes.timezoneField = $('<div class="timezone input-group-addon">').text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
@@ -206,7 +206,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
                 this.nodes.timeField.val(timestamp.format('LT'));
-                this.nodes.timezoneField.text(gt.noI18n(timestamp.zoneAbbr()));
+                this.nodes.timezoneField.text(timestamp.zoneAbbr());
             }
             // trigger change after all fields are updated, not before. Otherwise we update the model with a wrong time value
             this.nodes.dayField.trigger('change');

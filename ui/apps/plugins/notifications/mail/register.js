@@ -228,7 +228,7 @@ define('plugins/notifications/mail/register', [
                         //#. %1$s mail sender
                         //#. %2$s mail subject
                         //#, c-format
-                        message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
+                        message = gt('Mail from %1$s, %2$s', util.getDisplayName(from[0]), data.subject || gt('No subject'));
                     desktopNotifications.show({
                         title: gt('New mail'),
                         body: message,

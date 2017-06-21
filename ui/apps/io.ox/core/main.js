@@ -500,7 +500,7 @@ define('io.ox/core/main', [
                                     gt.ngettext(
                                         'You will be automatically signed out in %1$d second',
                                         'You will be automatically signed out in %1$d seconds', sec
-                                    ), gt.noI18n(sec)
+                                    ), sec
                                 );
                             },
                             node = $('<span>').text(getString(countdown)),
@@ -764,9 +764,9 @@ define('io.ox/core/main', [
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a.apptitle', node).text(_.noI18n(value));
+            $('a.apptitle', node).text(value);
             addUserContent(model, node);
-            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
+            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(value);
             $('a.closelink', node).attr('title', getCloseIconLabel(value));
 
             ox.trigger('recalculate-topbarsize');
@@ -1307,7 +1307,7 @@ define('io.ox/core/main', [
         ext.point('io.ox/core/relogin').extend({
             draw: function () {
                 this.append(
-                    gt('Your session is expired'), $.txt(_.noI18n('.')), $('<br>'),
+                    gt('Your session is expired'), $.txt('.'), $('<br>'),
                     $('<small>').text(gt('Please sign in again to continue'))
                 );
             }
@@ -1647,7 +1647,7 @@ define('io.ox/core/main', [
                                 var version = item.version || '';
                                 version = version.split('.').slice(0, -2).join('.');
                                 if (version) {
-                                    versionInfo = $('<span class="oldversion">').text(gt.noI18n('(' + version + ')'));
+                                    versionInfo = $('<span class="oldversion">').text('(' + version + ')');
                                 }
                             }
                             this.append(
@@ -1656,7 +1656,7 @@ define('io.ox/core/main', [
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
-                                    $('<span>').text(gt.noI18n(info)),
+                                    $('<span>').text(info),
                                     versionInfo
                                 )
                             );

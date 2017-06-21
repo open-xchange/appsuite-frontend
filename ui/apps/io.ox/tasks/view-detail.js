@@ -71,7 +71,7 @@ define('io.ox/tasks/view-detail', [
                         util.getPriority(task)
                     ),
                     // title
-                    $.txt(gt.noI18n(task.title))
+                    $.txt(task.title)
                 );
             this.append(
                 $('<header>').append(
@@ -143,9 +143,9 @@ define('io.ox/tasks/view-detail', [
                 if (task[key] !== undefined && task[key] !== null && task[key] !== '') {
                     $details.append($('<dt class="detail-label">').text(label));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
+                        $details.append($('<dd class="detail-value">').text(task[key]) + ' ' + task.currency);
                     } else {
-                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key])));
+                        $details.append($('<dd class="detail-value">').text(task[key]));
                     }
                     hasDetails = true;
                 }
@@ -179,7 +179,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('end-date').text(
                         //#. %1$s due date of a task
                         //#, c-format
-                        gt('Due %1$s', _.noI18n(task.end_time))
+                        gt('Due %1$s', task.end_time)
                     )
                 );
             }
@@ -190,7 +190,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('alarm-date').text(
                         //#. %1$s reminder date of a task
                         //#, c-format
-                        gt('Reminder date %1$s', _.noI18n(task.alarm))
+                        gt('Reminder date %1$s', task.alarm)
                     )
                 );
             }
@@ -199,7 +199,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('task-progress').text(
                         //#. %1$s how much of a task is completed in percent, values from 0-100
                         //#, c-format
-                        gt('Progress %1$s %', _.noI18n(task.percent_completed))
+                        gt('Progress %1$s %', task.percent_completed)
                     )
                 );
             }
@@ -235,7 +235,7 @@ define('io.ox/tasks/view-detail', [
                 api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
                         // draw
-                        buildDropdown(attachmentNode, _.noI18n(a.filename), a);
+                        buildDropdown(attachmentNode, a.filename, a);
                     });
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');

@@ -244,7 +244,7 @@ define('io.ox/core/tk/attachments', [
                     }).done(function (attachments) {
                         if (attachments.length) {
                             _(attachments).each(function (a) {
-                                drawAttachment(a, _.noI18n(a.filename));
+                                drawAttachment(a, a.filename);
                             });
                             if (attachments.length > 1) {
                                 drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');

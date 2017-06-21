@@ -175,7 +175,7 @@ define('io.ox/core/api/group', [
      */
     api.getName = function (id) {
         return api.get({ id: id }).then(function (data) {
-            return _.noI18n(data.display_name || data.name || '');
+            return data.display_name || data.name || '';
         });
     };
 

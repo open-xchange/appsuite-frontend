@@ -250,7 +250,7 @@ define('io.ox/core/tk/tokenfield', [
                         //#. %1$d is the number of search results in the autocomplete field
                         //#, c-format
                         gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
-                        gt.noI18n(numberOfResults)
+                        numberOfResults
                     );
                 }
 

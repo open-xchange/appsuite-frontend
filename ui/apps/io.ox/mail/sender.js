@@ -30,7 +30,7 @@ define('io.ox/mail/sender', [
     }
 
     function drawOption(value, text, display_name, address) {
-        return $('<option>', { value: value }).text(_.noI18n(text || value))
+        return $('<option>', { value: value }).text(text || value)
             .attr({ 'data-display-name': (display_name || ''), 'data-address': (address || value) });
     }
 

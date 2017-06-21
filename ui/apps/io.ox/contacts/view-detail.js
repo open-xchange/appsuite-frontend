@@ -47,8 +47,8 @@ define('io.ox/contacts/view-detail', [
 
         function single(index, value, translated) {
             var params = new Array(index);
-            params[index - 1] = translated ? value : _.noI18n(value);
-            return { format: _.noI18n('%' + index + '$s'), params: params };
+            params[index - 1] = translated ? value : value;
+            return { format: '%' + index + '$s', params: params };
         }
 
         var count, desc;
@@ -69,7 +69,7 @@ define('io.ox/contacts/view-detail', [
         if (data.position || data.profession) {
             return {
                 format: join(', ', data.position ? '%1$s' : '', data.profession ? '%2$s' : ''),
-                params: [_.noI18n(data.position), _.noI18n(data.profession)]
+                params: [data.position, data.profession]
             };
         }
 
@@ -81,7 +81,7 @@ define('io.ox/contacts/view-detail', [
         return _.aprintf(
             format.format,
             function (index) {
-                return $('<span>').addClass(classes[index]).text(_.noI18n(format.params[index]));
+                return $('<span>').addClass(classes[index]).text(format.params[index]);
             },
             function (text) {
                 return $.txt(text);
@@ -195,7 +195,7 @@ define('io.ox/contacts/view-detail', [
                         section.empty();
                         _(data).each(function (a) {
                             // draw
-                            buildDropdown(section, _.noI18n(a.filename), a);
+                            buildDropdown(section, a.filename, a);
                         });
                         if (data.length > 1) {
                             buildDropdown(section, gt('All attachments'), data).find('a').removeClass('attachment-item');
@@ -341,8 +341,7 @@ define('io.ox/contacts/view-detail', [
             $(this).append(
                 $('<dt>').text(model.fields[id]),
                 $('<dd>').append(
-                    $('<a>', { href: 'mailto:' + address })
-                        .text(_.noI18n(address))
+                    $('<a>').attr('href', 'mailto:' + address).text(address)
                         .on('click', { email: address, display_name: name }, clickMail)
                 )
             );

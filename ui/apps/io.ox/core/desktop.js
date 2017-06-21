@@ -213,7 +213,7 @@ define('io.ox/core/desktop', [
                         _.url.hash('folder', null);
                         // update window title?
                         if (win) {
-                            win.setTitle(_.noI18n(''));
+                            win.setTitle('');
                         }
                         // update grid?
                         if (grid) {
@@ -232,7 +232,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title || ''));
+                                    win.setTitle(data.title || '');
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -1273,11 +1273,11 @@ define('io.ox/core/desktop', [
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
-                                _.noI18n(ox.serverConfig.pageTitle),
-                                _.noI18n(self.getTitle())
+                                ox.serverConfig.pageTitle,
+                                self.getTitle()
                             );
                         } else {
-                            document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                            document.title = document.customTitle = ox.serverConfig.pageTitle;
                         }
 
                         if (firstShow) {
@@ -1314,7 +1314,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.hide', this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                        document.title = document.customTitle = ox.serverConfig.pageTitle;
                     }
                     return this;
                 };
@@ -1443,11 +1443,11 @@ define('io.ox/core/desktop', [
                                     //#. %1$s is the name of the page, e.g. OX App Suite
                                     //#. %2$s is the title of the active app, e.g. Calendar
                                     gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    _.noI18n(title)
+                                    ox.serverConfig.pageTitle,
+                                    title
                                 );
                             } else {
-                                document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                                document.title = document.customTitle = ox.serverConfig.pageTitle;
                             }
                         }
                         this.trigger('change:title');

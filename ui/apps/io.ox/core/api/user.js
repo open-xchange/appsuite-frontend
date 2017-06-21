@@ -216,7 +216,7 @@ define('io.ox/core/api/user', [
      */
     api.getName = function (id) {
         return api.get({ id: id }).then(function (data) {
-            return _.noI18n(data.display_name || data.email1 || '');
+            return data.display_name || data.email1 || '';
         });
     };
 
@@ -227,7 +227,7 @@ define('io.ox/core/api/user', [
      */
     api.getGreeting = function (id) {
         return api.get({ id: id }).then(function (data) {
-            return _.noI18n(data.first_name || data.display_name || data.email1 || '');
+            return data.first_name || data.display_name || data.email1 || '';
         });
     };
 
@@ -260,7 +260,7 @@ define('io.ox/core/api/user', [
      * @return { jquery} textlink node
      */
     api.getLink = function (id, text) {
-        text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
+        text = text ? $.txt(text) : api.getTextNode(id);
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 

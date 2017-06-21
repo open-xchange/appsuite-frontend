@@ -29,8 +29,8 @@ define('io.ox/contacts/util', [
      */
     function single(index, value) {
         var params = new Array(index);
-        params[index - 1] = _.noI18n(value);
-        return { format: _.noI18n('%' + index + '$s'), params: params };
+        params[index - 1] = value;
+        return { format: '%' + index + '$s', params: params };
     }
 
     // vanity fix
@@ -100,11 +100,11 @@ define('io.ox/contacts/util', [
             if (first_name && last_name) {
 
                 var preference = settings.get('fullNameFormat', 'auto'),
-                    params = [_.noI18n(first_name), _.noI18n(last_name)],
+                    params = [first_name, last_name],
                     format;
 
                 title = getTitle(title);
-                if (title) params.push(_.noI18n(title));
+                if (title) params.push(title);
 
                 if (preference === 'firstname lastname') {
                     format = title ? '%3$s %1$s %2$s' : '%1$s %2$s';
@@ -139,7 +139,7 @@ define('io.ox/contacts/util', [
             // fallback #3: use existing display name?
             if (display_name) return single(4, util.unescapeDisplayName(display_name));
 
-            return { format: _.noI18n(''), params: [] };
+            return { format: '', params: [] };
         },
 
         getFullName: function (obj, htmlOutput) {
@@ -186,7 +186,7 @@ define('io.ox/contacts/util', [
                         //#. %1$s is the first name
                         //#. %2$s is the last name
                         gt.pgettext('mail address', '%1$s %2$s'),
-                    params: [_.noI18n(first_name), _.noI18n(last_name)]
+                    params: [first_name, last_name]
                 };
             }
 
@@ -205,7 +205,7 @@ define('io.ox/contacts/util', [
                 return single(4, util.unescapeDisplayName(display_name));
             }
 
-            return { format: _.noI18n(''), params: [] };
+            return { format: '', params: [] };
         },
 
         getMailFullName: function (obj, htmlOutput) {
@@ -228,7 +228,7 @@ define('io.ox/contacts/util', [
             if (obj.email1) return single(1, obj.email1);
             if (obj.email2) return single(2, obj.email2);
             if (obj.email3) return single(3, obj.email3);
-            return { format: _.noI18n(''), params: [] };
+            return { format: '', params: [] };
         },
 
         getMail: function (obj) {

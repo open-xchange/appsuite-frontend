@@ -122,8 +122,8 @@ define('io.ox/participants/views', [
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
                 extra = extra || TYPE_LABELS[this.model.get('type')] || '';
-                this.nodes.$mail.text(gt.noI18n(mail));
-                this.nodes.$extra.text(gt.noI18n(extra));
+                this.nodes.$mail.text(mail);
+                this.nodes.$extra.text(extra);
                 if (mail && extra) {
                     this.$el.addClass('three-rows');
                 }

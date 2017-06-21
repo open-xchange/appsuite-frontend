@@ -374,8 +374,8 @@ define('io.ox/calendar/util', [
             var current = moment(data.start_date);
 
             parent.append(
-                $.txt(gt.noI18n(this.getTimeInterval(data))),
-                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(gt.noI18n(current.zoneAbbr())), data, options)
+                $.txt(this.getTimeInterval(data)),
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(current.zoneAbbr()), data, options)
             );
 
             return parent;
@@ -409,12 +409,12 @@ define('io.ox/calendar/util', [
                     // get short name (with a few exceptions; see bug 41440)
                     var name = /(North|East|South|West|Central)/.test(zone) ? zone : zone.replace(/^.*?\//, '');
                     // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<li>').append(
-                        $('<span>')
-                            .text(gt.noI18n(name.replace(/_/g, ' '))),
-                        $('<span class="time">')
-                            .text(gt.noI18n(that.getTimeInterval(data, zone)))
-                    ));
+                    div.append(
+                        $('<li>').append(
+                            $('<span>').text(name.replace(/_/g, ' ')),
+                            $('<span class="time">').text(that.getTimeInterval(data, zone))
+                        )
+                    );
                 });
 
                 return div;

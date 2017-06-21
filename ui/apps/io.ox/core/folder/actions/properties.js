@@ -71,11 +71,11 @@ define('io.ox/core/folder/actions/properties', [
                 // users requires "caldav" capability
                 if (capabilities.has('caldav') && (module === 'calendar' || (module === 'tasks' && model.is('private')))) {
                     node.append(
-                        group(gt('CalDAV URL'), _.noI18n(
+                        group(gt('CalDAV URL'),
                             caldavConfig.get('url')
                                 .replace('[hostname]', location.host)
                                 .replace('[folderId]', id)
-                        ))
+                        )
                     );
                 }
             })

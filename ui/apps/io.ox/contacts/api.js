@@ -850,7 +850,7 @@ define('io.ox/contacts/api', [
                     email1: email
                 });
             }
-            node.text(_.noI18n(name + '\u00A0'));
+            node.text(name + '\u00A0');
         };
 
         // clear vars after call stack has cleared
