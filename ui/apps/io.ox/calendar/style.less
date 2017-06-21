@@ -237,6 +237,11 @@
         }
     }
 
+    .fulltime .appointment:focus {
+            //increase z-index so box shadow is shown fully
+            z-index: 1;
+    }
+
     .custom-colors & .appointment {
 
         .generate-color-label(@counter) when (@counter > 0) {
