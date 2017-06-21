@@ -1,0 +1,5 @@
+{
+    "namespace": "io.ox/mail/signatures",
+    "request": "/appsuite/api/mail\\?action=reply.*view=text",
+    "response": {"data":{"msgref":"default0/INBOX/100","unread":0,"attachment":false,"content_type":"text/plain","size":-1,"account_id":0,"malicious":false,"security_info":{"encrypted":false,"signed":false},"from":[["Richard Petersen","richard.petersen@open-xchange.com"]],"to":[["Richard Petersen","richard.petersen@open-xchange.com"]],"cc":[],"bcc":[],"subject":"Re: Test","flags":0,"user":[],"color_label":0,"priority":3,"headers":{"MIME-Version":"1.0","References":"<186969008.761.1498045579118@appsuite-dev.open-xchange.com>","Content-Transfer-Encoding":"7bit","In-Reply-To":"<186969008.761.1498045579118@appsuite-dev.open-xchange.com>"},"attachments":[{"id":"1","disp":"inline","content_type":"text/plain","size":208,"content":"<br>&gt; On June 21, 2017 at 1:46 PM Richard Petersen &lt;richard.petersen@open-xchange.com&gt; wrote:<br>&gt; <br>&gt; <br>&gt; This is my first signature<br>&gt; <br>&gt; displayed above the quoted text<br>","truncated":false,"sanitized":true}],"modified":0,"csid":"4185.1498045605104"}}
+}

@@ -47,7 +47,8 @@ describe('Mail Compose html signatures', function () {
         client
             .login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' })
             .waitForElementVisible('.io-ox-mail-window', 20000)
-            .setSetting('io.ox/mail', 'defaultSignature', '0');
+            .setSetting('io.ox/mail', 'defaultSignature', '0')
+            .setSetting('io.ox/mail', 'messageFormat', 'html');
 
         client
             // clicked on a-tag with label "Compose"
@@ -87,7 +88,7 @@ describe('Mail Compose html signatures', function () {
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
             .clickWhenVisible('.io-ox-dialog-popup button[data-action="delete"]')
-            .waitForElementVisible('.io-ox-mail-window');
+            .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
     });
@@ -96,7 +97,8 @@ describe('Mail Compose html signatures', function () {
         client
             .login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' })
             .waitForElementVisible('.io-ox-mail-window', 20000)
-            .setSetting('io.ox/mail', 'defaultSignature', '2');
+            .setSetting('io.ox/mail', 'defaultSignature', '2')
+            .setSetting('io.ox/mail', 'messageFormat', 'html');
 
         client
             // clicked on a-tag with label "Compose"
@@ -113,7 +115,7 @@ describe('Mail Compose html signatures', function () {
         // discard mail
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
-            .waitForElementVisible('.io-ox-mail-window');
+            .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
     });
@@ -122,7 +124,8 @@ describe('Mail Compose html signatures', function () {
         client
             .login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' })
             .waitForElementVisible('.io-ox-mail-window', 20000)
-            .setSetting('io.ox/mail', 'defaultReplyForwardSignature', '0');
+            .setSetting('io.ox/mail', 'defaultReplyForwardSignature', '0')
+            .setSetting('io.ox/mail', 'messageFormat', 'html');
 
         // click on first email
         client
@@ -168,7 +171,7 @@ describe('Mail Compose html signatures', function () {
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
             .clickWhenVisible('.io-ox-dialog-popup button[data-action="delete"]')
-            .waitForElementVisible('.io-ox-mail-window');
+            .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
     });
@@ -177,7 +180,8 @@ describe('Mail Compose html signatures', function () {
         client
             .login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' })
             .waitForElementVisible('.io-ox-mail-window', 20000)
-            .setSetting('io.ox/mail', 'defaultReplyForwardSignature', '2');
+            .setSetting('io.ox/mail', 'defaultReplyForwardSignature', '2')
+            .setSetting('io.ox/mail', 'messageFormat', 'html');
 
         // click on first email
         client
@@ -201,7 +205,7 @@ describe('Mail Compose html signatures', function () {
         // discard mail
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
-            .waitForElementVisible('.io-ox-mail-window');
+            .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
     });

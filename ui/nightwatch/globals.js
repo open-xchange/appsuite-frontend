@@ -17,7 +17,7 @@ module.exports = {
         done();
     },
     after: function (done) {
-        if (this.test_settings.globals.environment === 'local') return chromedriver.stop();
+        if (this.test_settings.globals.environment === 'local') chromedriver.stop();
         done();
     }
 };

@@ -3,6 +3,6 @@
     "request": "/appsuite/api/mail\\?action=all",
     "response": {
         "cached": false,
-        "data": [[0,"100","default0/INBOX",false,[["Markus Wagner","mwagner@debian.local"]],[[null,"mwagner@debian.local"]],[],[],"Test subject",830,1496100674000,32,3,"E-Mail","text/html; charset=UTF-8",null]]
+        "data": [[0,"100","default0/INBOX",false,[["Richard Petersen","richard.petersen@open-xchange.com"]],[[null,"richard.petersen@open-xchange.com"]],[],[],"Test subject",830,1496100674000,32,3,"E-Mail","text/html; charset=UTF-8",null]]
     }
 }
