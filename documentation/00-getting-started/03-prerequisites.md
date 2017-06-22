@@ -15,7 +15,7 @@ Before we begin, here are a few things that you need to have set up before going
 We will not cover how to set up one of these.
 Either have it running locally on your development machine, if you are also developing backend functionality, or install an OX server on another machine as a normal set up.
 Either one is fine. - To follow this guide, on your development machine you will need git, nodejs (including npm) and a text editor, for the actual development.
-Following npm modules must be installed globally: `grunt-cli` and `bower`, optionally `yo` might be useful for scaffolding.
+Following npm modules must be installed globally: `grunt-cli` and optionally `yo` might be useful for scaffolding.
 
 # Check out the source
 

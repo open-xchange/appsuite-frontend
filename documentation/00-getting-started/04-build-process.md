@@ -51,7 +51,6 @@ of the shared grunt configuration.
 
 - delete ui/build directory
 - delete ui/node_modules
-- delete ui/bower_components
 - runt `grunt build` again
 
 ## The ui starts but the top bar does not contain any apps/modules
