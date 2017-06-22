@@ -924,7 +924,6 @@
         },
 
         noI18n: function () {
-            console.log('_.noI18n is deprecated and will be removed after 7.10.');
             return !_.url.hash('debug-i18n') ? _.identity(arguments[0]) : function (text) {
                 return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
             };

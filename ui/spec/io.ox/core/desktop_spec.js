@@ -53,7 +53,7 @@ define(['io.ox/core/desktop'], function () {
                         });
                     });
 
-                    it('should not launch an unregistered app', function () {
+                    it.skip('should not launch an unregistered app', function () {
                         ox.manifests.disabled['io.ox/testApp/main'] = true;
 
                         return app.launch().then(function () {
