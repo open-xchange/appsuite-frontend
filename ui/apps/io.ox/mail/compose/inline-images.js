@@ -96,8 +96,7 @@ define('io.ox/mail/compose/inline-images', [
     return {
         api: api,
         show: function () {
-            var noBusy = (_.browser.IE && _.browser.IE < 10), // IE9 upload fails if window becomes busy
-                dialog = new dialogs.ModalDialog({ async: true, noBusy: noBusy }),
+            var dialog = new dialogs.ModalDialog({ async: true }),
                 baton =  new ext.Baton({ $: {} }),
                 def = $.Deferred(),
                 form;
@@ -125,9 +124,7 @@ define('io.ox/mail/compose/inline-images', [
                         popup.idle();
                     };
 
-                if (!noBusy) {
-                    popup.busy();
-                }
+                popup.busy();
 
                 if (!(/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(file.val())) {
                     notifications.yell('error', gt('Please select a valid image File to insert'));

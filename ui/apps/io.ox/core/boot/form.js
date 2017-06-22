@@ -237,8 +237,7 @@ define('io.ox/core/boot/form', [
             });
         }
 
-        // set username input type to text in IE
-        if (_.device('IE > 9')) {
+        if (_.device('IE')) {
             // cannot change type with jQuery's attr()
             ($('#io-ox-login-username')[0] || {}).type = 'text';
         }
