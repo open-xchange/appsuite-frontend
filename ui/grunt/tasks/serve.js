@@ -18,10 +18,9 @@ module.exports = function (grunt) {
                 standalone: false
             });
 
-        grunt.config.set('connect.mock', grunt.config('connect.server'));
-        grunt.config.set('connect.mock.options.middleware', _.wrap(grunt.config.get('connect.server.options.middleware'), function (func, connect, options, middlewares) {
+        grunt.config.set('connect.server.options.middleware', _.wrap(grunt.config.get('connect.server.options.middleware'), function (func, connect, options, middlewares) {
             var mws = func.call(this, connect, options, middlewares);
-            if (this.target === 'mock') mws.unshift(mockMiddleware);
+            if (this.flags.mock === true) mws.unshift(mockMiddleware);
             return mws;
         }));
     }
