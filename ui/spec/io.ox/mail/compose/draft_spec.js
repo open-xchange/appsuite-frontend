@@ -15,7 +15,7 @@ define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
 
     describe('Mail Compose', function () {
         describe('draft mails', function () {
-            this.timeout = 10000;
+            this.timeout(10000);
 
             var app, pictureHalo, snippetsGetAll, getValidAddress, throttle;
 
