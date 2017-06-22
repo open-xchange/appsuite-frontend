@@ -65,7 +65,7 @@ The local dependencies are not installed, run `npm install` to install them. Aft
 
 ## Some of my files aren't copied. How can I extend a copy sub-task?
 
-Especially when using external libraries managed with Bower or npm, sometimes the [shared grunt configuration](https://github.com/Open-Xchange-Frontend/shared-grunt-config) doesn't contain all cases for files to be copied during the build or dist tasks.
+Especially when using external libraries managed with npm, sometimes the [shared grunt configuration](https://github.com/Open-Xchange-Frontend/shared-grunt-config) doesn't contain all cases for files to be copied during the build or dist tasks.
 Due to the extensibility of our shared grunt configuration, it's quite easy to add those missing files.
 You can hook up into the `build_*` or the `dist_*` copy task and add your custom configuration like this:
 
