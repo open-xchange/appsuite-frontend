@@ -173,6 +173,10 @@ stop_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy
