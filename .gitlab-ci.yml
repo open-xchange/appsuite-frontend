@@ -168,7 +168,7 @@ stop_review:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
   script:
-    - docker stop $CI_ENVIRONMENT_SLUG
+    - docker stop $CI_COMMIT_REF_SLUG
   when: manual
   environment:
     name: review/$CI_COMMIT_REF_NAME
