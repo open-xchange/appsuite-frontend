@@ -150,11 +150,10 @@ define('plugins/portal/reddit/register', [
                     willDisableBusyIndicator = true;
 
                     $img = $('<img/>', { 'src': imageUrl }).css({ display: 'none' })
-                        .load(function () {
-                            if ($busyIndicator) {
-                                $busyIndicator.detach();
-                                $(this).fadeIn();
-                            }
+                        .on('load', function () {
+                            if (!$busyIndicator) return;
+                            $busyIndicator.detach();
+                            $(this).fadeIn();
                         });
 
                     $img.appendTo($node);

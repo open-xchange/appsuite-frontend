@@ -36,7 +36,7 @@ define('io.ox/contacts/actions/print', [
                     .attr({
                         title: gt('Print preview'),
                         src: ox.base + '/print.html'
-                    }).load(def.resolve)
+                    }).on('load', def.resolve)
                 ),
                 $('<div class="col-xs-5">').append(
                     new mini.RadioView({

@@ -85,7 +85,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 if (callback) {
                     var self = this;
                     //preload Image
-                    $('<img>').attr('src', url).load(function () {
+                    $('<img>').attr('src', url).on('load', function () {
                         //no memory leaks
                         $(this).remove();
                         //image is cached now so no loading time for this
