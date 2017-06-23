@@ -346,6 +346,10 @@ define('io.ox/backbone/mini-views/common', [
         }) :
         InputView.extend({
             format: 'l',
+            onChange: function () {
+                var t = +moment(this.$el.val(), this.format).utc(true);
+                this.model.set(this.name, t);
+            },
             update: function () {
                 this.$el.val(moment(this.model.get(this.name)).format(this.format));
             },

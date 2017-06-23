@@ -164,6 +164,11 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                         })
                     )
                 );
+
+                this.model.on('change:dateFrom', function (model, value) {
+                    var length = (model.get('dateUntil') - model.previous('dateFrom')) || 0;
+                    model.set('dateUntil', value + length);
+                });
             }
         }
     );
@@ -208,7 +213,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
             render: function (baton) {
 
                 this.$body.append(
-                    $('<div class="form-group">').append(
+                    $('<div>').append(
                         $('<button type="button" class="btn btn-link">')
                         .text('Show advanced options')
                         .on('click', onClick)
@@ -217,7 +222,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                 );
 
                 function onClick() {
-                    $(this).parent().next().show().end().remove();
+                    $(this).parent().next().show().find(':input:first').focus();
+                    $(this).remove();
                 }
             }
         }
@@ -261,10 +267,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     )
                 );
 
-                console.log('from', this.model.get('from'), 'addresses', this.getAddresses());
-
                 // fix invalid address
-                // if (!this.$('select[name="from"]').val()) this.$('select[name="from"]').val('default');
+                if (!this.$('select[name="from"]').val()) this.$('select[name="from"]').val('default');
             }
         },
         // Aliases
