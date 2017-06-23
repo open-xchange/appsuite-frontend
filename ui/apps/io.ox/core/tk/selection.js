@@ -338,6 +338,9 @@ define('io.ox/core/tk/selection', [
                                 node.addClass('pending-select');
                             }
                         } else {
+                            if (isRange(e)) {
+                                prev = self.get()[0] || empty;
+                            }
                             clear();
                             apply(id, e);
                         }
