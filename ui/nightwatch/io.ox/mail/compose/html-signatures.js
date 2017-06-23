@@ -36,10 +36,10 @@ describe('Mail Compose html signatures', function () {
         } else {
             client.assert
                 .propEquals(
-                '.io-ox-mail-compose-window .editor .editable',
-                'innerHTML',
-                test
-            );
+                    '.io-ox-mail-compose-window .editor .editable',
+                    'innerHTML',
+                    test
+                );
         }
     }
 
@@ -115,6 +115,7 @@ describe('Mail Compose html signatures', function () {
         // discard mail
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
+            .clickWhenVisible('.io-ox-dialog-popup button[data-action="delete"]')
             .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
@@ -205,6 +206,7 @@ describe('Mail Compose html signatures', function () {
         // discard mail
         client
             .clickWhenVisible('.io-ox-mail-compose-window button[data-action="discard"]')
+            .clickWhenVisible('.io-ox-dialog-popup button[data-action="delete"]')
             .waitForElementVisible('.io-ox-mail-window', 5000);
 
         client.logout();
