@@ -80,6 +80,7 @@
     "resize-polyfill": "1.1.1",
     "socket.io-client": "^2.0.3",
     "swiper": "3.0.6",
+    "tinymce": "^4.6.3",
     "typeahead.js": "0.10.5",
     "underscore": "1.8.3",
     "unorm": "1.4.1",
