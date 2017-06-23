@@ -56,9 +56,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         setDropdownOverlay: function () {
             var self = this;
 
-            this.$overlay = $('<div class="smart-dropdown-container dropdown open">')
-                .addClass(this.$el.prop('className'))
-                .on('ready', this.onReady.bind(this));
+            this.$overlay = $('<div class="smart-dropdown-container dropdown open">', this.onReady.bind(this))
+                .addClass(this.$el.prop('className'));
+
             this.$ul.data('style', this.$ul.attr('style'));
             this.adjustBounds();
 
@@ -288,6 +288,9 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         render: function () {
+            $(this.$el, function () {
+                this.trigger('ready');
+            }.bind(this));
             var label = getLabel(this.options.label),
                 ariaLabel = this.options.aria ? this.options.aria : null;
 
