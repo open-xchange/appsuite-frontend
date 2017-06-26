@@ -177,6 +177,10 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
             if (alert.length) {
                 node.addClass('appear');
+                // trigger a 'notification:removed' when the yell node is
+                // removed from dom like in remove() for a consistent behavior
+                // e.g. when the yell is closed by an new yell
+                alert.trigger('notification:removed');
                 alert.remove();
             }
 
