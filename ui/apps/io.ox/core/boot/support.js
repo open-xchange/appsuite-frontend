@@ -55,7 +55,7 @@ define('io.ox/core/boot/support', [
 
                 // special info for not supported android
                 util.feedback('info', function () {
-                    return $.txt(
+                    return $('<div data-error="outdated-platform">').text(
                         //#. %n in the lowest version of Android
                         gt('You need to use Android %n or higher.', _.browserSupport.Android)
                     );
@@ -77,7 +77,7 @@ define('io.ox/core/boot/support', [
 
                 // special info for not supported iOS
                 util.feedback('info', function () {
-                    return $.txt(
+                    return $('<div data-error="outdated-platform">').text(
                         //#. %n is the lowest version of iOS
                         gt('You need to use iOS %n or higher.', _.browserSupport.iOS)
                     );
@@ -94,14 +94,14 @@ define('io.ox/core/boot/support', [
             index: 400,
             draw: function (baton) {
 
-                if (!_.browser.unknown) return; // don't use device() here
+                if (_.device('desktop') || window.isBrowserSupported()) return;
 
                 // warning about all unknown browser-platform combinations, might be chrome on iOS
                 util.feedback('info', function () {
                     return $('<b>').text(gt('Your browser is not supported!'))
                         .add($.txt(_.noI18n('\xa0')))
                         //#. Should tell the user that his combination of browser and operating system is not supported
-                        .add($('<div>').text(gt('This browser is not supported on your current platform.')));
+                        .add($('<div data-error="unkown-combination">').text(gt('This browser is not supported on your current platform.')));
                 });
 
                 baton.stopPropagation();
@@ -120,7 +120,7 @@ define('io.ox/core/boot/support', [
                     return $('<b>').text(gt('Your platform is not supported!'))
                         .add($.txt(_.noI18n('\xa0')))
                         //#. Should tell the user that his combination of browser and operating system is not supported
-                        .add($('<div>').text(gt('This platform is currently not supported.')));
+                        .add($('<div data-error="unkown-platform">').text(gt('This platform is currently not supported.')));
                 });
 
                 baton.stopPropagation();
@@ -128,7 +128,7 @@ define('io.ox/core/boot/support', [
         },
         //
         // Desktop browsers. Detailed response.
-        //
+
         {
             id: 'update-required',
             index: 1000000000000,
@@ -138,8 +138,8 @@ define('io.ox/core/boot/support', [
                     return $('<b>').text(gt('Your browser is not supported!'))
                         .add($.txt(_.noI18n('\xa0')))
                         .add(
-                            $('<div>').text(
-                                gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.',
+                            $('<div data-error="outdated-browser">').text(
+                                gt.format(gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.'),
                                     _.browserSupport.Chrome, _.browserSupport.Firefox, _.browserSupport.IE, _.browserSupport.Safari
                                 )
                             )

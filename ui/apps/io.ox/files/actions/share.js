@@ -65,6 +65,13 @@ define('io.ox/files/actions/share', [
             .parent().busy()
             .find('.btn-primary').prop('disabled', true);
 
+        // error handler
+        view.listenTo(view.model, 'error:sync', function (action) {
+            if (action === 'read') return dialog.close();
+            dialog.idle();
+        });
+
+        // add event listeners
         view.listenTo(view.model, 'change:url', function (value) {
             if (!value) return;
             dialog.getContentNode().removeClass('invisible')

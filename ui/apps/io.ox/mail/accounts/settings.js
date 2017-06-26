@@ -132,6 +132,13 @@ define('io.ox/mail/accounts/settings', [
                                 }, true);
                         })), list = new OAuth.Views.ServicesListView({ collection: mailServices });
 
+                    if (mailServices.length === 0) {
+                        baton.popup.getFooter().find('[data-action="add"]').show();
+                        // invoke wizard, there are no OAuth options to choose from
+                        ext.point('io.ox/mail/add-account/wizard').invoke('draw', baton.popup.getContentNode().empty());
+                        return;
+                    }
+
                     // only valid for non dsc setups
                     mailServices.push({
                         id: 'wizard',
