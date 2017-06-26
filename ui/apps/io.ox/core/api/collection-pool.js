@@ -19,7 +19,15 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         collections = {},
         // to avoid unnecessary/endless recursion
         skip = false,
-        skipRemove = false;
+        skipRemove = false,
+        Collection = backbone.Collection.extend({
+            _removeModels: function (models, options) {
+                models = _(models).filter(function (model) {
+                    return model.preserve !== true;
+                });
+                backbone.Collection.prototype._removeModels.call(this, models, options);
+            }
+        });
 
     function propagateRemove(module, model) {
         if (skip || skipRemove) return;
@@ -112,7 +120,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         var hash = collections[module] || (collections[module] = {});
 
         options = options || {};
-        this.Collection = options.Collection || backbone.Collection;
+        this.Collection = options.Collection || Collection;
         this.Model = options.Model || backbone.Model;
 
         this.getCollections = function () {
@@ -281,6 +289,13 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             var list = _(this.getByFolder(ids));
             list.each(function (collection) { collection.expired = true; });
             return list;
+        },
+
+        preserveModel: function (cid, state) {
+            _(this.getCollections()).each(function (entry) {
+                var model = entry.collection.get(cid);
+                if (model) model.preserve = !!state;
+            });
         }
     });
 

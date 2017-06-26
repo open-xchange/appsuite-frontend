@@ -1095,6 +1095,21 @@ define('io.ox/mail/main', [
             });
         },
 
+        'preserve-selection': function (app) {
+            app.listView.on({
+                'selection:add': function (list) {
+                    _(list).each(function (cid) {
+                        api.pool.preserveModel(cid, true);
+                    });
+                },
+                'selection:remove': function (list) {
+                    _(list).each(function (cid) {
+                        api.pool.preserveModel(cid, false);
+                    });
+                }
+            });
+        },
+
         /*
          * Thread view navigation must respond to changing layout
          */
