@@ -27,7 +27,6 @@
     "open-xchange-shared-grunt-config": "git://github.com/Open-Xchange-Frontend/shared-grunt-config.git#master"
   },
   "devDependencies": {
-    "@open-xchange/mock-middleware": "https://gitlab.open-xchange.com/frontend/mock-middleware.git",
     "appserver": "git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8",
     "chai": "^4.0.2",
     "chromedriver": "^2.25.1",
