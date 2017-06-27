@@ -252,7 +252,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 scrollPane =  $node.closest('.scrollable-pane');
 
             return this.initialize().then(function (data, config) {
-                data = data[0];
 
                 // adds test for testcase
                 // config.tests.push({ test: 'newtest', comparison: ['regex', 'is', 'contains', 'matches', 'testValue'] });
@@ -533,6 +532,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             });
 
         },
+
         initialize: function () {
             // needed for mail actions
             var options = {
@@ -546,12 +546,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         refresh: function () {
             this.initialize().done(function (data) {
-                _.each(data[0], function (rule) {
+                _(data).each(function (rule) {
                     collection.add(factory.create(rule), { merge: true });
                 });
             });
-
         }
     };
-
 });
