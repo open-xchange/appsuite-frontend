@@ -3887,7 +3887,7 @@ msgstr ""
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr ""
-"Dateien können nicht hochgeladen werden, weil das Upload-Limit von%1$s "
+"Dateien können nicht hochgeladen werden, weil das Upload-Limit von %1$s "
 "überschritten wurde."
 
 #: apps/io.ox/files/actions.js module:io.ox/files

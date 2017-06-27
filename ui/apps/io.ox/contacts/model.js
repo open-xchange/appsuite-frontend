@@ -19,8 +19,9 @@ define('io.ox/contacts/model', [
     'io.ox/contacts/api',
     'io.ox/core/capabilities',
     'io.ox/settings/util',
+    'io.ox/core/strings',
     'gettext!io.ox/contacts'
-], function (ModelFactory, Validators, ext, api, capabilities, settingsUtil, gt) {
+], function (ModelFactory, Validators, ext, api, capabilities, settingsUtil, strings, gt) {
 
     'use strict';
 
@@ -185,7 +186,7 @@ define('io.ox/contacts/model', [
             id: 'upload_quota',
             validate: function (attributes) {
                 if (attributes.quotaExceeded) {
-                    this.add('attachments_list', gt('Files can not be uploaded, because quota exceeded.'));
+                    this.add('attachments_list', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
                 }
             }
         });
