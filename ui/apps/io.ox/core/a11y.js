@@ -64,23 +64,44 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
 
     $(document).on('keydown.launchers', 'ul[role="menubar"], ul[role="tablist"], ul[role="toolbar"]:not(.classic-toolbar), ul.launchers', menubarKeydown);
 
+    // listbox
+
+    $(document).on('blur.listbox', 'ul[role="listbox"].listbox', function () {
+        $(this).removeAttr('aria-activedescendant');
+    });
+
     $(document).on('keydown.listbox', 'ul[role="listbox"].listbox', function (e) {
-        var node = $(e.target).closest('.window-container');
-        if (e.which === 27) node.find('.folder-tree .folder.selected').focus();
-        if (/13|32/.test(e.which)) {
+        var node = $(e.target).closest('.window-container'),
+            $list = $(this),
+            active = $('#' + $list.attr('aria-activedescendant'));
+
+        // ESC
+        if (/^27$/.test(e.which)) return node.find('.folder-tree .folder.selected').focus();
+
+        // ENTER/SPACE
+        if (/^(13|32)$/.test(e.which)) {
             e.preventDefault();
-            node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
+            return node.find('.list-item.selectable.selected, .list-item.selectable:first, .vgrid-cell.selectable.selected, .vgrid-cell.selectable:first, .vgrid-scrollpane-container, .rightside, .scrollpane.f6-target').first().visibleFocus();
         }
-        if (!/38|40/.test(e.which)) return;
-        var li = $(this).children(),
-            active = $('#' + $(this).attr('aria-activedescendant')),
-            next = (/40/.test(e.which)) ? active.next() : active.prev(),
-            wrap = (/40/.test(e.which)) ? li.first() : li.last();
 
-        if (!next.length) next = wrap;
+        // BACKSPACE/DELETE
+        if (/^(8|46)$/.test(e.which)) {
+            var cid = active.attr('data-cid');
+            if (cid) $list.trigger('remove', cid);
+            return;
+        }
 
-        next.addClass('focussed').attr('aria-selected', true).trigger('click').siblings().removeClass('focussed').removeAttr('aria-selected');
-        $(this).attr('aria-activedescendant', next.attr('id'));
+        // ARROW KEYS
+        if (/^(37|38|39|40)$/.test(e.which)) {
+            var li = $list.children(),
+                next = (/39|40/.test(e.which)) ? active.next() : active.prev(),
+                wrap = (/39|40/.test(e.which)) ? li.first() : li.last();
+
+            if (!next.length) next = wrap;
+
+            next.addClass('focussed').attr('aria-selected', true).trigger('click').siblings().removeClass('focussed').removeAttr('aria-selected');
+            return $list.attr('aria-activedescendant', next.attr('id'));
+        }
     });
 
     $(document).on('click.listbox', 'ul[role="listbox"].listbox li', function () {

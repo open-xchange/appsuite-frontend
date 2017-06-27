@@ -265,7 +265,7 @@ define('io.ox/files/api', [
         },
 
         types: {
-            image: (/^(gif|bmp|tiff|jpe?g|gmp|png)$/),
+            image: (/^(gif|bmp|tif?f|jpe?g|gmp|png|psd)$/),
             audio: (/^(aac|mp3|m4a|m4b|ogg|opus|wav)$/),
             video: (/^(avi|m4v|mp4|ogv|ogm|mov|mpeg|webm|wmv)$/),
             vcf:   (/^(vcf)$/),

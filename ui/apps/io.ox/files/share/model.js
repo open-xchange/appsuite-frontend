@@ -146,7 +146,10 @@ define('io.ox/files/share/model', [
                         self.set(_.extend(data, { lastModified: timestamp }), { '_inital': true });
                         self.setOriginal();
                         return data.url;
-                    }).fail(yell);
+                    }).fail(function (error) {
+                        yell(error);
+                        self.trigger('error:sync', 'read', error);
+                    });
                 case 'update':
                 case 'create':
                     var changes = self.getChanges(),

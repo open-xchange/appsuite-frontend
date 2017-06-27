@@ -153,6 +153,9 @@ define('io.ox/mail/compose/extensions', [
                                 name = null;
                             } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
                                 name = settings.get(['customDisplayNames', address, 'name'], '');
+                            } else {
+                                // reset
+                                name = settings.get(['customDisplayNames', address, 'defaultName'], '');
                             }
                             return [name, address];
                         }
@@ -896,7 +899,7 @@ define('io.ox/mail/compose/extensions', [
             }
 
             return function (baton) {
-                var fileInput = $('<input type="file" name="file" capture="camera">').css('display', 'none')
+                var fileInput = $('<input type="file" name="file">').css('display', 'none')
                         .on('change', addLocalFile.bind(this, baton.model))
                         // multiple is off on smartphones in favor of camera roll/capture selection
                         .prop('multiple', _.device('!smartphone'));

@@ -40,7 +40,9 @@ define('io.ox/core/tk/mobiscroll', [
             endYear: moment().year() + 100,
             monthNamesShort: moment.monthsShort(),
             dateFormat: moment.localeData().longDateFormat('l').toLowerCase().replace(/yy/g, 'y'),
-            timeFormat: moment.localeData().longDateFormat('LT').replace(/m/g, 'i')
+            timeFormat: moment.localeData().longDateFormat('LT').replace(/m/g, 'i'),
+            amText: moment.localeData().meridiem(0),
+            pmText: moment.localeData().meridiem(12)
         };
         settings.dateOrder = settings.dateFormat.replace(/\W/g, '').replace(/yy/g, 'y');
         settings.timeWheels = settings.timeFormat.replace(/\W/g, '');
