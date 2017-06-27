@@ -446,14 +446,14 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        require(['io.ox/mail/vacationnotice/settings/view-form'], function (view) {
+                        require(['io.ox/mail/mailfilter/vacationnotice/view'], function (view) {
                             view.open();
                         });
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        require(['io.ox/mail/autoforward/settings/view-form'], function (view) {
+                        require(['io.ox/mail/mailfilter/autoforward/view'], function (view) {
                             view.open();
                         });
                     }

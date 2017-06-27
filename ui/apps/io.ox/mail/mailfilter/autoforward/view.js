@@ -11,17 +11,17 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/autoforward/settings/view-form', [
+define('io.ox/mail/mailfilter/autoforward/view', [
+    'io.ox/mail/mailfilter/autoforward/model',
     'io.ox/backbone/views/modal',
     'io.ox/backbone/mini-views',
-    'io.ox/mail/autoforward/settings/model',
     'io.ox/core/settings/util',
     'io.ox/core/extensions',
     'io.ox/core/yell',
     'gettext!io.ox/mail',
     // yep, also use vacationnotice here
-    'less!io.ox/mail/vacationnotice/settings/style'
-], function (ModalView, mini, model, util, ext, yell, gt) {
+    'less!io.ox/mail/mailfilter/vacationnotice/style'
+], function (Model, ModalView, mini, util, ext, yell, gt) {
 
     'use strict';
 
@@ -37,7 +37,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
         return new ModalView({
             async: true,
             focus: 'input[name="active"]',
-            model: new Backbone.Model({ active: false }),
+            model: data.model,
             point: POINT,
             title: gt('Auto Forward'),
             width: 640
@@ -53,9 +53,12 @@ define('io.ox/mail/autoforward/settings/view-form', [
             this.$el.addClass('rule-dialog');
         })
         .addCancelButton()
-        .addButton({ label: gt('Apply changes'), action: 'apply' })
+        .addButton({ label: gt('Apply changes'), action: 'save' })
         .on('open', function () {
             this.updateActive();
+        })
+        .on('save', function () {
+            this.model.save().done(this.close).fail(this.idle).fail(yell);
         })
         .open();
     }
@@ -82,9 +85,9 @@ define('io.ox/mail/autoforward/settings/view-form', [
         //
         {
             index: INDEX += 100,
-            id: 'address',
+            id: 'to',
             render: function () {
-                this.$body.append(util.input('forwardmail', model.fields.forwardmail, this.model));
+                this.$body.append(util.input('to', Model.fields.to, this.model));
             }
         },
         //
@@ -92,9 +95,9 @@ define('io.ox/mail/autoforward/settings/view-form', [
         //
         {
             index: INDEX += 100,
-            id: 'keep',
+            id: 'copy',
             render: function () {
-                this.$body.append(util.checkbox('keep', model.fields.keep, this.model));
+                this.$body.append(util.checkbox('copy', Model.fields.copy, this.model));
             }
         },
         //
@@ -104,7 +107,7 @@ define('io.ox/mail/autoforward/settings/view-form', [
             index: INDEX += 100,
             id: 'stop',
             render: function () {
-                this.$body.append(util.checkbox('processSub', model.fields.processSub, this.model));
+                this.$body.append(util.checkbox('processSub', Model.fields.processSub, this.model));
             }
         }
     );
@@ -112,13 +115,12 @@ define('io.ox/mail/autoforward/settings/view-form', [
     //
     // Get required data
     //
-    var getData = (function () {
-
-        return function () {
-            return $.when();
-        };
-
-    }());
+    function getData() {
+        var model = new Model();
+        return model.fetch().then(function () {
+            return { model: model };
+        });
+    }
 
     return { open: open };
 });

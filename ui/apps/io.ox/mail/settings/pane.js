@@ -244,7 +244,7 @@ define('io.ox/mail/settings/pane', [
                 );
 
                 function openDialog() {
-                    ox.load(['io.ox/mail/vacationnotice/settings/view-form']).done(function (view) {
+                    ox.load(['io.ox/mail/mailfilter/vacationnotice/view']).done(function (view) {
                         view.open();
                     });
                 }
@@ -268,7 +268,7 @@ define('io.ox/mail/settings/pane', [
                 );
 
                 function openDialog() {
-                    ox.load(['io.ox/mail/autoforward/settings/view-form']).done(function (view) {
+                    ox.load(['io.ox/mail/mailfilter/autoforward/view']).done(function (view) {
                         view.open();
                     });
                 }

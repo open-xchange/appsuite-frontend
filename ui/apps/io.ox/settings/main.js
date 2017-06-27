@@ -572,7 +572,7 @@ define('io.ox/settings/main', [
                     if (focus) vsplit.right.focus();
                 });
             }
-            return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
+            return require(['io.ox/contacts/settings/pane'], function () {
                 // again, since require makes this async
                 right.empty().idle();
                 vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));

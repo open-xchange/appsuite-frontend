@@ -11,9 +11,9 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/vacationnotice/settings/view-form', [
+define('io.ox/mail/mailfilter/vacationnotice/view', [
+    'io.ox/mail/mailfilter/vacationnotice/model',
     'io.ox/core/api/mailfilter',
-    'io.ox/mail/vacationnotice/settings/model',
     'io.ox/backbone/views',
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views',
@@ -25,8 +25,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
     'io.ox/contacts/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'less!io.ox/mail/vacationnotice/settings/style'
-], function (api, Model, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, settings, gt) {
+    'less!io.ox/mail/mailfilter/vacationnotice/style'
+], function (Model, api, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, settings, gt) {
 
     'use strict';
 
