@@ -75,7 +75,7 @@
     "moment": "2.18.1",
     "moment-timezone": "0.5.13",
     "open-sans-fontface": "1.4.0",
-    "pdfjs-dist": "1.4.20",
+    "pdfjs-dist": "1.7.225",
     "requirejs": "2.3.3",
     "resize-polyfill": "1.1.1",
     "socket.io-client": "^2.0.3",
