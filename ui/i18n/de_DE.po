@@ -9971,7 +9971,7 @@ msgstr "Benutzernamen dürfen nicht leer sein."
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
-msgid "Vacation Notice"
+msgid "Vacation notice"
 msgstr "Abwesenheitsnotiz"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
