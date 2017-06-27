@@ -94,15 +94,15 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                     return api.create(this.toJSON()).done(options.success).fail(options.error);
                 case 'read':
                     return $.when(
-                            api.getRules('autoforward'),
-                            api.getRules('vacation'),
-                            userAPI.get()
-                        )
-                        .then(function (forward, vacation, user) {
-                            return { forward: forward[0], vacation: vacation[0], user: user };
-                        })
-                        .done(options.success)
-                        .fail(options.error);
+                        api.getRules('autoforward'),
+                        api.getRules('vacation'),
+                        userAPI.get()
+                    )
+                    .then(function (forward, vacation, user) {
+                        return { forward: forward[0], vacation: vacation[0], user: user };
+                    })
+                    .done(options.success)
+                    .fail(options.error);
                 case 'update':
                     return api.update(this.toJSON()).done(options.success).fail(options.error);
                 case 'delete':
@@ -113,7 +113,7 @@ define('io.ox/mail/mailfilter/autoforward/model', [
     });
 
     AutoforwardModel.fields = {
-        headline: gt('Auto Forward'),
+        headline: gt('Auto forward'),
         to: gt('Forward all incoming emails to this address'),
         active: gt('Enable'),
         copy: gt('Keep a copy of the message'),

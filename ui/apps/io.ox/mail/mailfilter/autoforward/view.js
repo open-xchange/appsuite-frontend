@@ -30,7 +30,14 @@ define('io.ox/mail/mailfilter/autoforward/view', [
         INDEX = 0;
 
     function open() {
-        return getData().then(openModalDialog, yell);
+        return getData().then(openModalDialog, fail);
+    }
+
+    function fail(e) {
+        yell('error', e.code === 'MAIL_FILTER-0015' ?
+            gt('Unable to load mail filter settings.') :
+            gt('Unable to load your auto forward settings. Please retry later.')
+        );
     }
 
     function openModalDialog(data) {
@@ -40,7 +47,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             focus: 'input[name="active"]',
             model: data.model,
             point: POINT,
-            title: gt('Auto Forward'),
+            title: gt('Auto forward'),
             width: 640
         })
         .inject({
