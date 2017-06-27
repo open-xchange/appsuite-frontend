@@ -150,21 +150,21 @@ define('io.ox/calendar/invitations/register', [
             if (status > 0) {
                 switch (status) {
                     case 1:
-                        message = this.type !== 'task' ?
-                        gt('You have accepted this appointment') :
-                        gt('You have accepted this task');
+                        message = this.type !== 'task'
+                            ? gt('You have accepted this appointment')
+                            : gt('You have accepted this task');
                         className = 'accepted';
                         break;
                     case 2:
-                        message = this.type !== 'task' ?
-                        gt('You declined this appointment') :
-                        gt('You declined this task');
+                        message = this.type !== 'task'
+                            ? gt('You declined this appointment')
+                            : gt('You declined this task');
                         className = 'declined';
                         break;
                     case 3:
-                        message = this.type !== 'task' ?
-                        gt('You tentatively accepted this invitation') :
-                        gt('You tentatively accepted this task');
+                        message = this.type !== 'task'
+                            ? gt('You tentatively accepted this invitation')
+                            : gt('You tentatively accepted this task');
                         className = 'tentative';
                         break;
                     // no default
@@ -185,10 +185,10 @@ define('io.ox/calendar/invitations/register', [
             this.$el.find('.itip-details').append(
                 $('<b>').text(data.title), separator,
                 $('<span class="day">').append(
-                    $.txt(gt.noI18n(dateStrings.dateStr)),
-                    $.txt(gt.noI18n(' ')),
-                    $.txt(gt.noI18n(dateStrings.timeStr)),
-                    $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')))
+                    $.txt(dateStrings.dateStr),
+                    $.txt(' '),
+                    $.txt(dateStrings.timeStr),
+                    $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')
                 ),
                 // confirmation
                 this.renderConfirmation()
@@ -544,9 +544,9 @@ define('io.ox/calendar/invitations/register', [
             // appointment or task was deleted in the meantime
             this.$el.idle().hide();
             notifications.yell('error',
-                this.type === 'appointment' ?
-                gt('Failed to update confirmation status; most probably the appointment has been deleted.') :
-                gt('Failed to update confirmation status; most probably the task has been deleted.')
+                this.type === 'appointment'
+                    ? gt('Failed to update confirmation status; most probably the appointment has been deleted.')
+                    : gt('Failed to update confirmation status; most probably the task has been deleted.')
             );
         },
 

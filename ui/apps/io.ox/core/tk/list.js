@@ -29,7 +29,7 @@ define('io.ox/core/tk/list', [
             39: 'cursor:right',
             40: 'cursor:down'
         },
-    // PULL TO REFRESH constants
+        // PULL TO REFRESH constants
         PTR_START =           5,    // Threshold when pull-to-refresh starts
         PTR_TRIGGER =       150,    // threshold when refresh is done
         PTR_MAX_PULLDOWM =  300,    // max distance where the PTR node can be dragged to

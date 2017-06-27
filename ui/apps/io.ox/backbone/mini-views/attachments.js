@@ -43,7 +43,6 @@ define('io.ox/backbone/mini-views/attachments', [
 
             var self = this;
 
-            this.oldMode = _.browser.IE < 10;
             this.attachmentsToAdd = [];
             this.attachmentsToDelete = [];
             this.attachmentsOnServer = [];
@@ -140,11 +139,7 @@ define('io.ox/backbone/mini-views/attachments', [
         },
 
         addFile: function (file) {
-            if (this.oldMode) {
-                this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
-            } else {
-                this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
-            }
+            this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
         },
 
         addAttachment: function (attachment) {
@@ -157,9 +152,6 @@ define('io.ox/backbone/mini-views/attachments', [
                 this.attachmentsToAdd = _(this.attachmentsToAdd).reject(function (att) {
                     return att.cid === attachment.cid;
                 });
-                if (this.oldMode) {
-                    attachment.file.remove();
-                }
             } else {
                 this.attachmentsToDelete.push(attachment);
             }
@@ -205,33 +197,18 @@ define('io.ox/backbone/mini-views/attachments', [
             }
 
             if (this.attachmentsToAdd.length) {
-                if (this.oldMode) {
-                    api.createOldWay(apiOptions, this.$el.closest('form')).then(
-                        function success() {
-                            allDone -= 2;
-                            if (allDone <= 0) done();
-                        },
-                        function fail(e) {
-                            self.model.trigger('server:error', e);
-                            allDone -= 2;
-                            errors.push(e);
-                            if (allDone <= 0) done();
-                        }
-                    );
-                } else {
-                    api.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).then(
-                        function success() {
-                            allDone -= 2;
-                            if (allDone <= 0) done();
-                        },
-                        function fail(e) {
-                            self.model.trigger('server:error', e);
-                            allDone -= 2;
-                            errors.push(e);
-                            if (allDone <= 0) done();
-                        }
-                    );
-                }
+                api.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).then(
+                    function success() {
+                        allDone -= 2;
+                        if (allDone <= 0) done();
+                    },
+                    function fail(e) {
+                        self.model.trigger('server:error', e);
+                        allDone -= 2;
+                        errors.push(e);
+                        if (allDone <= 0) done();
+                    }
+                );
             }
 
             if (allDone <= 0) done();
@@ -263,27 +240,14 @@ define('io.ox/backbone/mini-views/attachments', [
                 .on('change', function (e) {
                     e.preventDefault();
                     var list = self.$el.closest('form').find('.attachment-list').data('view');
-                    if (_.browser.IE !== 9) {
-                        _($input[0].files).each(function (fileData) {
-                            // add to attachment list
-                            list.addFile(fileData);
-                        });
-                        //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
-                        //in file picker dialog - other browsers still seem to work)
-                        $input[0].value = '';
-                        $input.trigger('reset.fileupload');
-                    } else if ($input.val()) {
-                        var fileData = {
-                            name: $input.val().match(/[^\/\\]+$/),
-                            size: 0,
-                            hiddenField: $input
-                        };
+                    _($input[0].files).each(function (fileData) {
+                        // add to attachment list
                         list.addFile(fileData);
-                        $input.addClass('add-attachment').hide();
-                        $input.parent().append(
-                            $input = $('<input type="file">')
-                        );
-                    }
+                    });
+                    //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                    //in file picker dialog - other browsers still seem to work)
+                    $input[0].value = '';
+                    $input.trigger('reset.fileupload');
                 });
 
             this.$el.append(uploadWidget);

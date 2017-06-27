@@ -83,7 +83,7 @@ define('io.ox/metrics/main', [
         },
         // register listener
         watch: function (options, data) {
-            options.node.delegate(options.selector, options.type, data, metrics.trackEvent);
+            options.node.on(options.type, options.selector, data, metrics.trackEvent);
         },
         // util
         getUserHash: function () {

@@ -148,7 +148,7 @@ define('io.ox/search/view-template', [
             }
 
             // delegate handler
-            $('body').delegate('.app-dropdown a', 'click', function (e) {
+            $('body').on('click', '.app-dropdown a', function (e) {
                 var cell = $(e.target),
                     next = cell.closest('a').attr('data-app');
 
@@ -206,9 +206,8 @@ define('io.ox/search/view-template', [
         draw: function () {
             this.append(
                 $('<div class="row busy">').append(
-                    $('<div class="col-xs-12 io-ox-busy">')
-                        .css('min-height', '50px')
-                    )
+                    $('<div class="col-xs-12 io-ox-busy">').css('min-height', '50px')
+                )
             );
         }
     });

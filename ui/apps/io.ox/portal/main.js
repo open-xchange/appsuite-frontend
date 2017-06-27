@@ -161,7 +161,7 @@ define('io.ox/portal/main', [
             // TODO: check for metric capability
             require(['io.ox/metrics/main'], function (metrics) {
                 // track click on concrete dropdown entry to add a widget
-                self.delegate('.io-ox-portal-settings-dropdown', 'mousedown', function (e) {
+                self.on('mousedown', '.io-ox-portal-settings-dropdown', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'toolbar',
@@ -171,7 +171,7 @@ define('io.ox/portal/main', [
                     });
                 });
                 // track click on concrete widget
-                self.delegate('ol.widgets > .widget .content', 'mousedown', function (e) {
+                self.on('mousedown', 'ol.widgets > .widget .content', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'widgets',
@@ -181,7 +181,7 @@ define('io.ox/portal/main', [
                     });
                 });
                 // track removing of concret widget
-                self.delegate('ol.widgets .disable-widget', 'mousedown', function (e) {
+                self.on('mousedown', 'ol.widgets .disable-widget', function (e) {
                     metrics.trackEvent({
                         app: 'portal',
                         target: 'widget',
@@ -554,7 +554,7 @@ define('io.ox/portal/main', [
             var baton = ext.Baton({ model: model, point: 'io.ox/portal/widget/' + model.get('type') }),
                 point = ext.point(baton.point),
                 title = widgets.getTitle(model.toJSON(), point.prop('title')),
-                $title = node.find('h2 .title').text(_.noI18n(title)),
+                $title = node.find('h2 .title').text(title),
                 requiresSetUp = point.invoke('requiresSetUp').reduce(reduceBool, false).value();
             // remember
             model.set('baton', baton, { validate: true, silent: true });
@@ -675,8 +675,8 @@ define('io.ox/portal/main', [
                 app.drawScaffold(model, false);
             });
 
-            widgets.loadUsedPlugins().done(function (cleanCollection) {
-                cleanCollection.each(app.drawWidget);
+            widgets.loadUsedPlugins().then(function (cleanCollection) {
+                cleanCollection.forEach(app.drawWidget);
                 ox.trigger('portal:items:render');
             });
 
@@ -760,7 +760,7 @@ define('io.ox/portal/main', [
         var lazyLayout = _.debounce(function () {
             scrollPos = $(this).scrollTop() + this.innerHeight;
             widgets.loadUsedPlugins().done(function (cleanCollection) {
-                cleanCollection.each(app.drawWidget);
+                cleanCollection.forEach(app.drawWidget);
             });
         }, 300);
 

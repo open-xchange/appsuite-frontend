@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* eslint requirejs/no-assign-require: 0 */
 // change ms-viewport rule for WP8 devices
 // http://mattstow.com/responsive-design-in-ie10-on-windows-phone-8.html
 if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
@@ -22,7 +22,7 @@ if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
 }
 
 // not document.ready cause we wait for CSS to be loaded
-$(window).load(function () {
+$(window).on('load', function () {
 
     'use strict';
 
@@ -79,12 +79,27 @@ $(window).load(function () {
 
     (function (require) {
 
+        // ultimate fallback to remove endless throbber and reload with longer timeout
+        function handleError(e) {
+            // check if it is a timeout on the login screen, otherwise other
+            // fail handlers will take over
+            if (e.requireType === 'timeout' && $('#background-loader').is(':visible')) {
+                $('.throbber').hide();
+                $('#timeout-error').show();
+                $('#timeout-reload').on('click', function (e) {
+                    e.preventDefault();
+                    _.url.hash({ 'waitSeconds': 30 });
+                    location.reload();
+                });
+            }
+        }
+
         function fallback(error) {
-            console.error('require: Error in ' + error.requireModules, error.stack);
+            console.error('require.js: "' + error.requireType + '" for ' + error.requireModules, error.stack);
+            handleError(error);
         }
 
         window.require = function (deps, success, fail) {
-
             if (_.isArray(deps)) {
                 // use deferred object
                 _(deps).each(function (name) {

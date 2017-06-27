@@ -128,7 +128,8 @@ define('plugins/notifications/mail/register', [
             // copy new/other sounds to themefolder->sounds
             var sounds;
 
-            this.append(formUtil.fieldset(
+            this.append(
+                formUtil.fieldset(
                     //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
                     gt('Notification sounds'),
                     formUtil.checkbox('playSound', gt('Play sound on incoming mail'), settings),
@@ -224,10 +225,10 @@ define('plugins/notifications/mail/register', [
             } else {
                 api.get(_.extend({}, _.cid(newItems[0]), { unseen: true })).then(function (data) {
                     var from = data.from || [['', '']],
-                                  //#. %1$s mail sender
-                                  //#. %2$s mail subject
-                                  //#, c-format
-                        message = gt('Mail from %1$s, %2$s', _.noI18n(util.getDisplayName(from[0])), _.noI18n(data.subject) || gt('No subject'));
+                        //#. %1$s mail sender
+                        //#. %2$s mail subject
+                        //#, c-format
+                        message = gt('Mail from %1$s, %2$s', util.getDisplayName(from[0]), data.subject || gt('No subject'));
                     desktopNotifications.show({
                         title: gt('New mail'),
                         body: message,

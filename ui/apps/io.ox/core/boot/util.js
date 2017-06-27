@@ -122,7 +122,7 @@ define('io.ox/core/boot/util', [], function () {
             $('#io-ox-login-form')
                 // visual response (shake sucks on touch devices)
                 .css('opacity', '')
-                .find('input').removeAttr('disabled');
+                .find('input').prop('disabled', false);
             $('#io-ox-login-blocker').hide();
             //$('#io-ox-login-feedback').idle();
         },
@@ -131,7 +131,7 @@ define('io.ox/core/boot/util', [], function () {
             // be busy
             $('#io-ox-login-form')
                 .css('opacity', 0.5)
-                .find('input').attr('disabled', 'disabled');
+                .find('input').prop('disabled', true);
             $('#io-ox-login-blocker').show();
             //$('#io-ox-login-feedback').busy().empty();
         }

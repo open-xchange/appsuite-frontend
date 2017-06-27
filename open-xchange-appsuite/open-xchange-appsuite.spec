@@ -330,7 +330,6 @@ if [ -x %{update} ]; then %{update}; fi
 
 %files
 %defattr(-,root,root)
-%doc ui/readme.txt
 %dir %{docroot}/appsuite
 %{docroot}/appsuite
 %config(noreplace) %{docroot}/appsuite/apps/themes/.htaccess

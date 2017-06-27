@@ -18,7 +18,6 @@ define('io.ox/core/boot/i18n', ['io.ox/core/boot/util', 'gettext!io.ox/core/boot
     util.gt = gt;
 
     // A list of all strings to be included in the POT file.
-    /* jshint unused: false */
     /* eslint-disable no-unused-vars */
     function list() {
         gt('User name');

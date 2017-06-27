@@ -106,7 +106,6 @@ define('io.ox/contacts/distrib/main', [
 
             app.cid = 'io.ox/contacts/group:edit.' + _.cid(obj);
             return contactModel.factory.realm('edit').retain().get(api.reduce(obj)).done(function (data) {
-
                 // actually data IS a model
                 app.model = data;
 
@@ -177,7 +176,7 @@ define('io.ox/contacts/distrib/main', [
                     container.find('input[type=text]:visible').eq(0).focus();
                 }
                 container.find('[data-extension-id="displayname"] input').on('keyup', _.debounce(function () {
-                    app.setTitle(_.noI18n($.trim($(this).val())) || gt('Distribution List'));
+                    app.setTitle($.trim($(this).val()) || gt('Distribution List'));
                     fnToggleSave($(this).val());
                 }, 150));
             });

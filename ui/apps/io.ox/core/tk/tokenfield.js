@@ -20,7 +20,7 @@ define('io.ox/core/tk/tokenfield', [
     'io.ox/core/http',
     'io.ox/core/util',
     'gettext!io.ox/core',
-    'static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js',
+    'static/3rd.party/bootstrap-tokenfield.js',
     'css!3rd.party/bootstrap-tokenfield/css/bootstrap-tokenfield.css',
     'less!io.ox/core/tk/tokenfield',
     'static/3rd.party/jquery-ui.min.js'
@@ -206,7 +206,7 @@ define('io.ox/core/tk/tokenfield', [
         register: function () {
             var self = this;
             // register custom event when token is clicked
-            this.$el.tokenfield().parent().delegate('.token', 'click mousedown', function (e) {
+            this.$el.tokenfield().parent().on('click mousedown', '.token', function (e) {
                 // create new event set attrs property like it's used in the non-custom events
                 var evt = $.extend(true, {}, e, {
                     type: 'tokenfield:clickedtoken',
@@ -250,7 +250,7 @@ define('io.ox/core/tk/tokenfield', [
                         //#. %1$d is the number of search results in the autocomplete field
                         //#, c-format
                         gt.ngettext('One autocomplete entry found', '%1$d autocomplete entries found', numberOfResults),
-                        gt.noI18n(numberOfResults)
+                        numberOfResults
                     );
                 }
 

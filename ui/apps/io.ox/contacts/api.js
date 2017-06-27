@@ -294,14 +294,14 @@ define('io.ox/contacts/api', [
         var def = $.Deferred();
         require(['io.ox/core/api/user'], function (userApi) {
             $.when(
-                    userApi.caches.get.remove({ id: data.user_id }),
-                    userApi.caches.all.clear(),
-                    userApi.caches.list.remove({ id: data.user_id })
-                ).then(function () {
-                    def.resolve();
-                }, function () {
-                    def.reject();
-                });
+                userApi.caches.get.remove({ id: data.user_id }),
+                userApi.caches.all.clear(),
+                userApi.caches.list.remove({ id: data.user_id })
+            ).then(function () {
+                def.resolve();
+            }, function () {
+                def.reject();
+            });
         });
         return def;
     }
@@ -636,7 +636,7 @@ define('io.ox/contacts/api', [
                     // remove host
                     if (data.image1_url) {
                         data.image1_url = data.image1_url
-                            .replace(/^https?\:\/\/[^\/]+/i, '');
+                            .replace(/^https?:\/\/[^/]+/i, '');
                         data.image1_url = coreUtil.replacePrefix(data.image1_url);
                         data.image1_url = coreUtil.getShardingRoot(data.image1_url);
                     }
@@ -841,7 +841,7 @@ define('io.ox/contacts/api', [
 
         // set node content
         set = function (name) {
-            if (options.halo && /\@/.test(data.email) && capabilities.has('contacts')) {
+            if (options.halo && /@/.test(data.email) && capabilities.has('contacts')) {
                 node
                 .addClass('halo-link')
                 .attr('href', '#')
@@ -850,7 +850,7 @@ define('io.ox/contacts/api', [
                     email1: email
                 });
             }
-            node.text(_.noI18n(name + '\u00A0'));
+            node.text(name + '\u00A0');
         };
 
         // clear vars after call stack has cleared

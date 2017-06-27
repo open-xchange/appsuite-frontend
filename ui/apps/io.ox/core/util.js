@@ -41,7 +41,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
     //     }
     // });
 
-    var regUrl = /((https?|ftps?)\:\/\/[^\s"]+)/gim;
+    var regUrl = /((https?|ftps?):\/\/[^\s"]+)/gim;
 
     var that = {
 
@@ -80,8 +80,8 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
             // get node
             var node = options.$el || (
                 halo.email || halo.user_id ?
-                $('<a href="#" role="button" class="halo-link">').attr('title', halo.email).data(halo) :
-                $('<' + options.tagName + '>')
+                    $('<a href="#" role="button" class="halo-link">').attr('title', halo.email).data(halo) :
+                    $('<' + options.tagName + '>')
             );
 
             ext.point('io.ox/core/person').invoke('draw', node.empty(), baton);
@@ -114,7 +114,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // central helper to solve this only once
         fixUrlSuffix: function (url, suffix) {
             suffix = suffix || '';
-            url = url.replace(/([.,;!?<>\(\)\{\}\[\]\|]+)$/, function (all, marks) {
+            url = url.replace(/([.,;!?<>(){}[\]|]+)$/, function (all, marks) {
                 suffix = marks + suffix;
                 return '';
             });
@@ -124,7 +124,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // remove (almost) all quotes from a string
         removeQuotes: function (str) {
             // remove all outer single and double quotes; also remove all inner quotes
-            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?\"/g, '');
+            return $.trim(str).replace(/^["'\\]+|["'\\]+$/g, '').replace(/\\?"/g, '');
         },
 
         // detect URLs in plain text
@@ -207,7 +207,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
         isValidPhoneNumber: (function () {
 
-            var regex = /^\+?[0-9 .,;\-\/\(\)\*\#]+$/,
+            var regex = /^\+?[0-9 .,;\-/()*#]+$/,
                 tooShort = /^\+\d{0,2}$/;
 
             function validate(val) {
@@ -229,7 +229,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
                 folder = '&folder=' + encodeURIComponent(data.id);
             } else {
                 folder = '&folder=' + encodeURIComponent(data.folder_id);
-                id = '&id=' + (/^[\d\/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
+                id = '&id=' + (/^[\d/]+$/.test(data.id) ? data.id : encodeURIComponent(data.id));
             }
             return ox.abs + ox.root + '/#!&app=' + app + folder + id;
         },
@@ -240,7 +240,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
         // the local part is either a quoted string or latin (see above) plus . ! # $ % & ' * + - / = ? ^ _ ` { | } ~
         // returns array of addresses
         getAddresses: function (str) {
-            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-\/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
+            var addresses = String(str).match(/("[^"]+"|'[^']+'|\w[\w\u00C0-\u024F.!#$%&'*+-/=?^_`{|}~]*)@[^,;\x20\t\n]+|[\w\u00C0-\u024F][\w\u00C0-\u024F\-\x20]+\s<[^>]+>|("[^"]+"|'[^']+')\s<[^>]+>/g) || [];
             return addresses.map(function (str) {
                 return str.replace(/^([^"]+)\s</, '"$1" <');
             });

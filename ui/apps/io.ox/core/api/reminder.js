@@ -140,7 +140,7 @@ define('io.ox/core/api/reminder', [
                     // if no range given, get the reminders an our ahead(to be independent of global refresh)
                     end: range || moment().add(1, 'hour').valueOf()
                 }
-            }).pipe(function (list) {
+            }).then(function (list) {
                 updateReminders(list);
                 checkReminders();
                 return list;

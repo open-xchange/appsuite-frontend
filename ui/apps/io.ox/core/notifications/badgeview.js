@@ -51,7 +51,7 @@ define('io.ox/core/notifications/badgeview', [
             this.nodes.badge.toggleClass('empty', count === 0);
             this.nodes.icon.attr('title', a11y);
             this.$el.attr('aria-label', a11y);
-            this.nodes.number.text(_.noI18n(count >= 100 ? '99+' : count));
+            this.nodes.number.text(count >= 100 ? '99+' : count);
             // don't alert if there is no notification or the number did not change
             if (count !== 0 && this.model.previous('count') !== count) {
                 yell('screenreader', a11y);

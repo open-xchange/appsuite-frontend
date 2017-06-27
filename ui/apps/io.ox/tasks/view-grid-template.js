@@ -44,7 +44,7 @@ define('io.ox/tasks/view-grid-template', [
 
             set: function (task, fields, index, prev, grid) {
 
-                var data = task, ariaLabel = _.noI18n(data.title);
+                var data = task, ariaLabel = data.title;
                 if (!data.badge && data.badge !== '') {
                     // check for empty string also to avoid double processing (see bug 36610)
                     // data needs to be processed first
@@ -53,14 +53,14 @@ define('io.ox/tasks/view-grid-template', [
 
                 //important. with addClass old classes aren't removed correctly
                 fields.status.attr('class', 'status ' + data.badge)
-                    .text(data.status || _.noI18n('\u00A0'));
+                    .text(data.status || '\u00A0');
                 ariaLabel = ariaLabel + ', ' + data.status;
 
-                fields.title.text(_.noI18n(data.title));
+                fields.title.text(data.title);
                 if (!task.full_time) {
                     fields.title.addClass('not-fulltime');
                 }
-                fields.end_time.text(_.noI18n(data.end_time));
+                fields.end_time.text(data.end_time);
 
                 if (task.end_time) {
                     //#. followed by date or time to mark the enddate of a task
@@ -86,7 +86,7 @@ define('io.ox/tasks/view-grid-template', [
                     fields.progress.find('.progress-bar').css('width', data.percent_completed + '%').end().show();
                     //#. %1$s how much of a task is completed in percent, values from 0-100
                     //#, c-format
-                    ariaLabel = ariaLabel + ', ' + gt('Progress %1$s %', _.noI18n(data.percent_completed));
+                    ariaLabel = ariaLabel + ', ' + gt('Progress %1$s %', data.percent_completed);
                 } else {
                     fields.progress.find('.progress-bar').css('width', 0 + '%').end().hide();
                 }

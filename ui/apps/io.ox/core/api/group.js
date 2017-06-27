@@ -174,8 +174,8 @@ define('io.ox/core/api/group', [
      * @return { deferred} done handler returns name (string)
      */
     api.getName = function (id) {
-        return api.get({ id: id }).pipe(function (data) {
-            return _.noI18n(data.display_name || data.name || '');
+        return api.get({ id: id }).then(function (data) {
+            return data.display_name || data.name || '';
         });
     };
 

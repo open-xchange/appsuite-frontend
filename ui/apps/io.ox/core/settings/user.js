@@ -82,15 +82,10 @@ define('io.ox/core/settings/user', [
                             if (user.get('birthday') === null) {
                                 $node.find('[data-field="birthday"]').find('.year,.month,.date').val('');
                             }
-                            // dont't hide on IE to fix form submit.
-                            if (!_.browser.IE || _.browser.IE > 9) {
-                                dialogs.busy($node);
-                            }
+                            dialogs.busy($node);
                         });
                         user.on('sync:always', function () {
-                            if (!_.browser.IE || _.browser.IE > 9) {
-                                dialogs.idle($node);
-                            }
+                            dialogs.idle($node);
                         });
                     },
                     function fail() {

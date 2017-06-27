@@ -30,8 +30,8 @@ define.async('io.ox/mail/accounts/view-form', [
         model,
 
         optionsServerType = [
-            { label: gt.noI18n('IMAP'), value: 'imap' },
-            { label: gt.noI18n('POP3'), value: 'pop3' }
+            { label: 'IMAP', value: 'imap' },
+            { label: 'POP3', value: 'pop3' }
         ],
 
         serverTypePorts = {
@@ -40,13 +40,13 @@ define.async('io.ox/mail/accounts/view-form', [
         },
 
         optionsRefreshRatePop = [
-            { label: gt.noI18n('3'), value: '3' },
-            { label: gt.noI18n('5'), value: '5' },
-            { label: gt.noI18n('10'), value: '10' },
-            { label: gt.noI18n('15'), value: '15' },
-            { label: gt.noI18n('30'), value: '30' },
-            { label: gt.noI18n('60'), value: '60' },
-            { label: gt.noI18n('360'), value: '360' }
+            { label: '3', value: '3' },
+            { label: '5', value: '5' },
+            { label: '10', value: '10' },
+            { label: '15', value: '15' },
+            { label: '30', value: '30' },
+            { label: '60', value: '60' },
+            { label: '360', value: '360' }
         ],
 
         optionsAuthType = [
@@ -113,7 +113,7 @@ define.async('io.ox/mail/accounts/view-form', [
                 //if the server has no pop3 support and this account is a new one, remove the pop3 option from the selection box
                 //we leave it in with existing accounts to display them correctly even if they have pop3 protocol (we deny protocol changing when editing accounts anyway)
                 if (!capabilities.has('pop3') && !this.model.get('id')) {
-                    optionsServerType = [{ label: gt.noI18n('IMAP'), value: 'imap' }];
+                    optionsServerType = [{ label: 'IMAP', value: 'imap' }];
                 }
 
                 //check if login and mailaddress are synced
@@ -325,11 +325,11 @@ define.async('io.ox/mail/accounts/view-form', [
                                 notifications.yell('error', gt('Username must not be empty.'));
                             } else if (data.code === 'SVL-0002') {
                                 notifications.yell('error',
-                                   //#. %1$s the missing request parameter
-                                   //#, c-format
-                                   gt('Please enter the following data: %1$s', _.noI18n(data.error_params[0])));
+                                    //#. %1$s the missing request parameter
+                                    //#, c-format
+                                    gt('Please enter the following data: %1$s', data.error_params[0]));
                             } else {
-                                notifications.yell('error', _.noI18n(data.error));
+                                notifications.yell('error', data.error);
                             }
                             self.dialog.idle();
                         }

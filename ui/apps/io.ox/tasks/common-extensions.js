@@ -30,7 +30,7 @@ define('io.ox/tasks/common-extensions', [
             this.append(
                 $('<time class="date">')
                 .attr('datetime', moment(t).toISOString())
-                .text(_.noI18n(mailUtil.getDateTime(t, options)))
+                .text(mailUtil.getDateTime(t, options))
             );
         },
 
@@ -106,9 +106,8 @@ define('io.ox/tasks/common-extensions', [
 
             return function (baton) {
                 var $ul = $('<ul class="dropdown-menu pull-right" role="menu">').append(
-                        util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
-                    )
-                    .on('click', 'li > a:not([data-action="close-menu"])', { data: baton.data }, onClick);
+                    util.buildDropdownMenu({ bootstrapDropdown: true, daysOnly: true })
+                ).on('click', 'li > a:not([data-action="close-menu"])', { data: baton.data }, onClick);
 
                 this.attr({
                     'aria-haspopup': 'true',

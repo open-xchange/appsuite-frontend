@@ -70,7 +70,6 @@ define('io.ox/tasks/edit/view-template', [
                                 yell(response);
                             }, 300);
                         });
-
                     }),
                 //cancel button
                 $('<button type="button" data-action="discard" class="btn btn-default cancel task-edit-cancel">')
@@ -79,7 +78,7 @@ define('io.ox/tasks/edit/view-template', [
                         e.stopPropagation();
                         app.quit();
                     })
-                );
+            );
 
             app.getWindow().setHeader(row);
 
@@ -264,7 +263,8 @@ define('io.ox/tasks/edit/view-template', [
         row: '7',
         draw: function (baton) {
             var selector;
-            this.append($('<div class="col-sm-6 collapsed">').append(
+            this.append(
+                $('<div class="col-sm-6 collapsed">').append(
                     $('<label for="task-edit-reminder-select">').text(gt('Reminder')),
                     selector = $('<select id="task-edit-reminder-select" class="form-control">')
                     .append($('<option>')
@@ -350,10 +350,7 @@ define('io.ox/tasks/edit/view-template', [
                     { label: gt('Deferred'), value: 5 }
                 ], selectInput;
             this.$el.append(
-                $('<label>').attr({
-                    class: 'control-label',
-                    for: guid
-                }).text(gt('Status')),
+                $('<label class="control-label">').attr('for', guid).text(gt('Status')),
                 $('<div>').append(
                     selectInput = new mini.SelectView({
                         list: options,
@@ -382,9 +379,9 @@ define('io.ox/tasks/edit/view-template', [
         row: '8',
         draw: function (baton) {
             var progressField = util.buildProgress(baton.model.get('percent_completed'));
-            this.append($('<div class="col-sm-3 collapsed">')
-                .append(
-                     $('<label>').text(gt('Progress in %')).attr('for', 'task-edit-progress-field'), $(progressField.wrapper)
+            this.append(
+                $('<div class="col-sm-3 collapsed">').append(
+                    $('<label for="task-edit-progress-field">').text(gt('Progress in %')), $(progressField.wrapper)
                     .val(baton.model.get('percent_completed'))
                     .on('change', function () {
                         var value = $.trim(progressField.progress.val()).replace(/\s*%$/, ''),
@@ -599,7 +596,7 @@ define('io.ox/tasks/edit/view-template', [
                     } else if ($input.val()) {
                         //IE
                         var fileData = {
-                            name: $input.val().match(/[^\/\\]+$/),
+                            name: $input.val().match(/[^/\\]+$/),
                             size: 0,
                             hiddenField: $input
                         };

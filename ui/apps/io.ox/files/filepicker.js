@@ -140,8 +140,8 @@ define('io.ox/files/filepicker', [
     // }
 
     var
-      //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/),
-      //REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
+        //REGX__IMAGE_EXTENSION = (/[./](gif|png|jpg|jpeg)$/),
+        //REGX__MIMETYPE_IMAGE  = (/(?:^image\/)|(?:(?:gif|png|jpg|jpeg)$)/),
 
         fileTypeIconClassNameMap = {
 
@@ -155,12 +155,12 @@ define('io.ox/files/filepicker', [
 
             zip: 'file-type-zip',
 
-          //image: 'file-type-image',
+            //image: 'file-type-image',
             audio: 'file-type-audio',
             video: 'file-type-video',
 
             guard: 'file-type-guard'
-          //folder: 'file-type-folder'
+            //folder: 'file-type-folder'
         };
 
     function getFileTypeIconClassName(fileObject) {
@@ -204,7 +204,7 @@ define('io.ox/files/filepicker', [
     }
 
     function appendFileInfoToPreviewPane($previewPane, $fileinfo, fileObject) {
-      //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject] : ', $previewPane, $fileinfo, fileObject);
+        //console.log('+++ appendFileInfoToPreviewPane +++ [$previewPane, $fileinfo, fileObject] : ', $previewPane, $fileinfo, fileObject);
 
         filesAPI.get(fileObject).done(function (fileDescriptor) {
 
@@ -239,7 +239,7 @@ define('io.ox/files/filepicker', [
      * @param fileObject
      */
     function renderImagePreview($previewPane, fileObject/*, previewStore*/) {
-      //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        //console.log('+++ renderImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
@@ -260,7 +260,7 @@ define('io.ox/files/filepicker', [
     }
 
     function renderNonImagePreview($previewPane, fileObject/*, previewStore*/) {
-      //console.log('+++ renderNonImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
+        //console.log('+++ renderNonImagePreview +++ [$previewPane, fileObject] : ', $previewPane, fileObject);
         var
             $preview      = $('<div class="preview"></div>'),
             $fileinfo     = $('<div class="fileinfo"><div class="sidebar-panel-body"></div></div>'),
@@ -319,7 +319,7 @@ define('io.ox/files/filepicker', [
             containerHeight = $(window).height() - 200,
             hub = _.extend({}, Backbone.Events),
             currentFolder,
-          //previewStore = new PreviewStore(),
+            //previewStore = new PreviewStore(),
             $previewPane,
             isAllowPreviewPane = !_.device('smartphone');
 
@@ -393,7 +393,7 @@ define('io.ox/files/filepicker', [
         // - according to some counseling from Olpe the required 3rd preview-pane is supposed to be hacked into this modal dialogue.
         //
         function handleFileSelectionChange(event, fileId, fileObject) {
-          //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
+            //console.log('Filepicker::Selection::handleSelect - [event, fileId, fileObject] : ', event, fileId, fileObject);
             if (!$previewPane) {
                 $previewPane = createPreviewPane(filesPane);
             }
@@ -407,7 +407,7 @@ define('io.ox/files/filepicker', [
             } else {
                 renderNonImagePreview($previewPane, fileObject/*, previewStore*/);
 
-              //deletePreviewPane();
+                //deletePreviewPane();
             }
         }
 
@@ -420,7 +420,7 @@ define('io.ox/files/filepicker', [
             if (options.uploadButton) {
                 folderAPI.get(id).done(function (folder) {
                     $('[data-action="alternative"]', filesPane.closest('.add-infostore-file'))
-                    .attr('disabled', !folderAPI.can('create', folder));
+                    .prop('disabled', !folderAPI.can('create', folder));
                 });
             }
             if (_.device('smartphone')) {
@@ -453,7 +453,7 @@ define('io.ox/files/filepicker', [
                     deletePreviewPane();
                 } else {                                                // - 2ndly, use human readable variable names
                     var paneItems = files.map(function (file) {         //   in order to show other developers what
-                                                                        //   direction you are heading to.
+                        //                                                   direction you are heading to.
                         var guid = _.uniqueId('form-control-label-');   // - nice: model and view after 3 years are finally in sync.
                         var title = (file['com.openexchange.file.sanitizedFilename'] || file.filename || file.title),
                             $div = $('<li class="file selectable">').attr('data-obj-id', _.cid(file)).append(
@@ -470,7 +470,7 @@ define('io.ox/files/filepicker', [
                         }
                         return $div;
                     });
-                                                                        // - 3rd, you provide a result that got processed stepwise
+                    //                                                     - 3rd, you provide a result that got processed stepwise
                     filesPane.append(                                   //   (and not by spaghetti code), thus other devs much easear
                         paneItems                                       //   recognize its creation process, thus they will be able changing
                     );                                                  //   this process' control flow (better refactoring/maintaining of code).

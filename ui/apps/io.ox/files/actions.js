@@ -373,7 +373,7 @@ define('io.ox/files/actions', [
                 e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
-                util.hasStatus('lockedByMe', e);
+                (util.hasStatus('lockedByMe', e) || util.hasStatus('createdByMe', e));
 
             // only test the second condition when files are selected, so 'some' and 'items' must be checked in the preCondition
             return preCondition && folderAPI.get(_.first(e.baton.models).get('folder_id')).then(function (fileModel) { return !folderAPI.isExternalFileStorage(fileModel); });
@@ -465,9 +465,9 @@ define('io.ox/files/actions', [
 
             var
                 model         = e.baton.models[0];
-          //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
-          //
-          //if (!isAccessWrite(e)) return false;
+            //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
+            //
+            //if (!isAccessWrite(e)) return false;
 
             // preferred variant over >> return (model.isFile() && !model.isPDF()); <<
             return (model.isFile() && (model.isOffice() || model.isText()));
@@ -674,36 +674,6 @@ define('io.ox/files/actions', [
                         model = new api.Model(folderAPI.pool.getModel(id).toJSON());
                     action.link([model]);
                 }
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/audioplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('audio', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: false
-                });
-            });
-        }
-    });
-
-    new Action('io.ox/files/icons/videoplayer', {
-        requires: function (e) {
-            if (_.device('android')) return false;
-            return util.checkMedia('video', e);
-        },
-        action: function (baton) {
-            ox.load(['io.ox/files/mediaplayer']).done(function (mediaplayer) {
-                mediaplayer.init({
-                    baton: baton,
-                    videoSupport: true
-                });
             });
         }
     });

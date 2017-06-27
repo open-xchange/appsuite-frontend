@@ -21,7 +21,9 @@ define('io.ox/core/folder/selection', [], function () {
 
         this.view.$el
             .on('click contextmenu', '.selectable', $.proxy(this.onClick, this))
-            .on('keydown', '.selectable', $.proxy(this.onKeydown, this));
+            .on('keydown', '.selectable', $.proxy(this.onKeydown, this))
+            // bug 54193: do not set focus
+            .on('mousedown contextmenu', '.selectable', function (e) { e.preventDefault(); });
 
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
@@ -188,14 +190,14 @@ define('io.ox/core/folder/selection', [], function () {
             if (this.view.disposed) return $();
             var width = this.view.$el.width();
             return nodes.addClass('selected')
-                .attr({ 'aria-selected': true, tabindex: 0 })
-                .find('.folder-label:first').each(function () {
-                    // special handling for settings for now
-                    if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
-                    var left = $(this).position().left, maxWidth = width - left - 76;
-                    $(this).css('max-width', Math.max(maxWidth, 80));
-                })
-                .end();
+            .attr({ 'aria-selected': true, tabindex: 0 })
+            .find('.folder-label:first').each(function () {
+                // special handling for settings for now
+                if (nodes.length === 1 && (nodes.first().attr('data-id') && nodes.first().attr('data-id').indexOf('virtual/settings') === 0)) return;
+                var left = $(this).position().left, maxWidth = width - left - 76;
+                $(this).css('max-width', Math.max(maxWidth, 80));
+            })
+            .end();
         },
 
         uncheck: function (items) {

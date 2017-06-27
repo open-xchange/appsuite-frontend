@@ -64,15 +64,15 @@ define('io.ox/tasks/view-detail', [
             var infoPanel = $('<div>').addClass('info-panel'),
                 task = baton.interpretedData,
                 title = $('<h1 class="title clear-title">').append(
-                        // lock icon
-                        baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
-                        // priority
-                        $('<span class="priority">').append(
-                            util.getPriority(task)
-                        ),
-                        // title
-                        $.txt(gt.noI18n(task.title))
-                    );
+                    // lock icon
+                    baton.data.private_flag ? $('<i class="fa fa-lock private-flag">').attr({ title: gt('Private'), 'data-placement': 'bottom', 'data-animation': 'false' }).tooltip() : [],
+                    // priority
+                    $('<span class="priority">').append(
+                        util.getPriority(task)
+                    ),
+                    // title
+                    $.txt(task.title)
+                );
             this.append(
                 $('<header>').append(
                     _.device('smartphone') ? [title, infoPanel] : [infoPanel, title]
@@ -143,9 +143,9 @@ define('io.ox/tasks/view-detail', [
                 if (task[key] !== undefined && task[key] !== null && task[key] !== '') {
                     $details.append($('<dt class="detail-label">').text(label));
                     if ((key === 'target_costs' || key === 'actual_costs') && task.currency) {
-                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key]) + ' ' + task.currency));
+                        $details.append($('<dd class="detail-value">').text(task[key]) + ' ' + task.currency);
                     } else {
-                        $details.append($('<dd class="detail-value">').text(gt.noI18n(task[key])));
+                        $details.append($('<dd class="detail-value">').text(task[key]));
                     }
                     hasDetails = true;
                 }
@@ -179,7 +179,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('end-date').text(
                         //#. %1$s due date of a task
                         //#, c-format
-                        gt('Due %1$s', _.noI18n(task.end_time))
+                        gt('Due %1$s', task.end_time)
                     )
                 );
             }
@@ -190,7 +190,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('alarm-date').text(
                         //#. %1$s reminder date of a task
                         //#, c-format
-                        gt('Reminder date %1$s', _.noI18n(task.alarm))
+                        gt('Reminder date %1$s', task.alarm)
                     )
                 );
             }
@@ -199,7 +199,7 @@ define('io.ox/tasks/view-detail', [
                     $('<div>').addClass('task-progress').text(
                         //#. %1$s how much of a task is completed in percent, values from 0-100
                         //#, c-format
-                        gt('Progress %1$s %', _.noI18n(task.percent_completed))
+                        gt('Progress %1$s %', task.percent_completed)
                     )
                 );
             }
@@ -235,12 +235,12 @@ define('io.ox/tasks/view-detail', [
                 api.getAll({ folder_id: task.folder_id, id: task.id, module: 4 }).done(function (data) {
                     _(data).each(function (a) {
                         // draw
-                        buildDropdown(attachmentNode, _.noI18n(a.filename), a);
+                        buildDropdown(attachmentNode, a.filename, a);
                     });
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt('All attachments'), data).find('a').removeClass('attachment-item');
                     }
-                    attachmentNode.delegate('a', 'click', function (e) { e.preventDefault(); });
+                    attachmentNode.on('click', 'a', function (e) { e.preventDefault(); });
                 }).fail(function () {
                     attachmentFail(attachmentNode, task);
                 });
@@ -250,10 +250,10 @@ define('io.ox/tasks/view-detail', [
 
     var attachmentFail = function (container, task) {
         container.empty().append(
-                $.fail(gt('Could not load attachments for this task.'), function () {
-                    ext.point('io.ox/tasks/detail-attach').invoke('draw', container, task);
-                })
-            );
+            $.fail(gt('Could not load attachments for this task.'), function () {
+                ext.point('io.ox/tasks/detail-attach').invoke('draw', container, task);
+            })
+        );
     };
 
     var buildDropdown = function (container, label, data) {

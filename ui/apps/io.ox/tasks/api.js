@@ -308,7 +308,7 @@ define('io.ox/tasks/api', [
                 api.caches.all.grepRemove(task.folder_id + api.DELIM),
                 api.caches.get.add(task),
                 api.caches.list.merge(task)
-           );
+            );
         }).then(function () {
             if (attachmentHandlingNeeded) {
                 //to make the detailview show the busy animation
@@ -408,11 +408,12 @@ define('io.ox/tasks/api', [
                 sortChanged = true;
             }
             return $.when(
+                //api.get updates list and get caches
+                api.removeFromCache(key).then(function () {
                     //api.get updates list and get caches
-                    api.removeFromCache(key)
-                        //api.get updates list and get caches
-                        .then(function () { return api.get({ id: task.id, folder_id: newFolder || useFolder }); }),
-                        sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
+                    return api.get({ id: task.id, folder_id: newFolder || useFolder });
+                }),
+                sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         })
         .then(function (data) {
             //return object with id and folder id needed to save the attachments correctly

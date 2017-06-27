@@ -14,7 +14,7 @@ var util = require('util');
 
 /**
  * If you need to set a non user setting, you can use this function to set it.
- * Example: setSetting('mail', 'features/unseenFolder', true);
+ * Example: setSetting('io.ox/mail', 'features/unseenFolder', true);
  * @param module {string} for example mail, calender, contacts etc.
  * @param name {string} the settings name
  * @param value {boolean|number|string|object} the value for the setting
@@ -22,10 +22,10 @@ var util = require('util');
 exports.command = function (module, name, value) {
 
     this
-        .timeoutsAsyncScript(2000)
+        .timeoutsAsyncScript(5000)
         .executeAsync(function (module, name, valueStr, done) {
             require(['settings!' + module], function (settings) {
-                settings.set(name, JSON.parse(value));
+                settings.set(name, JSON.parse(valueStr));
                 done(true);
             }, function () {
                 done(false);

@@ -77,7 +77,7 @@ define('io.ox/mail/util', [
         // regex: remove delimiters/spaces
         rRecipientCleanup = /^[,;\s]+/,
         // regex: process single recipient
-        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^\>]+\>)$/,
+        rRecipient = /^("(\\.|[^"])+"\s|[^<]+)(<[^>]+>)$/,
         // regex: remove < > from mail address
         rMailCleanup = /(^<|>$)/g,
         // regex: remove special characters from telephone number
@@ -253,10 +253,10 @@ define('io.ox/mail/util', [
                     // only show if display names differ (otherwise it looks like a senseless duplicate)
                     if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
                         tmp.append(
-                            $.txt(_.noI18n(' ')),
+                            $.txt(' '),
                             //#. (From) email1 via email2. Appears in email detail view.
                             gt('via'),
-                            $.txt(_.noI18n(' ')),
+                            $.txt(' '),
                             this.serializeList({ sender: sender }, 'sender')
                         );
                     }
@@ -283,11 +283,11 @@ define('io.ox/mail/util', [
                     delivery: 'download'
                 });
                 tmp = tmp.add(
-                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(_.noI18n(filename))
+                    $('<a class="attachment-link" target="_blank">').attr('href', href).text(filename)
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span class="delimiter">').append($.txt(_.noI18n('\u00A0\u2022 ')))
+                        $('<span class="delimiter">').append($.txt('\u00A0\u2022 '))
                     );
                 }
             }
@@ -318,7 +318,7 @@ define('io.ox/mail/util', [
             if (!options.showDisplayName) return email;
 
             if (options.reorderDisplayName) {
-                display_name = display_name.replace(/^([^,.\(\)]+),\s([^,.\(\)]+)$/, '$2 $1');
+                display_name = display_name.replace(/^([^,.()]+),\s([^,.()]+)$/, '$2 $1');
             }
 
             if (options.showMailAddress && display_name && email) {
@@ -406,7 +406,7 @@ define('io.ox/mail/util', [
 
             // remove mailing list stuff (optional)
             if (settings.get('features/cleanSubjects', false)) {
-                subject = subject.replace(/\[[^\[]*\]\s*/g, '');
+                subject = subject.replace(/\[[^[]*\]\s*/g, '');
             }
 
             return keepFirstPrefix ?

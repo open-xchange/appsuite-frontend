@@ -53,15 +53,15 @@ define(['io.ox/core/desktop'], function () {
                         });
                     });
 
-                    it('should not launch an unregistered app', function () {
-                        var def;
+                    it.skip('should not launch an unregistered app', function () {
                         ox.manifests.disabled['io.ox/testApp/main'] = true;
 
-                        def = app.launch();
-
-                        ox.manifests.disabled = {};
-                        expect(ox.ui.apps.models).not.to.contain(app);
-                        expect(def.state()).to.equal('rejected');
+                        return app.launch().then(function () {
+                            throw new Error('expected to fail');
+                        }).catch(function () {
+                            ox.manifests.disabled = {};
+                            expect(ox.ui.apps.models).not.to.contain(app);
+                        });
                     });
                 });
 

@@ -74,8 +74,8 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                     baton.model.off('change:' + checkboxView.name, null, ext.point(ref + '/edit/view'));
                     baton.model.on('change:' + checkboxView.name, function (model, checked) {
-                        $('.dateFrom').find('.form-control').attr('disabled', !checked);
-                        $('.dateUntil').find('.form-control').attr('disabled', !checked);
+                        $('.dateFrom').find('.form-control').prop('disabled', !checked);
+                        $('.dateUntil').find('.form-control').prop('disabled', !checked);
                     }, ext.point(ref + '/edit/view'));
 
                     this.append(
@@ -100,7 +100,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     dateView.$el.find('legend').removeClass('simple');
 
                     if (!baton.model.get('activateTimeFrame')) {
-                        dateView.$el.find('.form-control').attr('disabled', true);
+                        dateView.$el.find('.form-control').prop('disabled', true);
                     }
                 }
             });
@@ -121,7 +121,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
                     dateView.$el.find('legend').removeClass('simple');
 
                     if (!baton.model.get('activateTimeFrame')) {
-                        dateView.$el.find('.form-control').attr('disabled', true);
+                        dateView.$el.find('.form-control').prop('disabled', true);
                     }
                 }
             });

@@ -96,8 +96,8 @@ define('io.ox/calendar/actions/acceptdeny', [
                             description = [
                                 $('<b>').text(appointmentData.title),
                                 $.txt(', '),
-                                $.txt(gt.noI18n(strings.dateStr)),
-                                $.txt(gt.noI18n((recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''))),
+                                $.txt(strings.dateStr),
+                                $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''),
                                 $.txt(' '),
                                 $.txt(strings.timeStr)
                             ];

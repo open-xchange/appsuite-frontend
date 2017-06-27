@@ -17,8 +17,8 @@ define('io.ox/mail/statistics', [
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'gettext!io.ox/mail',
-    'static/3rd.party/Chart.js/Chart.js'
-], function (api, accountAPI, ext, dialogs, gt) {
+    'static/3rd.party/Chart.min.js'
+], function (api, accountAPI, ext, dialogs, gt, Chart) {
 
     'use strict';
 
@@ -77,6 +77,30 @@ define('io.ox/mail/statistics', [
         return $('<canvas width="' + WIDTH + '" height="' + HEIGHT + '" style="width:' + WIDTH + 'px; height:' + HEIGHT + 'px;"></canvas>');
     }
 
+    function createLineChart(canvas, data) {
+        var ctx = canvas.get(0).getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                legend: { display: false },
+                tooltips: { enabled: false },
+                elements: {
+                    line: {
+                        backgroundColor: 'rgba(0, 136, 204, 0.15)',
+                        borderColor: 'rgba(0, 136, 204, 0.80)',
+                        borderWidth: 2
+                    },
+                    point: {
+                        backgroundColor: 'rgba(0, 136, 204, 1)',
+                        borderColor: '#fff',
+                        radius: 4
+                    }
+                }
+            }
+        });
+    }
+
     var fetch = (function () {
 
         // hash of deferred objects
@@ -126,21 +150,12 @@ define('io.ox/mail/statistics', [
                         .first(10)
                         .value();
 
-                    var chart = {
-                        labels: '1 2 3 4 5 6 7 8 9 10'.split(' '),
-                        datasets: [{
-                            fillColor: 'rgba(0, 136, 204, 0.15)',
-                            strokeColor: 'rgba(0, 136, 204, 0.80)',
-                            pointColor: 'rgba(0, 136, 204, 1)',
-                            pointStrokeColor: '#fff',
-                            data: _(data).pluck(1)
-                        }]
-                    };
-
                     node.idle();
 
-                    var ctx = canvas.get(0).getContext('2d');
-                    new window.Chart(ctx).Line(chart, {});
+                    createLineChart(canvas, {
+                        labels: '1 2 3 4 5 6 7 8 9 10'.split(' '),
+                        datasets: [{ data: _(data).pluck(1) }]
+                    });
 
                     node.append(
                         $('<ol>').append(
@@ -189,21 +204,9 @@ define('io.ox/mail/statistics', [
                     //adjust weekstart
                     days = days.slice(dow, days.length).concat(days.slice(0, dow));
 
-                    var chart = {
-                        labels: weekdays,
-                        datasets: [{
-                            fillColor: 'rgba(0, 136, 204, 0.15)',
-                            strokeColor: 'rgba(0, 136, 204, 0.80)',
-                            pointColor: 'rgba(0, 136, 204, 1)',
-                            pointStrokeColor: '#fff',
-                            data: days
-                        }]
-                    };
-
                     node.idle();
 
-                    var ctx = canvas.get(0).getContext('2d');
-                    new window.Chart(ctx).Line(chart, {});
+                    createLineChart(canvas, { labels: weekdays, datasets: [{ data: days }] });
                 },
                 function fail() {
                     node.idle().empty();
@@ -234,21 +237,12 @@ define('io.ox/mail/statistics', [
                         return Math.round(sum / data.length * 100);
                     });
 
-                    var chart = {
-                        labels: '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23'.split(' '),
-                        datasets: [{
-                            fillColor: 'rgba(0, 136, 204, 0.15)',
-                            strokeColor: 'rgba(0, 136, 204, 0.80)',
-                            pointColor: 'rgba(0, 136, 204, 1)',
-                            pointStrokeColor: '#fff',
-                            data: hours
-                        }]
-                    };
-
                     node.idle();
 
-                    var ctx = canvas.get(0).getContext('2d');
-                    new window.Chart(ctx).Line(chart, {});
+                    createLineChart(canvas, {
+                        labels: '0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23'.split(' '),
+                        datasets: [{ data: hours }]
+                    });
                 },
                 function fail() {
                     node.idle().empty();

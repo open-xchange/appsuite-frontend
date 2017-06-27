@@ -10,11 +10,12 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main'], function (compose) {
+define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
     'use strict';
 
     describe('Mail Compose', function () {
         describe('draft mails', function () {
+            this.timeout(10000);
 
             var app, pictureHalo, snippetsGetAll, getValidAddress, throttle;
 
@@ -160,14 +161,19 @@ define(['io.ox/mail/compose/main'], function (compose) {
 
                     expect(spy.called, 'mail API send has been called').to.be.false;
                     btn.click();
-                    expect(spy.called, 'mail API send has been called').to.be.true;
-                    var mail = spy.firstCall.args[0];
-                    // mail must have normal send type, without a msgref, but have the draft flags be set
-                    // so the middleware will save this mail as draft and not send it out
-                    expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
-                    expect(mail.msgref).not.to.exist;
-                    expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
-                    spy.restore();
+                    return waitsFor(function () {
+                        return spy.called;
+                    }).then(function () {
+                        expect(spy.called, 'mail API send has been called').to.be.true;
+                        var mail = spy.firstCall.args[0];
+                        // mail must have normal send type, without a msgref, but have the draft flags be set
+                        // so the middleware will save this mail as draft and not send it out
+                        expect(mail.sendtype).to.equal(api.SENDTYPE.NORMAL);
+                        expect(mail.msgref).not.to.exist;
+                        expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
+                        spy.restore();
+                    });
+
                 });
                 it('should send correct data when clicking compose, save, save, send', function () {
                     this.server.respondWith('POST', /api\/mail\?action=new/, function (xhr) {
@@ -202,7 +208,8 @@ define(['io.ox/mail/compose/main'], function (compose) {
                         expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
                         return app.view.saveDraft();
-                    }).then(function () {
+                    })
+                    .then(function () {
                         expect(spy.calledTwice, 'mail API send has been called twice').to.be.true;
                         var mail = spy.secondCall.args[0];
                         //3 - A draft edit operation. The field "msgref" must be present in order to delete previous draft message since e.g. IMAP does not support changing/replacing a message but requires a delete-and-insert sequence
@@ -211,7 +218,8 @@ define(['io.ox/mail/compose/main'], function (compose) {
                         expect(mail.flags & api.FLAGS.DRAFT, 'DRAFT flag set').to.equal(api.FLAGS.DRAFT);
 
                         return app.view.send();
-                    }).then(function () {
+                    })
+                    .then(function () {
                         expect(spy.calledThrice, 'mail API send has been called thrice').to.be.true;
                         var mail = spy.thirdCall.args[0];
                         // 4 - Transport of a draft mail. The field "msgref" must be present
@@ -223,7 +231,8 @@ define(['io.ox/mail/compose/main'], function (compose) {
                         app = {
                             quit: $.noop
                         };
-                    }).always(function (result) {
+                    })
+                    .always(function (result) {
                         expect(result || {}).not.to.have.property('error');
                         spy.restore();
                     });

@@ -33,7 +33,7 @@ define('io.ox/core/about/about', [
                 ),
                 // contact data can use HTML
                 $('<p>').html(data.contact || ''),
-                $('<p>').text(gt.noI18n(copyright))
+                $('<p>').text(copyright)
             );
         }
     });
@@ -58,7 +58,7 @@ define('io.ox/core/about/about', [
                             _.device('!touch') && cap.has('eggs') ?
                                 $('<span class="pull-right" style="color: rgba(0, 0, 0, 0.3); cursor: pointer;">').html('&pi;')
                                 .on('click', { popup: this }, click) : [],
-                            $.txt(gt.noI18n(data.productName))
+                            $.txt(data.productName)
                         )
                     );
                     ext.point('io.ox/core/about').invoke('draw', this.getContentNode(), data);

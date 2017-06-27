@@ -402,11 +402,12 @@ define('io.ox/core/extPatterns/links', [
 
             if (lo.length > 1 && !allDisabled && (!multiple || extension.dropdown === true) && extension.dropdown !== false) {
                 var dd = $('<a href="#" class="io-ox-action-link" draggable="false" role="button" data-toggle="dropdown" data-action="more" aria-haspopup="true">')
-                            .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions')).append(
-                                isSmartphone && !extension.compactDropdown ?
-                                    $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
-                                    $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
-                        ),
+                    .attr('data-original-title', isSmartphone ? gt('Actions') : gt('More actions'))
+                    .append(
+                        isSmartphone && !extension.compactDropdown ?
+                            $().add($.txt(gt('Actions'))).add($('<i aria-hidden="true" class="fa fa-caret-down">')) :
+                            $('<span class="sr-only">').text(gt('Actions')).add($('<i aria-hidden="true" class="fa fa-bars">'))
+                    ),
                     node = $('<ul class="dropdown-menu pull-right" role="menu">')
                         .attr('aria-label', isSmartphone ? gt('Actions') : gt('More'))
                         .append(lo);
@@ -686,7 +687,7 @@ define('io.ox/core/extPatterns/links', [
                                 a.tooltip({ trigger: 'hover' });
                             }
                         } else {
-                            a.addClass('disabled').attr({ 'aria-disabled': true }).on('click', preventDefault);
+                            a.addClass('disabled').attr('aria-disabled', true).on('click', preventDefault);
                         }
                     }
                 });

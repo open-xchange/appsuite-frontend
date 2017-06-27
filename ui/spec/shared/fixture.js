@@ -10,7 +10,7 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-
+/* eslint requirejs/no-object-define: 0 */
 define('fixture', {
     load: function (name, parentRequire, load) {
         if (name.substr(-5, 5) === '.json') {

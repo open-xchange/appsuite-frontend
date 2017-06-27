@@ -38,7 +38,7 @@ define('io.ox/core/api/attachment', [
                     folder: options.folder || options.folder_id,
                     columns: '1,800,801,802,803,804,805'
                 }
-            }).pipe(function (data) {
+            }).then(function (data) {
                 //fix for backend bug folder should not be 0
                 for (var i = 0; i < data.length; i++) {
                     data[i].folder = options.folder || options.folder_id;

@@ -8,12 +8,12 @@ module.exports = function (grunt) {
                 {
                     src: ['bootstrap.min.js'],
                     expand: true,
-                    cwd: 'bower_components/bootstrap/dist/js',
+                    cwd: 'node_modules/bootstrap/dist/js',
                     dest: 'build/help'
                 }, {
                     src: ['jquery.min.js'],
                     expand: true,
-                    cwd: 'bower_components/jquery/dist',
+                    cwd: 'node_modules/jquery/dist',
                     dest: 'build/help'
                 }
            ]

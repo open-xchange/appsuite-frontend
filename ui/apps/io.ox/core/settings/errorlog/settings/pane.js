@@ -17,8 +17,8 @@ define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
-    'static/3rd.party/Chart.js/Chart.js'
-], function (ext, http, capabilities, settings, gt) {
+    'static/3rd.party/Chart.min.js'
+], function (ext, http, capabilities, settings, gt, Chart) {
 
     'use strict';
 
@@ -197,16 +197,8 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             chart = {
                 labels: [0, '', 100, '', 200, '', 300, '', 400, '', '> 0.5s', '> 1s'],
                 datasets: [{
-                    fillColor: 'rgba(220, 220, 220, 0.5)',
-                    strokeColor: 'rgba(220, 220, 220, 1)',
-                    pointColor: 'rgba(220, 220, 220, 1)',
-                    pointStrokeColor: '#fff',
                     data: ping
                 }, {
-                    fillColor: 'rgba(0, 136, 204, 0.15)',
-                    strokeColor: 'rgba(0, 136, 204, 0.80)',
-                    pointColor: 'rgba(0, 136, 204, 1)',
-                    pointStrokeColor: '#fff',
                     data: data
                 }]
             };
@@ -216,7 +208,26 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             );
 
             ctx = canvas.get(0).getContext('2d');
-            new window.Chart(ctx).Line(chart, {});
+            new Chart(ctx, {
+                type: 'line',
+                data: chart,
+                options: {
+                    legend: { display: false },
+                    tooltips: { enabled: false },
+                    elements: {
+                        line: {
+                            backgroundColor: 'rgba(0, 136, 204, 0.15)',
+                            borderColor: 'rgba(0, 136, 204, 0.80)',
+                            borderWidth: 2
+                        },
+                        point: {
+                            backgroundColor: 'rgba(0, 136, 204, 1)',
+                            borderColor: '#fff',
+                            radius: 4
+                        }
+                    }
+                }
+            });
         },
 
         renderTabs: function () {

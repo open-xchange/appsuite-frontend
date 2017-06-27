@@ -32,7 +32,7 @@ define('io.ox/files/share/permissions', [
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'io.ox/backbone/mini-views/addresspicker',
-    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
+    'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
 ], function (ext, DisposableView, yell, miniViews, DropdownView, folderAPI, filesAPI, api, contactsAPI, ModalDialog, contactsUtil, Typeahead, pModel, pViews, capabilities, folderUtil, gt, settingsContacts, AddressPickerView) {
 
@@ -825,10 +825,10 @@ define('io.ox/files/share/permissions', [
                 share: false }, options);
 
             options.title = options.title || (options.share ?
-                        //#. %1$s determines whether setting permissions for a file or folder
-                        //#. %2$s is the file or folder name
-                        gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
-                        gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
+                //#. %1$s determines whether setting permissions for a file or folder
+                //#. %2$s is the file or folder name
+                gt('Share %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()) :
+                gt('Permissions for %1$s "%2$s"', (objModel.isFile() ? gt('file') : gt('folder')), objModel.getDisplayName()));
 
             options.point = 'io.ox/files/share/permissions/dialog';
 
@@ -909,7 +909,7 @@ define('io.ox/files/share/permissions', [
             }
 
             dialogConfig.on('change:disabled', function () {
-                dialog.$footer.find('[name="sendNotifications"]').attr('disabled', dialogConfig.get('disabled'));
+                dialog.$footer.find('[name="sendNotifications"]').prop('disabled', dialogConfig.get('disabled'));
             });
 
             dialog.$el.addClass('share-permissions-dialog');

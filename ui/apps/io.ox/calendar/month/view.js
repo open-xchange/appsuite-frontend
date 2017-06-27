@@ -167,8 +167,8 @@ define('io.ox/calendar/month/view', [
                         .attr('id', moment(day.timestamp).format('YYYY-M-D'))
                         .data('date', day.timestamp)
                         .append(
-                            $('<div>').addClass('list abs'),
-                            $('<div>').addClass('number').text(gt.noI18n(day.date))
+                            $('<div class="list abs">'),
+                            $('<div class="number">').text(day.date)
                         )
                     );
                 }
@@ -188,12 +188,10 @@ define('io.ox/calendar/month/view', [
 
         renderAppointment: function (a) {
             var self = this,
-                el = $('<div>')
-                    .addClass('appointment')
+                el = $('<div class="appointment" data-extension-point="io.ox/calendar/month/view/appointment">')
                     .data('app', a)
                     .attr({
                         'data-cid': a.cid,
-                        'data-extension-point': 'io.ox/calendar/month/view/appointment',
                         'data-composite-id': a.cid
                     });
 
@@ -327,13 +325,12 @@ define('io.ox/calendar/month/view', [
             dow = moment.localeData().firstDayOfWeek(),
             tmp = [];
         days = days.slice(dow, days.length).concat(days.slice(0, dow));
-        return $('<div>')
-            .addClass('abs')
+        return $('<div class="abs">')
             .append(
-                $('<div>').addClass('footer-container').append(
-                    $('<div>').addClass('footer').append(function () {
+                $('<div class="footer-container">').append(
+                    $('<div class="footer">').append(function () {
                         _(days).each(function (day) {
-                            tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
+                            tmp.push($('<div class="weekday">').text(day));
                         });
                         return tmp;
                     })
@@ -350,7 +347,7 @@ define('io.ox/calendar/month/view', [
                 a = baton.model,
                 folder = baton.folder,
                 conf = 1,
-                confString = _.noI18n('%1$s'),
+                confString = '%1$s',
                 classes = '';
 
             function addColorClasses(f) {
@@ -392,8 +389,8 @@ define('io.ox/calendar/month/view', [
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                        a.get('title') ? $('<div class="title">').text(gt.format(confString, a.get('title') || '\u00A0')) : '',
+                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )
                 .attr({

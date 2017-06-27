@@ -26,10 +26,8 @@ define('io.ox/core/tk/upload', [
         return e.originalEvent && e.originalEvent.dataTransfer && (
             !_.browser.Firefox ||
             e.type === 'dragleave' ? e.originalEvent.dataTransfer.dropEffect === 'none' : e.originalEvent.dataTransfer.dropEffect !== 'none'
-        ) && (
-            _(e.originalEvent.dataTransfer.types).contains('Files') ||
-            _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file')
-        );
+        ) &&
+        (_(e.originalEvent.dataTransfer.types).contains('Files') || _(e.originalEvent.dataTransfer.types).contains('application/x-moz-file'));
     }
 
     // options should contain a list of actions. The action id will be the first parameter to the event handlers

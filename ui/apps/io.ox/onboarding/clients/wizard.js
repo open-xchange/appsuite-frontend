@@ -64,12 +64,12 @@ define('io.ox/onboarding/clients/wizard', [
             if (!_.contains(['device', 'scenario'], type)) return;
             // tabindex needed (wizard tabtrap)
             return $('<li class="option centered" data-value="back">').append(
-                        $('<button class="link box" role="menuitem">').append(
-                            $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
-                            // a11y
-                            options._getTitle({ title: gt('back') }).addClass('sr-only')
-                        )
-                    );
+                $('<button class="link box" role="menuitem">').append(
+                    $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
+                    // a11y
+                    options._getTitle({ title: gt('back') }).addClass('sr-only')
+                )
+            );
         },
 
         _getLink: function (obj) {

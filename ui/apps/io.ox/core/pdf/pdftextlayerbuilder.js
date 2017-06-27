@@ -348,8 +348,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 }
             },
 
-            appendText: function TextLayerBuilder_appendText(geom,
-                    styles) {
+            appendText: function TextLayerBuilder_appendText(geom, styles) {
                 var style = styles[geom.fontName];
                 var textDiv = document.createElement('div');
                 this.textDivs.push(textDiv);
@@ -357,8 +356,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                     textDiv.dataset.isWhitespace = true;
                     return;
                 }
-                var tx = PDFJS.Util.transform(this.viewport.transform,
-                        geom.transform);
+                var tx = PDFJS.Util.transform(this.viewport.transform, geom.transform);
                 var angle = Math.atan2(tx[1], tx[0]);
                 if (style.vertical) {
                     angle += Math.PI / 2;
@@ -422,14 +420,13 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 this.divContentDone = true;
             },
 
-            convertMatches: function TextLayerBuilder_convertMatches(
-                    matches) {
+            convertMatches: function TextLayerBuilder_convertMatches(matches) {
                 var i = 0;
                 var iIndex = 0;
                 var bidiTexts = this.textContent.items;
                 var end = bidiTexts.length - 1;
                 var queryLen = (this.findController === null ? 0
-                        : this.findController.state.query.length);
+                    : this.findController.state.query.length);
                 var ret = [];
 
                 for (var m = 0, len = matches.length; m < len; m++) {
@@ -474,8 +471,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 return ret;
             },
 
-            renderMatches: function TextLayerBuilder_renderMatches(
-                    matches) {
+            renderMatches: function TextLayerBuilder_renderMatches(matches) {
                 // Early exit if there is nothing to render.
                 if (matches.length === 0) {
                     return;
@@ -486,11 +482,11 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 var prevEnd = null;
                 var pageIdx = this.pageIdx;
                 var isSelectedPage = (this.findController === null ? false
-                        : (pageIdx === this.findController.selected.pageIdx));
+                    : (pageIdx === this.findController.selected.pageIdx));
                 var selectedMatchIdx = (this.findController === null ? -1
-                        : this.findController.selected.matchIdx);
+                    : this.findController.selected.matchIdx);
                 var highlightAll = (this.findController === null ? false
-                        : this.findController.state.highlightAll);
+                    : this.findController.state.highlightAll);
                 var infinity = {
                     divIdx: -1,
                     offset: undefined
@@ -502,11 +498,10 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                     appendTextToDiv(divIdx, 0, begin.offset, className);
                 }
 
-                function appendTextToDiv(divIdx, fromOffset, toOffset,
-                        className) {
+                function appendTextToDiv(divIdx, fromOffset, toOffset, className) {
                     var div = textDivs[divIdx];
                     var content = bidiTexts[divIdx].str.substring(
-                            fromOffset, toOffset);
+                        fromOffset, toOffset);
                     var node = document.createTextNode(content);
                     if (className) {
                         var span = document.createElement('span');
@@ -534,12 +529,12 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                     var end = match.end;
                     var isSelected = (isSelectedPage && i === selectedMatchIdx);
                     var highlightSuffix = (isSelected ? ' selected'
-                            : '');
+                        : '');
 
                     if (this.findController) {
                         this.findController.updateMatchPosition(
-                                pageIdx, i, textDivs, begin.divIdx,
-                                end.divIdx);
+                            pageIdx, i, textDivs, begin.divIdx,
+                            end.divIdx);
                     }
 
                     // Match inside new div.
@@ -548,22 +543,22 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                         // text at the end.
                         if (prevEnd !== null) {
                             appendTextToDiv(prevEnd.divIdx,
-                                    prevEnd.offset, infinity.offset);
+                                prevEnd.offset, infinity.offset);
                         }
                         // Clear the divs and set the content until the
                         // starting point.
                         beginText(begin);
                     } else {
                         appendTextToDiv(prevEnd.divIdx, prevEnd.offset,
-                                begin.offset);
+                            begin.offset);
                     }
 
                     if (begin.divIdx === end.divIdx) {
                         appendTextToDiv(begin.divIdx, begin.offset,
-                                end.offset, 'highlight' + highlightSuffix);
+                            end.offset, 'highlight' + highlightSuffix);
                     } else {
                         appendTextToDiv(begin.divIdx, begin.offset,
-                                infinity.offset, 'highlight begin' + highlightSuffix);
+                            infinity.offset, 'highlight begin' + highlightSuffix);
                         for (var n0 = begin.divIdx + 1, n1 = end.divIdx; n0 < n1; n0++) {
                             textDivs[n0].className = 'highlight middle' + highlightSuffix;
                         }
@@ -609,7 +604,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
                 // match format
                 // used for the textLayer.
                 this.matches = this.convertMatches(this.findController === null ? []
-                                : (this.findController.pageMatches[this.pageIdx] || []));
+                    : (this.findController.pageMatches[this.pageIdx] || []));
                 this.renderMatches(this.matches);
             }
         };

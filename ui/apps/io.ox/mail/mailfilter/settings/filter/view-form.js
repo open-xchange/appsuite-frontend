@@ -334,7 +334,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return;
                 }
 
-                 // create condition
+                // create condition
                 if (data.type === 'condition') {
                     testArray = _.copy(this.model.get('test'));
 
@@ -502,7 +502,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     point.invoke('draw', conditionList, baton, conditionKey, cmodel, filterValues, condition, addClass);
                 });
 
-                 // inintial validation to disable save button
+                // inintial validation to disable save button
                 if (!cmodel.isValid()) {
                     conditionList.find('[data-test-id=' + conditionKey + '] input').closest('.row').addClass('has-error');
                 }
@@ -666,7 +666,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     return $('<div class="control-group mailfilter checkbox">').append(
                         $('<div class="controls">'),
                         $('<label>').attr('for', guid).text(gt('Process subsequent rules')).prepend(
-                            $('<input type="checkbox">').attr({ id: guid, 'checked': value })
+                            $('<input type="checkbox">').attr('id', guid).prop('checked', value)
                         )
                     );
                 },

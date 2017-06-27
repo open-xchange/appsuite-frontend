@@ -105,15 +105,11 @@ define('plugins/portal/userSettings/register', [
                     $('<label class="password-change-label">').text(gt('Repeat new password')),
                     newPass2 = $('<input type="password" class="form-control repeat-new-password">'),
                     pwContainer,
-                    $('<div class="alert alert-info">')
-                        .css('margin', '14px 0')
-                        .text(
-                            gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
-                        )
-                    ).css('max-height', '500px');
-                if (showStrength) {
-                    newPass.on('keyup', updateStrength);
-                }
+                    $('<div class="alert alert-info">').css('margin', '14px 0').css('max-height', '500px').text(
+                        gt('If you change the password, you will be signed out. Please ensure that everything is closed and saved.')
+                    )
+                );
+                if (showStrength) newPass.on('keyup', updateStrength);
 
             })
             .addPrimaryButton('change', gt('Change password and sign out'))

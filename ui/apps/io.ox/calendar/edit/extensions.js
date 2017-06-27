@@ -649,29 +649,13 @@ define('io.ox/calendar/edit/extensions', [
                 $input = $inputWrap.find('input[type="file"]'),
                 changeHandler = function (e) {
                     e.preventDefault();
-                    if (_.browser.IE !== 9) {
-                        _($input[0].files).each(function (fileData) {
-                            baton.attachmentList.addFile(fileData);
-                        });
-                        //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
-                        //in file picker dialog - other browsers still seem to work)
-                        $input[0].value = '';
-                        $input.trigger('reset.fileupload');
-                    } else if ($input.val()) {
-                        //IE
-                        var fileData = {
-                            name: $input.val().match(/[^\/\\]+$/),
-                            size: 0,
-                            hiddenField: $input
-                        };
+                    _($input[0].files).each(function (fileData) {
                         baton.attachmentList.addFile(fileData);
-                        //hide input field with file
-                        $input.addClass('add-attachment').hide();
-                        //create new input field
-                        $input = $('<input>', { type: 'file', name: 'file' })
-                                .on('change', changeHandler)
-                                .appendTo($input.parent());
-                    }
+                    });
+                    //WORKAROUND "bug" in Chromium (no change event triggered when selecting the same file again,
+                    //in file picker dialog - other browsers still seem to work)
+                    $input[0].value = '';
+                    $input.trigger('reset.fileupload');
                     // look if the quota is exceeded
                     baton.model.on('invalid:quota_exceeded', function (messages) {
                         require(['io.ox/core/yell'], function (yell) {

@@ -22,7 +22,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                 // remove comments
                 .replace(/<!--(.*?)-->/g, '')
                 // remove emoji images and convert them back to unicode characters
-                .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1');
+                .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1');
             // remove class attribute and custom attributes
             //.replace(/(data-[^=]+|class)="[^"]*"/ig, '')
             // remove relative links (remove if links don't start with a protocol)
@@ -177,13 +177,9 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
                         padding: '0.4em 1em 0.4em 1em'
                     });
                 self.find('tr').first()
-                    .find('td, th').css({
-                        borderTop: '1px solid #555'
-                    });
+                    .find('td, th').css({ borderTop: '1px solid #555' });
                 self.find('tr').last()
-                    .find('td, th').css({
-                        borderBottom: '1px solid #555'
-                    });
+                    .find('td, th').css({ borderBottom: '1px solid #555' });
             }
 
             var node = $(o.node), done;
@@ -191,19 +187,18 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             // remove iframes and other stuff that shouldn't be in an email
             // images too - doesn't work with copy/paste (except for emoji classed images)
             node.find(
-                'iframe, object, applet, input, textarea, button, select, ' +
-                'canvas, script, noscript, audio, video, img'
-                )
-                .filter(':not(' +
-                    [
-                        'img.emoji',
-                        'img[src*="' + ox.abs + ox.root + '/api/file"]',
-                        'img[src*="' + ox.root + '/api/file"]',
-                        'img[src*="' + ox.abs + ox.root + '/api/image"]',
-                        'img[src*="' + ox.root + '/api/image"]',
-                        'img[data-pending="true"]'
-                    ].join(', ') + ')'
-                ).remove();
+                'iframe, object, applet, input, textarea, button, select, canvas, script, noscript, audio, video, img'
+            )
+            .filter(':not(' +
+                [
+                    'img.emoji',
+                    'img[src*="' + ox.abs + ox.root + '/api/file"]',
+                    'img[src*="' + ox.root + '/api/file"]',
+                    'img[src*="' + ox.abs + ox.root + '/api/image"]',
+                    'img[src*="' + ox.root + '/api/image"]',
+                    'img[data-pending="true"]'
+                ].join(', ') + ')'
+            ).remove();
             // beautify SUP tags
             node.find('sup').css('lineHeight', '0');
             // unwrap
@@ -364,7 +359,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             function cleanUp(string) {
                 return string
                     .replace(/<!--(.*?)-->/g, '')             // Remove comments
-                    .replace(/<img[^>]* data-emoji-unicode=\"([^\"]*)\"[^>]*>/gi, '$1')
+                    .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1')
                     .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
                     .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
                     .replace(/\n\s+\n/g, '\n\n')
@@ -379,7 +374,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
             string = cleanUp(string);
             string = string.replace(/^\s+\n\n/, '\n');
             // only insert newline when content starts with quote
-            if (!/^\n\>\s/.test(string)) {
+            if (!/^\n>\s/.test(string)) {
                 string = string.replace(/^\n/, '');
             }
             return string;
@@ -388,7 +383,7 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         texttohtml: function (string) {
             var noop = { exec: $.noop },
                 def = $.Deferred();
-            require(['static/3rd.party/marked/lib/marked.js']).then(function (marked) {
+            require(['static/3rd.party/marked.js']).then(function (marked) {
 
                 marked.prototype.constructor.Parser.prototype.parse = function (src) {
                     this.inline = new marked.InlineLexer(src.links, this.options, this.renderer);

@@ -99,7 +99,7 @@ define('io.ox/core/boot/support', [
                 // warning about all unknown browser-platform combinations, might be chrome on iOS
                 util.feedback('info', function () {
                     return $('<b>').text(gt('Your browser is not supported!'))
-                        .add($.txt(_.noI18n('\xa0')))
+                        .add($.txt('\xa0'))
                         //#. Should tell the user that his combination of browser and operating system is not supported
                         .add($('<div data-error="unkown-combination">').text(gt('This browser is not supported on your current platform.')));
                 });
@@ -107,7 +107,7 @@ define('io.ox/core/boot/support', [
                 baton.stopPropagation();
             }
         },
-         //
+        //
         // unsupported platform
         //
         {
@@ -118,7 +118,7 @@ define('io.ox/core/boot/support', [
 
                 util.feedback('info', function () {
                     return $('<b>').text(gt('Your platform is not supported!'))
-                        .add($.txt(_.noI18n('\xa0')))
+                        .add($.txt('\xa0'))
                         //#. Should tell the user that his combination of browser and operating system is not supported
                         .add($('<div data-error="unkown-platform">').text(gt('This platform is currently not supported.')));
                 });
@@ -136,7 +136,7 @@ define('io.ox/core/boot/support', [
 
                 util.feedback('info', function () {
                     return $('<b>').text(gt('Your browser is not supported!'))
-                        .add($.txt(_.noI18n('\xa0')))
+                        .add($.txt('\xa0'))
                         .add(
                             $('<div data-error="outdated-browser">').text(
                                 gt.format(gt('Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d.'),
@@ -167,13 +167,13 @@ define('io.ox/core/boot/support', [
                 // Offer Chrome to all non-chrome users on android
                 util.feedback('info', function () {
                     return $('<b>').text(
-                            //#. 'Google Chrome' is a brand and should not be translated
-                            gt('For best results we recommend using Google Chrome for Android.')
-                        )
-                        .add($.txt(_.noI18n('\xa0')))
-                        //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
-                        .add($.txt(gt('Get the latest version from the ')))
-                        .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
+                        //#. 'Google Chrome' is a brand and should not be translated
+                        gt('For best results we recommend using Google Chrome for Android.')
+                    )
+                    .add($.txt('\xa0'))
+                    //.# The missing word at the end of the sentence ('Play Store') will be injected later by script
+                    .add($.txt(gt('Get the latest version from the ')))
+                    .add($('<a href="http://play.google.com/store/apps/details?id=com.android.chrome">Play Store</>'));
                 });
 
                 baton.stopPropagation();

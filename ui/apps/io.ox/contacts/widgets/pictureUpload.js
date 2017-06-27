@@ -42,14 +42,11 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 this.addImgText.show();
                 this.setImageURL();
                 this.fileInput.val('');
-                if (this.oldMode) {
-                    this.fileInput.removeAttr('style');
-                }
             },
 
             handleFileSelect: function (e, input) {
 
-                var fileData = {}, $input = $(input);
+                var fileData = {};
 
                 // check for valid image type. especially, svg is not allowed (see Bug 50748)
                 if (input.files.length > 0 && !/(jpg|jpeg|gif|bmp|png)/i.test(input.files[0].type)) {
@@ -57,23 +54,14 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     return;
                 }
 
-                if (this.oldMode) {
-                    if ($input.val()) {
-                        fileData = $input.parent();
-                    }
-                    // user information
-                    this.setImageURL();
-                    notifications.yell('success', gt('Your selected picture will be displayed after saving'));
-                } else {
-                    fileData = input.files[0];
-                    // check if the picture is small enough
-                    if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
-                        require(['io.ox/core/strings'], function (strings) {
-                            //#. %1$s maximum file size
-                            notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
-                        });
-                        return;
-                    }
+                fileData = input.files[0];
+                // check if the picture is small enough
+                if (fileData && settings.get('maxImageSize') && fileData.size > settings.get('maxImageSize')) {
+                    require(['io.ox/core/strings'], function (strings) {
+                        //#. %1$s maximum file size
+                        notifications.yell('error', gt('Your selected picture exceeds the maximum allowed file size of %1$s', strings.fileSize(settings.get('maxImageSize'), 2)));
+                    });
+                    return;
                 }
 
                 if (!fileData) {
@@ -97,7 +85,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 if (callback) {
                     var self = this;
                     //preload Image
-                    $('<img>').attr('src', url).load(function () {
+                    $('<img>').attr('src', url).on('load', function () {
                         //no memory leaks
                         $(this).remove();
                         //image is cached now so no loading time for this
@@ -110,11 +98,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
             },
 
             previewPictureFile: function () {
-
-                if (this.oldMode) {
-                    this.setImageURL();
-                    return;
-                }
 
                 var self = this, file = this.model.get('pictureFile');
 
@@ -144,8 +127,6 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     imageUrl = this.model.get('image1_url'),
                     guid = _.uniqueId('form-picture-upload-'),
                     hasImage = false;
-
-                self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
                     imageUrl = util.getShardingRoot(util.replacePrefix(imageUrl));
@@ -182,7 +163,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                     )
                 );
 
-                if (!self.oldMode || hasImage) {
+                if (hasImage) {
                     self.fileInput.css({ height: '1px', width: '1px', cursor: 'pointer' });
                 }
 

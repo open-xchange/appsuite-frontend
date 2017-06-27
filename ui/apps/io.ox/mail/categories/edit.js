@@ -90,17 +90,16 @@ define('io.ox/mail/categories/edit', [
                     var guid = _.uniqueId('form-control-label-');
                     this.$container.append(
                         this.collection.map(function (model) {
-                            return $('<form class="form-inline">').append(
-                                // inputs
-                                $('<div class="form-group category-item center-childs">')
-                                    .attr('data-id', model.get('id'))
+                            return $('<form class="form-inline">')
+                                .append(
+                                    // inputs
+                                    $('<div class="form-group category-item center-childs">').attr('data-id', model.get('id'))
                                     .append(
                                         // read only
                                         model.can('rename') ? $() : [
                                             $('<label class="center-childs">').attr('for', guid).append(
-                                                $('<input type="checkbox" class="status">')
-                                                    .prop('checked', model.isEnabled())
-                                                    .attr({ 'id': guid, 'disabled': !model.can('disable') })
+                                                $('<input type="checkbox" class="status">').attr('id', guid)
+                                                    .prop({ 'checked': model.isEnabled(), 'disabled': !model.can('disable') })
                                                     .toggleClass('disabled', !model.can('disable')),
                                                 $('<div class="name form-control">').text(model.get('name'))
                                             )
@@ -109,18 +108,16 @@ define('io.ox/mail/categories/edit', [
                                     .append(
                                         // changable
                                         !model.can('rename') ? $() : [
-                                            $('<input type="checkbox" class="status">')
-                                                .prop('checked', model.isEnabled())
-                                                .attr('disabled', !model.can('disable'))
-                                                .toggleClass('disabled', !model.can('disable')),
-                                            $('<input type="text" class="form-control name">')
-                                                .attr({ placeholder: gt('Name') })
-                                                .val(model.get('name'))
+                                            $('<input type="checkbox" class="status">').prop({
+                                                'checked': model.isEnabled(),
+                                                'disabled': !model.can('disable')
+                                            }).toggleClass('disabled', !model.can('disable')),
+                                            $('<input type="text" class="form-control name">').attr('placeholder', gt('Name')).val(model.get('name'))
                                         ]
                                     ),
-                                // optional description block
-                                model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
-                            );
+                                    // optional description block
+                                    model.get('description') ? $('<div class="description">').text(model.get('description')) : $()
+                                );
                         })
                     );
                 },

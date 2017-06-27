@@ -171,9 +171,9 @@ define('io.ox/portal/widgets', [
         },
 
         getEnabled: function () {
-            return _(collection.filter(function (model) {
+            return collection.filter(function (model) {
                 return !model.has('candidate') && (!model.has('enabled') || model.get('enabled') === true);
-            }));
+            });
         },
 
         getSettings: function () {

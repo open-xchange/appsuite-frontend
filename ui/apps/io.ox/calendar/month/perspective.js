@@ -247,7 +247,7 @@ define('io.ox/calendar/month/perspective', [
                 if (monthDelimiter) {
                     endDate.add(1, 'd').startOf('month');
                     // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<div>').text(gt.noI18n(endDate.format('MMMM YYYY')))));
+                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<div>').text(endDate.format('MMMM YYYY'))));
                     view.$el.addClass('no-border');
 
                     if (!endDate.clone().startOf('week').isSame(endDate)) {

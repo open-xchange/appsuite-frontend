@@ -162,7 +162,8 @@ define('io.ox/mail/accounts/settings', [
                         return _(service.get('availableScopes')).contains('mail') &&
                             oauthAPI.accounts.forService(service.id, { scope: 'mail' }).map(function (account) {
                                 return account.id;
-                            }).reduce(function (acc, oauthId) {
+                            })
+                            .reduce(function (acc, oauthId) {
                                 // make sure, no mail account using this oauth-account exists
                                 return acc && !_(api.cache).chain()
                                     .values()
@@ -196,14 +197,16 @@ define('io.ox/mail/accounts/settings', [
                 list.listenTo(list, 'select', function (service) {
                     if (service.id === 'mailwizard') return;
 
-                    var account = oauthAPI.accounts.forService(service.id).filter(function (account) {
-                        return !account.hasScopes('mail');
-                    })[0] || new OAuth.Account.Model({
-                        serviceId: service.id,
-                        //#. %1$s is the display name of the account
-                        //#. e.g. My Xing account
-                        displayName: gt('My %1$s account', service.get('displayName'))
-                    });
+                    var account = oauthAPI.accounts.forService(service.id)
+                        .filter(function (account) {
+                            return !account.hasScopes('mail');
+                        })[0] ||
+                        new OAuth.Account.Model({
+                            serviceId: service.id,
+                            //#. %1$s is the display name of the account
+                            //#. e.g. My Xing account
+                            displayName: gt('My %1$s account', service.get('displayName'))
+                        });
 
                     account.enableScopes('mail').save().then(function () {
                         baton.popup.busy();

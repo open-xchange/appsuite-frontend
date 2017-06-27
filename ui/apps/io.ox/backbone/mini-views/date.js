@@ -80,8 +80,7 @@ define('io.ox/backbone/mini-views/date', [
                 if (!d.isValid()) {
                     // jump back to last valid day of previous month
                     // invalid date cannot be fixed by changing days. use valid date before change month
-                    d = moment(d.valueOf());
-                    d.date(0);
+                    d = moment([d.creationData().input.year, d.creationData().input.month]).endOf('month').hours(1).minutes(0).seconds(0).milliseconds(0);
                     // set date field to right day
                     // needs to be done or an invalid date can be selected
                     // if model already has the corrected date

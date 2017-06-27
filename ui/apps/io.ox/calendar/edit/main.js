@@ -97,14 +97,11 @@ define('io.ox/calendar/edit/main', [
                             }
                         });
 
-                        //window.busy breaks oldschool upload, iframe needs to be enabled until all files are uploaded
-                        if (_.browser.IE === undefined || _.browser.IE > 9) {
-                            self.model.on({
-                                'sync:start': function () {
-                                    self.getWindow().busy();
-                                }
-                            });
-                        }
+                        self.model.on({
+                            'sync:start': function () {
+                                self.getWindow().busy();
+                            }
+                        });
 
                         self.considerSaved = true;
 
@@ -343,11 +340,9 @@ define('io.ox/calendar/edit/main', [
         });
 
         app.setLauncher(function () {
-            if (_.browser.IE === undefined || _.browser.IE > 9) {
-                this.dropZone = new dnd.UploadZone({
-                    ref: 'io.ox/calendar/edit/dnd/actions'
-                }, this);
-            }
+            this.dropZone = new dnd.UploadZone({
+                ref: 'io.ox/calendar/edit/dnd/actions'
+            }, this);
         });
 
         app.setQuit(function () {

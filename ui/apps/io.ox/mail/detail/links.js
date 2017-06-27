@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+/* eslint no-useless-escape: 0 */
 define('io.ox/mail/detail/links', [
     'io.ox/mail/api',
     'io.ox/core/util',

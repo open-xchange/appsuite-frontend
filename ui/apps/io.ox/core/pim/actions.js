@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
- /* global blankshield */
+/* global blankshield */
 
 define('io.ox/core/pim/actions', [
     'io.ox/core/api/attachment',

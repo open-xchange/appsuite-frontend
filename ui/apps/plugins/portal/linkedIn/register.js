@@ -240,7 +240,7 @@ define('plugins/portal/linkedIn/register', [
                     api: 'linkedin',
                     url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
                 })
-                .pipe(function (msgs) {
+                .then(function (msgs) {
                     var data = JSON.parse(msgs);
                     if ((data.errorCode >= 0) && data.message) {
                         return (baton.data = data);

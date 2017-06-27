@@ -25,7 +25,7 @@ define('io.ox/files/share/wizard', [
     'settings!io.ox/contacts',
     'io.ox/core/capabilities',
     'io.ox/backbone/mini-views/addresspicker',
-    'static/3rd.party/resize-polyfill/lib/polyfill-resize.js',
+    'static/3rd.party/polyfill-resize.js',
     'less!io.ox/files/share/style'
 ], function (DisposableView, ext, api, sModel, miniViews, Dropdown, contactsAPI, Tokenfield, yell, gt, settingsContacts, capabilities, AddressPickerView) {
 
@@ -116,9 +116,9 @@ define('io.ox/files/share/wizard', [
             );
 
             // load lib
-            require(['static/3rd.party/clipboard/dist/clipboard.min.js']).then(function (ClipBoard) {
+            require(['static/3rd.party/clipboard.min.js']).then(function (ClipBoard) {
                 new ClipBoard(button.get(0));
-                button.removeAttr('disabled');
+                button.prop('disabled', false);
             });
 
             // change tooltip after button was clicked
@@ -218,7 +218,8 @@ define('io.ox/files/share/wizard', [
                     $textView = new miniViews.TextView({
                         name: 'message',
                         model: baton.model
-                    }).render().$el.attr({
+                    }).render().$el
+                    .attr({
                         id: guid,
                         //#. placeholder text in share dialog
                         placeholder: gt('Message (optional)')

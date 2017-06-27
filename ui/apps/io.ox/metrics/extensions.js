@@ -80,7 +80,7 @@ define('io.ox/metrics/extensions', [
         id: 'settings',
         register: function () {
             var metrics = this;
-            $('#topbar-settings-dropdown').delegate('a', 'mousedown', function (e) {
+            $('#topbar-settings-dropdown').on('mousedown', 'a', function (e) {
                 var node = $(e.target).closest('a'),
                     action = node.attr('data-action') || node.attr('class') || node.parent().attr('class');
                 metrics.trackEvent({

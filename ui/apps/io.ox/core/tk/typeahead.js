@@ -15,7 +15,7 @@ define('io.ox/core/tk/typeahead', [
     'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
     'settings!io.ox/contacts',
-    'static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
+    'static/3rd.party/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
 ], function (ext, AutocompleteAPI, settings) {
 

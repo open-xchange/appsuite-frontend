@@ -175,7 +175,7 @@ define('io.ox/core/sub/subscriptions', [
                 this.model.validate();
                 if (this.model.errors && this.model.errors.hasErrors()) {
                     this.model.errors.each(function (errors) {
-                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(errors[0]));
+                        if (errors.length > 0) showErrorInline(popup.getBody(), gt('Error:'), errors[0]);
                     });
                     popup.idle();
                     popup.getContentNode().find('input').first().focus();
@@ -195,7 +195,7 @@ define('io.ox/core/sub/subscriptions', [
                             },
                             function refreshFail(error) {
                                 popup.idle();
-                                showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error_html || error.error));
+                                showErrorInline(popup.getBody(), gt('Error:'), error.error_html || error.error);
                                 api.subscriptions.destroy(id);
                                 self.model = self.model.clone();
                                 folderAPI.remove(self.model.get('folder'));
@@ -216,7 +216,7 @@ define('io.ox/core/sub/subscriptions', [
                     function saveFail(error) {
                         popup.idle();
                         if (error.error) {
-                            showErrorInline(popup.getBody(), gt('Error:'), _.noI18n(error.error));
+                            showErrorInline(popup.getBody(), gt('Error:'), error.error);
                         } else {
                             notifications.yell({
                                 type: 'error',
@@ -281,7 +281,8 @@ define('io.ox/core/sub/subscriptions', [
             });
             this.append(new OAuth.Views.ServicesListView({
                 collection: new Backbone.Collection(baton.services)
-            }).on('select', function (model) {
+            })
+            .on('select', function (model) {
                 var fd = model.get('formDescription'),
                     bat = ext.Baton({ view: baton.view, subModel: baton.model, model: model, services: baton.services, popup: baton.popup, app: baton.app });
                 baton.model.setSource(model.toJSON());
@@ -299,7 +300,8 @@ define('io.ox/core/sub/subscriptions', [
         var serviceId = service.formDescription[0].options.type,
             account = oauthAPI.accounts.forService(serviceId).filter(function (account) {
                 return !account.hasScopes(scope);
-            })[0] || new OAuth.Account.Model({
+            })[0] ||
+            new OAuth.Account.Model({
                 serviceId: serviceId,
                 //#. %1$s is the display name of the account
                 //#. e.g. My Xing account

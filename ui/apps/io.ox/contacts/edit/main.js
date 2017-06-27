@@ -126,7 +126,7 @@ define('io.ox/contacts/edit/main', [
                         function fnToggleSave(isDirty) {
                             var node = win.nodes.footer.find('.btn[data-action="save"]');
                             if (_.device('smartphone')) node = container.parent().parent().find('.btn[data-action="save"]');
-                            if (isDirty) node.prop('disabled', false); else node.prop('disabled', true);
+                            node.prop('disabled', !isDirty);
                         }
 
                         if (!data.id) {
@@ -160,7 +160,7 @@ define('io.ox/contacts/edit/main', [
                             app.quit();
                         });
 
-                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('filestore')) {
+                        if (capabilities.has('filestore')) {
 
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
@@ -234,8 +234,9 @@ define('io.ox/contacts/edit/main', [
 
             if (data) {
                 // hash support
-                app.setState(data.id ? { folder: data.folder_id, id: data.id }
-                                     : { folder: data.folder_id });
+                app.setState(data.id
+                    ? { folder: data.folder_id, id: data.id }
+                    : { folder: data.folder_id });
                 cont(data);
             } else {
                 cont({ folder_id: app.getState().folder, id: app.getState().id });

@@ -234,9 +234,9 @@ define('io.ox/core/pdf/pdfdocument', [
 
             $.get(encTestPDFConverterURL).always(function (data) {
                 loadDef.resolve(
-                  (_.isObject(data) && _.isString(data.responseText)) ?
-                      $.parseJSON(data.responseText) :
-                          { cause: 'filterError' });
+                    (_.isObject(data) && _.isString(data.responseText)) ?
+                        $.parseJSON(data.responseText) :
+                        { cause: 'filterError' });
 
             });
         });

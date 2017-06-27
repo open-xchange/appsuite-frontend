@@ -24,40 +24,41 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'bower_components/jquery/dist/jquery.js',
-                            'lib/jquery.mobile.touch.min.js',
-                            'bower_components/underscore/underscore.js', // load this before require.js to keep global object
+                            'node_modules/jquery/dist/jquery.js',
+                            //'node_modules/jquery-migrate/dist/jquery-migrate.js',
+                            'node_modules/jquery-touch-events/src/jquery.mobile-events.min.js',
+                            'node_modules/underscore/underscore.js', // load this before require.js to keep global object
                             'build/ox.js',
                             // add backbone and dot.js may be a AMD-variant would be better
-                            'bower_components/backbone/backbone.js',
-                            'bower_components/backbone-validation/dist/backbone-validation.js',
+                            'node_modules/backbone/backbone.js',
+                            'node_modules/backbone-validation/dist/backbone-validation.js',
                             // load moment before require, because of anonymous define
                             'build/static/3rd.party/moment/moment.js',
                             'build/static/3rd.party/moment/moment-timezone-with-data.js',
                             'build/static/3rd.party/moment/moment-interval.js',
-                            'build/static/3rd.party/velocity/velocity.min.js',
-                            'bower_components/requirejs/require.js',
-                            'lib/require-fix.js',
+                            'node_modules/velocity-animate/velocity.min.js',
+                            'src/util.js',
+                            'node_modules/requirejs/require.js',
+                            'src/require-fix.js',
                             'lib/modernizr.js',
                             'src/lazyload.js',
-                            'src/util.js',
                             'src/browser.js',
                             'src/plugins.js',
                             'src/jquery.plugins.js',
 
-                            'bower_components/blankshield/blankshield.js',
+                            'node_modules/blankshield/blankshield.js',
                             // add bootstrap JavaScript
-                            'bower_components/bootstrap/js/transition.js',
-                            'bower_components/bootstrap/js/alert.js',
-                            'bower_components/bootstrap/js/button.js',
-                            'bower_components/bootstrap/js/carousel.js',
-                            'bower_components/bootstrap/js/collapse.js',
-                            'bower_components/bootstrap/js/modal.js',
-                            'bower_components/bootstrap/js/tooltip.js',
-                            'bower_components/bootstrap/js/popover.js',
-                            'bower_components/bootstrap/js/scrollspy.js',
-                            'bower_components/bootstrap/js/tab.js',
-                            'bower_components/bootstrap/js/affix.js',
+                            'node_modules/bootstrap/js/transition.js',
+                            'node_modules/bootstrap/js/alert.js',
+                            'node_modules/bootstrap/js/button.js',
+                            'node_modules/bootstrap/js/carousel.js',
+                            'node_modules/bootstrap/js/collapse.js',
+                            'node_modules/bootstrap/js/modal.js',
+                            'node_modules/bootstrap/js/tooltip.js',
+                            'node_modules/bootstrap/js/popover.js',
+                            'node_modules/bootstrap/js/scrollspy.js',
+                            'node_modules/bootstrap/js/tab.js',
+                            'node_modules/bootstrap/js/affix.js',
                             // add custom bootstrap code
                             'apps/io.ox/core/tk/dropdown.js',
                             'lib/bootstrap-a11y.js',
@@ -255,25 +256,25 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'bower_components/mobiscroll/js/mobiscroll.core.js',
-                            'bower_components/mobiscroll/js/mobiscroll.util.datetime.js',
-                            'bower_components/mobiscroll/js/mobiscroll.frame.js',
-                            'bower_components/mobiscroll/js/mobiscroll.scroller.js',
-                            'bower_components/mobiscroll/js/mobiscroll.datetimebase.js',
-                            'bower_components/mobiscroll/js/mobiscroll.datetime.js',
-                            'bower_components/mobiscroll/js/mobiscroll.frame.ios.js'
+                            'node_modules/mobiscroll/js/mobiscroll.core.js',
+                            'node_modules/mobiscroll/js/mobiscroll.util.datetime.js',
+                            'node_modules/mobiscroll/js/mobiscroll.frame.js',
+                            'node_modules/mobiscroll/js/mobiscroll.scroller.js',
+                            'node_modules/mobiscroll/js/mobiscroll.datetimebase.js',
+                            'node_modules/mobiscroll/js/mobiscroll.datetime.js',
+                            'node_modules/mobiscroll/js/mobiscroll.frame.ios.js'
                         ],
-                        dest: 'build/static/3rd.party/mobiscroll/mobiscroll.js',
+                        dest: 'build/static/3rd.party/mobiscroll.js',
                         nonull: true
                     },
                     {
                         src: [
-                            'bower_components/mobiscroll/css/mobiscroll.frame.css',
-                            'bower_components/mobiscroll/css/mobiscroll.frame.ios.css',
-                            'bower_components/mobiscroll/css/mobiscroll.scroller.css',
-                            'bower_components/mobiscroll/css/mobiscroll.scroller.ios.css'
+                            'node_modules/mobiscroll/css/mobiscroll.frame.css',
+                            'node_modules/mobiscroll/css/mobiscroll.frame.ios.css',
+                            'node_modules/mobiscroll/css/mobiscroll.scroller.css',
+                            'node_modules/mobiscroll/css/mobiscroll.scroller.ios.css'
                         ],
-                        dest: 'build/apps/3rd.party/mobiscroll/mobiscroll.css',
+                        dest: 'build/apps/3rd.party/mobiscroll.css',
                         nonull: true
                     }
                 ]
@@ -282,12 +283,10 @@ module.exports = function (grunt) {
                 files: [
                     {
                         src: [
-                            'bower_components/tinymce-dist/tinymce.min.js',
-                            'lib/tinymce/themes/unobtanium/theme.min.js',
-                            'bower_components/tinymce-dist/plugins/{autolink,code,link,paste,textcolor,lists}/plugin.min.js',
-                            'lib/tinymce/plugins/oximage/plugin.min.js',
-                            'lib/tinymce/plugins/oxpaste/plugin.min.js',
-                            'lib/tinymce/plugins/oxdrop/plugin.min.js'
+                            'node_modules/tinymce/tinymce.min.js',
+                            'node_modules/@open-xchange/tinymce/themes/unobtanium/theme.min.js',
+                            'node_modules/tinymce/plugins/{autolink,code,link,paste,textcolor,lists}/plugin.min.js',
+                            'node_modules/@open-xchange/tinymce/plugins/ox{image,paste,drop}/plugin.min.js'
                         ],
                         dest: 'build/apps/3rd.party/tinymce/tinymce.min.js',
                         nonull: true
@@ -306,9 +305,9 @@ module.exports = function (grunt) {
                     footer: '\n' +
                             '  define.amd = _amd;\n' +
                             '});\n\n' +
-                            'define("static/3rd.party/typeahead.js/dist/typeahead.jquery.js", _.noop);\n' +
+                            'define("static/3rd.party/typeahead.jquery.js", _.noop);\n' +
                             'define("static/3rd.party/jquery-ui.min.js", _.noop);\n' +
-                            'define("static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js", _.noop);\n'
+                            'define("static/3rd.party/bootstrap-tokenfield.js", _.noop);\n'
                 },
                 files: [
                     {
@@ -329,10 +328,10 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/api/snippets.js',
                             'apps/io.ox/core/tk/contenteditable-editor.js',
                             'apps/io.ox/core/tk/textproc.js',
-                            'bower_components/tinymce-dist/jquery.tinymce.min.js',
+                            'node_modules/tinymce/jquery.tinymce.min.js',
                             'build/static/3rd.party/jquery-ui.min.js',
-                            'build/static/3rd.party/typeahead.js/dist/typeahead.jquery.js',
-                            'build/static/3rd.party/bootstrap-tokenfield/js/bootstrap-tokenfield.js'
+                            'build/static/3rd.party/typeahead.jquery.js',
+                            'build/static/3rd.party/bootstrap-tokenfield.js'
                         ],
                         dest: 'build/apps/io.ox/mail/compose/bundle.js',
                         nonull: true

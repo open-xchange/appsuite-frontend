@@ -204,7 +204,7 @@ define('io.ox/core/api/apps', [
                     installedLoaded.push(extension.installed());
                 }
             });
-            return $.when.apply($, installedLoaded).pipe(function () {
+            return $.when.apply($, installedLoaded).then(function () {
                 return (cachedInstalled = _.chain(arguments).flatten().filter(function (app) {
                     return 'requires' in app ? capabilities.has(app.requires) : true;
                 }).value());

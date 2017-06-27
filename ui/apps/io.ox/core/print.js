@@ -30,7 +30,7 @@ define('io.ox/core/print', [
         callbacks = {};
 
     function escapeTitle(str) {
-        return (str || '').replace(/[#%&§\/$*!`´'"=:@+\^\\.+?{}|]/g, '_');
+        return (str || '').replace(/[#%&§/$*!`´'"=:@+^\\.+?{}|]/g, '_');
     }
 
     function addCallback(options, it) {

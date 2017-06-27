@@ -17,15 +17,20 @@
  * @param parameters {string} a string or an array with url parameters
  * @param userIndex {number} optional, the index of the user in the global users array
  */
-exports.command = function (parameters, userIndex) {
+exports.command = function (parameters, options) {
     // make sure, parameters is an array
     parameters = [].concat(parameters);
 
-    userIndex = userIndex || 0;
+    options = options || {};
+    var userIndex = options.userIndex || 0,
+        prefix = options.prefix || 0;
 
-    // make sure, launch_url has a trailing slash
     var launchURL = this.launch_url;
+    if (launchURL.indexOf('appsuite') >= 0) launchURL = launchURL.substring(0, launchURL.indexOf('appsuite'));
     if (!/\/$/.test(launchURL)) launchURL += '/';
+    launchURL += prefix;
+    if (!/\/$/.test(launchURL)) launchURL += '/';
+    launchURL += 'appsuite/';
 
     var users = this.globals.users;
     if (!users || !users.length) this.assert.fail('user not found', 'A configured user', 'Expected at least one configured user in the global array "users".');

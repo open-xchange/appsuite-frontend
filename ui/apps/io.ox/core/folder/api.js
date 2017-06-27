@@ -1225,7 +1225,7 @@ define('io.ox/core/folder/api', [
     //
 
     function updateTextNode(data) {
-        this.nodeValue = _.noI18n(data.title || data.id);
+        this.nodeValue = data.title || data.id;
     }
 
     function getTextNode(id) {

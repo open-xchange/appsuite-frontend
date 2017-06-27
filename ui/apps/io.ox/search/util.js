@@ -50,12 +50,8 @@ define('io.ox/search/util', [
                     'data-animation': 'false',
                     'data-container': 'body',
                     'data-original-title': title
-                })
-                .tooltip()
-                .on('click', function () {
-                    if (node.tooltip) {
-                        node.tooltip('hide');
-                    }
+                }).tooltip().on('click', function () {
+                    if (node.tooltip) node.tooltip('hide');
                 });
             }
             return node;

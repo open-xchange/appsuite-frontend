@@ -10,7 +10,7 @@
  *
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
-
-define('com.spamexperts/settings/defaults', { 
-	name: 'Spampanel' 
+/* eslint requirejs/no-object-define: 0 */
+define('com.spamexperts/settings/defaults', {
+    name: 'Spampanel'
 });

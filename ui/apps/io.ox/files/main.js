@@ -753,7 +753,7 @@ define('io.ox/files/main', [
                 column = Math.max(1, Math.min(12, width / gridWidth >> 0));
 
                 // update class name
-                list.el.className = list.el.className.replace(/\s?grid\-\d+/g, '');
+                list.el.className = list.el.className.replace(/\s?grid-\d+/g, '');
                 list.$el.addClass('grid-' + column).attr('grid-count', column);
 
                 resizePending = false;

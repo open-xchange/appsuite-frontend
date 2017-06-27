@@ -53,7 +53,7 @@ define('io.ox/core/emoji/util', ['settings!io.ox/mail/emoji'], function (setting
                  * When adjusting this regex, make sure, all supported emoji do still
                  * match (all unified + all softbank codepoints)
                  */
-                hasEmoji = /[\u203c\u2049\u20e3\u2123-\uffff](?![^\<]*?\>)/.test(str);
+                hasEmoji = /[\u203c\u2049\u20e3\u2123-\uffff](?![^<]*?>)/.test(str);
 
             function cont(str, libJustLoaded) {
                 if (callback) callback(str, { loaded: !!libJustLoaded });

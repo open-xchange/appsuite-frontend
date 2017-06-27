@@ -1,0 +1,47 @@
+{
+    "namespace": "io.ox/mail/signatures",
+    "request": "/appsuite/api/snippet\\?action=all",
+    "response": {
+        "data":[{
+            "id":"0",
+            "content":"<p>The content of the first signature</p>",
+            "createdby": 4,
+            "displayname": "First signature above",
+            "misc": {"insertion": "above","content-type": "text/html"},
+            "module": "io.ox/mail",
+            "type": "signature",
+            "shared": false,
+            "props": {"MIME-Version": "1.0","Message-ID": "<946804824.48.1496177668951@debian.local>","Content-Type": "multipart/mixed;  boundary=\"----=_Part_1_547682208.1496100662247\""}
+        }, {
+            "id": "1",
+            "content": "<p>The content of the second signature</p>",
+            "createdby": 4,
+            "displayname": "Second signature above",
+            "misc": {"insertion": "above","content-type": "text/html"},
+            "module": "io.ox/mail",
+            "type": "signature",
+            "shared": false,
+            "props": {"MIME-Version": "1.0","Message-ID": "<756429212.49.1496177668952@debian.local>","Content-Type": "multipart/mixed;  boundary=\"----=_Part_4_595573836.1496100663537\""}
+        }, {
+            "id": "2",
+            "content": "<p>The content of the third signature</p>",
+            "createdby": 4,
+            "displayname": "First signature below",
+            "misc": {"insertion": "below","content-type": "text/html"},
+            "module": "io.ox/mail",
+            "type": "signature",
+            "shared": false,
+            "props": {"MIME-Version": "1.0","Message-ID": "<930629613.50.1496177668954@debian.local>","Content-Type": "multipart/mixed;  boundary=\"----=_Part_8_785519517.1496100664869\""}
+        },{
+            "id": "3",
+            "content": "<p>The content of the fourth signature</p>",
+            "createdby": 4,
+            "displayname": "Second signature below",
+            "misc": {"insertion": "below","content-type": "text/html"},
+            "module": "io.ox/mail",
+            "type": "signature",
+            "shared": false,
+            "props": {"MIME-Version": "1.0","Message-ID": "<1878083517.51.1496177668955@debian.local>","Content-Type":"multipart/mixed;  boundary=\"----=_Part_13_2013849994.1496100666110\""}
+        }]
+    }
+}

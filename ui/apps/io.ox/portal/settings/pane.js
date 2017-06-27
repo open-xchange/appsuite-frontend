@@ -195,7 +195,7 @@ define('io.ox/portal/settings/pane', [
                 .addClass(data.protectedWidget && !protectedButDraggable ? ' protected' : ' draggable')
                 .append(
                     data.protectedWidget && !protectedButDraggable ? $('<div class="spacer">') :
-                    listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
+                        listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
                 );
 
         }
@@ -313,7 +313,8 @@ define('io.ox/portal/settings/pane', [
                     widgets.getCollection().trigger('order-changed', 'settings');
                     widgets.save(this.$el);
                 }
-            }).on('add', function (view) {
+            })
+            .on('add', function (view) {
                 // See Bugs: 47816 / 47230
                 if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') return;
                 view.edit();

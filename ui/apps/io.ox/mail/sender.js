@@ -30,7 +30,7 @@ define('io.ox/mail/sender', [
     }
 
     function drawOption(value, text, display_name, address) {
-        return $('<option>', { value: value }).text(_.noI18n(text || value))
+        return $('<option>', { value: value }).text(text || value)
             .attr({ 'data-display-name': (display_name || ''), 'data-address': (address || value) });
     }
 
@@ -167,25 +167,25 @@ define('io.ox/mail/sender', [
          */
         getNumbers: function () {
             return $.when(
-                        that.getUser(),
-                        that.getDisplayName()
-                    )
-                    .then(function (data, display_name) {
-                        display_name = display_name || data.display_name || '';
-                        return _(that.getMapping())
-                                    .chain()
-                                    .map(function (field) {
-                                        var number = $.trim(data[field]);
-                                        if (number) {
-                                            return [
-                                                display_name,
-                                                number
-                                            ];
-                                        }
-                                    })
-                                    .compact()
-                                    .value();
-                    });
+                that.getUser(),
+                that.getDisplayName()
+            )
+            .then(function (data, display_name) {
+                display_name = display_name || data.display_name || '';
+                return _(that.getMapping())
+                            .chain()
+                            .map(function (field) {
+                                var number = $.trim(data[field]);
+                                if (number) {
+                                    return [
+                                        display_name,
+                                        number
+                                    ];
+                                }
+                            })
+                            .compact()
+                            .value();
+            });
         },
 
         /**
@@ -195,10 +195,10 @@ define('io.ox/mail/sender', [
          */
         getAddresses: function () {
             return $.when(
-                    that.getAccounts(),
-                    that.getNumbers(),
-                    that.getPrimaryAddress()
-                );
+                that.getAccounts(),
+                that.getNumbers(),
+                that.getPrimaryAddress()
+            );
         },
 
         /**

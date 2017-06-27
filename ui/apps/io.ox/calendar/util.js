@@ -292,36 +292,35 @@ define('io.ox/calendar/util', [
             // });
             // return opt;
 
-            var reminderListValues = [
-                { value: -1, format: 'string' },
+            var options = {},
+                reminderListValues = [
+                    { value: -1, format: 'string' },
+                    { value: 0, format: 'minutes' },
+                    { value: 5, format: 'minutes' },
+                    { value: 10, format: 'minutes' },
+                    { value: 15, format: 'minutes' },
+                    { value: 30, format: 'minutes' },
+                    { value: 45, format: 'minutes' },
 
-                { value: 0, format: 'minutes' },
-                { value: 5, format: 'minutes' },
-                { value: 10, format: 'minutes' },
-                { value: 15, format: 'minutes' },
-                { value: 30, format: 'minutes' },
-                { value: 45, format: 'minutes' },
+                    { value: 60, format: 'hours' },
+                    { value: 120, format: 'hours' },
+                    { value: 240, format: 'hours' },
+                    { value: 360, format: 'hours' },
+                    { value: 480, format: 'hours' },
+                    { value: 720, format: 'hours' },
 
-                { value: 60, format: 'hours' },
-                { value: 120, format: 'hours' },
-                { value: 240, format: 'hours' },
-                { value: 360, format: 'hours' },
-                { value: 480, format: 'hours' },
-                { value: 720, format: 'hours' },
+                    { value: 1440, format: 'days' },
+                    { value: 2880, format: 'days' },
+                    { value: 4320, format: 'days' },
+                    { value: 5760, format: 'days' },
+                    { value: 7200, format: 'days' },
+                    { value: 8640, format: 'days' },
 
-                { value: 1440, format: 'days' },
-                { value: 2880, format: 'days' },
-                { value: 4320, format: 'days' },
-                { value: 5760, format: 'days' },
-                { value: 7200, format: 'days' },
-                { value: 8640, format: 'days' },
-
-                { value: 10080, format: 'weeks' },
-                { value: 20160, format: 'weeks' },
-                { value: 30240, format: 'weeks' },
-                { value: 40320, format: 'weeks' }
-                ],
-                options = {};
+                    { value: 10080, format: 'weeks' },
+                    { value: 20160, format: 'weeks' },
+                    { value: 30240, format: 'weeks' },
+                    { value: 40320, format: 'weeks' }
+                ];
 
             _(reminderListValues).each(function (item) {
                 var i;
@@ -375,8 +374,8 @@ define('io.ox/calendar/util', [
             var current = moment(data.start_date);
 
             parent.append(
-                $.txt(gt.noI18n(this.getTimeInterval(data))),
-                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(gt.noI18n(current.zoneAbbr())), data, options)
+                $.txt(this.getTimeInterval(data)),
+                this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(current.zoneAbbr()), data, options)
             );
 
             return parent;
@@ -410,12 +409,12 @@ define('io.ox/calendar/util', [
                     // get short name (with a few exceptions; see bug 41440)
                     var name = /(North|East|South|West|Central)/.test(zone) ? zone : zone.replace(/^.*?\//, '');
                     // must use outer DIV with "clear: both" here for proper layout in firefox
-                    div.append($('<li>').append(
-                        $('<span>')
-                            .text(gt.noI18n(name.replace(/_/g, ' '))),
-                        $('<span class="time">')
-                            .text(gt.noI18n(that.getTimeInterval(data, zone)))
-                    ));
+                    div.append(
+                        $('<li>').append(
+                            $('<span>').text(name.replace(/_/g, ' ')),
+                            $('<span class="time">').text(that.getTimeInterval(data, zone))
+                        )
+                    );
                 });
 
                 return div;

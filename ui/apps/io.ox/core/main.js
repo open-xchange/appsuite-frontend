@@ -227,7 +227,8 @@ define('io.ox/core/main', [
     var launcherDropdownTab = $('<li class="launcher-dropdown dropdown" role="presentation">').append(
         launcherDropdownToggle = $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true">').attr({
             'aria-label': gt('Launcher dropdown. Press [enter] to jump to the dropdown.')
-        }).append(
+        })
+        .append(
             $('<i class="fa fa-angle-double-right" aria-hidden="true">'),
             $('<span class="sr-only">').text('Dropdown')
         ),
@@ -253,10 +254,8 @@ define('io.ox/core/main', [
     gt.pgettext('app', 'Drive');
     gt.pgettext('app', 'Conversations');
 
-    var tabManager = _.throttle(function () {
-
+    var tabManager = function () {
         var items = launchers.children('.launcher'),
-            launcherDropDownIcon = $('.launcher-dropdown', topbar),
             secondaryLauncher = topbar.find('.launchers-secondary'),
             forceDesktopLaunchers = settings.get('forceDesktopLaunchers', false);
 
@@ -276,8 +275,10 @@ define('io.ox/core/main', [
 
         var itemsVisible = launchers.children('.launcher:visible'),
             itemsRightWidth = secondaryLauncher.length > 0 ? secondaryLauncher[0].getBoundingClientRect().width : 0,
-            launcherDropDownIconWidth = launcherDropDownIcon.width(),
-            viewPortWidth = topbar.width() - launcherDropDownIconWidth;
+            viewPortWidth = topbar[0].getBoundingClientRect().width,
+            launcherDropDownIcon = topbar.find('.launcher-dropdown');
+
+        if (launcherDropDownIcon.length) viewPortWidth -= launcherDropDownIcon[0].getBoundingClientRect().width;
 
         launcherDropdownTab.detach();
 
@@ -308,7 +309,7 @@ define('io.ox/core/main', [
             launcherDropdownTab.detach();
         }
 
-    }, 100);
+    };
 
     // add launcher
     var addLauncher = function (side, label, fn, arialabel) {
@@ -499,7 +500,7 @@ define('io.ox/core/main', [
                                     gt.ngettext(
                                         'You will be automatically signed out in %1$d second',
                                         'You will be automatically signed out in %1$d seconds', sec
-                                    ), gt.noI18n(sec)
+                                    ), sec
                                 );
                             },
                             node = $('<span>').text(getString(countdown)),
@@ -738,14 +739,14 @@ define('io.ox/core/main', [
             );
             add(launchernode, launcherDropdown, model);
 
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ox.ui.apps.on('remove', function (model) {
             _([launchers, launcherDropdown]).each(function (node) {
                 node.children('[data-app-guid="' + model.guid + '"]').remove();
             });
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ox.ui.apps.on('launch resume', function (model) {
@@ -763,12 +764,12 @@ define('io.ox/core/main', [
 
         ox.ui.apps.on('change:title', function (model, value) {
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
-            $('a.apptitle', node).text(_.noI18n(value));
+            $('a.apptitle', node).text(value);
             addUserContent(model, node);
-            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(_.noI18n(value));
+            launcherDropdown.find('li[data-app-guid="' + model.guid + '"] a:first').text(value);
             $('a.closelink', node).attr('title', getCloseIconLabel(value));
 
-            tabManager();
+            ox.trigger('recalculate-topbarsize');
         });
 
         ext.point('io.ox/core/topbar/right').extend({
@@ -805,12 +806,12 @@ define('io.ox/core/main', [
                     // so let's delay this for responsiveness!
                     // only requests are delayed by 5s, the badge is drawn normally
                     self.append(notifications.attach(addLauncher, DELAY));
-                    tabManager();
+                    ox.trigger('recalculate-topbarsize');
                 } else {
                     //lets wait till we are online
                     ox.once('connection:online', function () {
                         self.append(notifications.attach(addLauncher, DELAY));
-                        tabManager();
+                        ox.trigger('recalculate-topbarsize');
                     });
                 }
             }
@@ -1251,8 +1252,10 @@ define('io.ox/core/main', [
 
                 ext.point('io.ox/core/topbar/favorites').invoke('draw');
 
-                $(window).resize(tabManager);
-                ox.on('recalculate-topbarsize', tabManager);
+                $(window).on('resize', function () {
+                    ox.trigger('recalculate-topbarsize');
+                });
+                ox.on('recalculate-topbarsize', _.throttle(function () { tabManager(); }, 100));
             }
         });
 
@@ -1304,7 +1307,7 @@ define('io.ox/core/main', [
         ext.point('io.ox/core/relogin').extend({
             draw: function () {
                 this.append(
-                    gt('Your session is expired'), $.txt(_.noI18n('.')), $('<br>'),
+                    gt('Your session is expired'), $.txt('.'), $('<br>'),
                     $('<small>').text(gt('Please sign in again to continue'))
                 );
             }
@@ -1644,7 +1647,7 @@ define('io.ox/core/main', [
                                 var version = item.version || '';
                                 version = version.split('.').slice(0, -2).join('.');
                                 if (version) {
-                                    versionInfo = $('<span class="oldversion">').text(gt.noI18n('(' + version + ')'));
+                                    versionInfo = $('<span class="oldversion">').text('(' + version + ')');
                                 }
                             }
                             this.append(
@@ -1653,7 +1656,7 @@ define('io.ox/core/main', [
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
-                                    $('<span>').text(gt.noI18n(info)),
+                                    $('<span>').text(info),
                                     versionInfo
                                 )
                             );
@@ -1920,8 +1923,8 @@ define('io.ox/core/main', [
     folderAPI.on('warn:hidden', function (folder) {
         if (folder) {
             notifications.yell('info',
-               //#. %1$s is the filename
-               gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
+                //#. %1$s is the filename
+                gt('Folder with name "%1$s" will be hidden. Enable setting "Show hidden files and folders" to access this folder again.', folder.title)
             );
         }
     });

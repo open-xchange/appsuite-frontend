@@ -13,7 +13,7 @@
 
 define('io.ox/core/tk/datepicker', [
     'gettext!io.ox/core',
-    'static/3rd.party/bootstrap-datepicker/js/bootstrap-datepicker.js',
+    'static/3rd.party/bootstrap-datepicker.js',
     'static/3rd.party/bootstrap-combobox.js'
 ], function (gt) {
 

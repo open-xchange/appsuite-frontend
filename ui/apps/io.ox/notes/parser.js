@@ -45,7 +45,7 @@ define('io.ox/notes/parser', [], function () {
             var lines = _.escape(text).split(/\n/), openList;
 
             lines = lines.map(function (line) {
-                var match = line.match(/^(\*\s|\#\s|\-\s\[(?:\s|x)\])\s?(.+)$/), out, item;
+                var match = line.match(/^(\*\s|#\s|-\s\[(?:\s|x)\])\s?(.+)$/), out, item;
                 if (!match) {
                     if (openList) {
                         out = '</' + openList + '>' + line + '\n';
@@ -66,12 +66,12 @@ define('io.ox/notes/parser', [], function () {
             });
 
             var html = lines.join('')
-                    .replace(/\!\[\]\((.*?)\)/g, '<img src="$1">')
-                    .replace(/(^|[^\\])\*\*([^<\*]+)\*\*/g, '$1<b>$2</b>')
-                    .replace(/(^|[^\\])\*([^<\*]+)\*/g, '$1<i>$2</i>')
-                    .replace(/(^|[^\\])\_([^<\_]+)\_/g, '$1<u>$2</u>')
-                    .replace(/(^|[^\\])\~([^<\~]+)\~/g, '$1<strike>$2</strike>')
-                    .replace(/(https?\:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
+                    .replace(/!\[\]\((.*?)\)/g, '<img src="$1">')
+                    .replace(/(^|[^\\])\*\*([^<*]+)\*\*/g, '$1<b>$2</b>')
+                    .replace(/(^|[^\\])\*([^<*]+)\*/g, '$1<i>$2</i>')
+                    .replace(/(^|[^\\])_([^<_]+)_/g, '$1<u>$2</u>')
+                    .replace(/(^|[^\\])~([^<~]+)~/g, '$1<strike>$2</strike>')
+                    .replace(/(https?:\/\/\S+)/ig, '<a href="$1" target="_blank" rel="noopener">$1</a>')
                     .replace(/\n/g, '<br>');
 
             return { html: html, preview: this.getPreview(text), content: text };

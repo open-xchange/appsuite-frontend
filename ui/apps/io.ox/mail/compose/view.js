@@ -584,7 +584,8 @@ define('io.ox/mail/compose/view', [
                         self.model.set('attachments', attachmentCollection);
                         obj = data = attachmentCollection = null;
                     });
-                }).fail(function () {
+                })
+                .fail(function () {
                     // Mark model as clean to prevent save/discard dialog when server side error occurs
                     self.clean();
                 });

@@ -55,7 +55,7 @@ define('io.ox/calendar/view-grid-template', [
 
                 var self = this,
                     isPrivate = _.isUndefined(data.title),
-                    title = isPrivate ? gt('Private') : gt.noI18n(data.title || '\u00A0'),
+                    title = isPrivate ? gt('Private') : (data.title || '\u00A0'),
                     a11yLabel = [];
 
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
@@ -69,9 +69,9 @@ define('io.ox/calendar/view-grid-template', [
 
                 fields.title.text(title);
 
-                fields.location.text(gt.noI18n(data.location || '\u00A0'));
-                fields.time.text(gt.noI18n(util.getTimeInterval(data)));
-                fields.date.text(gt.noI18n(util.getDateInterval(data)));
+                fields.location.text(data.location || '\u00A0');
+                fields.time.text(util.getTimeInterval(data));
+                fields.date.text(util.getDateInterval(data));
                 fields.shown_as.addClass(util.getShownAsLabel(data)).attr('title', util.getShownAs(data));
 
                 fields.isPrivate.toggle(isPrivate);
@@ -84,7 +84,7 @@ define('io.ox/calendar/view-grid-template', [
                 //#. Some languages (e.g. German) might need to translate "location:".
                 if (data.location) a11yLabel.push(gt.pgettext('a11y', 'at %1$s', data.location));
                 a11yLabel.push(util.getTimeIntervalA11y(data));
-                a11yLabel.push(gt.noI18n(util.getDateIntervalA11y(data)));
+                a11yLabel.push(util.getDateIntervalA11y(data));
 
                 this.attr('aria-label', _.escape(a11yLabel.join(', ') + '.'));
             }

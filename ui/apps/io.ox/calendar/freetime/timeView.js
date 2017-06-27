@@ -50,16 +50,14 @@ define('io.ox/calendar/freetime/timeView', [
                 fillInfo = function () {
                     info.empty().append(
                         $('<span>').text(
-                            gt.noI18n(
-                                baton.model.get('currentWeek').formatInterval(moment(baton.model.get('currentWeek')).add(6, 'days'))
-                            )
+                            baton.model.get('currentWeek').formatInterval(moment(baton.model.get('currentWeek')).add(6, 'days'))
                         ),
                         $.txt(' '),
                         $('<span class="cw">').text(
                             //#. %1$d = Calendar week
                             gt('CW %1$d', moment(baton.model.get('currentWeek')).isoWeek())
                         ),
-                        $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
+                        $('<i class="fa fa-caret-down fa-fw">').attr('aria-hidden', true)
                     );
                 };
 
@@ -78,9 +76,7 @@ define('io.ox/calendar/freetime/timeView', [
 
             this.append(
                 $('<span class="controls-container">').append(
-                    $('<a class="control prev" >').attr({
-                        href: '#',
-                        role: 'button',
+                    $('<a href="#" role="button" class="control prev">').attr({
                         title: gt('Previous Day'),
                         'aria-label': gt('Previous Day')
                     })
@@ -94,9 +90,7 @@ define('io.ox/calendar/freetime/timeView', [
                     //     'aria-label': gt('Today')
                     // })
                     // .append($('<i class="fa fa-circle" aria-hidden="true">')),
-                    $('<a class="control next" >').attr({
-                        href: '#',
-                        role: 'button',
+                    $('<a href="#" role="button" class="control next">').attr({
                         title: gt('Next Day'),
                         'aria-label': gt('Next Day')
                     })
@@ -113,10 +107,10 @@ define('io.ox/calendar/freetime/timeView', [
         draw: function (baton) {
             var dropdown = new Dropdown({ keep: true, caret: true, model: baton.model, label: gt('Options'), tagName: 'span' })
                 .header(gt('Zoom'))
-                .option('zoom', '100', gt.noI18n('100%'), { radio: true })
-                .option('zoom', '200', gt.noI18n('200%'), { radio: true })
-                .option('zoom', '400', gt.noI18n('400%'), { radio: true })
-                .option('zoom', '1000', gt.noI18n('1000%'), { radio: true })
+                .option('zoom', '100', '100%', { radio: true })
+                .option('zoom', '200', '200%', { radio: true })
+                .option('zoom', '400', '400%', { radio: true })
+                .option('zoom', '1000', '1000%', { radio: true })
                 .divider()
                 .header(gt('Rows'))
                 .option('compact', true, gt('Compact'))
@@ -155,13 +149,14 @@ define('io.ox/calendar/freetime/timeView', [
                     dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '').text(day.format('ddd, ll'))),
                     dayNode;
 
-                node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append($('<div class="daylabel-container">')
-                    .addClass(counter === 0 ? 'first' : '').append(
-                    dayLabel,
-                    dayLabel.clone().addClass('level-2'),
-                    dayLabel.clone().addClass('level-1'),
-                    dayLabel.clone().addClass('level-2')),
-                dayNode = $('<div class="day-hours">')));
+                node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append(
+                    $('<div class="daylabel-container">').addClass(counter === 0 ? 'first' : '').append(
+                        dayLabel,
+                        dayLabel.clone().addClass('level-2'),
+                        dayLabel.clone().addClass('level-1'),
+                        dayLabel.clone().addClass('level-2')
+                    ),
+                    dayNode = $('<div class="day-hours">')));
 
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
@@ -291,7 +286,11 @@ define('io.ox/calendar/freetime/timeView', [
                     appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
 
                     if (appointment.title) {
-                        appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append($('<div class="title">').text(gt.noI18n(appointment.title)).append($('<span class="appointment-time">').text(util.getTimeInterval(appointment))))
+                        appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
+                            $('<div class="title">').text(appointment.title).append(
+                                $('<span class="appointment-time">').text(util.getTimeInterval(appointment))
+                            )
+                        )
                         .attr({
                             title: appointment.title + (appointment.location ? ' ' + appointment.location : ''),
                             'aria-label': appointment.title,
@@ -299,7 +298,7 @@ define('io.ox/calendar/freetime/timeView', [
                         }).tooltip({ container: tooltipContainer });
                     }
                     if (appointment.location && appointment.location !== '') {
-                        appointmentNode.append($('<div class="location">').text(appointment.location)).addClass('has-location');
+                        appointmentNode.addClass('has-location').append($('<div class="location">').text(appointment.location));
                     }
 
                     if (baton.view.parentView.options.isApp && (appointment.folder_id || settings.get('freeBusyStrict', true) === false)) {
@@ -353,14 +352,14 @@ define('io.ox/calendar/freetime/timeView', [
             this.pointHeader = pointHeader;
             this.pointBody = pointBody;
             this.headerNodeRow1 = $('<div class="freetime-time-view-header row1">')
-                .delegate('.control.next,.control.prev,.control.today', 'click', self.onControlView.bind(this));
+                .on('click', '.control.next,.control.prev,.control.today', self.onControlView.bind(this));
             this.headerNodeRow2 = $('<div class="freetime-time-view-header row2">')
-                .delegate('.freetime-hour', 'click', self.onSelectHour.bind(this));
+                .on('click', '.freetime-hour', self.onSelectHour.bind(this));
             this.bodyNode = $('<div class="freetime-time-view-body">')
-                .delegate('.freetime-table', 'mousedown', self.onMouseDown.bind(this))
-                .delegate('.freetime-table', 'mouseup', self.onMouseUp.bind(this))
-                .delegate('.freetime-table', 'mousemove', self.onMouseMove.bind(this))
-                .delegate('.freetime-table-cell', 'dblclick', self.onSelectHour.bind(this))
+                .on('mousedown', '.freetime-table', self.onMouseDown.bind(this))
+                .on('mouseup', '.freetime-table', self.onMouseUp.bind(this))
+                .on('mousemove', '.freetime-table', self.onMouseMove.bind(this))
+                .on('dblclick', '.freetime-table-cell', self.onSelectHour.bind(this))
                 .on('scroll', self.onScroll.bind(this));
 
             // add some listeners
@@ -755,7 +754,7 @@ define('io.ox/calendar/freetime/timeView', [
             this.model.set('currentWeek', week);
         },
 
-         /**
+        /**
          * handler for clickevents in toolbar
          * @param  { MouseEvent } e Clickevent
          */

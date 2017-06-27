@@ -64,13 +64,12 @@ define('io.ox/core/notifications/subview', [
                     node.append(
                         $('<div class="notification-item-actions">').append(
                             $('<button type="button" class="btn btn-link clear-single-button fa fa-times" data-action="clear-single">')
-                                .attr({
-                                    'aria-label': gt('Hide this notification')
-                                }).on('click', function () {
+                                .attr('aria-label', gt('Hide this notification'))
+                                .on('click', function () {
                                     view.hide(requestedModel);
                                 })
-                            )
-                        );
+                        )
+                    );
                 }
 
                 node.appendTo(itemNode);

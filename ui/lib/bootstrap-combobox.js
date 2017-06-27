@@ -11,15 +11,12 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 
-!function($) {
+(function ($) {
 
     'use strict';
 
     var Combobox = function (element, options) {
-        this.$outer = $('<div>').attr({
-            role: 'combobox',
-            'aria-expanded': false
-        }).css('display', 'inline');
+        this.$outer = $('<div role="combobox" aria-expanded="false">').css('display', 'inline');
         this.$element = $(element).wrap(this.$outer);
         this.options = $.extend({}, $.fn.combobox.defaults, options);
         this.matcher = this.options.matcher || this.matcher;
@@ -29,9 +26,7 @@
         this.source = this.options.source;
         this.shown = false;
         this.$ul = $(this.$menu);
-        this.$inputWrap = $('<div>').attr({
-            role: 'presentation'
-        }).css('display', 'inline');
+        this.$inputWrap = $('<div role="presentation">').css('display', 'inline');
         this.$element.attr({ 'aria-owns': 'listchoices' }).wrap(this.$inputWrap);
         this.listen();
     };
@@ -41,11 +36,10 @@
         listen: function () {
             var self = this;
             this.$element
-                .on('blur',     $.proxy(this.blur, this))
-                .on('focus',    $.proxy(this.focus, this))
+                .on('blur', $.proxy(this.blur, this))
+                .on('focus', $.proxy(this.focus, this))
                 .on('keypress', $.proxy(this.keypress, this))
-                .on('keyup',    $.proxy(this.keyup, this));
-
+                .on('keyup', $.proxy(this.keyup, this));
 
             if (_.browser.webkit || _.browser.msie) {
                 this.$element.on('keydown', $.proxy(this.keypress, this));
@@ -76,87 +70,72 @@
             e.preventDefault();
             this.select();
         },
-        focus: function (e) {
+        focus: function () {
             this.lookup();
         },
-        blur: function (e) {
-            if (this.blurring) {
-                return;
-            }
+        blur: function () {
+            if (this.blurring) return;
             var self = this;
-            setTimeout(function () {
-                self.select();
-            }, 0);
+            setTimeout(function () { self.select(); }, 0);
         },
-        mouseleave: function(e) {
+        mouseleave: function () {
             this.$li.removeClass('active').attr({ 'aria-selected': false });
         },
         move: function (e) {
             if (!this.shown) return;
 
-            switch(e.keyCode) {
-            case 13: // enter
-            case 27: // escape
-                e.preventDefault();
-                break;
+            switch (e.keyCode) {
+                case 13: // enter
+                case 27: // escape
+                    e.preventDefault();
+                    break;
 
-            case 38: // up arrow
-                e.preventDefault();
-                this.show();
-                this.prev();
-                break
+                case 38: // up arrow
+                    e.preventDefault();
+                    this.show();
+                    this.prev();
+                    break;
 
-            case 40: // down arrow
-                e.preventDefault();
-                this.show();
-                this.next();
-                break;
+                case 40: // down arrow
+                    e.preventDefault();
+                    this.show();
+                    this.next();
+                    break;
+                // no default
             }
 
             e.stopPropagation();
         },
         keyup: function (e) {
             switch (e.keyCode) {
-            case 40: // down arrow
-            case 38: // up arrow
-                if (!this.shown) {
+                case 40: // down arrow
+                case 38: // up arrow
+                    if (!this.shown) this.lookup();
+                    break;
+                case 9:
+                    break; // tab
+                case 13: // enter
+                    e.stopPropagation();
+                    if (!this.shown) return;
+                    this.select();
+                    break;
+
+                case 27: // escape
+                    if (!this.shown) return;
+                    e.stopPropagation();
+                    this.hide();
+                    break;
+
+                case 37: // left
+                case 39: // right
+                    if (!this.shown) return;
+                    e.stopPropagation();
+                    break;
+                default:
+                    if (!this.shown) return;
+                    e.stopPropagation();
                     this.lookup();
-                }
-                break;
-
-            case 9:
-                break; // tab
-            case 13: // enter
-                e.stopPropagation();
-                if (!this.shown) {
-                    return;
-                }
-                this.select();
-                break;
-
-            case 27: // escape
-                if (!this.shown) {
-                    return;
-                }
-                e.stopPropagation();
-                this.hide();
-                break;
-
-            case 37: // left
-            case 39: // right
-                if (!this.shown) {
-                    return;
-                }
-                e.stopPropagation();
-            break;
-            default:
-                if (!this.shown) {
-                    return;
-                }
-                e.stopPropagation();
-                this.lookup();
             }
-
         },
         select: function () {
             var val = this.$menu.find('.active').attr('data-value');
@@ -193,12 +172,12 @@
             return this;
         },
         scrollIntoCombobox: function (el) {
-            var ownHeight = this.$menu.height();
-            var itemPos = el.get(0).offsetTop;
-            this.$menu.scrollTop(itemPos - ownHeight / 2 );
+            var ownHeight = this.$menu.height(),
+                itemPos = el.get(0).offsetTop;
+            this.$menu.scrollTop(itemPos - ownHeight / 2);
         },
         show: function () {
-            var pos = $.extend({}, {top: this.$element[0].offsetTop, left: this.$element[0].offsetLeft}, {
+            var pos = $.extend({}, { top: this.$element[0].offsetTop, left: this.$element[0].offsetLeft }, {
                 height: this.$element[0].offsetHeight
             });
             this.$menu.css({
@@ -215,7 +194,7 @@
             this.shown = true;
             return this;
         },
-        next: function (e) {
+        next: function () {
             var active = this.$menu.find('.active').removeClass('active').attr({ 'aria-selected': false }),
                 next = active.next();
 
@@ -225,17 +204,16 @@
             this.scrollIntoCombobox(next);
             next.addClass('active').attr({ 'aria-selected': true });
         },
-        prev: function (e) {
+        prev: function () {
             var active = this.$menu.find('.active').removeClass('active').attr({ 'aria-selected': false }),
                 prev = active.prev();
 
-            if (!prev.length) {
-                prev = this.$menu.find('li').last();
-            }
+            if (!prev.length) prev = this.$menu.find('li').last();
+
             this.scrollIntoCombobox(prev);
             prev.addClass('active').attr({ 'aria-selected': true });
         },
-        lookup: function (event) {
+        lookup: function () {
             var self = this,
                 items;
 
@@ -247,9 +225,7 @@
 
             if (this.options.autocompleteBehaviour) {
                 items = $.grep(this.source, function (item) {
-                    if (self.matcher(item)) {
-                        return item;
-                    }
+                    if (self.matcher(item)) return item;
                 });
             } else {
                 items = this.source;
@@ -257,9 +233,7 @@
 
             items = this.sorter(items);
 
-            if (!items.length) {
-                return this.shown ? this.hide() : this;
-            }
+            if (!items.length) return this.shown ? this.hide() : this;
 
             return this.render(items.slice(0, this.options.items)).show();
         },
@@ -286,8 +260,8 @@
                 return '<strong>' + match + '</strong>';
             });
         },
-        destroy : function () {
-            this.$element.data('typeahead',null);
+        destroy: function () {
+            this.$element.data('typeahead', null);
             this.$element
                 .off('focus')
                 .off('blur')
@@ -300,7 +274,7 @@
 
             this.$menu.remove();
         },
-        eventSupported: function(eventName) {
+        eventSupported: function (eventName) {
             var isSupported = eventName in this.$element;
             if (!isSupported) {
                 this.$element.setAttribute(eventName, 'return;');
@@ -309,9 +283,9 @@
             return isSupported;
         },
         keydown: function (e) {
-            this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27]);
-            if (!this.shown && e.keyCode == 40) {
-                this.lookup("");
+            this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40, 38, 9, 13, 27]);
+            if (!this.shown && e.keyCode === 40) {
+                this.lookup('');
             } else {
                 this.move(e);
             }
@@ -332,13 +306,9 @@
             var $this = $(this),
                 data = $this.data('combobox'),
                 options = typeof option === 'object' && option;
-            if (!data) {
-                $this.data('combobox', (data = new Combobox(this, options)));
-            }
 
-            if (typeof option === 'string') {
-                data[option]();
-            }
+            if (!data) $this.data('combobox', (data = new Combobox(this, options)));
+            if (typeof option === 'string') data[option]();
         });
     };
 
@@ -355,11 +325,9 @@
     $(function () {
         $('body').on('focus.combobox.data-api', '[data-provide="combobox"]', function (e) {
             var $this = $(this);
-            if ($this.data('combobox')) {
-                return;
-            }
+            if ($this.data('combobox')) return;
             e.preventDefault();
             $this.typeahead($this.data());
         });
     });
-}(jQuery)
+})(jQuery);

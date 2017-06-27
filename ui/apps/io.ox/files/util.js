@@ -133,6 +133,9 @@ define('io.ox/files/util', [
                     },
                     'lockedByMe': function (obj) {
                         return obj.locked_until > _.now() && obj.modified_by === ox.user_id;
+                    },
+                    'createdByMe': function (obj) {
+                        return obj.created_by === ox.user_id;
                     }
                 },
                 inverse, result, fn;
@@ -232,10 +235,10 @@ define('io.ox/files/util', [
                 extServer = serverFilename.indexOf('.') >= 0 ? _.last(serverFilename.split('.')) : '',
                 extForm = _.last(formFilename.split('.')),
                 $hint = $('<div class="muted inset">').append(
-                            $('<small style="padding-top: 8px">').text(
-                                gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
-                            )
-                        ),
+                    $('<small style="padding-top: 8px">').text(
+                        gt('Please note, changing or removing the file extension will cause problems when viewing or editing.')
+                    )
+                ),
                 message;
 
             // set message

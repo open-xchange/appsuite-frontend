@@ -41,7 +41,7 @@ define('plugins/portal/calendar/register', [
         },
 
         load: function (baton) {
-            return api.getAll().pipe(function (ids) {
+            return api.getAll().then(function (ids) {
                 var numOfItems = _.device('smartphone') ? 5 : 10;
                 return api.getList(ids.slice(0, numOfItems)).done(function (data) {
                     baton.data = data;
@@ -62,9 +62,9 @@ define('plugins/portal/calendar/register', [
                 var obj = _(baton.data).first();
 
                 sum.append(
-                    $('<span class="normal accent">').text(_.noI18n(util.getSmartDate(obj, true))), $.txt(gt.noI18n('\u00A0')),
-                    $('<span class="bold">').text(_.noI18n(obj.title || '')), $.txt(gt.noI18n('\u00A0')),
-                    $('<span class="gray">').text(_.noI18n(obj.location || ''))
+                    $('<span class="normal accent">').text(util.getSmartDate(obj, true)), $.txt('\u00A0'),
+                    $('<span class="bold">').text(obj.title || ''), $.txt('\u00A0'),
+                    $('<span class="gray">').text(obj.location || '')
                 );
 
                 this.on('tap', 'h2', function (e) {
@@ -95,9 +95,9 @@ define('plugins/portal/calendar/register', [
                             .css('text-decoration', declined ? 'line-through' : 'none')
                             .data('item', nextApp)
                             .append(
-                                $('<span class="normal accent">').text(_.noI18n(timespan)), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="bold">').text(_.noI18n(nextApp.title || '')), $.txt(gt.noI18n('\u00A0')),
-                                $('<span class="gray">').text(_.noI18n(nextApp.location || ''))
+                                $('<span class="normal accent">').text(timespan), $.txt('\u00A0'),
+                                $('<span class="bold">').text(nextApp.title || ''), $.txt('\u00A0'),
+                                $('<span class="gray">').text(nextApp.location || '')
                             )
                         );
                     }

@@ -1,4 +1,4 @@
- /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -76,7 +76,7 @@ define('io.ox/participants/add', [
                 //#. %1$d a list of email addresses
                 //#, c-format
                 gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-                gt.noI18n(invalid.join(', '))
+                invalid.join(', ')
             ));
         }
     };

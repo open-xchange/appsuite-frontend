@@ -27,7 +27,7 @@ define('io.ox/calendar/settings/pane', [
         optionsInterval = function () {
             return _.map([5, 10, 15, 20, 30, 60], function (i) {
                 i = String(i);
-                return { label: gt.noI18n(i), value: i };
+                return { label: i, value: i };
             });
         },
 

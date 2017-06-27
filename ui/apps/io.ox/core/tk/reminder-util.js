@@ -24,18 +24,18 @@ define('io.ox/core/tk/reminder-util', [
         if (_.device('medium')) {
             //native style for tablet
             node.append(
-                    $('<div>').text(gt('Remind me again')),
-                    $('<select class="dateselect" data-action="selector">').append(function () {
-                        var ret = '<option value="0">' + gt('Pick a time here') + '</option>';
-                        for (var i = 0; i < values.length; i++) {
-                            ret += '<option value="' + values[i][0] + '">' + values[i][1] + '</option>';
-                        }
-                        return ret;
-                    }),
-                    $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
-                    //#. %1$s appointment or task title
-                    .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
-                );
+                $('<div>').text(gt('Remind me again')),
+                $('<select class="dateselect" data-action="selector">').append(function () {
+                    var ret = '<option value="0">' + gt('Pick a time here') + '</option>';
+                    for (var i = 0; i < values.length; i++) {
+                        ret += '<option value="' + values[i][0] + '">' + values[i][1] + '</option>';
+                    }
+                    return ret;
+                }),
+                $('<button type="button" class="btn btn-primary btn-sm remindOkBtn" data-action="ok">').text(gt('OK'))
+                //#. %1$s appointment or task title
+                .attr('aria-label', gt('Close reminder for %1$s', model.get('title')))
+            );
         } else {
             // special link dropdown
             // must be <a> instead of <button> or the first item will not focus on space key
@@ -81,15 +81,17 @@ define('io.ox/core/tk/reminder-util', [
         if (taskMode) {
             //task
             info = $('<a class="notification-info" role="button">').append(
-                $('<span class="span-to-div title">').text(_.noI18n(model.get('title'))),
-                $('<span class="span-to-div info-wrapper">').append($('<span class="end_date">').text(_.noI18n(model.get('end_time'))),
-                $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))),
+                $('<span class="span-to-div title">').text(model.get('title')),
+                $('<span class="span-to-div info-wrapper">').append(
+                    $('<span class="end_date">').text(model.get('end_time')),
+                    $('<span class="status pull-right">').text(model.get('status')).addClass(model.get('badge'))
+                ),
                 $('<span class="sr-only">').text(gt('Press to open Details'))
             );
 
             //#. %1$s task title
             //#, c-format
-            label = gt('Reminder for task %1$s.', _.noI18n(model.get('title')));
+            label = gt('Reminder for task %1$s.', model.get('title'));
         } else {
             var strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
             //appointment
@@ -102,7 +104,7 @@ define('io.ox/core/tk/reminder-util', [
             );
             //#. %1$s appointment title
             //#, c-format
-            label = gt('Reminder for appointment %1$s.', _.noI18n(model.get('title')));
+            label = gt('Reminder for appointment %1$s.', model.get('title'));
         }
 
         node.attr({

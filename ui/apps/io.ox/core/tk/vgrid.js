@@ -132,7 +132,7 @@ define('io.ox/core/tk/vgrid', [
             row.node.add(row.node.find('div, span, p, td')).not('.ignoreheight').each(function () {
                 var node = $(this);
                 if (node.children().length === 0 && node.text() === '') {
-                    node.text(_.noI18n('\u00A0'));
+                    node.text('\u00A0');
                 }
             });
             row.node.find('img').each(function () {
@@ -304,7 +304,7 @@ define('io.ox/core/tk/vgrid', [
                         .on('click keydown', { grid: this }, fnClickCheckbox)
                 )
                 .prependTo(node),
-        // item template
+            // item template
             templateOptions = { tempDrawContainer: container };
         if (options.templateOptions) {
             templateOptions = _.extend(templateOptions, options.templateOptions);
@@ -513,7 +513,7 @@ define('io.ox/core/tk/vgrid', [
                 labels.textIndex[text] = i;
             }
             // reloop to get proper height
-            return $.when.apply($, defs).pipe(function () {
+            return $.when.apply($, defs).then(function () {
                 var i, obj, node, top,
                     //isVisible is only needed in for loop; visible selectors are slow, avoid them if possible
                     isVisible = $i > 0 ? container.show().is(':visible') : undefined,

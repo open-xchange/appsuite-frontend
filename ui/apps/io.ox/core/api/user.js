@@ -176,7 +176,7 @@ define('io.ox/core/api/user', [
                 api.caches.get.clear(),
                 api.caches.all.clear(),
                 api.caches.list.clear()
-            ).pipe(function () {
+            ).then(function () {
                 api.trigger('refresh.list');
                 api.trigger('update', {
                     id: o.id
@@ -197,7 +197,7 @@ define('io.ox/core/api/user', [
                 data: form,
                 fixPost: true
             })
-            .pipe(filter);
+            .then(filter);
         }
         return http.FORM({
             module: 'user',
@@ -206,7 +206,7 @@ define('io.ox/core/api/user', [
             data: changes,
             params: { id: o.id, folder: o.folder_id, timestamp: o.timestamp || _.then() }
         })
-        .pipe(filter);
+        .then(filter);
     };
 
     /**
@@ -215,8 +215,8 @@ define('io.ox/core/api/user', [
      * @return { deferred} returns name string
      */
     api.getName = function (id) {
-        return api.get({ id: id }).pipe(function (data) {
-            return _.noI18n(data.display_name || data.email1 || '');
+        return api.get({ id: id }).then(function (data) {
+            return data.display_name || data.email1 || '';
         });
     };
 
@@ -226,8 +226,8 @@ define('io.ox/core/api/user', [
      * @return { deferred} returns greeting string
      */
     api.getGreeting = function (id) {
-        return api.get({ id: id }).pipe(function (data) {
-            return _.noI18n(data.first_name || data.display_name || data.email1 || '');
+        return api.get({ id: id }).then(function (data) {
+            return data.first_name || data.display_name || data.email1 || '';
         });
     };
 
@@ -260,7 +260,7 @@ define('io.ox/core/api/user', [
      * @return { jquery} textlink node
      */
     api.getLink = function (id, text) {
-        text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
+        text = text ? $.txt(text) : api.getTextNode(id);
         return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 

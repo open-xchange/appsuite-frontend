@@ -45,7 +45,7 @@ define('io.ox/contacts/addressbook/popup', [
     var collected_id = mailSettings.get('contactCollectFolder', 0);
 
     // split words
-    var regSplitWords = /[\s,.\-:;\<\>\(\)\_\@\/\'\"]/;
+    var regSplitWords = /[\s,.\-:;<>()_@/'"]/;
 
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
@@ -246,7 +246,7 @@ define('io.ox/contacts/addressbook/popup', [
             // drop no-reply addresses
             if (/^(noreply|no-reply|do-not-reply)@/.test(address)) return;
             // drop broken imports
-            if (/^\=\?iso\-8859\-1\?q\?\=22/i.test(item.display_name)) return;
+            if (/^=\?iso-8859-1\?q\?=22/i.test(item.display_name)) return;
             // add to results
             // do all calculations now; during rendering is more expensive
             var folder_id = String(item.folder_id),

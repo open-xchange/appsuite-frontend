@@ -29,8 +29,6 @@ define('io.ox/core/tk/attachments', [
 
     'use strict';
 
-    var oldMode = _.browser.IE < 10;
-
     // EditableAttachmentList is only used by tasks and calendar
     function EditableAttachmentList(options) {
         var counter = 0;
@@ -140,11 +138,7 @@ define('io.ox/core/tk/attachments', [
             },
 
             addFile: function (file) {
-                if (oldMode) {
-                    this.addAttachment({ file: file.hiddenField, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
-                } else {
-                    this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
-                }
+                this.addAttachment({ file: file, newAttachment: true, cid: counter++, filename: file.name, file_size: file.size });
             },
 
             addAttachment: function (attachment) {
@@ -157,9 +151,6 @@ define('io.ox/core/tk/attachments', [
                     this.attachmentsToAdd = _(this.attachmentsToAdd).reject(function (att) {
                         return att.cid === attachment.cid;
                     });
-                    if (oldMode) {
-                        attachment.file.remove();
-                    }
                 } else {
                     this.attachmentsToDelete.push(attachment);
                 }
@@ -197,27 +188,15 @@ define('io.ox/core/tk/attachments', [
                 }
 
                 if (this.attachmentsToAdd.length) {
-                    if (oldMode) {
-                        attachmentAPI.createOldWay(apiOptions, self.baton.parentView.$el.find('.attachments-form')[0]).fail(function (resp) {
-                            self.model.trigger('backendError', resp);
-                            errors.push(resp);
-                            allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
-                        }).done(function () {
-                            allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
-                        });
-                    } else {
-                        attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
-                            self.model.trigger('backendError', resp);
-                            errors.push(resp);
-                            allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
-                        }).done(function () {
-                            allDone -= 2;
-                            if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
-                        });
-                    }
+                    attachmentAPI.create(apiOptions, _(this.attachmentsToAdd).pluck('file')).fail(function (resp) {
+                        self.model.trigger('backendError', resp);
+                        errors.push(resp);
+                        allDone -= 2;
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
+                    }).done(function () {
+                        allDone -= 2;
+                        if (allDone <= 0) { self.finishedCallback(self.model, id, errors); }
+                    });
                 }
 
                 if (allDone <= 0) {
@@ -265,7 +244,7 @@ define('io.ox/core/tk/attachments', [
                     }).done(function (attachments) {
                         if (attachments.length) {
                             _(attachments).each(function (a) {
-                                drawAttachment(a, _.noI18n(a.filename));
+                                drawAttachment(a, a.filename);
                             });
                             if (attachments.length > 1) {
                                 drawAttachment(attachments, gt('All attachments')).find('a').removeClass('attachment-link');

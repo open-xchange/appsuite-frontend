@@ -79,13 +79,7 @@ define('io.ox/calendar/week/view', [
             allowLasso: true
         },
 
-        // init values from perspective
-        initialize: function (opt) {
-            var self = this;
-
-            // init options
-            this.options = _.extend({}, this.options, opt);
-
+        events: (function () {
             // define view events
             var events = {
                 'click .control.next,.control.prev': 'onControlView',
@@ -96,8 +90,8 @@ define('io.ox/calendar/week/view', [
             if (_.device('touch')) {
                 _.extend(events, {
                     'taphold .week-container>.day,.fulltime>.day': 'onCreateAppointment',
-                    'swipeleft .timeslot': 'onControlView',
-                    'swiperight .timeslot': 'onControlView'
+                    'swipeleft': 'onControlView',
+                    'swiperight': 'onControlView'
                 });
             } else {
                 _.extend(events, {
@@ -113,8 +107,15 @@ define('io.ox/calendar/week/view', [
                     });
                 }
             }
+            return events;
+        }()),
 
-            this.delegateEvents(events);
+        // init values from perspective
+        initialize: function (opt) {
+            var self = this;
+
+            // init options
+            this.options = _.extend({}, this.options, opt);
 
             // initialize main objects
             _.extend(this, {
@@ -391,12 +392,11 @@ define('io.ox/calendar/week/view', [
          */
         onControlView: function (e) {
             e.preventDefault();
-            var cT = $(e.currentTarget),
-                t = $(e.target);
-            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
+            var cT = $(e.currentTarget);
+            if (cT.hasClass('next') || (e.type === 'swipeleft' && !this.lasso)) {
                 this.setStartDate('next');
             }
-            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
+            if (cT.hasClass('prev') || (e.type === 'swiperight' && !this.lasso)) {
                 this.setStartDate('prev');
             }
             this.trigger('onRefresh');
@@ -762,20 +762,17 @@ define('io.ox/calendar/week/view', [
         },
 
         renderTimeLabel: function (timezone, className) {
-            var timeLabel = $('<div class="week-container-label">')
-                    .addClass(className)
-                    .attr('aria-hidden', true),
+            var timeLabel = $('<div class="week-container-label" aria-hidden="true">').addClass(className),
                 self = this;
 
             timeLabel.append(
                 _(_.range(this.slots)).map(function (i) {
                     var number = moment().startOf('day').hours(i).tz(timezone).format('LT');
 
-                    return $('<div>')
-                        .addClass('time')
+                    return $('<div class="time">')
                         .addClass((i >= self.workStart && i < self.workEnd) ? 'in' : '')
                         .addClass((i + 1 === self.workStart || i + 1 === self.workEnd) ? 'working-time-border' : '')
-                        .append($('<div>').addClass('number').text(gt.noI18n(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2'))));
+                        .append($('<div class="number">').text(number.replace(/^(\d\d?):00 ([AP]M)$/, '$1 $2')));
                 })
             );
 
@@ -951,7 +948,7 @@ define('io.ox/calendar/week/view', [
                 top: (this.options.showFulltime ? 21 : 1) + 'px'
             });
 
-             // create days
+            // create days
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -1094,8 +1091,7 @@ define('io.ox/calendar/week/view', [
             var cells = Math.min(Math.max(4, (this.workEnd - this.workStart + 1)), 18);
             this.paneHeight = this.pane.height() || this.paneHeight;
             this.cellHeight = Math.floor(
-                Math.max(this.paneHeight / (cells * this.gridSize),
-                this.minCellHeight)
+                Math.max(this.paneHeight / (cells * this.gridSize), this.minCellHeight)
             );
 
             // only update if height differs from CSS default
@@ -1152,7 +1148,7 @@ define('io.ox/calendar/week/view', [
                         date: d,
                         title: gt('Create all-day appointment')
                     })
-                    .text(gt.noI18n(tmpDate.format('ddd D')))
+                    .text(tmpDate.format('ddd D'))
                     .width(100 / this.columns + '%');
                 // mark today
                 if (util.isToday(tmpDate)) {
@@ -1178,29 +1174,25 @@ define('io.ox/calendar/week/view', [
 
             this.kwInfo.empty().append(
                 $('<span>').text(
-                    gt.noI18n(
-                        this.columns > 1 ?
-                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
-                        this.startDate.format('ddd, l')
-                    )
+                    this.columns > 1
+                        ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                        : this.startDate.format('ddd, l')
                 ),
                 $.txt(' '),
                 $('<span class="cw">').text(
                     //#. %1$d = Calendar week
                     gt('CW %1$d', moment(this.startDate).format('w'))
                 ),
-                $('<i>').addClass('fa fa-caret-down fa-fw').attr({ 'aria-hidden': true })
+                $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
             );
 
             if (_.device('smartphone')) {
                 // pass some dates around
                 this.navbarDates = {
                     cw: gt('CW %1$d', this.startDate.format('w')),
-                    date: gt.noI18n(
-                        this.columns > 1 ?
-                        this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days')) :
-                        this.startDate.format('l')
-                    )
+                    date: this.columns > 1
+                        ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                        : this.startDate.format('l')
                 };
                 // bubbling event to get it in page controller
                 this.trigger('change:navbar:date', this.navbarDates);
@@ -2081,7 +2073,7 @@ define('io.ox/calendar/week/view', [
                 a = baton.model,
                 folder = baton.folder,
                 conf = 1,
-                confString = _.noI18n('%1$s'),
+                confString = '%1$s',
                 classes = '';
 
             function addColorClasses(f) {
@@ -2121,8 +2113,8 @@ define('io.ox/calendar/week/view', [
                 .append(
                     $('<div class="appointment-content">').append(
                         a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, gt.noI18n(a.get('title') || '\u00A0'))) : '',
-                        a.get('location') ? $('<div class="location">').text(gt.noI18n(a.get('location') || '\u00A0')) : ''
+                        a.get('title') ? $('<div class="title">').text(gt.format(confString, a.get('title') || '\u00A0')) : '',
+                        a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )
                 .attr({

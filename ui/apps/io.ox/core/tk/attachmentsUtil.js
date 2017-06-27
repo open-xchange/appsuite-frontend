@@ -198,44 +198,38 @@ define('io.ox/core/tk/attachmentsUtil', [
             if (obj.group !== 'vcard') {
                 //default
                 icon = $('<i class="fa fa-paperclip">');
-                info = $('<span>').addClass('filesize').text(size);
+                info = $('<span class="filesize">').text(size);
             } else {
                 //vcard
                 icon = $('<i class="fa fa-list-alt">');
-                info = $('<span>').addClass('filesize').text(gt.noI18n('vCard\u00A0'));
+                info = $('<span class="filesize">').text('vCard\u00A0');
                 //lazy way; use contactsUtil.getFullName(attachment) for the perfect solution
                 name = obj.file.display_name || obj.file.email1 || '';
             }
 
             //create node
-            $node = $('<div>')
-                .addClass(this.itemClasses)
-                .append(
-                    //file
-                    $('<div class="item file">')
-                        .addClass(this.fileClasses)
-                        .append(
-                            icon,
-                            $('<div class="row-1">').text(_.noI18n(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' }))),
-                            $('<div class="row-2">').append(
-                                info,
-                                opt.showpreview ? createPreview(obj.file, opt.rightside) : $(),
-                                $.txt('\u00A0')
-                            ),
-                             // remove
-                            $('<a href="#" class="remove">')
-                            .attr('title', gt('Remove attachment'))
-                            .append(
-                                $('<i class="fa fa-trash-o" aria-hidden="true">')
-                            )
-                            .on('click', function (e) {
-                                e.preventDefault();
-                                if (!('remove' in caller)) {
-                                    console.error('Caller should provide a remove function.');
-                                }
-                                caller.remove(obj);
-                            })
+            $node = $('<div>').addClass(this.itemClasses).append(
+                //file
+                $('<div class="item file">').addClass(this.fileClasses).append(
+                    icon,
+                    $('<div class="row-1">').text(_.ellipsis(name, { max: opt.labelmax, charpos: 'middle' })),
+                    $('<div class="row-2">').append(
+                        info,
+                        opt.showpreview ? createPreview(obj.file, opt.rightside) : $(),
+                        $.txt('\u00A0')
+                    ),
+                    // remove
+                    $('<a href="#" class="remove">').attr('title', gt('Remove attachment')).append(
+                        $('<i class="fa fa-trash-o" aria-hidden="true">')
                     )
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        if (!('remove' in caller)) {
+                            console.error('Caller should provide a remove function.');
+                        }
+                        caller.remove(obj);
+                    })
+                )
             );
 
             if (options.ref) {
@@ -279,7 +273,7 @@ define('io.ox/core/tk/attachmentsUtil', [
                 });
                 if (preview.supportsPreview()) {
                     preview.appendTo(popup);
-                    popup.append($('<div>').text(_.noI18n('\u00A0')));
+                    popup.append($('<div>').text('\u00A0'));
                 }
             // refereneced contact vcard
             } else if (data.module === 'contacts') {

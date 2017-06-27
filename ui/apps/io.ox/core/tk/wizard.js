@@ -310,7 +310,7 @@ define('io.ox/core/tk/wizard', [
             if (e.which !== 9 || !this.$el.is(':visible')) return;
 
             // get focusable items
-            var items = this.$('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible').andSelf(),
+            var items = this.$('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible').addBack(),
                 first = e.shiftKey && document.activeElement === items.get(0),
                 last = !e.shiftKey && document.activeElement === items.get(-1);
 
@@ -502,10 +502,7 @@ define('io.ox/core/tk/wizard', [
         // enable/disable 'next' button
         toggleNext: function (state) {
             if (_.device('smartphone')) {
-                return this.parent.container.find('[data-action="next"]').attr({
-                    'disabled': !state,
-                    'aria-disabled': !state
-                });
+                return this.parent.container.find('[data-action="next"]').prop('disabled', !state).attr('aria-disabled', !state);
             }
             this.$('.btn[data-action="next"]').prop('disabled', !state);
             return this;

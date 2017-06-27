@@ -75,15 +75,15 @@ define('io.ox/calendar/list/view-grid-template', [
                     });
                 }
 
-                var title = data.title ? gt.noI18n(data.title) : gt('Private');
+                var title = data.title ? data.title : gt('Private');
                 fields.title.text(title);
-                fields.location.text(gt.noI18n(data.location || '\u00A0'));
+                fields.location.text(data.location || '\u00A0');
 
                 fields.time.empty()
                     .addClass(util.getShownAsClass(data))
                     .append(
-                        $('<div class="fragment">').text(gt.noI18n(timeSplits[0])),
-                        $('<div class="fragment">').text(gt.noI18n(timeSplits[1]))
+                        $('<div class="fragment">').text(timeSplits[0]),
+                        $('<div class="fragment">').text(timeSplits[1])
                     );
 
                 fields.date.empty()
@@ -109,7 +109,7 @@ define('io.ox/calendar/list/view-grid-template', [
                 a11yLabel.push(startDate.isSame(endDate, 'day') ? util.getEvenSmarterDate(data) : util.getDateIntervalA11y(data));
                 a11yLabel.push(util.getTimeIntervalA11y(data));
 
-                this.attr('aria-label', gt.noI18n(_.escape(a11yLabel.join(', ')) + '.'));
+                this.attr('aria-label', _.escape(a11yLabel.join(', ')) + '.');
             }
         },
 
@@ -123,7 +123,7 @@ define('io.ox/calendar/list/view-grid-template', [
             },
             set: function (data) {
                 var d = util.getEvenSmarterDate(data, true);
-                this.text(gt.noI18n(d));
+                this.text(d);
             }
         },
 

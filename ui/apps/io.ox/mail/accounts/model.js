@@ -41,7 +41,7 @@ define('io.ox/mail/accounts/model', [
                     required: true,
                     msg: gt('This field is mandatory')
                 }, {
-                    fn: _.noI18n('isMailAddress')
+                    fn: 'isMailAddress'
                 }
             ],
             login: function (value) {
@@ -122,7 +122,7 @@ define('io.ox/mail/accounts/model', [
 
             // See also io.ox/backbone/validation.js
 
-            var regEmail = /\@/.test(newMailaddress);
+            var regEmail = /@/.test(newMailaddress);
 
             if (!regEmail) return gt('This is not a valid email address');
         },

@@ -51,7 +51,7 @@ define.async('io.ox/mail/accounts/keychain', [
                  * this is needed for internal accounts, at the moment
                  * FIXME: save one API call here, if data.personal can be assured
                 */
-                userAPI.getName(ox.user_id).pipe(function (name) {
+                userAPI.getName(ox.user_id).then(function (name) {
                     data.personal = data.personal || name;
                 });
             }

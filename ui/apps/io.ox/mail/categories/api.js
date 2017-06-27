@@ -20,7 +20,7 @@ define('io.ox/mail/categories/api', [
     'use strict';
 
     function invalidateCollections(options) {
-         // flag collections as expired
+        // flag collections as expired
         var rCategory = new RegExp('categoryid=' + options.target);
         _.each(mailAPI.pool.getCollections(), function (collection, id) {
             if (rCategory.test(id)) collection.expired = true;

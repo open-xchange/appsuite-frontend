@@ -10,7 +10,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
- /* global blankshield */
+/* global blankshield */
 define('io.ox/core/viewer/views/toolbarview', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/disposable',

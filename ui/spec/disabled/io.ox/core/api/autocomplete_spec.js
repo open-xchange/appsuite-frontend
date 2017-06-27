@@ -227,7 +227,7 @@ define(['io.ox/core/api/autocomplete'], function (api) {
                             'company': null,
                             'distribution_list': null,
                             'mark_as_distributionlist': false,
-                            'image1_url': '\/ajax\/image\/contact\/picture?folder=14830&id=486089&timestamp=1370252041765',
+                            'image1_url': '/ajax/image/contact/picture?folder=14830&id=486089&timestamp=1370252041765',
                             'sort_name': 'HawthornePierce'
                         },
                         'field': 'email1',

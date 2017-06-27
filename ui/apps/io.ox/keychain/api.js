@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
- /**
+/**
  ext.point("io.ox/keychain/api").extend({
     id: ...,
     displayName: ...,

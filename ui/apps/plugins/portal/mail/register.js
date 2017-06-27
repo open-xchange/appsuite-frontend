@@ -60,7 +60,7 @@ define('plugins/portal/mail/register', [
         render: function (baton) {
             var self = this,
                 subjectNode,
-                subject = this.model.get('subject') ? _.noI18n(_.ellipsis(this.model.get('subject'), { max: 50 })) : gt('No subject'),
+                subject = this.model.get('subject') ? _.ellipsis(this.model.get('subject'), { max: 50 }) : gt('No subject'),
                 received = moment(this.model.get('received_date')).format('l');
 
             this.$el.empty()
@@ -71,9 +71,9 @@ define('plugins/portal/mail/register', [
                             return $('<i class="fa fa-circle new-item accent">');
                         }
                     })(),
-                    $('<span class="bold">').text(_.noI18n(util.getDisplayName(this.model.get('from')[0]))), $.txt(' '),
+                    $('<span class="bold">').text(util.getDisplayName(this.model.get('from')[0])), $.txt(' '),
                     subjectNode = $('<span class="normal">').text(subject), $.txt(' '),
-                    $('<span class="accent">').text(_.noI18n(received))
+                    $('<span class="accent">').text(received)
                 );
 
             //process emoji
@@ -217,7 +217,7 @@ define('plugins/portal/mail/register', [
                     //#. %1$d is the number of mails
                     //#, c-format
                     gt.ngettext('You have %1$d unread message', 'You have %1$d unread messages', unread),
-                    gt.noI18n(unread)
+                    unread
                 ));
             }
         },

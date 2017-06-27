@@ -72,7 +72,7 @@ define('io.ox/core/api/sub', [
             destroy: function (id) {
                 var that = this;
                 return clearCache(this, { id: id })
-                    .pipe(function () {
+                    .then(function () {
                         return that.remove(id);
                     });
             },
@@ -129,7 +129,7 @@ define('io.ox/core/api/sub', [
             }
 
             var folder = data.folder || data.attributes.folder || '';
-            return clearCache(this, data).pipe(function () {
+            return clearCache(this, data).then(function () {
                 return http.GET({
                     module: 'subscriptions',
                     appendColumns: false,

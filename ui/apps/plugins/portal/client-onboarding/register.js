@@ -58,7 +58,7 @@ define('plugins/portal/client-onboarding/register', [
                             //#. users can configure their devices to access/sync appsuites data (f.e. install ox mail app)
                             //#. %1$s the product name
                             //#, c-format
-                             gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
+                            gt('Take %1$s with you! Stay up-to-date on your favorite devices.', ox.serverConfig.productName)
                         ),
                         $('<div class="paragraph text-justify devices">').css(style.devices)
                             .append(

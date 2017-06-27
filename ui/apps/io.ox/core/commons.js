@@ -681,19 +681,19 @@ define('io.ox/core/commons', [
             if (coreSettings.get('upsell/premium/folderView/closedByUser')) return;
 
             var container = $('<div class="premium-toolbar generic-toolbar bottom visual-focus in">').append(
-                    $('<div class="header">').append(
-                        gt('Premium features'),
-                        $('<a href="#" role="button" class="pull-right">').append(
-                            $('<i class="fa fa-times" aria-hidden="true">'),
-                            $('<span class="sr-only">').text(gt('Close premium features'))
-                        )
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            $(this).closest('.premium-toolbar').collapse('hide');
-                            coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
-                        })
+                $('<div class="header">').append(
+                    gt('Premium features'),
+                    $('<a href="#" role="button" class="pull-right">').append(
+                        $('<i class="fa fa-times" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close premium features'))
                     )
-                );
+                    .on('click', function (e) {
+                        e.preventDefault();
+                        $(this).closest('.premium-toolbar').collapse('hide');
+                        coreSettings.set('upsell/premium/folderView/closedByUser', true).save();
+                    })
+                )
+            );
 
             ext.point(app.get('name') + '/folderview/premium-area').invoke('draw', container, {});
 

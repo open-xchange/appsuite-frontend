@@ -213,7 +213,7 @@ define('io.ox/core/desktop', [
                         _.url.hash('folder', null);
                         // update window title?
                         if (win) {
-                            win.setTitle(_.noI18n(''));
+                            win.setTitle('');
                         }
                         // update grid?
                         if (grid) {
@@ -232,7 +232,7 @@ define('io.ox/core/desktop', [
                             if (!appchange) {
                                 // update window title & toolbar?
                                 if (win) {
-                                    win.setTitle(_.noI18n(data.title || ''));
+                                    win.setTitle(data.title || '');
                                     win.updateToolbar();
                                 }
                                 // update grid?
@@ -602,7 +602,7 @@ define('io.ox/core/desktop', [
                 $(window).trigger('resize.lazyload');
             }
 
-            return deferred.pipe(function () {
+            return deferred.then(function () {
                 return $.Deferred().resolveWith(self, arguments);
             });
         },
@@ -803,7 +803,7 @@ define('io.ox/core/desktop', [
                     _(data).map(function (obj) {
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
-                        return ox.load(requirements).pipe(function (m) {
+                        return ox.load(requirements).then(function (m) {
                             return m.getApp().launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
@@ -1273,11 +1273,11 @@ define('io.ox/core/desktop', [
                                 //#. %1$s is the name of the page, e.g. OX App Suite
                                 //#. %2$s is the title of the active app, e.g. Calendar
                                 gt.pgettext('window title', '%1$s %2$s'),
-                                _.noI18n(ox.serverConfig.pageTitle),
-                                _.noI18n(self.getTitle())
+                                ox.serverConfig.pageTitle,
+                                self.getTitle()
                             );
                         } else {
-                            document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                            document.title = document.customTitle = ox.serverConfig.pageTitle;
                         }
 
                         if (firstShow) {
@@ -1314,7 +1314,7 @@ define('io.ox/core/desktop', [
                     ox.ui.windowManager.trigger('window.hide', this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                        document.title = document.customTitle = ox.serverConfig.pageTitle;
                     }
                     return this;
                 };
@@ -1443,11 +1443,11 @@ define('io.ox/core/desktop', [
                                     //#. %1$s is the name of the page, e.g. OX App Suite
                                     //#. %2$s is the title of the active app, e.g. Calendar
                                     gt.pgettext('window title', '%1$s %2$s'),
-                                    _.noI18n(ox.serverConfig.pageTitle),
-                                    _.noI18n(title)
+                                    ox.serverConfig.pageTitle,
+                                    title
                                 );
                             } else {
-                                document.title = document.customTitle = _.noI18n(ox.serverConfig.pageTitle);
+                                document.title = document.customTitle = ox.serverConfig.pageTitle;
                             }
                         }
                         this.trigger('change:title');
@@ -1574,7 +1574,7 @@ define('io.ox/core/desktop', [
 
                 // add default css class
                 if (opt.name) {
-                    win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+                    win.nodes.outer.addClass(opt.name.replace(/[./]/g, '-') + '-window');
                 }
 
                 // draw window head
@@ -1651,7 +1651,7 @@ define('io.ox/core/desktop', [
                     draw: function (baton) {
                         baton.$.group.append(
                             // search
-                             $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
+                            $('<button type="button" class="btn btn-link form-control-feedback action action-show" data-toggle="tooltip" data-placement="bottom" data-animation="false" data-container="body">')
                                 .attr({
                                     'data-original-title': gt('Start search'),
                                     'aria-label': gt('Start search')

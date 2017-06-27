@@ -1,4 +1,4 @@
-    /**
+/**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
  * law. Any use of the work other than as authorized under this license
@@ -228,13 +228,11 @@ define('io.ox/tasks/main', [
                 right = app.pages.getPage('detailView');
 
             app.left = left;
-            app.right = right.addClass('default-content-padding f6-target task-detail-container')
-            .attr({
+            app.right = right.addClass('default-content-padding f6-target task-detail-container').attr({
                 'tabindex': -1,
                 'role': 'main',
                 'aria-label': gt('Task Details')
-            })
-            .scrollable();
+            }).scrollable();
         },
 
         'vgrid': function (app) {
@@ -281,7 +279,7 @@ define('io.ox/tasks/main', [
                 } else {
                     column = 317;
                 }
-                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).pipe(function (data) {
+                return api.getAll({ folder: this.prop('folder'), sort: column, order: order }).then(function (data) {
                     if (sort !== 'urgency') {
                         datacopy = _.copy(data, true);
                     } else {
@@ -298,7 +296,7 @@ define('io.ox/tasks/main', [
             };
 
             listRequest = function (ids) {
-                return api.getList(ids).pipe(function (list) {
+                return api.getList(ids).then(function (list) {
                     //use compact to eliminate unfound tasks to prevent errors(maybe deleted elsewhere)
                     var listcopy = _.copy(_.compact(list), true);
 
@@ -889,7 +887,8 @@ define('io.ox/tasks/main', [
                     app.grid.refresh();
                 });
 
-            this.append($('<div class="grid-options dropdown">').append(
+            this.append(
+                $('<div class="grid-options dropdown">').append(
                     dropdown.render().$el.attr('data-dropdown', 'sort')
                 )
             );

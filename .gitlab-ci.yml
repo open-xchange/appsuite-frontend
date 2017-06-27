@@ -25,20 +25,17 @@ variables:
     - cd ${PROJECT_PATH}
     - yarn
     - yarn clean
-    - bower i --silent
   cache:
     # use one cache per project and branch
     # ex.: ui_feature/gitlab_ci
-    key: ${PROJECT_PATH}_${CI_BUILD_REF_NAME}
+    key: ${PROJECT_PATH}_${CI_COMMIT_REF_NAME}
     paths:
       - "${PROJECT_PATH}/node_modules"
-      - "${PROJECT_PATH}/bower_components"
   artifacts:
     name: ${PROJECT_PATH}_dependencies
     expire_in: 2 hours
     paths:
       - ${PROJECT_PATH}/node_modules
-      - ${PROJECT_PATH}/bower_components
 
 install_deps_ui:
   variables:
@@ -77,7 +74,7 @@ install_deps_guidedtours:
     - install_deps_ui
   script:
     - cd ui
-    - grunt ${CI_BUILD_NAME}
+    - grunt ${CI_JOB_NAME}
   stage: build
   artifacts:
     expire_in: 2hours
@@ -89,15 +86,19 @@ install_deps_guidedtours:
 # this distributes workload onto 2 runners instead of one and basically halves build time
 lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist:
   <<: *build_ui
+  tags:
+    - openstack
 
 copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist:
   <<: *build_ui
+  tags:
+    - openstack
 
 docker_image_ui:
   script:
-    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ui/
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_BUILD_REF_SLUG}
+    - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
+    - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
   stage: docker
   dependencies:
     - install_deps_ui
@@ -120,10 +121,10 @@ test_ui:
   dependencies: [] # none
   script:
     - "[ -z $TAG_NAME ] && export TAG_NAME=$(echo $CI_JOB_NAME | sed 's/tag //') || true"
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
-    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG}
-    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_BUILD_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.open-xchange.com:4567
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
+    - docker pull ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG}
+    - docker tag ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ${CI_REGISTRY_IMAGE}:${TAG_NAME}
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push ${CI_REGISTRY_IMAGE}:${TAG_NAME}
 
 tag latest:
@@ -143,6 +144,43 @@ tag tags:
     TAG_NAME: ${CI_COMMIT_TAG}
   only:
     - tags
+
+deploy preview app:
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+  script:
+    - docker pull $DOCKER_IMAGE
+    - docker stop $CI_COMMIT_REF_SLUG || echo "Nothing to stop"
+    - counter=0; while [ $counter -lt 10 ]; do sleep 2; docker run --name $CI_COMMIT_REF_SLUG --rm -d -e SERVER=http://10.20.28.164/appsuite/ $DOCKER_IMAGE && break || counter=$((counter+1)); done
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
+    on_stop: stop_review
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
+
+stop_review:
+  stage: deploy
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+  script:
+    - docker stop $CI_COMMIT_REF_SLUG
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  only:
+    - /^feature\//
+    - /^bug\//
+    - /^poc\//
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy

@@ -121,7 +121,7 @@ define('plugins/portal/birthdays/register', [
                             $('<li class="line">').append(
                                 birthday.isSame(today, 'day') ? $('<span class="bold">').append('<i class="cake fa fa-birthday-cake">') : $(),
                                 $('<span class="bold">').text(name), $.txt(' '),
-                                $('<span class="accent">').text(_.noI18n(birthdayText))
+                                $('<span class="accent">').text(birthdayText)
                             )
                         );
                         markDuplicate(name, birthday, hash);
@@ -187,9 +187,9 @@ define('plugins/portal/birthdays/register', [
                                     contact,
                                     { width: 48, height: 48 }
                                 ),
-                                $('<div class="name">').text(_.noI18n(name)),
+                                $('<div class="name">').text(name),
                                 $('<div>').append(
-                                    $('<span class="date">').text(_.noI18n(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l'))), $.txt(' '),
+                                    $('<span class="date">').text(birthday.format(birthday.year() === 1 ? moment.localeData().longDateFormat('l').replace(/Y/g, '') : 'l')), $.txt(' '),
                                     $('<span class="distance">').text(delta)
                                 )
                             )

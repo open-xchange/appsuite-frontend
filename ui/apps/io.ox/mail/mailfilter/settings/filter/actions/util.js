@@ -88,7 +88,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
                         ),
                         $('<div class=" col-sm-8">').append(
                             $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
-                            new Input(o.inputOptions).render().$el.attr({ disabled: 'disabled' })
+                            new Input(o.inputOptions).render().$el.prop('disabled', true)
                         )
                     )
                 ),
