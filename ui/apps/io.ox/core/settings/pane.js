@@ -34,7 +34,6 @@ define('io.ox/core/settings/pane', [
         index: 100,
         id: 'view',
         draw: function () {
-            console.log('hier?');
             this.append(
                 new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings }).render().$el
             );
@@ -117,7 +116,7 @@ define('io.ox/core/settings/pane', [
                 var options = _(ox.serverConfig.languages).map(function (key, val) { return { label: key, value: val }; });
 
                 this.$el.append(
-                    select('language', gt('Language'), this.model, options)
+                    util.compactSelect('language', gt('Language'), this.model, options)
                 );
 
                 this.listenTo(this.model, 'change:language', function (language) {
@@ -174,7 +173,7 @@ define('io.ox/core/settings/pane', [
                     .value();
 
                 this.$el.append(
-                    select('theme', gt('Theme'), this.model, options)
+                    util.compactSelect('theme', gt('Theme'), this.model, options)
                 );
             }
         },
@@ -196,7 +195,7 @@ define('io.ox/core/settings/pane', [
                 ];
 
                 this.$el.append(
-                    select('refreshInterval', gt('Refresh interval'), this.model, options)
+                    util.compactSelect('refreshInterval', gt('Refresh interval'), this.model, options)
                 );
             }
         },
@@ -218,7 +217,7 @@ define('io.ox/core/settings/pane', [
                 options.push({ label: gt('None'), value: 'none' });
 
                 this.$el.append(
-                    select('autoStart', gt('Default app after sign in'), this.model, options)
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, options)
                 );
             }
         },
@@ -233,7 +232,7 @@ define('io.ox/core/settings/pane', [
                 if (!settings.isConfigurable('autoLogout')) return;
 
                 this.$el.append(
-                    select('autoLogout', gt('Automatic sign out'), this.model, [
+                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, [
                         { label: gt('Never'), value: 0 },
                         { label: gt('5 minutes'), value: 5 * MINUTES },
                         { label: gt('10 minutes'), value: 10 * MINUTES },
@@ -357,15 +356,6 @@ define('io.ox/core/settings/pane', [
             }
         }
     );
-
-    function select(name, label, model, options) {
-        return $('<div class="form-group row">').append(
-            $('<div class="col-md-6">').append(
-                $('<label for="settings-' + name + '">').text(label),
-                new mini.SelectView({ name: name, model: model, list: options }).render().$el
-            )
-        );
-    }
 
     // register once
     settings.on('change:highcontrast', function (value) {

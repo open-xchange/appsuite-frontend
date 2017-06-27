@@ -58,9 +58,7 @@ define('io.ox/calendar/settings/timezones/pane', [
         id: 'favorite-timezone',
         draw: function () {
             this.append(
-                $('<fieldset>').append(
-                    new FavoriteView({ model: settings }).render().$el
-                )
+                new FavoriteView({ model: settings }).render().$el
             );
         }
     });

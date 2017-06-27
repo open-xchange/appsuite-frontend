@@ -428,11 +428,22 @@ html:not(.internet-explorer) {
 
 // custom checkboxes
 
-.checkbox.custom, .radio.custom {
+// blue
+@control-color: white;
+@control-background: #3c73aa;
+@control-border-color: #aaa;
+@control-border-color-checked: transparent;
 
-    @color: #333;
-    @background: #eee;
-    @focus: #03a9f4;
+// gray
+// @control-color: #333;
+// @control-background: #eee;
+// @control-border-color: #aaa;
+// @control-border-color-checked: @border-color;
+
+@control-focus: #03a9f4;
+@switch-background: #558B2F;
+
+.checkbox.custom, .radio.custom {
 
     margin-bottom: 8px;
     padding-left: 32px;
@@ -447,7 +458,7 @@ html:not(.internet-explorer) {
         width: 16px;
         height: 16px;
         border-radius: 3px;
-        border: 1px solid #aaa;
+        border: 1px solid @control-border-color;
         background-color: white;
         font: normal normal normal 12px/1 FontAwesome;
         text-rendering: auto;
@@ -465,8 +476,9 @@ html:not(.internet-explorer) {
     // checked
 
     input:checked + i.toggle {
-        color: @color;
-        background-color: @background;
+        color: @control-color;
+        background-color: @control-background;
+        border-color-checked: @control-border-color-checked;
     }
 
     input:checked + i.toggle:before {
@@ -477,8 +489,8 @@ html:not(.internet-explorer) {
     // focus
 
     input:focus + i.toggle {
-        border-color: @focus;
-        box-shadow: 0 0 8px 1px fade(@focus, 60%);
+        border-color: @control-focus;
+        box-shadow: 0 0 8px 1px fade(@control-focus, 60%);
     }
 
     // disabled
@@ -512,13 +524,11 @@ html:not(.internet-explorer) {
         width: 6px;
         height: 6px;
         border-radius: 3px;
-        background-color: @black;
+        background-color: @control-color;
     }
 }
 
 .checkbox.switch {
-
-    @accent: #7CB342;
 
     margin-bottom: 8px;
     padding-left: 72px;
@@ -560,7 +570,7 @@ html:not(.internet-explorer) {
 
     input:checked + i.toggle {
         border-color: transparent;
-        background-color: @accent;
+        background-color: @switch-background;
     }
 
     input:checked + i.toggle:before {
@@ -568,7 +578,7 @@ html:not(.internet-explorer) {
     }
 
     input:focus + i.toggle {
-        border-color: lighten(@accent, 20%);
+        border-color: lighten(@switch-background, 20%);
         box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
     }
 

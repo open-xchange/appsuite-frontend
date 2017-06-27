@@ -308,10 +308,13 @@
 
     fieldset {
         padding: 0;
-        margin: 0;
-        border: 0;
+        margin: 0 0 @vertical-margin 32px;
         min-width: 0;
-        margin-bottom: @vertical-margin;
+    }
+
+    legend {
+        position: relative;
+        left: -32px;
     }
 
     .section { max-width: 800px; }
@@ -346,10 +349,10 @@
         display: block;
         width: 100%;
         font-size: 14px;
-        height: 32px;
         color: #333;
         margin: 0;
         border: 0;
+        padding: 0;
         h2 {
             font-weight: 700;
             font-size: 14px;

@@ -48,6 +48,16 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
             ];
         },
 
+        compactSelect: function (name, label, model, list, options) {
+            options = options || {};
+            return $('<div class="form-group row">').append(
+                $('<div>').addClass('col-md-' + (options.width || 6)).append(
+                    $('<label for="settings-' + name + '">').text(label),
+                    new miniViews.SelectView({ name: name, model: model, list: list, integer: !!options.integer }).render().$el
+                )
+            );
+        },
+
         inlineSelect: function (id, labelBefore, copyAfter, model, options, View) {
             var SelectView = View ? View : miniViews.SelectView;
             var guid = _.uniqueId('form-control-label-');

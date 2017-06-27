@@ -318,7 +318,8 @@ define('io.ox/backbone/mini-views/common', [
         className: 'input-xlarge form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val());
+            var val = this.$el.val();
+            this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
