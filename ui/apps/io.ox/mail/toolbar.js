@@ -248,37 +248,6 @@ define('io.ox/mail/toolbar', [
         ref: 'io.ox/mail/classic-toolbar/links'
     }));
 
-    // local mediator
-    function updateContactPicture() {
-        // disposed?
-        if (!this.model) return;
-        // only show this option if preview pane is right (vertical/compact)
-        var li = this.$el.find('[data-name="contactPictures"]').parent(),
-            layout = this.model.get('layout');
-        if (layout === 'vertical' || layout === 'compact') li.show(); else li.hide();
-    }
-
-    function statistics(app, e) {
-        e.preventDefault();
-        require(['io.ox/mail/statistics']).done(function (statistics) {
-            statistics.open(app);
-        });
-    }
-
-    function allAttachments(app, e) {
-        e.preventDefault();
-        var attachmentView = settings.get('folder/mailattachments', {});
-        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
-            this.folder.set(attachmentView.all);
-        });
-    }
-
-    function onConfigureCategories(props) {
-        require(['io.ox/mail/categories/edit'], function (dialog) {
-            dialog.open(props);
-        });
-    }
-
     // view dropdown
     ext.point('io.ox/mail/classic-toolbar').extend({
         id: 'view-dropdown',
@@ -316,13 +285,19 @@ define('io.ox/mail/toolbar', [
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))
-            .divider()
-            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
-            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
+            .divider();
+
+            if (capabilities.has('mailfilter')) {
+                dropdown.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
+            }
 
             if (settings.get('folder/mailattachments', {}).all) {
                 dropdown.link('attachments', gt('All attachments'), allAttachments.bind(null, baton.app));
             }
+
+            dropdown
+            .link('statistics', gt('Statistics'), statistics.bind(null, baton.app))
+            .listenTo(baton.app.props, 'change:layout', updateContactPicture);
 
             this.append(
                 dropdown.render().$el.addClass('pull-right').attr('data-dropdown', 'view')
@@ -331,6 +306,42 @@ define('io.ox/mail/toolbar', [
             updateContactPicture.call(dropdown);
         }
     });
+
+    // local mediator
+    function updateContactPicture() {
+        // disposed?
+        if (!this.model) return;
+        // only show this option if preview pane is right (vertical/compact)
+        var li = this.$el.find('[data-name="contactPictures"]').parent(),
+            layout = this.model.get('layout');
+        if (layout === 'vertical' || layout === 'compact') li.show(); else li.hide();
+    }
+
+    function statistics(app, e) {
+        e.preventDefault();
+        require(['io.ox/mail/statistics']).done(function (statistics) {
+            statistics.open(app);
+        });
+    }
+
+    function allAttachments(app, e) {
+        e.preventDefault();
+        var attachmentView = settings.get('folder/mailattachments', {});
+        ox.launch('io.ox/files/main', { folder: attachmentView.all }).done(function () {
+            this.folder.set(attachmentView.all);
+        });
+    }
+
+    function onConfigureCategories(props) {
+        require(['io.ox/mail/categories/edit'], function (dialog) {
+            dialog.open(props);
+        });
+    }
+
+    function onOpenVacationNotice(e) {
+        e.preventDefault();
+        require(['io.ox/mail/mailfilter/vacationnotice/view'], function (view) { view.open(); });
+    }
 
     // classic toolbar
     ext.point('io.ox/mail/mediator').extend({

@@ -10,6 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/mail/mailfilter/vacationnotice/model', [
@@ -165,7 +166,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', [
     }
 
     VacationNoticeModel.fields = {
-        headline: gt('Vacation Notice'),
+        headline: gt('Vacation notice'),
         subject: gt('Subject'),
         text: gt('Text'),
         //#. Context: Vacation notices

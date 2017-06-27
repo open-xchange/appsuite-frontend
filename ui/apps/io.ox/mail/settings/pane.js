@@ -74,7 +74,7 @@ define('io.ox/mail/settings/pane', [
             $.when(accounts, msisdns).then(function (addresses, numbers) {
 
                 optionsAllAccounts = [].concat(addresses, numbers);
-                console.log('Sooo', optionsAllAccounts);
+                console.log('optionsAllAccounts', optionsAllAccounts);
                 ext.point(POINT + '/pane').invoke('draw', self.$el, baton);
 
                 // hide non-configurable sections
@@ -234,6 +234,8 @@ define('io.ox/mail/settings/pane', [
             index: 100,
             draw: function () {
 
+                if (!capabilities.has('mailfilter')) return;
+
                 this.append(
                     $('<button type="button" class="btn btn-default">')
                     .on('click', openDialog)
@@ -257,6 +259,8 @@ define('io.ox/mail/settings/pane', [
             id: 'auto-forward',
             index: 200,
             draw: function () {
+
+                if (!capabilities.has('mailfilter')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')
