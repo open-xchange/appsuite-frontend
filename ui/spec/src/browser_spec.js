@@ -124,5 +124,19 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device('touch')).to.be.false;
             expect(_.browser.windows).to.be.true;
         });
+        it('should handle Chrome on Linux convertible devices as non-touch devices', function () {
+            _.device.cache = {};
+            _.device.loadUA(userAgents.valid.Chrome[59]);
+            expect(_.device('touch')).to.be.false;
+            expect(_.device('linux')).to.be.true;
+            expect(_.device('android')).to.be.false;
+        });
+        it('should handle Chrome on Android as touch device', function () {
+            _.device.cache = {};
+            _.device.loadUA(userAgents.valid.Android[6]);
+            expect(_.device('touch')).to.be.true;
+            expect(_.device('linux')).to.be.false;
+            expect(_.device('android')).to.be.true;
+        });
     });
 });

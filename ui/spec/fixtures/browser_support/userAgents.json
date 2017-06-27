@@ -22,6 +22,10 @@
             "60": {
                 "supported": true,
                 "userAgent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.1847.131 Safari/537.36"
+            },
+            "59": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
             }
         },
         "ChromeiOS": {
@@ -48,6 +52,10 @@
             "52 Windows": {
                 "supported": true,
                 "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
+            },
+            "52 Linux": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
             }
         },
         "FirefoxAndroid": {
