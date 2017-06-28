@@ -330,7 +330,9 @@
                 supported = true;
             }
         }
-        return supported;
+        return supported ||
+            //support safari on ios if platform is supported
+            !!(us.browser.iOS && us.browser.Safari && isPlatformSupported());
     }
     // helper for platform support
     function isPlatformSupported() {
