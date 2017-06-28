@@ -140,7 +140,7 @@ define('io.ox/portal/settings/pane', [
     ext.point('io.ox/portal/settings/detail/view').extend({
         index: 200,
         id: 'add',
-        draw: drawAddButton
+        render: drawAddButton
     });
 
     var drawChangeColor = (function () {

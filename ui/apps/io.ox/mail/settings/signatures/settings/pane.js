@@ -326,12 +326,17 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 if (_.device('smartphone')) return;
 
                 var $el = $('<div class="form-group buttons">').append(
-                    $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
+                    $('<button type="button" class="btn btn-primary">').append(
+                        $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add new signature'))
+                    )
+                    .on('click', fnEditSignature)
                 );
 
                 if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
                     $el.append(
-                        $('<button type="button" class="btn btn-default">').text(gt('Import signatures')).on('click', function (e) {
+                        $('<button type="button" class="btn btn-default">')
+                        .text(gt('Import signatures') + ' ...')
+                        .on('click', function (e) {
                             fnImportSignatures(e, config.get('gui.mail.signatures'));
                             return false;
                         })
@@ -391,7 +396,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     list.$('[data-id="' + composeId + '"]')
                         .addClass('default')
                         .append($('<div class="default-label">').append(
-                            $('<span class="label label-success">').text(gt('Default signature for new messages'))
+                            $('<span class="label label-default">').text(gt('Default signature for new messages'))
                         ));
                 }, 100),
                 list = new ListView({
@@ -479,7 +484,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     ),
                     $('<div class="form-group col-xs-12 col-md-6">').append(
                         $('<label for="defaultSignature" class="control-label">')
-                        .text(gt('Default signature for replies or forwardings')),
+                        .text(gt('Default signature for replies or forwards')),
                         $('<div>').addClass('controls').append(
                             defaultReplyForwardView.render().$el
                         )

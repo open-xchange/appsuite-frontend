@@ -80,7 +80,9 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
         render: function () {
             this.$el.append(
                 $('<div class="form-group buttons">').append(
-                    $('<button type="button" class="btn btn-primary">').text(gt('Add timezone'))
+                    $('<button type="button" class="btn btn-primary">').append(
+                        $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add timezone'))
+                    )
                 ),
                 $('<div class="form-group">').append(
                     this.listView.render().$el

@@ -469,7 +469,9 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         this.$el.append(
                             $('<h1>').text(gt('Mail Filter Rules')),
                             $('<div class="form-group buttons">').append(
-                                $('<button type="button" class="btn btn-primary" data-action="add">').text(gt('Add new rule'))
+                                $('<button type="button" class="btn btn-primary" data-action="add">').append(
+                                    $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add new rule'))
+                                )
                             ),
                             $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
                         );
