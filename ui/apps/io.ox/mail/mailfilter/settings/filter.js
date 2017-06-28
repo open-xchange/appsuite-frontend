@@ -466,11 +466,11 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     render: function () {
                         this.$el.empty();
-                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
-                            $('<div>').addClass('btn-group pull-right').append(
-                                $('<button type="button" class="btn btn-primary" data-action="add">').addClass('btn btn-primary').text(gt('Add new rule'))
+                        this.$el.append(
+                            $('<h1>').text(gt('Mail Filter Rules')),
+                            $('<div class="form-group buttons">').append(
+                                $('<button type="button" class="btn btn-primary" data-action="add">').text(gt('Add new rule'))
                             ),
-                            $('<div class="clearfix">'),
                             $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
                         );
                         this.renderFilter();
