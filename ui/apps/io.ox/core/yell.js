@@ -98,7 +98,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
         var o = {
                 duration: 0,
                 focus: false,
-                type: 'info'
+                type: 'info',
+                closeOnClick: true
             },
             // there is a special yell for displaying conflicts for filestorages correctly
             useConflictsView = false,
@@ -156,10 +157,14 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
             //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although it should not)
             $(document).off('.yell');
-            _.defer(function () {
-                // use defer not to run into drag&drop
-                $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
-            });
+
+            // closeOnClick: whether the yell is closed on the following events
+            if (o.closeOnClick) {
+                _.defer(function () {
+                    // use defer not to run into drag&drop
+                    $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
+                });
+            }
 
             var node = $('<div tabindex="-1" class="io-ox-alert">').addClass('io-ox-alert-' + o.type),
                 content, wordbreak, text;
