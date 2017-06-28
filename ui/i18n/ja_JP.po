@@ -9036,8 +9036,8 @@ msgid ""
 "There are more than %n appointments in the current calendar. Some features "
 "are disabled due to performance reasons."
 msgstr ""
-"現在のカレンダーには %n以上アポイントがあります。性能上の問題でいくつかの機能"
-"が無効です。"
+"現在のカレンダーには %n 件以上のアポイントがあります。"
+"性能上の問題のためいくつかの機能が無効になります。
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid ""
