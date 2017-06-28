@@ -58,25 +58,6 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
             );
         },
 
-        inlineSelect: function (id, labelBefore, copyAfter, model, options, View) {
-            var SelectView = View ? View : miniViews.SelectView;
-            var guid = _.uniqueId('form-control-label-');
-            var nonBreakingWhitespaceChar = '\u00A0';
-            return [
-                $('<label class="control-label" style="display: inline-block">').attr('for', guid).text(labelBefore + nonBreakingWhitespaceChar),
-                $('<span style="display: inline-block">').append(
-                    new SelectView({
-                        list: options,
-                        name: id,
-                        model: model,
-                        id: guid,
-                        className: 'form-control'
-                    }).render().$el
-                ),
-                $('<label class="control-label" style="display: inline-block">').attr('for', guid).text(nonBreakingWhitespaceChar + copyAfter + '.')
-            ];
-        },
-
         fieldset: function (text) {
             var args = _(arguments).toArray();
             return $('<fieldset>').append($('<legend class="sectiontitle">').append($('<h2>').text(text))).append(args.slice(1));

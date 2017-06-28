@@ -12,27 +12,21 @@
  */
 
 define('io.ox/files/settings/pane', [
-    'settings!io.ox/files',
     'io.ox/core/extensions',
+    'io.ox/backbone/views/extensible',
     'io.ox/core/capabilities',
-    'gettext!io.ox/files',
     'io.ox/backbone/mini-views',
-    'io.ox/core/settings/util'
-], function (settings, ext, capabilities, gt, mini, util) {
+    'io.ox/core/settings/util',
+    'settings!io.ox/files',
+    'gettext!io.ox/files'
+], function (ext, ExtensibleView, capabilities, mini, util, settings, gt) {
 
     'use strict';
 
     // not really relevant for guests (as of today)
     if (capabilities.has('guest')) return;
 
-    function optionsAutoplayPause() {
-        return _.map([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 50, 60], function (i) {
-            i = String(i);
-            return { label: i, value: i };
-        });
-    }
-
-    var POINT = 'io.ox/files/settings/detail';
+    // change events
 
     settings.on('change', function () {
         settings.saveAndYell();
@@ -44,80 +38,105 @@ define('io.ox/files/settings/pane', [
         });
     });
 
-    ext.point(POINT).extend({
+    //
+    // Extensible View
+    //
+
+    ext.point('io.ox/files/settings/detail').extend({
         index: 100,
-        id: 'filessettings',
+        id: 'view',
         draw: function () {
-            var holder = $('<div class="io-ox-drive-settings">');
-            this.append(holder);
-            ext.point(POINT + '/pane').invoke('draw', holder);
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'header',
-        draw: function () {
-            this.append(util.header(gt.pgettext('app', 'Drive')));
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'common',
-        draw: function () {
-            if (!settings.isConfigurable('showHidden')) return;
-
             this.append(
-                $('<div class="form-group">').append(
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-8">').append(
-                            util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
-                        )
-                    )
-                )
+                new ExtensibleView({ point: 'io.ox/files/settings/detail/view', model: settings })
+                .inject({
+                    getUploadOptions: function () {
+                        return [
+                            { label: gt('Add new version'), value: 'newVersion' },
+                            { label: gt('Add new version and show notification'), value: 'announceNewVersion' },
+                            { label: gt('Add separate file'), value: 'newFile' }
+                        ];
+                    },
+                    getAutoPlayOptions: function () {
+                        return [
+                            { label: gt('Show all images just once'), value: 'loopOnceOnly' },
+                            { label: gt('Repeat slideshow'), value: 'loopEndlessly' }
+                        ];
+                    },
+                    getAutoPlayPauseOptions: function () {
+                        return _.map([3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30, 35, 40, 50, 60], function (i) {
+                            i = String(i);
+                            return { value: i, label: gt('%1$d seconds', i) };
+                        });
+                    }
+                })
+                .render().$el
             );
         }
     });
 
-    ext.point(POINT + '/pane').extend({
-        index: 300,
-        id: 'uploadHandling',
-        draw: function () {
-            var preferences = [
-                { label: gt('Add new version'), value: 'newVersion' },
-                { label: gt('Add new version and show notification'), value: 'announceNewVersion' },
-                { label: gt('Add separate file'), value: 'newFile' }
+    var INDEX = 0;
 
-            ];
-            this.append(
-                util.fieldset(gt('Adding files with identical names'),
-                    new mini.CustomRadioView({ list: preferences, name: 'uploadHandling', model: settings }).render().$el
-                )
-            );
-        }
-    });
+    ext.point('io.ox/files/settings/detail/view').extend(
+        //
+        // Header
+        //
+        {
+            id: 'header',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.addClass('io-ox-drive-settings').append(
+                    util.header(gt.pgettext('app', 'Drive'))
+                );
+            }
+        },
+        //
+        // Common
+        //
+        {
+            id: 'common',
+            index: INDEX += 100,
+            render: function () {
 
-    ext.point(POINT + '/pane').extend({
-        index: 400,
-        id: 'displayerviewAutoplay',
-        draw: function () {
-            var preferences = [
-                { label: gt('Show all images just once'), value: 'loopOnceOnly' },
-                { label: gt('Repeat slideshow'), value: 'loopEndlessly' }
-            ];
-            this.append(
-                util.fieldset(gt('Slideshow / Autoplay mode for images'),
-                    new mini.CustomRadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
+                if (!settings.isConfigurable('showHidden')) return;
 
+                this.$el.append(
                     $('<div class="form-group">').append(
-                        $('<div class="row" style="margin: auto">').append(
-                            //.# Used as settings label, User can select a numeric value of seconds. Final "sentence" i.e. "show all images for 5 seconds"
-                            util.inlineSelect('autoplayPause', gt('Show all images for'), gt('seconds'), settings, optionsAutoplayPause())
-                        )
+                        util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
                     )
-                )
-            );
+                );
+            }
+        },
+        //
+        // Upload
+        //
+        {
+            id: 'upload',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Adding files with identical names'),
+                        new mini.CustomRadioView({ name: 'uploadHandling', model: settings, list: this.getUploadOptions() }).render().$el
+                    )
+                );
+            }
+        },
+        //
+        // Autoplay
+        //
+        {
+            id: 'autoplay',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(gt('Slideshow / Autoplay mode for images'),
+                        $('<div class="form-group">').append(
+                            new mini.CustomRadioView({ name: 'autoplayLoopMode', model: settings, list: this.getAutoPlayOptions() }).render().$el
+                        ),
+                        util.compactSelect('autoplayPause', gt('Duration per image'), settings, this.getAutoPlayPauseOptions(), { width: 3 })
+                    )
+                );
+            }
         }
-    });
+    );
 });
