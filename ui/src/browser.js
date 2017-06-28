@@ -198,7 +198,7 @@
         var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
         // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
         if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
-            if (window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
+            if (!us.browser.karma && window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
             return false;
         }
         return reportsTouch;
