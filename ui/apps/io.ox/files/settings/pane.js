@@ -110,7 +110,7 @@ define('io.ox/files/settings/pane', [
                 util.fieldset(gt('Slideshow / Autoplay mode for images'),
                     new mini.CustomRadioView({ list: preferences, name: 'autoplayLoopMode', model: settings }).render().$el,
 
-                    $('<div class="form-group expertmode">').append(
+                    $('<div class="form-group">').append(
                         $('<div class="row" style="margin: auto">').append(
                             //.# Used as settings label, User can select a numeric value of seconds. Final "sentence" i.e. "show all images for 5 seconds"
                             util.inlineSelect('autoplayPause', gt('Show all images for'), gt('seconds'), settings, optionsAutoplayPause())

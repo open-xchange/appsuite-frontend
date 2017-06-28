@@ -6,6 +6,5 @@
     "settings": true,
     "requires": "contacts",
     "refreshable": true,
-    "index": 700,
-    "advancedMode": true
+    "index": 700
 }

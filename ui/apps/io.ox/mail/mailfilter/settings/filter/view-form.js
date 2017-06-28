@@ -556,8 +556,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 }
             });
 
-            var headlineTest = $('<legend>').addClass('sectiontitle expertmode conditions').text(gt('Conditions')),
-                headlineActions = $('<legend>').addClass('sectiontitle expertmode actions').text(gt('Actions')),
+            var headlineTest = $('<legend>').addClass('sectiontitle conditions').text(gt('Conditions')),
+                headlineActions = $('<legend>').addClass('sectiontitle actions').text(gt('Actions')),
                 notificationConditions = $('<div class="notification-for-conditions">'),
                 notificationActions = $('<div class="notification-for-actions">');
 
