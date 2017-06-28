@@ -90,23 +90,6 @@ define('io.ox/files/settings/pane', [
             }
         },
         //
-        // Common
-        //
-        {
-            id: 'common',
-            index: INDEX += 100,
-            render: function () {
-
-                if (!settings.isConfigurable('showHidden')) return;
-
-                this.$el.append(
-                    $('<div class="form-group">').append(
-                        util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
-                    )
-                );
-            }
-        },
-        //
         // Upload
         //
         {
@@ -134,6 +117,24 @@ define('io.ox/files/settings/pane', [
                             new mini.CustomRadioView({ name: 'autoplayLoopMode', model: settings, list: this.getAutoPlayOptions() }).render().$el
                         ),
                         util.compactSelect('autoplayPause', gt('Duration per image'), settings, this.getAutoPlayPauseOptions(), { width: 3 })
+                    )
+                );
+            }
+        },
+        //
+        // Advanced
+        //
+        {
+            id: 'advanced',
+            index: INDEX += 100,
+            render: function () {
+
+                if (!settings.isConfigurable('showHidden')) return;
+
+                this.$el.append(
+                    util.fieldset(
+                        gt('Advanced settings'),
+                        util.checkbox('showHidden', gt('Show hidden files and folders'), settings)
                     )
                 );
             }
