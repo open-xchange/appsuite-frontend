@@ -238,11 +238,8 @@ define('io.ox/mail/settings/pane', [
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')
+                    .text(gt('Vacation notice') + ' ...')
                     .on('click', openDialog)
-                    .append(
-                        $('<i class="fa fa-plane"></i>'),
-                        $.txt(gt('Edit vacation notice'))
-                    )
                 );
 
                 function openDialog() {
@@ -264,11 +261,8 @@ define('io.ox/mail/settings/pane', [
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')
+                    .text(gt('Auto forward') + ' ...')
                     .on('click', openDialog)
-                    .append(
-                        $('<i class="fa fa-mail-forward"></i>'),
-                        $.txt(gt('Auto forward'))
-                    )
                 );
 
                 function openDialog() {
@@ -288,11 +282,8 @@ define('io.ox/mail/settings/pane', [
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')
+                    .text(gt('Change IMAP subscriptions') + ' ...')
                     .on('click', openDialog)
-                    .append(
-                        $('<i class="fa fa-list"></i>'),
-                        $.txt(gt('Change IMAP subscriptions'))
-                    )
                 );
 
                 function openDialog() {

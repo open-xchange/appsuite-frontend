@@ -56,7 +56,7 @@
         li > a, .dropdown a { text-decoration: none; }
         .dropdown > a:focus,.dropdown > a:hover { text-decoration: underline; }
 
-        max-width: 780px;
+        max-width: 800px;
 
         .settings-list-view {
             .settings-list-item {
@@ -104,8 +104,9 @@
         }
 
         .example-text {
-            margin-top: 8px;
+            margin: 8px 0;
             border: 1px solid #ccc;
+            background-color: white;
             border-radius: 4px;
             padding: 16px;
         }
@@ -299,7 +300,7 @@
 
 .settings-detail-pane {
 
-    @vertical-margin: 24px;
+    @vertical-margin: 40px;
     @horizontal-margin: 32px;
 
     &.default-content-padding {
@@ -308,13 +309,20 @@
 
     fieldset {
         padding: 0;
-        margin: 0 0 @vertical-margin 32px;
+        margin: 0 0 @vertical-margin 0;
         min-width: 0;
+        position: relative;
+        padding: 32px 0 0 32px;
     }
 
     legend {
-        position: relative;
-        left: -32px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    label {
+        color: #333;
     }
 
     .section { max-width: 800px; }
@@ -323,9 +331,9 @@
 
         font-family: @light-font-family;
         font-weight: 200;
-        font-size: 26px;
+        font-size: 24px;
         line-height: 32px;
-        margin: (2 * @vertical-margin) 0 @vertical-margin 0;
+        margin: @vertical-margin 0;
 
         &:first-child {
             margin-top: 0;
@@ -345,17 +353,20 @@
     }
 
     legend.sectiontitle {
-        font-weight: 700;
         display: block;
         width: 100%;
         font-size: 14px;
+        line-height: 24px;
+        font-weight: 700;
         color: #333;
         margin: 0;
         border: 0;
         padding: 0;
         h2 {
-            font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
+            line-height: 24px;
+            font-weight: 500;
+            color: #777;
             margin: 0;
         }
     }

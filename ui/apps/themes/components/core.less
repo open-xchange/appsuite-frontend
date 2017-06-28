@@ -441,6 +441,7 @@ html:not(.internet-explorer) {
 // @control-border-color-checked: @border-color;
 
 @control-focus: #03a9f4;
+@checkbox-radius: 3px;
 @switch-background: #558B2F;
 
 .checkbox.custom, .radio.custom {
@@ -457,7 +458,7 @@ html:not(.internet-explorer) {
         position: absolute;
         width: 16px;
         height: 16px;
-        border-radius: 3px;
+        border-radius: @checkbox-radius;
         border: 1px solid @control-border-color;
         background-color: white;
         font: normal normal normal 12px/1 FontAwesome;

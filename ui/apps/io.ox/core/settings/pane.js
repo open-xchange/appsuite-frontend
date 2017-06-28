@@ -63,12 +63,10 @@ define('io.ox/core/settings/pane', [
             index: INDEX += 100,
             render: function () {
 
-                this.listenTo(settings, 'change', function (setting) {
+                this.listenTo(settings, 'change', function (attr) {
 
-                    console.log('change', setting);
-
-                    var showNotice = _(['language', 'timezone', 'theme']).some(function (attr) {
-                        return setting === attr;
+                    var showNotice = _(['language', 'timezone', 'theme']).some(function (id) {
+                        return id === attr;
                     });
 
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
