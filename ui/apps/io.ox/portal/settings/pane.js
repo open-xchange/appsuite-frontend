@@ -22,9 +22,10 @@ define('io.ox/portal/settings/pane', [
     'io.ox/backbone/mini-views/listutils',
     'io.ox/backbone/mini-views/settings-list-view',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/core/settings/util',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/portal/style'
-], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown) {
+], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown, util) {
 
     'use strict';
 
@@ -55,7 +56,7 @@ define('io.ox/portal/settings/pane', [
         id: 'header',
         draw: function () {
             this.addClass('io-ox-portal-settings').append(
-                $('<h1 class="pull-left">').text(gt('Portal settings'))
+                util.header(gt('Portal settings'))
             );
         }
     });
@@ -83,6 +84,7 @@ define('io.ox/portal/settings/pane', [
     }
 
     function drawAddButton() {
+
         var $ul = $('<ul class="dropdown-menu io-ox-portal-settings-dropdown" role="menu">').on('click', 'a:not(.io-ox-action-link)', addWidget),
             $toggle = $('<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" type="button" aria-haspopup="true">').append(
                 $.txt(gt('Add widget')),
@@ -91,14 +93,16 @@ define('io.ox/portal/settings/pane', [
             );
 
         this.append(
-            new Dropdown({
-                className: 'btn-group-portal pull-right',
-                $ul: $ul,
-                $toggle: $toggle
-            }).render().$el,
-            $('<div class="clearfix">'),
-            $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions text">').attr('id', notificationId)
+            $('<div class="form-group buttons">').append(
+                new Dropdown({
+                    className: 'btn-group-portal',
+                    $ul: $ul,
+                    $toggle: $toggle
+                }).render().$el,
+                $('<div class="sr-only" role="log" aria-live="assertive" aria-relevant="additions text">').attr('id', notificationId)
+            )
         );
+
         repopulateAddButton();
     }
 

@@ -29,18 +29,92 @@ define('io.ox/core/settings/pane', [
 
     'use strict';
 
+    var INDEX = 0, MINUTES = 60000;
+
     // this is the offical point for settings
     ext.point('io.ox/core/settings/detail').extend({
         index: 100,
         id: 'view',
         draw: function () {
             this.append(
-                new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings }).render().$el
+                new ExtensibleView({ point: 'io.ox/core/settings/detail/view', model: settings })
+                .inject({
+
+                    showNoticeFields: ['language', 'timezone', 'theme'],
+
+                    showNotice: function (attr) {
+                        return _(this.showNoticeFields).some(function (id) {
+                            return id === attr;
+                        });
+                    },
+
+                    reloadHint: gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.'),
+
+                    getLanguageOptions: function () {
+                        return _(ox.serverConfig.languages).map(function (key, val) {
+                            return { label: key, value: val };
+                        });
+                    },
+
+                    getThemeOptions: function () {
+
+                        var availableThemes = settingOptions.get('themes') || {};
+                        // until we get translated themes from backend
+                        if (availableThemes['default']) availableThemes['default'] = gt('Default Theme');
+                        // sort
+                        return _(availableThemes)
+                            .chain()
+                            .map(function (key, val) { return { label: key, value: val }; })
+                            .sortBy(function (obj) { return obj.label.toLowerCase(); })
+                            .value();
+                    },
+
+                    hasMoreThanOneTheme: function () {
+                        return _(settingOptions.get('themes')).size() > 1;
+                    },
+
+                    getRefreshOptions: function () {
+                        return [
+                            { label: gt('5 minutes'), value: 5 * MINUTES },
+                            { label: gt('10 minutes'), value: 10 * MINUTES },
+                            { label: gt('15 minutes'), value: 15 * MINUTES },
+                            { label: gt('30 minutes'), value: 30 * MINUTES }
+                        ];
+                    },
+
+                    getAutoStartOptions: function () {
+                        return [].concat(
+                            _(appAPI.getFavorites()).map(function (app) {
+                                return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
+                            }),
+                            [{ label: gt('None'), value: 'none' }]
+                        );
+                    },
+
+                    hasMoreThanOneAutoStartOption: function () {
+                        return _(appAPI.getFavorites()).size() > 1;
+                    },
+
+                    getAutoLogoutOptions: function () {
+                        return [
+                            { label: gt('Never'), value: 0 },
+                            { label: gt('5 minutes'), value: 5 * MINUTES },
+                            { label: gt('10 minutes'), value: 10 * MINUTES },
+                            { label: gt('15 minutes'), value: 15 * MINUTES },
+                            { label: gt('30 minutes'), value: 30 * MINUTES }
+                        ];
+                    },
+
+                    openUserSettings: function () {
+                        require(['io.ox/core/settings/user'], function (settingsUser) {
+                            settingsUser.openModalDialog();
+                        });
+                    }
+                })
+                .render().$el
             );
         }
     });
-
-    var INDEX = 0, MINUTES = 60000;
 
     ext.point('io.ox/core/settings/detail/view').extend(
         //
@@ -62,13 +136,8 @@ define('io.ox/core/settings/pane', [
             id: 'onchange',
             index: INDEX += 100,
             render: function () {
-
                 this.listenTo(settings, 'change', function (attr) {
-
-                    var showNotice = _(['language', 'timezone', 'theme']).some(function (id) {
-                        return id === attr;
-                    });
-
+                    var showNotice = this.showNotice(attr);
                     settings.saveAndYell(undefined, { force: !!showNotice }).then(
                         function success() {
                             if (!showNotice) return;
@@ -87,9 +156,7 @@ define('io.ox/core/settings/pane', [
             render: function () {
 
                 this.$el.append(
-                    $('<div class="help-block">')
-                    .text(gt('Some settings (language, timezone, theme) require a page reload or relogin to take effect.') + ' ')
-                    .css('margin-bottom', '24px')
+                    $('<div class="help-block">').text(this.reloadHint + ' ').css('margin-bottom', '24px')
                     .append(
                         $('<a href="#" role="button" data-action="reload">').text(gt('Reload page')).on('click', reload)
                     )
@@ -102,19 +169,87 @@ define('io.ox/core/settings/pane', [
             }
         },
         //
+        // Fieldset/first
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/first',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/first', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Fieldset/second
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/second',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/second', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Fieldset/second
+        //
+        {
+            index: INDEX += 100,
+            id: 'fieldset/third',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('fieldset/third', this, $('<fieldset role="presentation">'))
+                );
+            }
+        },
+        //
+        // Buttons
+        //
+        {
+            id: 'buttons',
+            render: function () {
+
+                var $group = $('<div class="form-group">');
+
+                // check if users can edit their own data (see bug 34617)
+                if (settings.get('user/internalUserEdit', true)) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('My contact data') + ' ...')
+                            .on('click', this.openUserSettings)
+                    );
+                }
+
+                if (capabilities.has('edit_password')) {
+                    $group.append(
+                        $('<button type="button" class="btn btn-default">')
+                            .text(gt('Change password') + ' ...')
+                            .on('click', userSettings.changePassword)
+                    );
+                }
+
+                if ($group.children().length) this.$el.append($group);
+            }
+        }
+    );
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/first').extend(
+        //
         // Language
         //
         {
             id: 'language',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.isConfigurable('language')) return;
 
-                var options = _(ox.serverConfig.languages).map(function (key, val) { return { label: key, value: val }; });
-
-                this.$el.append(
-                    util.compactSelect('language', gt('Language'), this.model, options)
+                baton.$el.append(
+                    util.compactSelect('language', gt('Language'), this.model, this.getLanguageOptions())
                 );
 
                 this.listenTo(this.model, 'change:language', function (language) {
@@ -128,11 +263,11 @@ define('io.ox/core/settings/pane', [
         {
             id: 'timezone',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.isConfigurable('timezone')) return;
 
-                this.$el.append(
+                baton.$el.append(
                     $('<div class="form-group row">').append(
                         $('<div class="col-md-6">').append(
                             $('<label for="settings-timezone">').text(gt('Time zone')),
@@ -153,47 +288,33 @@ define('io.ox/core/settings/pane', [
         {
             id: 'theme',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
-                var availableThemes = settingOptions.get('themes') || {};
-
-                if (_(availableThemes).size() <= 1) return;
                 if (!settings.isConfigurable('theme')) return;
+                if (!this.hasMoreThanOneTheme()) return;
 
-                // until we get translated themes from backend
-                if (availableThemes['default']) availableThemes['default'] = gt('Default Theme');
-
-                // sort
-                var options = _(availableThemes)
-                    .chain()
-                    .map(function (key, val) { return { label: key, value: val }; })
-                    .sortBy(function (obj) { return obj.label.toLowerCase(); })
-                    .value();
-
-                this.$el.append(
-                    util.compactSelect('theme', gt('Theme'), this.model, options)
+                baton.$el.append(
+                    util.compactSelect('theme', gt('Theme'), this.model, this.getThemeOptions())
                 );
             }
-        },
+        }
+    );
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/second').extend(
         //
         // Refresh Interval
         //
         {
             id: 'refreshInterval',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.isConfigurable('refreshInterval')) return;
 
-                var options = [
-                    { label: gt('5 minutes'), value: 5 * MINUTES },
-                    { label: gt('10 minutes'), value: 10 * MINUTES },
-                    { label: gt('15 minutes'), value: 15 * MINUTES },
-                    { label: gt('30 minutes'), value: 30 * MINUTES }
-                ];
-
-                this.$el.append(
-                    util.compactSelect('refreshInterval', gt('Refresh interval'), this.model, options)
+                baton.$el.append(
+                    util.compactSelect('refreshInterval', gt('Refresh interval'), this.model, this.getRefreshOptions())
                 );
             }
         },
@@ -203,19 +324,13 @@ define('io.ox/core/settings/pane', [
         {
             id: 'autoStart',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.isConfigurable('autoStart')) return;
+                if (!this.hasMoreThanOneAutoStartOption()) return;
 
-                var options =  _(appAPI.getFavorites()).map(function (app) {
-                    return { label: /*#, dynamic*/gt.pgettext('app', app.title), value: app.path };
-                });
-
-                if (options.length <= 1) return;
-                options.push({ label: gt('None'), value: 'none' });
-
-                this.$el.append(
-                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, options)
+                baton.$el.append(
+                    util.compactSelect('autoStart', gt('Default app after sign in'), this.model, this.getAutoStartOptions())
                 );
             }
         },
@@ -225,21 +340,20 @@ define('io.ox/core/settings/pane', [
         {
             id: 'autoLogout',
             index: INDEX += 100,
-            render: function () {
+            render: function (baton) {
 
                 if (!settings.isConfigurable('autoLogout')) return;
 
-                this.$el.append(
-                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, [
-                        { label: gt('Never'), value: 0 },
-                        { label: gt('5 minutes'), value: 5 * MINUTES },
-                        { label: gt('10 minutes'), value: 10 * MINUTES },
-                        { label: gt('15 minutes'), value: 15 * MINUTES },
-                        { label: gt('30 minutes'), value: 30 * MINUTES }
-                    ])
+                baton.$el.append(
+                    util.compactSelect('autoLogout', gt('Automatic sign out'), this.model, this.getAutoLogoutOptions())
                 );
             }
-        },
+        }
+    );
+
+    INDEX = 0;
+
+    ext.point('io.ox/core/settings/detail/view/fieldset/third').extend(
         //
         // Data fixes
         //
@@ -312,45 +426,16 @@ define('io.ox/core/settings/pane', [
         //
         {
             id: 'options',
-            render: function () {
+            render: function (baton) {
 
-                this.$el.append(
-                    $('<div class="form-group" style="margin: 32px 0">').append(
+                baton.$el.append(
+                    $('<div class="form-group">').append(
                         util.checkbox('autoOpenNotification', gt('Automatic opening of notification area'), this.model),
                         util.checkbox('showDesktopNotifications', gt('Show desktop notifications'), this.model).append(this.$requestLink),
                         util.checkbox('features/accessibility', gt('Use accessibility improvements'), this.model),
                         util.checkbox('highcontrast', gt('High contrast theme'), this.model)
                     )
                 );
-            }
-        },
-        //
-        // Buttons
-        //
-        {
-            id: 'buttons',
-            render: function () {
-
-                var $group = $('<div class="form-group">');
-
-                // check if users can edit their own data (see bug 34617)
-                if (settings.get('user/internalUserEdit', true)) {
-                    $group.append(
-                        $('<button type="button" class="btn btn-default">')
-                            .text(gt('My contact data') + ' ...')
-                            .on('click', openUserSettings)
-                    );
-                }
-
-                if (capabilities.has('edit_password')) {
-                    $group.append(
-                        $('<button type="button" class="btn btn-default">')
-                            .text(gt('Change password') + ' ...')
-                            .on('click', userSettings.changePassword)
-                    );
-                }
-
-                if ($group.children().length) this.$el.append($group);
             }
         }
     );
@@ -359,11 +444,5 @@ define('io.ox/core/settings/pane', [
     settings.on('change:highcontrast', function (value) {
         $('html').toggleClass('high-contrast', value);
     });
-
-    function openUserSettings() {
-        require(['io.ox/core/settings/user'], function (settingsUser) {
-            settingsUser.openModalDialog();
-        });
-    }
 
 });

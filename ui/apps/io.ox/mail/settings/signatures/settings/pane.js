@@ -291,40 +291,57 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         });
     }
 
-    ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
-        id: 'header',
-        index: 100,
-        draw: function () {
-            var buttonContainer = $('<div class="pull-right">').append(
-                $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
-            );
+    ext.point('io.ox/mail/settings/signatures/settings/detail').extend(
+        //
+        // Header
+        //
+        {
+            id: 'header',
+            index: 100,
+            draw: function () {
 
-            this.addClass('io-ox-signature-settings').append(
-                $('<h1 class="pull-left">').text(gt('Signatures')),
-                !_.device('smartphone') ? buttonContainer : [],
-                $('<div class="clearfix">')
-            );
-
-            if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
-                buttonContainer.append(
-                    $('<button type="button" class="btn btn-default">').text(gt('Import signatures')).on('click', function (e) {
-                        fnImportSignatures(e, config.get('gui.mail.signatures'));
-                        return false;
-                    })
+                this.addClass('io-ox-signature-settings').append(
+                    util.header(gt('Signatures'))
                 );
+            },
+            save: function () {
+                settings.saveAndYell().done(function () {
+                    //update mailapi
+                    require(['io.ox/mail/api'], function (mailAPI) {
+                        mailAPI.updateViewSettings();
+                    });
+                }).fail(function () {
+                    notifications.yell('error', gt('Could not save settings'));
+                });
             }
         },
-        save: function () {
-            settings.saveAndYell().done(function () {
-                //update mailapi
-                require(['io.ox/mail/api'], function (mailAPI) {
-                    mailAPI.updateViewSettings();
-                });
-            }).fail(function () {
-                notifications.yell('error', gt('Could not save settings'));
-            });
+        //
+        // Buttons
+        //
+        {
+            id: 'buttons',
+            index: 150,
+            draw: function () {
+
+                if (_.device('smartphone')) return;
+
+                var $el = $('<div class="form-group buttons">').append(
+                    $('<button type="button" class="btn btn-primary">').text(gt('Add new signature')).on('click', fnEditSignature)
+                );
+
+                if (config.get('gui.mail.signatures') && !_.isNull(config.get('gui.mail.signatures')) && config.get('gui.mail.signatures').length > 0) {
+                    $el.append(
+                        $('<button type="button" class="btn btn-default">').text(gt('Import signatures')).on('click', function (e) {
+                            fnImportSignatures(e, config.get('gui.mail.signatures'));
+                            return false;
+                        })
+                    );
+                }
+
+                this.append($el);
+            }
         }
-    });
+    );
 
     ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
         id: 'collection',
