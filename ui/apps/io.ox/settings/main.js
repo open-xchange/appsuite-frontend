@@ -279,7 +279,6 @@ define('io.ox/settings/main', [
 
         // select tree node on expand
         tree.on('open', function (id, autoOpen) {
-            console.log('hier?', id, autoOpen);
             if (autoOpen) return;
             if (_.device('smartphone')) return;
             select(id, undefined, undefined, { focus: true, focusPane: true });
@@ -312,7 +311,7 @@ define('io.ox/settings/main', [
             if (opt.focus) item.focus();
 
             // show subfolders on default
-            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
+            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open', true);
 
             // show settings on changed selection or on forced refresh
             previousSelection = currentSelection;
