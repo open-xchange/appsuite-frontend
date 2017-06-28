@@ -98,12 +98,13 @@ define('io.ox/files/actions/share', [
             })
             .on('remove', function () {
                 view.removeLink()
-                    .done(function () {
+                    .then(function () {
                         notifications.yell('success', gt('The link has been removed'));
-                        this.close();
-                    }.bind(this))
-                    .fail(notifications.yell)
-                    .always(dialog.idle.bind(dialog));
+                        dialog.close();
+                    }, function (error) {
+                        notifications.yell(error);
+                        dialog.idle();
+                    });
             });
 
         dialog.open();
