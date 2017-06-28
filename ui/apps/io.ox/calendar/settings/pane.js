@@ -73,6 +73,11 @@ define('io.ox/calendar/settings/pane', [
                         });
                     }
                 })
+                .build(function () {
+                    this.listenTo(settings, 'change', function () {
+                        settings.saveAndYell();
+                    });
+                })
                 .render().$el
             );
         }

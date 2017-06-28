@@ -13,6 +13,7 @@
 
 define('io.ox/portal/settings/pane', [
     'io.ox/core/extensions',
+    'io.ox/backbone/views/extensible',
     'io.ox/core/manifests',
     'io.ox/portal/settings/widgetview',
     'io.ox/core/upsell',
@@ -25,11 +26,30 @@ define('io.ox/portal/settings/pane', [
     'io.ox/core/settings/util',
     'static/3rd.party/jquery-ui.min.js',
     'less!io.ox/portal/style'
-], function (ext, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown, util) {
+], function (ext, ExtensibleView, manifests, WidgetSettingsView, upsell, widgets, gt, settings, listUtils, ListView, Dropdown, util) {
 
     'use strict';
 
-    var POINT = 'io.ox/portal/settings/detail', pane;
+    ext.point('io.ox/portal/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+
+            var view = new ExtensibleView({ point: 'io.ox/portal/settings/detail/view', model: settings })
+                .build(function () {
+                    this.listenTo(settings, 'change:mobile/summaryView', function () {
+                        console.log('AHA!');
+                        settings.saveAndYell();
+                    });
+                });
+
+            this.append(view.$el.busy());
+
+            widgets.loadAllPlugins().done(function () {
+                view.render().$el.idle();
+            });
+        }
+    });
 
     var collection = widgets.getCollection(),
         notificationId = _.uniqueId('notification_');
@@ -39,23 +59,11 @@ define('io.ox/portal/settings/pane', [
             repopulateAddButton();
         });
 
-    ext.point(POINT).extend({
-        draw: function () {
-            var self = this;
-            pane = $('<div class="io-ox-portal-settings">').busy();
-            self.append(pane);
-            widgets.loadAllPlugins().done(function () {
-                ext.point(POINT + '/pane').invoke('draw', pane);
-                pane.idle();
-            });
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
+    ext.point('io.ox/portal/settings/detail/view').extend({
         index: 100,
         id: 'header',
-        draw: function () {
-            this.addClass('io-ox-portal-settings').append(
+        render: function () {
+            this.$el.addClass('io-ox-portal-settings').append(
                 util.header(gt('Portal settings'))
             );
         }
@@ -92,7 +100,7 @@ define('io.ox/portal/settings/pane', [
                 $('<i class="fa fa-caret-down" aria-hidden="true">')
             );
 
-        this.append(
+        this.$el.append(
             $('<div class="form-group buttons">').append(
                 new Dropdown({
                     className: 'btn-group-portal',
@@ -129,7 +137,7 @@ define('io.ox/portal/settings/pane', [
 
     }
 
-    ext.point(POINT + '/pane').extend({
+    ext.point('io.ox/portal/settings/detail/view').extend({
         index: 200,
         id: 'add',
         draw: drawAddButton
@@ -176,27 +184,27 @@ define('io.ox/portal/settings/pane', [
         };
     }());
 
-    ext.point(POINT + '/view').extend({
+    ext.point('io.ox/portal/settings/detail/list-item').extend({
         id: 'state',
         index: 100,
-        draw: function (baton) {
+        render: function (baton) {
             var data = baton.model.toJSON();
-            this[data.enabled ? 'removeClass' : 'addClass']('disabled');
+            this.toggleClass('disabled', !data.enabled);
         }
     });
 
-    ext.point(POINT + '/view').extend({
+    ext.point('io.ox/portal/settings/detail/list-item').extend({
         id: 'drag-handle',
         index: 200,
         draw: function (baton) {
+
             if (_.device('smartphone')) return;
             var data = baton.model.toJSON();
             // seems to be added in MW silently..
             // a protectedWidget might be editable. If it is the "index" allow d&d for reorder
             var protectedButDraggable = data.protectedWidget && (data.changeable && data.changeable.index);
 
-            this
-                .addClass(data.protectedWidget && !protectedButDraggable ? ' protected' : ' draggable')
+            this.addClass(data.protectedWidget && !protectedButDraggable ? 'protected' : ' draggable')
                 .append(
                     data.protectedWidget && !protectedButDraggable ? $('<div class="spacer">') :
                         listUtils.dragHandle(gt('Drag to reorder widget'), baton.model.collection.length <= 1 ? 'hidden' : '')
@@ -205,7 +213,7 @@ define('io.ox/portal/settings/pane', [
         }
     });
 
-    ext.point(POINT + '/view').extend({
+    ext.point('io.ox/portal/settings/detail/list-item').extend({
         id: 'title',
         index: 400,
         draw: function (baton) {
@@ -220,10 +228,11 @@ define('io.ox/portal/settings/pane', [
         }
     });
 
-    ext.point(POINT + '/view').extend({
+    ext.point('io.ox/portal/settings/detail/list-item').extend({
         id: 'controls',
-        index: 400,
+        index: 500,
         draw: function (baton) {
+
             var data = baton.model.toJSON(),
                 point = ext.point(baton.view.point),
                 title = widgets.getTitle(data, point.prop('title'));
@@ -284,75 +293,65 @@ define('io.ox/portal/settings/pane', [
         }
     });
 
-    ext.point(POINT + '/pane').extend({
+    ext.point('io.ox/portal/settings/detail/view').extend({
         index: 300,
         id: 'list',
-        draw: function () {
+        render: function () {
 
-            this.append(new ListView({
-                collection: collection,
-                sortable: true,
-                containment: this,
-                notification: pane.find('#' + notificationId),
-                childView: WidgetSettingsView,
-                dataIdAttribute: 'data-widget-id',
-                childOptions: function (model) {
-                    return {
-                        point: 'io.ox/portal/widget/' + model.get('type')
-                    };
-                },
-                filter: function (model) {
-                    //TODO: some tests?
-                    var enabledIsChangeable = _.isObject(model.get('changeable')) && model.get('changeable').enabled === true,
-                        anyChangeable = _.any(model.get('changeable'), function (val) {
-                            return val === true;
-                        });
-                    //do not show protected widgets which are disabled and the disabled state can not be changed
-                    if (model.get('protectedWidget') === true && (model.get('enabled') !== true || enabledIsChangeable)) return false;
-                    //do not show protected widgets which are enabled but don't have any attribute changeable
-                    if (model.get('protectedWidget') === true && model.get('enabled') === true && !anyChangeable) return false;
-                    return true;
-                },
-                update: function () {
-                    widgets.getCollection().trigger('order-changed', 'settings');
-                    widgets.save(this.$el);
-                }
-            })
-            .on('add', function (view) {
-                // See Bugs: 47816 / 47230
-                if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') return;
-                view.edit();
-            }).render().$el);
+            this.$el.append(
+                new ListView({
+                    collection: collection,
+                    sortable: true,
+                    containment: this.$el,
+                    notification: this.$('#' + notificationId),
+                    childView: WidgetSettingsView,
+                    dataIdAttribute: 'data-widget-id',
+                    childOptions: function (model) {
+                        return {
+                            point: 'io.ox/portal/widget/' + model.get('type')
+                        };
+                    },
+                    filter: function (model) {
+                        //TODO: some tests?
+                        var enabledIsChangeable = _.isObject(model.get('changeable')) && model.get('changeable').enabled === true,
+                            anyChangeable = _.any(model.get('changeable'), function (val) {
+                                return val === true;
+                            });
+                        //do not show protected widgets which are disabled and the disabled state can not be changed
+                        if (model.get('protectedWidget') === true && (model.get('enabled') !== true || enabledIsChangeable)) return false;
+                        //do not show protected widgets which are enabled but don't have any attribute changeable
+                        if (model.get('protectedWidget') === true && model.get('enabled') === true && !anyChangeable) return false;
+                        return true;
+                    },
+                    update: function () {
+                        widgets.getCollection().trigger('order-changed', 'settings');
+                        widgets.save(this.$el);
+                    }
+                })
+                .on('add', function (view) {
+                    // See Bugs: 47816 / 47230
+                    if (ox.ui.App.getCurrentApp().get('name') === 'io.ox/portal') return;
+                    view.edit();
+                })
+                .render().$el
+            );
         }
     });
 
-    ext.point(POINT + '/pane').extend({
+    ext.point('io.ox/portal/settings/detail/view').extend({
         index: 500,
         id: 'summaryView',
-        draw: function () {
-
-            var buildCheckbox = function () {
-                return $('<input type="checkbox" class="input-xlarge">')
-                    .prop('checked', settings.get('mobile/summaryView'))
-                    .on('change', function () {
-                        settings.set('mobile/summaryView', $(this).prop('checked')).save();
-                    });
-            };
-            this.append(
-                $('<fieldset>').append(
-                    $('<legend class="sectiontitle">').append(
-                        $('<h2>').text(gt('Smartphone settings:'))
-                    ),
+        render: function () {
+            this.$el.append(
+                util.fieldset(
+                    gt('Smartphone settings:'),
                     $('<div class="form-group">').append(
-                        $('<div class="checkbox">').append(
-                            $('<label>').text(gt('Reduce to widget summary')).prepend(
-                                buildCheckbox('showHidden')
-                            )
-                        )
+                        util.checkbox('mobile/summaryView', gt('Reduce to widget summary'), settings)
                     )
                 )
             );
         }
     });
+
     return {};
 });

@@ -67,6 +67,11 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
             return _.extend(this, functions);
         },
 
+        build: function (fn) {
+            fn.call(this);
+            return this;
+        },
+
         render: function () {
             return this.invoke('render');
         }

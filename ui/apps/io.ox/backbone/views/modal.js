@@ -175,11 +175,6 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             });
         },
 
-        build: function (fn) {
-            fn.call(this);
-            return this;
-        },
-
         // Add a button
         //
         // options:

@@ -53,6 +53,11 @@ define('io.ox/contacts/settings/pane', [
                         });
                     }
                 })
+                .build(function () {
+                    this.listenTo(settings, 'change', function () {
+                        settings.saveAndYell();
+                    });
+                })
                 .render().$el
             );
         }

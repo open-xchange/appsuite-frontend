@@ -56,7 +56,7 @@ define('io.ox/portal/settings/widgetview', [
             if (this.disposed) {
                 return this;
             }
-            ext.point('io.ox/portal/settings/detail/view').invoke('draw', this.$el.empty(), baton);
+            ext.point('io.ox/portal/settings/detail/list-item').invoke('draw', this.$el.empty(), baton);
             return this;
         },
 
