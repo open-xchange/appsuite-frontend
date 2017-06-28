@@ -44,7 +44,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
                 it('should detect ' + browser + ' ' + version, function () {
                     _.device.loadUA(userAgents.valid[browser][version]);
                     expect(_.device(browser)).to.be.true;
-                    expect(parseFloat(_.browser[browser])).to.be.at.least(Number(version));
+                    expect(parseFloat(_.browser[browser])).to.be.at.least(Number(version.split(' ')[0]));
                 });
             });
         });
@@ -118,6 +118,11 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device('touch')).to.be.false;
             expect(_.browser.windows8).to.be.true;
         });
-
+        it('should handle Firefox on Windows desktops as non-touch devices', function () {
+            _.device.cache = {};
+            _.device.loadUA(userAgents.valid.Firefox['52 Windows']);
+            expect(_.device('touch')).to.be.false;
+            expect(_.browser.windows).to.be.true;
+        });
     });
 });
