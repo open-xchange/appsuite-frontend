@@ -112,7 +112,8 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(window.isPlatformSupported()).to.be.false;
         });
 
-        it.skip('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+        it('should handle Chrome on Windows 8 convertible devices as non-touch devices', function () {
+            _.device.cache = {};
             _.device.loadUA(userAgents.valid.Chrome[34]);
             expect(_.device('touch')).to.be.false;
             expect(_.browser.windows8).to.be.true;

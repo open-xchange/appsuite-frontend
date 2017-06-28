@@ -40,7 +40,8 @@
         uiwebview,
         chromeIOS,
         firefoxIOS,
-        browserLC = {};
+        browserLC = {},
+        isTouch;
 
     // supported browsers
     us.browserSupport = {
@@ -193,7 +194,7 @@
     // first detection
     detectBrowser(navigator);
 
-    var isTouch = (function () {
+    function checkTouch() {
         var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
         // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
         if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
@@ -201,7 +202,9 @@
             return false;
         }
         return reportsTouch;
-    }());
+    }
+
+    isTouch = checkTouch();
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -318,6 +321,7 @@
 
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
+        isTouch = checkTouch();
         underscoreExtends.recheckDevice();
         _.browser = us.browser;
     };
