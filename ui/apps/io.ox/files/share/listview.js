@@ -14,14 +14,14 @@
 define('io.ox/files/share/listview', [
     'io.ox/files/share/api',
     'io.ox/core/extensions',
-    'io.ox/files/share/model',
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
+    'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, sModel, BreadcrumbView, ListView, extensions, gt) {
+], function (api, ext, BreadcrumbView, ListView, extensions, capabilities, gt) {
 
     'use strict';
 
@@ -210,6 +210,8 @@ define('io.ox/files/share/listview', [
             index: 600,
             draw: function (baton) {
                 if (_.device('smartphone')) return;
+                // show also when gab isn't accessible but shares for users still exists
+                if (capabilities.has('!gab || alone') && !hasUser(baton)) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-user">')
