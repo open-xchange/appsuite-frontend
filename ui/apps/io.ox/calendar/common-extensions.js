@@ -106,7 +106,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         privateFlag: function (baton) {
-            if (!baton.data.private_flag) return;
+            if (util.isPrivate(baton.data)) return;
             this.append(
                 $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
                     .attr('title', gt('Private'))
@@ -116,7 +116,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         note: function (baton) {
-            if (!baton.data.note) return;
+            if (!baton.data.description) return;
 
             this.append(
                 $('<div class="note">').html(util.getNote(baton.data))
@@ -126,8 +126,8 @@ define('io.ox/calendar/common-extensions', [
         detail: function (baton, options) {
 
             // we don't show details for private appointments in shared/public folders (see bug 37971)
-            var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder_id);
-            if (data.private_flag && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
+            var data = baton.data, folder = options.minimaldata ? {} : folderAPI.pool.getModel(data.folder);
+            if (util.isPrivate(data) && data.created_by !== ox.user_id && !folderAPI.is('private', folder)) return;
 
             var node = $('<table class="details-table expandable-content">');
             ext.point('io.ox/calendar/detail/details').invoke('draw', node, baton, options);

@@ -15,7 +15,7 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/extensions',
     'io.ox/calendar/common-extensions',
     'io.ox/calendar/util',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/tk/attachments',
     'io.ox/participants/detail',
     'gettext!io.ox/calendar',

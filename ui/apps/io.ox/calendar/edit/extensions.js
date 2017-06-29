@@ -23,7 +23,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/tk/attachments',
     'io.ox/backbone/views/recurrence-view',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/participants/add',
     'io.ox/participants/views',
     'io.ox/core/capabilities',
@@ -63,13 +63,13 @@ define('io.ox/calendar/edit/extensions', [
         index: 100,
         id: 'save',
         draw: function (baton) {
-            var oldFolder = baton.model.get('folder_id');
+            var oldFolder = baton.model.get('folder');
             this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
-                        folder = baton.model.get('folder_id'),
+                        folder = baton.model.get('folder'),
                         inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
 
                     //check if attachments are changed
@@ -79,7 +79,7 @@ define('io.ox/calendar/edit/extensions', [
                     }
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
-                        baton.model.set({ 'folder_id': oldFolder }, { silent: true });
+                        baton.model.set({ 'folder': oldFolder }, { silent: true });
                         //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
@@ -148,7 +148,7 @@ define('io.ox/calendar/edit/extensions', [
             'click a': 'onSelect'
         },
         setup: function () {
-            this.listenTo(this.model, 'change:folder_id', this.render);
+            this.listenTo(this.model, 'change:folder', this.render);
         },
         onSelect: function () {
             var self = this;
@@ -166,10 +166,10 @@ define('io.ox/calendar/edit/extensions', [
                 root: '1',
                 settings: settings,
                 title: gt('Select folder'),
-                folder: this.model.get('folder_id'),
+                folder: this.model.get('folder'),
 
                 done: function (id) {
-                    self.model.set('folder_id', id);
+                    self.model.set('folder', id);
                 },
 
                 disable: function (data, options) {
@@ -180,7 +180,7 @@ define('io.ox/calendar/edit/extensions', [
         },
         render: function () {
             var link = $('<a href="#">'),
-                folderId = this.model.get('folder_id');
+                folderId = this.model.get('folder');
 
             folderAPI.get(folderId).done(function (folder) {
                 link.text(folder.display_title || folder.title);
@@ -214,13 +214,13 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ id: guid, name: 'title', model: self.model, mandatory: true }).render().$el,
-                    new mini.ErrorView({ name: 'title', model: self.model }).render().$el
+                    input = new mini.InputView({ id: guid, name: 'summary', model: self.model, mandatory: true }).render().$el,
+                    new mini.ErrorView({ name: 'summary', model: self.model }).render().$el
                 )
             );
             input.on('keyup', function () {
                 // update title on keyup
-                self.model.trigger('keyup:title', $(this).val());
+                self.model.trigger('keyup:summary', $(this).val());
             });
         }
     });
@@ -258,8 +258,8 @@ define('io.ox/calendar/edit/extensions', [
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6',
-                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
-                    attribute: 'start_date',
+                    display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                    attribute: 'startDate',
                     label: gt('Starts on'),
                     timezoneButton: true,
                     timezoneAttribute: 'timezone',
@@ -267,7 +267,7 @@ define('io.ox/calendar/edit/extensions', [
                     a11y: {
                         timeLabel: gt('Start time')
                     }
-                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
                     .on('click:time', function () {
@@ -295,8 +295,8 @@ define('io.ox/calendar/edit/extensions', [
                 new DatePicker({
                     model: baton.model,
                     className: 'col-xs-6',
-                    display: baton.model.get('full_time') ? 'DATE' : 'DATETIME',
-                    attribute: 'end_date',
+                    display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                    attribute: 'endDate',
                     label: gt('Ends on'),
                     timezoneButton: true,
                     timezoneAttribute: 'endTimezone',
@@ -304,7 +304,7 @@ define('io.ox/calendar/edit/extensions', [
                     a11y: {
                         timeLabel: gt('End time')
                     }
-                }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
+                }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
                     .on('click:time', function () {
@@ -349,7 +349,7 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                new mini.CustomCheckboxView({ id: guid, name: 'full_time', label: gt('All day'), model: this.model }).render().$el
+                new mini.CustomCheckboxView({ id: guid, name: 'allDay', label: gt('All day'), model: this.model }).render().$el
             );
         }
     });
@@ -391,7 +391,7 @@ define('io.ox/calendar/edit/extensions', [
             var guid = _.uniqueId('form-control-label-');
             this.$el.append(
                 $('<label class="control-label">').text(gt('Description')).attr({ for: guid }),
-                new mini.TextView({ name: 'note', model: this.model }).render().$el.attr({ id: guid }).addClass('note')
+                new mini.TextView({ name: 'description', model: this.model }).render().$el.attr({ id: guid }).addClass('note')
             );
         }
     });
@@ -529,8 +529,8 @@ define('io.ox/calendar/edit/extensions', [
         render: function () {
 
             // private flag only works in private folders
-            var folder_id = this.model.get('folder_id');
-            if (!folderAPI.pool.getModel(folder_id).is('private')) return;
+            var folder = this.model.get('folder');
+            if (!folderAPI.pool.getModel(folder).is('private')) return;
 
             this.$el.append(
                 $('<fieldset>').append(
@@ -770,7 +770,7 @@ define('io.ox/calendar/edit/extensions', [
             app: app,
             start_date: start,
             end_date: end,
-            folder: model.get('folder_id'),
+            folder: model.get('folder'),
             participants: model.getParticipants().map(function (p) {
                 return p.toJSON();
             }),

@@ -14,7 +14,7 @@
 define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'gettext!io.ox/calendar'
 ], function (ext, links, api, gt) {
 

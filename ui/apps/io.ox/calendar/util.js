@@ -664,7 +664,7 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-            var text = $.trim(data.note || '')
+            var text = $.trim(data.description || '')
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)
@@ -859,7 +859,7 @@ define('io.ox/calendar/util', [
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (appointment['class'] === 'CONFIDENTIAL') folderColor = 10;
+            if (that.isPrivate(appointment)) folderColor = 10;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -873,7 +873,7 @@ define('io.ox/calendar/util', [
 
         canAppointmentChangeColor: function (folder, appointment) {
             var appointmentColor = appointment.color_label || 0,
-                privateFlag = appointment['class'] === 'CONFIDENTIAL',
+                privateFlag = that.isPrivate(appointment),
                 conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
             // shared appointments which are needs-action or declined don't receive color classes
@@ -924,6 +924,11 @@ define('io.ox/calendar/util', [
                         gt('Series'), 'series')
                     .addButton('appointment', gt('Appointment'), 'appointment')
                     .addButton('cancel', gt('Cancel'), 'cancel');
+        },
+
+        isPrivate: function (data) {
+            if (data.attributes) data = data.attributes;
+            return data['class'] === 'CONFIDENTIAL';
         }
     };
 
