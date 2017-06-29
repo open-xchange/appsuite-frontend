@@ -151,7 +151,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 });
 
                 baton.$el.append(
-                    util.checkbox('activateTimeFrame', Model.fields.activateTimeFrame, baton.model)
+                    util.checkbox('activateTimeFrame', gt('Send vacation notice during this time only'), baton.model)
                 );
             }
         },
@@ -163,11 +163,13 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'from-util',
             render: function (baton) {
 
+                var labels = { dateFrom: gt('Start'), dateUntil: gt('End') };
+
                 baton.$el.append(
                     $('<div class="row">').append(
                         ['dateFrom', 'dateUntil'].map(function (id) {
                             return $('<div class="col-md-4">').append(
-                                $('<label>').attr('for', 'vacation_notice_' + id).text(Model.fields[id]),
+                                $('<label>').attr('for', 'vacation_notice_' + id).text(labels[id]),
                                 new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
                                     .render().$el
                                     .prop('disabled', !baton.model.get('activateTimeFrame'))
@@ -199,7 +201,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             render: function (baton) {
                 this.$body.append(
                     $('<div class="form-group">').append(
-                        $('<label for="vacation_notice_subject">').append(Model.fields.subject),
+                        $('<label for="vacation_notice_subject">').append(gt('Subject')),
                         new mini.InputView({ name: 'subject', model: baton.model, id: 'vacation_notice_subject' }).render().$el
                     )
                 );
@@ -214,7 +216,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             render: function (baton) {
                 this.$body.append(
                     $('<div class="form-group">').append(
-                        $('<label for="vacation_notice_text">').text(Model.fields.text),
+                        $('<label for="vacation_notice_text">').text(gt('Message')),
                         new mini.TextView({ name: 'text', model: baton.model, id: 'vacation_notice_text', rows: 6 }).render().$el
                     )
                 );
@@ -258,7 +260,8 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 baton.$el.append(
                     $('<div class="form-group row">').append(
-                        $('<label for="vacation_notice_days" class="col-md-12">').text(Model.fields.days),
+                        //#. Context: Vacation notices
+                        $('<label for="vacation_notice_days" class="col-md-12">').text(gt('Days between notices to the same sender')),
                         $('<div class="col-md-4">').append(
                             new mini.SelectView({ list: days, name: 'days', model: baton.model, id: 'vacation_notice_days' }).render().$el
                         )
@@ -278,7 +281,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 baton.$el.append(
                     $('<div class="form-group">').append(
-                        $('<label for="days">').text(Model.fields.sendFrom),
+                        $('<label for="from">').text(gt('Send from')),
                         new mini.SelectView({ list: this.getAddresses(), name: 'from', model: this.model, id: 'from' }).render().$el
                     )
                 );

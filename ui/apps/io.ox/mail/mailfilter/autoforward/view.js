@@ -95,7 +95,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             index: INDEX += 100,
             id: 'to',
             render: function () {
-                this.$body.append(util.input('to', Model.fields.to, this.model));
+                this.$body.append(util.input('to', gt('Forward all incoming emails to this address'), this.model));
             }
         },
         //
@@ -105,7 +105,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             index: INDEX += 100,
             id: 'copy',
             render: function () {
-                this.$body.append(util.checkbox('copy', Model.fields.copy, this.model));
+                this.$body.append(util.checkbox('copy', gt('Keep a copy of the message'), this.model));
             }
         },
         //
@@ -115,7 +115,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             index: INDEX += 100,
             id: 'stop',
             render: function () {
-                this.$body.append(util.checkbox('processSub', Model.fields.processSub, this.model));
+                this.$body.append(util.checkbox('processSub', gt('Process subsequent rules'), this.model));
             }
         }
     );

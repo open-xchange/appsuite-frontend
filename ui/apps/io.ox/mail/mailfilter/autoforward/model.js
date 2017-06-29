@@ -15,9 +15,8 @@
 
 define('io.ox/mail/mailfilter/autoforward/model', [
     'io.ox/core/api/mailfilter',
-    'io.ox/core/api/user',
-    'gettext!io.ox/mail'
-], function (api, userAPI, gt) {
+    'io.ox/core/api/user'
+], function (api, userAPI) {
 
     'use strict';
 
@@ -111,14 +110,6 @@ define('io.ox/mail/mailfilter/autoforward/model', [
             }
         }
     });
-
-    AutoforwardModel.fields = {
-        headline: gt('Auto forward'),
-        to: gt('Forward all incoming emails to this address'),
-        active: gt('Enable'),
-        copy: gt('Keep a copy of the message'),
-        processSub: gt('Process subsequent rules')
-    };
 
     return AutoforwardModel;
 });

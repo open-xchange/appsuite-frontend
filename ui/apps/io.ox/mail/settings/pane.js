@@ -193,7 +193,6 @@ define('io.ox/mail/settings/pane', [
     //
     // Buttons
     //
-
     ext.point('io.ox/mail/settings/detail/view/buttons').extend(
         //
         // Vacation notice
@@ -201,7 +200,7 @@ define('io.ox/mail/settings/pane', [
         {
             id: 'vacation-notice',
             index: 100,
-            draw: function () {
+            render: function () {
 
                 if (!capabilities.has('mailfilter')) return;
 
@@ -224,7 +223,7 @@ define('io.ox/mail/settings/pane', [
         {
             id: 'auto-forward',
             index: 200,
-            draw: function () {
+            render: function () {
 
                 if (!capabilities.has('mailfilter')) return;
 
@@ -247,7 +246,7 @@ define('io.ox/mail/settings/pane', [
         {
             id: 'imap-subscription',
             index: 300,
-            draw: function () {
+            render: function () {
 
                 this.append(
                     $('<button type="button" class="btn btn-default">')

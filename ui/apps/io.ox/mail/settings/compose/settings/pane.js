@@ -230,7 +230,7 @@ define('io.ox/mail/settings/compose/settings/pane', [
                     fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
                 });
 
-                _(this.getFontSizeOptions).each(function (item, index) {
+                _(this.getFontSizeOptions()).each(function (item, index) {
                     if (index === 1) fontSizeSelect.divider();
                     fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
                 });

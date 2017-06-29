@@ -13,11 +13,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/vacationnotice/model', [
-    'io.ox/core/api/mailfilter',
-    'io.ox/settings/util',
-    'gettext!io.ox/mail'
-], function (api, settingsUtil, gt) {
+define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter'], function (api) {
 
     'use strict';
 
@@ -164,24 +160,6 @@ define('io.ox/mail/mailfilter/vacationnotice/model', [
         var match = address.match(/^(.+)\s<(.+)>$/);
         return match ? match.slice(1, 3) : address;
     }
-
-    VacationNoticeModel.fields = {
-        headline: gt('Vacation notice'),
-        subject: gt('Subject'),
-        text: gt('Text'),
-        //#. Context: Vacation notices
-        days: gt('Days between notices to the same sender'),
-        headlineAdresses: gt('Enable for the following addresses'),
-        headlineSender: gt('Default sender for vacation notice'),
-        addresses: gt('Email addresses'),
-        dateFrom: gt('Start'),
-        dateUntil: gt('End'),
-        activateTimeFrame: gt('Send vacation notice during this time only'),
-        active: gt('Enabled'),
-        placeholder: gt('Add contact') + ' \u2026',
-        label: gt('Add contact'),
-        sendFrom: gt('Send from')
-    };
 
     return VacationNoticeModel;
 });
