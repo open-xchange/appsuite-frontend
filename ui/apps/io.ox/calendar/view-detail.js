@@ -238,10 +238,10 @@ define('io.ox/calendar/view-detail', [
 
     return {
 
-        draw: function (baton, options) {
+        draw: function (model, options) {
             // make sure we have a baton
-            baton = ext.Baton.ensure(baton);
-            options = _.extend({ minimaldata: !baton.data.folder_id }, options);
+            var baton = new ext.Baton({ model: model, data: model.toJSON() });
+            options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
             }
@@ -251,7 +251,7 @@ define('io.ox/calendar/view-detail', [
 
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
-                // check if this is an exception from a series
+                // TODO: check if this is an exception from a series (this check will change when flags are introduced)
                 if (baton.data.recurrence_id && baton.data.recurrence_id !== baton.data.id) {
                     calAPI.on('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
                     node.one('remove', function () {

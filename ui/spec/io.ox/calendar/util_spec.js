@@ -25,22 +25,22 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
                 };
 
             it('yesterday', function () {
-                data.start_date = testDate.subtract(1, 'day').valueOf();
+                data.startDate = testDate.subtract(1, 'day').valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format('l'));
             });
 
             it('same day', function () {
-                data.start_date = testDate.add(1, 'day').valueOf();
+                data.startDate = testDate.add(1, 'day').valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format('l'));
             });
 
             it('tomorrow', function () {
-                data.start_date = testDate.add(1, 'day').valueOf();
+                data.startDate = testDate.add(1, 'day').valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format('l'));
             });
 
             it('date in the past', function () {
-                data.start_date = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
+                data.startDate = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
                 expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
             });
 
@@ -54,12 +54,12 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('same day', function () {
                 var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('So., 11.11.2012');
+                expect(util.getDateInterval({ startDate: start.valueOf(), endDate: start.valueOf() })).to.equal('So., 11.11.2012');
             });
 
             it('one week difference', function () {
                 var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ start_date: start.valueOf(), end_date: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
+                expect(util.getDateInterval({ startDate: start.valueOf(), endDate: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -72,12 +72,12 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
             it('same time', function () {
                 var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.valueOf() })).to.equal('11:11');
+                expect(util.getTimeInterval({ startDate: start.valueOf(), endDate: start.valueOf() })).to.equal('11:11');
             });
 
             it('same day', function () {
                 var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
+                expect(util.getTimeInterval({ startDate: start.valueOf(), endDate: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
             });
 
         });
@@ -403,38 +403,38 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('resolve appointment color class', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { color_label: 6, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { class: 'CONFIDENTIAL', color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { class: 'CONFIDENTIAL', color_label: 5, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
                 });
                 it('with shared unconfirmed appointment', function () {
                     var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+                        appointment = { color_label: 0, created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('');
                 });
                 it('with public folder', function () {
                     var folder = { meta: { color_label: 2 }, type: 2 },
-                        appointment = { color_label: 0, created_by: 377, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { color_label: 0, created_by: 377, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
                 });
@@ -442,32 +442,32 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { color_label: 6, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 0, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { class: 'CONFIDENTIAL', color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
                     var folder = { meta: { color_label: 2 } },
-                        appointment = { private_flag: true, color_label: 5, users: [{ id: 1337, confirmation: 1 }] };
+                        appointment = { class: 'CONFIDENTIAL', color_label: 5, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with shared unconfirmed appointment', function () {
                     var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 2, created_by: 377, users: [{ id: 1337, confirmmessage: 'unconfirmed' }] };
+                        appointment = { color_label: 2, created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] };
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });

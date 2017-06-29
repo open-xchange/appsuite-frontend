@@ -127,7 +127,7 @@ define('io.ox/calendar/actions', [
                 allowed = e.collection.has('one', 'modify');
             if (allowed) {
                 // if you have no permission to edit you don't have a folder id (see calendar/freebusy response)
-                if (!e.baton.data.folder_id) {
+                if (!e.baton.data.folder) {
                     // you need to have a folder id to edit
                     allowed = false;
                 }

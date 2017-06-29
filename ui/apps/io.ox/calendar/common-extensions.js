@@ -23,7 +23,7 @@ define('io.ox/calendar/common-extensions', [
     'use strict';
 
     function getTitle(baton) {
-        return _.isUndefined(baton.data.title) ? gt('Private') : (baton.data.title || '\u00A0');
+        return _.isUndefined(baton.data.summary) ? gt('Private') : (baton.data.summary || '\u00A0');
     }
 
     var extensions = {
