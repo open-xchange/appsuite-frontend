@@ -186,7 +186,7 @@ define('io.ox/portal/settings/pane', [
     ext.point('io.ox/portal/settings/detail/list-item').extend({
         id: 'state',
         index: 100,
-        render: function (baton) {
+        draw: function (baton) {
             var data = baton.model.toJSON();
             this.toggleClass('disabled', !data.enabled);
         }
