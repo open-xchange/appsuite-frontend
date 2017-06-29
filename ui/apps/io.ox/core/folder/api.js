@@ -831,6 +831,8 @@ define('io.ox/core/folder/api', [
     function flat(options) {
 
         options = _.extend({ module: undefined, cache: true }, options);
+        // TODO needs another solution. but will do for now. maybe the whole module is renamed to event.
+        if (options.module === 'calendar') options.module = 'event';
 
         // missing module?
         if (ox.debug && !options.module) {

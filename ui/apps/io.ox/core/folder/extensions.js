@@ -803,10 +803,11 @@ define('io.ox/core/folder/extensions', [
             index: 100,
             draw: function (tree) {
 
-                var links = $('<ul class="list-unstyled" role="group">'),
+                var moduleName = module === 'calendar' ? 'event' : module,
+                    links = $('<ul class="list-unstyled" role="group">'),
                     baton = ext.Baton({ module: module, view: tree, context: tree.context }),
-                    folder = 'virtual/flat/' + module,
-                    model_id = 'flat/' + module,
+                    folder = 'virtual/flat/' + moduleName,
+                    model_id = 'flat/' + moduleName,
                     defaults = { count: 0, empty: false, indent: false, open: false, tree: tree, parent: tree },
                     privateFolders,
                     publicFolders,
@@ -820,17 +821,17 @@ define('io.ox/core/folder/extensions', [
                 this.append(placeholder);
 
                 // call flat() here to cache the folders. If not, any new TreeNodeview() and render() call calls flat() resulting in a total of 12 flat() calls.
-                api.flat({ module: module }).always(function () {
+                api.flat({ module: moduleName }).always(function () {
 
                     privateFolders = new TreeNodeView(_.extend({}, defaults, { folder: folder + '/private', model_id: model_id + '/private', title: getTitle(module, 'private') }));
 
                     // open private folder whenever a folder is added to it
-                    api.pool.getCollection('flat/' + module + '/private').on('add', function () {
+                    api.pool.getCollection('flat/' + moduleName + '/private').on('add', function () {
                         privateFolders.toggle(true);
                     });
 
                     // open public folder whenever a folder is added to it
-                    api.pool.getCollection('flat/' + module + '/public').on('add', function () {
+                    api.pool.getCollection('flat/' + moduleName + '/public').on('add', function () {
                         privateFolders.toggle(true);
                     });
 
@@ -1000,7 +1001,7 @@ define('io.ox/core/folder/extensions', [
                 id: 'color',
                 index: 400,
                 draw: function (baton) {
-                    if (!/^calendar$/.test(baton.data.module)) return;
+                    if (!/^event$/.test(baton.data.module)) return;
                     if (!api.is('private', baton.data)) return;
                     if (/^virtual/.test(baton.data.id)) return;
 
