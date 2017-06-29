@@ -10014,6 +10014,13 @@ msgstr "Videos"
 msgid "View"
 msgstr "Ansicht"
 
+#. the noun not the verb
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+msgctxt "noun"
+msgid "View"
+msgstr "Ansicht"
+
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 msgid "View all attachments"
 msgstr "Alle Anhänge anzeigen"

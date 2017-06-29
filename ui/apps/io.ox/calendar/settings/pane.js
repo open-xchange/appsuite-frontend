@@ -107,7 +107,7 @@ define('io.ox/calendar/settings/pane', [
             render: function () {
                 this.$el.append(
                     util.fieldset(
-                        //#. not the verb but the noun (German "Anzeige")
+                        //#. the noun, not the verb (e.g. German "Anzeige")
                         gt.pgettext('noun', 'View'),
                         $('<div class="form-group row">').append(
                             // start

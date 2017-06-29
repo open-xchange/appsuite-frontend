@@ -13,101 +13,178 @@
 
 define('io.ox/mail/settings/compose/settings/pane', [
     'io.ox/core/extensions',
-    'gettext!io.ox/mail',
-    'settings!io.ox/mail',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/api/account',
     'io.ox/core/settings/util',
     'io.ox/backbone/mini-views',
     'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views/colorpicker'
-], function (ext, gt, settings, util, mini, Dropdown, Colorpicker) {
+    'io.ox/backbone/mini-views/colorpicker',
+    'io.ox/core/capabilities',
+    'io.ox/core/api/user',
+    'io.ox/contacts/api',
+    'io.ox/mail/util',
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, ExtensibleView, api, util, mini, Dropdown, Colorpicker, capabilities, userAPI, contactsAPI, mailUtil, settings, gt) {
 
     'use strict';
 
-    var INDEX = 0,
-
-        optionsForwardEmailAs = [
-            { label: gt('Inline'), value: 'Inline' },
-            { label: gt('Attachment'), value: 'Attachment' }
-        ],
-
-        optionsFormatAs = [
-            { label: gt('HTML'), value: 'html' },
-            { label: gt('Plain text'), value: 'text' },
-            { label: gt('HTML and plain text'), value: 'alternative' }
-        ],
-
-        optionsAutoSave = [
-            { label: gt('disabled'), value: 'disabled' },
-            { label: gt('1 minute'), value: '1_minute' },
-            { label: gt('3 minutes'), value: '3_minutes' },
-            { label: gt('5 minutes'), value: '5_minutes' },
-            { label: gt('10 minutes'), value: '10_minutes' }
-        ],
-
-        optionsFontName = [
-            { label: gt('Use browser default'), value: 'browser-default' },
-            { label: 'Andale Mono', value: '"andale mono", monospace' },
-            { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
-            { label: 'Arial Black', value: '"arial black", sans-serif' },
-            { label: 'Book Antiqua', value: '"book antiqua", palatino, serif' },
-            { label: 'Comic Sans MS', value: '"comic sans ms", sans-serif' },
-            { label: 'Courier New', value: '"courier new", courier, monospace' },
-            { label: 'Georgia', value: 'georgia, palatino, serif' },
-            { label: 'Helvetica', value: 'helvetica, arial, sans-serif' },
-            { label: 'Impact', value: 'impact, sans-serif' },
-            { label: 'Symbol', value: 'symbol' },
-            { label: 'Tahoma', value: 'tahoma, arial, helvetica, sans-serif' },
-            { label: 'Terminal', value: 'terminal, monaco, monospace' },
-            { label: 'Times New Roman', value: '"times new roman", times, serif' },
-            { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
-            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
-        ],
-
-        optionsFontsize = [
-            { label: gt('Use browser default'), value: 'browser-default' },
-            { label: '8pt', value: '8pt' },
-            { label: '10pt', value: '10pt' },
-            { label: '11pt', value: '11pt' },
-            { label: '12pt', value: '12pt' },
-            { label: '13pt', value: '13pt' },
-            { label: '14pt', value: '14pt' },
-            { label: '16pt', value: '16pt' }
-        ];
+    var INDEX = 0;
 
     function isConfigurable(id) {
         return settings.isConfigurable(id);
     }
 
-    ext.point('io.ox/mail/settings/compose/settings/detail').extend(
+    ext.point('io.ox/mail/settings/compose/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/mail/settings/compose/settings/detail/view', model: settings })
+                .inject({
+                    getForwardOptions: function () {
+                        return [
+                            { label: gt('Inline'), value: 'Inline' },
+                            { label: gt('Attachment'), value: 'Attachment' }
+                        ];
+                    },
+                    getFormatOptions: function () {
+                        return [
+                            { label: gt('HTML'), value: 'html' },
+                            { label: gt('Plain text'), value: 'text' },
+                            { label: gt('HTML and plain text'), value: 'alternative' }
+                        ];
+                    },
+                    getAutoSaveOptions: function () {
+                        return [
+                            { label: gt('Never'), value: 'disabled' },
+                            { label: gt('1 minute'), value: '1_minute' },
+                            { label: gt('3 minutes'), value: '3_minutes' },
+                            { label: gt('5 minutes'), value: '5_minutes' },
+                            { label: gt('10 minutes'), value: '10_minutes' }
+                        ];
+                    },
+                    getFontNameOptions: function () {
+                        return [
+                            { label: gt('Use browser default'), value: 'browser-default' },
+                            { label: 'Andale Mono', value: '"andale mono", monospace' },
+                            { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
+                            { label: 'Arial Black', value: '"arial black", sans-serif' },
+                            { label: 'Book Antiqua', value: '"book antiqua", palatino, serif' },
+                            { label: 'Comic Sans MS', value: '"comic sans ms", sans-serif' },
+                            { label: 'Courier New', value: '"courier new", courier, monospace' },
+                            { label: 'Georgia', value: 'georgia, palatino, serif' },
+                            { label: 'Helvetica', value: 'helvetica, arial, sans-serif' },
+                            { label: 'Impact', value: 'impact, sans-serif' },
+                            { label: 'Symbol', value: 'symbol' },
+                            { label: 'Tahoma', value: 'tahoma, arial, helvetica, sans-serif' },
+                            { label: 'Terminal', value: 'terminal, monaco, monospace' },
+                            { label: 'Times New Roman', value: '"times new roman", times, serif' },
+                            { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
+                            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
+                        ];
+                    },
+                    getFontSizeOptions: function () {
+                        return [
+                            { label: gt('Use browser default'), value: 'browser-default' },
+                            { label: '8pt', value: '8pt' },
+                            { label: '10pt', value: '10pt' },
+                            { label: '11pt', value: '11pt' },
+                            { label: '12pt', value: '12pt' },
+                            { label: '13pt', value: '13pt' },
+                            { label: '14pt', value: '14pt' },
+                            { label: '16pt', value: '16pt' }
+                        ];
+                    },
+                    fetchAccounts: function () {
+
+                        /* TODO: only the default account (id: 0) can have multiple aliases for now
+                         * all other accounts can only have one address (the primary address)
+                         * So the option is only for the default account, for now. This should
+                         * be changed in the future. If more (e.g. external) addresses are shown
+                         * here, server _will_ respond with an error, when these are selected.
+                         *
+                         * THIS COMMENT IS IMPORTANT, DON’T REMOVE
+                         */
+                        var accounts = api.getSenderAddresses(0).then(function (addresses) {
+                            return _(addresses).map(function (address) {
+                                //use value also as label
+                                return { value: address[1], label: address[1] };
+                            });
+                        });
+
+                        // get msisdn numbers
+                        var msisdns = !capabilities.has('msisdn') ? [] : userAPI.get().then(function (data) {
+                            return _(contactsAPI.getMapping('msisdn', 'names'))
+                                .chain()
+                                .map(function (field) {
+                                    if (data[field]) {
+                                        return {
+                                            label: data[field],
+                                            value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
+                                        };
+                                    }
+                                })
+                                .compact()
+                                .value();
+                        });
+
+                        return $.when(accounts, msisdns).then(function (addresses, numbers) {
+                            return [].concat(addresses, numbers);
+                        });
+                    },
+                    // overwrite render to resolve async stuff first
+                    render: function () {
+
+                        this.fetchAccounts().done(function (options) {
+                            this.getSenderOptions = function () { return options; };
+                            ExtensibleView.prototype.render.apply(this);
+                        }.bind(this));
+
+                        return this;
+                    }
+                })
+                .build(function () {
+                    this.listenTo(settings, 'change', function () {
+                        settings.saveAndYell();
+                    });
+                })
+                .render().$el
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/settings/compose/settings/detail/view').extend(
         {
-            index: INDEX += 100,
+
             id: 'header',
-            draw: function () {
-                this.append(
-                    $('<h1>').text(gt.pgettext('settings', 'Mail Compose'))
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.header(gt.pgettext('settings', 'Mail Compose'))
                 );
             }
         },
         {
-            index: INDEX += 100,
             id: 'format',
-            draw: function () {
+            index: INDEX += 100,
+            render: function () {
 
                 if (!isConfigurable('messageFormat')) return;
                 if (_.device('smartphone')) return;
 
-                this.append(
+                this.$el.append(
                     util.fieldset(
                         gt('Format emails as'),
-                        new mini.CustomRadioView({ list: optionsFormatAs, name: 'messageFormat', model: settings }).render().$el
+                        new mini.CustomRadioView({ list: this.getFormatOptions(), name: 'messageFormat', model: settings }).render().$el
                     )
                 );
             }
         },
         {
-            index: INDEX += 100,
             id: 'defaultStyle',
-            draw: function () {
+            index: INDEX += 100,
+            render: function () {
 
                 if (_.device('smartphone')) return;
 
@@ -148,12 +225,12 @@ define('io.ox/mail/settings/compose/settings/pane', [
                 var fontFamilySelect = new Dropdown({ caret: true, model: settings, label: gt('Font'), tagName: 'div', className: 'dropdown fontnameSelectbox', update: update, name: 'defaultFontStyle/family' }),
                     fontSizeSelect = new Dropdown({ caret: true, model: settings, label: gt('Size'), tagName: 'div', className: 'dropdown fontsizeSelectbox', update: update, name: 'defaultFontStyle/size' });
 
-                _(optionsFontName).each(function (item, index) {
+                _(this.getFontNameOptions()).each(function (item, index) {
                     if (index === 1) fontFamilySelect.divider();
                     fontFamilySelect.option('defaultFontStyle/family', item.value, item.label, { radio: true });
                 });
 
-                _(optionsFontsize).each(function (item, index) {
+                _(this.getFontSizeOptions).each(function (item, index) {
                     if (index === 1) fontSizeSelect.divider();
                     fontSizeSelect.option('defaultFontStyle/size', item.value, item.label, { radio: true });
                 });
@@ -179,7 +256,7 @@ define('io.ox/mail/settings/compose/settings/pane', [
                     });
                 });
 
-                this.append(
+                this.$el.append(
                     util.fieldset(gt('Default font style'),
                         $('<div>').css('margin', '8px 0').append(
                             fontFamilySelect.render().$el,
@@ -196,25 +273,25 @@ define('io.ox/mail/settings/compose/settings/pane', [
             }
         },
         {
-            index: INDEX += 100,
             id: 'forward',
-            draw: function () {
+            index: INDEX += 100,
+            render: function () {
 
                 if (!isConfigurable('forwardMessageAs')) return;
 
-                this.append(
+                this.$el.append(
                     util.fieldset(
                         gt('Forward emails as'),
-                        new mini.CustomRadioView({ list: optionsForwardEmailAs, name: 'forwardMessageAs', model: settings }).render().$el
+                        new mini.CustomRadioView({ list: this.getForwardOptions(), name: 'forwardMessageAs', model: settings }).render().$el
                     )
                 );
             }
         },
         {
-            index: INDEX += 100,
             id: 'advanced',
-            draw: function () {
-                this.append(
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
                     util.fieldset(gt('Advanced settings'),
                         $('<div class="form-group">').append(
                             // vcard
@@ -224,17 +301,12 @@ define('io.ox/mail/settings/compose/settings/pane', [
                             // mailing lists
                             util.checkbox('confirmReplyToMailingLists', gt('Confirm recipients when replying to a mailing list'), settings)
                         ),
-                        // $('<div class="row form-group">').append(
-                        //     $('<label for="defaultSendAddress">').text(gt('Default sender address')),
-                        //     new mini.SelectView({ list: optionsAllAccounts, name: 'defaultSendAddress', model: settings, id: 'defaultSendAddress', className: 'form-control' }).render().$el
-                        // ),
-                        $('<div class="row form-group">').append(
-                            $('<div class="col-md-9">').append(
-                                $('<label for="autoSaveDraftsAfter">').text(gt('Auto-save email drafts')),
-                                new mini.SelectView({ list: optionsAutoSave, name: 'autoSaveDraftsAfter', model: settings, id: 'autoSaveDraftsAfter', className: 'form-control' }).render().$el
-                            )
-                        ),
-                        $('<div class="row form-group">').append(
+                        // Auto save
+                        util.compactSelect('autoSaveDraftsAfter', gt('Auto-save email drafts'), settings, this.getAutoSaveOptions()),
+                        // Default sender
+                        util.compactSelect('defaultSendAddress', gt('Default sender address'), settings, this.getSenderOptions()),
+                        // BCC
+                        $('<div class="form-group row">').append(
                             $('<div class="col-md-9">').append(
                                 $('<label for="autobcc">').text(gt('Always add the following recipient to blind carbon copy (BCC)')),
                                 new mini.InputView({ name: 'autobcc', model: settings, className: 'form-control', id: 'autobcc' }).render().$el

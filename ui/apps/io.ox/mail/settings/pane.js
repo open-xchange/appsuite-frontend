@@ -12,109 +12,51 @@
  */
 
 define('io.ox/mail/settings/pane', [
-    'settings!io.ox/mail',
-    'io.ox/core/api/user',
-    'io.ox/core/capabilities',
-    'io.ox/contacts/api',
-    'io.ox/core/settings/util',
-    'io.ox/mail/util',
     'io.ox/core/extensions',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/capabilities',
+    'io.ox/core/settings/util',
     'io.ox/core/notifications',
-    'gettext!io.ox/mail',
-    'io.ox/core/api/account'
-], function (settings, userAPI, capabilities, contactsAPI, util, mailUtil, ext, notifications, gt, api) {
+    'settings!io.ox/mail',
+    'gettext!io.ox/mail'
+], function (ext, ExtensibleView, capabilities, util, notifications, settings, gt) {
 
     'use strict';
-
-    var mailViewSettings,
-        POINT = 'io.ox/mail/settings/detail',
-        optionsAllAccounts;
 
     // not possible to set nested defaults, so do it here
     if (settings.get('features/registerProtocolHandler') === undefined) {
         settings.set('features/registerProtocolHandler', true);
     }
 
-    var MailSettingsView = Backbone.View.extend({
-        tagName: 'div',
-
-        render: function (baton) {
-            var self = this, accounts, msisdns;
-            /* TODO: only the default account (id: 0) can have multiple aliases for now
-             * all other accounts can only have one address (the primary address)
-             * So the option is only for the default account, for now. This should
-             * be changed in the future. If more (e.g. external) addresses are shown
-             * here, server _will_ respond with an error, when these are selected.
-             *
-             * THIS COMMENT IS IMPORTANT, DON’T REMOVE
-             */
-            accounts = api.getSenderAddresses(0).then(function (addresses) {
-                return _.map(addresses, function (address) {
-                    //use value also as label
-                    return { value: address[1], label: address[1] };
-                });
-            });
-
-            //get msisdn numbers
-            msisdns = !capabilities.has('msisdn') ? [] : userAPI.get({ id: ox.user_id }).then(function (data) {
-                return _(contactsAPI.getMapping('msisdn', 'names'))
-                        .chain()
-                        .map(function (field) {
-                            if (data[field]) {
-                                return {
-                                    label: data[field],
-                                    value: mailUtil.cleanupPhone(data[field]) + mailUtil.getChannelSuffixes().msisdn
-                                };
-                            }
-                        })
-                        .compact()
-                        .value();
-            });
-
-            $.when(accounts, msisdns).then(function (addresses, numbers) {
-
-                optionsAllAccounts = [].concat(addresses, numbers);
-                console.log('optionsAllAccounts', optionsAllAccounts);
-                ext.point(POINT + '/pane').invoke('draw', self.$el, baton);
-
-                // hide non-configurable sections
-                self.$el.find('[data-property-section]').each(function () {
-                    var section = $(this), property = section.attr('data-property-section');
-                    if (!settings.isConfigurable(property)) {
-                        section.remove();
+    ext.point('io.ox/mail/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/mail/settings/detail/view', model: settings })
+                .inject({
+                    // this gets overwritten elsewhere
+                    getSoundOptions: function () {
+                        return [{ label: gt('Bell'), value: 'bell' }];
                     }
-                });
-
-            });
-            return self;
-        }
-    });
-
-    ext.point(POINT).extend({
-        index: 200,
-        id: 'mailsettings',
-        draw: function (baton) {
-            baton.model = settings;
-            this.addClass('io-ox-mail-settings');
-            mailViewSettings = new MailSettingsView({ model: settings });
-
-            this.append(mailViewSettings.render(baton).$el);
-
-            if (!capabilities.has('emoji')) {
-                // see Bug 25537 - Emotes not working as advertised
-                this.find('[name="displayEmoticons"]').parent().parent().hide();
-            }
-        },
-
-        save: function () {
-            mailViewSettings.model.saveAndYell().done(function () {
-                //update mailapi
-                require(['io.ox/mail/api'], function (mailAPI) {
-                    mailAPI.updateViewSettings();
-                });
-            }).fail(function () {
-                notifications.yell('error', gt('Could not save settings'));
-            });
+                })
+                .build(function () {
+                    this.listenTo(settings, 'change', function () {
+                        settings.saveAndYell().then(
+                            function ok() {
+                                // update mail API
+                                require(['io.ox/mail/api'], function (mailAPI) {
+                                    mailAPI.updateViewSettings();
+                                });
+                            },
+                            function fail() {
+                                notifications.yell('error', gt('Could not save settings'));
+                            }
+                        );
+                    });
+                })
+                .render().$el
+            );
         }
     });
 
@@ -124,16 +66,16 @@ define('io.ox/mail/settings/pane', [
 
     var INDEX = 0;
 
-    ext.point(POINT + '/pane').extend(
+    ext.point('io.ox/mail/settings/detail/view').extend(
         //
         // Header
         //
         {
-            index: INDEX += 100,
             id: 'header',
-            draw: function () {
-                this.append(
-                    $('<h1>').text(gt.pgettext('app', 'Mail'))
+            index: INDEX += 100,
+            render: function () {
+                this.$el.addClass('io-ox-mail-settings').append(
+                    util.header(gt.pgettext('app', 'Mail'))
                 );
             }
         },
@@ -141,10 +83,10 @@ define('io.ox/mail/settings/pane', [
         // Buttons
         //
         {
-            index: INDEX += 100,
             id: 'buttons',
-            draw: function (baton) {
-                this.append(
+            index: INDEX += 100,
+            render: function (baton) {
+                this.$el.append(
                     baton.branch('buttons', null, $('<div class="form-group buttons">'))
                 );
             }
@@ -153,49 +95,76 @@ define('io.ox/mail/settings/pane', [
         // Display
         //
         {
-            index: INDEX += 100,
             id: 'display',
-            draw: function () {
-                this.append(util.fieldset(
-                    //#. not the verb but the noun (German "Anzeige")
-                    gt.pgettext('noun', 'Display'),
-                    // html
-                    util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
-                    // images
-                    util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
-                    // emojis
-                    util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
-                    // colored quotes
-                    util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
-                    // fixed width
-                    util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
-                    // // beautify plain text
-                    // hidden until bug 52294 gets fixed
-                    // util.checkbox('beautifyPlainText',
-                    //     //#. prettify or beautify
-                    //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-                    //     gt('Prettify plain text mails'),
-                    //     settings
-                    // ),
-                    // read receipts
-                    util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings),
-                    // unseen folder
-                    settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ?
-                        util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
-                ));
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        //#. the noun, not the verb (e.g. German "Anzeige")
+                        gt.pgettext('noun', 'View'),
+                        // html
+                        util.checkbox('allowHtmlMessages', gt('Allow html formatted emails'), settings),
+                        // images
+                        util.checkbox('allowHtmlImages', gt('Allow pre-loading of externally linked images'), settings),
+                        // emojis
+                        util.checkbox('displayEmoticons', gt('Display emoticons as graphics in text emails'), settings),
+                        // colored quotes
+                        util.checkbox('isColorQuoted', gt('Color quoted lines'), settings),
+                        // fixed width
+                        util.checkbox('useFixedWidthFont', gt('Use fixed-width font for text mails'), settings),
+                        // // beautify plain text
+                        // hidden until bug 52294 gets fixed
+                        // util.checkbox('beautifyPlainText',
+                        //     //#. prettify or beautify
+                        //     //#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
+                        //     gt('Prettify plain text mails'),
+                        //     settings
+                        // ),
+                        // read receipts
+                        util.checkbox('sendDispositionNotification', gt('Show requests for read receipts'), settings),
+                        // unseen folder
+                        settings.get('features/unseenFolder', false) && isConfigurable('unseenMessagesFolder') ?
+                            util.checkbox('unseenMessagesFolder', gt('Show folder with all unseen messages'), settings) : []
+                    )
+                );
+            }
+        },
+        //
+        // Sounds
+        //
+        {
+            id: 'sounds',
+            index: INDEX += 100,
+            render: function () {
+
+                if (_.device('smartphone') || !(capabilities.has('websocket') || ox.debug) || !Modernizr.websockets) return;
+
+                this.$el.append(
+                    util.fieldset(
+                        //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
+                        gt('Notification sounds'),
+                        util.checkbox('playSound', gt('Play sound on incoming mail'), settings),
+                        util.compactSelect('notificationSoundName', gt('Sound'), settings, this.getSoundOptions())
+                            .prop('disabled', !settings.get('playSound'))
+                    )
+                );
+
+                this.listenTo(settings, 'change:playSound', function (model, value) {
+                    this.$('[name="notificationSoundName"]').prop('disabled', !value);
+                });
             }
         },
         //
         // Behavior
         //
         {
-            index: INDEX += 100,
             id: 'behavior',
-            draw: function () {
+            index: INDEX += 100,
+            render: function () {
 
                 var contactCollect = !!capabilities.has('collect_email_addresses');
 
-                this.append(
+                this.$el.append(
                     util.fieldset(
                         gt('Verhalten'),
                         util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
@@ -225,7 +194,7 @@ define('io.ox/mail/settings/pane', [
     // Buttons
     //
 
-    ext.point(POINT + '/pane/buttons').extend(
+    ext.point('io.ox/mail/settings/detail/view/buttons').extend(
         //
         // Vacation notice
         //
