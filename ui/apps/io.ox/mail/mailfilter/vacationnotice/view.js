@@ -34,7 +34,8 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     var POINT = 'io.ox/mail/vacation-notice/edit',
         INDEX = 0,
         INDEX_RANGE = 0,
-        INDEX_ADV = 0;
+        INDEX_ADV = 0,
+        DAY = 24 * 60 * 60 * 1000;
 
     function open() {
         return getData().then(openModalDialog, fail);
@@ -81,7 +82,11 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             },
             getDuration: function () {
                 var from = this.model.get('dateFrom'), until = this.model.get('dateUntil');
-                return moment.duration(moment(until).diff(from)).asDays();
+                return Math.floor(moment.duration(moment(until + DAY).diff(from)).asDays());
+            },
+            getDurationString: function () {
+                var duration = this.getDuration();
+                return duration > 0 ? gt.ngettextf('%1$d day', '%1$d days', duration) : '';
             }
         })
         .build(function () {
@@ -167,8 +172,8 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                                     .render().$el
                                     .prop('disabled', !baton.model.get('activateTimeFrame'))
                             );
-                        })
-                        // $('<div class="col-md-4" class="duration">').text(this.getDuration())
+                        }),
+                        $('<div class="col-md-4 duration">').text(this.getDurationString())
                     )
                 );
 
@@ -177,9 +182,9 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     model.set('dateUntil', value + length);
                 });
 
-                // this.listenTo(this.model, 'change:dateFrom change:dateUtil', function () {
-                //     this.$('.duration').text(this.getDuration());
-                // });
+                this.listenTo(this.model, 'change:dateFrom change:dateUntil', function () {
+                    this.$('.duration').text(this.getDurationString());
+                });
             }
         }
     );
