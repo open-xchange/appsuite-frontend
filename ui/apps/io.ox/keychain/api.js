@@ -47,16 +47,13 @@
 
 define('io.ox/keychain/api', [
     'io.ox/core/extensions',
-    'io.ox/core/event',
     'io.ox/core/http',
     'gettext!io.ox/keychain'
-], function (ext, Events, http, gt) {
+], function (ext, http, gt) {
 
     'use strict';
 
-    var api = {}, data;
-
-    Events.extend(api);
+    var api = _.extend({}, Backbone.Events), data;
 
     function byIndex(a, b) {
         return a.index - b.index;

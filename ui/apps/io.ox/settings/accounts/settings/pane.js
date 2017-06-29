@@ -8,157 +8,154 @@
  *
  * © 2016 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/settings/accounts/settings/pane', [
     'io.ox/core/extensions',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/api/account',
     'io.ox/keychain/api',
     'io.ox/keychain/model',
-    'io.ox/backbone/mini-views/dropdown',
-    'io.ox/backbone/mini-views',
     'io.ox/core/settings/util',
     'io.ox/settings/accounts/views',
+    'io.ox/backbone/mini-views/settings-list-view',
     'settings!io.ox/core',
     'gettext!io.ox/settings/accounts',
-    'io.ox/backbone/mini-views/settings-list-view',
     'withPluginsFor!keychainSettings'
-], function (ext, dialogs, api, keychainModel, Dropdown, mini, util, AccountViews, coreSettings, gt, ListView) {
+], function (ext, ExtensibleView, accountAPI, api, keychainModel, util, AccountViews, ListView, settings, gt) {
 
     'use strict';
 
-    // make sure changes get saved
-    coreSettings.on('change:security/acceptUntrustedCertificates', function () {
-        this.save();
-    });
-
-    var drawCertificateValidation = function () {
-            return $('<div class="form-group">').append(
-                util.checkbox('security/acceptUntrustedCertificates', gt('Allow connections with untrusted certificates'), coreSettings)
-            );
-        },
-
-        drawRecoveryButtonHeadline = function () {
-            return $('<h2 class="sr-only">').text(gt('Password recovery'));
-        },
-
-        drawRecoveryButton = function () {
-
-            return [
-                $('<a href="#" role="button" class="hint col-md-6 col-lg-12">')
-                    //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
-                    //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
-                    .text(gt('Show information about account recovery'))
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        $(this).hide().next().show();
-                    }),
-                $('<div class="hint col-md-8 col-lg-12">').hide().append(
-                    $.txt(
-                        gt('For security reasons, all credentials are encrypted with your primary account password. ' +
-                            'If you change your primary password, your external accounts might stop working. In this case, ' +
-                            'you can use your old password to recover all account passwords.')
-                    ),
-                    $('<a href="#" role="button" class="hint recover" data-action="recover">')
-                        .text(gt('Recover passwords'))
-                        .on('click', function (e) {
-                            e.preventDefault();
-                            ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (srd) {
-                                srd.show();
-                            });
-                        })
-                )
-            ];
-        },
-
-        drawPane = function () {
-            return $('<div class="io-ox-accounts-settings">').append(
-                $('<div class="row">').append(
-                    $('<h1 class="col-md-8 col-xs-8">').text(gt('Accounts'))
-                ),
-                $('<ul class="list-unstyled list-group widget-list">')
-            );
-        },
-
-        hasOAuthCredentials = function hasOAuthCredentials(account) {
-            return account.has('mail_oauth') && account.get('mail_oauth') >= 0;
-        };
-
-    /**
-     * Extension point for account settings detail view
-     *
-     * This extension point provides a list to manage accounts of the keyring.
-     *
-     * As an extension to basic extension points, accounts can implement a canAdd
-     * attribute of type {bool|function} to specify if the user is able to add new
-     * accounts of this type. If false, the user is able to view the account in the
-     * list and edit it, but it will be filtered from the dropdown menu of the add
-     * button.
-     *
-     */
-
     ext.point('io.ox/settings/accounts/settings/detail').extend({
-        index: 300,
-        id: 'accountssettings',
-        draw: function (data) {
-            var that = this;
-
-            function redraw() {
-
-                var allAccounts = api.getAll(),
-                    collection = keychainModel.wrap(allAccounts);
-
-                var $pane = drawPane(),
-                    accountsList = new ListView({
-                        tagName: 'ul',
-                        childView: AccountViews.ListItem,
-                        collection: collection,
-                        filter: function (m) { return !hasOAuthCredentials(m); }
-                    });
-
-                require(['io.ox/core/api/account']).then(function (accountAPI) {
-                    return accountAPI.getStatus();
-                }).then(function (status) {
-                    for (var id in status) {
-                        // to avoid double ids the collection has the account type as prefix see Bug 50219
-                        var m = collection.get('mail' + id),
-                            s = status[id];
-                        if (!m) return;
-
-                        m.set('status', s.status !== 'ok' ? s : s.status);
+        index: 100,
+        id: 'view',
+        draw: function () {
+            console.log('hier?');
+            this.append(
+                new ExtensibleView({ point: 'io.ox/settings/accounts/settings/detail/view', model: settings })
+                .inject({
+                    hasNoOAuthCredentials: function (account) {
+                        return !(account.has('mail_oauth') && account.get('mail_oauth') >= 0);
+                    },
+                    openRecoveryDialog: function (e) {
+                        e.preventDefault();
+                        ox.load(['io.ox/keychain/secretRecoveryDialog']).done(function (dialog) {
+                            dialog.show();
+                        });
+                    },
+                    updateStatuses: function () {
+                        var collection = this.collection;
+                        accountAPI.getStatus().then(function (status) {
+                            for (var id in status) {
+                                // to avoid double ids the collection has the account type as prefix see Bug 50219
+                                var model = collection.get('mail' + id),
+                                    s = status[id];
+                                if (!model) return;
+                                model.set('status', s.status !== 'ok' ? s : s.status);
+                            }
+                        });
                     }
-                });
-                $pane.append(accountsList.render().$el);
-
-                if (coreSettings.isConfigurable('security/acceptUntrustedCertificates')) {
-                    $pane.append(drawCertificateValidation());
-                }
-
-                if (collection.length > 1) {
-                    $pane.append(drawRecoveryButtonHeadline(), drawRecoveryButton());
-                }
-
-                that.empty().append($pane);
-            }
-
-            redraw();
-
-            function onChange(id, list) {
-                if (!list || list.length === 0 || (id !== 'virtual/io.ox/settings/accounts' && id !== 'virtual/settings/io.ox/settings/accounts')) {
-                    api.off('refresh.all refresh.list', redraw);
-                    data.tree.off('virtual', onChange);
-                }
-            }
-            api.on('refresh.all refresh.list', redraw);
-            data.tree.on('virtual', onChange);
-        },
-        save: function () {
-            // TODO
-            //console.log('now accounts get saved?');
+                })
+                .build(function () {
+                    // make sure changes get saved
+                    this.listenTo(settings, 'change:security/acceptUntrustedCertificates', function () {
+                        settings.save();
+                    });
+                })
+                .render().$el
+            );
         }
     });
 
-    return {};
+    var INDEX = 0;
 
+    ext.point('io.ox/settings/accounts/settings/detail/view').extend(
+        //
+        // Header
+        //
+        {
+            id: 'header',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.addClass('io-ox-accounts-settings').append(
+                    util.header(gt('Accounts'))
+                );
+            }
+        },
+        //
+        // List view
+        //
+        {
+            id: 'list',
+            index: INDEX += 100,
+            render: function () {
+
+                this.collection = keychainModel.wrap(api.getAll());
+
+                this.$el.append(
+                    new ListView({
+                        tagName: 'ul',
+                        childView: AccountViews.ListItem,
+                        collection: this.collection,
+                        filter: this.hasNoOAuthCredentials
+                    })
+                    .render().$el
+                );
+
+                this.updateStatuses();
+                this.listenTo(api, 'refresh.all refresh.list', this.updateStatuses);
+            }
+        },
+        //
+        // Untrusted Certificates
+        //
+        {
+            id: 'untrusted-certificates',
+            index: INDEX += 100,
+            render: function () {
+
+                if (!settings.isConfigurable('security/acceptUntrustedCertificates')) return;
+
+                this.$el.append(
+                    $('<div class="form-group">').append(
+                        util.checkbox('security/acceptUntrustedCertificates', gt('Allow connections with untrusted certificates'), settings)
+                    )
+                );
+            }
+        },
+        //
+        // Password Recovery
+        //
+        {
+            id: 'recovery',
+            index: INDEX += 100,
+            render: function () {
+
+                if (this.collection.length <= 1) return;
+
+                this.$el.append(
+                    $('<h2 class="sr-only">').text(gt('Password recovery')),
+                    $('<a href="#" role="button" class="hint">')
+                        //#. Shown in settings page for accounts. Should use the indefinite form, it's a general information
+                        //#. about account recovery, where account can be plural. In German "Informationen zur Accounwiederherstellung"
+                        .text(gt('Show information about account recovery'))
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            $(this).hide().next().show();
+                        }),
+                    $('<div class="hint">').hide().append(
+                        $('<p>').text(
+                            gt('For security reasons, all credentials are encrypted with your primary account password. ' +
+                                'If you change your primary password, your external accounts might stop working. In this case, ' +
+                                'you can use your old password to recover all account passwords.')
+                        ),
+                        $('<button type="button" class="btn btn-primary" data-action="recover">')
+                            .text(gt('Recover passwords'))
+                            .on('click', this.openRecoveryDialog)
+                    )
+                );
+            }
+        }
+    );
 });
