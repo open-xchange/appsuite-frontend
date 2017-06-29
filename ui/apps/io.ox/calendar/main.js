@@ -23,7 +23,7 @@ define('io.ox/calendar/main', [
     'io.ox/core/tk/vgrid',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/calendar/mobile-navbar-extensions',
     'io.ox/calendar/mobile-toolbar-actions',
     'io.ox/calendar/toolbar',

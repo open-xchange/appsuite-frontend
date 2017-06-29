@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/calendar/model', [
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/extensions',
     'io.ox/backbone/extendedModel',
     'gettext!io.ox/calendar',
@@ -48,17 +48,17 @@ define('io.ox/calendar/model', [
 
             // set default time
             this.attributes = _.extend({
-                start_date: defStart,
-                end_date: defEnd
+                startDate: defStart,
+                endDate: defEnd
             }, this.attributes);
 
             // End date automatically shifts with start date
-            var length = this.get('end_date') - this.get('start_date');
+            var length = this.get('endDate') - this.get('startDate');
 
             // internal storage for last timestamps
             this.cache = {
-                start: this.get('full_time') ? defStart : this.get('start_date'),
-                end: this.get('full_time') ? defEnd : this.get('end_date')
+                start: this.get('allDay') ? defStart : this.get('startDate'),
+                end: this.get('allDay') ? defEnd : this.get('endDate')
             };
 
             // overwrites model.cid with our _.cid
@@ -73,27 +73,27 @@ define('io.ox/calendar/model', [
                     }
                 },
 
-                'change:start_date': function (model, startDate) {
+                'change:startDate': function (model, startDate) {
                     if (length < 0) return;
                     if (startDate && _.isNumber(length)) {
-                        model.set('end_date', startDate + length, { validate: true });
+                        model.set('endDate', startDate + length, { validate: true });
                     }
                 },
 
-                // 'change:end_date': function (model, endDate) { },
+                // 'change:endDate': function (model, endDate) { },
                 //
                 // We DO NOT anything else if the length gets negative
                 //
                 // Actually you have three major optons
-                // 1. shift the start_date to keep the current length
-                // 2. shift the start_date for example 1 hour before the new end date (OX6)
+                // 1. shift the startDate to keep the current length
+                // 2. shift the startDate for example 1 hour before the new end date (OX6)
                 // 3. do nothing so that the user recognizes that the start date has also changed
                 //
                 // We could show a hint right away but this is here is still rocket science
                 // and triggering a simple validation seems impossible.
                 // Therefore TODO: completely rewrite this whole model-validaten-magic!
 
-                'change:full_time': function (model, fulltime) {
+                'change:allDay': function (model, fulltime) {
                     // handle shown as
                     if (settings.get('markFulltimeAppointmentsAsFree', false)) {
                         model.set('shown_as', fulltime ? 4 : 1, { validate: true });
@@ -103,15 +103,15 @@ define('io.ox/calendar/model', [
 
                     if (fulltime === true) {
                         // save to cache, convert to UTC and save
-                        startDate = moment(this.cache.start = model.get('start_date')).startOf('day').utc(true).valueOf();
-                        endDate = moment(this.cache.end = model.get('end_date')).startOf('day').add(1, 'day').utc(true).valueOf();
+                        startDate = moment(this.cache.start = model.get('startDate')).startOf('day').utc(true).valueOf();
+                        endDate = moment(this.cache.end = model.get('endDate')).startOf('day').add(1, 'day').utc(true).valueOf();
                     } else {
                         var oldStart = moment(this.cache.start),
                             oldEnd = moment(this.cache.end);
 
                         // save to cache
-                        this.cache.start = moment.utc(model.get('start_date')).local(true).valueOf();
-                        this.cache.end = moment.utc(model.get('end_date')).local(true).valueOf();
+                        this.cache.start = moment.utc(model.get('startDate')).local(true).valueOf();
+                        this.cache.end = moment.utc(model.get('endDate')).local(true).valueOf();
 
                         // handle time
                         startDate = moment(this.cache.start).startOf('day').hours(oldStart.hours()).minutes(oldStart.minutes()).valueOf();
@@ -119,8 +119,8 @@ define('io.ox/calendar/model', [
                     }
                     // save
                     length = endDate - startDate;
-                    model.set('start_date', startDate, { validate: true });
-                    model.set('end_date', endDate, { validate: true });
+                    model.set('startDate', startDate, { validate: true });
+                    model.set('endDate', endDate, { validate: true });
                 }
             });
         },
@@ -130,11 +130,11 @@ define('io.ox/calendar/model', [
             var time = this.get.apply(this, arguments);
             options = options || {};
             // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
+            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('allDay');
             if (options.fulltime) {
                 time = moment.utc(time).local(true);
                 // fake end date for datepicker
-                if (attr === 'end_date') {
+                if (attr === 'endDate') {
                     time.subtract(1, 'day');
                 }
                 time = time.valueOf();
@@ -146,11 +146,11 @@ define('io.ox/calendar/model', [
         setDate: function (attr, time, options) {
             options = options || {};
             // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('full_time');
+            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('allDay');
             if (options.fulltime) {
                 time = moment(time);
                 // fix fake end date for model
-                if (attr === 'end_date') {
+                if (attr === 'endDate') {
                     time.add(1, 'day');
                 }
                 arguments[1] = time.utc(true).valueOf();
@@ -182,7 +182,7 @@ define('io.ox/calendar/model', [
         },
 
         setDefaultParticipants: function (options) {
-            return folderAPI.get(this.get('folder_id')).then(function (folder) {
+            return folderAPI.get(this.get('folder')).then(function (folder) {
                 if (!options.create) return;
                 var isPrivate = folderAPI.is('private', folder),
                     isShared = folderAPI.is('shared', folder);
@@ -245,12 +245,12 @@ define('io.ox/calendar/model', [
             }
 
             if (this.get('recurrence_type') > 0) {
-                attributesToSave.start_date = this.get('start_date');
-                attributesToSave.end_date = this.get('end_date');
+                attributesToSave.startDate = this.get('startDate');
+                attributesToSave.endDate = this.get('endDate');
             }
 
             if (!attributesToSave.folder) {
-                attributesToSave.folder = this.get('folder') || this.get('folder_id');
+                attributesToSave.folder = this.get('folder');
             }
 
             if (this.get('ignore_conflicts')) {
@@ -264,8 +264,8 @@ define('io.ox/calendar/model', [
     ext.point('io.ox/calendar/model/validation').extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
-                this.add('end_date', gt('The end date must be after the start date.'));
+            if (attributes.startDate && attributes.endDate && attributes.endDate < attributes.startDate) {
+                this.add('endDate', gt('The end date must be after the start date.'));
             }
         }
     });
@@ -282,8 +282,8 @@ define('io.ox/calendar/model', [
 
     Validators.validationFor('io.ox/calendar/model', {
         title: { format: 'string', mandatory: true },
-        start_date: { format: 'date', mandatory: true },
-        end_date: { format: 'date', mandatory: true }
+        startDate: { format: 'date', mandatory: true },
+        endDate: { format: 'date', mandatory: true }
     });
 
     return model;

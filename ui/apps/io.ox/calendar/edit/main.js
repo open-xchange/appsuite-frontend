@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/edit/main', [
     'io.ox/calendar/model',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/extPatterns/dnd',
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
@@ -22,10 +22,11 @@ define('io.ox/calendar/edit/main', [
     'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
+    'io.ox/calendar/chronos-util',
     'less!io.ox/calendar/edit/style',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
+], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings, chronosUtil) {
 
     'use strict';
 
@@ -67,15 +68,15 @@ define('io.ox/calendar/edit/main', [
                 notifications.yell('success', gt('Description has been copied'));
             },
 
-            edit: function (data, opt) {
+            edit: function (model, opt) {
 
-                var self = this;
-                data = data || {};
+                var self = this,
+                    data = model ? model.toJSON() : {};
                 opt = _.extend({
                     mode: 'edit'
                 }, opt);
 
-                app.cid = 'io.ox/calendar:' + opt.mode + '.' + _.cid(data);
+                app.cid = 'io.ox/calendar:' + opt.mode + '.' + chronosUtil.cid(model);
 
                 function cont() {
                     // create app window
@@ -143,7 +144,7 @@ define('io.ox/calendar/edit/main', [
                                             self.model.set('endTimezone', self.model.endTimezone, { silent: true });
                                             delete self.model.endTimezone;
                                             // restore model attributes for moving
-                                            if (self.moveAfterSave) self.model.set('folder_id', self.moveAfterSave, { silent: true });
+                                            if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
                                         })
                                         .on('ignore', function () {
                                             self.model.set('ignore_conflicts', true, { validate: true });
@@ -157,7 +158,7 @@ define('io.ox/calendar/edit/main', [
                         win.on('show', function () {
                             if (app.dropZone) app.dropZone.include();
                             //set url parameters
-                            self.setState({ folder: self.model.attributes.folder_id, id: self.model.get('id') ? self.model.attributes.id : null });
+                            self.setState({ folder: self.model.attributes.folder, id: self.model.get('id') ? self.model.attributes.id : null });
                         });
 
                         if (app.dropZone) win.on('hide', function () { app.dropZone.remove(); });
@@ -186,13 +187,13 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 function loadFolder() {
-                    folderAPI.get(self.model.get('folder_id')).always(cont);
+                    folderAPI.get(self.model.get('folder')).always(cont);
                 }
 
                 // check mode
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
-                    self.setState({ folder: data.folder_id, id: data.id });
+                    self.setState({ folder: data.folder, id: data.id });
                     self.model = new AppointmentModel(data);
                 } else {
                     // default values from settings
@@ -201,8 +202,8 @@ define('io.ox/calendar/edit/main', [
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }
                     self.model = new AppointmentModel(data);
-                    if (!data.folder_id || /^virtual/.test(data.folder_id)) {
-                        self.model.set('folder_id', data.folder_id = folderAPI.getDefaultFolder('calendar'));
+                    if (!data.folder || /^virtual/.test(data.folder)) {
+                        self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
                     }
                 }
                 loadFolder();
@@ -243,11 +244,11 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 var self = this;
-                if (self.model.get('title')) {
-                    self.getWindow().setTitle(self.model.get('title'));
-                    self.setTitle(self.model.get('title'));
+                if (self.model.get('summary')) {
+                    self.getWindow().setTitle(self.model.get('summary'));
+                    self.setTitle(self.model.get('summary'));
                 }
-                self.model.on('keyup:title', function (value) {
+                self.model.on('keyup:summary', function (value) {
                     if (!value) value = self.model.get('id') ? gt('Edit appointment') : gt('Create appointment');
 
                     self.getWindow().setTitle(value);
@@ -303,8 +304,8 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 // restore state of model attributes for moving
-                if (this.moveAfterSave && this.model.get('folder_id') !== this.moveAfterSave) {
-                    this.model.set('folder_id', this.moveAfterSave, { silent: true });
+                if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
+                    this.model.set('folder', this.moveAfterSave, { silent: true });
                 }
                 delete this.moveAfterSave;
                 this.getWindow().idle();

@@ -14,7 +14,7 @@
 define('io.ox/calendar/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/calendar/util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/print',

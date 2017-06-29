@@ -63,6 +63,11 @@ define('io.ox/calendar/chronos-api', [
                 api.pool.add(obj.folder, data);
                 return api.pool.get(obj.folder).findWhere(obj);
             });
+        },
+
+        uploadInProgress: function () {
+            // TODO implement that
+            return false;
         }
     };
 

@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/actions/edit', [
     'io.ox/calendar/edit/main',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/notifications',
     'io.ox/calendar/util'
 ], function (m, api, notifications, util) {
@@ -24,7 +24,7 @@ define('io.ox/calendar/actions/edit', [
         var params = baton.data,
             o = {
                 id: params.id,
-                folder: params.folder_id
+                folder: params.folder
             };
 
         if (!!params.recurrence_position) {
