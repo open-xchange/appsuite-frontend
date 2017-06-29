@@ -81,7 +81,7 @@ define('io.ox/core/pdf/pdfdocument', [
         /**
          * Open external links in a new window
          */
-        PDFJS.openExternalLinksInNewWindow = true;
+        PDFJS.externalLinkTarget = PDFJS.LinkTarget.BLANK;
 
         /**
          * Path for image resources, mainly for annotation icons. Include trailing slash.
