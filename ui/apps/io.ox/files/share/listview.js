@@ -17,11 +17,10 @@ define('io.ox/files/share/listview', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
-    'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, extensions, capabilities, gt) {
+], function (api, ext, BreadcrumbView, ListView, extensions, gt) {
 
     'use strict';
 
@@ -209,7 +208,7 @@ define('io.ox/files/share/listview', [
             id: 'user',
             index: 600,
             draw: function (baton) {
-                if (_.device('smartphone') || capabilities.has('!gab || alone')) return;
+                if (_.device('smartphone')) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-user">')
