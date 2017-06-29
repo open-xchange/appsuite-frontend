@@ -15,6 +15,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
     'io.ox/calendar/model',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
@@ -23,7 +24,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/print',
     'less!io.ox/calendar/print-style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
+], function (ext, AppointmentModel, util, chronosUtil, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
 
     'use strict';
 
@@ -222,27 +223,22 @@ define('io.ox/calendar/week/view', [
          * @param  { number } startDate starttime from initail request
          * @param  { array }  data      all appointments returend by API
          */
-        reset: function (startDate, data) {
+        reset: function (startDate, models) {
             if (startDate === this.apiRefTime.valueOf()) {
                 var ws = this.startDate.valueOf(),
                     we = moment(this.startDate).add(this.columns, 'days').valueOf();
                 // reset collection; transform raw dato to proper models
-                data = _(data)
-                    .filter(function (obj) {
-                        var os = obj.start_date,
-                            oe = obj.end_date;
-                        if (obj.full_time) {
+                models = _(models)
+                    .filter(function (model) {
+                        var os = model.get('startDate'),
+                            oe = model.get('endDate');
+                        if (model.get('allDay')) {
                             os = moment.utc(os).local(true).valueOf();
                             oe = moment.utc(oe).local(true).valueOf();
                         }
                         return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
-                    })
-                    .map(function (obj) {
-                        var model = new AppointmentModel(obj);
-                        model.id = _.cid(obj);
-                        return model;
                     });
-                this.collection.reset(data);
+                this.collection.reset(models);
                 if (this.collection.length > this.limit) {
                     var self = this;
                     console.warn('Too many appointments. There are ' + this.collection.length + ' appointments. The limit is ' + this.limit + '. Resize, drag and opacity are disabled due to performance reasons.');
@@ -516,7 +512,7 @@ define('io.ox/calendar/week/view', [
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(String(cT.data('cid')));
+                    obj = chronosUtil.cid(String(cT.data('cid')));
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
@@ -1228,14 +1224,14 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                appointmentStartDate = moment(model.get('start_date'));
+                appointmentStartDate = moment(model.get('startDate'));
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
-                    if (model.get('full_time') && this.options.showFulltime) {
+                    if (model.get('allDay') && this.options.showFulltime) {
 
-                        appointmentStartDate = moment.utc(model.get('start_date')).local(true);
+                        appointmentStartDate = moment.utc(model.get('startDate')).local(true);
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 
@@ -1243,18 +1239,18 @@ define('io.ox/calendar/week/view', [
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment.utc(model.get('end_date')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max((moment.utc(model.get('endDate')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
-                            if (fulltimeColPos[row] <= model.get('start_date')) {
-                                fulltimeColPos[row] = model.get('end_date');
+                            if (fulltimeColPos[row] <= model.get('startDate')) {
+                                fulltimeColPos[row] = model.get('endDate');
                                 break;
                             }
                         }
 
                         if (row === fulltimeColPos.length) {
-                            fulltimeColPos.push(model.get('end_date'));
+                            fulltimeColPos.push(model.get('endDate'));
                         }
                         node.css({
                             height: this.fulltimeHeight,
@@ -1266,13 +1262,13 @@ define('io.ox/calendar/week/view', [
                         this.fulltimePane.append(node);
                     } else {
                         // fix fulltime appointments to local time when this.showFulltime === false
-                        if (model.get('full_time')) {
-                            model.set({ start_date: moment.utc(model.get('start_date')).local(true).valueOf() }, { silent: true });
-                            model.set({ end_date: moment.utc(model.get('end_date')).local(true).valueOf() }, { silent: true });
+                        if (model.get('allDay')) {
+                            model.set({ startDate: moment.utc(model.get('startDate')).local(true).valueOf() }, { silent: true });
+                            model.set({ endDate: moment.utc(model.get('endDate')).local(true).valueOf() }, { silent: true });
                         }
 
-                        var startLocal = moment(Math.max(model.get('start_date'), this.startDate.valueOf())),
-                            endLocal = moment(model.get('end_date')),
+                        var startLocal = moment(Math.max(model.get('startDate'), this.startDate.valueOf())),
+                            endLocal = moment(model.get('endDate')),
                             start = moment(startLocal).startOf('day').valueOf(),
                             end = moment(endLocal).startOf('day').valueOf(),
                             maxCount = 0,
@@ -1286,11 +1282,11 @@ define('io.ox/calendar/week/view', [
 
                             if (start !== end) {
                                 endLocal = moment(startLocal).endOf('day');
-                                if (model.get('end_date') - endLocal.valueOf() > 1) {
+                                if (model.get('endDate') - endLocal.valueOf() > 1) {
                                     style += 'rmsouth';
                                 }
                             } else {
-                                endLocal = moment(model.get('end_date'));
+                                endLocal = moment(model.get('endDate'));
                             }
 
                             // kill overlap appointments with length null
@@ -1880,9 +1876,9 @@ define('io.ox/calendar/week/view', [
         renderAppointment: function (a) {
             var el = $('<div class="appointment">')
                 .attr({
-                    'data-cid': a.id,
+                    'data-cid': a.cid,
                     'data-extension-point': this.extPoint,
-                    'data-composite-id': a.id
+                    'data-composite-id': a.cid
                 });
 
             ext.point(this.extPoint)
@@ -1895,7 +1891,7 @@ define('io.ox/calendar/week/view', [
          * @param  { Backbone.Model } a Appointment Model
          */
         redrawAppointment: function (a) {
-            var positionFieldChanged = _(['start_date', 'end_date', 'full_time'])
+            var positionFieldChanged = _(['startDate', 'endDate', 'allDay'])
                 .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
             if (positionFieldChanged) {
                 this.renderAppointments();
@@ -2092,21 +2088,21 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            var folder_id = a.get('folder_id');
+            var folder_id = a.get('folder');
             if (String(folder.id) === String(folder_id)) {
                 addColorClasses(folder);
             } else if (folder_id !== undefined) {
                 folderAPI.get(folder_id).done(addColorClasses);
             }
 
-            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
+            if (a.get('class') === 'CONFIDENTIAL' && ox.user_id !== a.get('createdBy') && !folderAPI.is('private', folder)) {
                 classes = 'private disabled';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
+                classes = (a.get('class') === 'CONFIDENTIAL' ? 'private ' : '') + util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
-                if (conf === 3) {
+                if (conf === 'TENTATIVE') {
                     confString =
                         //#. add confirmation status behind appointment title
                         //#. %1$s = apppintment title
@@ -2120,8 +2116,8 @@ define('io.ox/calendar/week/view', [
                 .addClass(classes)
                 .append(
                     $('<div class="appointment-content">').append(
-                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, a.get('title') || '\u00A0')) : '',
+                        a.get('class') === 'CONFIDENTIAL' ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
                         a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )

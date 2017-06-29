@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/week/perspective', [
     'io.ox/calendar/week/view',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
@@ -65,10 +65,11 @@ define('io.ox/calendar/week/perspective', [
                 self.app.pages.getPage('detailView').busy();
             }
             api.get(obj).then(
-                function success(data) {
+                function success(model) {
 
                     if (_.device('smartphone')) {
-                        var p = self.app.pages.getPage('detailView'),
+                        var data = model.toJSON(),
+                            p = self.app.pages.getPage('detailView'),
                             b = new ext.Baton({ data: data });
                         // draw details to page
                         p.idle().empty().append(detailView.draw(data));
@@ -78,7 +79,7 @@ define('io.ox/calendar/week/perspective', [
                     } else {
                         self.dialog.show(e, function (popup) {
                             popup
-                            .append(detailView.draw(data))
+                            .append(detailView.draw(model))
                             .attr({
                                 'role': 'complementary',
                                 'aria-label': gt('Appointment Details')
@@ -89,10 +90,10 @@ define('io.ox/calendar/week/perspective', [
                         // view should change week to the start of this appointment(used by deeplinks)
                         // one time only
                         self.setNewStart = false;
-                        self.app.refDate = moment(data.start_date);
+                        self.app.refDate = moment(model.get('startDate'));
                         if (self.view) {
                             //view is rendered already
-                            self.view.setStartDate(data.start_date);
+                            self.view.setStartDate(model.get('startDate'));
                         }
                     }
 

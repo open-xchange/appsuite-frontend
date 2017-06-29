@@ -108,9 +108,9 @@
         &.border { border-left: 1px solid rgba(0, 0, 0, 0.2); }
 
         &.declined    { background-color: @appointment-declined;    }
-        &.unconfirmed { background-color: @appointment-unconfirmed; }
+        &.needs-action { background-color: @appointment-unconfirmed; }
 
-        &.unconfirmed:not(.hover) {
+        &.needs-action:not(.hover) {
             .title { color: rgba(0, 0, 0, 0.7); }
             .location { color: rgba(0, 0, 0, 0.5); }
         }
@@ -211,7 +211,7 @@
             .common();
         }
 
-        &.unconfirmed {
+        &.needs-action {
             color: @appointment-unconfirmed-font;
             background-color: @appointment-unconfirmed;
             border-left-color: rgba(0, 0, 0, 0.2);

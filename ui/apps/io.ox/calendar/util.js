@@ -136,12 +136,12 @@ define('io.ox/calendar/util', [
         },
 
         getSmartDate: function (data) {
-            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date);
+            var m = data.full_time ? moment.utc(data.startDate).local(true) : moment(data.startDate);
             return m.calendar();
         },
 
         getEvenSmarterDate: function (data) {
-            var m = data.full_time ? moment.utc(data.start_date).local(true) : moment(data.start_date),
+            var m = data.full_time ? moment.utc(data.startDate).local(true) : moment(data.startDate),
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {
@@ -162,7 +162,7 @@ define('io.ox/calendar/util', [
 
         // function that returns markup for date and time + timzonelabel
         getDateTimeIntervalMarkup: function (data, options) {
-            if (data && data.start_date && data.end_date) {
+            if (data && data.startDate && data.endDate) {
 
                 options = _.extend({ timeZoneLabel: { placement:  _.device('touch') ? 'bottom' : 'top' }, a11y: false, output: 'markup' }, options);
 
@@ -175,15 +175,15 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = moment(data.start_date).zoneAbbr(),
+                    timeZoneStr = moment(data.startDate).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
                 if (data.full_time) {
-                    startDate = moment.utc(data.start_date).local(true);
-                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                    startDate = moment.utc(data.startDate).local(true);
+                    endDate = moment.utc(data.endDate).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.start_date);
-                    endDate = moment(data.end_date);
+                    startDate = moment(data.startDate);
+                    endDate = moment(data.endDate);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     dateStr = startDate.format(fmtstr);
@@ -216,18 +216,18 @@ define('io.ox/calendar/util', [
         },
 
         getDateInterval: function (data, a11y) {
-            if (data && data.start_date && data.end_date) {
+            if (data && data.startDate && data.endDate) {
                 var startDate, endDate,
                     fmtstr = a11y ? 'dddd, l' : 'ddd, l';
 
                 a11y = a11y || false;
 
                 if (data.full_time) {
-                    startDate = moment.utc(data.start_date).local(true);
-                    endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                    startDate = moment.utc(data.startDate).local(true);
+                    endDate = moment.utc(data.endDate).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.start_date);
-                    endDate = moment(data.end_date);
+                    startDate = moment(data.startDate);
+                    endDate = moment(data.endDate);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
@@ -250,12 +250,12 @@ define('io.ox/calendar/util', [
         },
 
         getTimeInterval: function (data, zone, a11y) {
-            if (!data || !data.start_date || !data.end_date) return '';
+            if (!data || !data.startDate || !data.endDate) return '';
             if (data.full_time) {
                 return this.getFullTimeInterval(data, true);
             }
-            var start = moment(data.start_date),
-                end = moment(data.end_date);
+            var start = moment(data.startDate),
+                end = moment(data.endDate);
             if (zone) {
                 start.tz(zone);
                 end.tz(zone);
@@ -355,23 +355,23 @@ define('io.ox/calendar/util', [
         },
 
         getDurationInDays: function (data) {
-            return moment(data.end_date).diff(data.start_date, 'days');
+            return moment(data.endDate).diff(data.startDate, 'days');
         },
 
         getStartAndEndTime: function (data) {
             var ret = [];
-            if (!data || !data.start_date || !data.end_date) return ret;
+            if (!data || !data.startDate || !data.endDate) return ret;
             if (data.full_time) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
-                ret.push(moment(data.start_date).format('LT'), moment(data.end_date).format('LT'));
+                ret.push(moment(data.startDate).format('LT'), moment(data.endDate).format('LT'));
             }
             return ret;
         },
 
         addTimezoneLabel: function (parent, data, options) {
 
-            var current = moment(data.start_date);
+            var current = moment(data.startDate);
 
             parent.append(
                 $.txt(this.getTimeInterval(data)),
@@ -383,7 +383,7 @@ define('io.ox/calendar/util', [
 
         addTimezonePopover: function (parent, data, opt) {
 
-            var current = moment(data.start_date);
+            var current = moment(data.startDate);
 
             opt = _.extend({
                 placement: 'left',
@@ -477,7 +477,7 @@ define('io.ox/calendar/util', [
         },
 
         getConfirmationClass: function (status) {
-            return confirmClass[status || 0];
+            return (status || 'NEEDS-ACTION').toLowerCase();
         },
 
         getConfirmationLabel: function (status) {
@@ -632,7 +632,7 @@ define('io.ox/calendar/util', [
             var type = appointment.recurrence_type;
             if (type === 0) return;
             var oldDate = moment(old_start_date),
-                date = moment(appointment.start_date);
+                date = moment(appointment.startDate);
 
             // if weekly and only single day selected
             if (type === 2 && appointment.days === 1 << oldDate.day()) {
@@ -693,15 +693,19 @@ define('io.ox/calendar/util', [
         },
 
         getConfirmationStatus: function (obj, id, defaultStatus) {
-            var hash = this.getConfirmations(obj),
-                user = id || ox.user_id;
-            return hash[user] ? hash[user].status : (defaultStatus || 0);
+            var user = _(obj.attendees).findWhere({
+                entity: id || ox.user_id
+            });
+            if (!user) return (defaultStatus || 'NEEDS-ACTION');
+            return user.partStat || (defaultStatus || 'NEEDS-ACTION');
         },
 
         getConfirmationMessage: function (obj, id) {
-            var hash = this.getConfirmations(obj),
-                user = id || ox.user_id;
-            return hash[user] ? hash[user].comment : '';
+            var user = _(obj.attendees).findWhere({
+                entity: id || ox.user_id
+            });
+            if (!user) return '';
+            return user.comment || '';
         },
 
         getConfirmationSummary: function (conf) {
@@ -849,13 +853,13 @@ define('io.ox/calendar/util', [
 
             var folderColor = that.getFolderColor(folder),
                 appointmentColor = appointment.color_label || 0,
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 1 : 0);
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 'ACCEPTED' : 'NEEDS-ACTION');
 
-            // shared appointments which are unconfirmed or declined don't receive color classes
-            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) return '';
+            // shared appointments which are needs-action or declined don't receive color classes
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (appointment.private_flag) folderColor = 10;
+            if (appointment['class'] === 'CONFIDENTIAL') folderColor = 10;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -869,11 +873,11 @@ define('io.ox/calendar/util', [
 
         canAppointmentChangeColor: function (folder, appointment) {
             var appointmentColor = appointment.color_label || 0,
-                privateFlag = appointment.private_flag || false,
+                privateFlag = appointment['class'] === 'CONFIDENTIAL',
                 conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
-            // shared appointments which are unconfirmed or declined don't receive color classes
-            if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) {
+            // shared appointments which are needs-action or declined don't receive color classes
+            if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) {
                 return false;
             }
 
