@@ -500,6 +500,9 @@
 
 @media (max-width: 480px), (max-device-width: 480px)  {
 
+    @font-size: 16px;
+    @line-height: 20px;
+
     .io-ox-settings-window .vgrid-cell {
         font-size: 15px;
         border-top: 1px solid #eee;
@@ -508,83 +511,45 @@
     .settings-detail-pane {
 
         &.default-content-padding {
-            padding: 7px 8px 8px 8px;
+            padding: 16px;
         }
 
         h1:first-child,
-        h1.pane-headline:first-child { margin: 0; }
-
-        .form-group { margin-bottom: 0; }
-
-        .btn.btn-primary { margin-bottom: 7px; }
-
-        h1 + .sectiondelimiter {
-            border: none;
-            margin-top: 0;
+        h1.pane-headline:first-child {
+            margin: 0 0 32px 0;
         }
 
-        .io-ox-mail-settings {
-
-            .form-horizontal .control-group>label {
-                float: none;
-                width: 160px;
-            }
-
-            .form-inline .controls {
-                text-align: left;
-                width: auto;
-
-                span {
-                    display: inherit;
-                    line-height: 29px;
-                }
-
-                input {
-                    width: 70px;
-                    float: left;
-                }
-
-                input + span {
-                    display: inline-block;
-                    padding-left: 5px;
-                    float: none;
+        fieldset {
+            padding: 0;
+            margin-bottom: 32px;
+            legend.sectiontitle {
+                position: relative;
+                h2 {
+                    font-size: @font-size;
+                    line-height: @line-height;
                 }
             }
-
-            legend + .control-group { margin-top: 0; }
         }
 
-        .io-ox-accounts-settings .controls {
-            padding-left: 0;
-
-            .btn-group.pull-right { float: none; }
+        label {
+            font-size: 14px;
+            line-height: @line-height;
         }
 
-        .io-ox-calendar-settings,
-        .io-ox-tasks-settings {
-            .form-horizontal .control-group>label {
-                float: none;
-                width: 160px;
-             }
+        .form-control {
+            font-size: @font-size;
         }
 
-        .form-horizontal {
-            .control-label {
-                margin-bottom: 0;
-                float: none;
-                text-align: left;
-                width: auto;
+        .buttons {
+            margin-bottom: 32px;
+        }
+
+        .checkbox.custom, .radio.custom {
+            label {
+                font-size: @font-size;
+                line-height: @line-height;
             }
-
-            .control-group > label { text-align: left; }
-
-            .controls, .help-inline,
-            .control-group > label { margin-left: 5px; }
-
-            .control-group label.control-label {
-                float: none;
-                width: auto;
-            }
+            margin-bottom: 16px;
         }
     }
 }

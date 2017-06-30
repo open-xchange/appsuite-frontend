@@ -174,8 +174,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                                     .render().$el
                                     .prop('disabled', !baton.model.get('activateTimeFrame'))
                             );
-                        }),
-                        $('<div class="col-md-4 duration">').text(this.getDurationString())
+                        })
                     )
                 );
 
@@ -183,6 +182,21 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     var length = (model.get('dateUntil') - model.previous('dateFrom')) || 0;
                     model.set('dateUntil', value + length);
                 });
+            }
+        },
+        //
+        // Show length indicator
+        //
+        {
+            index: INDEX_RANGE += 100,
+            id: 'days',
+            render: function (baton) {
+
+                if (_.device('smartphone')) return;
+
+                baton.$el.find('.row:last').append(
+                    $('<div class="col-md-4 duration">').text(this.getDurationString())
+                );
 
                 this.listenTo(this.model, 'change:dateFrom change:dateUntil', function () {
                     this.$('.duration').text(this.getDurationString());

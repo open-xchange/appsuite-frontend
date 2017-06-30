@@ -248,6 +248,9 @@ define('io.ox/mail/settings/pane', [
             index: 300,
             render: function () {
 
+                // we don't really need that on a smartphone (I guess)
+                if (_.device('smartphone')) return;
+
                 this.append(
                     $('<button type="button" class="btn btn-default">')
                     .text(gt('Change IMAP subscriptions') + ' ...')

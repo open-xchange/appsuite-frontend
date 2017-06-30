@@ -343,7 +343,7 @@ define('io.ox/backbone/mini-views/common', [
     //
     var DateView = _.device('smartphone') ?
         InputView.extend({
-            el: '<input type="date">'
+            el: '<input type="date" class="form-control">'
         }) :
         InputView.extend({
             format: 'l',
