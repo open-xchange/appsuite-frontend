@@ -149,10 +149,35 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
 
         sync: function (method, module, options) {
             switch (method) {
-                case 'read': return api.getRules('vacation').done(options.success).fail(options.error);
-                case 'update': return api.update(this.toJSON()).done(options.success).fail(options.error);
+                case 'read':
+                    return api.getRules('vacation')
+                        .done(options.success).fail(options.error);
+                case 'update':
+                    return api.update(this.toJSON())
+                        .done(this.onUpdate.bind(this))
+                        .done(options.success).fail(options.error);
                 // no default
             }
+        },
+
+        onUpdate: function () {
+            // an easy way to propagate changes
+            // otherwise we need to sync data across models or introduce a singleton-model-approach
+            ox.trigger('mail:change:vacation-notice', this);
+        },
+
+        isActive: function () {
+            if (!this.get('active')) return false;
+            if (!this.get('activateTimeFrame')) return true;
+            var now = _.utc();
+            // FROM and UNTIL
+            if (this.has('dateFrom') && this.has('dateUntil')) {
+                return this.get('dateFrom') <= now && this.get('dateUntil') > now;
+            }
+            // just FROM
+            if (this.has('dateFrom')) return this.get('dateFrom') <= now;
+            // just UNTIL
+            return this.get('dateUntil') > now;
         }
     });
 

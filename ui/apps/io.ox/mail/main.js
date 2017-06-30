@@ -1973,6 +1973,13 @@ define('io.ox/mail/main', [
                     app.listView.reload();
                 }
             });
+        },
+
+        'vacation-notice': function (app) {
+            if (!capabilities.has('mailfilter')) return;
+            require(['io.ox/mail/mailfilter/vacationnotice/indicator'], function (View) {
+                new View().attachTo(app.listControl.$el);
+            });
         }
     });
 
