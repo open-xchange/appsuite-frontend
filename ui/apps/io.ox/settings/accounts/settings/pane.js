@@ -31,7 +31,6 @@ define('io.ox/settings/accounts/settings/pane', [
         index: 100,
         id: 'view',
         draw: function () {
-            console.log('hier?');
             this.append(
                 new ExtensibleView({ point: 'io.ox/settings/accounts/settings/detail/view', model: settings })
                 .inject({
@@ -46,7 +45,7 @@ define('io.ox/settings/accounts/settings/pane', [
                     },
                     updateStatuses: function () {
                         var collection = this.collection;
-                        accountAPI.getStatus().then(function (status) {
+                        return accountAPI.getStatus().done(function (status) {
                             for (var id in status) {
                                 // to avoid double ids the collection has the account type as prefix see Bug 50219
                                 var model = collection.get('mail' + id),
