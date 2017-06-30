@@ -21,6 +21,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     // options:
     // - async: call busy() instead of close() when invoking an action (except "cancel")
     // - container: parent DOM element of the dialog
+    // - backdrop: include a backdrop element - default is 'static': backdrop is rendered but non-clickable,
+    //       see http://getbootstrap.com/javascript/#modals-options
     // - enter: this action is triggered on <enter>
     // - focus: set initial focus on this element
     // - help: link to online help article
@@ -98,7 +100,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             this.previousFocus = o.previousFocus || $(document.activeElement);
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
-            this.$el.modal({ keyboard: false }).modal('show');
+            this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
             this.$el.siblings(':not(script,noscript)').attr('aria-hidden', true);
             this.trigger('open');
             // set initial focus
