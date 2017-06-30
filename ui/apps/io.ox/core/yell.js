@@ -204,11 +204,14 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
                 );
             });
 
-            node.append(
-                $('<a href="#" role="button" class="close">').append(
-                    $('<i class="fa fa-times" aria-hidden="true">'),
-                    $('<span class="sr-only">').text(gt('Close this notification')))
-            );
+            // closeOnClick: only show a close button when the yell can be closed on click
+            if (o.closeOnClick) {
+                node.append(
+                    $('<a href="#" role="button" class="close">').append(
+                        $('<i class="fa fa-times" aria-hidden="true">'),
+                        $('<span class="sr-only">').text(gt('Close this notification')))
+                );
+            }
 
             // yell would be behind modal dialogs, because those are attached to the body node
             // this also applies for the wizard
