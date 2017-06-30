@@ -399,14 +399,24 @@ define('io.ox/core/folder/extensions', [
 
         subscribe: function (baton) {
             if (baton.extension.capabilities && !upsell.visible(baton.extension.capabilities)) return;
-            var title;
-            if (baton.module === 'contacts') title = gt('Subscribe address book');
-            else if (baton.module === 'calendar') title = gt('Subscribe calendar');
-            this.append(
-                $('<li role="presentation">').append(
-                    $('<a href="#" data-action="subscribe-address-book" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionDialog)
-                )
-            );
+            var self = this, title;
+
+            require(['io.ox/core/sub/subscriptions'], function (sub) {
+                // if there is nothing configured we do not show the "subscribe" button
+                if (baton.module === 'contacts' && sub.availableServices.contacts) {
+                    title = gt('Subscribe address book');
+                } else if (baton.module === 'calendar' && sub.availableServices.calendar) {
+                    title = gt('Subscribe calendar');
+                } else {
+                    return;
+                }
+
+                self.append(
+                    $('<li role="presentation">').append(
+                        $('<a href="#" data-action="subscribe-external-account" role="treeitem">').text(title).on('click', { baton: baton }, openSubscriptionDialog)
+                    )
+                );
+            });
         },
 
         treeLinks: function () {
