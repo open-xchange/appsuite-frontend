@@ -3829,9 +3829,9 @@ supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
-swiper@3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-3.0.6.tgz#004d887a473ab19ee349bdebb677ae4fb208453d"
+swiper@3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-3.4.2.tgz#39d6b410b1a39833e1f72d3b72999df5f5e38392"
 
 table@^4.0.1:
   version "4.0.1"
