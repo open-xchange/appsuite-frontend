@@ -34,8 +34,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     var POINT = 'io.ox/mail/vacation-notice/edit',
         INDEX = 0,
         INDEX_RANGE = 0,
-        INDEX_ADV = 0,
-        DAY = 24 * 60 * 60 * 1000;
+        INDEX_ADV = 0;
 
     function open() {
         return getData().then(openModalDialog, fail);
@@ -80,12 +79,8 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     })
                 );
             },
-            getDuration: function () {
-                var from = this.model.get('dateFrom'), until = this.model.get('dateUntil');
-                return Math.floor(moment.duration(moment(until + DAY).diff(from)).asDays());
-            },
             getDurationString: function () {
-                var duration = this.getDuration();
+                var duration = this.model.getDuration();
                 return duration > 0 ? gt.ngettextf('%1$d day', '%1$d days', duration) : '';
             }
         })

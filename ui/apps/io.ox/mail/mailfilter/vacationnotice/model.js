@@ -17,6 +17,8 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
 
     'use strict';
 
+    var DAY = 24 * 60 * 60 * 1000;
+
     var VacationNoticeModel = Backbone.Model.extend({
 
         parse: function (response) {
@@ -172,12 +174,17 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             var now = _.utc();
             // FROM and UNTIL
             if (this.has('dateFrom') && this.has('dateUntil')) {
-                return this.get('dateFrom') <= now && this.get('dateUntil') > now;
+                return this.get('dateFrom') <= now && (this.get('dateUntil') + DAY) > now;
             }
             // just FROM
             if (this.has('dateFrom')) return this.get('dateFrom') <= now;
             // just UNTIL
-            return this.get('dateUntil') > now;
+            return (this.get('dateUntil') + DAY) > now;
+        },
+
+        getDuration: function () {
+            var from = this.model.get('dateFrom'), until = this.model.get('dateUntil');
+            return Math.floor(moment.duration(moment(until + DAY).diff(from)).asDays());
         }
     });
 
