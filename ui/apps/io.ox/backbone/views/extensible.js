@@ -28,7 +28,7 @@ define('io.ox/backbone/views/extensible', ['io.ox/backbone/views/disposable', 'i
         constructor: function (options) {
             // add central extension point
             this.options = options || {};
-            this.point = ext.point(this.options.point);
+            this.point = ext.point(this.point || this.options.point);
             // the original constructor will call initialize()
             DisposableView.prototype.constructor.apply(this, arguments);
             // simplify debugging

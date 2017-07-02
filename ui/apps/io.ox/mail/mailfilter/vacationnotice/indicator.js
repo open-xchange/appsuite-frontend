@@ -13,13 +13,16 @@
 
 define('io.ox/mail/mailfilter/vacationnotice/indicator', [
     'io.ox/mail/mailfilter/vacationnotice/model',
-    'io.ox/backbone/views/disposable',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/extensions',
     'gettext!io.ox/mail'
-], function (Model, DisposableView, gt) {
+], function (Model, ExtensibleView, ext, gt) {
 
     'use strict';
 
-    var VacationNoticeIndicator = DisposableView.extend({
+    var VacationNoticeIndicator = ExtensibleView.extend({
+
+        point: 'io.ox/mail/vacation-notice/indicator',
 
         el: '<div class="alert alert-info alert-dismissable" role="alert">',
 
@@ -44,16 +47,6 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             }.bind(this));
         },
 
-        render: function () {
-            this.$el.append(
-                $('<button type="button" class="close"><span aria-hidden="true">&times;</span></button>')
-                    .attr('aria-label', gt('Close')),
-                $('<a href="#" data-action="edit-vacation-notice">')
-                    .text(gt('Your vacation notice is active'))
-            );
-            return this;
-        },
-
         onClose: function () {
             this.$el.hide().next().css('top', '');
         },
@@ -63,6 +56,29 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             this.$el.toggle(active).next().css('top', active ? '40px' : '');
         }
     });
+
+    ext.point('io.ox/mail/vacation-notice/indicator').extend(
+        {
+            id: 'close',
+            index: 100,
+            render: function () {
+                this.$el.append(
+                    $('<button type="button" class="close"><span aria-hidden="true">&times;</span></button>')
+                        .attr('aria-label', gt('Close'))
+                );
+            }
+        },
+        {
+            id: 'link',
+            index: 200,
+            render: function () {
+                this.$el.append(
+                    $('<a href="#" data-action="edit-vacation-notice">')
+                        .text(gt('Your vacation notice is active'))
+                );
+            }
+        }
+    );
 
     return VacationNoticeIndicator;
 });

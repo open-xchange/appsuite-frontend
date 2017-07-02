@@ -183,7 +183,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         },
 
         getDuration: function () {
-            var from = this.model.get('dateFrom'), until = this.model.get('dateUntil');
+            var from = this.get('dateFrom'), until = this.get('dateUntil');
             return Math.floor(moment.duration(moment(until + DAY).diff(from)).asDays());
         }
     });
