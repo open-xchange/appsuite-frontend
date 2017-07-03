@@ -67,6 +67,7 @@
     "bootstrap-tokenfield": "git://github.com/Open-Xchange-Frontend/bootstrap-tokenfield.git#6d86ea2da2cb1129b21a00b68369f737c8007c07",
     "chart.js": "2.6.0",
     "clipboard": "1.7.1",
+    "crypto-js": "3.1.9-1",
     "font-awesome": "4.7.0",
     "jquery": "2.2.4",
     "jquery-touch-events": "git://github.com/benmajor/jQuery-Touch-Events.git#1.0.9",

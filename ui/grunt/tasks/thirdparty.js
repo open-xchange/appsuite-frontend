@@ -115,14 +115,14 @@ module.exports = function (grunt) {
                         expand: true,
                         flatten: true,
                         src: ['requirejs/require.js'],
-                        cwd: 'bower_components/',
+                        cwd: 'node_modules/',
                         dest: 'build/static/3rd.party/requirejs'
                     },
                     {
                         expand: true,
                         flatten: true,
                         src: ['crypto-js/crypto-js.js'],
-                        cwd: 'bower_components/',
+                        cwd: 'node_modules/',
                         dest: 'build/static/3rd.party/crypto-js'
                     },
                     {
