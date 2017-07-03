@@ -23,6 +23,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/tk/attachments',
     'io.ox/backbone/views/recurrence-view',
+    'io.ox/backbone/mini-views/alarms',
     'io.ox/calendar/chronos-api',
     'io.ox/participants/add',
     'io.ox/participants/views',
@@ -32,7 +33,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -420,35 +421,11 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    // alarms
-    point.extend({
-        id: 'alarm',
-        className: 'col-md-6',
-        index: 800,
-        render: function () {
-            var guid = _.uniqueId('form-control-label-');
-            this.$el.append(
-                $('<label class="control-label">').attr('for', guid).text(gt('Reminder')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-                $('<div>').append(
-                    new mini.SelectView({
-                        list: _.map(calendarUtil.getReminderOptions(), function (key, val) { return { label: key, value: val }; }),
-                        name: 'alarm',
-                        model: this.baton.model,
-                        id: guid,
-                        className: 'form-control'
-                    }).render().$el
-                )
-            );
-        }
-    }, {
-        rowClass: 'collapsed form-spacer'
-    });
-
     // shown as
     point.extend({
         id: 'shown_as',
         className: 'col-md-6',
-        index: 900,
+        index: 800,
         render: function () {
             var guid = _.uniqueId('form-control-label-'),
                 options = [
@@ -471,7 +448,6 @@ define('io.ox/calendar/edit/extensions', [
             );
         }
     }, {
-        nextTo: 'alarm',
         rowClass: 'collapsed form-spacer'
     });
 
@@ -482,7 +458,7 @@ define('io.ox/calendar/edit/extensions', [
     //color selection
     point.extend({
         id: 'color',
-        index: 1000,
+        index: 900,
         className: 'col-md-6',
         render: function () {
 
@@ -524,7 +500,7 @@ define('io.ox/calendar/edit/extensions', [
     // private checkbox
     point.extend({
         id: 'private_flag',
-        index: 1200,
+        index: 1000,
         className: 'col-md-6',
         render: function () {
 
@@ -542,6 +518,23 @@ define('io.ox/calendar/edit/extensions', [
     }, {
         nextTo: 'color',
         rowClass: 'collapsed'
+    });
+
+    // alarms
+    point.extend({
+        id: 'alarms',
+        index: 1100,
+        className: 'col-md-12',
+        render: function () {
+            this.$el.append(
+                $('<fieldset>').append(
+                    $('<legend>').text(gt('Reminder')),
+                    new AlarmsView({ model: this.model }).render().$el
+                )
+            );
+        }
+    }, {
+        rowClass: 'collapsed form-spacer'
     });
 
     // participants container
