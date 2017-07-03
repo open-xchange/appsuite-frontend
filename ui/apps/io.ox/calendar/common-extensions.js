@@ -148,6 +148,7 @@ define('io.ox/calendar/common-extensions', [
         organizer: function (baton) {
 
             // internal or external organizer?
+            // TODO check if internal and external organizers are still different, maybe we can get rid of the 2 options here
             if (!baton.data.organizerId && !baton.data.organizer) return;
 
             this.append(
@@ -161,8 +162,9 @@ define('io.ox/calendar/common-extensions', [
                                 user_id: baton.data.organizerId
                             } : {
                                 $el: baton.organizerNode,
-                                name: baton.data.organizer,
-                                email: baton.data.organizer
+                                name: baton.data.organizer.cn,
+                                email: baton.data.organizer.email,
+                                user_id: baton.data.organizer.entity
                             },
                             baton.data
                         )
