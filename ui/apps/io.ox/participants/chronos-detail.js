@@ -13,16 +13,11 @@
 
 define('io.ox/participants/chronos-detail', [
     'io.ox/calendar/util',
-    'io.ox/core/api/user',
-    'io.ox/core/api/group',
-    'io.ox/core/api/resource',
     'io.ox/core/extensions',
-    'io.ox/contacts/util',
-    'io.ox/mail/util',
     'io.ox/core/util',
     'gettext!io.ox/core',
     'less!io.ox/participants/style'
-], function (util, userAPI, groupAPI, resourceAPI, ext, contactsUtil, mailUtil, coreUtil, gt) {
+], function (util, ext, coreUtil, gt) {
 
     'use strict';
 
