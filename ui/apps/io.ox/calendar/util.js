@@ -164,7 +164,7 @@ define('io.ox/calendar/util', [
         getDateTimeIntervalMarkup: function (data, options) {
             if (data && data.start_date && data.end_date) {
 
-                options = _.extend({ timeZoneLabel: { placement: 'top' }, a11y: false, output: 'markup' }, options);
+                options = _.extend({ timeZoneLabel: { placement:  _.device('touch') ? 'bottom' : 'top' }, a11y: false, output: 'markup' }, options);
 
                 if (options.container && options.container.parents('#io-ox-core').length < 1) {
                     // view is not in core (happens with deep links)
