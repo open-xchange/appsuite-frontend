@@ -4516,8 +4516,8 @@ tinymce@4.6.7:
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.7.tgz#ef2e82828989073d187a4e3491c74eb6a8cd92f3"
 
 tinymce@^4.6.3:
-  version "4.6.5"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.5.tgz#b5ea976738e819bf07a44f7d5653fb160880b9ee"
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.3.tgz#94ad24ead4f13938c0903afd2ff469c0b655623e"
 
 tmp@0.0.31, tmp@0.0.x:
   version "0.0.31"
