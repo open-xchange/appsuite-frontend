@@ -34,6 +34,7 @@ define('io.ox/calendar/util', [
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
+        chronosStates = 'NEEDS-ACTION ACCEPTED DECLINED TENTATIVE'.split(' '),
         confirmTitles = [
             gt('unconfirmed'),
             gt('accepted'),
@@ -473,15 +474,15 @@ define('io.ox/calendar/util', [
         },
 
         getConfirmationSymbol: function (status) {
-            return n_confirm[status || 0];
+            return n_confirm[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
 
         getConfirmationClass: function (status) {
-            return (status || 'NEEDS-ACTION').toLowerCase();
+            return confirmClass[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
 
         getConfirmationLabel: function (status) {
-            return confirmTitles[status || 0];
+            return confirmTitles[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
         },
 
         getRecurrenceDescription: function (data) {
@@ -720,7 +721,7 @@ define('io.ox/calendar/util', [
                 };
             });
             _.each(conf, function (c) {
-                ret[c.status].count++;
+                ret[c.status || chronosStates.indexOf(c.partStat)].count++;
                 ret.count++;
             });
             return ret;

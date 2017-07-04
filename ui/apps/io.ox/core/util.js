@@ -65,7 +65,7 @@ define('io.ox/core/util', ['io.ox/core/extensions', 'settings!io.ox/core'], func
 
             var halo = {
                 // alternative fields to get the name
-                name: options.full_name || options.display_name || options.name,
+                name: options.full_name || options.display_name || options.name || options.cn,
                 // halo view looks for email1
                 email: options.email,
                 email1: options.email,

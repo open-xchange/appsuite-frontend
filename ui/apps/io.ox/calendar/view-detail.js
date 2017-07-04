@@ -17,7 +17,7 @@ define('io.ox/calendar/view-detail', [
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-api',
     'io.ox/core/tk/attachments',
-    'io.ox/participants/detail',
+    'io.ox/participants/chronos-detail',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
@@ -107,7 +107,7 @@ define('io.ox/calendar/view-detail', [
         index: 700,
         id: 'inline-actions-participantrelated',
         draw: function (baton) {
-            if (!baton.data.participants && !baton.data.participants.length <= 1) return;
+            if (!baton.model.get('attendees') || baton.model.get('attendees').length <= 1) return;
             ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, baton);
         }
     });
