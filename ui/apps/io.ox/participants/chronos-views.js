@@ -21,6 +21,12 @@ define('io.ox/participants/chronos-views', [
 
     'use strict';
 
+    var TYPE_LABELS = {
+        'INDIVIDUAL': '',
+        'GROUP': gt('Group'),
+        'RESOURCE': gt('Resource')
+    };
+
     var ParticipantEntryView = Backbone.View.extend({
 
         tagName: 'div',
@@ -100,7 +106,7 @@ define('io.ox/participants/chronos-views', [
 
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
-                extra = extra || '';
+                extra = extra || TYPE_LABELS[this.model.get('cuType')] || '';
                 this.nodes.$mail.text(mail);
                 this.nodes.$extra.text(extra);
                 if (mail && extra) {
@@ -145,7 +151,7 @@ define('io.ox/participants/chronos-views', [
                             .addClass('halo-link');
                     }
                     break;
-                case 'RESSOURCE':
+                case 'RESOURCE':
                     if (this.options.halo && !this.options.hideMail) {
                         var data = this.model.toJSON();
                         data.callbacks = {};

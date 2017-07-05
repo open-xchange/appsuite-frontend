@@ -53,33 +53,34 @@ define('io.ox/participants/add', [
 
     var validation = {
 
-        validate: function (list, options) {
-            if (!this.options.blacklist) return;
-            var opt = _.extend({ yell: true }, options),
-                invalid = this.getInvalid(list);
-            // process
-            if (invalid.length === 0) return;
-            // yell warning
-            if (opt.yell) this.yell(list, invalid);
-            return invalid;
-        },
+            validate: function (list, options) {
+                if (!this.options.blacklist) return;
+                var opt = _.extend({ yell: true }, options),
+                    invalid = this.getInvalid(list);
+                // process
+                if (invalid.length === 0) return;
+                // yell warning
+                if (opt.yell) this.yell(list, invalid);
+                return invalid;
+            },
 
-        getInvalid: function (list) {
-            var blacklist = this.options.blacklist;
-            return _(getAddresses(list)).filter(function (address) {
-                return !!blacklist[address];
-            });
-        },
+            getInvalid: function (list) {
+                var blacklist = this.options.blacklist;
+                return _(getAddresses(list)).filter(function (address) {
+                    return !!blacklist[address];
+                });
+            },
 
-        yell: function (list, invalid) {
-            yell('warning', gt.format(
-                //#. %1$d a list of email addresses
-                //#, c-format
-                gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-                invalid.join(', ')
-            ));
-        }
-    };
+            yell: function (list, invalid) {
+                yell('warning', gt.format(
+                    //#. %1$d a list of email addresses
+                    //#, c-format
+                    gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
+                    invalid.join(', ')
+                ));
+            }
+        },
+        attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
 
     function getAddresses(list) {
         return _(list).map(getAddress);
@@ -174,6 +175,39 @@ define('io.ox/participants/add', [
             if (error) return;
             // now really validate address
             list = this.getValidAddresses(list);
+
+            if (this.options.convertToAttendee) {
+                list = _(list).map(function (item) {
+                    // external participants that are not in the addressbook are not full models (just typed in a new mail address)
+                    if (!item.get) {
+                        return {
+                            cuType: 'INDIVIDUAL',
+                            cn: item.display_name,
+                            partStat: 'NEEDS-ACTION',
+                            email: item.email1,
+                            uri: 'mailto:' + item.email1,
+                            comment: ''
+                        };
+                    }
+                    var attendee = {
+                        cuType: attendeeLookupArray[item.get('type')],
+                        entity: item.get('user_id') || item.get('id'),
+                        cn: item.getDisplayName()
+                    };
+                    if (attendee.cuType !== 'RESOURCE') {
+                        attendee.uri = 'mailto:' + item.value;
+                        attendee.folder = item.get('folder_id');
+                        attendee.partStat = 'NEEDS-ACTION';
+                        attendee.email = item.value;
+                        attendee.comment = '';
+                    } else {
+                        attendee.partStat = 'ACCEPTED';
+                        attendee.comment = item.get('description');
+                    }
+                    return attendee;
+                });
+            }
+
             this.collection.add(list);
             // clean typeahad input
             if (value) this.typeahead.$el.typeahead('val', '');
