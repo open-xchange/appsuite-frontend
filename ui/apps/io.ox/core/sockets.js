@@ -20,7 +20,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         PATH = '/socket.io/appsuite',
         isConnected = false,
         supported = Modernizr.websockets && cap.has('websocket'),
-        debug = _.url.hash('socket-debug') || ox.debug,
+        debug = true, //_.url.hash('socket-debug') || ox.debug,
         options = {
             path: PATH,
             transports: ['websocket'],      // do not change, middleware only support sockets not http polling
@@ -30,57 +30,71 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
             reconnectionDelayMax: 10 * 60 * 1000      // 10 min. max delay between a reconnect (reached after aprox. 10 retries)
         };
 
+    ox.websocketlog = [];
+
+    function log(event) {
+        try {
+            ox.websocketlog.push({
+                timestamp: _.now(),
+                date: moment().format('D.M.Y HH:mm:ss'),
+                event: event
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     function connectSocket() {
         var def = $.Deferred();
         // connect Websocket
-        if (debug) console.log('Websocket trying to connect...');
+        if (debug) log('Websocket trying to connect...');
         socket = io.connect(URI + '/?session=' + ox.session, options);
         // expose global variable for debugging
         if (debug) window.socket = socket;
         socket.on('connect', function () {
-            if (debug) console.log('Websocket connected!');
+            if (debug) log('Websocket connected!');
             isConnected = true;
             def.resolve(socket);
         });
         socket.on('disconnect', function () {
-            if (debug) console.log('Websocket disconnected');
+            if (debug) log('Websocket disconnected');
             isConnected = false;
         });
         socket.on('reconnect', function () {
-            if (debug) console.log('Websocket was reconnected');
+            if (debug) log('Websocket was reconnected');
             isConnected = true;
         });
         socket.on('reconnecting', function () {
-            if (debug) console.log('Websocket trying to reconnect');
+            if (debug) log('Websocket trying to reconnect');
         });
         socket.on('connect_error', function () {
-            if (debug) console.log('Websocket connection error');
+            if (debug) log('Websocket connection error');
             if (socket.io.backoff.attempts === options.reconnectionAttempts) {
                 ox.trigger('socket:maxreconnections:reached');
-                if (debug) console.log('Max reconnection attempts for socket reached, stopping reconnection.');
+                if (debug) log('Max reconnection attempts for socket reached, stopping reconnection.');
             }
             def.reject();
         });
         socket.on('connect_timeout', function () {
-            if (debug) console.log('Websocket connection timeout');
+            if (debug) log('Websocket connection timeout');
             def.reject();
         });
 
         // close socket on invalid session
         socket.on('session:invalid', function () {
-            if (debug) console.log('Websocket disconnected due to invalid session');
+            if (debug) log('Websocket disconnected due to invalid session');
             if (socket.connected) socket.close();
         });
 
         ox.on('relogin:required', function () {
-            if (debug) console.log('Websocket disconnected due to invalid session');
+            if (debug) log('Websocket disconnected due to invalid session');
             if (socket.connected) socket.close();
         });
 
         // reconnect socket on new session
         ox.on('relogin:success', function () {
             if (socket.disconnected) {
-                if (debug) console.log('Websocket reconnecting with new session');
+                if (debug) log('Websocket reconnecting with new session');
                 if (socket.disconnected) {
                     // recreate URI to pass new session
                     socket.io.uri = URI + '/?session=' + ox.session;
@@ -90,7 +104,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         });
         // disconnect on logout
         ox.on('logout', function () {
-            if (debug) console.log('Websocket disconnected on logout');
+            if (debug) log('Websocket disconnected on logout');
             if (socket.connected) socket.close();
         });
 
@@ -108,7 +122,7 @@ define('io.ox/core/sockets', ['static/3rd.party/socket.io.slim.js', 'io.ox/core/
         } else if (socket) {
             return $.Deferred().resolve(socket);
         }
-        if (debug) console.log('No websocket support, connection not possible.');
+        if (debug) log('No websocket support, connection not possible.');
         return $.Deferred().reject();
     }
 

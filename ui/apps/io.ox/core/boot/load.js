@@ -145,6 +145,17 @@ define('io.ox/core/boot/load', [
             if (capabilities.has('webmail')) {
                 socket.on('ox:mail:new', function (data) {
                     // simple event forwarding
+                    // don't log sensitive data here (data object)
+                    try {
+                        ox.websocketlog.push({
+                            timestamp: _.now(),
+                            date: moment().format('D.M.Y HH:mm:ss'),
+                            event: 'ox:mail:new',
+                            data: { folder: data.folder, id: data.id }
+                        });
+                    } catch (e) {
+                        console.log(e);
+                    }
                     ox.trigger('socket:mail:new', data);
                 });
             }
