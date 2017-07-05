@@ -36,12 +36,12 @@ define('io.ox/backbone/mini-views/alarms', [
         render: function () {
             var self = this;
             this.$el.empty().append(
-                self.list,
                 $('<button class="btn btn-default" type="button">').text(gt('Add new Reminder'))
                     .on('click', function () {
                         self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: '15' }));
                         self.updateModel();
-                    })
+                    }),
+                self.list
             );
             this.updateView();
             return this;
