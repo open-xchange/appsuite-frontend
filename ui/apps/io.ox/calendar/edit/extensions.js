@@ -26,7 +26,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/backbone/mini-views/alarms',
     'io.ox/calendar/chronos-api',
     'io.ox/participants/add',
-    'io.ox/participants/views',
+    'io.ox/participants/chronos-views',
     'io.ox/core/capabilities',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',

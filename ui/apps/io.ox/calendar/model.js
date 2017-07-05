@@ -16,12 +16,11 @@ define('io.ox/calendar/model', [
     'io.ox/backbone/extendedModel',
     'gettext!io.ox/calendar',
     'io.ox/backbone/validation',
-    'io.ox/participants/model',
     'io.ox/core/folder/api',
     'io.ox/core/strings',
     'settings!io.ox/calendar',
     'settings!io.ox/core'
-], function (api, ext, extendedModel, gt, Validators, pModel, folderAPI, strings, settings, coreSettings) {
+], function (api, ext, extendedModel, gt, Validators, folderAPI, strings, settings, coreSettings) {
 
     'use strict';
 
@@ -163,19 +162,20 @@ define('io.ox/calendar/model', [
             var self = this,
                 resetListUpdate = false,
                 changeParticipantsUpdate = false;
-            // create collection
-            this._participants = new pModel.Participants(this.get('participants'), { silent: false });
-            // sync property and collection
+
+            this._participants = new Backbone.Collection(this.get('attendees'), { silent: false });
+
             this._participants.on('add remove reset', function () {
                 if (changeParticipantsUpdate) return;
                 resetListUpdate = true;
-                self.set('participants', this.getAPIData(), { validate: true });
+                self.set('attendees', this.toJSON(), { validate: true });
                 resetListUpdate = false;
             });
-            this.on('change:participants', function () {
+
+            this.on('change:attendees', function () {
                 if (resetListUpdate) return;
                 changeParticipantsUpdate = true;
-                self._participants.reset(self.get('participants'));
+                self._participants.reset(self.get('attendees'));
                 changeParticipantsUpdate = false;
             });
             return this._participants;
