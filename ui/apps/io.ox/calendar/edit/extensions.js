@@ -565,6 +565,7 @@ define('io.ox/calendar/edit/extensions', [
                     resources: true,
                     distributionlists: true
                 },
+                convertToAttendee: true,
                 collection: baton.model.getParticipants(),
                 blacklist: settings.get('participantBlacklist') || false,
                 scrollIntoView: true
