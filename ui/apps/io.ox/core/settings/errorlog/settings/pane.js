@@ -13,12 +13,14 @@
 
 define('io.ox/core/settings/errorlog/settings/pane', [
     'io.ox/core/extensions',
+    'io.ox/backbone/views/extensible',
+    'io.ox/core/settings/util',
     'io.ox/core/http',
     'io.ox/core/capabilities',
     'settings!io.ox/core',
     'gettext!io.ox/core',
     'static/3rd.party/Chart.min.js'
-], function (ext, http, capabilities, settings, gt, Chart) {
+], function (ext, ExtensibleView, util, http, capabilities, settings, gt, Chart) {
 
     'use strict';
 
@@ -29,9 +31,40 @@ define('io.ox/core/settings/errorlog/settings/pane', [
         id: 'errorlog',
         title: gt('Error log'),
         ref: 'io.ox/core/settings/errorlog',
-        index: 200,
-        advancedMode: true
+        index: 200
     });
+
+    ext.point('io.ox/core/settings/errorlog/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/core/settings/errorlog/settings/detail/view', model: settings })
+                .render().$el
+            );
+        }
+    });
+
+    ext.point('io.ox/core/settings/errorlog/settings/detail/view').extend(
+        {
+            id: 'header',
+            index: 100,
+            render: function () {
+                this.$el.append(util.header(gt('Error log')));
+            }
+        },
+        {
+            id: 'error-view',
+            index: 200,
+            render: function () {
+                this.$el.append(new ErrorLogView().render().$el);
+            }
+        }
+    );
+
+    //
+    // Error Log View
+    //
 
     var ErrorLogView = Backbone.View.extend({
 
@@ -352,15 +385,6 @@ define('io.ox/core/settings/errorlog/settings/pane', [
             );
 
             this.updateTab(id);
-        }
-    });
-
-    ext.point('io.ox/core/settings/errorlog/settings/detail').extend({
-        draw: function () {
-            this.append(
-                $('<h1>').text(gt('Error log')),
-                (new ErrorLogView()).render().$el
-            );
         }
     });
 });

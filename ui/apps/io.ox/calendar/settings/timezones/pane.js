@@ -12,56 +12,53 @@
  */
 
 define('io.ox/calendar/settings/timezones/pane', [
+    'io.ox/backbone/views/extensible',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'io.ox/core/extensions',
     'io.ox/calendar/settings/timezones/favorite-view',
     'less!io.ox/calendar/settings/timezones/style.less'
-], function (settings, gt, ext, FavoriteView) {
+], function (ExtensibleView, settings, gt, ext, FavoriteView) {
 
     'use strict';
-
-    var POINT = 'io.ox/calendar/timezones/settings/detail';
 
     ext.point('io.ox/settings/pane/main/io.ox/calendar').extend({
         id: 'io.ox/timezones',
         title: gt('Favorite timezones'),
         ref: 'io.ox/calendar/timezones',
         loadSettingPane: false,
-        index: 100,
-        lazySaveSettings: true
+        index: 100
     });
 
-    ext.point(POINT).extend({
+    ext.point('io.ox/calendar/timezones/settings/detail').extend({
         index: 100,
-        id: 'timezone-calendarsettings',
-        draw: function () {
-            var self = this,
-                pane = $('<div class="io-ox-calendar-settings">');
-            self.append($('<div>').addClass('section').append(pane));
-            ext.point(POINT + '/pane').invoke('draw', pane);
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'header',
+        id: 'view',
         draw: function () {
             this.append(
-                $('<h1>').text(gt.pgettext('app', 'Favorite timezones'))
+                new ExtensibleView({ point: 'io.ox/calendar/timezones/settings/detail/view', model: settings })
+                .render().$el
             );
         }
     });
 
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'favorite-timezone',
-        draw: function () {
-            this.append(
-                $('<fieldset>').append(
+    ext.point('io.ox/calendar/timezones/settings/detail/view').extend(
+        {
+            id: 'header',
+            index: 100,
+            render: function () {
+                this.$el.addClass('io-ox-calendar-settings').append(
+                    $('<h1>').text(gt.pgettext('app', 'Favorite timezones'))
+                );
+            }
+        },
+        {
+            id: 'favorite-timezone',
+            index: 200,
+            render: function () {
+                this.$el.append(
                     new FavoriteView({ model: settings }).render().$el
-                )
-            );
+                );
+            }
         }
-    });
+    );
 });

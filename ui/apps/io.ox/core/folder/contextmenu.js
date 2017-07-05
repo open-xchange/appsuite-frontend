@@ -675,11 +675,13 @@ define('io.ox/core/folder/contextmenu', [
             draw: divider
         },
         // -----------------------------------------------
+        /*
         {
             id: 'properties',
             index: 6100,
             draw: extensions.properties
         },
+        */
         {
             id: 'toggle',
             index: 6200,

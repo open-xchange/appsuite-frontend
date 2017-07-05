@@ -119,6 +119,11 @@ define('io.ox/core/gettext', function () {
             return npgettext.apply(null, args);
         };
 
+        gettext.ngettextf = function (/* singular, plural, n */) {
+            var str = this.ngettext.apply(this, arguments);
+            return this.format(str, arguments[2]);
+        };
+
         gettext.getDictionary = function () {
             return po.dictionary;
         };

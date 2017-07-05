@@ -3887,7 +3887,7 @@ msgstr ""
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr ""
-"Dateien können nicht hochgeladen werden, weil das Upload-Limit von%1$s "
+"Dateien können nicht hochgeladen werden, weil das Upload-Limit von %1$s "
 "überschritten wurde."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
@@ -9971,7 +9971,7 @@ msgstr "Benutzernamen dürfen nicht leer sein."
 
 #: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/mail/vacationnotice/settings/register.js
-msgid "Vacation Notice"
+msgid "Vacation notice"
 msgstr "Abwesenheitsnotiz"
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
@@ -10011,6 +10011,13 @@ msgstr "Videos"
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+msgid "View"
+msgstr "Ansicht"
+
+#. the noun not the verb
+#: apps/io.ox/core/boot/i18n.js
+#: module:io.ox/core/boot
+msgctxt "noun"
 msgid "View"
 msgstr "Ansicht"
 

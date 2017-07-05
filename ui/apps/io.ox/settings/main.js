@@ -42,23 +42,11 @@ define('io.ox/settings/main', [
         // nodes
         left,
         right,
-        // always true
-        // TODO: clean up code if we stick to the decision to remove this
-        expertmode = true,
         currentSelection = null,
         previousSelection = null,
         pool = api.pool,
         mainGroups = [],
         disabledSettingsPanes;
-
-    // function updateExpertMode() {
-    //     var nodes = $('.expertmode');
-    //     if (expertmode) {
-    //         nodes.show();
-    //     } else {
-    //         nodes.hide();
-    //     }
-    // }
 
     ext.point('io.ox/settings/help/mapping').extend({
         id: 'core',
@@ -204,6 +192,7 @@ define('io.ox/settings/main', [
         });
 
         var getAllSettingsPanes = function () {
+
             var def = $.Deferred(),
                 actionPoints = {
                     'redirect': 'io.ox/autoforward',
@@ -211,13 +200,9 @@ define('io.ox/settings/main', [
                 };
 
             disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
+
             function filterAvailableSettings(point) {
-                var shown = _.indexOf(disabledSettingsPanes, point.id) === -1;
-                if (expertmode && shown) {
-                    return true;
-                } else if (!point.advancedMode && shown) {
-                    return true;
-                }
+                return _.indexOf(disabledSettingsPanes, point.id) === -1;
             }
 
             if (capabilities.has('mailfilter')) {
@@ -326,7 +311,7 @@ define('io.ox/settings/main', [
             if (opt.focus) item.focus();
 
             // show subfolders on default
-            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open');
+            if (view.hasSubFolders() && view.options.open !== 'open') view.toggle('open', true);
 
             // show settings on changed selection or on forced refresh
             previousSelection = currentSelection;
@@ -568,16 +553,14 @@ define('io.ox/settings/main', [
                     right.empty().idle();
                     vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                     ext.point(extPointPart).invoke('draw', right, baton);
-                    // updateExpertMode();
                     if (focus) vsplit.right.focus();
                 });
             }
-            return require(['io.ox/contacts/settings/pane', 'io.ox/mail/vacationnotice/settings/filter', 'io.ox/mail/autoforward/settings/filter'], function () {
+            return require(['io.ox/contacts/settings/pane'], function () {
                 // again, since require makes this async
                 right.empty().idle();
                 vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                 ext.point(extPointPart).invoke('draw', right, baton);
-                // updateExpertMode();
                 if (focus) vsplit.right.focus();
             });
         };

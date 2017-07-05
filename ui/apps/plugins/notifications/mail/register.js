@@ -109,7 +109,6 @@ define('plugins/notifications/mail/register', [
                 sound = s;
             }
         });
-        settings.saveAndYell();
     });
 
     // get and load stored sound
@@ -119,36 +118,14 @@ define('plugins/notifications/mail/register', [
         });
     }
 
-    ext.point('io.ox/mail/settings/detail/pane').extend({
-        index: 490,
+    ext.point('io.ox/mail/settings/detail/pane/view').extend({
+        index: 100,
         id: 'sounds',
-        draw: function () {
-            if (_.device('smartphone') || !cap.has('websocket') || !Modernizr.websockets) return;
-            // use this array to customize the sounds
-            // copy new/other sounds to themefolder->sounds
-            var sounds;
-
-            this.append(
-                formUtil.fieldset(
-                    //#. Should be "töne" in german, used for notification sounds. Not "geräusch"
-                    gt('Notification sounds'),
-                    formUtil.checkbox('playSound', gt('Play sound on incoming mail'), settings),
-                    $('<div class="col-xs-12 col-md-6">').append(
-                        $('<div class="row">').append(
-                            $('<label>').attr({ 'for': 'notificationSoundName' }).text(gt('Sound')),
-                            sounds = new miniViews.SelectView({ list: soundList, name: 'notificationSoundName', model: settings, id: 'notificationSoundName', className: 'form-control' }).render().$el
-
-                        )
-                    )
-                )
-            );
-
-            // toggle soundselection on overall settings
-            $(sounds).prop('disabled', !settings.get('playSound'));
-
-            settings.on('change:playSound', function () {
-                $(sounds).prop('disabled', !settings.get('playSound'));
-            });
+        render: function () {
+            // just publish the array
+            this.getSoundOptions = function () {
+                return soundList;
+            };
         }
     });
 

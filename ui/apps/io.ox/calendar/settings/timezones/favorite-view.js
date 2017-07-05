@@ -46,7 +46,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
 
         tagName: 'div',
 
-        className: 'expertmode favorite-view',
+        className: 'favorite-view',
 
         events: {
             'click button': 'openDialog',
@@ -79,11 +79,9 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
 
         render: function () {
             this.$el.append(
-                $('<div class="form-group">').append(
-                    $('<div class="row">').append(
-                        $('<div class="col-sm-8">').append(
-                            $('<button type="button" class="btn btn-primary">').text(gt('Add timezone'))
-                        )
+                $('<div class="form-group buttons">').append(
+                    $('<button type="button" class="btn btn-primary">').append(
+                        $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add timezone'))
                     )
                 ),
                 $('<div class="form-group">').append(

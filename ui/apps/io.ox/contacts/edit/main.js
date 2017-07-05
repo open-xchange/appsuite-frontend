@@ -99,6 +99,7 @@ define('io.ox/contacts/edit/main', [
                             var invalid = false, field;
                             if (error && error.model) {
                                 _(error.model.attributeValidity).each(function (valid, id) {
+
                                     if (!valid && !invalid) {
                                         field = container.find('[data-field="' + id + '"]');
                                         invalid = true;
@@ -109,7 +110,18 @@ define('io.ox/contacts/edit/main', [
                             win.idle();
 
                             if (invalid) {
-                                notifications.yell('error', gt('Some fields contain invalid data'));
+                                if (error && _.isArray(error.error)) {
+                                    // specific errors
+                                    var allErrors = '';
+                                    _(error.error).each(function (err) {
+                                        // concat issues
+                                        allErrors += err + '\n';
+                                    });
+                                    if (allErrors) notifications.yell('error', allErrors);
+                                } else {
+                                    // unspecific case
+                                    notifications.yell('error', gt('Some fields contain invalid data'));
+                                }
                                 // set error marker and scroll
                                 field = field.addClass('has-error').get(0);
                                 if (field) field.scrollIntoView();

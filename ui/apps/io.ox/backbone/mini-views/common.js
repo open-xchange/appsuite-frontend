@@ -196,19 +196,62 @@ define('io.ox/backbone/mini-views/common', [
         el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.prop('checked'));
+            this.model.set(this.name, this.isChecked());
+        },
+        isChecked: function () {
+            return !!this.$input.prop('checked');
         },
         setup: function () {
+            this.$input = this.$el;
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$el.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
+            this.$input.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
         },
         render: function () {
-            this.$el.attr({ name: this.name });
-            if (this.options.id) this.$el.attr('id', this.options.id);
+            this.$input.attr({ name: this.name });
+            if (this.options.id) this.$input.attr('id', this.options.id);
             this.update();
             return this;
+        }
+    });
+
+    //
+    // custom checkbox
+    // options: id, name, size (small | large), label
+    //
+    var CustomCheckboxView = CheckboxView.extend({
+        el: '<div class="checkbox custom">',
+        render: function () {
+            var id = this.options.id || _.uniqueId('custom-');
+            this.$el.addClass(this.options.size || 'small').append(
+                $('<label>').attr('for', id).append(
+                    this.$input = $('<input type="checkbox" class="sr-only">').attr({ id: id, name: this.name }),
+                    $('<i class="toggle" aria-hidden="true">'),
+                    $.txt(this.options.label || '\u00a0')
+                )
+            );
+            this.update();
+            return this;
+        }
+    });
+
+    //
+    // switch control
+    // options: id, name, size (small | large), label
+    //
+    var SwitchView = CustomCheckboxView.extend({
+        el: '<div class="checkbox switch">',
+        events: {
+            'change': 'onChange',
+            'swipeleft .toggle': 'onSwipeLeft',
+            'swiperight .toggle': 'onSwipeRight'
+        },
+        onSwipeLeft: function () {
+            if (this.isChecked()) this.$input.prop('checked', false);
+        },
+        onSwipeRight: function () {
+            if (!this.isChecked()) this.$input.prop('checked', true);
         }
     });
 
@@ -221,28 +264,48 @@ define('io.ox/backbone/mini-views/common', [
         className: 'controls',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.find('[name="' + this.name + '"]:checked').val());
+            this.model.set(this.name, this.$('[name="' + this.name + '"]:checked').val());
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            var self = this;
-            _.each(self.$el.find('[name="' + self.name + '"]'), function (option) {
-                if (self.model.get(self.name) === option.value) $(option).prop('checked', true);
+            var name = this.model.get(this.name);
+            this.$('[name="' + this.name + '"]').each(function () {
+                if (this.value === name) $(this).prop('checked', true);
             });
         },
         render: function () {
-            var self = this;
-            this.$el.append(_.map(this.options.list, function (option) {
-                return $('<div class="radio">').append(
-                    $('<label>').text(option.label).prepend(
-                        $('<input type="radio">').attr('name', self.name).val(option.value)
-                    )
-                );
-            }));
+            this.$el.append(_(this.options.list).map(this.renderOption, this));
             this.update();
             return this;
+        },
+        renderOption: function (data) {
+            return $('<div class="radio custom">')
+                .addClass(this.options.size || 'small')
+                .append(this.renderLabel(data));
+        },
+        renderLabel: function (data) {
+            return $('<label>').append(this.renderInput(data), $.txt(data.label));
+        },
+        renderInput: function (data) {
+            return $('<input type="radio">').attr('name', this.name).val(data.value);
+        }
+    });
+
+    var CustomRadioView = RadioView.extend({
+        renderLabel: function (data) {
+            return $('<label>').append(
+                this.renderInput(data),
+                this.renderToggle(data),
+                $.txt(data.label)
+            );
+        },
+        renderToggle: function () {
+            return $('<i class="toggle" aria-hidden="true">');
+        },
+        renderInput: function () {
+            return RadioView.prototype.renderInput.apply(this, arguments).addClass('sr-only');
         }
     });
 
@@ -255,7 +318,8 @@ define('io.ox/backbone/mini-views/common', [
         className: 'input-xlarge form-control',
         events: { 'change': 'onChange' },
         onChange: function () {
-            this.model.set(this.name, this.$el.val());
+            var val = this.$el.val();
+            this.model.set(this.name, this.options.integer ? parseInt(val, 10) : val);
         },
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
@@ -264,7 +328,7 @@ define('io.ox/backbone/mini-views/common', [
             this.$el.val(this.model.get(this.name));
         },
         render: function () {
-            this.$el.attr({ name: this.name, tabindex: 0 });
+            this.$el.attr({ name: this.name });
             if (this.id) this.$el.attr({ id: this.id });
             this.$el.append(_.map(this.options.list, function (option) {
                 return $('<option>').attr({ value: option.value }).text(option.label);
@@ -274,6 +338,42 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    //
+    // Date view: <input type="date"> or <input type="text"> plus Date Picker
+    //
+    var DateView = _.device('smartphone') ?
+        InputView.extend({
+            el: '<input type="date" class="form-control">'
+        }) :
+        InputView.extend({
+            format: 'l',
+            onChange: function () {
+                var t = +moment(this.$el.val(), this.format).utc(true);
+                this.model.set(this.name, t);
+            },
+            update: function () {
+                this.$el.val(moment(this.model.get(this.name)).format(this.format));
+            },
+            render: function () {
+                InputView.prototype.render.call(this);
+                var view = this;
+                require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
+                    new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core') })
+                        .attachTo(view.$el)
+                        .on('select', function (date) {
+                            view.model.set(view.name, date.valueOf());
+                        })
+                        .on('before:open', function () {
+                            this.setDate(view.model.get('currentWeek'));
+                        });
+                });
+                return this;
+            }
+        });
+
+    //
+    // Error view
+    //
     var ErrorView =  AbstractView.extend({
         tagName: 'span',
         className: 'help-block',
@@ -323,6 +423,9 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    //
+    // Form view
+    //
     var FormView = AbstractView.extend({
         tagName: 'form',
         setup: function () {
@@ -334,6 +437,9 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    //
+    // Dropdown Link view
+    //
     var DropdownLinkView = Dropdown.extend({
         tagName: 'div',
         className: 'dropdownlink',
@@ -363,8 +469,12 @@ define('io.ox/backbone/mini-views/common', [
         PasswordViewToggle: PasswordViewToggle,
         TextView: TextView,
         CheckboxView: CheckboxView,
+        CustomCheckboxView: CustomCheckboxView,
+        SwitchView: SwitchView,
         RadioView: RadioView,
+        CustomRadioView: CustomRadioView,
         SelectView: SelectView,
+        DateView: DateView,
         ErrorView: ErrorView,
         FormView: FormView,
         DropdownLinkView: DropdownLinkView

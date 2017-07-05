@@ -7,8 +7,7 @@
     "settings": true,
     "settingsRequires": "!guest",
     "refreshable": true,
-    "index": 1000,
-    "advancedMode": true
+    "index": 1000
 }, {
     "namespace": "io.ox/files/filter",
     "path": "io.ox/filter/files"

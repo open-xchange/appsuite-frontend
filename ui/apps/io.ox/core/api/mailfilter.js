@@ -59,10 +59,10 @@ define('io.ox/core/api/mailfilter', [
 
                 return http.GET({
                     module: 'mailfilter/v2',
-                    params: {
-                        action: 'list',
-                        flag: flag
-                    }
+                    params: { action: 'list', flag: flag }
+                })
+                .then(function (data) {
+                    return data;
                 });
             },
 

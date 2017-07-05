@@ -23,8 +23,7 @@ define('io.ox/mail/mailfilter/settings/register', [
         title: gt('Filter Rules'),
         ref: 'io.ox/mailfilter',
         loadSettingPane: false,
-        index: 300,
-        advancedMode: true
+        index: 300
     });
 
     ext.point('io.ox/mailfilter/settings/detail').extend({

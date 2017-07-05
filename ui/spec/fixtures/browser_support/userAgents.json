@@ -22,6 +22,10 @@
             "60": {
                 "supported": true,
                 "userAgent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.1847.131 Safari/537.36"
+            },
+            "59": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.104 Safari/537.36"
             }
         },
         "ChromeiOS": {
@@ -44,6 +48,14 @@
             "52": {
                 "supported": true,
                 "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:52.0) Gecko/20100101 Firefox/52.0"
+            },
+            "52 Windows": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Firefox/52.0"
+            },
+            "52 Linux": {
+                "supported": true,
+                "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101 Firefox/52.0"
             }
         },
         "FirefoxAndroid": {
@@ -87,7 +99,7 @@
             "6": {
                 "supported": true,
                 "platformSupport": true,
-                "userAgent": "Mozilla/5.0 (Linux; Android 6.0.1; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/53.0.1025.133 Mobile Safari/535.19"
+                "userAgent": "Mozilla/5.0 (Linux; Android 6.0.1; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/59.0.1025.133 Mobile Safari/535.19"
             }
         },
         "Blackberry": {

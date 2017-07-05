@@ -68,7 +68,7 @@ define('io.ox/backbone/mini-views/date', [
         return node.append(options);
     }
 
-    var DateView = AbstractView.extend({
+    var DateSelectView = AbstractView.extend({
 
         className: 'native-date-picker row',
         events: { 'change select': 'onChange' },
@@ -186,6 +186,6 @@ define('io.ox/backbone/mini-views/date', [
     });
 
     return {
-        DateView: DateView
+        DateSelectView: DateSelectView
     };
 });

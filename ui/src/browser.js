@@ -30,6 +30,7 @@
         edge,
         phantom,
         MacOS,
+        Linux,
         Windows,
         Windows8,
         Blackberry,
@@ -40,13 +41,14 @@
         uiwebview,
         chromeIOS,
         firefoxIOS,
-        browserLC = {};
+        browserLC = {},
+        isTouch;
 
     // supported browsers
     us.browserSupport = {
-        'Chrome':    50,
-        'Safari':     8,
-        'Firefox':   40,
+        'Chrome':    55,
+        'Safari':    10,
+        'Firefox':   52,
         'IE':        11
     };
 
@@ -87,6 +89,7 @@
             edge = ua.indexOf('Edge/') > -1;
             phantom = ua.indexOf('PhantomJS/') > -1;
             MacOS = ua.indexOf('Macintosh') > -1;
+            Linux = ua.indexOf('Linux') > -1;
             Windows = ua.indexOf('Windows') > -1;
             Windows8 = ua.indexOf('Windows NT 6.3') > -1;
             Blackberry = (ua.indexOf('BB10') > -1 || ua.indexOf('RIM Tablet') > 1 || ua.indexOf('BlackBerry') > 1);
@@ -147,6 +150,7 @@
                 iOS: iOS,
                 MacOS: MacOS,
                 Android: Android,
+                Linux: Linux && !Android,
                 Windows: Windows,
                 Windows8: Windows8
             };
@@ -193,15 +197,17 @@
     // first detection
     detectBrowser(navigator);
 
-    var isTouch = (function () {
+    function checkTouch() {
         var reportsTouch = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch;
         // fix for Firefox and Chrome on Windows convertibles with touchscreen to keep features like d&d alive
-        if ((us.browser.chrome || us.browser.firefox) && us.browser.windows && reportsTouch) {
-            if (window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
+        if ((us.browser.chrome || us.browser.firefox) && (us.browser.windows || us.browser.linux) && reportsTouch) {
+            if (!us.browser.karma && window.console && window.console.info) console.info('Detected a desktop device with touchscreen. Touchevents will be disabled due to compatibility reasons.');
             return false;
         }
         return reportsTouch;
-    }());
+    }
+
+    isTouch = checkTouch();
 
     // do media queries here
     // TODO define sizes to match pads and phones
@@ -318,6 +324,7 @@
 
     underscoreExtends.device.loadUA = function (nav) {
         detectBrowser(nav);
+        isTouch = checkTouch();
         underscoreExtends.recheckDevice();
         _.browser = us.browser;
     };
@@ -330,7 +337,9 @@
                 supported = true;
             }
         }
-        return supported;
+        return supported ||
+            //support safari on ios if platform is supported
+            !!(us.browser.iOS && us.browser.Safari && isPlatformSupported());
     }
     // helper for platform support
     function isPlatformSupported() {

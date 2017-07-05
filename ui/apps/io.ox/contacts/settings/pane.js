@@ -12,107 +12,156 @@
  */
 
 define('io.ox/contacts/settings/pane', [
-    'settings!io.ox/contacts',
     'io.ox/core/extensions',
-    'gettext!io.ox/contacts',
+    'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views',
     'io.ox/core/settings/util',
-    'io.ox/core/notifications',
-    'io.ox/core/capabilities'
-], function (settings, ext, gt, mini, util, notifications, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/contacts',
+    'settings!io.ox/core',
+    'gettext!io.ox/contacts'
+], function (ext, ExtensibleView, mini, util, capabilities, settings, coreSettings, gt) {
 
     'use strict';
 
-    var POINT = 'io.ox/contacts/settings/detail',
-        reloadMe = [];
+    ext.point('io.ox/contacts/settings/detail').extend({
+        index: 100,
+        id: 'view',
+        draw: function () {
+            this.append(
+                new ExtensibleView({ point: 'io.ox/contacts/settings/detail/view', model: settings })
+                .inject({
+                    getNameOptions: function () {
+                        return [
+                            { label: gt('Language-specific default'), value: 'auto' },
+                            { label: gt('First name Last name'), value: 'firstname lastname' },
+                            { label: gt('Last name, First name'), value: 'lastname, firstname' }
+                        ];
+                    },
+                    getMapOptions: function () {
+                        var options = [
+                            { label: gt('Google Maps'), value: 'google' },
+                            { label: gt('Open Street Map'), value: 'osm' },
+                            { label: gt('No link'), value: 'none' }
+                        ];
+                        if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
+                        return options;
+                    },
+                    openUserSettings: function () {
+                        require(['io.ox/core/settings/user'], function (settingsUser) {
+                            settingsUser.openModalDialog();
+                        });
+                    }
+                })
+                .build(function () {
+                    this.listenTo(settings, 'change', function () {
+                        settings.saveAndYell();
+                    });
+                })
+                .render().$el
+            );
+        }
+    });
 
-    settings.on('change', function (setting) {
-        var showNotice = _(reloadMe).some(function (attr) {
-            return setting === attr;
-        });
+    var INDEX = 0;
 
-        settings.saveAndYell(undefined, showNotice ? { force: true } : {}).then(
-            function success() {
-                if (!showNotice) return;
-
-                notifications.yell('success', gt('The setting has been saved and will become active when you enter the application the next time.'));
+    ext.point('io.ox/contacts/settings/detail/view').extend(
+        //
+        // Header
+        //
+        {
+            id: 'header',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.addClass('io-ox-contacts-settings').append(
+                    util.header(gt('Address Book'))
+                );
             }
-        );
-    });
-
-    ext.point(POINT).extend({
-        index: 100,
-        id: 'contactssettings',
-        draw: function () {
-            var holder = $('<div class="io-ox-contacts-settings">');
-            this.append(holder);
-            ext.point(POINT + '/pane').invoke('draw', holder);
-        }
-    });
-
-    ext.point(POINT + '/pane').extend({
-        index: 100,
-        id: 'header',
-        draw: function () {
-            this.append(util.header(gt('Address Book')));
-        }
-    });
-
-    if (capabilities.has('gab !alone')) {
-        ext.point(POINT + '/pane').extend({
-            index: 150,
+        },
+        //
+        // Buttons
+        //
+        {
+            index: INDEX += 100,
+            id: 'buttons/top',
+            render: function (baton) {
+                this.$el.append(
+                    baton.branch('buttons/top', this, $('<div class="form-group buttons">'))
+                );
+            }
+        },
+        //
+        // Display name
+        //
+        {
+            id: 'names',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Display of names'),
+                        new mini.CustomRadioView({ name: 'fullNameFormat', model: settings, list: this.getNameOptions() }).render().$el
+                    )
+                );
+            }
+        },
+        //
+        // Initial folder
+        //
+        {
             id: 'startfolder',
-            draw: function () {
+            index: INDEX += 100,
+            render: function () {
+
+                if (!capabilities.has('gab !alone')) return;
                 if (!settings.isConfigurable('startInGlobalAddressbook')) return;
 
-                this.append(
-                    util.fieldset(gt('Initial folder'),
+                this.$el.append(
+                    util.fieldset(
+                        gt('Initial folder'),
                         $('<div class="form-group">').append(
                             util.checkbox('startInGlobalAddressbook', gt('Start in global address book'), settings)
                         )
                     )
                 );
             }
-        });
-    }
-
-    ext.point(POINT + '/pane').extend({
-        index: 200,
-        id: 'displaynames',
-        draw: function () {
-            var preferences = [
-                { label: gt('Language-specific default'), value: 'auto' },
-                { label: gt('First name Last name'), value: 'firstname lastname' },
-                { label: gt('Last name, First name'), value: 'lastname, firstname' }
-
-            ];
-            this.append(
-                util.fieldset(gt('Display of names'),
-                    new mini.RadioView({ list: preferences, name: 'fullNameFormat', model: settings }).render().$el
-                )
-            );
+        },
+        //
+        // Map service
+        //
+        {
+            id: 'map-service',
+            index: INDEX += 100,
+            render: function () {
+                this.$el.append(
+                    util.fieldset(
+                        gt('Link postal addresses with map service'),
+                        new mini.CustomRadioView({ name: 'mapService', model: settings, list: this.getMapOptions() }).render().$el
+                    )
+                );
+            }
         }
-    });
+    );
 
-    ext.point(POINT + '/pane').extend({
-        index: 300,
-        id: 'map-service',
-        draw: function () {
+    ext.point('io.ox/contacts/settings/detail/view/buttons/top').extend(
+        //
+        // My contact data
+        //
+        {
+            id: 'my-contact-data',
+            index: 100,
+            render: function (baton) {
 
-            var options = [
-                { label: gt('Google Maps'), value: 'google' },
-                { label: gt('Open Street Map'), value: 'osm' },
-                { label: gt('No link'), value: 'none' }
-            ];
+                // check if users can edit their own data (see bug 34617)
+                if (!coreSettings.get('user/internalUserEdit', true)) return;
 
-            if (_.device('ios || macos')) options.splice(2, 0, { label: gt('Apple Maps'), value: 'apple' });
-
-            this.append(
-                util.fieldset(gt('Link postal addresses with map service'),
-                    new mini.RadioView({ list: options, name: 'mapService', model: settings }).render().$el
-                )
-            );
+                baton.$el.append(
+                    $('<button type="button" class="btn btn-default">')
+                        .text(gt('My contact data') + ' ...')
+                        .on('click', this.openUserSettings)
+                );
+            }
         }
-    });
+    );
 
 });

@@ -243,7 +243,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
     });
 
     return {
-        editMailfilter: function ($node, baton) {
+        editMailfilter: function ($node) {
 
             var createExtpointForSelectedFilter = function (node, args, config) {
                     ext.point('io.ox/settings/mailfilter/filter/settings/detail').invoke('draw', node, args, config);
@@ -252,7 +252,6 @@ define('io.ox/mail/mailfilter/settings/filter', [
                 scrollPane =  $node.closest('.scrollable-pane');
 
             return this.initialize().then(function (data, config) {
-                data = data[0];
 
                 // adds test for testcase
                 // config.tests.push({ test: 'newtest', comparison: ['regex', 'is', 'contains', 'matches', 'testValue'] });
@@ -446,12 +445,16 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     onEditVacation: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/vacation', {});
+                        require(['io.ox/mail/mailfilter/vacationnotice/view'], function (view) {
+                            view.open();
+                        });
                     },
 
                     onEditAutoforward: function (e) {
                         e.preventDefault();
-                        baton.tree.trigger('virtual', 'virtual/settings/' + 'io.ox/autoforward', {});
+                        require(['io.ox/mail/mailfilter/autoforward/view'], function (view) {
+                            view.open();
+                        });
                     }
                 });
 
@@ -463,11 +466,13 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
                     render: function () {
                         this.$el.empty();
-                        this.$el.append($('<h1>').addClass('pull-left').text(gt('Mail Filter Rules')),
-                            $('<div>').addClass('btn-group pull-right').append(
-                                $('<button type="button" class="btn btn-primary" data-action="add">').addClass('btn btn-primary').text(gt('Add new rule'))
+                        this.$el.append(
+                            $('<h1>').text(gt('Mail Filter Rules')),
+                            $('<div class="form-group buttons">').append(
+                                $('<button type="button" class="btn btn-primary" data-action="add">').append(
+                                    $('<i class="fa fa-plus" aria-hidden="true">'), $.txt(gt('Add new rule'))
+                                )
                             ),
-                            $('<div class="clearfix">'),
                             $('<div class="sr-only" role="log" aria-live="polite" aria-relevant="all">').attr('id', notificationId)
                         );
                         this.renderFilter();
@@ -529,6 +534,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
             });
 
         },
+
         initialize: function () {
             // needed for mail actions
             var options = {
@@ -542,12 +548,10 @@ define('io.ox/mail/mailfilter/settings/filter', [
 
         refresh: function () {
             this.initialize().done(function (data) {
-                _.each(data[0], function (rule) {
+                _(data).each(function (rule) {
                     collection.add(factory.create(rule), { merge: true });
                 });
             });
-
         }
     };
-
 });

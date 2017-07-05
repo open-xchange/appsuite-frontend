@@ -30,7 +30,6 @@ define('io.ox/core/sub/subscriptions', [
     'use strict';
 
     var POINT = 'io.ox/core/sub/subscribe',
-
         // needs id and module (e.g. contacts)
         buildSubscribeDialog = function (options) {
             options = options || {};
@@ -46,6 +45,15 @@ define('io.ox/core/sub/subscriptions', [
         getAccountType = function (type) {
             return type.substring(type.lastIndexOf('.') + 1);
         },
+
+        availableServices = (function () {
+            var s = { calendar: false, contacts: false };
+            _(ox.rampup.oauth.services).each(function (service) {
+                if (service.availableScopes.indexOf('contacts') !== -1 || service.availableScopes.indexOf('contacts_ro') !== -1) s.contacts = true;
+                if (service.availableScopes.indexOf('calendar') !== -1 || service.availableScopes.indexOf('calendar_ro') !== -1) s.calendar = true;
+            });
+            return s;
+        }()),
 
         SubscriptionView = Backbone.View.extend({
 
@@ -415,6 +423,7 @@ define('io.ox/core/sub/subscriptions', [
     // });
 
     return {
+        availableServices: availableServices,
         buildSubscribeDialog: buildSubscribeDialog
     };
 });

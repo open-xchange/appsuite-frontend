@@ -6,12 +6,12 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/settings/signatures/register', [
+define('io.ox/mail/settings/compose/register', [
     'io.ox/core/extensions',
     'gettext!io.ox/mail'
 ], function (ext, gt) {
@@ -19,10 +19,9 @@ define('io.ox/mail/settings/signatures/register', [
     'use strict';
 
     ext.point('io.ox/settings/pane/main/io.ox/mail').extend({
-        id: 'io.ox/mail/settings/signatures',
-        title: gt('Signatures'),
-        ref: 'io.ox/mail/settings/signatures',
-        index: 200
+        id: 'io.ox/mail/settings/compose',
+        title: gt('Compose'),
+        ref: 'io.ox/mail/settings/compose',
+        index: 100
     });
-
 });

@@ -52,6 +52,28 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             .text(name);
     }
 
+    function renderItemSize(model) {
+        var size, total, sizeString;
+
+        if (model.isFile()) {
+            size = model.get('file_size');
+            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
+        } else {
+            total = model.get('total');
+            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
+        }
+
+        return sizeString;
+    }
+
+    function renderDateString(model) {
+        var modified = model.get('last_modified');
+        var isToday = moment().isSame(moment(modified), 'day');
+        var dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-';
+
+        return dateString;
+    }
+
     Ext.point('io.ox/core/viewer/sidebar/fileinfo').extend({
         index: 100,
         id: 'fileinfo',
@@ -59,17 +81,13 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
 
             if (!baton.model) return;
 
-            var model = baton.model,
-                options = baton.options || {},
-                size = model.get('file_size'),
-                sizeString = (_.isNumber(size)) ? _.filesize(size) : '-',
-                modifiedBy = model.get('modified_by'),
-                modified = model.get('last_modified'),
-                isToday = moment().isSame(moment(modified), 'day'),
-                dateString = modified ? moment(modified).format(isToday ? 'LT' : 'l LT') : '-',
-                folder_id = model.get('folder_id'),
-                dl = $('<dl>'),
-                isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
+            var model = baton.model;
+            var options = baton.options || {};
+            var modifiedBy = model.get('modified_by');
+            var dateString = renderDateString(model);
+            var folder_id = model.get('folder_id');
+            var dl = $('<dl>');
+            var isAttachmentView = !_.isEmpty(model.get('com.openexchange.file.storage.mail.mailMetadata'));
 
             dl.append(
                 // filename
@@ -79,7 +97,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 ),
                 // size
                 $('<dt>').text(gt('Size')),
-                $('<dd class="size">').text(sizeString)
+                $('<dd class="size">').text(renderItemSize(model))
             );
             if (!isAttachmentView) {
                 dl.append(

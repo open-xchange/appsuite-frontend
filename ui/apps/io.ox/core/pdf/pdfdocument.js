@@ -11,6 +11,8 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
+/* global Promise */
+
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
     'pdfjs-dist/build/pdf.combined',
@@ -79,7 +81,7 @@ define('io.ox/core/pdf/pdfdocument', [
         /**
          * Open external links in a new window
          */
-        PDFJS.openExternalLinksInNewWindow = true;
+        PDFJS.externalLinkTarget = PDFJS.LinkTarget.BLANK;
 
         /**
          * Path for image resources, mainly for annotation icons. Include trailing slash.
@@ -205,6 +207,22 @@ define('io.ox/core/pdf/pdfdocument', [
         // convert document to PDF
         PDFJS.getDocument(pdfConverterURL).promise.then(function (document) {
             var error = true;
+            // the original getPage() function
+            var origGetPageFunction = document && document.transport && document.transport.getPage;
+
+            // wrap around original getPage() function
+            // to fix an exception which occurs when rapidly switching documents
+            // and causes PDFjs to stop working and to render white pages only
+            if (origGetPageFunction) {
+                document.transport.getPage = function WorkerTransport_getPage(pageNumber, capability) {
+                    // return rejected promise if no message handler is present
+                    if (!document.transport.messageHandler) {
+                        return Promise.reject();
+                    }
+                    // call original getPage() function
+                    return origGetPageFunction.call(this, pageNumber, capability);
+                };
+            }
 
             if (document) {
                 pdfjsDocument = document;

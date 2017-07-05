@@ -44,7 +44,7 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
-            this.date = moment(this.options.date);
+            this.date = moment(this.options.date).utc(true);
             this.mode = 'month';
             this.closing = false;
             // the original constructor will call initialize()
@@ -406,7 +406,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onSelectDate: function (e) {
-            var date = moment($(e.currentTarget).data('date'));
+            var date = moment($(e.currentTarget).data('date')).utc(true);
             this.trigger('select', date);
         },
 
@@ -471,7 +471,10 @@ define('io.ox/backbone/views/datepicker', [
                 all.eq(index + 1).focus();
             }
 
-            function handleEscape() {
+            function handleEscape(e) {
+                // we use preventDefault for nested handlers, e.g. picker in a modal dialog
+                e.preventDefault();
+                console.log('prevent default ...');
                 this.close();
             }
 
@@ -536,8 +539,11 @@ define('io.ox/backbone/views/datepicker', [
                     e.preventDefault();
                     this.$el.focus();
                     break;
-                case 13:
                 case 27:
+                    // we use preventDefault for nested handlers, e.g. picker in a modal dialog
+                    e.preventDefault();
+                    // falls through
+                case 13:
                     this.toggle();
                     break;
                 // no default
@@ -545,13 +551,13 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onTargetInput: function () {
-            var val = this.$target.val(), date = moment(val, 'l');
+            var val = this.$target.val(), date = moment(val, 'l').utc(true);
             this.setDate(date);
         },
 
         setDate: function (date, forceRender) {
 
-            date = moment(date || this.date);
+            date = moment(date || this.date).utc(true);
             // valid?
             if (!date.isValid()) return;
             // avoid BC
@@ -593,7 +599,7 @@ define('io.ox/backbone/views/datepicker', [
     }
 
     function isToday(m) {
-        return isSame(m, moment());
+        return isSame(m, moment().utc(true));
     }
 
     return DatePickerView;

@@ -532,7 +532,7 @@ define('io.ox/contacts/edit/view-form', [
                 $('<fieldset class="col-lg-12 form-group birthdate">').append(
                     $('<legend class="simple">').text(options.label),
                     // don't wrap the date control with a label (see bug #27559)
-                    new mini.DateView({ name: options.field, model: model }).render().$el
+                    new mini.DateSelectView({ name: options.field, model: model }).render().$el
                 )
             );
         }

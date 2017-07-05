@@ -209,7 +209,9 @@ define('io.ox/files/share/listview', [
             id: 'user',
             index: 600,
             draw: function (baton) {
-                if (_.device('smartphone') || capabilities.has('!gab || alone')) return;
+                if (_.device('smartphone')) return;
+                // show also when gab isn't accessible but shares for users still exists
+                if (capabilities.has('!gab || alone') && !hasUser(baton)) return;
                 this.append(
                     $('<div class="list-item-column type gray">').append(
                         $('<i class="fa fa-user">')
