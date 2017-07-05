@@ -209,7 +209,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     )
                 );
 
-                this.listenTo(this.model, 'change:dateFrom change:dateUntil', function () {
+                this.listenTo(this.model, 'change:dateFrom change:dateUntil change:active change:activateTimeFrame', function () {
                     this.$('.duration').text(this.getDurationString());
                     // trigger internal validation
                     if (this.model.isValid()) this.reflectValidity();
