@@ -151,6 +151,173 @@ define([
 
         });
 
+        describe('use "rrule" as recurrence pattern', function () {
+
+            it('parses a daily rrule', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=DAILY;INTERVAL=2',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(1);
+                expect(view.model.get('interval')).to.equal(2);
+            });
+
+            it('parses a weekly rrule', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(2);
+                expect(view.model.get('interval')).to.equal(1);
+                expect(view.model.get('days')).to.equal(62);
+            });
+
+            it('parses a monthly rrule by date', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=MONTHLY;BYMONTHDAY=3;COUNT=10',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(3);
+                expect(view.model.get('interval')).to.equal(1);
+                expect(view.model.get('day_in_month')).to.equal(3);
+                expect(view.model.get('occurrences')).to.equal(10);
+            });
+
+            it('parses a monthly rrule by weekday', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=MONTHLY;BYDAY=MO;BYSETPOS=1',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(3);
+                expect(view.model.get('interval')).to.equal(1);
+                expect(view.model.get('day_in_month')).to.equal(1);
+                expect(view.model.get('days')).to.equal(2);
+            });
+
+            it('parses a yearly rrule by date', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=YEARLY;BYMONTH=7;BYMONTHDAY=3;UNTIL=20181003T180000Z',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(4);
+                expect(view.model.get('interval')).to.equal(1);
+                expect(view.model.get('day_in_month')).to.equal(3);
+                expect(view.model.get('month')).to.equal(6);
+                expect(view.model.get('until')).to.equal(1538589600000);
+            });
+
+            it('parses a monthly rrule by weekday', function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=YEARLY;BYMONTH=7;BYDAY=MO;BYSETPOS=1',
+                    startDate: 1481720709550 // 12/14/2016
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+
+                view.model.get('recurrence_type').should.to.equal(4);
+                expect(view.model.get('interval')).to.equal(1);
+                expect(view.model.get('day_in_month')).to.equal(1);
+                expect(view.model.get('days')).to.equal(2);
+                expect(view.model.get('month')).to.equal(6);
+            });
+
+        });
+
+        describe('change rrule of original model on mapping model changes', function () {
+
+            function waitForRruleChange() {
+                var def = new $.Deferred();
+                model.once('change:rrule', function () {
+                    _.delay(def.resolve, 10);
+                });
+                return def.promise();
+            }
+            beforeEach(function () {
+                model = new Backbone.Model({
+                    rrule: 'FREQ=DAILY',
+                    startDate: 1481720709550 // Wednesday, December 14, 2016 2:05 PM
+                });
+                view = new RecurrenceView({
+                    model: model
+                }).render();
+            });
+
+            it('for daily / weekly recurrences', function () {
+                view.model.set('interval', 10);
+                return waitForRruleChange().then(function () {
+                    model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
+                    view.model.set({ 'recurrence_type': 2, days: 8 }); // weekly recurrence
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=WE;INTERVAL=10');
+                    view.model.set('days', 62); // set days to all week days
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=10');
+                    view.model.set('recurrence_type', 1); // daily recurrence
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
+                });
+            });
+
+            it('for monthly recurrences', function () {
+                view.model.set({ 'recurrence_type': 3, day_in_month: 14 }); // monthly recurrence by date
+                return waitForRruleChange().then(function () {
+                    model.get('rrule').should.equal('FREQ=MONTHLY;BYMONTHDAY=14');
+                    view.model.set({ day_in_month: 2, days: 8 });
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=MONTHLY;BYDAY=WE;BYSETPOS=2');
+                });
+            });
+
+            it('for yearly recurrences', function () {
+                view.model.set({ 'recurrence_type': 4, day_in_month: 14, month: 11 }); // yearly recurrence by date
+                return waitForRruleChange().then(function () {
+                    model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=14');
+                    view.model.set({ day_in_month: 2, days: 8, month: 11 });
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYDAY=WE;BYSETPOS=2');
+                });
+            });
+
+            it('for recurrence endings', function () {
+                view.model.set('until', 1482584709550); // Saturday, December 24, 2016 2:05 PM
+                return waitForRruleChange().then(function () {
+                    model.get('rrule').should.equal('FREQ=DAILY;UNTIL=20161224T130509Z');
+                    view.model.unset('until');
+                    view.model.set('occurrences', 10);
+                    return waitForRruleChange();
+                }).then(function () {
+                    model.get('rrule').should.equal('FREQ=DAILY;COUNT=10');
+                });
+            });
+
+        });
+
     });
 
 });
