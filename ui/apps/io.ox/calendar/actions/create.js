@@ -23,9 +23,9 @@ define('io.ox/calendar/actions/create', [
     'use strict';
 
     function openEditDialog(params) {
-        ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
+        ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/chronos-model']).done(function (edit, chronosModel) {
             edit.getApp().launch().done(function () {
-                this.create(params);
+                this.create(new chronosModel.Model(params));
             });
         });
     }
@@ -70,14 +70,14 @@ define('io.ox/calendar/actions/create', [
             participants: []
         };
 
-        if (obj && obj.start_date) {
+        if (obj && obj.startDate) {
             _.extend(params, obj);
         } else if (baton.app.props.get('layout') !== 'list') {
             var refDate = baton.app.refDate ? moment(baton.app.refDate) : moment();
 
             refDate.startOf('hour').add(1, 'hours');
-            params.start_date = refDate.valueOf();
-            params.end_date = refDate.add(1, 'hours').valueOf();
+            params.startDate = refDate.valueOf();
+            params.endDate = refDate.add(1, 'hours').valueOf();
         }
 
         // show warning for shared folders
