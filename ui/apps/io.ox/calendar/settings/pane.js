@@ -154,8 +154,8 @@ define('io.ox/calendar/settings/pane', [
         {
             index: INDEX += 100,
             id: 'New',
-            draw: function () {
-                this.append(
+            render: function () {
+                this.$el.append(
                     util.fieldset(gt('New appointment'),
                         // same width as col-md-10 but without the strange input and hover issues
                         $('<div>').css('width', '83.33333333%').append(
