@@ -17,8 +17,10 @@
 define('io.ox/core/pdf/pdftextlayerbuilder', [
     'io.ox/core/pdf/pdfpolyfill',
     'io.ox/core/pdf/pdfcustomstyle',
-    'pdfjs-dist/build/pdf.combined'
-], function (Polyfill, CustomStyle, PDFJSCombined) {
+    'pdfjs-dist/build/pdf',
+    'pdfjs-dist/build/pdf.worker'
+], function (Polyfill, CustomStyle, PDFJSLib) {
+
     'use strict';
 
     /*
@@ -207,7 +209,7 @@ define('io.ox/core/pdf/pdftextlayerbuilder', [
     // --------------------------
     // - PDFTextLayerBuilder.js -
     // --------------------------
-    var PDFJS = PDFJSCombined.PDFJS;
+    var PDFJS = PDFJSLib.PDFJS;
 
     var MAX_TEXT_DIVS_TO_RENDER = 100000;
 
