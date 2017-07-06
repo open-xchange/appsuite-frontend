@@ -90,7 +90,7 @@ anymatch@^1.3.0:
     arrify "^1.0.0"
     micromatch "^2.1.5"
 
-"appserver@git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8":
+appserver@^0.6.0, "appserver@git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8":
   version "0.6.0"
   resolved "git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8"
   dependencies:
@@ -2286,11 +2286,12 @@ karma-mocha@^1.3.0:
   dependencies:
     minimist "1.2.0"
 
-"karma-ox-ui@git://github.com/Open-Xchange-Frontend/karma-ox-ui.git#c1f3ab272e498297659e8a4642c7844ca59eba0a":
-  version "0.1.1"
-  resolved "git://github.com/Open-Xchange-Frontend/karma-ox-ui.git#c1f3ab272e498297659e8a4642c7844ca59eba0a"
+karma-ox-ui@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/karma-ox-ui/-/karma-ox-ui-0.2.0.tgz#f2b3ede257f10f46d40bf32e25c3420690cb7adc"
   dependencies:
-    appserver "git://github.com/Open-Xchange-Frontend/appserver.git#93c30af2fc5a09e6e6dc9bdecdc9918b264889e8"
+    appserver "^0.6.0"
+    sinon-chai "^2.11.0"
 
 karma-phantomjs-launcher@^1.0.4:
   version "1.0.4"
@@ -3594,6 +3595,10 @@ shelljs@0.3.x:
 signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
+
+sinon-chai@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-2.11.0.tgz#93d90f989fff67ce45767077ffe575dde1faea6d"
 
 sinon@^2.1.0:
   version "2.3.5"

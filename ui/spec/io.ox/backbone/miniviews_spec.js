@@ -44,7 +44,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             });
 
             it('has a model', function () {
-                expect(this.view.model).to.be.defined;
+                expect(this.view.model).to.exist;
             });
 
             it('references itself via data("view")', function () {
