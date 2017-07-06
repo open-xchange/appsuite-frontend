@@ -33,7 +33,6 @@ define('io.ox/calendar/util', [
         shownAsClass = 'reserved temporary absent free'.split(' '),
         shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
-        confirmClass = 'unconfirmed accepted declined tentative'.split(' '),
         chronosStates = 'NEEDS-ACTION ACCEPTED DECLINED TENTATIVE'.split(' '),
         confirmTitles = [
             gt('unconfirmed'),
@@ -478,7 +477,7 @@ define('io.ox/calendar/util', [
         },
 
         getConfirmationClass: function (status) {
-            return confirmClass[(_(status).isNumber() ? status : chronosStates.indexOf(status)) || 0];
+            return (status || 'NEEDS-ACTION').toLowerCase();
         },
 
         getConfirmationLabel: function (status) {
@@ -712,11 +711,11 @@ define('io.ox/calendar/util', [
         getConfirmationSummary: function (conf) {
             var ret = { count: 0 };
             // init
-            _.each(confirmClass, function (cls, i) {
+            _.each(chronosStates, function (cls, i) {
                 ret[i] = {
                     icon: n_confirm[i] || '<i class="fa fa-exclamation-circle" aria-hidden="true">',
                     count: 0,
-                    css: cls,
+                    css: cls.toLowerCase(),
                     title: confirmTitles[i] || ''
                 };
             });
