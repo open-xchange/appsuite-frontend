@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/edit/main', [
-    'io.ox/calendar/model',
+    'io.ox/calendar/chronos-model',
     'io.ox/calendar/chronos-api',
     'io.ox/core/extPatterns/dnd',
     'io.ox/calendar/edit/view',
@@ -91,7 +91,7 @@ define('io.ox/calendar/edit/main', [
 
                     self.setWindow(win);
 
-                    self.model.setDefaultParticipants({ create: opt.mode === 'create' }).done(function () {
+                    self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
 
                         app.view = self.view = new EditView({
                             model: self.model,
@@ -198,14 +198,14 @@ define('io.ox/calendar/edit/main', [
                 if (opt.mode === 'edit' && data.id) {
                     // hash support
                     self.setState({ folder: data.folder, id: data.id });
-                    self.model = new AppointmentModel(data);
+                    self.model = new AppointmentModel.Model(data);
                 } else {
                     // default values from settings
                     data.alarm = data.alarm || settings.get('defaultReminder', 15);
                     if (data.full_time) {
                         data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
                     }
-                    self.model = new AppointmentModel(data);
+                    self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
                     }

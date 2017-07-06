@@ -91,17 +91,18 @@ define('io.ox/calendar/edit/extensions', [
 
                     //check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
-                        var participantModel = new baton.model._participants.model({
-                            display_name: mailUtil.parseRecipient(inputfieldVal)[0],
-                            email1: mailUtil.parseRecipient(inputfieldVal)[1],
-                            field: 'email1', type: 5
-                        });
-                        participantModel.loading.done(function () {
-                            baton.model._participants.oldAdd(participantModel);
-                        }).always(function () { baton.model.save().then(save, fail); });
-                    } else {
-                        baton.model.save().then(save, fail);
+                        baton.model._attendees.add(
+                            new baton.model._attendees.model({
+                                cuType: 'INDIVIDUAL',
+                                cn: mailUtil.parseRecipient(inputfieldVal)[0],
+                                partStat: 'NEEDS-ACTION',
+                                email: mailUtil.parseRecipient(inputfieldVal)[1],
+                                uri: 'mailto:' + mailUtil.parseRecipient(inputfieldVal)[1],
+                                comment: ''
+                            })
+                        );
                     }
+                    baton.model.save().then(save, fail);
                 })
             );
 
@@ -544,7 +545,7 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer',
         draw: function (baton) {
             this.append(new pViews.UserContainer({
-                collection: baton.model.getParticipants(),
+                collection: baton.model.getAttendees(),
                 baton: baton
             }).render().$el);
         }
@@ -566,7 +567,7 @@ define('io.ox/calendar/edit/extensions', [
                     distributionlists: true
                 },
                 convertToAttendee: true,
-                collection: baton.model.getParticipants(),
+                collection: baton.model.getAttendees(),
                 blacklist: settings.get('participantBlacklist') || false,
                 scrollIntoView: true
             });
@@ -717,15 +718,15 @@ define('io.ox/calendar/edit/extensions', [
                         // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
                         _(appointment.participants).each(function (data) {
                             //create model
-                            var mod = new e.data.model._participants.model(data);
+                            var mod = new e.data.model._attendees.model(data);
                             models.push(mod);
                             // wait for fetch, then add to collection
                             defs.push(mod.loading);
                         });
                         $.when.apply($, defs).done(function () {
                             // first reset then addUniquely collection might not redraw correctly otherwise in some cases
-                            e.data.model._participants.reset([]);
-                            e.data.model._participants.addUniquely(models);
+                            e.data.model._attendees.reset([]);
+                            e.data.model._attendees.addUniquely(models);
                         });
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         if (validDate) {
@@ -743,34 +744,6 @@ define('io.ox/calendar/edit/extensions', [
             });
         });
     }
-
-    /*function openFreeBusyView(e) {
-        var app = e.data.app,
-            model = e.data.model,
-            start = model.get('start_date'),
-            end = model.get('end_date');
-        e.preventDefault();
-
-        //when editing a series we are not interested in the past (see Bug 35492)
-        if (model.get('recurrence_type') !== 0) {
-            start = _.now();
-            //prevent end_date before start_date
-            if (start > end) {
-                //just add an hour
-                end = start + 3600000;
-            }
-        }
-        ox.launch('io.ox/calendar/freebusy/main', {
-            app: app,
-            start_date: start,
-            end_date: end,
-            folder: model.get('folder'),
-            participants: model.getParticipants().map(function (p) {
-                return p.toJSON();
-            }),
-            model: model
-        });
-    }*/
 
     // link free/busy view
     point.basicExtend({

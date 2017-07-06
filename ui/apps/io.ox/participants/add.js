@@ -19,6 +19,7 @@ define('io.ox/participants/add', [
     'io.ox/mail/util',
     'io.ox/contacts/util',
     'io.ox/core/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/core/yell',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
@@ -26,7 +27,7 @@ define('io.ox/participants/add', [
     'io.ox/backbone/mini-views/addresspicker',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, chronosUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -53,34 +54,33 @@ define('io.ox/participants/add', [
 
     var validation = {
 
-            validate: function (list, options) {
-                if (!this.options.blacklist) return;
-                var opt = _.extend({ yell: true }, options),
-                    invalid = this.getInvalid(list);
-                // process
-                if (invalid.length === 0) return;
-                // yell warning
-                if (opt.yell) this.yell(list, invalid);
-                return invalid;
-            },
-
-            getInvalid: function (list) {
-                var blacklist = this.options.blacklist;
-                return _(getAddresses(list)).filter(function (address) {
-                    return !!blacklist[address];
-                });
-            },
-
-            yell: function (list, invalid) {
-                yell('warning', gt.format(
-                    //#. %1$d a list of email addresses
-                    //#, c-format
-                    gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
-                    invalid.join(', ')
-                ));
-            }
+        validate: function (list, options) {
+            if (!this.options.blacklist) return;
+            var opt = _.extend({ yell: true }, options),
+                invalid = this.getInvalid(list);
+            // process
+            if (invalid.length === 0) return;
+            // yell warning
+            if (opt.yell) this.yell(list, invalid);
+            return invalid;
         },
-        attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
+
+        getInvalid: function (list) {
+            var blacklist = this.options.blacklist;
+            return _(getAddresses(list)).filter(function (address) {
+                return !!blacklist[address];
+            });
+        },
+
+        yell: function (list, invalid) {
+            yell('warning', gt.format(
+                //#. %1$d a list of email addresses
+                //#, c-format
+                gt.ngettext('This email address cannot be used', 'The following email addresses cannot be used: %1$d', list.length),
+                invalid.join(', ')
+            ));
+        }
+    };
 
     function getAddresses(list) {
         return _(list).map(getAddress);
@@ -178,33 +178,7 @@ define('io.ox/participants/add', [
 
             if (this.options.convertToAttendee) {
                 list = _(list).map(function (item) {
-                    // external participants that are not in the addressbook are not full models (just typed in a new mail address)
-                    if (!item.get) {
-                        return {
-                            cuType: 'INDIVIDUAL',
-                            cn: item.display_name,
-                            partStat: 'NEEDS-ACTION',
-                            email: item.email1,
-                            uri: 'mailto:' + item.email1,
-                            comment: ''
-                        };
-                    }
-                    var attendee = {
-                        cuType: attendeeLookupArray[item.get('type')],
-                        entity: item.get('user_id') || item.get('id'),
-                        cn: item.getDisplayName()
-                    };
-                    if (attendee.cuType !== 'RESOURCE') {
-                        attendee.uri = 'mailto:' + item.value;
-                        attendee.folder = item.get('folder_id');
-                        attendee.partStat = 'NEEDS-ACTION';
-                        attendee.email = item.value;
-                        attendee.comment = '';
-                    } else {
-                        attendee.partStat = 'ACCEPTED';
-                        attendee.comment = item.get('description');
-                    }
-                    return attendee;
+                    return chronosUtil.createAttendee(item);
                 });
             }
 

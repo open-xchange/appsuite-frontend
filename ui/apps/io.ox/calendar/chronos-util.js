@@ -17,6 +17,7 @@ define('io.ox/calendar/chronos-util', [
 ], function () {
 
     'use strict';
+    var attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
 
     return {
         rangeFilter: function (start, end) {
@@ -38,6 +39,28 @@ define('io.ox/calendar/chronos-util', [
                 if (s.length === 3) r.recurrenceId = parseInt(s[2], 10);
                 return r;
             }
+        },
+        // creates an attendee object from a user object or model and contact model or object
+        // used to create default participants and used by addparticipantsview
+        createAttendee: function (user) {
+            var attendee = {
+                cuType: attendeeLookupArray[(user.get ? user.get('type') : user.type)] || 'INDIVIDUAL',
+                cn: user.getDisplayName ? user.getDisplayName() : user.display_name,
+                partStat: 'NEEDS-ACTION',
+                comment: ''
+            };
+
+            if (attendee.cuType !== 'RESOURCE') {
+                if (user.id && (user.get ? user.get('type') : user.type) !== 5) attendee.entity = user.id;
+                attendee.email = user.get ? user.get('email1') : user.email1;
+                attendee.uri = 'mailto:' + (user.get ? user.get('email1') : user.email1);
+            } else {
+                attendee.partStat = 'ACCEPTED';
+                attendee.comment = user.get ? user.get('description') : user.description;
+                attendee.entity = user.get ? user.get('id') : user.id;
+            }
+
+            return attendee;
         }
     };
 

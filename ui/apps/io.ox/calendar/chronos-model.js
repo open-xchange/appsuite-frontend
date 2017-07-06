@@ -13,8 +13,9 @@
  */
 
 define('io.ox/calendar/chronos-model', [
-    'io.ox/calendar/chronos-util'
-], function (util) {
+    'io.ox/calendar/chronos-util',
+    'io.ox/core/folder/api'
+], function (util, folderAPI) {
 
     'use strict';
 
@@ -22,6 +23,88 @@ define('io.ox/calendar/chronos-model', [
         idAttribute: 'cid',
         initialize: function () {
             this.cid = this.attributes.cid = util.cid(this.attributes);
+        },
+        getAttendees: function () {
+            if (this._attendees) {
+                return this._attendees;
+            }
+            var self = this,
+                resetListUpdate = false,
+                changeAttendeesUpdate = false;
+
+            this._attendees = new Backbone.Collection(this.get('attendees'), { silent: false });
+
+            this._attendees.on('add remove reset', function () {
+                if (changeAttendeesUpdate) {
+                    return;
+                }
+                resetListUpdate = true;
+                self.set('attendees', this.toJSON(), { validate: true });
+                resetListUpdate = false;
+            });
+
+            this.on('change:attendees', function () {
+                if (resetListUpdate) {
+                    return;
+                }
+                changeAttendeesUpdate = true;
+                self._attendees.reset(self.get('attendees'));
+                changeAttendeesUpdate = false;
+            });
+            return this._attendees;
+        },
+
+        setDefaultAttendees: function (options) {
+            var self = this;
+            var def = $.Deferred();
+            folderAPI.get(this.get('folder')).then(function (folder) {
+                if (folderAPI.is('private', folder)) {
+                    // if private folder, current user will be the organizer
+                    if (options.create) {
+                        require(['io.ox/core/api/user'], function (userAPI) {
+                            userAPI.get().done(function (user) {
+
+                                self.set('organizer', {
+                                    cn: user.display_name,
+                                    email: user.email1,
+                                    uri: 'mailto:' + user.email1,
+                                    entity: ox.user_id
+                                });
+                                self.getAttendees().add(util.createAttendee(user));
+                                def.resolve();
+
+                            }).fail(def.reject);
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                } else if (folderAPI.is('public', folder)) {
+                    // if public folder, current user will be added
+                    if (options.create) {
+                        require(['io.ox/core/api/user'], function (userAPI) {
+                            userAPI.get().done(function (user) {
+
+                                self.getAttendees().add(util.createAttendee(user));
+                                def.resolve();
+
+                            }).fail(def.reject);
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                } else if (folderAPI.is('shared', folder)) {
+                    // in a shared folder the owner (created_by) will be added by default
+                    require(['io.ox/core/api/user'], function (userAPI) {
+                        userAPI.get(folder.created_by).done(function (user) {
+
+                            self.getAttendees().add(util.createAttendee(user));
+                            def.resolve();
+
+                        }).fail(def.reject);
+                    });
+                }
+            }).fail(def.reject);
+            return def;
         }
     });
 
