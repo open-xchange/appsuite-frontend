@@ -69,20 +69,27 @@ define('io.ox/mail/inplace-reply', [
         events: {
             'input .inplace-editor': 'onChange',
             'click [data-action="send"]': 'onSend',
+            'click [data-action="sendall"]': 'onSend',
             'click [data-action="cancel"]': 'onCancel',
             'keydown': 'onKeyUpDown',
             'keyup': 'onKeyUpDown'
         },
 
-        onSend: function () {
+        onSend: function (e) {
             // get reply
             this.busy(true).setProgress(30);
             var cid = this.cid;
             // alternativ also asks for HTML
             var view = getFormat() === 'text' ? 'text' : 'html';
-            api.replyall(_.cid(this.cid), view)
-                .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
-                .fail(this.onSendFail.bind(this));
+            if ($(e.currentTarget).attr('data-action') === 'sendall') {
+                api.replyall(_.cid(this.cid), view)
+                    .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
+                    .fail(this.onSendFail.bind(this));
+            } else {
+                api.reply(_.cid(this.cid), view)
+                    .done(this.onReplyReady.bind(this, $.trim(this.getContent()), cid))
+                    .fail(this.onSendFail.bind(this));
+            }
         },
 
         onReplyReady: function (content, cid, data) {
@@ -167,6 +174,7 @@ define('io.ox/mail/inplace-reply', [
             content = content || $.trim(this.getContent());
             var isEmpty = !content.length;
             this.$send.toggleClass('disabled', isEmpty).prop('disabled', isEmpty);
+            if (this.$sendall) this.$sendall.toggleClass('disabled', isEmpty).prop('disabled', isEmpty);
         },
 
         getContent: function () {
@@ -194,14 +202,20 @@ define('io.ox/mail/inplace-reply', [
         },
 
         render: function () {
-            var replyText;
-            // do _not_ use gt.ngettext here, see Bug 45798
-            if (this.numberOfRecipients === 1) {
-                //#. Used as a verb to reply to one recipient
-                replyText = gt('Reply');
-            } else {
-                //#. Used as a verb to reply to all recipients
-                replyText = gt('Reply to all');
+
+            var buttons = [
+                this.$sendall = $('<button class="btn btn-primary btn-sm disabled" data-action="sendall">')
+                    .prop('disabled', true)
+                    .text(gt('Reply to all'))
+            ];
+
+            if (this.numberOfRecipients > 1) {
+                buttons.push(
+                    $.txt(' '),
+                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send">')
+                        .prop('disabled', true)
+                        .text(gt('Reply'))
+                );
             }
 
             this.$el.append(
@@ -213,9 +227,7 @@ define('io.ox/mail/inplace-reply', [
                     .hide(),
                 // buttons
                 $('<div class="form-group">').append(
-                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send">')
-                        .prop('disabled', true)
-                        .text(replyText),
+                    buttons,
                     $.txt(' '),
                     $('<button class="btn btn-default btn-sm" data-action="cancel">')
                         .text(gt('Cancel'))
