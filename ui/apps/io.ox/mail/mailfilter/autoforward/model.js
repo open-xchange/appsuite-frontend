@@ -36,9 +36,9 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 userMainEmail: data.user.email1
             };
 
-            if (_.isEmpty(data)) {
+            if (_.isEmpty(data.forward)) {
                 // new rule
-                attr.position = _.isEmpty(data.vacation) ? 0 : data[0].position + 1;
+                attr.position = _.isEmpty(data.vacation) ? 0 : data.vacation.position + 1;
                 return attr;
             }
 
