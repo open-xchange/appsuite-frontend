@@ -82,8 +82,8 @@ module.exports = function (grunt) {
         ignoreList = [
             'apps/pdfjs-dist/build/pdf.js',
             'apps/pdfjs-dist/build/pdf.worker.js'
-        ];
-    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList, largeFiles).map(function (f) { return '!' + f; }));
+        ].concat(largeFiles).map(function (f) { return '!' + f; });
+    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList));
     grunt.config.merge({
         uglify: {
             dist_largeFiles: {
