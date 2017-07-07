@@ -202,11 +202,12 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         },
 
         validate: function () {
-            if (!this.get('active')) return true;
-            if (!this.get('activateTimeFrame')) return true;
+            // false means "good"
+            if (!this.get('active')) return false;
+            if (!this.get('activateTimeFrame')) return false;
             if (this.isReverse()) return { dateUntil: gt('The end date must be after the start date.') };
             if (this.isPast()) return { dateUntil: gt('The time frame is in the past.') };
-            return;
+            return false;
         }
     });
 
