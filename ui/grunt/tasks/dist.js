@@ -73,18 +73,22 @@ module.exports = function (grunt) {
     });
 
     var fileList = grunt.config('uglify.dist.files.0.src'),
-        ignoreList = [
+        largeFiles = [
             'apps/3rd.party/tinymce/tinymce.js',
             'apps/io.ox/mail/compose/bundle.js',
             'boot.js',
             'precore.js'
+        ],
+        ignoreList = [
+            'apps/pdfjs-dist/build/pdf.js',
+            'apps/pdfjs-dist/build/pdf.worker.js'
         ];
-    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList.map(function (f) { return '!' + f; })));
+    grunt.config('uglify.dist.files.0.src', fileList.concat(ignoreList, largeFiles).map(function (f) { return '!' + f; }));
     grunt.config.merge({
         uglify: {
             dist_largeFiles: {
                 files: [{
-                    src: ignoreList,
+                    src: largeFiles,
                     cwd: 'build/',
                     dest: 'dist/appsuite/',
                     expand: true
