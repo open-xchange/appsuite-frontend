@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, date, moment) {
+define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, AlarmsView, date, moment) {
 
     'use strict';
 
@@ -249,6 +249,71 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/date', 'i
             it('updates the model', function () {
                 this.view.$el.val('new password').trigger('change');
                 expect(this.model.get('test')).to.equal('new password');
+            });
+        });
+
+        describe('AlarmsView', function () {
+            beforeEach(function () {
+                this.model = new Backbone.Model({
+                    summary: 'Pizza Essen',
+                    description: 'Lecker Lecker!',
+                    alarms: [{
+                        action: 'DISPLAY',
+                        description: 'Pizza Essen',
+                        trigger: '-P15M'
+                    }, {
+                        action: 'AUDIO',
+                        trigger: '-P30M'
+                    }, {
+                        action: 'EMAIL',
+                        attendee: 'mailto:miss.test@test.com',
+                        description: 'Lecker Lecker!',
+                        summary: 'Pizza Essen',
+                        trigger: '-P2H'
+                    }]
+                });
+                this.view = new AlarmsView({ model: this.model });
+                this.view.render();
+            });
+
+            afterEach(function () {
+                delete this.model;
+                delete this.view;
+            });
+
+            it('should draw nodes', function () {
+                this.view.$el.find('button').length.should.equal(1);
+                this.view.$el.find('.alarm-list').length.should.equal(1);
+            });
+
+            it('should create nodes from the model', function () {
+                this.view.$el.find('.alarm-list-item').length.should.equal(3);
+            });
+
+            it('should create new alarm when button is clicked', function () {
+                this.view.$el.find('button').trigger('click');
+                this.view.$el.find('.alarm-list-item').length.should.equal(4);
+            });
+
+            it('should remove alarmes when button is clicked', function () {
+                this.view.$el.find('.alarm-remove:first').trigger('click');
+                this.view.$el.find('.alarm-list-item').length.should.equal(2);
+            });
+
+            it('should update the model correctly', function () {
+                this.view.$el.find('.alarm-remove:last').trigger('click');
+                // change must be triggered manually when the value is changed using javascript.
+                this.view.$el.find('.alarm-action:last').val('DISPLAY').trigger('change');
+                this.view.$el.find('.alarm-time:first').val('-P1H').trigger('change');
+                this.model.get('alarms').should.deep.equal([{
+                    action: 'DISPLAY',
+                    trigger: '-P1H',
+                    description: 'Pizza Essen'
+                }, {
+                    action: 'DISPLAY',
+                    trigger: '-P30M',
+                    description: 'Pizza Essen'
+                }]);
             });
         });
 

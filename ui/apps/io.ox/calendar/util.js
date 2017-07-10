@@ -294,53 +294,51 @@ define('io.ox/calendar/util', [
 
             var options = {},
                 reminderListValues = [
-                    { value: -1, format: 'string' },
-                    { value: 0, format: 'minutes' },
-                    { value: 5, format: 'minutes' },
-                    { value: 10, format: 'minutes' },
-                    { value: 15, format: 'minutes' },
-                    { value: 30, format: 'minutes' },
-                    { value: 45, format: 'minutes' },
+                    // value is ical duration format
+                    { value: '-1', format: 'string' },
+                    { value: '-P0M', format: 'minutes' },
+                    { value: '-P5M', format: 'minutes' },
+                    { value: '-P10M', format: 'minutes' },
+                    { value: '-P15M', format: 'minutes' },
+                    { value: '-P30M', format: 'minutes' },
+                    { value: '-P45M', format: 'minutes' },
 
-                    { value: 60, format: 'hours' },
-                    { value: 120, format: 'hours' },
-                    { value: 240, format: 'hours' },
-                    { value: 360, format: 'hours' },
-                    { value: 480, format: 'hours' },
-                    { value: 720, format: 'hours' },
+                    { value: '-P1H', format: 'hours' },
+                    { value: '-P2H', format: 'hours' },
+                    { value: '-P4H', format: 'hours' },
+                    { value: '-P6H', format: 'hours' },
+                    { value: '-P8H', format: 'hours' },
+                    { value: '-P12H', format: 'hours' },
 
-                    { value: 1440, format: 'days' },
-                    { value: 2880, format: 'days' },
-                    { value: 4320, format: 'days' },
-                    { value: 5760, format: 'days' },
-                    { value: 7200, format: 'days' },
-                    { value: 8640, format: 'days' },
+                    { value: '-P1D', format: 'days' },
+                    { value: '-P2D', format: 'days' },
+                    { value: '-P3D', format: 'days' },
+                    { value: '-P4D', format: 'days' },
+                    { value: '-P5D', format: 'days' },
+                    { value: '-P6D', format: 'days' },
 
-                    { value: 10080, format: 'weeks' },
-                    { value: 20160, format: 'weeks' },
-                    { value: 30240, format: 'weeks' },
-                    { value: 40320, format: 'weeks' }
+                    { value: '-P1W', format: 'weeks' },
+                    { value: '-P2W', format: 'weeks' },
+                    { value: '-P3W', format: 'weeks' },
+                    { value: '-P4W', format: 'weeks' }
                 ];
 
             _(reminderListValues).each(function (item) {
-                var i;
+                var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
                     case 'string':
                         options[item.value] = gt('No reminder');
                         break;
                     case 'minutes':
-                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
+                        options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', i), i);
                         break;
                     case 'hours':
-                        i = Math.floor(item.value / 60);
                         options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
                         break;
                     case 'days':
-                        i = Math.floor(item.value / 60 / 24);
                         options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
                         break;
                     case 'weeks':
-                        i = Math.floor(item.value / 60 / 24 / 7);
                         options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
                         break;
                     // no default

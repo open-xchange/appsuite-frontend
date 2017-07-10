@@ -43,12 +43,15 @@ define('io.ox/calendar/chronos-util', [
         // creates an attendee object from a user object or model and contact model or object
         // used to create default participants and used by addparticipantsview
         createAttendee: function (user) {
-            var attendee = {
-                cuType: attendeeLookupArray[(user.get ? user.get('type') : user.type)] || 'INDIVIDUAL',
-                cn: user.getDisplayName ? user.getDisplayName() : user.display_name,
-                partStat: 'NEEDS-ACTION',
-                comment: ''
-            };
+            if (!user) return;
+
+            var displayName = user.get ? user.get('display_name') : user.display_name,
+                attendee = {
+                    cuType: attendeeLookupArray[(user.get ? user.get('type') : user.type)] || 'INDIVIDUAL',
+                    cn: user.getDisplayName ? user.getDisplayName() : displayName,
+                    partStat: 'NEEDS-ACTION',
+                    comment: ''
+                };
 
             if (attendee.cuType !== 'RESOURCE') {
                 if (user.id && (user.get ? user.get('type') : user.type) !== 5) attendee.entity = user.id;
