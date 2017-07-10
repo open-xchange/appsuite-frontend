@@ -57,6 +57,16 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&gt;');
             });
 
+            it('transforms multiple mail addresses', function () {
+                var html = process('One "ipsum@dolor.amet" and another "ipsum@dolor.amet".');
+                expect(html).to.equal('One &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot; and another &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot;.');
+            });
+
+            it('ignores invalid addresses', function () {
+                var html = process('One "ipsum@dolor" and another "@dolor.amet".');
+                expect(html).to.equal('One &quot;ipsum@dolor&quot; and another &quot;@dolor.amet&quot;.');
+            });
+
             // QUOTES
 
             it('transforms quotes', function () {
