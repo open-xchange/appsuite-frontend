@@ -764,7 +764,7 @@ define('io.ox/portal/main', [
             });
         }, 300);
 
-        $(window).on('scrollstop resize', lazyLayout);
+        $(window).on('scrollend resize', lazyLayout);
     });
 
     return {

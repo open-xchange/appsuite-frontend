@@ -535,7 +535,7 @@ define('io.ox/calendar/month/perspective', [
                         this.drawWeeks({ up: true });
                     }
                 }, this))
-                .on('scrollstop', $.proxy(function () {
+                .on('scrollend', $.proxy(function () {
                     var month = false,
                         prevMonth = 0,
                         scrollTop = this.scrollTop(),
