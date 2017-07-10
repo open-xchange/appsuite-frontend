@@ -86,7 +86,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
             it('transforms quotes without trailing new line', function () {
                 var html = process('> Lorem\n>\n> ipsum\n>\n\n');
-                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br><br>');
+                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum<br></blockquote><br>');
             });
             it('transforms nested quotes without trailing new line', function () {
                 var html = process('> > Lorem ipsum\n> amet\ndolor sit');
