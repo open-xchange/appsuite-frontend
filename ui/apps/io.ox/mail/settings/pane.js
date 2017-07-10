@@ -17,9 +17,11 @@ define('io.ox/mail/settings/pane', [
     'io.ox/core/capabilities',
     'io.ox/core/settings/util',
     'io.ox/core/notifications',
+    'io.ox/mail/mailfilter/vacationnotice/model',
+    'io.ox/mail/mailfilter/autoforward/model',
     'settings!io.ox/mail',
     'gettext!io.ox/mail'
-], function (ext, ExtensibleView, capabilities, util, notifications, settings, gt) {
+], function (ext, ExtensibleView, capabilities, util, notifications, vacationNoticeModel, autoforwardModel, settings, gt) {
 
     'use strict';
 
@@ -205,10 +207,22 @@ define('io.ox/mail/settings/pane', [
                 if (!capabilities.has('mailfilter')) return;
 
                 this.append(
-                    $('<button type="button" class="btn btn-default">')
-                    .text(gt('Vacation notice') + ' ...')
+                    $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
+                    .append(
+                        $('<i class="fa fa-toggle-on">').hide(),
+                        $.txt(gt('Vacation notice') + ' ...')
+                    )
                     .on('click', openDialog)
                 );
+
+                // check whether it's active
+                var model = new vacationNoticeModel();
+                model.fetch().done(updateToggle.bind(this, model));
+                ox.on('mail:change:vacation-notice', updateToggle.bind(this));
+
+                function updateToggle(model) {
+                    this.find('[data-action="edit-vacation-notice"] .fa-toggle-on').toggle(model.isActive());
+                }
 
                 function openDialog() {
                     ox.load(['io.ox/mail/mailfilter/vacationnotice/view']).done(function (view) {
@@ -228,10 +242,22 @@ define('io.ox/mail/settings/pane', [
                 if (!capabilities.has('mailfilter')) return;
 
                 this.append(
-                    $('<button type="button" class="btn btn-default">')
-                    .text(gt('Auto forward') + ' ...')
+                    $('<button type="button" class="btn btn-default" data-action="edit-auto-forward">')
+                    .append(
+                        $('<i class="fa fa-toggle-on">').hide(),
+                        $.txt(gt('Auto forward') + ' ...')
+                    )
                     .on('click', openDialog)
                 );
+
+                // check whether it's active
+                var model = new autoforwardModel();
+                model.fetch().done(updateToggle.bind(this, model));
+                ox.on('mail:change:auto-forward', updateToggle.bind(this));
+
+                function updateToggle(model) {
+                    this.find('[data-action="edit-auto-forward"] .fa-toggle-on').toggle(model.isActive());
+                }
 
                 function openDialog() {
                     ox.load(['io.ox/mail/mailfilter/autoforward/view']).done(function (view) {
