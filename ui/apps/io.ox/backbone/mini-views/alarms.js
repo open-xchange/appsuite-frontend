@@ -25,8 +25,8 @@ define('io.ox/backbone/mini-views/alarms', [
         className: 'alarms-view',
         events: {
             'click .alarm-remove': 'onRemove',
-            'change .alarm-action': 'update',
-            'change .alarm-time': 'update'
+            'change .alarm-action': 'updateModel',
+            'change .alarm-time': 'updateModel'
         },
         initialize: function (options) {
             options = options || {};
