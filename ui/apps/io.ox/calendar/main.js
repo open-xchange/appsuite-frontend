@@ -803,6 +803,7 @@ define('io.ox/calendar/main', [
                 // selection in listview
                 app.grid.selection.on({
                     'change': function (event, list) {
+                        if (!list.length) return;
                         metrics.trackEvent({
                             app: 'calendar',
                             target: 'list',
