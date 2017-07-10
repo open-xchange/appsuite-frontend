@@ -84,9 +84,13 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>');
             });
 
-            it('transforms quotes with trailing new line', function () {
-                var html = process('> Lorem\n>\n> ipsum\n>\n');
-                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br>');
+            it('transforms quotes without trailing new line', function () {
+                var html = process('> Lorem\n>\n> ipsum\n>\n\n');
+                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br><br>');
+            });
+            it('transforms nested quotes without trailing new line', function () {
+                var html = process('> > Lorem ipsum\n> amet\ndolor sit');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>amet</blockquote>dolor sit');
             });
 
             // UNORDERED LISTS

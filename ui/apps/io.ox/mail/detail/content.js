@@ -714,7 +714,7 @@ define('io.ox/mail/detail/content', [
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*/,
+            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*\n?/,
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
