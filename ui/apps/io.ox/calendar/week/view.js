@@ -220,7 +220,7 @@ define('io.ox/calendar/week/view', [
         /**
          * reset appointment collection
          * avoids processing concurrent requests in wrong order
-         * @param  { number } startDate starttime from initail request
+         * @param  { number } startDate starttime from inital request
          * @param  { array }  data      all appointments returend by API
          */
         reset: function (startDate, models) {
@@ -232,6 +232,11 @@ define('io.ox/calendar/week/view', [
                     .filter(function (model) {
                         var os = model.get('startDate'),
                             oe = model.get('endDate');
+
+                        if (!os || !oe) return false;
+
+                        os = moment.tz(os.value, os.tzid).valueOf();
+                        oe = moment.tz(oe.value, oe.tzid).valueOf();
                         if (model.get('allDay')) {
                             os = moment.utc(os).local(true).valueOf();
                             oe = moment.utc(oe).local(true).valueOf();
@@ -1224,14 +1229,13 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                appointmentStartDate = moment(model.get('startDate'));
+                // no timezone is always utc time. This is used for all day appointments, which are timezone independent (christmas, birthdays etc.)
+                appointmentStartDate = moment.tz(model.get('startDate').value, model.get('startDate').tzid || 'UTC');
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
-                    if (model.get('allDay') && this.options.showFulltime) {
-
-                        appointmentStartDate = moment.utc(model.get('startDate')).local(true);
+                    if (!model.get('startDate').tzid && this.options.showFulltime) {
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 
@@ -1239,18 +1243,18 @@ define('io.ox/calendar/week/view', [
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment.utc(model.get('endDate')).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max((moment.utc(model.get('endDate').value).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
-                            if (fulltimeColPos[row] <= model.get('startDate')) {
-                                fulltimeColPos[row] = model.get('endDate');
+                            if (fulltimeColPos[row] <= moment.utc(model.get('startDate').value).valueOf()) {
+                                fulltimeColPos[row] = moment.utc(model.get('endDate').value).valueOf();
                                 break;
                             }
                         }
 
                         if (row === fulltimeColPos.length) {
-                            fulltimeColPos.push(model.get('endDate'));
+                            fulltimeColPos.push(moment.utc(model.get('endDate').value).valueOf());
                         }
                         node.css({
                             height: this.fulltimeHeight,
@@ -1262,13 +1266,13 @@ define('io.ox/calendar/week/view', [
                         this.fulltimePane.append(node);
                     } else {
                         // fix fulltime appointments to local time when this.showFulltime === false
-                        if (model.get('allDay')) {
+                        /*if (!model.get('startDate').tzid) {
                             model.set({ startDate: moment.utc(model.get('startDate')).local(true).valueOf() }, { silent: true });
                             model.set({ endDate: moment.utc(model.get('endDate')).local(true).valueOf() }, { silent: true });
-                        }
+                        }*/
 
-                        var startLocal = moment(Math.max(model.get('startDate'), this.startDate.valueOf())),
-                            endLocal = moment(model.get('endDate')),
+                        var startLocal = moment(Math.max(appointmentStartDate.valueOf(), this.startDate.valueOf())),
+                            endLocal = moment.tz(model.get('endDate').value, model.get('endDate').tzid),
                             start = moment(startLocal).startOf('day').valueOf(),
                             end = moment(endLocal).startOf('day').valueOf(),
                             maxCount = 0,
@@ -1282,11 +1286,11 @@ define('io.ox/calendar/week/view', [
 
                             if (start !== end) {
                                 endLocal = moment(startLocal).endOf('day');
-                                if (model.get('endDate') - endLocal.valueOf() > 1) {
+                                if (moment.tz(model.get('endDate').value, model.get('endDate').tzid).valueOf() - endLocal.valueOf() > 1) {
                                     style += 'rmsouth';
                                 }
                             } else {
-                                endLocal = moment(model.get('endDate'));
+                                endLocal = moment.tz(model.get('endDate').value, model.get('endDate').tzid);
                             }
 
                             // kill overlap appointments with length null
