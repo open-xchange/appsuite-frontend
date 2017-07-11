@@ -20,9 +20,14 @@
         options = options || {};
         this.each(function () {
             _.defer(function () {
+                // needs to be added to the node temporary. Otherwise every lazylod uses the first option passe
+                if (options.previewUrl) {
+                    this[0].previewUrl = options.previewUrl;
+                    delete options.previewUrl;
+                }
                 // look for potential scrollpane
-                (options.container || this.closest('.scrollpane, .scrollable, .tt-dropdown-menu'))
-                    .lazyloadScrollpane()
+                (options.container || this.closest('.scrollpane, .scrollable, .tt -dropdown-menu'))
+                    .lazyloadScrollpane(options)
                     .trigger('scroll');
             }.bind($(this).addClass('lazyload')));
         });
@@ -91,36 +96,51 @@
     function onAppear(options) {
         if (this.loaded) return;
 
-        var node = $(this).removeClass('lazyload');
+        var node = $(this).removeClass('lazyload'),
+            createImg  = function () {
+                $('<img>').on({
+                    'load': function () {
 
-        $('<img>').on({
-            'load': function () {
+                        var original = node.attr('data-original');
 
-                var original = node.attr('data-original');
+                        if (options.effect !== 'show') node.hide();
 
-                if (options.effect !== 'show') node.hide();
+                        if (node.is('img')) {
+                            node.attr('src', original);
+                        } else {
+                            node.css('background-image', 'url("' + original + '")');
+                        }
 
-                if (node.is('img')) {
-                    node.attr('src', original);
-                } else {
-                    node.css('background-image', 'url("' + original + '")');
-                }
+                        // show / fade-in
+                        node[options.effect]();
+                        node.prop('loaded', true);
 
-                // show / fade-in
-                node[options.effect]();
-                node.prop('loaded', true);
-
-                node.trigger('load.lazyload', this, options);
-                $(this).off();
-                node = options = null;
-            },
-            'error': function () {
-                node.trigger('error.lazyload', this, options);
-                $(this).off();
-                node = options = null;
-            }
-        })
-        .attr('src', node.attr('data-original'));
+                        node.trigger('load.lazyload', this, options);
+                        $(this).off();
+                        node = options = null;
+                    },
+                    'error': function () {
+                        node.trigger('error.lazyload', this, options);
+                        $(this).off();
+                        node = options = null;
+                    }
+                })
+                .attr('src', node.attr('data-original'));
+            };
+        // it makes sense to fetch preview urls here because it uses canvasresize. This may put too heavy load an cpu and memory otherwise
+        if (this.previewUrl) {
+            var self = this;
+            // don't use busy function to avoid 300ms delay
+            node.addClass('io-ox-busy');
+            this.previewUrl().done(function (url) {
+                node.removeClass('io-ox-busy');
+                node.attr('data-original', url);
+                delete self.previewUrl;
+                createImg();
+            });
+        } else {
+            createImg();
+        }
     }
 
     // helper

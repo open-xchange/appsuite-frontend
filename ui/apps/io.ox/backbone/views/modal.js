@@ -51,6 +51,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 maximize: false,
                 smartphoneInputFocus: false
             }, options);
+            // ensure correct width on smartphone
+            if (_.device('smartphone') && options.width >= 320) {
+                options.width = '95%';
+            }
             this.context = options.context;
             // the original constructor will call initialize()
             ExtensibleView.prototype.constructor.apply(this, arguments);

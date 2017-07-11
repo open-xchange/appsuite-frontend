@@ -149,6 +149,8 @@ define('io.ox/core/folder/node', [
         // re-render on any attribute change
         onChange: function (model) {
 
+            if (model.changed.title !== undefined) this.renderFolderLabel();
+
             if (model.changed.id !== undefined) {
                 this.onChangeId(model);
             }
@@ -541,6 +543,10 @@ define('io.ox/core/folder/node', [
                 })
                 .append($('<i class="fa fa-bars" aria-hidden="true">'))
             );
+        },
+
+        renderFolderLabel: function () {
+            this.$.label.text(this.getTitle());
         },
 
         renderAttributes: function () {
