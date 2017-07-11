@@ -1950,7 +1950,7 @@ define('io.ox/core/main', [
                 break;
             case 'LGI-0016':
                 // redirect based on error message; who had the brilliant idea to name the message of the error object 'error'?
-                location.href = _.url.vars(error.error);
+                _.url.redirect(_.url.vars(error.error));
                 break;
             // no default
         }

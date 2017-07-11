@@ -42,7 +42,7 @@ define('io.ox/core/boot/login/auto', [
                 // special autologin error handling. redirect user to an
                 // external page defined in the error params
                 if (error && error.code === 'LGI-0016' && (error.error_params || []).length === 1) {
-                    window.location.href = error.error_params[0];
+                    _.url.redirect(error.error_params[0]);
                 } else {
                     ox.trigger('login:fail', error);
                 }
