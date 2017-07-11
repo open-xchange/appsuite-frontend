@@ -272,7 +272,7 @@
 
     section.body {
         margin: 0;
-        padding: @default-padding;
+        padding: 32px 40px;
         background-color: #fff;
         display: none;
         width: 100%;
@@ -433,11 +433,12 @@
     .contact-picture {
         position: absolute;
         top: @default-padding;
-        left: @default-padding;
+        right: @default-padding;
         .picture(@picture-width, @picture-width);
     }
 
-    &.no-padding .contact-picture { left: 0; }
+    &.mail-item .contact-picture { margin: 0; }
+    &.no-padding .contact-picture { right: 0; }
 
     .io-ox-label {
         font-size: 12px;
@@ -455,7 +456,7 @@
 
         position: relative;
         line-height: 16px;
-        padding: (@default-padding + 3) 0 8px (@picture-padding + @default-padding + 24px);
+        padding: (@default-padding + 3) (@picture-padding + @default-padding) 8px 40px;
 
         min-height: 64px;
 
@@ -481,7 +482,7 @@
             a { color: #333; }
         }
         .actions {
-            margin: 5px 8px 0 0;
+            margin: 0 8px 0 -8px;
             & > li {
                 display: inline-block;
                 a {
@@ -493,7 +494,7 @@
                         text-decoration: none;
                     }
                 }
-                &:not(.dropdown) a, &.dropdown i { padding: 4px 8px; }
+                a, &.dropdown i { padding: 4px 8px; }
             }
             .fa-bars {
                 font-size: 14px;
@@ -530,12 +531,13 @@
         }
     }
 
-    &.expanded .detail-view-header { border-bottom: 1px solid #eee; }
+    &.expanded .detail-view-header { border-bottom: 1px solid #ddd; }
 
     .notifications { cursor: default; }
 
     .notification-item {
         padding: @default-padding;
+        padding-left: 40px;
         border-bottom: 1px solid #ddd;
     }
 
@@ -628,7 +630,10 @@
             line-height: 20px;
             margin-right: (@default-padding / 2);
 
-            &.seen-unseen-indicator:before { content: "\f003"; color: rgba(0, 0, 0, 0.50); } // fa-envelope-o
+            &.seen-unseen-indicator:before {
+                content: @mail-unseen-icon;
+                color: rgba(0, 0, 0, 0.50);
+            }
             &.icon-answered  { color: #aaa; }
             &.icon-forwarded { color: #888; }
         }
@@ -665,7 +670,7 @@
 
     .unread {
         i.seen-unseen-indicator:before {
-            content: "\f0e0"; // fa-envelope
+            content: @mail-unseen-icon;
             color: @link-color;
         }
     }
@@ -704,16 +709,15 @@
 
     .account-name, .original-folder, .thread-size {
         font-size: 12px;
-        color: #767676;
-        line-height: 14px;
+        color: @mail-thread-size-color;
+        background-color: @mail-thread-size-background;
+        line-height: 16px;
         padding: 0 4px;
-        margin: 2px 0 0 (@default-padding / 2);
+        margin: 3px 0 0 (@default-padding / 2);
         display: inline-block;
         float: right;
         overflow: visible;
         text-align: center;
-        border: 1px solid rgba(0, 0, 0, 0.15);
-
         .fontWeight(normal);
         .border-radius(@border-radius-small);
     }
@@ -730,7 +734,6 @@
 
     .thread-size {
         min-width: 24px;
-
         html.high-contrast & { color: @hc-gray; }
     }
 
@@ -738,14 +741,20 @@
         .thread-size,
         .account-name,
         .original-folder,
-        .original-folder .breadcrumb-link { color: #555; }
+        .original-folder .breadcrumb-link {
+            color: #555;
+            background-color: rgba(0, 0, 0, 0.10);
+        }
     }
 
     &.visible-selection.has-focus .selected {
         .thread-size,
         .account-name,
         .original-folder,
-        .original-folder .breadcrumb-link { color: #fff; }
+        .original-folder .breadcrumb-link {
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.20);
+        }
     }
 
     .thread-item {
@@ -766,7 +775,7 @@
 
     .attachments {
         padding: 10px @default-padding 9px @default-padding;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #ddd;
 
         .io-ox-inline-links {
             display: inline;
@@ -798,7 +807,7 @@
 
         position: absolute;
         top: 19px;
-        left: 72px;
+        left: @default-padding;
         outline: none;
         font-size: 14px;
         color: #767676;
@@ -810,24 +819,25 @@
         }
 
         &:hover { text-decoration: none; color: #aaa; }
-        i.fa:before { content: "\f003"; } // fa-envelope-o
+        i.fa:before { content: @mail-unseen-icon-seen; }
     }
 
     &.unread .unread-toggle {
         color: @link-color;
-        i.fa:before { content: "\f0e0"; } // fa-envelope
+        i.fa:before { content: @mail-unseen-icon; }
     }
 }
 
 .subject-base() {
     font-size: 20px;
     line-height: 24px;
-    padding: 12px @default-padding 4px @default-padding;
+    padding: 4px @default-padding 4px 0;
     margin: 0;
-    .fontWeight(300);
+    font-weight: 400;
 }
 
 .thread-view-list {
+
     padding: @default-padding;
     background-color: #eee;
 
@@ -835,31 +845,15 @@
 
     & > .thread-view-header {
 
-        & > * {
-            .subject-base();
-        }
-
-        padding-bottom: 0;
-        background-color: white;
+        padding: 0;
 
         .subject {
-            word-break: break-word;
-            padding-bottom: 0;
-            &.spacer {
-                padding-bottom: 20px;
-            }
-        }
-
-        .summary {
-            display: block;
-            color: #767676;
-            font-size: 13px;
-            line-height: 16px;
-            font-weight: 300;
+            font-size: 18px;
+            line-height: 24px;
+            padding: 4px 40px 20px 0;
             margin: 0;
-            padding-top: 0;
-            padding-bottom: 4px;
-            html.high-contrast & { color: @hc-gray; }
+            font-weight: 700;
+            word-break: break-word;
         }
 
         .toggle-all, .toggle-big-screen {
@@ -869,7 +863,7 @@
             &:hover { color: #595959; }
             &:focus { color: @link-color; }
             padding: 0;
-            margin: 12px @default-padding 4px 0;
+            margin: 8px @default-padding 4px 0;
             .flex(0 0 auto);
             .align-self(flex-start);
         }
@@ -882,6 +876,7 @@
 
 .list-item {
     .flag {
+        font-size: 14px;
         color: rgba(0, 0, 0, 0.5);
         .fa:before { content: @flag-icon-unset; }
     }
@@ -1302,11 +1297,6 @@ body.dragging .categories-toolbar-container {
             .subject {
                 line-height: 20px;
             }
-            .summary {
-                padding-top: 20px;
-                font-size: @phone-font-size - 2;
-                color: #fff;
-            }
         }
         .row-3{
             display: none;
@@ -1411,7 +1401,7 @@ body.dragging .categories-toolbar-container {
         }
 
         section {
-            .attachments, .body { border-top: 1px solid #eee; }
+            .attachments, .body { border-top: 1px solid #ddd; }
             .attachments { margin-bottom: 0; }
             .body { padding: 8px @default-padding; }
         }

@@ -123,7 +123,6 @@ define(['io.ox/mail/threadview', 'io.ox/mail/api', 'fixture!io.ox/mail/thread.js
                 setTimeout(function () {
                     expect(h1.length).to.equal(1);
                     expect(h1.find('.subject').text()).to.equal('A simple text email');
-                    expect(h1.find('.summary').text()).to.equal('3 Nachrichten in dieser Konversation');
                     done();
                 }, 20);
             });

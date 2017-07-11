@@ -105,21 +105,6 @@ define('io.ox/mail/threadview', [
     });
 
     ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'summary',
-        index: 300,
-        draw: function (baton) {
-            var length = baton.view.collection.length;
-            if (length === 1) {
-                this.find('.subject').addClass('spacer');
-                return;
-            }
-            this.find('.subject').after(
-                $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
-            );
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
         id: 'toggle-big-screen',
         index: 110,
         draw: function (baton) {

@@ -96,7 +96,7 @@ define('io.ox/mail/detail/view', [
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
         index: _.device('smartphone') ? 50 : INDEX_header += 100,
-        classes: _.device('smartphone') ? '' : 'actions pull-right',
+        classes: _.device('smartphone') ? '' : 'actions',
         label: gt('Actions'),
         ariaLabel: gt('Actions'),
         icon: _.device('smartphone') ? undefined : 'fa fa-bars',
