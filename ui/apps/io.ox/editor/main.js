@@ -284,7 +284,8 @@ define('io.ox/editor/main', [
                 if (model.has('id')) {
                     // update
                     var params = {};
-                    if ((data.meta && data.meta.Encrypted) || data.filename.endsWith('.pgp')) {
+                    // do not use endsWith because of IE11
+                    if ((data.meta && data.meta.Encrypted) || data.filename.lastIndexOf('.pgp') === data.filename.length - 4) {
                         params = {
                             cryptoAction: 'Encrypt'
                         };

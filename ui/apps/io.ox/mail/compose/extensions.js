@@ -148,6 +148,9 @@ define('io.ox/mail/compose/extensions', [
                                 name = null;
                             } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
                                 name = settings.get(['customDisplayNames', address, 'name'], '');
+                            } else {
+                                // reset
+                                name = settings.get(['customDisplayNames', address, 'defaultName'], '');
                             }
                             return [name, address];
                         }

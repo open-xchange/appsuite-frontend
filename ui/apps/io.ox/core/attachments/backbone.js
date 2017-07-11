@@ -170,8 +170,8 @@ define('io.ox/core/attachments/backbone', [
             return this.get('uploaded') === 0;
         },
 
-        previewUrl: function () {
-
+        previewUrl: function (options) {
+            options = options || {};
             var supportsDocumentPreview = capabilities.has('document_preview'),
                 filename = this.get('filename'), url;
 
@@ -182,7 +182,14 @@ define('io.ox/core/attachments/backbone', [
             if (url) return url;
 
             var fetchPreview = previewFetcher[this.get('group')];
-            if (fetchPreview) return fetchPreview(this);
+            if (fetchPreview) {
+                // you may want to delay the execution of the previewfetcher as it may cause heavy load on cpu and memory (canvasresize)
+                // give return value as previewUrl option to lazyload function will enable lazyload to create the previewURL on demand
+                if (options.delayExecution) {
+                    return fetchPreview.bind(this, this);
+                }
+                return fetchPreview(this);
+            }
 
             return null;
         },

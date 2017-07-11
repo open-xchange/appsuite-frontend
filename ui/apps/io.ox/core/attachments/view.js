@@ -217,19 +217,10 @@ define('io.ox/core/attachments/view', [
 
         className: 'preview',
 
-        initialize: function () {
-            this.listenTo(this.model, 'change:meta', function () {
-                if (this.$el.hasClass('lazy')) return;
-                // render again since we might now have a preview URL
-                this.$('.fallback').remove();
-                this.render();
-            });
-        },
-
-        lazyload: function () {
+        lazyload: function (previewUrl) {
             // use defer to make sure this view has already been added to the DOM
             _.defer(function () {
-                this.$el.lazyload({ container: this.$el.closest('ul'), effect: 'fadeIn' });
+                this.$el.lazyload({ container: this.$el.closest('ul'), effect: 'fadeIn', previewUrl: previewUrl });
             }.bind(this));
         },
 
@@ -258,10 +249,13 @@ define('io.ox/core/attachments/view', [
         },
 
         render: function () {
-            var url = this.model.previewUrl();
+            var url = this.model.previewUrl({ delayExecution: true });
             if (_.isString(url)) {
                 this.$el.addClass('lazy').attr('data-original', url);
                 this.lazyload();
+            } else if (url !== null) {
+                this.$el.addClass('lazy');
+                this.lazyload(url);
             } else {
                 this.fallback();
             }

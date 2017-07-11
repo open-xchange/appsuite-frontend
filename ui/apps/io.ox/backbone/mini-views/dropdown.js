@@ -135,7 +135,8 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .on('dragstart', false)
                 .append(
                     options.icon ? $('<i class="fa fa-fw" aria-hidden="true">') : $(),
-                    text
+                    // bug #54320
+                    $('<span>').text(text)
                 );
             if (callback) link.on('click', {}, callback);
             return this.append(link);

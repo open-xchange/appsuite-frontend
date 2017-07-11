@@ -21,7 +21,9 @@ define('io.ox/core/folder/selection', [], function () {
 
         this.view.$el
             .on('click contextmenu', '.selectable', $.proxy(this.onClick, this))
-            .on('keydown', '.selectable', $.proxy(this.onKeydown, this));
+            .on('keydown', '.selectable', $.proxy(this.onKeydown, this))
+            // bug 54193: do not set focus
+            .on('mousedown contextmenu', '.selectable', function (e) { e.preventDefault(); });
 
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')

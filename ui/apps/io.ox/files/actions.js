@@ -108,7 +108,8 @@ define('io.ox/files/actions', [
                 };
 
                 // Check if Guard file.  If so, do auth then call with parameters
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.endsWith('.pgp')) && capabilities.has('guard-drive')) {
+                // do not use endsWith because of IE11
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard-drive')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
