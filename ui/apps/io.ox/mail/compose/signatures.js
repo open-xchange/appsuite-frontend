@@ -244,7 +244,7 @@ define('io.ox/mail/compose/signatures', [
         },
 
         appendSignature: function (signature) {
-            var text,
+            var text, proc,
                 isHTML = !!this.editor.find;
 
             // add signature?
@@ -254,11 +254,12 @@ define('io.ox/mail/compose/signatures', [
                 // signature wrapper
                 if (_.isString(signature.misc)) signature.misc = JSON.parse(signature.misc);
                 if (signature.misc && signature.misc.insertion === 'below') {
-                    this.editor.appendContent(text);
+                    proc = _.bind(this.editor.insertPostCite || this.editor.appendContent, this.editor);
+                    proc(text);
                     this.editor.scrollTop('bottom');
                 } else {
                     // backward compatibility
-                    var proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
+                    proc = _.bind(this.editor.insertPrevCite || this.editor.prependContent, this.editor);
                     proc(text);
                     this.editor.scrollTop('top');
                 }

@@ -128,7 +128,7 @@ define('io.ox/core/tk/tokenfield', [
             this.$el
                 .attr({
                     tabindex: this.options.tabindex,
-                    placeholder: this.options.placeholder || ''
+                    placeholder: this.options.placeholder || ''
                 })
                 .addClass('tokenfield');
             this.$el.tokenfield({
@@ -138,6 +138,9 @@ define('io.ox/core/tk/tokenfield', [
                 html: this.options.html || false
             }).on({
                 'tokenfield:createtoken': function (e) {
+
+                    if (self.redrawLock) return;
+
                     var inputData = self.getInput().data(), model;
                     if (inputData.edit === true) {
                         // edit mode
@@ -158,38 +161,38 @@ define('io.ox/core/tk/tokenfield', [
                         e.attrs.model = model;
                         // set correct displayname
                         model.set('display_name', newAttrs[1]);
-                    } else if (!self.redrawLock) {
-                        // create mode
-                        var model;
-                        if (e.attrs.model) {
-                            model = e.attrs.model;
-                        } else {
-                            var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
-                            if (_.isArray(newAttrs)) {
-                                // this is a mail address
-                                e.attrs.label = util.removeQuotes(newAttrs[1]);
-                                e.attrs.value = newAttrs[3];
-                            } else {
-                                newAttrs = ['', e.attrs.value, '', e.attrs.value];
-                            }
-                            // add external participant
-                            model = new pModel.Participant({
-                                type: 5,
-                                display_name: newAttrs[1],
-                                email1: newAttrs[3]
-                            });
-                        }
-                        model.set('token', {
-                            label: e.attrs.label,
-                            value: e.attrs.value
-                        }, { silent: true });
-                        // add model to the collection and save id to the token
-                        self.collection.addUniquely(makeUnique(model));
-                        // save id to token value
-                        // id was made unique with makeUnique method
-                        e.attrs.value = model.id;
-                        e.attrs.model = model;
+                        return;
                     }
+                    // create mode
+                    var model;
+                    if (e.attrs.model) {
+                        model = e.attrs.model;
+                    } else {
+                        var newAttrs = /^"(.*?)"\s*(<\s*(.*?)\s*>)?$/.exec(e.attrs.value);
+                        if (_.isArray(newAttrs)) {
+                            // this is a mail address
+                            e.attrs.label = util.removeQuotes(newAttrs[1]);
+                            e.attrs.value = newAttrs[3];
+                        } else {
+                            newAttrs = ['', e.attrs.value, '', e.attrs.value];
+                        }
+                        // add external participant
+                        model = new pModel.Participant({
+                            type: 5,
+                            display_name: newAttrs[1],
+                            email1: newAttrs[3]
+                        });
+                    }
+                    model.set('token', {
+                        label: e.attrs.label,
+                        value: e.attrs.value
+                    }, { silent: true });
+                    // add model to the collection and save id to the token
+                    self.collection.addUniquely(makeUnique(model));
+                    // save id to token value
+                    // id was made unique with makeUnique method
+                    e.attrs.value = model.id;
+                    e.attrs.model = model;
                 },
                 'tokenfield:createdtoken': function (e) {
                     if (e.attrs) {
@@ -221,6 +224,27 @@ define('io.ox/core/tk/tokenfield', [
                             // token.label might have quotes, so we need to clean up again
                             e.attrs.value = token.label ? '"' + util.removeQuotes(token.label) + '" <' + token.value + '>' : token.value;
                         }
+                        self.getInput().one('blur', function () {
+                            // see if there is a token with the cid
+                            var tokens = self.$el.parent().find('.token'),
+                                id = self.getInput().data().editModel.id,
+                                found = false;
+
+                            for (var i = 0; i < tokens.length; i++) {
+                                if ($(tokens[i]).data('attrs').value === id) {
+                                    found = true;
+                                    return;
+                                }
+                            }
+
+                            // user tries to remove token by clearing the token in editmode
+                            // token was removed but it's still in the collection, so we need to remove it correctly
+                            if (!found) {
+                                self.collection.remove(self.collection._byId[id]);
+                                self.resort();
+                            }
+                        });
+
                     }
                 },
                 'tokenfield:removetoken': function (e) {
