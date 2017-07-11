@@ -237,7 +237,7 @@ define('io.ox/calendar/week/view', [
 
                         os = moment.tz(os.value, os.tzid).valueOf();
                         oe = moment.tz(oe.value, oe.tzid).valueOf();
-                        if (model.get('allDay')) {
+                        if (chronosUtil.isAllday(model)) {
                             os = moment.utc(os).local(true).valueOf();
                             oe = moment.utc(oe).local(true).valueOf();
                         }
@@ -565,16 +565,15 @@ define('io.ox/calendar/week/view', [
                 // calculate timestamp for current position
                 start.add(this.getTimeFromPos(e.target.offsetTop), 'milliseconds');
                 this.trigger('openCreateAppointment', e, {
-                    start_date: start.valueOf(),
-                    end_date: start.add(1, 'hour').valueOf()
+                    startDate: { value: start.format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() },
+                    endDate: { value: start.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() }
                 });
             }
             if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
                 // calculate timestamp for current position
                 this.trigger('openCreateAppointment', e, {
-                    start_date: start.utc(true).valueOf(),
-                    end_date: start.add(1, 'day').valueOf(),
-                    full_time: true
+                    startDate: { value: start.utc(true).format('YYYYMMDD') },
+                    endDate: { value: start.add(1, 'day').format('YYYYMMDD') }
                 });
             }
         },
@@ -1229,13 +1228,12 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                // no timezone is always utc time. This is used for all day appointments, which are timezone independent (christmas, birthdays etc.)
                 appointmentStartDate = moment.tz(model.get('startDate').value, model.get('startDate').tzid || 'UTC');
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
-                    if (!model.get('startDate').tzid && this.options.showFulltime) {
+                    if (chronosUtil.isAllday(model) && this.options.showFulltime) {
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 

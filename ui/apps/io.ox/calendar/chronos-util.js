@@ -64,6 +64,22 @@ define('io.ox/calendar/chronos-util', [
             }
 
             return attendee;
+        },
+
+        // all day appointments have no timezone and the start and end dates are in date format not date-time
+        // checking the start date is sufficient as the end date must be of the same type, according to the spec
+        isAllday: function (app) {
+            if (!app) return false;
+            var time = app.get ? app.get('startDate') : app.startDate;
+            // there is either no time value or the time value is only 0s
+            return this.isLocal(app) && (time.value.indexOf('T') === -1 || time.value.search(/T0*$/) !== -1);
+        },
+
+        // appointments may be in local time. This means they do not move when the timezone changes. Do not confuse this with UTC time
+        isLocal: function (app) {
+            if (!app) return false;
+            var time = app.get ? app.get('startDate') : app.startDate;
+            return time && time.value && !time.tzid;
         }
     };
 

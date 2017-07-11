@@ -19,10 +19,11 @@ define('io.ox/calendar/util', [
     'io.ox/core/util',
     'io.ox/core/folder/folder-color',
     'io.ox/core/tk/dialogs',
+    'io.ox/calendar/chronos-util',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, settings, coreSettings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, chronosUtil, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -175,20 +176,20 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = moment(data.startDate).zoneAbbr(),
+                    timeZoneStr = moment.tz(data.startDate.value, data.startDate.tzid).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
-                if (data.full_time) {
-                    startDate = moment.utc(data.startDate).local(true);
-                    endDate = moment.utc(data.endDate).local(true).subtract(1, 'days');
+                if (chronosUtil.isAllday(data)) {
+                    startDate = moment.utc(data.startDate.value).local(true);
+                    endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.startDate);
-                    endDate = moment(data.endDate);
+                    startDate = moment.tz(data.startDate.value, data.startDate.tzid);
+                    endDate = moment.tz(data.endDate.value, data.startDate.tzid);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     dateStr = startDate.format(fmtstr);
                     timeStr = this.getTimeInterval(data, options.zone);
-                } else if (data.full_time) {
+                } else if (chronosUtil.isAllday(data)) {
                     dateStr = this.getDateInterval(data);
                     timeStr = this.getTimeInterval(data, options.zone);
                 } else {
@@ -208,7 +209,8 @@ define('io.ox/calendar/util', [
                     // time
                     $('<span class="time">').append(
                         timeStr ? $.txt(timeStr) : '',
-                        this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel)
+                        // Yep there are appointments without timezone. May not be all day appointmens either
+                        data.startDate.tzid ? this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(timeZoneStr), data, options.timeZoneLabel) : ''
                     )
                 );
             }
@@ -222,17 +224,17 @@ define('io.ox/calendar/util', [
 
                 a11y = a11y || false;
 
-                if (data.full_time) {
-                    startDate = moment.utc(data.startDate).local(true);
-                    endDate = moment.utc(data.endDate).local(true).subtract(1, 'days');
+                if (chronosUtil.isAllday(data)) {
+                    startDate = moment.utc(data.startDate.value).local(true);
+                    endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment(data.startDate);
-                    endDate = moment(data.endDate);
+                    startDate = moment.tz(data.startDate.value, data.startDate.tzid);
+                    endDate = moment.tz(data.endDate.value, data.endDate.tzid);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
                 }
-                if (a11y && data.full_time) {
+                if (a11y && chronosUtil.isAllday(data)) {
                     //#. date intervals for screenreaders
                     //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
                     //#. %1$s is the start date
@@ -251,11 +253,11 @@ define('io.ox/calendar/util', [
 
         getTimeInterval: function (data, zone, a11y) {
             if (!data || !data.startDate || !data.endDate) return '';
-            if (data.full_time) {
+            if (chronosUtil.isAllday(data)) {
                 return this.getFullTimeInterval(data, true);
             }
-            var start = moment(data.startDate),
-                end = moment(data.endDate);
+            var start = moment.tz(data.startDate.value, data.startDate.tzid),
+                end = moment.tz(data.endDate.value, data.startDate.tzid);
             if (zone) {
                 start.tz(zone);
                 end.tz(zone);
@@ -353,16 +355,16 @@ define('io.ox/calendar/util', [
         },
 
         getDurationInDays: function (data) {
-            return moment(data.endDate).diff(data.startDate, 'days');
+            return moment(data.endDate.value).diff(data.startDate.value, 'days');
         },
 
         getStartAndEndTime: function (data) {
             var ret = [];
             if (!data || !data.startDate || !data.endDate) return ret;
-            if (data.full_time) {
+            if (chronosUtil.isAllday(data)) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
-                ret.push(moment(data.startDate).format('LT'), moment(data.endDate).format('LT'));
+                ret.push(moment.tz(data.startDate.value, data.startDate.tzid).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).format('LT'));
             }
             return ret;
         },
