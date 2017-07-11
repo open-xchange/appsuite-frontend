@@ -189,8 +189,7 @@ define('io.ox/core/folder/contextmenu', [
                     data: { id: id },
                     enabled: api.can('delete', baton.data),
                     handler: handler,
-                    //#. Verb: (to) archive messages
-                    text: gt.pgettext('verb', 'Archive')
+                    text: gt('Archive old messages')
                 });
             };
 
@@ -567,7 +566,9 @@ define('io.ox/core/folder/contextmenu', [
                     });
                 }
             };
-        })()
+        })(),
+
+        divider: divider
     };
 
     //

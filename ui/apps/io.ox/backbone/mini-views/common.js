@@ -345,13 +345,20 @@ define('io.ox/backbone/mini-views/common', [
                 this.model.set(this.name, t);
             },
             update: function () {
-                this.$el.val(moment(this.model.get(this.name)).format(this.format));
+                var date = this.model.get(this.name);
+                this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
+            },
+            getFormattedDate: function (date) {
+                return this.isToday(date) ? gt('Today') : moment(date).utc(true).format(this.format);
+            },
+            isToday: function (date) {
+                return moment(date).utc(true).isSame(moment().utc(true), 'day');
             },
             render: function () {
                 InputView.prototype.render.call(this);
                 var view = this;
                 require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
-                    new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core') })
+                    new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
                         .attachTo(view.$el)
                         .on('select', function (date) {
                             view.model.set(view.name, date.valueOf());
@@ -455,6 +462,15 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    // most needed pattern
+    function getInputWithLabel(id, label, model) {
+        var guid = _.uniqueId('form-control-label-');
+        return [
+            $('<label>').attr('for', guid).text(label),
+            new InputView({ name: id, model: model, id: guid }).render().$el
+        ];
+    }
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -470,6 +486,7 @@ define('io.ox/backbone/mini-views/common', [
         DateView: DateView,
         ErrorView: ErrorView,
         FormView: FormView,
-        DropdownLinkView: DropdownLinkView
+        DropdownLinkView: DropdownLinkView,
+        getInputWithLabel: getInputWithLabel
     };
 });

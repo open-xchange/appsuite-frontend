@@ -44,7 +44,7 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
-            this.date = moment(this.options.date).utc(true);
+            this.date = options.mandatory === false ? null : moment(this.options.date).utc(true);
             this.mode = 'month';
             this.closing = false;
             // the original constructor will call initialize()
@@ -101,7 +101,7 @@ define('io.ox/backbone/views/datepicker', [
                 // just open from input fields (no toggle)
                 this.$target.on('focus click', $.proxy(this.open, this));
                 this.on('select', function () {
-                    this.$target.val(this.date.format('l')).trigger('change');
+                    this.$target.val(this.getFormattedDate()).trigger('change');
                 });
             } else {
                 // click (i.e. mouse click and enter) to toggle
@@ -217,7 +217,7 @@ define('io.ox/backbone/views/datepicker', [
 
         renderMonth: function () {
 
-            var current = this.date.clone().startOf('day'),
+            var current = this.getDate().clone().startOf('day'),
                 m = current.clone();
 
             this.renderHeader(
@@ -289,8 +289,8 @@ define('io.ox/backbone/views/datepicker', [
 
         renderYear: function () {
 
-            var current = this.date.month(),
-                m = this.date.clone().month(0);
+            var current = this.getDate().month(),
+                m = this.getDate().clone().month(0);
 
             this.renderHeader(
                 $('<button type="button" class="switch-mode">')
@@ -330,8 +330,8 @@ define('io.ox/backbone/views/datepicker', [
 
         renderDecade: function () {
 
-            var current = this.date.year(),
-                m = this.date.clone();
+            var current = this.getDate().year(),
+                m = this.getDate().clone();
 
             m.year(Math.floor(m.year() / 10) * 10);
 
@@ -367,7 +367,7 @@ define('io.ox/backbone/views/datepicker', [
 
         onNavigate: function (e) {
             var fn = $(e.currentTarget).hasClass('btn-prev') ? 'subtract' : 'add',
-                date = this.date.clone();
+                date = this.getDate().clone();
             switch (this.mode) {
                 case 'decade': date[fn](10, 'years'); break;
                 case 'year': date[fn](1, 'year'); break;
@@ -390,7 +390,7 @@ define('io.ox/backbone/views/datepicker', [
 
         switchMode: function (mode, value) {
             this.mode = mode;
-            var date = this.date.clone();
+            var date = this.getDate().clone();
             switch (this.mode) {
                 case 'year': date.year(value); break;
                 case 'month': date.month(value); break;
@@ -474,7 +474,6 @@ define('io.ox/backbone/views/datepicker', [
             function handleEscape(e) {
                 // we use preventDefault for nested handlers, e.g. picker in a modal dialog
                 e.preventDefault();
-                console.log('prevent default ...');
                 this.close();
             }
 
@@ -482,7 +481,7 @@ define('io.ox/backbone/views/datepicker', [
                 // handle enter only if focus is on grid
                 if (this.$grid[0] !== document.activeElement) return;
                 if (this.mode === 'month') {
-                    this.trigger('select', this.date.clone());
+                    this.trigger('select', this.getDate().clone());
                 } else {
                     var selected = this.$('[aria-selected="true"]'),
                         mode = selected.attr('data-mode');
@@ -498,12 +497,12 @@ define('io.ox/backbone/views/datepicker', [
                     case 'decade': interval.year = sign * (e.shiftKey ? 100 : 10); break;
                     // no default
                 }
-                this.setDate(this.date.clone().add(interval));
+                this.setDate(this.getDate().clone().add(interval));
             }
 
             function handleHomeEnd(e) {
                 var isEnd = e.which === 35, fn = isEnd ? 'endOf' : 'startOf';
-                this.setDate(this.date.clone()[fn]('month'));
+                this.setDate(this.getDate().clone()[fn]('month'));
             }
 
             function handleCursor(e) {
@@ -524,7 +523,7 @@ define('io.ox/backbone/views/datepicker', [
                     // no default
                 }
 
-                this.setDate(this.date.clone()[type](movement[direction][this.mode]));
+                this.setDate(this.getDate().clone()[type](movement[direction][this.mode]));
                 this.$grid.focus();
             }
 
@@ -555,6 +554,14 @@ define('io.ox/backbone/views/datepicker', [
             this.setDate(date);
         },
 
+        getDate: function () {
+            return this.date || moment().utc(true);
+        },
+
+        getFormattedDate: function () {
+            return this.getDate().format('l');
+        },
+
         setDate: function (date, forceRender) {
 
             date = moment(date || this.date).utc(true);
@@ -564,7 +571,7 @@ define('io.ox/backbone/views/datepicker', [
             if (date.year() <= 0) return;
 
             // update internal date
-            var isSame = date.isSame(this.date);
+            var isSame = date.isSame(this.getDate());
             this.date = date;
 
             var selector,
@@ -581,16 +588,16 @@ define('io.ox/backbone/views/datepicker', [
             } else {
                 // currently visible?
                 switch (this.mode) {
-                    case 'decade': selector = '#year_' + this.date.year(); break;
-                    case 'year': selector = '#month_' + this.date.format('YYYY-MM'); break;
-                    case 'month': selector = '#date_' + $.escape(this.date.format('l')); break;
+                    case 'decade': selector = '#year_' + date.year(); break;
+                    case 'year': selector = '#month_' + date.format('YYYY-MM'); break;
+                    case 'month': selector = '#date_' + $.escape(date.format('l')); break;
                     // no default
                 }
                 // found?
                 var node = this.$grid.find(selector);
                 if (node.length) select(node); else this.render();
             }
-            if (!isSame) this.trigger('change', this.date);
+            if (!isSame) this.trigger('change', date);
         }
     });
 

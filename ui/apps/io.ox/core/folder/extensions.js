@@ -287,6 +287,10 @@ define('io.ox/core/folder/extensions', [
             });
         },
 
+        getLocalFolderName: function () {
+            return account.getPrimaryName() || gt('My folders');
+        },
+
         localFolders: function (tree) {
 
             var defaultId = api.altnamespace ? 'default0' : INBOX;
@@ -307,7 +311,7 @@ define('io.ox/core/folder/extensions', [
                 icons: tree.options.icons,
                 contextmenu_id: defaultId,
                 parent: tree,
-                title: gt('My folders'),
+                title: extensions.getLocalFolderName(),
                 tree: tree
             });
 

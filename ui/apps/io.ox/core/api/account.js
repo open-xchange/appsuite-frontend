@@ -812,6 +812,13 @@ define('io.ox/core/api/account', [
         });
     };
 
+    api.getPrimaryName = function () {
+        if (!api.cache[0]) return '';
+        var name = api.cache[0].name;
+        if (!/^(email|e-mail)$/i.test(name)) return name;
+        return String(api.cache[0].primary_address).toLowerCase().split('@')[1] || '';
+    };
+
     /**
      * bind to global refresh; clears caches and trigger refresh.all
      * @fires  api#refresh.all

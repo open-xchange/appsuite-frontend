@@ -138,7 +138,7 @@ define('io.ox/mail/common-extensions', [
             }, options);
             if (!_.isNumber(t)) return;
             this.append(
-                $('<time class="date">')
+                $('<time class="date gray">')
                 .attr('datetime', moment(t).toISOString())
                 .text(util.getDateTime(t, options))
             );
@@ -378,7 +378,7 @@ define('io.ox/mail/common-extensions', [
             this.append(
                 $('<div class="subject">').append(
                     $('<span class="flags">'),
-                    node = $('<span class="drag-title">').text(subject)
+                    node = $('<span class="drag-title gray">').text(subject)
                 )
             );
 

@@ -65,6 +65,9 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         if (_.device('smartphone')) return remove();
 
+        // close on escape
+        if (e.type === 'keydown' && e.which === 27) return remove();
+
         // close if clicked outside notifications
         if (!$.contains(alert.get(0), e.target)) return remove();
 
@@ -162,7 +165,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             if (o.closeOnClick) {
                 _.defer(function () {
                     // use defer not to run into drag&drop
-                    $('body').on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
+                    $('body').on(_.device('touch') ? 'tap.yell' : 'mousedown.yell keydown.yell', click);
                 });
             }
 
