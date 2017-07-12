@@ -22,9 +22,10 @@ define('io.ox/core/boot/main', [
     'io.ox/core/boot/form',
     'io.ox/core/boot/config',
     'io.ox/core/boot/login/auto',
-    'io.ox/core/boot/login/token'
+    'io.ox/core/boot/login/token',
+    'io.ox/core/boot/login/openid'
 
-], function (themes, gettext, ext, manifests, session, util, form, config, autologin, tokenlogin) {
+], function (themes, gettext, ext, manifests, session, util, form, config, autologin, tokenlogin, oidcLogin) {
 
     'use strict';
 
@@ -74,6 +75,8 @@ define('io.ox/core/boot/main', [
                     location.href = 'https:' + location.href.substring(location.protocol.length);
                     return;
                 }
+
+                if (ox.serverConfig.oidcLogin === true) return oidcLogin({ flow: 'login' });
 
                 // set page title now
                 ox.on('language', function (lang, gt) {
