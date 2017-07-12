@@ -91,6 +91,7 @@ module.exports = function (grunt) {
                             'apps/io.ox/core/boot/util.js',
                             'apps/io.ox/core/boot/support.js',
                             'apps/io.ox/core/boot/login/auto.js',
+                            'apps/io.ox/core/boot/login/openid.js',
                             'apps/io.ox/core/boot/login/standard.js',
                             'apps/io.ox/core/boot/login/token.js',
                             'apps/io.ox/core/boot/main.js',
