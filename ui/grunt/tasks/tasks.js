@@ -34,4 +34,23 @@ module.exports = function (grunt) {
     grunt.registerTask('dist', ['clean', 'copy_build', 'compile_po', 'concat', 'newer:less', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
     grunt.registerTask('refresh', 'force an update and reload the browser', ['force_update', 'send_livereload']);
+
+    grunt.registerTask('prefetch:static', function () {
+        var appserver = require('appserver'),
+            mirrorFile = appserver.tools.mirrorFile,
+            config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
+            fileName = grunt.option('output'),
+            done = this.async();
+        mirrorFile(fileName, fileName.replace(config.prefixes[0], 'v=7.x.x/'), config)
+            .then(done);
+    });
+    grunt.registerTask('prefetch:appsLoad', function () {
+        var appserver = require('appserver'),
+            mirrorFile = appserver.tools.mirrorFile,
+            config = appserver.tools.unifyOptions(grunt.config('local.appserver')),
+            fileName = grunt.option('output'),
+            done = this.async();
+        mirrorFile(fileName, fileName.replace(config.prefixes[0] + 'apps/', 'api/apps/load/v=7.x.x,'), config)
+            .then(done);
+    });
 };
