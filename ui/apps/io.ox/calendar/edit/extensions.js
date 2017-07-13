@@ -15,6 +15,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/contacts/util',
     'io.ox/mail/util',
     'io.ox/core/util',
@@ -33,7 +34,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, chronosUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -68,6 +69,7 @@ define('io.ox/calendar/edit/extensions', [
             this.append($('<button type="button" class="btn btn-primary save" data-action="save">')
                 .text(baton.mode === 'edit' ? gt('Save') : gt('Create'))
                 .on('click', function () {
+                    debugger;
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder'),
@@ -102,7 +104,11 @@ define('io.ox/calendar/edit/extensions', [
                             })
                         );
                     }
-                    baton.model.save().then(save, fail);
+                    if (baton.mode === 'edit') {
+                        api.update(baton.model).then(save, fail);
+                        return;
+                    }
+                    api.create(baton.model).then(save, fail);
                 })
             );
 
@@ -264,11 +270,11 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'startDate',
                     label: gt('Starts on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'timezone',
                     closeOnScroll: true,
                     a11y: {
                         timeLabel: gt('Start time')
-                    }
+                    },
+                    chronos: true
                 }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -301,11 +307,11 @@ define('io.ox/calendar/edit/extensions', [
                     attribute: 'endDate',
                     label: gt('Ends on'),
                     timezoneButton: true,
-                    timezoneAttribute: 'endTimezone',
                     closeOnScroll: true,
                     a11y: {
                         timeLabel: gt('End time')
-                    }
+                    },
+                    chronos: true
                 }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -330,7 +336,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var appointmentTimezoneAbbr = moment.tz(this.model.get('timezone')).zoneAbbr(),
+            var appointmentTimezoneAbbr = moment.tz(this.model.get('startDate').tzid).zoneAbbr(),
                 userTimezoneAbbr = moment.tz(coreSettings.get('timezone')).zoneAbbr();
 
             if (appointmentTimezoneAbbr === userTimezoneAbbr) return;
@@ -433,23 +439,13 @@ define('io.ox/calendar/edit/extensions', [
         className: 'col-md-6',
         index: 800,
         render: function () {
-            var guid = _.uniqueId('form-control-label-'),
-                options = [
-                    { label: gt('Reserved'), value: 1 },
-                    { label: gt('Temporary'), value: 2 },
-                    { label: gt('Absent'), value: 3 },
-                    { label: gt('Free'), value: 4 }
-                ];
+            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<label class="control-label">').attr('for', guid).text(gt('Shown as')), //#. Describes how a appointment is shown in the calendar, values can be "reserved", "temporary", "absent" and "free"
-                $('<div>').append(
-                    new mini.SelectView({
-                        list: options,
-                        name: 'shown_as',
-                        model: this.baton.model,
-                        id: guid,
-                        className: 'form-control'
-                    }).render().$el
+                $('<div class="checkbox">').append(
+                    $('<label class="control-label">').attr('for', guid).append(
+                        new mini.CheckboxView({ id: guid, name: 'transparency', model: this.model, customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' }, defaultVal: 'OPAQUE' }).render().$el,
+                        $.txt(gt('Show as free'))//#. Describes how a appointment is shown in the calendar
+                    )
                 )
             );
         }

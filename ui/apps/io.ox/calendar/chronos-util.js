@@ -42,9 +42,10 @@ define('io.ox/calendar/chronos-util', [
         },
         // creates an attendee object from a user object or model and contact model or object
         // used to create default participants and used by addparticipantsview
-        createAttendee: function (user) {
+        // options can contain attende object fields that should be prefilled (usually partStat: 'ACCEPTED')
+        createAttendee: function (user, options) {
             if (!user) return;
-
+            options = options || {};
             var displayName = user.get ? user.get('display_name') : user.display_name,
                 attendee = {
                     cuType: attendeeLookupArray[(user.get ? user.get('type') : user.type)] || 'INDIVIDUAL',
@@ -63,7 +64,8 @@ define('io.ox/calendar/chronos-util', [
                 attendee.entity = user.get ? user.get('id') : user.id;
             }
 
-            return attendee;
+            // override with predefined values if given
+            return _.extend(attendee, options);
         },
 
         // all day appointments have no timezone and the start and end dates are in date format not date-time
