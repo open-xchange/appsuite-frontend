@@ -66,8 +66,7 @@ define('io.ox/calendar/actions/create', [
         // FIXME: if this action is invoked by the menu button, both
         // arguments are the same (the app)
         var params = {
-            folder_id: baton.app.folder.get(),
-            participants: []
+            folder: baton.app.folder.get()
         };
 
         if (obj && obj.startDate) {
@@ -76,12 +75,12 @@ define('io.ox/calendar/actions/create', [
             var refDate = baton.app.refDate ? moment(baton.app.refDate) : moment();
 
             refDate.startOf('hour').add(1, 'hours');
-            params.startDate = refDate.valueOf();
-            params.endDate = refDate.add(1, 'hours').valueOf();
+            params.startDate = { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
+            params.endDate = { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() };
         }
 
         // show warning for shared folders
-        api.get(params.folder_id).done(function (folder) {
+        api.get(params.folder).done(function (folder) {
             if (api.is('shared', folder)) showDialog(params, folder); else openEditDialog(params);
         });
     };

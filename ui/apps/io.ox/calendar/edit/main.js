@@ -201,10 +201,13 @@ define('io.ox/calendar/edit/main', [
                     self.model = new AppointmentModel.Model(data);
                 } else {
                     // default values from settings
-                    data.alarm = data.alarm || settings.get('defaultReminder', 15);
-                    if (data.full_time) {
-                        data.shown_as = settings.get('markFulltimeAppointmentsAsFree', false) ? 4 : 1;
-                    }
+                    data.alarms = data.alarms || settings.get('defaultReminder', [{
+                        action: 'DISPLAY',
+                        description: '',
+                        trigger: '-P15M'
+                    }]);
+                    // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
+                    data.transparency = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));

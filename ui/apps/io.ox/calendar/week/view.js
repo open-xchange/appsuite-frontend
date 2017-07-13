@@ -740,9 +740,8 @@ define('io.ox/calendar/week/view', [
                         this.cleanUpLasso();
 
                         this.trigger('openCreateAppointment', e, {
-                            start_date: start.valueOf(),
-                            end_date: end.valueOf(),
-                            lasso: true
+                            startDate: { value: start.format('YYYYMMDD[T]HHmmss'), tzid: start.tz() },
+                            endDate: { value: end.format('YYYYMMDD[T]HHmmss'), tzid: end.tz() }
                         });
                         e.stopImmediatePropagation();
                     }

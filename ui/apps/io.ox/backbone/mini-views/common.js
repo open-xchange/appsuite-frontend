@@ -205,13 +205,28 @@ define('io.ox/backbone/mini-views/common', [
 
     //
     // <input type="checkbox">
+    // if you require custom values instead of true and false you may pass the option customValues. This must be an object containing the values to be used with 'true' and 'false' as keys.
+    // used for transparency in calendar edit for example
     //
 
     var CheckboxView = AbstractView.extend({
         el: '<input type="checkbox">',
         events: { 'change': 'onChange' },
+        getValue: function () {
+            return (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) ? this.options.customValues[this.isChecked()] : this.isChecked();
+        },
+        setValue: function () {
+            var val = this.model.get(this.name) || this.options.defaultVal;
+            if (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) {
+                val = this.options.customValues['true'] === val;
+            } else {
+                // make true boolean
+                val = !!val;
+            }
+            return val;
+        },
         onChange: function () {
-            this.model.set(this.name, this.isChecked());
+            this.model.set(this.name, this.getValue());
         },
         isChecked: function () {
             return !!this.$input.prop('checked');
@@ -221,7 +236,7 @@ define('io.ox/backbone/mini-views/common', [
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
         update: function () {
-            this.$input.prop('checked', !!this.model.get(this.name, this.options.defaultVal));
+            this.$input.prop('checked', this.setValue());
         },
         render: function () {
             this.$input.attr({ name: this.name });

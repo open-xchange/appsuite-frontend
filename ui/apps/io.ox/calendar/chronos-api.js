@@ -66,8 +66,31 @@ define('io.ox/calendar/chronos-api', [
         },
 
         uploadInProgress: function () {
-            // TODO implement that
+            // TODO implement that if needed
             return false;
+        },
+
+        create: function (obj) {
+            obj = obj.attributes || obj;
+            return http.PUT({
+                module: 'chronos',
+                params: {
+                    action: 'new',
+                    folder: obj.folder
+                },
+                data: obj
+            }).then(function (data) {
+                // very strange response: object with create deleted updated arrays in it.
+                // todo talk to backend if this can be changed to just the new appointment object
+                api.pool.add(data.created[0].folder, data.created[0]);
+                return api.pool.get(obj.folder).findWhere(data.created[0]);
+            });
+        },
+
+        update: function () {
+            //placeholder
+            //todo implement that
+            return $.when();
         }
     };
 
