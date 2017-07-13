@@ -167,7 +167,7 @@ define('io.ox/calendar/week/view', [
                     new Picker({ date: self.startDate })
                         .attachTo(self.kwInfo)
                         .on('select', function (date) {
-                            self.setStartDate(date);
+                            self.setStartDate(date, true);
                             self.trigger('onRefresh');
                         })
                         .on('before:open', function () {
