@@ -70,6 +70,30 @@ define('io.ox/oauth/keychain', [
         return id.substring(id.lastIndexOf('.') + 1);
     }
 
+    function chooseDisplayName(service) {
+        // check if model or simple json
+        if (service.toJSON) service = service.toJSON();
+
+        var names = {}, name, counter = 0;
+        _(accounts.forService(service.id)).each(function (account) {
+            names[account.get('displayName')] = 1;
+        });
+
+        //#. %1$s is the display name of the account
+        //#. e.g. My Xing account
+        name = gt('My %1$s account', service.displayName);
+
+        while (names[name]) {
+            counter++;
+            //#. %1$s is the display name of the account
+            //#. %2$d number, if more than one account of the same service
+            //#. e.g. My Xing account
+            name = gt('My %1$s account (%2$d)', service.displayName, counter);
+        }
+
+        return name;
+    }
+
     // Extension
     function OAuthKeychainAPI(service) {
         var self = this;
@@ -85,26 +109,6 @@ define('io.ox/oauth/keychain', [
             }
             account.accountType = self.id;
             return account;
-        }
-
-        function chooseDisplayName() {
-            var names = {}, name, counter = 0;
-            _(accounts.forService(service.id)).each(function (account) {
-                names[account.displayName] = 1;
-            });
-
-            //#. %1$s is the display name of the account
-            //#. e.g. My Xing account
-            name = gt('My %1$s account', service.displayName);
-
-            while (names[name]) {
-                counter++;
-                //#. %1$s is the display name of the account
-                //#. %2$d number, if more than one account of the same service
-                //#. e.g. My Xing account
-                name = gt('My %1$s account (%2$d)', service.displayName, counter);
-            }
-            return name;
         }
 
         this.getAll = function () {
@@ -137,7 +141,7 @@ define('io.ox/oauth/keychain', [
             if (!popupWindow) return def.reject();
 
             var newAccount = new OAuth.Account.Model({
-                displayName: chooseDisplayName(),
+                displayName: chooseDisplayName(service),
                 serviceId: service.id,
                 popup: popupWindow
             });
@@ -241,6 +245,7 @@ define('io.ox/oauth/keychain', [
     return {
         services: services,
         accounts: accounts,
+        chooseDisplayName: chooseDisplayName,
         serviceIDs: services.map(function (service) { return simplifyId(service.id); })
     };
 });

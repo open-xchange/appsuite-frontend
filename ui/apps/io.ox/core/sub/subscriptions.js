@@ -311,9 +311,7 @@ define('io.ox/core/sub/subscriptions', [
             })[0] ||
             new OAuth.Account.Model({
                 serviceId: serviceId,
-                //#. %1$s is the display name of the account
-                //#. e.g. My Xing account
-                displayName: gt('My %1$s account', service.displayName)
+                displayName: oauthAPI.chooseDisplayName(service)
             });
 
         return account.enableScopes(scope).save().then(function (account) {
@@ -321,7 +319,6 @@ define('io.ox/core/sub/subscriptions', [
             return account;
         });
     }
-
     ext.point(POINT + '/oauth').extend({
         id: 'oauth',
         index: 100,
