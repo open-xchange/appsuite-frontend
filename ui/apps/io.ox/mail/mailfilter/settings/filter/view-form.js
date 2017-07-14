@@ -218,6 +218,43 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     testsPart = this.model.get('test'),
                     actionArray = this.model.get('actioncmds');
 
+                function isValid(tests, actions) {
+                    var result = true;
+
+                    _.each(tests, function (val, key) {
+                        // single test
+                        if (key === 'values') result = val[0] !== '';
+
+                        // multiple tests
+                        if (key === 'tests') {
+                            _.each(val, function (val) {
+                                if (val.values && val.values[0] === '') result = false;
+
+                                // nested tests
+                                if (val.tests) {
+                                    _.each(val.tests, function (val) {
+                                        if (val.values && val.values[0] === '') result = false;
+                                    });
+                                }
+                            });
+                        }
+
+                    });
+
+                    _.each(actions, function (val) {
+                        if (val.to === '' || val.text === '') result = false;
+                        if (val.flags && val.flags[0] === '$') result = false;
+                    });
+
+                    return result;
+                }
+
+                if (!isValid(testsPart, actionArray)) {
+                    self.dialog.idle();
+                    self.render();
+                    return;
+                }
+
                 if (currentState !== null) self.model.trigger('ChangeProcessSub', currentState);
                 currentState = null;
 
@@ -369,6 +406,9 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             },
 
             setModel: function (type, model, num) {
+
+                // this.subModelHasError = model.validationError !== null;
+
                 if (type === 'test') {
                     var testArray = _.copy(this.model.get(type));
                     if (checkForMultipleTests(this.el).length > 1) {
