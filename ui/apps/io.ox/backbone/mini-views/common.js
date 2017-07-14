@@ -19,6 +19,17 @@ define('io.ox/backbone/mini-views/common', [
 
     'use strict';
 
+    // used by firefox only, because it doesn't trigger a change event automatically
+    var firefoxDropHelper =  function (e) {
+        if (e.originalEvent.dataTransfer.getData('text')) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
+
     //
     // <input type="text">
     //
@@ -30,16 +41,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
-        // used by firefox only, because it doesn't trigger a change event automatically
-        onDrop: function (e) {
-            if (e.originalEvent.dataTransfer.getData('text')) {
-                var self = this;
-                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
-                this.$el.one('input', function () {
-                    self.$el.trigger('change');
-                });
-            }
-        },
+        onDrop: firefoxDropHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -162,16 +164,7 @@ define('io.ox/backbone/mini-views/common', [
         onChange: function () {
             this.model.set(this.name, this.$el.val(), { validate: true });
         },
-        // used by firefox only, because it doesn't trigger a change event automatically
-        onDrop: function (e) {
-            if (e.originalEvent.dataTransfer.getData('text')) {
-                var self = this;
-                // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
-                this.$el.one('input', function () {
-                    self.$el.trigger('change');
-                });
-            }
-        },
+        onDrop: firefoxDropHelper,
         setup: function (options) {
             this.rows = options.rows;
             this.listenTo(this.model, 'change:' + this.name, this.update);
