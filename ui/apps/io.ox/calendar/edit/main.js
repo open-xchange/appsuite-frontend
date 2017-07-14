@@ -219,9 +219,11 @@ define('io.ox/calendar/edit/main', [
             },
 
             getDirtyStatus: function () {
-                if (this.considerSaved) return false;
+                return false;
+                //TODO fix dirty status
+                /*if (this.considerSaved) return false;
 
-                return !_.isEmpty(this.model.changedSinceLoading());
+                return !_.isEmpty(this.model.changedSinceLoading());*/
             },
 
             onShowWindow: function () {
@@ -274,6 +276,7 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
+                debugger;
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
@@ -296,6 +299,7 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error, options) {
+                debugger;
                 // conflicts have their own special handling
                 if (error.conflicts) return;
 
