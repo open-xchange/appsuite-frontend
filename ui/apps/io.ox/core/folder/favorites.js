@@ -95,6 +95,23 @@ define('io.ox/core/folder/favorites', [
                     storeCollection();
                 });
             });
+
+            var fetch = {
+                id: 'favorites-fetch',
+                index: 2,
+                draw: function () {
+                    // ensure getAffectedSubfolders works also when tree node extension is disabled
+                    var hasIncomplete = collection.any(function (model) {
+                        return !model.has('id');
+                    });
+                    if (hasIncomplete) api.list(id, { all: false });
+                }
+            };
+
+            ext.point('io.ox/core/foldertree/mail/app').extend(_.extend({}, fetch));
+            ext.point('io.ox/core/foldertree/mail/popup').extend(_.extend({}, fetch));
+
+
         } else if (module === 'infostore') {
             // Add infos for the filesview
             model.set('title', gt('Favorites'));
@@ -140,7 +157,7 @@ define('io.ox/core/folder/favorites', [
     function getAffectedSubfolders(collection, id) {
         return collection.filter(function (model) {
             var modelId = model.get('id');
-            return modelId.indexOf(id + api.getMailFolderSeparator(modelId)) === 0;
+            return (modelId || '').indexOf(id + api.getMailFolderSeparator(modelId)) === 0;
         });
     }
 
