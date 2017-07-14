@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/actions/delete', [
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar'
 ], function (api, notifications, gt) {
@@ -20,82 +20,40 @@ define('io.ox/calendar/actions/delete', [
     'use strict';
 
     return function (list) {
+        debugger;
+        // only simple delete for now
+        // TODO make it work for recurring appointments
+        ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
 
-        var apiCalls = [];
-
-        // build array with full identifier for an appointment and collect API get calls
-        _(list).each(function (obj) {
-            var o = {
-                id: obj.id,
-                folder: obj.folder_id
+            var cont = function () {
+                api.remove(list).fail(notifications.yell);
             };
-            if (!!obj.recurrence_position) {
-                o.recurrence_position = obj.recurrence_position;
+
+            // different warnings especially for events with
+            // recurrence_type > 0 should handled here
+            if (false) {
+                new dialogs.ModalDialog()
+                    .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
+                    .addPrimaryButton('series', gt('Series'), 'series')
+                    .addButton('appointment', gt('Appointment'), 'appointment')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .show()
+                    .done(function (action) {
+                        if (action === 'cancel') return;
+                        cont(action === 'series');
+                    });
+            } else {
+                new dialogs.ModalDialog()
+                    .text(gt('Do you want to delete this appointment?'))
+                    .addPrimaryButton('ok', gt('Delete'), 'ok')
+                    .addButton('cancel', gt('Cancel'), 'cancel')
+                    .show()
+                    .done(function (action) {
+                        if (action === 'cancel') return;
+                        cont();
+                    });
             }
-
-            apiCalls.push(api.get(o));
         });
-
-        $.when.apply($, apiCalls)
-            .then(function () {
-                return _.chain(arguments)
-                    .flatten(true)
-                    .filter(function (app) {
-                        return _.isObject(app);
-                    }).value();
-            })
-            .then(function (appList) {
-
-                // check if appointment list contains recurring appointments
-                var hasRec = _(appList).some(function (app) {
-                    return app.recurrence_type > 0;
-                });
-
-                ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
-
-                    var cont = function (series) {
-                        var data = _(appList).chain().map(function (obj) {
-                            var options = {
-                                id: obj.id,
-                                folder: obj.folder_id || obj.folder
-                            };
-                            if (!series && obj.recurrence_position) {
-                                _.extend(options, { recurrence_position: obj.recurrence_position });
-                            }
-                            return options;
-                        })
-                        .uniq(function (obj) {
-                            return JSON.stringify(obj);
-                        }).value();
-                        api.remove(data).fail(notifications.yell);
-                    };
-
-                    // different warnings especially for events with
-                    // recurrence_type > 0 should handled here
-                    if (hasRec) {
-                        new dialogs.ModalDialog()
-                            .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('series', gt('Series'), 'series')
-                            .addButton('appointment', gt('Appointment'), 'appointment')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') return;
-                                cont(action === 'series');
-                            });
-                    } else {
-                        new dialogs.ModalDialog()
-                            .text(gt('Do you want to delete this appointment?'))
-                            .addPrimaryButton('ok', gt('Delete'), 'ok')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .done(function (action) {
-                                if (action === 'cancel') return;
-                                cont();
-                            });
-                    }
-                });
-            });
     };
 
 });

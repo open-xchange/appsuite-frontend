@@ -856,7 +856,8 @@ define('io.ox/calendar/main', [
         win.addClass('io-ox-calendar-main');
 
         // go!
-        var defaultFolder  = options.folder || 'virtual/all-my-appointments';
+        // TODO change core settings so the default folder isnt just a number
+        var defaultFolder  = options.folder || ('cal://0/' + folderAPI.getDefaultFolder('calendar'));
         if (!options.folder && capabilities.has('guest')) {
             // guests don't have the all-my-appointments folder
             // try to select the first shared folder available

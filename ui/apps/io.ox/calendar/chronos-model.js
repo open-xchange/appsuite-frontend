@@ -22,7 +22,10 @@ define('io.ox/calendar/chronos-model', [
     var Model = Backbone.Model.extend({
         idAttribute: 'cid',
         initialize: function () {
-            this.cid = this.attributes.cid = util.cid(this.attributes);
+            // models in create view do not have an id yet. avoid undefined.undefined cids
+            if (this.attributes.folder && this.attributes.id) {
+                this.cid = this.attributes.cid = util.cid(this.attributes);
+            }
         },
         getAttendees: function () {
             if (this._attendees) {
