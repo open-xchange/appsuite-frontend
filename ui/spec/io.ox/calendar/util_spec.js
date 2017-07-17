@@ -53,13 +53,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
 
             it('same day', function () {
-                var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ startDate: start.valueOf(), endDate: start.valueOf() })).to.equal('So., 11.11.2012');
+                expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121112' } })).to.equal('So., 11.11.2012');
             });
 
             it('one week difference', function () {
-                var start = moment([2012, 10, 11]);
-                expect(util.getDateInterval({ startDate: start.valueOf(), endDate: start.add(1, 'week').valueOf() })).to.equal('So., 11.11.2012 – So., 18.11.2012');
+                expect(util.getDateInterval({ startDate: { value: '20121111' }, endDate: { value: '20121119' } })).to.equal('So., 11.11.2012 – So., 18.11.2012');
             });
 
         });
@@ -71,13 +69,11 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
             });
 
             it('same time', function () {
-                var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ startDate: start.valueOf(), endDate: start.valueOf() })).to.equal('11:11');
+                expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T111100' } })).to.equal('11:11');
             });
 
             it('same day', function () {
-                var start = moment([2012, 10, 11, 11, 11, 0]);
-                expect(util.getTimeInterval({ startDate: start.valueOf(), endDate: start.add(1, 'hour').valueOf() })).to.equal('11:11\u201312:11 Uhr');
+                expect(util.getTimeInterval({ startDate: { value: '20121111T111100' }, endDate: { value: '20121111T121100' } })).to.equal('11:11\u201312:11 Uhr');
             });
 
         });

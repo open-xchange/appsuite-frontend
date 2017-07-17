@@ -106,8 +106,6 @@ define('io.ox/calendar/edit/main', [
 
                         self.considerSaved = true;
 
-                        self.model.set('endTimezone', self.model.get('timezone'));
-
                         self.model
                             .on('change', function () {
                                 self.considerSaved = false;
@@ -140,9 +138,6 @@ define('io.ox/calendar/edit/main', [
                                 ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                     conflictView.dialog(conflicts)
                                         .on('cancel', function () {
-                                            // add temp timezone attribute again
-                                            self.model.set('endTimezone', self.model.endTimezone, { silent: true });
-                                            delete self.model.endTimezone;
                                             // restore model attributes for moving
                                             if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
                                         })
@@ -200,7 +195,7 @@ define('io.ox/calendar/edit/main', [
                     data.alarms = data.alarms || settings.get('defaultReminder', [{
                         action: 'DISPLAY',
                         description: '',
-                        trigger: '-P15M'
+                        trigger: { duration: '-P15M', related: 'START' }
                     }]);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
                     data.transparency = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
@@ -276,7 +271,6 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
-                debugger;
                 if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
@@ -288,10 +282,6 @@ define('io.ox/calendar/edit/main', [
                         save();
                     }, fail);
                 } else {
-                    if (this.model.endTimezone) {
-                        this.model.set('endTimezone', this.model.endTimezone);
-                        delete this.model.endTimezone;
-                    }
                     this.considerSaved = true;
                     this.getWindow().idle();
                     this.quit();
@@ -299,16 +289,10 @@ define('io.ox/calendar/edit/main', [
             },
 
             onError: function (error, options) {
-                debugger;
                 // conflicts have their own special handling
                 if (error.conflicts) return;
 
                 this.model.set('ignore_conflicts', false, { validate: true, isSave: true });
-                if (this.model.endTimezone) {
-                    // must be silent or validation removes errormessages
-                    this.model.set('endTimezone', this.model.endTimezone, { silent: true, isSave: true });
-                    delete this.model.endTimezone;
-                }
 
                 // restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {

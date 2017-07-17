@@ -260,16 +260,16 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                     alarms: [{
                         action: 'DISPLAY',
                         description: 'Pizza Essen',
-                        trigger: '-P15M'
+                        trigger: { duration: '-P15M' }
                     }, {
                         action: 'AUDIO',
-                        trigger: '-P30M'
+                        trigger: { duration: '-P30M' }
                     }, {
                         action: 'EMAIL',
                         attendee: 'mailto:miss.test@test.com',
                         description: 'Lecker Lecker!',
                         summary: 'Pizza Essen',
-                        trigger: '-P2H'
+                        trigger: { duration: '-P2H' }
                     }]
                 });
                 this.view = new AlarmsView({ model: this.model });
@@ -307,11 +307,11 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 this.view.$el.find('.alarm-time:first').val('-P1H').trigger('change');
                 this.model.get('alarms').should.deep.equal([{
                     action: 'DISPLAY',
-                    trigger: '-P1H',
+                    trigger: { duration: '-P1H' },
                     description: 'Pizza Essen'
                 }, {
                     action: 'DISPLAY',
-                    trigger: '-P30M',
+                    trigger: { duration: '-P30M' },
                     description: 'Pizza Essen'
                 }]);
             });

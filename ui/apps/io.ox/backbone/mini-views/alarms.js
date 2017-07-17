@@ -38,7 +38,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.$el.empty().append(
                 $('<button class="btn btn-default" type="button">').text(gt('Add new Reminder'))
                     .on('click', function () {
-                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: '15' }));
+                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: '-P15M', related: 'START' } }));
                         self.updateModel();
                     }),
                 self.list
@@ -73,7 +73,7 @@ define('io.ox/backbone/mini-views/alarms', [
                     $('<div class="col-md-5">').append(
                         $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                             return '<option value="' + val + '">' + key + '</option>';
-                        })).val(alarm.trigger)
+                        })).val(alarm.trigger.duration)
                     ),
                     $('<span role="button" tabindex="0" class="alarm-remove pull-right">').append($('<i class="alarm-remove fa fa-trash">'))
                 ));
@@ -81,7 +81,7 @@ define('io.ox/backbone/mini-views/alarms', [
         getAlarmsArray: function () {
             var self = this;
             return _(this.list.children()).map(function (item) {
-                var alarm = { action: $(item).find('.alarm-action').val(), trigger: $(item).find('.alarm-time').val() };
+                var alarm = { action: $(item).find('.alarm-action').val(), trigger: { duration: $(item).find('.alarm-time').val() } };
                 switch (alarm.action) {
                     case 'EMAIL':
                         alarm.summary = self.model ? self.model.get('summary') || '' : '';

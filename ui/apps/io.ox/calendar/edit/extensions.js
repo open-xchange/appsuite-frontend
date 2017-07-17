@@ -85,10 +85,6 @@ define('io.ox/calendar/edit/extensions', [
                         //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
-                    // cleanup temp timezone data from attributes without change events but keep it in the model (previousAttributes might be cleaned in some cases so it's not safe)
-                    var timezone = baton.model.get('endTimezone');
-                    baton.model.unset('endTimezone', { silent: true });
-                    baton.model.endTimezone = timezone;
 
                     //check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
