@@ -28,8 +28,9 @@ define('io.ox/calendar/chronos-api', [
                 api.pool.add(event.folder, event);
             });
             _(response.deleted).each(function (event) {
-                api.pool.remove(event.folder, event);
+                api.pool.get(event.folder).remove(_.cid(event));
                 api.trigger('delete', event);
+                api.trigger('delete:' + _.cid(event), event);
             });
             _(response.updated).each(function (event) {
                 api.pool.add(event.folder, event);
