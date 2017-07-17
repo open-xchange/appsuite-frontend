@@ -29,8 +29,6 @@ define('io.ox/calendar/chronos-api', [
             });
             _(response.deleted).each(function (event) {
                 api.pool.remove(event.folder, event);
-                // should trigger a redraw of the view if needed
-                // TODO see if it works after mw fixed the delete request response
                 api.trigger('delete', event);
             });
             _(response.updated).each(function (event) {
