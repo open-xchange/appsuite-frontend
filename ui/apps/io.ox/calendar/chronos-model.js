@@ -73,7 +73,7 @@ define('io.ox/calendar/chronos-model', [
                                     uri: 'mailto:' + user.email1,
                                     entity: ox.user_id
                                 });
-                                self.getAttendees().add(util.createAttendee(user), { partStat: 'ACCEPTED' });
+                                self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                                 def.resolve();
 
                             }).fail(def.reject);
@@ -100,7 +100,7 @@ define('io.ox/calendar/chronos-model', [
                     require(['io.ox/core/api/user'], function (userAPI) {
                         userAPI.get(folder.created_by).done(function (user) {
 
-                            self.getAttendees().add(util.createAttendee(user), { partStat: 'ACCEPTED' });
+                            self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                             def.resolve();
 
                         }).fail(def.reject);
