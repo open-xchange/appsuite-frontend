@@ -118,8 +118,9 @@
                     // TODO: Handle Edge as IE 12. Is this really wanted?
                     Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1]) : (
                         nav.appName === 'Microsoft Internet Explorer' ?
-                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) : (
-                                !!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)),
+                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) :
+                            (!!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)
+                    ),
                 /** is Edge browser? */
                 Edge: edge ?
                     // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.

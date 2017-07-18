@@ -1074,7 +1074,7 @@ define('io.ox/calendar/week/view', [
         setScrollPos: function () {
             this.adjustCellHeight();
             var slotHeight = this.cellHeight * this.gridSize,
-            // see bug 40297
+                // see bug 40297
                 timelineTop = parseFloat(this.timeline[0].style.top) * slotHeight * 0.24;
 
             // adjust scoll position to center current time
