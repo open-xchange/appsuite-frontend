@@ -22,10 +22,11 @@ define('io.ox/portal/main', [
     'io.ox/portal/util',
     'io.ox/portal/settings/pane',
     'io.ox/portal/settings/widgetview',
+    'io.ox/core/yell',
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings) {
 
     'use strict';
 
@@ -396,6 +397,7 @@ define('io.ox/portal/main', [
     };
 
     function setup(e) {
+        debugger;
         e.preventDefault();
         var baton = e.data.baton;
         ext.point(baton.point).invoke('performSetUp', null, baton);
@@ -505,8 +507,13 @@ define('io.ox/portal/main', [
                 // clean up
                 node.find('.content').remove();
                 decoration.removeClass('pending');
-                // show error message unless it's just missing oauth account
-                if (e.code !== 'OAUTH-0006') {
+                if (e.code === 'ACC-0002') {
+                    // if an account was removed, disable widget (do not delete it)
+                    // to avoid further requests
+                    baton.model.set('enabled', false, { validate: false });
+                    yell('info', gt.format('The widget "%s" was disabled as the account seems to be removed or is no longer available.', baton.model.get('title')));
+                } else if (e.code !== 'OAUTH-0006') {
+                    // show error message unless it's just missing oauth account
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
