@@ -580,6 +580,7 @@ define('io.ox/core/desktop', [
                     function fail() {
                         var autoStart = require('settings!io.ox/core').get('autoStart');
                         if (autoStart !== 'none') ox.launch(autoStart);
+                        throw arguments;
                     }
                 );
             } else if (this.has('window')) {

@@ -220,13 +220,11 @@ define('io.ox/core/settings', [
             if (detached) return $.when();
 
             return http.PUT({ module: 'jslob', params: { action: 'list' }, data: [path] })
-                .done(function (data) {
+                .then(function (data) {
                     tree = data[0].tree;
                     meta = data[0].meta;
                     saved = JSON.parse(JSON.stringify(tree));
                     applyDefaults();
-                })
-                .then(function () {
                     self.trigger('reload', tree, meta);
                     return { tree: tree, meta: meta };
                 });

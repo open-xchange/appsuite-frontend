@@ -45,6 +45,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             gt('Unable to load mail filter settings.') :
             gt('Unable to load your vacation notice. Please retry later.')
         );
+        throw e;
     }
 
     function openModalDialog(data) {

@@ -1512,6 +1512,7 @@ define('io.ox/core/main', [
             return function (e) {
                 var message = (e && e.message) || '';
                 console.error('core: Failed to load:', type, message, e, baton);
+                throw e;
             };
         }
 

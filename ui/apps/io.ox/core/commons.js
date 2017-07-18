@@ -450,9 +450,9 @@ define('io.ox/core/commons', [
             defaultFolderId = _.url.hash('folder') || defaultFolderId;
 
             function apply(id) {
-                return app.folder.set(id).then(null, function () {
+                return app.folder.set(id).then(_.identity, function () {
                     // fallback to default on error
-                    return app.folder.setDefault();
+                    return $.when(app.folder.setDefault());
                 });
             }
 

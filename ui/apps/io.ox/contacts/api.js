@@ -291,19 +291,13 @@ define('io.ox/contacts/api', [
      * @returns defered
      */
     function clearUserApiCache(data) {
-        var def = $.Deferred();
-        require(['io.ox/core/api/user'], function (userApi) {
-            $.when(
+        return require(['io.ox/core/api/user']).then(function (userApi) {
+            return $.when(
                 userApi.caches.get.remove({ id: data.user_id }),
                 userApi.caches.all.clear(),
                 userApi.caches.list.remove({ id: data.user_id })
-            ).then(function () {
-                def.resolve();
-            }, function () {
-                def.reject();
-            });
+            );
         });
-        return def;
     }
 
     /**

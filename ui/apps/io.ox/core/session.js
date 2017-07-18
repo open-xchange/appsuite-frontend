@@ -249,7 +249,7 @@ define('io.ox/core/session', [
                         },
                         function fail(e) {
                             if (ox.debug) console.error('Login failed!', e.error, e.error_desc || '');
-                            return e;
+                            throw e;
                         }
                     )
                     .always(function () {

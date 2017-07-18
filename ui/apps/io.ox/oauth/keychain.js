@@ -155,8 +155,9 @@ define('io.ox/oauth/keychain', [
                 ox.trigger('refresh-portal');
                 notifications.yell('success', gt('Account added successfully'));
                 return account;
-            }, function () {
+            }, function (error) {
                 notifications.yell('error', gt('Account could not be added'));
+                throw error;
             });
         };
 
@@ -210,6 +211,7 @@ define('io.ox/oauth/keychain', [
                 return account.toJSON();
             }, function (e) {
                 notifications.yell('error', e.error);
+                throw e;
             });
         };
         if (_.contains(['xing', 'twitter', 'linkedin', 'boxcom', 'dropbox', 'google', 'msliveconnect', 'yahoo'], this.id)) {

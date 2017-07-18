@@ -150,6 +150,7 @@ define('io.ox/settings/accounts/views', [
                                 },
                                 function fail() {
                                     popup.close();
+                                    throw arguments;
                                 }
                             )
                             .always(function () {

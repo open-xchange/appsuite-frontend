@@ -501,7 +501,7 @@ define('io.ox/portal/main', [
                 if (e === 'remove') {
                     widgets.remove(baton.model);
                     node.remove();
-                    return;
+                    throw e;
                 }
                 // clean up
                 node.find('.content').remove();
@@ -535,6 +535,7 @@ define('io.ox/portal/main', [
                     // missing oAuth account
                     app.drawDefaultSetup(baton);
                 }
+                throw e;
             }
         );
     }

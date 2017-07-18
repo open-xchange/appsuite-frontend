@@ -207,6 +207,7 @@ define('io.ox/core/sub/subscriptions', [
                                 api.subscriptions.destroy(id);
                                 self.model = self.model.clone();
                                 folderAPI.remove(self.model.get('folder'));
+                                throw error;
                             }
                         )
                         .then(function (model) {
@@ -233,6 +234,7 @@ define('io.ox/core/sub/subscriptions', [
                             });
                         }
                         folderAPI.remove(self.model.get('folder'));
+                        throw error;
                     }
                 );
             }
