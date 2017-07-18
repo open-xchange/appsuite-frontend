@@ -234,7 +234,7 @@ define('io.ox/mail/detail/content', [
                         'aria-expanded': false
                     });
                 }
-                $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
+                $(node).addClass('collapsed-blockquote').hide().attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         ellipsisButton,
@@ -248,7 +248,7 @@ define('io.ox/mail/detail/content', [
                 );
             });
             // delegate
-            $(this).on('click keydown', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click keydown', '.blockquote-toggle', expandBlockquote);
         },
 
         checkSimple: function () {
@@ -567,7 +567,7 @@ define('io.ox/mail/detail/content', [
         return str;
     }
 
-    function explandBlockquote(e) {
+    function expandBlockquote(e) {
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
