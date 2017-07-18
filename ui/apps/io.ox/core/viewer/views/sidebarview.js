@@ -279,10 +279,10 @@ define('io.ox/core/viewer/views/sidebarview', [
                 // drop handler
                 this.zone.on({
                     show: function () {
-                        detailPane.stop().addClass('hidden');
+                        detailPane.addClass('hidden');
                     },
                     hide: function () {
-                        detailPane.fadeIn('fast');
+                        detailPane.removeClass('hidden');
                     },
                     drop: this.onNewVersionDropped.bind(this)
                 });
