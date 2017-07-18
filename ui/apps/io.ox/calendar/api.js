@@ -261,7 +261,7 @@ define('io.ox/calendar/api', [
             }, function (error) {
                 api.caches.all = {};
                 api.trigger('delete', o);
-                return error;
+                throw error;
             });
         },
 
