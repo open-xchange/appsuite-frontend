@@ -104,10 +104,10 @@ define('io.ox/portal/main', [
         id: 'header',
         index: 100,
         draw: function (baton) {
-            var $btn,
+            var $header,
                 $greeting;
 
-            this.append($btn = $('<div class="header">'));
+            this.append($header = $('<div class="header">'));
             // greeting
             $greeting = $('<h1 class="greeting">').append(
                 baton.$.greeting = $('<span class="greeting-phrase">'),
@@ -120,23 +120,22 @@ define('io.ox/portal/main', [
             if (_.device('!smartphone')) {
                 widgets.loadUsedPlugins().done(function () {
                     // add widgets
-                    ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
+                    ext.point('io.ox/portal/settings/detail/view').map(function (point) {
                         if (point && point.id === 'add') {
-                            point.invoke('draw', $btn);
+                            point.invoke('render', { $el: $header });
                         }
                     });
-                    // please no button
-                    $btn.find('.btn-group-portal').after($greeting);
-                    $btn.find('.btn-group-portal')
+                    $header.find('.form-group')
+                        .addClass('pull-right')
                         .prepend($('<button type="button" class="btn btn-primary">')
-                        .attr({
-                            'data-action': 'customize'
-                        })
-                        .text(gt('Customize this page'))
-                        .on('click', openSettings));
+                            .attr({ 'data-action': 'customize' })
+                            .text(gt('Customize this page'))
+                            .on('click', openSettings));
+
+                    $header.append($greeting);
                 });
             } else {
-                $btn.append($greeting);
+                $header.append($greeting);
             }
         }
     });
