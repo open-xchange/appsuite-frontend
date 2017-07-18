@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
@@ -22,25 +22,15 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/print',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/chronos-model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, gt, printStyle) {
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt, printStyle) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('month'),
-        // ensure cid is used in model and collection as idAttribute properly
-        MonthAppointment = Backbone.Model.extend({
-            idAttribute: 'cid',
-            initialize: function () {
-                this.cid = this.attributes.cid = _.cid(this.attributes);
-                // backward compatibility
-                this.id = this.cid;
-            }
-        }),
-        MonthAppointmentCollection = Backbone.Collection.extend({
-            model: MonthAppointment
-        });
+    var perspective = new ox.ui.Perspective('month');
 
     _.extend(perspective, {
 
@@ -67,11 +57,11 @@ define('io.ox/calendar/month/perspective', [
         showAppointment: function (e, obj) {
             // open appointment details
             var self = this;
-            api.get(obj).done(function (data) {
+            api.get(obj).done(function (model) {
                 self.dialog
                     .show(e, function (popup) {
                         popup
-                        .append(detailView.draw(data))
+                        .append(detailView.draw(model))
                         .attr({
                             'role': 'complementary',
                             'aria-label': gt('Appointment Details')
@@ -89,7 +79,7 @@ define('io.ox/calendar/month/perspective', [
             // add current time to start timestamp
             start = moment(start).add(Math.ceil((moment().hours() * 60 + moment().minutes()) / 30) * 30, 'minutes');
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, { app: this.app }, { start_date: start.valueOf(), end_date: start.add(1, 'hour').valueOf() });
+                .invoke('action', this, { app: this.app }, { startDate: start.valueOf(), endDate: start.add(1, 'hour').valueOf() });
         },
 
         /**
@@ -138,10 +128,10 @@ define('io.ox/calendar/month/perspective', [
                                 // get recurrence master object
                                 if (obj.old_start_date || obj.old_end_date) {
                                     // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
+                                    api.get({ id: obj.id, folder: obj.folder }, false).done(function (data) {
                                         // calculate new dates if old dates are available
-                                        data.start_date += (obj.start_date - obj.old_start_date);
-                                        data.end_date += (obj.end_date - obj.old_end_date);
+                                        data.startDate += (obj.startDate - obj.old_start_date);
+                                        data.endDate += (obj.endDate - obj.old_end_date);
                                         data = util.updateRecurrenceDate(data, obj.old_start_date);
                                         apiUpdate(data);
                                     });
@@ -176,13 +166,7 @@ define('io.ox/calendar/month/perspective', [
             return api.getAll(apiData, useCache).then(function (list) {
                 // update single week view collections
                 function appointmentsBetween(start, end) {
-                    return list.filter(function (mod) {
-                        var tmpStart = mod.full_time ? moment.utc(mod.start_date).local(true).valueOf() : mod.start_date,
-                            tmpEnd = mod.full_time ? moment.utc(mod.end_date).local(true).valueOf() : mod.end_date;
-                        return (tmpStart >= start && tmpStart < end) || (tmpEnd > start && tmpEnd <= end) || (tmpStart <= start && tmpEnd >= end);
-                    }).map(function (obj) {
-                        return new MonthAppointment(obj);
-                    });
+                    return list.filter(chronosUtil.rangeFilter(start, end));
                 }
                 var start = opt.start;
                 for (var i = 0; i < weeks; i++) {
@@ -252,7 +236,7 @@ define('io.ox/calendar/month/perspective', [
                     }
 
                     // add collection for week
-                    self.collections[day] = new MonthAppointmentCollection([]);
+                    self.collections[day] = new chronosModel.Collection([]);
 
                     // new view
                     currMonth.push(createView({
@@ -457,7 +441,7 @@ define('io.ox/calendar/month/perspective', [
                 styleNode = $('<style type="text/css">').text(printStyle);
 
             if (folderID && folderID !== 'virtual/all-my-appointments') {
-                data = { folder_id: folderID };
+                data = { folder: folderID };
             }
             win = print.open('printCalendar', data, {
                 template: 'cp_monthview_table_appsuite.tmpl',
@@ -667,7 +651,7 @@ define('io.ox/calendar/month/perspective', [
 
         // called when an appointment detail-view opens the according appointment
         selectAppointment: function (obj) {
-            this.gotoMonth(moment(obj.start_date));
+            this.gotoMonth(moment(obj.startDate));
         },
 
         getStartDate: function () {

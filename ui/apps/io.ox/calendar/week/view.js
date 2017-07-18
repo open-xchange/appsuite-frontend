@@ -227,22 +227,8 @@ define('io.ox/calendar/week/view', [
             if (startDate === this.apiRefTime.valueOf()) {
                 var ws = this.startDate.valueOf(),
                     we = moment(this.startDate).add(this.columns, 'days').valueOf();
+                models = _(models).filter(chronosUtil.rangeFilter(ws, we));
                 // reset collection; transform raw dato to proper models
-                models = _(models)
-                    .filter(function (model) {
-                        var os = model.get('startDate'),
-                            oe = model.get('endDate');
-
-                        if (!os || !oe) return false;
-
-                        os = moment.tz(os.value, os.tzid).valueOf();
-                        oe = moment.tz(oe.value, oe.tzid).valueOf();
-                        if (chronosUtil.isAllday(model)) {
-                            os = moment.utc(os).local(true).valueOf();
-                            oe = moment.utc(oe).local(true).valueOf();
-                        }
-                        return (os >= ws && os < we) || (oe > ws && oe < we) || (os <= ws && oe >= we);
-                    });
                 this.collection.reset(models);
                 if (this.collection.length > this.limit) {
                     var self = this;

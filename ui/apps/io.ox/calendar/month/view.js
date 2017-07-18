@@ -15,11 +15,12 @@ define('io.ox/calendar/month/view', [
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, folderAPI, util, gt, settings) {
+], function (ext, folderAPI, util, chronosUtil, gt, settings) {
 
     'use strict';
 
@@ -59,15 +60,15 @@ define('io.ox/calendar/month/view', [
                 cT = $('[data-cid="' + cid + '"]', this.pane);
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = _.cid(String(cid));
+                    obj = chronosUtil.cid(String(cid));
 
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane))
+                        .not($('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.pane))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
-                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.pane).addClass('current');
+                    $('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');
                 }
@@ -109,14 +110,14 @@ define('io.ox/calendar/month/view', [
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = _.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').addClass('hover');
+            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid')));
+            $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible').addClass('hover');
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = _.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder_id + '.' + cid.id + '"]:visible').removeClass('hover');
+            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid')));
+            $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible').removeClass('hover');
         },
 
         // handler for mobile month view day-change
@@ -223,15 +224,12 @@ define('io.ox/calendar/month/view', [
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes) === 2 && !settings.get('showDeclinedAppointments', false)) return;
 
-                var startMoment = moment(model.get('start_date')),
-                    endMoment = moment(model.get('end_date')),
+                var startMoment = model.getMoment('startDate'),
+                    endMoment = model.getMoment('endDate'),
                     maxCount = 7;
 
                 // fix full-time values
-                if (model.get('full_time')) {
-                    startMoment.utc().local(true);
-                    endMoment.utc().local(true).subtract(1, 'millisecond');
-                }
+                if (chronosUtil.isAllday(model)) endMoment.subtract(1, 'millisecond');
 
                 // reduce to dates inside the current week
                 startMoment = moment.max(startMoment, this.weekStart).clone();
@@ -363,18 +361,18 @@ define('io.ox/calendar/month/view', [
                 }
             }
 
-            var folder_id = a.get('folder_id');
+            var folder_id = a.get('folder');
             if (String(folder.id) === String(folder_id)) {
                 addColorClasses(folder);
             } else if (folder_id !== undefined) {
                 folderAPI.get(folder_id).done(addColorClasses);
             }
 
-            if (a.get('private_flag') && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                classes = (a.get('private_flag') ? 'private ' : '') + util.getShownAsClass(a.attributes) +
+                classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a.attributes) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {
@@ -394,8 +392,8 @@ define('io.ox/calendar/month/view', [
                     .addClass('appointment-content')
                     .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
-                        a.get('private_flag') ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
-                        a.get('title') ? $('<div class="title">').text(gt.format(confString, a.get('title') || '\u00A0')) : '',
+                        util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
+                        a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',
                         a.get('location') ? $('<div class="location">').text(a.get('location') || '\u00A0') : ''
                     )
                 )

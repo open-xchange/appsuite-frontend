@@ -21,27 +21,14 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('week'),
-        // ensure cid is used in model and collection as idAttribute properly
-        // hint: please note that WeekAppointment is actually not used as Model
-        //       cause we currently still have to deal with the ModelFactory
-        WeekAppointment = Backbone.Model.extend({
-            idAttribute: 'cid',
-            initialize: function () {
-                this.cid = this.attributes.cid = _.cid(this.attributes);
-                // backward compatibility
-                this.id = this.cid;
-            }
-        }),
-        WeekAppointmentCollection = Backbone.Collection.extend({
-            model: WeekAppointment
-        });
+    var perspective = new ox.ui.Perspective('week');
 
     _.extend(perspective, {
 
@@ -388,7 +375,7 @@ define('io.ox/calendar/week/perspective', [
                     'role': 'main',
                     'aria-label': gt('Appointment list')
                 });
-            this.collection = new WeekAppointmentCollection([]);
+            this.collection = new chronosModel.Collection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };
