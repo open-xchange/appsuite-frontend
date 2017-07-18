@@ -853,7 +853,7 @@ define('io.ox/files/api', [
             return mergeDetailInPool(data);
         }, function (error) {
             api.trigger('error error:' + error.code, error);
-            return error;
+            throw error;
         });
     };
 
@@ -878,7 +878,7 @@ define('io.ox/files/api', [
             return data;
         }, function (error) {
             api.trigger('error error:' + error.code, error);
-            return error;
+            throw error;
         });
     };
 
