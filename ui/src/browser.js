@@ -114,17 +114,21 @@
             // add namespaces, just sugar
             us.browser = {
                 /** is IE? */
-                IE: edge ?
+                IE: edge
                     // TODO: Handle Edge as IE 12. Is this really wanted?
-                    Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1]) : (
-                        nav.appName === 'Microsoft Internet Explorer' ?
-                            Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1]) :
-                            (!!nav.userAgent.match(/Trident/) ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2]) : undefined)
+                    ? Number(ua.match(/Edge\/(\d+.\d)\d+$/)[1])
+                    : (
+                        nav.appName === 'Microsoft Internet Explorer'
+                            ? Number(nav.appVersion.match(/MSIE (\d+\.\d+)/)[1])
+                            : (!!nav.userAgent.match(/Trident/)
+                                ? Number(nav.userAgent.match(/rv(:| )(\d+.\d+)/)[2])
+                                : undefined)
                     ),
                 /** is Edge browser? */
-                Edge: edge ?
+                Edge: edge
                     // TODO: If Edge is handled as IE 12, a specific 'Edge' property is not required.
-                    Number(ua.match(/Edge\/(\d+.\d+)$/)[1]) : undefined,
+                    ? Number(ua.match(/Edge\/(\d+.\d+)$/)[1])
+                    : undefined,
                 /** is Opera? */
                 Opera: opera ? ua.split('OPR/')[1].split(' ')[0].split('.')[0] : undefined,
                 /** is WebKit? */

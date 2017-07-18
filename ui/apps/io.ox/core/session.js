@@ -113,11 +113,11 @@ define('io.ox/core/session', [
 
             // GET request
             return (
-                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
+                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken')
                     // no auto-login for server-token-based logins
-                    $.Deferred().reject({}) :
+                    ? $.Deferred().reject({})
                     // try auto-login
-                    withTimeout(http.GET, {
+                    : withTimeout(http.GET, {
                         module: 'login',
                         appendColumns: false,
                         appendSession: false,
