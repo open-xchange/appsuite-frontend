@@ -52,19 +52,29 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(html).to.equal('Lorem <a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>! dolor');
             });
 
+            it('transforms links inside parentheses', function () {
+                var html = process('Lorem (http://ip.sum) dolor');
+                expect(html).to.equal('Lorem (<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>) dolor');
+            });
+
+            it('transforms links inside angle brackets', function () {
+                var html = process('Lorem <http://ip.sum> dolor');
+                expect(html).to.equal('Lorem &lt;<a href="http://ip.sum" rel="noopener" target="_blank">http://ip.sum</a>> dolor');
+            });
+
             it('transforms mail addresses', function () {
                 var html = process('Lorem <ipsum@dolor.amet>');
-                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&gt;');
+                expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>>');
             });
 
             it('transforms multiple mail addresses', function () {
                 var html = process('One "ipsum@dolor.amet" and another "ipsum@dolor.amet".');
-                expect(html).to.equal('One &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot; and another &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot;.');
+                expect(html).to.equal('One "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>" and another "<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>".');
             });
 
             it('ignores invalid addresses', function () {
                 var html = process('One "ipsum@dolor" and another "@dolor.amet".');
-                expect(html).to.equal('One &quot;ipsum@dolor&quot; and another &quot;@dolor.amet&quot;.');
+                expect(html).to.equal('One "ipsum@dolor" and another "@dolor.amet".');
             });
 
             // QUOTES

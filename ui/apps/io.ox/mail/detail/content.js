@@ -719,7 +719,7 @@ define('io.ox/mail/detail/content', [
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
-                regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
+                regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
                 regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^)]+\)$/gm,
@@ -773,7 +773,9 @@ define('io.ox/mail/detail/content', [
                         // advance
                         str = str.substr(match.length + (options.lists ? 1 : 0));
                         // escape first (otherwise we escape our own markup later)
-                        match = _.escape(match);
+                        // however, we just escape < (not quotes, not closing brackets)
+                        // we add a \r to avoid &lt; become part of URLs
+                        match = match.replace(/</g, '\r&lt;');
                         // rulers
                         if (options.rulers) {
                             match = match.replace(regRuler, replaceRuler);
@@ -785,8 +787,6 @@ define('io.ox/mail/detail/content', [
                         // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
-                                // cover edge-case: &quot; which is hard to handle in a regex
-                                .replace(/&quot;/g, '"')
                                 .replace(regLink, function (all, href, suffix) {
                                     // substitute @ by entity to avoid double detection, e.g. if an email address is part of a link
                                     href = href.replace(/@/g, '&#64;');
@@ -794,14 +794,10 @@ define('io.ox/mail/detail/content', [
                                 })
                                 .replace(regMailAddress, function (all, address) {
                                     return '<a href="mailto:' + address + '">' + address + '</a>';
-                                })
-                                // reinsert quotes
-                                .replace(/(<[^<]+>|")/g, function (all, q) {
-                                    return q === '"' ? '&quot;' : q;
                                 });
                         }
-                        // replace newlines
-                        out += match.replace(/\n/g, '<br>');
+                        // remove \r and replace newlines
+                        out += match.replace(/\r/g, '').replace(/\n/g, '<br>');
                         continue;
                     }
 
