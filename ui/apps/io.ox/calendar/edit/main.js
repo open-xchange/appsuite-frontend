@@ -72,7 +72,15 @@ define('io.ox/calendar/edit/main', [
             edit: function (model, opt) {
 
                 var self = this,
-                    data = model ? model.toJSON() : {};
+                    data = {};
+                // work with models and objects
+                if (model) {
+                    if (model.get) {
+                        data = model.toJSON();
+                    } else if (_.isObject(model)) {
+                        data = model;
+                    }
+                }
                 opt = _.extend({
                     mode: 'edit'
                 }, opt);
@@ -202,7 +210,7 @@ define('io.ox/calendar/edit/main', [
                         trigger: { duration: '-P15M', related: 'START' }
                     }]);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
-                    data.transparency = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
+                    data.transp = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));

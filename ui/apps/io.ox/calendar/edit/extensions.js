@@ -436,7 +436,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<div class="checkbox">').append(
                     $('<label class="control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'transparency', model: this.model, customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' }, defaultVal: 'OPAQUE' }).render().$el,
+                        new mini.CheckboxView({ id: guid, name: 'transp', model: this.model, customValues: { 'false': 'OPAQUE', 'true': 'TRANSPARENT' }, defaultVal: 'OPAQUE' }).render().$el,
                         $.txt(gt('Show as free'))//#. Describes how a appointment is shown in the calendar
                     )
                 )
@@ -701,31 +701,18 @@ define('io.ox/calendar/edit/extensions', [
                     if (appointment) {
                         data.dialog.close();
                         // make sure we have correct dates. Do not change dates if a date is NaN
-                        var validDate = !(_.isNaN(appointment.start_date) || _.isNaN(appointment.end_date));
+                        var validDate = !(_.isNaN(appointment.startDate) || _.isNaN(appointment.endDate));
 
                         if (validDate) {
-                            e.data.model.set({ full_time: appointment.full_time });
-                            e.data.model.set({ start_date: appointment.start_date });
+                            e.data.model.set({ allDay: appointment.allDay });
+                            e.data.model.set({ startDate: appointment.startDate });
                         }
-                        var models = [],
-                            defs = [];
-                        // add to participants collection instead of the model attribute to make sure the edit view is redrawn correctly
-                        _(appointment.participants).each(function (data) {
-                            //create model
-                            var mod = new e.data.model._attendees.model(data);
-                            models.push(mod);
-                            // wait for fetch, then add to collection
-                            defs.push(mod.loading);
-                        });
-                        $.when.apply($, defs).done(function () {
-                            // first reset then addUniquely collection might not redraw correctly otherwise in some cases
-                            e.data.model._attendees.reset([]);
-                            e.data.model._attendees.addUniquely(models);
-                        });
+
+                        e.data.model.getAttendees().reset(appointment.attendees);
                         // set end_date in a seperate call to avoid the appointment model applyAutoLengthMagic (Bug 27259)
                         if (validDate) {
                             e.data.model.set({
-                                end_date: appointment.end_date
+                                endDate: appointment.endDate
                             }, { validate: true });
                         }
                     } else {

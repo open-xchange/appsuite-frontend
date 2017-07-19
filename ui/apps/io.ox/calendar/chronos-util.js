@@ -49,23 +49,24 @@ define('io.ox/calendar/chronos-util', [
         // options can contain attende object fields that should be prefilled (usually partStat: 'ACCEPTED')
         createAttendee: function (user, options) {
             if (!user) return;
+            // make it work for models and objects
+            user = user.get ? user.attributes : user;
             options = options || {};
-            var displayName = user.get ? user.get('display_name') : user.display_name,
-                attendee = {
-                    cuType: attendeeLookupArray[(user.get ? user.get('type') : user.type)] || 'INDIVIDUAL',
-                    cn: user.getDisplayName ? user.getDisplayName() : displayName,
-                    partStat: 'NEEDS-ACTION',
-                    comment: ''
-                };
+            var attendee = {
+                cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
+                cn: user.display_name,
+                partStat: 'NEEDS-ACTION',
+                comment: ''
+            };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if (user.id && (user.get ? user.get('type') : user.type) !== 5) attendee.entity = user.id;
-                attendee.email = user.get ? user.get('email1') : user.email1;
-                attendee.uri = 'mailto:' + (user.get ? user.get('email1') : user.email1);
+                if (user.id && user.type !== 5) attendee.entity = user.id;
+                attendee.email = user.email1;
+                attendee.uri = 'mailto:' + user.email1;
             } else {
                 attendee.partStat = 'ACCEPTED';
-                attendee.comment = user.get ? user.get('description') : user.description;
-                attendee.entity = user.get ? user.get('id') : user.id;
+                attendee.comment = user.description;
+                attendee.entity = user.id;
             }
 
             // override with predefined values if given
@@ -76,7 +77,10 @@ define('io.ox/calendar/chronos-util', [
         // checking the start date is sufficient as the end date must be of the same type, according to the spec
         isAllday: function (app) {
             if (!app) return false;
-            var time = app.get ? app.get('startDate') : app.startDate;
+            app = app.get ? app.attributes : app;
+            if (_(app).has('allDay')) return app.allDay;
+
+            var time = app.startDate;
             // there is either no time value or the time value is only 0s
             return this.isLocal(app) && (time.value.indexOf('T') === -1 || time.value.search(/T0*$/) !== -1);
         },

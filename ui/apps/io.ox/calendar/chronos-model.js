@@ -19,6 +19,9 @@ define('io.ox/calendar/chronos-model', [
 
     'use strict';
 
+    var AttendeeModel = Backbone.Model.extend({ idAttribute: 'entity' }),
+        AttendeeCollection = Backbone.Collection.extend({ model: AttendeeModel });
+
     var Model = Backbone.Model.extend({
         idAttribute: 'cid',
         initialize: function () {
@@ -35,7 +38,7 @@ define('io.ox/calendar/chronos-model', [
                 resetListUpdate = false,
                 changeAttendeesUpdate = false;
 
-            this._attendees = new Backbone.Collection(this.get('attendees'), { silent: false });
+            this._attendees = new AttendeeCollection(this.get('attendees'), { silent: false });
 
             this._attendees.on('add remove reset', function () {
                 if (changeAttendeesUpdate) {

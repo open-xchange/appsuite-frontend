@@ -16,6 +16,7 @@ define('io.ox/calendar/actions', [
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/chronos-api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/print',
     'gettext!io.ox/calendar',
@@ -23,7 +24,7 @@ define('io.ox/calendar/actions', [
     'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
     'settings!io.ox/calendar'
-], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
+], function (ext, links, api, util, chronosUtil, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
 
     'use strict';
 
@@ -349,42 +350,27 @@ define('io.ox/calendar/actions', [
             return _.device('!smartphone');
         },
         action: function (baton) {
-            require(['io.ox/calendar/freetime/main'], function (freetime) {
-                var perspective = baton.app.getWindow().getPerspective(),
-                    now = _.now(),
-                    startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
-                    layout = perspective ? perspective.app.props.get('layout') : '';
+            require(['io.ox/calendar/freetime/main', 'io.ox/core/api/user'], function (freetime, userAPI) {
+                userAPI.get().done(function (user) {
+                    var perspective = baton.app.getWindow().getPerspective(),
+                        now = _.now(),
+                        startDate = perspective && perspective.name !== 'month' && perspective.getStartDate ? perspective.getStartDate() : now,
+                        layout = perspective ? perspective.app.props.get('layout') : '';
 
-                // see if the current day is in the displayed week.
-                if (startDate < now && layout.indexOf('week:') === 0) {
-                    // calculate end of week/workweek
-                    var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
-                    if (now < max) {
-                        startDate = now;
+                    // see if the current day is in the displayed week.
+                    if (startDate < now && layout.indexOf('week:') === 0) {
+                        // calculate end of week/workweek
+                        var max = startDate + 86400000 * (layout === 'week:workweek' ? 5 : 7);
+                        if (now < max) {
+                            startDate = now;
+                        }
                     }
-                }
 
-                freetime.getApp().launch({ startDate: startDate, participants: [{ id: ox.user_id, type: 1 }] });
+                    freetime.getApp().launch({ startDate: startDate, attendees: [chronosUtil.createAttendee(user, { partStat: 'ACCEPTED' })] });
+                });
             });
         }
     });
-
-    /*new Action('io.ox/calendar/actions/freebusy', {
-        capabilities: 'freebusy !alone !guest',
-        requires: function () {
-            return _.device('!smartphone');
-        },
-        action: function (baton) {
-            var perspective = baton.app.getWindow().getPerspective(),
-                start_date = perspective && perspective.getStartDate ? perspective.getStartDate() : _.now();
-            ox.launch('io.ox/calendar/freebusy/main', {
-                baton: baton,
-                folder: baton.app.folder.get(),
-                participants: [{ id: ox.user_id, type: 1 }],
-                start_date: start_date
-            });
-        }
-    });*/
 
     // Actions mobile
     new Action('io.ox/calendar/actions/dayview/showNext', {
