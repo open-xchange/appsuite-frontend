@@ -73,6 +73,7 @@ msgstr[1] "%1$d přílohy"
 msgstr[2] "%1$d příloh"
 
 #. estimated upload duration
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "%1$d day"
@@ -129,6 +130,13 @@ msgstr[0] "%1$d minuta"
 msgstr[1] "%d minuty"
 msgstr[2] "%d minut"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$d minute"
+#| msgid_plural "%1$d minutes"
+msgid "%1$d minutes"
+msgstr "%1$d minuta"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "%1$d month"
 msgid_plural "%1$d months"
@@ -172,6 +180,13 @@ msgid_plural "%1$d seconds"
 msgstr[0] "%1$d sekunda"
 msgstr[1] "%1$d sekundy"
 msgstr[2] "%1$d sekund"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d second"
+#| msgid_plural "%1$d seconds"
+msgid "%1$d seconds"
+msgstr "%1$d sekunda"
 
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
@@ -447,18 +462,20 @@ msgstr "V nedávné době byl změněn jeden soubor"
 
 #: apps/io.ox/core/tk/list-dnd.js module:io.ox/core
 #: apps/io.ox/core/tk/selection.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] "1 položka"
 msgstr[1] "%1$d položky"
 msgstr[2] "%1$d položek"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 minuta"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 minut"
 
@@ -471,7 +488,7 @@ msgstr "100 %"
 msgid "15 minutes"
 msgstr "15 minut"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 minuty"
 
@@ -480,7 +497,7 @@ msgid "30 minutes"
 msgstr "30 minut"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 minut"
 
@@ -690,7 +707,6 @@ msgstr "Přidat stav"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Přidat kontakt"
@@ -898,10 +914,6 @@ msgstr "Nový účastník byl přidán"
 msgid "Adding files with identical names"
 msgstr "Přidání souborů se shodnými názvy"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Additional settings"
-msgstr "Další nastavení"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Address"
@@ -948,6 +960,12 @@ msgstr "Role administrátora"
 #: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Administrátor"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#, fuzzy
+msgid "Advanced settings"
+msgstr "Pokročilá nastavení"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -1001,20 +1019,25 @@ msgstr "Všechny soubory byly smazány"
 msgid "All folders"
 msgstr "Všechny složky"
 
-#. informs user about the consequences when creating a rule for selected mails
+#. informs user about the consequences when creating a rule for a selected mail
 #. %1$s represents a email address
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+#| msgid "All future messages from %1$s will be moved to the selected folder."
+#| msgid_plural ""
+#| "All future messages from the senders of the selected mails will be moved "
+#| "to the selected folder."
 msgid "All future messages from %1$s will be moved to the selected folder."
-msgid_plural ""
+msgstr "Všechny budoucí zprávy od %1$s budou přesunuty do vybrané složky."
+
+#. informs user about the consequences when creating a rule for selected mails
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+msgid ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "Všechny budoucí zprávy od %1$s budou přesunuty do vybrané složky."
-msgstr[1] ""
-"Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
-"vybrané složky."
-msgstr[2] ""
-"Všechny budoucí zprávy od odesílatelů vybraných zpráv budou přesunuty do "
-"vybrané složky."
+msgstr ""
+"Všechny budoucí zprávy od odesílatelů vyznačených zpráv budou přesunuty do "
+"vyznačené složky."
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "All groups"
@@ -1050,7 +1073,7 @@ msgstr "Povolit zprávy s HTML formátováním"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Povolit přednačítání obrázků odkazovaných z externích zdrojů"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr "Vždy přidat následujícího příjemce do slepé kopie (BCC)"
 
@@ -1104,7 +1127,7 @@ msgstr "Kterýkoliv adresát"
 msgid "App Store"
 msgstr "App Store"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Připojit vCard"
 
@@ -1130,6 +1153,8 @@ msgstr "Použít"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 msgid "Apply changes"
 msgstr "Přijmout změny"
 
@@ -1254,7 +1279,7 @@ msgstr "Asistent(ka)"
 msgid "Attach Vcard"
 msgstr "Připojit vCard"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Attachment"
 msgstr "Příloha"
 
@@ -1308,9 +1333,11 @@ msgstr "Autor"
 msgid "Authorize your account again"
 msgstr "Autorizujte znovu svůj účet"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/autoforward/settings/register.js
-msgid "Auto Forward"
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js
+#, fuzzy
+#| msgid "Auto Forward"
+msgid "Auto forward"
 msgstr "Automaticky přeposlat"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1318,7 +1345,7 @@ msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr "Automatické nastavení selhalo. Přejete si nastavit svůj účet ručně?"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "Automaticky ukládat koncepty zpráv"
 
@@ -1411,6 +1438,7 @@ msgstr ""
 "Než budete moci pokračovat v používání produktu, je nutné zadat základní "
 "údaje. Zabere to méně než minutu."
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "Zvon"
@@ -1560,10 +1588,6 @@ msgstr "Zobrazení kalendáře: pracovní týden"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Kalendář"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Calendar workweek view"
-msgstr "Pohled: pracovní týden"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Calendar:"
@@ -1829,12 +1853,13 @@ msgstr "Úvodní nastavení klienta"
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/mediaplayer.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
-#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
+#: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Zavřít"
@@ -1889,7 +1914,7 @@ msgid "Collapse form"
 msgstr "Skrýt formulář"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Color"
@@ -1932,10 +1957,6 @@ msgstr "Komentáře a podněty"
 msgid "Commercial Register"
 msgstr "Obchodní rejstřík"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Common"
-msgstr "Obecné"
-
 #. Emojis that work across all Japanese carriers.
 #. Japanese: 他社共通絵文字
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -1961,7 +1982,7 @@ msgstr "Firma"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Psaní zpráv"
 
@@ -2001,7 +2022,7 @@ msgstr "Nastavit kategorie"
 msgid "Configure now"
 msgstr "Nastavit"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
 msgstr "Potvrdit příjemce při odpovídání do poštovní konference"
 
@@ -2207,7 +2228,6 @@ msgid "Could not load this list"
 msgstr "Seznam se nepodařilo načíst"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
 msgid "Could not save settings"
 msgstr "Nepodařilo se uložit nastavení"
 
@@ -2239,10 +2259,6 @@ msgstr "Nepodařilo se načíst editor"
 msgid "Couldn't load that task."
 msgstr "Úkol se nepodařilo nahrát."
 
-#: apps/io.ox/mail/autoforward/settings/register.js module:io.ox/mail
-msgid "Couldn't load your auto forward."
-msgstr "Nepodařilo se načíst vaše automatické odeslání."
-
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
 msgstr "Nepodařilo se načíst vaše kontaktní údaje."
@@ -2250,10 +2266,6 @@ msgstr "Nepodařilo se načíst vaše kontaktní údaje."
 #: apps/io.ox/mail/mailfilter/settings/register.js module:io.ox/mail
 msgid "Couldn't load your mail filter rules."
 msgstr "Nepodařilo se načíst vaše pravidla pro filtry zpráv."
-
-#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
-msgid "Couldn't load your vacation notice."
-msgstr "Nepodařilo se načíst vaše oznámení o nepřítomnosti."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Country"
@@ -2461,6 +2473,13 @@ msgstr "Den"
 msgid "Days"
 msgstr "Dny"
 
+#. Context: Vacation notices
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Number of days between vacation notices to the same sender"
+msgid "Days between notices to the same sender"
+msgstr "Počet dní mezi oznámeními o nepřítomnosti pro stejného odesílatele"
+
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Decide now"
@@ -2492,7 +2511,7 @@ msgstr "Výchozí aplikace po přihlášení"
 msgid "Default calendar"
 msgstr "Výchozí kalendář"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default font style"
 msgstr "Výchozí styl písma"
 
@@ -2500,13 +2519,15 @@ msgstr "Výchozí styl písma"
 msgid "Default reminder"
 msgstr "Výchozí upomínka"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "default sender"
+msgid "Default sender"
+msgstr "výchozí odesílatel"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default sender address"
 msgstr "Výchozí adresa odesílatele"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Default sender for vacation notice"
-msgstr "Výchozí odesílatel oznámení o nepřítomnosti"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature"
@@ -2518,6 +2539,12 @@ msgstr "Výchozí podpisy pro nové zprávy"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwardings"
+msgstr "Výchozí podpis pro odpovědi a přeposílání"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default signature for replies or forwardings"
+msgid "Default signature for replies or forwards"
 msgstr "Výchozí podpis pro odpovědi a přeposílání"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2769,10 +2796,6 @@ msgstr "Odstrani zprávy s předmětem %1$s"
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Zahodit zprávu"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Display"
-msgstr "Zobrazení"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -3160,6 +3183,10 @@ msgstr "Datum dokončení"
 msgid "Due on %1$s"
 msgstr "Dokončit do %1$s"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Duration per image"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS"
 msgstr "EAS"
@@ -3327,10 +3354,6 @@ msgstr "E-mail 3"
 msgid "Email address"
 msgstr "E-mailová adresa"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Email addresses"
-msgstr "E-mailové adresy"
-
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -3391,9 +3414,7 @@ msgid "Empty trash"
 msgstr "Vyprázdnit koš"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr "Povolit"
@@ -3402,11 +3423,19 @@ msgstr "Povolit"
 msgid "Enable %1$s"
 msgstr "Povolit %1$s"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Enable for the following addresses"
-msgstr "Povolit pro následující adresy"
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Could not save auto forward"
+msgid "Enable or disable auto forward"
+msgstr "Nepodařilo se uložit automatické přeposlání"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Could not save vacation notice"
+msgid "Enable or disable vacation notice"
+msgstr "Nepodařilo se uložit oznámení o nepřítomnosti"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "End"
 msgstr "Konec"
 
@@ -3662,6 +3691,17 @@ msgstr "Vyprší"
 msgid "Export"
 msgstr "Export"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Export as VCard"
+msgstr ""
+
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Send as vCard"
+msgid "Export as vCard"
+msgstr "Poslat jako vCard"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Exportovat složku"
@@ -3860,12 +3900,9 @@ msgstr "Tabulka verzí souboru. Aktuální verze je v prvním řádku."
 msgid "Files"
 msgstr "Soubory"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-msgid "Files can not be uploaded, because quota exceeded."
-msgstr "Soubor nelze nahrát, protože byl překročen limit."
-
 #. %1$s is an upload limit like for example 10mb
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
+#: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
 msgstr "Soubory nelze nahrát, protože je přesahují limit %1$s."
@@ -4032,7 +4069,7 @@ msgstr "Navazující"
 msgid "Following"
 msgstr "Sleduji"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Font"
 msgstr "Písmo"
 
@@ -4070,7 +4107,7 @@ msgstr "Zapomněli jste heslo?"
 msgid "Format"
 msgstr "Formát"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Format emails as"
 msgstr "Formátovat e-maily jako"
 
@@ -4079,11 +4116,11 @@ msgstr "Formátovat e-maily jako"
 msgid "Forward"
 msgstr "Přeposlat"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Forward all incoming emails to this address"
 msgstr "Přeposlat veškeré příchozí zprávy na tuto adresu"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Přeposílat zprávy jako"
 
@@ -4277,11 +4314,11 @@ msgid "Guided tour for this app"
 msgstr "Prohlídka pro tuto aplikaci"
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js
+#: apps/io.ox/mail/settings/compose/settings/pane.js
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "HTML and plain text"
 msgstr "HTML a prostý text"
 
@@ -4618,7 +4655,7 @@ msgstr ""
 msgid "Initial folder"
 msgstr "Počáteční složka"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Inline"
 msgstr "Vložené"
 
@@ -4636,7 +4673,7 @@ msgstr "Vložit"
 msgid "Insert inline image"
 msgstr "Vložit obrázek do textu"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Vložit text původní zprávy do odpovědi"
 
@@ -4812,7 +4849,7 @@ msgstr "kB"
 msgid "Keep"
 msgstr "Ponechat"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Uchovat kopii zprávy"
 
@@ -5095,6 +5132,13 @@ msgctxt "app"
 msgid "Mail"
 msgstr "Pošta"
 
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Compose"
+msgctxt "settings"
+msgid "Mail Compose"
+msgstr "Psaní zpráv"
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "Pravidla pro filtr zpráv"
@@ -5358,6 +5402,12 @@ msgstr "Členové"
 msgid "Members (%1$d)"
 msgstr "Členové (%1$d)"
 
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Messages"
+msgid "Message"
+msgstr "Zprávy"
+
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Message (optional)"
@@ -5398,10 +5448,6 @@ msgstr "Posílání zpráv"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
 msgstr "Prostřední jméno"
-
-#: apps/io.ox/files/mediaplayer.js module:io.ox/files
-msgid "Minimize"
-msgstr "Minimalizovat"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -5536,9 +5582,6 @@ msgstr "Hudba"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 msgid "My %1$s account"
 msgstr "Můj účet %1$s"
@@ -5567,6 +5610,7 @@ msgstr "Mé adresáře"
 msgid "My calendars"
 msgstr "Moje kalendáře"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/main.js apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
@@ -5631,7 +5675,8 @@ msgstr "Vnořená podmínka"
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/core/notifications.js
-#: module:io.ox/core
+#: module:io.ox/core apps/io.ox/core/settings/pane.js
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr "Nikdy"
 
@@ -5997,7 +6042,7 @@ msgid "Notification"
 msgstr "Oznámení"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Notification sounds"
 msgstr "Zvuky pro upozornění"
 
@@ -6017,14 +6062,6 @@ msgstr "Upozornit všechny účastníky e-mailem."
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
 msgstr "Připomenout znovu později"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Number of days between vacation notices to the same sender"
-msgstr "Počet dní mezi oznámeními o nepřítomnosti pro stejného odesílatele"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Number of days in work week"
-msgstr "Počet dní v pracovním týdnu"
 
 #. number of items in a folder
 #: apps/io.ox/core/folder/actions/properties.js module:io.ox/core
@@ -6551,21 +6588,13 @@ msgstr "Místa"
 msgid "Plain Text"
 msgstr "Prostý text"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Plain text"
 msgstr "Prostý text"
 
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Play audio files"
-msgstr "Přehrát audio soubory"
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Play sound on incoming mail"
 msgstr "Přehrát zvuk při příchodu zprávy"
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Play video files"
-msgstr "Přehrát video soubory"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -6808,10 +6837,6 @@ msgstr "Prosím, nastavte heslo"
 msgid "Please sign in again to continue"
 msgstr "Chcete-li pokračovat, přihlaste se, prosím, znovu"
 
-#: apps/io.ox/files/legacy_api.js module:io.ox/files
-msgid "Please specify these missing variables: "
-msgstr "Zadejte, prosím, tyto chybějící proměnné: "
-
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Aktualizujte, prosím, svůj prohlížeč."
@@ -7020,7 +7045,7 @@ msgid "Private address"
 msgstr "Soukromá adresa"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7512,7 +7537,6 @@ msgstr "Zopakujte nové heslo"
 msgid "Repeat slideshow"
 msgstr "Zopakovat slideshow"
 
-#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
 #: module:plugins/portal
@@ -7530,7 +7554,6 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Komu odpovědět"
 
-#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 msgid "Reply to all"
 msgstr "Odpovědět všem"
@@ -7548,6 +7571,11 @@ msgstr "Odpovědět do poštovní konference"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Odpovědět odesílateli"
+
+#. requested url for vcard download hits technical request limit
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Request limit was hit. Please try again with less contacts selected."
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -7926,7 +7954,7 @@ msgstr "Poslat jako vCard"
 msgid "Send by mail"
 msgstr "Poslat ve zprávě"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Send from"
 msgstr "Odeslat od"
 
@@ -7952,7 +7980,7 @@ msgstr "Poslat novou zprávu"
 msgid "Send notification by email"
 msgstr "Poslat oznámení e-mailem"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Oznámení o nepřítomnosti posílat pouze v tuto dobu"
 
@@ -8160,10 +8188,6 @@ msgid "Show all fields"
 msgstr "Zobrazit všechna pole"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "Show all images for"
-msgstr "Zobrazit všechny obrázky"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
 msgid "Show all images just once"
 msgstr "Ukážat každý obrázek jen jednou"
 
@@ -8320,8 +8344,8 @@ msgstr "Přihlášený(á) jako:"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
-#: module:io.ox/files apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/view-options.js
+#: module:io.ox/files apps/io.ox/mail/settings/compose/settings/pane.js
+#: module:io.ox/mail apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Velikost"
 
@@ -8418,7 +8442,7 @@ msgstr "Řadit podle"
 msgid "Sort options"
 msgstr "Možnosti řazení"
 
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Sound"
 msgstr "Zvuk"
 
@@ -8449,7 +8473,7 @@ msgstr "Standardní složky"
 msgid "Standard timezone"
 msgstr "Standardní časová pásma"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
 msgstr "Start"
@@ -8541,7 +8565,7 @@ msgstr "Student"
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mailfilter apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -8788,10 +8812,6 @@ msgstr "Předběžně"
 msgid "Tentatively accepted"
 msgstr "Předběžně přijal(a)"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Text"
-msgstr "Text"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 msgid "Text documents"
 msgstr "Textové dokument"
@@ -8816,7 +8836,7 @@ msgctxt "help"
 msgid "The Drive App"
 msgstr "Aplikace Drive"
 
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid ""
 "The Notice is sent out for messages received by %1$s. You may choose to send "
 "it out for other recipient addresses too:"
@@ -8832,7 +8852,7 @@ msgstr "Účty musí být pojmenován"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivita byla úspěšně smazána"
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "The allowed quota is reached."
 msgstr "Bylo dosaženo povoleného limitu."
 
@@ -8884,6 +8904,7 @@ msgid "The email has been sent"
 msgstr "Zpráva byla odeslána"
 
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 msgid "The end date must be after the start date."
 msgstr "Datum konce musí být po datu začátku."
 
@@ -8993,7 +9014,7 @@ msgstr "Nová schůzka se kryje se stávajícími schůzkami."
 msgid "The notification has been resent"
 msgstr "Oznámení bylo znovu odesláno"
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
 msgstr "Zadaný název souboru překračuje povolenou délku."
 
@@ -9054,8 +9075,6 @@ msgid "The series never ends."
 msgstr "Série nikdy nekončí."
 
 #: apps/io.ox/calendar/settings/model.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js apps/io.ox/contacts/settings/pane.js
-#: module:io.ox/contacts
 msgid ""
 "The setting has been saved and will become active when you enter the "
 "application the next time."
@@ -9070,10 +9089,6 @@ msgstr "Aby se nastavení projevilo, je nutné se odhlásit a znovu přihlásit.
 msgid "The start date must be before the due date."
 msgstr "Datum začátku musí být před datem konce."
 
-#: apps/io.ox/mail/vacationnotice/settings/filter.js module:io.ox/mail
-msgid "The start date must be before the end date."
-msgstr "Datum začátku musí být před datem konce."
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "The subscription could not be created."
 msgstr "Přihlášení k odběru se nepodařilo vytvořit."
@@ -9084,6 +9099,12 @@ msgid_plural "The tasks could not be deleted."
 msgstr[0] "Úkol se nepodařilo smazat."
 msgstr[1] "Úkoly se nepodařilo smazat."
 msgstr[2] "Úkoly se nepodařilo smazat."
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "The time frame is in the past."
+msgstr "Zadejte, prosím, datum v minulosti"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -9271,7 +9292,7 @@ msgstr[1] ""
 msgstr[2] ""
 "Tyto soubory (složky) jsou sdílené s ostatními. Již pro ně nebudou přístupné."
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "This file could not be uploaded."
 msgstr "Soubor se nepodařilo nahrát"
 
@@ -9366,7 +9387,7 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Toto je standardní složka, kterou nelze přejmenovat."
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "This is how your message text will look like."
 msgid "This is how your message text will look."
@@ -9475,8 +9496,10 @@ msgid "Time"
 msgstr "Čas"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Time scale in minutes"
-msgstr "Časový rozsah v minutách"
+#, fuzzy
+#| msgid "Time Range"
+msgid "Time scale"
+msgstr "Časový rozsah"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
@@ -9655,11 +9678,21 @@ msgstr ""
 msgid "Unable to load mail filter rules settings."
 msgstr "Nepodařilo se načíst nastavení pro filtrování pošty."
 
-#: apps/io.ox/mail/autoforward/settings/register.js module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Nepodařilo se načíst nastavení pro filtrování pošty."
+
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+msgid "Unable to load your auto forward settings. Please retry later."
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Unable to load your vacation notice. Please retry later."
+msgstr "Nepodařilo se načíst vaše oznámení o nepřítomnosti."
 
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -9807,7 +9840,7 @@ msgstr "Použít %1$s"
 msgid "Use accessibility improvements"
 msgstr "Použít funkce pro zlepšení přístupnosti"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
 msgstr "Použít výchozí nastavení prohlížeče"
 
@@ -9903,10 +9936,16 @@ msgstr "Uživatelské jméno"
 msgid "Username must not be empty."
 msgstr "Uživatelské jméno nemůže být prázdné."
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js
-msgid "Vacation Notice"
-msgstr "Oznámení o nepřítomnosti"
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "vacation notice"
+msgid "Vacation notice"
+msgstr "oznámení o nepřítomnosti"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Verhalten"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -9945,6 +9984,15 @@ msgstr "Videa"
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+msgid "View"
+msgstr "Zobrazit"
+
+#. the noun, not the verb (e.g. German "Anzeige")
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "View"
+msgctxt "noun"
 msgid "View"
 msgstr "Zobrazit"
 
@@ -10031,6 +10079,12 @@ msgstr "středu"
 msgid "Week"
 msgstr "Týden"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Work week starts on"
+msgid "Week start"
+msgstr "Pracovní týden začíná v"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "Weekday"
@@ -10107,14 +10161,22 @@ msgstr "Celý den"
 msgid "Wood"
 msgstr "Dřevo"
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Work week starts on"
-msgstr "Pracovní týden začíná v"
-
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
 msgstr "Pracovní týden"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek View"
+msgid "Workweek length"
+msgstr "Pohled: pracovní týden"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek View"
+msgid "Workweek view"
+msgstr "Pohled: pracovní týden"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Would you like to enable desktop notifications?"
@@ -10546,10 +10608,6 @@ msgstr "Vaše odpověď byla odeslána"
 msgid "Your selected picture exceeds the maximum allowed file size of %1$s"
 msgstr "Vybraný obrázek přesahuje maximální povolenou velikost %1$s"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture will be displayed after saving"
-msgstr "Vybraný obrázek bude zobrazen po uložení"
-
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Your session is expired"
 msgstr "Sezení vypršelo"
@@ -10570,6 +10628,12 @@ msgstr "Váš stav byl úspěšně sdílen na %s"
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Your timezone"
 msgstr "Vaše časové pásmo"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js module:io.ox/mail
+#, fuzzy
+#| msgid "Your vacation notice has been saved"
+msgid "Your vacation notice is active"
+msgstr "Vaše oznámení o nepřítomnosti byla uloženo"
 
 #. Zettabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -10702,10 +10766,6 @@ msgstr "den (dny)"
 msgid "declined"
 msgstr "odmítnuté"
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
-msgid "default sender"
-msgstr "výchozí odesílatel"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -10724,14 +10784,6 @@ msgstr "mazání vlastních objektů"
 #: module:io.ox/mailfilter
 msgid "deleted"
 msgstr "smazáno"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-msgid "disable"
-msgstr "zakázat"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "disabled"
-msgstr "zakázáno"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -10981,18 +11033,10 @@ msgstr "červená"
 msgid "second"
 msgstr "druhý(é)"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-msgid "seconds"
-msgstr "sekundy"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "seen"
 msgstr "prohlédnuto"
-
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
-msgid "select all"
-msgstr "označit vše"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
@@ -11062,17 +11106,9 @@ msgstr "neznámý odesílatel"
 msgid "unlimited"
 msgstr "neomezené"
 
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
-msgid "unselect all"
-msgstr "odznačit vše"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
 msgstr "vCard"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "vacation notice"
-msgstr "oznámení o nepřítomnosti"
 
 #. (From) email1 via email2. Appears in email detail view.
 #: apps/io.ox/mail/util.js module:io.ox/core
@@ -12000,6 +12036,9 @@ msgstr "vaše platforma"
 #~ msgid "Adding subscription. This may take some seconds …"
 #~ msgstr "Přidávám nové přihlášení k odběru. Může to několik sekund trvat..."
 
+#~ msgid "Additional settings"
+#~ msgstr "Další nastavení"
+
 #~ msgid "Additional:"
 #~ msgstr "Dodatečné:"
 
@@ -12020,10 +12059,6 @@ msgstr "vaše platforma"
 
 #~ msgid "Advanced facets block was opened."
 #~ msgstr "Blok pokročilých kritérií byl otevřen."
-
-#, fuzzy
-#~ msgid "Advanced options"
-#~ msgstr "Pokročilá nastavení"
 
 #, fuzzy
 #~| msgid "Advanced Facets"
@@ -12223,13 +12258,6 @@ msgstr "vaše platforma"
 #~| msgid "All my contacts"
 #~ msgid "All contacts"
 #~ msgstr "Všechny mé kontakty"
-
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr ""
-#~ "Všechny budoucí zprávy od odesílatelů vyznačených zpráv budou přesunuty "
-#~ "do vyznačené složky."
 
 #~ msgid "All times will be shown in the timezone %1$s"
 #~ msgstr "Všechny časy budou zobrazeny v časové zóně %1$s"
@@ -13631,6 +13659,9 @@ msgstr "vaše platforma"
 #~ msgid "Calendar custom view"
 #~ msgstr "Vlastní zobrazení kalendáře"
 
+#~ msgid "Calendar workweek view"
+#~ msgstr "Pohled: pracovní týden"
+
 #~ msgid "Cambodia"
 #~ msgstr "Kambodža"
 
@@ -13927,6 +13958,9 @@ msgstr "vaše platforma"
 #~ msgid "Commercial Register:"
 #~ msgstr "Obchodní rejstřík:"
 
+#~ msgid "Common"
+#~ msgstr "Obecné"
+
 #~ msgid "Common Facets"
 #~ msgstr "Běžná kritéria"
 
@@ -14025,12 +14059,6 @@ msgstr "vaše platforma"
 #~ msgid "Could not load all participants for this task."
 #~ msgstr "Nepodařilo se nahrát všechny účastníky tohoto úkolu."
 
-#~ msgid "Could not save auto forward"
-#~ msgstr "Nepodařilo se uložit automatické přeposlání"
-
-#~ msgid "Could not save vacation notice"
-#~ msgstr "Nepodařilo se uložit oznámení o nepřítomnosti"
-
 #~ msgid "Couldn't load all contact images."
 #~ msgstr "Nepodařilo se načíst všechny obrázky kontaktů."
 
@@ -14042,6 +14070,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Couldn't load that email."
 #~ msgstr "Zprávu se nepodařilo načíst."
+
+#~ msgid "Couldn't load your auto forward."
+#~ msgstr "Nepodařilo se načíst vaše automatické odeslání."
 
 #~ msgid "Country (other)"
 #~ msgstr "Země (jiná)"
@@ -14237,6 +14268,9 @@ msgstr "vaše platforma"
 #~ msgid "Default sender address:"
 #~ msgstr "Výchozí adresa odesílatele:"
 
+#~ msgid "Default sender for vacation notice"
+#~ msgstr "Výchozí odesílatel oznámení o nepřítomnosti"
+
 #~ msgid "Default view"
 #~ msgstr "Výchozí zobrazení"
 
@@ -14390,6 +14424,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Disabled"
 #~ msgstr "Zakázaný"
+
+#~ msgid "Display"
+#~ msgstr "Zobrazení"
 
 #~ msgid "Display Name"
 #~ msgstr "Zobrazované jméno"
@@ -14698,6 +14735,9 @@ msgstr "vaše platforma"
 #~ msgid "Email Address:"
 #~ msgstr "E-mailová adresa:"
 
+#~ msgid "Email addresses"
+#~ msgstr "E-mailové adresy"
+
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "E-mailové oznámení stavu Přijato/Odmítnuto"
 
@@ -14761,6 +14801,9 @@ msgstr "vaše platforma"
 #~| msgid "Available Categories:"
 #~ msgid "Enable categories"
 #~ msgstr "Dostupné kategorie:"
+
+#~ msgid "Enable for the following addresses"
+#~ msgstr "Povolit pro následující adresy"
 
 #~ msgid "Enable start page hovers"
 #~ msgstr "Povolit vyskakovací okna na stránce Start"
@@ -15255,6 +15298,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Files View"
 #~ msgstr "Souborový pohled"
+
+#~ msgid "Files can not be uploaded, because quota exceeded."
+#~ msgstr "Soubor nelze nahrát, protože byl překročen limit."
 
 #~ msgid "Fine grid"
 #~ msgstr "Jemná mřížka"
@@ -16402,6 +16448,9 @@ msgstr "vaše platforma"
 #~ msgid "Mime type"
 #~ msgstr "Druh souboru"
 
+#~ msgid "Minimize"
+#~ msgstr "Minimalizovat"
+
 #~ msgid "Mobile"
 #~ msgstr "Mobil"
 
@@ -16794,6 +16843,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Number of days in custom view"
 #~ msgstr "Počet dní ve vlastním pohledu"
+
+#~ msgid "Number of days in work week"
+#~ msgstr "Počet dní v pracovním týdnu"
 
 #~ msgid "Number of rows to be displayed in card view:"
 #~ msgstr "Počet řádků zobrazených v kartovém pohledu:"
@@ -17235,6 +17287,12 @@ msgstr "vaše platforma"
 #~ msgid "Place of Signature:"
 #~ msgstr "Místo podpisu:"
 
+#~ msgid "Play audio files"
+#~ msgstr "Přehrát audio soubory"
+
+#~ msgid "Play video files"
+#~ msgstr "Přehrát video soubory"
+
 #~ msgid "Please ask me every time"
 #~ msgstr "Pokaždé se mě, prosím, zeptat"
 
@@ -17337,6 +17395,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Please set valid folder!"
 #~ msgstr "Nastavte, prosím, platnou složku!"
+
+#~ msgid "Please specify these missing variables: "
+#~ msgstr "Zadejte, prosím, tyto chybějící proměnné: "
 
 #~ msgid "Please wait ..."
 #~ msgstr "Čekejte prosím..."
@@ -18107,6 +18168,9 @@ msgstr "vaše platforma"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Zobrazit karty pro příchozí poštu"
 
+#~ msgid "Show all images for"
+#~ msgstr "Zobrazit všechny obrázky"
+
 #~ msgid "Show all mails. Note: Mails are no longer grouped by conversation."
 #~ msgstr ""
 #~ "Zobrazit všechny zprávy. Poznámka: Zprávy již nejsou seskupené podle "
@@ -18676,6 +18740,9 @@ msgstr "vaše platforma"
 #~ msgid "Template"
 #~ msgstr "Šablona"
 
+#~ msgid "Text"
+#~ msgstr "Text"
+
 #~ msgid "Text 1"
 #~ msgstr "Text 1"
 
@@ -19104,6 +19171,9 @@ msgstr "vaše platforma"
 #~ msgstr ""
 #~ "Sdílená data budou přístupná komukoliv na internetu. Rozmyslete si, "
 #~ "prosím, která data chcete sdílet."
+
+#~ msgid "The start date must be before the end date."
+#~ msgstr "Datum začátku musí být před datem konce."
 
 #~ msgid "The subscription %s is now disabled"
 #~ msgstr "Přihlášení k odběru %s je nyní zakázáno"
@@ -19619,9 +19689,6 @@ msgstr "vaše platforma"
 #~ msgid "Tile"
 #~ msgstr "Dlaždice"
 
-#~ msgid "Time Range"
-#~ msgstr "Časový rozsah"
-
 #~ msgid "Time range for the calender view"
 #~ msgstr "Časový rozsah pro kalendář"
 
@@ -19630,6 +19697,9 @@ msgstr "vaše platforma"
 
 #~ msgid "Time range for the team view"
 #~ msgstr "Časový rozsah pro tým"
+
+#~ msgid "Time scale in minutes"
+#~ msgstr "Časový rozsah v minutách"
 
 #~ msgid "Timezone"
 #~ msgstr "Časové pásmo"
@@ -20206,6 +20276,9 @@ msgstr "vaše platforma"
 #~ msgid "V-split view"
 #~ msgstr "V-rozdělení"
 
+#~ msgid "Vacation Notice"
+#~ msgstr "Oznámení o nepřítomnosti"
+
 #~ msgid "Vanuatu"
 #~ msgstr "Vanuatu"
 
@@ -20388,9 +20461,6 @@ msgstr "vaše platforma"
 #~ msgctxt "address"
 #~ msgid "Work"
 #~ msgstr "Práce"
-
-#~ msgid "Workweek View"
-#~ msgstr "Pohled: pracovní týden"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr "Přejete si vytvořit následující sériovou narozeninovou schůzku?"
@@ -20621,11 +20691,11 @@ msgstr "vaše platforma"
 #~ "Soubor „%1$s“ nelze nahrát, protože je větší než maximální povolená "
 #~ "velikost souboru %2$s"
 
+#~ msgid "Your selected picture will be displayed after saving"
+#~ msgstr "Vybraný obrázek bude zobrazen po uložení"
+
 #~ msgid "Your session has expired. You have to close this window."
 #~ msgstr "Vaše sezení vypršelo. Toto okno musíte zavřít."
-
-#~ msgid "Your vacation notice has been saved"
-#~ msgstr "Vaše oznámení o nepřítomnosti byla uloženo"
 
 #~ msgid "ZIP"
 #~ msgstr "PSČ"
@@ -20991,6 +21061,12 @@ msgstr "vaše platforma"
 #~ msgid "default"
 #~ msgstr "výchozí"
 
+#~ msgid "disable"
+#~ msgstr "zakázat"
+
+#~ msgid "disabled"
+#~ msgstr "zakázáno"
+
 #, fuzzy
 #~| msgid "Edit signature"
 #~ msgid "edit share"
@@ -21210,6 +21286,12 @@ msgstr "vaše platforma"
 #~ msgid "route planner"
 #~ msgstr "plánovač cest"
 
+#~ msgid "seconds"
+#~ msgstr "sekundy"
+
+#~ msgid "select all"
+#~ msgstr "označit vše"
+
 #~ msgid "september"
 #~ msgstr "září"
 
@@ -21280,6 +21362,9 @@ msgstr "vaše platforma"
 
 #~ msgid "unread"
 #~ msgstr "nepřečtené"
+
+#~ msgid "unselect all"
+#~ msgstr "odznačit vše"
 
 #~ msgid "vacation"
 #~ msgstr "nepřítomnost"
