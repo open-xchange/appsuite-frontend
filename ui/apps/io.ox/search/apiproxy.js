@@ -143,14 +143,17 @@ define('io.ox/search/apiproxy', [
                                     model.defaults.options.mapping[app] = model.defaults.options.defaultApp;
                                     return autocomplete(standard, options, { params: { module: model.getModule() } });
                                 }
-                                return error;
+                                throw error;
                             })
                             .then(function (data) {
                                 // match convention in autocomplete tk
                                 model.set({ query: query, autocomplete: data }, { silent: true });
                                 return { list: data, hits: 0 };
 
-                            }, notifications.yell);
+                            }, function (error) {
+                                notifications.yell(error);
+                                throw error;
+                            });
                 },
                 query: (function () {
 
@@ -188,12 +191,13 @@ define('io.ox/search/apiproxy', [
                         return result;
                     }
 
-                    function fail(result) {
-                        notifications.yell(result);
+                    function fail(error) {
+                        notifications.yell(error);
                         app.view.model.trigger('query:fail');
                         app.view.model.trigger('query:stop');
                         app.view.trigger('query:stop');
                         app.view.trigger('query:fail');
+                        throw error;
                     }
 
                     return function (sync, params) {

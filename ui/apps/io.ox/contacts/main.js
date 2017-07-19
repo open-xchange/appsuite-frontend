@@ -959,6 +959,7 @@ define('io.ox/contacts/main', [
                 app.grid.selection.on({
                     'change': function (event, list, opt) {
                         if (opt && opt.retriggerUnlessEmpty) return;
+                        if (!list.length) return;
                         metrics.trackEvent({
                             app: 'contacts',
                             target: 'list',

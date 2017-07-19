@@ -463,6 +463,9 @@ define('io.ox/files/actions', [
             // is folder?
             if (e.collection.has('folders')) return false;
 
+            // bug 54493: no "Save as PDF" for anonymous guests (same solution as in bug 42621)
+            if (capabilities.has('guest && anonymous')) return false;
+
             var
                 model         = e.baton.models[0];
             //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());

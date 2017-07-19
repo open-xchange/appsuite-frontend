@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-appsuite\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-12 13:11+0000\n"
+"POT-Creation-Date: 2017-07-18 16:35+0000\n"
 "PO-Revision-Date: 2015-05-29 13:25+0000\n"
 "Last-Translator: resellerclub <ameya.d@directi.com>\n"
 "Language-Team: NAME <EMAIL>\n"
@@ -61,6 +61,7 @@ msgid_plural "%1$d attachments"
 msgstr[0] "%1$d ek dosya%1$d ek dosya"
 
 #. estimated upload duration
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "%1$d day"
@@ -107,6 +108,13 @@ msgid "%1$d minute"
 msgid_plural "%1$d minutes"
 msgstr[0] "%1$d dakika%1$d dakika"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "%1$d minute"
+#| msgid_plural "%1$d minutes"
+msgid "%1$d minutes"
+msgstr "%1$d dakika%1$d dakika"
+
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 #, fuzzy
 msgid "%1$d month"
@@ -147,6 +155,13 @@ msgid "%1$d second"
 msgid_plural "%1$d seconds"
 msgstr[0] "%1$d saniye%1$d saniye"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#, fuzzy
+#| msgid "%1$d second"
+#| msgid_plural "%1$d seconds"
+msgid "%1$d seconds"
+msgstr "%1$d saniye%1$d saniye"
+
 #. This is a short version of "x messages selected", will be used in mobile mail list view
 #: apps/io.ox/mail/main.js module:io.ox/mail
 msgid "%1$d selected"
@@ -159,7 +174,6 @@ msgstr "bir ay"
 
 #: apps/io.ox/core/folder/node.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$d unread mails"
 msgid "%1$d unread"
 msgstr "%1$d okunmamış mail"
 
@@ -420,16 +434,18 @@ msgstr "1 dosya değiştirildi"
 
 #: apps/io.ox/core/tk/list-dnd.js module:io.ox/core
 #: apps/io.ox/core/tk/selection.js
+#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: module:io.ox/core/viewer
 msgid "1 item"
 msgid_plural "%1$d items"
 msgstr[0] "1 öğe%1$d öğeler"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "1 minute"
 msgstr "1 dakika"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "10 minutes"
 msgstr "10 dakika"
 
@@ -442,7 +458,7 @@ msgstr "100%"
 msgid "15 minutes"
 msgstr "15 dakika"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "3 minutes"
 msgstr "3 dakika"
 
@@ -451,7 +467,7 @@ msgid "30 minutes"
 msgstr "30 dakika"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "5 minutes"
 msgstr "5 dakika"
 
@@ -663,7 +679,6 @@ msgstr "Koşul Ekle"
 
 #: apps/io.ox/contacts/actions.js module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 msgid "Add contact"
 msgstr "Kişi ekle"
@@ -877,14 +892,9 @@ msgstr "Yeni katılımcı eklendi"
 msgid "Adding files with identical names"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Additional settings"
-msgstr "Ek Ayarlar"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Address Home"
 msgid "Address"
 msgstr "Ev Adresi"
 
@@ -930,6 +940,13 @@ msgstr "Yönetici"
 #: apps/io.ox/files/share/permissions.js
 msgid "Administrator"
 msgstr "Yönetici"
+
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Advanced Settings"
+msgid "Advanced settings"
+msgstr "Gelişmiş Ayarlar"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -986,15 +1003,20 @@ msgstr "Bu dosya silinmediBu dosyalar silinmedi"
 msgid "All folders"
 msgstr "Tüm klasörler"
 
-#. informs user about the consequences when creating a rule for selected mails
+#. informs user about the consequences when creating a rule for a selected mail
 #. %1$s represents a email address
 #: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
 #, fuzzy
 msgid "All future messages from %1$s will be moved to the selected folder."
-msgid_plural ""
+msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+
+#. informs user about the consequences when creating a rule for selected mails
+#: apps/io.ox/mail/actions/copyMove.js module:io.ox/mail
+#, fuzzy
+msgid ""
 "All future messages from the senders of the selected mails will be moved to "
 "the selected folder."
-msgstr[0] "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
+msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 #, fuzzy
@@ -1031,7 +1053,7 @@ msgstr "html formatlı e-postalara izin ver"
 msgid "Allow pre-loading of externally linked images"
 msgstr "Dışarıdan eklenen linklerin önceden dolmasına izin ver"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Always add the following recipient to blind carbon copy (BCC)"
 msgstr ""
 
@@ -1088,7 +1110,7 @@ msgstr "Herhangi bir alıcı"
 msgid "App Store"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Append vCard"
 msgstr "Vcard iliştir"
 
@@ -1114,6 +1136,8 @@ msgstr "Kuralı uygula"
 
 #. Applies changes to an existing appointment, used in scheduling view
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #, fuzzy
 msgid "Apply changes"
 msgstr "Değişiklikleri kabul et"
@@ -1130,7 +1154,6 @@ msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 #, fuzzy
-#| msgid "Apply rule if any condition is met."
 msgid "Apply rule if any condition is met"
 msgstr "Herhangi bir koşulun sağlanması durumunda kuralı uygula"
 
@@ -1242,7 +1265,7 @@ msgstr "Yardımcı"
 msgid "Attach Vcard"
 msgstr "Vcard ekle"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Attachment"
 msgstr "Ek"
 
@@ -1292,9 +1315,11 @@ msgstr "Yazar"
 msgid "Authorize your account again"
 msgstr "Hesabınızı yeniden doğrulamak için tıklayınız"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/autoforward/settings/register.js
-msgid "Auto Forward"
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js
+#, fuzzy
+#| msgid "Auto Forward"
+msgid "Auto forward"
 msgstr "Otomatik Yönlendirme"
 
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
@@ -1302,7 +1327,7 @@ msgid ""
 "Auto-configuration failed. Do you want to configure your account manually?"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Auto-save email drafts"
 msgstr "E-posta taslaklarını otomatik olarak kaydet"
 
@@ -1399,6 +1424,7 @@ msgid ""
 "information. It will take less than a minute."
 msgstr ""
 
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr ""
@@ -1558,11 +1584,6 @@ msgstr "İş haftası görüntüleyicisi"
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
 msgstr "Takvim görünüşü"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, fuzzy
-msgid "Calendar workweek view"
-msgstr "İş haftası görüntüleyicisi"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 #, fuzzy
@@ -1835,12 +1856,13 @@ msgstr ""
 #: apps/io.ox/core/wizard/registry.js module:io.ox/core/wizard
 #: apps/io.ox/editor/main.js module:io.ox/editor
 #: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/files/actions/share.js apps/io.ox/files/mediaplayer.js
-#: apps/io.ox/files/share/permissions.js apps/io.ox/files/upload/view.js
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
-#: apps/io.ox/mail/actions/source.js module:io.ox/mail apps/io.ox/mail/main.js
-#: apps/io.ox/mail/statistics.js apps/io.ox/onboarding/clients/view-mobile.js
-#: module:io.ox/core/onboarding apps/plugins/upsell/simple-wizard/register.js
+#: apps/io.ox/files/actions/share.js apps/io.ox/files/share/permissions.js
+#: apps/io.ox/files/upload/view.js apps/io.ox/mail/accounts/settings.js
+#: module:io.ox/mail/accounts/settings apps/io.ox/mail/actions/source.js
+#: module:io.ox/mail apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
+#: apps/io.ox/mail/main.js apps/io.ox/mail/statistics.js
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/plugins/upsell/simple-wizard/register.js
 #: module:plugins/upsell/simple-wizard
 msgid "Close"
 msgstr "Kapat"
@@ -1866,7 +1888,6 @@ msgstr "Klasör görünümünü kapat"
 
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
-#| msgid "close for %1$s"
 msgid "Close for %1$s"
 msgstr "%1$s için kapat"
 
@@ -1901,7 +1922,7 @@ msgid "Collapse form"
 msgstr "Formu daralt"
 
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js apps/io.ox/portal/settings/pane.js
 #: module:io.ox/portal
 msgid "Color"
@@ -1945,10 +1966,6 @@ msgstr "Yorumlar ve Öneriler"
 msgid "Commercial Register"
 msgstr "Ticari Tescil"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Common"
-msgstr "Ortak "
-
 #. Emojis that work across all Japanese carriers.
 #. Japanese: 他社共通絵文字
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -1974,7 +1991,7 @@ msgstr "Şirket"
 
 #: apps/io.ox/mail/compose/main.js module:io.ox/mail
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/settings/compose/register.js apps/io.ox/mail/toolbar.js
 msgid "Compose"
 msgstr "Oluştur"
 
@@ -2018,7 +2035,7 @@ msgstr "E-posta adresi"
 msgid "Configure now"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Confirm recipients when replying to a mailing list"
 msgstr ""
 
@@ -2128,7 +2145,6 @@ msgstr "İçerik"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Contains"
 msgid "Contains not"
 msgstr "İçerik"
 
@@ -2229,7 +2245,6 @@ msgid "Could not load this list"
 msgstr "Bu liste yüklenemedi"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/settings/signatures/settings/pane.js
 msgid "Could not save settings"
 msgstr "Ayarlar yüklenemedi"
 
@@ -2262,10 +2277,6 @@ msgstr "Veri yüklenmedi"
 msgid "Couldn't load that task."
 msgstr "Bu görev yüklenemedi."
 
-#: apps/io.ox/mail/autoforward/settings/register.js module:io.ox/mail
-msgid "Couldn't load your auto forward."
-msgstr "Otomatik yönlendirmeniz yüklenemedi."
-
 #: apps/io.ox/core/settings/user.js module:io.ox/contacts
 msgid "Couldn't load your contact data."
 msgstr "İletişim veriniz yüklenemedi"
@@ -2273,10 +2284,6 @@ msgstr "İletişim veriniz yüklenemedi"
 #: apps/io.ox/mail/mailfilter/settings/register.js module:io.ox/mail
 msgid "Couldn't load your mail filter rules."
 msgstr "E-posta filtre kurallarınız yüklenemedi"
-
-#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
-msgid "Couldn't load your vacation notice."
-msgstr "Tatil bildiriminiz yüklenemedi."
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Country"
@@ -2500,6 +2507,13 @@ msgstr "Gün"
 msgid "Days"
 msgstr "Günler"
 
+#. Context: Vacation notices
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Number of days between vacation notices to the same sender"
+msgid "Days between notices to the same sender"
+msgstr "Tatil bildirimleri arasındaki gün sayısını aynı göndericiye yönlendir"
+
 #. Opens popup to decide if desktop notifications should be shown
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Decide now"
@@ -2532,7 +2546,7 @@ msgstr "Giriş sonrası varsayılan uygulama"
 msgid "Default calendar"
 msgstr "Varsayılan hatırlatma"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default font style"
 msgstr ""
 
@@ -2540,14 +2554,14 @@ msgstr ""
 msgid "Default reminder"
 msgstr "Varsayılan hatırlatma"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+msgid "Default sender"
+msgstr "Varsayılan hatırlatma"
+
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Default sender address"
 msgstr "Varsayılan gönderen adresi"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-#, fuzzy
-msgid "Default sender for vacation notice"
-msgstr "Tatil bildiriminiz yüklenemedi."
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 #, fuzzy
@@ -2560,6 +2574,12 @@ msgstr "Yeni mesajlar için varsayılan imza"
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
 msgid "Default signature for replies or forwardings"
+msgstr "Cevaplar ve yönlendirmeler için varsayılan imza"
+
+#: apps/io.ox/mail/settings/signatures/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Default signature for replies or forwardings"
+msgid "Default signature for replies or forwards"
 msgstr "Cevaplar ve yönlendirmeler için varsayılan imza"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -2824,10 +2844,6 @@ msgstr ""
 msgctxt "dialog"
 msgid "Discard message"
 msgstr "Mesajı sil "
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Display"
-msgstr " Görüntüle"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
@@ -3234,6 +3250,10 @@ msgstr "Sona erme tarihi"
 msgid "Due on %1$s"
 msgstr "%1$s tarihinde sona eriyor"
 
+#: apps/io.ox/files/settings/pane.js module:io.ox/files
+msgid "Duration per image"
+msgstr ""
+
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "EAS"
 msgstr ""
@@ -3408,10 +3428,6 @@ msgstr "E posta 3"
 msgid "Email address"
 msgstr "E posta adresi"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Email addresses"
-msgstr "E posta adresleri"
-
 #. %1$s: Mail sender
 #. %2$s: Mail subject
 #: apps/io.ox/mail/detail/mobileView.js module:io.ox/mail
@@ -3473,9 +3489,7 @@ msgid "Empty trash"
 msgstr "Boş"
 
 #: apps/io.ox/core/sub/settings/pane.js module:io.ox/core/sub
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/mailfilter/settings/filter.js
-#: apps/io.ox/mail/vacationnotice/settings/model.js
+#: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 #: apps/io.ox/portal/settings/pane.js module:io.ox/portal
 msgid "Enable"
 msgstr " Etkinleştir"
@@ -3485,12 +3499,16 @@ msgstr " Etkinleştir"
 msgid "Enable %1$s"
 msgstr " Etkinleştir"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-#, fuzzy
-msgid "Enable for the following addresses"
-msgstr "Belirtilen adresler için etkinleştirilmiştir"
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+msgid "Enable or disable auto forward"
+msgstr ""
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+msgid "Enable or disable vacation notice"
+msgstr "Tatil bildiriminiz yüklenemedi."
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "End"
 msgstr "Son"
 
@@ -3512,7 +3530,6 @@ msgstr "biter"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Ends on"
 msgid "Ends not with"
 msgstr "biter"
 
@@ -3525,7 +3542,6 @@ msgstr "biter"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Ends on"
 msgid "Ends with"
 msgstr "biter"
 
@@ -3748,6 +3764,17 @@ msgstr "Sona eriyor"
 msgid "Export"
 msgstr "Dışarı aktar"
 
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Export as VCard"
+msgstr ""
+
+#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
+#, fuzzy
+#| msgid "Send as vCard"
+msgid "Export as vCard"
+msgstr "vCard olarak gönder"
+
 #: apps/io.ox/core/export/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Klasörü dışarı aktar"
@@ -3935,7 +3962,6 @@ msgstr "Dosya taşındı"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "File name"
 msgid "File into"
 msgstr "Dosya ismi"
 
@@ -3959,15 +3985,9 @@ msgstr "Dosya sürüm masasında, ilk satır şuanki sürümü temsil eder."
 msgid "Files"
 msgstr "Dosya"
 
-#: apps/io.ox/contacts/model.js module:io.ox/contacts
-#, fuzzy
-msgid "Files can not be uploaded, because quota exceeded."
-msgstr ""
-"\"%1$s\" dosyası maksimum dosya kota limiti %2$s i geçtiği için "
-"yüklenememektedir"
-
 #. %1$s is an upload limit like for example 10mb
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
+#: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/io.ox/tasks/model.js module:io.ox/tasks
 #, fuzzy
 msgid "Files can not be uploaded, because upload limit of %1$s is exceeded."
@@ -4143,7 +4163,7 @@ msgstr "Takip et"
 msgid "Following"
 msgstr "Takip eden "
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Font"
 msgstr ""
 
@@ -4182,7 +4202,7 @@ msgstr "Şifremi Unuttum ?"
 msgid "Format"
 msgstr "Format"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Format emails as"
 msgstr "Emailleri formatla"
 
@@ -4191,11 +4211,11 @@ msgstr "Emailleri formatla"
 msgid "Forward"
 msgstr "Yönlendir"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Forward all incoming emails to this address"
 msgstr "Bütün gelen mailleri bu adrese yönlendir"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Forward emails as"
 msgstr "Emailleri yönlendir"
 
@@ -4358,7 +4378,6 @@ msgstr "açık mavi"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Create"
 msgid "Greater"
 msgstr "Oluştur"
 
@@ -4366,7 +4385,6 @@ msgstr "Oluştur"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Create list"
 msgid "Greater equals"
 msgstr "Liste oluştur"
 
@@ -4402,11 +4420,11 @@ msgid "Guided tour for this app"
 msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
-#: apps/io.ox/mail/settings/pane.js
+#: apps/io.ox/mail/settings/compose/settings/pane.js
 msgid "HTML"
 msgstr "HTML"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "HTML and plain text"
 msgstr " HTML ve düz metin dosyası"
 
@@ -4419,7 +4437,6 @@ msgstr "Başlık"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Header"
 msgid "Header exists"
 msgstr "Başlık"
 
@@ -4753,7 +4770,7 @@ msgstr ""
 msgid "Initial folder"
 msgstr "Dosyayı yeniden adlandır"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Inline"
 msgstr " Satıriçi"
 
@@ -4771,7 +4788,7 @@ msgstr ""
 msgid "Insert inline image"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Insert the original email text to a reply"
 msgstr "Orjinal e-posta metnini yanıta yerleştir"
 
@@ -4873,7 +4890,6 @@ msgstr "kesinlikle "
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #, fuzzy
-#| msgid "Is exactly"
 msgid "Is not exactly"
 msgstr "kesinlikle "
 
@@ -4949,7 +4965,7 @@ msgstr "KB"
 msgid "Keep"
 msgstr "Sakla"
 
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 msgid "Keep a copy of the message"
 msgstr "Mesajın kopyasını sakla"
 
@@ -5247,6 +5263,13 @@ msgctxt "app"
 msgid "Mail"
 msgstr "E posta"
 
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "Compose"
+msgctxt "settings"
+msgid "Mail Compose"
+msgstr "Oluştur"
+
 #: apps/io.ox/mail/mailfilter/settings/filter.js module:io.ox/mail
 msgid "Mail Filter Rules"
 msgstr "E-posta Filtre Kuralları"
@@ -5491,7 +5514,6 @@ msgstr "Eşleşmeler"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Matches"
 msgid "Matches not"
 msgstr "Eşleşmeler"
 
@@ -5522,6 +5544,11 @@ msgstr "Üyeler"
 #, fuzzy
 msgid "Members (%1$d)"
 msgstr "Sürümler (%1$d)"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+msgid "Message"
+msgstr "Mesajlaşma"
 
 #. placeholder text in share dialog
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
@@ -5565,10 +5592,6 @@ msgstr "Mesajlaşma"
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Middle name"
 msgstr "İkinci İsim"
-
-#: apps/io.ox/files/mediaplayer.js module:io.ox/files
-msgid "Minimize"
-msgstr "Küçült"
 
 #. %1$s is the minimum password length
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
@@ -5708,9 +5731,6 @@ msgstr "Müzik"
 
 #. %1$s is the display name of the account
 #. e.g. My Xing account
-#: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
-#: apps/io.ox/files/actions/add-storage-account.js module:io.ox/files
-#: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/oauth/keychain.js module:io.ox/core
 #, fuzzy
 msgid "My %1$s account"
@@ -5743,6 +5763,7 @@ msgstr "Adres defterlerim"
 msgid "My calendars"
 msgstr "Takvimlerim"
 
+#: apps/io.ox/contacts/settings/pane.js module:io.ox/contacts
 #: apps/io.ox/core/folder/extensions.js module:io.ox/core
 #: apps/io.ox/core/main.js apps/io.ox/core/settings/pane.js
 #: apps/plugins/portal/userSettings/register.js
@@ -5803,14 +5824,14 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Add condition"
 msgid "Nested condition"
 msgstr "Koşul Ekle"
 
 #. declines the use of desktop notifications
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main apps/io.ox/core/notifications.js
-#: module:io.ox/core
+#: module:io.ox/core apps/io.ox/core/settings/pane.js
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Never"
 msgstr ""
 
@@ -6132,7 +6153,6 @@ msgstr "Normal"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Regex"
 msgid "Not Regex"
 msgstr "Düzenli ifade"
 
@@ -6188,7 +6208,7 @@ msgid "Notification"
 msgstr "Uyarılar"
 
 #. Should be "töne" in german, used for notification sounds. Not "geräusch"
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 msgid "Notification sounds"
 msgstr "Uyarılar"
@@ -6208,14 +6228,6 @@ msgstr "Tüm katılımcıları e-posta ile bilgilendir."
 #. Hides all current notifications (invitations, reminder etc.) for half an hour.
 #: apps/io.ox/core/notifications.js module:io.ox/core
 msgid "Notify me again later"
-msgstr ""
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Number of days between vacation notices to the same sender"
-msgstr "Tatil bildirimleri arasındaki gün sayısını aynı göndericiye yönlendir"
-
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Number of days in work week"
 msgstr ""
 
 #. number of items in a folder
@@ -6749,22 +6761,14 @@ msgstr "Yerler"
 msgid "Plain Text"
 msgstr "Düz Metin"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Plain text"
 msgstr "Düz metin"
 
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Play audio files"
-msgstr "Ses dosyalarını çal"
-
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #, fuzzy
 msgid "Play sound on incoming mail"
 msgstr "Yeni eposta gönder "
-
-#: apps/io.ox/files/toolbar.js module:io.ox/files
-msgid "Play video files"
-msgstr "Video dosyalarını oynat"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid ""
@@ -7014,10 +7018,6 @@ msgstr "Lütfen şifrenizi giriniz"
 msgid "Please sign in again to continue"
 msgstr "Devam etmek için lütfen tekrar giriş yapınız"
 
-#: apps/io.ox/files/legacy_api.js module:io.ox/files
-msgid "Please specify these missing variables: "
-msgstr "Lütfen eksik değişenleri tamamlayınız: "
-
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Please update your browser."
 msgstr "Lütfen tarayıcınızı güncelleyin"
@@ -7239,7 +7239,7 @@ msgid "Private address"
 msgstr "Kişisel adres"
 
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
-#: apps/io.ox/mail/autoforward/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
 #: apps/io.ox/mail/mailfilter/settings/filter/view-form.js
 #: module:io.ox/settings
 msgid "Process subsequent rules"
@@ -7714,7 +7714,6 @@ msgstr "Şunu kaldır: %1$s"
 #. %1$s is the removed search query
 #: apps/io.ox/core/tk/tokenfield.js module:io.ox/core
 #, fuzzy
-#| msgid "Remove %1$s"
 msgid "Removed %1$s."
 msgstr "Şunu kaldır: %1$s"
 
@@ -7757,7 +7756,6 @@ msgstr "Yeni şifreyi tekrarlayınız"
 msgid "Repeat slideshow"
 msgstr "Bir sonraki hafta"
 
-#. Used as a verb to reply to one recipient
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/inplace-reply.js apps/plugins/portal/twitter/util.js
 #: module:plugins/portal
@@ -7777,7 +7775,6 @@ msgctxt "compose"
 msgid "Reply to"
 msgstr "Cevapla"
 
-#. Used as a verb to reply to all recipients
 #: apps/io.ox/mail/inplace-reply.js module:io.ox/mail
 #, fuzzy
 msgid "Reply to all"
@@ -7797,6 +7794,11 @@ msgstr "Tümüne Cevapla"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Göndereni yanıtla"
+
+#. requested url for vcard download hits technical request limit
+#: apps/io.ox/contacts/actions.js module:io.ox/contacts
+msgid "Request limit was hit. Please try again with less contacts selected."
+msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -8190,7 +8192,7 @@ msgstr "vCard olarak gönder"
 msgid "Send by mail"
 msgstr "Posta ile gönder"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #, fuzzy
 msgid "Send from"
 msgstr "Gönderen/Kimden"
@@ -8219,14 +8221,13 @@ msgstr "Yeni eposta gönder "
 msgid "Send notification by email"
 msgstr "Yeni Uyarılar"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid "Send vacation notice during this time only"
 msgstr "Sadece bu zaman için seyahat bildirimi gönder"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Send"
 msgid "Sender"
 msgstr "Gönder"
 
@@ -8245,7 +8246,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "end date "
 msgid "Sent date"
 msgstr "bitiş tarihi"
 
@@ -8310,7 +8310,6 @@ msgstr "Renk belirle"
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Set color"
 msgid "Set color flag"
 msgstr "Renk belirle"
 
@@ -8439,13 +8438,6 @@ msgstr "Tüm alanları göster"
 
 #: apps/io.ox/files/settings/pane.js module:io.ox/files
 #, fuzzy
-#| msgid "Show images"
-msgid "Show all images for"
-msgstr "Resimleri göster"
-
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "Show all items"
 msgid "Show all images just once"
 msgstr "Tüm ögeleri göster"
 
@@ -8605,8 +8597,8 @@ msgstr "Olarak oturum açıldı:"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js
-#: module:io.ox/files apps/io.ox/mail/settings/pane.js module:io.ox/mail
-#: apps/io.ox/mail/view-options.js
+#: module:io.ox/files apps/io.ox/mail/settings/compose/settings/pane.js
+#: module:io.ox/mail apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Boyut"
 
@@ -8708,7 +8700,7 @@ msgstr "Sıralama Türü"
 msgid "Sort options"
 msgstr "Seçenekleri sırala"
 
-#: apps/plugins/notifications/mail/register.js module:plugins/notifications
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Sound"
 msgstr ""
 
@@ -8740,7 +8732,7 @@ msgstr "Standart klasörler"
 msgid "Standard timezone"
 msgstr "Standart zaman dilimi"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
 msgid "Start"
 msgstr "Başla"
@@ -8792,7 +8784,6 @@ msgstr "Başla"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Starts on"
 msgid "Starts not with"
 msgstr "Başlangıç tarihi"
 
@@ -8803,7 +8794,6 @@ msgstr "Başlangıç tarihi"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Starts on"
 msgid "Starts with"
 msgstr "Başlangıç tarihi"
 
@@ -8840,7 +8830,7 @@ msgstr "Öğrenci"
 #: module:io.ox/mail apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/detail/view.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter apps/io.ox/mail/vacationnotice/settings/model.js
+#: module:io.ox/mailfilter apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/mail/view-options.js apps/io.ox/tasks/edit/view-template.js
 #: module:io.ox/tasks/edit apps/io.ox/tasks/main.js module:io.ox/tasks
 msgid "Subject"
@@ -9091,10 +9081,6 @@ msgstr "Geçici"
 msgid "Tentatively accepted"
 msgstr "Geçici olarak kabul edildi"
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "Text"
-msgstr "Text"
-
 #: apps/io.ox/files/view-options.js module:io.ox/files
 #, fuzzy
 msgid "Text documents"
@@ -9121,7 +9107,7 @@ msgctxt "help"
 msgid "The Drive App"
 msgstr "Drive Uygulaması"
 
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid ""
 "The Notice is sent out for messages received by %1$s. You may choose to send "
 "it out for other recipient addresses too:"
@@ -9135,7 +9121,7 @@ msgstr "Hesap isimlendirilmelidir"
 msgid "The activity has been deleted successfully"
 msgstr "Aktivite başarılı şekilde silinmiştir"
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "The allowed quota is reached."
 msgstr "Kota sınırına ulaşıldı."
 
@@ -9191,6 +9177,7 @@ msgid "The email has been sent"
 msgstr "E-posta gönderilmiştir"
 
 #: apps/io.ox/calendar/model.js module:io.ox/calendar
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
 #, fuzzy
 msgid "The end date must be after the start date."
 msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
@@ -9310,7 +9297,7 @@ msgstr ""
 msgid "The notification has been resent"
 msgstr "Bildirim alanı açıldı"
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "The provided filename exceeds the allowed length."
 msgstr "Girilen dosya adı izin verilen uzunluğu aşıyor."
 
@@ -9375,8 +9362,6 @@ msgid "The series never ends."
 msgstr "Seriler %1$s de sona ermektedir"
 
 #: apps/io.ox/calendar/settings/model.js module:io.ox/calendar
-#: apps/io.ox/calendar/settings/pane.js apps/io.ox/contacts/settings/pane.js
-#: module:io.ox/contacts
 msgid ""
 "The setting has been saved and will become active when you enter the "
 "application the next time."
@@ -9394,10 +9379,6 @@ msgstr ""
 msgid "The start date must be before the due date."
 msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
 
-#: apps/io.ox/mail/vacationnotice/settings/filter.js module:io.ox/mail
-msgid "The start date must be before the end date."
-msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
-
 #: apps/io.ox/core/sub/subscriptions.js module:io.ox/core/sub
 msgid "The subscription could not be created."
 msgstr "Abonelik oluşturulamadı."
@@ -9406,6 +9387,12 @@ msgstr "Abonelik oluşturulamadı."
 msgid "The task could not be deleted."
 msgid_plural "The tasks could not be deleted."
 msgstr[0] "Görev silinemedi.Görevler silinemedi."
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/model.js module:io.ox/mail
+#, fuzzy
+#| msgid "Please enter a date in the past"
+msgid "The time frame is in the past."
+msgstr "Lütfen geçmişte olan bir tarih giriniz"
 
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
@@ -9585,7 +9572,7 @@ msgid_plural ""
 "any more."
 msgstr[0] ""
 
-#: apps/io.ox/files/api.js module:io.ox/files apps/io.ox/files/legacy_api.js
+#: apps/io.ox/files/api.js module:io.ox/files
 msgid "This file could not be uploaded."
 msgstr "Bu dosya yüklenemedi."
 
@@ -9678,7 +9665,7 @@ msgstr ""
 msgid "This is a standard folder, which can't be renamed."
 msgstr "Bu standart bir dosyadır, tekrar adlandırılamaz."
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "This is how your message text will look."
 msgstr ""
 
@@ -9786,7 +9773,9 @@ msgid "Time"
 msgstr "Zaman"
 
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-msgid "Time scale in minutes"
+#, fuzzy
+#| msgid "Time scale in minutes"
+msgid "Time scale"
 msgstr "Zaman aralığı (dakikalar ile)"
 
 #: apps/io.ox/core/settings/pane.js module:io.ox/core
@@ -9967,11 +9956,21 @@ msgstr ""
 msgid "Unable to load mail filter rules settings."
 msgstr "Posta filtresi kuralları yüklenemedi."
 
-#: apps/io.ox/mail/autoforward/settings/register.js module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js
 #: apps/io.ox/settings/util.js module:io.ox/core
 msgid "Unable to load mail filter settings."
 msgstr "Posta filtresi kuralları yüklenemedi."
+
+#: apps/io.ox/mail/mailfilter/autoforward/view.js module:io.ox/mail
+msgid "Unable to load your auto forward settings. Please retry later."
+msgstr ""
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#, fuzzy
+#| msgid "Couldn't load your vacation notice."
+msgid "Unable to load your vacation notice. Please retry later."
+msgstr "Tatil bildiriminiz yüklenemedi."
 
 #: apps/io.ox/calendar/print.js module:io.ox/calendar
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -10129,7 +10128,7 @@ msgstr "Sona erme tarihi %1$s"
 msgid "Use accessibility improvements"
 msgstr ""
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Use browser default"
 msgstr ""
 
@@ -10232,10 +10231,16 @@ msgstr "Kullanıcı adı"
 msgid "Username must not be empty."
 msgstr "Kullanıcı adı boş bırakılmamalıdır. "
 
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-#: apps/io.ox/mail/vacationnotice/settings/register.js
-msgid "Vacation Notice"
-msgstr "Tatil Hatırlatması"
+#: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
+#: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
+#, fuzzy
+#| msgid "vacation notice"
+msgid "Vacation notice"
+msgstr "Tatil duyurusu"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Verhalten"
+msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
@@ -10277,6 +10282,15 @@ msgstr "Videolar"
 #: module:io.ox/core/viewer apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/files/toolbar.js apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/toolbar.js apps/io.ox/tasks/toolbar.js module:io.ox/tasks
+msgid "View"
+msgstr "Görüntü"
+
+#. the noun, not the verb (e.g. German "Anzeige")
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#, fuzzy
+#| msgid "View"
+msgctxt "noun"
 msgid "View"
 msgstr "Görüntü"
 
@@ -10369,6 +10383,11 @@ msgstr ""
 msgid "Week"
 msgstr "Hafta"
 
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+msgid "Week start"
+msgstr "Başlangıç tarihi"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #, fuzzy
@@ -10448,14 +10467,21 @@ msgstr "Tüm gün"
 msgid "Wood"
 msgstr ""
 
-#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
-#, fuzzy
-msgid "Work week starts on"
-msgstr "Başlangıç tarihi"
-
 #: apps/io.ox/calendar/freebusy/templates.js module:io.ox/calendar/freebusy
 #: apps/io.ox/calendar/toolbar.js module:io.ox/calendar
 msgid "Workweek"
+msgstr "İş haftası"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek"
+msgid "Workweek length"
+msgstr "İş haftası"
+
+#: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
+#, fuzzy
+#| msgid "Workweek"
+msgid "Workweek view"
 msgstr "İş haftası"
 
 #: apps/io.ox/core/notifications.js module:io.ox/core
@@ -10911,10 +10937,6 @@ msgstr ""
 "\"%1$s\" dosyası maksimum dosya boyutu olan %2$s i geçtiği için "
 "yüklenememektedir"
 
-#: apps/io.ox/contacts/widgets/pictureUpload.js module:io.ox/contacts
-msgid "Your selected picture will be displayed after saving"
-msgstr "seçilen fotografın kaydedildikten sonra görüntülenecektir"
-
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/core/relogin.js
 msgid "Your session is expired"
 msgstr "seansının süresi doldu"
@@ -10935,6 +10957,12 @@ msgstr "Statünüz %s itibari ile başarılı bir şekilde güncellenmiştir."
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid "Your timezone"
 msgstr "saat dilimin"
+
+#: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js module:io.ox/mail
+#, fuzzy
+#| msgid "vacation notice"
+msgid "Your vacation notice is active"
+msgstr "Tatil duyurusu"
 
 #. Zettabytes
 #: apps/io.ox/core/strings.js module:io.ox/core
@@ -11028,21 +11056,18 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Apply rule if all conditions are met"
 msgid "continue if all conditions are met"
 msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Apply rule if all conditions are met"
 msgid "continue if all of these conditions are met"
 msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Apply rule if all conditions are met"
 msgid "continue if any of these conditions are met"
 msgstr "Tüm koşulların sağlanması durumunda kuralları uygula"
 
@@ -11078,11 +11103,6 @@ msgstr ""
 msgid "declined"
 msgstr "reddedilmiş"
 
-#: apps/io.ox/mail/vacationnotice/settings/register.js module:io.ox/mail
-#, fuzzy
-msgid "default sender"
-msgstr "Varsayılan hatırlatma"
-
 #. object permissions - delete
 #: apps/io.ox/core/permissions/permissions.js module:io.ox/core
 msgid "delete all objects"
@@ -11102,15 +11122,6 @@ msgstr "sadece kendi nesnelerini sil "
 #: module:io.ox/mailfilter
 msgid "deleted"
 msgstr "silinmiş"
-
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
-#, fuzzy
-msgid "disable"
-msgstr "engelli"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "disabled"
-msgstr "engelli"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -11338,7 +11349,6 @@ msgstr "turuncu"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #, fuzzy
-#| msgid "Your timezone"
 msgid "original time zone"
 msgstr "saat dilimin"
 
@@ -11373,21 +11383,10 @@ msgstr "kırmızı"
 msgid "second"
 msgstr "ikinci"
 
-#: apps/io.ox/files/settings/pane.js module:io.ox/files
-#, fuzzy
-#| msgid "second"
-msgid "seconds"
-msgstr "ikinci"
-
 #: apps/io.ox/mail/mailfilter/settings/filter/actions/register.js
 #: module:io.ox/mailfilter
 msgid "seen"
 msgstr "görüldü"
-
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
-#, fuzzy
-msgid "select all"
-msgstr "Tümünü seç"
 
 #: apps/io.ox/core/export/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
@@ -11458,18 +11457,9 @@ msgstr "Bilinmeyen gönderen"
 msgid "unlimited"
 msgstr "Limitsiz "
 
-#: apps/io.ox/mail/vacationnotice/settings/view-form.js module:io.ox/mail
-#, fuzzy
-msgid "unselect all"
-msgstr "Tümünü seç"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "vCard"
 msgstr "vCard"
-
-#: apps/io.ox/mail/vacationnotice/settings/model.js module:io.ox/mail
-msgid "vacation notice"
-msgstr "Tatil duyurusu"
 
 #. (From) email1 via email2. Appears in email detail view.
 #: apps/io.ox/mail/util.js module:io.ox/core
@@ -11629,8 +11619,8 @@ msgstr "Platformunuz"
 #~ msgid "Add new folder for this subscription"
 #~ msgstr "Bu üyelik için yeni klasör ekle"
 
-#~ msgid "Advanced Settings"
-#~ msgstr "Gelişmiş Ayarlar"
+#~ msgid "Additional settings"
+#~ msgstr "Ek Ayarlar"
 
 #~ msgid "Advanced facets block was closed."
 #~ msgstr "Gelişmiş özellikler engeli kapatıldı. "
@@ -11644,12 +11634,6 @@ msgstr "Platformunuz"
 #, fuzzy
 #~ msgid "All contacts"
 #~ msgstr "Kişi ekle"
-
-#, fuzzy
-#~ msgid ""
-#~ "All future messages from the senders of the selected mails will be moved "
-#~ "to the selected folder."
-#~ msgstr "%1$d günden eski tüm mesajlar arşiv klasörüne taşınacak"
 
 #~ msgid "Applications"
 #~ msgstr "Uygulamalar"
@@ -11677,6 +11661,10 @@ msgstr "Platformunuz"
 #, fuzzy
 #~ msgid "CalDAV Login"
 #~ msgstr "CalDAV URL"
+
+#, fuzzy
+#~ msgid "Calendar workweek view"
+#~ msgstr "İş haftası görüntüleyicisi"
 
 #, fuzzy
 #~ msgid "CardDAV Login"
@@ -11737,6 +11725,9 @@ msgstr "Platformunuz"
 #~ msgid "Close this reminder"
 #~ msgstr "Bu hatırlatıcıyı kapat"
 
+#~ msgid "Common"
+#~ msgstr "Ortak "
+
 #, fuzzy
 #~| msgid "Compact"
 #~ msgid "Compact rows"
@@ -11749,6 +11740,9 @@ msgstr "Platformunuz"
 #, fuzzy
 #~ msgid "Continue presentation"
 #~ msgstr "Sunumlar"
+
+#~ msgid "Couldn't load your auto forward."
+#~ msgstr "Otomatik yönlendirmeniz yüklenemedi."
 
 #~ msgid "Day View"
 #~ msgstr "Gün Görüntüle"
@@ -11767,6 +11761,9 @@ msgstr "Platformunuz"
 #~ msgid "Direct link: %1$s"
 #~ msgstr "Link yönlendir: %1$s"
 
+#~ msgid "Display"
+#~ msgstr " Görüntüle"
+
 #~ msgid "Display Name"
 #~ msgstr "Görünen İsim"
 
@@ -11781,6 +11778,9 @@ msgstr "Platformunuz"
 #~| msgid "Mail address"
 #~ msgid "Edit categories"
 #~ msgstr "E-posta adresi"
+
+#~ msgid "Email addresses"
+#~ msgstr "E posta adresleri"
 
 #~ msgid "Email notification for Accept/Declined"
 #~ msgstr "Kabul Etme/Geri Çevirme için E-posta bildirimi"
@@ -11804,6 +11804,10 @@ msgstr "Platformunuz"
 #~| msgid "Mail address"
 #~ msgid "Enable categories"
 #~ msgstr "E-posta adresi"
+
+#, fuzzy
+#~ msgid "Enable for the following addresses"
+#~ msgstr "Belirtilen adresler için etkinleştirilmiştir"
 
 #~ msgid "Enabled"
 #~ msgstr "Etkinleştirilmiş"
@@ -11875,6 +11879,12 @@ msgstr "Platformunuz"
 
 #~ msgid "Filename"
 #~ msgstr "Dosya Adı "
+
+#, fuzzy
+#~ msgid "Files can not be uploaded, because quota exceeded."
+#~ msgstr ""
+#~ "\"%1$s\" dosyası maksimum dosya kota limiti %2$s i geçtiği için "
+#~ "yüklenememektedir"
 
 #~ msgid "Flag mail with"
 #~ msgstr "ile postayı işaretle"
@@ -11992,6 +12002,9 @@ msgstr "Platformunuz"
 #~ msgid "May"
 #~ msgstr "Mayıs"
 
+#~ msgid "Minimize"
+#~ msgstr "Küçült"
+
 #~ msgid "Monthly on day %1$d"
 #~ msgstr "%1$d gününde aylık"
 
@@ -12053,8 +12066,17 @@ msgstr "Platformunuz"
 #~ msgid "Pause the presentation"
 #~ msgstr "Sunumlar"
 
+#~ msgid "Play audio files"
+#~ msgstr "Ses dosyalarını çal"
+
+#~ msgid "Play video files"
+#~ msgstr "Video dosyalarını oynat"
+
 #~ msgid "Please choose a sentence below."
 #~ msgstr "Lütfen aşağıdan bir cümle seçiniz."
+
+#~ msgid "Please specify these missing variables: "
+#~ msgstr "Lütfen eksik değişenleri tamamlayınız: "
 
 #, fuzzy
 #~ msgctxt "presenter"
@@ -12174,6 +12196,10 @@ msgstr "Platformunuz"
 #~ msgid "Show Tabs for inbox"
 #~ msgstr "Gelen kutunuzda herhangi bir e-posta bulunmuyor"
 
+#, fuzzy
+#~ msgid "Show all images for"
+#~ msgstr "Resimleri göster"
+
 #~ msgid "Show comments"
 #~ msgstr "Yorumları göster"
 
@@ -12237,6 +12263,9 @@ msgstr "Platformunuz"
 
 #~ msgid "Tag mail with"
 #~ msgstr "E postayı işaretleyin "
+
+#~ msgid "Text"
+#~ msgstr "Text"
 
 #~ msgid ""
 #~ "The appointment is repeated <a href=\"#\"  data-widget=\"number\" data-"
@@ -12349,6 +12378,9 @@ msgstr "Platformunuz"
 #~ "Seri <a href=\"#\" data-attribute=\"ending\" data-widget=\"options\">asla "
 #~ "sona ermez</a>."
 
+#~ msgid "The start date must be before the end date."
+#~ msgstr "Başlangıç tarihi bitiş tarihinden önce olmalıdır"
+
 #~ msgid "There is already %1$d appointment in this timeframe."
 #~ msgid_plural "There are already %1$d appointments in this timeframe."
 #~ msgstr[0] ""
@@ -12424,6 +12456,9 @@ msgstr "Platformunuz"
 #~ "%2$d derecelendirmesi %1$d onaylanmıştır. Derecelendirmenizi ayarlamak "
 #~ "için sağ ve sol tuşlarını kullanın."
 
+#~ msgid "Vacation Notice"
+#~ msgstr "Tatil Hatırlatması"
+
 #~ msgid "View (New)"
 #~ msgstr "Görüntü (Yeni)"
 
@@ -12473,6 +12508,9 @@ msgstr "Platformunuz"
 #~ msgid "Your email address will be included when sending this feedback"
 #~ msgstr "Bu geri bildirimi gönderdiğinizde e posta adresiniz dahil olacak "
 
+#~ msgid "Your selected picture will be displayed after saving"
+#~ msgstr "seçilen fotografın kaydedildikten sonra görüntülenecektir"
+
 #~ msgid "after %1$d appointment"
 #~ msgid_plural "after %1$d appointments"
 #~ msgstr[0] " %1$d  randevu sonra  %1$d randevu sonra "
@@ -12503,6 +12541,13 @@ msgstr "Platformunuz"
 
 #~ msgid "dd"
 #~ msgstr "dd"
+
+#, fuzzy
+#~ msgid "disable"
+#~ msgstr "engelli"
+
+#~ msgid "disabled"
+#~ msgstr "engelli"
 
 #~ msgid "ends"
 #~ msgstr "biter"
@@ -12568,6 +12613,14 @@ msgstr "Platformunuz"
 #~ msgid "remove"
 #~ msgstr "kaldır"
 
+#, fuzzy
+#~ msgid "seconds"
+#~ msgstr "ikinci"
+
+#, fuzzy
+#~ msgid "select all"
+#~ msgstr "Tümünü seç"
+
 #~ msgid "status "
 #~ msgstr "statü"
 
@@ -12576,6 +12629,10 @@ msgstr "Platformunuz"
 
 #~ msgid "the line length must be a number"
 #~ msgstr "Satır uzunluğu bir numara olmalıdır"
+
+#, fuzzy
+#~ msgid "unselect all"
+#~ msgstr "Tümünü seç"
 
 #~ msgid "weekly"
 #~ msgstr "Haftalık"

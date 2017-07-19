@@ -129,8 +129,13 @@ define('io.ox/find/apiproxy', [
                         return data;
                     }
                     app.trigger('find:autocomplete:start', query);
-                    return autocomplete(standard)
-                            .then(updateModel, notifications.yell);
+                    return autocomplete(standard).then(
+                        updateModel,
+                        function (error) {
+                            notifications.yell(error);
+                            throw error;
+                        }
+                    );
                 },
                 // result
                 query: (function () {
@@ -160,6 +165,7 @@ define('io.ox/find/apiproxy', [
                         notifications.yell(result);
                         app.trigger('find:query:stop');
                         app.trigger('find:query:fail');
+                        throw result;
                     }
 
                     return function (sync, params) {

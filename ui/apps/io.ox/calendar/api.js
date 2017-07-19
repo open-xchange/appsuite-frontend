@@ -261,7 +261,7 @@ define('io.ox/calendar/api', [
             }, function (error) {
                 api.caches.all = {};
                 api.trigger('delete', o);
-                return error;
+                throw error;
             });
         },
 
@@ -527,18 +527,19 @@ define('io.ox/calendar/api', [
                 // redraw detailview to be responsive and remove invites
                 api.trigger('mark:invite:confirmed', o);
                 delete api.caches.get[key];
-                return api.get(o).then(function (data) {
-                    // fix confirmation data
-                    // this is necessary when changing the confirmation for a single appointment
-                    // within a series as it becomes an exception.
-                    // the series does not update, however (see bug 40137)
-                    var user = _(data.users).findWhere({ id: ox.user_id });
-                    if (user) _.extend(user, _(o.data).pick('confirmation', 'confirmmessage'));
-                    // events
-                    api.trigger('update', data);
-                    api.trigger('update:' + _.ecid(data), data);
-                    return data;
-                });
+                return api.get(o);
+            })
+            .then(function (data) {
+                // fix confirmation data
+                // this is necessary when changing the confirmation for a single appointment
+                // within a series as it becomes an exception.
+                // the series does not update, however (see bug 40137)
+                var user = _(data.users).findWhere({ id: ox.user_id });
+                if (user) _.extend(user, _(o.data).pick('confirmation', 'confirmmessage'));
+                // events
+                api.trigger('update', data);
+                api.trigger('update:' + _.ecid(data), data);
+                return data;
             });
         },
 

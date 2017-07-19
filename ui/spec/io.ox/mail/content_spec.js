@@ -57,6 +57,16 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(html).to.equal('Lorem &lt;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&gt;');
             });
 
+            it('transforms multiple mail addresses', function () {
+                var html = process('One "ipsum@dolor.amet" and another "ipsum@dolor.amet".');
+                expect(html).to.equal('One &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot; and another &quot;<a href="mailto:ipsum@dolor.amet">ipsum@dolor.amet</a>&quot;.');
+            });
+
+            it('ignores invalid addresses', function () {
+                var html = process('One "ipsum@dolor" and another "@dolor.amet".');
+                expect(html).to.equal('One &quot;ipsum@dolor&quot; and another &quot;@dolor.amet&quot;.');
+            });
+
             // QUOTES
 
             it('transforms quotes', function () {
@@ -84,9 +94,13 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem<br>ipsum</blockquote></blockquote>');
             });
 
-            it('transforms quotes with trailing new line', function () {
-                var html = process('> Lorem\n>\n> ipsum\n>\n');
-                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum</blockquote><br>');
+            it('transforms quotes without trailing new line', function () {
+                var html = process('> Lorem\n>\n> ipsum\n>\n\n');
+                expect(html).to.equal('<blockquote type="cite">Lorem<br><br>ipsum<br></blockquote><br>');
+            });
+            it('transforms nested quotes without trailing new line', function () {
+                var html = process('> > Lorem ipsum\n> amet\ndolor sit');
+                expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>amet</blockquote>dolor sit');
             });
 
             // UNORDERED LISTS

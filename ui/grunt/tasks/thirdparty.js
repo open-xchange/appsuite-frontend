@@ -104,12 +104,15 @@ module.exports = function (grunt) {
                     {
                         expand: true,
                         src: [
-                            'build/pdf.combined.js',
+                            'build/pdf.min.js',
+                            'build/pdf.worker.min.js',
                             'web/images/*'
                         ],
                         cwd: 'node_modules/pdfjs-dist',
-                        dest: 'build/apps/pdfjs-dist/'
-                        // pdfjs now has it's own define: define('pdfjs-dist/build/pdf.combined', ...)
+                        dest: 'build/apps/pdfjs-dist/',
+                        rename: function (dest, src) {
+                            return dest + src.replace(/\.min.js$/, '.js');
+                        }
                     },
                     {
                         expand: true,

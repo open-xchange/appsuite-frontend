@@ -320,6 +320,7 @@ define('io.ox/editor/main', [
                     .fail(notifications.yell);
             }, function () {
                 view.idle.apply(app.view);
+                throw arguments;
             });
         };
 

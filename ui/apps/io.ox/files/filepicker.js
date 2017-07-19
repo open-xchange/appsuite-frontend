@@ -513,6 +513,7 @@ define('io.ox/files/filepicker', [
                             if (e && e.data && e.data.custom) {
                                 notifications.yell(e.data.custom.type, e.data.custom.text);
                             }
+                            throw e;
                         }
                     );
                 },

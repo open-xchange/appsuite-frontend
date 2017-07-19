@@ -15,13 +15,14 @@
 
 define('io.ox/core/pdf/pdfdocument', [
     'io.ox/core/pdf/pdfview',
-    'pdfjs-dist/build/pdf.combined',
+    'pdfjs-dist/build/pdf',
+    'pdfjs-dist/build/pdf.worker',
     'settings!io.ox/core'
-], function (PDFView, PDFJSCombined, Settings) {
+], function (PDFView, PDFJSLib, PDFJSWorker, Settings) {
 
     'use strict';
 
-    var PDFJS = PDFJSCombined.PDFJS;
+    var PDFJS = PDFJSLib.PDFJS;
 
     // class PDFDocument =======================================================
 

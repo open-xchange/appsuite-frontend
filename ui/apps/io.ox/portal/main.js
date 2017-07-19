@@ -22,10 +22,11 @@ define('io.ox/portal/main', [
     'io.ox/portal/util',
     'io.ox/portal/settings/pane',
     'io.ox/portal/settings/widgetview',
+    'io.ox/core/yell',
     'gettext!io.ox/portal',
     'settings!io.ox/portal',
     'less!io.ox/portal/style'
-], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, gt, settings) {
+], function (ext, capabilities, userAPI, contactAPI, dialogs, widgets, util, settingsPane, WidgetSettingsView, yell, gt, settings) {
 
     'use strict';
 
@@ -104,10 +105,10 @@ define('io.ox/portal/main', [
         id: 'header',
         index: 100,
         draw: function (baton) {
-            var $btn,
+            var $header,
                 $greeting;
 
-            this.append($btn = $('<div class="header">'));
+            this.append($header = $('<div class="header">'));
             // greeting
             $greeting = $('<h1 class="greeting">').append(
                 baton.$.greeting = $('<span class="greeting-phrase">'),
@@ -120,23 +121,22 @@ define('io.ox/portal/main', [
             if (_.device('!smartphone')) {
                 widgets.loadUsedPlugins().done(function () {
                     // add widgets
-                    ext.point('io.ox/portal/settings/detail/pane').map(function (point) {
+                    ext.point('io.ox/portal/settings/detail/view').map(function (point) {
                         if (point && point.id === 'add') {
-                            point.invoke('draw', $btn);
+                            point.invoke('render', { $el: $header });
                         }
                     });
-                    // please no button
-                    $btn.find('.btn-group-portal').after($greeting);
-                    $btn.find('.btn-group-portal')
+                    $header.find('.form-group')
+                        .addClass('pull-right')
                         .prepend($('<button type="button" class="btn btn-primary">')
-                        .attr({
-                            'data-action': 'customize'
-                        })
-                        .text(gt('Customize this page'))
-                        .on('click', openSettings));
+                            .attr({ 'data-action': 'customize' })
+                            .text(gt('Customize this page'))
+                            .on('click', openSettings));
+
+                    $header.append($greeting);
                 });
             } else {
-                $btn.append($greeting);
+                $header.append($greeting);
             }
         }
     });
@@ -501,13 +501,18 @@ define('io.ox/portal/main', [
                 if (e === 'remove') {
                     widgets.remove(baton.model);
                     node.remove();
-                    return;
+                    throw e;
                 }
                 // clean up
                 node.find('.content').remove();
                 decoration.removeClass('pending');
-                // show error message unless it's just missing oauth account
-                if (e.code !== 'OAUTH-0006') {
+                if (e.code === 'ACC-0002') {
+                    // if an account was removed, disable widget (do not delete it)
+                    // to avoid further requests
+                    baton.model.set('enabled', false, { validate: false });
+                    yell('info', gt.format('The widget "%s" was disabled as the account seems to be removed or is no longer available.', baton.model.get('title')));
+                } else if (e.code !== 'OAUTH-0006') {
+                    // show error message unless it's just missing oauth account
                     node.append(
                         $('<div class="content error">').append(
                             $('<div>').text(gt('An error occurred.')),
@@ -530,6 +535,7 @@ define('io.ox/portal/main', [
                     // missing oAuth account
                     app.drawDefaultSetup(baton);
                 }
+                throw e;
             }
         );
     }
@@ -764,7 +770,7 @@ define('io.ox/portal/main', [
             });
         }, 300);
 
-        $(window).on('scrollstop resize', lazyLayout);
+        $(window).on('scrollend resize', lazyLayout);
     });
 
     return {

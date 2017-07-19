@@ -155,7 +155,7 @@ define('io.ox/mail/compose/actions/send', [
             perform: function (baton) {
                 if (baton.error && !baton.warning) {
                     var win = baton.app.getWindow(),
-                    // check if abort is triggered by the ui
+                        // check if abort is triggered by the ui
                         text = baton.error === 'abort' ? gt('The sending of the message has been canceled.') : baton.error;
                     if (win) {
                         // reenable the close button(s) in toolbar

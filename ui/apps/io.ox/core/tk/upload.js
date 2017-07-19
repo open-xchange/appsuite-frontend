@@ -326,7 +326,7 @@ define('io.ox/core/tk/upload', [
 
                     return validFiles;
                 }, function fail() {
-                    return newFiles;
+                    throw newFiles;
                 });
             });
         };

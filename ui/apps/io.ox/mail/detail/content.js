@@ -234,7 +234,7 @@ define('io.ox/mail/detail/content', [
                         'aria-expanded': false
                     });
                 }
-                $(node).addClass('collapsed-blockquote').attr('id', blockquoteId).after(
+                $(node).addClass('collapsed-blockquote').hide().attr('id', blockquoteId).after(
                     $('<div class="blockquote-toggle">').append(
                         // we don't use <a href=""> here, as we get too many problems with :visited inside mail content
                         ellipsisButton,
@@ -248,7 +248,7 @@ define('io.ox/mail/detail/content', [
                 );
             });
             // delegate
-            $(this).on('click keydown', '.blockquote-toggle', explandBlockquote);
+            $(this).on('click keydown', '.blockquote-toggle', expandBlockquote);
         },
 
         checkSimple: function () {
@@ -567,7 +567,7 @@ define('io.ox/mail/detail/content', [
         return str;
     }
 
-    function explandBlockquote(e) {
+    function expandBlockquote(e) {
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
@@ -714,13 +714,13 @@ define('io.ox/mail/detail/content', [
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
-            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*/,
+            var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*\n?/,
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /([^"\s<,:;|()[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
@@ -772,7 +772,7 @@ define('io.ox/mail/detail/content', [
                     if (match = exec(regText, str)) {
                         // advance
                         str = str.substr(match.length + (options.lists ? 1 : 0));
-                        // escape first
+                        // escape first (otherwise we escape our own markup later)
                         match = _.escape(match);
                         // rulers
                         if (options.rulers) {
@@ -785,12 +785,20 @@ define('io.ox/mail/detail/content', [
                         // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
+                                // cover edge-case: &quot; which is hard to handle in a regex
+                                .replace(/&quot;/g, '"')
                                 .replace(regLink, function (all, href, suffix) {
                                     // substitute @ by entity to avoid double detection, e.g. if an email address is part of a link
                                     href = href.replace(/@/g, '&#64;');
                                     return '<a href="' + href + '" rel="noopener" target="_blank">' + href + '</a>' + suffix;
                                 })
-                                .replace(regMailAddress, '<a href="mailto:$1">$1</a>');
+                                .replace(regMailAddress, function (all, address) {
+                                    return '<a href="mailto:' + address + '">' + address + '</a>';
+                                })
+                                // reinsert quotes
+                                .replace(/(<[^<]+>|")/g, function (all, q) {
+                                    return q === '"' ? '&quot;' : q;
+                                });
                         }
                         // replace newlines
                         out += match.replace(/\n/g, '<br>');

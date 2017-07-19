@@ -38,6 +38,7 @@ define('io.ox/mail/mailfilter/autoforward/view', [
             gt('Unable to load mail filter settings.') :
             gt('Unable to load your auto forward settings. Please retry later.')
         );
+        throw e;
     }
 
     function openModalDialog(data) {

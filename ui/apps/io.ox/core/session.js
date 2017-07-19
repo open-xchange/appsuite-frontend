@@ -113,11 +113,11 @@ define('io.ox/core/session', [
 
             // GET request
             return (
-                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken') ?
+                _.url.hash('token.autologin') === 'false' && _.url.hash('serverToken')
                     // no auto-login for server-token-based logins
-                    $.Deferred().reject({}) :
+                    ? $.Deferred().reject({})
                     // try auto-login
-                    withTimeout(http.GET, {
+                    : withTimeout(http.GET, {
                         module: 'login',
                         appendColumns: false,
                         appendSession: false,
@@ -140,7 +140,7 @@ define('io.ox/core/session', [
                 },
                 // If autologin fails, try token login
                 function fail(data) {
-                    if (!_.url.hash('serverToken')) return data || {};
+                    if (!_.url.hash('serverToken')) throw (data || {});
                     return withTimeout(http.POST, {
                         module: 'login',
                         jsessionid: _.url.hash('jsessionid'),
@@ -172,6 +172,13 @@ define('io.ox/core/session', [
                     });
                 }
             )
+            .then(function (data) {
+                set(data);
+                // global event
+                ox.trigger('login', data);
+                // call store for token-based login / not for pure auto-login
+                return store ? that.store().then(function () { return data; }) : data;
+            })
             .done(function () {
                 _.url.hash({
                     jsessionid: null,
@@ -180,13 +187,6 @@ define('io.ox/core/session', [
                     store: null,
                     'token.autologin': null
                 });
-            })
-            .then(function (data) {
-                set(data);
-                // global event
-                ox.trigger('login', data);
-                // call store for token-based login / not for pure auto-login
-                return store ? that.store().then(function () { return data; }) : data;
             });
         },
 
@@ -249,7 +249,7 @@ define('io.ox/core/session', [
                         },
                         function fail(e) {
                             if (ox.debug) console.error('Login failed!', e.error, e.error_desc || '');
-                            return e;
+                            throw e;
                         }
                     )
                     .always(function () {

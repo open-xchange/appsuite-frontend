@@ -144,7 +144,7 @@ define('io.ox/core/api/sub', [
                     if (resp.code === 'SUB-90112' && link) {
                         resp.error_html = resp.error.replace(link, '<a href="' + link + '" title="' + link + '" target="_blank">Link</>');
                     }
-                    return resp;
+                    throw resp;
                 });
             });
         }

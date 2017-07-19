@@ -616,7 +616,7 @@ define('io.ox/core/folder/api', [
             },
             function (error) {
                 api.trigger('error error:' + error.code, error);
-                return error;
+                throw error;
             }
         )
         .then(function (data) {
@@ -707,7 +707,7 @@ define('io.ox/core/folder/api', [
         })
         .then(renameDefaultCalendarFolders, function (error) {
             api.trigger('error error:' + error.code, error);
-            return error;
+            throw error;
         })
         .then(function (array) {
             array = processListResponse(id, array);
@@ -994,7 +994,7 @@ define('io.ox/core/folder/api', [
                 if (!options.silent) {
                     api.trigger('update:fail', error, id);
                 }
-                return error;
+                throw error;
             }
         );
     }
@@ -1036,7 +1036,7 @@ define('io.ox/core/folder/api', [
                 pool.getModel(folderId).set('subscr_subflds', true);
                 virtual.refresh();
                 pool.getCollection(folderId).add(model);
-                return error;
+                throw error;
             }
         );
     }

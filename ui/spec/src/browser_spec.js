@@ -80,9 +80,7 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             it('should use the fallback "unknown" if an unknown or broken user agent occurs', function () {
                 var spy = sinon.stub(console, 'warn').callsFake(function () {});
                 _.device.loadUA(userAgents.invalid[number]);
-                //FIXME: really test spy
-                //expect(spy).toHaveBeenCalledWithMatch('Could not detect browser, using fallback');
-                expect(spy).to.have.beenCalled;
+                expect(spy).to.have.been.calledWithMatch('Could not detect browser, using fallback');
                 expect(_.browser.unknown).to.be.true;
                 spy.restore();
             });
@@ -132,11 +130,18 @@ define(['fixture!browser_support/userAgents.json'], function (userAgents) {
             expect(_.device('android')).to.be.false;
         });
         it('should handle Chrome on Android as touch device', function () {
+            // report touch!
+            var removeFakeTouch = false;
+            if (!window.ontouchstart) {
+                window.ontouchstart = _.noop;
+                removeFakeTouch = true;
+            }
             _.device.cache = {};
             _.device.loadUA(userAgents.valid.Android[6]);
             expect(_.device('touch')).to.be.true;
             expect(_.device('linux')).to.be.false;
             expect(_.device('android')).to.be.true;
+            if (removeFakeTouch) delete window.ontouchstart;
         });
     });
 });

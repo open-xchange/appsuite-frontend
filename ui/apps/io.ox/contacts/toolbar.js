@@ -83,6 +83,13 @@ define('io.ox/contacts/toolbar', [
         //
         // --- LO ----
         //
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Export as vCard'),
+            drawDisabled: true,
+            ref: 'io.ox/contacts/actions/export'
+        },
         'vcard': {
             prio: 'lo',
             mobile: 'lo',

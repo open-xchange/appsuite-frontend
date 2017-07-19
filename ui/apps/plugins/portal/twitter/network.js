@@ -25,8 +25,6 @@ define('plugins/portal/twitter/network', ['io.ox/oauth/proxy'], function (proxy)
             var obj = JSON.parse(data);
 
             return network.deleteTweet(obj.current_user_retweet.id_str);
-        }, function fail(error) {
-            return error;
         });
     };
 
@@ -64,8 +62,6 @@ define('plugins/portal/twitter/network', ['io.ox/oauth/proxy'], function (proxy)
             if (!jsonResponse.errors) {
                 return jsonResponse.id_str;
             }
-        }, function fail(error) {
-            return error;
         });
     };
 

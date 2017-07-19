@@ -226,44 +226,43 @@ define('io.ox/calendar/list/perspective', [
                         end: dates.end,
                         folder: prop.folder === 'virtual/all-my-appointments' ? 0 : prop.folder,
                         order: prop.order
-                    })
-                    .then(function (data) {
-                        if (!settings.get('showDeclinedAppointments', false)) {
-                            data = _.filter(data, function (obj) {
-                                return util.getConfirmationStatus(obj) !== 2;
-                            });
-                        }
-                        if (findRecurrence) {
-
-                            var foundRecurrence = false,
-                                searchItem = _.url.hash('id').split('.');
-
-                            _(data).each(function (obj) {
-                                if (obj.id.toString() === searchItem[1] && obj.folder_id.toString() === searchItem[0]) {
-                                    if (foundRecurrence) {
-                                        if (foundRecurrence > obj.recurrence_position) {
-                                            foundRecurrence = obj.recurrence_position;
-                                        }
-
-                                    } else {
-                                        foundRecurrence = obj.recurrence_position || 0;
-                                    }
-                                }
-                            });
-
-                            //found valid recurrence, append it
-                            if (foundRecurrence !== false) {
-                                _.url.hash({ id: _.url.hash('id') + '.' + foundRecurrence });
-                            } else {
-                                //ok its not in the list lets show it directly
-                                app.trigger('show:appointment', { id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0 }, true);
-                            }
-
-                            //only search once
-                            findRecurrence = false;
-                        }
-                        return data;
                     });
+                })
+                .then(function (data) {
+                    if (!settings.get('showDeclinedAppointments', false)) {
+                        data = _.filter(data, function (obj) {
+                            return util.getConfirmationStatus(obj) !== 2;
+                        });
+                    }
+                    if (findRecurrence) {
+
+                        var foundRecurrence = false,
+                            searchItem = _.url.hash('id').split('.');
+
+                        _(data).each(function (obj) {
+                            if (obj.id.toString() === searchItem[1] && obj.folder_id.toString() === searchItem[0]) {
+                                if (foundRecurrence) {
+                                    if (foundRecurrence > obj.recurrence_position) {
+                                        foundRecurrence = obj.recurrence_position;
+                                    }
+                                } else {
+                                    foundRecurrence = obj.recurrence_position || 0;
+                                }
+                            }
+                        });
+
+                        //found valid recurrence, append it
+                        if (foundRecurrence !== false) {
+                            _.url.hash({ id: _.url.hash('id') + '.' + foundRecurrence });
+                        } else {
+                            //ok its not in the list lets show it directly
+                            app.trigger('show:appointment', { id: searchItem[1], folder_id: searchItem[0], recurrence_position: 0 }, true);
+                        }
+
+                        //only search once
+                        findRecurrence = false;
+                    }
+                    return data;
                 });
             };
         };

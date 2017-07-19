@@ -679,7 +679,7 @@ define('io.ox/mail/main', [
          */
         'thread-view': function (app) {
             if (_.device('smartphone')) return;
-            app.threadView = new ThreadView.Desktop({ app: app });
+            app.threadView = new ThreadView.Desktop();
             app.right.append(app.threadView.render().$el);
         },
 
@@ -1091,6 +1091,21 @@ define('io.ox/mail/main', [
                     app.right.find('.multi-selection-message div').attr('id', null);
                     // make sure we are not in multi-selection
                     if (app.listView.selection.get().length === 1) react('action', list);
+                }
+            });
+        },
+
+        'preserve-selection': function (app) {
+            app.listView.on({
+                'selection:add': function (list) {
+                    _(list).each(function (cid) {
+                        api.pool.preserveModel(cid, true);
+                    });
+                },
+                'selection:remove': function (list) {
+                    _(list).each(function (cid) {
+                        api.pool.preserveModel(cid, false);
+                    });
                 }
             });
         },

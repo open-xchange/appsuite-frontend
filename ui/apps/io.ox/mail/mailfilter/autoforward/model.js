@@ -36,9 +36,9 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                 userMainEmail: data.user.email1
             };
 
-            if (_.isEmpty(data)) {
+            if (_.isEmpty(data.forward)) {
                 // new rule
-                attr.position = _.isEmpty(data.vacation) ? 0 : data[0].position + 1;
+                attr.position = _.isEmpty(data.vacation) ? 0 : data.vacation.position + 1;
                 return attr;
             }
 
@@ -103,11 +103,23 @@ define('io.ox/mail/mailfilter/autoforward/model', [
                     .done(options.success)
                     .fail(options.error);
                 case 'update':
-                    return api.update(this.toJSON()).done(options.success).fail(options.error);
+                    return api.update(this.toJSON())
+                        .done(this.onUpdate.bind(this))
+                        .done(options.success).fail(options.error);
                 case 'delete':
                     return api.deleteRule(this.get('id')).done(options.success).fail(options.error);
                 // no default
             }
+        },
+
+        onUpdate: function () {
+            // an easy way to propagate changes
+            // otherwise we need to sync data across models or introduce a singleton-model-approach
+            ox.trigger('mail:change:auto-forward', this);
+        },
+
+        isActive: function () {
+            if (!this.get('active')) return false;
         }
     });
 

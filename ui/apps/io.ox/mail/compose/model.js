@@ -331,14 +331,9 @@ define.async('io.ox/mail/compose/model', [
 
             var mail = this.getMailForDraft();
 
-            // delete mail.infostore_ids;
-            if (mail.infostore_ids) {
-                // Reject files from drive to avoid duplicates
-                var saved = this.get('infostore_ids_saved');
-                mail.infostore_ids = _(mail.infostore_ids).reject(function (id) {
-                    return _(saved).indexOf(id) > -1;
-                });
-            }
+            // Infostore attachments are not saved upon autosave anymore as we can't remove them properly later on
+            // See Bug 54586
+            if (mail.infostore_ids) delete mail.infostore_ids;
 
             return mail;
         },

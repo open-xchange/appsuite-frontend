@@ -2,34 +2,37 @@ msgid ""
 msgstr ""
 "Project-Id-Version: open-xchange-guidedtours\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-12 12:48+0000\n"
-"PO-Revision-Date: 2015-12-16 11:55+0100\n"
-"Last-Translator: www-data <www-data@l10n.open-xchange.com>\n"
+"POT-Creation-Date: 2017-07-18 16:24+0000\n"
+"PO-Revision-Date: 2017-05-17 22:59+0000\n"
+"Last-Translator: martimarkov <marti.markov@icloud.com>\n"
 "Language-Team: Bulgarian\n"
 "Language: bg_BG\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Translate Toolkit 1.11.0\n"
+"X-Generator: Pootle 2.5.1.1\n"
+"X-POOTLE-MTIME: 1495061997.000000\n"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Add another account"
-msgstr ""
+msgstr "Добавете друг профил"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Adding attachments"
-msgstr ""
+msgstr "Добавяне на прикачени файлове"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Adding further details"
-msgstr ""
+msgstr "Добавяне на допълнителни подробности"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "At the top you can find the toolbar with many functions and additional "
 "options. You can easily create new folders, new files and much more."
 msgstr ""
+"В горната част можете да намерите лентата с много функции и допълнителни "
+"опции. Можете лесно да създавате нови папки, нови файлове и много други."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -38,81 +41,95 @@ msgid ""
 "and edit files. Or just get a link to let others view and download your "
 "files. You can use an expiration date and password protection if you like."
 msgstr ""
+"Изберете от две алтернативи, за да споделяте файловете и папките си. "
+"Използвайте Поканване на хора, ако искате да управлявате правата за достъп и "
+"да разрешите на получателите да създават и редактират файлове. Или просто да "
+"получите връзка, за да позволите на другите да преглеждат и изтеглят "
+"файловете ви. Можете да използвате дата на изтичане на срока и защита с "
+"парола, ако искате."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
 "Click on a letter on the left side of the navigation bar in order to display "
 "the corresponding contacts from the selected address book."
 msgstr ""
+"Кликнете върху буква от лявата страна на навигационната лента, за да "
+"покажете съответните контакти от избраната адресна книга."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Clicking on a folder displays all the subfolders, documents, media and other "
 "files that it contains."
 msgstr ""
+"Кликването върху папка показва всички подпапки, документи, медии и други "
+"файлове, които съдържа."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Clicking on the view icon leads you to a preview of the selected file."
 msgstr ""
+"Кликването върху иконата за изглед ви води до визуализация на избрания файл."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Closing a square"
-msgstr ""
+msgstr "Затваряне на квадрат"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Collaborating"
-msgstr ""
+msgstr "Сътрудничество"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Composing a new E-Mail"
-msgstr ""
+msgstr "Съставяне на нова електронна поща"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating a new appointment"
-msgstr ""
+msgstr "Създаване на новo събитие"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Creating a new contact"
-msgstr ""
+msgstr "Създаване на нов контакт"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating a new task"
-msgstr ""
+msgstr "Създаване на нова задача"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Creating new items"
-msgstr ""
+msgstr "Създаване на нови елементи"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating recurring appointments"
-msgstr ""
+msgstr "Създаване на повтарящи се събития"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating recurring tasks"
-msgstr ""
+msgstr "Създаване на повтарящи се задачи"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Creating the appointment"
-msgstr ""
+msgstr "Създаване на събитието"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Creating the task"
-msgstr ""
+msgstr "Създаване на задачата"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Customizing the Portal"
-msgstr ""
+msgstr "Персонализиране на портала"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Depending on the app, the toolbar contains various functions for creating, "
 "editing and organizing objects."
 msgstr ""
+"В зависимост от приложението лентата с инструменти съдържа различни функции "
+"за създаване, редактиране и организиране на обекти."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Detailed instructions for the single apps are located in System menu > Help."
 msgstr ""
+"Подробни указания за отделните приложения се намират в менюто Система> Помощ."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -120,18 +137,22 @@ msgid ""
 "will automatically update your edited file, but thanks to versioning the "
 "original file stays available."
 msgstr ""
+"Знаете ли, че можете да редактирате текстови документи и електронни таблици "
+"онлайн? \"Диск\" ще актуализира автоматично вашия редактиран файл, но "
+"благодарение на версията оригиналът остава на разположение."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Different views are available. Just select the one you like best."
 msgstr ""
+"Има различни изгледи. Просто изберете този, който ви харесва най-добре."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Displaying the help or the settings"
-msgstr ""
+msgstr "Показване на помощта или настройките"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Drag and drop"
-msgstr ""
+msgstr "Влачите и пускате"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -139,32 +160,38 @@ msgid ""
 "cloud storage account you use to save and sync your files. Simply click on "
 "the appropriate logo to access your existing data."
 msgstr ""
+"Диск ви позволява да се свържете с други решения за съхранение, ако вече "
+"имате профил за съхранение в облак, който използвате, за да запазвате и "
+"синхронизирате файловете си. Просто кликнете върху съответното лого, за да "
+"получите достъп до съществуващите си данни."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "Edit a setting on the right side. In most of the cases, the changes are "
 "activated immediately."
 msgstr ""
+"Редактирайте настройка от дясната страна. В повечето случаи промените се "
+"активират незабавно."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Edit documents"
-msgstr ""
+msgstr "Редактиране на документи"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Editing multiple E-Mails"
-msgstr ""
+msgstr "Редактиране на няколко електронни писма"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Editing multiple contacts"
-msgstr ""
+msgstr "Редактиране на няколко контакта"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Editing multiple tasks"
-msgstr ""
+msgstr "Редактиране на няколко задачи"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Editing settings"
-msgstr ""
+msgstr "Редактиране на настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -172,6 +199,10 @@ msgid ""
 "in the options, you can format the E-Mail text. To do so select a text part "
 "and then click an icon in the formatting bar."
 msgstr ""
+"Въведете текста на електронната поща в главната област. Ако форматът на "
+"текста е зададен като HTML в опциите, можете да форматирате текста на "
+"електронната поща. За целта изберете текстова част и след това кликнете "
+"върху икона в лентата за форматиране."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -179,115 +210,132 @@ msgid ""
 "the first letters, suggestions from the address books are displayed. To "
 "accept a recipient suggestion, click on it."
 msgstr ""
+"Въведете името на получателя в полето Получатели. Веднага след като напишете "
+"първите букви, се показват предложения от адресните книги. За да приемете "
+"предложението за получател, кликнете върху него."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Enter the subject into the subject field."
-msgstr ""
+msgstr "Въведете обекта в полето за тема."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "Enter the subject, the start and the end date of the appointment. Other "
 "details are optional."
 msgstr ""
+"Въведете обекта, началната и крайната дата на събитието. Други подробности "
+"са по избор."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Enter the subject, the start date, and a description."
-msgstr ""
+msgstr "Въведете обекта, началната дата и описание."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering billing information"
-msgstr ""
+msgstr "Въвеждане на информация за плащане"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the E-Mail text"
-msgstr ""
+msgstr "Въвеждане на текста на електронната поща"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Entering the appointment's data"
-msgstr ""
+msgstr "Въвеждане на данните за събитие"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the recipient's name"
-msgstr ""
+msgstr "Въвеждане на името на получателя"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Entering the subject"
-msgstr ""
+msgstr "Въвеждане на обекта"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Entering the task's data"
-msgstr ""
+msgstr "Въвеждане на данните за задачите"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "File details"
-msgstr ""
+msgstr "Данни за файла"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder content"
-msgstr ""
+msgstr "Съдържание на папките"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Folder tree"
-msgstr ""
+msgstr "Папка дърво"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "From preview you can also select other options to help you manage and work "
 "on your files."
 msgstr ""
+"От визуализацията можете да изберете и други опции, които да ви помогнат да "
+"управлявате и работите с вашите файлове."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "Further down you can add documents as attachments to the appointment."
 msgstr ""
+"По-надолу можете да добавяте документи като прикачени файлове към събитието."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Further functions"
-msgstr ""
+msgstr "Допълнителни функции"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Further information"
-msgstr ""
+msgstr "Допълнителна информация"
 
 #. Tour name; general introduction
 #: apps/io.ox/tours/main.js module:io.ox/tours
 msgid "Getting started"
-msgstr ""
+msgstr "Първи стъпки"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Halo view"
-msgstr ""
+msgstr "Halo изглед"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Here you can share files with your colleagues and external contacts. You can "
 "also collaborate on a document and set different access rights."
 msgstr ""
+"Тук можете да споделяте файлове с вашите колеги и външни контакти. Също така "
+"можете да си сътрудничите с документ и да зададете различни права за достъп."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
 "Hint: you can always restart guided tours, any time you need them, from the "
 "system menu."
 msgstr ""
+"Съвет: Винаги можете да рестартирате екскурзовод, когато имате нужда от "
+"него, от системното меню."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "How the settings are organized"
-msgstr ""
+msgstr "Как се организират настройките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "If double-clicking on an E-Mail in the list, the E-Mail is opened in a "
 "separate window."
 msgstr ""
+"Ако щракнете двукратно върху електронна поща в списъка, електронната поща се "
+"отваря в отделен прозорец."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "If you no longer want to display a square, click the delete icon."
 msgstr ""
+"Ако вече не искате да показвате квадрат, кликнете върху иконата за изтриване."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "In case of new notifications, e.g. appointment invitations, the info area is "
 "opened."
 msgstr ""
+"В случай на нови известия, напр. Покани за срещи, се отваря информационната "
+"зона."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
@@ -295,23 +343,28 @@ msgid ""
 "side of the E-Mails. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
+"За да редактирате едновременно няколко имейла, активирайте квадратчетата за "
+"отметки отляво на имейлите. Ако квадратчетата за отметка не са показани, "
+"кликнете върху Преглед> Отметки отдясно на лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "In this area you can find further functions, e.g. for adding attachments."
 msgstr ""
+"В тази област можете да намерите допълнителни функции, например за добавяне "
+"на прикачени файлове."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Inviting other participants"
-msgstr ""
+msgstr "Покани други участници"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Launching an app"
-msgstr ""
+msgstr "Стартиране на приложение"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Navigation bar"
-msgstr ""
+msgstr "Навигационна лента"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -320,70 +373,74 @@ msgid ""
 "life easier, we have already included folders for your Documents, Music, "
 "Pictures and Videos."
 msgstr ""
+"Отляво можете да видите дървовидната папка. Той показва структурата на "
+"папките ви и ви позволява да се придвижвате до конкретни папки и подпапки. "
+"За да улесните живота си, ние вече включихме папки за документи, музика, "
+"снимки и видеоклипове."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening an E-Mail in a separate window"
-msgstr ""
+msgstr "Отваряне на електронна поща в отделен прозорец"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Opening or closing the folder tree"
-msgstr ""
+msgstr "Отваряне или затваряне на дървото на папките"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Opening the E-Mail settings"
-msgstr ""
+msgstr "Отваряне на настройките за електронна поща"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Opening the help"
-msgstr ""
+msgstr "Отваряне на помощта"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Opening the settings"
-msgstr ""
+msgstr "Отваряне на настройките"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview files"
-msgstr ""
+msgstr "Визуализация на файлове"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Preview mode"
-msgstr ""
+msgstr "Режим на визуализация"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Reading E-Mail conversations"
-msgstr ""
+msgstr "Четене на разговори по електронната поща"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "Reading the details"
-msgstr ""
+msgstr "Четене на подробностите"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Restart Guided Tour"
-msgstr ""
+msgstr "Рестартирайте ръководството"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Searching for objects"
-msgstr ""
+msgstr "Търсене на обекти"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Select a view"
-msgstr ""
+msgstr "Изберете изглед"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/mail.js
 msgid "Selecting a view"
-msgstr ""
+msgstr "Избиране на изглед"
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "Sending an E-Mail to a contact"
-msgstr ""
+msgstr "Изпращане на електронна поща до контакт"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sending the E-Mail"
-msgstr ""
+msgstr "Изпращане на електронната поща"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Share files"
-msgstr ""
+msgstr "Споделяне на файлове"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -392,44 +449,51 @@ msgid ""
 "able to collaborate with you on text documents and spreadsheets at the same "
 "time."
 msgstr ""
+"Споделянето на файлове чрез покана на хора не само предлага на получателите "
+"ви възможност да създават и редактират файлове. Вътрешни и външни участници "
+"също могат да си сътрудничат с вас в текстови документи и електронни таблици "
+"едновременно."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Sharing options"
-msgstr ""
+msgstr "Опции за споделяне"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid "Signing out"
-msgstr ""
+msgstr "Излизане"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Sorting tasks"
-msgstr ""
+msgstr "Сортиране на задачи"
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "Sorting your E-Mails"
-msgstr ""
+msgstr "Сортиране на имейлите ви"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The Detail view"
-msgstr ""
+msgstr "Подробният изглед"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "The Detail view displays an object's content. Depending on the app, further "
 "functions for organizing objects can be found in the Detail view."
 msgstr ""
+"Подробният изглед показва съдържанието на обекта. В зависимост от "
+"приложението могат да се намерят допълнителни функции за организиране на "
+"обекти в екрана \"Подробности\"."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app"
-msgstr ""
+msgstr "Приложението \"Диск\""
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "The Drive app tour.txt"
-msgstr ""
+msgstr "Разделът за пътуването на приложението Диск"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The List view"
-msgstr ""
+msgstr "Изгледът на списъка"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -437,36 +501,45 @@ msgid ""
 "clicking on an appointment, the appointment's data and some functions are "
 "displayed in the Detail view."
 msgstr ""
+"Изгледът \"Списък\" показва списък с назначенията в текущата папка. Ако "
+"кликнете върху среща, данните от събитието и някои функции се показват в "
+"изгледа \"Подробности\"."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The New objects icon"
-msgstr ""
+msgstr "Иконата \"Нови обекти\""
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "The New objects icon shows the number of appointment reminders or other "
 "notifications. If clicking the icon, the info area opens."
 msgstr ""
+"Иконата \"Нови обекти\" показва броя напомняния за назначения или други "
+"известия. Ако щракнете върху иконата, ще се отвори информационната зона."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "The Portal"
-msgstr ""
+msgstr "Порталът"
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid ""
 "The Portal informs you about current E-Mails, appointments or social network "
 "news."
 msgstr ""
+"Порталът ви информира за текущите имейли, срещи или новини в социалните "
+"мрежи."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "The calendar views"
-msgstr ""
+msgstr "Показванията на календара"
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "The calendar views display a calendar sheet with the appointments for the "
 "selected time range."
 msgstr ""
+"Показванията в календара показват календарен лист с назначенията за избрания "
+"период от време."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -474,102 +547,133 @@ msgid ""
 "Just enable the File details option from the View drop down menu and select "
 "a file to see the details."
 msgstr ""
+"Страничната лента за детайлите на файла предлага допълнителна информация за "
+"файловете ви. Просто активирайте опцията Файл с подробности от падащото меню "
+"Изглед и изберете файл, за да видите подробностите."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The folder tree"
-msgstr ""
+msgstr "Дървото на папките"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The info area"
-msgstr ""
+msgstr "Информационната зона"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The list"
-msgstr ""
+msgstr "Списъкът"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "The settings are organized in topics. Select the topic on the left side, e.g "
 "Basic settings or E-Mail."
 msgstr ""
+"Настройките са организирани по теми. Изберете темата отляво, например "
+"Основни настройки или Електронна поща."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "The toolbar"
-msgstr ""
+msgstr "Лента с инструменти"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "This guided tour will briefly introduce you to the product. Get more "
 "detailed information in the tours for the single apps or in the online help."
 msgstr ""
+"Този обиколка с екскурзовод ще ви запознае накратко с продукта. Получете по-"
+"подробна информация в обиколките за отделните приложения или в онлайн "
+"помощта."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To add further details, click on Expand form."
 msgstr ""
+"За да добавите допълнителни подробности, кликнете върху Разширяване на "
+"формуляра."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid ""
 "To change the layout, drag a square's title to another position and drop it "
 "there."
 msgstr ""
+"За да промените оформлението, плъзнете заглавието на квадратчето в друга "
+"позиция и го поставете там."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To choose between the different views. click on View in the toolbar. Select "
 "a menu entry in the layout."
 msgstr ""
+"Да избирате между различните изгледи. Кликнете върху Изглед в лентата с "
+"инструменти. Изберете елемент от менюто в оформлението."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To compose a new E-Mail, click on Compose in the toolbar."
 msgstr ""
+"За да създадете нова електронна поща, кликнете върху \"Изготвяне\" в лентата "
+"с инструменти."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To create a new E-Mail, click the Compose new E-Mail in the toolbar."
 msgstr ""
+"За да създадете нова електронна поща, кликнете върху \"Създаване на нова "
+"електронна поща\" в лентата с инструменти."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create a new appointment, click on New in the toolbar."
 msgstr ""
+"За да създадете ново събитие, кликнете върху \"Нов\" в лентата с инструменти."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid "To create a new contact, click on New > Add contact in the toolbar."
 msgstr ""
+"За да създадете нов контакт, кликнете върху Нов> Добави контакт в лентата с "
+"инструменти."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create a new task, click on New in the toolbar."
 msgstr ""
+"За да създадете нова задача, кликнете върху \"Нов\" в лентата с инструменти."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "To create recurring appointments, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
+"За да създавате повтарящи се събития, активирайте Повторение. Извеждат се "
+"функции за задаване на параметрите на повтаряне."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
 "To create recurring tasks, enable Repeat. Functions for setting the "
 "recurrence parameters are shown."
 msgstr ""
+"За да създавате повтарящи се задачи, разрешете Повторение. Извеждат се "
+"функции за задаване на параметрите на повтаряне."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To create the appointment, click on Create at the lower left side."
 msgstr ""
+"За да създадете събитието, кликнете върху Създаване в долната лява част."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To create the task, click on Create."
-msgstr ""
+msgstr "За да създадете задачата, кликнете върху Създаване."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid ""
 "To display a square again or to display further information sources, click "
 "on Customize this page."
 msgstr ""
+"За да покажете отново квадрат или да покажете допълнителни източници на "
+"информация, кликнете върху Персонализиране на тази страница."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "To display the help or the settings, click the System menu icon in the menu "
 "bar."
 msgstr ""
+"За да видите помощта или настройките, кликнете върху иконата на системното "
+"меню в лентата с менюта."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
@@ -577,6 +681,9 @@ msgid ""
 "the contacts. If the checkboxes are not displayed, click on View > "
 "Checkboxes on the right side of the toolbar."
 msgstr ""
+"За да редактирате няколко контакта наведнъж, активирайте квадратчетата за "
+"отметки отляво на контактите. Ако квадратчетата за отметка не са показани, "
+"кликнете върху Преглед> Отметки отдясно на лентата с инструменти."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
@@ -584,10 +691,14 @@ msgid ""
 "the tasks. If the checkboxes are not displayed, click on View > Checkboxes "
 "on the right side of the toolbar."
 msgstr ""
+"За да редактирате едновременно няколко задачи, активирайте квадратчетата за "
+"отметки в лявата част на задачите. Ако квадратчетата за отметка не са "
+"показани, кликнете върху Преглед> Отметки отдясно на лентата с инструменти."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To enter billing information, click on Show details."
 msgstr ""
+"За да въведете данните за плащане, кликнете върху Показване на подробностите."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
@@ -595,42 +706,56 @@ msgid ""
 "Participants. To avoid appointment conflicts, click on Find a free time at "
 "the upper right side."
 msgstr ""
+"За да поканите други участници, въведете имената им в полето под участници. "
+"За да избегнете конфликти за назначаване, кликнете върху Намиране на "
+"свободно време в горната дясна част."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid ""
 "To invite other participants, enter their names in the field below "
 "Participants. You can add documents as attachment to the task."
 msgstr ""
+"За да поканите други участници, въведете имената им в полето под участници. "
+"Можете да добавяте документи като прикачен файл към задачата."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To launch an app, click on an entry on the left side of the menu bar."
 msgstr ""
+"За да стартирате приложение, кликнете върху елемент в лявата част на лентата "
+"с менюта."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid "To not miss the appointment, use the reminder function."
-msgstr ""
+msgstr "За да не пропуснете събитието, използвайте функцията за напомняне."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To not miss the task, use the reminder function."
-msgstr ""
+msgstr "За да не пропуснете задачата, използвайте функцията за напомняне."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To open or close an E-Mail in a conversation, click on a free area in the "
 "header."
 msgstr ""
+"За да отворите или затворите електронна поща в разговор, кликнете върху "
+"свободна зона в заглавката."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "To open or close the folder tree, click on View >  Folder view on the right "
 "side of the toolbar."
 msgstr ""
+"За да отворите или затворите дървовидната структура на папките, кликнете "
+"върху Изглед> Преглед на папки от дясната страна на лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To open the E-Mail settings, click the System menu icon on the upper right "
 "side of the menu bar. Select Settings. Click on E-Mail on the left side."
 msgstr ""
+"За да отворите настройките за електронна поща, кликнете върху иконата на "
+"системното меню в горната дясна част на лентата с менюта. Изберете "
+"Настройки. Кликнете върху E-Mail от лявата страна."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
@@ -639,60 +764,80 @@ msgid ""
 "To browse the complete help, click on Start Page or Table Of Contents at the "
 "upper part of the window."
 msgstr ""
+"За да отворите помощта, кликнете върху иконата на системното меню в горната "
+"дясна част на лентата с менюта. Изберете Помощ. Появява се помощта за текущо "
+"избраното приложение. За да прегледате пълната помощ, щракнете върху Начална "
+"страница или Съдържание в горната част на прозореца."
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "To open the settings, click the System menu icon on the upper right side of "
 "the menu bar. Select Settings."
 msgstr ""
+"За да отворите настройките, кликнете върху иконата на системното меню в "
+"горната дясна част на лентата с менюта. Изберете Настройки."
 
 #: apps/io.ox/tours/portal.js module:io.ox/tours
 msgid "To read the details, click on an entry in a square."
-msgstr ""
+msgstr "За да прочетете подробностите, кликнете върху записа в квадрат."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid ""
 "To receive information about the sender or other recipients, open the Halo "
 "view by clicking on a name."
 msgstr ""
+"За да получите информация за изпращача или други получатели, отворете "
+"изгледа Halo, като кликнете върху име."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "To search for objects, click the Search icon in the menu bar."
 msgstr ""
+"За да търсите обекти, кликнете върху иконата за търсене в лентата с менюта."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours
 msgid ""
 "To select one of the views like Day, Month or List, click on View in the "
 "toolbar. Select a menu entry from the Layout section."
 msgstr ""
+"За да изберете един от изгледите като Ден, Месец или Списък, кликнете върху "
+"Изглед в лентата с инструменти. Изберете запис от менюто от секцията Layout."
 
 #: apps/io.ox/tours/contacts.js module:io.ox/tours
 msgid ""
 "To send an E-Mail to the contact, click on an E-Mail address or on Send "
 "email in the toolbar."
 msgstr ""
+"За да изпратите електронна поща на контакта, кликнете върху адрес на "
+"електронна поща или върху Изпращане на имейл в лентата с инструменти."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To send the E-Mail, click on Send"
-msgstr ""
+msgstr "За да изпратите електронната поща, кликнете върху Изпращане"
 
 #: apps/io.ox/tours/settings.js module:io.ox/tours
 msgid ""
 "To sign out, click the System menu icon on the upper right side of the menu "
 "bar. Select Sign out."
 msgstr ""
+"За да излезете от профила си, кликнете върху иконата на системното меню в "
+"горната дясна част на лентата с менюта. Изберете Изход."
 
 #: apps/io.ox/tours/mail.js module:io.ox/tours
 msgid "To sort the E-Mails, click on Sort by. Select a sort criteria."
 msgstr ""
+"За да сортирате имейлите, кликнете върху Сортиране по. Изберете критерии за "
+"сортиране."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To sort the tasks, click on Sort by. Select a sort criteria."
 msgstr ""
+"За да сортирате задачите, кликнете върху Сортиране по. Изберете критерии за "
+"сортиране."
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "To track the editing status, enter the current progress."
 msgstr ""
+"За да проследявате състоянието на редактиране, въведете текущия прогрес."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -701,37 +846,45 @@ msgid ""
 "drag and drop files from your local device into Drive. The uploaded file is "
 "now available in Drive on all your devices."
 msgstr ""
+"За да качите нов файл от локалното си устройство, трябва само да кликнете "
+"върху Добавяне на локален файл и да изберете файла, който искате да качите. "
+"Още по-лесно е да прехвърлите файлове от локалното си устройство в Диск. "
+"Каченият файл вече е налице в Диск на всичките ви устройства."
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Toolbar"
-msgstr ""
+msgstr "Лента с инструменти"
 
 #: apps/io.ox/tours/tasks.js module:io.ox/tours
 msgid "Tracking the editing status"
-msgstr ""
+msgstr "Проследяване на състоянието на редактиране"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid "Upload a new file"
-msgstr ""
+msgstr "Качете нов файл"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Use the folder tree to open the folder containing the objects that you want "
 "to view in the list."
 msgstr ""
+"Използвайте дървовидната папка, за да отворите папката, съдържаща обектите, "
+"които искате да видите в списъка."
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid ""
 "Use the list to select an object, show its contents or activate functions."
 msgstr ""
+"Използвайте списъка, за да изберете обект, да показвате съдържанието му или "
+"да активирате функции."
 
 #: apps/io.ox/tours/calendar.js module:io.ox/tours apps/io.ox/tours/tasks.js
 msgid "Using the reminder function"
-msgstr ""
+msgstr "Използване на функцията за напомняне"
 
 #: apps/io.ox/tours/intro.js module:io.ox/tours
 msgid "Welcome to %s"
-msgstr ""
+msgstr "Добре дошли в %s"
 
 #: apps/io.ox/tours/files.js module:io.ox/tours
 msgid ""
@@ -740,3 +893,8 @@ msgid ""
 "files from all your accounts. This is where you can upload and save your "
 "files, share them and synchronize them with different devices.  "
 msgstr ""
+"Добре дошли в приложението за съхранение в облак. Това направление ще ви "
+"запознае с новото онлайн решение за съхранение - вашата една точка за достъп "
+"до онлайн съхранените файлове от всичките ви профили. Тук можете да качвате "
+"и запазвате файловете си, да ги споделяте и да ги синхронизирате с различни "
+"устройства.  "

@@ -417,9 +417,9 @@ define('io.ox/search/model', [
                         }
                     }
                 }, function () {
-                    return {
+                    throw new Error({
                         message: error.virtual
-                    };
+                    });
                 });
             },
             getFacets: function () {

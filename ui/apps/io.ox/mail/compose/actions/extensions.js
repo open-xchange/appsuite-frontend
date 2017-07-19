@@ -23,6 +23,7 @@ define('io.ox/mail/compose/actions/extensions', [
     api.emptyAttachmentCheck = function (baton) {
         return attachmentEmpty.emptinessCheck(baton.mail.files).then(_.identity, function () {
             baton.stopPropagation();
+            throw arguments;
         });
     };
 

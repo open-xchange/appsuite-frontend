@@ -440,7 +440,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                                         $('<div>').on('click', clickEdit.bind(this)).append(content)
                                     )
                                 );
-                                console.log('onChangeDefault ...');
                                 onChangeDefault();
                             }
                         }

@@ -29,13 +29,13 @@ define('io.ox/core/api/export', [
     });
 
     /**
-     * returns export url
+     * returns export url for complete folders
      * @param  {string} type/format
      * @param  {string} folder
      * @param  {object} options
      * @return { string} url
      */
-    api.getUrl = function (type, folder, options) {
+    api.getURL = function (type, folder, options) {
         var opt = $.extend({ include: true }, options || {});
         return ox.apiRoot + '/export' +
                 '?action=' + type +
@@ -43,6 +43,25 @@ define('io.ox/core/api/export', [
                 '&export_dlists=' + opt.include +
                 '&content_disposition=attachment' +
                 '&session=' + ox.session;
+    };
+
+
+    /**
+     * returns export url for list of contacts/distribution lists
+     * @param  {string} list contacts with at leat folder_id and id property
+     * @return {string} url
+     */
+    api.getVCardURL = function (list, options) {
+        var opt = $.extend({ include: true }, options || {}),
+            ids = _.map(list, function (item) { return [String(item.folder_id), String(item.id)]; });
+        var url = ox.apiRoot + '/export' +
+                '?action=VCARD' +
+                '&ids=' + encodeURIComponent(JSON.stringify(ids)) +
+                '&export_dlists=' + opt.include +
+                '&content_disposition=attachment' +
+                '&session=' + ox.session;
+        // max length check for huge lists of contacts
+        if (url.length <= http.getRequestLengthLimit()) return url;
     };
 
     return api;

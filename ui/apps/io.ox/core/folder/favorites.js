@@ -140,6 +140,7 @@ define('io.ox/core/folder/favorites', [
     function getAffectedSubfolders(collection, id) {
         return collection.filter(function (model) {
             var modelId = model.get('id');
+            if (!modelId) return;
             return modelId.indexOf(id + api.getMailFolderSeparator(modelId)) === 0;
         });
     }

@@ -658,7 +658,6 @@ define('io.ox/mail/actions', [
         mobile: 'lo',
         label: gt('Reply all'),
         ref: 'io.ox/mail/actions/reply-all',
-        drawDisabled: true,
         section: 'standard'
     }));
 

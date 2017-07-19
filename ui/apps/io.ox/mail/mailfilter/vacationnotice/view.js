@@ -45,6 +45,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             gt('Unable to load mail filter settings.') :
             gt('Unable to load your vacation notice. Please retry later.')
         );
+        throw e;
     }
 
     function openModalDialog(data) {
@@ -82,6 +83,16 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             getDurationString: function () {
                 var duration = this.model.getDuration();
                 return duration > 0 ? gt.ngettextf('%1$d day', '%1$d days', duration) : '';
+            },
+            getTimeFrameError: function () {
+                var error = this.model.validate();
+                return (error && error.dateUntil) || '';
+            },
+            reflectValidity: function () {
+                var error = (this.model.validationError || {}).dateUntil;
+                this.$('.error-message > .help-block').text(error).parent().toggle(!!error);
+                this.$('[name="dateUntil"]').parent().toggleClass('has-error', !!error);
+                this.$('.btn-primary[data-action="save"]').prop('disabled', !!error);
             }
         })
         .build(function () {
@@ -164,7 +175,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     $('<div class="row">').append(
                         ['dateFrom', 'dateUntil'].map(function (id) {
                             return $('<div class="col-md-4">').append(
-                                $('<label>').attr('for', 'vacation_notice_' + id).text(labels[id]),
+                                $('<label class="control-label">').attr('for', 'vacation_notice_' + id).text(labels[id]),
                                 new mini.DateView({ name: id, model: baton.model, id: 'vacation_notice_' + id })
                                     .render().$el
                                     .prop('disabled', !baton.model.get('activateTimeFrame'))
@@ -193,9 +204,19 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                     $('<div class="col-md-4 duration">').text(this.getDurationString())
                 );
 
-                this.listenTo(this.model, 'change:dateFrom change:dateUntil', function () {
+                baton.$el.append(
+                    $('<div class="row error-message has-error">').hide().append(
+                        $('<div class="col-md-8 col-md-offset-4 help-block">')
+                    )
+                );
+
+                this.listenTo(this.model, 'change:dateFrom change:dateUntil change:active change:activateTimeFrame', function () {
                     this.$('.duration').text(this.getDurationString());
+                    // trigger internal validation
+                    if (this.model.isValid()) this.reflectValidity();
                 });
+
+                this.listenTo(this.model, 'invalid', this.reflectValidity);
             }
         }
     );

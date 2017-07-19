@@ -13,7 +13,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter'], function (api) {
+define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter', 'gettext!io.ox/mail'], function (api, gt) {
 
     'use strict';
 
@@ -162,6 +162,12 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             }
         },
 
+        // add missing promise support
+        save: function () {
+            var promise = Backbone.Model.prototype.save.apply(this, arguments);
+            return !promise ? $.Deferred().reject(this.validationError) : promise;
+        },
+
         onUpdate: function () {
             // an easy way to propagate changes
             // otherwise we need to sync data across models or introduce a singleton-model-approach
@@ -182,9 +188,26 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             return (this.get('dateUntil') + DAY) > now;
         },
 
+        isPast: function () {
+            return this.has('dateUntil') && (this.get('dateUntil') + DAY) < _.utc();
+        },
+
+        isReverse: function () {
+            return this.has('dateFrom') && this.has('dateUntil') && this.get('dateFrom') > this.get('dateUntil');
+        },
+
         getDuration: function () {
             var from = this.get('dateFrom'), until = this.get('dateUntil');
             return Math.floor(moment.duration(moment(until + DAY).diff(from)).asDays());
+        },
+
+        validate: function () {
+            // false means "good"
+            if (!this.get('active')) return false;
+            if (!this.get('activateTimeFrame')) return false;
+            if (this.isReverse()) return { dateUntil: gt('The end date must be after the start date.') };
+            if (this.isPast()) return { dateUntil: gt('The time frame is in the past.') };
+            return false;
         }
     });
 

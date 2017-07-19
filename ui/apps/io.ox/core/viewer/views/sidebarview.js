@@ -133,14 +133,15 @@ define('io.ox/core/viewer/views/sidebarview', [
          */
         initTabNavigation: function () {
             // build tab navigation and its panes
-            var tabsList = $('<ul class="viewer-sidebar-tabs">'),
-                detailTabLink = $('<a class="tablink" data-tab-id="detail">').text(gt('Details')),
-                detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink),
-                detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">'),
-                thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail">').text(gt('Thumbnails')),
-                thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink),
-                thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
-            tabsList.append(thumbnailTab, detailTab).hide();
+            var tabsList = $('<ul class="viewer-sidebar-tabs hidden">');
+            var detailTabLink = $('<a class="tablink" data-tab-id="detail">').text(gt('Details'));
+            var detailTab = $('<li class="viewer-sidebar-detailtab">').append(detailTabLink);
+            var detailPane = $('<div class="viewer-sidebar-pane detail-pane" data-tab-id="detail">');
+            var thumbnailTabLink = $('<a class="tablink selected"  data-tab-id="thumbnail">').text(gt('Thumbnails'));
+            var thumbnailTab = $('<li class="viewer-sidebar-thumbnailtab">').append(thumbnailTabLink);
+            var thumbnailPane = $('<div class="viewer-sidebar-pane thumbnail-pane" data-tab-id="thumbnail">');
+
+            tabsList.append(thumbnailTab, detailTab);
             this.$el.append(tabsList);
             tabsList.on('click', '.tablink', this.onTabClicked.bind(this));
             this.$el.append(thumbnailPane, detailPane);
@@ -187,14 +188,16 @@ define('io.ox/core/viewer/views/sidebarview', [
          * tab id string to be activated. Supported: 'thumbnail' and 'detail'.
          */
         activateTab: function (tabId) {
-            var tabs = this.$('.tablink'),
-                panes = this.$('.viewer-sidebar-pane'),
-                activatedTab = tabs.filter('[data-tab-id="' + tabId + '"]'),
-                activatedPane = panes.filter('[data-tab-id="' + tabId + '"]');
+            var tabs = this.$('.tablink');
+            var panes = this.$('.viewer-sidebar-pane');
+            var activatedTab = tabs.filter('[data-tab-id="' + tabId + '"]');
+            var activatedPane = panes.filter('[data-tab-id="' + tabId + '"]');
+
             tabs.removeClass('selected');
-            panes.hide();
+            panes.addClass('hidden');
             activatedTab.addClass('selected');
-            activatedPane.show();
+            activatedPane.removeClass('hidden');
+
             // render the tab contents
             switch (tabId) {
                 case 'detail':
@@ -212,6 +215,7 @@ define('io.ox/core/viewer/views/sidebarview', [
                     break;
                 default: break;
             }
+
             // save last activated tab in office standalone mode
             if (this.standalone && (this.model.isOffice() || this.model.isPDF())) {
                 ViewerSettings.setSidebarActiveTab(tabId);
@@ -275,10 +279,10 @@ define('io.ox/core/viewer/views/sidebarview', [
                 // drop handler
                 this.zone.on({
                     show: function () {
-                        detailPane.stop().hide();
+                        detailPane.addClass('hidden');
                     },
                     hide: function () {
-                        detailPane.fadeIn('fast');
+                        detailPane.removeClass('hidden');
                     },
                     drop: this.onNewVersionDropped.bind(this)
                 });
@@ -314,7 +318,7 @@ define('io.ox/core/viewer/views/sidebarview', [
             this.model = model;
             // show tab navigation in office standalone mode
             if (this.standalone && Capabilities.has('document_preview') && (model.isOffice() || model.isPDF()) && !_.device('smartphone')) {
-                this.$('.viewer-sidebar-tabs').show();
+                this.$('.viewer-sidebar-tabs').removeClass('hidden');
                 var lastActivatedThumbnail = ViewerSettings.getSidebarActiveTab();
                 this.activateTab(lastActivatedThumbnail);
             } else {

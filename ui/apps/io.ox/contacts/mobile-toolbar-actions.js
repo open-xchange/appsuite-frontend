@@ -46,6 +46,13 @@ define('io.ox/contacts/mobile-toolbar-actions', [
                 drawDisabled: true,
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
             },
+            'export': {
+                prio: 'lo',
+                mobile: 'lo',
+                label: gt('Export as vCard'),
+                ref: 'io.ox/contacts/actions/export',
+                drawDisabled: true
+            },
             'vcard': {
                 prio: 'lo',
                 mobile: 'lo',

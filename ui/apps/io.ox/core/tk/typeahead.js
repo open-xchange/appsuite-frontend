@@ -15,9 +15,10 @@ define('io.ox/core/tk/typeahead', [
     'io.ox/core/extensions',
     'io.ox/core/api/autocomplete',
     'settings!io.ox/contacts',
+    'settings!io.ox/core',
     'static/3rd.party/typeahead.jquery.js',
     'css!3rd.party/bootstrap-tokenfield/css/tokenfield-typeahead.css'
-], function (ext, AutocompleteAPI, settings) {
+], function (ext, AutocompleteAPI, settings, coreSettings) {
 
     'use strict';
 
@@ -74,16 +75,16 @@ define('io.ox/core/tk/typeahead', [
 
             if (o.apiOptions) {
                 // limit per autocomplete/search api
-                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : 10;
+                var limit  = o.apiOptions.limit !== undefined ? o.apiOptions.limit : coreSettings.get('autocompleteApiLimit', 10);
                 o.apiOptions.limit = limit;
 
                 // overall limit
                 if (!o.maxResults) {
                     // Max limit for draw operation in dropdown depending on used apis
-                    o.maxResults = limit * _(o.apiOptions).filter(function (val) { return val === true; }).length;
+                    o.maxResults = coreSettings.get('autocompleteDrawLimit', limit * _(o.apiOptions).filter(function (val) { return val === true; }).length);
                 }
             } else {
-                o.maxResults = 25;
+                o.maxResults = coreSettings.get('autocompleteDrawLimit', 25);
             }
 
             // use a clone instead of shared default-options-object

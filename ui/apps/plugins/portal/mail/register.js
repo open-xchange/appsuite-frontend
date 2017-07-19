@@ -324,7 +324,7 @@ define('plugins/portal/mail/register', [
                     api.on('deleted-mails', remove);
                 },
                 function fail(e) {
-                    return e.code === 'MSG-0032' ? 'remove' : e;
+                    throw e.code === 'MSG-0032' ? 'remove' : e;
                 }
             );
         },

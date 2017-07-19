@@ -731,7 +731,7 @@ define('io.ox/mail/compose/view', [
                 return;
             }
             // only fade in once, then leave it there
-            this.$el.parents().find('.inline-yell').text(text).fadeIn();
+            this.$el.closest('.io-ox-mail-compose-window').find('.inline-yell').text(text).fadeIn();
         },
 
         clean: function () {
