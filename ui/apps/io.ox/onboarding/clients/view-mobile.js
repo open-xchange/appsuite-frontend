@@ -169,7 +169,7 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         get: function () {
             return new ModalDialog({
-                title: gt('Connect your device'),
+                title: gt('Connect this device'),
                 point: 'io.ox/onboarding/clients/views/mobile',
                 maximize: false
             })
