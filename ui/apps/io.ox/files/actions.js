@@ -373,6 +373,8 @@ define('io.ox/files/actions', [
                 e.collection.has('some', 'modify', 'items') &&
                 // hide in mail compose preview
                 (e.baton.openedBy !== 'io.ox/mail/compose') &&
+                util.hasStatus('locked', e) &&
+                // locked or created by me
                 (util.hasStatus('lockedByMe', e) || util.hasStatus('createdByMe', e));
 
             // only test the second condition when files are selected, so 'some' and 'items' must be checked in the preCondition
