@@ -20,12 +20,15 @@ define('io.ox/calendar/chronos-api', [
 ], function (http, Pool, util, models) {
 
     'use strict';
+
     // updates pool based on writing operations response (create update delete etc)
     var processResponse  = function (response) {
             if (!response) return;
 
             _(response.created).each(function (event) {
                 api.pool.add(event.folder, event);
+                api.trigger('create', event);
+                api.trigger('create:' + _.cid(event), event);
             });
             _(response.deleted).each(function (event) {
                 api.pool.get(event.folder).remove(_.cid(event));
@@ -34,6 +37,8 @@ define('io.ox/calendar/chronos-api', [
             });
             _(response.updated).each(function (event) {
                 api.pool.add(event.folder, event);
+                api.trigger('update', event);
+                api.trigger('update:' + _.cid(event), event);
             });
 
             return response;
@@ -120,6 +125,28 @@ define('io.ox/calendar/chronos-api', [
                     data: list
                 })
                 .then(processResponse);
+            },
+
+            // returns events for a list of attendees, using the freebusy api
+            freebusyEvents: function (list, options) {
+                if (list.length === 0) {
+                    return $.Deferred().resolve([]);
+                }
+
+                options = _.extend({
+                    from: _.now(),
+                    until: moment().add(1, 'day').valueOf()
+                }, options);
+
+                return http.GET({
+                    module: 'chronos/freebusy',
+                    params: {
+                        action: 'events',
+                        from: options.from,
+                        until: options.until,
+                        attendees: list
+                    }
+                });
             }
         };
 

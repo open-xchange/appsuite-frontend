@@ -43,14 +43,14 @@ define('io.ox/calendar/freetime/main', [
             this.parentModel = options.parentModel;
             this.app = options.app;
             if (options.parentModel) {
-                this.model.get('participants').add(options.parentModel.get('participants'));
-                this.model.set('currentWeek', moment(options.parentModel.get('start_date')).startOf('week'));
+                this.model.get('attendees').add(options.parentModel.get('attendees'));
+                this.model.set('currentWeek', moment(options.parentModel.get('startDate')).startOf('week'));
             } else {
                 if (options.startDate) {
-                    this.model.set('currentWeek', moment(options.startDate).startOf('week'));
+                    this.model.set('currentWeek', moment(options.startDate).startOf('week').startOf('week'));
                 }
-                if (options.participants) {
-                    this.model.get('participants').add(options.participants);
+                if (options.attendees) {
+                    this.model.get('attendees').add(options.attendees);
                 }
             }
 
@@ -60,7 +60,7 @@ define('io.ox/calendar/freetime/main', [
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:compact', self.updateCompact.bind(this));
             this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
-            this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateSettings.bind(this));
+            this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showReserved', self.updateSettings.bind(this));
 
             api.on('refresh.all update', refresh);
             this.on('dispose', function () {
@@ -85,9 +85,7 @@ define('io.ox/calendar/freetime/main', [
             settings.set('scheduling/zoom', this.model.get('zoom'));
             settings.set('scheduling/onlyWorkingHours', this.model.get('onlyWorkingHours'));
             settings.set('scheduling/showFree', this.model.get('showFree'));
-            settings.set('scheduling/showAbsent', this.model.get('showAbsent'));
             settings.set('scheduling/showReserved', this.model.get('showReserved'));
-            settings.set('scheduling/showTemporary', this.model.get('showTemporary'));
             settings.set('scheduling/compact', this.model.get('compact'));
             settings.save();
         },
@@ -151,7 +149,8 @@ define('io.ox/calendar/freetime/main', [
                 var appointment = this.createAppointment();
 
                 if (appointment) {
-                    appointment.folder = coreSettings.get('folder/calendar');
+                    // TODO change core settings so the default folder isn't just a number
+                    appointment.folder = 'cal://0/' + coreSettings.get('folder/calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {
                             this.create(appointment);
@@ -268,7 +267,7 @@ define('io.ox/calendar/freetime/main', [
                     description: gt('Scheduling'),
                     module: 'io.ox/calendar/freetime',
                     point:  {
-                        participants: this.view.model.get('participants'),
+                        attendees: this.view.model.get('attendees'),
                         currentWeek: this.view.model.get('currentWeek').valueOf(),
                         lassoStart: this.view.timeSubview.lassoStart,
                         lassoEnd: this.view.timeSubview.lassoEnd
@@ -289,7 +288,7 @@ define('io.ox/calendar/freetime/main', [
             } else {
                 this.view.timeSubview.keepScrollpos = this.view.timeSubview.lassoStartTime;
             }
-            this.view.model.get('participants').add(point.participants);
+            this.view.model.get('attendees').add(point.attendees);
 
             return $.when();
         };

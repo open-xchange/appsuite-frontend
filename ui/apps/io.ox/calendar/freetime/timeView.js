@@ -15,28 +15,25 @@ define('io.ox/calendar/freetime/timeView', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/calendar',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/backbone/views/datepicker'
-], function (DisposableView, ext, gt, api, Dropdown, settings, util, DatePicker) {
+], function (DisposableView, ext, gt, api, Dropdown, settings, util, chronosUtil, DatePicker) {
 
     'use strict';
 
     var pointHeader = ext.point('io.ox/calendar/freetime/time-view-header'),
         pointBody = ext.point('io.ox/calendar/freetime/time-view-body'),
         availabilityClasses = {
-            1: 'reserved',
-            2: 'temporary',
-            3: 'absent',
-            4: 'free'
+            'OPAQUE': 'reserved',
+            'TRANSPARENT': 'free'
         },
         zIndexbase = {
             free: 0,
-            temporary: 1000,
-            reserved: 2000,
-            absent: 3000
+            reserved: 1000
         };
 
     // header
@@ -81,15 +78,6 @@ define('io.ox/calendar/freetime/timeView', [
                         'aria-label': gt('Previous Day')
                     })
                     .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
-                    // let's try a first round without today button
-                    // don't know how important that is; date picker offers today anyway
-                    // $('<a class="control today" >').attr({
-                    //     href: '#',
-                    //     role: 'button',
-                    //     title: gt('Today'),
-                    //     'aria-label': gt('Today')
-                    // })
-                    // .append($('<i class="fa fa-circle" aria-hidden="true">')),
                     $('<a href="#" role="button" class="control next">').attr({
                         title: gt('Next Day'),
                         'aria-label': gt('Next Day')
@@ -117,9 +105,7 @@ define('io.ox/calendar/freetime/timeView', [
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))
-                .option('showTemporary', true, gt('Temporary'))
                 .option('showReserved', true, gt('Reserved'))
-                .option('showAbsent', true, gt('Absent'))
                 .divider()
                 .option('onlyWorkingHours', true, gt('Hide non-working time'));
 
@@ -262,38 +248,34 @@ define('io.ox/calendar/freetime/timeView', [
             var table = $('<div class="appointments">').appendTo(this.find('.freetime-table')),
                 tooltipContainer = baton.view.headerNodeRow1.parent().parent().parent();
 
-            _(baton.model.get('participants').models).each(function (participant) {
-                var participantTable = $('<div class="appointment-table">').attr('data-value', participant.get('id')).appendTo(table);
+            _(baton.model.get('attendees').models).each(function (attendee) {
+                var attendeeTable = $('<div class="appointment-table">').attr('data-value', attendee.get('entity')).appendTo(table);
 
-                _(baton.model.get('appointments')[participant.get('id')]).each(function (appointment, index) {
-                    var start = appointment.start_date,
-                        end = appointment.end_date;
-                    // fulltime appointments are timezone independent (birthday/holiday feature)
-                    if (appointment.full_time) {
-                        start = moment.utc(start).local(true).valueOf();
-                        end = moment.utc(end).local(true).valueOf();
-                    }
+                _(baton.model.get('appointments')[attendee.get('entity')]).each(function (appointment, index) {
+                    var start = moment.tz(appointment.startDate.value, appointment.startDate.tzid).valueOf(),
+                        end = moment.tz(appointment.endDate.value, appointment.endDate.tzid).valueOf();
+
                     var left = baton.view.timeToPosition(start),
                         right = 100 - baton.view.timeToPosition(end),
                         appointmentNode = $('<div class="appointment" draggable="false">')
-                            .addClass(availabilityClasses[appointment.shown_as])
+                            .addClass(availabilityClasses[appointment.transp])
                             .css({ left: left + '%', right: right + '%' });
 
                     // appointment has a width of 0 it doesn't need to be drawn (happens if appointment is in non-working-times and the option to display them is deactivated)
                     if (100 - left - right === 0) {
                         return;
                     }
-                    appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.shown_as]] + index + (appointment.full_time ? 0 : 4000));
+                    appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.transp]] + index + (chronosUtil.isAllday(appointment) ? 0 : 2000));
 
-                    if (appointment.title) {
+                    if (appointment.summary) {
                         appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(
-                            $('<div class="title">').text(appointment.title).append(
+                            $('<div class="title">').text(appointment.summary).append(
                                 $('<span class="appointment-time">').text(util.getTimeInterval(appointment))
                             )
                         )
                         .attr({
-                            title: appointment.title + (appointment.location ? ' ' + appointment.location : ''),
-                            'aria-label': appointment.title,
+                            title: appointment.summary + (appointment.location ? ' ' + appointment.location : ''),
+                            'aria-label': appointment.summary,
                             'data-toggle': 'tooltip'
                         }).tooltip({ container: tooltipContainer });
                     }
@@ -301,7 +283,7 @@ define('io.ox/calendar/freetime/timeView', [
                         appointmentNode.addClass('has-location').append($('<div class="location">').text(appointment.location));
                     }
 
-                    if (baton.view.parentView.options.isApp && (appointment.folder_id || settings.get('freeBusyStrict', true) === false)) {
+                    if (baton.view.parentView.options.isApp && (appointment.folder || settings.get('freeBusyStrict', true) === false)) {
                         appointmentNode.addClass('has-detailview').on('click', function (e) {
                             //don't open if this was a lasso drag
                             if (baton.view.lassoEnd === baton.view.lassoStart) {
@@ -329,7 +311,7 @@ define('io.ox/calendar/freetime/timeView', [
                             }
                         });
                     }
-                    participantTable.append(appointmentNode);
+                    attendeeTable.append(appointmentNode);
                 });
             });
             // timeviewbody and header must be the same width or they scroll out off sync (happens when timeviewbody has scrollbars)
@@ -363,9 +345,9 @@ define('io.ox/calendar/freetime/timeView', [
                 .on('scroll', self.onScroll.bind(this));
 
             // add some listeners
-            this.model.get('participants').on('add reset', self.getAppointments.bind(this));
+            this.model.get('attendees').on('add reset', self.getAppointments.bind(this));
             // no need to fire a server request when removing a participant
-            this.model.get('participants').on('remove', self.removeParticipant.bind(this));
+            this.model.get('attendees').on('remove', self.removeParticipant.bind(this));
             this.model.on('change:onlyWorkingHours', self.onChangeWorkingHours.bind(this));
             this.model.on('change:currentWeek', self.getAppointmentsInstant.bind(this));
             this.model.on('change:appointments', self.renderBody.bind(this));
@@ -378,14 +360,9 @@ define('io.ox/calendar/freetime/timeView', [
             this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 28);
 
             // preselect lasso
-            if (options.parentModel && options.parentModel.get('start_date') !== undefined && options.parentModel.get('end_date') !== undefined) {
-                var start = options.parentModel.get('start_date'),
-                    end = options.parentModel.get('end_date');
-                // fulltime appointments are timezone independent (birthday/holiday feature)
-                if (options.parentModel.get('full_time')) {
-                    start = moment.utc(start).local(true).valueOf();
-                    end = moment.utc(end).local(true).valueOf();
-                }
+            if (options.parentModel && options.parentModel.get('startDate') !== undefined && options.parentModel.get('endDate') !== undefined) {
+                var start = moment.tz(options.parentModel.get('startDate').value, options.parentModel.get('startDate').tzid).valueOf(),
+                    end = moment.tz(options.parentModel.get('endDate').value, options.parentModel.get('endDate').tzid).valueOf();
                 this.lassoStart = this.timeToPosition(start);
                 this.lassoEnd = this.timeToPosition(end);
                 this.keepScrollpos = start;
@@ -454,7 +431,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         renderBody: function () {
-            if (this.model.get('participants').length !== _(this.model.get('appointments')).keys().length) {
+            if (this.model.get('attendees').length !== _(this.model.get('appointments')).keys().length) {
                 this.getAppointmentsInstant();
             } else {
                 var baton = new ext.Baton({ view: this, model: this.model });
@@ -477,40 +454,36 @@ define('io.ox/calendar/freetime/timeView', [
             this.bodyNode.busy(true);
             // get fresh appointments
             var self = this,
-                start,
-                end,
-                participants = this.model.get('participants').toJSON(),
+                from,
+                until,
+                attendees = this.model.get('attendees').pluck('entity'),
                 appointments = {};
 
             // no need to get appointments for every participant all the time
             if (addOnly === true) {
                 var keys = _(self.model.get('appointments')).keys();
-                participants = _(participants).filter(function (participant) {
-                    return _(keys).indexOf(String(participant.id)) === -1;
+                attendees = _(attendees).filter(function (attendee) {
+                    return _(keys).indexOf(String(attendee)) === -1;
                 });
             }
 
             if (this.model.get('onlyWorkingHours')) {
-                start = moment(this.model.get('currentWeek')).add(this.model.get('startHour'), 'hours');
-                end = moment(start).add(6, 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
+                from = moment(this.model.get('currentWeek')).add(this.model.get('startHour'), 'hours');
+                until = moment(from).add(6, 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
             } else {
-                start = moment(this.model.get('currentWeek')).startOf('day');
-                end = moment(start).add(1, 'weeks');
+                from = moment(this.model.get('currentWeek')).startOf('day');
+                until = moment(until).add(1, 'weeks');
             }
 
-            return api.freebusy(participants, { start: start.valueOf(), end: end.valueOf() }).done(function (items) {
+            return api.freebusyEvents(attendees.toString(), { from: from.valueOf(), until: until.valueOf() }).done(function (items) {
                 if (addOnly === true) {
                     appointments = self.model.get('appointments');
                 }
                 var sorted;
-                for (var i = 0; i < participants.length; i++) {
-                    if (items [i]) {
-                        // sort by start_date
-                        sorted = _(items[i].data).sortBy('start_date');
-                        appointments[participants[i].id] = sorted;
-                    } else {
-                        appointments[participants[i].id] = [];
-                    }
+                for (var i = 0; i < attendees.length; i++) {
+                    // sort by startDate
+                    sorted = _(items[i].events).sortBy('startDate');
+                    appointments[attendees[i]] = sorted;
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
@@ -520,7 +493,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         removeParticipant: function (model) {
-            var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('id') + '"]'),
+            var node = this.bodyNode.find('.appointment-table[data-value="' + model.get('entity') + '"]'),
                 appointments = this.model.get('appointments');
             if (node.length) {
                 node.remove();
@@ -705,26 +678,17 @@ define('io.ox/calendar/freetime/timeView', [
                 }
                 var startTime = Math.min(this.lassoStartTime, this.lassoEndTime),
                     endTime = Math.max(this.lassoStartTime, this.lassoEndTime),
-                    participants = this.model.get('participants').map(function (model) {
-                        var tempParticipant = { id: model.get('id'), type: model.get('type') };
-                        if (model.get('type') === 5) {
-                            // External participants need more data for an appointment
-                            tempParticipant.id = tempParticipant.mail = model.getTarget();
-                            tempParticipant.display_name = model.getDisplayName();
-                            tempParticipant.image1_url = model.get('image1_url');
-                        }
-                        return tempParticipant;
-                    });
+                    attendees = this.model.get('attendees').toJSON();
 
                 //round to full minutes
-                startTime = moment.utc(startTime).startOf('minute').valueOf();
-                endTime = moment.utc(endTime).startOf('minute').valueOf();
+                startTime = moment(startTime).startOf('minute');
+                endTime = moment(endTime).startOf('minute');
 
                 return {
-                    start_date: startTime,
-                    end_date: endTime,
-                    full_time: false,
-                    participants: participants
+                    startDate: { value: startTime.format('YYYYMMDD[T]HHmmss'), tzid: startTime.tz() },
+                    endDate: { value: endTime.format('YYYYMMDD[T]HHmmss'), tzid: endTime.tz() },
+                    allDay: false,
+                    attendees: attendees
                 };
             }
         },

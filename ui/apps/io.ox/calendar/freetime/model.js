@@ -11,7 +11,7 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/participants/model'], function (settings, participantsModel) {
+define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar'], function (settings) {
 
     'use strict';
 
@@ -26,11 +26,9 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar', 'io.ox/parti
                 onlyWorkingHours: settings.get('scheduling/onlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),
                 endHour: Math.min(parseInt(settings.get('endTime', 18), 10), 24),
-                participants: new participantsModel.Participants([], { splitGroups: true }),
+                attendees: new Backbone.Collection(),
                 showFree: settings.get('scheduling/showFree', false),
-                showAbsent: settings.get('scheduling/showAbsent', true),
                 showReserved: settings.get('scheduling/showReserved', true),
-                showTemporary: settings.get('scheduling/showTemporary', true),
                 appointments: {}
             });
         }

@@ -118,7 +118,7 @@ define('io.ox/participants/chronos-views', [
         isOrganizer: function () {
             if (!this.options.baton) return false;
             var appointment = this.options.baton.model.toJSON();
-            if (!appointment.organizer.entity) return false;
+            if (!appointment.organizer || !appointment.organizer.entity) return false;
             return this.model.get('entity') === appointment.organizer.entity;
         },
 
@@ -126,7 +126,7 @@ define('io.ox/participants/chronos-views', [
             if (!this.options.baton) return false;
             var appointment = this.options.baton.model.toJSON();
             // participants can be removed unless they are organizer
-            if (this.model.get('entity') !== appointment.organizer.entity) return true;
+            if (!appointment.organizer || this.model.get('entity') !== appointment.organizer.entity) return true;
             // special case: organizer can be removed from public folders
             return folderAPI.pool.getModel(appointment.folder).is('public');
         },
@@ -242,7 +242,7 @@ define('io.ox/participants/chronos-views', [
             view.render().$el.addClass(this.options.entryClass || 'col-xs-12 col-sm-6');
 
             // bring organizer up
-            if (participant.get('entity') === this.options.baton.model.get('organizer').entity) {
+            if (this.options.baton.model.get('organizer') && participant.get('entity') === this.options.baton.model.get('organizer').entity) {
                 this.$ul.prepend(view.$el);
             } else {
                 this.$ul.append(view.$el);
