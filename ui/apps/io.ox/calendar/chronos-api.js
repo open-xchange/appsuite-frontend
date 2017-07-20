@@ -134,8 +134,8 @@ define('io.ox/calendar/chronos-api', [
                 }
 
                 options = _.extend({
-                    from: _.now(),
-                    until: moment().add(1, 'day').valueOf()
+                    from: moment().startOf('day').format('YYYYMMDD[T]HHmmss[Z]'),
+                    until: moment().startOf('day').add(1, 'day').format('YYYYMMDD[T]HHmmss[Z]')
                 }, options);
 
                 return http.GET({
@@ -144,7 +144,8 @@ define('io.ox/calendar/chronos-api', [
                         action: 'events',
                         from: options.from,
                         until: options.until,
-                        attendees: list
+                        attendees: list,
+                        includeStackTraceOnError: true
                     }
                 });
             }

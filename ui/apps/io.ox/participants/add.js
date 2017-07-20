@@ -177,9 +177,9 @@ define('io.ox/participants/add', [
             list = this.getValidAddresses(list);
 
             if (this.options.convertToAttendee) {
-                list = _(list).map(function (item) {
+                list = _(list).chain().map(function (item) {
                     return chronosUtil.createAttendee(item);
-                });
+                }).flatten().value();
             }
 
             this.collection.add(list);

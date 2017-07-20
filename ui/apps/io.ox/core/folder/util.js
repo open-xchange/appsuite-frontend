@@ -311,7 +311,7 @@ define('io.ox/core/folder/util', [
     // simple generic check to see if the folder supports a capability
     // supports models and objects containing folder data
     function supports(capability, data) {
-        return data.get ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
+        return data instanceof Backbone.Model ? _(data.get('supported_capabilities')).indexOf(capability) > -1 : _(data.supported_capabilities).indexOf(capability) > -1;
     }
 
     /*

@@ -45,12 +45,19 @@ define('io.ox/calendar/chronos-util', [
             }
         },
         // creates an attendee object from a user object or model and contact model or object
+        // distribution lists create an array of attendees representing the menmbers of the distribution list
         // used to create default participants and used by addparticipantsview
-        // options can contain attende object fields that should be prefilled (usually partStat: 'ACCEPTED')
+        // options can contain attendee object fields that should be prefilled (usually partStat: 'ACCEPTED')
         createAttendee: function (user, options) {
+
             if (!user) return;
             // make it work for models and objects
-            user = user.get ? user.attributes : user;
+            user = user instanceof Backbone.Model ? user.attributes : user;
+
+            // distribution lists are split into members
+            if (user.mark_as_distributionlist) {
+                return _(user.distribution_list).map(this.createAttendee);
+            }
             options = options || {};
             var attendee = {
                 cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
@@ -60,15 +67,24 @@ define('io.ox/calendar/chronos-util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if (user.id && user.type !== 5) attendee.entity = user.id;
-                attendee.email = user.email1;
-                attendee.uri = 'mailto:' + user.email1;
+                if (user.user_id && user.type !== 5) attendee.entity = user.user_id;
+                attendee.email = user.email1 || user.mail;
+                attendee.uri = 'mailto:' + (user.email1 || user.mail);
             } else {
                 attendee.partStat = 'ACCEPTED';
                 attendee.comment = user.description;
                 attendee.entity = user.id;
             }
 
+            if (attendee.cuType === 'GROUP') {
+                attendee.entity = user.id;
+                // not really needed. Added just for convenience. Helps if group should be resolved
+                attendee.members = user.members;
+            }
+            // not really needed. Added just for convenience. Helps if distibution list should be created
+            if (attendee.cuType === 'INDIVIDUAL') {
+                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
+            }
             // override with predefined values if given
             return _.extend(attendee, options);
         },
@@ -77,7 +93,7 @@ define('io.ox/calendar/chronos-util', [
         // checking the start date is sufficient as the end date must be of the same type, according to the spec
         isAllday: function (app) {
             if (!app) return false;
-            app = app.get ? app.attributes : app;
+            app = app instanceof Backbone.Model ? app.attributes : app;
             if (_(app).has('allDay')) return app.allDay;
 
             var time = app.startDate;
@@ -88,7 +104,7 @@ define('io.ox/calendar/chronos-util', [
         // appointments may be in local time. This means they do not move when the timezone changes. Do not confuse this with UTC time
         isLocal: function (app) {
             if (!app) return false;
-            var time = app.get ? app.get('startDate') : app.startDate;
+            var time = app instanceof Backbone.Model ? app.get('startDate') : app.startDate;
             return time && time.value && !time.tzid;
         }
     };

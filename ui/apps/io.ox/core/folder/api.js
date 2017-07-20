@@ -103,7 +103,7 @@ define('io.ox/core/folder/api', [
 
     function isExternalFileStorage(data) {
         //
-        var type = data.get ? data.get('type') : data.type;
+        var type = data instanceof Backbone.Model ? data.get('type') : data.type;
         return type === 14;
     }
 
