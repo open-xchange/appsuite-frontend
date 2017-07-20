@@ -25,7 +25,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
                 models = _(models).filter(function (model) {
                     return model.preserve !== true;
                 });
-                backbone.Collection.prototype._removeModels.call(this, models, options);
+                return backbone.Collection.prototype._removeModels.call(this, models, options);
             }
         });
 
