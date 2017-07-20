@@ -19,8 +19,48 @@ define('io.ox/calendar/chronos-model', [
 
     'use strict';
 
-    var AttendeeModel = Backbone.Model.extend({ idAttribute: 'entity' }),
-        AttendeeCollection = Backbone.Collection.extend({ model: AttendeeModel });
+    var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
+        AttendeeCollection = Backbone.Collection.extend({
+            // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
+            // Some attendee types don't have an email address (groups and resources), but have entity numbers. Use those as id to prevent duplicates
+            modelId: function (attrs) {
+                return attrs.email || attrs.entity;
+            },
+            initialize: function (models, options) {
+                this.options = options || {};
+                if (this.options.resolveGroups) {
+                    this.oldAdd = this.add;
+                    this.add = this.addAsync;
+                }
+            },
+            // special add function that allows resolving of groups
+            // is used when option resolveGroups is active (used by scheduling view)
+            addAsync: function (models, options) {
+                var usersToResolve  = [],
+                    modelsToAdd = [],
+                    self = this,
+                    def = $.Deferred();
+                models = [].concat(models);
+                _(models).each(function (model) {
+                    if (model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
+                        usersToResolve = _.uniq(usersToResolve.concat(model instanceof Backbone.Model ? model.get('members') : model.members));
+                    } else {
+                        modelsToAdd.push(model);
+                    }
+                });
+                require(['io.ox/core/api/user'], function (userAPI) {
+                    userAPI.getList(usersToResolve).done(function (users) {
+                        modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                            return util.createAttendee(user);
+                        })));
+                        // no merge here or we would overwrite the confirm status
+                        def.resolve(self.oldAdd(modelsToAdd, options));
+                    }).fail(def.reject);
+                });
+
+                return def;
+            }
+        });
 
     var Model = Backbone.Model.extend({
         idAttribute: 'cid',
@@ -44,6 +84,7 @@ define('io.ox/calendar/chronos-model', [
                 if (changeAttendeesUpdate) {
                     return;
                 }
+
                 resetListUpdate = true;
                 self.set('attendees', this.toJSON(), { validate: true });
                 resetListUpdate = false;
@@ -178,6 +219,7 @@ define('io.ox/calendar/chronos-model', [
 
     return {
         Model: Model,
-        Collection: Collection
+        Collection: Collection,
+        AttendeeCollection: AttendeeCollection
     };
 });

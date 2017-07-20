@@ -42,15 +42,16 @@ define('io.ox/calendar/freetime/main', [
             this.options = options || {};
             this.parentModel = options.parentModel;
             this.app = options.app;
+            var attendeesToAdd = [];
             if (options.parentModel) {
-                this.model.get('attendees').add(options.parentModel.get('attendees'));
+                attendeesToAdd = options.parentModel.get('attendees');
                 this.model.set('currentWeek', moment(options.parentModel.get('startDate')).startOf('week'));
             } else {
                 if (options.startDate) {
                     this.model.set('currentWeek', moment(options.startDate).startOf('week').startOf('week'));
                 }
                 if (options.attendees) {
-                    this.model.get('attendees').add(options.attendees);
+                    attendeesToAdd = options.attendees;
                 }
             }
 
@@ -79,6 +80,7 @@ define('io.ox/calendar/freetime/main', [
             this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));
             this.updateWorkingHours();
             this.updateCompact();
+            return this.model.get('attendees').add(attendeesToAdd);
         },
 
         updateSettings: function () {
@@ -138,7 +140,7 @@ define('io.ox/calendar/freetime/main', [
 
             distributionListButton.on('click', function () {
                 require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
-                    distrib.showDialog({ participants: self.model.get('participants') });
+                    distrib.showDialog({ attendees: self.model.get('attendees') });
                 });
             });
             return distributionListButton;
@@ -288,9 +290,7 @@ define('io.ox/calendar/freetime/main', [
             } else {
                 this.view.timeSubview.keepScrollpos = this.view.timeSubview.lassoStartTime;
             }
-            this.view.model.get('attendees').add(point.attendees);
-
-            return $.when();
+            return this.view.model.get('attendees').add(point.attendees);
         };
 
         app.getContextualHelp = function () {

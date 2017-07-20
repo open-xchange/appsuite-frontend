@@ -11,7 +11,10 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/calendar/freetime/model', [
+    'settings!io.ox/calendar',
+    'io.ox/calendar/chronos-model'
+], function (settings, chronosModel) {
 
     'use strict';
 
@@ -26,7 +29,7 @@ define('io.ox/calendar/freetime/model', ['settings!io.ox/calendar'], function (s
                 onlyWorkingHours: settings.get('scheduling/onlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),
                 endHour: Math.min(parseInt(settings.get('endTime', 18), 10), 24),
-                attendees: new Backbone.Collection(),
+                attendees: new chronosModel.AttendeeCollection(null, { resolveGroups: true }),
                 showFree: settings.get('scheduling/showFree', false),
                 showReserved: settings.get('scheduling/showReserved', true),
                 appointments: {}

@@ -472,10 +472,10 @@ define('io.ox/calendar/freetime/timeView', [
                 until = moment(from).add(6, 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
             } else {
                 from = moment(this.model.get('currentWeek')).startOf('day');
-                until = moment(until).add(1, 'weeks');
+                until = moment(from).add(1, 'weeks');
             }
 
-            return api.freebusyEvents(attendees.toString(), { from: from.valueOf(), until: until.valueOf() }).done(function (items) {
+            return api.freebusyEvents(attendees.toString(), { from: from.format('YYYYMMDD[T]HHmmss[Z]'), until: until.format('YYYYMMDD[T]HHmmss[Z]') }).done(function (items) {
                 if (addOnly === true) {
                     appointments = self.model.get('appointments');
                 }
