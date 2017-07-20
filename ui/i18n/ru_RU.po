@@ -117,10 +117,6 @@ msgstr[0] "Выбрано %1$d сообщение"
 msgstr[1] "Выбрано %1$d сообщения"
 msgstr[2] "Выбрано %1$d сообщений"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "сообщений в обсуждении: %1$d"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11176,6 +11172,9 @@ msgstr "вашей платформы"
 #~ msgstr[0] "%1$d час %2$s"
 #~ msgstr[1] "%1$d часа %2$s"
 #~ msgstr[2] "%1$d часов %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "сообщений в обсуждении: %1$d"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d из %2$d"

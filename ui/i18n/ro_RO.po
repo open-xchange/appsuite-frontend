@@ -118,10 +118,6 @@ msgstr[0] "%1$d mesaj selectat"
 msgstr[1] "%1$d mesaje selectate"
 msgstr[2] "%1$d de mesaje selectate"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d mesaje în această conversație"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11278,6 +11274,9 @@ msgstr "platforma dumneavoastră"
 #~ msgstr[0] "%1$d oră și %2$s"
 #~ msgstr[1] "%1$d ore și %2$s"
 #~ msgstr[2] "%1$d de ore și %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "%1$d mesaje în această conversație"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d din %2$d"

@@ -119,10 +119,6 @@ msgstr[0] "Wybrano %1$d wiadomość"
 msgstr[1] "Wybrano %1$d wiadomości"
 msgstr[2] "Wybrano %1$d wiadomości"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "Liczba wiadomości w konwersacji: %1$d"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11265,6 +11261,9 @@ msgstr "Twoja platforma"
 #~ msgstr[0] "%1$d godzinę i %2$s"
 #~ msgstr[1] "%1$d godziny i %2$s"
 #~ msgstr[2] "%1$d godzin i %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "Liczba wiadomości w konwersacji: %1$d"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d z %2$d"

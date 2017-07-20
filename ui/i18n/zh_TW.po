@@ -106,10 +106,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "已選擇 %1$d 封訊息"
 msgstr[1] "已選擇 %1$d 封訊息"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "此對話中的 %1$d 封訊息"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -10984,6 +10980,9 @@ msgstr "您的平台"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d 小時和 %2$s"
 #~ msgstr[1] "%1$d 小時和 %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "此對話中的 %1$d 封訊息"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "第 %1$d 張，共 %2$d 張"

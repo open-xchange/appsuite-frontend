@@ -10471,11 +10471,6 @@ msgstr ""
 
 #: apps/io.ox/mail/threadview.js
 #: module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr ""
-
-#: apps/io.ox/mail/threadview.js
-#: module:io.ox/mail
 msgid "Toggle viewport size"
 msgstr ""
 

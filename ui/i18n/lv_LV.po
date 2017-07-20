@@ -116,10 +116,6 @@ msgstr[0] "Izvēlēts %1$d ziņojums"
 msgstr[1] "Izvēlēti %1$d ziņojumi"
 msgstr[2] "Izvēlēti %1$d ziņojumi"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "Šai sarunā ir %1$d ziņojumi"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11259,6 +11255,9 @@ msgstr "jūsu platforma"
 #~ msgstr[0] "%1$d stunda un %2$s"
 #~ msgstr[1] "%1$d stundas un %2$s"
 #~ msgstr[2] "%1$d stundas un %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "Šai sarunā ir %1$d ziņojumi"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d no %2$d"

@@ -96,10 +96,6 @@ msgid "%1$d message selected"
 msgid_plural "%1$d messages selected"
 msgstr[0] "%1$d 件のメッセージが選択されています。"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "このスレッドに %1$d 件のメッセージが含まれています。"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11098,6 +11094,9 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "%1$d hour and %2$s"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d 時間 %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "このスレッドに %1$d 件のメッセージが含まれています。"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%2$d 中の %1$d"

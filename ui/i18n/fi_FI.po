@@ -104,10 +104,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "%1$d viesti valittuna"
 msgstr[1] "%1$d viestiä valittuna"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d viestiä tässä keskustelussa"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11135,6 +11131,9 @@ msgstr "Alustasi"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d tunti ja %2$s"
 #~ msgstr[1] "%1$d tuntia ja %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "%1$d viestiä tässä keskustelussa"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$s/%2$s"

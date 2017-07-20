@@ -109,10 +109,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "%1$d messaggio selezionato"
 msgstr[1] "%1$d messaggi selezionati"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d messaggi in questa conversazione"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11244,6 +11240,9 @@ msgstr "la tua piattaforma"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d ora e %2$s"
 #~ msgstr[1] "%1$d ore e %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "%1$d messaggi in questa conversazione"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d di %2$d"

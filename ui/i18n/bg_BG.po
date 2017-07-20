@@ -113,10 +113,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "%1$d селектирани съобщения"
 msgstr[1] "%1$d селектирани съобщения"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d съобщения в този разговор"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 #, fuzzy
@@ -11114,6 +11110,9 @@ msgstr ""
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d час и %2$s"
 #~ msgstr[1] "%1$d час и %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "%1$d съобщения в този разговор"
 
 #, fuzzy
 #~ msgid "%1$d of %2$d"

@@ -105,10 +105,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "已选定 %1$d 个消息"
 msgstr[1] "已选定 %1$d 个消息"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "此交谈有 %1$d 个消息"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -10982,6 +10978,9 @@ msgstr "您的平台"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d 小时和 %2$s"
 #~ msgstr[1] "%1$d 小时和 %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "此交谈有 %1$d 个消息"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%2$s 的 %1$s"

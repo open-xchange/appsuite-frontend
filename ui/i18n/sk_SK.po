@@ -119,10 +119,6 @@ msgstr[0] "%1$d správa vybraná"
 msgstr[1] "%1$d správy vybrané"
 msgstr[2] "%1$d správ vybraných"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "%1$d správ v tejto konverzácii"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -11257,6 +11253,9 @@ msgstr "vaša platforma"
 #~ msgstr[0] "%1$d hodina a %2$s"
 #~ msgstr[1] "%1$d hodiny a %2$s"
 #~ msgstr[2] "%1$d hodín a %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "%1$d správ v tejto konverzácii"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d z %2$d"
