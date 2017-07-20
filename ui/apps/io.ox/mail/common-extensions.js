@@ -78,22 +78,19 @@ define('io.ox/mail/common-extensions', [
             // - show picture of first recipient in "Sent items" and "Drafts"
             // - exception: always show sender in threaded messages
             var data = baton.data,
-                self = this,
                 size = api.threads.size(data),
                 single = size <= 1,
                 addresses = single && !isSearchResult(baton) && account.is('sent|drafts', data.folder_id) ? data.to : data.from,
-                // search result: use image based on 'addresses'
-                picture = isSearchResult ? undefined : data.picture;
+                node = $('<div class="contact-picture" aria-hidden="true">');
 
-            if (picture) {
-                this.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        { email: picture },
-                        { width: 40, height: 40, effect: 'fadeIn' }
-                    )
+            this.append(node);
+
+            if (isSearchResult(baton) && data.picture) {
+                return contactsAPI.pictureHalo(
+                    node,
+                    { email: data.picture },
+                    { width: 40, height: 40, effect: 'fadeIn' }
                 );
-                return;
             }
 
             // user should be in cache from rampup data
@@ -103,12 +100,10 @@ define('io.ox/mail/common-extensions', [
                     address = addresses && addresses[0] && addresses[0][1],
                     useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
 
-                self.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        (useUserApi ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                    )
+                contactsAPI.pictureHalo(
+                    node,
+                    (useUserApi ? { id: ox.user_id } : { email: address }),
+                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
                 );
             });
         },
@@ -116,7 +111,9 @@ define('io.ox/mail/common-extensions', [
         senderPicture: function (baton) {
             // shows picture of sender see Bug 41023
             var addresses = baton.data.from,
-                self = this;
+                node = $('<div class="contact-picture" aria-hidden="true">');
+
+            this.append(node);
 
             // user should be in cache from rampup data
             // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
@@ -125,12 +122,10 @@ define('io.ox/mail/common-extensions', [
                     address = addresses && addresses[0] && addresses[0][1],
                     useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
 
-                self.append(
-                    contactsAPI.pictureHalo(
-                        $('<div class="contact-picture" aria-hidden="true">'),
-                        (useUserApi ? { id: ox.user_id } : { email: address }),
-                        { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                    )
+                contactsAPI.pictureHalo(
+                    node,
+                    (useUserApi ? { id: ox.user_id } : { email: address }),
+                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
                 );
             });
         },
