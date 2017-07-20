@@ -809,7 +809,7 @@ define('io.ox/files/share/permissions', [
 
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = !folderUtil.is('public', objModel.attributes),
+                notificationDefault = true, // #54777 - always send notification mail by default
                 title,
                 guid;
 
