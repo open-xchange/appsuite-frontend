@@ -68,7 +68,7 @@ define('io.ox/calendar/chronos-util', [
 
             if (attendee.cuType !== 'RESOURCE') {
                 if (user.user_id && user.type !== 5) attendee.entity = user.user_id;
-                attendee.email = user.email1 || user.mail;
+                attendee.email = user.field ? user[user.field] : (user.email1 || user.mail);
                 attendee.uri = 'mailto:' + (user.email1 || user.mail);
             } else {
                 attendee.partStat = 'ACCEPTED';
