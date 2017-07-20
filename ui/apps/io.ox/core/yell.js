@@ -162,7 +162,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             if (o.closeOnClick) {
                 _.defer(function () {
                     // use defer not to run into drag&drop
-                    $(document).on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
+                    $('body').on(_.device('touch') ? 'tap.yell' : 'mousedown.yell', click);
                 });
             }
 
