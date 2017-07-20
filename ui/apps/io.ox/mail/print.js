@@ -45,6 +45,11 @@ define('io.ox/mail/print',
         });
     }
 
+    // Check if decrypted Guard email
+    function isDecrypted(selection) {
+        return selection[0] && selection[0].security && selection[0].security.decrypted;
+    }
+
     function process(data) {
         return {
             from: getList(data, 'from'),
@@ -69,7 +74,7 @@ define('io.ox/mail/print',
                     // is an embedded email?
                     if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
                     // fetch normal message
-                    return api.get(_.extend({ view: type, unseen: true }, obj));
+                    return api.get(_.extend({ view: type, unseen: true, decrypt: isDecrypted(selection) }, obj));
                 },
 
                 title: selection.length === 1 ? selection[0].subject : undefined,
