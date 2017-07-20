@@ -30,7 +30,11 @@ define(['io.ox/calendar/chronos-util'], function (util) {
             comment: '',
             entity: 1337,
             email: 'miss.test@test.com',
-            uri: 'mailto:miss.test@test.com'
+            uri: 'mailto:miss.test@test.com',
+            contactInformation: {
+                folder: 123,
+                contact_id: 123456
+            }
         },
         // test resource object
         testResource = {
@@ -64,7 +68,11 @@ define(['io.ox/calendar/chronos-util'], function (util) {
             cuType: 'INDIVIDUAL',
             email: 'hannibal@a.team',
             partStat: 'NEEDS-ACTION',
-            uri: 'mailto:hannibal@a.team'
+            uri: 'mailto:hannibal@a.team',
+            contactInformation: {
+                folder: 123,
+                contact_id: 1337
+            }
         },
         // input from addParticipants for external contacts not in your gab
         inputFragment = {
@@ -110,7 +118,11 @@ define(['io.ox/calendar/chronos-util'], function (util) {
                     cuType: 'INDIVIDUAL',
                     email: 'vader@dark.side',
                     partStat: 'NEEDS-ACTION',
-                    uri: 'mailto:vader@dark.side'
+                    uri: 'mailto:vader@dark.side',
+                    contactInformation: {
+                        folder: undefined,
+                        contact_id: undefined
+                    }
                 });
             });
         });
