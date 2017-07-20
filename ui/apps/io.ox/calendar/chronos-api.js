@@ -55,14 +55,14 @@ define('io.ox/calendar/chronos-api', [
                         params: {
                             action: 'all',
                             folder: obj.folder,
-                            rangeStart: range.start,
-                            rangeEnd: range.end,
+                            rangeStart: moment(range.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                            rangeEnd: moment(range.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
                             timezone: 'UTC'
                         }
                     });
                 });
                 return http.resume().then(function (data) {
-                    data = _(data).chain().pluck('data').flatten().value();
+                    data = _(data).chain().pluck('data').flatten().compact().value();
                     if (data.length > 0) api.pool.add(obj.folder, data);
                     return api.pool.get(obj.folder).filter(util.rangeFilter(obj.start, obj.end));
                 });
