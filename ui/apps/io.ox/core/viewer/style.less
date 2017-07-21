@@ -605,14 +605,18 @@
             }
 
             .play-button {
-                position: absolute;
+                position: relative;
                 width: 280px;
-                height: 280px;
-                padding-top: 100px;
+                height: auto;
                 text-align: center;
                 font-size: 56px;
                 color: #eee;
                 cursor: pointer;
+                &.cover {
+                    height: 280px;
+                    position: absolute;
+                    padding-top: 100px;
+                }
             }
             .player-text {
                 text-align: center;
