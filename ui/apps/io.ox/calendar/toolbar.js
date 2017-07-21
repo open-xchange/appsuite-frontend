@@ -21,10 +21,11 @@ define('io.ox/calendar/toolbar', [
     'io.ox/core/dropzone',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
+    'io.ox/calendar/chronos-util',
     'gettext!io.ox/calendar',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, gt) {
+], function (ext, links, actions, Dropdown, Toolbar, upload, dropzone, notifications, capabilities, chronosUtil, gt) {
 
     'use strict';
 
@@ -232,7 +233,11 @@ define('io.ox/calendar/toolbar', [
 
     function prepareUpdateToolbar(app) {
         var perspective = app.getWindow().getPerspective(),
-            list = perspective && perspective.name === 'list' ? app.getGrid().selection.get() : {};
+            list = perspective && perspective.name === 'list' ? app.listView.selection.get() : {};
+        list = _(list).map(function (item) {
+            if (_.isString(item)) return chronosUtil.cid(item);
+            return item;
+        });
         app.updateToolbar(list);
     }
 
@@ -242,7 +247,7 @@ define('io.ox/calendar/toolbar', [
         setup: function (app) {
             app.updateToolbar();
             // update toolbar on selection change
-            app.getGrid().selection.on('change', function () {
+            app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);
             });
             // folder change

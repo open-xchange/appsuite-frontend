@@ -15,9 +15,10 @@
 define('io.ox/calendar/chronos-api', [
     'io.ox/core/http',
     'io.ox/core/api/collection-pool',
+    'io.ox/core/api/collection-loader',
     'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-model'
-], function (http, Pool, util, models) {
+], function (http, Pool, CollectionLoader, util, models) {
 
     'use strict';
 
@@ -28,17 +29,17 @@ define('io.ox/calendar/chronos-api', [
             _(response.created).each(function (event) {
                 api.pool.add(event.folder, event);
                 api.trigger('create', event);
-                api.trigger('create:' + _.cid(event), event);
+                api.trigger('create:' + util.ecid(event), event);
             });
             _(response.deleted).each(function (event) {
-                api.pool.get(event.folder).remove(_.cid(event));
+                api.pool.get(event.folder).remove(util.cid(event));
                 api.trigger('delete', event);
-                api.trigger('delete:' + _.cid(event), event);
+                api.trigger('delete:' + util.ecid(event), event);
             });
             _(response.updated).each(function (event) {
                 api.pool.add(event.folder, event);
                 api.trigger('update', event);
-                api.trigger('update:' + _.cid(event), event);
+                api.trigger('update:' + util.ecid(event), event);
             });
 
             return response;
@@ -68,11 +69,22 @@ define('io.ox/calendar/chronos-api', [
                     });
                 });
                 return http.resume().then(function (data) {
+                    var def = $.Deferred(),
+                        error = _(data).find(function (res) {
+                            return !!res.error;
+                        });
+                    if (error) def.reject(error);
+                    else def.resolve(data);
+                    return def;
+                }).then(function (data) {
                     data = _(data).chain().pluck('data').flatten().compact().value();
                     if (data.length > 0) api.pool.add(obj.folder, data);
                     return api.pool.get(obj.folder).filter(util.rangeFilter(obj.start, obj.end));
                 }).then(function (list) {
-                    return _(list).sortBy(function (model) { return model.getTimestamp('startDate'); });
+                    // sort is necessary for listview. may be removed if real pagination (with sorting) is enabled
+                    return _(list).sortBy(function (model) {
+                        return model.getTimestamp('startDate');
+                    });
                 });
             },
 
@@ -123,6 +135,7 @@ define('io.ox/calendar/chronos-api', [
             },
 
             remove: function (list) {
+                api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
                 return http.PUT({
                     module: 'chronos',
@@ -184,6 +197,10 @@ define('io.ox/calendar/chronos-api', [
                         includeStackTraceOnError: true
                     }
                 });
+            },
+
+            reduce: function (obj) {
+                return _(obj).pick('id', 'folder', 'recurrenceId');
             }
         };
 

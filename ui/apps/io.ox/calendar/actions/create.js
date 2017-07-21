@@ -71,7 +71,7 @@ define('io.ox/calendar/actions/create', [
 
         if (obj && obj.startDate) {
             _.extend(params, obj);
-        } else if (baton.app.props.get('layout') !== 'list') {
+        } else {
             var refDate = baton.app.refDate ? moment(baton.app.refDate) : moment();
 
             refDate.startOf('hour').add(1, 'hours');

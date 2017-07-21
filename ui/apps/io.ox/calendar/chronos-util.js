@@ -19,7 +19,7 @@ define('io.ox/calendar/chronos-util', [
     'use strict';
     var attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
 
-    return {
+    var util = {
         rangeFilter: function (start, end) {
             return function (model) {
                 var startDate = model.get('startDate'),
@@ -40,9 +40,13 @@ define('io.ox/calendar/chronos-util', [
             } else if (_.isString(o)) {
                 var s = o.split('.'),
                     r = { folder: s[0], id: s[1] };
-                if (s.length === 3) r.recurrenceId = parseInt(s[2], 10);
+                if (s.length === 3) r.recurrenceId = s[2];
                 return r;
             }
+        },
+        ecid: function (o) {
+            var cid = typeof o === 'string' ? o : util.cid(o);
+            return encodeURIComponent(cid).replace(/\./g, ':');
         },
         // creates an attendee object from a user object or model and contact model or object
         // distribution lists create an array of attendees representing the menmbers of the distribution list
@@ -108,5 +112,7 @@ define('io.ox/calendar/chronos-util', [
             return time && time.value && !time.tzid;
         }
     };
+
+    return util;
 
 });

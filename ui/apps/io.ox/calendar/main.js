@@ -20,7 +20,8 @@ define('io.ox/calendar/main', [
     'io.ox/core/folder/view',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
-    'io.ox/core/tk/vgrid',
+    'io.ox/core/tk/list-control',
+    'io.ox/calendar/list/listview',
     'io.ox/core/toolbars-mobile',
     'io.ox/core/page-controller',
     'io.ox/calendar/chronos-api',
@@ -30,7 +31,7 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
-], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, VGrid, Bars, PageController, api) {
+], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api) {
 
     'use strict';
 
@@ -166,6 +167,16 @@ define('io.ox/calendar/main', [
                 container: c
             });
 
+            app.pages.addPage({
+                name: 'listView',
+                classes: 'leftside'
+            });
+
+            app.pages.addPage({
+                name: 'detailView',
+                classes: 'rightside'
+            });
+
         },
 
         'subscription': function (app) {
@@ -174,21 +185,12 @@ define('io.ox/calendar/main', [
             };
         },
 
-        /*
-         * Early List view vsplit - we need that to get a Vgrid instance
-         * Vsplit compatibilty
-         */
         'list-vsplit': function (app) {
             if (_.device('smartphone')) return;
-            var vsplit = commons.vsplit($('<div>'), app);
-            app.left = vsplit.left;
-            app.right = vsplit.right;
+            app.left = app.pages.getPage('listView');
+            app.right = app.pages.getPage('detailView');
         },
 
-        /*
-         * Early List view vsplit - we need that to get a Vgrid instance
-         * Vsplit compatibilty
-         */
         'list-vsplit-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.left = app.pages.getPage('list');
@@ -244,68 +246,15 @@ define('io.ox/calendar/main', [
             app.pages.getNavbar('list').on('rightAction', function () {
                 if (app.props.get('checkboxes') === true) {
                     // leave multiselect? -> clear selection
-                    app.grid.selection.clear();
-                    app.grid.showTopbar(false);
-                    app.grid.showToolbar(false);
+                    app.listView.selection.clear();
                     app.pages.getNavbar('list').setRight(gt('Edit')).show('.left');
                 } else {
-                    // also show sorting options
-                    app.grid.showTopbar(true);
-                    app.grid.showToolbar(true);
                     app.pages.getNavbar('list').setRight(gt('Cancel')).hide('.left');
                 }
                 app.props.set('checkboxes', !app.props.get('checkboxes'));
+                app.listView.toggleCheckboxes(app.props.get('checkboxes'));
+                app.listControl.$el.toggleClass('toolbar-top-visible', app.props.get('checkboxes'));
             });
-        },
-
-        /*
-         * VGrid
-         */
-        'vgrid': function (app) {
-
-            var gridOptions = {
-                    settings: settings,
-                    showToggle: _.device('smartphone'),
-                    hideTopbar: _.device('smartphone'),
-                    hideToolbar: _.device('smartphone'),
-                    // if it's shown, it should be on the top
-                    toolbarPlacement: 'top'
-                },
-                savedWidth = app.settings.get('vgrid/width/' + _.display());
-
-            // do not apply on touch devices. it's not possible to change the width there
-            if (!_.device('touch') && savedWidth) {
-                app.right.css('left', savedWidth + 'px');
-                app.left.css('width', savedWidth + 'px');
-            }
-
-            // show "load more" link
-            gridOptions.tail = function () {
-                var link = $('<div class="vgrid-cell tail">').append(
-                    //#. Label for a button which shows more upcoming
-                    //#. appointments in a listview by extending the search
-                    //#. by one month in the future
-                    $('<a href="#">').text(gt('Expand timeframe by one month'))
-                );
-                return link;
-            };
-
-            app.grid = new VGrid(app.left, gridOptions);
-            app.left.attr({
-                role: 'navigation',
-                'aria-label': 'Appointment list'
-            });
-
-            app.getGrid = function () {
-                return this.grid;
-            };
-
-            if (_.device('smartphone')) {
-                // remove some stuff from toolbar once
-                app.grid.one('meta:update', function () {
-                    app.grid.getToolbar().find('.select-all-toggle, .grid-info').hide();
-                });
-            }
         },
 
         /*
@@ -319,68 +268,50 @@ define('io.ox/calendar/main', [
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
-        'folderview-toolbar': function (app) {
-            if (_.device('smartphone')) return;
-
+        'toggle-folder-view': function (app) {
             app.toggleFolderView = function (e) {
                 e.preventDefault();
                 app.folderView.toggle(e.data.state);
             };
 
-            function onFolderViewOpen(app) {
-                app.getWindow().nodes.sidepanel.show();
-                app.left.removeClass('bottom-toolbar');
-                // for perspectives other than list
-                app.getWindow().nodes.body.removeClass('bottom-toolbar-visible');
-            }
-
-            function onFolderViewClose(app) {
-                // hide sidepanel so invisible objects are not tabbable
-                app.getWindow().nodes.sidepanel.hide();
-                app.left.addClass('bottom-toolbar');
-                // for perspectives other than list
-                app.getWindow().nodes.body.addClass('bottom-toolbar-visible');
-            }
-
-            // create extension point for second toolbar
-            ext.point('io.ox/calendar/vgrid/second-toolbar').extend({
-                id: 'default',
-                index: 100,
-                draw: function () {
-                    this.addClass('visual-focus').append(
-                        $('<a href="#" class="toolbar-item" data-action="open-folder-view">')
-                        .attr('aria-label', gt('Open folder view'))
-                        .append($('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view')))
-                        .on('click', { state: true }, app.toggleFolderView)
-                    );
-                }
-            });
-
             ext.point('io.ox/calendar/sidepanel').extend({
                 id: 'toggle-folderview',
                 index: 1000,
                 draw: function () {
+                    if (_.device('smartphone')) return;
                     this.addClass('bottom-toolbar').append(
                         $('<div class="generic-toolbar bottom visual-focus">').append(
                             $('<a href="#" class="toolbar-item" role="button" data-action="close-folder-view">').attr('aria-label', gt('Close folder view'))
                             .append(
                                 $('<i class="fa fa-angle-double-left" aria-hidden="true">').attr('title', gt('Close folder view'))
                             )
-                            .on('click', { app: app, state: false }, app.toggleFolderView)
+                            .on('click', { state: false }, app.toggleFolderView)
                         )
                     );
                 }
             });
+        },
 
-            app.on({
-                'folderview:open': onFolderViewOpen.bind(null, app),
-                'folderview:close': onFolderViewClose.bind(null, app)
+        'listview': function (app) {
+            app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true });
+            app.listView.model.set({
+                folder: app.folder.get(),
+                thread: true
             });
+        },
 
-            var grid = app.getGrid(), topbar = grid.getTopbar();
-            ext.point(app.get('name') + '/vgrid/second-toolbar').invoke('draw', topbar, ext.Baton({ grid: grid }));
-            onFolderViewClose(app);
-            if (app.folderViewIsVisible()) _.defer(onFolderViewOpen, app);
+        'list-view-control': function (app) {
+            app.listControl = new ListViewControl({ id: 'io.ox/chronos', listView: app.listView, app: app });
+            app.left.append(
+                app.listControl.render().$el
+                    .attr('aria-label', gt('Appointments'))
+                    .find('.toolbar')
+                    //#. toolbar with 'select all' and 'sort by'
+                    .attr('aria-label', gt('Appointment options'))
+                    .end()
+            );
+            // make resizable
+            app.listControl.resizable();
         },
 
         'premium-area': function (app) {
@@ -465,11 +396,10 @@ define('io.ox/calendar/main', [
             app.settings.set('colorScheme', app.props.get('colorScheme'));
         },
 
-        'vgrid-checkboxes': function (app) {
-            // always hide checkboxes on small devices initially
-            if (_.device('smartphone')) return;
-            var grid = app.getGrid();
-            grid.setEditable(app.props.get('checkboxes'));
+        'listview-checkboxes': function (app) {
+            if (_.device('smartphone')) app.listControl.$el.toggleClass('toolbar-top-visible', app.props.get('checkboxes'));
+            else app.listControl.$('.select-all').toggle(app.props.get('checkboxes'));
+            app.listView.toggleCheckboxes(app.props.get('checkboxes'));
         },
 
         /*
@@ -524,9 +454,10 @@ define('io.ox/calendar/main', [
          * Respond to change:checkboxes
          */
         'change:checkboxes': function (app) {
-            //if (_.device('smartphone')) return;
+            if (_.device('smartphone')) return;
             app.props.on('change:checkboxes', function (model, value) {
-                app.grid.setEditable(value);
+                app.listView.toggleCheckboxes(value);
+                app.listControl.$('.select-all').toggle('value');
             });
         },
 
@@ -594,22 +525,23 @@ define('io.ox/calendar/main', [
 
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list',
-                find = app.get('find'),
-                emptyMessage = function findResultEmptyMessage() { return gt('No matching items found.'); };
+                find = app.get('find');
+
+            ext.point('io.ox/chronos/listview/notification/empty').extend({
+                id: 'no-resulsts',
+                index: 200,
+                draw: function () {
+                    if (!lastPerspective) return;
+                    this.text(gt('No matching items found.'));
+                }
+            });
 
             if (find) {
-                // WORKAROUND: no suitable way other of wrapping getEmptyMessage
-                app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
-                    if (app.grid.getMode() === 'search') return emptyMessage;
-                    // return function set by grid.setEmptyMessage
-                    return fn.apply(fn);
-                });
-
                 // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
-                        // hide sort options
-                        app.grid.getToolbar().find('.grid-options:first').hide();
+                        // TODO hide sort options
+                        // app.grid.getToolbar().find('.grid-options:first').hide();
                         // switch to supported perspective
                         lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
@@ -625,8 +557,8 @@ define('io.ox/calendar/main', [
                         if (lastPerspective && lastPerspective !== currentPerspective) {
                             app.props.set('layout', lastPerspective);
                         }
-                        // show sort options again
-                        app.grid.getToolbar().find('.grid-options:first').show();
+                        // TODO show sort options again
+                        // app.grid.getToolbar().find('.grid-options:first').show();
                         // disable
                         app.props.off('change', find.cancel);
                         // reset
@@ -665,8 +597,9 @@ define('io.ox/calendar/main', [
             // detail app does not make sense on small devices
             // they already see appointments in full screen
             if (_.device('smartphone')) return;
-            app.grid.selection.on('selection:doubleclick', function (e, key) {
-                ox.launch('io.ox/calendar/detail/main', { cid: key });
+            app.listView.on('selection:doubleclick', function (list) {
+                if (list.length < 1) return;
+                ox.launch('io.ox/calendar/detail/main', { cid: list[0] });
             });
         },
 
@@ -729,8 +662,8 @@ define('io.ox/calendar/main', [
                         detail: isToggle ? !node.find('.fa-check').length : node.attr('data-value')
                     });
                 });
-                // vgrid toolbar
-                nodes.main.on('mousedown', '.vgrid-toolbar a[data-name], .vgrid-toolbar a[data-action]', function (e) {
+                // listview toolbar toolbar
+                nodes.main.on('mousedown', '.calendar-list-view .toolbar.top a a[data-name], .calendar-list-view .toolbar.top a a[data-action]', function (e) {
                     var node = $(e.currentTarget);
                     var action = node.attr('data-name') || node.attr('data-action');
                     if (!action) return;
@@ -801,8 +734,8 @@ define('io.ox/calendar/main', [
                         });
                 });
                 // selection in listview
-                app.grid.selection.on({
-                    'change': function (event, list) {
+                app.listView.on({
+                    'selection:change': function (list) {
                         if (!list.length) return;
                         metrics.trackEvent({
                             app: 'calendar',

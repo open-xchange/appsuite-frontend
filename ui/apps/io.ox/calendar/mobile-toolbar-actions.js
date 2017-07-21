@@ -196,7 +196,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
             if (_.device('!smartphone')) return;
             app.updateToolbar();
             // update toolbar on selection change
-            app.getGrid().selection.on('change', function () {
+            app.listView.on('selection:change', function () {
                 prepareUpdateToolbar(app);
             });
             // folder change

@@ -11,18 +11,52 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-.calendar-list-view {
+.chronos-item {
 
-    .search-view .vgrid-cell.calendar .date {display: block; }
+    .search-view .list-item-content.calendar .date { display: block; }
 
     .vgrid.editable .vgrid-cell { padding-left: 48px; }
 
-    .vgrid-cell {
+    &.visible-selection.has-focus .list-item.selected * { color: #fff!important; }
+
+    .notification.empty {
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .list-item {
+        padding-bottom: 0;
+        padding-top: 0;
+        border: none;
+    }
+
+    .tail {
+        padding-top: 1em;
+        padding-bottom: 1em;
+        text-align: center;
+    }
+
+    .list-item.list-item-label {
+        font-weight: 300;
+        font-size: 18px;
+        line-height: 21px;
+        color: #3c73aa;
+        padding: 14px 13px 7px 48px;;
+    }
+
+    .list-item-checkmark { margin-top: 10px; }
+
+    .list-item-content {
 
         &.calendar {
             height: 70px; /* = 3 rows */
+            font-size: 13px;
+            padding: 10px 0px;
+            color: #333;
 
-            .vgrid-cell-checkbox { padding-top: 10px; }
+            * {
+                .ellipsis();
+            }
 
             .contentContainer { padding-left: 10px; }
 
@@ -40,8 +74,17 @@
                 border-radius: @border-radius-base;
             }
 
-           &.declined .title,
-           &.declined .location { text-decoration: line-through; }
+            &.declined .title,
+            &.declined .location { text-decoration: line-through; }
+
+            .title {
+                font-weight: 700;
+                white-space: pre;
+            }
+
+            .location {
+                color: #767676;
+            }
 
             .time {
                 position: relative;
@@ -52,6 +95,7 @@
                 .fragment {
                     text-overflow: clip;
                     margin-right: 5px;
+                    color: #555;
                 }
 
             }
@@ -77,7 +121,22 @@
     }
 }
 
-.custom-colors .calendar-list-view .vgrid-cell {
+.calendar-list-view {
+    .folder-info {
+        text-align: center;
+        margin: 0 30px;
+        .ellipsis();
+    }
+
+    .folder-count {
+        font-size: 13px;
+        color: #767676;
+
+        html.high-contrast & { color: @hc-gray; }
+    }
+}
+
+.custom-colors .calendar-list-view .list-item-content {
     .custom_shown_as {
         .generate-color-label(@counter) when (@counter > 0) {
             .generate-color-label((@counter - 1));
