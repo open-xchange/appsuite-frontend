@@ -242,9 +242,10 @@ define('io.ox/core/extPatterns/links', [
             .addClass(extension.classes || '')
             .attr(extension.attributes || {})
             .appendTo(node),
-            $li = $('<li role="presentation">');
+            $li = $('<li role="presentation">'),
+            def = $.Deferred();
 
-        return getLinks(extension, collection, baton, args)
+        getLinks(extension, collection, baton, args)
             .always(function (items) {
                 // count resolved items
                 var count = 0;
@@ -264,9 +265,13 @@ define('io.ox/core/extPatterns/links', [
                 // empty?
                 if (count === 0) nav.addClass('empty').removeAttr('role');
             })
-            .then(function () {
-                return nav;
-            });
+            .done(function () {
+                // not using then() to avoid async
+                def.resolve(nav);
+            })
+            .fail(def.reject);
+
+        return def;
     };
 
     var drawInlineButtonGroup = function (extension, collection, node, baton, args, bootstrapMode) {
