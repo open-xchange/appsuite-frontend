@@ -968,6 +968,10 @@ msgstr "Administrador"
 msgid "Advanced settings"
 msgstr "Preferències avançades"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "After"
+msgstr ""
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #, fuzzy
@@ -979,6 +983,14 @@ msgstr "Hi ha hagut un error intern"
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "All"
+msgstr "Tot"
+
+#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "All"
+msgctxt "dropdown"
 msgid "All"
 msgstr "Tot"
 
@@ -1020,6 +1032,7 @@ msgid "All files have been deleted"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Totes les carpetes"
@@ -1051,6 +1064,12 @@ msgstr "Suprimeix el compte"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr ""
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "%1$d messages in this conversation"
+msgid "All messages in this folder"
+msgstr "%1$d missatges en aquesta conversa"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
@@ -1252,15 +1271,20 @@ msgstr "Arxiu"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
 msgstr "Arxiva"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
+msgstr "Arxiva missatges"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#, fuzzy
+#| msgid "Archive messages"
+msgid "Archive old messages"
 msgstr "Arxiva missatges"
 
 #. notification while archiving messages
@@ -1450,6 +1474,10 @@ msgstr "Configuració bàsica"
 #: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Cco"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "Before"
+msgstr ""
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
@@ -2107,12 +2135,23 @@ msgstr ""
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
-msgstr ""
+#, fuzzy
+#| msgid "Close this reminder"
+msgid "Connect this Device"
+msgstr "Tanca aquest recordatori"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-msgid "Connect your device"
+#, fuzzy
+#| msgid "Close this reminder"
+msgid "Connect this device"
+msgstr "Tanca aquest recordatori"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -2180,6 +2219,11 @@ msgstr "Conté"
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "Contains not"
+msgstr "Conté"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Contains words"
 msgstr "Conté"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
@@ -2444,6 +2488,11 @@ msgstr "Moneda"
 #, fuzzy
 msgid "Current date"
 msgstr "Data de venciment"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Current folder"
+msgstr "Reanomena la carpeta"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
@@ -4448,6 +4497,11 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML i text pla"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Has attachment"
+msgstr "Afegeix-hi adjunts"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -5972,6 +6026,10 @@ msgstr "Nova contrasenya"
 #: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Nova regla"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "New search ... (prototype)"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
@@ -8095,8 +8153,9 @@ msgstr "Planificació"
 msgid "Sea green"
 msgstr "Marca-ho com a llegit"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
@@ -8109,6 +8168,12 @@ msgstr "Cerca"
 #, fuzzy
 msgid "Search facets"
 msgstr "Cerca elements"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Search"
+msgid "Search in"
+msgstr "Cerca"
 
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
@@ -8156,7 +8221,6 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Selecciona-ho tot"
 
@@ -8707,10 +8771,18 @@ msgstr ""
 "de LinkedIn amb permisos per a llegir missatges."
 
 #. Sort options drop-down
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "dropdown"
+#| msgid "Sort by"
+msgctxt "dropdown"
+msgid "Sort"
+msgstr "Ordena per"
+
+#. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
 msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Ordena per"
@@ -9813,10 +9885,11 @@ msgstr ""
 "electrònic vàlida (per exemple, john.doe@example.com o \"John Doe\" "
 "<jd@example.com>)"
 
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -11507,9 +11580,6 @@ msgstr "la vostra plataforma"
 #~ msgstr[0] "%1$d hora i %2$s"
 #~ msgstr[1] "%1$d hores i %2$s"
 
-#~ msgid "%1$d messages in this conversation"
-#~ msgstr "%1$d missatges en aquesta conversa"
-
 #, fuzzy
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$s de %2$s"
@@ -11842,9 +11912,6 @@ msgstr "la vostra plataforma"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Tanca per a tancar la vista de recurrència"
-
-#~ msgid "Close this reminder"
-#~ msgstr "Tanca aquest recordatori"
 
 #~ msgid "Common"
 #~ msgstr "Comú"

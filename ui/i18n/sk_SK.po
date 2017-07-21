@@ -962,6 +962,12 @@ msgstr "Správca"
 msgid "Advanced settings"
 msgstr "Pokročilé nastavenie"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+#, fuzzy
+#| msgid "after"
+msgid "After"
+msgstr "po"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "After a number of occurrences"
@@ -972,6 +978,14 @@ msgstr "Po počte opakovaní"
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "All"
+msgstr "Všetky"
+
+#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "All"
+msgctxt "dropdown"
 msgid "All"
 msgstr "Všetky"
 
@@ -1010,6 +1024,7 @@ msgid "All files have been deleted"
 msgstr "Všetky súbory boli zmazané"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Všetky priečinky"
@@ -1041,6 +1056,12 @@ msgstr "Všetky skupiny"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr "Všetky správy boli odstránené"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete all messages in this folder"
+msgid "All messages in this folder"
+msgstr "Odstrániť všetky správy v tomto priečinku"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
@@ -1231,15 +1252,20 @@ msgstr "Archív"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
 msgstr "Archív"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
+msgstr "Archivovať správy"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#, fuzzy
+#| msgid "Archive messages"
+msgid "Archive old messages"
 msgstr "Archivovať správy"
 
 #. notification while archiving messages
@@ -1429,6 +1455,10 @@ msgstr "Základné nastavenia"
 #: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Skrytá kópia"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "Before"
+msgstr ""
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
@@ -2062,12 +2092,23 @@ msgstr "Pripojiť"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect this Device"
 msgstr "Pripojte svoje zariadenie"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-msgid "Connect your device"
+#, fuzzy
+#| msgid "Connect your device"
+msgid "Connect this device"
+msgstr "Pripojte svoje zariadenie"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
 msgstr "Pripojte svoje zariadenie"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -2132,6 +2173,12 @@ msgstr "Obsahuje"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Contains not"
+msgstr "Neobsahuje"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Contains not"
+msgid "Contains words"
 msgstr "Neobsahuje"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
@@ -2387,6 +2434,12 @@ msgstr "Mena"
 #: module:io.ox/mailfilter
 msgid "Current date"
 msgstr "Aktuálny dátum"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Current role"
+msgid "Current folder"
+msgstr "Aktuálna rola"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
@@ -4338,6 +4391,12 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML a čistý text"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "has attachments"
+msgid "Has attachment"
+msgstr "má prílohy"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -5799,6 +5858,10 @@ msgstr "Nové heslo"
 #: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Nové pravidlo"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "New search ... (prototype)"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
@@ -7857,8 +7920,9 @@ msgstr "Plánovanie"
 msgid "Sea green"
 msgstr "Morská zelená"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
@@ -7870,6 +7934,12 @@ msgstr "Hľadať"
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Fazety hľadania"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Searched in"
+msgid "Search in"
+msgstr "Vyhľadané v"
 
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
@@ -7921,7 +7991,6 @@ msgstr ""
 "začiarknite políčko a nechajte pole nevyplnené."
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Vybrať všetko"
 
@@ -8453,10 +8522,18 @@ msgstr ""
 "LinkedIn s povolením na čítanie správ."
 
 #. Sort options drop-down
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "dropdown"
+#| msgid "Sort by"
+msgctxt "dropdown"
+msgid "Sort"
+msgstr "Zoradiť podľa"
+
+#. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
 msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Zoradiť podľa"
@@ -9562,10 +9639,11 @@ msgstr ""
 "Ak chcete účastníkov pridať ručne, jednoducho zadajte platnú emailovú adresu "
 "(napr. jan.kovac@example.com alebo \"Ján Kováč\" <jk@example.com>)"
 
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -12775,9 +12853,6 @@ msgstr "vaša platforma"
 #~ msgid "Delete all accounts"
 #~ msgstr "Zmazať všetky účty"
 
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Odstrániť všetky správy v tomto priečinku"
-
 #~ msgid "Delete drawing object"
 #~ msgstr "Zmazať objekt kresby"
 
@@ -15768,9 +15843,6 @@ msgstr "vaša platforma"
 #~ msgid "Search:"
 #~ msgstr "Hľadať:"
 
-#~ msgid "Searched in"
-#~ msgstr "Vyhľadané v"
-
 #~ msgid "Searching for objects"
 #~ msgstr "Hľadanie objektov"
 
@@ -17949,9 +18021,6 @@ msgstr "vaša platforma"
 
 #~ msgid "absent on business"
 #~ msgstr "služobne neprítomný"
-
-#~ msgid "after"
-#~ msgstr "po"
 
 #~ msgid "after %1$d appointment"
 #~ msgid_plural "after %1$d appointments"

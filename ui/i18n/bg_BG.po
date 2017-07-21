@@ -953,6 +953,10 @@ msgstr "Администратор"
 msgid "Advanced settings"
 msgstr "Акаунт настройки"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "After"
+msgstr ""
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "After a number of occurrences"
@@ -965,6 +969,14 @@ msgstr ""
 #: module:io.ox/mailfilter
 msgid "All"
 msgstr ""
+
+#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "All day"
+msgctxt "dropdown"
+msgid "All"
+msgstr "Цял ден"
 
 #. Emojis of SoftBank set.
 #. Japanese: 全絵文字
@@ -1003,6 +1015,7 @@ msgid "All files have been deleted"
 msgstr ""
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr ""
@@ -1028,6 +1041,12 @@ msgstr "Групи"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr ""
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete all messages in this folder"
+msgid "All messages in this folder"
+msgstr "Изтрий всички съобщение в тази папка"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
@@ -1220,9 +1239,8 @@ msgstr "Архив"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
 msgstr "Архивирай"
@@ -1230,6 +1248,13 @@ msgstr "Архивирай"
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
 msgstr ""
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#, fuzzy
+#| msgctxt "folder"
+#| msgid "Deleted messages"
+msgid "Archive old messages"
+msgstr "Изтрити съобщения"
 
 #. notification while archiving messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
@@ -1414,6 +1439,10 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Bcc"
+msgstr ""
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "Before"
 msgstr ""
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
@@ -2046,12 +2075,19 @@ msgstr ""
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
+msgid "Connect this Device"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-msgid "Connect your device"
+msgid "Connect this device"
+msgstr ""
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -2122,6 +2158,11 @@ msgstr "Съдържа"
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "Contains not"
+msgstr "Съдържа"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Contains words"
 msgstr "Съдържа"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
@@ -2376,6 +2417,11 @@ msgstr ""
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "Current date"
+msgstr "Сегашна дата"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Current folder"
 msgstr "Сегашна дата"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
@@ -4322,6 +4368,11 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML и текстови"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Has attachment"
+msgstr "Добави прикачен файл"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -5796,6 +5847,10 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Ново правило"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "New search ... (prototype)"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
@@ -7852,8 +7907,9 @@ msgstr ""
 msgid "Sea green"
 msgstr "тъмно зелен"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
@@ -7864,6 +7920,10 @@ msgstr ""
 
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
+msgstr ""
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+msgid "Search in"
 msgstr ""
 
 #: apps/io.ox/find/main.js module:io.ox/core
@@ -7909,7 +7969,6 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Избери всички"
 
@@ -8445,10 +8504,18 @@ msgid ""
 msgstr ""
 
 #. Sort options drop-down
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "dropdown"
+#| msgid "Sort by"
+msgctxt "dropdown"
+msgid "Sort"
+msgstr "Сортирай по"
+
+#. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
 msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Сортирай по"
@@ -9488,10 +9555,11 @@ msgid ""
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
 
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -11221,9 +11289,6 @@ msgstr ""
 
 #~ msgid "Delete all %1$d messages"
 #~ msgstr "Изтрий всичките %1$d съобщения"
-
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "Изтрий всички съобщение в тази папка"
 
 #, fuzzy
 #~| msgid "Create contact"

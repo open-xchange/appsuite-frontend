@@ -944,6 +944,10 @@ msgstr "Yönetici"
 msgid "Advanced settings"
 msgstr "Gelişmiş Ayarlar"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "After"
+msgstr ""
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #, fuzzy
@@ -955,6 +959,14 @@ msgstr "Dahili bir hata belirdi. "
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "All"
+msgstr "Tümü"
+
+#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "All"
+msgctxt "dropdown"
 msgid "All"
 msgstr "Tümü"
 
@@ -995,6 +1007,7 @@ msgid "All files have been deleted"
 msgstr "Bu dosya silinmediBu dosyalar silinmedi"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "Tüm klasörler"
@@ -1023,6 +1036,12 @@ msgstr "Grubu sil"
 #, fuzzy
 msgid "All messages have been deleted"
 msgstr "Değişiklikler reddedildi"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "%1$d messages in this conversation"
+msgid "All messages in this folder"
+msgstr "%1$d bu görüşmedeki mesajlar"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
@@ -1217,15 +1236,20 @@ msgstr "Arşiv"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
 msgstr "Arşiv"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
+msgstr "Mesajları arşivle"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#, fuzzy
+#| msgid "Archive messages"
+msgid "Archive old messages"
 msgstr "Mesajları arşivle"
 
 #. notification while archiving messages
@@ -1413,6 +1437,10 @@ msgstr "Başlıca ayarlar"
 #: module:io.ox/mailfilter
 msgid "Bcc"
 msgstr "Gizli bilgi"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "Before"
+msgstr ""
 
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
@@ -2069,12 +2097,23 @@ msgstr ""
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
-msgstr ""
+#, fuzzy
+#| msgid "Close this reminder"
+msgid "Connect this Device"
+msgstr "Bu hatırlatıcıyı kapat"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-msgid "Connect your device"
+#, fuzzy
+#| msgid "Close this reminder"
+msgid "Connect this device"
+msgstr "Bu hatırlatıcıyı kapat"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
 msgstr ""
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
@@ -2142,6 +2181,11 @@ msgstr "İçerik"
 #: module:io.ox/mailfilter
 #, fuzzy
 msgid "Contains not"
+msgstr "İçerik"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Contains words"
 msgstr "İçerik"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
@@ -2405,6 +2449,11 @@ msgstr "Para birimi"
 #, fuzzy
 msgid "Current date"
 msgstr "Para birimi"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+msgid "Current folder"
+msgstr "Yenileniyor"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #, fuzzy
@@ -4424,6 +4473,12 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr " HTML ve düz metin dosyası"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "has attachments"
+msgid "Has attachment"
+msgstr " ekleri var"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -5931,6 +5986,10 @@ msgstr "Yeni parola"
 #: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "Yeni kural"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "New search ... (prototype)"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
@@ -8061,8 +8120,9 @@ msgstr "Planlama"
 msgid "Sea green"
 msgstr "koyu yeşil "
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
@@ -8074,6 +8134,12 @@ msgstr "Arama"
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "Arama yönleri"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Search"
+msgid "Search in"
+msgstr "Arama"
 
 #: apps/io.ox/find/main.js module:io.ox/core
 #, fuzzy
@@ -8128,7 +8194,6 @@ msgstr ""
 "kullanmak istemeniz durumunda onay kutusunu seçin ve bu alanı boş bırakın."
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "Tümünü seç"
 
@@ -8684,10 +8749,18 @@ msgstr ""
 "mesajları okuyabilme izni için bir anahtar edinmesi gerekiyor. "
 
 #. Sort options drop-down
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "dropdown"
+#| msgid "Sort by"
+msgctxt "dropdown"
+msgid "Sort"
+msgstr "Sıralama Türü"
+
+#. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
 msgctxt "dropdown"
 msgid "Sort by"
 msgstr "Sıralama Türü"
@@ -9806,10 +9879,11 @@ msgstr ""
 "Kişileri manuel olarak eklemek için, geçerli bir e-posta adresi girin (örn: "
 "john.doe@example.com veya \"John Doe\" <jd@example.com>)"
 
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -11522,9 +11596,6 @@ msgstr "Platformunuz"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d saat ve %2$s%1$d saat ve %2$s"
 
-#~ msgid "%1$d messages in this conversation"
-#~ msgstr "%1$d bu görüşmedeki mesajlar"
-
 #~ msgid "%1$d of %2$d"
 #~ msgstr "%1$d of %2$d"
 
@@ -11720,9 +11791,6 @@ msgstr "Platformunuz"
 #~| msgid "Click to close the recurrence view"
 #~ msgid "Close recurrence view"
 #~ msgstr "Yineleme görünüşünü kapatmak için tıklayınız"
-
-#~ msgid "Close this reminder"
-#~ msgstr "Bu hatırlatıcıyı kapat"
 
 #~ msgid "Common"
 #~ msgstr "Ortak "
