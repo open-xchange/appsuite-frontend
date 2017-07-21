@@ -69,6 +69,48 @@ define(function () {
             });
         });
 
+        describe('caching', function () {
+            it('should fetch uncached files async', function () {
+                require.undef('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session'], cb);
+                expect(cb).not.to.have.been.called;
+                return def.then(function () {
+                    expect(cb).to.have.been.calledOnce;
+                });
+            });
+
+            it('should have sync cache hits using cb style', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session'], cb);
+                expect(cb).to.have.been.calledOnce;
+                return def;
+            });
+
+            it('should have sync cache hits using done style', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session']).done(cb);
+                expect(cb).to.have.been.calledOnce;
+                return def;
+            });
+
+            it('should resolve for multiple modules', function () {
+                //make sure the file is in require registry
+                require('io.ox/core/session');
+                require('io.ox/core/api/account');
+                var cb = sinon.spy(),
+                    def = require(['io.ox/core/session', 'io.ox/core/api/account']).done(cb);
+                expect(cb).to.have.been.calledOnce;
+                return def.then(function () {
+                    expect(arguments).to.have.length(2);
+                });
+            });
+        });
+
         describe('with fixture plugin', function () {
             it('should load JSON data as objects', function (done) {
                 require(['fixture!test/data.json'], function (data) {
