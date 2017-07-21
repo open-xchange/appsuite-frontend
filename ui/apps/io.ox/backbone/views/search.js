@@ -21,6 +21,8 @@ define('io.ox/backbone/views/search', [
 
     'use strict';
 
+    var yelled = false;
+
     var SearchView = ExtensibleView.extend({
 
         className: 'search-view',
@@ -29,7 +31,7 @@ define('io.ox/backbone/views/search', [
             'click .dropdown-toggle': 'onToggle',
             'input .search-field': 'onInput',
             'focus .search-field': 'onFocus',
-            'keypress .search-field': 'onKeypress',
+            'keyup .search-field': 'onKeyUpSeachField',
             'keyup': 'onKeyUp',
             'submit .dropdown': 'onSubmit'
         },
@@ -82,9 +84,14 @@ define('io.ox/backbone/views/search', [
             return state;
         },
 
-        onKeypress: function (e) {
-            if (e.which !== 13) return;
-            if (this.isEmpty()) this.toggleDropdown(); else this.submit();
+        onKeyUpSeachField: function (e) {
+            switch (e.which) {
+                // enter
+                case 13: this.toggleDropdown(false); this.submit(); break;
+                // cursor down
+                case 40: this.toggleDropdown(true); break;
+                // no default
+            }
         },
 
         onKeyUp: function (e) {
@@ -101,14 +108,17 @@ define('io.ox/backbone/views/search', [
 
         submit: function () {
             var criteria = this.parseQuery();
-            if (criteria.empty) return;
+            if (criteria.empty) return this.trigger('cancel');
+            this.trigger('search', criteria);
+            // just yell once
+            if (yelled) return;
             yell(
                 'info',
-                'That doesn\'t work yet!\n\n' +
-                'This is just a prototype to play aorund with a visually different and more explicit user interface.\n\n' +
+                'This is just a prototype to play around with a visually different and more explicit user interface.\n\n' +
                 'Simple for the 99% use-case (just entering a word or name), still easy to use for explicit queries.\n\n' +
-                'You can open a dropdown by clicking on the caret or simply hitting enter while the search field is empty'
+                'You can open a dropdown by clicking on the caret or by cursor down in the search field'
             );
+            yelled = true;
         },
 
         input: function (name, label) {

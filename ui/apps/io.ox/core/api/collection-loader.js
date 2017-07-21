@@ -176,7 +176,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
     }
 
     function map(key) {
-        return key + '=' + this[key];
+        return key + '=' + JSON.stringify(this[key]);
     }
 
     _.extend(CollectionLoader.prototype, {

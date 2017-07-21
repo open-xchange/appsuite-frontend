@@ -20,8 +20,11 @@ define('io.ox/mail/view-options', [
     'io.ox/core/commons',
     'io.ox/core/folder/contextmenu',
     'io.ox/backbone/views/search',
+    'io.ox/core/api/collection-loader',
+    'io.ox/core/http',
+    'io.ox/mail/api',
     'settings!io.ox/mail'
-], function (ext, Dropdown, mini, account, gt, commons, contextmenu, SearchView, settings) {
+], function (ext, Dropdown, mini, account, gt, commons, contextmenu, SearchView, CollectionLoader, http, mailAPI, settings) {
 
     'use strict';
 
@@ -32,8 +35,58 @@ define('io.ox/mail/view-options', [
         id: 'search',
         index: 100,
         draw: function (baton) {
+
+            var listView = baton.app.listView;
+
+            var collectionLoader = new CollectionLoader({
+                module: 'mail',
+                getQueryParams: function (params) {
+
+                    var criteria = params.criteria, filters = [];
+
+                    // The available field names are
+                    // from, to, cc, bcc, subject, received_date, sent_date, size,flags, content, content_type, disp and priority
+                    if (criteria.from) filters.push(['=', { field: 'from' }, criteria.from]);
+                    if (criteria.to) filters.push(['=', { field: 'to' }, criteria.to]);
+                    if (criteria.subject) filters.push(['=', { field: 'subject' }, criteria.subject]);
+                    if (criteria.words) filters.push(['=', { field: 'content' }, criteria.words]);
+                    if (criteria.attachment === 'true') filters.push(['=', { field: 'content_type' }, 'multipart/mixed']);
+                    if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
+                    if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
+
+                    return {
+                        action: 'search',
+                        folder: params.folder,
+                        data: { filter: ['and'].concat(filters) }
+                    };
+                },
+                fetch: function (params) {
+                    return http.PUT({
+                        module: this.module,
+                        params: {
+                            action: params.action,
+                            folder: params.folder,
+                            columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                            sort: params.sort || '610',
+                            order: params.order || 'desc',
+                            timezone: 'utc'
+                        },
+                        data: params.data
+                    });
+                }
+            });
+
             this.append(
-                new SearchView({ point: 'io.ox/mail/search/dropdown', app: baton.app }).render().$el
+                new SearchView({ point: 'io.ox/mail/search/dropdown' })
+                .on('search', function (criteria) {
+                    listView.connect(collectionLoader);
+                    listView.model.set({ criteria: criteria, thread: false, sort: 610, order: 'desc' });
+                })
+                .on('cancel', function () {
+                    listView.connect(mailAPI.collectionLoader);
+                    listView.model.unset('criteria');
+                })
+                .render().$el
             );
         }
     });
