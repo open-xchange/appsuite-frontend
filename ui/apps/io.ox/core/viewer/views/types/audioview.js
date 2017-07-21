@@ -60,7 +60,7 @@ define('io.ox/core/viewer/views/types/audioview', [
                             $(this).remove();
                             self.$el.find('.play-button').css({ height: 'auto', position: 'relative' }).after($('<div class="player-text">').text(gt('Click to play audio file')));
                         })
-                        .attr('data-src', _.unescapeHTML('aesrgerfcwertvc0' + coverUrl)),
+                        .attr('data-src', _.unescapeHTML(coverUrl)),
                     // audio element
                     $('<audio controls="true">')
                         // set preload (and do a dance); see https://code.google.com/p/chromium/issues/detail?id=234779
