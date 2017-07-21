@@ -29,6 +29,17 @@ define('io.ox/backbone/mini-views/common', [
             });
         }
     };
+    // used by passwordfield, because it doesn't trigger a change event automatically
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
 
     //
     // <input type="text">
@@ -72,12 +83,17 @@ define('io.ox/backbone/mini-views/common', [
 
     var PasswordView = AbstractView.extend({
         el: '<input type="password" class="form-control">',
-        events: { 'change': 'onChange' },
+        events: {
+            'change': 'onChange',
+            'paste': 'onPaste'
+        },
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
             this.model.set(this.name, value, { validate: true });
         },
+        // paste doesn't trigger a change event
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
