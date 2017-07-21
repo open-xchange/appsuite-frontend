@@ -422,9 +422,9 @@ define('io.ox/calendar/week/perspective', [
         },
 
         // called when an appointment detail-view opens the according appointment
-        selectAppointment: function (obj) {
+        selectAppointment: function (model) {
             if (this.view) {
-                this.view.setStartDate(obj.start_date);
+                this.view.setStartDate(model.getTimestamp('startDate'));
                 this.view.trigger('onRefresh');
             }
         },

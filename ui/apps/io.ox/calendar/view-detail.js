@@ -173,7 +173,7 @@ define('io.ox/calendar/view-detail', [
 
             ox.ui.Perspective.show(app, perspective).done(function (p) {
                 function cont() {
-                    if (p.selectAppointment) p.selectAppointment(baton.data);
+                    if (p.selectAppointment) p.selectAppointment(baton.model);
                 }
 
                 if (app.folder.get() === folder) {
