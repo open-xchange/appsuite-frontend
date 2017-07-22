@@ -10,8 +10,11 @@
  *
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  */
-define(['io.ox/mail/compose/main', 'waitsFor'], function (compose, waitsFor) {
+define(['io.ox/mail/compose/main', 'waitsFor', 'io.ox/mail/api'], function (compose, waitsFor, api) {
     'use strict';
+
+    //HACK: make tests more contained (large delay would have trigger code from these tests be executed much later)
+    api.SEND_REFRESH_DELAY = 0;
 
     describe('Mail Compose', function () {
         describe('draft mails', function () {
