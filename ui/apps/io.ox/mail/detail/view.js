@@ -610,12 +610,12 @@ define('io.ox/mail/detail/view', [
                     var cid = _.cid(this.model.cid);
                     // check if we have a nested email here, those are requested differently
                     if (_(cid).size() === 1 && cid.id !== undefined && this.model.has('parent')) {
-                        api.getNestedMail(this.model.attributes).then(
+                        api.getNestedMail(this.model.attributes).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );
                     } else {
-                        api.get(cid).then(
+                        api.get(cid).pipe(
                             this.onLoad.bind(this),
                             this.onLoadFail.bind(this)
                         );

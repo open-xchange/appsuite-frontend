@@ -610,7 +610,7 @@ define('io.ox/core/folder/api', [
                 tree: tree(id)
             }
         })
-        .then(
+        .pipe(
             function (data) {
                 return renameDefaultCalendarFolders(data);
             },
@@ -619,7 +619,7 @@ define('io.ox/core/folder/api', [
                 throw error;
             }
         )
-        .then(function (data) {
+        .pipe(function (data) {
             // update/add model
             var model = pool.addModel(data);
             // propagate changes via api events
@@ -639,7 +639,7 @@ define('io.ox/core/folder/api', [
             http.pause();
             return $.when.apply($,
                 _(ids).map(function (id) {
-                    return get(id, { cache: options.cache }).then(
+                    return get(id, { cache: options.cache }).pipe(
                         null,
                         function fail(error) {
                             error.id = id;
@@ -648,7 +648,7 @@ define('io.ox/core/folder/api', [
                     );
                 })
             )
-            .then(function () {
+            .pipe(function () {
                 return _(arguments).toArray();
             });
         } finally {
