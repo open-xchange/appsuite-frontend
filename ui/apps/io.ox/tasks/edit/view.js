@@ -17,8 +17,9 @@ define('io.ox/tasks/edit/view', [
     'io.ox/tasks/model',
     'io.ox/core/extensions',
     'io.ox/backbone/views',
-    'io.ox/core/capabilities'
-], function (gt, template, model, ext, views, capabilities) {
+    'io.ox/core/capabilities',
+    'settings!io.ox/core'
+], function (gt, template, model, ext, views, capabilities, settings) {
 
     'use strict';
 
@@ -92,7 +93,7 @@ define('io.ox/tasks/edit/view', [
             self.baton.app = app;
 
             //hide stuff
-            if (!capabilities.has('filestore')) {
+            if (!settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
                 ext.point('io.ox/tasks/edit/view').disable('attachment_list');
                 ext.point('io.ox/tasks/edit/view').disable('attachment_upload');
                 ext.point('io.ox/tasks/edit/view').disable('attachments_legend');
