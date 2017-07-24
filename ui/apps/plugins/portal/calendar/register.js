@@ -14,11 +14,12 @@
 
 define('plugins/portal/calendar/register', [
     'io.ox/core/extensions',
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
+    'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',
     'settings!io.ox/calendar'
-], function (ext, api, util, gt, settings) {
+], function (ext, api, folderAPI, util, gt, settings) {
 
     'use strict';
 
@@ -41,11 +42,11 @@ define('plugins/portal/calendar/register', [
         },
 
         load: function (baton) {
-            return api.getAll().then(function (ids) {
+            // TODO remove folder from call as soon as the API supports it
+            return api.getAll({ folder: 'cal://0/' + folderAPI.getDefaultFolder('calendar') }).then(function (models) {
                 var numOfItems = _.device('smartphone') ? 5 : 10;
-                return api.getList(ids.slice(0, numOfItems)).done(function (data) {
-                    baton.data = data;
-                });
+                baton.data = models.slice(0, numOfItems);
+                return baton.data;
             });
         },
 
@@ -59,12 +60,12 @@ define('plugins/portal/calendar/register', [
             if (baton.data.length === 0) {
                 sum.text(gt('You don\'t have any appointments in the near future.'));
             } else {
-                var obj = _(baton.data).first();
+                var model = _(baton.data).first();
 
                 sum.append(
-                    $('<span class="normal accent">').text(util.getSmartDate(obj, true)), $.txt('\u00A0'),
-                    $('<span class="bold">').text(obj.title || ''), $.txt('\u00A0'),
-                    $('<span class="gray">').text(obj.location || '')
+                    $('<span class="normal accent">').text(util.getSmartDate(model, true)), $.txt('\u00A0'),
+                    $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
+                    $('<span class="gray">').text(model.get('location') || '')
                 );
 
                 this.on('tap', 'h2', function (e) {
@@ -76,28 +77,28 @@ define('plugins/portal/calendar/register', [
         },
 
         preview: function (baton) {
-            var appointments = baton.data,
+            var models = baton.data,
                 $content = $('<ul class="content list-unstyled">');
 
-            if (appointments.length === 0) {
+            if (models.length === 0) {
                 $content.append(
                     $('<li class="line">')
                     .text(gt('You don\'t have any appointments in the near future.'))
                 );
             } else {
-                _(appointments).each(function (nextApp) {
-                    var declined = util.getConfirmationStatus(nextApp) === 2;
+                _(models).each(function (model) {
+                    var declined = util.getConfirmationStatus(model) === 'DECLINED';
                     if (settings.get('showDeclinedAppointments', false) || !declined) {
-                        var timespan = util.getSmartDate(nextApp, true);
+                        var timespan = util.getSmartDate(model, true);
 
                         $content.append(
                             $('<li class="item" tabindex="0">')
                             .css('text-decoration', declined ? 'line-through' : 'none')
-                            .data('item', nextApp)
+                            .data('item', model)
                             .append(
                                 $('<span class="normal accent">').text(timespan), $.txt('\u00A0'),
-                                $('<span class="bold">').text(nextApp.title || ''), $.txt('\u00A0'),
-                                $('<span class="gray">').text(nextApp.location || '')
+                                $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
+                                $('<span class="gray">').text(model.get('location') || '')
                             )
                         );
                     }
@@ -110,10 +111,8 @@ define('plugins/portal/calendar/register', [
         draw: function (baton) {
             var popup = this.busy();
             require(['io.ox/calendar/view-detail'], function (view) {
-                var obj = api.reduce(baton.item);
-                api.get(obj).done(function (data) {
-                    popup.idle().append(view.draw(data, { deeplink: true }));
-                });
+                var model = baton.item;
+                popup.idle().append(view.draw(model, { deeplink: true }));
             });
         },
 

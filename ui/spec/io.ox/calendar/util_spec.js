@@ -11,7 +11,7 @@
  * @author Julian Bäume <julian.baeume@open-xchange.com>
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
-define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
+define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-model'], function (util, moment, models) {
 
     'use strict';
 
@@ -19,29 +19,44 @@ define(['io.ox/calendar/util', 'io.ox/core/moment'], function (util, moment) {
 
         describe('can convert timestamp to even smarter dates', function () {
 
-            var testDate = moment(),
-                data = {
-                    full_time: false
-                };
+            var model = new models.Model({
+                allDay: false
+            });
 
             it('yesterday', function () {
-                data.startDate = testDate.subtract(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Gestern, ' + testDate.format('l'));
+                var date = moment().subtract(1, 'day');
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: moment.defaultZone.name
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Gestern, ' + date.format('l'));
             });
 
             it('same day', function () {
-                data.startDate = testDate.add(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Heute, ' + testDate.format('l'));
+                var date = moment();
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: moment.defaultZone.name
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Heute, ' + date.format('l'));
             });
 
             it('tomorrow', function () {
-                data.startDate = testDate.add(1, 'day').valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('Morgen, ' + testDate.format('l'));
+                var date = moment().add(1, 'day');
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: moment.defaultZone.name
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('Morgen, ' + date.format('l'));
             });
 
             it('date in the past', function () {
-                data.startDate = testDate.set({ 'year': 2012, 'month': 10, 'date': 11 }).valueOf();
-                expect(util.getEvenSmarterDate(data)).to.equal('So., 11.11.2012');
+                var date = moment().set({ 'year': 2012, 'month': 10, 'date': 11 });
+                model.set('startDate', {
+                    value: date.format('YYYYMMDD[T]HHmmss'),
+                    tzid: moment.defaultZone.name
+                });
+                expect(util.getEvenSmarterDate(model)).to.equal('So., 11.11.2012');
             });
 
         });

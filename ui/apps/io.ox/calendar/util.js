@@ -136,13 +136,12 @@ define('io.ox/calendar/util', [
             return moment(timestamp ? timestamp : undefined).format('ddd, l');
         },
 
-        getSmartDate: function (data) {
-            var m = data.full_time ? moment.utc(data.startDate).local(true) : moment(data.startDate);
-            return m.calendar();
+        getSmartDate: function (model) {
+            return model.getMoment('startDate').calendar();
         },
 
-        getEvenSmarterDate: function (data) {
-            var m = data.full_time ? moment.utc(data.startDate).local(true) : moment(data.startDate),
+        getEvenSmarterDate: function (model) {
+            var m = model.getMoment('startDate'),
                 startOfDay = moment().startOf('day');
             // past?
             if (m.isBefore(startOfDay)) {

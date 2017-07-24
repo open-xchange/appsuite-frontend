@@ -165,7 +165,7 @@ define('io.ox/calendar/view-detail', [
         e.preventDefault();
 
         var baton = e.data.baton,
-            folder = String(baton.data.folder_id);
+            folder = String(baton.data.folder);
 
         ox.launch('io.ox/calendar/main', { folder: folder }).done(function () {
             var app = this,
