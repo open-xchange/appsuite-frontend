@@ -20,7 +20,6 @@ define('io.ox/calendar/actions/delete', [
     'use strict';
 
     return function (list) {
-        debugger;
         // only simple delete for now
         // TODO make it work for recurring appointments
         ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
