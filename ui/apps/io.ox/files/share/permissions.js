@@ -805,11 +805,29 @@ define('io.ox/files/share/permissions', [
             that.show(model, { share: true });
         },
 
+        // traverse folders upwards and check if root folder is Public Files
+        isOrIsUnderPublicFolder: function(model) {
+
+            var id = model.isFolder() ? model.get('id') : model.get('folder_id');
+
+            function checkFolder(id) {
+                if (id === '15') { return true; }
+                if (id === '9' || id === '1' || id === '0' || id === undefined) { return false; }
+
+                var model = folderAPI.pool.getModel(id);
+                var parentId = model && model.get('folder_id');
+
+                return checkFolder(parentId);
+            }
+
+            return checkFolder(id);
+        },
+
         show: function (objModel, options) {
 
             // folder tree: nested (whitelist) vs. flat
             var nested = folderAPI.isNested(objModel.get('module')),
-                notificationDefault = true, // #54777 - always send notification mail by default
+                notificationDefault = !this.isOrIsUnderPublicFolder(objModel),
                 title,
                 guid;
 
