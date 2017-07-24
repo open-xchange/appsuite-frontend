@@ -870,6 +870,11 @@ define('io.ox/files/main', [
             api.on('rename add:version remove:version change:version', _.debounce(function () {
                 app.listView.reload();
             }, 100));
+            // bug 53498
+            api.on('reload:listview', _.debounce(function () {
+                app.listView.selection.clear();
+                app.listView.reload();
+            }, 100));
             folderAPI.on('rename', _.debounce(function (id, data) {
                 // if the renamed folder is inside the folder currently displayed, reload
                 if (data.folder_id === app.folder.get()) {
