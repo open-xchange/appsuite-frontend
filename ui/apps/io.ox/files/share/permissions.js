@@ -806,7 +806,7 @@ define('io.ox/files/share/permissions', [
         },
 
         // traverse folders upwards and check if root folder is Public Files
-        isOrIsUnderPublicFolder: function(model) {
+        isOrIsUnderPublicFolder: function (model) {
 
             var id = model.isFolder() ? model.get('id') : model.get('folder_id');
 
