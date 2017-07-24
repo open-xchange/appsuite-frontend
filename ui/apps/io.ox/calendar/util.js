@@ -757,50 +757,45 @@ define('io.ox/calendar/util', [
 
         resolveParticipants: function (data) {
             // clone array
-            var participants = data.participants.slice(),
+            var attendees = data.attendees.slice(),
                 IDs = {
                     user: [],
                     group: [],
                     ext: []
                 };
 
-            var organizerIsExternalParticipant = !data.organizerId && _.isString(data.organizer) && _.find(participants, function (p) {
-                return p.mail === data.organizer || p.email1 === data.organizer;
+            var organizerIsExternalParticipant = !data.organizer.entity && _.isString(data.organizer.email) && _.find(attendees, function (p) {
+                return p.mail === data.organizer.email;
             });
 
             if (!organizerIsExternalParticipant) {
-                participants.unshift({
-                    display_name: data.organizer,
-                    mail: data.organizer,
-                    type: 5
-                });
+                attendees.unshift(data.organizer);
             }
 
-            _.each(participants, function (participant) {
-                switch (participant.type) {
-                    // internal user
-                    case 1:
-                        // user API expects array of integer [1337]
-                        IDs.user.push(participant.id);
+            _.each(attendees, function (attendee) {
+                switch (attendee.cuType) {
+                    case 'INDIVIDUAL':
+                        // internal user
+                        if (attendee.entity) {
+                            // user API expects array of integer [1337]
+                            IDs.user.push(attendee.entity);
+                        } else {
+                            // external attendee
+                            IDs.ext.push({
+                                display_name: attendee.cn,
+                                mail: attendee.email,
+                                mail_field: 0
+                            });
+                        }
                         break;
-                    // user group
-                    case 2:
+                    // group
+                    case 'GROUP':
                         // group expects array of object [{ id: 1337 }], yay (see bug 47207)
-                        IDs.group.push({ id: participant.id });
+                        IDs.group.push({ id: attendee.entity });
                         break;
                     // resource or rescource group
-                    case 3:
-                    case 4:
+                    case 'RESOURCE':
                         // ignore resources
-                        break;
-                    // external user
-                    case 5:
-                        // external user
-                        IDs.ext.push({
-                            display_name: participant.display_name,
-                            mail: participant.mail,
-                            mail_field: 0
-                        });
                         break;
                     // no default
                 }
