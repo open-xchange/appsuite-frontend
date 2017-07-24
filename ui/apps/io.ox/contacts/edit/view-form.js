@@ -27,8 +27,9 @@ define('io.ox/contacts/edit/view-form', [
     'gettext!io.ox/contacts',
     'io.ox/core/folder/api',
     'io.ox/core/folder/util',
+    'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils) {
+], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';
 
@@ -147,7 +148,7 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     // Remove attachment handling when infostore is not present
-    if (!capabilities.has('filestore')) {
+    if (!settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
     }
