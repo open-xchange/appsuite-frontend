@@ -180,6 +180,8 @@ define('io.ox/core/attachments/backbone', [
 
             if (!this.isFileAttachment()) return null;
             if (!regIsImage.test(filename) && !(supportsDocumentPreview && (regIsDocument.test(filename)) || this.isContact())) return null;
+            // no support for localFile document preview
+            if (this.get('group') === 'localFile' && supportsDocumentPreview && regIsDocument.test(filename)) return null;
 
             url = this.get('meta').previewUrl;
             if (url) return url;
