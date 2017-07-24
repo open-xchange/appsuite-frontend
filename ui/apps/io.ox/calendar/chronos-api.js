@@ -45,6 +45,11 @@ define('io.ox/calendar/chronos-api', [
         },
         api = {
             getAll: function (obj, useCache) {
+                obj = _.extend({
+                    start: _.now(),
+                    end: moment().add(28, 'days').valueOf(),
+                    order: 'asc'
+                }, obj || {});
                 obj.useCache = obj.useCache || useCache || true;
                 var collection = api.pool.get(obj.folder),
                     ranges = collection.getRanges(obj);
@@ -57,7 +62,8 @@ define('io.ox/calendar/chronos-api', [
                             folder: obj.folder,
                             rangeStart: moment(range.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
                             rangeEnd: moment(range.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            timezone: 'UTC'
+                            timezone: 'UTC',
+                            order: obj.order
                         }
                     });
                 });
@@ -65,6 +71,8 @@ define('io.ox/calendar/chronos-api', [
                     data = _(data).chain().pluck('data').flatten().compact().value();
                     if (data.length > 0) api.pool.add(obj.folder, data);
                     return api.pool.get(obj.folder).filter(util.rangeFilter(obj.start, obj.end));
+                }).then(function (list) {
+                    return _(list).sortBy(function (model) { return model.getTimestamp('startDate'); });
                 });
             },
 
