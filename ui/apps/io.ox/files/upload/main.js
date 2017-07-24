@@ -169,8 +169,6 @@ define('io.ox/files/upload/main', [
                 estimation = time / progress - time || 0,
                 counter = 0;
 
-            console.log('get estimated time', totalSize);
-
             do {
                 estimation = Math.round(estimation / limits[counter].limit);
                 counter++;
