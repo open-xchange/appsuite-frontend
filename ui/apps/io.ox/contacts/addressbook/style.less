@@ -34,6 +34,66 @@
         height: auto;
     }
 
+    .list-view .notification {
+        font-size: 13px;
+        font-weight: 400;
+    }
+
+    .selection-summary {
+        font-size: 13px;
+        padding: 0 0 16px 0;
+        text-align: left;
+        .count {
+            color: #777;
+        }
+        .addresses {
+            padding-left: 0;
+            clear: both;
+            max-height: 200px;
+            overflow: auto;
+            outline: 0;
+            display: flex;
+            flex-wrap: wrap;
+            .token {
+                margin: 0 5px 3px 0;
+                padding: 2px 4px;
+                white-space: nowrap;
+                max-width: calc(~"50% - 5px");
+
+                display: flex;
+                align-items: baseline;
+
+                border-radius: 3px;
+                border: 1px solid #d9d9d9;
+                background-color: #ededed;
+                cursor: default;
+
+            }
+            .token-label {
+                .ellipsis();
+                padding-left: 4px;
+                vertical-align: top;
+            }
+            .token-action {
+                margin-left: 5px;
+                padding-right: 4px;
+                color: #666;
+            }
+            &.listbox:focus {
+                // disable a11y listbox style
+                box-shadow: none;
+                .selected { border-color: rgba(82,168,236,.8); }
+            }
+        }
+    }
+}
+
+.address-picker {
+
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
     .list-item {
         line-height: 16px;
         padding-top: 11px;
@@ -122,58 +182,5 @@
 
     .list-item .display_name {
         font-weight: bold;
-    }
-
-    .list-view .notification {
-        font-size: 13px;
-        font-weight: 400;
-    }
-
-    .selection-summary {
-        font-size: 13px;
-        padding: 0 0 16px 0;
-        text-align: left;
-        .count {
-            color: #777;
-        }
-        .addresses {
-            padding-left: 0;
-            clear: both;
-            max-height: 200px;
-            overflow: auto;
-            outline: 0;
-            display: flex;
-            flex-wrap: wrap;
-            .token {
-                margin: 0 5px 3px 0;
-                padding: 2px 4px;
-                white-space: nowrap;
-                max-width: calc(~"50% - 5px");
-
-                display: flex;
-                align-items: baseline;
-
-                border-radius: 3px;
-                border: 1px solid #d9d9d9;
-                background-color: #ededed;
-                cursor: default;
-
-            }
-            .token-label {
-                .ellipsis();
-                padding-left: 4px;
-                vertical-align: top;
-            }
-            .token-action {
-                margin-left: 5px;
-                padding-right: 4px;
-                color: #666;
-            }
-            &.listbox:focus {
-                // disable a11y listbox style
-                box-shadow: none;
-                .selected { border-color: rgba(82,168,236,.8); }
-            }
-        }
     }
 }

@@ -43,14 +43,28 @@ define('io.ox/mail/view-options', [
                 mode: 'search',
                 getQueryParams: function (params) {
 
-                    var criteria = params.criteria, filters = [];
+                    var criteria = params.criteria, filters = [], start, end;
 
                     // The available field names are
                     // from, to, cc, bcc, subject, received_date, sent_date, size,flags, content, content_type, disp and priority
                     if (criteria.from) filters.push(['=', { field: 'from' }, criteria.from]);
                     if (criteria.to) filters.push(['or', ['=', { field: 'to' }, criteria.to], ['=', { field: 'cc' }, criteria.to], ['=', { field: 'bcc' }, criteria.to]]);
                     if (criteria.subject) filters.push(['=', { field: 'subject' }, criteria.subject]);
-                    if (criteria.words) filters.push(['=', { field: 'content' }, criteria.words]);
+                    if (criteria.year) {
+                        start = Date.UTC(criteria.year, 0, 1);
+                        end = Date.UTC(criteria.year, 11, 31);
+                        filters.push(['and', ['>', { field: 'received_date' }, String(start)], ['<', { field: 'received_date' }, String(end)]]);
+                    }
+                    if (criteria.words) {
+                        _(criteria.words.split(' ')).each(function (word) {
+                            filters.push(['or', ['=', { field: 'content' }, word], ['=', { field: 'subject' }, word]]);
+                        });
+                    }
+                    if (criteria.addresses) {
+                        _(criteria.addresses.split(' ')).each(function (address) {
+                            filters.push(['or', ['=', { field: 'to' }, address], ['=', { field: 'cc' }, address], ['=', { field: 'bcc' }, address], ['=', { field: 'content' }, address]]);
+                        });
+                    }
                     if (criteria.attachment === 'true') filters.push(['=', { field: 'content_type' }, 'multipart/mixed']);
                     if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
                     if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
@@ -74,12 +88,24 @@ define('io.ox/mail/view-options', [
                         });
                     });
                 },
+                each: function (obj) {
+                    mailAPI.pool.add('detail', obj);
+                },
                 PRIMARY_PAGE_SIZE: 100,
                 SECONDARY_PAGE_SIZE: 100
             });
 
             this.append(
                 new SearchView({ point: 'io.ox/mail/search/dropdown' })
+                .build(function () {
+                    var view = this;
+                    baton.app.on('folder:change', function () {
+                        view.cancel();
+                    });
+                    baton.app.folderView.tree.$el.on('click', function () {
+                        view.cancel();
+                    });
+                })
                 .on('search', function (criteria) {
                     listView.connect(collectionLoader);
                     listView.model.set({ criteria: criteria, thread: false, sort: 610, order: 'desc' });

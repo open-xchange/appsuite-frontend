@@ -48,7 +48,7 @@
         background-color: @toolbar-focus-color;
     }
 
-    .dropdown {
+    .dropdown, .autocomplete {
         display: none;
         position: absolute;
         top: 39px;
@@ -75,5 +75,35 @@
                 display: block;
             }
         }
+    }
+
+    .progress {
+        position: absolute;
+        top: 37px;
+        left: 0;
+        width: 0;
+        transition: width 0.3s;
+        height: 2px;
+        background-color: @brand-primary;
+    }
+
+    .autocomplete {
+        display: block;
+        max-height: 290px;
+        min-height: 0;
+        padding: 0;
+        .list-item {
+            padding: 8px 16px;
+        }
+        .list-item-checkmark {
+            display: none;
+        }
+        .list-item.selected {
+            background-color: #ddd;
+        }
+    }
+
+    .autocomplete:empty {
+        display: none;
     }
 }

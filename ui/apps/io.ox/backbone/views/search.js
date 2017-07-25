@@ -21,7 +21,8 @@ define('io.ox/backbone/views/search', [
 
     'use strict';
 
-    var yelled = false;
+    var yelled = false,
+        cache = { items: [], index: [], hash: {} };
 
     var SearchView = ExtensibleView.extend({
 
@@ -31,7 +32,7 @@ define('io.ox/backbone/views/search', [
             'click .dropdown-toggle': 'onToggle',
             'input .search-field': 'onInput',
             'focus .search-field': 'onFocus',
-            'keyup .search-field': 'onKeyUpSeachField',
+            'keydown .search-field': 'onKeyDownSeachField',
             'keyup': 'onKeyUp',
             'submit .dropdown': 'onSubmit'
         },
@@ -39,22 +40,54 @@ define('io.ox/backbone/views/search', [
         constructor: function () {
             this.model = new Backbone.Model({ words: '', folder: 'current' });
             ExtensibleView.prototype.constructor.apply(this, arguments);
+            this.$el.one('focus', '.search-field', this.onFirstFocus.bind(this));
         },
 
         render: function () {
             this.$el.append(
-                this.$input = $('<input type="text" class="search-field" spellcheck="false">')
+                this.$input = $('<input type="text" class="search-field" spellcheck="false" autocomplete="false">')
                     .attr('placeholder', gt('New search ... (prototype)')),
                 this.$dropdownToggle = $('<button type="button" class="dropdown-toggle"><i class="fa fa-caret-down" aria-hidden="true"></i></button>')
                     .attr({ 'aria-haspopup': true, 'aria-expanded': false }),
-                this.$dropdown = $('<form class="dropdown" autocomplete="off">')
+                this.$dropdown = $('<form class="dropdown" autocomplete="off">'),
+                this.$progress = $('<div class="progress">'),
+                this.$autocomplete = $('<ul class="autocomplete address-picker scrollable">')
             );
             return this.invoke('render');
         },
 
+        onFirstFocus: function () {
+            // load addressbook picker for auto-complete
+            var $progress = this.$progress.css('width', '20%'),
+                $autocomplete = this.$autocomplete;
+            require(['io.ox/contacts/addressbook/popup'], function (picker) {
+                $progress.css('width', '50%');
+                picker.getAllMailAddresses().then(function (response) {
+                    cache.items = response.items.sort(picker.sorter);
+                    cache.index = response.index;
+                    cache.hash = response.hash;
+                    SearchView.picker = {
+                        search: picker.search,
+                        renderItems: picker.renderItems,
+                        resolve: function (cid) {
+                            return cache.hash[cid];
+                        }
+                    };
+                    $progress.css('width', '100%').delay(300).fadeOut('fast');
+                    $autocomplete.on('appear', picker.onAppear);
+                });
+            });
+        },
+
         onInput: function () {
+            this.clear();
+            this.model.set(this.parseQuery());
+            this.renderAutoComplete();
+        },
+
+        clear: function () {
             var folder = this.model.get('folder');
-            this.model.clear().set('folder', folder).set(this.parseQuery());
+            this.model.clear().set('folder', folder);
         },
 
         onFocus: function () {
@@ -77,19 +110,57 @@ define('io.ox/backbone/views/search', [
         },
 
         toggleDropdown: function (state) {
-            if (state === undefined) state = !this.$el.hasClass('open');
+            if (state === undefined) state = !this.isDropdownOpen();
             this.$el.toggleClass('open', state);
             this.$dropdownToggle.attr('aria-expanded', state);
             this.trigger(state ? 'open' : 'close');
+            this.$autocomplete.empty();
             return state;
         },
 
-        onKeyUpSeachField: function (e) {
+        isDropdownOpen: function () {
+            return this.$el.hasClass('open');
+        },
+
+        isAutocompleteOpen: function () {
+            return this.$autocomplete.children().length;
+        },
+
+        onKeyDownSeachField: function (e) {
+            var selected, item, el, index, children;
             switch (e.which) {
                 // enter
-                case 13: this.toggleDropdown(false); this.submit(); break;
+                case 13:
+                    selected = this.$autocomplete.children('.selected');
+                    if (this.isAutocompleteOpen() && selected.length) {
+                        item = SearchView.picker.resolve(selected.attr('data-cid'));
+                        index = this.$input.val().lastIndexOf(this.getLastWord());
+                        this.$input.val(this.$input.val().substr(0, index) + item.email).trigger('input');
+                        this.$autocomplete.empty();
+                        // move cursor to end
+                        el = this.$input[0];
+                        el.scrollLeft = el.scrollWidth;
+                    } else {
+                        this.toggleDropdown(false);
+                        this.submit();
+                    }
+                    break;
+                // cursor up
+                case 38:
+                    children = this.$autocomplete.children();
+                    index = children.index(children.filter('.selected'));
+                    if (index <= 0) return;
+                    children.filter('.selected').removeClass('selected');
+                    children.eq(index - 1).addClass('selected').intoView(this.$autocomplete);
+                    break;
                 // cursor down
-                case 40: this.toggleDropdown(true); break;
+                case 40:
+                    children = this.$autocomplete.children();
+                    index = children.index(children.filter('.selected'));
+                    if (index >= children.length - 1) return;
+                    children.filter('.selected').removeClass('selected');
+                    children.eq(index + 1).addClass('selected').intoView(this.$autocomplete);
+                    break;
                 // no default
             }
         },
@@ -98,12 +169,12 @@ define('io.ox/backbone/views/search', [
             if (e.which === 27) this.toggleDropdown(false);
         },
 
-        onSubmit: function () {
+        onSubmit: function (e) {
+            e.preventDefault();
             this.toggleDropdown(false);
             this.serializeQuery();
             this.$input.focus();
             setTimeout(this.submit.bind(this), 0);
-            return false;
         },
 
         submit: function () {
@@ -116,9 +187,17 @@ define('io.ox/backbone/views/search', [
                 'info',
                 'This is just a prototype to play around with a visually different and more explicit user interface.\n\n' +
                 'Simple for the 99% use-case (just entering a word or name), still easy to use for explicit queries.\n\n' +
-                'You can open a dropdown by clicking on the caret or by cursor down in the search field'
+                'You can open a dropdown by clicking on the caret on the right-hand side.'
             );
             yelled = true;
+        },
+
+        cancel: function () {
+            this.toggleDropdown(false);
+            this.$autocomplete.empty();
+            this.$input.val('');
+            this.clear();
+            return this.trigger('cancel');
         },
 
         input: function (name, label) {
@@ -174,7 +253,7 @@ define('io.ox/backbone/views/search', [
                 .chain()
                 .map(function (value, name) {
                     if (!value || name === 'empty' || name === 'folder') return;
-                    if (name === 'words') return value;
+                    if (name === 'words' || name === 'addresses') return value;
                     if (_.isNumber(value)) return name + ':' + moment(value).utc(true).format('YYYY-MM-DD');
                     return name + ':' + (String(value).indexOf(' ') > -1 ? '"' + value + '"' : value);
                 })
@@ -185,8 +264,8 @@ define('io.ox/backbone/views/search', [
         },
 
         parseQuery: function () {
-            var criteria = { words: [], empty: true };
-            this.$input.val().trim().split(/(\w+:(?:"[^"]+"|\S+)|\S+)/).forEach(function (word) {
+            var criteria = { words: [], addresses: [], empty: true };
+            this.$input.val().trim().toLowerCase().split(/(\w+:(?:"[^"]+"|\S+)|\S+)/).forEach(function (word) {
                 if (word === '' || word === ' ') return;
                 var pair = word.split(':', 2), prefix = pair[0], value = (pair[1] || '').replace(/^"|"$/g, '');
                 if (prefix && value) {
@@ -196,15 +275,45 @@ define('io.ox/backbone/views/search', [
                     } else {
                         criteria[prefix] = value;
                     }
+                } else if (/^[^@]+@[^@\s]*?\.\w+$/.test(word)) {
+                    criteria.addresses.push(word);
                 } else {
                     criteria.words.push(word);
                 }
                 criteria.empty = false;
             });
+            criteria.addresses = criteria.addresses.join(' ');
             criteria.words = criteria.words.join(' ');
             return criteria;
+        },
+
+        renderAutoComplete: function () {
+            var word = this.getLastWord(),
+                items = SearchView.picker.search(word, cache.index, cache.hash, true);
+            // empty?
+            if (!items.length) return this.$autocomplete.empty();
+            // filter lists & labels
+            items = _(items).filter(function (item) {
+                if (item.list || item.label) return false;
+                return true;
+            });
+            // render
+            SearchView.picker.renderItems.call(this.$autocomplete, items, { isSearch: true });
+            this.$autocomplete.children().removeAttr('tabindex');
+        },
+
+        getLastWord: function () {
+            var match = this.$input.val().match(/(\w+:)?(\S+)$/);
+            return match ? match[2] : '';
         }
     });
+
+    // public functions
+    SearchView.picker = {
+        search: _.constant([]),
+        renderItems: _.noop,
+        resolve: _.noop
+    };
 
     return SearchView;
 });
