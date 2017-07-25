@@ -135,6 +135,34 @@ define('io.ox/calendar/chronos-api', [
                 .then(processResponse);
             },
 
+            confirm: function (obj, options) {
+                options = options || {};
+                var params = {
+                        action: 'updateAttendee',
+                        id: obj.id,
+                        folder: obj.folder,
+                        ignore_conflicts: options.ignore_conflicts,
+                        timestamp: _.now()
+                    },
+                    data = {
+                        attendee: obj.attendee
+                    };
+
+                if (obj.recurrenceId) {
+                    params.recurrenceId = obj.recurrenceId;
+                }
+                if (obj.alarms) {
+                    data.alarms = obj.alarms;
+                }
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: data
+                })
+                .then(processResponse);
+            },
+
             // returns events for a list of attendees, using the freebusy api
             freebusyEvents: function (list, options) {
                 if (list.length === 0) {

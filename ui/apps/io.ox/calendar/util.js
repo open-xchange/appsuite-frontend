@@ -99,7 +99,7 @@ define('io.ox/calendar/util', [
 
             var check = function (data) {
                 if (folderAPI.is('private', data)) {
-                    var isOrganizer = opt.app.organizerId === ox.user_id;
+                    var isOrganizer = opt.app.organizer.entity === ox.user_id;
                     return opt.invert ? !isOrganizer : isOrganizer;
                 }
                 return true;
@@ -107,9 +107,9 @@ define('io.ox/calendar/util', [
 
             if (opt.folderData) return $.when(check(opt.folderData));
 
-            if (!opt.app.folder_id) return $.when(false);
+            if (!opt.app.folder) return $.when(false);
 
-            return folderAPI.get(opt.app.folder_id).then(function (data) {
+            return folderAPI.get(opt.app.folder).then(function (data) {
                 return check(data);
             });
         },
@@ -297,19 +297,19 @@ define('io.ox/calendar/util', [
                 reminderListValues = [
                     // value is ical duration format
                     { value: '-1', format: 'string' },
-                    { value: '-P0M', format: 'minutes' },
-                    { value: '-P5M', format: 'minutes' },
-                    { value: '-P10M', format: 'minutes' },
-                    { value: '-P15M', format: 'minutes' },
-                    { value: '-P30M', format: 'minutes' },
-                    { value: '-P45M', format: 'minutes' },
+                    { value: '-PT0M', format: 'minutes' },
+                    { value: '-PT5M', format: 'minutes' },
+                    { value: '-PT10M', format: 'minutes' },
+                    { value: '-PT15M', format: 'minutes' },
+                    { value: '-PT30M', format: 'minutes' },
+                    { value: '-PT45M', format: 'minutes' },
 
-                    { value: '-P1H', format: 'hours' },
-                    { value: '-P2H', format: 'hours' },
-                    { value: '-P4H', format: 'hours' },
-                    { value: '-P6H', format: 'hours' },
-                    { value: '-P8H', format: 'hours' },
-                    { value: '-P12H', format: 'hours' },
+                    { value: '-PT1H', format: 'hours' },
+                    { value: '-PT2H', format: 'hours' },
+                    { value: '-PT4H', format: 'hours' },
+                    { value: '-PT6H', format: 'hours' },
+                    { value: '-PT8H', format: 'hours' },
+                    { value: '-PT12H', format: 'hours' },
 
                     { value: '-P1D', format: 'days' },
                     { value: '-P2D', format: 'days' },
@@ -476,7 +476,7 @@ define('io.ox/calendar/util', [
         },
 
         getConfirmationClass: function (status) {
-            return (status || 'NEEDS-ACTION').toLowerCase();
+            return (_(status).isNumber() ? chronosStates[status] : status || 'NEEDS-ACTION').toLowerCase();
         },
 
         getConfirmationLabel: function (status) {

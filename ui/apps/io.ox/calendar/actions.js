@@ -174,9 +174,9 @@ define('io.ox/calendar/actions', [
             function cont(app) {
                 return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
                     var iamUser = false;
-                    if (app.users) {
-                        for (var i = 0; i < app.users.length; i++) {
-                            if (app.users[i].id === ox.user_id) {
+                    if (app.attendees) {
+                        for (var i = 0; i < app.attendees.length; i++) {
+                            if (app.attendees[i].entity === ox.user_id) {
                                 iamUser = true;
                             }
                         }
@@ -192,7 +192,7 @@ define('io.ox/calendar/actions', [
             if (!app.id) return false;
 
             // incomplete
-            if (app.id && !app.users) {
+            if (app.id && !app.attendees) {
                 return api.get(app).then(cont);
             }
             return cont(app);

@@ -29,7 +29,7 @@ define('io.ox/backbone/mini-views/alarms', [
             'change .alarm-time': 'updateModel'
         },
         initialize: function (options) {
-            options = options || {};
+            this.options = options || {};
             this.attribute = options.attribute || 'alarms';
             this.list = $('<ul class="list-unstyled alarm-list">');
         },
@@ -38,7 +38,7 @@ define('io.ox/backbone/mini-views/alarms', [
             this.$el.empty().append(
                 $('<button class="btn btn-default" type="button">').text(gt('Add new Reminder'))
                     .on('click', function () {
-                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: '-P15M', related: 'START' } }));
+                        self.list.append(self.createNodeFromAlarm({ action: 'DISPLAY', trigger: { duration: '-PT15M', related: 'START' } }));
                         self.updateModel();
                     }),
                 self.list
@@ -58,9 +58,10 @@ define('io.ox/backbone/mini-views/alarms', [
         },
         updateView: function () {
             var self = this;
-            this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm) : []);
+            this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
+            var self = this;
             return $('<li class="alarm-list-item">').append(
                 $('<div class="row">').append(
                     $('<div class="col-md-6">').append(
@@ -70,7 +71,7 @@ define('io.ox/backbone/mini-views/alarms', [
                             $('<option>').text(gt('Mail')).val('EMAIL')
                         ).val(alarm.action)
                     ),
-                    $('<div class="col-md-5">').append(
+                    $('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').append(
                         $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                             return '<option value="' + val + '">' + key + '</option>';
                         })).val(alarm.trigger.duration)

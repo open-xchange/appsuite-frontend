@@ -260,16 +260,16 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                     alarms: [{
                         action: 'DISPLAY',
                         description: 'Pizza Essen',
-                        trigger: { duration: '-P15M' }
+                        trigger: { duration: '-PT15M' }
                     }, {
                         action: 'AUDIO',
-                        trigger: { duration: '-P30M' }
+                        trigger: { duration: '-PT30M' }
                     }, {
                         action: 'EMAIL',
                         attendee: 'mailto:miss.test@test.com',
                         description: 'Lecker Lecker!',
                         summary: 'Pizza Essen',
-                        trigger: { duration: '-P2H' }
+                        trigger: { duration: '-PT2H' }
                     }]
                 });
                 this.view = new AlarmsView({ model: this.model });
@@ -304,14 +304,14 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 this.view.$el.find('.alarm-remove:last').trigger('click');
                 // change must be triggered manually when the value is changed using javascript.
                 this.view.$el.find('.alarm-action:last').val('DISPLAY').trigger('change');
-                this.view.$el.find('.alarm-time:first').val('-P1H').trigger('change');
+                this.view.$el.find('.alarm-time:first').val('-PT1H').trigger('change');
                 this.model.get('alarms').should.deep.equal([{
                     action: 'DISPLAY',
-                    trigger: { duration: '-P1H' },
+                    trigger: { duration: '-PT1H' },
                     description: 'Pizza Essen'
                 }, {
                     action: 'DISPLAY',
-                    trigger: { duration: '-P30M' },
+                    trigger: { duration: '-PT30M' },
                     description: 'Pizza Essen'
                 }]);
             });
