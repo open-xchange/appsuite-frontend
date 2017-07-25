@@ -374,14 +374,18 @@ define('io.ox/backbone/mini-views/common', [
                 InputView.prototype.render.call(this);
                 var view = this;
                 require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
-                    new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
-                        .attachTo(view.$el)
-                        .on('select', function (date) {
-                            view.model.set(view.name, date.valueOf());
-                        })
-                        .on('before:open', function () {
-                            this.setDate(view.model.get('currentWeek'));
-                        });
+                    // need to be async here otherwise parent is undefined
+                    setTimeout(function () {
+                        new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
+                            .attachTo(view.$el)
+                            .on('select', function (date) {
+                                console.log('select handler', date.valueOf());
+                                view.model.set(view.name, date.valueOf());
+                            })
+                            .on('before:open', function () {
+                                this.setDate(view.model.get('currentWeek'));
+                            });
+                    });
                 });
                 return this;
             }

@@ -85,7 +85,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         },
 
         getDefaultRange: function () {
-            return { dateFrom: +moment().utc(true), dateUntil: +moment().utc(true).add(1, 'week') };
+            return { dateFrom: +moment(), dateUntil: +moment().add(1, 'week') };
         },
 
         toJSON: function () {
@@ -177,7 +177,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         isActive: function () {
             if (!this.get('active')) return false;
             if (!this.get('activateTimeFrame')) return true;
-            var now = _.utc();
+            var now = +moment();
             // FROM and UNTIL
             if (this.has('dateFrom') && this.has('dateUntil')) {
                 return this.get('dateFrom') <= now && (this.get('dateUntil') + DAY) > now;
@@ -189,7 +189,7 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
         },
 
         isPast: function () {
-            return this.has('dateUntil') && (this.get('dateUntil') + DAY) < _.utc();
+            return this.has('dateUntil') && (this.get('dateUntil') + DAY) < +moment();
         },
 
         isReverse: function () {

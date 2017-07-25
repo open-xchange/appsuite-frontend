@@ -44,7 +44,7 @@ define('io.ox/backbone/views/datepicker', [
             this.options = options || {};
             this.$target = $();
             this.$parent = $(this.options.parent || 'body');
-            this.date = options.mandatory === false ? null : moment(this.options.date).utc(true);
+            this.date = this.getInitialDate();
             this.mode = 'month';
             this.closing = false;
             // the original constructor will call initialize()
@@ -80,6 +80,16 @@ define('io.ox/backbone/views/datepicker', [
             }, 1);
             this.$el.on('focusout', $.proxy(this.focusOut, this));
             $(window).on('resize', $.proxy(this.onWindowResize, this));
+        },
+
+        getInitialDate: function () {
+            if (this.options.mandatory) return null;
+            if (this.options.date !== undefined) return moment(this.options.date);
+            return this.getToday();
+        },
+
+        getToday: function () {
+            return moment.utc().startOf('day');
         },
 
         //
@@ -380,11 +390,11 @@ define('io.ox/backbone/views/datepicker', [
             if (this.mode !== 'month') {
                 // switch to current date in month view
                 this.mode = 'month';
-                this.setDate(moment());
+                this.setDate(this.getToday());
                 this.$grid.focus();
             } else {
                 // select current date and close picker
-                this.trigger('select', moment());
+                this.trigger('select', this.getToday());
             }
         },
 
@@ -406,7 +416,7 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onSelectDate: function (e) {
-            var date = moment($(e.currentTarget).data('date')).utc(true);
+            var date = moment($(e.currentTarget).data('date'));
             this.trigger('select', date);
         },
 
@@ -550,12 +560,12 @@ define('io.ox/backbone/views/datepicker', [
         },
 
         onTargetInput: function () {
-            var val = this.$target.val(), date = moment(val, 'l').utc(true);
+            var val = this.$target.val(), date = moment(val, 'l');
             this.setDate(date);
         },
 
         getDate: function () {
-            return this.date || moment().utc(true);
+            return this.date || this.getToday();
         },
 
         getFormattedDate: function () {
@@ -564,7 +574,7 @@ define('io.ox/backbone/views/datepicker', [
 
         setDate: function (date, forceRender) {
 
-            date = moment(date || this.date).utc(true);
+            date = moment(date || this.date);
             // valid?
             if (!date.isValid()) return;
             // avoid BC
@@ -606,7 +616,7 @@ define('io.ox/backbone/views/datepicker', [
     }
 
     function isToday(m) {
-        return isSame(m, moment().utc(true));
+        return isSame(m, moment());
     }
 
     return DatePickerView;

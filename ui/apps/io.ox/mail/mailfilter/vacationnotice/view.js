@@ -20,14 +20,13 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     'io.ox/backbone/mini-views',
     'io.ox/backbone/views/modal',
     'io.ox/core/settings/util',
-    'io.ox/backbone/mini-views/datepicker',
     'io.ox/core/yell',
     'io.ox/core/api/user',
     'io.ox/contacts/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/mailfilter/vacationnotice/style'
-], function (Model, api, views, ext, mini, ModalView, util, DatePicker, yell, userAPI, contactsUtil, settings, gt) {
+], function (Model, api, views, ext, mini, ModalView, util, yell, userAPI, contactsUtil, settings, gt) {
 
     'use strict';
 
