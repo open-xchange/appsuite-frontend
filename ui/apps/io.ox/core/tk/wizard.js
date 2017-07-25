@@ -49,14 +49,17 @@ define('io.ox/core/tk/wizard', [
         // simple container on desktop for flex layout
         $('<div class="wizard-container abs">');
 
-    function getBounds(elem) {
+    function getBounds(elem, padding) {
+        padding = padding ? padding : 0;
         var o = elem.offset();
-        o.width = elem.outerWidth();
-        o.height = elem.outerHeight();
+        o.width = elem.outerWidth() + padding * 2;
+        o.height = elem.outerHeight() + padding * 2;
         o.availableWidth = $(window).width();
         o.availableHeight = $(window).height();
-        o.right = o.availableWidth - o.width - o.left;
-        o.bottom = o.availableHeight - o.height - o.top;
+        o.right = o.availableWidth - o.width - o.left + padding;
+        o.bottom = o.availableHeight - o.height - o.top + padding;
+        o.top -= padding;
+        o.left -= padding;
         return o;
     }
 
@@ -259,7 +262,7 @@ define('io.ox/core/tk/wizard', [
             this.shift(0);
         },
 
-        spotlight: function (selector) {
+        spotlight: function (selector, options) {
             if (!selector) return;
             // allow dynamic selectors
             if (_.isFunction(selector)) {
@@ -267,7 +270,7 @@ define('io.ox/core/tk/wizard', [
             }
             var elem = $(selector).filter(':visible');
             if (!elem.length) return;
-            var bounds = getBounds(elem);
+            var bounds = getBounds(elem, options ? options.padding : 0);
             // apply positions (top, right, bottom, left)
             overlays[0].css({ width: bounds.left, right: 'auto' });
             overlays[1].css({ left: bounds.left, height: bounds.top, bottom: 'auto' });
@@ -579,7 +582,7 @@ define('io.ox/core/tk/wizard', [
                 if (this.options.spotlight) {
                     // apply spotlight
                     this.parent.toggleBackdrop(false);
-                    this.parent.spotlight(this.options.spotlight.selector);
+                    this.parent.spotlight(this.options.spotlight.selector, this.options.spotlight.options);
                     // respond to window resize
                     $(window).on('resize.wizard.spotlight', _.debounce(function () {
                         this.parent.spotlight(this.options.spotlight.selector);
