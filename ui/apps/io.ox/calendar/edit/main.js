@@ -203,7 +203,7 @@ define('io.ox/calendar/edit/main', [
                     data.alarms = data.alarms || settings.get('defaultReminder', [{
                         action: 'DISPLAY',
                         description: '',
-                        trigger: { duration: '-P15M', related: 'START' }
+                        trigger: { duration: '-PT15M', related: 'START' }
                     }]);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
                     data.transp = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
