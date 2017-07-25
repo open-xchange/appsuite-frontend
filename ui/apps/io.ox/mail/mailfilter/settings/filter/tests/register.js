@@ -12,7 +12,7 @@
  *
  */
 
-define('io.ox/mail/mailfilter/settings/filter/tests/register', [
+define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
     'io.ox/core/extensions',
     'gettext!io.ox/mailfilter',
     'io.ox/backbone/mini-views',
@@ -23,10 +23,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
     'use strict';
 
-    api.getConfig().done(processConfig);
+    var defer = $.Deferred();
 
     function processConfig(config) {
-
 
         var cap = _.object(config.capabilities, config.capabilities);
         ext.point('io.ox/mail/mailfilter/tests').extend({
@@ -915,8 +914,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
     }
 
-    return {
-        processConfig: processConfig
-    };
+    return api.getConfig().then(processConfig).then(function () {
+        defer.resolve({ processConfig: processConfig });
+        return defer;
+    });
 
 });

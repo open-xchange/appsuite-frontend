@@ -13,26 +13,33 @@
 
 define([
     'io.ox/core/extensions',
-    'io.ox/mail/mailfilter/settings/filter/tests/register',
-    'io.ox/mail/mailfilter/settings/filter/actions/register',
+    'io.ox/core/api/mailfilter',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'fixture!io.ox/mail/mailfilter/config.json'
-], function (ext, conditionsExtensions, actionsExtensions, defaults, fixtureMailfilterConfig) {
+], function (ext, api, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
     describe('Mailfilter defaults', function () {
 
+        var def = $.Deferred().resolve(fixtureMailfilterConfig),
+            stub;
+
         beforeEach(function () {
+            stub = sinon.stub(api, 'getConfig').returns(def);
+            return require(['io.ox/mail/mailfilter/settings/filter/tests/register', 'io.ox/mail/mailfilter/settings/filter/actions/register']).then(function (conditionsExtensions, actionsExtensions) {
+                conditionsExtensions.processConfig(fixtureMailfilterConfig);
+                actionsExtensions.processConfig(fixtureMailfilterConfig);
 
-            conditionsExtensions.processConfig(fixtureMailfilterConfig);
-            actionsExtensions.processConfig(fixtureMailfilterConfig);
-
-            ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
-            ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+                ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+                ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+            });
 
         });
 
+        afterEach(function () {
+            stub.restore();
+        });
 
         it('should return a object', function () {
             defaults.should.be.a('object');
