@@ -258,7 +258,7 @@ define('io.ox/mail/compose/signatures', [
             // add signature?
             if (this.model.get('signatures').length > 0) {
                 text = cleanAdd(signature.content, isHTML);
-                if (isHTML) text = this.getParagraph(text);
+                if (isHTML) text = this.getParagraph(text, looksLikeHTML(text));
                 // signature wrapper
                 if (_.isString(signature.misc)) signature.misc = JSON.parse(signature.misc);
                 if (signature.misc && signature.misc.insertion === 'below') {
