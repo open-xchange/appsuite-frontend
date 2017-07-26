@@ -33,6 +33,28 @@ define('io.ox/core/folder/util', [
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 
+    var pool;
+
+    function registerPool(folderPool) {
+        pool = folderPool;
+    }
+
+    function isInMyFilesFolder(data, visitedFolders) {
+        // folderpool not registered yet. Check not possible, require folderapi once to register the pool
+        if (!pool) return false;
+        // false if no data
+        // avoid infinite loops due to ring structures
+        visitedFolders = visitedFolders || [];
+        if (!data || _(data).indexOf(visitedFolders) !== -1) return false;
+
+        if (data.id.toString() === getDefaultFolder('infostore').toString()) {
+            return true;
+        } else if (data.folder_id && pool.models[data.folder_id]) {
+            visitedFolders.push(data.id);
+            return isInMyFilesFolder(pool.models[data.folder_id].attributes, visitedFolders);
+        }
+        return false;
+    }
     //
     // Is?
     //
@@ -71,6 +93,9 @@ define('io.ox/core/folder/util', [
                 return data.type === 1;
             case 'public':
                 // special file folder: regard as public
+                if (data.module === 'infostore' && data.type === 2 && !/^(10|14|15)$/.test(data.id)) {
+                    return !isInMyFilesFolder(data);
+                }
                 return data.type === 2 || /^(10|14|15)$/.test(data.id);
             case 'shared':
                 return data.type === 3;
@@ -301,6 +326,7 @@ define('io.ox/core/folder/util', [
     }
 
     return {
+        registerPool: registerPool,
         perm: perm,
         bits: bits,
         supports: supports,

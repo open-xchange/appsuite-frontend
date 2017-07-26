@@ -1451,6 +1451,9 @@ define('io.ox/core/folder/api', [
         return getDefaultSeparator();
     }
 
+    // register pool in util function. Needed for some checks. Cannot be done with require folderAPI or we would either be asynchronous or have circular dependencies
+    util.registerPool(pool);
+
     // publish api
     _.extend(api, {
         FolderModel: FolderModel,
