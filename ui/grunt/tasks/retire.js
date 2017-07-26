@@ -13,6 +13,8 @@
 'use strict';
 
 module.exports = function (grunt) {
+    if (!grunt.isPeerDependencyInstalled('grunt-retire')) return;
+
     grunt.config.merge({
         retire: {
             js: ['**/*.js'], /** Which js-files to scan. **/
