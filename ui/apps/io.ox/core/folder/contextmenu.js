@@ -361,9 +361,8 @@ define('io.ox/core/folder/contextmenu', [
         exportData: (function () {
 
             function handler(e) {
-                require(['io.ox/core/export/export'], function (exporter) {
-                    //module,folderid
-                    exporter.show(e.data.baton.data.module, e.data.baton.data.id);
+                require(['io.ox/core/export'], function (exportDialog) {
+                    exportDialog.open(e.data.baton.data.module, { folder: e.data.baton.data.id });
                 });
             }
 

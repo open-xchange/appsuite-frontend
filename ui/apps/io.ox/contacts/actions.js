@@ -155,35 +155,11 @@ define('io.ox/contacts/actions', [
         }
     });
 
-    function useFolderExport(list, baton) {
-        // not relevant
-        if (list.length < 100) return;
-        var gridIds = baton.app.grid.getIds();
-        // compare numbers
-        if (list.length !== gridIds.length) return;
-        // full check
-        var diff = _.difference(_.pluck(gridIds, 'folder_id', 'id'), _.pluck(gridIds, 'folder_id', 'id'));
-        return diff.length === 0;
-    }
-
     new Action('io.ox/contacts/actions/export', {
         requires: 'some read',
-        multiple: function (list, baton) {
-
-            require(['io.ox/core/api/export',
-                'io.ox/core/download',
-                'io.ox/core/yell'], function (exportAPI, download, yell) {
-                // switch to folder export in case user selected all contacts
-                var url = useFolderExport(list, baton) ?
-                    exportAPI.getURL('VCARD', baton.data[0].folder_id) :
-                    exportAPI.getVCardURL(list);
-                if (url) return download.url(url);
-                // error case
-                yell({
-                    type: 'error',
-                    //#. requested url for vcard download hits technical request limit
-                    message: gt('Request limit was hit. Please try again with less contacts selected.')
-                });
+        multiple: function (list) {
+            require(['io.ox/core/export'], function (exportDialog) {
+                exportDialog.open('contacts', { list: list });
             });
         }
     });
@@ -444,7 +420,7 @@ define('io.ox/contacts/actions', [
         index: INDEX += 100,
         prio: 'lo',
         mobile: 'lo',
-        label: gt('Export as VCard'),
+        label: gt('Export'),
         ref: 'io.ox/contacts/actions/export'
     }));
 

@@ -89,6 +89,13 @@ define('io.ox/tasks/toolbar', [
         //
         // --- LO ----
         //
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Export'),
+            drawDisabled: true,
+            ref: 'io.ox/tasks/actions/export'
+        },
         'confirm': {
             prio: 'lo',
             mobile: 'lo',
