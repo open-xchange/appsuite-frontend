@@ -171,7 +171,7 @@ define('io.ox/calendar/list/perspective', [
             });
 
             // select ids from url
-            var cids = [].concat(_.url.hash('id').split(','));
+            var cids = [].concat((_.url.hash('id') || '').split(','));
             app.listView.once('first-reset', function () {
                 app.listView.selection.set(cids);
             });

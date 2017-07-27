@@ -15,8 +15,9 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/calendar/chronos-api',
+    'io.ox/calendar/chronos-util',
     'gettext!io.ox/calendar'
-], function (ext, links, api, gt) {
+], function (ext, links, api, chronosUtil, gt) {
 
     'use strict';
 
@@ -174,7 +175,11 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     }, 10);
 
     function prepareUpdateToolbar(app) {
-        var list = app.pages.getCurrentPage().name === 'list' ? app.getGrid().selection.get() : {};
+        var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
+        list = _(list).map(function (item) {
+            if (_.isString(item)) return chronosUtil.cid(item);
+            return item;
+        });
         app.updateToolbar(list);
     }
 
