@@ -22,11 +22,12 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     'io.ox/core/settings/util',
     'io.ox/core/yell',
     'io.ox/core/api/user',
+    'io.ox/core/api/account',
     'io.ox/contacts/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'less!io.ox/mail/mailfilter/vacationnotice/style'
-], function (Model, api, views, ext, mini, ModalView, util, yell, userAPI, contactsUtil, settings, gt) {
+], function (Model, api, views, ext, mini, ModalView, util, yell, userAPI, accountAPI, contactsUtil, settings, gt) {
 
     'use strict';
 
@@ -95,7 +96,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             }
         })
         .build(function () {
-            this.data = _(data).pick('aliases', 'config', 'user');
+            this.data = _(data).pick('aliases', 'config', 'user', 'primary');
             this.$el.addClass('rule-dialog');
         })
         .addCancelButton()
@@ -329,7 +330,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
                 if (!settings.get('features/setAddressesInVacationNotice', true)) return;
 
                 var model = this.model,
-                    primaryMail = model.get('primaryMail') || this.data.aliases[0];
+                    primaryMail = this.data.primary || this.data.aliases[0];
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);
@@ -363,8 +364,9 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
     //
     function getData() {
         var model = new Model();
-        return $.when(userAPI.get(), api.getConfig(), model.fetch()).then(function (user, config) {
-            return { model: model, aliases: user.aliases, config: config, user: user };
+
+        return $.when(userAPI.get(), api.getConfig(), accountAPI.getPrimaryAddress(), model.fetch()).then(function (user, config, primary) {
+            return { model: model, aliases: user.aliases, config: config, user: user, primary: primary[1] };
         });
     }
 
