@@ -281,6 +281,14 @@ msgstr "%1$s alterou o status:"
 msgid "%1$s completed"
 msgstr "%1$s completo"
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Mac OS"
+msgid "%1$s for MacOS"
+msgstr "Cliente %s para Mac OS"
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr "%1$s tem um novo contato:"
@@ -314,6 +322,41 @@ msgstr "%1$s foi movido para a posição %2$s de %3$s"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr "%1$s de %2$s"
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on %2$s"
+msgstr "%1$s de %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s on Android"
+msgstr "Cliente %s para Android"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s on Windows"
+msgstr "Cliente %s para Windows"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on iOS"
 msgstr "%1$s de %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -622,6 +665,12 @@ msgstr "Ações para %1$s"
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Ações. Use a tecla do cursor para navegar."
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Active clients"
+msgstr "Cliente do Drive"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1112,6 +1161,10 @@ msgstr "Ocorreu um erro interno"
 msgid "An unknown error occurred"
 msgstr "Ocorreu um erro desconhecido"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Aniversário"
@@ -1499,6 +1552,7 @@ msgid "Branches"
 msgstr "Filiais"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "Navegador"
 
@@ -1816,6 +1870,12 @@ msgstr "Criança"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
 msgstr "Badalos"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Chrome %1$s on %2$s"
+msgstr "Compartilhar %1$s \"%2$s\""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -2430,6 +2490,12 @@ msgstr "Papel atual"
 msgid "Current role"
 msgstr "Papel atual"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Current Costs:"
+msgid "Current session"
+msgstr "Custos atuais:"
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Atualizando agora"
@@ -2626,6 +2692,7 @@ msgid "Delete"
 msgstr "Excluir"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Delete %1$s"
 msgstr "Excluir %1$s"
 
@@ -2993,6 +3060,20 @@ msgstr "Deseja realmente excluir a extensão \".%1$s\" do nome do arquivo?"
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "Deseja realmente responder a todos ou apenas a %1$s?"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr "Deseja realmente excluir esta conta?"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to terminate that session?"
+msgstr "Deseja realmente excluir esta versão?"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
@@ -3241,6 +3322,12 @@ msgstr "EAS"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr "EB"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Edge on %1$s"
+msgstr "Vencimento em %1$s"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3694,6 +3781,10 @@ msgstr ""
 msgid "Exact dates"
 msgstr "Datas exatas"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Executivo"
@@ -3989,6 +4080,12 @@ msgstr "Localizar um tempo livre"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Terminar"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "Firefox %1$s on %2$s"
+msgstr "%1$s de %2$s"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4562,6 +4659,12 @@ msgstr "Eu curto isso"
 msgid "IMAP"
 msgstr "IMAP"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s."
+msgid "IP Address: %1$s"
+msgstr "%1$s adicionado."
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "Telefone IP"
@@ -4769,6 +4872,10 @@ msgstr "Usuário interno"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Usuários internos"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -5175,6 +5282,10 @@ msgstr "MB"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
@@ -5711,6 +5822,12 @@ msgstr "Minhas tarefas"
 msgid "Name"
 msgstr "Nome"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Native clients"
+msgstr "Cliente do Drive"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -6163,6 +6280,7 @@ msgstr "Modo desconectado"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
 
@@ -6414,6 +6532,12 @@ msgstr "Outro endereço"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
 msgstr "Outro endereço"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Others"
+msgid "Other clients"
+msgstr "Outros"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Outgoing server (SMTP)"
@@ -7782,6 +7906,12 @@ msgstr "SMTP"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "SSL/TLS"
 msgstr "SSL/TLS"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Safari %1$s on %2$s"
+msgstr "Compartilhar %1$s \"%2$s\""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
@@ -9801,6 +9931,16 @@ msgstr "Unificado"
 msgid "Unknown"
 msgstr "Desconhecido"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown client"
+msgstr "Nenhum remetente"
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Erro desconhecido ao verificar blog do Tumblr."
@@ -10237,6 +10377,12 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Dia inteiro"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Windows are shown as"
+msgid "Windows"
+msgstr "Janelas são exibidas como"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
@@ -10952,6 +11098,10 @@ msgstr "tem participantes"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
 msgstr "em"
@@ -11228,6 +11378,12 @@ msgstr "quando o destinatário acessar os arquivos"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "quando o destinatário acabar de baixar os arquivos"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "windows"
+msgstr "Janela principal"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12469,9 +12625,6 @@ msgstr "sua plataforma"
 #~ msgid "Curacao"
 #~ msgstr "Macau"
 
-#~ msgid "Current Costs:"
-#~ msgstr "Custos atuais:"
-
 #~ msgid "Current Date"
 #~ msgstr "Data atual"
 
@@ -12767,9 +12920,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Drag and drop"
 #~ msgstr "Arrastar e soltar"
-
-#~ msgid "Drive Client"
-#~ msgstr "Cliente do Drive"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "Solte aqui para enviar um <b class='dndignore'>novo anexo</b>"
@@ -14065,9 +14215,6 @@ msgstr "sua plataforma"
 #~ msgid "Mailing list %s"
 #~ msgstr "Lista de discussão %s"
 
-#~ msgid "Main window"
-#~ msgstr "Janela principal"
-
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
 
@@ -14602,9 +14749,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizador:"
-
-#~ msgid "Others"
-#~ msgstr "Outros"
 
 #~ msgid "Outlook file"
 #~ msgstr "Arquivo Outlook"
@@ -17073,11 +17217,6 @@ msgstr "sua plataforma"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Qual dispositivo você deseja configurar?"
-
-#, fuzzy
-#~| msgid "Windows are shown as"
-#~ msgid "Windows Phone"
-#~ msgstr "Janelas são exibidas como"
 
 #~ msgid "Would you like to create the following birthday series appointment?"
 #~ msgstr ""

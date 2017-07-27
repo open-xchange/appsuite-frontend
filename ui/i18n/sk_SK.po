@@ -300,6 +300,14 @@ msgstr "%1$s zmenil(a) svoj stav:"
 msgid "%1$s completed"
 msgstr "%1$s dokončených"
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Mac OS"
+msgid "%1$s for MacOS"
+msgstr "Klient %s pre Mac OS"
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr "%1$s má nový kontakt:"
@@ -334,6 +342,41 @@ msgstr "%1$s sa presunulo na pozíciu %2$s z %3$s"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr "%1$s z %2$s"
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on %2$s"
+msgstr "%1$s z %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s on Android"
+msgstr "Klient %s pre Android"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s on Windows"
+msgstr "Klient %s pre Windows"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on iOS"
 msgstr "%1$s z %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -643,6 +686,12 @@ msgstr "Operácie s %1$s"
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Operácie. Na navigáciu použite klávesy s šípkami."
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Active clients"
+msgstr "Klient Drive"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1130,6 +1179,10 @@ msgstr "Vyskytla sa vnútorná chyba"
 msgid "An unknown error occurred"
 msgstr "Vyskytla sa neznáma chyba"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Výročie"
@@ -1516,6 +1569,7 @@ msgid "Branches"
 msgstr "Vetvy"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "Prehliadač"
 
@@ -1830,6 +1884,12 @@ msgstr "Deti"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
 msgstr "Zvonkohra"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Chrome %1$s on %2$s"
+msgstr "Zdieľať %1$s „%2$s“"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -2445,6 +2505,12 @@ msgstr "Aktuálna rola"
 msgid "Current role"
 msgstr "Aktuálna rola"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Current Costs:"
+msgid "Current session"
+msgstr "Aktuálne náklady:"
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Práve sa aktualizuje"
@@ -2641,6 +2707,7 @@ msgid "Delete"
 msgstr "Zmazať"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Delete %1$s"
 msgstr "Zmazať %1$s"
 
@@ -3011,6 +3078,20 @@ msgstr ""
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "Ste si istý, že chcete odpovedať všetkým a nie len „%s“?"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr "Ste si istý, že chcete tento účet zmazať?"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to terminate that session?"
+msgstr "Ste si istý, že chcete túto verziu zmazať?"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "Chcete vypísať schôdzky podrobne alebo vo forme kompaktného zoznamu?"
@@ -3257,6 +3338,12 @@ msgstr "EAS"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr "EB"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Edge on %1$s"
+msgstr "Termín %1$s"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3715,6 +3802,10 @@ msgstr ""
 msgid "Exact dates"
 msgstr "Presné dátumy"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Konateľ"
@@ -4010,6 +4101,12 @@ msgstr "Nájsť voľný čas"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Dokončiť"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "Firefox %1$s on %2$s"
+msgstr "%1$s z %2$s"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4583,6 +4680,12 @@ msgstr "Páči sa mi to"
 msgid "IMAP"
 msgstr "IMAP"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s."
+msgid "IP Address: %1$s"
+msgstr "Pridané %1$s."
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP telefón"
@@ -4789,6 +4892,10 @@ msgstr "Vnútorný používateľ"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Interní používatelia"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -5195,6 +5302,10 @@ msgstr "MB"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
@@ -5732,6 +5843,12 @@ msgstr "Moje úlohy"
 msgid "Name"
 msgstr "Meno"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Native clients"
+msgstr "Klient Drive"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -6186,6 +6303,7 @@ msgstr "Režime offline"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr "OK"
 
@@ -6440,6 +6558,12 @@ msgstr "Iná adresa"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
 msgstr "Iné adresy"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Others"
+msgid "Other clients"
+msgstr "Iní"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Outgoing server (SMTP)"
@@ -7806,6 +7930,12 @@ msgstr "SMTP"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "SSL/TLS"
 msgstr "SSL/TLS"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Safari %1$s on %2$s"
+msgstr "Zdieľať %1$s „%2$s“"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
@@ -9830,6 +9960,16 @@ msgstr "Zjednotená"
 msgid "Unknown"
 msgstr "Neznáme"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown client"
+msgstr "Neznámy odosielateľ"
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Neznáma chyba počas kontrolovania blogu Tumblr."
@@ -10266,6 +10406,12 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Celodenná"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Windows are shown as"
+msgid "Windows"
+msgstr "Okná sú zobrazené ako"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
@@ -10981,6 +11127,10 @@ msgstr "má účastníkov"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
 msgstr "v"
@@ -11258,6 +11408,12 @@ msgstr "pri prístupe príjemcov k súboru"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "keď príjemcovia dokončia sťahovanie súborov"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "windows"
+msgstr "Hlavné okno"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12690,9 +12846,6 @@ msgstr "vaša platforma"
 #~ msgid "Curacao"
 #~ msgstr "Macao"
 
-#~ msgid "Current Costs:"
-#~ msgstr "Aktuálne náklady:"
-
 #~ msgid "Current Date"
 #~ msgstr "Aktuálny dátum"
 
@@ -13072,9 +13225,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Drawing position"
 #~ msgstr "Pozícia kresby"
-
-#~ msgid "Drive Client"
-#~ msgstr "Klient Drive"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr ""
@@ -14544,9 +14694,6 @@ msgstr "vaša platforma"
 #~ msgid "Mailing list %s"
 #~ msgstr "Poštová konferencia %s"
 
-#~ msgid "Main window"
-#~ msgstr "Hlavné okno"
-
 #~ msgid "Malawi"
 #~ msgstr "Malawi"
 
@@ -15113,9 +15260,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizátor:"
-
-#~ msgid "Others"
-#~ msgstr "Iní"
 
 #~ msgid "Outlook file"
 #~ msgstr "Súbor Outlook"
@@ -17763,11 +17907,6 @@ msgstr "vaša platforma"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Ktoré zariadenie chcete nakonfigurovať?"
-
-#, fuzzy
-#~| msgid "Windows are shown as"
-#~ msgid "Windows Phone"
-#~ msgstr "Okná sú zobrazené ako"
 
 #~ msgctxt "address"
 #~ msgid "Work"

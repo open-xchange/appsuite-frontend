@@ -274,6 +274,12 @@ msgstr ""
 msgid "%1$s completed"
 msgstr ""
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s for MacOS"
+msgstr ""
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr ""
@@ -307,6 +313,36 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr ""
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "every %1$d week"
+#| msgid_plural "every %1$d weeks"
+msgid "%1$s on %2$s"
+msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s on Android"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s on Windows"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s on iOS"
 msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -607,6 +643,10 @@ msgstr "Байршил"
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Active clients"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -1084,6 +1124,10 @@ msgstr ""
 msgid "An unknown error occurred"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr ""
@@ -1458,6 +1502,7 @@ msgid "Branches"
 msgstr "Салбарууд"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr ""
 
@@ -1769,6 +1814,13 @@ msgstr ""
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "every %1$d week"
+#| msgid_plural "every %1$d weeks"
+msgid "Chrome %1$s on %2$s"
+msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -2386,6 +2438,11 @@ msgstr "Үүсгэх"
 msgid "Current role"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Current session"
+msgstr "Үүсгэх"
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
 msgstr ""
@@ -2579,6 +2636,7 @@ msgid "Delete"
 msgstr "Устгах"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Delete %1$s"
 msgstr "Устгах"
@@ -2945,6 +3003,16 @@ msgstr ""
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "Энэхүү уулзалтыг устгах уу?"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Do you really want to terminate that session?"
+msgstr "Энэхүү уулзалтыг устгах уу?"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
@@ -3186,6 +3254,11 @@ msgstr ""
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Edge on %1$s"
+msgstr "Байршил"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3639,6 +3712,10 @@ msgstr ""
 msgid "Exact dates"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr ""
@@ -3920,6 +3997,11 @@ msgstr ""
 msgctxt "tour"
 msgid "Finish"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Firefox %1$s on %2$s"
+msgstr "Байршил"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4488,6 +4570,11 @@ msgstr ""
 msgid "IMAP"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "IP Address: %1$s"
+msgstr "Байршил"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP утас"
@@ -4680,6 +4767,10 @@ msgstr ""
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
 msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -5081,6 +5172,10 @@ msgstr ""
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
@@ -5623,6 +5718,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Native clients"
+msgstr ""
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -6073,6 +6172,7 @@ msgstr "Оффлайн горим"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr ""
 
@@ -6324,6 +6424,12 @@ msgstr "Бусад хаяг"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Other Address"
+msgid "Other clients"
+msgstr "Бусад хаяг"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Outgoing server (SMTP)"
@@ -7676,6 +7782,13 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "SSL/TLS"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "every %1$d week"
+#| msgid_plural "every %1$d weeks"
+msgid "Safari %1$s on %2$s"
+msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
@@ -9607,6 +9720,14 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown client"
+msgstr ""
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
 msgstr ""
@@ -10034,6 +10155,10 @@ msgstr ""
 
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Windows"
 msgstr ""
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
@@ -10715,6 +10840,10 @@ msgstr ""
 msgid "iCal"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
 msgstr ""
@@ -10996,6 +11125,10 @@ msgstr ""
 msgid "when the receivers have finished downloading the files"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "windows"
+msgstr ""
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 #, fuzzy
@@ -11082,12 +11215,6 @@ msgstr ""
 #~| msgid_plural "every %1$d days"
 #~ msgid "Every %1$d days."
 #~ msgstr "%1$d өдөр тутам%1$d өдрүүд тутам"
-
-#, fuzzy
-#~| msgid "every %1$d week"
-#~| msgid_plural "every %1$d weeks"
-#~ msgid "Every %1$d weeks on %2$s."
-#~ msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
 
 #, fuzzy
 #~| msgid "every %1$d week"

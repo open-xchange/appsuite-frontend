@@ -4907,6 +4907,7 @@ msgstr ""
 #: apps/io.ox/core/relogin.js
 #: apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr ""
 
@@ -5674,6 +5675,7 @@ msgstr ""
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js
 #: module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr ""
 
@@ -11251,6 +11253,8 @@ msgstr ""
 
 #: apps/io.ox/settings/accounts/views.js
 #: module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
 msgid "Delete %1$s"
 msgstr ""
 
@@ -11302,6 +11306,144 @@ msgstr ""
 #: apps/io.ox/settings/main.js
 #: module:io.ox/core
 msgid "%1$s %2$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Active clients"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Windows"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "windows"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "MacOS"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Android"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "iOS"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Firefox %1$s on %2$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Chrome %1$s on %2$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Safari %1$s on %2$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Internet Explorer on %1$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Edge on %1$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Unknown client"
+msgstr ""
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "%1$s on %2$s"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "%1$s on Windows"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "%1$s on iOS"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "%1$s on Android"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "%1$s for MacOS"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "IP Address: %1$s"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Current session"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Do you really want to terminate that session?"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Native clients"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Other clients"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Do you really want to terminate all active sessions except the current one?"
 msgstr ""
 
 #: apps/io.ox/tasks/actions.js

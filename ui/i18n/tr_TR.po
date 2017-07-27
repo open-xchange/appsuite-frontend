@@ -272,6 +272,14 @@ msgstr "%1$s durumlarını değiştirdiler:"
 msgid "%1$s completed"
 msgstr "%1$s tamamlandı"
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Mac OS"
+msgid "%1$s for MacOS"
+msgstr "%s Mac OS için müşteriler"
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr "%1$s yeni iletişimi var:"
@@ -305,6 +313,40 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr "%1$s of %2$s"
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on %2$s"
+msgstr "%1$s of %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s on Android"
+msgstr "%s Android için müşteriler"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "%1$s on Windows"
+msgstr "%s Android için müşteriler"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on iOS"
 msgstr "%1$s of %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -615,6 +657,10 @@ msgstr "%1$s için kapat"
 #. screenreader label for main toolbar
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Active clients"
 msgstr ""
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
@@ -1111,6 +1157,10 @@ msgstr "Dahili bir hata belirdi. "
 msgid "An unknown error occurred"
 msgstr "Bir hata belirdi."
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Yıl dönümü"
@@ -1496,6 +1546,7 @@ msgid "Branches"
 msgstr "Bölümler"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "Tarayıcı"
 
@@ -1822,6 +1873,11 @@ msgstr "Çocuk"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Chrome %1$s on %2$s"
+msgstr "%1$s tarafından paylaşıldı"
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -2460,6 +2516,12 @@ msgstr "Yenileniyor"
 msgid "Current role"
 msgstr "Yenileniyor"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Currently refreshing"
+msgid "Current session"
+msgstr "Yenileniyor"
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Yenileniyor"
@@ -2663,6 +2725,7 @@ msgid "Delete"
 msgstr "Sil"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 msgid "Delete %1$s"
 msgstr "Sona erme tarihi %1$s"
@@ -3050,6 +3113,18 @@ msgstr ""
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "\"%s\" klasörünü boşaltmak istediğinize emin misiniz?"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr "Bu hesabı gerçekten silmek istiyor musunuz?"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Do you really want to terminate that session?"
+msgstr "Bu dosyayı silmek istediğinize emin misiniz?"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr ""
@@ -3307,6 +3382,12 @@ msgstr ""
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr "EB"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Edge on %1$s"
+msgstr "%1$s tarihinde sona eriyor"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3770,6 +3851,10 @@ msgstr ""
 msgid "Exact dates"
 msgstr "Kesin tarih"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Yönetici"
@@ -4076,6 +4161,12 @@ msgstr "Boş zaman bul"
 msgctxt "tour"
 msgid "Finish"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "Firefox %1$s on %2$s"
+msgstr "%1$s of %2$s"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4672,6 +4763,11 @@ msgstr "Bunu beğendiniz"
 msgid "IMAP"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "IP Address: %1$s"
+msgstr "%1$s, %2$s"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP telefon"
@@ -4879,6 +4975,10 @@ msgstr ""
 
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
 msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
@@ -5296,6 +5396,10 @@ msgstr "MB"
 #. %1$s: app store name
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
@@ -5856,6 +5960,10 @@ msgstr "Görevlerim"
 msgid "Name"
 msgstr "İsim"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Native clients"
+msgstr ""
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -6326,6 +6434,7 @@ msgstr "Çevrim dışı mod"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Tamam"
 
@@ -6580,6 +6689,12 @@ msgstr "Diğer adres"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
+msgstr "Diğer adres"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Other Address"
+msgid "Other clients"
 msgstr "Diğer adres"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -8005,6 +8120,11 @@ msgstr ""
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "SSL/TLS"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+msgid "Safari %1$s on %2$s"
+msgstr "%1$s tarafından paylaşıldı"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
@@ -10071,6 +10191,16 @@ msgstr "Birleşik"
 msgid "Unknown"
 msgstr "Bilinmeyen "
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown client"
+msgstr "Bilinmeyen gönderen"
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Tumblr-blog'unu kontrol ederken bilinmeyen bir hata ile karşılaşıldı. "
@@ -10532,6 +10662,10 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Tüm gün"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Windows"
+msgstr ""
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
@@ -11272,6 +11406,10 @@ msgstr "Katılımcılar"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 #, fuzzy
 msgid "in"
@@ -11559,6 +11697,12 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "windows"
+msgstr "E posta penceresi"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12047,9 +12191,6 @@ msgstr "Platformunuz"
 
 #~ msgid "Mail saved as draft"
 #~ msgstr "E-posta taslak olarak kaydedildi"
-
-#~ msgid "Main window"
-#~ msgstr "E posta penceresi"
 
 #~ msgid "Manage applications"
 #~ msgstr "Uygulamaları yönet"

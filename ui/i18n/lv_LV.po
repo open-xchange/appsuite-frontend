@@ -297,6 +297,14 @@ msgstr "%1$s izmainīja statusu:"
 msgid "%1$s completed"
 msgstr "%1$s izpildīts"
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Mac OS"
+msgid "%1$s for MacOS"
+msgstr "%s klients priekš Mac OS"
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr "%1$s ir jauns kontakts:"
@@ -331,6 +339,41 @@ msgstr "%1$s pārvietots uz pozīciju %2$s no %3$s"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr "%1$s no %2$s"
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on %2$s"
+msgstr "%1$s no %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s on Android"
+msgstr "%s klients priekš Android"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s on Windows"
+msgstr "%s klients priekš Windows"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on iOS"
 msgstr "%1$s no %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -641,6 +684,12 @@ msgstr "Darbības priekš %1$s"
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
 msgstr "Darbības. Lai pārvietotos, izmantojiet kursora taustiņus."
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Active clients"
+msgstr "'Drive' klients"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -1126,6 +1175,10 @@ msgstr "Reģistrēta iekšēja kļūda"
 msgid "An unknown error occurred"
 msgstr "Reģistrēta neatpazīta kļūda"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
 msgstr "Dzimšanas diena"
@@ -1516,6 +1569,7 @@ msgid "Branches"
 msgstr "Zari"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "Pārlūks"
 
@@ -1827,6 +1881,12 @@ msgstr "Bērni"
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Chimes"
 msgstr "Zvaniņi"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Chrome %1$s on %2$s"
+msgstr "Koplietojums %1$s \"%2$s\""
 
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
@@ -2442,6 +2502,12 @@ msgstr "Pašreizējā loma"
 msgid "Current role"
 msgstr "Pašreizējā loma"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Current Costs:"
+msgid "Current session"
+msgstr "Pašreiz. izmaksas:"
+
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
 msgstr "Notiek jaunināšana"
@@ -2638,6 +2704,7 @@ msgid "Delete"
 msgstr "Dzēst"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Delete %1$s"
 msgstr "Dzēst %1$s"
 
@@ -3006,6 +3073,20 @@ msgstr "Vai tiešām vēlaties noņemt paplašinājumu \".%1$s\" no šī faila v
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "Vai vēlaties atbildēt visiem vai tikai %1$s?"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr "Vai tiešām vēlaties dzēst šo kontu?"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to terminate that session?"
+msgstr "Vai tiešām vēlaties dzēst šo versiju?"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "Vai jūs vēlaties drukāt mītiņus detalizēti vai kā kompaktu sarakstu?"
@@ -3258,6 +3339,12 @@ msgstr "EAS"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr "EB"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Edge on %1$s"
+msgstr "Izpildāms %1$s"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3717,6 +3804,10 @@ msgstr ""
 msgid "Exact dates"
 msgstr "Precīzi datumi"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "Vadītājs"
@@ -4010,6 +4101,12 @@ msgstr "Atrast brīvu laiku"
 msgctxt "tour"
 msgid "Finish"
 msgstr "Pabeigt"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "Firefox %1$s on %2$s"
+msgstr "%1$s no %2$s"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4583,6 +4680,12 @@ msgstr "Labi"
 msgid "IMAP"
 msgstr "IMAP"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s."
+msgid "IP Address: %1$s"
+msgstr "Pievienots %1$s."
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
 msgstr "IP telefons"
@@ -4789,6 +4892,10 @@ msgstr "Iekšējs lietotājs"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "Iekšējie lietotāji"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -5194,6 +5301,10 @@ msgstr "MB"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
@@ -5731,6 +5842,12 @@ msgstr "Mani uzdevumi"
 msgid "Name"
 msgstr "Vārds"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Native clients"
+msgstr "'Drive' klients"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -6188,6 +6305,7 @@ msgstr "Bezsaistes režīms"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr "Labi"
 
@@ -6441,6 +6559,12 @@ msgstr "Cita adrese"
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
 msgstr "Cita adrese"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Others"
+msgid "Other clients"
+msgstr "Citi"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "Outgoing server (SMTP)"
@@ -7806,6 +7930,12 @@ msgstr "SMTP"
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 msgid "SSL/TLS"
 msgstr "SSL/TLS"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Safari %1$s on %2$s"
+msgstr "Koplietojums %1$s \"%2$s\""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
@@ -9829,6 +9959,16 @@ msgstr "Vienots"
 msgid "Unknown"
 msgstr "Nezināms"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown client"
+msgstr "Nezināms nosūtītājs"
+
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
 msgstr "Neatpazīta kļūda 'tumblr' blogu pārbaudes laikā."
@@ -10266,6 +10406,12 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "Visa diena"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Windows are shown as"
+msgid "Windows"
+msgstr "Logi tiek uzrādīti kā"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
@@ -10980,6 +11126,10 @@ msgstr "ir dalībnieki"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
 msgstr "iekš"
@@ -11257,6 +11407,12 @@ msgstr "kad saņēmēji būs piekļuvuši failiem"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "kad saņēmēji būs pabeiguši failu lejupielādi"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "windows"
+msgstr "Pasta logs"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12695,9 +12851,6 @@ msgstr "jūsu platforma"
 #~ msgid "Curacao"
 #~ msgstr "Makao"
 
-#~ msgid "Current Costs:"
-#~ msgstr "Pašreiz. izmaksas:"
-
 #~ msgid "Current Date"
 #~ msgstr "Pašreizējais datums"
 
@@ -13078,9 +13231,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Drawing position"
 #~ msgstr "Zīmējuma pozīcija"
-
-#~ msgid "Drive Client"
-#~ msgstr "'Drive' klients"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr ""
@@ -14553,9 +14703,6 @@ msgstr "jūsu platforma"
 #~ msgid "Mailing list %s"
 #~ msgstr "Adresātu saraksts %s"
 
-#~ msgid "Main window"
-#~ msgstr "Pasta logs"
-
 #~ msgid "Malawi"
 #~ msgstr "Malāvija"
 
@@ -15125,9 +15272,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Organizer:"
 #~ msgstr "Organizators:"
-
-#~ msgid "Others"
-#~ msgstr "Citi"
 
 #~ msgid "Outlook file"
 #~ msgstr "Outlook fails"
@@ -17810,11 +17954,6 @@ msgstr "jūsu platforma"
 
 #~ msgid "Which device do you want to configure?"
 #~ msgstr "Kuru ierīci jūs vēlaties konfigurēt?"
-
-#, fuzzy
-#~| msgid "Windows are shown as"
-#~ msgid "Windows Phone"
-#~ msgstr "Logi tiek uzrādīti kā"
 
 #~ msgctxt "address"
 #~ msgid "Work"
