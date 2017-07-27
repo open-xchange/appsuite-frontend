@@ -396,9 +396,8 @@ define('io.ox/mail/util', [
         },
 
         // remove typical "Re: Re: Fwd: Re sequences".
-        // keepFirstPrefix <bool> allows to keep the most recent one.
-        // that mode is useful in list view to indicate that it's not the original email.
-        getSubject: function (data, keepFirstPrefix) {
+        // keepPrefix <bool> allows to keep them
+        getSubject: function (data, keepPrefix) {
 
             var subject = $.trim(_.isString(data) ? data : data.subject);
 
@@ -409,9 +408,8 @@ define('io.ox/mail/util', [
                 subject = subject.replace(/\[[^[]*\]\s*/g, '');
             }
 
-            return keepFirstPrefix ?
-                subject.replace(/^((re|fwd|aw|wg):\s?)((re|fwd|aw|wg):\s?)*/i, '$1') :
-                subject.replace(/^((re|fwd|aw|wg):\s?)+/i, '');
+            console.log('getSubject', keepPrefix, subject);
+            return keepPrefix ? subject : subject.replace(/^((re|ref|aw|fwd|wg|rv|tr):\s?)+/i, '');
         },
 
         getPriority: function (data) {

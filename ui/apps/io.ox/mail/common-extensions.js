@@ -371,8 +371,8 @@ define('io.ox/mail/common-extensions', [
         subject: function (baton) {
 
             var data = baton.data,
-                keepFirstPrefix = baton.data.threadSize === 1,
-                subject = util.getSubject(data, keepFirstPrefix),
+                keepPrefix = baton.data.threadSize === 1,
+                subject = util.getSubject(data, keepPrefix),
                 node;
 
             this.append(
