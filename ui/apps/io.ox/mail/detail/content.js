@@ -474,12 +474,15 @@ define('io.ox/mail/detail/content', [
             return memo;
         }
 
-        return function (elem, isLarge) {
+        return function (elem, size) {
             var farthest = { x: elem.scrollWidth, y: elem.scrollHeight, found: false },
                 width = elem.offsetWidth,
                 height = elem.offsetHeight;
             // FF18 is behaving oddly correct, but impractical
-            if (!isLarge && (farthest.x >= width || farthest.y >= height)) {
+            // some early returns (allow 128KB for Chrome, 64KB for others)
+            if (_.device('chrome')) { if (size > 0x1FFFF) return; } else if (size > 0xFFFF) return;
+            // the following might change after a resize
+            if (farthest.x >= width || farthest.y >= height) {
                 farthest = _(elem.querySelectorAll('*')).reduce(findFarthestElement, farthest);
             }
             // only do this for absolute elements
@@ -489,7 +492,7 @@ define('io.ox/mail/detail/content', [
             }
             // look for resize event
             $(elem).one('resize', function () {
-                fixAbsolutePositions(this, isLarge);
+                fixAbsolutePositions(this, size);
             });
         };
     })();
@@ -663,7 +666,7 @@ define('io.ox/mail/detail/content', [
                 // fix absolute positions
                 // heuristic: the source must at least contain the word "absolute" somewhere
                 if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
+                    setTimeout(fixAbsolutePositions, 10, content, baton.source.length);
                 }
 
             } catch (e) {
