@@ -13,12 +13,13 @@
  */
 
 define('io.ox/calendar/detail/main', [
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/chronos-util',
     'io.ox/core/extensions',
     'io.ox/calendar/view-detail',
     'gettext!io.ox/calendar',
     'io.ox/core/notifications'
-], function (api, ext, detailView, gt, notifications) {
+], function (api, chronosUtil, ext, detailView, gt, notifications) {
 
     'use strict';
 
@@ -29,13 +30,13 @@ define('io.ox/calendar/detail/main', [
             app.showAppointment = function (appointment) {
 
                 api.get(appointment).then(
-                    function success(data) {
-                        app.setTitle(data.title);
+                    function success(model) {
+                        app.setTitle(model.get('summary'));
                         app.getWindowNode().addClass('detail-view-app').append($('<div class="f6-target detail-view-container" tabindex="0" role="complementary">').attr({
                             'aria-label': gt('Appointment Details')
-                        }).append(detailView.draw(data)));
+                        }).append(detailView.draw(model)));
 
-                        api.one('delete:' + _.ecid(data), function () {
+                        api.once('delete:' + chronosUtil.ecid(model.attributes), function () {
                             app.quit();
                         });
                     },
@@ -86,7 +87,6 @@ define('io.ox/calendar/detail/main', [
 
         // launcher
         return app.setLauncher(function (options) {
-
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
@@ -99,8 +99,8 @@ define('io.ox/calendar/detail/main', [
             var cid = options.cid, obj;
             if (cid !== undefined) {
                 // called from calendar app
-                obj = _.cid(cid);
-                app.setState({ folder: obj.folder_id, id: obj.id, recurrence_position: obj.recurrence_position || null });
+                obj = chronosUtil.cid(cid);
+                app.setState({ folder: obj.folder, id: obj.id, recurrenceId: obj.recurrenceId || null });
                 app.showAppointment(obj);
                 return;
             }
