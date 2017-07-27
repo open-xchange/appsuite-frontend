@@ -291,6 +291,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                     label: gt('Open in browser tab'),
                     ref: 'io.ox/mail/actions/open-attachment'
                 },
+                'print': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Print as PDF'),
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
+                },
                 'downloadmailattachment': {
                     prio: 'hi',
                     mobile: 'lo',
@@ -312,6 +318,12 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     label: gt('Open in browser tab'),
                     ref: 'io.ox/core/tk/actions/open-attachment'
+                },
+                'print': {
+                    prio: 'lo',
+                    mobile: 'lo',
+                    label: gt('Print as PDF'),
+                    ref: TOOLBAR_ACTION_DROPDOWN_ID + '/print'
                 },
                 'downloadmailattachment': {
                     prio: 'lo',
@@ -421,7 +433,7 @@ define('io.ox/core/viewer/views/toolbarview', [
     new Action(TOOLBAR_ACTION_DROPDOWN_ID + '/print', {
         capabilities: 'document_preview',
         requires: function (e) {
-            if (!e.collection.has('one', 'read')) {
+            if (!e.collection.has('one')) {
                 return false;
             }
 
@@ -429,7 +441,15 @@ define('io.ox/core/viewer/views/toolbarview', [
             var meta = model.get('meta');
             var isError = meta && meta.document_conversion_error && meta.document_conversion_error.length > 0;
 
-            return (!isError && model.isFile() && (model.isOffice() || model.isPDF()));
+            if (isError) {
+                return false;
+            }
+
+            if (model.isFile() && !e.collection.has('read')) {
+                return false;
+            }
+
+            return (model.isOffice() || model.isPDF());
         },
         action: function (baton) {
             var documentPDFUrl = DocConverterUtils.getEncodedConverterUrl(baton.context.model);
