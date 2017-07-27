@@ -3303,9 +3303,9 @@ open-sans-fontface@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/open-sans-fontface/-/open-sans-fontface-1.4.0.tgz#03cc6d1bf5e6a8b5b47910888562f722c5dd3428"
 
-open-xchange-shared-grunt-config@^0.15.0-pre1:
-  version "0.15.0-pre1"
-  resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.15.0-pre1.tgz#407b8defef0f0cbb90ebefb3751c54484be95748"
+open-xchange-shared-grunt-config@^0.15.0-pre2:
+  version "0.15.0-pre2"
+  resolved "https://registry.yarnpkg.com/open-xchange-shared-grunt-config/-/open-xchange-shared-grunt-config-0.15.0-pre2.tgz#0a0d82bf9d97d3473ba68c764eab44aa141ac06d"
   dependencies:
     async "^2.4.1"
 
