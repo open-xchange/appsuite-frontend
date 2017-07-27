@@ -212,7 +212,7 @@ define('io.ox/calendar/actions', [
         action: function (baton) {
             // load & call
             ox.load(['io.ox/calendar/actions/follow-up']).done(function (action) {
-                action(baton.data);
+                action(baton.model);
             });
         }
     });

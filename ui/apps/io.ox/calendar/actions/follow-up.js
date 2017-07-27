@@ -15,19 +15,19 @@ define('io.ox/calendar/actions/follow-up', function () {
 
     'use strict';
 
-    return function (data) {
+    return function (model) {
 
         // reduce data
-        var copy = _(data).pick(
-            'alarm color_label folder_id full_time location note participants private_flag shown_as title'.split(' ')
+        var copy = model.pick(
+            'alarms color folder allDay location description participants attendees transp summary'.split(' ')
         );
 
-        // check isBefore once for the start_date; then reuse that information for end_date (see bug 44647)
+        // check isBefore once for the startDate; then reuse that information for endDate (see bug 44647)
         var isBefore = false;
 
         // copy date/time
-        ['start_date', 'end_date'].forEach(function (field) {
-            var ref = moment(data[field]),
+        ['startDate', 'endDate'].forEach(function (field) {
+            var ref = model.getMoment(field),
                 // set date to today, keep time, then use same weekday
                 d = moment({ hour: ref.hour(), minute: ref.minute() }).weekday(ref.weekday());
             // add 1 week if date is in the past
@@ -35,7 +35,8 @@ define('io.ox/calendar/actions/follow-up', function () {
                 d.add(1, 'w');
                 isBefore = true;
             }
-            copy[field] = d.valueOf();
+            // TODO consider date without time here. We need a general solution for that
+            copy[field] = { value: d.format('YYYYMMDD[T]HHmmss'), tzid: d._z ? d._z.name : undefined };
         });
 
         // use ox.launch to have an indicator for slow connections
