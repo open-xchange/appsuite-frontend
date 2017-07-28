@@ -19,7 +19,7 @@ module.exports = function (grunt) {
         concat: {
             bootjs: {
                 options: {
-                    banner: 'dependencies = dependencies || {};\n'
+                    banner: 'dependencies = {};\n'
                 },
                 files: [
                     {
