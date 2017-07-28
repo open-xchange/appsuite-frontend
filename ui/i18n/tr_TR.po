@@ -1499,6 +1499,10 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr ""
@@ -10437,10 +10441,6 @@ msgstr "Kullanıcı adı boş bırakılmamalıdır. "
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "Tatil duyurusu"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer

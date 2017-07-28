@@ -1518,6 +1518,10 @@ msgstr ""
 "údaje. Zabere to méně než minutu."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "Zvon"
@@ -10156,10 +10160,6 @@ msgstr "Uživatelské jméno nemůže být prázdné."
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "oznámení o nepřítomnosti"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer

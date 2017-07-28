@@ -1455,6 +1455,10 @@ msgid ""
 msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr ""
@@ -9945,10 +9949,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 #: apps/io.ox/mail/settings/pane.js apps/io.ox/mail/toolbar.js
 msgid "Vacation notice"
-msgstr ""
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
 msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js

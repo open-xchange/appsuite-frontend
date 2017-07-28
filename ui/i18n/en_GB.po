@@ -1497,6 +1497,10 @@ msgstr ""
 "information. It will take less than a minute."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "Bell"
@@ -10122,10 +10126,6 @@ msgstr "Username must not be empty."
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "vacation notice"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer

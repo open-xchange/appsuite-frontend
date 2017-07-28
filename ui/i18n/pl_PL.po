@@ -1526,6 +1526,10 @@ msgstr ""
 "informacje. Nie zajmie to więcej niż minuty."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "Dzwonek"
@@ -10222,10 +10226,6 @@ msgstr "Nazwa użytkownika nie może być pusta."
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "zawiadomienie o urlopie"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer

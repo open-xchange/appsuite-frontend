@@ -1470,6 +1470,10 @@ msgid ""
 msgstr "在您能继续使用产品之前，您必须输入一些基本信息。这将会花少于一分钟。"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "鈴鐺"
@@ -9954,10 +9958,6 @@ msgstr "用户名称不得为空。"
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "假期通知"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer

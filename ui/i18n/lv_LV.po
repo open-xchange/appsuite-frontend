@@ -1522,6 +1522,10 @@ msgstr ""
 "informācija. Šis process neaizņems vairāk par minūti."
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Bell"
 msgstr "Zvans"
@@ -10192,10 +10196,6 @@ msgstr "Lietotāja vārds nevar būt tukšs."
 #| msgid "vacation notice"
 msgid "Vacation notice"
 msgstr "prombūtnes paziņojums"
-
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
 
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
