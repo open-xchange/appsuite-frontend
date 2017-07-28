@@ -90,7 +90,7 @@ define('io.ox/calendar/chronos-api', [
 
             get: function (obj, useCache) {
                 if (useCache !== false) {
-                    var model = api.pool.get(obj.folder).findWhere(obj);
+                    var model = api.pool.get(obj.folder).get(util.cid(obj));
                     if (model) return $.when(model);
                 }
                 return http.GET({
@@ -103,7 +103,36 @@ define('io.ox/calendar/chronos-api', [
                     }
                 }).then(function (data) {
                     api.pool.add(obj.folder, data);
-                    return api.pool.get(obj.folder).findWhere(obj);
+                    return api.pool.get(obj.folder).get(util.cid(obj));
+                });
+            },
+
+            getList: function (list, useCache) {
+                var def, reqList = list;
+                if (useCache !== false) {
+                    reqList = list.filter(function (obj) {
+                        return !api.pool.get(obj.folder).get(util.cid(obj));
+                    });
+                }
+                if (reqList.length > 0) {
+                    def = http.PUT({
+                        module: 'chronos',
+                        params: {
+                            action: 'list'
+                        },
+                        data: reqList
+                    });
+                } else {
+                    def = $.when();
+                }
+                return def.then(function (data) {
+                    _(data).each(function (obj) {
+                        api.pool.get(obj.folder).add(obj.folder, obj);
+                    });
+                    return _(list).map(function (obj) {
+                        var cid = util.cid(obj);
+                        return api.pool.get(obj.folder).get(cid);
+                    });
                 });
             },
 
@@ -200,8 +229,58 @@ define('io.ox/calendar/chronos-api', [
             },
 
             reduce: function (obj) {
-                return _(obj).pick('id', 'folder', 'recurrenceId');
+                obj = obj instanceof Backbone.Model ? obj : _(obj);
+                return obj.pick('id', 'folder', 'recurrenceId');
+            },
+
+            move: function (list, targetFolderId) {
+                var folders = [String(targetFolderId)];
+                list = [].concat(list);
+                models = _(list).map(function (obj) {
+                    var cid = util.cid(obj),
+                        collection = api.pool.get(obj.folder),
+                        model = collection.get(cid);
+                    collection.remove(model);
+                    return model;
+                });
+
+                http.pause();
+                _(models).map(function (model) {
+                    folders.push(model.get('folder'));
+                    return http.PUT({
+                        module: 'chronos',
+                        params: {
+                            action: 'move',
+                            id: model.get('id'),
+                            folder: targetFolderId,
+                            recurrenceId: model.get('recurrenceId'),
+                            timestamp: model.get('lastModified')
+                        }
+                    });
+                });
+                return http.resume().then(function (data) {
+                    var def = $.Deferred(),
+                        error = _(data).find(function (res) {
+                            return !!res.error;
+                        });
+                    if (error) {
+                        def.reject(error.error);
+                        // reset models
+                        _(models).each(function (model) {
+                            api.pool.add(model.get('folder'), model.toJSON());
+                        });
+                    } else {
+                        def.resolve(data);
+                    }
+                    return def;
+                }).then(processResponse).done(function (list) {
+                    _(list).each(function (obj) {
+                        api.trigger('move:' + util.ecid(obj), targetFolderId);
+                    });
+                    api.trigger('refresh.all');
+                });
             }
+
         };
 
     api.pool = Pool.create('chronos', {
