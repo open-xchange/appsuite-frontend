@@ -74,7 +74,7 @@ define('io.ox/calendar/list/perspective', [
 
             } else {
                 baton.disable('io.ox/calendar/detail', 'inline-actions');
-                this.app.right.idle().empty().append(viewDetail.draw(model));
+                this.app.right.idle().empty().append(viewDetail.draw(baton));
             }
         },
 

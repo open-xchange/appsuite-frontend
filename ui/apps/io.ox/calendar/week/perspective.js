@@ -57,9 +57,9 @@ define('io.ox/calendar/week/perspective', [
                     if (_.device('smartphone')) {
                         var data = model.toJSON(),
                             p = self.app.pages.getPage('detailView'),
-                            b = new ext.Baton({ data: data });
+                            b = new ext.Baton({ data: data, model: model });
                         // draw details to page
-                        p.idle().empty().append(detailView.draw(data));
+                        p.idle().empty().append(detailView.draw(model));
                         // update toolbar with new baton
                         self.app.pages.getToolbar('detailView').setBaton(b);
 
