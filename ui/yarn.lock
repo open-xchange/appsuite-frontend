@@ -21,8 +21,8 @@
     tinymce "^4.6.3"
 
 "@open-xchange/ui-middleware@^7.10.0-0":
-  version "7.10.0-0.pre1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.0-0.pre1.tgz#6a5e03b74c1cc7c6bcee95f245ff23f7114cafe6"
+  version "7.10.0-0.pre2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.0-0.pre2.tgz#2641d95637e8141a2898190a68ce8e72f31bed1f"
   dependencies:
     dotenv "^4.0.0"
     esprima "^4.0.0"
