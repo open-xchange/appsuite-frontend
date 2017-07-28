@@ -238,9 +238,9 @@ define('io.ox/calendar/view-detail', [
 
     return {
 
-        draw: function (model, options) {
+        draw: function (baton, options) {
             // make sure we have a baton
-            var baton = new ext.Baton({ model: model, data: model.toJSON() });
+            baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
             options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
