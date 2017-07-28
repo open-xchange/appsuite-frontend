@@ -19,7 +19,7 @@ module.exports = function (grunt) {
     // displays the execution time of grunt tasks
     if (grunt.option('benchmark') || grunt.config('local.benchmark')) require('time-grunt')(grunt);
 
-    grunt.registerTask('bootjs', ['newer:copy:ox', 'newer:concat:bootjs']);
+    grunt.registerTask('bootjs', ['copy:build_ox', 'concat:bootjs']);
 
     grunt.registerTask('lint', ['newer:eslint:all']);
     grunt.registerTask('lint:specs', ['newer:eslint:all']);
@@ -34,7 +34,7 @@ module.exports = function (grunt) {
     // create a package ready version of the ui (aka what jenkins does)
     grunt.registerTask('dist', ['clean', 'copy_build', 'compile_po', 'concat', 'newer:less', 'uglify', 'copy_dist', 'create_i18n_properties']);
 
-    grunt.registerTask('refresh', 'force an update and reload the browser', ['force_update', 'send_livereload']);
+    grunt.registerTask('force_update', ['bootjs', 'copy:build_base']);
 
     grunt.registerTask('workaround_fetch', function () {
         var appserver = require('appserver'),
