@@ -69,13 +69,11 @@ define('io.ox/calendar/chronos-api', [
                     });
                 });
                 return http.resume().then(function (data) {
-                    var def = $.Deferred(),
-                        error = _(data).find(function (res) {
-                            return !!res.error;
-                        });
-                    if (error) def.reject(error);
-                    else def.resolve(data);
-                    return def;
+                    var error = _(data).find(function (res) {
+                        return !!res.error;
+                    });
+                    if (error) throw error;
+                    return data;
                 }).then(function (data) {
                     data = _(data).chain().pluck('data').flatten().compact().value();
                     if (data.length > 0) api.pool.add(obj.folder, data);

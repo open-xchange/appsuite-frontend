@@ -13,7 +13,6 @@
 
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
-    'io.ox/calendar/model',
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-util',
     'io.ox/core/folder/api',
@@ -24,7 +23,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/print',
     'less!io.ox/calendar/print-style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, AppointmentModel, util, chronosUtil, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
+], function (ext, util, chronosUtil, folderAPI, gt, settings, coreSettings, Dropdown, print, printStyle) {
 
     'use strict';
 
