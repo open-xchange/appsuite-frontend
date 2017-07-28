@@ -43,16 +43,19 @@ define('io.ox/mail/view-options', [
                 mode: 'search',
                 getQueryParams: function (params) {
 
-                    var criteria = params.criteria, filters = [], start, end;
+                    var criteria = params.criteria, filters = [], start, end,
+                        // special support for main languages (en, de, fr, es)
+                        from = criteria.from || criteria.von || criteria.de,
+                        to = criteria.to || criteria.an || criteria.a || criteria.para,
+                        subject = criteria.subject || criteria.betreff || criteria.sujet || criteria.asunto,
+                        year = criteria.year || criteria.y || criteria.jahr || criteria.ano;
 
-                    // The available field names are
-                    // from, to, cc, bcc, subject, received_date, sent_date, size,flags, content, content_type, disp and priority
-                    if (criteria.from) filters.push(['=', { field: 'from' }, criteria.from]);
-                    if (criteria.to) filters.push(['or', ['=', { field: 'to' }, criteria.to], ['=', { field: 'cc' }, criteria.to], ['=', { field: 'bcc' }, criteria.to]]);
-                    if (criteria.subject) filters.push(['=', { field: 'subject' }, criteria.subject]);
-                    if (criteria.year) {
-                        start = Date.UTC(criteria.year, 0, 1);
-                        end = Date.UTC(criteria.year, 11, 31);
+                    if (from) filters.push(['=', { field: 'from' }, from]);
+                    if (to) filters.push(['or', ['=', { field: 'to' }, to], ['=', { field: 'cc' }, to], ['=', { field: 'bcc' }, to]]);
+                    if (subject) filters.push(['=', { field: 'subject' }, subject]);
+                    if (year) {
+                        start = Date.UTC(year, 0, 1);
+                        end = Date.UTC(year, 11, 31);
                         filters.push(['and', ['>', { field: 'received_date' }, String(start)], ['<', { field: 'received_date' }, String(end)]]);
                     }
                     if (criteria.words) {

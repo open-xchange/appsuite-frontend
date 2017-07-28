@@ -14,10 +14,9 @@
 define('io.ox/backbone/views/search', [
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views/common',
-    'io.ox/core/yell',
     'gettext!io.ox/core',
     'less!io.ox/backbone/views/search'
-], function (ExtensibleView, mini, yell, gt) {
+], function (ExtensibleView, mini, gt) {
 
     'use strict';
 
@@ -52,16 +51,25 @@ define('io.ox/backbone/views/search', [
                 this.$dropdown = $('<form class="dropdown" autocomplete="off">'),
                 this.$progress = $('<div class="progress">'),
                 this.$autocomplete = $('<ul class="autocomplete address-picker scrollable">')
-            );
+            )
+            .popover({
+                container: 'body',
+                content: '<p>This is just a <b>prototype</b> to play around with a visually different and more explicit user interface.</p>' +
+                    '<p>Simple for the 99% use-case (just entering a word or name), still easy to use for explicit queries.</p>' +
+                    '<p>You can open a dropdown by clicking on the caret on the right-hand side.</p>',
+                html: true,
+                placement: 'right',
+                title: 'Please note',
+                trigger: 'manual'
+            });
             return this.invoke('render');
         },
 
         onFirstFocus: function () {
             // load addressbook picker for auto-complete
-            var $progress = this.$progress.css('width', '20%'),
-                $autocomplete = this.$autocomplete;
+            var view = this;
             require(['io.ox/contacts/addressbook/popup'], function (picker) {
-                $progress.css('width', '50%');
+                view.$progress.css('width', '50%');
                 picker.getAllMailAddresses().then(function (response) {
                     cache.items = response.items.sort(picker.sorter);
                     cache.index = response.index;
@@ -73,8 +81,10 @@ define('io.ox/backbone/views/search', [
                             return cache.hash[cid];
                         }
                     };
-                    $progress.css('width', '100%').delay(300).fadeOut('fast');
-                    $autocomplete.on('appear', picker.onAppear);
+                    view.$progress.css('width', '100%').delay(300).fadeOut('fast');
+                    view.$autocomplete.on('appear', picker.onAppear);
+                    view.$input.trigger('input');
+                    view = null;
                 });
             });
         },
@@ -183,13 +193,9 @@ define('io.ox/backbone/views/search', [
             this.trigger('search', criteria);
             // just yell once
             if (yelled) return;
-            yell(
-                'info',
-                'This is just a prototype to play around with a visually different and more explicit user interface.\n\n' +
-                'Simple for the 99% use-case (just entering a word or name), still easy to use for explicit queries.\n\n' +
-                'You can open a dropdown by clicking on the caret on the right-hand side.'
-            );
+            this.$el.popover('show');
             yelled = true;
+            $(document).one('click', this.$el.popover.bind(this.$el, 'hide'));
         },
 
         cancel: function () {
@@ -300,6 +306,9 @@ define('io.ox/backbone/views/search', [
             // render
             SearchView.picker.renderItems.call(this.$autocomplete, items, { isSearch: true });
             this.$autocomplete.children().removeAttr('tabindex');
+            // accelerate initial appear event for first 8 items
+            this.$autocomplete.find('.contact-picture').slice(0, 8).trigger('appear');
+
         },
 
         getLastWord: function () {
