@@ -292,14 +292,11 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/move', {
         requires: function (e) {
             return util.isBossyAppointmentHandling({ app: e.baton.data }).then(function (isBossy) {
-                var isSeries = e.baton.data.recurrence_type > 0;
+                var isSeries = !!e.baton.data.recurrenceId;
                 return e.collection.has('some', 'delete') && isBossy && !isSeries;
             });
         },
         multiple: function (list, baton) {
-
-            var vgrid = baton.grid || (baton.app && baton.app.getGrid());
-
             ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
                 move.item({
                     api: api,
@@ -319,8 +316,7 @@ define('io.ox/calendar/actions', [
                     },
                     target: baton.target,
                     title: gt('Move'),
-                    type: 'move',
-                    vgrid: vgrid
+                    type: 'move'
                 });
             });
         }

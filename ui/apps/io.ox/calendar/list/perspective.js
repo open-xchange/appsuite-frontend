@@ -160,14 +160,18 @@ define('io.ox/calendar/list/perspective', [
             });
 
             // refresh listview on all update/delete events
-            api.on('update delete', app.listView.reload.bind(app.listView));
+            api.on('update delete refresh.all', app.listView.reload.bind(app.listView));
 
             // to show an appointment without it being in the grid, needed for direct links
             app.on('show:appointment', this.showAppointment);
 
             // drag & drop support
             win.nodes.outer.on('selection:drop', function (e, baton) {
-                actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                var list = _.map(baton.data, chronosUtil.cid);
+                api.getList(list).then(function (models) {
+                    baton.data = _(models).map(api.reduce);
+                    actions.invoke('io.ox/calendar/detail/actions/move', null, baton);
+                });
             });
 
             // select ids from url
