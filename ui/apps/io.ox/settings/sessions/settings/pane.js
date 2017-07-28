@@ -377,7 +377,7 @@ define('io.ox/settings/sessions/settings/pane', [
                     buildConfirmationDialog(gt('Do you really want to terminate all active sessions except the current one?')).done(function () {
                         var dialog = this;
                         this.busy();
-                        http.PUT({
+                        http.GET({
                             url: '/ajax/sessionmanagement',
                             params: {
                                 action: 'removeAllOtherSessions'
