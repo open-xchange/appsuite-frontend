@@ -286,10 +286,11 @@ define('io.ox/calendar/list/listview', [
 
         drawTail: function () {
             if (this.tail) this.tail.remove();
+            var m = moment(this.collection.lastDate).add(1, 'month');
             this.$el.append(
                 this.tail = $('<li class="tail">').append(
                     $('<a href="#">')
-                        .text(gt('Expand timeframe by one month'))
+                        .text(gt('Load appointments until %1$s', m.format('l')))
                         .on('click', this.onLoadMore.bind(this))
                 )
             );
