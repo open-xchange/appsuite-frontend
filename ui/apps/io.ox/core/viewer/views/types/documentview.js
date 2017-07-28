@@ -476,7 +476,10 @@ define('io.ox/core/viewer/views/types/documentview', [
                     _.extend(params, { version: options.version });
                 }
 
-                $.ajax({ url: DocConverterUtils.getEncodedConverterUrl(this.model, params) });
+                $.ajax({
+                    url: DocConverterUtils.getEncodedConverterUrl(this.model, params),
+                    dataType: 'text'
+                });
                 this.isPrefetched = true;
             }
 
