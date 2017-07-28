@@ -190,6 +190,7 @@ define('io.ox/backbone/views/search', [
         submit: function () {
             var criteria = this.parseQuery();
             if (criteria.empty) return this.trigger('cancel');
+            criteria.folder = this.model.get('folder');
             this.trigger('search', criteria);
             // just yell once
             if (yelled) return;

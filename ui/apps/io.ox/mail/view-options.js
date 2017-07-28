@@ -72,9 +72,11 @@ define('io.ox/mail/view-options', [
                     if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
                     if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
 
+                    var folder = criteria.folder === 'all' ? 'default0/virtual/all' : baton.app.folder.get();
+
                     return {
                         action: 'search',
-                        folder: params.folder,
+                        folder: folder,
                         columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
                         sort: params.sort || '610',
                         order: params.order || 'desc',
