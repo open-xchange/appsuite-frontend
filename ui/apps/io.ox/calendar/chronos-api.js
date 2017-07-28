@@ -178,9 +178,24 @@ define('io.ox/calendar/chronos-api', [
                 });
             },
 
-            update: function () {
-                //placeholder
-                //todo implement that
+            update: function (obj) {
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                var params = {
+                    action: 'update',
+                    folder: obj.folder,
+                    id: obj.id,
+                    timestamp: obj.timestamp
+                };
+                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: obj
+                }).then(processResponse);
+            },
+
+            attachmentCallback: function () {
+                // TODO implement that if still needed
                 return $.when();
             },
 
@@ -370,6 +385,11 @@ define('io.ox/calendar/chronos-api', [
     api.pool = Pool.create('chronos', {
         Collection: models.Collection
     });
+
+    api.pool.map = function (data) {
+        data.cid = util.cid(data);
+        return data;
+    };
 
     _.extend(api, Backbone.Events);
 

@@ -285,7 +285,7 @@ define('io.ox/calendar/edit/main', [
                 if (this.view.options.mode === 'create') {
                     this.model.trigger('create');
                 } else {
-                    this.modell.trigger('update');
+                    this.model.trigger('update');
                 }
 
                 /*if (this.moveAfterSave) {
