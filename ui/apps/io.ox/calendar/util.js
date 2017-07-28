@@ -442,11 +442,18 @@ define('io.ox/calendar/util', [
                 trigger: opt.trigger
             }).on('blur dispose', function () {
                 $(this).popover('hide');
+                // set correct state or toggle doesn't work on next click
+                $(this).data('bs.popover').inState.click = false;
             });
 
             if (opt.closeOnScroll && !coreSettings.get('features/accessibility', true)) {
-                parent.scrollParent().on('scroll', function () {
-                    parent.popover('hide');
+                // add listener on popup shown. Otherwise we will not get the correct scrollparent at this point (if the popover container is not yet added to the dom)
+                parent.on('shown.bs.popover', function () {
+                    parent.scrollParent().one('scroll', function () {
+                        parent.popover('hide');
+                        // set correct state or toggle doesn't work on next click
+                        parent.data('bs.popover').inState.click = false;
+                    });
                 });
             }
 
