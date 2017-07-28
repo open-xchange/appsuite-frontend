@@ -23,7 +23,7 @@ exports.command = function (parameters, options) {
 
     options = options || {};
     var userIndex = options.userIndex || 0,
-        prefix = options.prefix || 0;
+        prefix = options.prefix || '';
 
     var launchURL = this.launch_url;
     if (launchURL.indexOf('appsuite') >= 0) launchURL = launchURL.substring(0, launchURL.indexOf('appsuite'));

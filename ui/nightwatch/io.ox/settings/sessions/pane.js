@@ -12,7 +12,7 @@
 
 describe('Sessions settings', function () {
 
-    it.only('lists all sessions', function (client) {
+    it('lists all sessions', function (client) {
 
         client
             .login(['app=io.ox/settings', 'folder=virtual/settings/sessions'])
