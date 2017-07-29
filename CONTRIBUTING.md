@@ -22,7 +22,9 @@ Contributing
 
 **Branch naming conventions**
 
-- please user lower case
+- we use three namespaces (`feature/`, `bug/` and `poc/`) as prefix to ease housekeeping
+- always user lower case for namespace and branch name
+- please note that only `master`, `develop`, `release` and `hotfix` branches do not have any leading namespace
 
 ```
 feature/[jira-id]_[short-description]
