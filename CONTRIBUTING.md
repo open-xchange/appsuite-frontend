@@ -22,6 +22,8 @@ Contributing
 
 **Branch naming conventions**
 
+- please user lower case
+
 ```
 feature/[jira-id]_[short-description]
 bug/[bugzilla-id]_[short-description]
