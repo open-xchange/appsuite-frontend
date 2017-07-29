@@ -44,10 +44,10 @@ define('io.ox/core/export/export', [
         draw: function (baton) {
 
             this.append(
-                $('<label>').append(
-                    $.txt(gt('Format')),
-                    $('<br>'),
-                    baton.$.select = $('<select>').attr('aria-label', gt('select format'))
+                $('<div class="form-group">').append(
+                    $('<label for="export-format">').text(gt('Format')),
+                    baton.$.select = $('<select id="export-format" class="form-control">')
+                        .attr('aria-label', gt('select format'))
                 )
             );
 
@@ -73,10 +73,12 @@ define('io.ox/core/export/export', [
             if (baton.module !== 'contacts') return;
             var guid = _.uniqueId('form-control-label-');
             this.append(
-                // checkbox
-                $('<label class="checkbox include_distribution_lists">').attr('for', guid).append(
-                    baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">').attr('id', guid),
-                    $.txt(gt('Include distribution lists'))
+                $('<div class="form-group">').append(
+                    // checkbox
+                    $('<label class="checkbox include_distribution_lists">').attr('for', guid).append(
+                        baton.$.include = $('<input type="checkbox" name="include_distribution_lists" checked="checked">').attr('id', guid),
+                        $.txt(gt('Include distribution lists'))
+                    )
                 )
             );
 

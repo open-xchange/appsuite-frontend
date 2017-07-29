@@ -190,6 +190,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.options.id) this.$el.attr('id', this.options.id);
             if (this.rows) this.$el.attr('rows', this.rows);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
@@ -304,8 +305,9 @@ define('io.ox/backbone/mini-views/common', [
 
     var CustomRadioView = RadioView.extend({
         renderLabel: function (data) {
-            return $('<label>').append(
-                this.renderInput(data),
+            var id = this.options.id || _.uniqueId('custom-');
+            return $('<label>').attr('for', id).append(
+                this.renderInput(data).attr('id', id),
                 this.renderToggle(data),
                 $.txt(data.label)
             );

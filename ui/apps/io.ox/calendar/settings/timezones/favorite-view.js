@@ -101,7 +101,9 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
                 .addButton('cancel', gt('Cancel'), 'cancel')
                 .build(function () {
                     this.getContentNode().append(
+                        $('<label for="settings-timezone">').text(gt('Time zone')),
                         new TimezonePicker({
+                            id: 'settings-timezone',
                             name: 'timezone',
                             model: model,
                             className: 'form-control'

@@ -34,8 +34,10 @@ define('io.ox/core/import/import', [
             nodes.row = $('<div class="form-group">').appendTo($(this));
 
             //lable and select
-            nodes.label = $('<label>').text(gt('Format')).appendTo(nodes.row);
-            nodes.select = $('<select class="form-control" name="action">').attr('aria-label', gt('select format')).appendTo(nodes.row);
+            nodes.label = $('<label>').attr('for', 'import-format').text(gt('Format')).appendTo(nodes.row);
+            nodes.select = $('<select class="form-control" name="action">')
+                .attr({ id: 'import-format', 'aria-label': gt('select format') })
+                .appendTo(nodes.row);
 
             //add option
             formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
