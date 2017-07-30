@@ -9761,7 +9761,8 @@ msgstr "Tijd"
 msgid "Time scale"
 msgstr "Intervaltijd in minuten"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Tijdzone"
 

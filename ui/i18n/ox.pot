@@ -2291,6 +2291,13 @@ msgstr ""
 
 #: apps/io.ox/calendar/settings/timezones/favorite-view.js
 #: module:io.ox/calendar
+#: apps/io.ox/core/settings/pane.js
+#: module:io.ox/core
+msgid "Time zone"
+msgstr ""
+
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar
 msgid "The selected timezone is already a favorite."
 msgstr ""
 
@@ -5816,11 +5823,6 @@ msgstr ""
 #: apps/plugins/portal/xing/register.js
 #: module:plugins/portal
 msgid "Language"
-msgstr ""
-
-#: apps/io.ox/core/settings/pane.js
-#: module:io.ox/core
-msgid "Time zone"
 msgstr ""
 
 #: apps/io.ox/core/settings/pane.js

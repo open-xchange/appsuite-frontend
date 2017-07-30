@@ -9656,7 +9656,8 @@ msgstr "Aika"
 msgid "Time scale"
 msgstr "Aika-asteikko minuuteissa"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Aikavyöhyke"
 

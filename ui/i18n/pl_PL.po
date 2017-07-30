@@ -9771,7 +9771,8 @@ msgstr "Godzina"
 msgid "Time scale"
 msgstr "Skala czasu w minutach"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Strefa czasowa"
 

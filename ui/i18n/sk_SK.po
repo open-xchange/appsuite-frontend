@@ -9742,7 +9742,8 @@ msgstr "Čas"
 msgid "Time scale"
 msgstr "Časový rozsah"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Časové pásmo"
 

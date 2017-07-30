@@ -9764,7 +9764,8 @@ msgstr "Oră"
 msgid "Time scale"
 msgstr "Interval de timp"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Fus orar"
 

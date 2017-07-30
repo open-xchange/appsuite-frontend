@@ -9665,7 +9665,8 @@ msgstr "Tid"
 msgid "Time scale"
 msgstr "Tidsskala i minutter"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "Tidszone"
 
