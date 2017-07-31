@@ -17,24 +17,71 @@ define('io.ox/core/tk/megalist', [], function () {
 
     // draw example list
 
-    var li = $('<li tabindex="-1" role="option" aria-selected="false" aria-checked="false" data-cid=""><i class="fa checkmark" aria-hidden="true"></i></li>');
+    var li = $('<li tabindex="-1" role="option" aria-selected="false" aria-checked="false" data-cid=""><i class="fa checkmark" aria-hidden="true"></i></li>')[0];
 
     $('body').append(
         $('<ul class="megalist checkboxes" role="listbox" aria-multiselectable="true">').append(
-            _.range(0, 100).map(function (i) {
-                return li.clone().attr('data-cid', i).append($.txt('List option #' + i));
+            _.range(0, 20).map(function (i) {
+                return $('<li class="page-divider">').attr('data-divider', i);
             })
         )
     );
 
     var $el = $('.megalist'), el = $el[0];
 
+    // prepare pages
+    var pages = _.range(0, 20).map(function (i) {
+        var fragment = document.createDocumentFragment();
+        _.range(0, 50).forEach(function (j) {
+            var clone = li.cloneNode(true), cid = i * 100 + j;
+            clone.setAttribute('data-cid', cid);
+            clone.appendChild(document.createTextNode('List option #' + cid));
+            fragment.appendChild(clone);
+        });
+        return { detached: true, fragment: fragment };
+    });
+
+    insertAfter(pages[0].fragment, el.querySelector('.page-divider'));
+    pages[0].detached = false;
+
+    $el.on('scrollend', function () {
+        var v1 = this.scrollTop, v2 = v1 + this.clientHeight, divider = this.querySelectorAll('.page-divider'), fragment, page, p1, p2, i;
+        for (i = 0; page = divider[i]; i++) {
+            p1 = page.offsetTop;
+            p2 = p1 + page.offsetHeight;
+            if (p2 < v1 || p1 > v2) {
+                // out of viewport
+                if (pages[i].detached) continue;
+                fragment = document.createDocumentFragment();
+                el.querySelectorAll('[data-page="' + i + '"]').forEach(function (elem) {
+                    fragment.appendChild(elem);
+                });
+                pages[i].fragment = fragment;
+                pages[i].detached = true;
+            } else {
+                // inside viewport
+                if (!pages[i].detached) continue;
+                // insert after
+                insertAfter(pages[i].fragment, divider[i]);
+                pages[i].detached = false;
+            }
+        }
+    });
+
+    function insertAfter(newNode, referenceNode) {
+        if (!referenceNode.nextSibling) {
+            el.append(newNode);
+        } else {
+            el.insertBefore(newNode, referenceNode);
+        }
+    }
+
     // the root element during range select
     var rangeStart = 0;
 
     $el
         .attr('tabindex', -1)
-        .find('li:first').attr({ 'tabindex': 1, 'aria-selected': true }).end()
+        .find('[role="option"]:first').attr({ 'tabindex': 1, 'aria-selected': true }).end()
         .focus();
 
     // DOM EVENTS
@@ -54,14 +101,14 @@ define('io.ox/core/tk/megalist', [], function () {
                 /* no default */
             }
         })
-        .on('mousedown', 'li', function (e) {
+        .on('mousedown', '[role="option"]', function (e) {
             var isToggle = e.ctrlKey || e.metaKey || (e.offsetX < 48 && hasCheckboxes());
             trigger(e.currentTarget, isToggle ? 'toggle' : 'select', e);
         })
-        .on('select', 'li', function (e) {
+        .on('select', '[role="option"]', function (e) {
             onSelect.call(e.currentTarget, e);
         })
-        .on('toggle', 'li', function (e) {
+        .on('toggle', '[role="option"]', function (e) {
             onToggle.call(e.currentTarget, e);
         })
         .on('enter action', function (e, cid) {
@@ -79,15 +126,15 @@ define('io.ox/core/tk/megalist', [], function () {
         TABINDEX = 'tabindex', TABINDEX_1 = '[' + TABINDEX + '="1"]';
 
     function get(arg) {
-        return _.isNumber(arg) ? $el.children().eq(arg) : $(arg);
+        return _.isNumber(arg) ? getItems().eq(arg) : $(arg);
     }
 
     function getAllChecked() {
-        return $el.children().filter(CHECKED_true);
+        return getItems().filter(CHECKED_true);
     }
 
     function getAllSelected() {
-        return $el.children().filter(SELECTED_true);
+        return getItems().filter(SELECTED_true);
     }
 
     function hasChecked() {
@@ -109,9 +156,13 @@ define('io.ox/core/tk/megalist', [], function () {
         propagateChange();
     }
 
+    function getItems() {
+        return $el.find('[role="option"]');
+    }
+
     function onSelect(e) {
 
-        var index = $el.children().index(this);
+        var index = getItems().index(this);
 
         deselectAll();
 
@@ -129,7 +180,7 @@ define('io.ox/core/tk/megalist', [], function () {
 
         e.preventDefault();
 
-        var items = $el.children(),
+        var items = getItems(),
             index = items.index(document.activeElement), item;
 
         index += e.which === 38 ? -1 : +1;
@@ -150,7 +201,7 @@ define('io.ox/core/tk/megalist', [], function () {
     }
 
     function onHomeEnd(e) {
-        var item = $el.children().eq(e.which === 35 ? -1 : 0);
+        var item = getItems().eq(e.which === 35 ? -1 : 0);
         focus(item);
         trigger(item, 'select', e);
     }
@@ -172,14 +223,14 @@ define('io.ox/core/tk/megalist', [], function () {
             var count = getAllChecked().length;
             item.attr(CHECKED, newState);
             if (newState || count > 1) item.attr(SELECTED, newState);
-            if (newState) $el.children(CHECKED_false + SELECTED_true).attr(SELECTED, false);
+            if (newState) getItems().filter(CHECKED_false + SELECTED_true).attr(SELECTED, false);
         } else {
             item.attr(CHECKED, newState).attr(SELECTED, newState);
         }
     }
 
     function focus(item) {
-        $el.children(TABINDEX_1).attr(TABINDEX, -1);
+        getItems().filter(TABINDEX_1).attr(TABINDEX, -1);
         item.attr(TABINDEX, 1).focus();
     }
 
@@ -189,7 +240,7 @@ define('io.ox/core/tk/megalist', [], function () {
 
     function selectRange(index) {
         var start = Math.min(rangeStart, index), end = Math.max(rangeStart, index);
-        $el.children().slice(start, end + 1).attr(CHECKED, true).attr(SELECTED, true);
+        getItems().slice(start, end + 1).attr(CHECKED, true).attr(SELECTED, true);
     }
 
     function deselectAll() {
@@ -206,7 +257,7 @@ define('io.ox/core/tk/megalist', [], function () {
     // PROGAPATE CHANGE
 
     function getCIDs(selector) {
-        return $el.children(selector).map(function () { return $(this).attr('data-cid'); }).toArray();
+        return getItems().filter(selector).map(function () { return $(this).attr('data-cid'); }).toArray();
     }
 
     function propagateChange() {
