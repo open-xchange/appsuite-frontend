@@ -136,9 +136,11 @@ define('io.ox/mail/view-options', [
                 this.input('subject', gt('Subject')),
                 this.input('from', gt('From')),
                 this.input('to', gt('To')),
+                //#. Context: mail search. Label for <input>.
                 this.input('words', gt('Contains words')),
                 this.dateRange(),
-                this.checkbox('attachment', gt('Has attachment')),
+                //#. Context: mail search. Label for checbbox.
+                this.checkbox('attachment', gt('Has attachments')),
                 this.button()
             );
         }

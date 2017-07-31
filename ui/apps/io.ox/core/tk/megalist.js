@@ -54,8 +54,8 @@ define('io.ox/core/tk/megalist', [], function () {
                 if (pages[i].detached) continue;
                 fragment = document.createDocumentFragment();
                 el.querySelectorAll('[data-page="' + i + '"]').forEach(function (elem) {
-                    fragment.appendChild(elem);
-                });
+                    this.appendChild(elem);
+                }.bind(fragment));
                 pages[i].fragment = fragment;
                 pages[i].detached = true;
             } else {
