@@ -85,9 +85,13 @@ define('io.ox/settings/sessions/settings/pane', [
                 os = _(operatingSystems).find(function (value, key) {
                     return !!self.browser[key];
                 }) || gt('Unknown Operating System');
+            // .# Used to display the current version on the current platform, i.e. Firefox 50 on Windows
             if (this.browser.firefox) this.set('displayName', gt('Firefox %1$s on %2$s', this.browser.firefox, os));
+            // .# Used to display the current version on the current platform, i.e. Chrome 50 on Windows
             else if (this.browser.chrome) this.set('displayName', gt('Chrome %1$s on %2$s', this.browser.chrome, os));
+            // .# Used to display the current version on the current platform, i.e. Safari 50 on OS X
             else if (this.browser.safari) this.set('displayName', gt('Safari %1$s on %2$s', this.browser.safari, os));
+            // .# Used to display the current version on the current platform, i.e. Internet Explorer 11 on Windows
             else if (this.browser.ie) this.set('displayName', gt('Internet Explorer on %1$s', os));
             else if (this.browser.edge) this.set('displayName', gt('Edge on %1$s', os));
             else this.set({ displayName: gt('Unknown client'), other: true });
