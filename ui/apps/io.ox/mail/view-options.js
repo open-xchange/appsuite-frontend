@@ -265,6 +265,9 @@ define('io.ox/mail/view-options', [
             function toggle() {
                 var folder = app.folder.get();
                 dropdown.$el.toggle(folder !== 'virtual/all-unseen');
+                dropdown.$ul.empty();
+                ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
+
             }
 
             app.on('folder:change', toggle);
