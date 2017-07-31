@@ -21,10 +21,11 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosUtil, chronosModel, gt) {
 
     'use strict';
 
@@ -353,7 +354,7 @@ define('io.ox/calendar/week/perspective', [
 
                     //marker to make the view open in the correct week
                     this.setNewStart = true;
-                    this.showAppointment(e, _.cid(cid), { arrow: false });
+                    this.showAppointment(e, chronosUtil.cid(cid), { arrow: false });
                 }
             }
         },
