@@ -119,8 +119,7 @@ define('io.ox/backbone/views/datepicker', [
             }
             this.$target
                 .attr({
-                    'aria-haspopup': true,
-                    'aria-expanded': false
+                    'aria-haspopup': true
                 })
                 .on('change input', $.proxy(this.onTargetInput, this))
                 .on('keydown', $.proxy(this.onTargetKeydown, this))
@@ -154,9 +153,12 @@ define('io.ox/backbone/views/datepicker', [
                 this.$el.css({ top: offset.top + targetHeight });
             }
             this.$el.css({ left: offset.left }).addClass('open');
-            this.$target.attr('aria-expanded', true);
             // only change for non-input fields
             if (!this.$target.is(':input')) this.$el.focus();
+
+            var id =  _.uniqueId('datepicker');
+            this.$el.attr('id', id);
+            this.$target.attr('aria-owns', id);
             this.trigger('open');
         },
 
@@ -165,7 +167,7 @@ define('io.ox/backbone/views/datepicker', [
             this.closing = true;
             this.trigger('before:close');
             this.$el.removeClass('open');
-            this.$target.attr('aria-expanded', false);
+            this.$target.removeAttr('aria-owns');
             if (restoreFocus !== false) this.$target.focus();
             this.closing = false;
             this.trigger('close');
