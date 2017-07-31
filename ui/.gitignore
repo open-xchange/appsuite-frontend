@@ -16,9 +16,12 @@
 local.conf*
 !local.conf.default.json
 npm-debug.log
+package-lock.json
 /bower_components
 /nightwatch-reports
 selenium-debug.log
 /.externalToolBuilders
 /.settings
 .project
+yarn-error.log
+

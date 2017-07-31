@@ -37,6 +37,11 @@ define('io.ox/core/settings/defaults', function () {
         showDesktopNotifications: true,
         settings: {
             downloadsDisabled: false
+        },
+        productname: {
+            mailapp: 'OX Mail',
+            oxdrive: 'OX Drive',
+            oxtender: 'OXtener'
         }
     };
 

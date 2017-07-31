@@ -106,7 +106,14 @@ $(window).on('load', function () {
                     $(window).trigger('require:require', name);
                 });
                 var def = $.Deferred().done(success).fail(fail || fallback);
-                require(deps, def.resolve, def.reject);
+                try {
+                    def.resolve.apply(def, deps.map(function (dep) {
+                        if (!require.defined(dep)) throw new Error();
+                        return require(dep);
+                    }));
+                } catch (e) {
+                    require(deps, def.resolve, def.reject);
+                }
                 return def.promise();
             }
             // bypass

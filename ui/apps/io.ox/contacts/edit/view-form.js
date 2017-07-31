@@ -27,8 +27,9 @@ define('io.ox/contacts/edit/view-form', [
     'gettext!io.ox/contacts',
     'io.ox/core/folder/api',
     'io.ox/core/folder/util',
+    'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils) {
+], function (model, views, actions, links, PictureUpload, api, util, capabilities, ext, mini, attachmentViews, gt, folderApi, folderUtils, settings) {
 
     'use strict';
 
@@ -147,7 +148,7 @@ define('io.ox/contacts/edit/view-form', [
     });
 
     // Remove attachment handling when infostore is not present
-    if (!capabilities.has('filestore')) {
+    if (!settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
         delete meta.sections.attachments;
         delete meta.i18n.attachments;
     }
@@ -262,7 +263,7 @@ define('io.ox/contacts/edit/view-form', [
             index: 300,
             id: 'showall',
             draw: function (baton) {
-                var guid = _.uniqueId('form-control-label-');
+                var guid = _.uniqueId('contacts-');
                 this.append(
                     $('<label class="checkbox-inline">').attr('for', guid).append(
                         $('<input type="checkbox" class="toggle-check">').attr('id', guid)
@@ -497,10 +498,11 @@ define('io.ox/contacts/edit/view-form', [
 
         function drawDefault(options, model) {
             var input;
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
-                $('<label class="control-label col-xs-12">').append(
+                $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(options.label),
-                    input = new mini.InputView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el,
+                    input = new mini.InputView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el,
                     new mini.ErrorView({ selector: '.row' }).render().$el
                 )
             );
@@ -519,10 +521,11 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawTextarea(options, model) {
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
-                $('<label>').addClass('control-label col-xs-12').append(
+                $('<label>').attr('for', guid).addClass('control-label col-xs-12').append(
                     $.txt('\u00A0'), $('<br>'),
-                    new mini.TextView({ name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
+                    new mini.TextView({ id: guid, name: options.field, model: model, maxlength: meta.maxlength[options.field] || 64 }).render().$el
                 )
             );
         }
@@ -538,7 +541,7 @@ define('io.ox/contacts/edit/view-form', [
         }
 
         function drawCheckbox(options, model) {
-            var guid = _.uniqueId('form-control-label-');
+            var guid = _.uniqueId('contacts-' + options.field + '-');
             this.append(
                 $('<div class="col-lg-12 checkbox">').append(
                     $('<label>').attr('for', guid).append(

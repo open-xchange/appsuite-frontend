@@ -15,79 +15,78 @@ define('l10n/ja_JP/io.ox/collation', function () {
 
     'use strict';
 
+    // helper for half width katakana
+    // I really don't know who came up with this encoding style
+    var dakuten = 'ﾞ ゙ ゛'.split(' '),
+        handakuten = 'ﾟ ﾟ ゜'.split(' '),
+        // only katakana that can have dakuten or handakuten
+        halfWidthKana = 'ｳ ｴ ｵ ｶ ｷ ｸ ｹ ｺ ｻ ｼ ｽ ｾ ｿ ﾀ ﾁ ﾂ ｯ ﾃ ﾄ ﾊ ﾋ ﾌ ﾍ ﾎ ﾜ'.split(' ');
+
     // raw alphabet data
     // see http://en.wikipedia.org/wiki/Goj%C5%ABon
     // or http://en.wikipedia.org/wiki/Japanese_writing_system#Collation
-    //and for half width kana https://en.wikipedia.org/wiki/Half-width_kana
+    // and for half width kana https://en.wikipedia.org/wiki/Half-width_kana
     var tableau = [
-            // a  i  u  e  o
-            'あ い う え お ' +      // Hiragana
-            'ぁ ぃ ぅ ぇ ぉ ' +      // Hiragana small
-            'ア イ ウ エ オ ' +      // Katakana
-            'ァ ィ ゥ ェ ォ ' +      // Katakana small
-            'ｱ ｲ ｳ ｴ ｵ ' +           // Katakana half width
-            'ゔ ' +                 // Hiragana with dakuten uncommon (vu)
-            'ヴ',                   // Katakana with dakuten uncommon (vu)
-            // ka ki ku ke ko
-            'か き く け こ ' +      // Hiragana
-            'ゕ ゖ ' +              // Hiragana small (ka ke)
-            'が ぎ ぐ げ ご ' +      // Hiragana with dakuten (ga gi gu ge go)
-            'カ キ ク ケ コ ' +      // Katakana
-            'ヵ ㇰ ヶ ' +           // Katakana small (ka ku ke)
-            'ｶ ｷ ｸ ｹ ｺ ' +          // Katakana half width
-            'ガ ギ グ ゲ ゴ',       // Katakana with dakuten (ga gi gu ge go)
-            // sa shi su se so
-            'さ し す せ そ ' +      // Hiragana
-            'ざ じ ず ぜ ぞ ' +      // Hiragana with dakuten (za ji zu ze zo)
-            'サ シ ス セ ソ ' +      // Katakana
-            'ㇱ ㇲ ' +              // Katakana small (shi su)
-            'ｻ ｼ ｽ ｾ ｿ ' +          // Katakana half width
-            'ザ ジ ズ ゼ ゾ',        // Katakana with dakuten (za ji zu ze zo)
-            // ta chi tsu te to
-            'た ち つ て と ' +      // Hiragana
-            'っ ' +                 // Hiragana small (tsu)
-            'だ ぢ づ で ど ' +      // Hiragana with dakuten (da ji zu de do)
-            'タ チ ツ テ ト ' +      // Katakana
-            'ｯ ㇳ ' +               // Katakana small (tsu to)
-            'ﾀ ﾁ ﾂ ﾃ ﾄ ' +          // Katakana half width
-            'ダ ヂ ヅ デ ド ッ',     // Katakana with dakuten (da ji zu de do)
-            // na ni nu ne no
-            'な に ぬ ね の ' +      // Hiragana
-            'ナ ニ ヌ ネ ノ ' +      // Katakana
-            'ㇴ ' +                 // Katakana small (nu)
-            'ﾅ ﾆ ﾇ ﾈ ﾉ',            // Katakana half width
-            // ha hi fu he ho
-            'は ひ ふ へ ほ ' +      // Hiragana
-            'ば び ぶ ぺ ぼ ' +      // Hiragana with dakuten (ba bi bu be bo)
-            'ぱ ぴ ぷ ぺ ぽ ' +      // Hiragana with handakuten (pa pi pu pe po)
-            'ハ ヒ フ ヘ ホ ' +      // Katakana
-            'ㇵ ㇶ ㇷ ㇸ ㇹ ' +      // Katakana small
-            'ﾊ ﾋ ﾌ ﾍ ﾎ ' +           // Katakana half width
-            'バ ビ ブ ベ ボ ' +      // Katakana with dakuten (ba bi bu be bo)
-            'パ ピ プ ペ ポ',        // Katakana with handakuten (pa pi pu pe po)
-            // ma mi mu me mo
-            'ま み む め も ' +      // Hiragana
-            'マ ミ ム メ モ ' +      // Katakana
-            'ㇺ ' +                  // Katakana small (mu)
-            'ﾏ ﾐ ﾑ ﾒ ﾓ',             // Katakana half width
-            // ya yu yo                ('yi' and 'ye' do not exist)
-            'や ゆ よ ' +            // Hiragana
-            'ゃ ゅ ょ ' +            // Hiragana small
-            'ヤ ユ ヨ ' +            // Katakana
-            'ャ ュ ョ ' +            // Katakana small
-            'ﾔ ﾕ ﾖ',                 // Katakana half width
-            // ra ri ru re ro
-            'ら り る れ ろ ' +      // Hiragana
-            'ラ リ ル レ ロ ' +      // Katakana
-            'ㇻ ㇼ ㇽ ㇾ ㇿ ' +      // Katakana small
-            'ﾗ ﾘ ﾙ ﾚ ﾛ',            // Katakana half width
-            // wa (wi)(we)wo n        ('wi' and 'we' are nearly obsolete. 'wu' does not exist. 'n' is an additional kana)
-            'わ ゐ ゑ を ん ' +      // Hiragana
-            'ゎ ' +                 // Hiragana small (wa)
-            'ワ ヰ ヱ ヲ ン ' +      // Katakana
-            'ﾜ ｦ ﾝ ' +              // Katakana half width (wa wo n)
-            'ヮ ' +                // Katakana small (wa)
-            'ヷ ヸ ヹ ヺ'           // Katakana with dakuten uncommon (va vi ve vo ). vu is written as ヴ uncommon as well
+            // Hiragana, Hiragana small, Katakana, Katakana half-width, , Katakana small, Hiragana with dakuten, Katakana with dakuten, Hiragana with handakuten, Katakana with handakuten
+            'あ ぁ ア ｱ ァ ' + // a
+            'い ぃ イ ｲ ィ ' + // i
+            'う ぅ ウ ｳ ゥ ゔ ヴ ｳﾞ ' + // u, vu
+            'え ぇ エ ｴ ェ ' +  // e
+            'お ぉ オ ｵ ォ',  // o
+
+            'か ゕ カ ｶ ヵ が ガ ｶﾞ ' + // ka, ga
+            'き キ ｷ ぎ ギ ｷﾞ ' + // ki, gi
+            'く ク ｸ ㇰ ぐ グ ㇰﾞ ' + // ku, gu
+            'け ゖ ケ ｹ ヶ げ ゲ ｹﾞ ' + // ke, ge
+            'こ コ ｺ ご ゴ ｺﾞ',      // ko, go
+
+            'さ サ ｻ ざ ザ ｻﾞ ' + // sa, za
+            'し シ ｼ ㇱ じ ジ ｼﾞ ' + // shi, ji
+            'す ス ｽ ㇲ ず ズ ｽﾞ ' +// su ,zu
+            'せ セ ｾ ぜ ゼ ｾﾞ ' + // se, ze
+            'そ ソ ｿ ぞ ゾ ｿﾞ',  // so, zo
+
+            'た タ ﾀ だ ダ ﾀﾞ ' + // ta, da
+            'ち チ ﾀ ぢ ヂ ﾀﾞ ' + // chi, ji
+            'つ っ ツ ﾂ ッ ｯ づ ヅ ﾂﾞ ｯﾞ ' + // tsu, zu ( note: there is a small half-width katakana character for tsu)
+            'て テ ﾃ で デ ﾃﾞ ' + // te, de
+            'と ト ﾄ ㇳ ど ド ﾄﾞ', // to, do
+
+            'な ナ ﾅ ' + // na
+            'に ニ ﾆ ' + // ni
+            'ぬ ヌ ﾇ ㇴ ' + // nu
+            'ね ネ ﾈ ' + // ne
+            'の ノ ﾉ', // no
+
+            'は ハ ﾊ ㇵ ば バ ﾊﾞ ぱ パ ﾊﾟ ' + // ha, ba, pa
+            'ひ ヒ ﾋ ㇶ び ビ ﾋﾞ ぴ ピ ﾋﾟ ' + // hi, bi, pi
+            'ふ フ ﾌ ㇷ ぶ ブ ﾌﾞ ぷ プ ﾌﾟ ' + // fu , bu, pi
+            'へ ヘ ﾍ ㇸ べ ベ ﾍﾞ ぺ ペ ﾍﾟ ' + // he, be, pe
+            'ほ ホ ﾎ ㇹ ぼ ボ ﾎﾞ ぽ ポ ﾎﾟ',  // ho, bo, po
+
+            'ま マ ﾏ ' + // ma
+            'み ミ ﾐ ' + // mi
+            'む ム ﾑ ㇺ ' + // mu
+            'め メ ﾒ ' + // me
+            'も モ ﾓ',   // mo
+
+            // ('yi' and 'ye' do not exist)
+            'や ゃ ヤ ﾔ ャ ' + // ya
+            'ゆ ゅ ユ ﾕ ュ ' + // yu
+            'よ ょ ヨ ﾖ ョ', // yo
+
+            'ら ラ ﾗ ㇻ ' + // ra
+            'り リ ﾘ ㇼ ' + // ri
+            'る ル ﾙ ㇽ ' + // ru
+            'れ レ ﾚ ㇾ ' + // re
+            'ろ ロ ﾛ ㇿ', // ro
+
+            // ('wi' and 'we' are nearly obsolete. 'wu' does not exist. 'n' is an additional kana)
+            'わ ゎ ワ ﾜ ヮ ヷ  ﾜﾞ' + // wa, va
+            'ゐ ヰ ヸ ' + // wi
+            'ゑ ヱ ヹ ' + // we
+            'を ヲ ｦ ヺ ' + // wo
+            'ん ン ﾝ' // n
         ],
         hash = {},
         label = {}, // first column of all rows
@@ -105,10 +104,26 @@ define('l10n/ja_JP/io.ox/collation', function () {
         });
     });
 
+    // dakuten and handakuten are written after the katakana they belong to if the katakana is a half width katakana. (think of umlauts with the dots after the character)
+    var isHalfWidthWithDakutenOrHandakuten = function (char, sortName) {
+        if (char && sortName && halfWidthKana.indexOf(char) !== -1) {
+            //see if the next letter is a dakuten or handakuten
+            if (sortName[1] && dakuten.indexOf(sortName[1]) !== -1) {
+                char = char + dakuten[0];
+            }
+            if (sortName[1] && handakuten.indexOf(sortName[1]) !== -1) {
+                char = char + handakuten[0];
+            }
+        }
+        return char;
+    };
+
     // the sorter
     // order is: Kana, Other, Latin, Empty
     sorter = function (a, b) {
         /*eslint no-nested-ternary: 0*/
+        var aSortName = a.sort_name,
+            bSortName = b.sort_name;
         a = a.sort_name[0];
         b = b.sort_name[0];
         // empty (put at end)
@@ -116,7 +131,12 @@ define('l10n/ja_JP/io.ox/collation', function () {
         if (a === undefined) return +1;
         if (b === undefined) return -1;
         // kana (first)
-        if (a in hash && b in hash) return hash[a] - hash[b];
+        if (a in hash && b in hash) {
+            // see if this is a half width katakana
+            a = isHalfWidthWithDakutenOrHandakuten(a, aSortName);
+            b = isHalfWidthWithDakutenOrHandakuten(b, bSortName);
+            return hash[a] - hash[b];
+        }
         if (a in hash) return -1;
         if (b in hash) return +1;
         // case-insensitive

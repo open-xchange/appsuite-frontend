@@ -494,24 +494,24 @@ define('io.ox/calendar/edit/extensions', [
             });
 
             this.$el.append(
-                $('<label class="control-label">').append(
-                    $.txt(gt('Color')),
-                    $('<div class="custom-color">').append(
-                        _.map(_.range(0, 11), function (color_label) {
-                            return $('<label>').append(
-                                // radio button
-                                $('<input type="radio" name="color">')
-                                .attr('aria-label', calendarUtil.getColorLabel(color_label))
+                $('<legend class="simple control-label">').text(gt('Color')),
+                $('<div class="custom-color">').append(
+                    _.range(0, 11).map(function (color_label) {
+                        var id = _.uniqueId('color-label-' + color_label + '-');
+                        return $('<label>').attr('for', id).append(
+                            // radio button
+                            $('<input type="radio" name="color">')
+                                .attr('id', id)
                                 .val(color_label)
                                 .prop('checked', color_label === currentColor)
                                 .on('change', { model: this.model }, changeColorHandler),
-                                // colored box
-                                $('<span class="box">')
+                            // colored box
+                            $('<span class="box">')
+                                .attr('title', calendarUtil.getColorLabel(color_label))
                                 .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
                                 .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                            );
-                        }, this)
-                    )
+                        );
+                    }, this)
                 )
             );
         }
@@ -799,7 +799,7 @@ define('io.ox/calendar/edit/extensions', [
         }
     });
 
-    if (!capabilities.has('filestore')) {
+    if (!coreSettings.get('features/PIMAttachments', capabilities.has('filestore'))) {
         ext.point('io.ox/calendar/edit/section')
             .disable('attachments_legend')
             .disable('attachments_upload');

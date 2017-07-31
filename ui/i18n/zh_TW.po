@@ -106,10 +106,6 @@ msgid_plural "%1$d messages selected"
 msgstr[0] "已選擇 %1$d 封訊息"
 msgstr[1] "已選擇 %1$d 封訊息"
 
-#: apps/io.ox/mail/threadview.js module:io.ox/mail
-msgid "%1$d messages in this conversation"
-msgstr "此對話中的 %1$d 封訊息"
-
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
 msgid "%1$d minute"
@@ -280,6 +276,14 @@ msgstr "%1$s 已更改狀態:"
 msgid "%1$s completed"
 msgstr "已完成 %1$s"
 
+#. %1$s the producname of the drive app
+#. Example: OXDrive on MacOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Mac OS"
+msgid "%1$s for MacOS"
+msgstr "%s Mac OS 客戶端"
+
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
 msgstr "%1$s 有了新聯絡人:"
@@ -313,6 +317,41 @@ msgstr "已將 %1$s 移動至 %3$s 的 %2$s 位置"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
+msgstr "%2$s 的 %1$s"
+
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: Mailapp on iOS
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on %2$s"
+msgstr "%2$s 的 %1$s"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s on Android"
+msgstr "%s Android 客戶端"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s on Windows"
+msgstr "%s Windows 客戶端"
+
+#. %1$s the producname of the drive app
+#. Example: OXDrive on iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s on iOS"
 msgstr "%2$s 的 %1$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -616,6 +655,12 @@ msgstr "%1$s 操作"
 #: apps/io.ox/backbone/mini-views/toolbar.js module:io.ox/core
 msgid "Actions. Use cursor keys to navigate."
 msgstr "行為。使用方向鍵切換。"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Active clients"
+msgstr "Drive 客戶端"
 
 #: apps/io.ox/tasks/edit/view-template.js module:io.ox/tasks/edit
 #: apps/io.ox/tasks/print.js module:io.ox/tasks
@@ -931,6 +976,10 @@ msgstr "管理員"
 msgid "Advanced settings"
 msgstr "進階設定"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "After"
+msgstr ""
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "After a number of occurrences"
@@ -941,6 +990,14 @@ msgstr "次後"
 #: apps/io.ox/find/manager/value-model.js
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
+msgid "All"
+msgstr "全部"
+
+#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "All"
+msgctxt "dropdown"
 msgid "All"
 msgstr "全部"
 
@@ -979,6 +1036,7 @@ msgid "All files have been deleted"
 msgstr "已刪除所有檔案"
 
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
 #: apps/io.ox/search/facets/extensions.js module:io.ox/core
 msgid "All folders"
 msgstr "所有資料夾"
@@ -1008,6 +1066,12 @@ msgstr "所有群組"
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "All messages have been deleted"
 msgstr "已刪除所有訊息"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Delete all messages in this folder"
+msgid "All messages in this folder"
+msgstr "刪除此資料夾中的所有訊息"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "All messages older than %1$d days will be moved to the archive folder"
@@ -1073,6 +1137,10 @@ msgstr "發生內部錯誤"
 #: apps/io.ox/core/http_errors.js module:io.ox/core
 msgid "An unknown error occurred"
 msgstr "發生未知錯誤"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Android"
+msgstr ""
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Anniversary"
@@ -1195,15 +1263,20 @@ msgstr "封存"
 
 #. Verb: (to) archive messages
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js apps/io.ox/mail/actions.js
-#: module:io.ox/mail apps/io.ox/mail/mobile-toolbar-actions.js
-#: apps/io.ox/mail/toolbar.js
+#: apps/io.ox/mail/actions.js module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgctxt "verb"
 msgid "Archive"
 msgstr "封存"
 
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
+msgstr "封存訊息"
+
+#: apps/io.ox/core/folder/contextmenu.js module:io.ox/core
+#, fuzzy
+#| msgid "Archive messages"
+msgid "Archive old messages"
 msgstr "封存訊息"
 
 #. notification while archiving messages
@@ -1385,11 +1458,19 @@ msgstr "基礎設定"
 msgid "Bcc"
 msgstr "密件抄送"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "Before"
+msgstr ""
+
 #: apps/plugins/wizards/mandatory/main.js module:io.ox/wizards/firstStart
 msgid ""
 "Before you can continue using the product, you have to enter some basic "
 "information. It will take less than a minute."
 msgstr "在您繼續使用本產品前，請輸入一些基礎資訊，這不會花您超過一分鐘。"
+
+#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+msgid "Behavior"
+msgstr ""
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
@@ -1439,6 +1520,7 @@ msgid "Branches"
 msgstr "分支"
 
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Browser"
 msgstr "瀏覽器"
 
@@ -1750,6 +1832,12 @@ msgstr "子女"
 msgid "Chimes"
 msgstr "Chimes"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Chrome %1$s on %2$s"
+msgstr "分享「%2$s」%1$s"
+
 #: apps/io.ox/contacts/print.js module:io.ox/contacts
 msgid "City"
 msgstr "城市"
@@ -2010,13 +2098,24 @@ msgstr "連線"
 #. to configure their devices to access/sync appsuites
 #. data (f.e. install ox mail app)
 #: apps/io.ox/core/main.js module:io.ox/core
-#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
-msgid "Connect your Device"
+#, fuzzy
+#| msgid "Connect your Device"
+msgid "Connect this Device"
 msgstr "連線至裝置"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
-msgid "Connect your device"
+#, fuzzy
+#| msgid "Connect your device"
+msgid "Connect this device"
 msgstr "連線至您的裝置"
+
+#. starts the client onboarding wizard that helps users
+#. to configure their devices to access/sync appsuites
+#. data (f.e. install ox mail app)
+#: apps/io.ox/core/main.js module:io.ox/core
+#: apps/plugins/portal/client-onboarding/register.js module:plugins/portal
+msgid "Connect your Device"
+msgstr "連線至裝置"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Connection"
@@ -2080,6 +2179,12 @@ msgstr "包含"
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Contains not"
+msgstr "不包含"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Contains not"
+msgid "Contains words"
 msgstr "不包含"
 
 #: apps/io.ox/core/main.js module:io.ox/core apps/io.ox/mail/compose/view.js
@@ -2330,9 +2435,21 @@ msgstr "幣值"
 msgid "Current date"
 msgstr "目前日期"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Current role"
+msgid "Current folder"
+msgstr "目前角色"
+
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Current role"
 msgstr "目前角色"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Current Costs:"
+msgid "Current session"
+msgstr "當前費用："
 
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Currently refreshing"
@@ -2530,6 +2647,7 @@ msgid "Delete"
 msgstr "刪除"
 
 #: apps/io.ox/settings/accounts/views.js module:io.ox/settings/accounts
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Delete %1$s"
 msgstr "刪除 %1$s"
 
@@ -2892,6 +3010,20 @@ msgstr "確定要從你的檔案名稱移除延伸檔名 \".%1$s\" 嗎？"
 msgid "Do you really want to reply all or just %1$s?"
 msgstr "您真的要回覆所有人，或只要回覆 %1$s？"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Do you really want to delete this account?"
+msgid ""
+"Do you really want to terminate all active sessions except the current one?"
+msgstr "確定要刪除此帳號？"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgctxt "One file only"
+#| msgid "Do you really want to delete this version?"
+msgid "Do you really want to terminate that session?"
+msgstr "您真的要刪除這個版本嗎？"
+
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
 msgstr "您想要列印約會的詳細資訊或是精簡清單？"
@@ -3132,6 +3264,12 @@ msgstr "EAS"
 #: apps/io.ox/core/strings.js module:io.ox/core
 msgid "EB"
 msgstr "EB"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Due on %1$s"
+msgid "Edge on %1$s"
+msgstr "結束於 %s"
 
 #. Used as a button label to enter the "edit mode"
 #: apps/io.ox/backbone/mini-views/listutils.js module:io.ox/core
@@ -3577,6 +3715,10 @@ msgstr "每個人都會收到一樣的鏈結，該鏈結僅能檢視檔案或資
 msgid "Exact dates"
 msgstr "準確日期"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Exchange Active Sync"
+msgstr ""
+
 #: apps/plugins/halo/xing/register.js module:plugins/portal
 msgid "Executive"
 msgstr "執行階層"
@@ -3861,6 +4003,12 @@ msgstr "尋找空閒時間"
 msgctxt "tour"
 msgid "Finish"
 msgstr "完成"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "Firefox %1$s on %2$s"
+msgstr "%2$s 的 %1$s"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 #: apps/plugins/portal/xing/register.js module:plugins/portal
@@ -4239,6 +4387,12 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML 和純文字"
 
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "has attachments"
+msgid "Has attachment"
+msgstr "有附件"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
@@ -4424,6 +4578,12 @@ msgstr "我喜歡"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP"
 msgstr "IMAP"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Added %1$s."
+msgid "IP Address: %1$s"
+msgstr "已新增 %1$s。"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "IP phone"
@@ -4622,6 +4782,10 @@ msgstr "內部使用者"
 #: apps/io.ox/files/share/listview.js module:io.ox/files
 msgid "Internal users"
 msgstr "內部使用者"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Internet Explorer on %1$s"
+msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -5023,6 +5187,10 @@ msgstr "MB"
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "Mac App Store"
 msgstr "Mac App Store"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "MacOS"
+msgstr ""
 
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
@@ -5559,6 +5727,12 @@ msgstr "我的任務"
 msgid "Name"
 msgstr "姓名"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Drive Client"
+msgid "Native clients"
+msgstr "Drive 客戶端"
+
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
 msgid "Nature"
@@ -5685,6 +5859,10 @@ msgstr "新密碼"
 #: apps/io.ox/mail/mailfilter/settings/util.js
 msgid "New rule"
 msgstr "新增規則"
+
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
+msgid "New search ... (prototype)"
+msgstr ""
 
 #: apps/io.ox/tasks/toolbar.js module:io.ox/tasks
 msgid "New task"
@@ -6002,6 +6180,7 @@ msgstr "離線模式"
 #: apps/io.ox/core/folder/picker.js module:io.ox/core
 #: apps/io.ox/core/relogin.js apps/io.ox/core/tk/filestorageUtil.js
 #: apps/io.ox/core/tk/mobiscroll.js
+#: apps/io.ox/settings/sessions/settings/pane.js
 msgid "Ok"
 msgstr "確定"
 
@@ -6251,6 +6430,12 @@ msgstr "其他地址"
 
 #: apps/io.ox/contacts/edit/view-form.js module:io.ox/contacts
 msgid "Other address"
+msgstr "其他地址"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Other Address"
+msgid "Other clients"
 msgstr "其他地址"
 
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
@@ -7595,6 +7780,12 @@ msgstr "SMTP"
 msgid "SSL/TLS"
 msgstr "SSL/TLS"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Share %1$s \"%2$s\""
+msgid "Safari %1$s on %2$s"
+msgstr "分享「%2$s」%1$s"
+
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Sales Volume"
 msgstr "銷售量"
@@ -7707,8 +7898,9 @@ msgstr "行程"
 msgid "Sea green"
 msgstr "海藻綠"
 
+#: apps/io.ox/backbone/views/search.js module:io.ox/core
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
-#: apps/io.ox/core/desktop.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/main.js
 #: apps/io.ox/find/extensions-facets.js apps/io.ox/find/main.js
 #: apps/io.ox/find/view-tokenfield.js
 #: apps/io.ox/search/autocomplete/extensions.js apps/io.ox/search/main.js
@@ -7720,6 +7912,12 @@ msgstr "搜尋"
 #: apps/io.ox/find/view-facets.js module:io.ox/core
 msgid "Search facets"
 msgstr "搜尋 facet"
+
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgid "Searched in"
+msgid "Search in"
+msgstr "搜尋於"
 
 #: apps/io.ox/find/main.js module:io.ox/core
 msgid "Search in all folders"
@@ -7769,7 +7967,6 @@ msgstr ""
 "使用該地址，請勾選選取盒並將該欄位留白。"
 
 #: apps/io.ox/core/tk/vgrid.js module:io.ox/core
-#: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Select all"
 msgstr "選擇全部"
 
@@ -8291,10 +8488,18 @@ msgstr ""
 "抱歉，我們無法在此幫忙。您的提供者需要自 LinkedIn 取得金鑰與讀取訊息的權限。"
 
 #. Sort options drop-down
+#: apps/io.ox/mail/view-options.js module:io.ox/mail
+#, fuzzy
+#| msgctxt "dropdown"
+#| msgid "Sort by"
+msgctxt "dropdown"
+msgid "Sort"
+msgstr "排序依照"
+
+#. Sort options drop-down
 #: apps/io.ox/files/favorite/view-options.js module:io.ox/core
 #: apps/io.ox/files/share/view-options.js module:io.ox/files
-#: apps/io.ox/files/view-options.js apps/io.ox/mail/view-options.js
-#: module:io.ox/mail
+#: apps/io.ox/files/view-options.js
 msgctxt "dropdown"
 msgid "Sort by"
 msgstr "排序依照"
@@ -9308,7 +9513,8 @@ msgstr "時間"
 msgid "Time scale"
 msgstr "按分鐘設置間隔"
 
-#: apps/io.ox/core/settings/pane.js module:io.ox/core
+#: apps/io.ox/calendar/settings/timezones/favorite-view.js
+#: module:io.ox/calendar apps/io.ox/core/settings/pane.js module:io.ox/core
 msgid "Time zone"
 msgstr "時區"
 
@@ -9339,10 +9545,11 @@ msgstr ""
 "要手動新增參與者，只需要提供有效電子郵件位置 (例如 john.doe@example.com 或是 "
 "\"John Doe\" <jd@example.com>)"
 
+#: apps/io.ox/backbone/mini-views/common.js module:io.ox/core
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 #: apps/io.ox/calendar/toolbar.js apps/io.ox/calendar/util.js
 #: apps/io.ox/calendar/week/view.js apps/io.ox/core/tk/datepicker.js
-#: module:io.ox/core apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
+#: apps/io.ox/find/date/patterns.js apps/io.ox/tasks/util.js
 #: module:io.ox/tasks apps/plugins/portal/birthdays/register.js
 #: module:plugins/portal
 msgid "Today"
@@ -9527,6 +9734,16 @@ msgstr "統一"
 #: apps/io.ox/participants/views.js module:io.ox/core
 msgid "Unknown"
 msgstr "未知"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unknown Operating System"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unknown client"
+msgstr "未知的寄件者"
 
 #: apps/plugins/portal/tumblr/register.js module:io.ox/portal
 msgid "Unknown error while checking tumblr-blog."
@@ -9744,10 +9961,6 @@ msgstr "使用者名稱不能為空。"
 msgid "Vacation notice"
 msgstr "假期通知"
 
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Verhalten"
-msgstr ""
-
 #: apps/io.ox/core/viewer/views/sidebar/uploadnewversionview.js
 #: module:io.ox/core/viewer
 msgid "Version Comment"
@@ -9955,6 +10168,12 @@ msgstr ""
 #: apps/io.ox/calendar/util.js module:io.ox/calendar
 msgid "Whole day"
 msgstr "全天"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Close Window"
+msgid "Windows"
+msgstr "關閉窗口"
 
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 msgid "Wood"
@@ -10639,6 +10858,10 @@ msgstr "有參與者"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "iOS"
+msgstr ""
+
 #: apps/io.ox/search/view-template.js module:io.ox/core
 msgid "in"
 msgstr "於"
@@ -10916,6 +11139,12 @@ msgstr "當收件者存取檔案時"
 msgid "when the receivers have finished downloading the files"
 msgstr "當收件者完成下載檔案時"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Main window"
+msgid "windows"
+msgstr "主視窗"
+
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
 msgid "year(s)"
@@ -10984,6 +11213,9 @@ msgstr "您的平台"
 #~ msgid_plural "%1$d hours and %2$s"
 #~ msgstr[0] "%1$d 小時和 %2$s"
 #~ msgstr[1] "%1$d 小時和 %2$s"
+
+#~ msgid "%1$d messages in this conversation"
+#~ msgstr "此對話中的 %1$d 封訊息"
 
 #~ msgid "%1$d of %2$d"
 #~ msgstr "第 %1$d 張，共 %2$d 張"
@@ -12025,9 +12257,6 @@ msgstr "您的平台"
 #~ "客戶端 PC 作業系統：最新版本的 Windows XP、Windows 7（皆含 32 與 64 位元版"
 #~ "本）（不支援使用模擬器執行的 Mac OS X 客戶端）"
 
-#~ msgid "Close Window"
-#~ msgstr "關閉窗口"
-
 #~ msgid "Close document"
 #~ msgstr "關閉文件"
 
@@ -12255,9 +12484,6 @@ msgstr "您的平台"
 #~ msgid "Cuba"
 #~ msgstr "古巴"
 
-#~ msgid "Current Costs:"
-#~ msgstr "當前費用："
-
 #~ msgid "Current Date"
 #~ msgstr "今日"
 
@@ -12409,9 +12635,6 @@ msgstr "您的平台"
 
 #~ msgid "Delete all accounts"
 #~ msgstr "刪除所有帳號"
-
-#~ msgid "Delete all messages in this folder"
-#~ msgstr "刪除此資料夾中的所有訊息"
 
 #~ msgid "Delete drawing object"
 #~ msgstr "刪除繪圖物件"
@@ -12623,9 +12846,6 @@ msgstr "您的平台"
 
 #~ msgid "Drawing position"
 #~ msgstr "繪圖位置"
-
-#~ msgid "Drive Client"
-#~ msgstr "Drive 客戶端"
 
 #~ msgid "Drop here to upload a <b class='dndignore'>new attachment</b>"
 #~ msgstr "放到此處以上傳 <b class='dndignore'>新附件</b>"
@@ -13591,9 +13811,6 @@ msgstr "您的平台"
 #~ msgid "Mailfilter updated"
 #~ msgstr "已更新郵件篩選"
 
-#~ msgid "Main window"
-#~ msgstr "主視窗"
-
 #~ msgid "Manage applications"
 #~ msgstr "管理應用程式"
 
@@ -14207,9 +14424,6 @@ msgstr "您的平台"
 
 #~ msgid "Search within application"
 #~ msgstr "在應用程式內搜尋"
-
-#~ msgid "Searched in"
-#~ msgstr "搜尋於"
 
 #~ msgid "Searching for objects"
 #~ msgstr "搜尋物件"

@@ -474,12 +474,15 @@ define('io.ox/mail/detail/content', [
             return memo;
         }
 
-        return function (elem, isLarge) {
+        return function (elem, size) {
             var farthest = { x: elem.scrollWidth, y: elem.scrollHeight, found: false },
                 width = elem.offsetWidth,
                 height = elem.offsetHeight;
             // FF18 is behaving oddly correct, but impractical
-            if (!isLarge && (farthest.x >= width || farthest.y >= height)) {
+            // some early returns (allow 128KB for Chrome, 64KB for others)
+            if (_.device('chrome')) { if (size > 0x1FFFF) return; } else if (size > 0xFFFF) return;
+            // the following might change after a resize
+            if (farthest.x >= width || farthest.y >= height) {
                 farthest = _(elem.querySelectorAll('*')).reduce(findFarthestElement, farthest);
             }
             // only do this for absolute elements
@@ -489,7 +492,7 @@ define('io.ox/mail/detail/content', [
             }
             // look for resize event
             $(elem).one('resize', function () {
-                fixAbsolutePositions(this, isLarge);
+                fixAbsolutePositions(this, size);
             });
         };
     })();
@@ -663,7 +666,7 @@ define('io.ox/mail/detail/content', [
                 // fix absolute positions
                 // heuristic: the source must at least contain the word "absolute" somewhere
                 if ((/absolute/i).test(baton.source)) {
-                    setTimeout(fixAbsolutePositions, 10, content, baton.isLarge);
+                    setTimeout(fixAbsolutePositions, 10, content, baton.source.length);
                 }
 
             } catch (e) {
@@ -719,7 +722,7 @@ define('io.ox/mail/detail/content', [
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
                 regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
-                regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
+                regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
                 regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^)]+\)$/gm,
@@ -773,7 +776,9 @@ define('io.ox/mail/detail/content', [
                         // advance
                         str = str.substr(match.length + (options.lists ? 1 : 0));
                         // escape first (otherwise we escape our own markup later)
-                        match = _.escape(match);
+                        // however, we just escape < (not quotes, not closing brackets)
+                        // we add a \r to avoid &lt; become part of URLs
+                        match = match.replace(/</g, '\r&lt;');
                         // rulers
                         if (options.rulers) {
                             match = match.replace(regRuler, replaceRuler);
@@ -785,8 +790,6 @@ define('io.ox/mail/detail/content', [
                         // links & mail addresses
                         if (options.links && /(http|@)/i.test(match)) {
                             match = match
-                                // cover edge-case: &quot; which is hard to handle in a regex
-                                .replace(/&quot;/g, '"')
                                 .replace(regLink, function (all, href, suffix) {
                                     // substitute @ by entity to avoid double detection, e.g. if an email address is part of a link
                                     href = href.replace(/@/g, '&#64;');
@@ -794,14 +797,10 @@ define('io.ox/mail/detail/content', [
                                 })
                                 .replace(regMailAddress, function (all, address) {
                                     return '<a href="mailto:' + address + '">' + address + '</a>';
-                                })
-                                // reinsert quotes
-                                .replace(/(<[^<]+>|")/g, function (all, q) {
-                                    return q === '"' ? '&quot;' : q;
                                 });
                         }
-                        // replace newlines
-                        out += match.replace(/\n/g, '<br>');
+                        // remove \r and replace newlines
+                        out += match.replace(/\r/g, '').replace(/\n/g, '<br>');
                         continue;
                     }
 

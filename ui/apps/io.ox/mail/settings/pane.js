@@ -168,7 +168,7 @@ define('io.ox/mail/settings/pane', [
 
                 this.$el.append(
                     util.fieldset(
-                        gt('Verhalten'),
+                        gt('Behavior'),
                         util.checkbox('removeDeletedPermanently', gt('Permanently remove deleted emails'), settings),
                         contactCollect ? util.checkbox('contactCollectOnMailTransport', gt('Automatically collect contacts in the folder "Collected addresses" while sending'), settings) : [],
                         contactCollect ? util.checkbox('contactCollectOnMailAccess', gt('Automatically collect contacts in the folder "Collected addresses" while reading'), settings) : [],

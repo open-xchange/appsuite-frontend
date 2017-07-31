@@ -11,7 +11,7 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
+define('io.ox/core/a11y', [], function () {
 
     'use strict';
 
@@ -306,7 +306,9 @@ define('io.ox/core/a11y', ['settings!io.ox/core'], function (settings) {
     }
 
     function use() {
-        return !!settings.get('features/accessibility', true);
+        return require(['settings!io.ox/core'], function (settings) {
+            return !!settings.get('features/accessibility', true);
+        });
     }
 
     function collapse(action, content, opt) {

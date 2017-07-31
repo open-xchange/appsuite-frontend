@@ -911,16 +911,28 @@ define('io.ox/core/main', [
             draw: function () {
                 if (capabilities.has('!client-onboarding')) return;
 
+                var isEnabled = (function isEnabled() {
+                    // on mobile devices only clients for the current device are listed
+                    var device;
+                    if (_.device('desktop')) return true;
+                    if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
+                    if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+                    return ox.rampup.onboardingDevices[device] || false;
+                })();
+
                 this.append(
                     $('<li role="presentation">').append(
                         $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
                         //#. starts the client onboarding wizard that helps users
                         //#. to configure their devices to access/sync appsuites
                         //#. data (f.e. install ox mail app)
-                        .text(gt('Connect your Device'))
+                        .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
+                        .toggleClass('disabled ui-disabled', !isEnabled)
+                        .attr('aria-disabled', !isEnabled)
                     )
                     .on('click', function (e) {
                         e.preventDefault();
+                        if (!isEnabled) return e.stopPropagation();
                         require(['io.ox/onboarding/clients/wizard'], function (wizard) {
                             wizard.run();
                         });

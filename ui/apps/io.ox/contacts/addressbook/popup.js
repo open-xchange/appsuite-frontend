@@ -46,6 +46,7 @@ define('io.ox/contacts/addressbook/popup', [
 
     // split words
     var regSplitWords = /[\s,.\-:;<>()_@/'"]/;
+    // '
 
     // feature toggles
     var useInitials = settings.get('picker/useInitials', true),
@@ -146,6 +147,7 @@ define('io.ox/contacts/addressbook/popup', [
     var getAllMailAddresses = (function () {
 
         return function (options) {
+            options = options || {};
             return $.when(
                 fetchAddresses(options),
                 useLabels ? fetchLabels() : $.when()
@@ -168,8 +170,7 @@ define('io.ox/contacts/addressbook/popup', [
             }, options);
 
             var data = {
-                exclude_folders: options.exclude,
-                last_name: '*'
+                exclude_folders: options.exclude
             };
 
             if (options.folder === 'all') delete options.folder;
@@ -181,7 +182,8 @@ define('io.ox/contacts/addressbook/popup', [
                     admin: settings.get('showAdmin', false),
                     columns: options.columns,
                     right_hand_limit: options.limit,
-                    sort: 609
+                    sort: 608,
+                    order: 'desc'
                 },
                 // emailAutoComplete doesn't work; need to clean up client-side anyway
                 data: data
@@ -203,7 +205,7 @@ define('io.ox/contacts/addressbook/popup', [
 
         function processAddresses(list, result, hash, opt) {
 
-            list.forEach(function (item) {
+            list.forEach(function (item, rank) {
                 // remove quotes from display name (common in collected addresses)
                 item.display_name = getDisplayName(item.display_name);
                 // get sort name
@@ -222,7 +224,7 @@ define('io.ox/contacts/addressbook/popup', [
                         .join(', ');
                     // overwrite last name to get a nicer full name
                     item.last_name = item.display_name;
-                    var obj = process(item, sort_name, address, 0);
+                    var obj = process(item, sort_name, address, 0, rank);
                     if (obj) {
                         obj.full_name_html += ' <span class="gray">' + gt('Distribution list') + '</span>';
                         result.push((hash[obj.cid] = obj));
@@ -231,7 +233,7 @@ define('io.ox/contacts/addressbook/popup', [
                     if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
                     addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
+                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), rank, i);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -239,7 +241,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, i) {
+        function process(item, sort_name, address, rank, i) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -273,7 +275,8 @@ define('io.ox/contacts/addressbook/popup', [
                 mail_full_name: util.getMailFullName(item),
                 // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                 sort_name: sort_name.concat(address).join('_').toLowerCase().replace(/\s/g, '_'),
-                title: item.title
+                title: item.title,
+                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i
             };
         }
 
@@ -337,7 +340,8 @@ define('io.ox/contacts/addressbook/popup', [
                     mail_full_name: util.getMailFullName(item),
                     // all lower-case to be case-insensitive; replace spaces to better match server-side collation
                     sort_name: item.display_name.toLowerCase().replace(/\s/g, '_'),
-                    title: item.title
+                    title: item.title,
+                    rank: i
                 };
                 result.push((hash[item.cid] = item));
             });
@@ -351,6 +355,10 @@ define('io.ox/contacts/addressbook/popup', [
     function sorter(a, b) {
         // asc with locale compare
         return a.sort_name.localeCompare(b.sort_name);
+    }
+
+    function rankSorter(a, b) {
+        return a.rank - b.rank;
     }
 
     //
@@ -500,7 +508,7 @@ define('io.ox/contacts/addressbook/popup', [
                     ref: 'io.ox/contacts/addressbook-popup/list',
                     selection: { behavior: 'simple' }
                 });
-                this.$body.append(this.listView.render().$el);
+                this.$body.append(this.listView.render().$el.addClass('address-picker'));
             },
             onOpen: function () {
 
@@ -538,13 +546,7 @@ define('io.ox/contacts/addressbook/popup', [
                     query = $.trim(query);
                     var result, isSearch = query.length && query !== '@';
                     if (isSearch) {
-                        // split query into single words (without leading @; covers edge-case)
-                        var words = query.replace(/^@/, '').split(regSplitWords), firstWord = words[0];
-                        // use first word for the index-based lookup
-                        result = searchIndex(this.index, firstWord);
-                        result = this.resolveItems(result).sort(sorter);
-                        // final filter to match all words
-                        result = matchAllWords(result, words.slice(1));
+                        result = search(query, this.index, this.store.getHash());
                         // render
                         var json = JSON.stringify(result);
                         if (json === this.lastJSON) return;
@@ -598,6 +600,9 @@ define('io.ox/contacts/addressbook/popup', [
                         setHash: function (data) {
                             // full data
                             hash = data;
+                        },
+                        getHash: function () {
+                            return hash;
                         },
                         add: function (list) {
                             _(list).each(function (id) { selection[id] = true; });
@@ -691,63 +696,11 @@ define('io.ox/contacts/addressbook/popup', [
         })
         .build(function () {
 
-            // use a template for maximum performance
-            // yep, no extensions here; too slow for find-as-you-type
-            var template = _.template(
-                '<% _(list).each(function (item) { %>' +
-                '<li class="list-item selectable" aria-selected="false" role="option" tabindex="-1" data-cid="<%- item.cid %>">' +
-                '  <div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
-                '  <div class="list-item-content">' +
-                '    <% if (item.list) { %>' +
-                '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify"></i></div>' +
-                '    <% } else if (item.label) { %>' +
-                '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users"></i></div>' +
-                '    <% } else if (item.image) { %>' +
-                '      <div class="contact-picture image" data-original="<%= item.image %>" aria-hidden="true"></div>' +
-                '    <% } else { %>' +
-                '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
-                '    <% } %>' +
-                '    <div class="name">' +
-                '       <%= item.full_name_html || item.email || "\u00A0" %>' +
-                '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
-                '    </div>' +
-                '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
-                '  </div>' +
-                '</li>' +
-                '<% }); %>'
-            );
-
-            this.$el.on('appear', function (e) {
-                // track contact pictures that appear; we assume they get cached
-                appeared[$(e.target).attr('data-original')] = true;
-            });
+            this.$el.on('appear', onAppear);
 
             this.renderItems = function (list, options) {
-                // avoid duplicates
-                list = _(list).filter(function (item) {
-                    if (item.label) return true;
-                    if (this[item.email]) return false; return (this[item.email] = true);
-                }, {});
-                // get defaults
-                options = _.extend({
-                    limit: options.isSearch ? LIMITS.search : LIMITS.render,
-                    offset: 0
-                }, options);
-                // empty?
-                if (!list.length) return this.renderEmpty(options);
-                // get subset; don't draw more than n items by default
-                var subset = list.slice(options.offset, options.limit),
-                    $el = this.$('.list-view');
-                // clear if offset is zero
-                if (options.offset === 0) $el[0].innerHTML = '';
-                $el[0].innerHTML += template({ list: subset });
-                if (options.offset === 0) $el.scrollTop(0);
-                $el.data({ list: list, options: options });
-                this.$('.contact-picture[data-original]').each(function () {
-                    // appeared before? show now; no lazyload; better experience
-                    var node = $(this), url = node.attr('data-original');
-                    if (appeared[url]) node.css('background-image', 'url(' + url + ')'); else node.lazyload();
-                });
+                options.renderEmpty = this.renderEmpty.bind(this, options);
+                renderItems.call(this.$('.list-view'), list, options);
                 // restore selection
                 var ids = this.store.getIds();
                 this.listView.selection.set(ids);
@@ -793,11 +746,7 @@ define('io.ox/contacts/addressbook/popup', [
             });
 
             this.resolveItems = function (ids) {
-                return _(ids)
-                    .chain()
-                    .map(function (cid) { return this.store.resolve(cid); }, this)
-                    .compact()
-                    .value();
+                return resolveItems(this.store.getHash(), ids);
             };
 
             this.flattenItems = function (ids) {
@@ -840,6 +789,84 @@ define('io.ox/contacts/addressbook/popup', [
         //#. Context: Add selected contacts; German "Auswählen", for example
         .addButton({ label: gt.pgettext('select-contacts', 'Select'), action: 'select' })
         .open();
+    }
+
+    function search(query, index, hash, ranked) {
+        // split query into single words (without leading @; covers edge-case)
+        var words = query.replace(/^@/, '').split(regSplitWords), firstWord = words[0], result;
+        // use first word for the index-based lookup
+        result = searchIndex(index, firstWord);
+        result = resolveItems(hash, result).sort(ranked ? rankSorter : sorter);
+        // final filter to match all words
+        return matchAllWords(result, words.slice(1));
+    }
+
+    // use a template for maximum performance
+    // yep, no extensions here; too slow for find-as-you-type
+    var template = _.template(
+        '<% _(list).each(function (item) { %>' +
+        '<li class="list-item selectable" aria-selected="false" role="option" tabindex="-1" data-cid="<%- item.cid %>">' +
+        '  <div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
+        '  <div class="list-item-content">' +
+        '    <% if (item.list) { %>' +
+        '      <div class="contact-picture distribution-list" aria-hidden="true"><i class="fa fa-align-justify"></i></div>' +
+        '    <% } else if (item.label) { %>' +
+        '      <div class="contact-picture label" aria-hidden="true"><i class="fa fa-users"></i></div>' +
+        '    <% } else if (item.image) { %>' +
+        '      <div class="contact-picture image" data-original="<%= item.image %>" aria-hidden="true"></div>' +
+        '    <% } else { %>' +
+        '      <div class="contact-picture initials <%= item.initial_color %>" aria-hidden="true"><%- item.initials %></div>' +
+        '    <% } %>' +
+        '    <div class="name">' +
+        '       <%= item.full_name_html || item.email || "\u00A0" %>' +
+        '       <% if (item.department) { %><span class="gray">(<%- item.department %>)</span><% } %>' +
+        '    </div>' +
+        '    <div class="email gray"><%- item.caption || "\u00A0" %></div>' +
+        '  </div>' +
+        '</li>' +
+        '<% }); %>'
+    );
+
+    function onAppear(e) {
+        // track contact pictures that appear; we assume they get cached
+        appeared[$(e.target).attr('data-original')] = true;
+    }
+
+    function renderItems(list, options) {
+        // avoid duplicates
+        list = _(list).filter(function (item) {
+            if (item.label) return true;
+            if (this[item.email]) return false; return (this[item.email] = true);
+        }, {});
+        // get defaults
+        options = _.extend({
+            limit: options.isSearch ? LIMITS.search : LIMITS.render,
+            offset: 0
+        }, options);
+        // empty?
+        if (!list.length) {
+            if (options.renderEmpty) options.renderEmpty(options);
+        }
+        // get subset; don't draw more than n items by default
+        var subset = list.slice(options.offset, options.limit);
+        // clear if offset is zero
+        if (options.offset === 0) this[0].innerHTML = '';
+        this[0].innerHTML += template({ list: subset });
+        if (options.offset === 0) this.scrollTop(0);
+        this.data({ list: list, options: options });
+        this.find('.contact-picture[data-original]').each(function () {
+            // appeared before? show now; no lazyload; better experience
+            var node = $(this), url = node.attr('data-original');
+            if (appeared[url]) node.css('background-image', 'url(' + url + ')'); else node.lazyload();
+        });
+    }
+
+    function resolveItems(hash, ids) {
+        return _(ids)
+            .chain()
+            .map(function (cid) { return hash[cid]; })
+            .compact()
+            .value();
     }
 
     /* Debug lines
@@ -1027,6 +1054,10 @@ define('io.ox/contacts/addressbook/popup', [
         buildIndex: buildIndex,
         searchIndex: searchIndex,
         getAllMailAddresses: getAllMailAddresses,
+        sorter: sorter,
+        onAppear: onAppear,
+        renderItems: renderItems,
+        search: search,
         TokenView: TokenView,
         open: open
     };

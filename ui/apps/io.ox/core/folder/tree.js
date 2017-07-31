@@ -34,7 +34,8 @@ define('io.ox/core/folder/tree', [
             'click .contextmenu-control': 'onToggleContextMenu',
             'contextmenu .folder.selectable[aria-haspopup="true"], .contextmenu-control': 'onContextMenu',
             'keydown .folder.selectable[aria-haspopup="true"]': 'onKeydownMenuKeys',
-            'keydown .folder.selectable': 'onKeydown'
+            'keydown .folder.selectable': 'onKeydown',
+            'click .folder.selectable.selected': 'onClick'
         },
 
         initialize: function (options) {
@@ -86,6 +87,9 @@ define('io.ox/core/folder/tree', [
             var id = node.folder.replace(/\s/g, '_');
             this.trigger('appear:' + id, node);
         },
+
+        // See Bug: 54812 (Note: This should not be necessary, but node does not get focus otherwise)
+        onClick: function (e) { $(e.currentTarget).focus(); },
 
         // counter-part
         onAppear: function (id, handler) {

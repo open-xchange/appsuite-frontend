@@ -574,7 +574,8 @@ define('io.ox/calendar/invitations/register', [
                 .then(self.onActionSuccess.bind(self, confirmation), self.onActionFail.bind(self, action));
             }
 
-            if (this.type === 'appointment') {
+            // change-confirmation action is used to do conflict checks. That's only needed for appointments that are not declined
+            if (this.type === 'appointment' && action !== 'decline') {
                 return ox.load(['io.ox/calendar/actions/change-confirmation']).done(function (action) {
                     action(data).done(performConfirm).fail(function (err) {
                         if (err) notifications.yell(err);

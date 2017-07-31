@@ -29,6 +29,17 @@ define('io.ox/backbone/mini-views/common', [
             });
         }
     };
+    // used by passwordfield, because it doesn't trigger a change event automatically
+    var pasteHelper =  function (e) {
+        if (!e || e.type !== 'paste') return;
+        if (e.originalEvent.clipboardData.types.indexOf('text/plain') !== -1) {
+            var self = this;
+            // use a one time listener for the input Event, so we can trigger the changes after the input updated (onDrop is still to early)
+            this.$el.one('input', function () {
+                self.$el.trigger('change');
+            });
+        }
+    };
 
     //
     // <input type="text">
@@ -72,12 +83,17 @@ define('io.ox/backbone/mini-views/common', [
 
     var PasswordView = AbstractView.extend({
         el: '<input type="password" class="form-control">',
-        events: { 'change': 'onChange' },
+        events: {
+            'change': 'onChange',
+            'paste': 'onPaste'
+        },
         onChange: function () {
             var value = this.$el.val();
             if (/^\*$/.test(value)) value = null;
             this.model.set(this.name, value, { validate: true });
         },
+        // paste doesn't trigger a change event
+        onPaste: pasteHelper,
         setup: function () {
             this.listenTo(this.model, 'change:' + this.name, this.update);
         },
@@ -174,6 +190,7 @@ define('io.ox/backbone/mini-views/common', [
         },
         render: function () {
             this.$el.attr({ name: this.name });
+            if (this.options.id) this.$el.attr('id', this.options.id);
             if (this.rows) this.$el.attr('rows', this.rows);
             if (this.options.maxlength) this.$el.attr('maxlength', this.options.maxlength);
             this.update();
@@ -288,8 +305,9 @@ define('io.ox/backbone/mini-views/common', [
 
     var CustomRadioView = RadioView.extend({
         renderLabel: function (data) {
-            return $('<label>').append(
-                this.renderInput(data),
+            var id = this.options.id || _.uniqueId('custom-');
+            return $('<label>').attr('for', id).append(
+                this.renderInput(data).attr('id', id),
                 this.renderToggle(data),
                 $.txt(data.label)
             );
@@ -345,20 +363,31 @@ define('io.ox/backbone/mini-views/common', [
                 this.model.set(this.name, t);
             },
             update: function () {
-                this.$el.val(moment(this.model.get(this.name)).format(this.format));
+                var date = this.model.get(this.name);
+                this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
+            },
+            getFormattedDate: function (date) {
+                return this.isToday(date) ? gt('Today') : moment(date).utc(true).format(this.format);
+            },
+            isToday: function (date) {
+                return moment(date).utc(true).isSame(moment().utc(true), 'day');
             },
             render: function () {
                 InputView.prototype.render.call(this);
                 var view = this;
                 require(['io.ox/backbone/views/datepicker'], function (DatePicker) {
-                    new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core') })
-                        .attachTo(view.$el)
-                        .on('select', function (date) {
-                            view.model.set(view.name, date.valueOf());
-                        })
-                        .on('before:open', function () {
-                            this.setDate(view.model.get('currentWeek'));
-                        });
+                    // need to be async here otherwise parent is undefined
+                    setTimeout(function () {
+                        new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
+                            .attachTo(view.$el)
+                            .on('select', function (date) {
+                                console.log('select handler', date.valueOf());
+                                view.model.set(view.name, date.valueOf());
+                            })
+                            .on('before:open', function () {
+                                this.setDate(view.model.get('currentWeek'));
+                            });
+                    });
                 });
                 return this;
             }
@@ -455,6 +484,15 @@ define('io.ox/backbone/mini-views/common', [
         }
     });
 
+    // most needed pattern
+    function getInputWithLabel(id, label, model) {
+        var guid = _.uniqueId('form-control-label-');
+        return [
+            $('<label>').attr('for', guid).text(label),
+            new InputView({ name: id, model: model, id: guid }).render().$el
+        ];
+    }
+
     return {
         AbstractView: AbstractView,
         InputView: InputView,
@@ -470,6 +508,7 @@ define('io.ox/backbone/mini-views/common', [
         DateView: DateView,
         ErrorView: ErrorView,
         FormView: FormView,
-        DropdownLinkView: DropdownLinkView
+        DropdownLinkView: DropdownLinkView,
+        getInputWithLabel: getInputWithLabel
     };
 });

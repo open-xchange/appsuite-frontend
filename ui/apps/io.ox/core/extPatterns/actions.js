@@ -51,8 +51,9 @@ define('io.ox/core/extPatterns/actions', [
     // check if an action can be called based on a given list of items
     var check = function (ref, array) {
         var collection = new Collection(array);
-        return collection.getProperties().then(function () {
-            return processActions(ref, collection, ext.Baton.ensure(array)).then(function () {
+        // pipe/then
+        return collection.getProperties().pipe(function () {
+            return processActions(ref, collection, ext.Baton.ensure(array)).pipe(function () {
                 return _(arguments).any(function (bool) { return bool === true; }) ?
                     $.Deferred().resolve() :
                     $.Deferred().reject();
@@ -227,7 +228,7 @@ define('io.ox/core/extPatterns/actions', [
         // resolve collection's properties
         var linksResolved = new $.Deferred();
 
-        collection.getProperties().then(
+        collection.getProperties().pipe(
             function () {
                 // get links (check for requirements)
                 var links = ext.point(ref).map(function (link) {
@@ -249,7 +250,7 @@ define('io.ox/core/extPatterns/actions', [
                         return def.resolve({ link: link, state: false });
                     }
                     // combine actions
-                    return processActions(link.ref, collection, baton).then(function () {
+                    return processActions(link.ref, collection, baton).pipe(function () {
                         var state = _(arguments).any(function (bool) { return bool === true; });
                         return { link: link, state: state };
                     });

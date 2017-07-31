@@ -22,12 +22,16 @@
         display: inline-block;
 
         > i.toggle-caret {
-            width: 7px;
+            width: 8px;
+        }
+
+        > .summary {
+            margin-right: 8px;
         }
 
         > i.fa-paperclip {
             color: #333;
-            padding: 0 0.5em;
+            width: 24px;
         }
     }
 
@@ -70,7 +74,7 @@
         display: none;
     }
 
-    &.open .list-container { display: block; margin-top: 10px; }
+    &.open .list-container { display: block; margin-top: 10px; padding-left: 24px; }
     &.open.show-preview .list-container { display: none; }
     &.open.show-preview .preview-container { display: block; }
     &.open.show-preview ul.inline-items li.item { display: inline-block; }
@@ -81,7 +85,7 @@
     .scroll-left, .scroll-right {
         position: absolute;
         top: 10px;
-        width: 20px;
+        width: 23px; /* 24 - 1 */
         height: 120px;
         z-index: 2;
         background-color: #888;
@@ -163,11 +167,10 @@
     }
 
     ul.inline-items > li.item {
-        background-color: #f5f5f5;
-        border: 1px solid #ddd;
-        padding: 1px 5px 1px 5px;
-        margin: 0 5px 2px 0;
-        .border-radius(@border-radius-small);
+
+        background-color: #f0f0f0;
+        padding: 2px 8px;
+        margin: 0 2px 2px 0;
 
         .progress {
             background-color: rgba(255, 0, 0, 0.3);
@@ -228,8 +231,8 @@
 
         // no clue but helps keeping proper scrollHeight
         height: 140px;
-        // yep, 20 + 1
-        margin: 0 21px;
+        // yep, 24 (.scroll-left and .scroll-right have 24 - 1)
+        margin: 0 24px;
         white-space: nowrap;
         overflow: hidden;
         padding: 10px 0;

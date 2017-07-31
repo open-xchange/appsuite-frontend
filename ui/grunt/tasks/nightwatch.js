@@ -20,6 +20,24 @@ module.exports = function (grunt) {
 
     var config = grunt.config('local.nightwatch') || {};
 
+    if (!grunt.config('local.appserver.fixturesPath')) {
+        grunt.config('local.appserver.fixturesPath', 'e2e/fixtures');
+    }
+
+    grunt.config.merge({
+        copy: {
+            specs_nightwatch: {
+                files: [{
+                    expand: true,
+                    src: ['fixtures/**/*'],
+                    dest: 'build/e2e',
+                    cwd: 'nightwatch/'
+                }]
+            }
+        }
+    });
+
+
     grunt.config.merge({
         nightwatch: {
             options: config

@@ -13,13 +13,12 @@
 
 define([
     'io.ox/mail/mailfilter/settings/model',
+    'io.ox/core/api/mailfilter',
     'gettext!io.ox/mail',
-    'io.ox/mail/mailfilter/settings/filter/tests/register',
-    'io.ox/mail/mailfilter/settings/filter/actions/register',
     'io.ox/core/extensions',
     'io.ox/mail/mailfilter/settings/filter/defaults',
     'fixture!io.ox/mail/mailfilter/config.json'
-], function (mailfilterModel, gt, conditionsExtensions, actionsExtensions, ext, defaults, fixtureMailfilterConfig) {
+], function (mailfilterModel, api, gt, ext, defaults, fixtureMailfilterConfig) {
 
     'use strict';
 
@@ -94,17 +93,27 @@ define([
 
         describe('title', function () {
 
-            var model;
+            var model,
+                def = $.Deferred().resolve(fixtureMailfilterConfig),
+                stub;
 
             beforeEach(function () {
+
+                stub = sinon.stub(api, 'getConfig').returns(def);
                 model = factory.create(mailfilterModel.protectedMethods.provideEmptyModel());
 
-                conditionsExtensions.processConfig(fixtureMailfilterConfig);
-                actionsExtensions.processConfig(fixtureMailfilterConfig);
+                return require(['io.ox/mail/mailfilter/settings/filter/tests/register', 'io.ox/mail/mailfilter/settings/filter/actions/register']).then(function (conditionsExtensions, actionsExtensions) {
+                    conditionsExtensions.processConfig(fixtureMailfilterConfig);
+                    actionsExtensions.processConfig(fixtureMailfilterConfig);
 
-                ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
-                ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+                    ext.point('io.ox/mail/mailfilter/tests').invoke('initialize', null, { defaults: defaults, conditionsOrder: [] });
+                    ext.point('io.ox/mail/mailfilter/actions').invoke('initialize', null, { defaults: defaults, actionsOrder: [] });
+                });
 
+            });
+
+            afterEach(function () {
+                stub.restore();
             });
 
             it.skip('should change for default values', function () {

@@ -392,6 +392,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
             render: function () {
 
                 if (_.device('smartphone')) return;
+                var self = this;
 
                 function clickEdit(e) {
                     if ((e.type === 'click') || (e.which === 13)) {
@@ -437,7 +438,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                                 );
                                 this.$el.append(
                                     $('<div class="signature-preview">').append(
-                                        $('<div>').on('click', clickEdit.bind(this)).append(content)
+                                        $('<div>').on('click', clickEdit.bind(self)).append(content)
                                     )
                                 );
                                 onChangeDefault();

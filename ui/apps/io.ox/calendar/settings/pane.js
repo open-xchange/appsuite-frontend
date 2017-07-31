@@ -113,17 +113,17 @@ define('io.ox/calendar/settings/pane', [
                             // start
                             $('<div class="col-md-4">').append(
                                 $('<label for="settings-startTime">').text(gt('Start of working time')),
-                                new mini.SelectView({ name: 'startTime', model: settings, list: this.getTimeOptions() }).render().$el
+                                new mini.SelectView({ id: 'settings-startTime', name: 'startTime', model: settings, list: this.getTimeOptions() }).render().$el
                             ),
                             // end
                             $('<div class="col-md-4">').append(
                                 $('<label for="settings-endTime">').text(gt('End of working time')),
-                                new mini.SelectView({ name: 'endTime', model: settings, list: this.getTimeOptions() }).render().$el
+                                new mini.SelectView({ id: 'settings-endTime', name: 'endTime', model: settings, list: this.getTimeOptions() }).render().$el
                             ),
                             // scale
                             $('<div class="col-md-4">').append(
                                 $('<label for="settings-interval">').text(gt('Time scale')),
-                                new mini.SelectView({ name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
+                                new mini.SelectView({ id: 'settings-interval', name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
                             )
                         ),
                         // declined
@@ -149,12 +149,12 @@ define('io.ox/calendar/settings/pane', [
                             // first day
                             $('<div class="col-md-4">').append(
                                 $('<label for="settings-workweekStart">').text(gt('Week start')),
-                                new mini.SelectView({ name: 'workweekStart', model: settings, list: this.getWeekDays(), integer: true }).render().$el
+                                new mini.SelectView({ id: 'settings-workweekStart', name: 'workweekStart', model: settings, list: this.getWeekDays(), integer: true }).render().$el
                             ),
                             // work week length
                             $('<div class="col-md-4">').append(
                                 $('<label for="settings-numDaysWorkweek">').text(gt('Workweek length')),
-                                new mini.SelectView({ name: 'numDaysWorkweek', model: settings, list: this.getWeekLength(), integer: true }).render().$el
+                                new mini.SelectView({ id: 'settings-numDaysWorkweek', name: 'numDaysWorkweek', model: settings, list: this.getWeekLength(), integer: true }).render().$el
                             )
                         )
                     )

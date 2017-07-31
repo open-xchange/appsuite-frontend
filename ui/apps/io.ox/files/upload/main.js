@@ -169,8 +169,6 @@ define('io.ox/files/upload/main', [
                 estimation = time / progress - time || 0,
                 counter = 0;
 
-            console.log('get estimated time', totalSize);
-
             do {
                 estimation = Math.round(estimation / limits[counter].limit);
                 counter++;
@@ -215,7 +213,6 @@ define('io.ox/files/upload/main', [
                     //#. %1$s progress of currently uploaded files in percent
                     gt('%1$s completed', val + '%')
                 );
-                console.log('trigger progress on upload', baton.estimatedTime, val);
 
                 progressWrapper.find('.estimated-time').text(
                     //#. %1$s remaining upload time

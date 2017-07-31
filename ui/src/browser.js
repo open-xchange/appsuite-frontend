@@ -197,6 +197,8 @@
 
         }
 
+        return us.browser;
+
     }
 
     // first detection
@@ -260,6 +262,8 @@
     us.displayInfo = display;
     // extend underscore utilities
     var underscoreExtends = {
+
+        detectBrowser: detectBrowser,
 
         // make this public so that it can be patched by UI plugins
         hasNativeEmoji: function () {

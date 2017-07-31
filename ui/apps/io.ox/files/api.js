@@ -432,7 +432,7 @@ define('io.ox/files/api', [
                 }
                 return util.getShardingRoot((file.meta && file.meta.previewUrl) || url + query + '&delivery=view' + scaling + '&format=preview_image&content_type=image/jpeg');
             case 'cover':
-                url = ox.apiRoot + '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
+                url = '/image/file/mp3Cover?folder=' + folder + '&id=' + id + scaling + sessionData + '&content_type=image/jpeg&' + buster;
                 break;
             case 'play':
                 url = url + query + '&delivery=view';

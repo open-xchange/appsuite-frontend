@@ -1,0 +1,39 @@
+.rightside .scrollable-pane .io-ox-session-settings {
+
+    .settings-list-item {
+        position: relative;
+
+        > *:not(.list-item-controls) {
+            .flex-display(flex);
+            .flex-wrap(wrap);
+            padding-top: 0;
+            white-space: nowrap;
+            width: 100%;
+
+            > * {
+                .flex(1);
+                padding-top: 16px;
+                padding-right: 53px;
+            }
+        }
+
+        > *:not(:last-child) {
+            padding-bottom: 0;
+        }
+
+        .list-item-controls {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .list-control-placeholder {
+            width: 53px;
+        }
+
+        .addition-information {
+            color: #666;
+        }
+    }
+
+}

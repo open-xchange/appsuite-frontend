@@ -14,16 +14,137 @@
 define('io.ox/mail/view-options', [
     'io.ox/core/extensions',
     'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/common',
     'io.ox/core/api/account',
     'gettext!io.ox/mail',
     'io.ox/core/commons',
+    'io.ox/core/folder/contextmenu',
+    'io.ox/backbone/views/search',
+    'io.ox/core/api/collection-loader',
+    'io.ox/core/http',
+    'io.ox/mail/api',
     'settings!io.ox/mail'
-], function (ext, Dropdown, account, gt, commons, settings) {
+], function (ext, Dropdown, mini, account, gt, commons, contextmenu, SearchView, CollectionLoader, http, mailAPI, settings) {
 
     'use strict';
 
-    // no view options on smartphones
-    //if (_.device('smartphone')) return;
+    //
+    // Top
+    //
+    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+        id: 'search',
+        index: 100,
+        draw: function (baton) {
+
+            var listView = baton.app.listView;
+
+            var collectionLoader = new CollectionLoader({
+                module: 'mail',
+                mode: 'search',
+                getQueryParams: function (params) {
+
+                    var criteria = params.criteria, filters = [], start, end,
+                        // special support for main languages (en, de, fr, es)
+                        from = criteria.from || criteria.von || criteria.de,
+                        to = criteria.to || criteria.an || criteria.a || criteria.para,
+                        subject = criteria.subject || criteria.betreff || criteria.sujet || criteria.asunto,
+                        year = criteria.year || criteria.y || criteria.jahr || criteria.ano;
+
+                    if (from) filters.push(['=', { field: 'from' }, from]);
+                    if (to) filters.push(['or', ['=', { field: 'to' }, to], ['=', { field: 'cc' }, to], ['=', { field: 'bcc' }, to]]);
+                    if (subject) filters.push(['=', { field: 'subject' }, subject]);
+                    if (year) {
+                        start = Date.UTC(year, 0, 1);
+                        end = Date.UTC(year, 11, 31);
+                        filters.push(['and', ['>', { field: 'received_date' }, String(start)], ['<', { field: 'received_date' }, String(end)]]);
+                    }
+                    if (criteria.words) {
+                        _(criteria.words.split(' ')).each(function (word) {
+                            filters.push(['or', ['=', { field: 'content' }, word], ['=', { field: 'subject' }, word]]);
+                        });
+                    }
+                    if (criteria.addresses) {
+                        _(criteria.addresses.split(' ')).each(function (address) {
+                            filters.push(['or', ['=', { field: 'to' }, address], ['=', { field: 'cc' }, address], ['=', { field: 'bcc' }, address], ['=', { field: 'content' }, address]]);
+                        });
+                    }
+                    if (criteria.attachment === 'true') filters.push(['=', { field: 'content_type' }, 'multipart/mixed']);
+                    if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
+                    if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
+
+                    var folder = criteria.folder === 'all' ? 'default0/virtual/all' : baton.app.folder.get();
+
+                    return {
+                        action: 'search',
+                        folder: folder,
+                        columns: '102,600,601,602,603,604,605,606,607,608,610,611,614,652,656,X-Open-Xchange-Share-URL',
+                        sort: params.sort || '610',
+                        order: params.order || 'desc',
+                        timezone: 'utc',
+                        data: { filter: ['and'].concat(filters) }
+                    };
+                },
+                fetch: function (params) {
+                    return http.wait().then(function () {
+                        return http.PUT({
+                            module: 'mail',
+                            params: _(params).omit('data'),
+                            data: params.data
+                        });
+                    });
+                },
+                each: function (obj) {
+                    mailAPI.pool.add('detail', obj);
+                },
+                PRIMARY_PAGE_SIZE: 100,
+                SECONDARY_PAGE_SIZE: 100
+            });
+
+            this.append(
+                new SearchView({ point: 'io.ox/mail/search/dropdown' })
+                .build(function () {
+                    var view = this;
+                    baton.app.on('folder:change', function () {
+                        view.cancel();
+                    });
+                    baton.app.folderView.tree.$el.on('click', function () {
+                        view.cancel();
+                    });
+                })
+                .on('search', function (criteria) {
+                    listView.connect(collectionLoader);
+                    listView.model.set({ criteria: criteria, thread: false, sort: 610, order: 'desc' });
+                    listView.$el.parent().find('.grid-options [data-name="thread"]').addClass('disabled');
+                })
+                .on('cancel', function () {
+                    listView.connect(mailAPI.collectionLoader);
+                    listView.model.unset('criteria');
+                    listView.$el.parent().find('.grid-options [data-name="thread"]').removeClass('disabled');
+                })
+                .render().$el
+            );
+        }
+    });
+
+    ext.point('io.ox/mail/search/dropdown').extend({
+        id: 'default',
+        index: 100,
+        render: function () {
+            this.model.set('folder', 'current');
+            this.$dropdown.append(
+                this.select('folder', gt('Search in'), [{ value: 'current', label: gt('Current folder') }, { value: 'all', label: gt('All folders') }]),
+                this.input('subject', gt('Subject')),
+                this.input('from', gt('From')),
+                this.input('to', gt('To')),
+                //#. Context: mail search. Label for <input>.
+                this.input('words', gt('Contains words')),
+                this.dateRange(),
+                //#. Context: mail search. Label for checbbox.
+                this.checkbox('attachment', gt('Has attachments')),
+                this.button()
+            );
+        }
+    });
 
     ext.point('io.ox/mail/view-options').extend({
         id: 'sort',
@@ -71,9 +192,9 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
         id: 'dropdown',
-        index: 1000,
+        index: 300,
         draw: function (baton) {
 
             var app = baton.app, model = app.props;
@@ -81,7 +202,7 @@ define('io.ox/mail/view-options', [
             var dropdown = new Dropdown({
                 caret: true,
                 //#. Sort options drop-down
-                label: gt.pgettext('dropdown', 'Sort by'),
+                label: gt.pgettext('dropdown', 'Sort'),
                 model: model
             });
 
@@ -101,46 +222,53 @@ define('io.ox/mail/view-options', [
         }
     });
 
-    function toggleControl(i, state) {
-        i.attr('class', state ? 'fa fa-check-square-o' : 'fa fa-square-o').parent().attr('aria-checked', state);
-    }
-
-    function toggleSelection(e) {
-        if (e.type === 'click' || e.which === 32) {
-            e.preventDefault();
-            var i = $(this).find('i'), selection = e.data.baton.app.listView.selection;
-            if (i.hasClass('fa-check-square-o')) selection.selectNone(); else selection.selectAll();
-            // get the focus back
-            $(this).focus();
-        }
-    }
-
-    ext.point('io.ox/mail/list-view/toolbar/top').extend({
-        id: 'select-all',
+    ext.point('io.ox/mail/all-options').extend({
+        id: 'default',
         index: 100,
         draw: function (baton) {
-            this.append(
-                $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
-                    $('<i class="fa fa-square-o" aria-hidden="true">'),
-                    $.txt(gt('Select all'))
-                )
-                .on('click', { baton: baton }, toggleSelection)
-                .on('dblclick', function (e) {
-                    e.stopPropagation();
-                })
-                .on('keydown', { baton: baton }, toggleSelection)
-            );
 
-            var i = this.find('.select-all > i');
+            var app = baton.app,
+                extensions = contextmenu.extensions,
+                node = this.$ul;
 
-            baton.view.listView.on({
-                'selection:all': function () {
-                    toggleControl(i, true);
-                },
-                'selection:subset': function () {
-                    toggleControl(i, false);
-                }
+            this.header(gt('All messages in this folder'));
+
+            app.folder.getData().done(function (data) {
+                var baton = new ext.Baton({ data: data, module: 'mail' });
+                ['markFolderSeen', 'moveAllMessages', 'archive', 'divider', 'empty'].forEach(function (id) {
+                    extensions[id].call(node, baton);
+                });
             });
+        }
+    });
+
+    ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
+        id: 'all',
+        index: 200,
+        draw: function (baton) {
+
+            var app = baton.app, model = app.props;
+
+            var dropdown = new Dropdown({
+                caret: true,
+                //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
+                label: gt.pgettext('dropdown', 'All'),
+                model: model
+            });
+
+            ext.point('io.ox/mail/all-options').invoke('draw', dropdown, baton);
+
+            this.append(dropdown.render().$el.addClass('grid-options toolbar-item pull-right margin-auto').on('dblclick', function (e) {
+                e.stopPropagation();
+            }));
+
+            function toggle() {
+                var folder = app.folder.get();
+                dropdown.$el.toggle(folder !== 'virtual/all-unseen');
+            }
+
+            app.on('folder:change', toggle);
+            toggle();
         }
     });
 
@@ -156,13 +284,13 @@ define('io.ox/mail/view-options', [
 
     function onFolderViewOpen(app) {
         app.getWindow().nodes.sidepanel.show();
-        app.getWindow().nodes.main.find('.list-view-control').removeClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').hide();
     }
 
     function onFolderViewClose(app) {
         // hide sidepanel so invisible objects are not tabbable
         app.getWindow().nodes.sidepanel.hide();
-        app.getWindow().nodes.main.find('.list-view-control').addClass('toolbar-bottom-visible');
+        app.getWindow().nodes.main.find('.toolbar-item[data-action="open-folder-view"]').show();
     }
 
     ext.point('io.ox/mail/list-view/toolbar/bottom').extend({
@@ -171,7 +299,7 @@ define('io.ox/mail/view-options', [
         draw: function (baton) {
 
             this.append(
-                $('<a href="#" role="button" class="toolbar-item" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
+                $('<a href="#" role="button" class="toolbar-item pull-left" data-action="open-folder-view">').attr('aria-label', gt('Open folder view')).append(
                     $('<i class="fa fa-angle-double-right" aria-hidden="true">').attr('title', gt('Open folder view'))
                 ).on('click', { app: baton.app, state: true }, toggleFolderView)
             );

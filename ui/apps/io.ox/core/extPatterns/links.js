@@ -264,7 +264,8 @@ define('io.ox/core/extPatterns/links', [
                 // empty?
                 if (count === 0) nav.addClass('empty').removeAttr('role');
             })
-            .then(function () {
+            // pipe vs then
+            .pipe(function () {
                 return nav;
             });
     };

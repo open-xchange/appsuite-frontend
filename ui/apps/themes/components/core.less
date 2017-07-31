@@ -427,7 +427,6 @@ html:not(.internet-explorer) {
 }
 
 // custom checkboxes
-
 .checkbox.custom, .radio.custom {
 
     margin-bottom: 8px;
@@ -439,11 +438,13 @@ html:not(.internet-explorer) {
     label { padding: 0; }
 
     input {
-        height: 17px;
-        width: 16px;
         margin: 0;
         top: 3px;
         left: 0;
+        &:focus {
+            height: 17px;
+            width: 16px;
+        }
     }
 
     input + i.toggle {

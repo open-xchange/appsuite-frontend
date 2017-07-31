@@ -957,11 +957,11 @@ define('io.ox/mail/compose/view', [
             }
         },
 
-        getParagraph: function (text) {
+        getParagraph: function (text, isHTML) {
             //use div for html cause innerHTML for p tags with nested tags fail
             var node = (/(<([^>]+)>)/ig).test(text) ? $('<div>') : $('<p>');
             node.addClass('io-ox-signature')
-                .append(this.editor.ln2br(text));
+                .append(!!isHTML ? text : this.editor.ln2br(text));
             return $('<div>').append(node).html();
         },
 

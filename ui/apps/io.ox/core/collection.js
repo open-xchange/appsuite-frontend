@@ -102,7 +102,8 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                 return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(ox.rampup.user.groups).contains(item.entity));
             }
 
-            return api.multiple(folders).then(function (array) {
+            // pipe/then
+            return api.multiple(folders).pipe(function (array) {
 
                 var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false, objectPermission;
 

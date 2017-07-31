@@ -93,7 +93,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 topbar = $('#io-ox-topbar');
 
             // hits bottom ?
-            if (bounds.top + bounds.height > availableHeight + this.margin) {
+            if (bounds.top + bounds.height > availableHeight - this.margin) {
                 // left or right?
                 if ((offset.left + width + bounds.width + this.margin) < availableWidth) {
                     // enough room on right side
@@ -109,6 +109,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 positions.top = Math.max(positions.top, topbar.offset().top + topbar.height() + this.margin);
 
                 // adjust height
+                positions.height = bounds.height;
                 positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
             } else {
                 // outside viewport?

@@ -1,0 +1,48 @@
+{
+    "request": "/ajax/sessionmanagement\\?action=getSessions",
+    "response": {
+        "data": [{
+            "client": "open-xchange-appsuite",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "0",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+        }, {
+            "client": "open-xchange-appsuite",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "1",
+            "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:53.0) Gecko/20100101 Firefox/53.0"
+        }, {
+            "client": "open-xchange-appsuite",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "2",
+            "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+        }, {
+            "client": "open-xchange-mobile-api-facade",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "3",
+            "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
+        }, {
+            "client": "open-xchange-mailapp",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "4",
+            "userAgent": "Mozilla/5.0 (Linux; Android 4.3; Nexus 7 Build/JSS15Q) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+        }, {
+            "client": "USM-EAS",
+            "ipAddress": "827.23.423.23",
+            "location": "Leipzig / Germany",
+            "loginTime": 1498215192675,
+            "sessionId": "5",
+            "userAgent": ""
+        }]
+    }
+}

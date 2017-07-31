@@ -50,10 +50,11 @@ define('io.ox/core/settings/util', ['io.ox/backbone/mini-views/common'], functio
 
         compactSelect: function (name, label, model, list, options) {
             options = options || {};
+            var id = 'settings-' + name;
             return $('<div class="form-group row">').append(
                 $('<div>').addClass('col-md-' + (options.width || 6)).append(
-                    $('<label for="settings-' + name + '">').text(label),
-                    new miniViews.SelectView({ name: name, model: model, list: list, integer: !!options.integer }).render().$el
+                    $('<label>').attr('for', id).text(label),
+                    new miniViews.SelectView({ id: id, name: name, model: model, list: list, integer: !!options.integer }).render().$el
                 )
             );
         },

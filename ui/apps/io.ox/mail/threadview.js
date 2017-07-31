@@ -91,9 +91,9 @@ define('io.ox/mail/threadview', [
         index: 200,
         draw: function (baton) {
 
-            var keepFirstPrefix = baton.view.collection.length === 1,
+            var keepPrefix = baton.view.collection.length === 1,
                 data = baton.view.model.toJSON(),
-                subject = util.getSubject(api.threads.subject(data) || data.subject, keepFirstPrefix),
+                subject = util.getSubject(api.threads.subject(data) || data.subject, keepPrefix),
                 node = $('<h1 class="subject">').text(subject);
 
             this.append(node);
@@ -101,21 +101,6 @@ define('io.ox/mail/threadview', [
             emoji.processEmoji(node.html(), function (text) {
                 node.html(text);
             });
-        }
-    });
-
-    ext.point('io.ox/mail/thread-view/header').extend({
-        id: 'summary',
-        index: 300,
-        draw: function (baton) {
-            var length = baton.view.collection.length;
-            if (length === 1) {
-                this.find('.subject').addClass('spacer');
-                return;
-            }
-            this.find('.subject').after(
-                $('<h2 class="summary">').text(gt('%1$d messages in this conversation', length))
-            );
         }
     });
 
@@ -170,8 +155,8 @@ define('io.ox/mail/threadview', [
 
             var baton = new ext.Baton({ view: this }),
                 node = this.$el.find('.thread-view-list > .thread-view-header').empty(),
-                keepFirstPrefix = baton.view.collection.length === 1,
-                subject = util.getSubject(baton.view.model.toJSON(), keepFirstPrefix);
+                keepPrefix = baton.view.collection.length === 1,
+                subject = util.getSubject(baton.view.model.toJSON(), keepPrefix);
 
             if (this.collection.length > 0) {
                 ext.point('io.ox/mail/thread-view/header').invoke('draw', node, baton);
