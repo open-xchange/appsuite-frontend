@@ -274,10 +274,11 @@ define('io.ox/core/tk/attachments', [
             multi: true
         }, options);
 
-        var node = $('<div>').addClass((options.wrapperClass ? options.wrapperClass : 'form-group')),
-            gguid = _.uniqueId('form-control-label-'),
-            input = $('<input name="file" type="file" class="file-input">').prop({ multiple: options.multi }).attr('id', gguid),
-            uploadButton = $('<span class="btn btn-default btn-file" role="button">').append($.txt(options.buttontext)).append(input),
+        var input, node = $('<div>').toggleClass('form-group', !!options.wrapperClass),
+            id = _.uniqueId('form-control-label-'),
+            uploadButton = $('<button type="button" class="btn btn-default btn-file">').attr('id', id).text(options.buttontext).append(
+                input = $('<input name="file" type="file" class="file-input" tabindex="-1">').attr('aria-labelledby', id).prop({ multiple: options.multi })
+            ),
             driveButton = $('<button type="button" class="btn btn-default" data-action="add-internal">').text(gt('Add from Drive'));
 
         input.on('focus', function () {
@@ -295,9 +296,11 @@ define('io.ox/core/tk/attachments', [
         }
 
         node.on('keypress', function (e) {
-            if (e.which === 32) {
+            e.preventDefault();
+            if (/^(13|32)$/.test(e.which)) {
                 input.focus(); // BUG #34034: FF needs to focus the input-element first
                 input.trigger('click');
+                uploadButton.focus(); // Reset focus to button
             }
         });
 
