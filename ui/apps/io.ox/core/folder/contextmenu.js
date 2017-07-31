@@ -90,22 +90,21 @@ define('io.ox/core/folder/contextmenu', [
             e.preventDefault();
         },
         render: function (util) {
-            var folderColor = util.getFolderColor({ meta: this.model.get('meta') }),
-                self = this;
+            var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
 
-            _(_.range(1, 11)).each(function (colorNumber) {
-                self.$el.append(
-                    $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-                    .addClass('color-label-' + colorNumber)
-                    .addClass(folderColor === colorNumber ? 'active' : '')
-                    .attr({
-                        'data-index': colorNumber,
-                        'aria-checked': folderColor === colorNumber,
-                        'aria-label': util.getColorLabel(colorNumber)
-                    })
-                    .append('<i class="fa fa-check">')
-                );
-            });
+            this.$el.append(
+                _.range(1, 11).map(function (colorNumber) {
+                    return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
+                        .addClass('color-label-' + colorNumber)
+                        .toggleClass('active', folderColor === colorNumber)
+                        .attr({
+                            'data-index': colorNumber,
+                            'aria-checked': folderColor === colorNumber,
+                            'title': util.getColorLabel(colorNumber)
+                        })
+                        .append($('<i class="fa fa-check" aria-hidden="true">'));
+                })
+            );
 
             return this;
         },
