@@ -93,6 +93,7 @@ define('io.ox/settings/sessions/settings/pane', [
             else if (this.browser.safari) this.set('displayName', gt('Safari %1$s on %2$s', this.browser.safari, os));
             // .# Used to display the current version on the current platform, i.e. Internet Explorer 11 on Windows
             else if (this.browser.ie) this.set('displayName', gt('Internet Explorer on %1$s', os));
+            // .# Used to display the current version on the current platform, i.e. Edge on Windows
             else if (this.browser.edge) this.set('displayName', gt('Edge on %1$s', os));
             else this.set({ displayName: gt('Unknown client'), other: true });
         }
