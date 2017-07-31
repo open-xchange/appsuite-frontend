@@ -8,19 +8,7 @@ Contributing
 - [List open bugs](https://bugs.open-xchange.com/buglist.cgi?component=Web%20Frontend&list_id=2162361&product=OX%20App%20Suite&resolution=---)
 
 
-# Features
-
-- do *not commit* into develop branch directly
-- please create a feature branch instead
-- mind the naming conventions
-- do *not merge* develop into your feature branch - please [rebase](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) your changes instead
-- rebase your branches from time to time, use the force when pushing
-    - important branches are protected, so you can't force push to those
-    - only force push with agreement of the person who first created the branch
-    - don't worry to break anything, we got backups and protected branches
-- after you finished your work please create a [new merge request](https://gitlab.open-xchange.com/frontend/core/merge_requests/new)
-
-**Branch naming conventions**
+# Branches
 
 - we use three namespaces (`feature/`, `bug/` and `poc/`) as prefix to ease housekeeping
 - always user lower case for namespace and branch name
@@ -36,6 +24,19 @@ poc/[aha-id]_[short-description]
 # example: git checkout -b feature/oxui-200_gitlab develop
 git checkout -b <mybranch> develop 
 ```
+
+# Features
+
+- do *not commit* into develop branch directly
+- please create a feature branch instead
+- mind the naming conventions
+- do *not merge* develop into your feature branch - please [rebase](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) your changes instead
+- rebase your branches from time to time, use the force when pushing
+    - important branches are protected, so you can't force push to those
+    - only force push with agreement of the person who first created the branch
+    - don't worry to break anything, we got backups and protected branches
+- after you finished your work please create a [new merge request](https://gitlab.open-xchange.com/frontend/core/merge_requests/new)
+
 
 # Commmits
 
