@@ -13,9 +13,14 @@
  */
 
 define('io.ox/calendar/chronos-model', [
+    'io.ox/core/extensions',
     'io.ox/calendar/chronos-util',
-    'io.ox/core/folder/api'
-], function (util, folderAPI) {
+    'io.ox/core/folder/api',
+    'gettext!io.ox/calendar',
+    'io.ox/backbone/basicModel',
+    'io.ox/backbone/validation',
+    'io.ox/core/strings'
+], function (ext, util, folderAPI, gt, BasicModel, Validators, strings) {
 
     'use strict';
 
@@ -62,9 +67,10 @@ define('io.ox/calendar/chronos-model', [
             }
         });
 
-    var Model = Backbone.Model.extend({
+    var Model = BasicModel.extend({
         idAttribute: 'cid',
-        initialize: function () {
+        ref: 'io.ox/chronos/model/',
+        init: function () {
             // models in create view do not have an id yet. avoid undefined.undefined cids
             if (this.attributes.folder && this.attributes.id) {
                 this.cid = this.attributes.cid = util.cid(this.attributes);
@@ -160,7 +166,33 @@ define('io.ox/calendar/chronos-model', [
         },
         getTimestamp: function (name) {
             return this.getMoment(name).valueOf();
+        },
+        parse: function (res) {
+            return res;
         }
+    });
+
+    ext.point('io.ox/chronos/model/validation').extend({
+        id: 'start-date-before-end-date',
+        validate: function (attr, err, model) {
+            if (model.getTimestamp('endDate') < model.getTimestamp('startDate')) {
+                this.add('endDate', gt('The end date must be after the start date.'));
+            }
+        }
+    });
+
+    ext.point('io.ox/calendar/model/validation').extend({
+        id: 'upload-quota',
+        validate: function (attributes) {
+            if (attributes.quotaExceeded) {
+                //#. %1$s is an upload limit like for example 10mb
+                this.add('quota_exceeded', gt('Files can not be uploaded, because upload limit of %1$s is exceeded.', strings.fileSize(attributes.quotaExceeded.attachmentMaxUploadSize, 2)));
+            }
+        }
+    });
+
+    Validators.validationFor('io.ox/chronos/model', {
+        summary: { format: 'string', mandatory: true }
     });
 
     var Collection = Backbone.Collection.extend({
