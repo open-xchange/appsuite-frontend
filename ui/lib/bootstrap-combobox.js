@@ -16,18 +16,20 @@
     'use strict';
 
     var Combobox = function (element, options) {
+        this.id = _.uniqueId('bs-combobox');
         this.$outer = $('<div role="combobox" aria-expanded="false">').css('display', 'inline');
         this.$element = $(element).wrap(this.$outer);
         this.options = $.extend({}, $.fn.combobox.defaults, options);
         this.matcher = this.options.matcher || this.matcher;
         this.sorter = this.options.sorter || this.sorter;
         this.highlighter = this.options.highlighter || this.highlighter;
-        this.$menu = $(this.options.menu).attr({ role: 'listbox' }).insertAfter(this.$element);
+        this.$menu = $(this.options.menu).insertAfter(this.$element);
         this.source = this.options.source;
         this.shown = false;
         this.$ul = $(this.$menu);
         this.$inputWrap = $('<div role="presentation">').css('display', 'inline');
-        this.$element.attr({ 'aria-owns': 'listchoices' }).wrap(this.$inputWrap);
+        this.$element.wrap(this.$inputWrap);
+
         this.listen();
     };
 
@@ -63,6 +65,8 @@
         },
         hide: function () {
             this.$menu.hide();
+            this.$element.removeAttr('aria-owns');
+            this.$menu.removeAttr('role');
             return this;
         },
         click: function (e) {
@@ -184,6 +188,9 @@
                 top: pos.top + pos.height,
                 left: pos.left
             });
+
+            this.$element.attr({ 'aria-owns': this.id });
+            this.$menu.attr({ id: this.id, role: 'listbox' });
 
             this.$menu.show();
             var selected = this.$menu.find('.active');
