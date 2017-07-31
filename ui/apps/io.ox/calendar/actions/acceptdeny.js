@@ -110,13 +110,13 @@ define('io.ox/calendar/actions/acceptdeny', [
                         }
 
                         var recurrenceString = util.getRecurrenceString(appointmentData),
-                            description = $('<b>').text(appointmentData.subject),
+                            description = $('<b>').text(appointmentData.summary),
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
 
                         if (!options.taskmode) {
                             var strings = util.getDateTimeIntervalMarkup(appointmentData, { output: 'strings' });
                             description = [
-                                $('<b>').text(appointmentData.subject),
+                                $('<b>').text(appointmentData.summary),
                                 $.txt(', '),
                                 $.txt(strings.dateStr),
                                 $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : ''),
@@ -138,7 +138,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             ),
                             $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
-                                    $('<span class="sr-only">').text(data.subject + ' ' + gt('Please comment your confirmation status.'))
+                                    $('<span class="sr-only">').text(data.summary + ' ' + gt('Please comment your confirmation status.'))
                                 ),
                                 $('<input type="text" class="form-control" data-property="comment">').attr('id', inputid).val(message),
                                 reminderSelect

@@ -171,31 +171,26 @@ define('io.ox/calendar/actions', [
     new Action('io.ox/calendar/detail/actions/changestatus', {
         requires: function (e) {
 
-            function cont(app) {
+            function cont(model) {
                 return util.isBossyAppointmentHandling({ app: e.baton.data, invert: true }).then(function (isBossy) {
-                    var iamUser = false;
-                    if (app.attendees) {
-                        for (var i = 0; i < app.attendees.length; i++) {
-                            if (app.attendees[i].entity === ox.user_id) {
-                                iamUser = true;
-                            }
-                        }
-                    }
+                    var attendees = model.get('attendees') || [],
+                        iamUser = !!_(attendees).findWhere({ entity: ox.user_id });
                     return e.collection.has('one') && iamUser && isBossy;
                 });
             }
 
-            var app = e.baton.data;
+            var model = e.baton.model,
+                data = e.baton.data;
 
             // cannot confirm appointments without proper id (happens when detail view was opened from mail invitation from external calendar)
             // must use buttons in invitation mail instead
-            if (!app.id) return false;
+            if (!data.id) return false;
 
             // incomplete
-            if (app.id && !app.attendees) {
-                return api.get(app).then(cont);
+            if (data && !model) {
+                return api.get(data).then(cont);
             }
-            return cont(app);
+            return cont(model);
         },
         action: function (baton) {
             // load & call
