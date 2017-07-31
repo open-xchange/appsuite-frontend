@@ -231,7 +231,7 @@ define('io.ox/backbone/views/search', [
             return $('<div class="form-group row">').append(
                 $('<div class="col-md-6">').append(
                     //#. Context: Search. Label for date control.
-                    $('<label>').attr('for', a).text(gt.('After')),
+                    $('<label>').attr('for', a).text(gt('After')),
                     new mini.DateView({ name: 'after', id: a, model: this.model, mandatory: false }).render().$el
                 ),
                 $('<div class="col-md-6">').append(
