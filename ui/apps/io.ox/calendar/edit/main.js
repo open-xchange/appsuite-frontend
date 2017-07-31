@@ -296,23 +296,20 @@ define('io.ox/calendar/edit/main', [
                 }
             },
 
-            onError: function (error, options) {
+            onError: function (error) {
                 // conflicts have their own special handling
                 if (error.conflicts) return;
 
-                this.model.set('ignore_conflicts', false, { validate: true, isSave: true });
-
-                // restore state of model attributes for moving
+                /*// restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
                     this.model.set('folder', this.moveAfterSave, { silent: true });
                 }
-                delete this.moveAfterSave;
+                delete this.moveAfterSave;*/
                 this.getWindow().idle();
                 // when to do what?
                 // show validation errors inline -> dont yell
-                // show server errors caused by move (whatever that might be) -> yell
-                // everything else -> no yell, handled by backendError (see above)
-                if (error && (options && options.isMoveOperation)) notifications.yell(error);
+                // show server errors caused -> yell
+                if (error) notifications.yell(error);
             },
 
             failSave: function () {
