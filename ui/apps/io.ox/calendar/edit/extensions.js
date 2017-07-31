@@ -100,6 +100,8 @@ define('io.ox/calendar/edit/extensions', [
                         );
                     }
 
+                    if (!baton.model.isValid({ isSave: true })) return;
+
                     baton.app.getWindow().busy();
 
                     if (baton.mode === 'edit') {
