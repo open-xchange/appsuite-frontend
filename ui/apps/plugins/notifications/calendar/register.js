@@ -13,7 +13,7 @@
  */
 
 define('plugins/notifications/calendar/register', [
-    'io.ox/calendar/api',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/api/reminder',
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
@@ -40,7 +40,6 @@ define('plugins/notifications/calendar/register', [
         draw: function (baton) {
             var model = baton.model,
                 node = this,
-                view = baton.view,
                 onClickChangeStatus = function (e) {
                     // stopPropagation could be prevented by another markup structure
                     e.stopPropagation();
@@ -52,41 +51,44 @@ define('plugins/notifications/calendar/register', [
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/actions/change-confirmation'], function (folderAPI, calendarSettings, action) {
+                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, calendarSettings) {
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder
-                                alarm: parseInt(calendarSettings.get('defaultReminder', 15), 10),
-                                confirmmessage: '',
-                                confirmation: 1
+                                alarms: calendarSettings.get('defaultReminder', [{
+                                    action: 'DISPLAY',
+                                    description: '',
+                                    trigger: { duration: '-PT15M' }
+                                }]),
+                                attendee: _(appointmentData.attendees).findWhere({ entity: ox.user_id }),
+                                id: appointmentData.id,
+                                folder: appointmentData.folder
                             };
+                            o.data.attendee.partStat = 'ACCEPT';
+                            o.data.attendee.comment = '';
+                            //why is this
                             // add current user id in shared or public folder
                             if (folderAPI.is('shared', folder)) {
                                 o.data.id = folder.created_by;
                             }
 
                             // check if user is allowed to set the reminder time
-                            var modifyBits = folderAPI.bits(folder, 14),
-                                message = false;
+                            var modifyBits = folderAPI.bits(folder, 14);
                             // only own objects if bit is 1
-                            if (modifyBits === 0 || (modifyBits === 1 && appointmentData.organizerId !== ox.user_id)) {
+                            if (modifyBits === 0 || (modifyBits === 1 && appointmentData.organizer.entity !== ox.user_id)) {
                                 delete o.data.alarm;
-                                message = true;
                             }
 
-                            action(appointmentData).done(function success() {
-                                view.responsiveRemove(model);
-                                calAPI.confirm(o).done(function () {
-                                    // remove model from hidden collection or new invitations when the appointment changes will not be displayed
-                                    view.hiddenCollection.remove(model);
-                                    if (message) {
-                                        require(['io.ox/core/yell'], function (yell) {
-                                            yell('warning', gt('Your default reminder could not be set for this appointment due to insufficient permissions'));
-                                        });
-                                    }
-                                }).fail(function () {
-                                    view.unHide(model);
-                                });
+                            calAPI.confirm(o.data).done(function (result) {
+                                if (result.conflicts) {
+                                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                        conflictView.dialog(result.conflicts)
+                                            .on('ignore', function () {
+                                                calAPI.confirm(o.data, { ignore_conflicts: true });
+                                            });
+                                    });
+                                    return;
+                                }
                             });
                         });
                     });
@@ -104,9 +106,9 @@ define('plugins/notifications/calendar/register', [
                 $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
                     $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
-                    $('<span class="span-to-div title">').text(model.get('title')),
+                    $('<span class="span-to-div title">').text(model.get('summary')),
                     $('<span class="span-to-div location">').text(model.get('location')),
-                    $('<span class="span-to-div organizer">').text(model.get('organizer')),
+                    $('<span class="span-to-div organizer">').text(model.get('organizer').cn),
                     $('<span class="sr-only">').text(gt('Press to open Details'))
                 ),
                 $('<div class="actions">').append(
@@ -114,7 +116,7 @@ define('plugins/notifications/calendar/register', [
                         .attr({
                             'focus-id': 'calendar-invite-' + cid + '-accept-decline',
                             // button aria labels need context
-                            'aria-label': gt('Accept/Decline') + ' ' + model.get('title')
+                            'aria-label': gt('Accept/Decline') + ' ' + model.get('summary')
                         })
                         .css('margin-right', '14px')
                         .text(gt('Accept / Decline'))
@@ -122,7 +124,7 @@ define('plugins/notifications/calendar/register', [
                     $('<button type="button" class="refocus btn btn-success" data-action="accept">')
                         .attr({
                             // button aria labels need context
-                            'aria-label': gt('Accept invitation') + ' ' + model.get('title'),
+                            'aria-label': gt('Accept invitation') + ' ' + model.get('summary'),
                             'focus-id': 'calendar-invite-' + cid + '-accept'
                         })
                         .on('click', onClickAccept)
@@ -225,7 +227,6 @@ define('plugins/notifications/calendar/register', [
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
                     apiEvents: {
-                        reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
                     useListRequest: true,
@@ -263,6 +264,14 @@ define('plugins/notifications/calendar/register', [
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 subview.model.set('autoOpen', value);
+            });
+            calAPI.on('new-invites', function (invites) {
+                var oldAppointments = subview.collection.filter(function (model) {
+                    return moment.tz(model.get('endDate').value, model.get('endDate').tzid).valueOf() < _.now();
+                });
+                subview.removeNotifications(oldAppointments);
+                subview.addNotifications(invites.invitesToAdd);
+                subview.removeNotifications(invites.invitesToRemove);
             });
 
             calAPI.getInvites();

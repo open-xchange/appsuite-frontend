@@ -18,8 +18,9 @@ define('io.ox/calendar/chronos-api', [
     'io.ox/core/api/collection-loader',
     'io.ox/core/folder/api',
     'io.ox/calendar/chronos-util',
-    'io.ox/calendar/chronos-model'
-], function (http, Pool, CollectionLoader, folderApi, util, models) {
+    'io.ox/calendar/chronos-model',
+    'io.ox/core/capabilities'
+], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities) {
 
     'use strict';
 
@@ -214,7 +215,13 @@ define('io.ox/calendar/chronos-api', [
                     params: params,
                     data: data
                 })
-                .then(processResponse);
+                .then(processResponse)
+                .then(function (response) {
+                    if (!response.conflicts) {
+                        // updates notification area for example
+                        api.trigger('mark:invite:confirmed', api.pool.get(obj.folder).findWhere(data.updated[0]));
+                    }
+                });
             },
 
             // returns events for a list of attendees, using the freebusy api
@@ -290,9 +297,60 @@ define('io.ox/calendar/chronos-api', [
                     });
                     api.trigger('refresh.all');
                 });
-            }
+            },
 
+            // store last time we checked for invites
+            getInvitesSince: 0,
+
+            getInvites: function () {
+                var now = moment().valueOf();
+
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'updates',
+                        folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
+                        timestamp: api.getInvitesSince || moment().subtract(5, 'years').valueOf(),
+                        rangeStart: moment().subtract(2, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
+                        until: moment().add(2, 'years').format('YYYYMMDD[T]HHmmss[Z]')
+                    }
+                })
+                .then(function (data) {
+                    // sort by startDate & look for unconfirmed appointments
+                    // exclude appointments that already ended
+                    var invites = _(data.newAndModified)
+                        .filter(function (item) {
+
+                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid).valueOf() < now,
+                                isRecurring = !!item.recurrenceId;
+
+                            if (!isRecurring && isOver) {
+                                return false;
+                            }
+
+                            return _(item.attendees).any(function (user) {
+                                return user.entity === ox.user_id && user.partStat === 'NEEDS-ACTION';
+                            });
+                        });
+                    api.getInvitesSince = now;
+                    // even if empty array is given it needs to be triggered to remove
+                    // notifications that does not exist anymore (already handled in ox6 etc)
+                    api.trigger('new-invites', { invitesToAdd: invites, invitesToRemove: data.deleted });
+                    return invites;
+                });
+            },
+
+            refresh: function () {
+                // check capabilities
+                if (capabilities.has('calendar')) {
+                    api.getInvites();
+                }
+            }
         };
+
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
 
     api.pool = Pool.create('chronos', {
         Collection: models.Collection

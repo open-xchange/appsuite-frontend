@@ -29,7 +29,6 @@ define('io.ox/calendar/actions/acceptdeny', [
         function cont(series) {
 
             var def = $.Deferred(),
-                showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 'ACCEPTED',
                 message,
                 appointmentData,
                 //use different api if provided (tasks use this)
@@ -38,11 +37,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                 canModify,
                 reminderSelect = $(),
                 inputid = _.uniqueId('dialog'),
-                defaultReminder = settings.get('defaultReminder', [{
-                    action: 'DISPLAY',
-                    description: '',
-                    trigger: { duration: '-PT15M' }
-                }]),
                 apiData = { folder: o.folder || o.folder_id, id: o.id },
                 checkConflicts;
 
@@ -66,7 +60,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 canModify = options.taskmode ? 0 : folderAPI.bits(folder, 14);
                 // only own objects
                 if (canModify === 1) {
-                    canModify = appointmentData.organizer.id === ox.user_id;
+                    canModify = appointmentData.organizer.entity === ox.user_id;
                 } else {
                     canModify = canModify > 1;
                 }
@@ -74,30 +68,20 @@ define('io.ox/calendar/actions/acceptdeny', [
                 var alarmsModel,
                     previousConfirmation = options.taskmode ? _(appointmentData.users).findWhere({ id: ox.user_id }) : _(appointmentData.attendees).findWhere({ entity: ox.user_id });
 
-                if (showReminderSelect && canModify) {
-                    if (options.taskmode) {
-                        reminderSelect = $('<div class="form-group">').append(
-                            $('<label>').attr('for', 'reminderSelect').text(gt('Reminder')),
-                            $('<select id="reminderSelect" class="form-control" data-property="reminder">').append(function () {
-                                var self = $(this),
-                                    reminderOptions = util.getReminderOptions();
-                                _(reminderOptions).each(function (label, value) {
-                                    self.append($('<option>', { value: value }).text(label));
-                                });
-                            })
-                            .val(defaultReminder)
-                        );
-                    } else {
-                        // backbone model is fine. No need to require chronos model
-                        alarmsModel = new Backbone.Model(appointmentData);
-                        if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
-                            appointmentData.alarms = defaultReminder;
-                        }
-                        reminderSelect = $('<fieldset>').append(
-                            $('<legend>').text(gt('Reminder')),
-                            new AlarmsView({ model: alarmsModel, smallLayout: true }).render().$el
-                        );
+                if (canModify) {
+                    if (!previousConfirmation || previousConfirmation.partStat === 'NEEDS-ACTION') {
+                        appointmentData.alarms = settings.get('defaultReminder', [{
+                            action: 'DISPLAY',
+                            description: '',
+                            trigger: { duration: '-PT15M' }
+                        }]);
                     }
+                    // backbone model is fine. No need to require chronos model
+                    alarmsModel = new Backbone.Model(appointmentData);
+                    reminderSelect = $('<fieldset>').append(
+                        $('<legend>').text(gt('Reminder')),
+                        new AlarmsView({ model: alarmsModel, smallLayout: true }).render().$el
+                    );
                 }
 
                 return new dialogs.ModalDialog({
