@@ -16,9 +16,10 @@ define('io.ox/calendar/chronos-api', [
     'io.ox/core/http',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
+    'io.ox/core/folder/api',
     'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-model'
-], function (http, Pool, CollectionLoader, util, models) {
+], function (http, Pool, CollectionLoader, folderApi, util, models) {
 
     'use strict';
 
@@ -97,7 +98,8 @@ define('io.ox/calendar/chronos-api', [
                         action: 'get',
                         id: obj.id,
                         recurrenceId: obj.recurrenceId,
-                        timezone: 'UTC'
+                        timezone: 'UTC',
+                        folder: obj.folder
                     }
                 }).then(function (data) {
                     api.pool.add(obj.folder, data);
@@ -139,18 +141,25 @@ define('io.ox/calendar/chronos-api', [
                 return false;
             },
 
-            create: function (obj) {
+            create: function (obj, options) {
+                options = options || {};
                 obj = obj.attributes || obj;
                 return http.PUT({
                     module: 'chronos',
                     params: {
                         action: 'new',
-                        folder: obj.folder
+                        folder: obj.folder,
+                        // convert to true boolean
+                        ignore_conflicts: !!options.ignore_conflicts
                     },
                     data: obj
                 })
                 .then(processResponse)
                 .then(function (data) {
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
                     return api.pool.get(obj.folder).findWhere(data.created[0]);
                 });
             },
@@ -220,8 +229,7 @@ define('io.ox/calendar/chronos-api', [
                         action: 'events',
                         from: options.from,
                         until: options.until,
-                        attendees: list,
-                        includeStackTraceOnError: true
+                        attendees: list
                     }
                 });
             },

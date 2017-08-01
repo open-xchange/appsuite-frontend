@@ -118,6 +118,7 @@ define('io.ox/calendar/edit/main', [
                             .on('change', function () {
                                 self.considerSaved = false;
                             })
+                            //todo still needed?
                             .on('backendError', function (error) {
                                 try {
                                     self.getWindow().idle();
@@ -127,7 +128,6 @@ define('io.ox/calendar/edit/main', [
                                         api.removeFromUploadList(_.ecid(this.attributes));
                                     }
                                 }
-                                if (error.conflicts) return;
                                 var message;
                                 // hmm, backend likes to send an empty object in "problematic" which makes it hard to check
                                 if (error.problematic && error.problematic.length > 0 && !_.isEmpty(error.problematic[0])) {
@@ -140,20 +140,6 @@ define('io.ox/calendar/edit/main', [
                                     message = error.error;
                                 }
                                 notifications.yell('error', message);
-                            })
-                            .on('conflicts', function (conflicts) {
-
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(conflicts)
-                                        .on('cancel', function () {
-                                            // restore model attributes for moving
-                                            if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
-                                        })
-                                        .on('ignore', function () {
-                                            self.model.set('ignore_conflicts', true, { validate: true });
-                                            self.model.save().then(_.bind(self.onSave, self));
-                                        });
-                                });
                             });
 
                         self.setTitle(opt.mode === 'create' ? gt('Create appointment') : gt('Edit appointment'));
@@ -279,7 +265,22 @@ define('io.ox/calendar/edit/main', [
             },
 
             onSave: function (data) {
-                if (this.moveAfterSave) {
+                var self = this;
+                if (data && data.conflicts) {
+                    ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                        conflictView.dialog(data.conflicts)
+                            .on('cancel', function () {
+                                self.getWindow().idle();
+                                // restore model attributes for moving
+                                // if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
+                            })
+                            .on('ignore', function () {
+                                api.create(self.model, { ignore_conflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                            });
+                    });
+                    return;
+                }
+                /*if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),
                         self = this;
@@ -289,16 +290,14 @@ define('io.ox/calendar/edit/main', [
                         delete self.moveAfterSave;
                         save();
                     }, fail);
-                } else {
-                    this.considerSaved = true;
-                    this.getWindow().idle();
-                    this.quit();
-                }
+                } else {*/
+                this.considerSaved = true;
+                self.getWindow().idle();
+                this.quit();
+                //}
             },
 
             onError: function (error) {
-                // conflicts have their own special handling
-                if (error.conflicts) return;
 
                 /*// restore state of model attributes for moving
                 if (this.moveAfterSave && this.model.get('folder') !== this.moveAfterSave) {
