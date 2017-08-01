@@ -854,11 +854,13 @@ msgstr ""
 msgid "New search ... (prototype)"
 msgstr ""
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js
 #: module:io.ox/core
 msgid "After"
 msgstr ""
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js
 #: module:io.ox/core
 msgid "Before"
@@ -10632,14 +10634,16 @@ msgstr ""
 msgid "Current folder"
 msgstr ""
 
+#. Context: mail search. Label for <input>.
 #: apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
 msgid "Contains words"
 msgstr ""
 
+#. Context: mail search. Label for checbbox.
 #: apps/io.ox/mail/view-options.js
 #: module:io.ox/mail
-msgid "Has attachment"
+msgid "Has attachments"
 msgstr ""
 
 #. Sort by messages which are flagged, "Flag" is used in dropdown

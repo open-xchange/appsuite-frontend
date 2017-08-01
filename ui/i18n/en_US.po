@@ -956,6 +956,7 @@ msgstr ""
 msgid "Advanced settings"
 msgstr ""
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "After"
 msgstr ""
@@ -1425,6 +1426,7 @@ msgstr ""
 msgid "Bcc"
 msgstr ""
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
 msgstr ""
@@ -2140,6 +2142,7 @@ msgstr ""
 msgid "Contains not"
 msgstr ""
 
+#. Context: mail search. Label for <input>.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 msgid "Contains words"
 msgstr ""
@@ -4308,8 +4311,9 @@ msgstr ""
 msgid "HTML and plain text"
 msgstr ""
 
+#. Context: mail search. Label for checbbox.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
-msgid "Has attachment"
+msgid "Has attachments"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js

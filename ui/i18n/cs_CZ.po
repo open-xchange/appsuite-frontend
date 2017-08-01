@@ -1012,6 +1012,7 @@ msgstr "Administrátor"
 msgid "Advanced settings"
 msgstr "Pokročilá nastavení"
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #, fuzzy
 #| msgid "after"
@@ -1505,6 +1506,7 @@ msgstr "Základní nastavení"
 msgid "Bcc"
 msgstr "Bcc"
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
 msgstr ""
@@ -2232,6 +2234,7 @@ msgstr "Obsahuje"
 msgid "Contains not"
 msgstr "Neobsahuje"
 
+#. Context: mail search. Label for <input>.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
 #| msgid "Contains not"
@@ -4472,10 +4475,11 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML a prostý text"
 
+#. Context: mail search. Label for checbbox.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
 #| msgid "has attachments"
-msgid "Has attachment"
+msgid "Has attachments"
 msgstr "má přílohy"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js

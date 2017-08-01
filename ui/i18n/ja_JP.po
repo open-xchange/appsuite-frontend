@@ -968,6 +968,7 @@ msgstr "管理者"
 msgid "Advanced settings"
 msgstr "詳細設定"
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 #, fuzzy
 #| msgid "after"
@@ -1459,6 +1460,7 @@ msgstr "基本設定"
 msgid "Bcc"
 msgstr "Bcc"
 
+#. Context: Search. Label for date control.
 #: apps/io.ox/backbone/views/search.js module:io.ox/core
 msgid "Before"
 msgstr ""
@@ -2187,6 +2189,7 @@ msgstr "次の文字列を含む"
 msgid "Contains not"
 msgstr "次の文字列を含まない"
 
+#. Context: mail search. Label for <input>.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
 #| msgid "Contains not"
@@ -4419,10 +4422,11 @@ msgstr "HTML"
 msgid "HTML and plain text"
 msgstr "HTML とテキスト"
 
+#. Context: mail search. Label for checbbox.
 #: apps/io.ox/mail/view-options.js module:io.ox/mail
 #, fuzzy
 #| msgid "has attachments"
-msgid "Has attachment"
+msgid "Has attachments"
 msgstr "添付ファイルあります"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
