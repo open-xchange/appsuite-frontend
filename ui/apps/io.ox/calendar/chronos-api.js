@@ -64,7 +64,6 @@ define('io.ox/calendar/chronos-api', [
                             folder: obj.folder,
                             rangeStart: moment(range.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
                             rangeEnd: moment(range.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            timezone: 'UTC',
                             order: obj.order
                         }
                     });
@@ -98,7 +97,6 @@ define('io.ox/calendar/chronos-api', [
                         action: 'get',
                         id: obj.id,
                         recurrenceId: obj.recurrenceId,
-                        timezone: 'UTC',
                         folder: obj.folder
                     }
                 }).then(function (data) {
@@ -179,7 +177,14 @@ define('io.ox/calendar/chronos-api', [
                         action: 'delete',
                         timestamp: _.now()
                     },
-                    data: list
+                    data: _(list).map(function (obj) {
+                        obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                        return {
+                            id: obj.id,
+                            recurrenceId: obj.recurrenceId,
+                            folderId: obj.folder
+                        };
+                    })
                 })
                 .then(processResponse);
             },
