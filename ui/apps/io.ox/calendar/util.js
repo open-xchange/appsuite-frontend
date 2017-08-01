@@ -663,7 +663,7 @@ define('io.ox/calendar/util', [
         },
 
         getNote: function (data) {
-            var text = $.trim(data.description || '')
+            var text = $.trim(data.description || (data.get ? data.get('description') : ''))
                 .replace(/\n{3,}/g, '\n\n')
                 .replace(/</g, '&lt;');
             //use br to keep linebreaks when pasting (see 38714)

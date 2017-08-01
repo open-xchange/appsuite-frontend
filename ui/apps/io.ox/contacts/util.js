@@ -60,7 +60,7 @@ define('io.ox/contacts/util', [
         var copy = obj;
         if (htmlOutput === true) {
             copy = {};
-            _(['title', 'first_name', 'last_name', 'display_name']).each(function (id) {
+            _(['title', 'first_name', 'last_name', 'display_name', 'cn']).each(function (id) {
                 if (!$.trim(obj[id])) return;
                 var tagName = id === 'last_name' ? 'strong' : 'span';
                 copy[id] = '<' + tagName + ' class="' + id + '">' + _.escape(obj[id]) + '</' + tagName + '>';
@@ -74,7 +74,7 @@ define('io.ox/contacts/util', [
         // variant of getFullName without title, all lowercase
         getSortName: function (obj) {
             // use a copy without title
-            obj = _.pick(obj, 'first_name', 'last_name', 'display_name');
+            obj = _.pick(obj, 'first_name', 'last_name', 'display_name', 'cn');
             return this.getFullName(obj).toLowerCase();
         },
 
@@ -83,7 +83,7 @@ define('io.ox/contacts/util', [
          * @param obj {Object} A contact object.
          * @type {
          *     format: string,
-         *     params: [first_name, last_name, title, display_name]
+         *     params: [first_name, last_name, title, display_name, cn]
          * }
          * @returns An object with a format
          * string and an array of replacements which can be used e.g. as
@@ -93,7 +93,7 @@ define('io.ox/contacts/util', [
 
             var first_name = $.trim(obj.first_name),
                 last_name = $.trim(obj.last_name),
-                display_name = $.trim(obj.display_name),
+                display_name = $.trim(obj.display_name || obj.cn),
                 title = $.trim(obj.title);
 
             // combine title, last_name, and first_name

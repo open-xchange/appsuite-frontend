@@ -23,7 +23,8 @@ define('io.ox/calendar/common-extensions', [
     'use strict';
 
     function getTitle(baton) {
-        return _.isUndefined(baton.data.summary) ? gt('Private') : (baton.data.summary || '\u00A0');
+        var data = baton.data.event || baton.data;
+        return _.isUndefined(data.summary) ? gt('Private') : (data.summary || '\u00A0');
     }
 
     var extensions = {
@@ -83,10 +84,11 @@ define('io.ox/calendar/common-extensions', [
         },
 
         datetime: function (baton) {
+            var data = baton.data.event || baton.data;
             this.append(
                 $('<div class="date-time">').append(
-                    $('<span class="date">').text(util.getDateInterval(baton.data)),
-                    $('<span class="time">').text(util.getTimeInterval(baton.data))
+                    $('<span class="date">').text(util.getDateInterval(data)),
+                    $('<span class="time">').text(util.getTimeInterval(data))
                 )
             );
         },
@@ -190,28 +192,28 @@ define('io.ox/calendar/common-extensions', [
         },
 
         folder: function (baton) {
-            if (!baton.data.folder_id) return;
+            if (!baton.data.folder) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Folder')),
-                    $('<td>').attr('data-folder', baton.data.folder_id).append(folderAPI.getTextNode(baton.data.folder_id))
+                    $('<td>').attr('data-folder', baton.data.folder).append(folderAPI.getTextNode(baton.data.folder))
                 )
             );
         },
 
         created: function (baton) {
-            if (!baton.data.creation_date && !baton.data.created_by) return;
+            if (!baton.data.created && !baton.data.createdBy) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Created')),
                     $('<td class="created">').append(
                         baton.data.creation_date ? [
-                            $('<span>').text(util.getDate(baton.data.creation_date)),
+                            $('<span>').text(util.getDate(baton.data.created)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
-                        baton.data.created_by ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.created_by),
-                            user_id: baton.data.created_by
+                        baton.data.createdBy ? coreUtil.renderPersonalName({
+                            html: userAPI.getTextNode(baton.data.createdBy),
+                            user_id: baton.data.createdBy.entity
                         }, baton.data) : []
                     )
                 )
