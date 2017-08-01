@@ -46,7 +46,8 @@ define('io.ox/backbone/mini-views/alarms', [
             this.updateView();
             return this;
         },
-        onRemove: function () {
+        onRemove: function (e) {
+            e.stopPropagation();
             var item = $(arguments[0].target).closest('.alarm-list-item');
             item.remove();
             this.updateModel();

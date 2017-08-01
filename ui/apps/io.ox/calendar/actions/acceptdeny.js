@@ -160,8 +160,20 @@ define('io.ox/calendar/actions/acceptdeny', [
 
                         function performConfirm(checkConflicts) {
                             api.confirm(requestData, { ignore_conflicts: !checkConflicts })
-                                .done(function () {
-                                    //TODO Conflict check
+                                .done(function (data) {
+
+                                    if (data && data.conflicts) {
+                                        ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                                            conflictView.dialog(data.conflicts)
+                                                .on('cancel', function () {
+                                                    dialog.idle();
+                                                })
+                                                .on('ignore', function () {
+                                                    performConfirm(false);
+                                                });
+                                        });
+                                        return;
+                                    }
                                     dialog.close();
                                     if (options.callback) options.callback();
                                 })
@@ -195,29 +207,16 @@ define('io.ox/calendar/actions/acceptdeny', [
                             // don't check if confirmation status did not change
                             // no conflicts possible if you decline the appointment
                             // no conflicts possible for free appointments
-                            checkConflicts = action === 'declined' || appointmentData.transp === 'TRANSPARENT' || (previousConfirmation && requestData.attendee.partStat === previousConfirmation.partStat);
+                            checkConflicts = action !== 'declined' && appointmentData.transp === 'OPAQUE' && (!previousConfirmation || requestData.attendee.partStat !== previousConfirmation.partStat);
                         }
 
+                        // todo why was this in here?
                         /*// add current user id in shared or public folder
                         if (folderAPI.is('shared', folder)) {
                             apiData.data.id = folder.created_by;
                         }*/
 
                         performConfirm(checkConflicts);
-
-                        /*api.checkConflicts(appointmentData,)
-                            .done(function (conflicts) {
-
-                                if (conflicts.length === 0) return performConfirm();
-
-                                ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                                    conflictView.dialog(conflicts)
-                                        .on('cancel', function () { dialog.idle(); })
-                                        .on('ignore', function () { performConfirm(); });
-                                });
-                            })
-                            .fail(notifications.yell)
-                            .fail(dialog.close);*/
                     })
                     .show(function () {
                         // do not focus on mobiles. No, never, please. It does simply not work!

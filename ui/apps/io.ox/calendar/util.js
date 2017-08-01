@@ -719,7 +719,7 @@ define('io.ox/calendar/util', [
                 };
             });
             _.each(conf, function (c) {
-                ret[c.status || chronosStates.indexOf(c.partStat)].count++;
+                ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())].count++;
                 ret.count++;
             });
             return ret;
