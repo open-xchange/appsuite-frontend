@@ -417,12 +417,14 @@ define('io.ox/calendar/api', [
         copy: function (list, targetFolderId) {
             return copymove(list, 'copy', targetFolderId);
         },
+
+        //shouldn't be needed anymore
         /**
          * check if you have appointments confirmed that conflict with the given appointment and returns them
          * @param  {object} appointment
          * @return {deferred}
          */
-        checkConflicts: function (appointment) {
+        /*checkConflicts: function (appointment) {
 
             // no conflicts for free appointments
             if (appointment.shown_as === 4) {
@@ -471,7 +473,7 @@ define('io.ox/calendar/api', [
 
                 return conflicts;
             });
-        },
+        },*/
 
         /**
          * change confirmation status
