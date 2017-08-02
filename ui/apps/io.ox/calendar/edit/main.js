@@ -190,7 +190,7 @@ define('io.ox/calendar/edit/main', [
                         trigger: { duration: '-PT15M', related: 'START' }
                     }]);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
-                    data.transp = (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
+                    data.transp = data.transp || (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
@@ -311,9 +311,9 @@ define('io.ox/calendar/edit/main', [
 
             failSave: function () {
                 if (this.model) {
-                    var title = this.model.get('title');
+                    var summary = this.model.get('summary');
                     return {
-                        description: gt('Appointment') + (title ? ': ' + title : ''),
+                        description: gt('Appointment') + (summary ? ': ' + summary : ''),
                         module: 'io.ox/calendar/edit',
                         point: this.model.attributes
                     };
