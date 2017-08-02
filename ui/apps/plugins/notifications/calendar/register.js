@@ -66,11 +66,6 @@ define('plugins/notifications/calendar/register', [
                             };
                             o.data.attendee.partStat = 'ACCEPT';
                             o.data.attendee.comment = '';
-                            //why is this
-                            // add current user id in shared or public folder
-                            if (folderAPI.is('shared', folder)) {
-                                o.data.id = folder.created_by;
-                            }
 
                             // check if user is allowed to set the reminder time
                             var modifyBits = folderAPI.bits(folder, 14);
@@ -226,6 +221,7 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarinvitations',
                     api: calAPI,
+                    fullModel: true,
                     apiEvents: {
                         remove: 'delete:appointment mark:invite:confirmed'
                     },

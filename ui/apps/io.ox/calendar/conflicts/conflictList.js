@@ -37,7 +37,6 @@ define('io.ox/calendar/conflicts/conflictList', [
         var baton = e.data.baton;
         if (!!e.data.content.children().length) return;
         // there is no folder given for appointments where the user is not invited, so just use the data available
-        // todo backend sends wrong folder (only integer) check if this is fixed
         if (!baton.data.event.folder) {
             ext.point('io.ox/calendar/conflicts/details').invoke('draw', e.data.content.empty(), ext.Baton.ensure(baton.data.event));
             e.data.content.show();

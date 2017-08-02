@@ -19,9 +19,10 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/tk/attachments',
     'io.ox/participants/chronos-detail',
     'gettext!io.ox/calendar',
+    'io.ox/calendar/chronos-model',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt) {
+], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
 
     'use strict';
 
@@ -241,6 +242,15 @@ define('io.ox/calendar/view-detail', [
         draw: function (baton, options) {
             // make sure we have a baton
             baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
+
+            // if we only have one create the other
+            if (baton.data && !baton.model) {
+                baton.model = new ChronosModel.Model(baton.data);
+            }
+            if (baton.model && !baton.data) {
+                baton.data = baton.model.toJSON();
+            }
+
             options = _.extend({ minimaldata: !baton.data.folder }, options);
             if (_.device('smartphone') && !options.deeplink) {
                 baton.disable('io.ox/calendar/detail/actions', 'inline-links');
