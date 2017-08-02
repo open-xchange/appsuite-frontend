@@ -719,8 +719,11 @@ define('io.ox/calendar/util', [
                 };
             });
             _.each(conf, function (c) {
-                ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())].count++;
-                ret.count++;
+                // don't count groups or ressources, ignore unknown states (the spec allows custom partstats)
+                if (ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())] && (!c.cuType || c.cuType === 'INDIVIDUAL')) {
+                    ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())].count++;
+                    ret.count++;
+                }
             });
             return ret;
         },

@@ -64,7 +64,7 @@ define('plugins/notifications/calendar/register', [
                                 id: appointmentData.id,
                                 folder: appointmentData.folder
                             };
-                            o.data.attendee.partStat = 'ACCEPT';
+                            o.data.attendee.partStat = 'ACCEPTED';
                             o.data.attendee.comment = '';
 
                             // check if user is allowed to set the reminder time
