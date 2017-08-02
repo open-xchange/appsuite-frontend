@@ -276,6 +276,7 @@ define('io.ox/calendar/actions', [
             return false;
         },
         action: function (baton) {
+            // TODO ask backend if we want to get rid of the legacy printcalendar solution or fix it to work with chronos api
             var win = baton.app.getWindow(),
                 pers = win.getPerspective();
             if (pers.print) {

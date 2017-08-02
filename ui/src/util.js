@@ -871,7 +871,9 @@
                 }
                 // add tail (with just 1 parameter substring and substr are identical)
                 parts[p] += s.substring(index);
-                return p === 0 ? { id: parts[0] } : { folder_id: parts[0], id: parts[1] };
+                // some apis use folder (chronos) and some use folder_id
+                // TODO look if this creates problems
+                return p === 0 ? { id: parts[0] } : { folder_id: parts[0], folder: parts[0], id: parts[1] };
             }
 
             return function (o) {
