@@ -21,8 +21,8 @@
     tinymce "^4.6.3"
 
 "@open-xchange/ui-middleware@^7.10.0-0":
-  version "7.10.0-0.pre2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.0-0.pre2.tgz#2641d95637e8141a2898190a68ce8e72f31bed1f"
+  version "7.10.0-0.pre3"
+  resolved "https://registry.yarnpkg.com/@open-xchange/ui-middleware/-/ui-middleware-7.10.0-0.pre3.tgz#b96fc8cb2e10cdf4bdddc31528c47c33651278c4"
   dependencies:
     dotenv "^4.0.0"
     esprima "^4.0.0"
@@ -136,8 +136,8 @@ appserver@^0.6.0:
     nopt "~2.2.0"
 
 appserver@^0.7.0-pre1:
-  version "0.7.0-pre1"
-  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre1.tgz#b8895396af7a6b7667c48738ce0ebe9c9e289052"
+  version "0.7.0-pre2"
+  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre2.tgz#041ac6e0ae128272ed27c7925003a5c56145c79e"
   dependencies:
     "@open-xchange/ui-middleware" "^7.10.0-0"
     connect "^3.6.2"
