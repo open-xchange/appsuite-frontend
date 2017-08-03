@@ -116,6 +116,9 @@ define.async('io.ox/mail/compose/model', [
                     if (settings.get(['customDisplayNames', address[1], 'overwrite'])) {
                         address[0] = settings.get(['customDisplayNames', address[1], 'name'], '');
                     }
+                    if (!settings.get('sendDisplayName', true)) {
+                        address[0] = null;
+                    }
                     this.set('from', [address]);
                 }.bind(this));
             }
