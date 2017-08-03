@@ -33,11 +33,26 @@ define('io.ox/calendar/chronos-api', [
                 api.trigger('create', event);
                 api.trigger('create:' + util.ecid(event), event);
             });
+
             _(response.deleted).each(function (event) {
-                api.pool.get(event.folder).remove(util.cid(event));
-                api.trigger('delete', event);
-                api.trigger('delete:' + util.ecid(event), event);
+                // if there is a recurrence rule but no recurrenceId this means the whole series was deleted (recurrence master has no recurrenceId)
+                if (event.rrule && !event.recurrenceId) {
+                    var cid = util.ecid(event),
+                        events = api.pool.get(event.folder).filter(function (evt) {
+                            return evt.cid .indexOf(cid) === 0;
+                        });
+                    api.pool.get(event.folder).remove(events);
+                    _(events).each(function (evt) {
+                        api.trigger('delete', evt);
+                        api.trigger('delete:' + util.ecid(evt), evt);
+                    });
+                } else {
+                    api.pool.get(event.folder).remove(util.cid(event));
+                    api.trigger('delete', event);
+                    api.trigger('delete:' + util.ecid(event), event);
+                }
             });
+
             _(response.updated).each(function (event) {
                 api.pool.add(event.folder, event);
                 api.trigger('update', event);
