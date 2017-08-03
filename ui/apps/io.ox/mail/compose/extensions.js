@@ -112,6 +112,7 @@ define('io.ox/mail/compose/extensions', [
                 render = function () {
 
                     function renderFrom(array) {
+                        array = array || _(baton.model.get('from')).first();
                         if (!array) return;
                         var name = array[0], address = array[1];
                         return [
@@ -120,13 +121,12 @@ define('io.ox/mail/compose/extensions', [
                         ];
                     }
 
-                    var defaultSender = _(baton.model.get('from')).first(),
-                        dropdown = new Dropdown({
-                            model: baton.model,
-                            label: renderFrom(defaultSender),
-                            aria: gt('From'),
-                            caret: true
-                        });
+                    var dropdown = new Dropdown({
+                        model: baton.model,
+                        label: renderFrom,
+                        aria: gt('From'),
+                        caret: true
+                    });
 
                     sender.drawDropdown().done(function (list) {
 
@@ -140,11 +140,10 @@ define('io.ox/mail/compose/extensions', [
                         }
 
                         function redraw() {
-                            var from = _(baton.model.get('from')).first();
                             dropdown.$ul.empty().css('width', 'auto');
                             drawOptions();
-                            dropdown.$('.dropdown-label').empty().append(renderFrom(from));
                             if (dropdown.$el.hasClass('open')) dropdown.adjustBounds();
+                            dropdown.$toggle.find('.dropdown-label').empty().append(renderFrom);
                             // re-focus element otherwise the bootstap a11y closes the drop-down
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();
                         }
