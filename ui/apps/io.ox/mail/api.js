@@ -26,8 +26,9 @@ define('io.ox/mail/api', [
     'io.ox/core/tk/visibility-api-util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
-    'io.ox/core/capabilities'
-], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/mail/sanitizer'
+], function (http, cache, coreSettings, apiFactory, folderAPI, contactsAPI, accountAPI, notifications, util, Pool, CollectionLoader, visibilityApi, settings, gt, capabilities, sanitizer) {
 
     // SHOULD NOT USE notifications inside API!
 
@@ -67,6 +68,8 @@ define('io.ox/mail/api', [
         return data;
     };
 
+    var sanitize = sanitizer.isEnabled();
+
     // generate basic API
     var api = apiFactory({
         module: 'mail',
@@ -93,7 +96,8 @@ define('io.ox/mail/api', [
             },
             get: {
                 action: 'get',
-                embedded: 'true'
+                embedded: 'true',
+                sanitize: String(!sanitize)
             },
             getUnmodified: {
                 action: 'get',
@@ -288,10 +292,11 @@ define('io.ox/mail/api', [
             delete data.cid;
             // sanitize content Types (we want lowercase 'text/plain' or 'text/html')
             // split by ; because this field might contain further unwanted data
-            _(data.attachments).each(function (attachment) {
+            data.attachments.forEach(function (attachment) {
                 if (/^text\/(plain|html)/i.test(attachment.content_type)) {
                     // only clean-up text and html; otherwise we lose data (see bug 43727)
                     attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+                    if (sanitize) attachment = sanitizer.sanitize(attachment);
                 }
             });
 
