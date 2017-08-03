@@ -19,6 +19,9 @@ define('io.ox/mail/sanitizer', [
 
     var whitelist = mailSettings.get('whitelist');
 
+    // TODO: Backend seems to leave out a few necessary attributes
+    whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes);
+
     // See: https://github.com/cure53/DOMPurify for all available options
     var options = {
         SAFE_FOR_JQUERY: true,
