@@ -20,17 +20,33 @@ define('io.ox/calendar/actions/delete', [
     'use strict';
 
     return function (list) {
-        // only simple delete for now
-        // TODO make it work for recurring appointments
         ox.load(['io.ox/core/tk/dialogs']).done(function (dialogs) {
 
-            var cont = function () {
+            var cont = function (series) {
+
+                list = _(list).chain().map(function (obj) {
+                    obj = obj instanceof Backbone.Model ? obj.attributes() : obj;
+                    var options = {
+                        id: obj.id,
+                        folder: obj.folder
+                    };
+                    // if the whole series should be deleted, don't send the recurrenceId.
+                    if (!series && obj.recurrenceId) {
+                        options.recurrenceId = obj.recurrenceId;
+                    }
+                    return options;
+                })
+                .uniq(function (obj) {
+                    return JSON.stringify(obj);
+                }).value();
+
                 api.remove(list).fail(notifications.yell);
             };
 
-            // different warnings especially for events with
-            // recurrence_type > 0 should handled here
-            if (false) {
+            var hasSeries = _(list).some(function (app) {
+                return !!(app.get ? app.get('recurrenceId') : app.recurrenceId);
+            });
+            if (hasSeries) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you want to delete the whole series or just one appointment within the series?'))
                     .addPrimaryButton('series', gt('Series'), 'series')
