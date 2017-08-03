@@ -95,6 +95,11 @@ define('io.ox/mail/compose/view', [
             draw: extensions.sender
         },
         {
+            id: 'sender-realname',
+            index: INDEX += 100,
+            draw: extensions.senderRealName
+        },
+        {
             id: 'to',
             index: INDEX += 100,
             draw: extensions.tokenfield('to')

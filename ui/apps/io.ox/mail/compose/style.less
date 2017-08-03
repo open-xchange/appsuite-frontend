@@ -31,6 +31,11 @@
 
         &.sender .dropdown { padding-top: 8px; }
 
+        &.sender-realname {
+            display: none;
+            color: #767676;
+        }
+
         div.dropdown {
             display: inline-block;
             margin-bottom: 5px;
@@ -67,6 +72,11 @@
             display: inline-block;
             padding-top: 6px;
         }
+    }
+
+    & > .mail-compose-fields.no-realname {
+        .sender { margin-bottom: 0 };
+        .sender-realname { display: block };
     }
 
     .sender {

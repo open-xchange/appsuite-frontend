@@ -235,6 +235,25 @@ define('io.ox/mail/compose/extensions', [
             this.append(node);
         },
 
+        senderRealName: function (baton) {
+            var fields = this,
+                model = baton.model;
+
+            function toggleVisibility() {
+                fields.toggleClass('no-realname', !model.get('sendDisplayName'));
+            }
+
+            model.on('change:sendDisplayName', toggleVisibility);
+            toggleVisibility();
+
+            this.append(
+                $('<div class="row sender-realname" data-extension-id="sender-realname">').append(
+                    $('<div class="col-xs-11 col-xs-offset-1">')
+                        .text(gt('This email just contains your email address as sender. Your real name is not used.'))
+                )
+            );
+        },
+
         // TODO: only used by search
         tokenPicture: function (model) {
             // add contact picture
