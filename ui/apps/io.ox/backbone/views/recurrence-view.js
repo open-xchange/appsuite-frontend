@@ -779,7 +779,8 @@ define('io.ox/backbone/views/recurrence-view', [
         },
 
         getMappedModel: function () {
-            if (!this.model.get('rrule')) return this.model;
+            // only new appointment model has startDate and endDate
+            if (!this.model.get('startDate') && !this.model.get('endDate')) return this.model;
             return new RRuleMapModel({ model: this.model });
         },
 
