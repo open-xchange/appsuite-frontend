@@ -141,9 +141,10 @@ define('io.ox/mail/compose/extensions', [
 
                         function redraw() {
                             var from = _(baton.model.get('from')).first();
-                            dropdown.$ul.empty();
+                            dropdown.$ul.empty().css('width', 'auto');
                             drawOptions();
                             dropdown.$('.dropdown-label').empty().append(renderFrom(from));
+                            if (dropdown.$el.hasClass('open')) dropdown.adjustBounds();
                             // re-focus element otherwise the bootstap a11y closes the drop-down
                             dropdown.$ul.find('[data-name="toggle-display"]').focus();
                         }

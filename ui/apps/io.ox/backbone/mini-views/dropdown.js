@@ -80,9 +80,13 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
         adjustBounds: function () {
             var bounds = this.$ul.get(0).getBoundingClientRect(),
+                margins = {
+                    top: parseInt(this.$ul.css('margin-top') || 0, 10),
+                    left: parseInt(this.$ul.css('margin-left') || 0, 10)
+                },
                 positions = {
-                    top: bounds.top,
-                    left: bounds.left,
+                    top: bounds.top - margins.top,
+                    left: bounds.left - margins.left,
                     width: bounds.width,
                     height: 'auto'
                 },
@@ -302,7 +306,10 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$el.append(
                 this.$toggle = this.options.$toggle || $('<a href="#" draggable="false">').attr({
                     'aria-label': ariaLabel,
-                    'data-action': this.options.dataAction
+                    'data-action': this.options.dataAction,
+                    'title': this.options.title || null,
+                    // in firefox draggable=false is not enough to prevent dragging...
+                    'ondragstart': _.device('firefox') ? 'return false;' : null
                 })
                 .append(
                     // label
@@ -312,11 +319,6 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 ),
                 this.$ul
             );
-            // add title?
-            if (this.options.title) this.$toggle.attr('title', this.options.title);
-            // in firefox draggable=false is not enough to prevent dragging...
-            if (_.device('firefox')) this.$toggle.attr('ondragstart', 'return false;');
-
             // update custom label
             this.label();
             this.ensureA11y();
@@ -329,7 +331,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             this.$toggle.attr({
                 'aria-haspopup': true,
                 'aria-expanded': false,
-                role: 'button',
+                'role': 'button',
                 'data-toggle': 'dropdown'
             });
 
