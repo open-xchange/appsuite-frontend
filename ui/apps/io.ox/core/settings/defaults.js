@@ -41,7 +41,7 @@ define('io.ox/core/settings/defaults', function () {
         productname: {
             mailapp: 'OX Mail',
             oxdrive: 'OX Drive',
-            oxtender: 'OXtener'
+            oxtender: 'OXtender'
         }
     };
 
