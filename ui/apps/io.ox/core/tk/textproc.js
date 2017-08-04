@@ -228,10 +228,9 @@ define('io.ox/core/tk/textproc', [
                 {
                     patterns: 'p',
                     replacement: function (str, attrs, innerHTML) {
-                        var newline = '\n';
                         // transform before inline style was applied (setting as indicator) or after (inline style)
-                        if (mailSettings.get('compose/simpleLinebreaks', false) || reSimpleLinebreak.test(str)) newline = '';
-                        return innerHTML ? ('\n\n' + innerHTML + newline) : '';
+                        if (mailSettings.get('compose/simpleLineBreaks', false) || reSimpleLinebreak.test(str)) return innerHTML || '';
+                        return innerHTML ? ('\n\n' + innerHTML + '\n') : '';
                     }
                 },
                 {
