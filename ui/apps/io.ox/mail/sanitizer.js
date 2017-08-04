@@ -12,10 +12,9 @@
  */
 
 define('io.ox/mail/sanitizer', [
-    'settings!io.ox/core',
     'settings!io.ox/mail',
     'static/3rd.party/purify.min.js'
-], function (coreSettings, mailSettings, DOMPurify) {
+], function (mailSettings, DOMPurify) {
 
     var whitelist = mailSettings.get('whitelist');
 
@@ -30,7 +29,7 @@ define('io.ox/mail/sanitizer', [
     };
 
     function isEnabled() {
-        return coreSettings.get('features/mail/sanitize', false);
+        return mailSettings.get('features/sanitize', false);
     }
 
     function sanitize(data) {
