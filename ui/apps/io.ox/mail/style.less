@@ -489,7 +489,8 @@
             min-height: 32px;
             & > li {
                 display: inline-block;
-                a {
+                > a {
+                    padding: 4px 8px;
                     display: inline-block;
                     &:focus {
                         background: #3C73AA;
@@ -498,7 +499,6 @@
                         text-decoration: none;
                     }
                 }
-                &:not(.dropdown) a, &.dropdown i { padding: 4px 8px; }
             }
             .fa-bars {
                 font-size: 14px;
