@@ -90,7 +90,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                 })
                     .build(function () {
                         if (!series && o.recurrenceId) {
-                            data = api.removeRecurrenceInformation(appointmentData);
+                            data = _(appointmentData).omit('rrule');
                         }
 
                         var recurrenceString = util.getRecurrenceString(appointmentData),
@@ -211,7 +211,7 @@ define('io.ox/calendar/actions/acceptdeny', [
         }
 
         // series?
-        if (!options.taskmode && o.recurrenceID) {
+        if (!options.taskmode && o.recurrenceId) {
             return new dialogs.ModalDialog()
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',
