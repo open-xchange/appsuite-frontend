@@ -115,6 +115,7 @@ test_ui:
     - install_deps_ui
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
+  allow_failure: true
 
 .tag docker image: &add_tag
   stage: deploy
