@@ -673,11 +673,6 @@ settings!io.ox/mail
 > maximal file size for all attachments. Beyond this size drive mail is activated automatically.
 
 
-## Compose: TinyMCE
-
-**simpleLineBreaks**
-> is mappend on TinyMCE's option 'forced_root_block'
-
 
 ## Emoji
 

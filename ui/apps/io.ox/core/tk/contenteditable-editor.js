@@ -313,10 +313,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
-            // simpleLineBreaks = true -> false -> enter insert <br>
-            // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
-            // this one is stored in mail settings
-            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? /* false */ 'p' : 'p',
+            forced_root_block: 'p',
 
             browser_spellcheck: true,
 
