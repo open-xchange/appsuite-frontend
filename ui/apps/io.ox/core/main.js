@@ -694,6 +694,7 @@ define('io.ox/core/main', [
         }
 
         function getCloseIconLabel(docTitle) {
+            //#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
             return _.escape(gt('Close for %1$s', docTitle));
         }
 

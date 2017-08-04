@@ -266,7 +266,7 @@ define('io.ox/mail/settings/compose/settings/pane', [
                             )
                         ),
                         exampleText = $('<div class="example-text">')
-                            .text(gt('This is how your message text will look.'))
+                            .text(gt('This is how your message text will look like.'))
                             .css(getCSS())
                     )
                 );

@@ -34,8 +34,10 @@ define('io.ox/settings/sessions/settings/pane', [
     });
 
     var operatingSystems = {
+        //#. Context: Session Management. Active session on platform/os.
         windows: gt('Windows'),
-        windows8: gt('windows'),
+        //#. Context: Session Management. Active session platform/os.
+        windows8: gt('Windows'),
         macos: gt('MacOS'),
         android: gt('Android'),
         ios: gt('iOS')

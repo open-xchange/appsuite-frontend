@@ -122,6 +122,7 @@ define('io.ox/calendar/settings/pane', [
                             ),
                             // scale
                             $('<div class="col-md-4">').append(
+                                //#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
                                 $('<label for="settings-interval">').text(gt('Time scale')),
                                 new mini.SelectView({ id: 'settings-interval', name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
                             )
