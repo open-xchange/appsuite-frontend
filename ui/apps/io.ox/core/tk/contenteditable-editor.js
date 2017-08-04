@@ -246,6 +246,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
                     .css('margin-bottom', '32px')
+                    .toggleClass('simple-linebreaks', mailSettings.get('compose/simpleLineBreaks', false))
             )
         );
 

@@ -12,7 +12,10 @@
  */
 'use strict';
 
-define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
+define('io.ox/core/tk/textproc', [
+    'io.ox/core/emoji/util',
+    'settings!io.ox/mail'
+], function (emoji, mailSettings) {
 
     return {
 
@@ -220,11 +223,15 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
         },
 
         htmltotext: function (string) {
+            var reSimpleLinebreak = /margin(-bottom)?:\s?0(px)?/i;
             var ELEMENTS = [
                 {
                     patterns: 'p',
                     replacement: function (str, attrs, innerHTML) {
-                        return innerHTML ? '\n\n' + innerHTML + '\n' : '';
+                        var newline = '\n';
+                        // transform before inline style was applied (setting as indicator) or after (inline style)
+                        if (mailSettings.get('compose/simpleLinebreaks', false) || reSimpleLinebreak.test(str)) newline = '';
+                        return innerHTML ? ('\n\n' + innerHTML + newline) : '';
                     }
                 },
                 {
@@ -256,7 +263,8 @@ define('io.ox/core/tk/textproc', ['io.ox/core/emoji/util'], function (emoji) {
 
                         return '[' + (innerHTML || '') + '](' + (href && href[1] || '') + ')';
                     }
-                }];
+                }
+            ];
 
             for (var i = 0, len = ELEMENTS.length; i < len; i++) {
                 if (typeof ELEMENTS[i].patterns === 'string') {

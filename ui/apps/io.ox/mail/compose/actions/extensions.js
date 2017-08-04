@@ -14,8 +14,9 @@
 
 define('io.ox/mail/compose/actions/extensions', [
     'io.ox/mail/actions/attachmentEmpty',
-    'io.ox/mail/actions/attachmentQuota'
-], function (attachmentEmpty, attachmentQuota) {
+    'io.ox/mail/actions/attachmentQuota',
+    'settings!io.ox/mail'
+], function (attachmentEmpty, attachmentQuota, mailSettings) {
     'use strict';
 
     var api = {};
@@ -43,6 +44,11 @@ define('io.ox/mail/compose/actions/extensions', [
 
     api.publishMailAttachments = function (baton) {
         return attachmentQuota.publishMailAttachmentsNotification(baton.mail.files);
+    };
+
+    api.applySimpleLinebreaks = function (baton) {
+        if (!mailSettings.get('compose/simpleLineBreaks', false)) return;
+        baton.mail.attachments[0].content = $('<div>').append($.parseHTML(baton.mail.attachments[0].content)).children('p').css('margin', 0).end().html();
     };
 
     return api;

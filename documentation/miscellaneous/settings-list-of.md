@@ -672,6 +672,8 @@ settings!io.ox/mail
 **compose/shareAttachments/threshold**
 > maximal file size for all attachments. Beyond this size drive mail is activated automatically.
 
+**compose/simpleLineBreaks**
+> EXPERIMENTAL WORKAROUND: use simple line breaks
 
 
 ## Emoji

@@ -102,6 +102,11 @@ define('io.ox/mail/compose/actions/send', [
             index: 550,
             perform: extensions.publishMailAttachments
         },
+        {
+            id: 'simple-linebreaks',
+            index: 600,
+            perform: extensions.applySimpleLinebreaks
+        },
         // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',
