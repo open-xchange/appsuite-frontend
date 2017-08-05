@@ -126,10 +126,10 @@ define('io.ox/portal/main', [
                             point.invoke('render', { $el: $header });
                         }
                     });
+                    $header.find('[role="log"]').remove();
                     $header.find('.form-group')
                         .addClass('pull-right')
-                        .prepend($('<button type="button" class="btn btn-primary">')
-                            .attr({ 'data-action': 'customize' })
+                        .prepend($('<button type="button" class="btn btn-primary" data-action="customize">')
                             .text(gt('Customize this page'))
                             .on('click', openSettings));
 
