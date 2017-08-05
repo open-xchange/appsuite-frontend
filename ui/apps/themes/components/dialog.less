@@ -62,7 +62,7 @@
     background-color: white;
     z-index: 65001;
     border: 0 none;
-    .box-shadow(0 5px 25px -5px #000);
+    box-shadow: 0 5px 25px -5px #000;
     border-radius: @border-radius-base;
 
     .modal-header {
@@ -140,7 +140,7 @@
 
     &:focus {
         outline: 0;
-        .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
+        box-shadow: 0 5px 25px -5px darken(@link-color, 20%);
     }
 
     &.topmost { z-index: 65003; }
