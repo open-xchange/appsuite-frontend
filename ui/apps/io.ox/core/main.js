@@ -1664,7 +1664,7 @@ define('io.ox/core/main', [
                             }
                             this.append(
                                 $('<li class="restore-item">').append(
-                                    $('<a href="#" role="button" class="remove">').data(item).append(
+                                    $('<a href="#" role="button" class="remove">').attr('title', gt('Remove restore point: "%1$s"', info)).data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),
