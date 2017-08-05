@@ -63,7 +63,7 @@
     z-index: 65001;
     border: 0 none;
     .box-shadow(0 5px 25px -5px #000);
-    .border-radius(@border-radius-base);
+    border-radius: @border-radius-base;
 
     .modal-header {
         position: relative;
@@ -105,7 +105,7 @@
 
             iframe {
                 display: block;
-                .border-radius(5px 5px 0 0);
+                border-radius: 5px 5px 0 0;
             }
         }
 
@@ -134,8 +134,8 @@
     }
 
     .io-ox-sidepopup {
-        &.right { .border-radius(0 5px 5px 0); }
-        &.left  { .border-radius(5px 0 0 5px); }
+        &.right { border-radius: 0 5px 5px 0; }
+        &.left  { border-radius: 5px 0 0 5px; }
     }
 
     &:focus {
@@ -360,7 +360,7 @@
     width: 95%;
     margin-top: 0;
     top: 10px;
-    .border-radius(0);
+    border-radius: 0;
 
     .modal-footer {
         margin-top: 0;

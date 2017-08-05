@@ -45,7 +45,7 @@
 .share-wizard {
 
     .tokenfield {
-        .border-radius(@border-radius-small @border-radius-small 0px 0px);
+        border-radius: @border-radius-small @border-radius-small 0px 0px;
         .twitter-typeahead .tt-dropdown-menu { max-height: 125px; }
         // ensure all inputs share same blank space on the left
         &.form-control { padding-left: 7px; }
@@ -54,7 +54,7 @@
     .message {
         textarea {
             margin-top: -16px;
-            .border-radius(0px 0px @border-radius-small @border-radius-small);
+            border-radius: 0px 0px @border-radius-small @border-radius-small;
             resize: vertical;
             max-height: ~"calc(50vh - 64px)";
             min-height: 8em;
