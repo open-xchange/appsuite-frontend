@@ -227,6 +227,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (e.which !== 13) return;
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
+            e.preventDefault();
             this.invokeAction(this.options.enter);
         },
 
