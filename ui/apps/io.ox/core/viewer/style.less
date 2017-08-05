@@ -61,7 +61,7 @@
     @viewer-sidebar-description-outline-color: #444444;
     @viewer-sidebar-tab-color: #ffffff;
     @viewer-sidebar-tab-bordercolor: #555555;
-    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bordercolor: @brand-primary;
     @viewer-sidebar-activetab-bgcolor: rgba(255,255,255,0.1);
     @viewer-sidebar-tab-hovercolor: rgba(255,255,255,0.2);
     @document-thumbnail-link-focus-color: #777777;
@@ -83,12 +83,12 @@
     @viewer-background-color: #f5f5f5;
     @viewer-busy-color: rgba(0, 0, 0, 0.3);
     @viewer-toolbar-bgcolor: #ffffff;
-    @viewer-toolbar-color: #3c73aa;
+    @viewer-toolbar-color: @brand-primary;
     @viewer-toolbar-border-color: #DDDDDD;
     @viewer-toolbar-hover-color: #284d71;
     @viewer-toolbar-hover-bgcolor: #EEEEEE;
     @viewer-toolbar-focus-color: #FFFFFF;
-    @viewer-toolbar-focus-bgcolor: #3c73aa;
+    @viewer-toolbar-focus-bgcolor: @brand-primary;
     @viewer-toolbar-active-color: #284d71;
     @viewer-toolbar-active-bgcolor: #AAAAAA;
     @viewer-displayer-navigation-color: rgba(255, 255, 255, 0.5);
@@ -100,7 +100,7 @@
     @viewer-sidebar-bgcolor: #f5f5f5;
     @viewer-sidebar-border-color: #DDDDDD;
     @viewer-sidebar-active-color: #ffffff;
-    @viewer-sidebar-active-bgcolor: #3c73aa;
+    @viewer-sidebar-active-bgcolor: @brand-primary;
     @viewer-sidebar-active-bordercolor: #ffffff;
     @viewer-sidebar-label-text-color: #999999;
     @viewer-sidebar-uploadnewversion-bgcolor: rgba(0,0,0,.1);
@@ -113,7 +113,7 @@
     @viewer-sidebar-description-outline-color: #777777;
     @viewer-sidebar-tab-color: #333333;
     @viewer-sidebar-tab-bordercolor: rgba(0,0,0,0.2);
-    @viewer-sidebar-activetab-bordercolor: #3c73aa;
+    @viewer-sidebar-activetab-bordercolor: @brand-primary;
     @viewer-sidebar-activetab-bgcolor: rgba(0,0,0,0.1);
     @viewer-sidebar-tab-hovercolor: rgba(0,0,0,0.2);
     @document-thumbnail-link-focus-color: rgba(0,0,0,0.1);
@@ -284,7 +284,7 @@
     font-size: 13px;
     background-color: @viewer-background-color;
     color: @viewer-text-color;
-    outline: none;
+    outline: 0;
     z-index: 1000;
 
     scrollbar-base-color: @viewer-scrollbar-base-color;
@@ -326,7 +326,7 @@
                 height: @viewer-toolbar-height;
                 min-width: @viewer-toolbar-link-width;
                 padding: 0 16px;
-                outline: none;
+                outline: 0;
                 text-align: center;
                 text-decoration: none;
                 color: @viewer-toolbar-color;
@@ -466,7 +466,7 @@
         top: @viewer-toolbar-height;
         width: 100%;
         bottom: 0;
-        outline: none;
+        outline: 0;
 
         &.toolbar-bottom-visible {
             .toolbar.bottom {
@@ -696,7 +696,7 @@
             margin-top: -25px;
             color: @viewer-displayer-navigation-color;
             background: @viewer-displayer-navigation-bgcolor;
-            outline: none;
+            outline: 0;
             width: 50px;
             height: 50px;
             border-radius: 2px;
@@ -767,7 +767,7 @@
         width: @viewer-sidebar-width;
         background-color: @viewer-sidebar-bgcolor;
         border-left: 1px solid @viewer-sidebar-border-color;
-        outline: none;
+        outline: 0;
         z-index: 2;     // hide captions when sidebar is 100% width
 
         &.open { display: block; }
@@ -896,7 +896,7 @@
 
     .sidebar-panel {
 
-        a.btn, div.dropdown > a { outline: none; }
+        a.btn, div.dropdown > a { outline: 0; }
 
         .sidebar-panel-heading {
 
@@ -1001,5 +1001,5 @@ html.ios .io-ox-viewer {
     .viewer-sidebar, .swiper-slide.swiper-slide-active { -webkit-overflow-scrolling: touch; }
 }
 
-.viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: #3c73aa; }
+.viewer-sidebar .description-button { outline:0; padding:0; border:0; font-size: 13px; color: @brand-primary; }
 .viewer-dark-theme .viewer-sidebar .description-button { color: #7ba6d1; }

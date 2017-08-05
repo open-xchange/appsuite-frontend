@@ -113,7 +113,7 @@ legend {
         background: red;
         cursor: inherit;
         display: block;
-        outline: none;
+        outline: 0;
     }
 
     i.fa-paperclip:after { content: '\00a0'; }
@@ -418,7 +418,7 @@ html:not(.internet-explorer) {
         font-size: 16px;
         &:focus {
             color: #ffffff;
-            background-color: #3c73aa;
+            background-color: @brand-primary;
         }
     }
     &.has-focus .toggle-asterisks {

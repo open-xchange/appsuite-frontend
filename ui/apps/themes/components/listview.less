@@ -390,9 +390,6 @@
 
 /* New list view */
 .megalist {
-
-    @blue: #3c73aa;
-
     position: absolute;
     z-index: 1000000;
     background-color: #fff;
@@ -440,12 +437,12 @@
     &.has-focus {
 
         > li:focus {
-            border-color: @blue;
+            border-color: @brand-primary;
         }
 
         > li[aria-selected="true"] {
             color: white;
-            background-color: @blue;
+            background-color: @brand-primary;
         }
 
         > li[aria-selected="true"] .fa:before {
@@ -454,7 +451,7 @@
 
         > li[aria-selected="true"]:focus {
             border-color: transparent;
-            background-color: darken(@blue, 10%);
+            background-color: darken(@brand-primary, 10%);
         }
     }
 
