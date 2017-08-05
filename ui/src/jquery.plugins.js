@@ -70,7 +70,7 @@
         if (opt.purelink === true) {
             button = $('<a>').addClass(className).append(text);
         } else {
-            button = $('<button>').addClass(className).append(
+            button = $('<button type="button">').addClass(className).append(
                 $('<span>').append(text)
             );
         }

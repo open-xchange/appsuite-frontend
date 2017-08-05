@@ -225,7 +225,7 @@ define('io.ox/mail/detail/content', [
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
-                var ellipsisButton = $('<button class="bqt">').attr('title', gt('Show quoted text')).append(
+                var ellipsisButton = $('<button type="button" class="bqt">').attr('title', gt('Show quoted text')).append(
                     $('<span aria-hidden="true">').text('...')
                 );
                 if (!_.browser.Chrome) {

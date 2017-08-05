@@ -631,7 +631,7 @@ define('io.ox/tasks/edit/view-template', [
             }
             this.append(
                 $('<div class="col-lg-12 collapsed">').append(
-                    $('<button class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
+                    $('<button type="button" class="btn btn-link expand-details-link">').attr('aria-expanded', !baton.parentView.detailsCollapsed).text(text)
                     .on('click', function () {
                         baton.parentView.$el.find('.task-edit-details').toggle();
                         baton.parentView.detailsCollapsed = !baton.parentView.detailsCollapsed;

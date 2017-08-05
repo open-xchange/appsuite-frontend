@@ -158,7 +158,7 @@ define('io.ox/backbone/mini-views/common', [
         render: function () {
             this.$el.empty().append(
                 this.passwordView.render().$el,
-                $('<button href="#" class="btn form-control-feedback toggle-asterisks center-childs">')
+                $('<button type="button" class="btn form-control-feedback toggle-asterisks center-childs">')
                     //#. title of toggle button within password field
                     .attr({ title: gt('toggle password visibility') })
                     .append(

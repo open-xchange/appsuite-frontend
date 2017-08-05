@@ -42,7 +42,7 @@ define('io.ox/files/share/wizard', [
         index: INDEX += 100,
         draw: function () {
             this.append(
-                $('<span>').addClass('help-block').text(gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.'))
+                $('<span class="help-block">').text(gt('You can copy and paste this link in an email, instant messenger or social network. Please note that anyone with this link can access the share.'))
             );
         }
     });
@@ -101,7 +101,7 @@ define('io.ox/files/share/wizard', [
             // copy-to-clipboard button
             group.append(
                 $('<span class="input-group-btn">').append(
-                    button = $('<button class="btn btn-default" type="button">')
+                    button = $('<button type="button" class="btn btn-default">')
                     .append($('<i class="fa fa-clipboard clippy">'))
                     .attr({
                         'data-clipboard-target': target,
@@ -137,7 +137,7 @@ define('io.ox/files/share/wizard', [
         id: 'defaultOptions',
         index: INDEX += 100,
         draw: function (baton) {
-            var optionGroup = $('<div>').addClass('form-group shareoptions');
+            var optionGroup = $('<div class="form-group shareoptions">');
             ext.point(POINT + '/options').invoke('draw', optionGroup, baton);
             this.append(optionGroup);
         }
@@ -169,7 +169,7 @@ define('io.ox/files/share/wizard', [
             this.append(
                 $('<div class="form-group recipients">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
                     $('<div class="input-group has-picker">').append(
-                        $('<label>').attr({ for: guid }).addClass('sr-only').text(gt('Add recipients ...')),
+                        $('<label class="sr-only">').attr({ for: guid }).text(gt('Add recipients ...')),
                         tokenfieldView.$el,
                         usePicker ? new AddressPickerView({
                             isPermission: true,
@@ -214,7 +214,7 @@ define('io.ox/files/share/wizard', [
 
             this.append(
                 $('<div class="message">').addClass(_.browser.IE ? 'IE' : 'nonIE').append(
-                    $('<label>').addClass('control-label sr-only').text(gt('Message (optional)')).attr({ for: guid }),
+                    $('<label class="control-label sr-only">').text(gt('Message (optional)')).attr({ for: guid }),
                     $textView = new miniViews.TextView({
                         name: 'message',
                         model: baton.model

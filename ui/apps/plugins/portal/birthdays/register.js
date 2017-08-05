@@ -78,7 +78,7 @@ define('plugins/portal/birthdays/register', [
 
         preview: function (baton) {
 
-            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button" aria-label="' + gt('Press [enter] to jump to complete list of Birthdays.') + '">'),
+            var $list = $('<ul class="content list-unstyled io-ox-portal-birthdays" tabindex="0" role="button">').attr('aria-label', gt('Press [enter] to jump to complete list of Birthdays.')),
                 hash = {},
                 contacts = baton.data,
                 numOfItems = _.device('smartphone') ? 5 : 15;

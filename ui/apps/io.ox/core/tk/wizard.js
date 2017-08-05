@@ -420,7 +420,7 @@ define('io.ox/core/tk/wizard', [
             })
             .append(
                 $('<div class="wizard-header">').append(
-                    $('<button class="wizard-close close pull-right" data-action="close">').append(
+                    $('<button type="button" class="wizard-close close pull-right" data-action="close">').append(
                         $('<span aria-hidden="true">&times;</span>'),
                         $('<span class="sr-only">').text(gt('Close'))
                     ),
@@ -466,7 +466,7 @@ define('io.ox/core/tk/wizard', [
         },
 
         // internal; just add a button
-        addButton: addControl('<button class="btn">'),
+        addButton: addControl('<button type="button" class="btn">'),
 
         // internal; just add a link
         addLink: addControl('<a href="#" role="button">'),

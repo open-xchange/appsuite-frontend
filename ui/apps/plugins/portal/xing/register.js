@@ -144,7 +144,7 @@ define('plugins/portal/xing/register', [
     statusUpdateForm = function () {
         var form = $('<div class="xing comment">').append(
             $('<textarea rows="3" cols "40">'),
-            $('<button class="btn btn-primary">').text(gt('Post a status update'))
+            $('<button type="button" class="btn btn-primary">').text(gt('Post a status update'))
         );
 
         form.on('click', '.btn', function (clickEvent) {

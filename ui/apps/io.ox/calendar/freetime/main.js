@@ -136,7 +136,7 @@ define('io.ox/calendar/freetime/main', [
 
         createDistributionlistButton: function () {
             var self = this,
-                distributionListButton = $('<button class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list'));
+                distributionListButton = $('<button type="button" class="btn btn-link scheduling-distributionlist-button">').text(gt('Save as distribution list'));
 
             distributionListButton.on('click', function () {
                 require(['io.ox/calendar/freetime/distributionListPopup'], function (distrib) {
@@ -169,7 +169,7 @@ define('io.ox/calendar/freetime/main', [
         },
 
         createFooter: function () {
-            var saveButton = $('<button class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
+            var saveButton = $('<button type="button" class="btn btn-primary pull-right scheduling-save-button">').text(gt('Create appointment')),
                 distributionListButton = this.createDistributionlistButton(),
                 node = $('<div class="scheduling-app-footer clearfix">').append(distributionListButton, saveButton);
 
@@ -229,7 +229,7 @@ define('io.ox/calendar/freetime/main', [
             options.isApp = true;
             options.app = app;
 
-            var closeButton = $('<button class="btn btn-link scheduling-app-close">').attr('title', gt('Close')).append($('<i class="fa fa-close" aria-hidden="true">')).on('click', function () {
+            var closeButton = $('<button type="button" class="btn btn-link scheduling-app-close">').attr('title', gt('Close')).append($('<i class="fa fa-close" aria-hidden="true">')).on('click', function () {
                 app.quit();
             });
 

@@ -96,7 +96,7 @@ define('io.ox/onboarding/clients/view-mobile', [
 
         buttonDownload: function (action) {
             var ref = _.uniqueId('description-');
-            this.append($('<button class="btn btn-primary action-call">')
+            this.append($('<button type="button" class="btn btn-primary action-call">')
                 .attr('aria-describedby', ref)
                 .text(gt('Install'))
                 .on('click', function (e) {

@@ -226,12 +226,9 @@ define('io.ox/oauth/backbone', [
         render: function () {
             var shortId = this.model.get('icon') || this.model.id.match(/\.?(\w*)$/)[1] || 'fallback';
             this.$el.append(
-                $('<button>').addClass('btn btn-default').append(
-                    $('<i class="service-icon fa">')
-                        .addClass('logo-' + shortId),
-                    $('<div>')
-                        .addClass('service-label')
-                        .text(this.model.get('displayName'))
+                $('<button type="button" class="btn btn-default">').append(
+                    $('<i class="service-icon fa">').addClass('logo-' + shortId),
+                    $('<div class="service-label">').text(this.model.get('displayName'))
                 ).data({
                     cid: this.model.cid
                 })
