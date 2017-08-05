@@ -1590,7 +1590,8 @@ msgstr "Muutes selle sündmuse kuupäeva, tekitame erandi selle sündmuse sarja.
 msgid "CC"
 msgstr "CC"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1664,8 +1665,7 @@ msgstr "Kalendrid"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1943,6 +1943,7 @@ msgstr "Sulge kirjelduse paneel"
 msgid "Close folder view"
 msgstr "Sulge kaustavaade"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 msgid "Close for %1$s"
@@ -3788,25 +3789,25 @@ msgstr "Aegub"
 msgid "Expires on"
 msgstr "Aegub kuupäeval"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Ekspordi"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "Saada vCard"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Ekspordi kaust"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "%1$d valitud"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "External Apps"
@@ -4216,7 +4217,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Unustasite parooli?"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "Vorming"
@@ -4741,7 +4742,7 @@ msgstr "Sisendkaust"
 msgid "Inbox categories"
 msgstr "Sisendkausta kategooriad"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Kaasa leviloendid"
 
@@ -6022,6 +6023,12 @@ msgstr "Valitud elemendid puuduvad"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "Vead puuduvad"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "No action available"
+msgid "No export format available"
+msgstr "Toimingud ei ole saadaval"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7712,11 +7719,6 @@ msgstr "Vasta postiloendile"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Vasta saatjale"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9538,7 +9540,9 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Tegu on standardkaustaga, mida ei saa ümber nimetada."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look."
+#, fuzzy
+#| msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr ""
 "Kohandatud kirjatüübi eelvaade - sellise tekstistiiliga näete enda kirju."
 
@@ -9643,6 +9647,7 @@ msgstr "Paanid"
 msgid "Time"
 msgstr "Kellaaeg"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time scale in minutes"
@@ -10314,6 +10319,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "Terve päev"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Windows"
 msgstr ""
@@ -11018,6 +11025,12 @@ msgstr "osalejatega"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar"
+msgid "iCalendar"
+msgstr "Kalender"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11200,8 +11213,7 @@ msgstr "teine"
 msgid "seen"
 msgstr "nähtud"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "vali vorming"
 
@@ -11268,7 +11280,8 @@ msgstr "tundmatu saatja"
 msgid "unlimited"
 msgstr "piiramatu"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11298,10 +11311,6 @@ msgstr "kui adressaadid on failidele juurde pääsenud"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "kui adressaadid on failide allalaadimise lõpetanud"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "windows"
-msgstr ""
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -11622,6 +11631,11 @@ msgstr "teie platvorm"
 
 #~ msgid "Every day"
 #~ msgstr "Iga päev"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Saada vCard"
 
 #~ msgid "February"
 #~ msgstr "Veebruar"

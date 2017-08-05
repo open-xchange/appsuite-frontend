@@ -1571,7 +1571,8 @@ msgstr "更改此约会日期可创建一个系列约会的例外。"
 msgid "CC"
 msgstr "抄送"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1645,8 +1646,7 @@ msgstr "日历"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1923,6 +1923,7 @@ msgstr "关闭描述面板"
 msgid "Close folder view"
 msgstr "关闭文件夹视图"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 #| msgid "close for %1$s"
@@ -3756,25 +3757,25 @@ msgstr "过期于"
 msgid "Expires on"
 msgstr "过期于"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "导出"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "以 vCard 发送"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "导出文件夹"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "已选定 %1$d 个"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "External Apps"
@@ -4174,7 +4175,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "忘记密码？"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "格式"
@@ -4692,7 +4693,7 @@ msgstr "收件箱"
 msgid "Inbox categories"
 msgstr "收件箱类别"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "包括通讯组列表"
 
@@ -5971,6 +5972,12 @@ msgstr "没有选定的元素"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "没有错误"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "No action available"
+msgid "No export format available"
+msgstr "无可用动作"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7638,11 +7645,6 @@ msgstr "回复邮件列表"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "回复发信人"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9409,7 +9411,7 @@ msgstr "这是标准文件夹，不能更名。"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "This is how your message text will look like."
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr "这是您讯息文本的样子。"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9510,6 +9512,7 @@ msgstr "方块"
 msgid "Time"
 msgstr "时间"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time scale in minutes"
@@ -10171,6 +10174,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "全天"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Close Window"
@@ -10860,6 +10865,12 @@ msgstr "有参与者"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar"
+msgid "iCalendar"
+msgstr "日历"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11042,8 +11053,7 @@ msgstr "第二个"
 msgid "seen"
 msgstr "看到"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "选择格式"
 
@@ -11110,7 +11120,8 @@ msgstr "未知发送人"
 msgid "unlimited"
 msgstr "无限"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11140,12 +11151,6 @@ msgstr "在接收者已经访问文件时"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "在接收者结束下载文件时"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Main window"
-msgid "windows"
-msgstr "主窗口"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13255,6 +13260,11 @@ msgstr "您的平台"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "离开全屏幕"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "以 vCard 发送"
 
 #~ msgid "Extended view"
 #~ msgstr "扩展视图"
@@ -16015,6 +16025,11 @@ msgstr "您的平台"
 
 #~ msgid "weekly"
 #~ msgstr "每周"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "主窗口"
 
 #~ msgid "work days"
 #~ msgstr "工作日"

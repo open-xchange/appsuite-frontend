@@ -1616,7 +1616,8 @@ msgstr ""
 msgid "CC"
 msgstr "Kopie aan"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1690,8 +1691,7 @@ msgstr "Agenda's"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1971,6 +1971,7 @@ msgstr "Sluit omschrijvingspaneel"
 msgid "Close folder view"
 msgstr "Mappenoverzicht sluiten"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 #| msgid "close for %1$s"
@@ -3840,25 +3841,25 @@ msgstr "Verloopt op"
 msgid "Expires on"
 msgstr "Verloopt op"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Exporteren"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "Versturen als vCard"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Exporteer map"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "%1$d geselecteerd"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "External Apps"
@@ -4272,7 +4273,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Uw wachtwoord vergeten?"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "Formaat"
@@ -4799,7 +4800,7 @@ msgstr "Postvak IN"
 msgid "Inbox categories"
 msgstr "Postvak-In categorieën"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Distributielijst insluiten"
 
@@ -6092,6 +6093,14 @@ msgstr "Geen elementen geselecteerd"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "Geen foutmeldingen"
+
+# (Reinout)
+# Elma: links wordt veel vaker gebruikt?
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "No action available"
+msgid "No export format available"
+msgstr "Geen actie beschikbaar"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7801,11 +7810,6 @@ msgstr "Beantwoord naar mailinglijst"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Beantwoord verzender"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9652,7 +9656,7 @@ msgstr "Dit is een standaard-map, deze kan niet hernoemd worden."
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "This is how your message text will look like."
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr "Dit is hoe de tekst van uw bericht er uit zal zien."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9759,6 +9763,7 @@ msgstr "Vlakken"
 msgid "Time"
 msgstr "Tijd"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time scale in minutes"
@@ -10434,6 +10439,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "Volledige dag"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Windows"
 msgstr ""
@@ -11149,6 +11156,12 @@ msgstr "heeft deelnemers"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar"
+msgid "iCalendar"
+msgstr "Agenda"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11331,8 +11344,7 @@ msgstr "tweede"
 msgid "seen"
 msgstr "gezien"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "Selecteer formaat"
 
@@ -11401,7 +11413,8 @@ msgstr "onbekende verzender"
 msgid "unlimited"
 msgstr "ongelimiteerd"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11431,12 +11444,6 @@ msgstr "Als de ontvangers de bestanden hebben benaderd"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "Als de ontvangers de bestanden hebben gedownload"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Main window"
-msgid "windows"
-msgstr "Hoofdscherm"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12293,6 +12300,11 @@ msgstr "uw platform"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Volledig scherm verlaten"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Versturen als vCard"
 
 #~ msgid "Extended view"
 #~ msgstr "Uitgebreid overzicht"
@@ -14392,6 +14404,11 @@ msgstr "uw platform"
 
 #~ msgid "weekly"
 #~ msgstr "wekelijks"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "Hoofdscherm"
 
 #~ msgid "work days"
 #~ msgstr "werkdagen"

@@ -1575,7 +1575,8 @@ msgstr ""
 msgid "CC"
 msgstr "CC"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1649,8 +1650,7 @@ msgstr "予定表"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1928,6 +1928,7 @@ msgstr "説明パネルを閉じる"
 msgid "Close folder view"
 msgstr "フォルダビューを閉じる"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 #| msgid "close for %1$s"
@@ -3775,25 +3776,25 @@ msgstr "期限切れ"
 msgid "Expires on"
 msgstr "次の時刻に有効期間が切れます："
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "エクスポート"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "vCard を送信"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "フォルダをエクスポート"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "%1$d 件のメッセージが選択されています。"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "External Apps"
@@ -4202,7 +4203,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "パスワードをお忘れですか？"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "フォーマット"
@@ -4728,7 +4729,7 @@ msgstr "受信トレイ"
 msgid "Inbox categories"
 msgstr "受信トレイのカテゴリ"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "配布リストを追加"
 
@@ -6012,6 +6013,12 @@ msgstr "項目が選択されていません。"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "エラーはありません。"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "No participants available"
+msgid "No export format available"
+msgstr "出席者はいません。"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7691,11 +7698,6 @@ msgstr "メーリング リストに返信"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "差出人に返信"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9496,7 +9498,7 @@ msgstr "これは標準フォルダです。名前を変更できません。"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "This is how your message text will look like."
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr "メッセージテキストは次のように表示されます。"
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9601,6 +9603,7 @@ msgstr "タイル"
 msgid "Time"
 msgstr "時間"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time Range"
@@ -10271,6 +10274,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "終日"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Windows PC"
@@ -10975,6 +10980,10 @@ msgstr "出席者あり"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+msgid "iCalendar"
+msgstr "iCalendar"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11156,8 +11165,7 @@ msgstr "第２"
 msgid "seen"
 msgstr "既読"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "フォーマットを選択"
 
@@ -11224,7 +11232,8 @@ msgstr "差出人が不明です。"
 msgid "unlimited"
 msgstr "無制限"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11254,12 +11263,6 @@ msgstr "宛先がファイルにアクセスしたとき"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "宛先がダウンロードを終えた時"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Windows PC"
-msgid "windows"
-msgstr "ウィンドウ"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -14315,6 +14318,11 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張"
 
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "vCard を送信"
+
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
 
@@ -15803,9 +15811,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "このサーバには、一致するテンプレートがありません。"
-
-#~ msgid "No participants available"
-#~ msgstr "出席者はいません。"
 
 #~ msgid "No resources available"
 #~ msgstr "利用可能な設備はありません。"
@@ -19512,9 +19517,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "i18n test string - do not translate this"
 #~ msgstr "i18n test string"
 
-#~ msgid "iCalendar"
-#~ msgstr "iCalendar"
-
 #~| msgid "Phone"
 #~ msgid "iPhone"
 #~ msgstr "電話"
@@ -19738,6 +19740,11 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "who|From"
 #~ msgstr "差出人"
+
+#, fuzzy
+#~| msgid "Windows PC"
+#~ msgid "windows"
+#~ msgstr "ウィンドウ"
 
 #~ msgid "work days"
 #~ msgstr "稼働日"

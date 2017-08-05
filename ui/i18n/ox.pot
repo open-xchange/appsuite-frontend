@@ -646,7 +646,6 @@ msgstr ""
 #: apps/io.ox/contacts/edit/main.js
 #: apps/io.ox/contacts/main.js
 #: apps/io.ox/core/desktop.js
-#: apps/io.ox/core/export/export.js
 #: apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
@@ -938,6 +937,24 @@ msgstr ""
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
 msgid "Follow-up"
+msgstr ""
+
+#: apps/io.ox/calendar/actions.js
+#: module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts
+#: apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail
+#: apps/io.ox/contacts/toolbar.js
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js
+#: module:io.ox/tasks
+#: apps/io.ox/tasks/toolbar.js
+msgid "Export"
 msgstr ""
 
 #: apps/io.ox/calendar/actions.js
@@ -2200,6 +2217,7 @@ msgstr ""
 msgid "End of working time"
 msgstr ""
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js
 #: module:io.ox/calendar
 msgid "Time scale"
@@ -2909,12 +2927,6 @@ msgstr ""
 msgid "Contact has been copied"
 msgstr ""
 
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
-
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/create-dist-view.js
@@ -2941,11 +2953,6 @@ msgstr ""
 #: module:io.ox/mail
 #: apps/io.ox/contacts/toolbar.js
 msgid "Send mail"
-msgstr ""
-
-#: apps/io.ox/contacts/actions.js
-#: module:io.ox/contacts
-msgid "Export as VCard"
 msgstr ""
 
 #: apps/io.ox/contacts/actions.js
@@ -3311,13 +3318,6 @@ msgstr ""
 #: apps/io.ox/contacts/main.js
 #: module:io.ox/contacts
 msgid "Contacts toolbar"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js
-#: module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js
-#: module:io.ox/contacts
-msgid "Export as vCard"
 msgstr ""
 
 #: apps/io.ox/contacts/model.js
@@ -4360,32 +4360,47 @@ msgstr ""
 msgid "Reset this list"
 msgstr ""
 
-#: apps/io.ox/core/export/export.js
+#: apps/io.ox/core/export.js
 #: module:io.ox/core
 msgid "Export folder"
 msgstr ""
 
-#: apps/io.ox/core/export/export.js
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+msgid "Export selected"
+msgstr ""
+
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+msgid "iCalendar"
+msgstr ""
+
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+#: apps/io.ox/core/import/import.js
+msgid "vCard"
+msgstr ""
+
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+#: apps/io.ox/core/import/import.js
+msgid "CSV"
+msgstr ""
+
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+msgid "No export format available"
+msgstr ""
+
+#: apps/io.ox/core/export.js
 #: module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr ""
 
-#: apps/io.ox/core/export/export.js
-#: module:io.ox/core
-#: apps/io.ox/core/import/import.js
-msgid "select format"
-msgstr ""
-
-#: apps/io.ox/core/export/export.js
+#: apps/io.ox/core/export.js
 #: module:io.ox/core
 msgid "Include distribution lists"
-msgstr ""
-
-#: apps/io.ox/core/export/export.js
-#: module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
-msgid "Export"
 msgstr ""
 
 #. %1$s inline menu title for better accessibility
@@ -4949,17 +4964,12 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
+msgid "select format"
+msgstr ""
+
+#: apps/io.ox/core/import/import.js
+#: module:io.ox/core
 msgid "iCal"
-msgstr ""
-
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
-msgid "CSV"
-msgstr ""
-
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
-msgid "vCard"
 msgstr ""
 
 #: apps/io.ox/core/import/import.js
@@ -5171,6 +5181,7 @@ msgstr ""
 msgid "Sign out now"
 msgstr ""
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 msgid "Close for %1$s"
@@ -10246,7 +10257,7 @@ msgstr ""
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js
 #: module:io.ox/mail
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr ""
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js
@@ -11319,14 +11330,11 @@ msgstr ""
 msgid "Active clients"
 msgstr ""
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
 msgid "Windows"
-msgstr ""
-
-#: apps/io.ox/settings/sessions/settings/pane.js
-#: module:io.ox/core
-msgid "windows"
 msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js

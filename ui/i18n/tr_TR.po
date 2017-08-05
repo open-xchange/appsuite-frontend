@@ -1605,7 +1605,8 @@ msgstr ""
 msgid "CC"
 msgstr "CC"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1686,8 +1687,7 @@ msgstr "Takvim"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1972,6 +1972,7 @@ msgstr "İş tanımı"
 msgid "Close folder view"
 msgstr "Klasör görünümünü kapat"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 msgid "Close for %1$s"
@@ -3896,25 +3897,25 @@ msgstr "Sona eriyor"
 msgid "Expires on"
 msgstr "Sona eriyor"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Dışarı aktar"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "vCard olarak gönder"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Klasörü dışarı aktar"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "%1$d seçildi"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 #, fuzzy
@@ -4340,7 +4341,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Şifremi Unuttum ?"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "Format"
@@ -4882,7 +4883,7 @@ msgstr "Gelen kutusu"
 msgid "Inbox categories"
 msgstr "E-posta adresi"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Dağıtım listesi dahil "
 
@@ -6213,6 +6214,10 @@ msgstr "Herhangi bir öge seçilmedi"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "Herhangi bir hata bulunamadı."
+
+#: apps/io.ox/core/export.js module:io.ox/core
+msgid "No export format available"
+msgstr ""
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7972,11 +7977,6 @@ msgstr "Tümüne Cevapla"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Göndereni yanıtla"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9863,7 +9863,7 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Bu standart bir dosyadır, tekrar adlandırılamaz."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr ""
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9969,6 +9969,7 @@ msgstr "Döşemeler"
 msgid "Time"
 msgstr "Zaman"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time scale in minutes"
@@ -10668,6 +10669,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "Tüm gün"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "Windows"
 msgstr ""
@@ -11411,6 +11414,12 @@ msgstr "Katılımcılar"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar"
+msgid "iCalendar"
+msgstr "Takvim"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11601,8 +11610,7 @@ msgstr "ikinci"
 msgid "seen"
 msgstr "görüldü"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "formatı seçin"
 
@@ -11670,7 +11678,8 @@ msgstr "Bilinmeyen gönderen"
 msgid "unlimited"
 msgstr "Limitsiz "
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11702,12 +11711,6 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr ""
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Main window"
-msgid "windows"
-msgstr "E posta penceresi"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -12076,6 +12079,11 @@ msgstr "Platformunuz"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Tam ekrandan çık"
+
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "vCard olarak gönder"
 
 #~ msgid "Facebook"
 #~ msgstr "Facebook"
@@ -12849,6 +12857,11 @@ msgstr "Platformunuz"
 
 #~ msgid "weekly"
 #~ msgstr "Haftalık"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "E posta penceresi"
 
 #~ msgid "work days"
 #~ msgstr "İş günleri"

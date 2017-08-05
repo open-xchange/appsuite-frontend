@@ -1623,7 +1623,8 @@ msgstr "Ak zmeníte dátum tejto schôdzky, vytvoríte v sérii stretnutí výni
 msgid "CC"
 msgstr "Kópia"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "CSV"
 msgstr "CSV"
 
@@ -1697,8 +1698,7 @@ msgstr "Kalendáre"
 #: apps/io.ox/calendar/util.js apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts apps/io.ox/contacts/distrib/main.js
 #: apps/io.ox/contacts/edit/main.js apps/io.ox/contacts/main.js
-#: apps/io.ox/core/desktop.js apps/io.ox/core/export/export.js
-#: apps/io.ox/core/folder/actions/archive.js
+#: apps/io.ox/core/desktop.js apps/io.ox/core/folder/actions/archive.js
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/core/folder/picker.js
@@ -1980,6 +1980,7 @@ msgstr "Zatvoriť panel popisu"
 msgid "Close folder view"
 msgstr "Zavrieť zobrazenie priečinka"
 
+#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
 #: apps/io.ox/core/main.js module:io.ox/core
 #, fuzzy
 #| msgid "close for %1$s"
@@ -3845,25 +3846,25 @@ msgstr "Vyprší o"
 msgid "Expires on"
 msgstr "Vyprší"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/calendar/actions.js module:io.ox/calendar
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: apps/io.ox/calendar/toolbar.js apps/io.ox/contacts/actions.js
+#: module:io.ox/contacts apps/io.ox/contacts/mobile-toolbar-actions.js
+#: module:io.ox/mail apps/io.ox/contacts/toolbar.js apps/io.ox/core/export.js
+#: module:io.ox/core apps/io.ox/core/folder/contextmenu.js
+#: apps/io.ox/tasks/actions.js module:io.ox/tasks apps/io.ox/tasks/toolbar.js
 msgid "Export"
 msgstr "Exportovať"
 
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Export as VCard"
-msgstr ""
-
-#: apps/io.ox/contacts/mobile-toolbar-actions.js module:io.ox/mail
-#: apps/io.ox/contacts/toolbar.js module:io.ox/contacts
-#, fuzzy
-#| msgid "Send as vCard"
-msgid "Export as vCard"
-msgstr "Poslať ako vCard"
-
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Export folder"
 msgstr "Priečinok na export"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$d selected"
+msgid "Export selected"
+msgstr "%1$d vybraných"
 
 #: apps/io.ox/settings/apps/settings/pane.js module:io.ox/core
 msgid "External Apps"
@@ -4275,7 +4276,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Zabudli ste heslo?"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
 msgstr "Formát"
@@ -4801,7 +4802,7 @@ msgstr "Prijaté"
 msgid "Inbox categories"
 msgstr "Kategórie doručených"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
 msgid "Include distribution lists"
 msgstr "Pridať distribučné zoznamy"
 
@@ -6090,6 +6091,12 @@ msgstr "Žiadne prvky neboli vybrané"
 #: apps/io.ox/core/settings/errorlog/settings/pane.js module:io.ox/core
 msgid "No errors"
 msgstr "Žiadne chyby"
+
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgid "No participants available"
+msgid "No export format available"
+msgstr "Žiadni účastníci nie sú dostupní"
 
 #: apps/plugins/portal/recentfiles/register.js module:plugins/portal
 msgid "No files have been changed recently"
@@ -7789,11 +7796,6 @@ msgstr "Odpovedať do poštovej konferencie"
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
 msgid "Reply to sender"
 msgstr "Odpovedať odosielateľovi"
-
-#. requested url for vcard download hits technical request limit
-#: apps/io.ox/contacts/actions.js module:io.ox/contacts
-msgid "Request limit was hit. Please try again with less contacts selected."
-msgstr ""
 
 #: apps/io.ox/mail/compose/view.js module:io.ox/mail
 msgid "Request read receipt"
@@ -9635,7 +9637,7 @@ msgstr "Jedná sa o štandardný priečinok, ktorý nemôže byť premenovaný."
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 #, fuzzy
 #| msgid "This is how your message text will look like."
-msgid "This is how your message text will look."
+msgid "This is how your message text will look like."
 msgstr "Takto bude vyzerať text vašej správy."
 
 #: apps/io.ox/mail/accounts/model.js module:io.ox/keychain
@@ -9740,6 +9742,7 @@ msgstr "Dlaždice"
 msgid "Time"
 msgstr "Čas"
 
+#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
 #: apps/io.ox/calendar/settings/pane.js module:io.ox/calendar
 #, fuzzy
 #| msgid "Time Range"
@@ -10412,6 +10415,8 @@ msgstr ""
 msgid "Whole day"
 msgstr "Celodenná"
 
+#. Context: Session Management. Active session on platform/os.
+#. Context: Session Management. Active session platform/os.
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "Windows are shown as"
@@ -11132,6 +11137,10 @@ msgstr "má účastníkov"
 msgid "iCal"
 msgstr "iCal"
 
+#: apps/io.ox/core/export.js module:io.ox/core
+msgid "iCalendar"
+msgstr "iCalendar"
+
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "iOS"
 msgstr ""
@@ -11315,8 +11324,7 @@ msgstr "druhý"
 msgid "seen"
 msgstr "videné"
 
-#: apps/io.ox/core/export/export.js module:io.ox/core
-#: apps/io.ox/core/import/import.js
+#: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "select format"
 msgstr "vyberte formát"
 
@@ -11383,7 +11391,8 @@ msgstr "neznámy odosielateľ"
 msgid "unlimited"
 msgstr "neobmedzené"
 
-#: apps/io.ox/core/import/import.js module:io.ox/core
+#: apps/io.ox/core/export.js module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "vCard"
 msgstr "vCard"
 
@@ -11413,12 +11422,6 @@ msgstr "pri prístupe príjemcov k súboru"
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "when the receivers have finished downloading the files"
 msgstr "keď príjemcovia dokončia sťahovanie súborov"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Main window"
-msgid "windows"
-msgstr "Hlavné okno"
 
 #: apps/io.ox/backbone/views/recurrence-view.js
 #: module:io.ox/calendar/edit/main
@@ -13651,6 +13654,11 @@ msgstr "vaša platforma"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Ukončiť celoobrazovkový režim"
 
+#, fuzzy
+#~| msgid "Send as vCard"
+#~ msgid "Export as vCard"
+#~ msgstr "Poslať ako vCard"
+
 #~ msgid "Extended view"
 #~ msgstr "Rozšírené zobrazenie"
 
@@ -15053,9 +15061,6 @@ msgstr "vaša platforma"
 
 #~ msgid "No matching templates on this Server"
 #~ msgstr "Žiadne zodpovedajúce šablóny na tomto serveri"
-
-#~ msgid "No participants available"
-#~ msgstr "Žiadni účastníci nie sú dostupní"
 
 #~ msgid "No resources available"
 #~ msgstr "Žiadne zdroje nie sú dostupné"
@@ -18352,9 +18357,6 @@ msgstr "vaša platforma"
 #~ msgid "http://"
 #~ msgstr "http://"
 
-#~ msgid "iCalendar"
-#~ msgstr "iCalendar"
-
 #, fuzzy
 #~| msgid "Phone"
 #~ msgid "iPhone"
@@ -18564,6 +18566,11 @@ msgstr "vaša platforma"
 
 #~ msgid "weekly"
 #~ msgstr "týždenne"
+
+#, fuzzy
+#~| msgid "Main window"
+#~ msgid "windows"
+#~ msgstr "Hlavné okno"
 
 #~ msgid "work days"
 #~ msgstr "pracovné dni"
