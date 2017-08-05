@@ -35,6 +35,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         draw: function (baton) {
             this.append(
                 $('<div class="form-group">').append(
+                    $('<label for="signature-name" class="sr-only">').text(gt('Signature name')),
                     baton.$.name = $('<input id="signature-name" type="text" class="form-control">').attr('placeholder', gt('Signature name'))
                 )
             );
