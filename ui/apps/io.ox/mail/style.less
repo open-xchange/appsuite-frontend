@@ -406,7 +406,6 @@
     }
 
     .thread-size {
-        color: #aaa;
         float: right;
         display: inline-block;
         margin-left: 0.5em;
@@ -586,7 +585,7 @@
         html.high-contrast & { display: none; }
     }
 
-    .selected .contact-picture {
+    .selected:not(:focus) .contact-picture {
         opacity: 0.25;
         -webkit-filter: saturate(0);
     }
@@ -737,12 +736,22 @@
         .account-name,
         .original-folder,
         .original-folder .breadcrumb-link {
-            color: #555;
+            color: #333;
             background-color: rgba(0, 0, 0, 0.10);
         }
     }
 
     &.visible-selection.has-focus .selected {
+        .thread-size,
+        .account-name,
+        .original-folder,
+        .original-folder .breadcrumb-link {
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.10);
+        }
+    }
+
+    &.visible-selection.has-focus .selected:focus {
         .thread-size,
         .account-name,
         .original-folder,
@@ -803,7 +812,7 @@
         position: absolute;
         top: 19px;
         left: @default-padding;
-        outline: none;
+        outline: 0;
         font-size: 14px;
         color: #767676;
 

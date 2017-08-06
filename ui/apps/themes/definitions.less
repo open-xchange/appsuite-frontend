@@ -55,7 +55,7 @@
 
 // Bootstrap overwites
 //----------------------
-@brand-primary:                         #3C73AA; //@link-color uses this
+@brand-primary:                         #3C73AA;
 @brand-success:                         #008500;
 
 @badge-color:                           @white;
@@ -103,8 +103,13 @@
 
 @background:                            #fff;
 
-@selected-background:                   @brand-primary;
 @selected-color:                        #f0faff;
+@selected-background:                   @brand-primary;
+@selected-unfocussed-background:        #ddd;
+@selected-focussed-background:          darken(@selected-background, 10%);
+
+@grid-color:                            #676767;
+@grid-checkbox-color:                   #626262;
 @grid-selected-color:                   #fff;
 @grid-selected-checkbox-color:          @grid-selected-color;
 
@@ -174,8 +179,8 @@
 @mail-priority-low:                     lighten(#08c, 10%);
 @mail-attachment-link-color:            #333;
 @mail-attachment-link-color-hover:      #000;
-@mail-thread-size-color:                @brand-primary;
-@mail-thread-size-background:           #e2eefb;
+@mail-thread-size-color:                darken(@brand-primary, 20%); //@brand-primary;
+@mail-thread-size-background:           fade(lighten(@brand-primary, 5%), 15%); // #e2eefb;
 @mail-unseen-icon:                      "\f111"; // fa-circle
 @mail-unseen-icon-seen:                 "\f1db"; // fa-circle-thin
 
@@ -269,7 +274,6 @@
 @hotspot-color: #FD057C;
 @pulse-color: fade(@hotspot-color, 70%);
 @pulse-border-color: @hotspot-color;
-
 
 // mobile
 //----------------------

@@ -20,7 +20,6 @@
     bottom: 0;
     left: 0;
     right: -1px;
-
     .user-select(none);
 
     .vgrid-scrollpane {
@@ -30,25 +29,13 @@
         -webkit-tap-highlight-color: transparent;
         z-index: 1;
 
-        &.has-focus > div {
-            outline: 0;
-
-            & .vgrid-cell { outline: 0; }
-
-            & .vgrid-cell.selected {
-
+        &.has-focus {
+            .vgrid-cell.selected {
                 background-color: @selected-background;
-
-                * { color: @grid-selected-color }
-            }
-        }
-
-        > div:focus {
-
-            & .vgrid-cell.selected {
-                background-color: @selected-background;
-
-                * { color:  @grid-selected-color }
+                * { color: @grid-selected-color; }
+                i { color: @grid-selected-checkbox-color; }
+                &:hover { background-color: lighten(@selected-background, 2%) }
+                &:focus { background-color: @selected-focussed-background; }
             }
         }
     }
@@ -180,6 +167,7 @@
 }
 
 .vgrid-cell {
+    outline: 0;
     overflow: hidden;
     position: absolute;
     right: 0;
@@ -188,15 +176,12 @@
     padding: 10px 18px;
     color: @text-color;
     background-color: @background; /* resolves hw accel anti-aliasing */
-
-    * { .ellipsis(); }
-
-    &.selectable,
-    &.hover {
-        cursor: pointer;
-
-        &:hover { background-color: mix(@text-color, @background, 1000%/255); }
+    * {
+        .ellipsis();
+        -webkit-font-smoothing: antialiased;
     }
+
+    &.selectable { cursor: pointer; }
 
     &.vgrid-label {
         font-weight: bold;
@@ -209,13 +194,12 @@
         .vertical-gradient(@background, mix(@text-color, @background, 1500%/255));
 
         &.left { text-align: left; }
-
     }
 
+    &:hover { background: #f7f7f7; }
     &.selected {
-        background-color: #ddd;
-
-        * { -webkit-font-smoothing: antialiased; }
+        &:hover { background-color: lighten(@selected-unfocussed-background, 2%); }
+        background-color: @selected-unfocussed-background;
     }
 
     &.relative { position: relative; }
@@ -247,14 +231,14 @@
         padding: 12px 0 0 16px;
 
         i.fa:before {
-            color: #767676;
+            color: @grid-checkbox-color;
             font-size: 18px;
             content: "\f096"; // fa-check-square-o
         }
     }
 
     &.selected .vgrid-cell-checkbox i.fa:before {
-        color: #767676;
+        color: @grid-checkbox-color;
         content: "\f14a"; // fa-check-square-o
     }
 
