@@ -7664,6 +7664,12 @@ msgstr "Fjern lenke"
 msgid "Remove member"
 msgstr "Fjern medlem"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Reminder for appointment %1$s."
+msgid "Remove restore point: \"%1$s\""
+msgstr "Påminnelse for avtale %1$s."
+
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query

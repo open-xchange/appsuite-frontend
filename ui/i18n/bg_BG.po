@@ -7678,6 +7678,11 @@ msgstr ""
 msgid "Remove member"
 msgstr ""
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+msgid "Remove restore point: \"%1$s\""
+msgstr "Покани към нова среща"
+
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query

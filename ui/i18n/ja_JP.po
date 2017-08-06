@@ -7614,6 +7614,12 @@ msgstr "リンクを削除"
 msgid "Remove member"
 msgstr "メンバを削除"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove restore point: \"%1$s\""
+msgstr "宛先のリストから削除"
+
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query
@@ -16718,9 +16724,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Remove facet"
 #~ msgstr "ファセットを削除"
-
-#~ msgid "Remove from recipient list"
-#~ msgstr "宛先のリストから削除"
 
 #~ msgid "Remove participant"
 #~ msgstr "出席者を削除"

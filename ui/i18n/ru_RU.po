@@ -7684,6 +7684,12 @@ msgstr "Удалить ссылку"
 msgid "Remove member"
 msgstr "Удалить участника"
 
+#: apps/io.ox/core/main.js module:io.ox/core
+#, fuzzy
+#| msgid "Remove from recipient list"
+msgid "Remove restore point: \"%1$s\""
+msgstr "Удалить из списка получателей"
+
 #. %1$s is the display name of a removed user or mail recipient
 #. %2$s is the email address of the user or mail recipient
 #. %1$s is the removed search query
@@ -13189,9 +13195,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Remove facet"
 #~ msgstr "Удалить критерий"
-
-#~ msgid "Remove from recipient list"
-#~ msgstr "Удалить из списка получателей"
 
 #~ msgid "Reply All"
 #~ msgstr "Ответить всем"

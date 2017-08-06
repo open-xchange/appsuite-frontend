@@ -5279,6 +5279,11 @@ msgstr ""
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
+msgid "Remove restore point: \"%1$s\""
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
 msgid "The requested application is not available at this moment."
 msgstr ""
 
