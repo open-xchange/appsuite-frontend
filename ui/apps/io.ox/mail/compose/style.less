@@ -29,16 +29,21 @@
 
         margin-bottom: 10px;
 
-        &.sender .dropdown { padding-top: 8px; }
+        // first
+        &.sender {
+            margin-bottom: 2px;
+            .maillabel, .dropdown { padding-top: 10px; }
+        }
 
         &.sender-realname {
             display: none;
+            margin-bottom: 16px;
             color: #767676;
         }
 
         div.dropdown {
             display: inline-block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
 
             &.signatures { margin-right: 15px; }
         }
@@ -47,12 +52,18 @@
             margin-bottom: 0px;
         }
 
-        &.subject input { font-weight: bold; }
+        &.subject {
+            margin-bottom: 7px;
+            .maillabel { padding-top: 5px; }
+            input {
+                padding-top: 3px;
+                font-weight: bold;
+            }
+
+        }
 
         &.attachments {
-
             .inplace-dropzone { margin: 0 15px; }
-
             .io-ox-core-tk-attachment-list { clear: both; }
         }
 
@@ -70,12 +81,13 @@
             font-weight: bold;
             line-height: 20px;
             display: inline-block;
-            padding-top: 6px;
+            padding-top: 5px;
+            margin-bottom: 4px;
         }
     }
 
     & > .mail-compose-fields.no-realname {
-        .sender { margin-bottom: 0 };
+        .sender { margin-bottom: 6px };
         .sender-realname { display: block };
     }
 
@@ -98,7 +110,7 @@
     .recipient-actions {
 
         position: absolute;
-        top: 7px;
+        top: 5px;
         right: 16px;
 
         a {
@@ -118,7 +130,7 @@
     .open-addressbook-popup {
         font-size: 18px;
         position: absolute;
-        top: 2px;
+        top: 1px;
         right: 24px;
         padding: 2px;
         color: @hc-gray;
