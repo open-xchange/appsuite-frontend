@@ -64,7 +64,7 @@ define('io.ox/settings/main', [
         index: 100,
         list: function () {
             _.extend(this, {
-                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.email.externalaccounts.manage.html',
+                'virtual/settings/io.ox/settings/accounts': 'ox.appsuite.user.sect.dataorganisation.accounts.html',
                 'virtual/settings/io.ox/portal': 'ox.appsuite.user.sect.portal.customize.settings.html',
                 'virtual/settings/io.ox/mail': 'ox.appsuite.user.sect.email.settings.html',
                 'virtual/settings/io.ox/vacation': 'ox.appsuite.user.sect.email.send.vacationnotice.html',

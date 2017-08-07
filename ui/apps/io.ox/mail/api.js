@@ -754,8 +754,14 @@ define('io.ox/mail/api', [
      * @return { deferred }
      */
     api.markRead = function (list) {
-
         list = [].concat(list);
+
+        // Address collector must be triggered manually in some cases
+        //
+        // All elements should be from one folder, it's not possbile in App Suite UI
+        // to select mails from different folders and mark them as read. So it should
+        // be ok to use the first element only
+        var collectAddresses = !accountAPI.is('spam', list[0].folder_id) && !accountAPI.is('trash', list[0].folder_id);
 
         _(list).each(function (obj) {
             obj.flags = obj.flags | 32;
@@ -772,7 +778,7 @@ define('io.ox/mail/api', [
             api.trigger('update:set-seen', list); // used by notification area
         });
 
-        return update(list, { flags: api.FLAGS.SEEN, value: true }).done(function () {
+        return update(list, { flags: api.FLAGS.SEEN, value: true, collect_addresses: collectAddresses }).done(function () {
             unsetSorted(list, 651);
             folderAPI.reload(list);
             api.trigger('after:refresh.seen', list);

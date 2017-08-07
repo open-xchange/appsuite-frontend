@@ -22,8 +22,9 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/notifications',
     'io.ox/core/util',
     'io.ox/core/a11y',
+    'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil, a11y) {
+], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
 
     'use strict';
 
@@ -160,7 +161,7 @@ define('io.ox/contacts/edit/main', [
                             app.quit();
                         });
 
-                        if ((_.browser.IE === undefined || _.browser.IE > 9) && capabilities.has('filestore')) {
+                        if (settings.get('features/PIMAttachments', capabilities.has('filestore'))) {
 
                             app.dropZone = new dnd.UploadZone({
                                 ref: 'io.ox/contacts/edit/dnd/actions'
