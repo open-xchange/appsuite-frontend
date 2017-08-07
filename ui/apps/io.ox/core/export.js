@@ -20,6 +20,23 @@ define('io.ox/core/export', [
 
     'use strict';
 
+    function getFormats(module) {
+        var list = [];
+        switch (module) {
+            case 'calendar':
+            case 'tasks':
+                list.push({ value: 'ical', label: gt('iCalendar') });
+                break;
+            case 'contacts':
+                list.push({ value: 'vcard', label: gt('vCard') });
+                list.push({ value: 'csv', label: gt('CSV') });
+                break;
+            default:
+                break;
+        }
+        return list;
+    }
+
     return {
 
         /**
@@ -39,47 +56,49 @@ define('io.ox/core/export', [
                 // custom
                 module: module,
                 params: params
-
-            }).inject({
-                getFormats: function () {
-                    var list = [];
-                    switch (this.options.module) {
-                        case 'calendar':
-                        case 'tasks':
-                            list.push({ value: 'ical', label: gt('iCalendar') });
-                            break;
-                        case 'contacts':
-                            list.push({ value: 'vcard', label: gt('vCard') });
-                            list.push({ value: 'csv', label: gt('CSV') });
-                            break;
-                        default:
-                            break;
-                    }
-                    return list;
-                }
             }).extend({
-                default: function () {
+                'setup': function (baton) {
+                    // apply default value
+                    baton.formats = getFormats(this.options.module);
+                    this.model.set('format', (_.first(baton.formats) || {}).value);
+                    // apply visuals
                     this.$el.addClass('export-dialog')
                             .find('.modal-content').css('height', 'initial');
                 },
-                format: function () {
-                    var list = this.getFormats();
+                'single-format': function (baton) {
+                    if (baton.formats.length !== 1) return;
 
-                    if (!list.length) return this.$body.append(gt('No export format available'));
+                    // informative
+                    this.$body.append(
+                        $('<p>').append(
+                            //#. Warning dialog
+                            //#. %1$s is file format for data export
+                            gt('Format: %1$s', _.first(baton.formats).label)
+                        )
+                    );
+                },
+                'multi-format': function (baton) {
+                    if (baton.formats.length < 2) return;
 
-                    // preselect
-                    this.model.set('format', _.first(list).value);
-
+                    // options
                     this.$body.append(
                         $('<label>').append(
+                            //#. file format for data export
                             $.txt(gt('Format')),
-                            new miniViews.RadioView({
+                            new miniViews.CustomRadioView({
                                 model: this.model,
                                 name: 'format',
-                                list: list
+                                list: baton.formats
                             }).render().$el
                         )
                     );
+                },
+                'missing-format': function (baton) {
+                    if (baton.formats.length) return;
+                    this.$body.append(gt('No export format available'));
+                    this.$footer.find('button[data-action="export"]')
+                        .attr('disabled', true)
+                        .addClass('disabled');
                 },
                 'distribution-lists': function () {
                     if (this.options.module !== 'contacts') return;
@@ -88,7 +107,11 @@ define('io.ox/core/export', [
                     this.model.set('include', true);
 
                     this.$body.append(
-                        new miniViews.CustomCheckboxView({ name: 'include', model: this.model, label: gt('Include distribution lists') }).render().$el
+                        new miniViews.CustomCheckboxView({
+                            name: 'include',
+                            model: this.model,
+                            label: gt('Include distribution lists')
+                        }).render().$el
                     );
 
                 },
