@@ -1,0 +1,5 @@
+{
+    "namespace": ["io.ox/settings/main"],
+    "path": "io.ox/chronos/settings/timezones/pane",
+    "device": "!smartphone"
+}

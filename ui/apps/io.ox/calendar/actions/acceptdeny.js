@@ -18,7 +18,7 @@ define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/core/notifications',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'gettext!io.ox/calendar'
 ], function (calApi, AlarmsView, dialogs, folderAPI, util, notifications, settings, gt) {
 

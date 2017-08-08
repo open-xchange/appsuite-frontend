@@ -14,7 +14,7 @@
 define('io.ox/calendar/invitations/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'io.ox/calendar/util',
     'gettext!io.ox/calendar/main',
     'io.ox/core/notifications',
@@ -587,7 +587,7 @@ define('io.ox/calendar/invitations/register', [
 
         loadAppointment: function () {
             var view = this;
-            return require(['io.ox/calendar/api', 'settings!io.ox/calendar']).then(function (api, settings) {
+            return require(['io.ox/calendar/api']).then(function (api) {
                 view.api = api;
                 view.settings = settings;
                 return api.get(_.cid(view.cid)).then(

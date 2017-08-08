@@ -21,7 +21,7 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/util',
     'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'io.ox/calendar/chronos-util',
     'less!io.ox/calendar/edit/style',
     // need jquery-ui for scrollParent

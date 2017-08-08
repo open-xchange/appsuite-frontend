@@ -17,7 +17,7 @@ define('io.ox/calendar/freetime/timeView', [
     'gettext!io.ox/calendar',
     'io.ox/calendar/chronos-api',
     'io.ox/backbone/mini-views/dropdown',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-util',
     'io.ox/backbone/views/datepicker'

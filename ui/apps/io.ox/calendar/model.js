@@ -18,7 +18,7 @@ define('io.ox/calendar/model', [
     'io.ox/backbone/validation',
     'io.ox/core/folder/api',
     'io.ox/core/strings',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'settings!io.ox/core'
 ], function (api, ext, extendedModel, gt, Validators, folderAPI, strings, settings, coreSettings) {
 
