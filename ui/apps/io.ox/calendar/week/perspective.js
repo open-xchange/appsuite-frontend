@@ -43,7 +43,7 @@ define('io.ox/calendar/week/perspective', [
         /**
          * open sidepopup to show appointment
          * @param  {Event}  e   given click event
-         * @param  {Object} obj appointment object (min. id, folder_id, recurrence_position)
+         * @param  {Object} obj appointment object (min. id, folder, recurrence_position)
          */
         showAppointment: function (e, obj) {
             // open appointment details
@@ -155,7 +155,7 @@ define('io.ox/calendar/week/perspective', [
                                 // get recurrence master object
                                 if (obj.old_start_date || obj.old_end_date) {
                                     // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                    api.get({ id: obj.id, folder_id: obj.folder_id }, false).done(function (data) {
+                                    api.get({ id: obj.id, folder: obj.folder }, false).done(function (data) {
                                         // calculate new dates if old dates are available
                                         data.start_date += (obj.start_date - obj.old_start_date);
                                         data.end_date += (obj.end_date - obj.old_end_date);

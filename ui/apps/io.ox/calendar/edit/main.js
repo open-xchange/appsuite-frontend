@@ -395,7 +395,7 @@ define('io.ox/calendar/edit/main', [
         getApp: createInstance,
         reuse: function (type, data) {
             if (type === 'edit') {
-                return ox.ui.App.reuse('io.ox/calendar:edit.' + _.cid(data));
+                return ox.ui.App.reuse('io.ox/calendar:edit.' + chronosUtil.cid(data));
             }
         }
     };

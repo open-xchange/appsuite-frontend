@@ -15,6 +15,7 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/extensions',
     'io.ox/calendar/common-extensions',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-api',
     'io.ox/core/tk/attachments',
     'io.ox/participants/chronos-detail',
@@ -22,7 +23,7 @@ define('io.ox/calendar/view-detail', [
     'io.ox/calendar/chronos-model',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
+], function (ext, extensions, util, chronosUtil, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
 
     'use strict';
 
@@ -257,7 +258,7 @@ define('io.ox/calendar/view-detail', [
             }
             try {
                 var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(_.cid(baton.data)));
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(chronosUtil.cid(baton.data)));
 
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 

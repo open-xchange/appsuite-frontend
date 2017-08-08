@@ -510,9 +510,9 @@ define('io.ox/calendar/week/view', [
                     // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el))
+                        .not($('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.$el))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
-                    $('[data-cid^="' + obj.folder_id + '.' + obj.id + '"]', self.$el).addClass('current');
+                    $('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
 
                 } else {
@@ -2082,12 +2082,12 @@ define('io.ox/calendar/week/view', [
                 }
             }
 
-            var folder_id = a.get('folder');
+            var folderId = a.get('folder');
             if (baton.app.props.get('colorScheme') === 'custom') {
-                if (String(folder.id) === String(folder_id)) {
+                if (String(folder.id) === String(folderId)) {
                     addColors(folder);
-                } else if (folder_id !== undefined) {
-                    folderAPI.get(folder_id).done(addColors);
+                } else if (folderId !== undefined) {
+                    folderAPI.get(folderId).done(addColors);
                 }
             }
 
