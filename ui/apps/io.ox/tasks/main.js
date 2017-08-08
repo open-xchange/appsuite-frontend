@@ -734,6 +734,7 @@ define('io.ox/tasks/main', [
                 // selection in listview
                 app.grid.selection.on({
                     'change': function (event, list) {
+                        if (!list.length) return;
                         metrics.trackEvent({
                             app: 'tasks',
                             target: 'list',

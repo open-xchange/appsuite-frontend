@@ -719,9 +719,9 @@ define('io.ox/mail/detail/content', [
                 regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
                 regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?![ ]*(\* |\- |> |\d+\. ))[^\n]*)*/,
-                regLink = /(https?:\/\/.*?)([!?.,>]\s|\s|[!?.,>]$|$)/gi,
-                regMailAddress = /([^"\s<,:;\|\(\)\[\]\u0100-\uFFFF]+@.*?\.\w+)/g,
+                regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
+                regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
+                regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
                 regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^\)]+\)$/gm,
                 defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
@@ -773,8 +773,10 @@ define('io.ox/mail/detail/content', [
                     if (match = exec(regText, str)) {
                         // advance
                         str = str.substr(match.length + (options.lists ? 1 : 0));
-                        // escape first
-                        match = _.escape(match);
+                        // escape first (otherwise we escape our own markup later)
+                        // however, we just escape < (not quotes, not closing brackets)
+                        // we add a \r to avoid &lt; become part of URLs
+                        match = match.replace(/</g, '\r&lt;');
                         // rulers
                         if (options.rulers) {
                             match = match.replace(regRuler, replaceRuler);
@@ -791,10 +793,12 @@ define('io.ox/mail/detail/content', [
                                     href = href.replace(/@/g, '&#64;');
                                     return '<a href="' + href + '" rel="noopener" target="_blank">' + href + '</a>' + suffix;
                                 })
-                                .replace(regMailAddress, '<a href="mailto:$1">$1</a>');
+                                .replace(regMailAddress, function (all, address) {
+                                    return '<a href="mailto:' + address + '">' + address + '</a>';
+                                });
                         }
-                        // replace newlines
-                        out += match.replace(/\n/g, '<br>');
+                        // remove \r and replace newlines
+                        out += match.replace(/\r/g, '').replace(/\n/g, '<br>');
                         continue;
                     }
 
