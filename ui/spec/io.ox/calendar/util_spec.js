@@ -27,7 +27,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
                 var date = moment().subtract(1, 'day');
                 model.set('startDate', {
                     value: date.format('YYYYMMDD[T]HHmmss'),
-                    tzid: moment.defaultZone.name
+                    tzid: 'Europe/Berlin'
                 });
                 expect(util.getEvenSmarterDate(model)).to.equal('Gestern, ' + date.format('l'));
             });
@@ -36,7 +36,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
                 var date = moment();
                 model.set('startDate', {
                     value: date.format('YYYYMMDD[T]HHmmss'),
-                    tzid: moment.defaultZone.name
+                    tzid: 'Europe/Berlin'
                 });
                 expect(util.getEvenSmarterDate(model)).to.equal('Heute, ' + date.format('l'));
             });
@@ -45,7 +45,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
                 var date = moment().add(1, 'day');
                 model.set('startDate', {
                     value: date.format('YYYYMMDD[T]HHmmss'),
-                    tzid: moment.defaultZone.name
+                    tzid: 'Europe/Berlin'
                 });
                 expect(util.getEvenSmarterDate(model)).to.equal('Morgen, ' + date.format('l'));
             });
@@ -54,7 +54,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
                 var date = moment().set({ 'year': 2012, 'month': 10, 'date': 11 });
                 model.set('startDate', {
                     value: date.format('YYYYMMDD[T]HHmmss'),
-                    tzid: moment.defaultZone.name
+                    tzid: 'Europe/Berlin'
                 });
                 expect(util.getEvenSmarterDate(model)).to.equal('So., 11.11.2012');
             });
@@ -401,83 +401,83 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
         describe('can compute folder color', function () {
             describe('resolves folder color', function () {
                 it('without meta', function () {
-                    expect(util.getFolderColor({})).to.equal(1);
+                    expect(util.getFolderColor({})).to.equal('#CEE7FF');
                 });
                 it('with meta but without color label', function () {
-                    expect(util.getFolderColor({ meta: {} })).to.equal(1);
+                    expect(util.getFolderColor({ meta: {} })).to.equal('#CEE7FF');
                 });
                 it('with meta and color label', function () {
-                    expect(util.getFolderColor({ meta: { color_label: 4 } })).to.equal(4);
+                    expect(util.getFolderColor({ meta: { color: 'lightblue' } })).to.equal('lightblue');
                 });
             });
-            describe('resolve appointment color class', function () {
+            describe('resolve appointment color', function () {
                 it('with appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
                 it('with appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-6');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with private appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { class: 'CONFIDENTIAL', color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-10');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#666666');
                 });
 
                 it('with private appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { class: 'CONFIDENTIAL', color_label: 5, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-5');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#aabbcc');
                 });
                 it('with shared unconfirmed appointment', function () {
-                    var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 0, created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] };
+                    var folder = { meta: { color: 'lightblue' }, type: 3 },
+                        appointment = new Backbone.Model({ created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('');
                 });
                 it('with public folder', function () {
-                    var folder = { meta: { color_label: 2 }, type: 2 },
-                        appointment = { color_label: 0, created_by: 377, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' }, type: 2 },
+                        appointment = new Backbone.Model({ created_by: 377, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColorClass(folder, appointment)).to.equal('color-label-2');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('lightblue');
                 });
             });
             describe('detects, if appointment is editable', function () {
                 it('with appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(true);
                 });
                 it('with appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { color_label: 6, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with private appointment without color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { class: 'CONFIDENTIAL', color_label: 0, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
 
                 it('with private appointment with color', function () {
-                    var folder = { meta: { color_label: 2 } },
-                        appointment = { class: 'CONFIDENTIAL', color_label: 5, attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] };
+                    var folder = { meta: { color: 'lightblue' } },
+                        appointment = new Backbone.Model({ class: 'CONFIDENTIAL', color: '#aabbcc', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
                 it('with shared unconfirmed appointment', function () {
-                    var folder = { meta: { color_label: 2 }, type: 3 },
-                        appointment = { color_label: 2, created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] };
+                    var folder = { meta: { color: 'lightblue' }, type: 3 },
+                        appointment = new Backbone.Model({ color: '#aabbcc', created_by: 377, attendees: [{ entity: 1337, partStat: 'NEEDS-ACTION' }] });
 
                     expect(util.canAppointmentChangeColor(folder, appointment)).to.equal(false);
                 });
