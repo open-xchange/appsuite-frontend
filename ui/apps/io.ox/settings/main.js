@@ -31,6 +31,7 @@ define('io.ox/settings/main', [
     'io.ox/core/settings/downloads/pane',
     'io.ox/settings/apps/settings/pane',
     'io.ox/settings/sessions/settings/pane',
+    'io.ox/chronos/settings/pane',
     'less!io.ox/settings/style'
 ], function (VGrid, appsAPI, ext, commons, gt, configJumpSettings, coreSettings, capabilities, TreeView, TreeNodeView, api, folderUtil, mailfilterAPI, yell, keychainAPI) {
 

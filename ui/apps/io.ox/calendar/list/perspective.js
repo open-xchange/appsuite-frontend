@@ -20,7 +20,7 @@ define('io.ox/calendar/list/perspective', [
     'io.ox/calendar/chronos-util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/list/style'
 ], function (api, viewDetail, commons, ext, util, chronosUtil, actions, folderAPI, settings, gt) {

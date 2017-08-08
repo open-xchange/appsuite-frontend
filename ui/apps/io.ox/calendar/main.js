@@ -18,7 +18,7 @@ define('io.ox/calendar/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'gettext!io.ox/calendar',
     'io.ox/core/tk/list-control',
     'io.ox/calendar/list/listview',

@@ -97,7 +97,6 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
 
             it('object', function () {
                 var result = {
-                    '-1': 'Keine Erinnerung',
                     '-PT0M': '0 Minuten',
                     '-PT5M': '5 Minuten',
                     '-PT10M': '10 Minuten',

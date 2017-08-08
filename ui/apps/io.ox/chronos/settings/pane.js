@@ -6,28 +6,38 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Christoph Kopp <christoph.kopp@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define('io.ox/calendar/settings/pane', [
+define('io.ox/chronos/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/alarms',
     'io.ox/core/settings/util',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'gettext!io.ox/calendar'
-], function (ext, ExtensibleView, mini, util, settings, gt) {
+], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt) {
 
     'use strict';
 
-    ext.point('io.ox/calendar/settings/detail').extend({
+    ext.point('io.ox/settings/pane/main').extend({
+        id: 'io.ox/chronos',
+        title: 'Chronos',
+        ref: 'io.ox/chronos',
+        // slightly higher index than calendar
+        index: 810,
+        advancedMode: true
+    });
+
+    ext.point('io.ox/chronos/settings/detail').extend({
         index: 100,
         id: 'view',
         draw: function () {
             this.append(
-                new ExtensibleView({ point: 'io.ox/calendar/settings/detail/view', model: settings })
+                new ExtensibleView({ point: 'io.ox/chronos/settings/detail/view', model: settings })
                 .inject({
                     getIntervalOptions: function () {
                         return [5, 10, 15, 20, 30, 60].map(function (i) {
@@ -42,18 +52,6 @@ define('io.ox/calendar/settings/pane', [
                             m.add(1, 'hour');
                         }
                         return array;
-                    },
-                    getReminderOptions: function () {
-                        var minInt = [15, 30, 45, 60, 120, 240, 360, 480, 720, 1440, 2880, 4320, 5760, 7200, 8640, 10080, 20160, 30240, 40320],
-                            list = [
-                                { label: gt('No reminder'), value: '-1' },
-                                { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' }
-                            ];
-                        _(minInt).each(function (m) {
-                            var dur = moment.duration(m, 'minutes');
-                            list.push({ label: dur.humanize(), value: String(dur.asMinutes()) });
-                        });
-                        return list;
                     },
                     getWeekDays: function () {
                         return _(new Array(7)).map(function (num, index) {
@@ -85,7 +83,7 @@ define('io.ox/calendar/settings/pane', [
 
     var INDEX = 0;
 
-    ext.point('io.ox/calendar/settings/detail/view').extend(
+    ext.point('io.ox/chronos/settings/detail/view').extend(
         //
         // Header
         //
@@ -93,7 +91,7 @@ define('io.ox/calendar/settings/pane', [
             id: 'header',
             index: INDEX += 100,
             render: function () {
-                this.$el.addClass('io-ox-calendar-settings').append(
+                this.$el.addClass('io-ox-chronos-settings').append(
                     util.header(gt.pgettext('app', 'Calendar'))
                 );
             }
@@ -122,7 +120,6 @@ define('io.ox/calendar/settings/pane', [
                             ),
                             // scale
                             $('<div class="col-md-4">').append(
-                                //#. Context: Calendar settings. Defaut time scale in minutes for new appointments.
                                 $('<label for="settings-interval">').text(gt('Time scale')),
                                 new mini.SelectView({ id: 'settings-interval', name: 'interval', model: settings, list: this.getIntervalOptions() }).render().$el
                             )
@@ -162,20 +159,20 @@ define('io.ox/calendar/settings/pane', [
                 );
             }
         },
-        //
-        // New
-        //
         {
-            id: 'New',
             index: INDEX += 100,
+            id: 'New',
             render: function () {
                 this.$el.append(
-                    util.fieldset(
-                        gt('New appointment'),
-                        // reminder
-                        util.compactSelect('defaultReminder', gt('Default reminder'), settings, this.getReminderOptions(), { width: 4 }),
-                        // all day
-                        util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
+                    util.fieldset(gt('New appointment'),
+                        // same width as col-md-10 but without the strange input and hover issues
+                        $('<div>').css('width', '83.33333333%').append(
+                            $('<label>').text(gt('Default reminder')),
+                            new AlarmsView({ model: settings, attribute: 'defaultReminder' }).render().$el
+                        ),
+                        $('<div class="form-group expertmode">').append(
+                            util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
+                        )
                     )
                 );
             }

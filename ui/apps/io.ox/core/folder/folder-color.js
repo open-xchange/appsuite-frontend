@@ -11,7 +11,7 @@
  * @author Alexander Quast <alexander.quast@open-xchange.com>
  */
 
-define('io.ox/core/folder/folder-color', ['settings!io.ox/calendar'], function (settings) {
+define('io.ox/core/folder/folder-color', ['settings!io.ox/chronos'], function (settings) {
 
     'use strict';
 

@@ -31,7 +31,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'settings!io.ox/core',
     'less!io.ox/calendar/style'
 ], function (ext, gt, calendarUtil, chronosUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {

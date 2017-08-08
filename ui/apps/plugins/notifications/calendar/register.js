@@ -51,7 +51,7 @@ define('plugins/notifications/calendar/register', [
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar'], function (folderAPI, calendarSettings) {
+                    require(['io.ox/core/folder/api', 'settings!io.ox/chronos'], function (folderAPI, calendarSettings) {
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder

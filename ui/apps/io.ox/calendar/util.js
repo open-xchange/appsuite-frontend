@@ -20,7 +20,7 @@ define('io.ox/calendar/util', [
     'io.ox/core/folder/folder-color',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/chronos-util',
-    'settings!io.ox/calendar',
+    'settings!io.ox/chronos',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
 ], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, chronosUtil, settings, coreSettings, gt) {
@@ -296,7 +296,6 @@ define('io.ox/calendar/util', [
             var options = {},
                 reminderListValues = [
                     // value is ical duration format
-                    { value: '-1', format: 'string' },
                     { value: '-PT0M', format: 'minutes' },
                     { value: '-PT5M', format: 'minutes' },
                     { value: '-PT10M', format: 'minutes' },
@@ -327,9 +326,6 @@ define('io.ox/calendar/util', [
             _(reminderListValues).each(function (item) {
                 var i = item.value.match(/\d+/)[0];
                 switch (item.format) {
-                    case 'string':
-                        options[item.value] = gt('No reminder');
-                        break;
                     case 'minutes':
                         options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', i), i);
                         break;
