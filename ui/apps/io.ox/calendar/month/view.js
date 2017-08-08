@@ -110,14 +110,20 @@ define('io.ox/calendar/month/view', [
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible').addClass('hover');
+            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
+                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible'),
+                bg = el.data('background-color');
+            el.addClass('hover');
+            if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid')));
-            $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible').removeClass('hover');
+            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
+                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible'),
+                bg = el.data('background-color');
+            el.removeClass('hover');
+            if (bg) el.css('background-color', bg);
         },
 
         // handler for mobile month view day-change
@@ -353,25 +359,33 @@ define('io.ox/calendar/month/view', [
                 confString = '%1$s',
                 classes = '';
 
-            function addColorClasses(f) {
-                self.addClass(util.getAppointmentColorClass(f, a.attributes));
-                if (util.canAppointmentChangeColor(f, a.attributes)) {
+            function addColors(f) {
+                var color = util.getAppointmentColor(f, a);
+                if (!color) return;
+                self.css({
+                    'background-color': color,
+                    'color': util.getForegroundColor(color)
+                }).data('background-color', color);
+
+                if (util.canAppointmentChangeColor(f, a)) {
                     self.attr('data-folder', f.id);
                 }
             }
 
             var folder_id = a.get('folder');
-            if (String(folder.id) === String(folder_id)) {
-                addColorClasses(folder);
-            } else if (folder_id !== undefined) {
-                folderAPI.get(folder_id).done(addColorClasses);
+            if (baton.app.props.get('colorScheme') === 'custom') {
+                if (String(folder.id) === String(folder_id)) {
+                    addColors(folder);
+                } else if (folder_id !== undefined) {
+                    folderAPI.get(folder_id).done(addColors);
+                }
             }
 
             if (util.isPrivate(a) && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-                classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a.attributes) +
+                classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
                     (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {

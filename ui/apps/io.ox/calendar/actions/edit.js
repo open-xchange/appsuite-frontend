@@ -22,16 +22,9 @@ define('io.ox/calendar/actions/edit', [
 
     return function (baton) {
         var params = baton.data,
-            o = {
-                id: params.id,
-                folder: params.folder
-            };
+            o = api.reduce(baton.data);
 
-        if (!!params.recurrence_position) {
-            o.recurrence_position = params.recurrence_position;
-        }
-
-        if (params.recurrence_type > 0 || params.recurrence_position) {
+        if (params.recurrenceId) {
             util.getRecurrenceEditDialog()
                 .show()
                 .done(function (action) {
@@ -40,11 +33,8 @@ define('io.ox/calendar/actions/edit', [
                         return;
                     }
                     if (action === 'series') {
-                        // edit the series, discard recurrence position
-                        if (params.recurrence_id) {
-                            o.id = params.recurrence_id;
-                        }
-                        delete o.recurrence_position;
+                        // edit the series, discard recurrenceId
+                        delete o.recurrenceId;
                     }
 
                     // disable cache with second param

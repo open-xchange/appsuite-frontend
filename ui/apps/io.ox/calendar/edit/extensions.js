@@ -33,8 +33,9 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/folder/api',
     'settings!io.ox/chronos',
     'settings!io.ox/core',
+    'io.ox/calendar/color-picker',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, chronosUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings) {
+], function (ext, gt, calendarUtil, chronosUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker) {
 
     'use strict';
 
@@ -453,10 +454,6 @@ define('io.ox/calendar/edit/extensions', [
         rowClass: 'collapsed form-spacer'
     });
 
-    function changeColorHandler(e) {
-        e.data.model.set('color_label', $(this).parent().children(':checked').val());
-    }
-
     //color selection
     point.extend({
         id: 'color',
@@ -466,34 +463,36 @@ define('io.ox/calendar/edit/extensions', [
 
             if (settings.get('colorScheme') !== 'custom') return;
 
-            var currentColor = parseInt(this.model.get('color_label'), 10) || 0;
-
-            // update color palette: different 'no-color' option for private appointents (white vs. dark grey)
-            this.listenTo(this.model, 'change:private_flag', function (model, value) {
-                this.$el.find('.no-color').toggleClass('color-label-10', value);
+            var picker = new ColorPicker({
+                model: this.model,
+                attribute: 'color',
+                noColorOption: true,
+                additionalColor: this.model.get('color') ? {
+                    value: this.model.get('color'),
+                    foreground: calendarUtil.getForegroundColor(this.model.get('color'))
+                } : undefined
             });
 
             this.$el.append(
-                $('<legend class="simple control-label">').text(gt('Color')),
-                $('<div class="custom-color">').append(
-                    _.range(0, 11).map(function (color_label) {
-                        var id = _.uniqueId('color-label-' + color_label + '-');
-                        return $('<label>').attr('for', id).append(
-                            // radio button
-                            $('<input type="radio" name="color">')
-                                .attr('id', id)
-                                .val(color_label)
-                                .prop('checked', color_label === currentColor)
-                                .on('change', { model: this.model }, changeColorHandler),
-                            // colored box
-                            $('<span class="box">')
-                                .attr('title', calendarUtil.getColorLabel(color_label))
-                                .addClass(color_label > 0 ? 'color-label-' + color_label : 'no-color')
-                                .addClass(color_label === 0 && this.model.get('private_flag') ? 'color-label-10' : '')
-                        );
-                    }, this)
-                )
+                picker.render().$el
             );
+
+            function onChangeClass() {
+                var elem = picker.$('.no-color .box');
+                if (calendarUtil.isPrivate(picker.model)) {
+                    elem.css({
+                        'background-color': '#666',
+                        color: '#fff'
+                    });
+                } else {
+                    elem.css({
+                        'background-color': '#fff',
+                        color: '#000'
+                    });
+                }
+            }
+            picker.listenTo(this.model, 'change:class', onChangeClass);
+            onChangeClass();
         }
     }, {
         rowClass: 'collapsed'
@@ -515,7 +514,7 @@ define('io.ox/calendar/edit/extensions', [
                 $('<fieldset>').append(
                     $('<legend class="simple">').text(gt('Type')),
                     $('<label class="checkbox-inline control-label">').attr('for', guid).append(
-                        new mini.CheckboxView({ id: guid, name: 'private_flag', model: this.model }).render().$el,
+                        new mini.CheckboxView({ id: guid, name: 'class', model: this.model, customValues: { 'false': 'PUBLIC', 'true': 'CONFIDENTIAL' }, defaultVal: 'PUBLIC' }).render().$el,
                         $.txt(gt('Private'))
                     )
                 )

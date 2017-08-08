@@ -29,60 +29,60 @@ define('io.ox/core/folder/contextmenu', [
     // drawing utility functions
     //
 
-    var ColorSelectionView = Backbone.View.extend({
-        tagName: 'div',
-        className: 'custom-colors',
-        events: {
-            'click .color-label': 'select',
-            'remove': 'onRemove'
-        },
-        initialize: function () {
-            this.listenTo(this.model, 'change:meta', this.update);
-        },
-        update: function () {
-            //toggle active class
-            $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-            $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
-        },
-        select: function (e) {
-            var meta = _.extend({},
-                this.model.get('meta'),
-                { color_label: $(e.currentTarget).data('index') }
-            );
+    // var ColorSelectionView = Backbone.View.extend({
+    //     tagName: 'div',
+    //     className: 'custom-colors',
+    //     events: {
+    //         'click .color-label': 'select',
+    //         'remove': 'onRemove'
+    //     },
+    //     initialize: function () {
+    //         this.listenTo(this.model, 'change:meta', this.update);
+    //     },
+    //     update: function () {
+    //         //toggle active class
+    //         $('.active', this.$el).removeClass('active').attr('aria-checked', false);
+    //         $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
+    //     },
+    //     select: function (e) {
+    //         var meta = _.extend({},
+    //             this.model.get('meta'),
+    //             { color_label: $(e.currentTarget).data('index') }
+    //         );
 
-            api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
-                require(['io.ox/core/notifications'], function (notifications) {
-                    notifications.yell(error);
-                });
-            });
+    //         api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
+    //             require(['io.ox/core/notifications'], function (notifications) {
+    //                 notifications.yell(error);
+    //             });
+    //         });
 
-            //prevent dialog from closing
-            e.stopPropagation();
-            e.preventDefault();
-        },
-        render: function (util) {
-            var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
+    //         //prevent dialog from closing
+    //         e.stopPropagation();
+    //         e.preventDefault();
+    //     },
+    //     render: function (util) {
+    //         var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
 
-            this.$el.append(
-                _.range(1, 11).map(function (colorNumber) {
-                    return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-                        .addClass('color-label-' + colorNumber)
-                        .toggleClass('active', folderColor === colorNumber)
-                        .attr({
-                            'data-index': colorNumber,
-                            'aria-checked': folderColor === colorNumber,
-                            'title': util.getColorLabel(colorNumber)
-                        })
-                        .append($('<i class="fa fa-check" aria-hidden="true">'));
-                })
-            );
+    //         this.$el.append(
+    //             _.range(1, 11).map(function (colorNumber) {
+    //                 return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
+    //                     .addClass('color-label-' + colorNumber)
+    //                     .toggleClass('active', folderColor === colorNumber)
+    //                     .attr({
+    //                         'data-index': colorNumber,
+    //                         'aria-checked': folderColor === colorNumber,
+    //                         'title': util.getColorLabel(colorNumber)
+    //                     })
+    //                     .append($('<i class="fa fa-check" aria-hidden="true">'));
+    //             })
+    //         );
 
-            return this;
-        },
-        onRemove: function () {
-            this.stopListening();
-        }
-    });
+    //         return this;
+    //     },
+    //     onRemove: function () {
+    //         this.stopListening();
+    //     }
+    // });
 
     var extensions = {
 
@@ -520,15 +520,30 @@ define('io.ox/core/folder/contextmenu', [
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
                     var listItem, container = this.parent();
 
-                    this.append(
-                        listItem = $('<li role="presentation">')
-                    );
+                    this.append(listItem = $('<li role="presentation">'));
 
-                    require(['io.ox/calendar/util'], function (calendarUtil) {
+                    require(['io.ox/calendar/color-picker', 'io.ox/calendar/util'], function (ColorPicker, calendarUtil) {
                         listItem.append(
-                            new ColorSelectionView({
-                                model: api.pool.getModel(baton.data.id)
-                            }).render(calendarUtil).$el
+                            new ColorPicker({
+                                model: api.pool.getModel(baton.data.id),
+                                getValue: function () {
+                                    var value = this.model.get('meta') ? (this.model.get('meta').color || 1) : 1;
+                                    if (_.isNumber(value)) value = calendarUtil.colors[value - 1].value;
+                                    return value;
+                                },
+                                setValue: function (value) {
+                                    var meta = _.extend({},
+                                        this.model.get('meta'),
+                                        { color: value }
+                                    );
+
+                                    api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
+                                        require(['io.ox/core/notifications'], function (notifications) {
+                                            notifications.yell(error);
+                                        });
+                                    });
+                                }
+                            }).render().$el
                         );
                         // trigger ready to recompute bounds of smart dropdown
                         container.trigger('ready');

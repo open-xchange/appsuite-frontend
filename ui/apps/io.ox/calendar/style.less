@@ -96,12 +96,6 @@
         }
 
         &.reserved  { .background(@appointment-reserved); }
-        &.absent    { .background(@appointment-absent);   }
-        &.temporary {
-            .background(@appointment-temporary);
-            //white text would fail contrast requirements
-            .title { color: #321900; }
-        }
         &.free    { .background(@appointment-free-dark); }
         &.private { .background(@appointment-private);   }
 
@@ -151,36 +145,6 @@
 
             &.hover:not(.disabled) {
                 background-color: darken(@r, @appointment-hover-pct);
-            }
-
-            .common();
-        }
-
-        &.temporary {
-            @t: lighten(@appointment-temporary, 25%);
-
-            border-color: darken(@appointment-temporary, 15%);
-            color: darken(@appointment-temporary, 25%);
-            background-color: @t;
-
-            &.hover:not(.disabled) {
-                background-color: darken(@t, @appointment-hover-pct);
-                color: darken(darken(@appointment-temporary, 15%), @appointment-hover-pct);
-            }
-
-            .common();
-       }
-
-        &.absent {
-            @a: lighten(@appointment-absent, 50%);
-
-            border-color: lighten(@appointment-absent, 10%);
-            color: darken(@appointment-absent, 0%);
-            background-color: @a;
-
-            &.hover:not(.disabled) {
-                background-color: darken(@a, @appointment-hover-pct);
-                color: darken(@appointment-absent, @appointment-hover-pct);
             }
 
             .common();
@@ -244,62 +208,83 @@
 
     .custom-colors & .appointment {
 
-        .generate-color-label(@counter) when (@counter > 0) {
+        // .generate-color-label(@counter) when (@counter > 0) {
 
-            .generate-color-label((@counter - 1));
+        //     .generate-color-label((@counter - 1));
 
-            &.color-label-@{counter} {
+        //     &.color-label-@{counter} {
 
-                @color: ~"color-label-fg-@{counter}";
-                @background: ~"color-label-bg-@{counter}";
-                @background-light: lighten(@@background, @custom-color-pattern-pct);
+        //         @color: ~"color-label-fg-@{counter}";
+        //         @background: ~"color-label-bg-@{counter}";
+        //         @background-light: lighten(@@background, @custom-color-pattern-pct);
 
-                color: @@color;
-                background-color: @@background;
-                border-left-color: @@color;
+        //         color: @@color;
+        //         background-color: @@background;
+        //         border-left-color: @@color;
 
-                &.private { border-left-color: #222; }
+        //         &.private { border-left-color: #222; }
 
-                &.hover:not(.disabled) {
-                    background-color: darken(@@background, @custom-color-hover-pct);
-                }
+        //         &.hover:not(.disabled) {
+        //             background-color: darken(@@background, @custom-color-hover-pct);
+        //         }
 
-                &.free {
-                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
-                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
-                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
-                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
-                    opacity: 0.70;
-                }
+        //         &.free {
+        //             background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+        //             background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+        //             background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+        //             background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @background-light 25px, @background-light 50px);
+        //             opacity: 0.70;
+        //         }
 
-                &.temporary {
-                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
-                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
-                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
-                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
-                }
+        //         &.temporary {
+        //             background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+        //             background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+        //             background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+        //             background-image: repeating-linear-gradient(-45deg, transparent, transparent 8px, @background-light 8px, @background-light 16px);
+        //         }
 
-                &.absent {
-                    color: #333;
-                    background-color: #eee;
-                    border-left-color: #333;
-                    @background-absent: #bbb;
-                    background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
-                    background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
-                    background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
-                    background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+        //         &.absent {
+        //             color: #333;
+        //             background-color: #eee;
+        //             border-left-color: #333;
+        //             @background-absent: #bbb;
+        //             background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+        //             background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+        //             background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
+        //             background-image: repeating-linear-gradient(-45deg, transparent, transparent 7px, @background-absent 1px, @background-absent 8px);
 
-                    &.private {
-                        &.hover {
-                            //in combination with private this get's to hard to read otherwise
-                            color: @white;
-                        }
-                    }
-                }
-            }
+        //             &.private {
+        //                 &.hover {
+        //                     //in combination with private this get's to hard to read otherwise
+        //                     color: @white;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        // .generate-color-label(10);
+
+        &.private { border-left-color: #222; }
+
+        &.free {
+            @color-label-bg-light: rgba(255, 255, 255, 0.2);
+            background-image: -webkit-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+            background-image: -o-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+            background-image: -moz-repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+            background-image: repeating-linear-gradient(-45deg, transparent, transparent 25px, @color-label-bg-light 25px, @color-label-bg-light 50px);
+            opacity: 0.70;
         }
 
-        .generate-color-label(10);
+        // &.hover {
+        //     @color-label-bg-dark: rgba(0, 0, 0, 0.2);
+        //     background-image: -webkit-repeating-linear-gradient(@color-label-bg-dark, @color-label-bg-dark);
+        //     background-image: -o-repeating-linear-gradient(@color-label-bg-dark, @color-label-bg-dark);
+        //     background-image: -moz-repeating-linear-gradient(@color-label-bg-dark, @color-label-bg-dark);
+        //     background-image: repeating-linear-gradient(@color-label-bg-dark, @color-label-bg-dark);
+        // }
+
+        border-left-color: rgba(0, 0, 0, 0.3);
     }
 
     @media (min-width: 1281px) {
@@ -317,38 +302,35 @@
 
     position: relative;
 
-    &.color-label {
-        &:before {
-            content: "";
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            position: absolute;
-            left: -25px;
-            top: 3px;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            background-clip: border-box;
-        }
+    .color-label {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        position: absolute;
+        left: -25px;
+        top: 4px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        background-clip: border-box;
     }
 
     @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
-        &.color-label {
+        .color-label {
             margin-left: 25px;
-
-            &:before { top: 12px; }
+            top: 12px;
         }
     }
 
-    .generate-color-label(@counter) when (@counter > 0) {
-        .generate-color-label((@counter - 1));
+    // .generate-color-label(@counter) when (@counter > 0) {
+    //     .generate-color-label((@counter - 1));
 
-        &.color-label-@{counter}:before {
-            @color-label-counter: ~"color-label-bg-@{counter}";
-            background-color: darken(@@color-label-counter, 10%);
-        }
-    }
+    //     &.color-label-@{counter}:before {
+    //         @color-label-counter: ~"color-label-bg-@{counter}";
+    //         background-color: darken(@@color-label-counter, 10%);
+    //     }
+    // }
 
-    .generate-color-label(10);
+    // .generate-color-label(10);
 }
 
 // Grid , only used in conflicts. Listview styles are located under list/style.less
@@ -830,42 +812,42 @@
 }
 
 li {
-    .custom-colors {
+    .io-ox-calendar-color-picker {
         max-width: 160px;
         display: inline-block;
         padding: 3px 20px;
         clear: both;
 
-        .generate-color-label(@counter) when (@counter > 0) {
-            .generate-color-label((@counter - 1));
+        // .generate-color-label(@counter) when (@counter > 0) {
+        //     .generate-color-label((@counter - 1));
 
-            @color-label-bg-mod: ~"color-label-bg-@{counter}";
-            @color-label-contrast: contrast(@@color-label-bg-mod);
+        //     @color-label-bg-mod: ~"color-label-bg-@{counter}";
+        //     @color-label-contrast: contrast(@@color-label-bg-mod);
 
-            .color-label-@{counter} {
-                background-color: ~"@{color-label-bg-@{counter}}";
+        //     .color-label-@{counter} {
+        //         background-color: ~"@{color-label-bg-@{counter}}";
 
-                .fa { color: @color-label-contrast; }
-            }
-        }
+        //         .fa { color: @color-label-contrast; }
+        //     }
+        // }
 
-        .generate-color-label(10);
+        // .generate-color-label(10);
 
-        .color-label {
-            width: 20px;
-            height: 20px;
-            margin: 2px;
-            text-align: center;
-            border-radius: @border-radius-small;
-            cursor: pointer;
+        // .color-label {
+        //     width: 20px;
+        //     height: 20px;
+        //     margin: 2px;
+        //     text-align: center;
+        //     border-radius: @border-radius-small;
+        //     cursor: pointer;
 
-            .fa {
-                display: none;
-                width: 14px;
-            }
+        //     .fa {
+        //         display: none;
+        //         width: 14px;
+        //     }
 
-            &.active .fa { display: inline-block; }
-        }
+        //     &.active .fa { display: inline-block; }
+        // }
     }
 }
 
