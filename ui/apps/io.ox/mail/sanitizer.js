@@ -16,7 +16,7 @@ define('io.ox/mail/sanitizer', [
     'static/3rd.party/purify.min.js'
 ], function (mailSettings, DOMPurify) {
 
-    var whitelist = mailSettings.get('whitelist');
+    var whitelist = mailSettings.get('whitelist', []);
 
     // TODO: Backend seems to leave out a few necessary attributes
     whitelist.allowedAttributes = ['id', 'class', 'style'].concat(whitelist.allowedAttributes);
