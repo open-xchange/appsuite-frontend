@@ -39,7 +39,7 @@ define('io.ox/calendar/chronos-api', [
                 if (event.rrule && !event.recurrenceId) {
                     var cid = util.ecid(event),
                         events = api.pool.get(event.folder).filter(function (evt) {
-                            return evt.cid .indexOf(cid) === 0;
+                            return evt.cid.indexOf(cid) === 0;
                         });
                     api.pool.get(event.folder).remove(events);
                     _(events).each(function (evt) {
