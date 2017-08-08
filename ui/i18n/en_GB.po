@@ -4239,6 +4239,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Forgot your password?"
 
+#. file format for data export
 #: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
@@ -4247,6 +4248,15 @@ msgstr "Format"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Format emails as"
 msgstr "Format email messages as"
+
+#. Warning dialog
+#. %1$s is file format for data export
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+#| msgctxt "a11y"
+#| msgid "at %1$s"
+msgid "Format: %1$s"
+msgstr "at %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js

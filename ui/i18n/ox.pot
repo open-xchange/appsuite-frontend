@@ -4362,16 +4362,6 @@ msgstr ""
 
 #: apps/io.ox/core/export.js
 #: module:io.ox/core
-msgid "Export folder"
-msgstr ""
-
-#: apps/io.ox/core/export.js
-#: module:io.ox/core
-msgid "Export selected"
-msgstr ""
-
-#: apps/io.ox/core/export.js
-#: module:io.ox/core
 msgid "iCalendar"
 msgstr ""
 
@@ -4389,13 +4379,31 @@ msgstr ""
 
 #: apps/io.ox/core/export.js
 #: module:io.ox/core
-msgid "No export format available"
+msgid "Export folder"
 msgstr ""
 
 #: apps/io.ox/core/export.js
 #: module:io.ox/core
+msgid "Export selected"
+msgstr ""
+
+#. Warning dialog
+#. %1$s is file format for data export
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+msgid "Format: %1$s"
+msgstr ""
+
+#. file format for data export
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
+msgstr ""
+
+#: apps/io.ox/core/export.js
+#: module:io.ox/core
+msgid "No export format available"
 msgstr ""
 
 #: apps/io.ox/core/export.js

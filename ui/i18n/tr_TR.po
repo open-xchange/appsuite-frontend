@@ -4341,6 +4341,7 @@ msgstr ""
 msgid "Forgot your password?"
 msgstr "Şifremi Unuttum ?"
 
+#. file format for data export
 #: apps/io.ox/core/export.js module:io.ox/core
 #: apps/io.ox/core/import/import.js
 msgid "Format"
@@ -4349,6 +4350,13 @@ msgstr "Format"
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
 msgid "Format emails as"
 msgstr "Emailleri formatla"
+
+#. Warning dialog
+#. %1$s is file format for data export
+#: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
+msgid "Format: %1$s"
+msgstr "sıradaki %1$s"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 #: apps/io.ox/mail/mobile-toolbar-actions.js apps/io.ox/mail/toolbar.js
