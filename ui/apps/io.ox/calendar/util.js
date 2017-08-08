@@ -17,22 +17,17 @@ define('io.ox/calendar/util', [
     'io.ox/core/api/group',
     'io.ox/core/folder/api',
     'io.ox/core/util',
-    'io.ox/core/folder/folder-color',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/chronos-util',
     'settings!io.ox/chronos',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, color, dialogs, chronosUtil, settings, coreSettings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, chronosUtil, settings, coreSettings, gt) {
 
     'use strict';
 
     // day names
     var n_count = [gt('fifth / last'), '', gt('first'), gt('second'), gt('third'), gt('fourth'), gt('fifth / last')],
-        // shown as
-        n_shownAs = [gt('Reserved'), gt('Temporary'), gt('Absent'), gt('Free')],
-        shownAsClass = 'reserved temporary absent free'.split(' '),
-        shownAsLabel = 'label-info label-warning label-important label-success'.split(' '),
         // confirmation status (none, accepted, declined, tentative)
         chronosStates = 'NEEDS-ACTION ACCEPTED DECLINED TENTATIVE'.split(' '),
         confirmTitles = [
@@ -42,7 +37,6 @@ define('io.ox/calendar/util', [
             gt('tentative')
         ],
         n_confirm = ['', '<i class="fa fa-check" aria-hidden="true">', '<i class="fa fa-times" aria-hidden="true">', '<i class="fa fa-question-circle" aria-hidden="true">'],
-        colorLabels = [gt('no color'), gt('light blue'), gt('dark blue'), gt('purple'), gt('pink'), gt('red'), gt('orange'), gt('yellow'), gt('light green'), gt('dark green'), gt('gray')],
         superessiveWeekdays = [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
@@ -86,6 +80,19 @@ define('io.ox/calendar/util', [
             FRIDAY: 32,
             SATURDAY: 64
         },
+
+        colors: [
+            { label: gt('light blue'), value: '#CEE7FF', foreground: '#2A4B6C' },
+            { label: gt('dark blue'), value: '#96BBE8', foreground: '#0B1624' },
+            { label: gt('purple'), value: '#C4AFE3', foreground: '#3F0E84' },
+            { label: gt('pink'), value: '#F0D8F0', foreground: '#8A1C8C' },
+            { label: gt('red'), value: '#F2D1D2', foreground: '#A83336' },
+            { label: gt('orange'), value: '#FFD1A3', foreground: '#622906' },
+            { label: gt('yellow'), value: '#F7EBB6', foreground: '#5C4209' },
+            { label: gt('light green'), value: '#D4DEA7', foreground: '#526107' },
+            { label: gt('dark green'), value: '#99AF6E', foreground: '#28350F' },
+            { label: gt('gray'), value: '#666666', foreground: '#FFFFFF' }
+        ],
 
         isBossyAppointmentHandling: function (opt) {
 
@@ -456,15 +463,21 @@ define('io.ox/calendar/util', [
         },
 
         getShownAsClass: function (data) {
-            return shownAsClass[(data.shown_as || 1) - 1];
+            data = data instanceof Backbone.Model ? data.attributes : data;
+            if (data.transp === 'TRANSPARENT') return 'free';
+            return 'reserved';
         },
 
         getShownAsLabel: function (data) {
-            return shownAsLabel[(data.shown_as || 1) - 1];
+            data = data instanceof Backbone.Model ? data.attributes : data;
+            if (data.transp === 'TRANSPARENT') return 'label-success';
+            return 'label-info';
         },
 
         getShownAs: function (data) {
-            return n_shownAs[(data.shown_as || 1) - 1];
+            data = data instanceof Backbone.Model ? data.attributes : data;
+            if (data.transp === 'TRANSPARENT') return gt('Free');
+            return gt('Reserved');
         },
 
         getConfirmationSymbol: function (status) {
@@ -842,17 +855,18 @@ define('io.ox/calendar/util', [
             });
         },
 
-        getAppointmentColorClass: function (folder, appointment) {
-
+        getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
-                appointmentColor = appointment.color_label || 0,
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 'ACCEPTED' : 'NEEDS-ACTION');
+                eventColor = eventModel.get('color'),
+                conf = that.getConfirmationStatus(eventModel.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 'ACCEPTED' : 'NEEDS-ACTION');
+
+            if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
 
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (that.isPrivate(appointment)) folderColor = 10;
+            if (that.isPrivate(eventModel)) folderColor = _(that.colors).last().value;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -860,31 +874,79 @@ define('io.ox/calendar/util', [
             // }
 
             // set color of appointment. if color is 0, then use color of folder
-            var color = appointmentColor === 0 ? folderColor : appointmentColor;
-            return 'color-label-' + color;
+            return !eventColor ? folderColor : eventColor;
         },
 
-        canAppointmentChangeColor: function (folder, appointment) {
-            var appointmentColor = appointment.color_label || 0,
-                privateFlag = that.isPrivate(appointment),
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+        lightenDarkenColor: function (col, amt) {
+            if (_.isString(col)) col = this.colorToHex(col);
+            col = that.hexToHSL(col);
+            col[2] = Math.floor(col[2] * amt);
+            col[2] = Math.max(Math.min(100, col[2]), 0);
+            return 'hsl(' + col[0] + ',' + col[1] + '%,' + col[2] + '%)';
+        },
+
+        colorToHex: function (color) {
+            var canvas = document.createElement('canvas'), context = canvas.getContext('2d'), data;
+            canvas.width = 1;
+            canvas.height = 1;
+            context.fillStyle = 'rgba(0, 0, 0, 0)';
+            context.clearRect(0, 0, 1, 1);
+            context.fillStyle = color;
+            context.fillRect(0, 0, 1, 1);
+            data = context.getImageData(0, 0, 1, 1).data;
+            return (data[0] << 16) + (data[1] << 8) + data[2];
+        },
+
+        hexToHSL: function (color) {
+            var r = (color >> 16) / 255,
+                g = ((color >> 8) & 0x00FF) / 255,
+                b = (color & 0x0000FF) / 255,
+                max = Math.max(r, g, b), min = Math.min(r, g, b),
+                h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0; // achromatic
+            } else {
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                    default: h = 0; break;
+                }
+                h /= 6;
+            }
+
+            return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
+        },
+
+        getForegroundColor: function (color) {
+            var c = _(that.colors).findWhere({ value: color });
+            if (c) return c.foreground;
+            color = that.colorToHex(color);
+            return color > 0xffffff / 2 ? 'black' : 'white';
+        },
+
+        canAppointmentChangeColor: function (folder, eventModel) {
+            var eventColor = eventModel.get('color'),
+                privateFlag = that.isPrivate(eventModel),
+                conf = that.getConfirmationStatus(eventModel.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
             // shared appointments which are needs-action or declined don't receive color classes
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) {
                 return false;
             }
 
-            return appointmentColor === 0 && !privateFlag;
+            return !eventColor && !privateFlag;
         },
 
-        getFolderColor: color.getFolderColor,
-
-        getColorLabel: function (colorIndex) {
-            if (colorIndex >= 0 && colorIndex < colorLabels.length) {
-                return colorLabels[colorIndex];
-            }
-
-            return '';
+        getFolderColor: function (folder) {
+            var defaultColor = settings.get('defaultFolderColor', 1),
+                color = folder.meta ? folder.meta.color || defaultColor : defaultColor;
+            // fallback if color is an index
+            if (_.isNumber(color)) color = that.colors[color - 1].value;
+            return color;
         },
 
         getDeepLink: function (data) {

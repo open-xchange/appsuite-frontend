@@ -307,9 +307,35 @@ define('io.ox/calendar/month/perspective', [
 
         updateColor: function (model) {
             if (!model) return;
-            $('[data-folder="' + model.get('id') + '"]', this.pane).each(function () {
-                this.className = this.className.replace(/color-label-\d{1,2}/, 'color-label-' + (model.get('meta') ? model.get('meta').color_label || '1' : '1'));
-            });
+            var color = util.getFolderColor(model.attributes);
+            $('[data-folder="' + model.get('id') + '"]', this.pane).css({
+                'background-color': color,
+                'color': util.getForegroundColor(color)
+            }).data('background-color', color);
+        },
+
+        onChangeColorScheme: function () {
+            if (this.app.props.get('colorScheme') !== 'custom') {
+                $('.appointment', this.pane).css({ 'background-color': '', 'color':  '' });
+            } else {
+                $('.appointment', this.pane).each(function () {
+                    var $elem = $(this),
+                        cid = $elem.data('cid'),
+                        folder = chronosUtil.cid(cid).folder,
+                        model = api.pool.get(folder).get(cid),
+                        folderModel = folderAPI.pool.models[folder];
+                    if (!model || !folderModel) return;
+                    var color = util.getAppointmentColor(folderModel.attributes, model);
+                    if (!color) return;
+                    $elem.css({
+                        'background-color': color,
+                        'color': util.getForegroundColor(color)
+                    }).data('background-color', color);
+                    if (util.canAppointmentChangeColor(folderModel.attributes, model)) {
+                        $elem.attr('data-folder', folder);
+                    }
+                });
+            }
         },
 
         update: function (useCache) {
@@ -647,6 +673,8 @@ define('io.ox/calendar/month/perspective', [
                 .on('change:perspective', function () {
                     self.dialog.close();
                 });
+
+            this.app.props.on('change:colorScheme', this.onChangeColorScheme.bind(this));
         },
 
         // called when an appointment detail-view opens the according appointment

@@ -22,14 +22,13 @@ define('io.ox/core/folder/extensions', [
     'io.ox/core/api/user',
     'io.ox/mail/api',
     'gettext!io.ox/core',
-    'io.ox/core/folder/folder-color',
     'io.ox/backbone/mini-views/upsell',
     'io.ox/core/folder/blacklist',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/core/http',
     'io.ox/core/folder/favorites'
-], function (TreeNodeView, api, account, ext, capabilities, upsell, contactUtil, userAPI, mailAPI, gt, color, UpsellView, blacklist, settings, mailSettings, http) {
+], function (TreeNodeView, api, account, ext, capabilities, upsell, contactUtil, userAPI, mailAPI, gt, UpsellView, blacklist, settings, mailSettings, http) {
 
     'use strict';
 
@@ -935,12 +934,8 @@ define('io.ox/core/folder/extensions', [
         }
 
         function openColorSelection(e) {
-            // check, if clicked on the :before element
-            if (e.offsetX < 0 || e.clientX < $(e.target).offset().left) {
-                // process as context-menu event to view
-                e.type = 'contextmenu';
-                e.data.view.$el.trigger(e);
-            }
+            e.type = 'contextmenu';
+            e.data.view.$el.trigger(e);
         }
 
         ext.point('io.ox/core/foldertree/node').extend(
@@ -1003,20 +998,16 @@ define('io.ox/core/folder/extensions', [
                     if (!api.is('private', baton.data)) return;
                     if (/^virtual/.test(baton.data.id)) return;
 
-                    var folderColor = color.getFolderColor(baton.data),
-                        folderLabel = this.find('.folder-label');
+                    var folderLabel = this.find('.folder-label');
 
-                    // remove any color-label.* classes from folder.
-                    folderLabel.each(function (index, node) {
-                        node.className = _(node.className.split(' ')).filter(function (c) {
-                            return !c.match(/color-label(-\d{1,2})?/);
-                        }).join(' ');
-                    }).addClass('color-label color-label-' + folderColor);
-
-                    if (_.device('!smartphone')) {
-                        folderLabel.off('click', openColorSelection)
-                            .on('click', { view: baton.view, folder: baton.data }, openColorSelection);
-                    }
+                    require(['io.ox/calendar/util'], function (util) {
+                        var folderColor = util.getFolderColor(baton.data),
+                            target = folderLabel.find('.color-label');
+                        if (target.length === 0) target = $('<div class="color-label">');
+                        target.css('background-color', folderColor);
+                        target.off('click').on('click', { view: baton.view, folder: baton.data }, openColorSelection);
+                        folderLabel.prepend(target);
+                    });
                 }
             }
         );

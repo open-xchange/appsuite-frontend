@@ -26,31 +26,44 @@ define('io.ox/calendar/list/listview', [
     'use strict';
 
     ext.point('io.ox/chronos/listview/item').extend({
-        id: 'time',
+        id: 'appointment-class',
         index: 100,
+        draw: function () {
+            this.closest('li').addClass('appointment');
+        }
+    });
+    ext.point('io.ox/chronos/listview/item').extend({
+        id: 'time',
+        index: 200,
         draw: function (baton) {
             var self = this,
                 model = baton.model,
                 timeSplits = util.getStartAndEndTime(model.attributes),
-                time = $('<div class="time custom_shown_as" aria-hidden="true">');
+                time = $('<div class="time custom_shown_as" aria-hidden="true">'),
+                colorLabel = $('<div class="color-label">');
 
             if (model.get('folder')) {
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 folderAPI.get(model.get('folder')).done(function (folder) {
                     var conf = util.getConfirmationStatus(model.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
-
                     self.addClass(util.getConfirmationClass(conf) + (model.get('hard_conflict') ? ' hardconflict' : ''));
-                    time.addClass(util.getAppointmentColorClass(folder, model.attributes)).attr({
-                        'data-folder': util.canAppointmentChangeColor(folder, model.attributes) ? folder.id : ''
+
+                    if (baton.app.props.get('colorScheme') !== 'custom') return;
+                    var color = util.getAppointmentColor(folder, model);
+                    colorLabel.css({
+                        'background-color': color
+                    }).attr({
+                        'data-folder': util.canAppointmentChangeColor(folder, model) ? folder.id : ''
                     });
                 });
             }
 
             this.addClass('calendar').append(
-                time.addClass(util.getShownAsClass(model.attributes))
+                time.addClass(util.getShownAsClass(model))
                     .append(
                         $('<div class="fragment">').text(timeSplits[0]),
-                        $('<div class="fragment">').text(timeSplits[1])
+                        $('<div class="fragment">').text(timeSplits[1]),
+                        colorLabel
                     )
             );
         }
@@ -58,7 +71,7 @@ define('io.ox/calendar/list/listview', [
 
     ext.point('io.ox/chronos/listview/item').extend({
         id: 'content-container',
-        index: 200,
+        index: 300,
         draw: function (baton) {
             var content = $('<div class="contentContainer" aria-hidden="true">');
             this.append(content);
@@ -103,7 +116,7 @@ define('io.ox/calendar/list/listview', [
             //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
             //#. This fragment appears within a long string for screen readers
             if (model.get('location')) a11yLabel.push(gt.format(gt.pgettext('a11y', 'location %1$s'), model.get('location')));
-            a11yLabel.push(util.getShownAs(model.attributes));
+            a11yLabel.push(util.getShownAs(model));
             a11yLabel.push(startDate.isSame(endDate, 'day') ? util.getEvenSmarterDate(model) : util.getDateIntervalA11y(model.attributes));
             a11yLabel.push(util.getTimeIntervalA11y(model.attributes));
 
