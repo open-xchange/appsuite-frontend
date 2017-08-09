@@ -67,7 +67,7 @@ define('io.ox/backbone/mini-views/attachments', [
 
         render: function () {
 
-            this.$el.append(
+            this.$el.empty().append(
                 _(this.allAttachments).map(this.renderAttachment)
             );
 
@@ -130,11 +130,6 @@ define('io.ox/backbone/mini-views/attachments', [
                 });
             });
             this.checkQuota();
-            this.attachmentsChanged();
-        },
-
-        attachmentsChanged: function () {
-            this.$el.empty();
             this.render();
         },
 

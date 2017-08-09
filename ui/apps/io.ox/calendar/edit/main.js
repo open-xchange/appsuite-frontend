@@ -273,11 +273,25 @@ define('io.ox/calendar/edit/main', [
                                 // if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
                             })
                             .on('ignore', function () {
-                                api.create(self.model, { ignore_conflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                if (self.view.options.mode === 'create') {
+                                    api.create(self.model, { ignore_conflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                } else {
+                                    api.update(self.model, { ignore_conflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                }
                             });
                     });
                     return;
                 }
+                // update model with current data
+                this.model.set(data);
+
+                // needed for attachment uploads to work
+                if (this.view.options.mode === 'create') {
+                    this.model.trigger('create');
+                } else {
+                    this.modell.trigger('update');
+                }
+
                 /*if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),

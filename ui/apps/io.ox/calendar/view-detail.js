@@ -215,7 +215,7 @@ define('io.ox/calendar/view-detail', [
                 this.append(
                     $node.append(progressview.render().$el)
                 );
-            } else if (baton.data.number_of_attachments && baton.data.number_of_attachment !== 0) {
+            } else if (baton.data.attachments && baton.data.attachments.length) {
                 this.append($node);
                 ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, baton);
             }
@@ -225,7 +225,7 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail/attachments').extend(new attachments.AttachmentList({
         id: 'attachment-list',
         index: 200,
-        module: 1,
+        module: 'chronos',
         selector: '.window-container.io-ox-calendar-window'
     }));
 

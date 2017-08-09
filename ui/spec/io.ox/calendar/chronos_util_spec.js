@@ -111,6 +111,16 @@ define(['io.ox/calendar/chronos-util'], function (util) {
                 util.createAttendee(new Backbone.Model(testResource)).should.deep.equal(testResourceResult);
             });
 
+            it('should add predefined values', function () {
+                var result = _.copy(testUserResult);
+                result.partStat = 'ACCEPTED';
+                util.createAttendee(testUser, { partStat: 'ACCEPTED' }).should.deep.equal(result);
+            });
+
+            it('should resolve distribution lists', function () {
+                util.createAttendee({ mark_as_distributionlist: true, distribution_list: [testUser, testContact] }, { partStat: 'ACCEPTED' }).should.deep.equal([testUserResult, testContactResult]);
+            });
+
             it('should work with input fragments created by addParticipants autocomplete', function () {
                 util.createAttendee(inputFragment).should.deep.equal({
                     cn: 'vader',
