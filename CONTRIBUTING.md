@@ -11,7 +11,7 @@ Contributing
 # Branches
 
 - we use three namespaces (`feature/`, `bug/` and `poc/`) as prefix to ease housekeeping
-- in case slashes could break your toolchain blease use '-' instead
+- in case slashes (`/`) break your toolchain please use hypens (`-`) instead
 - always user lower case for namespace and branch name
 - please note that only `master`, `develop`, `release` and `hotfix` branches do not have any leading namespace
 
