@@ -111,7 +111,7 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
             var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible'),
+                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.addClass('hover');
             if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
@@ -120,7 +120,7 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible'),
+                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.removeClass('hover');
             if (bg) el.css('background-color', bg);
