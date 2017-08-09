@@ -46,9 +46,14 @@ define('io.ox/core/tk/attachments', [
                 this.loadAttachments();
 
                 function uploadOnSave(response) {
+                    response = response || {};
                     self.model.off('create update', uploadOnSave);
                     var id = response.id || self.model.attributes.id,
                         folder = self.model.attributes.folder || self.model.attributes.folder_id;
+                    // todo remove this once we get a upload request in the chronos api
+                    // until then cut off the additional cal://0/ etc from the folder
+                    folder = folder.split('/');
+                    folder = folder[folder.length - 1];
                     if (folder && id) {
                         self.save(id, folder);
                     }
@@ -63,6 +68,7 @@ define('io.ox/core/tk/attachments', [
 
             render: function () {
                 var self = this;
+                this.$el.empty();
                 _(this.allAttachments).each(function (attachment) {
                     //clearfix because all attachments have css float
                     self.$el.addClass('io-ox-core-tk-attachment-list clearfix').append(self.renderAttachment(attachment));
@@ -82,7 +88,7 @@ define('io.ox/core/tk/attachments', [
                         $('<i class="fa fa-paperclip">'),
                         $('<div class="row-1">').text(_.ellipsis(attachment.filename, { max: 40, charpos: 'middle' })),
                         $('<div class="row-2">').append(
-                            size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size))
+                            size = $('<span class="filesize">').text(strings.fileSize(attachment.file_size || attachment.size))
                         ),
                         removeFile = $('<a href="#" class="remove">').attr('title', gt('Remove attachment')).append($('<i class="fa fa-trash-o">'))
                     )
@@ -96,6 +102,13 @@ define('io.ox/core/tk/attachments', [
             },
 
             loadAttachments: function () {
+                // chronos model already has the full data
+                if (options.module === 'chronos') {
+                    this.attachmentsOnServer = this.model.get('attachments') || [];
+                    this.updateState();
+                    return;
+                }
+
                 var self = this;
                 if (this.model.id) {
                     attachmentAPI.getAll({ module: options.module, id: this.model.id, folder: this.model.get('folder') || this.model.get('folder_id') }).done(function (attachments) {
@@ -125,15 +138,13 @@ define('io.ox/core/tk/attachments', [
                 var self = this;
                 this.allAttachments = _(this.attachmentsOnServer.concat(this.attachmentsToAdd)).reject(function (attachment) {
                     return _(self.attachmentsToDelete).any(function (toDelete) {
+                        if (attachment.managedId) {
+                            return toDelete.managedId === attachment.managedId;
+                        }
                         return toDelete.id === attachment.id;
                     });
                 });
                 this.checkQuota();
-                this.attachmentsChanged();
-            },
-
-            attachmentsChanged: function () {
-                this.$el.empty();
                 this.render();
             },
 
@@ -233,15 +244,7 @@ define('io.ox/core/tk/attachments', [
                 }
 
                 function redraw(e, obj) {
-                    if (obj && (obj.module !== options.module || obj.id !== baton.data.id || obj.folder !== (baton.data.folder || baton.data.folder_id))) {
-                        return;
-                    }
-                    $node.empty();
-                    attachmentAPI.getAll({
-                        module: options.module,
-                        id: baton.data.id,
-                        folder: baton.data.folder || baton.data.folder_id
-                    }).done(function (attachments) {
+                    var callback = function (attachments) {
                         if (attachments.length) {
                             _(attachments).each(function (a) {
                                 drawAttachment(a, a.filename);
@@ -252,7 +255,22 @@ define('io.ox/core/tk/attachments', [
                         } else {
                             $node.append(gt('None'));
                         }
-                    });
+                    };
+
+                    if (obj && (obj.module !== options.module || obj.id !== baton.data.id || obj.folder !== (baton.data.folder || baton.data.folder_id))) {
+                        return;
+                    }
+
+                    if (options.module === 'chronos') {
+                        callback(baton.model.get('attachments'));
+                        return;
+                    }
+                    $node.empty();
+                    attachmentAPI.getAll({
+                        module: options.module,
+                        id: baton.data.id,
+                        folder: baton.data.folder || baton.data.folder_id
+                    }).done(callback);
                 }
 
                 attachmentAPI.on('attach detach', redraw);

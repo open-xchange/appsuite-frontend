@@ -58,7 +58,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'title',
         draw: function (baton) {
             this.append($('<h1>').addClass('sr-only').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
-        }
+        }// jkmrftjtk
     });
 
     // buttons
@@ -75,19 +75,24 @@ define('io.ox/calendar/edit/extensions', [
                         folder = baton.model.get('folder'),
                         inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
 
-                    //check if attachments are changed
-                    if (baton.attachmentList.attachmentsToDelete.length > 0 || baton.attachmentList.attachmentsToAdd.length > 0) {
+                    // check if attachments have changed
+                    if (baton.attachmentList.attachmentsToDelete.length > 0) {
+                        // attachments can be deleted without the need of another api call
+                        baton.model.set('attachments', _(baton.model.get('attachments')).difference(baton.attachmentList.attachmentsToDelete));
+                        baton.attachmentList.attachmentsToDelete = [];
+                    }
+                    if (baton.attachmentList.attachmentsToAdd.length > 0) {
                         //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
                         baton.model.attributes.tempAttachmentIndicator = true;
                     }
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
                         baton.model.set({ 'folder': oldFolder }, { silent: true });
-                        //actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
+                        // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
 
-                    //check if participants inputfield contains a valid email address
+                    // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
                         baton.model._attendees.add(
                             new baton.model._attendees.model({
@@ -623,7 +628,7 @@ define('io.ox/calendar/edit/extensions', [
         registerAs: 'attachmentList',
         className: 'div',
         index: 1700,
-        module: 1,
+        module: 'chronos',
         finishedCallback: function (model, id) {
             var obj = model.attributes;
             //new objects have no id in model yet
