@@ -134,6 +134,19 @@ define(['io.ox/calendar/chronos-model'], function (models) {
                     }]);
                 });
 
+                it('without cache', function () {
+                    var c = new models.Collection();
+                    c.ranges = [{ start: 0, end: 10 }];
+                    var result = c.getRanges({ start: 3, end: 5, useCache: false });
+                    result.should.deep.equal([{
+                        start: 3, end: 5
+                    }]);
+                    c.ranges.should.deep.equal([{
+                        start: 0,
+                        end: 10
+                    }]);
+                });
+
             });
 
         });

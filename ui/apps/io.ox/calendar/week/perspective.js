@@ -414,7 +414,8 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', refresh)
+            api.on('create update delete', refresh)
+                .on('refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();

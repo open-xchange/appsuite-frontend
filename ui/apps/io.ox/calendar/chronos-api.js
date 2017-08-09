@@ -68,7 +68,7 @@ define('io.ox/calendar/chronos-api', [
                     end: moment().add(28, 'days').valueOf(),
                     order: 'asc'
                 }, obj || {});
-                obj.useCache = obj.useCache || useCache || true;
+                obj.useCache = obj.useCache !== false && useCache !== false;
                 var collection = api.pool.get(obj.folder),
                     ranges = collection.getRanges(obj);
                 http.pause();
@@ -374,6 +374,7 @@ define('io.ox/calendar/chronos-api', [
                 // check capabilities
                 if (capabilities.has('calendar')) {
                     api.getInvites();
+                    api.trigger('refresh.all');
                 }
             }
         };
