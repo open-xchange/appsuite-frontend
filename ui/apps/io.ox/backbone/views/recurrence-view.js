@@ -759,7 +759,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 if (rrule.count) this.set('occurrences', parseInt(rrule.count, 10) || 1);
                 if (rrule.UNTIL) this.set('until', moment(rrule.UNTIL).valueOf() || 0);
                 this.set('interval', parseInt(rrule.interval, 10) || 1);
-                this.set('startDate', parseInt(this.model.get('startDate'), 10));
+                this.set('startDate', this.model.getTimestamp('startDate'), 10);
             }
 
         });
@@ -774,7 +774,7 @@ define('io.ox/backbone/views/recurrence-view', [
 
         initialize: function () {
             this.model = this.getMappedModel();
-            this.listenTo(this.model, 'change:recurrence_type change:interval change:days change:day_in_month change:month change:occurrences change:until', this.updateSummary);
+            this.listenTo(this.model, 'change:recurrence_type change:interval change:days change:day_in_month change:month change:occurrences change:until', _.debounce(this.updateSummary, 50));
             this.listenTo(this.model, 'change:start_time change:start_date change:startDate', this.onChangeStart);
         },
 
