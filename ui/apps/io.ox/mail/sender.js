@@ -29,11 +29,6 @@ define('io.ox/mail/sender', [
         return a < b ? -1 : +1;
     }
 
-    function drawOption(value, text, display_name, address) {
-        return $('<option>', { value: value }).text(text || value)
-            .attr({ 'data-display-name': (display_name || ''), 'data-address': (address || value) });
-    }
-
     /**
      * returns sender object
      * considers potential existing telephone numbers
@@ -52,44 +47,6 @@ define('io.ox/mail/sender', [
     }
 
     var that = {
-
-        getsender: function (data) {
-            return getSender(data);
-        },
-
-        // get current sender
-        get: function (select) {
-            var option = select.children('option:selected'),
-                display_name = option.attr('data-display-name'),
-                address = option.attr('data-address');
-            return option.length ? [display_name, address] : ['', select.attr('data-default-send-address')];
-        },
-
-        // set sender. Use default as fallback
-        set: function (select, from) {
-
-            if (!select || !_.isArray(from)) return;
-
-            var address = api.trimAddress(from[1]),
-                option = select.find('[data-address="' + address + '"]'),
-                children = select.children(),
-                index;
-
-            // still empty?
-            if (children.length === 0) {
-                select.attr('data-default', address);
-                return;
-            }
-
-            index = children.index(option);
-
-            if (index === -1) {
-                option = select.find('[default]');
-                index = select.children().index(option);
-            }
-
-            select.prop('selectedIndex', index);
-        },
 
         /**
          * user data
@@ -115,25 +72,6 @@ define('io.ox/mail/sender', [
          */
         getDefaultSendAddress: function () {
             return $.trim(settings.get('defaultSendAddress', ''));
-        },
-
-        /**
-         * default send adresse from settings
-         * @return {string}
-         */
-        getDefaultSendAddressWithDisplayname: function () {
-            return that.getAddresses().then(function (addresses, numbers, primary) {
-                return [primary];
-            });
-        },
-
-        /**
-         * primary address
-         * accessible for testing purposes
-         * @return { deferred} resolves as array
-         */
-        getPrimaryAddress: function () {
-            return api.getPrimaryAddress();
         },
 
         /**
@@ -189,6 +127,15 @@ define('io.ox/mail/sender', [
         },
 
         /**
+         * primary address
+         * accessible for testing purposes
+         * @return { deferred} resolves as array
+         */
+        getPrimaryAddress: function () {
+            return api.getPrimaryAddress();
+        },
+
+        /**
          * list of normalised arrays (display_name, value)
          * accessible for testing purposes
          * @return { deferred} resolves as array
@@ -201,52 +148,9 @@ define('io.ox/mail/sender', [
             );
         },
 
-        /**
-         * add all senders to <select> box
-         * @param  {jquery} select node
-         * @return { undefined }
-         */
-        drawOptions: function (select) {
-            if (!select) return;
-
-            // fallback address - if any other request fails we have the default send address
-            var defaultAddress = this.getDefaultSendAddress();
-            select.empty()
-                .attr('data-default-send-address', defaultAddress)
-                .append(drawOption(defaultAddress));
-
-            // append options to select-box
-            return that.getAddresses().then(function (addresses, numbers, primary) {
-                var defaultAddress = select.attr('data-default') || primary[1],
-                    defaultValue,
-                    list = [].concat(addresses, numbers);
-
-                // process with mail addresses and phone numbers
-                list = _(list).map(function (address) {
-                    var sender = getSender(address),
-                        option = drawOption(sender.value, sender.text, sender.display_name, sender.address);
-                    //support typed or typeless defaultAddress
-                    if (address[1] === defaultAddress || sender.address === defaultAddress) {
-                        option.attr('default', 'default');
-                        defaultValue = sender.value;
-                    }
-                    return { value: sender.value, option: option };
-                });
-
-                // concat, sort, then add to drop-down
-                select.empty().append(
-                    _(list.sort(sorter)).pluck('option')
-                );
-
-                select.attr('data-default', defaultAddress);
-
-                if (defaultValue) select.val(defaultValue);
-            });
-        },
-
         drawDropdown: function () {
             // fallback address - if any other request fails we have the default send address
-            var fallbackAddress = this.getDefaultSendAddress();
+            var fallbackAddress = settings.get('defaultSendAddress', '').trim();
 
             // append options to select-box
             return that.getAddresses().then(function (addresses, numbers, primary) {

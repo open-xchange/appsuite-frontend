@@ -23,14 +23,6 @@ define([
 
         var select = $();
 
-        function setValue(from) {
-            sender.set(select, from);
-        }
-
-        function getValue() {
-            return sender.get(select);
-        }
-
         beforeEach(function () {
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
@@ -249,43 +241,6 @@ define([
             return sender.drawOptions(select).then(function () {
                 expect(select.children().length).to.equal(8);
                 expect(select.find('[default]').length).to.equal(1);
-            });
-        });
-
-        it('sets initial value of select-box correctly', function () {
-            // box should automatically select the default value
-            expect(getValue()).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
-        });
-
-        it('sets value of select-box correctly', function () {
-            setValue(['Test', 'foo@gmail.com']);
-            var index = select.prop('selectedIndex');
-            expect(index).to.equal(5);
-        });
-
-        it('uses default address if invalid values are set', function () {
-            // an invalid value select first item in the list
-            setValue(['Test', 'not-in@the.list']);
-            var index = select.prop('selectedIndex'),
-                value = select.val();
-            expect(index).to.equal(4);
-            expect(value).to.equal('"Otto Xentner" <otto.xentner@open-xchange.com>');
-        });
-
-        it('selects proper address during initial loading', function () {
-            // clear box
-            select.empty().removeAttr('data-default');
-
-            // set value
-            setValue(['Test', 'foo@gmail.com']);
-
-            expect(select.val()).to.be.null;
-            expect(select.children().length).to.equal(0);
-
-            // an invalid value select first item in the list
-            return sender.drawOptions(select).then(function () {
-                var index = select.prop('selectedIndex');
-                expect(index).to.equal(5);
             });
         });
 
