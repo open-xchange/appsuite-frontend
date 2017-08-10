@@ -103,7 +103,7 @@ define('io.ox/calendar/month/view', [
                 if (!create) return;
                 if (!$(e.target).hasClass('list')) return;
 
-                this.trigger('createAppoinment', e, $(e.currentTarget).data('date'));
+                this.trigger('createAppointment', e, $(e.currentTarget).data('date'));
 
             }.bind(this));
         },

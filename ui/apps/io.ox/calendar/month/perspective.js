@@ -78,8 +78,12 @@ define('io.ox/calendar/month/perspective', [
         createAppointment: function (e, start) {
             // add current time to start timestamp
             start = moment(start).add(Math.ceil((moment().hours() * 60 + moment().minutes()) / 30) * 30, 'minutes');
+
             ext.point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, { app: this.app }, { startDate: start.valueOf(), endDate: start.add(1, 'hour').valueOf() });
+                .invoke('action', this, { app: this.app }, {
+                    startDate: { value: start.format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() },
+                    endDate: { value: start.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() }
+                });
         },
 
         /**
@@ -214,8 +218,8 @@ define('io.ox/calendar/month/perspective', [
                 return new View(options)
                     .on('showAppointment', self.showAppointment, self)
                     .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
-                    .on('createAppoinment', self.createAppointment, self)
-                    .on('createAppoinment', _.bind(self.bubble, self, 'createAppoinment'))
+                    .on('createAppointment', self.createAppointment, self)
+                    .on('createAppointment', _.bind(self.bubble, self, 'createAppointment'))
                     .on('openEditAppointment', self.openEditAppointment, self)
                     .on('updateAppointment', self.updateAppointment, self);
             }
