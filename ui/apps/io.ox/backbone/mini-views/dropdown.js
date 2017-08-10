@@ -250,6 +250,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 .attr({
                     'role': role,
                     'aria-checked': checked,
+                    'data-keep-open': options.keepOpen ? true : undefined,
                     'data-name': name,
                     'data-value': this.stringify(value),
                     // you may use toggle with boolean values or provide a toggleValue ('togglevalue' is the option not checked value, 'value' is the option checked value)
