@@ -269,7 +269,6 @@ define('io.ox/mail/common-extensions', [
 
             return function (baton) {
                 if (!settings.get('features/flag/star') || util.isEmbedded(baton.data)) return;
-                if (util.isEmbedded(baton.data)) return;
                 var self = this;
                 folderAPI.get(baton.data.folder_id).done(function (data) {
                     // see if the user is allowed to modify the flag status - always allows for unified folder
