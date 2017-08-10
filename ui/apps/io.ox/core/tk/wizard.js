@@ -125,7 +125,7 @@ define('io.ox/core/tk/wizard', [
 
         // focus trap
         $(document).on('click.wizard', '.wizard-overlay, .wizard-backdrop', function () {
-            $('.wizard-step:visible').focus();
+            $('.wizard-step:visible').find('button.btn-primary:first').focus();
         });
 
         this.container = container.clone();
@@ -311,31 +311,28 @@ define('io.ox/core/tk/wizard', [
 
             // focus trap; wizard/tour steps are generally modal (even if not visually)
             if (e.which !== 9 || !this.$el.is(':visible')) return;
-
             // get focusable items
-            var items = this.$('[tabindex][tabindex!="-1"][disabled!="disabled"]:visible').addBack(),
+            var items = this.$('button[tabindex!="-1"][disabled!="disabled"]:visible'),
                 first = e.shiftKey && document.activeElement === items.get(0),
                 last = !e.shiftKey && document.activeElement === items.get(-1);
-
             if (first || last) {
                 e.preventDefault();
-                if (first) items.get(-1).focus(); else this.$el.focus();
+                items.get(first ? -1 : 0).focus();
             }
         },
 
         onKeyUp: function (e) {
 
             function isInput(e) {
-                return $(e.target).is(':input');
+                return $(e.target).is('input, textarea, select');
             }
-
             switch (e.which) {
                 // check if "close" button exists
-                case 27: if (this.$('.wizard-close').length) this.trigger('close'); break;
+                case 27: if (this.$el.find('.wizard-close').length) this.trigger('close'); break;
                 // check if "back" button is enabled and available
-                case 37: if (!isInput(e) && this.$('[data-action="back"]:enabled').length) this.trigger('back'); break;
+                case 37: if (!isInput(e) && this.$el.find('[data-action="back"]:enabled').length) this.trigger('back'); break;
                 // check if "next" button is enabled and available
-                case 39: if (!isInput(e) && this.$('[data-action="next"]:enabled').length) this.trigger('next'); break;
+                case 39: if (!isInput(e) && this.$el.find('[data-action="next"]:enabled').length) this.trigger('next'); break;
                 // no default
             }
         },
@@ -415,19 +412,22 @@ define('io.ox/core/tk/wizard', [
             this.$el.attr({
                 role: 'dialog',
                 // as we have a focus trap (modal dialog) we use tabindex=1 in this case
-                tabindex: 0,
+                tabindex: -1,
                 'aria-labelledby': 'dialog-title'
             })
             .append(
-                $('<div class="wizard-header">').append(
-                    $('<button type="button" class="wizard-close close pull-right" data-action="close">').append(
-                        $('<span aria-hidden="true">&times;</span>'),
-                        $('<span class="sr-only">').text(gt('Close'))
+                $('<div role="document">').append(
+                    $('<div class="wizard-header">').append(
+                        $('<h1 class="wizard-title" id="dialog-title">'),
+                        $('<button type="button" class="wizard-close close" data-action="close">')
+                            .attr('aria-label', gt('Close'))
+                            .append(
+                                $('<i class="fa fa-times" aria-hidden="true">').attr('title', gt('Close'))
+                            )
                     ),
-                    $('<h4 class="wizard-title" id="dialog-title">')
-                ),
-                $('<div class="wizard-content" id="dialog-content">'),
-                $('<div class="wizard-footer">')
+                    $('<div class="wizard-content" id="dialog-content">'),
+                    $('<div class="wizard-footer">')
+                )
             );
             return this;
         },
@@ -604,12 +604,12 @@ define('io.ox/core/tk/wizard', [
                 }
 
                 // now, show and focus popup
-                this.$el.removeClass('invisible').focus();
+                this.$el.removeClass('invisible').find('button[tabindex!="-1"][disabled!="disabled"]:visible:last').focus();
 
                 // enable focus watcher?
                 if (this.options.focusWatcher) {
                     this.focusWatcher = setInterval(function () {
-                        if (!$.contains(this.el, document.activeElement)) this.$el.focus();
+                        if (!$.contains(this.el, document.activeElement)) this.$el.find('button[tabindex!="-1"][disabled!="disabled"]:visible:last').focus();
                     }.bind(this), 100);
                 }
 
