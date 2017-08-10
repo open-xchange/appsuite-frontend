@@ -21,8 +21,10 @@
     height: @drag-size;
     line-height: @drag-size;
     color: #333;
-    background-color: rgba(240, 240, 240, 0.80);
+    background-color: rgba(240, 240, 240, 0.95);
     padding: 0 14px 0 @drag-size + 14px;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     .ellipsis();
 }
 
@@ -35,7 +37,7 @@
     text-align: center;
     font-weight: bold;
     color: #fff;
-    background-color: rgba(0, 0, 0, 0.50);
+    background-color: @selected-focussed-background;
 }
 
 .inplace-dropzone {
