@@ -33,8 +33,9 @@ define('io.ox/calendar/actions/edit', [
                         return;
                     }
                     if (action === 'series') {
-                        // edit the series, discard recurrenceId
+                        // edit the series, discard recurrenceId and reference to seriesId if exception
                         delete o.recurrenceId;
+                        o.id = params.seriedId || params.id;
                     }
 
                     // disable cache with second param

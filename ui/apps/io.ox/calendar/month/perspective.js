@@ -666,8 +666,7 @@ define('io.ox/calendar/month/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update', refresh)
-                .on('refresh.all', reload)
+            api.on('create update delete refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();

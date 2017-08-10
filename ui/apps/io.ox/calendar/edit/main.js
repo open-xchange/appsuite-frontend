@@ -155,7 +155,7 @@ define('io.ox/calendar/edit/main', [
                         if (opt.mode === 'edit') {
 
                             if (opt.action === 'appointment') {
-                                self.model.set('recurrence_type', 0, { validate: true });
+                                self.model.set('rrule', undefined, { validate: true });
                                 self.model.mode = 'appointment';
                             }
 
