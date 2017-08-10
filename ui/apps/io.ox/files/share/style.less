@@ -118,7 +118,7 @@
 .myshares-list {
 
     &.visible-selection.has-focus .list-item.selected a,
-    &.visible-selection.has-focus .list-item.selected .type i:not(.gray) { color: white; }
+    &.visible-selection.has-focus .list-item.selected .type i { color: white; }
 
     .list-item-content {
         display: table;
@@ -139,7 +139,10 @@
             text-align: left;
         }
 
-        .list-item-column.type { width: 20px; }
+        .list-item-column.type {
+            width: 20px;
+            color: #717171;
+        }
     }
 }
 
