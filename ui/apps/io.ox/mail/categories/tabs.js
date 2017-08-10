@@ -30,7 +30,11 @@ define('io.ox/mail/categories/tabs', [
             'click .category .link': 'onChangeTab',
             'contextmenu .category': 'onConfigureCategories',
             'dblclick .category': 'onConfigureCategories',
-            'selection:drop': 'onMove'
+            'selection:drop': 'onMove',
+            'mousedown .category a': 'respondToNonKeyboardFocus',
+            'blur .category a': 'respondToNonKeyboardFocus',
+            'mouseover .category': 'onMouseover',
+            'mouseout .category': 'onMouseout'
         },
 
         initialize: function (options) {
@@ -50,6 +54,17 @@ define('io.ox/mail/categories/tabs', [
             this.listenTo(this.collection, 'update reset change', _.debounce(this.render, 200));
             this.listenTo(this.props, 'change:category_id', this.onCategoryChange);
         },
+
+        respondToNonKeyboardFocus: function (e) {
+            if (e.type === 'focusout') return $(e.currentTarget).removeAttr('style');
+            $(e.currentTarget).css({
+                'border-bottom': '1px solid white',
+                'background': 'white'
+            });
+        },
+
+        onMouseover: function (e) { $(e.currentTarget).addClass('hover'); },
+        onMouseout: function (e) { $(e.currentTarget).removeClass('hover'); },
 
         render: function () {
 
