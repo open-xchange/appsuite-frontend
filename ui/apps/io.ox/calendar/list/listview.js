@@ -281,6 +281,11 @@ define('io.ox/calendar/list/listview', [
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('chronos-item');
             this.connect(collectionLoader);
+            this.on('collection:set', this.onCollectionSet);
+        },
+
+        onCollectionSet: function () {
+            this.listenTo(this.collection, 'paginate', _.debounce(this.drawTail, 20));
         },
 
         getLabel: function (model) {
