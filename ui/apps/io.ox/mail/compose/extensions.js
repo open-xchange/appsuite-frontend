@@ -25,13 +25,14 @@ define('io.ox/mail/compose/extensions', [
     'io.ox/core/util',
     'io.ox/core/attachments/view',
     'io.ox/core/yell',
+    'io.ox/mail/util',
     'settings!io.ox/mail',
     'gettext!io.ox/mail',
     'io.ox/core/extPatterns/links',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'static/3rd.party/jquery-ui.min.js'
-], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, Attachments, yell, settings, gt, links, coreSettings, settingsContacts) {
+], function (contactAPI, sender, mini, Dropdown, ext, actions, Tokenfield, dropzone, capabilities, attachmentQuota, util, Attachments, yell, mailUtil, settings, gt, links, coreSettings, settingsContacts) {
 
     var POINT = 'io.ox/mail/compose';
 
@@ -48,6 +49,114 @@ define('io.ox/mail/compose/extensions', [
         ariabcc: gt('%1$s autocomplete token field. Use left and right Arrowkeys to navigate between the tokens', gt('BCC')),
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
+
+    var SenderView = Backbone.DisposableView.extend({
+
+        className: 'row sender',
+
+        attributes: { 'data-extension-id': 'sender' },
+
+        initialize: function () {
+            this.dropdown = new Dropdown({
+                model: this.model,
+                label: this.getItemNode.bind(this),
+                aria: gt('From'),
+                caret: true
+            });
+
+            this.listenTo(this.model, 'change:from', this.renderDropdown);
+            this.listenTo(this.model, 'change:sendDisplayName', function (model, value) {
+                settings.set('sendDisplayName', value);
+            });
+        },
+
+        render: function () {
+            // label
+            this.$el.empty().append(
+                $('<label class="maillabel col-xs-1">').text(gt('From')),
+                $('<div class="col-xs-11">').append(
+                    // label gets rendered by dropdown view, dropdown.$el is empty now
+                    this.dropdown.render().$el.attr({ 'data-dropdown': 'from' })
+                )
+            );
+            // ready to draw dropdown
+            sender.getAddressesOptions().then(function (list) {
+                this.list = list;
+                this.renderDropdown();
+            }.bind(this));
+            return this;
+        },
+
+        renderDropdown: function () {
+            // reset
+            this.dropdown.$ul.empty().css('width', 'auto');
+            // render
+            this.setDropdownOptions();
+            this.dropdown.$toggle.find('.dropdown-label').empty().append(this.getItemNode());
+            if (this.dropdown.$el.hasClass('open')) this.dropdown.adjustBounds();
+            // re-focus element otherwise the bootstap a11y closes the drop-down
+            this.dropdown.$ul.find('[data-name="sendDisplayName"]').focus();
+        },
+
+        setDropdownOptions: function () {
+            var self = this;
+            if (!this.list || !this.list.sortedAddresses.length) return;
+
+            var defaultAddress = settings.get('defaultSendAddress', '').trim();
+
+            // prepare list
+            var sortedAddresses = _(this.list.sortedAddresses)
+                .chain()
+                .map(function (address) {
+                    var array = mailUtil.getSender(address.option, self.model.get('sendDisplayName'));
+                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
+                })
+                .sortBy('key')
+                .pluck('array')
+                .value();
+
+            // draw default address first
+            sortedAddresses = _(sortedAddresses).filter(function (item) {
+                if (item[1] !== defaultAddress) return true;
+                self.dropdown.option('from', [item], function () {
+                    return self.getItemNode(item);
+                });
+                if (sortedAddresses.length > 1) self.dropdown.divider();
+                return false;
+            });
+
+            _(sortedAddresses).each(function (item) {
+                self.dropdown.option('from', [item], function () {
+                    return self.getItemNode(item);
+                });
+            });
+
+            if (_.device('smartphone')) return;
+
+            // append options to toggle and edit names
+            this.dropdown
+                .divider()
+                .option('sendDisplayName', true, gt('Show names'), { keepOpen: true })
+                .divider()
+                .link('edit-real-names', gt('Edit names'), this.onEditNames);
+        },
+
+        getItemNode: function (item) {
+            item = item || _(this.model.get('from')).first();
+            if (!item) return;
+            var name = item[0], address = item[1];
+            return [
+                $('<span class="name">').text(name ? name + ' ' : ''),
+                $('<span class="address">').text(name ? '<' + address + '>' : address)
+            ];
+        },
+
+        onEditNames: function () {
+            require(['io.ox/mail/compose/names'], function (names) {
+                names.open();
+            });
+        }
+    });
 
     var extensions = {
 
@@ -101,138 +210,8 @@ define('io.ox/mail/compose/extensions', [
         },
 
         sender: function (baton) {
-
-            function editNames() {
-                require(['io.ox/mail/compose/names'], function (names) {
-                    names.open();
-                });
-            }
-
-            var node = $('<div class="row sender" data-extension-id="sender">'),
-                render = function () {
-
-                    function renderFrom(array) {
-                        array = array || _(baton.model.get('from')).first();
-                        if (!array) return;
-                        var name = array[0], address = array[1];
-                        return [
-                            $('<span class="name">').text(name ? name + ' ' : ''),
-                            $('<span class="address">').text(name ? '<' + address + '>' : address)
-                        ];
-                    }
-
-                    var dropdown = new Dropdown({
-                        model: baton.model,
-                        label: renderFrom,
-                        aria: gt('From'),
-                        caret: true
-                    });
-
-                    sender.drawDropdown().done(function (list) {
-
-                        function toggleNames() {
-                            var value = !!settings.get('sendDisplayName', true);
-                            settings.set('sendDisplayName', !value).save();
-                            baton.model.set('sendDisplayName', !value);
-                            ox.trigger('change:customDisplayNames');
-                            // stop propagation to keep drop-down open
-                            return false;
-                        }
-
-                        function redraw() {
-                            dropdown.$ul.empty().css('width', 'auto');
-                            drawOptions();
-                            if (dropdown.$el.hasClass('open')) dropdown.adjustBounds();
-                            dropdown.$toggle.find('.dropdown-label').empty().append(renderFrom);
-                            // re-focus element otherwise the bootstap a11y closes the drop-down
-                            dropdown.$ul.find('[data-name="toggle-display"]').focus();
-                        }
-
-                        function applyDisplayName(item) {
-                            // consider custom settings
-                            var name = item[0], address = item[1];
-                            if (!settings.get('sendDisplayName', true)) {
-                                name = null;
-                            } else if (settings.get(['customDisplayNames', address, 'overwrite'])) {
-                                name = settings.get(['customDisplayNames', address, 'name'], '');
-                            } else {
-                                // reset
-                                name = settings.get(['customDisplayNames', address, 'defaultName'], '');
-                            }
-                            return [name, address];
-                        }
-
-                        function drawOptions() {
-
-                            if (!list.sortedAddresses.length) return;
-
-                            var defaultAddress = sender.getDefaultSendAddress();
-
-                            var sortedAddresses = _(list.sortedAddresses)
-                                .chain()
-                                .map(function (address) {
-                                    var array = applyDisplayName(address.option);
-                                    return { key: _(array).compact().join(' ').toLowerCase(), array: array };
-                                })
-                                .sortBy('key')
-                                .pluck('array')
-                                .value();
-
-                            // draw default address first
-                            sortedAddresses = _(sortedAddresses).filter(function (item) {
-                                if (item[1] !== defaultAddress) return true;
-                                dropdown.option('from', [item], function () {
-                                    return renderFrom(item);
-                                });
-                                if (sortedAddresses.length > 1) dropdown.divider();
-                                return false;
-                            });
-
-                            _(sortedAddresses).each(function (item) {
-                                dropdown.option('from', [item], function () {
-                                    return renderFrom(item);
-                                });
-                            });
-
-                            if (_.device('smartphone')) return;
-
-                            // append options to toggle and edit names
-                            var state = !!settings.get('sendDisplayName', true);
-                            dropdown
-                                .divider()
-                                .link('toggle-display', state ? gt('Hide names') : gt('Show names'), toggleNames)
-                                .link('edit-real-names', gt('Edit names'), editNames);
-                        }
-
-                        drawOptions();
-
-                        node.append(
-                            $('<label class="maillabel col-xs-1">').text(gt('From')),
-                            $('<div class="col-xs-11">').append(
-                                dropdown.render().$el.attr({ 'data-dropdown': 'from' })
-                            )
-                        );
-
-                        ox.on('change:customDisplayNames', function () {
-                            // fix current value
-                            var from = baton.model.get('from');
-                            if (from) baton.model.set('from', [applyDisplayName(from[0])]);
-                            // redraw drop-down
-                            redraw();
-                        });
-                        baton.view.listenTo(baton.model, 'change:from', redraw);
-                    });
-                };
-
-            if (!baton.model.get('from')) {
-                baton.model.once('change:from', function () {
-                    render();
-                });
-            } else {
-                render();
-            }
-
-            this.append(node);
+            var view = new SenderView({ model: baton.model });
+            this.append(view.render().$el);
         },
 
         senderRealName: function (baton) {

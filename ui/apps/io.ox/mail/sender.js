@@ -148,7 +148,7 @@ define('io.ox/mail/sender', [
             );
         },
 
-        drawDropdown: function () {
+        getAddressesOptions: function () {
             // fallback address - if any other request fails we have the default send address
             var fallbackAddress = settings.get('defaultSendAddress', '').trim();
 

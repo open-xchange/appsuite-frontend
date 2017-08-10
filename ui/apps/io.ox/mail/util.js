@@ -328,6 +328,16 @@ define('io.ox/mail/util', [
             return display_name || email;
         },
 
+        getSender: function (item, enabled) {
+            var address = item[1];
+            // disabled
+            if (!enabled) return [null, address];
+            // default or custom
+            var custom = settings.get(['customDisplayNames', address], {}),
+                name = (custom.overwrite ? custom.name : custom.defaultName) || '';
+            return [name, address];
+        },
+
         // takes care of special edge-case: no from address
         hasFrom: function (data) {
             return data && _.isArray(data.from) && data.from.length > 0 && !!data.from[0][1];
