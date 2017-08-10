@@ -77,6 +77,12 @@ define('io.ox/core/folder/actions/add', [
                 if (module === 'calendar') return gt('New calendar');
                 else if (module === 'contacts') return gt('New address book');
                 return gt('New folder');
+            },
+            getLabel: function () {
+                var module = this.context.module;
+                if (module === 'calendar') return gt('Calendar name');
+                else if (module === 'contacts') return gt('Address book name');
+                return gt('Folder name');
             }
         })
         .extend({
@@ -90,8 +96,8 @@ define('io.ox/core/folder/actions/add', [
                 this.$body.append(
                     // name
                     $('<div class="form-group">').append(
-                        $('<label class="sr-only">').text(gt('Folder name')).attr('for', guid),
-                        $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: gt('Folder name') })
+                        $('<label class="sr-only">').text(this.getLabel()).attr('for', guid),
+                        $('<input type="text" name="name" class="form-control">').attr({ id: guid, placeholder: this.getName() })
                     )
                 );
             },
