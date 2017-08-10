@@ -170,13 +170,6 @@ define('io.ox/calendar/list/perspective', [
                 });
             });
 
-            api.on('create', function (data) {
-                app.listView.load();
-                app.listView.collection.once('load', function () {
-                    app.listView.selection.set([chronosUtil.cid(data)]);
-                });
-            });
-
             api.on('beforedelete', function (ids) {
                 var selection = app.listView.selection.get(),
                     cids = _.map(ids, chronosUtil.cid);
@@ -184,7 +177,13 @@ define('io.ox/calendar/list/perspective', [
             });
 
             // refresh listview on all update/delete events
-            api.on('update delete refresh.all', app.listView.reload.bind(app.listView));
+            api.on('create update delete refresh.all', app.listView.reload.bind(app.listView));
+
+            api.on('create', function (data) {
+                app.listView.collection.once('reload', function () {
+                    app.listView.selection.set([chronosUtil.cid(data)]);
+                });
+            });
 
             // to show an appointment without it being in the grid, needed for direct links
             app.on('show:appointment', this.showAppointment);
