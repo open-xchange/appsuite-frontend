@@ -55,7 +55,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     function remove() {
         clearTimeout(timer);
         $('.io-ox-alert').trigger('notification:removed').remove();
-        $(document).off('.yell');
+        $('body').off('.yell');
     }
 
     function click(e) {
@@ -159,7 +159,7 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             //prevent double binding
             //we can not use an event listener that always listens. Otherwise we might run into opening clicks and close our notifications, when they should not. See Bug 34339
             //not using click here, since that sometimes shows odd behavior (clicking, then binding then listener -> listener runs code although it should not)
-            $(document).off('.yell');
+            $('body').off('.yell');
 
             // closeOnClick: whether the yell is closed on the following events
             if (o.closeOnClick) {
