@@ -187,7 +187,7 @@ define('io.ox/core/api/attachment', [
                     session: ox.session,
                     action: 'document',
                     folder: data.folder,
-                    id: data.id,
+                    id: data.id || data.managedId,
                     module: data.module,
                     attached: data.attached,
                     source: 'task'

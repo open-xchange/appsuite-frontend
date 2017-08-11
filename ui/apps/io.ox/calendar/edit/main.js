@@ -278,8 +278,9 @@ define('io.ox/calendar/edit/main', [
                     });
                     return;
                 }
+
                 // update model with current data
-                this.model.set(data);
+                this.model.set(data.toJSON());
 
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {

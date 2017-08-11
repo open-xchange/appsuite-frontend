@@ -103,7 +103,7 @@ define('io.ox/core/tk/attachments', [
 
             loadAttachments: function () {
                 // chronos model already has the full data
-                if (options.module === 'chronos') {
+                if (options.module === 1) {
                     this.attachmentsOnServer = this.model.get('attachments') || [];
                     this.updateState();
                     return;
@@ -236,6 +236,25 @@ define('io.ox/core/tk/attachments', [
                 var $node = $('<div>').addClass('attachment-list').appendTo(this);
 
                 function drawAttachment(data, label) {
+                    if (options.module === 1) {
+                        if (_.isArray(data)) {
+                            data = _(data).map(function (att) {
+                                // files api can only handle old folder ids
+                                // TODO check if that can be changed
+                                // until then cut off the additional cal://0/ etc from the folder
+                                att.folder = baton.model.get('folder').split('/');
+                                att.folder = att.folder[att.folder.length - 1];
+                                att.module = 1;
+                                att.attached = parseInt(baton.model.get('id'), 10);
+                                return att;
+                            });
+                        } else {
+                            data.folder = baton.model.get('folder').split('/');
+                            data.folder = data.folder[data.folder.length - 1];
+                            data.module = 1;
+                            data.attached = parseInt(baton.model.get('id'), 10);
+                        }
+                    }
                     return new links.Dropdown({
                         label: label || data.filename,
                         classes: 'attachment-link',
@@ -261,7 +280,7 @@ define('io.ox/core/tk/attachments', [
                         return;
                     }
 
-                    if (options.module === 'chronos') {
+                    if (options.module === 1) {
                         callback(baton.model.get('attachments'));
                         return;
                     }

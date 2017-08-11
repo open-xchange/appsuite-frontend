@@ -211,8 +211,8 @@ define('io.ox/calendar/view-detail', [
                 )
             );
 
-            if (calAPI.uploadInProgress(_.ecid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: _.ecid(baton.data) });
+            if (calAPI.uploadInProgress(chronosUtil.cid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: chronosUtil.cid(baton.data) });
                 this.append(
                     $node.append(progressview.render().$el)
                 );
@@ -226,7 +226,7 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail/attachments').extend(new attachments.AttachmentList({
         id: 'attachment-list',
         index: 200,
-        module: 'chronos',
+        module: 1,
         selector: '.window-container.io-ox-calendar-window'
     }));
 
@@ -264,9 +264,9 @@ define('io.ox/calendar/view-detail', [
 
                 // TODO: check if this is an exception from a series (this check will change when flags are introduced)
                 if (baton.data.recurrence_id && baton.data.recurrence_id !== baton.data.id) {
-                    calAPI.on('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
+                    calAPI.on('update:' + chronosUtil.cid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
                     node.one('remove', function () {
-                        calAPI.off('update:' + _.ecid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), showInfo);
+                        calAPI.off('update:' + chronosUtil.cid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), showInfo);
                     });
                 }
                 return node;

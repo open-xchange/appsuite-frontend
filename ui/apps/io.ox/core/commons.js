@@ -740,10 +740,11 @@ define('io.ox/core/commons', [
     // factory
     $.createViewContainer = function (baton, api, getter) {
 
-        var data = baton instanceof ext.Baton ? baton.data : baton,
+        var cidGetter = api.cid || _.ecid,
+            data = baton instanceof ext.Baton ? baton.data : baton,
             cid = _.cid(data),
-            ecid = _.ecid(data),
-            shortecid = 'recurrence_position' in data ? _.ecid({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
+            ecid = cidGetter(data),
+            shortecid = 'recurrenceID' in data ? cidGetter({ id: data.id, folder: (data.folder_id || data.folder) }) : null,
             node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function (e, changed) {

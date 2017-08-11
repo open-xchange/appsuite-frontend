@@ -61,6 +61,9 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         } else {
             total = model.get('total');
             sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
+            if (!_.isNumber(total) && _.isNumber(model.get('origData').size)) {
+                sizeString = _.filesize(model.get('origData').size);
+            }
         }
 
         return sizeString;

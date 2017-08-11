@@ -628,7 +628,7 @@ define('io.ox/calendar/edit/extensions', [
         registerAs: 'attachmentList',
         className: 'div',
         index: 1700,
-        module: 'chronos',
+        module: 1,
         finishedCallback: function (model, id) {
             var obj = model.attributes;
             //new objects have no id in model yet
