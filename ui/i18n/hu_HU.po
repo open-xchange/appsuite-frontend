@@ -961,6 +961,12 @@ msgstr "Cím (otthoni)"
 msgid "Address Other"
 msgstr "Cím (egyéb)"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Address Book"
+msgid "Address book name"
+msgstr "Címjegyzék"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Módosítás"
@@ -1658,6 +1664,12 @@ msgstr "Naptár heti nézet"
 #: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Calendar Workweek View"
 msgstr "Naptár munkahét nézet"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar name"
+msgstr "Naptár nézet"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"

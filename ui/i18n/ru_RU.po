@@ -978,6 +978,12 @@ msgstr "Адрес (домашний)"
 msgid "Address Other"
 msgstr "Адрес (другой)"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Address Book"
+msgid "Address book name"
+msgstr "Адресная книга"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Изменить"
@@ -1668,6 +1674,12 @@ msgstr "Календарная неделя"
 #: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Calendar Workweek View"
 msgstr "Рабочая неделя"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar name"
+msgstr "Календарь"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"

@@ -964,6 +964,12 @@ msgstr "Adresse (hjemme)"
 msgid "Address Other"
 msgstr "Adresse (andre)"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Address Book"
+msgid "Address book name"
+msgstr "Adressebok"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Juster"
@@ -1651,6 +1657,12 @@ msgstr "Ukevisning"
 #: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Calendar Workweek View"
 msgstr "Arbeidsukesvisning"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar name"
+msgstr "Kalendervisning"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"

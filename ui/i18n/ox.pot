@@ -4467,6 +4467,16 @@ msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js
 #: module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js
+#: module:io.ox/core
+msgid "Address book name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js
+#: module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js
 #: apps/io.ox/oauth/settings.js
 #: module:io.ox/settings

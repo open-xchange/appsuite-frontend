@@ -944,6 +944,12 @@ msgstr "Гэрийн хаяг"
 msgid "Address Other"
 msgstr "Хаяг бусад"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Address Book"
+msgid "Address book name"
+msgstr "Хаягийн дэвтэр"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr ""
@@ -1609,6 +1615,12 @@ msgstr ""
 #: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Calendar Workweek View"
 msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "User name"
+msgid "Calendar name"
+msgstr "Хэрэглэгчийн нэр"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"

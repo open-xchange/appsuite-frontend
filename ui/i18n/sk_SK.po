@@ -986,6 +986,12 @@ msgstr "Adresa domov"
 msgid "Address Other"
 msgstr "Iná adresa"
 
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Address Book"
+msgid "Address book name"
+msgstr "Adresár kontaktov"
+
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
 msgstr "Upraviť"
@@ -1675,6 +1681,12 @@ msgstr "Zobrazenie kalendára - týždeň"
 #: apps/io.ox/calendar/week/perspective.js module:io.ox/calendar
 msgid "Calendar Workweek View"
 msgstr "Zobrazenie kalendára - pracovný týždeň"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+#, fuzzy
+#| msgid "Calendar view"
+msgid "Calendar name"
+msgstr "Zobrazenie kalendára"
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js module:io.ox/calendar
 msgid "Calendar view"
