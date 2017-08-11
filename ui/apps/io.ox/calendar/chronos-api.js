@@ -44,6 +44,7 @@ define('io.ox/calendar/chronos-api', [
                 if (event.rrule && !event.recurrenceId) {
                     var cid = util.ecid(event),
                         events = api.pool.get(event.folder).filter(function (evt) {
+                            // check if it starts with cid (don't use startsWith because of IE)
                             return evt.cid.indexOf(cid) === 0;
                         });
                     api.pool.get(event.folder).remove(events);
@@ -59,7 +60,12 @@ define('io.ox/calendar/chronos-api', [
             });
 
             _(response.updated).each(function (event) {
-                if (filter(event)) api.pool.add(event.folder, event);
+                if (filter(event)) {
+                    // first we must clear the attributes
+                    // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
+                    api.pool.get(event.folder).get(util.cid(event)).clear({ silent: true });
+                    api.pool.add(event.folder, event);
+                }
                 api.trigger('update', event);
                 api.trigger('update:' + util.ecid(event), event);
             });
@@ -67,6 +73,8 @@ define('io.ox/calendar/chronos-api', [
             return response;
         },
         api = {
+            // convenience function
+            cid: util.cid,
             getAll: function (obj, useCache) {
                 obj = _.extend({
                     start: _.now(),
@@ -109,6 +117,9 @@ define('io.ox/calendar/chronos-api', [
             },
 
             get: function (obj, useCache) {
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
                 if (useCache !== false) {
                     var model = api.pool.get(obj.folder).get(util.cid(obj));
                     if (model) return $.when(model);
@@ -158,14 +169,15 @@ define('io.ox/calendar/chronos-api', [
                 });
             },
 
-            uploadInProgress: function () {
-                // TODO implement that if needed
-                return false;
-            },
-
             create: function (obj, options) {
+
                 options = options || {};
-                obj = obj.attributes || obj;
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
+                delete obj.tempAttachmentIndicator;
+
                 return http.PUT({
                     module: 'chronos',
                     params: {
@@ -175,6 +187,12 @@ define('io.ox/calendar/chronos-api', [
                         ignore_conflicts: !!options.ignore_conflicts
                     },
                     data: obj
+                }).then(function (data) {
+                    if (!data.conflicts && attachmentHandlingNeeded) {
+                        //to make the detailview show the busy animation
+                        api.addToUploadList(util.cid(data.updated[0]));
+                    }
+                    return data;
                 })
                 .then(processResponse)
                 .then(function (data) {
@@ -182,34 +200,105 @@ define('io.ox/calendar/chronos-api', [
                     if (data.conflicts) {
                         return data;
                     }
+
                     return api.pool.get(obj.folder).findWhere(data.created[0]);
                 });
             },
 
             update: function (obj) {
+
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
+                delete obj.tempAttachmentIndicator;
+
                 var params = {
                     action: 'update',
                     folder: obj.folder,
                     id: obj.id,
                     timestamp: obj.timestamp
                 };
+
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
                 return http.PUT({
                     module: 'chronos',
                     params: params,
                     data: obj
-                }).then(processResponse);
+                }).then(function (data) {
+                    if (!data.conflicts && attachmentHandlingNeeded) {
+                        //to make the detailview show the busy animation
+                        api.addToUploadList(util.cid(data.updated[0]));
+                    }
+                    return data;
+                })
+                .then(processResponse)
+                .then(function (data) {
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
+
+                    return api.pool.get(obj.folder).findWhere(data.updated[0]);
+                });
             },
 
-            attachmentCallback: function () {
-                // TODO implement that if still needed
-                return $.when();
+            //TODO see if that needs reworking after attachmenthandling is not done via attachment api
+
+            uploadCache: {},
+
+            /**
+             * used to cleanup Cache and trigger refresh after attachmentHandling
+             * @param  {object} o (appointment object)
+             * @fires  api#update (data)
+             * @return { deferred }
+             */
+            attachmentCallback: function (o) {
+                return api.get(o, !api.uploadInProgress(util.cid(o)))
+                    .then(function (data) {
+                        //to make the detailview remove the busy animation
+                        api.removeFromUploadList(util.cid(o));
+                        api.trigger('update', data.toJSON());
+                        api.trigger('update:' + util.cid(o), data.toJSON());
+                        return data;
+                    });
+            },
+
+            /**
+             * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
+             * @param  {string} key (task id)
+             * @return { boolean }
+             */
+            uploadInProgress: function (key) {
+                // return true boolean
+                return this.uploadCache[key] || false;
+            },
+
+            /**
+             * add appointment to the list
+             * @param {string} key (task id)
+             * @return { undefined }
+             */
+            addToUploadList: function (key) {
+                this.uploadCache[key] = true;
+            },
+
+            /**
+             * remove appointment from the list
+             * @param  {string} key (task id)
+             * @fires  api#update: + key
+             * @return { undefined }
+             */
+            removeFromUploadList: function (key) {
+                delete this.uploadCache[key];
             },
 
             remove: function (list) {
                 api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
+                // workaround
+                // TODO remove once it is fixed in backend
+                var folder = _(list).pluck('folder');
                 return http.PUT({
                     module: 'chronos',
                     params: {
@@ -224,6 +313,15 @@ define('io.ox/calendar/chronos-api', [
                             folderId: obj.folder
                         };
                     })
+                })
+                // workaround because backend strips the folder attribute
+                // TODO remove once this is fixed.
+                .then(function (resp) {
+                    resp.deleted = resp.deleted.map(function (evt, index) {
+                        evt.folder = folder[index];
+                        return evt;
+                    });
+                    return resp;
                 })
                 .then(processResponse);
             },
