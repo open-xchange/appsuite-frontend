@@ -117,9 +117,8 @@ define('io.ox/core/folder/picker', [
             });
         }
         function mapIds(id) {
-            // in flat folder views new folders are always created in the root folder
             if (tree.flat) {
-                return api.getDefaultFolder(tree.module);
+                return id;
             }
             if (id === 'virtual/myfolders') {
                 return api.altnamespace ? 'default0' : 'default0' + mailAPI.separator + 'INBOX';
