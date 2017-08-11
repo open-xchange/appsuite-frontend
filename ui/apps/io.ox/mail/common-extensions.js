@@ -644,7 +644,7 @@ define('io.ox/mail/common-extensions', [
                 view.trigger('load');
                 view.$el.find('.external-images').remove();
                 // get unmodified mail
-                api.getUnmodified(_.cid(view.model.cid)).done(function (data) {
+                api.getUnmodified(view.model.pick('id', 'folder', 'folder_id', 'parent')).done(function (data) {
                     view.trigger('load:done');
                     view.model.set(data);
                 });
@@ -654,11 +654,7 @@ define('io.ox/mail/common-extensions', [
             function draw(model) {
 
                 // nothing to do if message is unchanged
-                // or if message is embedded (since we cannot reload it)
-                if (model.get('modified') !== 1 || util.isEmbedded(model.toJSON())) {
-                    this.find('.external-images').remove();
-                    return;
-                }
+                if (model.get('modified') !== 1) return this.find('.external-images').remove();
 
                 this.append(
                     $('<div class="notification-item external-images">').append(
