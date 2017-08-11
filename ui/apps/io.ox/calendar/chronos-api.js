@@ -61,9 +61,9 @@ define('io.ox/calendar/chronos-api', [
 
             _(response.updated).each(function (event) {
                 if (filter(event)) {
-                    // first we must clear the attributes
+                    // first we must clear the attributes (don't use clear method as that kills the id and we cannot override the model again with add)
                     // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
-                    api.pool.get(event.folder).get(util.cid(event)).clear({ silent: true });
+                    api.pool.get(event.folder).get(util.cid(event)).attributes = {};
                     api.pool.add(event.folder, event);
                 }
                 api.trigger('update', event);
