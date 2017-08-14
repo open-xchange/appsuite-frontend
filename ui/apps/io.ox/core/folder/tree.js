@@ -243,6 +243,10 @@ define('io.ox/core/folder/tree', [
                 left = target.offset().left + 40;
                 target.removeData('fixed');
             }
+            if (e.type === 'contextmenu' && target.hasClass('contextmenu-control')) {
+                // if the contextmenubutton was rightclicked, the selection doesn't change, so we are allowed to prevent the default in this case (Bug 42409 remains fixed)
+                e.preventDefault();
+            }
             this.toggleContextMenu(target, top, left);
         },
 
