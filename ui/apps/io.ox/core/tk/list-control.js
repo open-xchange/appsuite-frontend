@@ -33,26 +33,27 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
             'mousedown .resizebar.vertical': 'onVerticalResize'
         },
 
+        // on container resize
         applySizeConstraints: function () {
             // do nothing, if element is not visible, can't calculate sizes in this case
             if (!this.$el.is(':visible')) return;
 
             var left = this.$el.parent(),
                 right = left.siblings('.rightside'),
-                isVertical = this.$('.resizebar.vertical').length > 0;
+                isVertical = this.$('.resizebar.vertical').is(':visible');
             if (right.length === 0) return;
-            var total = isVertical ? left.width() + right.width() : left.height() + right.height(),
-                max = getLimit(isVertical ? ListViewControl.maxWidth : ListViewControl.maxHeight, total),
-                min = getLimit(isVertical ? ListViewControl.minWidth : ListViewControl.minHeight, total),
-                base = isVertical ? left.width() : left.height(),
+            var total = isVertical ? left.height() + right.height() : left.width() + right.width(),
+                min = getLimit(isVertical ? ListViewControl.minHeight : ListViewControl.minWidth, total),
+                max = getLimit(isVertical ? ListViewControl.maxHeight : ListViewControl.maxWidth, total),
+                base = isVertical ? left.height() : left.width(),
                 size = Math.max(min, Math.min(base, max));
 
-            if ((isVertical && left.width() === size) || (!isVertical && left.height() === size)) return;
+            if ((isVertical && left.height() === size) || (!isVertical && left.width() === size)) return;
 
-            left.css(isVertical ? 'width' : 'height', size);
-            right.css(isVertical ? 'left' : 'top', size);
+            left.css(isVertical ? 'height' : 'width', size);
+            right.css(isVertical ? 'top' : 'left', size);
 
-            storeSize(this.listView.app, size, isVertical ? 'width' : 'height');
+            storeSize(this.listView.app, size, isVertical ? 'height' : 'width');
         },
 
         onResize: function (e) {
