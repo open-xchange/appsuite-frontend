@@ -347,7 +347,7 @@ define('io.ox/settings/sessions/settings/pane', [
         render: function (baton) {
             this.$el.append(
                 new SessionView({
-                    title: gt('Native clients'),
+                    title: gt('Mobile and Desktop Apps'),
                     collection: baton.view.collection,
                     filter: function (model) {
                         return model.get('client') !== 'open-xchange-appsuite' && !model.get('other');
