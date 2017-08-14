@@ -27,7 +27,7 @@ define('io.ox/mail/detail/view', [
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, shadowStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, contentStyle) {
 
     'use strict';
 
@@ -301,26 +301,46 @@ define('io.ox/mail/detail/view', [
         id: 'body',
         index: INDEX += 100,
         draw: function () {
-            var $body;
             this.append(
                 $('<section class="attachments">'),
                 // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text focusable" tabindex="-1">')
+                $('<section class="body user-select-text focusable" tabindex="-1">')
             );
+            /*
             // rendering mails in chrome is slow if we do not use a shadow dom
-            if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
+            if (false && $body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
                 $body[0].createShadowRoot();
                 $body.addClass('shadow-root-container');
             }
+
             $body.on('dispose', function () {
                 var $content = $(this.shadowRoot || this);
                 if ($content[0] && $content[0].children.length > 0) {
+
                     //cleanup content manually, since this subtree might get very large
                     //content only contains the mail and should not have any handlers assigned
                     //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
                     $content[0].innerHTML = '';
                 }
+            });*/
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'iframe',
+        index: 100,
+        draw: function (baton) {
+            var iframe = $('<iframe class="mail-detail-frame">');
+
+            iframe.ready(function () {
+                iframe.contents().find('body').addClass('iframe-body');
             });
+
+            iframe.on('dispose', function () {
+                $(this).contents().find('html').empty();
+            });
+
+            baton.iframe = iframe;
         }
     });
 
@@ -356,7 +376,7 @@ define('io.ox/mail/detail/view', [
                 });
             }
 
-            if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
+            if (this.find('.content-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
                 var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
                     return require('css!' + point.css).clone();
                 }).value();
@@ -365,7 +385,20 @@ define('io.ox/mail/detail/view', [
             // restore height or set minimum height of 100px
             $(node).css('min-height', baton.model.get('visualHeight') || 100);
             // add to DOM
-            this.idle().append(node);
+
+            var resizeFrame = _.throttle(function () {
+                var frame = this.find('.mail-detail-frame');
+                frame.css('height', frame.contents().find('.mail-detail-content').height());
+            }, 300).bind(this);
+
+            this.idle().append(baton.iframe);
+            baton.iframe.ready(function () {
+                baton.iframe.contents().find('head').append('<style class="content-style">' + contentStyle + '</style>');
+                baton.iframe.contents().find('body').append(node);
+                resizeFrame();
+            });
+            $(window).on('orientationchange resize', resizeFrame);
+
             // ensure, that the scrollable is a lazyload scrollpane
             if (this[0] && this[0].host) {
                 // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
@@ -379,6 +412,8 @@ define('io.ox/mail/detail/view', [
             }
             // now remember height
             baton.model.set('visualHeight', $(node).height(), { silent: true });
+
+            if (_.device('smartphone')) _.delay(resizeFrame, 400);
         }
     });
 
@@ -461,7 +496,7 @@ define('io.ox/mail/detail/view', [
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
                 shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + shadowStyle + '</style>'; else body.empty();
+            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + contentStyle + '</style>'; else body.empty();
             return $(shadowRoot || body);
         },
 

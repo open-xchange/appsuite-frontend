@@ -68,7 +68,8 @@ define('io.ox/mail/api', [
         return data;
     };
 
-    var sanitize = sanitizer.isEnabled();
+    var sanitize = sanitizer.isEnabled(),
+        sandboxedCSS = settings.get('features/sandboxedCSS', false);
 
     // generate basic API
     var api = apiFactory({
@@ -96,7 +97,7 @@ define('io.ox/mail/api', [
             },
             get: {
                 action: 'get',
-                embedded: 'true',
+                embedded: String(!sandboxedCSS),
                 sanitize: String(!sanitize)
             },
             getUnmodified: {
@@ -299,7 +300,6 @@ define('io.ox/mail/api', [
                     if (sanitize) attachment = sanitizer.sanitize(attachment);
                 }
             });
-
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads

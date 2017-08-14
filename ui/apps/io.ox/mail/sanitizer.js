@@ -25,7 +25,8 @@ define('io.ox/mail/sanitizer', [
     var options = {
         SAFE_FOR_JQUERY: true,
         ALLOWED_TAGS: whitelist.allowedTags,
-        ALLOWED_ATTR: whitelist.allowedAttributes
+        ALLOWED_ATTR: whitelist.allowedAttributes,
+        WHOLE_DOCUMENT: true    // keep HTML and style tags to display mails correctly in iframes
     };
 
     function isEnabled() {
