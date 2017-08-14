@@ -331,6 +331,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 var model = this.model,
                     primaryMail = this.data.primary || this.data.aliases[0];
+                model.set('primaryMail', primaryMail);
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);

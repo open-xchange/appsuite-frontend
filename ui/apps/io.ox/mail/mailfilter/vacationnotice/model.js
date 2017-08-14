@@ -107,6 +107,8 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
                 if (value === true && /^alias_.*@.*$/.test(name)) cmd.addresses.push(name.substr(6));
             });
 
+            cmd.addresses = _.uniq(cmd.addresses);
+
             // position
             if (attr.position !== undefined) cmd.position = attr.position;
 
@@ -141,7 +143,9 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
             var json = {
                 active: attr.active,
                 actioncmds: [cmd],
-                test: testForTimeframe
+                test: testForTimeframe,
+                flags: ['vacation'],
+                rulename: 'vacation notice'
             };
 
             if (attr.id !== undefined) json.id = attr.id;
@@ -151,6 +155,10 @@ define('io.ox/mail/mailfilter/vacationnotice/model', ['io.ox/core/api/mailfilter
 
         sync: function (method, module, options) {
             switch (method) {
+                case 'create':
+                    return api.create(this.toJSON())
+                    .done(this.onUpdate.bind(this))
+                    .done(options.success).fail(options.error);
                 case 'read':
                     return api.getRules('vacation')
                         .done(options.success).fail(options.error);
