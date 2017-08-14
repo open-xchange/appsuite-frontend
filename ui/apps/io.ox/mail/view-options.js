@@ -117,9 +117,11 @@ define('io.ox/mail/view-options', [
                     listView.$el.parent().find('.grid-options [data-name="thread"]').addClass('disabled');
                 })
                 .on('cancel', function () {
+                    var gridOptions = listView.$el.parent().find('.grid-options [data-name="thread"]');
+                    if (!gridOptions.hasClass('disabled')) return;
                     listView.connect(mailAPI.collectionLoader);
                     listView.model.unset('criteria');
-                    listView.$el.parent().find('.grid-options [data-name="thread"]').removeClass('disabled');
+                    gridOptions.removeClass('disabled');
                 })
                 .render().$el
             );
