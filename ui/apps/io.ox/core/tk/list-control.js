@@ -40,9 +40,13 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
 
             var left = this.$el.parent(),
                 right = left.siblings('.rightside'),
+                container = left.parent(),
                 isVertical = this.$('.resizebar.vertical').is(':visible');
+
             if (right.length === 0) return;
-            var total = isVertical ? left.height() + right.height() : left.width() + right.width(),
+            var total = isVertical ?
+                    getMinimal(left.height() + right.height(), container.height()) :
+                    getMinimal(left.width() + right.width(), container.width()),
                 min = getLimit(isVertical ? ListViewControl.minHeight : ListViewControl.minWidth, total),
                 max = getLimit(isVertical ? ListViewControl.maxHeight : ListViewControl.maxWidth, total),
                 base = isVertical ? left.height() : left.width(),
@@ -177,6 +181,11 @@ define('io.ox/core/tk/list-control', ['io.ox/core/tk/list', 'io.ox/core/extensio
         if (typeof limit === 'function') limit = limit();
         if (limit < 0) limit += total;
         return limit;
+    }
+
+    function getMinimal() {
+        // ignore undefined and 0
+        return _.chain(arguments).toArray().compact().min().value();
     }
 
     return ListViewControl;
