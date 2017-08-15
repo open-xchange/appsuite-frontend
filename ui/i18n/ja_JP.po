@@ -5611,6 +5611,10 @@ msgstr "分"
 msgid "Miscellaneous"
 msgstr "その他"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "モデルが不完全です。"
@@ -5795,12 +5799,6 @@ msgstr "自分の仕事"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "名前"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Drive Client"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -15687,6 +15685,11 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Namibia"
 #~ msgstr "ナミビア"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive Client"
 
 #~ msgid "Nauru"
 #~ msgstr "ナウル"

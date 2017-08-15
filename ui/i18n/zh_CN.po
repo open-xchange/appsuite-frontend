@@ -5573,6 +5573,10 @@ msgstr "分钟"
 msgid "Miscellaneous"
 msgstr "杂项"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "模型未完成。"
@@ -5756,12 +5760,6 @@ msgstr "我的任务"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "姓名"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Drive 客户端"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -14031,6 +14029,11 @@ msgstr "您的平台"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "名称和电子邮件地址"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive 客户端"
 
 #~ msgid "Navigation bar"
 #~ msgstr "导航条"

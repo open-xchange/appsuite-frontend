@@ -5690,6 +5690,10 @@ msgstr "Minuten"
 msgid "Miscellaneous"
 msgstr "Overig"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Model is niet compleet."
@@ -5873,12 +5877,6 @@ msgstr "Mijn taken"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Naam"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Drive Client"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -12749,6 +12747,11 @@ msgstr "uw platform"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Namen en e-mailadressen"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive Client"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigatiebalk"

@@ -5624,6 +5624,10 @@ msgstr "Minutit"
 msgid "Miscellaneous"
 msgstr "Mitmesugust"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Mudel on puudulik."
@@ -5807,10 +5811,6 @@ msgstr "Minu ülesanded"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Nimi"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Native clients"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji

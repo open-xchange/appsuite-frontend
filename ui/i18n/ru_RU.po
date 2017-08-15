@@ -5670,6 +5670,10 @@ msgstr "Минуты"
 msgid "Miscellaneous"
 msgstr "Другое"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Неполная модель."
@@ -5853,12 +5857,6 @@ msgstr "Мои задачи"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Имя"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Клиент Drive"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -12885,6 +12883,11 @@ msgstr "вашей платформы"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Имена и электронные адреса"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Клиент Drive"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Панель навигации"

@@ -5631,6 +5631,10 @@ msgstr "Minuuttia"
 msgid "Miscellaneous"
 msgstr "Muuta"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Malli on keskeneräinen."
@@ -5814,12 +5818,6 @@ msgstr "Minun tehtäväni"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Nimi"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Drive asiakasohjelmisto"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -12616,6 +12614,11 @@ msgstr "Alustasi"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Nimet ja sähköpostiosoitteet"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Drive asiakasohjelmisto"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Navigointipalkki"

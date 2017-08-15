@@ -5471,6 +5471,10 @@ msgstr ""
 msgid "Miscellaneous"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr ""
@@ -5653,10 +5657,6 @@ msgstr ""
 #: module:io.ox/mail apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "Name"
-msgstr ""
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Native clients"
 msgstr ""
 
 #. Emoji category

@@ -5796,6 +5796,10 @@ msgstr "Dakikalar"
 msgid "Miscellaneous"
 msgstr "Çeşitli"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Model tamamlanmamış"
@@ -5988,10 +5992,6 @@ msgstr "Görevlerim"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "İsim"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Native clients"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji

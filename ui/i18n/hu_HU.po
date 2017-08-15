@@ -5659,6 +5659,10 @@ msgstr "Perc"
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "A modell befejezetlen."
@@ -5842,10 +5846,6 @@ msgstr "Saját feladatok"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Név"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Native clients"
-msgstr ""
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji

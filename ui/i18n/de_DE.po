@@ -5622,6 +5622,10 @@ msgstr "Minuten"
 msgid "Miscellaneous"
 msgstr "Diverses"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Unvollständige Angaben"
@@ -5805,10 +5809,6 @@ msgstr "Meine Aufgaben"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Name"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "Native clients"
-msgstr "Native Clients"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -14173,6 +14173,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "Namibia"
 #~ msgstr "Namibia"
+
+#~ msgid "Native clients"
+#~ msgstr "Native Clients"
 
 #~ msgid "Nauru"
 #~ msgstr "Nauru"

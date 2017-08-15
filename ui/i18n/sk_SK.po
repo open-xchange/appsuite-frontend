@@ -5690,6 +5690,10 @@ msgstr "Minúty"
 msgid "Miscellaneous"
 msgstr "Rozličné"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Model je neúplný."
@@ -5873,12 +5877,6 @@ msgstr "Moje úlohy"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Meno"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "Klient Drive"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -14948,6 +14946,11 @@ msgstr "vaša platforma"
 
 #~ msgid "Namibia"
 #~ msgstr "Namíbia"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "Klient Drive"
 
 #~ msgid "Nauru"
 #~ msgstr "Nauru"

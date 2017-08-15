@@ -5689,6 +5689,10 @@ msgstr "Minūtes"
 msgid "Miscellaneous"
 msgstr "Dažādi"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Mobile and Desktop Apps"
+msgstr ""
+
 #: apps/io.ox/core/sub/model.js module:io.ox/core/sub
 msgid "Model is incomplete."
 msgstr "Modelis nav pabeigts."
@@ -5872,12 +5876,6 @@ msgstr "Mani uzdevumi"
 #: module:io.ox/mailfilter
 msgid "Name"
 msgstr "Vārds"
-
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "Drive Client"
-msgid "Native clients"
-msgstr "'Drive' klients"
 
 #. Emoji category
 #: apps/io.ox/emoji/categories.js module:io.ox/mail/emoji
@@ -14959,6 +14957,11 @@ msgstr "jūsu platforma"
 
 #~ msgid "Namibia"
 #~ msgstr "Namībija"
+
+#, fuzzy
+#~| msgid "Drive Client"
+#~ msgid "Native clients"
+#~ msgstr "'Drive' klients"
 
 #~ msgid "Nauru"
 #~ msgstr "Nauru"

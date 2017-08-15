@@ -11470,7 +11470,7 @@ msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "Native clients"
+msgid "Mobile and Desktop Apps"
 msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js
