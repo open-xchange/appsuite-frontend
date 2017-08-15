@@ -142,13 +142,16 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
         },
 
         onClick: function (e) {
-            e.preventDefault();
             var node = $(e.currentTarget),
+                href = node.attr('href'),
                 name = node.attr('data-name'),
                 value = node.data('value'),
                 toggleValue = node.data('toggle-value'),
                 toggle = node.data('toggle'),
                 keep = this.options.keep || node.attr('data-keep-open') === 'true';
+            // do no handle links with valid href attribute
+            if (href && href.length !== 0 && href !== '#') return;
+            e.preventDefault();
             // keep drop-down open?
             if (keep) e.stopPropagation();
             // ignore plain links
