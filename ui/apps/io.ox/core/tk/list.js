@@ -801,7 +801,7 @@ define('io.ox/core/tk/list', [
 
         busy: function () {
             if (this.isBusy) return;
-            this.$('.notification').addClass('hidden');
+            this.$('.notification').css('display', 'none');
             this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
             this.isBusy = true;
             return this;
@@ -817,6 +817,7 @@ define('io.ox/core/tk/list', [
             if (!this.isBusy) return;
             this.removeBusyIndicator();
             this.isBusy = false;
+            this.$('.notification').css('display', '');
             return this;
         },
 
