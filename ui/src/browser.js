@@ -135,7 +135,7 @@
                 WebKit: webkit,
                 /** Safari */
                 Safari: webkit && !Android && !chrome && !phantom && !uiwebview && !Blackberry && !chromeIOS && !firefoxIOS && !opera ?
-                    (standalone ? iOS : ua.split('Version/')[1].split(' Safari')[0]) : undefined,
+                    (standalone ? iOS : (ua.split('Version/')[1] ? ua.split('Version/')[1].split(' Safari')[0] : undefined)) : undefined,
                 /** PhantomJS (needed for headless spec runner) */
                 PhantomJS: webkit && phantom ?
                     ua.split('PhantomJS/')[1].split(' ')[0] : undefined,
