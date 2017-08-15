@@ -583,20 +583,28 @@ define('io.ox/mail/compose/extensions', [
             view.on('change:layout', function (mode) {
                 settings.set('attachments/layout/compose/' + _.display(), mode).save();
             });
-
-
         },
 
         attachmentSharing: function (baton) {
-            var view = baton.attachmentsView;
-
             if (!settings.get('compose/shareAttachments/enabled', false)) return;
-            var locked = false;
 
-            if (settings.get('compose/shareAttachments/driveLimit', -1) !== -1) {
-                baton.model.get('attachments').on('add remove reset', view.shareAttachmentsIsActive);
-            }
+            var view = baton.attachmentsView,
+                mailModel = baton.model,
+                locked = false;
 
+            // store readonline settings within attachment view
+            view.options.sharing = {
+                name:                settings.get('compose/shareAttachments/name'),
+                driveLimit:          settings.get('compose/shareAttachments/driveLimit', -1),
+                defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
+                expiryDates:         settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']),
+                requiredExpiration:  settings.get('compose/shareAttachments/requiredExpiration', false),
+                forceAutoDelete:     settings.get('compose/shareAttachments/forceAutoDelete', false),
+                threshold:           settings.get('compose/shareAttachments/threshold', 0),
+                enableNotifications: settings.get('compose/shareAttachments/enableNotifications', false)
+            };
+
+            // attachment view's header toggle actions
             new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
                 capabilities: 'infostore',
                 requires: function (options) {
@@ -606,7 +614,6 @@ define('io.ox/mail/compose/extensions', [
                     baton.model.set('enable', true);
                 }
             });
-
             new links.Action('io.ox/mail/compose/attachment/shareAttachmentsDisable', {
                 capabilities: 'infostore',
                 requires: function (options) {
@@ -614,39 +621,36 @@ define('io.ox/mail/compose/extensions', [
                 },
                 multiple: function (list, baton) {
                     // only uncheck if allowed (server setting can enforce drivemail if attachments are to large)
-                    if (locked) {
-                        //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                        yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', settings.get('compose/shareAttachments/name')));
-                        return;
-                    }
-                    baton.model.set('enable', false);
+                    if (!locked) return baton.model.set('enable', false);
+                    //#. %1$s is usually "Drive Mail" (product name; might be customized)
+                    yell('info', gt('Attachment file size too large. You have to use %1$s or reduce the attachment file size.', baton.view.options.sharing.name));
                 }
             });
-
             ext.point('io.ox/mail/attachment/shareAttachments').extend(
                 new links.Link({
                     id: 'shareAttachmentsEnable',
                     index: 100,
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                    label: gt('Use %1$s', view.options.sharing.name),
                     ref: 'io.ox/mail/compose/attachment/shareAttachmentsEnable'
                 }),
                 new links.Link({
                     id: 'shareAttachmentseDisable',
                     index: 110,
                     //#. %1$s is usually "Drive Mail" (product name; might be customized)
-                    label: gt('Use %1$s', settings.get('compose/shareAttachments/name')),
+                    label: gt('Use %1$s', view.options.sharing.name),
                     ref: 'io.ox/mail/compose/attachment/shareAttachmentsDisable'
                 })
             );
 
+            // expire options dropdown
             ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
                 id: 'options',
                 index: 100,
                 draw: function (baton) {
                     var now = _.now(),
-                        defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
-                        durationSeed = settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']);
+                        defaultVal = baton.view.options.sharing.defaultExpiryDate,
+                        durationSeed = baton.view.options.sharing.expiryDates;
 
                     _(durationSeed).each(function (seed) {
                         var count = seed.slice(0, seed.length - 1),
@@ -677,30 +681,27 @@ define('io.ox/mail/compose/extensions', [
                         }
                     });
                 }
-            });
-
-            ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+            }, {
                 id: 'none-option',
                 index: 200,
                 draw: function (baton) {
-                    if (settings.get('compose/shareAttachments/requiredExpiration', false)) return;
+                    if (baton.view.options.sharing.requiredExpiration) return;
 
-                    var defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M');
+                    var defaultVal = baton.view.options.sharing.defaultExpiryDate;
                     if (!defaultVal && defaultVal === 'none') {
                         baton.view.model.set('expiry_date', '');
                     }
 
                     baton.dropdown.option('expiry_date', '', gt('no expiry date'));
-                    if (!settings.get('compose/shareAttachments/forceAutoDelete', false)) {
-                        baton.view.model.on('change:expiry_date', function (settingsModel, value) {
-                            // autodelete makes no sense if links cannot expire
-                            if (value === '') baton.view.model.set('autodelete', false);
-                        });
-                    }
-                }
-            });
 
-            ext.point('io.ox/mail/attachment/shareAttachments/dropdown').extend({
+                    if (baton.view.options.sharing.forceAutoDelete) return;
+
+                    baton.view.model.on('change:expiry_date', function (settingsModel, value) {
+                        // autodelete makes no sense if links cannot expire
+                        if (value === '') baton.view.model.set('autodelete', false);
+                    });
+                }
+            }, {
                 id: 'delete-option',
                 index: 300,
                 draw: function (baton) {
@@ -727,55 +728,58 @@ define('io.ox/mail/compose/extensions', [
                 }
             });
 
-            view.model = new Backbone.Model({
-                'instruction_language': coreSettings.get('language'),
-                'enable':  false,
-                'autodelete': settings.get('compose/shareAttachments/forceAutoDelete', false)
+            // extend attachmend view
+            _.extend(view, {
+
+                model: new Backbone.Model({
+                    'instruction_language': coreSettings.get('language'),
+                    'enable':  false,
+                    'autodelete': view.options.sharing.forceAutoDelete
+                }),
+
+                notificationModel: new Backbone.Model(),
+
+                shareAttachmentsIsActive: function () {
+                    if (_.isEmpty(this.getValidModels())) return false;
+                    var actualAttachmentSize = 0,
+                        threshold = this.options.sharing.threshold,
+                        driveMailLimit = this.options.sharing.driveLimit,
+                        thresholdExceeded;
+
+                    _.each(baton.model.get('attachments').models, function (model) {
+                        actualAttachmentSize = actualAttachmentSize + model.getSize();
+                    });
+
+                    thresholdExceeded = threshold <= 0 ? false : (actualAttachmentSize > threshold);
+                    locked = thresholdExceeded;
+                    if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
+                        yell('warning', gt('Attachment size too large. Please remove attachments or reduce the file size.'));
+                    }
+                    return thresholdExceeded || this.model.get('enable');
+                },
+
+                toggleShareAttachments: function () {
+                    _.each(this.point.keys(), function (id) {
+                        if (this.shareAttachmentsIsActive()) {
+                            this.model.set('enable', true);
+                            this.point.enable(id);
+                            this.$el.addClass('show-share-attachments');
+                        } else if (id !== 'renderSwitch') {
+                            this.model.set('enable', false);
+                            this.point.disable(id);
+                            this.$el.removeClass('show-share-attachments');
+                        }
+                    }.bind(this));
+
+                    this.$header.empty();
+                    this.renderHeader();
+                    this.invoke('render');
+                    this.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
+                }
             });
 
-            view.notificationModel = new Backbone.Model();
-            view.shareAttachmentsIsActive = function () {
-                if (_.isEmpty(view.getValidModels())) return false;
-                var actualAttachmentSize = 0,
-                    threshold = settings.get('compose/shareAttachments/threshold', 0),
-                    driveMailLimit = settings.get('compose/shareAttachments/driveLimit', -1),
-                    thresholdExceeded;
-
-                _.each(baton.model.get('attachments').models, function (model) {
-                    actualAttachmentSize = actualAttachmentSize + model.getSize();
-                });
-
-                thresholdExceeded = threshold <= 0 ? false : (actualAttachmentSize > threshold);
-                locked = thresholdExceeded;
-                if (driveMailLimit !== -1 && actualAttachmentSize > driveMailLimit) {
-                    yell('warning', gt('Attachment size too large. Please remove attachments or reduce the file size.'));
-                }
-                return thresholdExceeded || view.model.get('enable');
-            };
-
-            view.toggleShareAttachments = function () {
-
-                _.each(view.point.keys(), function (id) {
-                    if (view.shareAttachmentsIsActive()) {
-                        view.model.set('enable', true);
-                        view.point.enable(id);
-                        view.$el.addClass('show-share-attachments');
-                    } else if (id !== 'renderSwitch') {
-                        view.model.set('enable', false);
-                        view.point.disable(id);
-                        view.$el.removeClass('show-share-attachments');
-                    }
-                });
-
-                view.$header.empty();
-                this.renderHeader();
-                view.invoke('render');
-                view.$el.find('.io-ox-inline-links a.io-ox-action-link').focus();
-            };
-
             view.extend({
-                renderSwitch: function (baton) {
-
+                renderSwitch: function () {
                     function drawInlineLinks(node, data, view) {
                         var extension = new links.InlineLinks({
                             dropdown: false,
@@ -785,43 +789,42 @@ define('io.ox/mail/compose/extensions', [
                         return extension.draw.call(node, ext.Baton({ model: view.model, data: data, view: view }));
                     }
 
-                    var models = baton.view.getValidModels(), $links = baton.view.$header.find('.links').empty().addClass('shareAttachments');
-                    if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'), baton.view);
+                    var models = this.getValidModels(), $links = this.$header.find('.links').empty().addClass('shareAttachments');
+                    if (models.length >= 1) drawInlineLinks($links, _(models).invoke('toJSON'), this);
 
-                    if (baton.view.shareAttachmentsIsActive()) {
+                    if (this.shareAttachmentsIsActive()) {
                         $links.find('li').prepend($('<i class="fa fa-check" aria-hidden="true">'));
                     }
                 },
-                renderOptions: function (baton) {
-                    var $links = baton.view.$header.find('.links'),
-                        dropdown = new Dropdown({ model: baton.view.model, label: gt('Expiration'), tagName: 'div', caret: true });
-
-                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: baton.view, dropdown: dropdown }));
+                renderOptions: function () {
+                    var $links = this.$header.find('.links'),
+                        dropdown = new Dropdown({ model: view.model, label: gt('Expiration'), tagName: 'div', caret: true });
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: this, dropdown: dropdown }));
 
                     $links.append(dropdown.render().$el);
                 },
-                renderNotifications: function (baton) {
-                    if (settings.get('compose/shareAttachments/enableNotifications', false)) {
-                        var $links = baton.view.$header.find('.links'),
-                            dropdown = new Dropdown({ model: baton.view.notificationModel, label: gt('Notification'), tagName: 'div', caret: true })
-                            .option('download', true, gt('when the receivers have finished downloading the files'))
-                            .option('expired', true, gt('when the link is expired'))
-                            .option('visit', true, gt('when the receivers have accessed the files'));
+                renderNotifications: function () {
+                    if (!this.options.sharing.enableNotifications) return;
 
-                        // if (!/^en_/.test(coreSettings.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+                    var $links = this.$header.find('.links'),
+                        dropdown = new Dropdown({ model: view.notificationModel, label: gt('Notification'), tagName: 'div', caret: true })
+                        .option('download', true, gt('when the receivers have finished downloading the files'))
+                        .option('expired', true, gt('when the link is expired'))
+                        .option('visit', true, gt('when the receivers have accessed the files'));
 
-                        $links.append(dropdown.render().$el);
-                    }
+                    // if (!/^en_/.test(coreSettings.get('language'))) dropdown.option('translated', true, gt('translate notifications to english'));
+
+                    $links.append(dropdown.render().$el);
                 },
-                renderPassword: function (baton) {
-                    var model = baton.view.model, passContainer;
+                renderPassword: function () {
+                    var model = this.model, passContainer;
 
                     function toggleState() {
                         if (model.get('usepassword')) return passContainer.find('input').prop('disabled', false);
                         passContainer.find('input').prop('disabled', true);
                     }
 
-                    baton.view.$header.find('.links').append(
+                    this.$header.find('.links').append(
                         $('<div class="input-group">').append(
                             $('<span class="input-group-addon">').append(
                                 new mini.CheckboxView({ name: 'usepassword', model: model }).render().$el
@@ -834,21 +837,19 @@ define('io.ox/mail/compose/extensions', [
                 }
             });
 
-            // updates mail model
+            // listeners
+            view.listenTo(view.model, 'change:enable', view.toggleShareAttachments);
+            view.listenTo(view.collection, 'update', view.toggleShareAttachments);
+
+            if (view.options.sharing.driveLimit !== -1) {
+                mailModel.get('attachments').on('add remove reset', view.shareAttachmentsIsActive);
+            }
             view.listenTo(view.model, 'change', function () {
-                if (!this.model.get('enable')) return baton.model.unset('share_attachments');
+                if (!this.model.get('enable')) return mailModel.unset('share_attachments');
                 var blacklist = ['usepassword'];
                 // don't save password if the field is empty or disabled.
                 if (!this.model.get('usepassword') || _.isEmpty(this.model.get('password'))) blacklist.push('password');
-                baton.model.set('share_attachments', _.omit(this.model.attributes, blacklist));
-            });
-
-            view.listenTo(view.model, 'change:enable', function () {
-                this.toggleShareAttachments();
-            });
-
-            view.listenTo(view.collection, 'update', function () {
-                this.toggleShareAttachments();
+                mailModel.set('share_attachments', _.omit(this.model.attributes, blacklist));
             });
 
             view.listenTo(view.notificationModel, 'change', function () {
