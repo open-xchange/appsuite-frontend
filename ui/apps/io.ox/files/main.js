@@ -224,6 +224,10 @@ define('io.ox/files/main', [
                 quota.getQuota(true);
             });
 
+            api.on('copy', function () {
+                quota.getQuota(true);
+            });
+
             app.treeView.$el.append(
                 quota.render().$el
             );
