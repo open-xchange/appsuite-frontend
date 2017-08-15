@@ -391,6 +391,10 @@ define('io.ox/mail/main', [
                 quota.getQuota(true);
             });
 
+            api.on('refresh.all', function () {
+                quota.getQuota(true);
+            });
+
             app.treeView.$el.append(
                 quota.render().$el
             );
