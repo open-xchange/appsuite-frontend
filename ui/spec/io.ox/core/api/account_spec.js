@@ -21,8 +21,6 @@ define([
 
     describe('Core account API', function () {
 
-        var select = $();
-
         beforeEach(function () {
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
@@ -217,31 +215,6 @@ define([
         it('returns correct default sender address', function () {
             var defaultAddress = sender.getDefaultSendAddress();
             expect(defaultAddress).to.equal('otto.xentner@open-xchange.com');
-        });
-
-        it('creates proper select-box with sender addresses', function () {
-            $('body').append(
-                select = $('<select class="sender-dropdown" size="1">').css('width', '400px')
-            );
-
-            // patch to get test data
-            sender.getNumbers = function () {
-                return $.Deferred().resolve({
-                    cellular_telephone0: '+49 151 00 000 001', // should not appear
-                    cellular_telephone1: '+49 151 99 888 777',
-                    cellular_telephone2: '+49 151 99 999 888',
-                    cellular_telephone3: ' ' // should not appear
-                });
-            };
-
-            sender.getMapping = function () {
-                return ['cellular_telephone1', 'cellular_telephone2', 'cellular_telephone3'];
-            };
-
-            return sender.drawOptions(select).then(function () {
-                expect(select.children().length).to.equal(8);
-                expect(select.find('[default]').length).to.equal(1);
-            });
         });
 
         // tidy up
