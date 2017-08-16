@@ -297,13 +297,48 @@ msgstr "%1$s изменил(а) статус:"
 msgid "%1$s completed"
 msgstr "%1$s завершено"
 
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
 #. %1$s the producname of the drive app
-#. Example: OXDrive on MacOS
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s for %2$s"
+msgstr "%1$s из %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s for Android"
+msgstr "Клиент %s для Android"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for macOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "%s client for Mac OS"
 msgid "%1$s for MacOS"
 msgstr "Клиент %s для Mac"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s for Windows"
+msgstr "Клиент %s для Windows"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s for iOS"
+msgstr "%1$s из %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -339,41 +374,6 @@ msgstr "%1$s перенесен в позицию %2$s в %3$s"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
-msgstr "%1$s из %2$s"
-
-#. %1$s the productname of the mailapp
-#. %2$s the operating system
-#. Example: Mailapp on iOS
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$s of %2$s"
-msgid "%1$s on %2$s"
-msgstr "%1$s из %2$s"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Android
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%s client for Android"
-msgid "%1$s on Android"
-msgstr "Клиент %s для Android"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%s client for Windows"
-msgid "%1$s on Windows"
-msgstr "Клиент %s для Windows"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on iOS
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$s of %2$s"
-msgid "%1$s on iOS"
 msgstr "%1$s из %2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -5314,10 +5314,6 @@ msgstr "МБ"
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "MacOS"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
 msgstr "Пурпурный"
@@ -9970,6 +9966,12 @@ msgstr "Неизвестная ошибка при проверке tumblr-blog.
 msgid "Unknown sender"
 msgstr "Неизвестный отправитель"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unkown client"
+msgstr "Неизвестный отправитель"
+
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Разблокировать"
@@ -11172,6 +11174,10 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "Место: %1$s"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "macOS"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "matches a substring"
@@ -11474,6 +11480,11 @@ msgstr "вашей платформы"
 #~ msgstr[0] "%1$s сообщение, не прочитано: %2$s"
 #~ msgstr[1] "%1$s сообщения, не прочитано: %2$s"
 #~ msgstr[2] "%1$s сообщений, не прочитано: %2$s"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s из %2$s"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s изменил(а) свой профиль:"

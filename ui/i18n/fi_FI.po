@@ -278,13 +278,48 @@ msgstr "%1$s muutti tilaansa:"
 msgid "%1$s completed"
 msgstr "%1$s valmiina"
 
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
 #. %1$s the producname of the drive app
-#. Example: OXDrive on MacOS
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s for %2$s"
+msgstr "%1$s/%2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Android"
+msgid "%1$s for Android"
+msgstr "%s asiakasohjelmisto Androidille"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for macOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
 #| msgid "%s client for Mac OS"
 msgid "%1$s for MacOS"
 msgstr "%s asiakasohjelmisto Mac OS:lle"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%s client for Windows"
+msgid "%1$s for Windows"
+msgstr "%s asiakasohjelmisto Windowsille"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s for iOS"
+msgstr "%1$s/%2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -319,41 +354,6 @@ msgstr "%1$s siirretty asemaan %2$s/%3$s"
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
-msgstr "%1$s/%2$s"
-
-#. %1$s the productname of the mailapp
-#. %2$s the operating system
-#. Example: Mailapp on iOS
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$s of %2$s"
-msgid "%1$s on %2$s"
-msgstr "%1$s/%2$s"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Android
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%s client for Android"
-msgid "%1$s on Android"
-msgstr "%s asiakasohjelmisto Androidille"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%s client for Windows"
-msgid "%1$s on Windows"
-msgstr "%s asiakasohjelmisto Windowsille"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on iOS
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "%1$s of %2$s"
-msgid "%1$s on iOS"
 msgstr "%1$s/%2$s"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -5276,10 +5276,6 @@ msgstr "MT"
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "MacOS"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
 msgstr "Purppura"
@@ -9930,6 +9926,12 @@ msgstr "Tuntematon virhe tumblr blogia tarkistettaessa."
 msgid "Unknown sender"
 msgstr "Tuntematon lähettäjä"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown sender"
+msgid "Unkown client"
+msgstr "Tuntematon lähettäjä"
+
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Avaa lukitus"
@@ -11135,6 +11137,10 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "paikka  %1$s"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "macOS"
+msgstr ""
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "matches a substring"
@@ -11431,6 +11437,11 @@ msgstr "Alustasi"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s viesti, %2$s lukematonta"
 #~ msgstr[1] "%1$s viestiä, %2$s lukematonta"
+
+#, fuzzy
+#~| msgid "%1$s of %2$s"
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s/%2$s"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s päivitti profiiliaan:"

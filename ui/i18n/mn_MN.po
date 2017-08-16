@@ -274,10 +274,40 @@ msgstr ""
 msgid "%1$s completed"
 msgstr ""
 
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
 #. %1$s the producname of the drive app
-#. Example: OXDrive on MacOS
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "every %1$d week"
+#| msgid_plural "every %1$d weeks"
+msgid "%1$s for %2$s"
+msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s for Android"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for macOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "%1$s for MacOS"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s for Windows"
+msgstr ""
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "%1$s for iOS"
 msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -313,36 +343,6 @@ msgstr ""
 #: apps/io.ox/backbone/mini-views/quota.js module:io.ox/core
 #, c-format
 msgid "%1$s of %2$s"
-msgstr ""
-
-#. %1$s the productname of the mailapp
-#. %2$s the operating system
-#. Example: Mailapp on iOS
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-#, fuzzy
-#| msgid "every %1$d week"
-#| msgid_plural "every %1$d weeks"
-msgid "%1$s on %2$s"
-msgstr "%1$d долоо хоног тутам%1$d долоо хоногууд тутам"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Android
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on Android"
-msgstr ""
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on Windows"
-msgstr ""
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on iOS
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on iOS"
 msgstr ""
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
@@ -5203,10 +5203,6 @@ msgstr ""
 msgid "Mac App Store"
 msgstr ""
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "MacOS"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
 msgstr ""
@@ -9770,6 +9766,10 @@ msgstr ""
 msgid "Unknown sender"
 msgstr ""
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "Unkown client"
+msgstr ""
+
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr ""
@@ -10943,6 +10943,10 @@ msgstr ""
 msgctxt "a11y"
 msgid "location %1$s"
 msgstr "Байршил"
+
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+msgid "macOS"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter

@@ -277,11 +277,46 @@ msgstr "%1$s hat den Status geändert:"
 msgid "%1$s completed"
 msgstr "%1$s hochgeladen"
 
+#. %1$s the productname of the mailapp
+#. %2$s the operating system
+#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
 #. %1$s the producname of the drive app
-#. Example: OXDrive on MacOS
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s of %2$s"
+msgid "%1$s for %2$s"
+msgstr "%1$s von %2$s"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Android
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s on Android"
+msgid "%1$s for Android"
+msgstr "%1$s auf Android"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for macOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 msgid "%1$s for MacOS"
 msgstr "%1$s für MacOS"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for Windows
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s on Windows"
+msgid "%1$s for Windows"
+msgstr "%1$s unter Windows"
+
+#. %1$s the producname of the drive app
+#. Example: OX Drive for iOS
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "%1$s on iOS"
+msgid "%1$s for iOS"
+msgstr "%1$s auf iOS"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -317,33 +352,6 @@ msgstr "%1$s an Position %2$s von %3$s verschoben"
 #, c-format
 msgid "%1$s of %2$s"
 msgstr "%1$s von %2$s"
-
-#. %1$s the productname of the mailapp
-#. %2$s the operating system
-#. Example: Mailapp on iOS
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on %2$s"
-msgstr "%1$s am %2$s"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Android
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on Android"
-msgstr "%1$s auf Android"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on Windows"
-msgstr "%1$s unter Windows"
-
-#. %1$s the producname of the drive app
-#. Example: OXDrive on iOS
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "%1$s on iOS"
-msgstr "%1$s auf iOS"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s posted a link:"
@@ -5270,10 +5278,6 @@ msgstr "MB"
 msgid "Mac App Store"
 msgstr "Mac App Store"
 
-#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
-msgid "MacOS"
-msgstr "MacOS"
-
 #: apps/io.ox/backbone/mini-views/colorpicker.js module:io.ox/core
 msgid "Magenta"
 msgstr "Magenta"
@@ -9955,6 +9959,12 @@ msgstr "Unbekannter Fehler beim Prüfen des tumblr-Blog."
 msgid "Unknown sender"
 msgstr "Unbekannter Absender"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "Unknown client"
+msgid "Unkown client"
+msgstr "Unbekannter Client"
+
 #: apps/io.ox/files/actions.js module:io.ox/files apps/io.ox/files/toolbar.js
 msgid "Unlock"
 msgstr "Sperre aufheben"
@@ -11161,6 +11171,12 @@ msgctxt "a11y"
 msgid "location %1$s"
 msgstr "Ort %1$s"
 
+#: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
+#, fuzzy
+#| msgid "MacOS"
+msgid "macOS"
+msgstr "MacOS"
+
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
 msgid "matches a substring"
@@ -11495,6 +11511,9 @@ msgstr "Ihre Plattform"
 
 #~ msgid "%1$s minutes"
 #~ msgstr "%1$s Minuten"
+
+#~ msgid "%1$s on %2$s"
+#~ msgstr "%1$s am %2$s"
 
 #~ msgid "%1$s seconds"
 #~ msgstr "%1$s Sekunden"

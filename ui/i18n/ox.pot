@@ -9028,6 +9028,11 @@ msgstr ""
 msgid "Manage signatures"
 msgstr ""
 
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "Drop attachments here"
+msgstr ""
+
 #. %1$s is usually "Drive Mail" (product name; might be customized)
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
@@ -9092,11 +9097,6 @@ msgstr ""
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
 msgid "when the receivers have accessed the files"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Drop attachments here"
 msgstr ""
 
 #. %s is a list of filenames separeted by commas
@@ -11362,7 +11362,7 @@ msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "MacOS"
+msgid "macOS"
 msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js
@@ -11412,37 +11412,37 @@ msgstr ""
 
 #. %1$s the productname of the mailapp
 #. %2$s the operating system
-#. Example: Mailapp on iOS
+#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
 #. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
+#. Example: OX Drive for Windows
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "%1$s on %2$s"
+msgid "%1$s for %2$s"
 msgstr ""
 
 #. %1$s the producname of the drive app
-#. Example: OXDrive on Windows
+#. Example: OX Drive for Windows
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "%1$s on Windows"
+msgid "%1$s for Windows"
 msgstr ""
 
 #. %1$s the producname of the drive app
-#. Example: OXDrive on iOS
+#. Example: OX Drive for iOS
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "%1$s on iOS"
+msgid "%1$s for iOS"
 msgstr ""
 
 #. %1$s the producname of the drive app
-#. Example: OXDrive on Android
+#. Example: OX Drive for Android
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
-msgid "%1$s on Android"
+msgid "%1$s for Android"
 msgstr ""
 
 #. %1$s the producname of the drive app
-#. Example: OXDrive on MacOS
+#. Example: OX Drive for macOS
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
 msgid "%1$s for MacOS"
@@ -11451,6 +11451,11 @@ msgstr ""
 #: apps/io.ox/settings/sessions/settings/pane.js
 #: module:io.ox/core
 msgid "Exchange Active Sync"
+msgstr ""
+
+#: apps/io.ox/settings/sessions/settings/pane.js
+#: module:io.ox/core
+msgid "Unkown client"
 msgstr ""
 
 #: apps/io.ox/settings/sessions/settings/pane.js
