@@ -5,7 +5,11 @@ BuildRequires:  ant
 %else
 BuildRequires:  ant-nodeps
 %endif
-BuildRequires:  java-devel >= 1.6.0
+%if 0%{?suse_version}
+BuildRequires: java-1_8_0-openjdk-devel
+%else
+BuildRequires: java-1.8.0-openjdk-devel
+%endif
 %if 0%{?suse_version}
 BuildRequires:  nodejs6
 BuildRequires:  npm6
