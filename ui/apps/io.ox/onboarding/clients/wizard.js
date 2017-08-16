@@ -391,7 +391,7 @@ define('io.ox/onboarding/clients/wizard', [
                     id: item.attr('data-value'),
                     missing: missing
                 });
-            });
+            }.bind(this));
         },
 
         register: function () {
