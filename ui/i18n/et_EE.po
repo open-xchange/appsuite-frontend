@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-08-14 13:53+0000\n"
-"PO-Revision-Date: 2017-07-24 08:40+0000\n"
-"Last-Translator: marko <marko.toom@gmail.com>\n"
+"PO-Revision-Date: 2017-08-16 10:20+0000\n"
+"Last-Translator: Anonymous Pootle User\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: et_EE\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1500885626.000000\n"
+"X-POOTLE-MTIME: 1502878859.000000\n"
 
 #: apps/io.ox/backbone/basicModel.js
 #: module:io.ox/core
@@ -861,7 +861,7 @@ msgstr "Üksikasjadega"
 #: apps/io.ox/mail/toolbar.js
 #: module:io.ox/mail
 msgid "Compact"
-msgstr "Kompaktselt"
+msgstr "Kompaktne"
 
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
@@ -934,7 +934,7 @@ msgstr "Kutsu uuele kohtumisele"
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
 msgid "Save as distribution list"
-msgstr "Salvesta leviloendina"
+msgstr "Salvesta postiloendina"
 
 #: apps/io.ox/calendar/actions.js
 #: module:io.ox/calendar
@@ -1665,7 +1665,7 @@ msgstr "Palun valige vähemalt üks osaleja"
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Create distribution list"
-msgstr "Loo leviloend"
+msgstr "Loo postiloend"
 
 #. Name of distribution list
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
@@ -1691,24 +1691,24 @@ msgstr "Nimi"
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 msgid "Please note that distribution lists cannot contain ressources."
-msgstr "Pange tähele, et leviloendid ei tohi sisaldada ressursse."
+msgstr "Pange tähele, et postiloendid ei tohi sisaldada ressursse."
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 msgid "Create distibution list"
-msgstr "Loo leviloend"
+msgstr "Loo postiloend"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 #: apps/io.ox/contacts/distrib/main.js
 #: module:io.ox/contacts
 msgid "Distribution list has been saved"
-msgstr "Leviloend on salvestatud"
+msgstr "Postiloend on salvestatud"
 
 #: apps/io.ox/calendar/freetime/distributionListPopup.js
 #: module:io.ox/calendar
 msgid "Please enter a name for the distribution list"
-msgstr "Palun sisestage leviloendi nimi"
+msgstr "Palun sisestage postiloendi nimi"
 
 #: apps/io.ox/calendar/freetime/participantsView.js
 #: module:io.ox/calendar
@@ -2843,7 +2843,7 @@ msgstr "Eelmine nädal"
 #: apps/io.ox/calendar/week/view.js
 #: module:io.ox/calendar
 msgid "Create all-day appointment"
-msgstr "Loo terve päeva kestev kohtumine"
+msgstr "Loo terve päeva kestev sündmus"
 
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
@@ -2892,7 +2892,7 @@ msgstr "Lisa kontakt"
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
 msgid "Add distribution list"
-msgstr "Lisa leviloend"
+msgstr "Lisa postiloend"
 
 #: apps/io.ox/contacts/actions.js
 #: module:io.ox/contacts
@@ -2948,17 +2948,17 @@ msgstr "Jaga kontakte"
 #: apps/io.ox/contacts/actions/addToPortal.js
 #: module:io.ox/mail
 msgid "This distribution list has been added to the portal"
-msgstr "Leviloend on portaali lisatud"
+msgstr "Postiloend on portaali lisatud"
 
 #: apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts
 msgid "Do you really want to delete these items?"
-msgstr "Kas soovite tõesti need üksused kustutada­?"
+msgstr "Kas soovite tõesti need üksused kustutada?"
 
 #: apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts
 msgid "Do you really want to delete this distribution list?"
-msgstr "Kas soovite tõesti selle leviloendi kustutada?"
+msgstr "Kas soovite tõesti selle postiloendi kustutada?"
 
 #: apps/io.ox/contacts/actions/delete.js
 #: module:io.ox/contacts
@@ -2997,7 +2997,7 @@ msgstr "Vali printimise paigutus"
 #: apps/io.ox/participants/views.js
 #: module:io.ox/core
 msgid "Distribution list"
-msgstr "Leviloend"
+msgstr "Postiloend"
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -3058,7 +3058,7 @@ msgstr "Kõik kaustad"
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
 msgid "All distribution lists"
-msgstr "Kõik leviloendid"
+msgstr "Kõik postiloendid"
 
 #: apps/io.ox/contacts/addressbook/popup.js
 #: module:io.ox/contacts
@@ -3104,7 +3104,7 @@ msgstr "Vali"
 #: apps/io.ox/contacts/detail/main.js
 #: module:io.ox/contacts
 msgid "Distribution List Details"
-msgstr "Leviloendi üksikasjad"
+msgstr "Postiloendi üksikasjad"
 
 #: apps/io.ox/contacts/detail/main.js
 #: module:io.ox/contacts
@@ -3122,7 +3122,7 @@ msgstr "Loo loend"
 #: module:io.ox/contacts
 #: apps/io.ox/contacts/distrib/main.js
 msgid "Edit distribution list"
-msgstr "Muuda leviloendit"
+msgstr "Muuda postiloendit"
 
 #: apps/io.ox/contacts/distrib/create-dist-view.js
 #: module:io.ox/contacts
@@ -3134,18 +3134,18 @@ msgstr "Sellel postiloendil ei ole veel liikmeid"
 #: module:io.ox/contacts
 msgid "To add contacts manually, just provide a valid email address (e.g john.doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"Kontaktide lisamiseks käsitsi sisestage kehtiv e-posti aadress (nt. "
-"juhan.juurikas@näide.ee või \"Juhan Juurikas\" <jj@näide.ee>)"
+"Kontaktide lisamiseks käsitsi sisestage kehtiv e-posti aadress (nt. john.doe@"
+"example.com või \"John Doe\" <jd@example.com>)"
 
 #: apps/io.ox/contacts/distrib/main.js
 #: module:io.ox/contacts
 msgid "Distribution List"
-msgstr "Leviloend"
+msgstr "Postiloend"
 
 #: apps/io.ox/contacts/distrib/main.js
 #: module:io.ox/contacts
 msgid "Failed to save distribution list."
-msgstr "Leviloendi salvestamine ebaõnnestus."
+msgstr "Postiloendi salvestamine ebaõnnestus."
 
 #: apps/io.ox/contacts/edit/main.js
 #: module:io.ox/contacts
@@ -3280,7 +3280,7 @@ msgstr "Kontaktide tööriistariba"
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 msgid "Files can not be uploaded, because quota exceeded."
-msgstr "Failide üleslaadimine ebaõnnestus kvoodi ületamise tõttu."
+msgstr "Failide üleslaadimine ebaõnnestus kettamahu ületamise tõttu."
 
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
@@ -3324,7 +3324,7 @@ msgstr "Sufiks"
 #: module:io.ox/contacts
 msgctxt "salutation"
 msgid "Title"
-msgstr "Pöördumine"
+msgstr "Pöördumine (pr, hr, dr.)"
 
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
@@ -3725,7 +3725,7 @@ msgstr "Lingid"
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
 msgid "Mark as distributionlist"
-msgstr "Märgi leviloendina"
+msgstr "Märgi postiloendina"
 
 #: apps/io.ox/contacts/model.js
 #: module:io.ox/contacts
@@ -3936,8 +3936,8 @@ msgstr "%1$s %2$s"
 #: module:io.ox/contacts
 msgid "Distribution list with 1 entry"
 msgid_plural "Distribution list with %1$d entries"
-msgstr[0] "Leviloend 1 kirjega"
-msgstr[1] "Leviloend %1$d kirjega"
+msgstr[0] "Postiloend 1 kirjega"
+msgstr[1] "Postiloend %1$d kirjega"
 
 #: apps/io.ox/contacts/view-detail.js
 #: module:io.ox/contacts
@@ -4483,7 +4483,7 @@ msgstr "vali vorming"
 #: apps/io.ox/core/export/export.js
 #: module:io.ox/core
 msgid "Include distribution lists"
-msgstr "Kaasa leviloendid"
+msgstr "Kaasa postiloendid"
 
 #: apps/io.ox/core/export/export.js
 #: module:io.ox/core
@@ -5189,7 +5189,7 @@ msgstr "Rakendused"
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Portal"
-msgstr "Portal"
+msgstr "Portaal"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
@@ -5200,21 +5200,21 @@ msgstr "Portal"
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Mail"
-msgstr "Mail"
+msgstr "E-Post"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Address Book"
-msgstr "Address Book"
+msgstr "Aadressiraamat"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Scheduling"
-msgstr "Scheduling"
+msgstr "Kalender"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
@@ -5223,7 +5223,7 @@ msgstr "Scheduling"
 #: module:io.ox/tasks
 msgctxt "app"
 msgid "Tasks"
-msgstr "Tasks"
+msgstr "Ülesanded"
 
 #. %1$s is usually "Drive" (product name; might be customized)
 #: apps/io.ox/core/main.js
@@ -5239,14 +5239,14 @@ msgstr "Tasks"
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Drive"
-msgstr "Drive"
+msgstr "Failid"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 #: apps/io.ox/search/view-template.js
 msgctxt "app"
 msgid "Conversations"
-msgstr "Conversations"
+msgstr "Vestlused"
 
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
@@ -6464,12 +6464,12 @@ msgstr[1] "%1$d automaatse sõnalõpetuse kirjet leitud"
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
 msgid "Added distribution list %s with %s member. The only member of the distribution list is %s."
-msgstr "Lisatud leviloend %s %s liikmega. Leviloendi ainus liige on %s."
+msgstr "Lisatud postiloend %s %s liikmega. Postiloendi ainus liige on %s."
 
 #: apps/io.ox/core/tk/tokenfield.js
 #: module:io.ox/core
 msgid "Added distribution list %s with %s members. Members of the distribution list are %s."
-msgstr "Lisatud leviloend %s %s liikmega. Leviloendi liikmed on %s."
+msgstr "Lisatud postiloend %s %s liikmega. Postiloendi liikmed on %s."
 
 #. %1$s is the display name of an added user or mail recipient
 #. %2$s is the email address of the user or mail recipient
@@ -6502,8 +6502,8 @@ msgstr "E-posti ei imporditud. Toetatakse ainult .eml faile."
 #: module:io.ox/core
 msgid "The file cannot be uploaded because it exceeds the quota limit of %1$s"
 msgid_plural "The files cannot be uploaded because they exceed the quota limit of %1$s"
-msgstr[0] "Faili ei saa üles laadida, sest kvoot %1$s on ületatud"
-msgstr[1] "Faile ei saa üles laadida, sest kvoot %1$s on ületatud"
+msgstr[0] "Faili ei saa üles laadida, sest kettamaht %1$s on ületatud"
+msgstr[1] "Faile ei saa üles laadida, sest kettamaht %1$s on ületatud"
 
 #. %1$s the filename
 #. %2$s the maximum file size
@@ -6752,7 +6752,7 @@ msgstr "Fail"
 #: apps/io.ox/core/viewer/views/sidebar/fileversionsview.js
 #: module:io.ox/core/viewer
 msgid "Versions (%1$d)"
-msgstr "Versioonid (%1$ d)"
+msgstr "Versioonid (%1$d)"
 
 #: apps/io.ox/core/viewer/views/sidebar/panelbaseview.js
 #: module:io.ox/core/viewer
@@ -7322,7 +7322,7 @@ msgstr[1] "Failid pole kustutatud, sest failide omanik on need lukustanud."
 #: module:io.ox/files
 msgid "This file has not been deleted"
 msgid_plural "These files have not been deleted"
-msgstr[0] "Fail pole kustutatud "
+msgstr[0] "Fail pole kustutatud"
 msgstr[1] "Failid pole kustutatud"
 
 #: apps/io.ox/files/actions/delete.js
@@ -7412,7 +7412,7 @@ msgstr "Pakutud faili nimi on lubatust pikem."
 #: module:io.ox/files
 #: apps/io.ox/files/legacy_api.js
 msgid "The allowed quota is reached."
-msgstr "Lubatud kvoot on saavutatud."
+msgstr "Lubatud kettamaht on saavutatud."
 
 #: apps/io.ox/files/api.js
 #: module:io.ox/files
@@ -7503,7 +7503,7 @@ msgstr "Lae üles kohalik fail"
 #: module:io.ox/files
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Rakendus Drive"
+msgstr "Rakendus Failid"
 
 #: apps/io.ox/files/guidance/main.js
 #: module:io.ox/files
@@ -7527,7 +7527,7 @@ msgstr "Juurdepääs failidele WebDAV-i abil"
 #: module:io.ox/files
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Drive'i seaded"
+msgstr "Rakenduse 'Failid' seaded"
 
 #: apps/io.ox/files/guidance/main.js
 #: module:io.ox/files
@@ -7587,7 +7587,7 @@ msgstr "Palun täpsustage need puuduvad muutujad: "
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
 msgid "File quota"
-msgstr "Failikvoot"
+msgstr "Kettamaht failidele"
 
 #: apps/io.ox/files/main.js
 #: module:io.ox/files
@@ -8362,7 +8362,7 @@ msgstr "See väli on kohustuslik"
 #: apps/io.ox/mail/accounts/model.js
 #: module:io.ox/keychain
 msgid "This is not a valid email address"
-msgstr "See ei ole kehtiv e-posti aadress"
+msgstr "See ei ole korrektne e-posti aadress"
 
 #: apps/io.ox/mail/accounts/settings.js
 #: module:io.ox/mail/accounts/settings
@@ -8779,7 +8779,8 @@ msgstr ""
 #: module:io.ox/mail
 msgid "The file \"%1$s\" cannot be uploaded because it exceeds the infostore quota limit of %2$s"
 msgstr ""
-"Faili \"%1$s\" ei saa üles laadida, sest see ületab Infostore'i kvooti %2$s"
+"Faili \"%1$s\" ei saa üles laadida, sest see ületab Infostore'i kettamahtu "
+"%2$s"
 
 #: apps/io.ox/mail/actions/attachmentQuota.js
 #: module:io.ox/mail
@@ -8820,6 +8821,9 @@ msgstr "tundmatu saatja"
 msgid "All future messages from %1$s will be moved to the selected folder."
 msgid_plural "All future messages from the senders of the selected mails will be moved to the selected folder."
 msgstr[0] "Kõik edaspidised sõnumid saatjalt %1$s teisaldatakse valitud kausta."
+msgstr[1] ""
+"Kõik edaspidised sõnumid märgitud kirjade saatjatelt teisaldatakse valitud "
+"kausta."
 
 #: apps/io.ox/mail/actions/create.js
 #: module:io.ox/core
@@ -8836,13 +8840,13 @@ msgstr[1] "Kas soovite need kirjad jäädavalt kustutada?"
 #: apps/io.ox/mail/actions/delete.js
 #: module:io.ox/mail
 msgid "Mail quota exceeded"
-msgstr "E-posti kvoot on ületatud"
+msgstr "E-posti kettamaht on ületatud"
 
 #: apps/io.ox/mail/actions/delete.js
 #: module:io.ox/mail
 msgid "Emails cannot be put into trash folder while your mail quota is exceeded."
 msgstr ""
-"E-kirju ei saa prügikausta suunata, kuni teie e-posti kvoot on ületatud."
+"E-kirju ei saa prügikausta suunata, kuni teie e-posti kettamaht on ületatud."
 
 #: apps/io.ox/mail/actions/ical.js
 #: module:io.ox/mail
@@ -9527,7 +9531,7 @@ msgstr "Dokument"
 #: apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
 msgid "Spreadsheet"
-msgstr "Arvutustabel"
+msgstr "Tabelarvutus"
 
 #: apps/io.ox/mail/detail/links.js
 #: module:io.ox/mail
@@ -10080,7 +10084,7 @@ msgstr "Lõim"
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
 msgid "Mail quota"
-msgstr "E-posti kvoot"
+msgstr "E-postkasti suurus"
 
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
@@ -10096,7 +10100,7 @@ msgstr "Sõnumite valikud"
 #: apps/io.ox/mail/main.js
 #: module:io.ox/mail
 msgid "No message selected"
-msgstr "Valitud sõnum puudub"
+msgstr "Kuvamiseks pole ühtegi kirja valitud"
 
 #. %1$d is the number of selected messages
 #: apps/io.ox/mail/main.js
@@ -10124,7 +10128,7 @@ msgstr "%1$d valitud"
 #: module:io.ox/mail
 msgid "Sending 1 message ... %2$d%"
 msgid_plural "Sending %1$d messages ... %2$d%"
-msgstr[0] "1 sõnumi saatmine... %2$d%"
+msgstr[0] "1 sõnumi saatmine ... %2$d%"
 msgstr[1] "%1$d sõnumi saatmine ... %2$d%"
 
 #: apps/io.ox/mail/main.js
@@ -10229,7 +10233,7 @@ msgstr "Luba väliselt lingitud piltide eellaadimist"
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
 msgid "Display emoticons as graphics in text emails"
-msgstr "Kuva emotikone tekstkirjades graafiliselt."
+msgstr "Kuva emotikone tekstkirjades graafiliselt"
 
 #: apps/io.ox/mail/settings/pane.js
 #: module:io.ox/mail
@@ -10392,7 +10396,7 @@ msgstr "Impordi allkirju"
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: module:io.ox/mail
 msgid "You can import existing signatures from the previous product generation."
-msgstr "Te saate importida olemasolevaid allkirju eelmise põlvkonna tootelt"
+msgstr "Te saate importida olemasolevaid allkirju eelmise põlvkonna tootelt."
 
 #: apps/io.ox/mail/settings/signatures/settings/pane.js
 #: module:io.ox/mail
@@ -10555,7 +10559,7 @@ msgstr "Statistika"
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
 msgid "via"
-msgstr "kaudu"
+msgstr "läbi"
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
@@ -10582,7 +10586,7 @@ msgstr "Madal prioriteet"
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
 msgid "Primary account"
-msgstr "Esmane konto"
+msgstr "Peamine konto"
 
 #: apps/io.ox/mail/util.js
 #: module:io.ox/core
@@ -12321,7 +12325,7 @@ msgstr ""
 #: apps/plugins/notifications/tasks/register.js
 #, c-format
 msgid "Invitation for %1$s."
-msgstr "Kutse %1$s jaoks"
+msgstr "Kutse %1$s."
 
 #: apps/plugins/notifications/calendar/register.js
 #: module:plugins/notifications
@@ -12816,7 +12820,7 @@ msgstr "E-kirjade arvu kvoot"
 #: apps/plugins/portal/quota/register.js
 #: module:plugins/portal
 msgid "Quota"
-msgstr "Kvoot"
+msgstr "Kettamaht"
 
 #: apps/plugins/portal/recentfiles/register.js
 #: module:plugins/portal
@@ -13190,7 +13194,7 @@ msgstr "Meeldivaks märgitud kommentaar"
 #: apps/plugins/portal/xing/actions.js
 #: module:plugins/portal
 msgid "Un-like"
-msgstr "Märgi ebameeldivaks"
+msgstr "Eemalda meeldimine"
 
 #: apps/plugins/portal/xing/actions.js
 #: module:plugins/portal
