@@ -82,8 +82,17 @@ define('io.ox/mail/compose/actions/save', [
             index: 1200,
             perform: function (baton) {
                 var opt = baton.view.parseMsgref(baton.resultData);
-                if (baton.mail.attachments[0].content_type === 'text/plain') opt.view = 'raw';
-                if (baton.mail.attachments[0].content_type === 'text/html') opt.view = 'html';
+                switch (baton.mail.attachments[0].content_type) {
+                    case 'text/plain':
+                        opt.view = 'raw';
+                        break;
+                    case 'text/html':
+                    case 'ALTERNATIVE':
+                        opt.view = 'html';
+                        break;
+                    default:
+                        break;
+                }
 
                 return $.when(
                     baton.resultData,
