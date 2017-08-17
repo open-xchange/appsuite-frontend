@@ -234,9 +234,14 @@ define('io.ox/tasks/edit/main', [
         app.failRestore = function (point) {
             this.markDirty();
 
-            // make auto open first, before the model is set. Otherwise the view has strange behavior (elements are hidden when they are updating)
             this.view.autoOpen(point);
+            var participants = point.participants;
+            delete point.participants;
+
             this.model.set(point);
+            this.model.set('participants', participants, { silent: true });
+            this.model.getParticipants().addUniquely(participants);
+
             // if we have an id switch to edit mode
             if (!_.isUndefined(point.id)) {
                 this.edit = true;
