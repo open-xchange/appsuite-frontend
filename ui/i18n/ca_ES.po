@@ -3929,6 +3929,12 @@ msgstr ""
 msgid "Expiration"
 msgstr "Venç en"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+msgid "Expiration: %1$d"
+msgstr "Venç en"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "Venç en"
@@ -4705,11 +4711,6 @@ msgstr "Premeu per a amagar tots els recordatoris de tasques."
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Amaga els detalls"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-#, fuzzy
-msgid "Hide names"
-msgstr "Segon nom"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 #, fuzzy
@@ -7331,7 +7332,8 @@ msgstr "Codi postal"
 msgid "PowerDNS parental control"
 msgstr ""
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr ""
 
@@ -9771,6 +9773,12 @@ msgstr "Aquest correu conté una tasca"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Aquest correu conté una cita"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -12325,6 +12333,10 @@ msgstr "la vostra plataforma"
 
 #~ msgid "Hide comments"
 #~ msgstr "Amaga els comentaris"
+
+#, fuzzy
+#~ msgid "Hide names"
+#~ msgstr "Segon nom"
 
 #~ msgid "IMAP folder subscription"
 #~ msgstr "Subscripció a carpeta IMAP"

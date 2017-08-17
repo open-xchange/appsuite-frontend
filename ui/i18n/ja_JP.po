@@ -3780,6 +3780,13 @@ msgstr "エキスパートユーザ？"
 msgid "Expiration"
 msgstr "期限"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expiration"
+msgid "Expiration: %1$d"
+msgstr "期限"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "期限切れ"
@@ -4526,10 +4533,6 @@ msgstr "仕事のアラームをすべて隠す。"
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "詳細を隠す"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Hide names"
-msgstr "名前を隠す"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
@@ -7049,7 +7052,8 @@ msgstr "郵便番号"
 msgid "PowerDNS parental control"
 msgstr "PowerDNS ペアレンタル・コントロール"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr "プレミアム"
 
@@ -9403,6 +9407,12 @@ msgstr "このメールには仕事が含まれています。"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "このメールにはアポイントが含まれています。"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -14788,6 +14798,9 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Hide module window"
 #~ msgstr "モジュール ウィンドウを隠す"
+
+#~ msgid "Hide names"
+#~ msgstr "名前を隠す"
 
 #~ msgid "Hide non-working time in teamview"
 #~ msgstr "チーム表示では稼働時間以外を隠す"

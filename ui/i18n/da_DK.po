@@ -3808,6 +3808,13 @@ msgstr "Ekspertbruger?"
 msgid "Expiration"
 msgstr "Udløbstidspunkt"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expiration"
+msgid "Expiration: %1$d"
+msgstr "Udløbstidspunkt"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "Udløber om"
@@ -4554,10 +4561,6 @@ msgstr "Skjul alle opgavepåmindelser."
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Skjul detaljer"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Hide names"
-msgstr "Skjul navne"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
@@ -7087,7 +7090,8 @@ msgstr "Postnummer"
 msgid "PowerDNS parental control"
 msgstr "PowerDNS-forælderkontrol"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr "Præmium"
 
@@ -9461,6 +9465,12 @@ msgstr "Denne e-mail indeholder en opgave"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Denne e-mail indeholder en aftale"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -12496,6 +12506,9 @@ msgstr "din platform"
 
 #~ msgid "Hide comments"
 #~ msgstr "Skjul kommentarer"
+
+#~ msgid "Hide names"
+#~ msgstr "Skjul navne"
 
 #~ msgid "Hide side panel"
 #~ msgstr "Skjul sidepanel"

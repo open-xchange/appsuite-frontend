@@ -3759,6 +3759,13 @@ msgstr "進階使用者？"
 msgid "Expiration"
 msgstr "過期於"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expiration"
+msgid "Expiration: %1$d"
+msgstr "過期於"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "過期於"
@@ -4494,10 +4501,6 @@ msgstr "隱藏所有工作提醒。"
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "隱藏詳情"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Hide names"
-msgstr "隱藏名稱"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
@@ -6994,7 +6997,8 @@ msgstr "郵遞區號"
 msgid "PowerDNS parental control"
 msgstr "PowerDNS 家長監護"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr "收費"
 
@@ -9322,6 +9326,12 @@ msgstr "此郵件包含任務"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "此郵件包含約會"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -13533,6 +13543,9 @@ msgstr "您的平台"
 
 #~ msgid "Hide conflicts"
 #~ msgstr "隱藏衝突"
+
+#~ msgid "Hide names"
+#~ msgstr "隱藏名稱"
 
 #~ msgid "Hide side panel"
 #~ msgstr "隱藏側面板"

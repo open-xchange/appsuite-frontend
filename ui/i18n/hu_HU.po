@@ -3827,6 +3827,13 @@ msgstr "Szakértő felhasználó?"
 msgid "Expiration"
 msgstr "Lejárat"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expiration"
+msgid "Expiration: %1$d"
+msgstr "Lejárat"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "Lejárat:"
@@ -4572,10 +4579,6 @@ msgstr "Összes feladatemlékeztető elrejtéséhez."
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Részletek elrejtése"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Hide names"
-msgstr "Nevek elrejtése"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
@@ -7101,7 +7104,8 @@ msgstr "Irányítószám"
 msgid "PowerDNS parental control"
 msgstr "PowerDNS szülői felügyelet"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr "Prémium"
 
@@ -9483,6 +9487,12 @@ msgstr "A levél feladatot tartalmaz"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "A levél találkozót tartalmaz"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -11930,6 +11940,9 @@ msgstr "az Ön rendszere"
 
 #~ msgid "Hide comments"
 #~ msgstr "Megjegyzések elrejtése"
+
+#~ msgid "Hide names"
+#~ msgstr "Nevek elrejtése"
 
 #~ msgid "IMAP Login"
 #~ msgstr "IMAP bejelentkezés"

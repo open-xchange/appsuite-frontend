@@ -8973,6 +8973,16 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
+msgid "Show names"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "Edit names"
+msgstr ""
+
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
 msgid "Compose new mail"
 msgstr ""
 
@@ -8987,17 +8997,7 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-msgid "Hide names"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Show names"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Edit names"
+msgid "This email just contains your email address as sender. Your real name is not used."
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
@@ -9071,12 +9071,18 @@ msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-msgid "Attachment size too large. Please remove attachments or reduce the file size."
+msgid "Expiration"
+msgstr ""
+
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js
+#: module:io.ox/mail
+msgid "Expiration: %1$d"
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
 #: module:io.ox/mail
-msgid "Expiration"
+msgid "Attachment size too large. Please remove attachments or reduce the file size."
 msgstr ""
 
 #: apps/io.ox/mail/compose/extensions.js
@@ -10913,6 +10919,12 @@ msgstr ""
 
 #: apps/io.ox/onboarding/clients/view-mobile.js
 #: module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr ""
+
+#: apps/io.ox/onboarding/clients/view-mobile.js
+#: module:io.ox/core/onboarding
 msgid "Connect this device"
 msgstr ""
 
@@ -10930,11 +10942,6 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js
 #: module:io.ox/core/onboarding
 msgid "back"
-msgstr ""
-
-#: apps/io.ox/onboarding/clients/wizard.js
-#: module:io.ox/core/onboarding
-msgid "Premium"
 msgstr ""
 
 #. user can choose between windows, android, apple (usually)

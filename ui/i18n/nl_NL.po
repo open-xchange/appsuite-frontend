@@ -3845,6 +3845,13 @@ msgstr "Geavanceerde gebruiker?"
 msgid "Expiration"
 msgstr "Verloopt op"
 
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+#, fuzzy
+#| msgid "Expiration"
+msgid "Expiration: %1$d"
+msgstr "Verloopt op"
+
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid "Expires in"
 msgstr "Verloopt op"
@@ -4597,10 +4604,6 @@ msgstr "Verberg alle taakherinneringen."
 #: module:io.ox/tasks/edit
 msgid "Hide details"
 msgstr "Details verbergen"
-
-#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
-msgid "Hide names"
-msgstr "Namen verbergen"
 
 #: apps/io.ox/calendar/freetime/timeView.js module:io.ox/calendar
 msgid "Hide non-working time"
@@ -7148,7 +7151,8 @@ msgstr "Postcode"
 msgid "PowerDNS parental control"
 msgstr "PowerDNS ouderlijke controle"
 
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
 msgid "Premium"
 msgstr "Premium"
 
@@ -9550,6 +9554,12 @@ msgstr "Dit e-mailbericht bevat een taak"
 #: apps/io.ox/calendar/invitations/register.js module:io.ox/calendar/main
 msgid "This email contains an appointment"
 msgstr "Dit e-mailbericht bevat een afspraak"
+
+#: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
+msgid ""
+"This email just contains your email address as sender. Your real name is not "
+"used."
+msgstr ""
 
 #: apps/io.ox/core/upsell.js module:io.ox/core
 msgid ""
@@ -12486,6 +12496,9 @@ msgstr "uw platform"
 
 #~ msgid "Hide comments"
 #~ msgstr "Verberg commentaar"
+
+#~ msgid "Hide names"
+#~ msgstr "Namen verbergen"
 
 #~ msgid "How the settings are organized"
 #~ msgstr "De instellingen zijn als volgt ingedeeld"
