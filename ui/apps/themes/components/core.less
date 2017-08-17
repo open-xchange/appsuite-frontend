@@ -235,6 +235,8 @@ div.hopscotch-bubble {
         .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
 
+    transition: filter 1s linear;
+
 }
 
 #io-ox-offline {
@@ -610,6 +612,11 @@ html:not(.internet-explorer) {
             left: 16px;
         }
     }
+}
+
+
+.blur {
+    filter: blur(@bluriness);
 }
 
 // .radio.custom {
