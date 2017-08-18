@@ -40,22 +40,22 @@ define('io.ox/mail/actions/reminder', [
             popup.getHeader().append($('<h4>').text(gt('Remind me')));
 
             //fill popup body
-            var popupBody = popup.getBody();
+            var popupBody = popup.getBody(), guid;
 
             popupBody.append(
                 $('<div class="form-group">').append(
-                    $('<label>').text(gt('Subject')),
-                    titleInput = $('<input>', { class: 'form-control', type: 'text', value: gt('Mail reminder') + ': ' + data.subject, 'aria-labelledby': 'subject' })
+                    $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Subject')),
+                    titleInput = $('<input>', { class: 'form-control', type: 'text', value: gt('Mail reminder') + ': ' + data.subject, 'aria-labelledby': 'subject', id: guid })
                         .focus(function () { this.select(); })
                 ),
                 $('<div class="form-group">').append(
-                    $('<label>').text(gt('Note')),
-                    noteInput = $('<textarea>', { class: 'form-control', rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), 'aria-labelledby': 'note' })
+                    $('<label>').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Note')),
+                    noteInput = $('<textarea>', { class: 'form-control', rows: '5', value: gt('Mail reminder for') + ': ' + data.subject + ' \n' + gt('From') + ': ' + util.formatSender(data.from[0]), 'aria-labelledby': 'note', id: guid })
                         .focus(function () { this.select(); })
                 ),
                 $('<div class="form-group">').append(
-                    $('<label id="remindme">').text(gt('Remind me')),
-                    dateSelector = $('<select>', { class: 'form-control', name: 'dateselect', 'aria-labelledby': 'remindme' }).append(tasksUtil.buildDropdownMenu({ time: endDate }))
+                    $('<label id="remindme">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Remind me')),
+                    dateSelector = $('<select>', { class: 'form-control', name: 'dateselect', 'aria-labelledby': 'remindme', id: guid }).append(tasksUtil.buildDropdownMenu({ time: endDate }))
                 )
             );
 

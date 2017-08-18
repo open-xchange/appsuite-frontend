@@ -79,13 +79,14 @@ define('io.ox/core/export', [
                 },
                 'multi-format': function (baton) {
                     if (baton.formats.length < 2) return;
-
+                    var guid = _.uniqueId('form-control-label-');
                     // options
                     this.$body.append(
-                        $('<label>').append(
+                        $('<label>').attr('for', guid).append(
                             //#. file format for data export
                             $.txt(gt('Format')),
                             new miniViews.CustomRadioView({
+                                id: guid,
                                 model: this.model,
                                 name: 'format',
                                 list: baton.formats

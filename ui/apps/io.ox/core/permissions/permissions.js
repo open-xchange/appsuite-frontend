@@ -417,7 +417,8 @@ define('io.ox/core/permissions/permissions', [
                             }
                         });
 
-                        var buildCheckbox = function () {
+                        var checkboxId = _.uniqueId('form-control-label-'),
+                            buildCheckbox = function () {
                                 var checkbox = $('<input type="checkbox">')
                                 .on('change', function () {
                                     cascadePermissionsFlag = checkbox.prop('checked');
@@ -427,8 +428,8 @@ define('io.ox/core/permissions/permissions', [
 
                             },
                             checkboxNode = $('<div>').addClass('checkbox control-group cascade').append(
-                                $('<label>').text(gt('Apply to all subfolders')).prepend(
-                                    buildCheckbox()
+                                $('<label>').attr('for', checkboxId).text(gt('Apply to all subfolders')).prepend(
+                                    buildCheckbox().attr('id', checkboxId)
                                 )
                             ),
                             view = new Typeahead({

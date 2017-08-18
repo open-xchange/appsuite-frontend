@@ -93,14 +93,15 @@ define('io.ox/core/relogin', [
 
             new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin', container: $('body') })
                 .build(function () {
+                    var guid = _.uniqueId('form-control-label-');
                     this.getPopup().addClass('relogin');
                     this.getHeader().append(
                         $('<h4>').text(getReason(error)),
                         $('<div>').text(gt('Please sign in again to continue'))
                     );
                     this.getContentNode().append(
-                        $('<label>').text(gt('Password')),
-                        $('<input type="password" name="relogin-password" class="form-control">')
+                        $('<label>').attr('for', guid).text(gt('Password')),
+                        $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
                     );
                 })
                 .addPrimaryButton('relogin', gt('Sign in'))

@@ -39,7 +39,7 @@ define('io.ox/contacts/actions/print', [
                     }).on('load', def.resolve)
                 ),
                 $('<div class="col-xs-5">').append(
-                    new mini.RadioView({
+                    new mini.CustomRadioView({
                         model: this.model,
                         name: 'list-type',
                         list: [{
