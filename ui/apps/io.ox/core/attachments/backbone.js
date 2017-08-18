@@ -260,6 +260,9 @@ define('io.ox/core/attachments/backbone', [
             return _(this.filter(function (model) {
                 return model.isLocalFile();
             })).pluck('fileObj');
+        },
+        getSize: function () {
+            return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);
         }
     });
 
