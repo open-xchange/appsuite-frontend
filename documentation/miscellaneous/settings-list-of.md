@@ -642,6 +642,9 @@ settings!io.ox/mail
 **sendDisplayName**
 > ...
 
+**compose/simpleLineBreaks**
+> EXPERIMENTAL WORKAROUND: use simple line breaks
+
 ## Compose: Attachments and Drive Mail
 
 **attachments/layout/compose/\[small|medium|large\]**
@@ -672,8 +675,6 @@ settings!io.ox/mail
 **compose/shareAttachments/threshold**
 > maximal file size for all attachments. Beyond this size drive mail is activated automatically.
 
-**compose/simpleLineBreaks**
-> EXPERIMENTAL WORKAROUND: use simple line breaks
 
 
 ## Emoji
