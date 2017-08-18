@@ -160,7 +160,7 @@ define('io.ox/core/dropzone', [], function () {
                 filter = this.options.filter;
 
             return this.filterDirectories(dataTransfer).then(function (files) {
-                console.log(files, dataTransfer);
+
                 if (!files.length || numFiles !== files.length) {
                     require(['io.ox/core/yell', 'gettext!io.ox/core'], function (yell, gt) {
                         yell('error', gt('Uploading folders is not supported.'));
