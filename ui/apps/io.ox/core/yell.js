@@ -52,8 +52,32 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         timer = null;
 
+    // Timer wrapping function to enable pausing
+    function Timer(callback, delay) {
+        var id,
+            start,
+            remaining = delay;
+
+        this.pause = function () {
+            window.clearTimeout(id);
+            remaining -= new Date() - start;
+        };
+
+        this.resume = function () {
+            start = new Date();
+            window.clearTimeout(id);
+            id = window.setTimeout(callback, remaining);
+        };
+
+        this.clear = function () {
+            window.clearTimeout(id);
+        };
+
+        this.resume();
+    }
+
     function remove() {
-        clearTimeout(timer);
+        if (timer) timer.clear();
         $('.io-ox-alert').trigger('notification:removed').remove();
         $('body').off('.yell');
     }
@@ -73,6 +97,14 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
         // click on close?
         if ($(e.target).closest('.close').length) return remove();
+    }
+
+    function pause() {
+        timer.pause();
+    }
+
+    function resume() {
+        timer.resume();
     }
 
     function screenreaderMessage(message) {
@@ -152,8 +184,8 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             // avoid empty yells
             if (!o.message) return;
 
-            clearTimeout(timer);
-            timer = o.duration === -1 ? null : setTimeout(remove, o.duration || durations[o.type] || 5000);
+            if (timer) timer.clear();
+            timer = o.duration === -1 ? null : new Timer(remove, o.duration || durations[o.type] || 5000);
             // replace existing alert?
             alert = $('.io-ox-alert');
             //prevent double binding
@@ -194,7 +226,9 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
 
             node.append(
                 $('<div class="icon">').append($('<i aria-hidden="true">').addClass(icons[o.type] || 'fa fa-fw'))
-            );
+            )
+            .mouseover(pause)  // Pause timer when user hovers over notification
+            .mouseout(resume);
 
             // DO NOT REMOVE! We need to use defer here, otherwise screenreaders don't read the alert correctly.
             _.defer(function () {
