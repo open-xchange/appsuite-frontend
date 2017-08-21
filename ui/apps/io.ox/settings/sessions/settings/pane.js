@@ -151,9 +151,9 @@ define('io.ox/settings/sessions/settings/pane', [
                     gt('%1$s for MacOS', settings.get('productname/oxdrive'))
                 );
             } else if (client === 'USM-EAS') {
-                this.set('displayName', gt('Exchange Active Sync'));
+                this.set({ 'displayName': gt('Exchange Active Sync'), other: true });
             } else if (client === 'USM-JSON') {
-                this.set('displayName', settings.get('productname/oxtender'));
+                this.set({ 'displayName': settings.get('productname/oxtender'), other: true });
             } else {
                 this.set({ displayName: this.get('client') || gt('Unkown client'), other: true });
             }
