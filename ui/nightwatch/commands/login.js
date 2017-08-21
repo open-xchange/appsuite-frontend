@@ -26,7 +26,7 @@ exports.command = function (parameters, options) {
         prefix = options.prefix || '';
 
     var launchURL = this.launch_url;
-    if (launchURL.indexOf('appsuite') >= 0) launchURL = launchURL.substring(0, launchURL.indexOf('appsuite'));
+    if (launchURL.search('appsuite\\/?$') >= 0) launchURL = launchURL.substring(0, launchURL.search('appsuite\\/?$'));
     if (!/\/$/.test(launchURL)) launchURL += '/';
     launchURL += prefix;
     if (!/\/$/.test(launchURL)) launchURL += '/';
