@@ -18,8 +18,7 @@ describe('Contacts', function () {
 
             client
                 .login('app=io.ox/contacts')
-                .waitForElementVisible('*[data-app-name="io.ox/contacts"]', 20000)
-                .assert.containsText('*[data-app-name="io.ox/contacts"]', 'Address Book');
+                .waitForElementVisible('*[data-app-name="io.ox/contacts"]', 20000);
 
             client
                 .selectFolder({ title: 'Contacts' })

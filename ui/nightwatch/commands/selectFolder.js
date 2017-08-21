@@ -24,41 +24,49 @@ exports.command = function (opt) {
 
     // find the id, if only the title is specified
     if (opt.title) {
-        this.execute(function (title) {
-            var elem;
-            $('.folder-tree:visible .folder-node').each(function () {
-                if ($(this).text() === title) {
-                    elem = $(this);
-                    return false;
-                }
+        // wait until element is in folder pool
+        this.waitForStatement(function (title) {
+            var folderAPI = require('io.ox/core/folder/api');
+            if (!folderAPI) return;
+            var model = _(folderAPI.pool.models).find(function (m) {
+                return m.get('title') === title;
             });
-            return elem.closest('.folder').attr('data-id');
+            return !!model;
+        }, [opt.title], 2500, 500, function error() {
+            this.assert.fail('not found', 'folder-model', 'Timedout while waiting for folder model');
+        });
+
+        // find id for that model
+        this.execute(function (title) {
+            var folderAPI = require('io.ox/core/folder/api'),
+                model = _(folderAPI.pool.models).find(function (m) {
+                    return m.get('title') === title;
+                });
+            return model.get('id');
         }, [opt.title], function (result) {
             if (!result || !result.value) this.assert.fail('not found', 'folder id', util.format('Could not find a folder id for the folder with the title "%s".', opt.title));
             id = result.value;
         });
     }
 
-    var selector = util.format('li[data-id="%s"]', id);
-
     this
-        // make sure, the folderview of the app is visible
-        .execute(function () {
-            if ($('.window-container:visible .window-body a[data-action="open-folder-view"]').length === 0) return;
-            $('.window-container:visible .window-body a[data-action="open-folder-view"]').click();
-        })
-        // make sure, that the parent folder is expanded
-        .execute(function (selector) {
-            var elem = $(selector, '.window-container:visible .folder-tree');
-            if (!elem.is(':visible')) {
-                elem.parent().closest('li.folder').find(' > .folder-node > .folder-arrow').click();
-            }
-        }, [selector])
-        // click on the element when it is visible and wait for it to be selected
+        .waitForElementVisible('.folder-tree', 2500)
         .perform(function (api, done) {
-            api
-                .clickWhenVisible(util.format('.folder-tree li[data-id="%s"]', id), 2500)
-                .waitForElementVisible(util.format('.folder-tree li.selected[data-id="%s"]', id), 10000, done);
+            api.executeAsync(function (id, done) {
+                var app = ox.ui.App.getCurrentApp();
+                // special handling for virtual folders
+                if (id.indexOf('virtual/') === 0) {
+                    var body = app.getWindow().nodes.body;
+                    if (body) {
+                        var view = body.find('.folder-tree').data('view');
+                        if (view) {
+                            view.trigger('virtual', id);
+                        }
+                    }
+                }
+                ox.ui.App.getCurrentApp().folder.set(id).always(done);
+            }, [id]);
+            done();
         })
         // add some time to start folder change in the application
         .pause(500);
