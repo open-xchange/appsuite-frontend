@@ -21,12 +21,12 @@ describe('Calendar', function () {
 
             client
                 .login('app=io.ox/calendar')
-                .waitForElementVisible('*[data-app-name="io.ox/calendar"]', 20000)
-                .assert.containsText('*[data-app-name="io.ox/calendar"]', 'Calendar');
+                .waitForElementVisible('*[data-app-name="io.ox/calendar"]', 20000);
 
             client
                 .selectFolder({ id: 'virtual/all-my-appointments' })
                 .setSetting('io.ox/core', 'autoOpenNotification', false)
+                .setSetting('io.ox/core', 'showDesktopNotifications', false)
                 .clickWhenEventListener('.io-ox-calendar-window .classic-toolbar a[data-action="create"]', 'click', 2500)
                 .waitForElementVisible('.io-ox-calendar-edit-window', 2500);
 
@@ -54,8 +54,14 @@ describe('Calendar', function () {
             // check appointment in all views
             // 1) day view
             client
+                .pause(1000)
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
-                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:day"]')
+                .execute(function () {
+                    return require('settings!io.ox/core').get('autoOpenNotification');
+                }, [], function (result) {
+                    console.log(result.value);
+                })
+                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:day"]', 2500)
                 .waitForElementVisible('.io-ox-calendar-window .week.dayview', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.dayview .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
@@ -66,7 +72,7 @@ describe('Calendar', function () {
             // 2) week view
             client
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
-                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:week"]')
+                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:week"]', 2500)
                 .waitForElementVisible('.io-ox-calendar-window .week.weekview', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.weekview .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
@@ -77,7 +83,7 @@ describe('Calendar', function () {
             // 3) month view
             client
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
-                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="month"]')
+                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="month"]', 2500)
                 .waitForElementVisible('.io-ox-calendar-window .month-view', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .month-view .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
@@ -88,9 +94,9 @@ describe('Calendar', function () {
             // 4) list view
             client
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
-                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="list"]')
-                .waitForElementVisible('.io-ox-calendar-window .calendar-list-view', 2500)
+                .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="list"]', 2500)
                 .perform(function (api, done) {
+                    api.waitForElementVisible(util.format('.io-ox-calendar-window .calendar-list-view .vgrid-cell[data-obj-id^="%s"]', newAppointmentCID), 2500);
                     api.assert.containsText(util.format('.io-ox-calendar-window .calendar-list-view .vgrid-cell[data-obj-id^="%s"] .title', newAppointmentCID), 'test title');
                     api.assert.containsText(util.format('.io-ox-calendar-window .calendar-list-view .vgrid-cell[data-obj-id^="%s"] .location', newAppointmentCID), 'test location');
                     api.assert.elementPresent(util.format('.io-ox-calendar-window .calendar-list-view .vgrid-cell[data-obj-id^="%s"] .private-flag', newAppointmentCID));
