@@ -45,10 +45,15 @@ define([
             defaults.should.be.a('object');
         });
 
-        //tests
+        // tests
 
         it('should return a object with property tests', function () {
             defaults.should.have.a.property('tests');
+        });
+
+        it('should provide defaults for nested tests', function () {
+            defaults.tests.should.have.a.property('nested');
+            defaults.tests.nested.should.be.deep.equal({ 'id': 'anyof', 'tests': [] });
         });
 
         it('should provide defaults for test From', function () {
@@ -57,8 +62,8 @@ define([
         });
 
         it('should provide defaults for test any', function () {
-            defaults.tests.should.have.a.property('anyRecipient');
-            defaults.tests.anyRecipient.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To', 'Cc'], 'id': 'anyRecipient', 'values': [''] });
+            defaults.tests.should.have.a.property('anyrecipient');
+            defaults.tests.anyrecipient.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['To', 'Cc'], 'id': 'anyrecipient', 'values': [''] });
         });
 
         it('should provide defaults for test Subject', function () {
@@ -67,8 +72,8 @@ define([
         });
 
         it('should provide defaults for test mailingList', function () {
-            defaults.tests.should.have.a.property('mailingList');
-            defaults.tests.mailingList.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'mailingList', 'values': [''] });
+            defaults.tests.should.have.a.property('mailinglist');
+            defaults.tests.mailinglist.should.be.deep.equal({ 'comparison': 'contains', 'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'], 'id': 'mailinglist', 'values': [''] });
         });
 
         it('should provide defaults for test To', function () {
@@ -88,7 +93,7 @@ define([
 
         it('should provide defaults for test envelope', function () {
             defaults.tests.should.have.a.property('envelope');
-            defaults.tests.envelope.should.be.deep.equal({ 'comparison': 'is', 'headers': ['To'], 'addresspart': 'all', 'id': 'envelope', 'values': [''] });
+            defaults.tests.envelope.should.be.deep.equal({ 'comparison': 'is', 'headers': ['to'], 'addresspart': 'all', 'id': 'envelope', 'values': [''] });
         });
 
         it('should provide defaults for test true', function () {
@@ -103,7 +108,7 @@ define([
 
         it('should provide defaults for test address', function () {
             defaults.tests.should.have.a.property('address');
-            defaults.tests.address.should.be.deep.equal({ 'id': 'address', 'addresspart': 'all', 'comparison': 'is', 'headers': ['From'], 'values': [''] });
+            defaults.tests.address.should.be.deep.equal({ 'id': 'address', 'addresspart': 'all', 'comparison': 'is', 'headers': ['from'], 'values': [''] });
         });
 
         it('should provide defaults for test exists', function () {
@@ -116,7 +121,7 @@ define([
             defaults.tests.date.should.be.deep.equal({ 'id': 'date', 'comparison': 'ge', 'zone': 'original', 'header': 'Date', 'datepart': 'date', 'datevalue': [] });
         });
 
-        //actions
+        // actions
 
         it('should return a object with property actions', function () {
             defaults.should.have.a.property('actions');

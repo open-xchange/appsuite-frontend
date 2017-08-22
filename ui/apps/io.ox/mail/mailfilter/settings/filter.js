@@ -279,6 +279,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                         var flag = (this.model.get('flags') || [])[0],
                             self = this,
                             actions = (this.model.get('actioncmds') || []),
+                            testsPart = this.model.get('test'),
                             supportColorFlags = settings.get('features/flag/color');
 
                         if (this.disposed) {
@@ -293,10 +294,44 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                     return !supportColorFlags && (/\$cl_/g.test(a.flags[0]));
                                 }
                             }
-                            _.each(actions, function (action) {
-                                if (!_.contains(['stop', 'vacation'], action.id)) {
-                                    unknown = _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action);
+
+                            function collectIds(testsPart) {
+                                var idList = {};
+                                // is single test
+                                if (!testsPart.tests) {
+                                    idList[testsPart.id] = true;
+                                } else {
+                                    _.each(testsPart.tests, function (value) {
+                                        if (!value.tests) {
+                                            idList[value.id] = true;
+                                        } else {
+                                            // there is a nested test in the rule
+                                            if (!config.options.allowNestedTests) unknown = true;
+                                            _.each(value.tests, function (value) {
+                                                idList[value.id] = true;
+                                            });
+                                        }
+                                    });
                                 }
+
+                                return idList;
+                            }
+
+                            // is there an unsupported/disabled action?
+                            _.each(actions, function (action) {
+                                // in MW
+                                if (_.isEmpty(_.where(config.actioncmds, { id: action.id })) || checkForColorFlags(action)) unknown = true;
+                                // in UI
+                                if (action.id !== 'vacation' && _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action)) unknown = true;
+
+                            });
+
+                            // is there an unsupported/disabled test?
+                            _.each(collectIds(testsPart), function (value, key) {
+                                // in MW
+                                if (_.isEmpty(_.where(config.tests, { id: key }))) unknown = true;
+                                // in UI
+                                if (_.isEmpty(_.where(defaults.tests, { id: key }))) unknown = true;
                             });
 
                             return unknown ? 'unknown' : undefined;

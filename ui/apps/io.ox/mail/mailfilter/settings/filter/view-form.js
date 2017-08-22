@@ -107,25 +107,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 testCapabilities = {};
                 _.each(opt.config.tests, function (value) {
-                    testCapabilities[value.test] = value.comparison;
-                });
-
-                var unsupported = [];
-
-                // filter unsupported actions
-                _.each(opt.actionCapabilities, function (action) {
-                    if (_.indexOf(_.map(opt.config.actioncommands, function (val) { return val.action; }), action) === -1) unsupported.push(action);
-                });
-
-                this.actionsTranslations = _.omit(this.actionsTranslations, unsupported);
-
-                // filter unsupported conditions
-                _.each(opt.conditionsMapping, function (list, conditionGroup) {
-                    if (!_.has(testCapabilities, conditionGroup)) {
-                        _.each(opt.conditionsMapping[conditionGroup], function (condition) {
-                            if (!opt.conditionsTranslation.nested) delete opt.conditionsTranslation[condition];
-                        });
-                    }
+                    testCapabilities[value.id] = value.comparisons;
                 });
 
                 this.listView = opt.listView;
