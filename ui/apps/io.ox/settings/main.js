@@ -196,8 +196,8 @@ define('io.ox/settings/main', [
 
             var def = $.Deferred(),
                 actionPoints = {
-                    'redirect': 'io.ox/autoforward',
-                    'vacation': 'io.ox/vacation'
+                    'redirect': 'auto-forward',
+                    'vacation': 'vacation-notice'
                 };
 
             disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
@@ -211,7 +211,9 @@ define('io.ox/settings/main', [
 
                     // disable autoforward or vacationnotice if the needed actions are not available
                     _.each(actionPoints, function (val, key) {
-                        if (_.findIndex(config.actioncommands, function (obj) { return obj.action === key; }) === -1) disabledSettingsPanes.push(val);
+                        if (_.findIndex(config.actioncmds, function (obj) { return obj.id === key; }) === -1) {
+                            ext.point('io.ox/mail/settings/detail/view/buttons').disable(val);
+                        }
                     });
 
                     appsInitialized.done(function () {
