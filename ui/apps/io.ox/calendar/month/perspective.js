@@ -350,7 +350,8 @@ define('io.ox/calendar/month/perspective', [
          *          number           duration: duration of the scroll animation
          */
         gotoMonth: function (target) {
-            var self = this;
+            var self = this,
+                isPrev;
 
             target = target || self.app.refDate || moment();
 
@@ -358,6 +359,7 @@ define('io.ox/calendar/month/perspective', [
                 if (target === 'today') {
                     target = moment();
                 } else if (target === 'prev') {
+                    isPrev = true;
                     target = moment(self.previous);
                 } else {
                     target = moment(self.current).add(1, 'month');
@@ -368,15 +370,17 @@ define('io.ox/calendar/month/perspective', [
             var nextMonth = moment(target).add(1, 'month'),
                 firstDay = $('#' + target.format('YYYY-MM'), self.pane),
                 nextFirstDay = $('#' + nextMonth.format('YYYY-MM'), self.pane),
+                // don't scroll to the first shown month (causes infinte scrolling because the scrollpos cannot be reached), draw a previous month first
+                isFirst = isPrev && $('.month-name', self.pane).first().attr('id') === target.format('YYYY-MM'),
                 scrollToDate = function () {
                     // scroll to position
                     if (firstDay.length === 0) return;
                     firstDay.get(0).scrollIntoView();
                 };
 
-            if (firstDay.length > 0 && nextFirstDay.length > 0) {
+            if (!isFirst && firstDay.length > 0 && nextFirstDay.length > 0) {
                 scrollToDate();
-            } else if (target.valueOf() < self.current.valueOf()) {
+            } else if (isFirst || target.valueOf() < self.current.valueOf()) {
                 this.drawWeeks({ up: true }).done(function () {
                     firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
