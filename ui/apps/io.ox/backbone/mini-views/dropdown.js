@@ -109,6 +109,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
                 positions.top = Math.max(positions.top, topbar.offset().top + topbar.height() + this.margin);
 
                 // adjust height
+                positions.height = bounds.height;
                 positions.height = Math.min(availableHeight - this.margin - positions.top, positions.height);
             } else {
                 // outside viewport?

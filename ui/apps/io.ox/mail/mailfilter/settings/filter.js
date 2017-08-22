@@ -145,7 +145,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
         .addCancelButton();
 
         //disable save button if no action is set
-        if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer[data-action="save"]').prop('disabled', true);
+        if (actionArray.length === 0) myView.dialog.$el.find('.modal-footer [data-action="save"]').prop('disabled', true);
 
         myView.dialog.open();
         myView.$el.find('input[name="rulename"]').focus();

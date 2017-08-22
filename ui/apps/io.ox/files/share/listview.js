@@ -118,7 +118,12 @@ define('io.ox/files/share/listview', [
     });
 
     var getPermissions = function (baton) {
-            return _(_(baton.model.getPermissions()).pluck('type')).uniq();
+            return _.chain(baton.model.getPermissions())
+                    // ignore current user - only necessary for folders
+                    .reject(function (data) { return data.type === 'user' && data.entity === ox.user_id; })
+                    .pluck('type')
+                    .uniq()
+                    .value();
         },
         hasGuests = function (baton) {
             return _(getPermissions(baton)).contains('guest');
