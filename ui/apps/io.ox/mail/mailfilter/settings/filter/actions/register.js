@@ -29,10 +29,17 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
 
     function processConfig(config) {
 
-        var cap = _.object(config.capabilities, config.capabilities);
+        var getIdList = function () {
+            var list = {};
+            _.each(config.actioncmds, function (val) {
+                list[val.id] = val;
+            });
+            return list;
+        };
 
-        if (_.has(cap, 'imap4flags')) {
+        var supportedActions = getIdList();
 
+        if (supportedActions.addflags) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
                 id: 'addflags',
@@ -149,7 +156,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                 }
 
             });
+        }
 
+        if (supportedActions.removeflags) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
                 id: 'removeflags',
@@ -192,79 +201,82 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
             });
         }
 
-        ext.point('io.ox/mail/mailfilter/actions').extend({
+        if (supportedActions.discard) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
 
-            id: 'discard',
+                id: 'discard',
 
-            index: 600,
+                index: 600,
 
-            initialize: function (opt) {
-                var defaults = {
-                    'discard': {
-                        'id': 'discard'
-                    }
-                };
-                _.extend(opt.defaults.actions, defaults);
-                _.extend(opt.actionsTranslations, {
-                    'discard': gt('Discard')
-                });
+                initialize: function (opt) {
+                    var defaults = {
+                        'discard': {
+                            'id': 'discard'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'discard': gt('Discard')
+                    });
 
-                _.extend(opt.actionCapabilities, { 'discard': 'discard' });
+                    _.extend(opt.actionCapabilities, { 'discard': 'discard' });
 
-                opt.actionsOrder.push('discard');
-            },
+                    opt.actionsOrder.push('discard');
+                },
 
-            draw: function (baton, actionKey, amodel, filterValues, action) {
-                var inputId = _.uniqueId('discard_');
-                this.append(
-                    util.drawAction({
-                        actionKey: actionKey,
-                        inputId: inputId,
-                        addClass: 'warning',
-                        title: baton.view.actionsTranslations[action.id]
-                    })
-                );
-            }
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('discard_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            addClass: 'warning',
+                            title: baton.view.actionsTranslations[action.id]
+                        })
+                    );
+                }
 
-        });
+            });
+        }
 
-        ext.point('io.ox/mail/mailfilter/actions').extend({
+        if (supportedActions.keep) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
 
-            id: 'keep',
+                id: 'keep',
 
-            index: 800,
+                index: 800,
 
-            initialize: function (opt) {
-                var defaults = {
-                    'keep': {
-                        'id': 'keep'
-                    }
-                };
-                _.extend(opt.defaults.actions, defaults);
-                _.extend(opt.actionsTranslations, {
-                    'keep': gt('Keep')
-                });
+                initialize: function (opt) {
+                    var defaults = {
+                        'keep': {
+                            'id': 'keep'
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'keep': gt('Keep')
+                    });
 
-                _.extend(opt.actionCapabilities, { 'keep': 'keep' });
+                    _.extend(opt.actionCapabilities, { 'keep': 'keep' });
 
-                opt.actionsOrder.push('keep');
-            },
+                    opt.actionsOrder.push('keep');
+                },
 
-            draw: function (baton, actionKey, amodel, filterValues, action) {
-                var inputId = _.uniqueId('keep_');
-                this.append(
-                    util.drawAction({
-                        actionKey: actionKey,
-                        inputId: inputId,
-                        title: baton.view.actionsTranslations[action.id]
-                    })
-                );
-            }
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('keep_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations[action.id]
+                        })
+                    );
+                }
 
-        });
+            });
+        }
 
-        if (_.has(cap, 'fileinto')) {
-
+        if (supportedActions.move) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
                 id: 'move',
@@ -329,8 +341,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
             });
         }
 
-        if (_.has(cap, 'fileinto') && _.has(cap, 'copy')) {
-
+        if (supportedActions.copy) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
                 id: 'copy',
@@ -396,47 +407,48 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
             });
         }
 
-        ext.point('io.ox/mail/mailfilter/actions').extend({
+        if (supportedActions.redirect) {
+            ext.point('io.ox/mail/mailfilter/actions').extend({
 
-            id: 'redirect',
+                id: 'redirect',
 
-            index: 300,
+                index: 300,
 
-            initialize: function (opt) {
-                var defaults = {
-                    'redirect': {
-                        'id': 'redirect',
-                        'to': ''
-                    }
-                };
-                _.extend(opt.defaults.actions, defaults);
-                _.extend(opt.actionsTranslations, {
-                    'redirect': gt('Redirect to')
-                });
+                initialize: function (opt) {
+                    var defaults = {
+                        'redirect': {
+                            'id': 'redirect',
+                            'to': ''
+                        }
+                    };
+                    _.extend(opt.defaults.actions, defaults);
+                    _.extend(opt.actionsTranslations, {
+                        'redirect': gt('Redirect to')
+                    });
 
-                _.extend(opt.actionCapabilities, { 'redirect': 'redirect' });
+                    _.extend(opt.actionCapabilities, { 'redirect': 'redirect' });
 
-                opt.actionsOrder.push('redirect');
-            },
+                    opt.actionsOrder.push('redirect');
+                },
 
-            draw: function (baton, actionKey, amodel, filterValues, action) {
-                var inputId = _.uniqueId('redirect_');
-                this.append(
-                    util.drawAction({
-                        actionKey: actionKey,
-                        inputId: inputId,
-                        title: baton.view.actionsTranslations[action.id],
-                        inputLabel: baton.view.actionsTranslations.redirect,
-                        inputOptions: { name: 'to', model: amodel, className: 'form-control', id: inputId },
-                        errorView: true
-                    })
-                );
-            }
+                draw: function (baton, actionKey, amodel, filterValues, action) {
+                    var inputId = _.uniqueId('redirect_');
+                    this.append(
+                        util.drawAction({
+                            actionKey: actionKey,
+                            inputId: inputId,
+                            title: baton.view.actionsTranslations[action.id],
+                            inputLabel: baton.view.actionsTranslations.redirect,
+                            inputOptions: { name: 'to', model: amodel, className: 'form-control', id: inputId },
+                            errorView: true
+                        })
+                    );
+                }
 
-        });
+            });
+        }
 
-        if (_.has(cap, 'reject')) {
-
+        if (supportedActions.reject) {
             ext.point('io.ox/mail/mailfilter/actions').extend({
 
                 id: 'reject',
@@ -475,9 +487,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                 }
 
             });
-
         }
-
     }
 
     return api.getConfig().then(processConfig).then(function () {

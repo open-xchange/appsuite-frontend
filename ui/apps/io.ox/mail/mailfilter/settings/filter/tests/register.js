@@ -27,66 +27,77 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
 
     function processConfig(config) {
 
-        var cap = _.object(config.capabilities, config.capabilities);
-        ext.point('io.ox/mail/mailfilter/tests').extend({
+        var getIdList = function () {
+            var list = {};
+            _.each(config.tests, function (val) {
+                list[val.id] = val;
+            });
+            return list;
+        };
 
-            id: 'nested',
+        var supportedConditions = getIdList();
 
-            index: 1500,
+        if (config.options.allowNestedTests) {
 
-            initialize: function (opt) {
-                var defaults = {
-                    'nested': {
-                        'id': 'anyof',
-                        'tests': []
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'nested': gt('Nested condition')
-                });
+            ext.point('io.ox/mail/mailfilter/tests').extend({
 
-                _.extend(opt.conditionsMapping, { 'nested': ['nested'] });
+                id: 'nested',
 
-                opt.conditionsOrder.push('nested');
-            },
+                index: 1500,
 
-            draw: function (baton, conditionKey) {
-                var arrayOfTests = baton.model.get('test').tests[conditionKey],
-                    options = {
-                        target: 'nestedID',
-                        toggle: 'dropup',
-                        caret: true,
-                        type: 'appliesto',
-                        classes: 'appliesto'
-                    },
-                    optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these conditions are met') }, options),
-                    assembled = arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof' ? optionsSwitch : $('<div>').addClass('line').text(gt('continue if all conditions are met'));
-                this.append(
-                    $('<li>').addClass('filter-settings-view row nestedrule').attr({ 'data-test-id': conditionKey }).append(
-                        $('<div>').addClass('col-sm-9 singleline').append(
-                            assembled
-                        ),
-                        $('<div>').addClass('col-sm-3 singleline').append(
-                            util.drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
-                                type: 'condition',
-                                nested: true,
-                                toggle: 'dropdown',
-                                classes: 'add-condition',
-                                // multi options?
-                                skip: 'nested'
-                            })
-                        ),
-                        util.drawDeleteButton('test')
-                    )
-                );
+                initialize: function (opt) {
+                    var defaults = {
+                        'nested': {
+                            'id': 'anyof',
+                            'tests': []
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'nested': gt('Nested condition')
+                    });
 
-            }
+                    _.extend(opt.conditionsMapping, { 'nested': ['nested'] });
 
-        });
+                    opt.conditionsOrder.push('nested');
+                },
 
-        if (_.has(cap, 'body')) {
+                draw: function (baton, conditionKey) {
+                    var arrayOfTests = baton.model.get('test').tests[conditionKey],
+                        options = {
+                            target: 'nestedID',
+                            toggle: 'dropup',
+                            caret: true,
+                            type: 'appliesto',
+                            classes: 'appliesto'
+                        },
+                        optionsSwitch = util.drawDropdown(arrayOfTests.id, { allof: gt('continue if all of these conditions are met'), anyof: gt('continue if any of these conditions are met') }, options),
+                        assembled = arrayOfTests.id === 'allof' || arrayOfTests.id === 'anyof' ? optionsSwitch : $('<div>').addClass('line').text(gt('continue if all conditions are met'));
+                    this.append(
+                        $('<li>').addClass('filter-settings-view row nestedrule').attr({ 'data-test-id': conditionKey }).append(
+                            $('<div>').addClass('col-sm-9 singleline').append(
+                                assembled
+                            ),
+                            $('<div>').addClass('col-sm-3 singleline').append(
+                                util.drawDropdown(gt('Add condition'), baton.view.conditionsTranslation, {
+                                    type: 'condition',
+                                    nested: true,
+                                    toggle: 'dropdown',
+                                    classes: 'add-condition',
+                                    // multi options?
+                                    skip: 'nested'
+                                })
+                            ),
+                            util.drawDeleteButton('test')
+                        )
+                    );
 
+                }
+
+            });
+        }
+
+        if (supportedConditions.body) {
             ext.point('io.ox/mail/mailfilter/tests').extend({
 
                 id: 'body',
@@ -121,8 +132,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.body,
-                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                            inputLabel: baton.view.conditionsTranslation.body + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.body + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                             inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                             errorView: true,
                             addClass: addClass
@@ -132,11 +143,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 }
 
             });
-
         }
 
-        if (_.has(cap, 'date') && _.has(cap, 'relational')) {
-
+        if (supportedConditions.currentdate) {
             ext.point('io.ox/mail/mailfilter/tests').extend({
 
                 id: 'currentdate',
@@ -251,6 +260,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 }
 
             });
+        }
+
+        if (supportedConditions.date) {
 
             ext.point('io.ox/mail/mailfilter/tests').extend({
 
@@ -372,8 +384,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
             });
         }
 
-        if (_.has(cap, 'envelope')) {
-
+        if (supportedConditions.envelope) {
             ext.point('io.ox/mail/mailfilter/tests').extend({
 
                 id: 'envelope',
@@ -386,7 +397,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             'id': 'envelope',
                             'comparison': 'is',
                             'addresspart': 'all',
-                            'headers': ['To'],
+                            'headers': ['to'],
                             'values': ['']
                         }
                     };
@@ -403,21 +414,16 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
 
                     var headerValues = {
-                            'To': gt('To'),
-                            'From': gt('From')
+                            'to': gt('To'),
+                            'from': gt('From')
                         },
                         addressValues = {
                             'all': gt('All'),
                             'localpart': gt('Localpart'),
-                            'domain': gt('Domain')
-                        };
-
-                    if (_.indexOf(config.capabilities, 'subaddress') !== -1) {
-                        _.extend(addressValues, {
+                            'domain': gt('Domain'),
                             'user': gt('User'),
                             'detail': gt('Detail')
-                        });
-                    }
+                        };
 
                     var inputId = _.uniqueId('envelope_');
                     this.append(
@@ -426,10 +432,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.envelope,
-                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                            seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
-                            thirddropdownOptions: { name: 'addresspart', model: cmodel, values: addressValues },
-                            inputLabel: baton.view.conditionsTranslation.envelope + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            seconddropdownOptions: { name: 'headers', model: cmodel, values: util.filterHeaderValues(config.tests, 'envelope', headerValues), saveAsArray: true },
+                            thirddropdownOptions: { name: 'addresspart', model: cmodel, values: util.filterPartValues(config.tests, 'envelope', addressValues) },
+                            inputLabel: baton.view.conditionsTranslation.envelope + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
                             inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
                             errorView: true,
                             addClass: addClass
@@ -439,478 +445,492 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 }
 
             });
-
         }
 
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'header',
-
-            index: 1000,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'cleanHeader': {
-                        'comparison': 'matches',
-                        'headers': [''],
-                        'id': 'header',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'cleanHeader': gt('Header')
-                });
-
-                _.extend(opt.conditionsMapping, { 'header': ['cleanHeader'] });
-
-                opt.conditionsOrder.push('cleanHeader');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var secondInputId = _.uniqueId('values');
-
-                var title,
-                    inputId = _.uniqueId('header_');
-
-                title = baton.view.conditionsTranslation.cleanHeader;
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: title,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
-                        secondInputId: secondInputId,
-                        secondInputLabel: title + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        secondInputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'subject',
-
-            index: 600,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'subject': {
-                        'comparison': 'contains',
-                        'headers': ['Subject'],
-                        'id': 'subject',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'subject': gt('Subject')
-                });
-
-                _.extend(opt.conditionsMapping, { 'subject': ['subject'] });
-
-                opt.conditionsOrder.push('subject');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('subject_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.subject,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputLabel: baton.view.conditionsTranslation.subject + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'from',
-
-            index: 100,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'from': {
-                        'comparison': 'contains',
-                        'headers': ['From'],
-                        'id': 'from',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'from': gt('From')
-                });
-                _.extend(opt.conditionsMapping, { 'from': ['from'] });
-
-                opt.conditionsOrder.push('from');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('from_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.from,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)), tooltips: util.returnDefaultToolTips() },
-                        inputLabel: baton.view.conditionsTranslation.from + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'to',
-
-            index: 200,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'to': {
-                        'comparison': 'contains',
-                        'headers': ['To'],
-                        'id': 'to',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'to': gt('To')
-                });
-
-                _.extend(opt.conditionsMapping, { 'to': ['to'] });
-
-                opt.conditionsOrder.push('to');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('to_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.to,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputLabel: baton.view.conditionsTranslation.to + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'cc',
-
-            index: 300,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'cc': {
-                        'comparison': 'contains',
-                        'headers': ['Cc'],
-                        'id': 'cc',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'cc': gt('Cc')
-                });
-
-                _.extend(opt.conditionsMapping, { 'cc': ['cc'] });
-
-                opt.conditionsOrder.push('cc');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('cc_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.cc,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputLabel: baton.view.conditionsTranslation.cc + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'anyRecipient',
-
-            index: 400,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'anyRecipient': {
-                        'comparison': 'contains',
-                        'headers': ['To', 'Cc'],
-                        'id': 'anyRecipient',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'anyRecipient': gt('Any recipient')
-                });
-
-                _.extend(opt.conditionsMapping, { 'anyRecipient': ['anyRecipient'] });
-
-                opt.conditionsOrder.push('anyRecipient');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('anyRecipient_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.anyRecipient,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputLabel: baton.view.conditionsTranslation.anyRecipient + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'mailingList',
-
-            index: 500,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'mailingList': {
-                        'comparison': 'contains',
-                        'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
-                        'id': 'mailingList',
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'mailingList': gt('Mailing list')
-                });
-
-                _.extend(opt.conditionsMapping, { 'mailingList': ['mailingList'] });
-
-                opt.conditionsOrder.push('mailingList');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('mailingList_');
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.mailingList,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        inputLabel: baton.view.conditionsTranslation.mailingList + ' ' + util.returnContainsOptions(cap)[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'size',
-
-            index: 1200,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'size': {
-                        'comparison': 'over',
-                        'id': 'size',
-                        'size': ''
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'size': gt('Size (bytes)')
-                });
-
-                _.extend(opt.conditionsMapping, { 'size': ['size'] });
-
-                opt.conditionsOrder.push('size');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('size_'),
-                    sizeValues = {
-                        'over': gt('Is bigger than'),
-                        'under': gt('Is smaller than')
+        if (supportedConditions.header) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'header',
+
+                index: 1000,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'cleanHeader': {
+                            'comparison': 'matches',
+                            'headers': [''],
+                            'id': 'header',
+                            'values': ['']
+                        }
                     };
-
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.size,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) },
-                        inputLabel: baton.view.conditionsTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
-                        inputOptions: { name: 'size', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-
-        });
-
-        ext.point('io.ox/mail/mailfilter/tests').extend({
-
-            id: 'address',
-
-            index: 800,
-
-            initialize: function (opt) {
-                var defaults = {
-                    'address': {
-                        'id': 'address',
-                        'addresspart': 'all',
-                        'comparison': 'is',
-                        'headers': ['From'],
-                        'values': ['']
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'address': gt('Address')
-                });
-
-                _.extend(opt.conditionsMapping, { 'address': ['address'] });
-
-                opt.conditionsOrder.push('address');
-            },
-
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var addressValues = {
-                        'all': gt('All'),
-                        'localpart': gt('Localpart'),
-                        'domain': gt('Domain')
-                    },
-                    headerValues = {
-                        'From': gt('From'),
-                        'To': gt('To'),
-                        'Cc': gt('Cc'),
-                        'Bcc': gt('Bcc'),
-                        'Sender': gt('Sender'),
-                        //#. header entry - needs no different translation
-                        'Resent-From': gt('Resent-From'),
-                        //#. header entry - needs no different translation
-                        'Resent-To': gt('Resent-To')
-                    },
-                    inputId = _.uniqueId('address_');
-
-                if (_.has(cap, 'subaddress')) {
-                    _.extend(addressValues, {
-                        'user': gt('User'),
-                        'detail': gt('Detail')
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'cleanHeader': gt('Header')
                     });
+
+                    _.extend(opt.conditionsMapping, { 'header': ['cleanHeader'] });
+
+                    opt.conditionsOrder.push('cleanHeader');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var secondInputId = _.uniqueId('values');
+
+                    var title,
+                        inputId = _.uniqueId('header_');
+
+                    title = baton.view.conditionsTranslation.cleanHeader;
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: title,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
+                            secondInputId: secondInputId,
+                            secondInputLabel: title + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            secondInputOptions: { name: 'values', model: cmodel, className: 'form-control', id: secondInputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+            });
+        }
+
+        if (supportedConditions.subject) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'subject',
+
+                index: 600,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'subject': {
+                            'comparison': 'contains',
+                            'headers': ['Subject'],
+                            'id': 'subject',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'subject': gt('Subject')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'subject': ['subject'] });
+
+                    opt.conditionsOrder.push('subject');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('subject_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.subject,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.subject + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
                 }
 
-                this.append(
-                    util.drawCondition({
-                        layout: '3',
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.address,
-                        dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions(cap)) },
-                        seconddropdownOptions: { name: 'headers', model: cmodel, values: headerValues, saveAsArray: true },
-                        thirddropdownOptions: { name: 'addresspart', model: cmodel, values: addressValues },
-                        inputLabel: baton.view.conditionsTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
-                        inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
-        });
+            });
+        }
 
-        ext.point('io.ox/mail/mailfilter/tests').extend({
+        if (supportedConditions.from) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
 
-            id: 'exists',
+                id: 'from',
 
-            index: 1100,
+                index: 100,
 
-            initialize: function (opt) {
-                var defaults = {
-                    'exists': {
-                        'headers': [],
-                        'id': 'exists'
-                    }
-                };
-                _.extend(opt.defaults.tests, defaults);
-                _.extend(opt.conditionsTranslation, {
-                    'exists': gt('Header exists')
-                });
+                initialize: function (opt) {
+                    var defaults = {
+                        'from': {
+                            'comparison': 'contains',
+                            'headers': ['From'],
+                            'id': 'from',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'from': gt('From')
+                    });
+                    _.extend(opt.conditionsMapping, { 'from': ['from'] });
 
-                _.extend(opt.conditionsMapping, { 'exists': ['exists'] });
+                    opt.conditionsOrder.push('from');
+                },
 
-                opt.conditionsOrder.push('exists');
-            },
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('from_');
 
-            draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                var inputId = _.uniqueId('exists_');
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.from,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()), tooltips: util.returnDefaultToolTips() },
+                            inputLabel: baton.view.conditionsTranslation.from + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
 
-                this.append(
-                    util.drawCondition({
-                        conditionKey: conditionKey,
-                        inputId: inputId,
-                        title: baton.view.conditionsTranslation.exists,
-                        inputLabel: baton.view.conditionsTranslation.exists + ' ' + cmodel.get('headers'),
-                        inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
-                        errorView: true,
-                        addClass: addClass
-                    })
-                );
-            }
+            });
+        }
 
-        });
+        if (supportedConditions.to) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'to',
+
+                index: 200,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'to': {
+                            'comparison': 'contains',
+                            'headers': ['To'],
+                            'id': 'to',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'to': gt('To')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'to': ['to'] });
+
+                    opt.conditionsOrder.push('to');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('to_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.to,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.to + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedConditions.cc) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'cc',
+
+                index: 300,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'cc': {
+                            'comparison': 'contains',
+                            'headers': ['Cc'],
+                            'id': 'cc',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'cc': gt('Cc')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'cc': ['cc'] });
+
+                    opt.conditionsOrder.push('cc');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('cc_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.cc,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.cc + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedConditions.anyrecipient) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'anyrecipient',
+
+                index: 400,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'anyrecipient': {
+                            'comparison': 'contains',
+                            'headers': ['To', 'Cc'],
+                            'id': 'anyrecipient',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'anyrecipient': gt('Any recipient')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'anyrecipient': ['anyrecipient'] });
+
+                    opt.conditionsOrder.push('anyrecipient');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('anyrecipient_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.anyrecipient,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.anyrecipient + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedConditions.mailinglist) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'mailinglist',
+
+                index: 500,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'mailinglist': {
+                            'comparison': 'contains',
+                            'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
+                            'id': 'mailinglist',
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'mailinglist': gt('Mailing list')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'mailinglist': ['mailinglist'] });
+
+                    opt.conditionsOrder.push('mailinglist');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('mailinglist_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.mailinglist,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            inputLabel: baton.view.conditionsTranslation.mailinglist + ' ' + util.returnContainsOptions()[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedConditions.size) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'size',
+
+                index: 1200,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'size': {
+                            'comparison': 'over',
+                            'id': 'size',
+                            'size': ''
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'size': gt('Size (bytes)')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'size': ['size'] });
+
+                    opt.conditionsOrder.push('size');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('size_'),
+                        sizeValues = {
+                            'over': gt('Is bigger than'),
+                            'under': gt('Is smaller than')
+                        };
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.size,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, sizeValues) },
+                            inputLabel: baton.view.conditionsTranslation.size + ' ' + sizeValues[cmodel.get('comparison')],
+                            inputOptions: { name: 'size', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
+
+        if (supportedConditions.address) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'address',
+
+                index: 800,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'address': {
+                            'id': 'address',
+                            'addresspart': 'all',
+                            'comparison': 'is',
+                            'headers': ['from'],
+                            'values': ['']
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'address': gt('Address')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'address': ['address'] });
+
+                    opt.conditionsOrder.push('address');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var addressValues = {
+                            'all': gt('All'),
+                            'localpart': gt('Localpart'),
+                            'domain': gt('Domain'),
+                            'user': gt('User'),
+                            'detail': gt('Detail')
+                        },
+                        headerValues = {
+                            'from': gt('From'),
+                            'to': gt('To'),
+                            'cc': gt('Cc'),
+                            'bcc': gt('Bcc'),
+                            'sender': gt('Sender'),
+                            //#. header entry - needs no different translation
+                            'resent-from': gt('Resent-From'),
+                            //#. header entry - needs no different translation
+                            'resent-to': gt('Resent-To')
+                        },
+                        inputId = _.uniqueId('address_');
+
+                    this.append(
+                        util.drawCondition({
+                            layout: '3',
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.address,
+                            dropdownOptions: { name: 'comparison', model: cmodel, values: filterValues(condition.id, util.returnContainsOptions()) },
+                            seconddropdownOptions: { name: 'headers', model: cmodel, values: util.filterHeaderValues(config.tests, 'address', headerValues), saveAsArray: true },
+                            thirddropdownOptions: { name: 'addresspart', model: cmodel, values: util.filterPartValues(config.tests, 'address', addressValues) },
+                            inputLabel: baton.view.conditionsTranslation.address + ' ' + addressValues[cmodel.get('comparison')],
+                            inputOptions: { name: 'values', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+            });
+        }
+
+        if (supportedConditions.exists) {
+            ext.point('io.ox/mail/mailfilter/tests').extend({
+
+                id: 'exists',
+
+                index: 1100,
+
+                initialize: function (opt) {
+                    var defaults = {
+                        'exists': {
+                            'headers': [],
+                            'id': 'exists'
+                        }
+                    };
+                    _.extend(opt.defaults.tests, defaults);
+                    _.extend(opt.conditionsTranslation, {
+                        'exists': gt('Header exists')
+                    });
+
+                    _.extend(opt.conditionsMapping, { 'exists': ['exists'] });
+
+                    opt.conditionsOrder.push('exists');
+                },
+
+                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
+                    var inputId = _.uniqueId('exists_');
+
+                    this.append(
+                        util.drawCondition({
+                            conditionKey: conditionKey,
+                            inputId: inputId,
+                            title: baton.view.conditionsTranslation.exists,
+                            inputLabel: baton.view.conditionsTranslation.exists + ' ' + cmodel.get('headers'),
+                            inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
+                            errorView: true,
+                            addClass: addClass
+                        })
+                    );
+                }
+
+            });
+        }
 
     }
 
