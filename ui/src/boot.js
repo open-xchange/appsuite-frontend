@@ -650,7 +650,11 @@ $(window).load(function () {
 
             // take care of invalid sessions
             ox.relogin = function () {
-                if (!ox.signin) gotoSignin('autologin=false');
+                if (!ox.signin) {
+                    fetchGeneralServerConfig().always(function () {
+                        gotoSignin('autologin=false');
+                    });
+                }
             };
             ox.on('relogin:required', ox.relogin);
 
