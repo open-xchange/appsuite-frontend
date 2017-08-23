@@ -263,6 +263,12 @@ define('io.ox/core/attachments/backbone', [
         },
         getSize: function () {
             return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);
+        },
+        isValidModel: function (model) {
+            return model.isFileAttachment();
+        },
+        getValidModels: function () {
+            return this.filter(this.isValidModel, this);
         }
     });
 

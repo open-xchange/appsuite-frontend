@@ -214,15 +214,8 @@ define('io.ox/mail/compose/sharing', [
         },
 
         updateVisibility: function () {
-            var isActive = !!this.getValidModels().length && (this.model.get('thresholdExceeded') || this.model.get('enable'));
+            var isActive = !!this.collection.getValidModels().length && (this.model.get('thresholdExceeded') || this.model.get('enable'));
             this.$el.toggleClass('active', isActive);
-        },
-
-        // TODO: move into attachment collection?
-        getValidModels: function () {
-            return this.collection.filter(function (model) {
-                return model.isFileAttachment();
-            });
         },
 
         render: function () {

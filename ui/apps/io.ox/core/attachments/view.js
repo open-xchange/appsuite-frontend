@@ -153,12 +153,8 @@ define('io.ox/core/attachments/view', [
             this.$preview.append(this.renderAttachment('preview', model));
         },
 
-        filter: function (model) {
-            return model.isFileAttachment();
-        },
-
         getValidModels: function () {
-            return this.collection.filter(this.filter, this);
+            return this.collection.getValidModels();
         },
 
         updateAriaControls: function () {
