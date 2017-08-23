@@ -594,19 +594,13 @@ define('io.ox/mail/compose/extensions', [
             view.sharing = {
                 name:                settings.get('compose/shareAttachments/name'),
                 driveLimit:          settings.get('compose/shareAttachments/driveLimit', -1),
-                defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate'),
+                defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
                 expiryDates:         settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']),
                 requiredExpiration:  settings.get('compose/shareAttachments/requiredExpiration', false),
                 forceAutoDelete:     settings.get('compose/shareAttachments/forceAutoDelete', false),
                 threshold:           settings.get('compose/shareAttachments/threshold', 0),
                 enableNotifications: settings.get('compose/shareAttachments/enableNotifications', false)
             };
-            // setting fallback: 'no expire'
-            if (!view.sharing.defaultExpiryDate || view.sharing.defaultExpiryDate === 'none') view.sharing.defaultExpiryDate = '';
-            // setting fallback: use longest timespan when expiration is required
-            if (!view.sharing.defaultExpiryDate && view.sharing.requiredExpiration) {
-                view.sharing.defaultExpiryDate = _.last(view.sharing.expiryDates);
-            }
 
             // attachment view's header toggle actions
             new links.Action('io.ox/mail/compose/attachment/shareAttachmentsEnable', {
@@ -704,7 +698,7 @@ define('io.ox/mail/compose/extensions', [
                     if (baton.view.sharing.forceAutoDelete) return node.prop('disabled', true).addClass('disabled');
 
                     // hide option and divider when 'no expire' is used
-                    baton.view.listenTo(baton.view.model, 'change:expiry_date', function () {
+                    baton.view.listenTo(view.model, 'change:expiry_date', function () {
                         node.toggleClass('hidden', view.model.get('expiry_date') === '')
                             .parent().prev().toggleClass('hidden', view.model.get('expiry_date') === '');
                     });
@@ -745,18 +739,6 @@ define('io.ox/mail/compose/extensions', [
                 }),
 
                 notificationModel: new Backbone.Model(),
-
-                getOptionsLabel: function () {
-                    var value = this.model.get('expiry_date');
-                    if (_.isUndefined(value)) return gt('Expiration');
-                    var option = this.expireDropdown.$ul.find('[data-value="' + value + '"]').parent().text();
-                    //#. %1$d represents a time span like "1 month" or "no expire"
-                    return gt('Expiration: %1$d', option);
-                },
-
-                redrawOptionsLabel: function () {
-                    this.expireDropdown.$('.dropdown-label').empty().append(this.getOptionsLabel());
-                },
 
                 shareAttachmentsIsActive: function () {
                     if (_.isEmpty(this.getValidModels())) return false;
@@ -817,16 +799,10 @@ define('io.ox/mail/compose/extensions', [
                     }
                 },
                 renderOptions: function () {
-                    this.expireDropdown = new Dropdown({
-                        model: view.model,
-                        label: this.getOptionsLabel.bind(this),
-                        tagName: 'div',
-                        caret: true
-                    });
-
-                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: this, dropdown: this.expireDropdown, data: {} }));
-                    this.$header.find('.links').append(this.expireDropdown.render().$el);
-                    this.listenTo(this.model, 'change:expiry_date', this.redrawOptionsLabel);
+                    var $links = this.$header.find('.links'),
+                        dropdown = new Dropdown({ model: view.model, label: gt('Expiration'), tagName: 'div', caret: true });
+                    ext.point('io.ox/mail/attachment/shareAttachments/dropdown').invoke('draw', this, ext.Baton({ view: this, dropdown: dropdown, data: {} }));
+                    $links.append(dropdown.render().$el);
                 },
                 renderNotifications: function () {
                     if (!this.sharing.enableNotifications) return;
