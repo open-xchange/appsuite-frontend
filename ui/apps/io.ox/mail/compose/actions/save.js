@@ -46,6 +46,7 @@ define('io.ox/mail/compose/actions/save', [
         {
             id: 'wait-for-pending-images',
             index: 400,
+            // important: replaces mail.attachments[0].content
             perform: extensions.waitForPendingImages
         },
         {
