@@ -18,7 +18,9 @@
         },
         {
             "id": "envelope",
-            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"],
+            "headers": ["from", "to"],
+            "parts": ["all", "domain", "localpart", "detail", "user"]
         },
         {
             "id": "anyrecipient",
@@ -62,7 +64,9 @@
         },
         {
             "id": "address",
-            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"],
+            "headers": ["cc", "bcc", "resent-from", "resent-to", "sender", "from", "to"],
+            "parts": ["all", "domain", "localpart", "detail", "user"]
         },
         {
             "id": "exists",

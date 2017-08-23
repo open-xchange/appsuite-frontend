@@ -108,7 +108,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'body': {
                             'id': 'body',
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'body', 'comparisons', 'contains'),
                             'extensionskey': 'text',
                             'extensionsvalue': null,
                             'values': ['']
@@ -156,7 +156,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'currentdate': {
                             'id': 'currentdate',
-                            'comparison': 'ge',
+                            'comparison': util.returnDefault(config.tests, 'currentdate', 'comparisons', 'ge'),
                             'datepart': 'date',
                             'datevalue': [],
                             'zone': 'original'
@@ -237,7 +237,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             $('<div>').addClass('col-sm-10').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-4').append(
-                                        new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
+                                        new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('currentdate', timeValues) }).render().$el
                                     ),
                                     $('<div>').addClass('col-sm-3').append(
                                         new mini.DropdownLinkView({ name: 'zone', model: cmodel, values: timezoneValues }).render().$el
@@ -274,7 +274,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'date': {
                             'id': 'date',
-                            'comparison': 'ge',
+                            'comparison': util.returnDefault(config.tests, 'date', 'comparisons', 'ge'),
                             'zone': 'original',
                             'header': 'Date',
                             'datepart': 'date',
@@ -358,7 +358,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             $('<div>').addClass('col-sm-10').append(
                                 $('<div>').addClass('row').append(
                                     $('<div>').addClass('col-sm-4').append(
-                                        new mini.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('date', timeValues) }).render().$el
+                                        new util.DropdownLinkView({ name: 'comparison', model: cmodel, values: filterValues('date', timeValues) }).render().$el
                                     ),
                                     $('<div>').addClass('col-sm-3').append(
                                         new mini.DropdownLinkView({ name: 'zone', model: cmodel, values: timezoneValues }).render().$el
@@ -395,9 +395,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'envelope': {
                             'id': 'envelope',
-                            'comparison': 'is',
-                            'addresspart': 'all',
-                            'headers': ['to'],
+                            'comparison': util.returnDefault(config.tests, 'envelope', 'comparisons', 'is'),
+                            'addresspart': util.returnDefault(config.tests, 'envelope', 'parts', 'all'),
+                            'headers': [util.returnDefault(config.tests, 'envelope', 'headers', 'to')],
                             'values': ['']
                         }
                     };
@@ -457,7 +457,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'cleanHeader': {
-                            'comparison': 'matches',
+                            'comparison': util.returnDefault(config.tests, 'header', 'comparisons', 'matches'),
                             'headers': [''],
                             'id': 'header',
                             'values': ['']
@@ -508,7 +508,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'subject': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'subject', 'comparisons', 'contains'),
                             'headers': ['Subject'],
                             'id': 'subject',
                             'values': ['']
@@ -554,7 +554,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'from': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'from', 'comparisons', 'contains'),
                             'headers': ['From'],
                             'id': 'from',
                             'values': ['']
@@ -599,7 +599,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'to': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'to', 'comparisons', 'contains'),
                             'headers': ['To'],
                             'id': 'to',
                             'values': ['']
@@ -645,7 +645,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'cc': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'cc', 'comparisons', 'contains'),
                             'headers': ['Cc'],
                             'id': 'cc',
                             'values': ['']
@@ -691,7 +691,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'anyrecipient': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'anyrecipient', 'comparisons', 'contains'),
                             'headers': ['To', 'Cc'],
                             'id': 'anyrecipient',
                             'values': ['']
@@ -737,7 +737,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'mailinglist': {
-                            'comparison': 'contains',
+                            'comparison': util.returnDefault(config.tests, 'mailinglist', 'comparisons', 'contains'),
                             'headers': ['List-Id', 'X-BeenThere', 'X-Mailinglist', 'X-Mailing-List'],
                             'id': 'mailinglist',
                             'values': ['']
@@ -783,7 +783,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 initialize: function (opt) {
                     var defaults = {
                         'size': {
-                            'comparison': 'over',
+                            'comparison': util.returnDefault(config.tests, 'size', 'comparisons', 'over'),
                             'id': 'size',
                             'size': ''
                         }
@@ -833,9 +833,9 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     var defaults = {
                         'address': {
                             'id': 'address',
-                            'addresspart': 'all',
-                            'comparison': 'is',
-                            'headers': ['from'],
+                            'addresspart': util.returnDefault(config.tests, 'address', 'parts', 'all'),
+                            'comparison': util.returnDefault(config.tests, 'address', 'comparisons', 'is'),
+                            'headers': [util.returnDefault(config.tests, 'address', 'headers', 'from')],
                             'values': ['']
                         }
                     };

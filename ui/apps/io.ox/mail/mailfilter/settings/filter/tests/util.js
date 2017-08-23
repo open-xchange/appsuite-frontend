@@ -24,16 +24,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     var DropdownLinkView = mini.DropdownLinkView.extend({
         updateLabel: function () {
-            if (!this.options.values[this.model.get(this.name)]) {
-                this.$el.empty().append(
-                    $('<span>').append(
-                        $('<span>').text(this.model.get(this.name))
-                    )
-                );
-            } else {
-                this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)]);
-            }
-
+            this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)] || this.model.get(this.name));
         }
     });
 
@@ -238,6 +229,15 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         return availableValues;
     };
 
+    var returnDefault = function (tests, id, option, value) {
+        var testId = _.findIndex(tests, { id: id }),
+            optionList = tests[testId][option];
+        if (_.indexOf(optionList, value) !== -1) {
+            return value;
+        }
+        return optionList[0];
+    };
+
     return {
         Input: Input,
         drawCondition: drawCondition,
@@ -246,6 +246,8 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         drawDropdown: drawDropdown,
         returnDefaultToolTips: returnDefaultToolTips,
         filterHeaderValues: filterHeaderValues,
-        filterPartValues: filterPartValues
+        filterPartValues: filterPartValues,
+        returnDefault: returnDefault,
+        DropdownLinkView: DropdownLinkView
     };
 });
