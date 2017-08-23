@@ -48,10 +48,6 @@
             &.signatures { margin-right: 15px; }
         }
 
-        .shareAttachments div.dropdown {
-            margin-bottom: 0px;
-        }
-
         &.subject {
             margin-bottom: 7px;
             .maillabel { padding-top: 5px; }
@@ -280,80 +276,62 @@
         }
     }
 
-    .shareAttachments {
-
-        > ul {
-            margin-left: 16px;
+    .attachments {
+        header {
+            display: flex;
+            align-items: center;
+            min-height: 30px;
         }
+        .toggle-details { white-space: nowrap; }
+        // pull right
+        .toggle-mode { margin-left: auto; }
 
-        > div {
+    }
+
+    .attachments .share-attachments {
+
+        display: flex;
+        align-items: center;
+        padding-left: 16px;
+
+        .toggle,
+        .expire.dropdown,
+        .notification.dropdown,
+        .password {
             margin-right: 16px;
+            padding-bottom: 0;
+            margin-bottom: 0;
         }
 
-        .input-group {
+        .password.input-group {
             width: 25%;
             display: inline-table;
-            top: 10px;
         }
 
-        .io-ox-inline-links {
-            display: inline;
-            font-family: @normal-font-family;
-            font-size: 13px;
+        &.active {
 
-            li {
-                padding-top: 3px;
-            }
-
-            a {
-                text-decoration: underline;
-            }
-
-            a[data-action="shareAttachmentseDisable"] {
+            .toggle {
                 text-decoration: none;
                 font-weight: bold;
-            }
-
-            .fa-check, a[data-action="shareAttachmentseDisable"] {
                 color: #FF6E00;
             }
 
-            .fa-check {
-                margin-right: 5px;
+            .fa-fw:before {
+                // fa-check
+                content: '\f00c';
+                color: #FF6E00;
             }
         }
 
-        .dropdownlink, .checkbox {
-            display: inline;
-            position: relative;
 
-            a:hover {
-                text-decoration: none;
+        &:not(.active) {
+            .expire.dropdown,
+            .notification.dropdown,
+            .password.input-group {
+                display: none
             }
-
-            a i.fa-caret-down {
-                color: inherit;
-                display: inline-block;
-                margin-left: 5px;
-            }
-
-        }
-
-    }
-
-    .show-share-attachments {
-
-        margin-top: -12px;
-
-        .toggle-mode {
-            padding-top: 12px;
         }
     }
-
-    .mail-attachment-list header .toggle-details {
-        padding-top: 3px;
-    }
-
 }
 
 .smartphone {
