@@ -154,6 +154,10 @@ define('io.ox/core/tk/textproc', [
                 }
             }
 
+            function addLinebreak() {
+                $(this).after($('<br>'));
+            }
+
             function beautifyTable() {
                 var self = $(this);
                 self.removeAttr('width')
@@ -220,6 +224,10 @@ define('io.ox/core/tk/textproc', [
             node.eq(0).children('div').each(makeParagraph);
             // remove <p> with just one <br> inside
             node.find('p').each(removeEmptyParagraphs);
+
+            if (mailSettings.get('compose/simpleLineBreaks', false)) {
+                node.find('p').each(addLinebreak);
+            }
         },
 
         htmltotext: function (string) {
