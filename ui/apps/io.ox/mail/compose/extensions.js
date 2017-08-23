@@ -412,6 +412,20 @@ define('io.ox/mail/compose/extensions', [
                     // call update when visible to correctly calculate tokefield dimensions (see Bug 52137)
                     tokenfieldView.$el.data('bs.tokenfield').update();
                 });
+
+                // see bug 53327
+                ext.point(POINT + '/createtoken').extend({
+                    id: 'scrolltop',
+                    index: 10,
+                    action: function (baton) {
+                        if (_.device('!smartphone')) return;
+                        if (baton && baton.view) {
+                            setTimeout(function () {
+                                if (baton.view.$el[0].scrollIntoView) baton.view.$el[0].scrollIntoView();
+                            }, 10);
+                        }
+                    }
+                });
             };
         },
 
@@ -708,19 +722,6 @@ define('io.ox/mail/compose/extensions', [
                     if (baton.view.model.get('autodelete')) {
                         // show disabled so user knows that the drive files are deleted, even if it cannot be changed
                         baton.dropdown.$ul.find('[data-name="autodelete"]').prop('disabled', true).addClass('disabled');
-                    }
-                }
-            });
-
-            ext.point(POINT + '/createtoken').extend({
-                id: 'scrolltop',
-                index: 10,
-                action: function (baton) {
-                    if (_.device('!smartphone')) return;
-                    if (baton && baton.view) {
-                        setTimeout(function () {
-                            if (baton.view.$el[0].scrollIntoView) baton.view.$el[0].scrollIntoView();
-                        }, 10);
                     }
                 }
             });
