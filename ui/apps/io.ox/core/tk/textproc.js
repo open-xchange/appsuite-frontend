@@ -17,6 +17,150 @@ define('io.ox/core/tk/textproc', [
     'settings!io.ox/mail'
 ], function (emoji, mailSettings) {
 
+    // simplify DOM tree
+    function simplify(memo, elem) {
+        var self = $(elem),
+            tagName = elem.tagName,
+            children = self.children(),
+            text,
+            unwrapDiv = true;
+
+        if (tagName === 'DIV' && self.attr('id') && self.attr('id').indexOf('ox-text-p') !== -1) {
+            // OX Text Paragraph DIV
+            unwrapDiv = false;
+        }
+
+        // remove attributes
+        self.removeAttr('id title alt rel');
+        // is closed tag?
+        if (/^(BR|HR|IMG)$/.test(tagName)) {
+            return memo;
+        }
+        // fix text align
+        if (self.attr('align')) {
+            self.css('textAlign', self.attr('align')).removeAttr('align');
+        }
+        // fix text nodes
+        self.contents().each(function () {
+            if (elem.nodeType === 3) {
+                elem.nodeValue = elem.nodeValue
+                    // fix space before quotes
+                    .replace(/:$/, ': ');
+            }
+        });
+        // has no children?
+        if (children.length === 0) {
+            //do not trim single spaces
+            text = self.text().match(/^[ \t]$/) ? self.text : $.trim(self.text());
+            // has no text?
+            if (text === '') {
+                // empty table cell?
+                if (tagName === 'TD') {
+                    self.text('\u00A0');
+                } else {
+                    // remove empty element
+                    self.remove();
+                    return false;
+                }
+            } else {
+                // remove simple <span>, <small>, and <pre>
+                if (/^(SPAN|SMALL|PRE)$/.test(tagName)) {
+                    if (!self.attr('class') && !self.attr('style')) {
+                        self.replaceWith($.txt(self.text()));
+                        return false;
+                    }
+                }
+                // is quote?
+                if (/^".+"$/.test(text)) {
+                    self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
+                }
+            }
+        } else if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
+            // extraneous DIV?
+            children.eq(0).unwrap();
+            return false;
+        }
+        return memo;
+    }
+
+    function removeEmptyParagraphs() {
+        var self = $(this),
+            contents = self.contents();
+        if (contents.length === 1 && contents.get(0).tagName === 'BR') {
+            self.remove();
+        }
+    }
+
+    function unwrap() {
+        $(this).children().first().unwrap();
+    }
+
+    function makeParagraph() {
+        var self = $(this),
+            style = self.attr('style'),
+            p = $('<p>');
+        if (style) {
+            p.attr('style', style);
+        }
+        self.replaceWith(p.append(self.contents()));
+    }
+
+    function replaceCodeByEm() {
+        var self = $(this);
+        self.replaceWith($('<em>').text(self.text()));
+    }
+
+    function cleanUpLinks() {
+        var self = $(this), match;
+        if (!self.attr('href')) {
+            // unwrap dead links (usually javascript hooks)
+            self.replaceWith(self.contents());
+        } else {
+            // remove title & target
+            self.removeAttr('title target');
+            // fix references
+            if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
+                match = (String(self.text())).match(/^\[(\d+)\]$/);
+                self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
+            }
+        }
+    }
+
+    function addLinebreak() {
+        $(this).after($('<br>'));
+    }
+
+    function beautifyTable() {
+        var self = $(this);
+        self.removeAttr('width')
+            .attr({
+                border: '0',
+                cellSpacing: '0',
+                cellPadding: '0'
+            })
+            .css({
+                lineHeight: '1em',
+                // center!
+                margin: '0.5em auto 0.5em auto'
+            });
+        self.find('th')
+            .css({
+                fontWeight: 'bold',
+                textAlign: 'center',
+                borderBottom: '1px solid #555',
+                padding: '0.4em 1em 0.4em 1em'
+            });
+        self.find('td')
+            .css({
+                borderBottom: '1px solid #aaa',
+                padding: '0.4em 1em 0.4em 1em'
+            });
+        self.find('tr').first()
+            .find('td, th').css({ borderTop: '1px solid #555' });
+        self.find('tr').last()
+            .find('td, th').css({ borderBottom: '1px solid #555' });
+    }
+
     return {
 
         paste_preprocess: function (pl, o) {
@@ -26,168 +170,11 @@ define('io.ox/core/tk/textproc', [
                 .replace(/<!--(.*?)-->/g, '')
                 // remove emoji images and convert them back to unicode characters
                 .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1');
-            // remove class attribute and custom attributes
-            //.replace(/(data-[^=]+|class)="[^"]*"/ig, '')
-            // remove relative links (remove if links don't start with a protocol)
-            //.replace(/<a[^>]+href="(?!.+:)[^"].+?">(.+)<\/\s?a>/gi, '$1')
-            // remove &nbsp;
-            //.replace(/&nbsp;/ig, ' ');
-            // fix missing white-space before/after links
-            //.replace(/([^>\s])<a/ig, '$1 <a')
-            //.replace(/<\/\s?a>([^<\s,\.:;])/ig, '</a> $1')
-            // beautify simple quotes
-            //.replace(/([^=])"([\w\- ]+)"/g, '$1\u201C$2\u201D')
-            // beautify dashes
-            //.replace(/(\w\s)-(\s\w)/g, '$1\u2013$2');
 
             o.content = emoji.processEmoji(o.content);
         },
 
         paste_postprocess: function (pl, o) {
-
-            // simplify DOM tree
-            function simplify(memo, elem) {
-                var self = $(elem),
-                    tagName = elem.tagName,
-                    children = self.children(),
-                    text,
-                    unwrapDiv = true;
-
-                if (tagName === 'DIV' && self.attr('id') && self.attr('id').indexOf('ox-text-p') !== -1) {
-                    // OX Text Paragraph DIV
-                    unwrapDiv = false;
-                }
-
-                // remove attributes
-                self.removeAttr('id title alt rel');
-                // is closed tag?
-                if (/^(BR|HR|IMG)$/.test(tagName)) {
-                    return memo;
-                }
-                // fix text align
-                if (self.attr('align')) {
-                    self.css('textAlign', self.attr('align')).removeAttr('align');
-                }
-                // fix text nodes
-                self.contents().each(function () {
-                    if (elem.nodeType === 3) {
-                        elem.nodeValue = elem.nodeValue
-                            // fix space before quotes
-                            .replace(/:$/, ': ');
-                    }
-                });
-                // has no children?
-                if (children.length === 0) {
-                    //do not trim single spaces
-                    text = self.text().match(/^[ \t]$/) ? self.text : $.trim(self.text());
-                    // has no text?
-                    if (text === '') {
-                        // empty table cell?
-                        if (tagName === 'TD') {
-                            self.text('\u00A0');
-                        } else {
-                            // remove empty element
-                            self.remove();
-                            return false;
-                        }
-                    } else {
-                        // remove simple <span>, <small>, and <pre>
-                        if (/^(SPAN|SMALL|PRE)$/.test(tagName)) {
-                            if (!self.attr('class') && !self.attr('style')) {
-                                self.replaceWith($.txt(self.text()));
-                                return false;
-                            }
-                        }
-                        // is quote?
-                        if (/^".+"$/.test(text)) {
-                            self.text(text.replace(/^"/, '\u201C').replace(/"$/, '\u201D'));
-                        }
-                    }
-                } else if (tagName === 'DIV' && !self.attr('class') && !self.attr('style') && unwrapDiv) {
-                    // extraneous DIV?
-                    children.eq(0).unwrap();
-                    return false;
-                }
-                return memo;
-            }
-
-            function removeEmptyParagraphs() {
-                var self = $(this),
-                    contents = self.contents();
-                if (contents.length === 1 && contents.get(0).tagName === 'BR') {
-                    self.remove();
-                }
-            }
-
-            function unwrap() {
-                $(this).children().first().unwrap();
-            }
-
-            function makeParagraph() {
-                var self = $(this),
-                    style = self.attr('style'),
-                    p = $('<p>');
-                if (style) {
-                    p.attr('style', style);
-                }
-                self.replaceWith(p.append(self.contents()));
-            }
-
-            function replaceCodeByEm() {
-                var self = $(this);
-                self.replaceWith($('<em>').text(self.text()));
-            }
-
-            function cleanUpLinks() {
-                var self = $(this), match;
-                if (!self.attr('href')) {
-                    // unwrap dead links (usually javascript hooks)
-                    self.replaceWith(self.contents());
-                } else {
-                    // remove title & target
-                    self.removeAttr('title target');
-                    // fix references
-                    if (/^\[\d+\]$/.test(self.text()) && /^#/.test(self.attr('href'))) {
-                        match = (String(self.text())).match(/^\[(\d+)\]$/);
-                        self.replaceWith($('<sup>').text(match[1]).add($.txt(' ')));
-                    }
-                }
-            }
-
-            function addLinebreak() {
-                $(this).after($('<br>'));
-            }
-
-            function beautifyTable() {
-                var self = $(this);
-                self.removeAttr('width')
-                    .attr({
-                        border: '0',
-                        cellSpacing: '0',
-                        cellPadding: '0'
-                    })
-                    .css({
-                        lineHeight: '1em',
-                        // center!
-                        margin: '0.5em auto 0.5em auto'
-                    });
-                self.find('th')
-                    .css({
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        borderBottom: '1px solid #555',
-                        padding: '0.4em 1em 0.4em 1em'
-                    });
-                self.find('td')
-                    .css({
-                        borderBottom: '1px solid #aaa',
-                        padding: '0.4em 1em 0.4em 1em'
-                    });
-                self.find('tr').first()
-                    .find('td, th').css({ borderTop: '1px solid #555' });
-                self.find('tr').last()
-                    .find('td, th').css({ borderBottom: '1px solid #555' });
-            }
 
             var node = $(o.node), done;
             //console.debug('post', node.html());
