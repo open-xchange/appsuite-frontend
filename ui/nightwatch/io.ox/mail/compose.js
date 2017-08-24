@@ -22,10 +22,10 @@ describe('Mail', function () {
                 .waitForElementVisible('.io-ox-settings-main', 20000);
 
             // open mail settings
-            client.selectFolder({ id: 'virtual/settings/io.ox/mail' });
+            client.selectFolder({ id: 'virtual/settings/io.ox/mail/settings/compose' });
 
             // set compose mode to html
-            client.clickWhenVisible('.io-ox-mail-settings input[value="html"]', 2500);
+            client.clickWhenVisible('div[data-point="io.ox/mail/settings/compose/settings/detail/view"] input[value="html"]', 2500);
 
             // 1) Switch to the mail app, select "Create mail"
             client
@@ -51,7 +51,7 @@ describe('Mail', function () {
                 .clickWhenVisible('.io-ox-mail-compose div[data-extension-id="composetoolbar-menu"] .dropdown:not(.security-options):not(.signatures) > a', 2000)
                 .clickWhenVisible('.dropdown.open a[data-name="editorMode"][data-value="text"]', 2000)
                 .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 20000)
-                .waitForElementNotVisible('.io-ox-mail-compose .editable-toolbar', 2000);
+                .waitForElementNotPresent('.io-ox-mail-compose .editable-toolbar', 2000);
 
             // 3) Set a recipient, add a subject and mail text
             client
