@@ -101,7 +101,7 @@ define('io.ox/mail/actions/copyMove', [
 
                         dialog.on('ok', function () { folderId = tree.selection.get(); });
 
-                        if (!capabilities.has('mailfilter') || o.type !== 'move') return;
+                        if (!capabilities.has('mailfilter_v2') || o.type !== 'move') return;
 
                         dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
                         var checkbox = dialog.getFooter().find('[data-action="create-rule"]'),

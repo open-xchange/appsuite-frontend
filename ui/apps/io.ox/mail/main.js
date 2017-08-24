@@ -1996,7 +1996,7 @@ define('io.ox/mail/main', [
         },
 
         'vacation-notice': function (app) {
-            if (!capabilities.has('mailfilter')) return;
+            if (!capabilities.has('mailfilter_v2')) return;
             require(['io.ox/mail/mailfilter/vacationnotice/indicator'], function (View) {
                 new View().attachTo(app.listControl.$el);
             });
