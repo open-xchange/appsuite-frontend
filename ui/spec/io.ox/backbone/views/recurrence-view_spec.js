@@ -12,8 +12,9 @@
  */
 
 define([
-    'io.ox/backbone/views/recurrence-view'
-], function (RecurrenceView) {
+    'io.ox/backbone/views/recurrence-view',
+    'io.ox/calendar/chronos-model'
+], function (RecurrenceView, chronosModel) {
 
     'use strict';
 
@@ -154,9 +155,9 @@ define([
         describe('use "rrule" as recurrence pattern', function () {
 
             it('parses a daily rrule', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=DAILY;INTERVAL=2',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -167,9 +168,9 @@ define([
             });
 
             it('parses a weekly rrule', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -181,9 +182,9 @@ define([
             });
 
             it('parses a monthly rrule by date', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=MONTHLY;BYMONTHDAY=3;COUNT=10',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -196,9 +197,9 @@ define([
             });
 
             it('parses a monthly rrule by weekday', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=MONTHLY;BYDAY=MO;BYSETPOS=1',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -211,9 +212,9 @@ define([
             });
 
             it('parses a yearly rrule by date', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=YEARLY;BYMONTH=7;BYMONTHDAY=3;UNTIL=20181003T180000Z',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -227,9 +228,9 @@ define([
             });
 
             it('parses a monthly rrule by weekday', function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=YEARLY;BYMONTH=7;BYDAY=MO;BYSETPOS=1',
-                    startDate: 1481720709550 // 12/14/2016
+                    startDate: { value: '20161214T010000', tzid: 'Europe/Berlin' }
                 });
                 view = new RecurrenceView({
                     model: model
@@ -254,9 +255,9 @@ define([
                 return def.promise();
             }
             beforeEach(function () {
-                model = new Backbone.Model({
+                model = new chronosModel.Model({
                     rrule: 'FREQ=DAILY',
-                    startDate: 1481720709550 // Wednesday, December 14, 2016 2:05 PM
+                    startDate: { value: '20161214T140500', tzid: 'Europe/Berlin' } // Wednesday, December 14, 2016 2:05 PM
                 });
                 view = new RecurrenceView({
                     model: model
