@@ -135,7 +135,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'range',
             render: function (baton) {
                 // supports date?
-                if (!_(this.data.config.tests).findWhere({ test: 'currentdate' })) return;
+                if (!_(this.data.config.tests).findWhere({ id: 'currentdate' })) return;
                 this.$body.append(
                     baton.branch('range', this, $('<div class="form-group date-range">'))
                 );
