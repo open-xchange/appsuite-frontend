@@ -125,10 +125,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('body_');
+                    var inputId = _.uniqueId('body_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.body,
@@ -139,6 +140,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
 
                 }
 
@@ -218,6 +226,8 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         }
                     });
 
+                    var li;
+
                     // set to default if not available
                     if (!_.has(cmodel.attributes, 'zone') || cmodel.get('zone') === null) cmodel.attributes.zone = 'original';
 
@@ -230,7 +240,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         baton.view.$el.trigger('toggle:saveButton');
                     });
                     this.append(
-                        $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
+                        li = $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
                             $('<div>').addClass('col-sm-2 singleline').append(
                                 $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
                             ),
@@ -257,6 +267,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     ).find('legend').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
 
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues('currentdate', timeValues),
+                        model: cmodel
+                    });
                 }
 
             });
@@ -337,6 +352,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             }
                         }
                     });
+                    var li;
 
                     // set to default if not available
                     if (!_.has(cmodel.attributes, 'zone') || cmodel.get('zone') === null) cmodel.attributes.zone = 'original';
@@ -351,7 +367,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     });
 
                     this.append(
-                        $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
+                        li = $('<li>').addClass('filter-settings-view row ' + addClass).attr({ 'data-test-id': conditionKey }).append(
                             $('<div>').addClass('col-sm-2 singleline').append(
                                 $('<span>').addClass('list-title').text(baton.view.conditionsTranslation[condition.id])
                             ),
@@ -378,6 +394,12 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         )
                     ).find('legend').addClass('sr-only');
                     if (cmodel.get('datevalue')[0] === null || cmodel.get('datevalue').length === 0) this.find('[data-test-id="' + conditionKey + '"] input.datepicker-day-field').closest('.row').addClass('has-error');
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues('date', timeValues),
+                        model: cmodel
+                    });
 
                 }
 
@@ -423,11 +445,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             'domain': gt('Domain'),
                             'user': gt('User'),
                             'detail': gt('Detail')
-                        };
+                        }, li;
 
                     var inputId = _.uniqueId('envelope_');
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             layout: '3',
                             conditionKey: conditionKey,
                             inputId: inputId,
@@ -441,6 +463,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
 
                 }
 
@@ -474,14 +503,15 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var secondInputId = _.uniqueId('values');
+                    var secondInputId = _.uniqueId('values'),
+                        li;
 
                     var title,
                         inputId = _.uniqueId('header_');
 
                     title = baton.view.conditionsTranslation.cleanHeader;
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: title,
@@ -494,6 +524,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
             });
         }
@@ -525,10 +562,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('subject_');
+                    var inputId = _.uniqueId('subject_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.subject,
@@ -539,6 +577,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -570,10 +615,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('from_');
+                    var inputId = _.uniqueId('from_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.from,
@@ -584,6 +630,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -616,10 +669,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('to_');
+                    var inputId = _.uniqueId('to_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.to,
@@ -630,6 +684,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -662,10 +723,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('cc_');
+                    var inputId = _.uniqueId('cc_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.cc,
@@ -676,6 +738,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -708,10 +777,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('anyrecipient_');
+                    var inputId = _.uniqueId('anyrecipient_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.anyrecipient,
@@ -722,6 +792,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -754,10 +831,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                 },
 
                 draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('mailinglist_');
+                    var inputId = _.uniqueId('mailinglist_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.mailinglist,
@@ -768,6 +846,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
 
             });
@@ -803,10 +888,10 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         sizeValues = {
                             'over': gt('Is bigger than'),
                             'under': gt('Is smaller than')
-                        };
+                        }, li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             conditionKey: conditionKey,
                             inputId: inputId,
                             title: baton.view.conditionsTranslation.size,
@@ -817,6 +902,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, sizeValues),
+                        model: cmodel,
+                        inputName: 'size'
+                    });
                 }
 
             });
@@ -868,10 +960,11 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             //#. header entry - needs no different translation
                             'resent-to': gt('Resent-To')
                         },
-                        inputId = _.uniqueId('address_');
+                        inputId = _.uniqueId('address_'),
+                        li;
 
                     this.append(
-                        util.drawCondition({
+                        li = util.drawCondition({
                             layout: '3',
                             conditionKey: conditionKey,
                             inputId: inputId,
@@ -885,6 +978,13 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                             addClass: addClass
                         })
                     );
+
+                    util.handleUnsupportedComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values'
+                    });
                 }
             });
         }
