@@ -238,6 +238,20 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         return optionList[0];
     };
 
+    var handleUnsupportedComparisonValues = function (opt) {
+        var input = opt.inputName ? opt.$li.find('[name="' + opt.inputName + '"]') : opt.$li.find('input'),
+            label = opt.$li.find('[data-name="comparison"]').first().closest('.dropdownlink').find('.dropdown-label');
+
+        if (!opt.values[opt.model.get('comparison')]) {
+            input.prop('disabled', true);
+            label.addClass('unsupported');
+        }
+        opt.model.on('change:comparison', function () {
+            input.prop('disabled', false);
+            label.removeClass('unsupported');
+        });
+    };
+
     return {
         Input: Input,
         drawCondition: drawCondition,
@@ -248,6 +262,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         filterHeaderValues: filterHeaderValues,
         filterPartValues: filterPartValues,
         returnDefault: returnDefault,
-        DropdownLinkView: DropdownLinkView
+        DropdownLinkView: DropdownLinkView,
+        handleUnsupportedComparisonValues: handleUnsupportedComparisonValues
     };
 });
