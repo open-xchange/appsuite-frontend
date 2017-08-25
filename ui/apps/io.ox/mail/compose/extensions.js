@@ -609,7 +609,7 @@ define('io.ox/mail/compose/extensions', [
                     settings: {
                         name:                settings.get('compose/shareAttachments/name'),
                         defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate', ''),
-                        expiryDates:         settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']),
+                        expiryDates:         settings.get('compose/shareAttachments/expiryDates', []),
                         requiredExpiration:  settings.get('compose/shareAttachments/requiredExpiration', false),
                         forceAutoDelete:     settings.get('compose/shareAttachments/forceAutoDelete', false),
                         threshold:           settings.get('compose/shareAttachments/threshold', 0),
