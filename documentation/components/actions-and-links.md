@@ -44,4 +44,4 @@ These are the options available when you creating a new action.
 
 # Common usage
 
-For some examples how to create and customize please refer to the [customize action article](/ui/customize/action.html).
+For some examples how to create and customize please refer to the [customize action article](../customize/action.html).
