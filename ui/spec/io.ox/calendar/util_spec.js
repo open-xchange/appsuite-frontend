@@ -483,6 +483,56 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/chronos-mode
                 });
             });
         });
+
+        describe('can compute color to hex', function () {
+            it('converts rgb colors', function () {
+                expect(util.colorToHex('rgb(23, 167, 237)')).to.equal(1550317);
+            });
+            it('converts rgba colors', function () {
+                expect(util.colorToHex('rgba(23, 167, 237, 80)')).to.equal(1550317);
+            });
+            it('converts hsl colors', function () {
+                expect(util.colorToHex('hsl(195, 53%, 79%)')).to.equal(11393254);
+            });
+            it('converts colors by name', function () {
+                expect(util.colorToHex('lightblue')).to.equal(11393254);
+            });
+        });
+
+        it('converts hex (as number) to hsl', function () {
+            expect(util.hexToHSL(0xadd8e6)).to.deep.equal([194, 53, 79]);
+        });
+
+        it('computes foreground color for background-color with an appropriate contrast ratio', function () {
+            // contrast computation is the same as in the chrome developer accessibility tools
+            function luminance(r, g, b) {
+                var a = [r, g, b].map(function (v) {
+                    v /= 255;
+                    return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+                });
+                return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+            }
+            function contrast(bg, fg) {
+                var bgLuminance, fgLuminance;
+                bgLuminance = luminance(bg[0], bg[1], bg[2]);
+                if (fg === 'black') fgLuminance = luminance(0, 0, 0);
+                else if (fg === 'white') fgLuminance = luminance(255, 255, 255);
+                return (Math.max(fgLuminance, bgLuminance) + 0.05) / (Math.min(fgLuminance, bgLuminance) + 0.05);
+            }
+
+            // yellow
+            expect(contrast([255, 255, 0], util.getForegroundColor('rgb(255, 255, 0)'))).to.be.above(4.54);
+            // red
+            expect(contrast([255, 0, 0], util.getForegroundColor('rgb(255, 0, 0)'))).to.be.above(4.54);
+            // blue
+            console.log(util.getForegroundColor('rgb(0, 0, 255)'));
+            expect(contrast([0, 0, 255], util.getForegroundColor('rgb(0, 0, 255)'))).to.be.above(4.54);
+            // black
+            expect(contrast([0, 0, 0], util.getForegroundColor('rgb(0, 0, 0)'))).to.be.above(4.54);
+            // white
+            expect(contrast([255, 255, 255], util.getForegroundColor('rgb(255, 255, 255)'))).to.be.above(4.54);
+        });
+
     });
 
 });
