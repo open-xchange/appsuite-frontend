@@ -13,9 +13,32 @@
 
 define('io.ox/core/boot/login/openid', [
     'io.ox/core/boot/util',
-    'io.ox/core/session'
-], function (util, session) {
+    'io.ox/core/session',
+    'io.ox/core/extensions'
+], function (util, session, ext) {
     'use strict';
+
+    ext.point('io.ox/core/logout').extend({
+        id: 'OIDC',
+        index: 'last',
+        logout: function () {
+            var def = $.Deferred();
+            if (ox.serverConfig.oidcLogin !== true) return def.resolve();
+            location.href = [
+                ox.apiRoot,
+                ox.serverConfig.oidcPath,
+                '/init?',
+                $.param({
+                    flow: 'logout',
+                    redirect: true,
+                    client: session.client(),
+                    version: session.version(),
+                    session: ox.session
+                })
+            ].join('');
+            return def.reject();
+        }
+    });
 
     return function openIdConnectLogin(options) {
         util.debug('Open ID Login ...');
