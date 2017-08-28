@@ -12,8 +12,9 @@
  */
 
 define([
-    'io.ox/core/attachments/view'
-], function (Attachments) {
+    'io.ox/core/attachments/view',
+    'io.ox/core/attachments/backbone'
+], function (Attachments, AttachmentsBackbone) {
 
     'use strict';
 
@@ -47,13 +48,13 @@ define([
 
             beforeEach(function () {
                 EmptyAttachmentList = Attachments.List.extend({
-                    collection: new Backbone.Collection()
+                    collection: new AttachmentsBackbone.Collection()
                 });
             });
             it('has a constructor expecting a Collection', function () {
                 var createWithCollection = function () {
                         new Attachments.List({
-                            collection: new Backbone.Collection()
+                            collection: new AttachmentsBackbone.Collection()
                         });
                     },
                     createWithoutCollection = function () {
@@ -69,7 +70,7 @@ define([
                         isFileAttachment: sinon.stub().returns(true)
                     }),
                     list = new Attachments.List({
-                        collection: new Backbone.Collection([new Model(), new Model()]),
+                        collection: new AttachmentsBackbone.Collection([new Model(), new Model()]),
                         AttachmentView: Backbone.View.extend({
                             tagName: 'li'
                         })
@@ -136,7 +137,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model(), new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model(), new Model()]),
                             AttachmentView: Backbone.View.extend({})
                         });
 
@@ -150,7 +151,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model()]),
                             AttachmentView: Backbone.View.extend({})
                         });
 
@@ -163,7 +164,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model()]),
                             AttachmentView: Backbone.View.extend({})
                         });
 
@@ -181,7 +182,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model()]),
                             AttachmentView: Backbone.View.extend({})
                         });
 
@@ -194,7 +195,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model()]),
                             AttachmentView: Backbone.View.extend({})
                         });
 
@@ -208,7 +209,7 @@ define([
                         isFileAttachment: sinon.stub().returns(true)
                     }),
                     list = new Attachments.List({
-                        collection: new Backbone.Collection([new Model(), new Model()]),
+                        collection: new AttachmentsBackbone.Collection([new Model(), new Model()]),
                         AttachmentView: Backbone.View.extend({
                             tagName: 'li'
                         })
@@ -227,7 +228,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model(), new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model(), new Model()]),
                             AttachmentView: Backbone.View.extend({
                                 tagName: 'li'
                             })
@@ -245,7 +246,7 @@ define([
                             isFileAttachment: sinon.stub().returns(true)
                         }),
                         list = new Attachments.List({
-                            collection: new Backbone.Collection([new Model(), new Model()]),
+                            collection: new AttachmentsBackbone.Collection([new Model(), new Model()]),
                             AttachmentView: Backbone.View.extend({
                                 tagName: 'li'
                             })
