@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment'], function (common, AlarmsView, date, moment) {
+define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 'io.ox/backbone/mini-views/date', 'io.ox/core/moment', 'gettext!io.ox/calendar'], function (common, AlarmsView, date, moment, gt) {
 
     'use strict';
 
@@ -314,6 +314,54 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                     trigger: { duration: '-PT30M' },
                     description: 'Pizza Essen'
                 }]);
+            });
+
+            it('should draw non standard alarms', function () {
+                this.model.set('alarms', [{
+                    action: 'SMS',
+                    description: 'Machete improvisiert',
+                    trigger: { duration: '-PT15M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT55M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: 'PT55M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT55M', related: 'END' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: 'PT55M', related: 'END' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { dateTime: '20170708T220000Z' }
+                }]);
+
+                this.view.render();
+                var items = this.view.$el.find('.alarm-list-item');
+
+                items.length.should.equal(6);
+
+                $(items[0]).find('.col-md-6').text().should.equal('SMS');
+
+                $(items[1]).find('.alarm-time').val().should.equal('-PT55M');
+                //#. %1$s is the reminder time (for example: 2 hours)
+                $(items[1]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s before the start time', new moment.duration('-PT55M').humanize()));
+
+                $(items[2]).find('.alarm-time').val().should.equal('PT55M');
+                //#. %1$s is the reminder time (for example: 2 hours)
+                $(items[2]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s after the start time', new moment.duration('PT55M').humanize()));
+
+                $(items[3]).find('.alarm-time').val().should.equal('-PT55M');
+                //#. %1$s is the reminder time (for example: 2 hours)
+                $(items[3]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s before the end time', new moment.duration('-PT55M').humanize()));
+
+                $(items[4]).find('.alarm-time').val().should.equal('PT55M');
+                //#. %1$s is the reminder time (for example: 2 hours)
+                $(items[4]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s after the end time', new moment.duration('PT55M').humanize()));
+
+                $(items[5]).find('.col-md-5').text().should.equal(new moment('20170708T220000Z').format('LLL'));
             });
         });
 
