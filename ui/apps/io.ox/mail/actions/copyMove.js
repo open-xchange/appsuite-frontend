@@ -42,16 +42,17 @@ define('io.ox/mail/actions/copyMove', [
                                 preparedTest = { id: 'anyof', tests: [] };
                                 _.each(senderList, function (item) {
                                     if (opt.filterDefaults.tests.address) {
-                                        preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
+                                        preparedTest.tests.push({ comparison: 'is', headers: ['from'], id: 'address', addresspart: 'all', values: [item] });
                                     } else {
                                         preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
                                     }
                                 });
                             } else {
                                 preparedTest = opt.filterDefaults.tests.address ? {
-                                    comparison: 'all',
-                                    headers: ['From'],
+                                    comparison: 'is',
+                                    headers: ['from'],
                                     id: 'address',
+                                    addresspart: 'all',
                                     values: [senderList[0]]
                                 } : {
                                     comparison: 'contains',
