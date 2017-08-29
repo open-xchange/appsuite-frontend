@@ -6,6 +6,8 @@ stages:
   - test
   - docker
   - deploy
+  - e2e
+  - cleanup
 
 variables:
   PROXY_HOST: npm.open-xchange.com
@@ -167,7 +169,7 @@ deploy preview app:
     - /^poc\//
 
 stop_review:
-  stage: deploy
+  stage: cleanup
   dependencies: []
   variables:
     GIT_STRATEGY: none
@@ -182,6 +184,45 @@ stop_review:
     - /^feature\//
     - /^bug\//
     - /^poc\//
+
+deploy e2e testserver:
+  stage: deploy
+  dependencies: []
+  variables:
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_COMMIT_REF_SLUG
+    SERVER: http://10.20.28.164/appsuite/
+  script:
+    - docker pull $DOCKER_IMAGE
+    - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
+    - docker container cp ui/nightwatch/fixtures $CONTAINER_NAME:/app/build/e2e
+    - docker container start $CONTAINER_NAME
+
+run e2e tests:
+  stage: e2e
+  dependencies:
+    - install_deps_ui
+  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  variables:
+    LAUNCH_URL: http://e2e-$CI_COMMIT_REF_SLUG.ui.cloud.open-xchange.com/appsuite/
+  script:
+    - cd ui
+    - grunt nightwatch
+
+stop e2e testserver:
+  stage: cleanup
+  dependencies: []
+  variables:
+    GIT_STRATEGY: none
+    DOCKER_HOST: docker.ui.cloud.open-xchange.com
+    DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_COMMIT_REF_SLUG
+  script:
+    - docker container stop $CONTAINER_NAME || true
+    - docker container wait $CONTAINER_NAME || true
+    - docker container rm $CONTAINER_NAME || true
+  when: always
 
 .build_ui_plugin_template: &build_ui_plugin
   <<: *use_npm_proxy
