@@ -21,6 +21,8 @@ define('io.ox/backbone/mini-views/alarms', [
 
     'use strict';
 
+    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'];
+
     var alarms = DisposableView.extend({
         className: 'alarms-view',
         events: {
@@ -62,23 +64,60 @@ define('io.ox/backbone/mini-views/alarms', [
             this.list.empty().append(this.model ? _(this.model.get(this.attribute)).map(self.createNodeFromAlarm.bind(self)) : []);
         },
         createNodeFromAlarm: function (alarm) {
-            var self = this;
-            return $('<li class="alarm-list-item">').append(
-                $('<div class="row">').append(
-                    $('<div class="col-md-6">').append(
-                        $('<select class="form-control alarm-action">').append(
-                            $('<option>').text(gt('Message')).val('DISPLAY'),
-                            $('<option>').text(gt('Audio')).val('AUDIO'),
-                            $('<option>').text(gt('Mail')).val('EMAIL')
-                        ).val(alarm.action)
-                    ),
-                    $('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').append(
-                        $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
-                            return '<option value="' + val + '">' + key + '</option>';
-                        })).val(alarm.trigger.duration)
-                    ),
-                    $('<span role="button" tabindex="0" class="alarm-remove pull-right">').append($('<i class="alarm-remove fa fa-trash">'))
+            var self = this,
+                row, container;
+
+            container = $('<li class="alarm-list-item">').append(row = $('<div class="row">'));
+            if (_(standardTypes).indexOf(alarm.action) === -1) {
+                row.append($('<div class="col-md-6">').text(alarm.action));
+            } else {
+                row.append($('<div class="col-md-6">').append(
+                    $('<select class="form-control alarm-action">').append(
+                        $('<option>').text(gt('Message')).val('DISPLAY'),
+                        $('<option>').text(gt('Audio')).val('AUDIO'),
+                        $('<option>').text(gt('Mail')).val('EMAIL')
+                    ).val(alarm.action)
                 ));
+            }
+
+            if (alarm.trigger.duration) {
+                var selectbox;
+                row.append($('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').append(
+                    selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
+                        return '<option value="' + val + '">' + key + '</option>';
+                    }))
+                ));
+
+                if (_(_(util.getReminderOptions()).keys()).indexOf(alarm.trigger.duration) === -1) {
+                    var index = 0, customLabels;
+                    if (alarm.trigger.duration.indexOf('-') !== 0) {
+                        index = index + 1;
+                    }
+                    if (alarm.trigger.related === 'END') {
+                        index = index + 2;
+                    }
+                    customLabels = [
+                        //#. %1$s is the reminder time (for example: 2 hours)
+                        gt.format('%1$s before the start time', new moment.duration(alarm.trigger.duration).humanize()),
+                        //#. %1$s is the reminder time (for example: 2 hours)
+                        gt.format('%1$s after the start time', new moment.duration(alarm.trigger.duration).humanize()),
+                        //#. %1$s is the reminder time (for example: 2 hours)
+                        gt.format('%1$s before the end time', new moment.duration(alarm.trigger.duration).humanize()),
+                        //#. %1$s is the reminder time (for example: 2 hours)
+                        gt.format('%1$s after the end time', new moment.duration(alarm.trigger.duration).humanize())
+                    ];
+                    selectbox.append($('<option>').val(alarm.trigger.duration).text(customLabels[index]));
+                }
+                selectbox.val(alarm.trigger.duration);
+            } else {
+                row.append($('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').text(new moment(alarm.trigger.dateTime).format('LLL')));
+            }
+
+            row.append(
+                $('<span role="button" tabindex="0" class="alarm-remove pull-right">').append($('<i class="alarm-remove fa fa-trash">'))
+            );
+
+            return container;
         },
         getAlarmsArray: function () {
             var self = this;
