@@ -101,7 +101,7 @@ define('plugins/portal/userSettings/register', [
                 this.getContentNode().append(
                     $('<label class="password-change-label">').attr('for', guid).text(currentPasswordString),
                     oldPass = $('<input type="password" class="form-control current-password">').attr('id', guid),
-                    $('<label class="password-change-label">').attr('for'. guid = _.uniqueId('form-control-label-')).text(gt('New password')),
+                    $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('New password')),
                     newPass = $('<input type="password" class="form-control new-password">').attr('id', guid),
                     $('<label class="password-change-label">').attr('for', guid = _.uniqueId('form-control-label-')).text(gt('Repeat new password')),
                     newPass2 = $('<input type="password" class="form-control repeat-new-password">').attr('id', guid),
