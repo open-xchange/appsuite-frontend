@@ -47,6 +47,7 @@ define('io.ox/mail/compose/actions/extensions', [
     };
 
     api.applySimpleLinebreaks = function (baton) {
+        if (baton.mail.attachments[0].content_type === 'text/plain') return;
         if (!mailSettings.get('compose/simpleLineBreaks', false)) return;
         baton.mail.attachments[0].content = $('<div>').append($.parseHTML(baton.mail.attachments[0].content)).children('p').css('margin', 0).end().html();
     };
