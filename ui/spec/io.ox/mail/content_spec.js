@@ -166,8 +166,10 @@ define(['io.ox/mail/detail/content'], function (content) {
         describe('Link Processor', function () {
 
             var cases = {
-                local: '<a href  =  "#some-anchor">',
+                local: '<a href="#some-anchor">',
                 common: '<a href="www.ox.io" target="_blank">',
+                ftp: '<a href="ftp://ox.io" target="_blank">',
+                mailto: '<a href="mailto:otto.xantner@open-xchange.com" target="_blank">',
                 styled: '<a href="http://ox.io" style = "color: #333; text-decoration: underline">',
                 different: "<a style='text-decoration:   underline;background-color:#333;color:#333' href='http://ox.io'>"
             };
@@ -178,6 +180,14 @@ define(['io.ox/mail/detail/content'], function (content) {
                 expect(baton.source)
                     .to.match(/href="http:\/\/www\.ox\.io"/g)
                     .to.match(/target="_blank"/g);
+            });
+
+            it('should respect other protocols', function () {
+                _([cases.local, cases.ftp, cases.mailto]).each(function (source) {
+                    var baton = { source: source };
+                    content.extensions.linkTarget(baton);
+                    expect(baton.source).to.not.match(/http/);
+                });
             });
 
             it('sets proper disabled state', function () {
