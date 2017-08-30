@@ -322,7 +322,7 @@ define('io.ox/mail/mailfilter/settings/filter', [
                                 // in MW
                                 if (_.isEmpty(_.where(config.actioncmds, { id: action.id })) || checkForColorFlags(action)) unknown = true;
                                 // in UI
-                                if (action.id !== 'vacation' && _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action)) unknown = true;
+                                if (!_.contains(['vacation', 'stop'], action.id) && _.isEmpty(_.where(defaults.actions, { id: action.id })) || checkForColorFlags(action)) unknown = true;
 
                             });
 
