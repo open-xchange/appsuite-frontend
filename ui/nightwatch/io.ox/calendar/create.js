@@ -27,7 +27,7 @@ describe('Calendar', function () {
                 .selectFolder({ id: 'virtual/all-my-appointments' })
                 .setSetting('io.ox/core', 'autoOpenNotification', false)
                 .setSetting('io.ox/core', 'showDesktopNotifications', false)
-                .clickWhenEventListener('.io-ox-calendar-window .classic-toolbar a[data-action="create"]', 'click', 2500)
+                .clickWhenEventListener('.io-ox-calendar-window .classic-toolbar a[data-action="create"]', 'click', 5000)
                 .waitForElementVisible('.io-ox-calendar-edit-window', 2500);
 
             client
@@ -40,14 +40,16 @@ describe('Calendar', function () {
 
             // save
             client
-                .click('.io-ox-calendar-edit-window button[data-action="save"]')
                 .timeoutsAsyncScript(10000)
                 .executeAsync(function (done) {
                     require('io.ox/calendar/api').one('create', function (e, data) {
                         done(_.cid(data));
                     });
+                    // click here to make sure, that the create-listener is bound before the model is saved
+                    $('.io-ox-calendar-edit-window button[data-action="save"]').trigger('click');
                 }, [], function (ret) {
                     newAppointmentCID = ret.value;
+                    console.log(ret);
                 })
                 .waitForElementNotPresent('.io-ox-calendar-edit-window', 5000);
 
@@ -56,13 +58,8 @@ describe('Calendar', function () {
             client
                 .pause(1000)
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
-                .execute(function () {
-                    return require('settings!io.ox/core').get('autoOpenNotification');
-                }, [], function (result) {
-                    console.log(result.value);
-                })
                 .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:day"]', 2500)
-                .waitForElementVisible('.io-ox-calendar-window .week.dayview', 2500)
+                .waitForElementVisible('.io-ox-calendar-window .week.dayview .appointment', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.dayview .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.dayview .appointment[data-cid="%s"] .location', newAppointmentCID), 'test location');
@@ -73,7 +70,7 @@ describe('Calendar', function () {
             client
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
                 .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="week:week"]', 2500)
-                .waitForElementVisible('.io-ox-calendar-window .week.weekview', 2500)
+                .waitForElementVisible('.io-ox-calendar-window .week.weekview .appointment', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.weekview .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
                     api.assert.containsText(util.format('.io-ox-calendar-window .week.weekview .appointment[data-cid="%s"] .location', newAppointmentCID), 'test location');
@@ -84,7 +81,7 @@ describe('Calendar', function () {
             client
                 .clickWhenVisible('.io-ox-calendar-window .classic-toolbar li[data-dropdown="view"] a', 2500)
                 .clickWhenVisible('.dropdown.open a[data-name="layout"][data-value="month"]', 2500)
-                .waitForElementVisible('.io-ox-calendar-window .month-view', 2500)
+                .waitForElementVisible('.io-ox-calendar-window .month-view .appointment', 2500)
                 .perform(function (api, done) {
                     api.assert.containsText(util.format('.io-ox-calendar-window .month-view .appointment[data-cid="%s"] .title', newAppointmentCID), 'test title');
                     api.assert.containsText(util.format('.io-ox-calendar-window .month-view .appointment[data-cid="%s"] .location', newAppointmentCID), 'test location');

@@ -20,7 +20,7 @@ var util = require('util');
  */
 exports.command = function (opt) {
 
-    var id = opt.id;
+    var id = opt.id, windowid;
 
     // find the id, if only the title is specified
     if (opt.title) {
@@ -50,7 +50,21 @@ exports.command = function (opt) {
     }
 
     this
-        .waitForElementVisible('.folder-tree', 2500)
+        .execute(function () {
+            var w = ox.ui.App.getCurrentWindow();
+            if (!w) return;
+            return w.id;
+        }, [], function (result) {
+            if (!result.value) this.assert.fail('not found', 'current window', 'Could not find a current app window');
+            windowid = result.value;
+        })
+        .execute(function () {
+            ox.ui.App.getCurrentApp().folderView.show();
+        })
+        .perform(function (api, done) {
+            api.waitForElementVisible(util.format('#%s .folder-tree', windowid), 2500);
+            done();
+        })
         .perform(function (api, done) {
             api.executeAsync(function (id, done) {
                 var app = ox.ui.App.getCurrentApp();
@@ -67,9 +81,7 @@ exports.command = function (opt) {
                 ox.ui.App.getCurrentApp().folder.set(id).always(done);
             }, [id]);
             done();
-        })
-        // add some time to start folder change in the application
-        .pause(500);
+        });
 
     return this;
 

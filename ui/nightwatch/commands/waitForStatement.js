@@ -49,7 +49,7 @@ exports.command = function (func, args, timeout, pollInterval, errorCallback) {
         }, [func.toString(), JSON.stringify(args), timeout, pollInterval], function (result) {
             if (!result || result.value !== true) {
                 if (errorCallback) errorCallback.call(this, result);
-                else this.assert.fail('not satisfied', 'statement', 'Timedout while waiting for a statement in a function to be true.');
+                else this.assert.fail('not satisfied', 'statement', 'Timedout while waiting for a statement in a function to be true.' + result.value);
             }
         });
 
