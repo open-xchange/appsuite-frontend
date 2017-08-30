@@ -23,7 +23,12 @@
         "acceptSslCerts": true
       },
       "globals": {
-        "environment": "default"
+        "environment": "default",
+        "users": [{
+          "username": "tthamm",
+          "password": "secret",
+          "mail": "tthamm@qa.open-xchange.com"
+        }]
       }
     },
 
