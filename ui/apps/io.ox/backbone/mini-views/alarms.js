@@ -67,9 +67,9 @@ define('io.ox/backbone/mini-views/alarms', [
             var self = this,
                 row, container;
 
-            container = $('<li class="alarm-list-item">').append(row = $('<div class="row">'));
+            container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-md-6">').text(alarm.action));
+                row.append($('<div class="col-md-6 alarm-action">').text(alarm.action).val(alarm.action));
             } else {
                 row.append($('<div class="col-md-6">').append(
                     $('<select class="form-control alarm-action">').append(
@@ -106,11 +106,11 @@ define('io.ox/backbone/mini-views/alarms', [
                         //#. %1$s is the reminder time (for example: 2 hours)
                         gt.format('%1$s after the end time', new moment.duration(alarm.trigger.duration).humanize())
                     ];
-                    selectbox.append($('<option>').val(alarm.trigger.duration).text(customLabels[index]));
+                    selectbox.append($('<option>').val(alarm.trigger.duration).text(customLabels[index]).data('related', alarm.trigger.related));
                 }
                 selectbox.val(alarm.trigger.duration);
             } else {
-                row.append($('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').text(new moment(alarm.trigger.dateTime).format('LLL')));
+                row.append($('<div class="alarm-time">').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(
@@ -122,7 +122,17 @@ define('io.ox/backbone/mini-views/alarms', [
         getAlarmsArray: function () {
             var self = this;
             return _(this.list.children()).map(function (item) {
-                var alarm = { action: $(item).find('.alarm-action').val(), trigger: { duration: $(item).find('.alarm-time').val() } };
+                var alarm = { action: $(item).find('.alarm-action').val() },
+                    time = $(item).find('.alarm-time').val();
+                if (time.indexOf('-P') === 0 || time.indexOf('P') === 0) {
+                    alarm.trigger = { duration: time, related: $(item).find('.alarm-time option[value=' + time + ']').data('related') || 'START' };
+                } else {
+                    alarm.trigger = { dateTime: time };
+                }
+                if ($(item).data('id')) {
+                    alarm = _.extend(_(self.model.get('alarms')).findWhere({ 'uid': $(item).data('id') }), alarm);
+                }
+
                 switch (alarm.action) {
                     case 'EMAIL':
                         alarm.summary = self.model ? self.model.get('summary') || '' : '';

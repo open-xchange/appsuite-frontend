@@ -92,6 +92,9 @@ define('io.ox/calendar/edit/extensions', [
                         baton.app.moveAfterSave = folder;
                     }
 
+                    // make sure alarms are correctly created
+                    baton.parentView.alarmsView.updateModel();
+
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
                         baton.model._attendees.add(
@@ -527,10 +530,11 @@ define('io.ox/calendar/edit/extensions', [
         index: 1100,
         className: 'col-md-12',
         render: function () {
+            this.baton.parentView.alarmsView = this.baton.parentView.alarmsView || new AlarmsView({ model: this.model });
             this.$el.append(
                 $('<fieldset>').append(
                     $('<legend>').text(gt('Reminder')),
-                    new AlarmsView({ model: this.model }).render().$el
+                    this.baton.parentView.alarmsView.render().$el
                 )
             );
         }
