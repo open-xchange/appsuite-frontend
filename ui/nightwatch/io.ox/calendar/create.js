@@ -49,7 +49,6 @@ describe('Calendar', function () {
                     $('.io-ox-calendar-edit-window button[data-action="save"]').trigger('click');
                 }, [], function (ret) {
                     newAppointmentCID = ret.value;
-                    console.log(ret);
                 })
                 .waitForElementNotPresent('.io-ox-calendar-edit-window', 5000);
 
