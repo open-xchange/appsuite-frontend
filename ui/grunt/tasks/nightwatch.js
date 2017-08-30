@@ -16,9 +16,10 @@ module.exports = function (grunt) {
     if (!grunt.isPeerDependencyInstalled('nightwatch')) return;
 
     var nightwatch = require('nightwatch');
+    var _ = require('underscore');
     nightwatch.initGrunt(grunt);
 
-    var config = grunt.config('local.nightwatch') || {};
+    var config = grunt.config('local.nightwatch') || { test_settings: {} };
 
     if (!grunt.config('local.appserver.fixturesPath')) {
         grunt.config('local.appserver.fixturesPath', 'e2e/fixtures');
@@ -37,6 +38,15 @@ module.exports = function (grunt) {
         }
     });
 
+    if (process.env.LAUNCH_URL) {
+        config.test_settings['default'] = _.extend(
+            {},
+            config.test_settings['default'],
+            {
+                launch_url: process.env.LAUNCH_URL
+            }
+        );
+    }
 
     grunt.config.merge({
         nightwatch: {
