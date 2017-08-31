@@ -260,16 +260,16 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                     alarms: [{
                         action: 'DISPLAY',
                         description: 'Pizza Essen',
-                        trigger: { duration: '-PT15M' }
+                        trigger: { duration: '-PT15M', related: 'START' }
                     }, {
                         action: 'AUDIO',
-                        trigger: { duration: '-PT30M' }
+                        trigger: { duration: '-PT30M', related: 'START' }
                     }, {
                         action: 'EMAIL',
                         attendee: 'mailto:miss.test@test.com',
                         description: 'Lecker Lecker!',
                         summary: 'Pizza Essen',
-                        trigger: { duration: '-PT2H' }
+                        trigger: { duration: '-PT2H', related: 'START' }
                     }]
                 });
                 this.view = new AlarmsView({ model: this.model });
@@ -307,16 +307,16 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 this.view.$el.find('.alarm-time:first').val('-PT1H').trigger('change');
                 this.model.get('alarms').should.deep.equal([{
                     action: 'DISPLAY',
-                    trigger: { duration: '-PT1H' },
+                    trigger: { duration: '-PT1H', related: 'START' },
                     description: 'Pizza Essen'
                 }, {
                     action: 'DISPLAY',
-                    trigger: { duration: '-PT30M' },
+                    trigger: { duration: '-PT30M', related: 'START' },
                     description: 'Pizza Essen'
                 }]);
             });
 
-            it('should draw non standard alarms', function () {
+            it('should be able to handle non standard alarms', function () {
                 this.model.set('alarms', [{
                     action: 'SMS',
                     description: 'Machete improvisiert',
@@ -362,6 +362,44 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 $(items[4]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s after the end time', new moment.duration('PT55M').humanize()));
 
                 $(items[5]).find('.col-md-5').text().should.equal(new moment('20170708T220000Z').format('LLL'));
+            });
+
+            it('should create missing data but preserve the rest', function () {
+                this.model.set('alarms', [{
+                    uid: 1234,
+                    action: 'SMS',
+                    description: 'Machete improvisiert',
+                    trigger: { duration: '-PT15M' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { duration: 'PT55M', related: 'END' }
+                }, {
+                    action: 'DISPLAY',
+                    trigger: { dateTime: '20170708T220000Z' }
+                }, {
+                    uid: 1337,
+                    action: 'DISPLAY',
+                    trigger: { duration: '-PT55M' },
+                    wurst: 'Im Brötchen mit Senf'
+                }]);
+
+                this.view.render().updateModel();
+                var alarms = this.model.get('alarms');
+
+                alarms.length.should.equal(4);
+
+                alarms[0].action.should.equal('SMS');
+                alarms[0].description.should.equal('Machete improvisiert');
+                alarms[0].trigger.related.should.equal('START');
+                alarms[0].uid.should.equal(1234);
+
+                alarms[1].trigger.duration.should.equal('PT55M');
+                alarms[1].trigger.related.should.equal('END');
+                alarms[1].description.should.equal('Pizza Essen');
+
+                alarms[2].trigger.dateTime.should.equal('20170708T220000Z');
+
+                alarms[3].wurst.should.equal('Im Brötchen mit Senf');
             });
         });
 
