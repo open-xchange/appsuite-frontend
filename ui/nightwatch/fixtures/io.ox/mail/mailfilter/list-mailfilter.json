@@ -1,0 +1,4 @@
+{   "namespace": "io.ox/mail/mailfilter",
+    "request": "/appsuite/api/mailfilter/v2\\?action=list",
+    "response":{"data":[{"id":25,"position":3,"rulename":"rule with kepp","active":true,"flags":[],"test":{"id":"from","comparison":"contains","values":["test"]},"actioncmds":[{"id":"keep"}]},{"id":26,"position":4,"rulename":"rule with discard","active":true,"flags":[],"test":{"id":"from","comparison":"contains","values":["test"]},"actioncmds":[{"id":"discard"},{"id":"stop"}]}]}
+}
