@@ -296,9 +296,7 @@ define('io.ox/calendar/chronos-api', [
             remove: function (list) {
                 api.trigger('beforedelete', list);
                 list = _.isArray(list) ? list : [list];
-                // workaround
-                // TODO remove once it is fixed in backend
-                var folder = _(list).pluck('folder');
+
                 return http.PUT({
                     module: 'chronos',
                     params: {
@@ -313,15 +311,6 @@ define('io.ox/calendar/chronos-api', [
                             folderId: obj.folder
                         };
                     })
-                })
-                // workaround because backend strips the folder attribute
-                // TODO remove once this is fixed.
-                .then(function (resp) {
-                    resp.deleted = resp.deleted.map(function (evt, index) {
-                        evt.folder = folder[index];
-                        return evt;
-                    });
-                    return resp;
                 })
                 .then(processResponse);
             },
