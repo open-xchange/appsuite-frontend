@@ -1,13 +1,13 @@
 <html lang="de">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>11.2.1. Welche Berechtigungen können erteilt werden?</title>
+<title>11.2.8. Welche Berechtigungen können verwendet werden?</title>
 <link rel="stylesheet" type="text/css" href="../../help.css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.78.1">
 <link rel="home" href="index.html" title="Benutzeranleitung">
-<link rel="up" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. Berechtigungen">
-<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. Berechtigungen">
-<link rel="next" href="ox.appsuite.user.sect.dataorganisation.permissions.folder.html" title="11.2.2. Berechtigungen an vorhandenen Ordnern">
+<link rel="up" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.2. Freigaben">
+<link rel="prev" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html" title="11.2.7. Auf Freigaben anderer Benutzer zugreifen">
+<link rel="next" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html" title="11.2.9. Anwendungsbeispiele für Berechtigungen">
 <link rel="copyright" href="ox.appsuite.user.legalnotice.html" title="Rechtlicher Hinweis">
 <link rel="stylesheet" type="text/css" href="../../bootstrap.min.css"​/> 
 <link id="favicon" rel="shortcut icon" href="../../../apps/themes/default/favicon.ico" type="image/x-icon"> 
@@ -22,27 +22,27 @@
 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#ox-main-nav"><span class="sr-only">Navigation umschalten</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand"></a>
 </div>
 <div class="collapse navbar-collapse" id="ox-main-nav"><ul class="nav navbar-nav">
-<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.permissions.html">Zurück</a></li>
+<li><a accesskey="p" class="oxhelp-prev-link" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html">Zurück</a></li>
 <li><a accesskey="h" href="index.html" class="oxhelp-home-link">Startseite</a></li>
 <li><a accesskey="t" href="bk01-toc.html" class="oxhelp-toc-link">Inhaltsverzeichnis</a></li>
-<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.permissions.folder.html">Weiter</a></li>
+<li><a accesskey="n" class="oxhelp-next-link" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html">Weiter</a></li>
 </ul></div>
 </div></nav></div>
 <div class="oxhelp-content">
   <h1 class="sr-only">Datenorganisation</h1>
-<h2 class="sr-only">Berechtigungen</h2>
+<h2 class="sr-only">Freigaben</h2>
 <div class="sect2">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.dataorganisation.permissions.defined"></a>11.2.1. Welche Berechtigungen können erteilt werden?</h3></div></div></div>
+<a name="ox.appsuite.user.sect.dataorganisation.sharing.permissions"></a>11.2.8. Welche Berechtigungen können verwendet werden?</h3></div></div></div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles"></a><p>Um sinnvolle Kombinationen von Berechtigungen möglichst
-        einfach erteilen zu können, sind bestimmte Benutzer-Rollen vorgegeben. Bei Bedarf können Sie diese Voreinstellungen ändern, indem Sie 
-        <a class="link" href="ox.appsuite.user.sect.dataorganisation.permissions.defined.html#ox.appsuite.user.concept.dataorganisation.permissions.detail" title="Detaillierte Berechtigungen">detaillierte Berechtigungen</a>
-        vergeben.
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions"></a><p>Um sinnvolle Berechtigungen möglichst
+        einfach erteilen zu können, sind bestimmte Benutzer-Rollen vorgegeben. Eine Benutzer-Rolle enthält eine sinnvolle Kombinationen 
+        von Berechtigungen. Bei Bedarf können detaillierte Berechtigungen vergeben werden. 
+        Sie vergeben diese Berechtigungen, indem Sie Objekte freigeben.
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.administrator"></a><h4 class="title">Administrator</h4>
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.administrator"></a><h4 class="title">Administrator</h4>
 <p>Der Administrator eines Ordners besitzt alle Rechte an diesem Ordner. Er kann anderen Benutzern Berechtigungen an
           dem Ordner erteilen.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
@@ -51,7 +51,7 @@
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.viewer"></a><h4 class="title">Viewer</h4>
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.viewer"></a><h4 class="title">Viewer</h4>
 <p>Ein Viewer darf alle vorhandenen Objekte lesen. Darüber hinaus hat er keine Berechtigungen.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Ordnerberechtigungen: Ordner anzeigen</p></li>
@@ -59,7 +59,7 @@
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.editor"></a><h4 class="title">Überarbeiter</h4>
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.editor"></a><h4 class="title">Überarbeiter</h4>
 <p>Ein Überarbeiter darf vorhandene Objekte lesen und bearbeiten. Er darf aber keine neuen Objekte anlegen. Er darf keine Objekte löschen.</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Ordnerberechtigungen: Ordner anzeigen</p></li>
@@ -67,15 +67,16 @@
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.roles.author"></a><h4 class="title">Autor</h4>
-<p>Ein Autor darf vorhandene Objekte ändern oder löschen. Er darf neue Objekte anlegen und bearbeiten. Er darf Unterordner anlegen.</p>
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.author"></a><h4 class="title">Autor</h4>
+<p>Ein Autor darf vorhandene Objekte ändern oder löschen. Er darf neue Objekte anlegen und bearbeiten. Er darf Unterordner anlegen.
+          </p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>Ordnerberechtigungen: Objekte und Unterordner anlegen</p></li>
 <li class="listitem"><p>Objektberechtigungen: Alle Objekte lesen, alle Objekte bearbeiten, alle Objekte löschen</p></li>
 </ul></div>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.dataorganisation.permissions.detail"></a><h4 class="title">Detaillierte Berechtigungen</h4>
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.detail"></a><h4 class="title">Detaillierte Berechtigungen</h4>
 <p>Bei Bedarf können die vorgegebenen Berechtigungen der
           Benutzer-Rollen weiter verfeinert werden. Dazu können die folgenden Berechtigungen erteilt werden. 
           </p>
@@ -118,8 +119,28 @@
 <p>
         </p>
 </div>
-<p><a name="ox.appsuite.user.concept.dataorganisation.permissions.defined.parent"></a>Übergeordnetes Thema:
-        <a class="xref" href="ox.appsuite.user.sect.dataorganisation.permissions.html" title="11.2. Berechtigungen">Berechtigungen</a>
+<div class="itemizedlist">
+<a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.related"></a><p class="title">Siehe auch</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none">
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.invitation.html" title="11.2.2. Zu einer Freigabe einladen">Zu einer Freigabe einladen</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.consume.html" title="11.2.7. Auf Freigaben anderer Benutzer zugreifen">Auf Freigaben anderer Benutzer zugreifen</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.edit.html" title="11.2.3. Freigaben bearbeiten">Freigaben bearbeiten</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.resend.html" title="11.2.4. Einladung erneut senden">Einladung erneut senden</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.remove.html" title="11.2.5. Freigaben entfernen">Freigaben entfernen</a></p>
+<p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.view.html" title="11.2.6. Eigene Freigaben in der App Drive anzeigen">Eigene Freigaben in der App 
+        <span class="phrase">Drive</span>
+        
+        
+        
+        anzeigen</a></p>
+</li>
+<li class="listitem" style="list-style-type: none"><p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.examples.html" title="11.2.9. Anwendungsbeispiele für Berechtigungen">Anwendungsbeispiele für Berechtigungen</a></p></li>
+<li class="listitem" style="list-style-type: none"><p><a class="xref" href="ox.appsuite.user.sect.dataorganisation.folder.permissions.html" title="11.1.2. Wozu dienen Berechtigungen?">Wozu dienen Berechtigungen?</a></p></li>
+</ul>
+</div>
+<p><a name="ox.appsuite.user.concept.dataorganisation.sharing.permissions.parent"></a>Übergeordnetes Thema:
+        <a class="xref" href="ox.appsuite.user.sect.dataorganisation.sharing.html" title="11.2. Freigaben">Freigaben</a>
       </p>
 </div>
           </div>
