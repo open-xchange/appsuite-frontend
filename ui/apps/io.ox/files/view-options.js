@@ -181,7 +181,8 @@ define('io.ox/files/view-options', [
                             folder = app.folder;
 
                         folder.getData().done(function (data) {
-                            if (data.folder_id === '9') {
+                            // 51093: 9 is root for Drive / 1 is root for external storages
+                            if (data.folder_id === '9' || data.folder_id === '1') {
                                 app.pages.goBack();
                             } else {
                                 folder.set(data.folder_id);
