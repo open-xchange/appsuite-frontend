@@ -149,6 +149,7 @@ define('io.ox/find/view-facets', [
                     id = value.getOption().value;
 
                 picker({
+                    async: true,
                     folder: id || api.getDefaultFolder(module),
                     module: module,
                     root: type === 'files' ? '9' : '1',

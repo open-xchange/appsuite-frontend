@@ -10,11 +10,12 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-describe.only('Mailfilter', function () {
+describe('Mailfilter', function () {
 
     it('adds and removes Mail Filter Rules', function (client) {
         client
             .login('app=io.ox/settings')
+            .waitForElementVisible('.io-ox-settings-main', 20000)
             .selectFolder({ id: 'virtual/settings/io.ox/mail' })
             .waitForElementVisible('.io-ox-settings-main li[data-id="virtual/settings/io.ox/mailfilter"]', 20000);
 
@@ -99,8 +100,45 @@ describe.only('Mailfilter', function () {
             .setValue('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1_0"] input[name="values"]', 'Test Value')
             .assert.elementNotPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
 
+        // add an action which includes the folder picker
+        client
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="keep"]', 10000)
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="move"]');
+
+        client
+            .assert.elementPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="1"]')
+            .assert.containsText('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="1"] .list-title', 'File into')
+            .assert.containsText('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="1"] .folderselect', 'Select folder')
+            .assert.elementPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="1"] a.remove');
+
+        // open folder picker
+        client
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="1"] .folderselect')
+            .waitForElementVisible('[data-point="io.ox/core/folder/picker"] .modal-dialog h1', 10000)
+            .assert.containsText('[data-point="io.ox/core/folder/picker"] .modal-dialog h1', 'Select folder');
+
+        // create a new folder
+        client
+            .waitForElementPresent('[data-point="io.ox/core/folder/picker"] .modal-body', 10000)
+            .waitForElementPresent('[data-point="io.ox/core/folder/picker"] li.selected', 10000)
+            .click('[data-point="io.ox/core/folder/picker"] .modal-footer button[data-action="create"]')
+            .waitForElementVisible('.modal[data-point="io.ox/core/folder/add-popup"]', 20000);
+
+        // cancel the add popup
+        client
+            .click('.modal[data-point="io.ox/core/folder/add-popup"] [data-action="cancel"]')
+            .assert.elementNotPresent('.modal[data-point="io.ox/core/folder/add-popup"]');
+
+        // cancel the picker
+        client
+            .waitForElementPresent('[data-point="io.ox/core/folder/picker"] .modal-footer button[data-action="cancel"]', 10000)
+            .click('[data-point="io.ox/core/folder/picker"] .modal-footer button[data-action="cancel"]')
+            .assert.elementNotPresent('.modal[data-point="io.ox/core/folder/picker"]');
+
         // cancel the form
         client
+            .waitForElementPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="cancel"]', 10000)
             .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="cancel"]');
 
         client.logout();
@@ -109,6 +147,7 @@ describe.only('Mailfilter', function () {
     it('adds and removes Mail Filter Rules with modified config ', function (client) {
         client
             .login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' })
+            .waitForElementVisible('.io-ox-settings-main', 20000)
             .selectFolder({ id: 'virtual/settings/io.ox/mail' })
             .waitForElementVisible('.io-ox-settings-main li[data-id="virtual/settings/io.ox/mailfilter"]', 20000);
 

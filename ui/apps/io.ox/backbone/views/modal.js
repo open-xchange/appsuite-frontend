@@ -210,6 +210,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             );
         },
 
+        addCheckbox: function (label, action, status) {
+            this.$footer.prepend(
+                $('<div class="checkbox">').append(
+                    $('<div class="controls">'),
+                    $('<label>').text(label).prepend(
+                        $('<input type="checkbox">').attr('name', action).prop('checked', status)
+                    )
+                )
+            );
+            return this;
+        },
+
         onAction: function (e) {
             this.invokeAction($(e.currentTarget).attr('data-action'));
         },
@@ -259,6 +271,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.$el.next().addBack().show();
             this.toggleAriaHidden(true);
+            this.idle();
         }
     });
 

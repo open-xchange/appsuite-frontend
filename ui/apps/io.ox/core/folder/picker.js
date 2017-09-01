@@ -16,8 +16,9 @@ define('io.ox/core/folder/picker', [
     'io.ox/mail/api',
     'io.ox/core/folder/api',
     'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'gettext!io.ox/core'
-], function (TreeView, mailAPI, api, dialogs, gt) {
+], function (TreeView, mailAPI, api, dialogs, ModalDialog, gt) {
 
     'use strict';
 
@@ -97,22 +98,17 @@ define('io.ox/core/folder/picker', [
         }, options);
 
         function create() {
-            var container = dialog.getBody().closest('.io-ox-dialog-wrapper'),
-                parentview = tree.getNodeView(tree.selection.get() || tree.root);
-            container.busy();
+            var parentview = tree.getNodeView(tree.selection.get() || tree.root);
             require(['io.ox/core/folder/actions/add'], function (add) {
-                container.hide().idle();
                 // request and open create-folder-dialog
                 add(mapIds(parentview.folder), { module: o.module }).then(
                     function (data) {
                         // add additonal 5ms to tree nodes debounced onSort handler
                         _.delay(function () {
-                            container.show();
                             tree.selection.set(data.id);
                             tree.selection.scrollIntoView(data.id);
                         }, 15);
-                    },
-                    container.show.bind(container)
+                    }
                 );
             });
         }
@@ -125,24 +121,26 @@ define('io.ox/core/folder/picker', [
             }
             return id;
         }
-
-        var dialog = new dialogs.ModalDialog({ async: o.async, addClass: o.addClass, width: o.width })
-            .header(
-                $('<h4>').append(
-                    _.isString(o.title) ? $.txt(o.title) : o.title
-                )
-            )
-            .addPrimaryButton('ok', o.button, 'ok')
-            .addButton('cancel', gt('Cancel'), 'cancel');
+        var dialog = new ModalDialog({
+            async: o.async,
+            width: o.width,
+            title: o.title,
+            point: 'io.ox/core/folder/picker'
+        })
+            .build(function () {
+                this.$el.addClass('folder-picker-dialog ' + o.addClass);
+            })
+            .addCancelButton()
+            .addButton({ action: 'ok', label: o.button ? o.button : gt('Ok') });
 
         if (o.createFolderButton) {
-            dialog.addAlternativeButton('create', gt('Create folder'), 'create', { click: create });
+            dialog.addAlternativeButton({ action: 'create', label: gt('Create folder') });
         }
 
         if (o.alternativeButton) {
             dialog.addAlternativeButton('alternative', o.alternativeButton);
         }
-        dialog.getBody().css({ height: o.height });
+        dialog.$body.css({ height: o.height });
 
         var id = o.folder;
 
@@ -191,33 +189,24 @@ define('io.ox/core/folder/picker', [
             tree.on('change virtual', function (id) {
                 id = mapIds(id);
                 var model = api.pool.getModel(id), data = model.toJSON();
-                dialog.getFooter().find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
+                dialog.$footer.find('.btn-primary[data-action="ok"]').prop('disabled', !!o.disable(data));
 
                 // check create folder button too
                 // special case: default0 with altnamespace
                 var canCreate = data.id === 'default0' && api.altnamespace;
                 canCreate = (this.flat || (canCreate || model.can('create:folder')) && !model.is('trash'));
-                dialog.getFooter().find('.btn-default[data-action="create"]').prop('disabled', !canCreate);
+                dialog.$footer.find('.btn-default[data-action="create"]').prop('disabled', !canCreate);
             });
 
-            dialog.getFooter().find('.btn-primary[data-action="ok"],.btn-default[data-action="create"]').prop('disabled', true);
+            dialog.$footer.find('.btn-primary[data-action="ok"],.btn-default[data-action="create"]').prop('disabled', true);
         }
 
         o.initialize(dialog, tree);
 
         return dialog
-            .on('ok', function () {
-                var id = tree.selection.get();
-                if (id) o.done(id, dialog, tree);
-                o.always(dialog, tree);
-            })
-            .on('alternative', function () {
-                o.alternative(dialog, tree);
-            })
-            .on('cancel', o.cancel)
-            .show(function () {
-                dialog.getBody().busy();
-                (id ? api.path(id) : $.Deferred().reject())
+            .inject({
+                renderTree: function () {
+                    (id ? api.path(id) : $.Deferred().reject())
                     .then(
                         function success(path) {
                             tree.open = _.union(tree.open, _(path).pluck('id'));
@@ -230,15 +219,28 @@ define('io.ox/core/folder/picker', [
                     )
                     // path might fail so we use always to con
                     .always(function () {
-                        dialog.getBody().idle().prepend(tree.render().$el);
+                        dialog.idle();
+                        dialog.$body.prepend(tree.render().$el);
                         // focus and trigger click on first element for proper keyboard a11y
                         tree.$('.tree-container .selectable:visible:first').focus().trigger('click');
                         o.show(dialog, tree);
                     });
+                    return this;
+                }
             })
-            .done(function () {
+            .on('ok', function () {
+                var id = tree.selection.get();
+                if (id) o.done(id, dialog, tree);
                 o.close(dialog, tree);
-                tree = dialog = o = null;
-            });
+                o.always(dialog, tree);
+                this.close();
+            })
+            .on('alternative', function () {
+                o.alternative(dialog, tree);
+            })
+            .on('cancel', o.cancel)
+            .on('create', create)
+            .renderTree()
+            .open();
     };
 });

@@ -311,6 +311,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                         baton.view.dialog.pause();
 
                         picker({
+                            async: true,
                             context: 'filter',
                             done: function (id) {
                                 model.set('into', id);
@@ -377,6 +378,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/actions/register', [
                         baton.view.dialog.pause();
 
                         picker({
+                            async: true,
                             context: 'filter',
                             done: function (id) {
                                 model.set('into', id);

@@ -66,7 +66,7 @@ define('io.ox/mail/actions/attachmentSave', [
             var id = settings.get('folderpopup/last') || coreSettings.get('folder/infostore');
 
             picker({
-
+                async: true,
                 button: gt('Save'),
                 folder: id,
                 module: 'infostore',
