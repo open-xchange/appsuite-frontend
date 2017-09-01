@@ -179,10 +179,6 @@ define('io.ox/core/folder/tree', [
 
             _.defer(function () {
 
-                // skip virtual folders
-                var id = this.selection.get('data-contextmenu-id');
-                if (api.isVirtual(id)) return;
-
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
                 this.dropdown.$toggle = target;
                 this.$dropdownToggle.dropdown('toggle');
@@ -296,7 +292,7 @@ define('io.ox/core/folder/tree', [
 
             function show(e) {
                 // load relevant code on demand
-                var contextmenu = $(e.target).attr('data-contextmenu');
+                var contextmenu = $(e.target).attr('data-contextmenu') || this.dropdown.$toggle.attr('data-contextmenu');
                 require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this, contextmenu)));
                 // a11y: The role menu should only be set if there are menuitems in it
                 this.$dropdownMenu.attr('role', 'menu');
