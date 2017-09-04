@@ -209,6 +209,9 @@ run e2e tests:
   script:
     - cd ui
     - grunt nightwatch
+  artifacts:
+    paths:
+      - ui/build/e2e/screenshots
 
 stop e2e testserver:
   stage: cleanup
