@@ -241,6 +241,9 @@ define('io.ox/calendar/view-detail', [
     return {
 
         draw: function (baton, options) {
+            if (baton && baton.data) {
+                baton = baton.data;
+            }
             // make sure we have a baton
             baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
 

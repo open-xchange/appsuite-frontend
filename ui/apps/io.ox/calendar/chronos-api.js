@@ -124,6 +124,10 @@ define('io.ox/calendar/chronos-api', [
                     var model = api.pool.get(obj.folder).get(util.cid(obj));
                     if (model) return $.when(model);
                 }
+                // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                if (obj.eventId) {
+                    obj.id = obj.eventId;
+                }
                 return http.GET({
                     module: 'chronos',
                     params: {
@@ -158,9 +162,11 @@ define('io.ox/calendar/chronos-api', [
                     def = $.when();
                 }
                 return def.then(function (data) {
-                    data.filter(filter).forEach(function (obj) {
-                        api.pool.get(obj.folder).add(obj.folder, obj);
-                    });
+                    if (data) {
+                        data.filter(filter).forEach(function (obj) {
+                            api.pool.get(obj.folder).add(obj.folder, obj);
+                        });
+                    }
                     return list.map(function (obj) {
                         if (!filter(obj)) return new models.Model(obj);
                         var cid = util.cid(obj);
@@ -196,12 +202,13 @@ define('io.ox/calendar/chronos-api', [
                 })
                 .then(processResponse)
                 .then(function (data) {
+                    api.getAlarms();
                     // return conflicts or new model
                     if (data.conflicts) {
                         return data;
                     }
 
-                    return api.pool.get(obj.folder).findWhere(data.created[0]);
+                    return api.pool.get(obj.folder).findWhere(data.createated[0]);
                 });
             },
 
@@ -234,6 +241,7 @@ define('io.ox/calendar/chronos-api', [
                 })
                 .then(processResponse)
                 .then(function (data) {
+                    api.getAlarms();
                     // return conflicts or new model
                     if (data.conflicts) {
                         return data;
@@ -312,7 +320,11 @@ define('io.ox/calendar/chronos-api', [
                         };
                     })
                 })
-                .then(processResponse);
+                .then(processResponse)
+                .then(function (data) {
+                    api.getAlarms();
+                    return data;
+                });
             },
 
             confirm: function (obj, options) {
@@ -465,10 +477,86 @@ define('io.ox/calendar/chronos-api', [
                 });
             },
 
+            getAlarms: function () {
+                return http.GET({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'until',
+                        // 3 days should be enough for the oldest reminder
+                        rangeStart: moment.utc().subtract(3, 'days').format('YYYYMMDD[T]HHmmss[Z]'),
+                        rangeEnd: moment.utc().add(10, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
+                        actions: 'DISPLAY,AUDIO'
+                    }
+                })
+                .then(function (data) {
+                    // add alarmId as id (makes it easier to use in backbone collections)
+                    data = _(data).map(function (obj) {
+                        obj.id = obj.alarmId;
+                        return obj;
+                    });
+                    var ids = _.uniq(_(data).map(function (obj) {
+                        return { folder: obj.folder, folderId: obj.folder, id: obj.eventId };
+                    }), function (item) { return util.cid(item); });
+
+                    // ugly workaround for now
+                    // todo remove once backend sends us acknowledge times in the until response
+                    api.getList(ids).then(function (evts) {
+                        data = _(data).filter(function (obj) {
+                            var event = _(evts).findWhere({ cid: util.cid({ folder: obj.folder, id: obj.eventId }) });
+                            if (!event) return false;
+                            var alarm = _(event.get('alarms')).findWhere({ id: obj.alarmId });
+                            if (!alarm) return false;
+                            if (!alarm.acknowledged) return true;
+                            obj.acknowledged = alarm.acknowledged;
+                            return moment(obj.time).valueOf() > alarm.acknowledged;
+                        });
+                        api.trigger('resetChronosAlarms', data);
+                    });
+                });
+            },
+
+            acknowledgeAlarm: function (obj) {
+                if (!obj) return $.Deferred().reject();
+                if (_(obj).isArray()) {
+                    http.pause();
+                    _(obj).each(function (alarm) {
+                        api.acknowledgeAlarm(alarm);
+                    });
+                    return http.resume();
+                }
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'ack',
+                        folder: obj.folder,
+                        id: obj.eventId,
+                        alarmId: obj.alarmId
+                    }
+                })
+                .then(processResponse);
+            },
+
+            remindMeAgain: function (obj) {
+                if (!obj) return $.Deferred().reject();
+
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'snooze',
+                        folder: obj.folder,
+                        id: obj.eventId,
+                        alarmId: obj.alarmId,
+                        snoozeTime: obj.time || 300000
+                    }
+                })
+                .then(processResponse);
+            },
+
             refresh: function () {
                 // check capabilities
                 if (capabilities.has('calendar')) {
                     api.getInvites();
+                    api.getAlarms();
                     api.trigger('refresh.all');
                 }
             },

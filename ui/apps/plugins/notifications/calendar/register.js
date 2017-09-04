@@ -14,13 +14,12 @@
 
 define('plugins/notifications/calendar/register', [
     'io.ox/calendar/chronos-api',
-    'io.ox/core/api/reminder',
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
     'settings!io.ox/core'
-], function (calAPI, reminderAPI, ext, Subview, gt, util, settings) {
+], function (calAPI, ext, Subview, gt, util, settings) {
 
     'use strict';
 
@@ -144,7 +143,7 @@ define('plugins/notifications/calendar/register', [
                 reminderUtil.draw(node, baton.model, options);
                 node.on('click', '[data-action="ok"]', function (e) {
                     e.stopPropagation();
-                    reminderAPI.deleteReminder(baton.requestedModel.attributes);
+                    calAPI.acknowledgeAlarm(baton.requestedModel.attributes);
                     baton.view.collection.remove(baton.requestedModel.attributes);
                 });
                 node.find('[data-action="reminder"]').on('click change', function (e) {
@@ -156,10 +155,24 @@ define('plugins/notifications/calendar/register', [
                     var min = $(e.target).data('value') || $(e.target).val();
                     //0 means 'pick a time here' was selected. Do nothing.
                     if (min !== '0') {
-                        baton.view.hide(baton.requestedModel, min * 60000);
+                        calAPI.remindMeAgain(_(baton.requestedModel.attributes).extend({ time: min * 60000 })).done(function () {
+                            calAPI.getAlarms();
+                        });
+                        baton.view.collection.remove(baton.requestedModel.attributes);
                     }
                 });
             });
+        }
+    });
+
+    ext.point('io.ox/core/notifications/calendar-reminder/footer').extend({
+        draw: function (baton) {
+            if (baton.view.collection.length > 1) {
+                this.append($('<button class="btn btn-link">').text(gt('Acknowledge all reminders')).on('click', function () {
+                    calAPI.acknowledgeAlarm(baton.view.collection.toJSON());
+                    baton.view.collection.reset();
+                }));
+            }
         }
     });
 
@@ -169,14 +182,12 @@ define('plugins/notifications/calendar/register', [
         register: function () {
             var options = {
                     id: 'io.ox/calendarreminder',
-                    api: reminderAPI,
-                    apiEvents: {
-                        reset: 'set:calendar:reminder'
-                    },
+                    api: calAPI,
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
-                        item: 'io.ox/core/notifications/calendar-reminder/item'
+                        item: 'io.ox/core/notifications/calendar-reminder/item',
+                        footer: 'io.ox/core/notifications/calendar-reminder/footer'
                     },
                     detailview: 'io.ox/calendar/view-detail',
                     autoOpen: autoOpen,
@@ -188,7 +199,7 @@ define('plugins/notifications/calendar/register', [
                         icon: ''
                     },
                     specificDesktopNotification: function (model) {
-                        var title = model.get('title'),
+                        var title = model.get('summary'),
                             date = ', ' + util.getDateInterval(model.attributes),
                             time = ', ' + util.getTimeInterval(model.attributes);
 
@@ -202,15 +213,70 @@ define('plugins/notifications/calendar/register', [
                     //#. Reminders (notifications) about appointments
                     hideAllLabel: gt('Hide all appointment reminders.')
                 },
+                nextAlarmTimer,
+                nextAlarm,
+                alarmsToShow = [],
                 subview = new Subview(options);
 
+            calAPI.on('resetChronosAlarms', function (alarms) {
+                var alarmsToAdd = [],
+                    now = new moment().utc().format('YYYYMMDD[T]HHmmss[Z]'),
+                    timerFunction = function () {
+                        subview.addNotifications(nextAlarm);
+                        nextAlarm = undefined;
+                        now = new moment().utc().format('YYYYMMDD[T]HHmmss[Z]');
+                        var temp = [];
+                        _(alarmsToShow).each(function (alarm) {
+                            if (alarm.time > now) {
+                                subview.addNotifications(alarm);
+                            } else if (!nextAlarm || nextAlarm.time > alarm.time) {
+                                if (nextAlarm) {
+                                    temp.push(nextAlarm);
+                                }
+                                nextAlarm = alarm;
+                            } else {
+                                temp.push(alarm);
+                            }
+                        });
+                        alarmsToShow = temp;
+                        if (nextAlarm) {
+                            nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm).utc().valueOf() - new moment(now).utc().valueOf());
+                        }
+                    };
+
+                nextAlarm = undefined;
+                if (nextAlarmTimer) {
+                    clearTimeout(nextAlarmTimer);
+                    nextAlarmTimer = undefined;
+                }
+                _(alarms).each(function (alarm) {
+                    if (alarm.time > now) {
+                        if (!nextAlarm || nextAlarm.time > alarm.time) {
+                            if (nextAlarm) {
+                                alarmsToShow.push(nextAlarm);
+                            }
+
+                            nextAlarm = alarm;
+                        } else {
+                            alarmsToShow.push(alarm);
+                        }
+                    } else {
+                        alarmsToAdd.push(alarm);
+                    }
+                });
+
+                if (nextAlarm) {
+                    nextAlarmTimer = setTimeout(timerFunction, new moment(nextAlarm.time).valueOf() - new moment(now).valueOf());
+                }
+                subview.resetNotifications(alarmsToAdd);
+            });
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 autoOpen = value;
                 subview.model.set('autoOpen', value);
             });
 
-            reminderAPI.getReminders();
+            calAPI.getAlarms();
         }
     });
 
