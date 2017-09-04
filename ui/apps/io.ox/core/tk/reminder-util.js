@@ -98,13 +98,13 @@ define('io.ox/core/tk/reminder-util', [
             info = $('<a class="notification-info" role="button">').append(
                 $('<span class="span-to-div time">').text(strings.timeStr),
                 $('<span class="span-to-div date">').text(strings.dateStr),
-                $('<span class="span-to-div title">').text(model.get('title')),
+                $('<span class="span-to-div title">').text(model.get('summary')),
                 $('<span class="span-to-div location">').text(model.get('location')),
                 $('<span class="sr-only">').text(gt('Press to open Details'))
             );
             //#. %1$s appointment title
             //#, c-format
-            label = gt('Reminder for appointment %1$s.', model.get('title'));
+            label = gt('Reminder for appointment %1$s.', model.get('summary'));
         }
 
         node.attr({

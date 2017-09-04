@@ -201,7 +201,8 @@ define('io.ox/core/notifications/subview', [
                 if (apiEvents.reset) {
                     api.on(apiEvents.reset, function () {
                         //strip off the event parameter
-                        self.resetNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.resetNotifications.apply(self, items);
                     });
                 }
             }
