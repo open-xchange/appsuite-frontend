@@ -51,7 +51,7 @@ describe('Mail', function () {
                 .clickWhenVisible('.io-ox-mail-compose div[data-extension-id="composetoolbar-menu"] .dropdown:not(.security-options):not(.signatures) > a', 2000)
                 .clickWhenVisible('.dropdown.open a[data-name="editorMode"][data-value="text"]', 2000)
                 .waitForElementVisible('.io-ox-mail-compose textarea.plain-text', 20000)
-                .waitForElementNotVisible('.io-ox-mail-compose .editable-toolbar', 2000);
+                .waitForElementNotVisibleOrNotPresent('.io-ox-mail-compose .editable-toolbar', 2000);
 
             // 3) Set a recipient, add a subject and mail text
             client
