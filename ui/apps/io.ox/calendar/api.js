@@ -532,7 +532,8 @@ define('io.ox/calendar/api', [
                     // this is necessary when changing the confirmation for a single appointment
                     // within a series as it becomes an exception.
                     // the series does not update, however (see bug 40137)
-                    var user = _(data.users).findWhere({ id: ox.user_id });
+                    // careful here when confirming in a shared calendar the user confirms on behalf of the calendar owner (o.data.id !== ox.user_id) see (Bug 55075)
+                    var user = _(data.users).findWhere({ id: o.data.id || ox.user_id });
                     if (user) _.extend(user, _(o.data).pick('confirmation', 'confirmmessage'));
                     // events
                     api.trigger('update', data);

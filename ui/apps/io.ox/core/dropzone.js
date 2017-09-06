@@ -116,8 +116,8 @@ define('io.ox/core/dropzone', [], function () {
             var def = new $.Deferred(),
                 files = _(dataTransfer.files).toArray();
 
-            // special handling for newer chrome
-            if (_.browser.Chrome && _.browser.Chrome > 21) {
+            // special handling for newer chrome, firefox or edge
+            if ((_.browser.Chrome && _.browser.Chrome > 21) || (_.browser.firefox && _.browser.firefox >= 50) || _.browser.edge) {
                 var items = dataTransfer.items;
 
                 def.resolve(_(files).filter(function (file, index) {
@@ -160,9 +160,10 @@ define('io.ox/core/dropzone', [], function () {
                 filter = this.options.filter;
 
             return this.filterDirectories(dataTransfer).then(function (files) {
-                if (numFiles !== files.length) {
-                    require(['io.ox/core/notifications', 'gettext!io.ox/core'], function (notifications, gt) {
-                        notifications.yell('error', gt('Uploading folders is not supported.'));
+
+                if (!files.length || numFiles !== files.length) {
+                    require(['io.ox/core/yell', 'gettext!io.ox/core'], function (yell, gt) {
+                        yell('error', gt('Uploading folders is not supported.'));
                     });
                 }
 

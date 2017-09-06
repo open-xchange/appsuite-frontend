@@ -43,7 +43,7 @@ define('io.ox/core/attachments/backbone', [
     };
 
     var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?)$/i,
-        regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
+        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
 
     var previewFetcher = {
         localFile: function (model) {
@@ -175,6 +175,8 @@ define('io.ox/core/attachments/backbone', [
             var supportsDocumentPreview = capabilities.has('document_preview'),
                 filename = this.get('filename'), url;
 
+            // special handling for psd and tiff; These can only be previewed by MW, not local (on upload)
+            if (this.isLocalFile() && filename.match(/psd|tif/)) return null;
             if (!this.isFileAttachment()) return null;
             if (!regIsImage.test(filename) && !(supportsDocumentPreview && (regIsDocument.test(filename)) || this.isContact())) return null;
             // no support for localFile document preview
