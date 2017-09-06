@@ -378,15 +378,17 @@ define('io.ox/core/api/account', [
     api.getValidAddress = function (data) {
         return api.getAllSenderAddresses().then(function (a) {
             if (_.isEmpty(a)) return;
-            // Find correct display name
-            if (!_.isEmpty(data.from)) data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
-            // Set default sender if data from is empty
-            if (_.isEmpty(data.from)) {
-                api.getPrimaryAddress().then(function (defaultAddress) {
-                    data.from = [defaultAddress];
+            // set correct display name
+            if (!_.isEmpty(data.from)) {
+                data.from = a.filter(function (from) {
+                    return from[1] === data.from[0][1].toLowerCase();
                 });
             }
-            return data;
+            if (!_.isEmpty(data.from)) return data;
+            // use primary account as fallback
+            return api.getPrimaryAddress().then(function (defaultAddress) {
+                return _.extend(data, { from: [defaultAddress] });
+            });
         });
     };
 
