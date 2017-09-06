@@ -223,7 +223,7 @@ define('io.ox/settings/main', [
 
                     // disable autoforward or vacationnotice if the needed actions are not available
                     _.each(actionPoints, function (val, key) {
-                        if (_.findIndex(config.actioncommands, function (obj) { return obj.action === key; }) === -1) disabledSettingsPanes.push(val);
+                        if (_.findIndex(config.actioncmds, function (obj) { return obj.id === key; }) === -1) disabledSettingsPanes.push(val);
                     });
 
                     appsInitialized.done(function () {

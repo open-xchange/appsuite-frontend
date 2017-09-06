@@ -1169,6 +1169,7 @@ define('io.ox/mail/main', [
                         app.listView.selection.selectEvents(app.listView.selection.getItems());
                     }
                 }
+                this.listControl.applySizeConstraints();
             };
 
             app.props.on('change:layout', function () {

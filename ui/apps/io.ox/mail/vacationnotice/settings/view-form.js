@@ -37,7 +37,7 @@ define('io.ox/mail/vacationnotice/settings/view-form', [
 
                 }
             }),
-            hasCurrentDate = _.findIndex(config.tests, function (obj) { return obj.test === 'currentdate'; }) !== -1;
+            hasCurrentDate = _.findIndex(config.tests, function (obj) { return obj.id === 'currentdate'; }) !== -1;
 
         ext.point(ref + '/edit/view').extend({
             index: 50,

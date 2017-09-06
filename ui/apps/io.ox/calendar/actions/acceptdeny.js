@@ -29,7 +29,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
             var def = $.Deferred(),
                 showReminderSelect = !options.taskmode && util.getConfirmationStatus(o) !== 1,
-                message = util.getConfirmationMessage(o),
+                message,
                 appointmentData,
                 //use different api if provided (tasks use this)
                 api = options.api || calApi,
@@ -52,7 +52,9 @@ define('io.ox/calendar/actions/acceptdeny', [
                 if (_.isArray(data) && data.length === 2 && _.isNumber(data[1])) {
                     appointmentData = data[0];
                 }
+
                 folder = folderData;
+                message = util.getConfirmationMessage(o, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
 
                 // check if user is allowed to set the reminder time
                 // tasks don't have a default reminder

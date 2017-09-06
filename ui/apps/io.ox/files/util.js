@@ -133,6 +133,9 @@ define('io.ox/files/util', [
                     },
                     'lockedByMe': function (obj) {
                         return obj.locked_until > _.now() && obj.modified_by === ox.user_id;
+                    },
+                    'createdByMe': function (obj) {
+                        return obj.created_by === ox.user_id;
                     }
                 },
                 inverse, result, fn;

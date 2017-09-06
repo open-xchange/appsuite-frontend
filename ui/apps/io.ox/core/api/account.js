@@ -567,7 +567,7 @@ define('io.ox/core/api/account', [
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam archive confirmed_spam'.split(' ')).each(function (type) {
+                _('drafts sent spam trash archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
                     var short_name = account[type], full_name = account[type + '_fullname'];
                     typeHash[full_name || short_name] = type;

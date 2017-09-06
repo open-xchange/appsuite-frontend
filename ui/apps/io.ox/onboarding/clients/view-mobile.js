@@ -17,32 +17,48 @@ define('io.ox/onboarding/clients/view-mobile', [
     'io.ox/onboarding/clients/config',
     'io.ox/onboarding/clients/api',
     'io.ox/core/a11y',
+    'settings!io.ox/core',
     'gettext!io.ox/core/onboarding'
-], function (ext, ModalDialog, config, api, a11y, gt) {
+], function (ext, ModalDialog, config, api, a11y, settings, gt) {
 
     'use strict';
 
     var POINT = 'io.ox/onboarding/clients/views/mobile';
+
+    function onPremium(e) {
+        e.preventDefault();
+        var item = $(e.target).closest('.scenario'),
+            missing = item.attr('data-missing-capabilities');
+        if (!missing) return;
+        require(['io.ox/core/upsell'], function (upsell) {
+            if (!upsell.enabled(missing.replace(/,/g, ' '))) return;
+            upsell.trigger({
+                type: 'custom',
+                id: item.attr('data-id'),
+                missing: missing
+            });
+        });
+    }
 
     var extensions = {
 
         scenario: function (scenario, index, list) {
             return [
                 // scenario
-                $('<article class="scenario">').attr('data-id', scenario.id).append(
+                $('<article class="scenario">').attr({ 'data-id': scenario.id, 'data-missing-capabilities': scenario.missing_capabilities }).append(
                     $('<h2 class="title">').text(scenario.name || ''),
                     $('<p class="description">').text(scenario.description),
-                    $('<div class="actions">').append(_.map(scenario.actions, extensions.action))
+                    $('<div class="actions">').append(_.map(scenario.actions, _.partial(extensions.action, scenario)))
                 ),
                 // divider
                 index !== list.length - 1 ? $('<hr class="divider">') : $()
             ];
         },
 
-        action: function (action, index) {
+        action: function (scenario, action, index) {
             var node = $('<section class="action">').attr('data-action', action.id).attr({ 'data-index': index }),
                 type = action.id.split('/')[0];
-            ext.point(POINT + '/' + type).invoke('draw', node, action);
+            ext.point(POINT + '/' + type).invoke('draw', node, action, scenario);
             return node;
         },
 
@@ -136,21 +152,45 @@ define('io.ox/onboarding/clients/view-mobile', [
                         'data-detail': action.store.name,
                         'src': action.store.image
                     })
-            ));
+                )
+            );
+        },
+
+        premium: function (action, scenario) {
+            if (scenario.enabled) return;
+            if (!settings.get('features/upsell/client.onboarding/enabled', true)) return;
+            var container = $('<div class="premium-container">'), textnode, iconnode,
+                color = settings.get('features/upsell/client.onboarding/color'),
+                icon = settings.get('features/upsell/client.onboarding/icon') || settings.get('upsell/defaultIcon');
+            container.append(
+                $('<div class="premium">').append(
+                    textnode = $('<span>').text(gt('Premium')),
+                    iconnode = $('<i class="fa">')
+                )
+            );
+            // custom icon/color
+            if (color) textnode.css('color', color);
+            if (icon) iconnode.addClass(icon);
+            // upsell
+            container.on('click', onPremium);
+            this.append(container);
         }
     };
 
     // supported
     ext.point(POINT + '/display').extend(
+        { id: 'premium', draw: extensions.premium },
         { id: 'block', draw: extensions.block },
         { id: 'toggle', draw: extensions.toggle }
     );
     ext.point(POINT + '/download').extend(
+        { id: 'premium', draw: extensions.premium },
         { id: 'title', draw: extensions.titleDownload },
         { id: 'description', draw: extensions.descriptionDownload },
         { id: 'button', draw: extensions.buttonDownload }
     );
     ext.point(POINT + '/link').extend(
+        { id: 'premium', draw: extensions.premium },
         { id: 'description', draw: extensions.descriptionLink },
         { id: 'imageLink', draw: extensions.imageLink },
         { id: 'badge', draw: extensions.badge }

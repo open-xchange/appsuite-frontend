@@ -15,16 +15,31 @@
 /**
  * :MIXINS
  */
-.mixin-unstyled-list {
+.mixin-unstyled-list() {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.mixin-expanded {
+.mixin-expanded() {
     .content { display: block; }
     .fa-chevron-right { display: none; }
     .fa-chevron-down { display: inline-block; }
+}
+
+.mixin-premium() {
+    position: absolute;
+    font-weight: 700;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 4px 16px;
+    background: @brand-primary;
+    border-radius: 12px;
+    color: white;
+    opacity: .8;
+    width: 90%;
+    .fa { padding-right: 4px; }
 }
 
 /**
@@ -74,6 +89,21 @@
     // mobile
     &.mobile.modal.flex {
 
+
+        .premium-container {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background-color: rgba(0,0,0,.5);
+            margin: -8px 8px 8px -8px;
+            border: 1px lightgray dashed;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .premium {
+            .mixin-premium();
+        }
+
         @space: 16px;
 
         .modal-dialog {
@@ -107,6 +137,7 @@
 
                 .action {
                     padding-bottom: 16px;
+                    position: relative;
 
                     .title { font-size: 14px; }
 
@@ -188,7 +219,7 @@
             }
 
             .options {
-                .mixin-unstyled-list;
+                .mixin-unstyled-list();
                 display: flex;
                 white-space: nowrap;
                 // auto expand to full height
@@ -211,20 +242,7 @@
                     }
 
                     .premium {
-                        position: absolute;
-                        font-weight: 700;
-                        left: 50%;
-                        top: 50%;
-                        transform: translate(-50%, -50%);
-                        padding: 4px 16px;
-                        background: #3c73aa;
-                        border-radius: 12px;
-                        color: white;
-                        opacity: .8;
-                        width: 90%;
-                        .fa {
-                            padding-right: 4px;
-                        }
+                        .mixin-premium();
                     }
 
                     .link {
@@ -303,7 +321,7 @@
                 }
             }
 
-            .descriptions { .mixin-unstyled-list; }
+            .descriptions { .mixin-unstyled-list(); }
 
             .teaser, .descriptions>.description {
                 width: 100%;
@@ -407,13 +425,13 @@
                     }
 
                     &.expanded {
-                        .mixin-expanded;
+                        .mixin-expanded();
                     }
                 }
 
                 // when only one action is visible
                 .single-action .action {
-                    .mixin-expanded;
+                    .mixin-expanded();
                     .section-title {
                         cursor: default;
                         .fa-chevron-right, .fa-chevron-down {

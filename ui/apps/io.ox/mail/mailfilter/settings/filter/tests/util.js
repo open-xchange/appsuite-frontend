@@ -22,6 +22,12 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     'use strict';
 
+    var DropdownLinkView = mini.DropdownLinkView.extend({
+        updateLabel: function () {
+            this.$el.find('.dropdown-label').text(this.options.values[this.model.get(this.name)] || this.model.get(this.name));
+        }
+    });
+
     var Input = mini.InputView.extend({
         events: { 'change': 'onChange', 'keyup': 'onKeyup' },
         onChange: function () {
@@ -64,18 +70,18 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                             $('<div>').addClass('row').append(
                                 $('<label class="col-sm-4">').text(gt('Header')),
                                 $('<div>').addClass('col-sm-8').append(
-                                    new mini.DropdownLinkView(o.seconddropdownOptions).render().$el
+                                    new DropdownLinkView(o.seconddropdownOptions).render().$el
                                 )
                             ),
                             $('<div>').addClass('row').append(
                                 $('<label class="col-sm-4">').text(gt('Part')),
                                 $('<div>').addClass('col-sm-8').append(
-                                    new mini.DropdownLinkView(o.thirddropdownOptions).render().$el
+                                    new DropdownLinkView(o.thirddropdownOptions).render().$el
                                 )
                             )
                         ),
                         $('<div>').addClass('col-sm-3 dropdownadjust').append(
-                            new mini.DropdownLinkView(o.dropdownOptions).render().$el
+                            new DropdownLinkView(o.dropdownOptions).render().$el
                         ),
                         $('<div>').addClass('col-sm-5 doubleline').append(
                             $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
@@ -103,7 +109,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                     ),
                     $('<div>').addClass('row').append(
                         $('<div>').addClass('col-sm-4').append(
-                            new mini.DropdownLinkView(o.dropdownOptions).render().$el
+                            new DropdownLinkView(o.dropdownOptions).render().$el
                         ),
                         $('<div class="col-sm-8">').append(
                             $('<label for="' + o.secondInputId + '" class="sr-only">').text(o.secondInputLabel),
@@ -122,10 +128,10 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             $('<div>').addClass('col-sm-8').append(
                 $('<div>').addClass('row').append(
                     o.seconddropdownOptions ? $('<div>').addClass('col-sm-2').append(
-                        new mini.DropdownLinkView(o.seconddropdownOptions).render().$el
+                        new DropdownLinkView(o.seconddropdownOptions).render().$el
                     ) : [],
                     $('<div>').addClass(o.seconddropdownOptions ? 'col-sm-2' : 'col-sm-4').append(
-                        o.dropdownOptions ? new mini.DropdownLinkView(o.dropdownOptions).render().$el : []
+                        o.dropdownOptions ? new DropdownLinkView(o.dropdownOptions).render().$el : []
                     ),
                     $('<div class="col-sm-8">').append(
                         $('<label for="' + o.inputId + '" class="sr-only">').text(o.inputLabel),
@@ -142,28 +148,22 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
     var returnContainsOptions = function (cap, additionalValues) {
 
         var defaults = {
-                'contains': gt('Contains'),
-                'not contains': gt('Contains not'),
-                'is': gt('Is exactly'),
-                'not is': gt('Is not exactly'),
-                'matches': gt('Matches'),
-                'not matches': gt('Matches not'),
-                //needs no different translation
-                'startswith': gt('Starts with'),
-                'not startswith': gt('Starts not with'),
-                //#. a given string does end with a specified pattern
-                'endswith': gt('Ends with'),
-                //#. a given string does not end with a specified pattern
-                'not endswith': gt('Ends not with')
-            },
-            regex = {
-                'regex': gt('Regex'),
-                'not regex': gt('Not Regex')
-            };
-
-        if (_.has(cap, 'regex')) {
-            _.extend(defaults, regex);
-        }
+            'contains': gt('Contains'),
+            'not contains': gt('Contains not'),
+            'is': gt('Is exactly'),
+            'not is': gt('Is not exactly'),
+            'matches': gt('Matches'),
+            'not matches': gt('Matches not'),
+            //needs no different translation
+            'startswith': gt('Starts with'),
+            'not startswith': gt('Starts not with'),
+            //#. a given string does end with a specified pattern
+            'endswith': gt('Ends with'),
+            //#. a given string does not end with a specified pattern
+            'not endswith': gt('Ends not with'),
+            'regex': gt('Regex'),
+            'not regex': gt('Not Regex')
+        };
 
         return _.extend(defaults, additionalValues);
     };
@@ -209,12 +209,60 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         }).render().$el;
     };
 
+    var filterHeaderValues = function (tests, testId, values) {
+        var id = _.findIndex(tests, { id: testId }),
+            availableValues = {};
+
+        _.each(values, function (value, key) {
+            if (_.indexOf(tests[id].headers, key) !== -1) availableValues[key] = value;
+        });
+        return availableValues;
+    };
+
+    var filterPartValues = function (tests, testId, values) {
+        var id = _.findIndex(tests, { id: testId }),
+            availableValues = {};
+
+        _.each(values, function (value, key) {
+            if (_.indexOf(tests[id].parts, key) !== -1) availableValues[key] = value;
+        });
+        return availableValues;
+    };
+
+    var returnDefault = function (tests, id, option, value) {
+        var testId = _.findIndex(tests, { id: id }),
+            optionList = tests[testId][option];
+        if (_.indexOf(optionList, value) !== -1) {
+            return value;
+        }
+        return optionList[0];
+    };
+
+    var handleUnsupportedComparisonValues = function (opt) {
+        var input = opt.inputName ? opt.$li.find('[name="' + opt.inputName + '"]') : opt.$li.find('input'),
+            label = opt.$li.find('[data-name="comparison"]').first().closest('.dropdownlink').find('.dropdown-label');
+
+        if (!opt.values[opt.model.get('comparison')]) {
+            input.prop('disabled', true);
+            label.addClass('unsupported');
+        }
+        opt.model.on('change:comparison', function () {
+            input.prop('disabled', false);
+            label.removeClass('unsupported');
+        });
+    };
+
     return {
         Input: Input,
         drawCondition: drawCondition,
         drawDeleteButton: drawDeleteButton,
         returnContainsOptions: returnContainsOptions,
         drawDropdown: drawDropdown,
-        returnDefaultToolTips: returnDefaultToolTips
+        returnDefaultToolTips: returnDefaultToolTips,
+        filterHeaderValues: filterHeaderValues,
+        filterPartValues: filterPartValues,
+        returnDefault: returnDefault,
+        DropdownLinkView: DropdownLinkView,
+        handleUnsupportedComparisonValues: handleUnsupportedComparisonValues
     };
 });
