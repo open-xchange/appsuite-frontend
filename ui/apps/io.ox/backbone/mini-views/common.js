@@ -367,10 +367,7 @@ define('io.ox/backbone/mini-views/common', [
                 this.$el.val(date || this.options.mandatory ? this.getFormattedDate(date) : '');
             },
             getFormattedDate: function (date) {
-                return this.isToday(date) ? gt('Today') : moment(date).utc(true).format(this.format);
-            },
-            isToday: function (date) {
-                return moment(date).utc(true).isSame(moment().utc(true), 'day');
+                return moment(date).utc(true).format(this.format);
             },
             render: function () {
                 InputView.prototype.render.call(this);
@@ -381,11 +378,7 @@ define('io.ox/backbone/mini-views/common', [
                         new DatePicker({ parent: view.$el.closest('.modal, #io-ox-core'), mandatory: view.options.mandatory })
                             .attachTo(view.$el)
                             .on('select', function (date) {
-                                console.log('select handler', date.valueOf());
-                                view.model.set(view.name, date.valueOf());
-                            })
-                            .on('before:open', function () {
-                                this.setDate(view.model.get('currentWeek'));
+                                view.model.set(view.name, date.utc(true).valueOf());
                             });
                     });
                 });
