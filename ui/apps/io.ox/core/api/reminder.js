@@ -42,7 +42,7 @@ define('io.ox/core/api/reminder', [
         checkReminders = function () {
             //reset variables
             tasksToDisplay = [];
-            clearTimeout(reminderTimer);//f fu ggh
+            clearTimeout(reminderTimer);
 
             //check if nextReminder was removed meanwhile
             if (nextReminder && !reminderStorage[nextReminder.id]) {

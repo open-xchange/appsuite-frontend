@@ -208,7 +208,7 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    return api.pool.get(obj.folder).findWhere(data.createated[0]);
+                    return api.pool.get(obj.folder).findWhere(data.created[0]);
                 });
             },
 
