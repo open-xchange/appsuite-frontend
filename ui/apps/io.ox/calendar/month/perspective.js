@@ -269,7 +269,8 @@ define('io.ox/calendar/month/perspective', [
             if (param.up) {
                 var firstWeek = $('.week:first', this.pane),
                     curOffset = firstWeek.offset().top - this.scrollTop();
-                this.pane.prepend(views).scrollTop(firstWeek.offset().top - curOffset);
+                //don't scroll under the scrollOffset, as this will cause infine scrolling
+                this.pane.prepend(views).scrollTop(Math.max(firstWeek.offset().top - curOffset, this.scrollOffset + 1));
             } else {
                 this.lastWeek.add(weeks, 'weeks');
                 this.pane.append(views);
