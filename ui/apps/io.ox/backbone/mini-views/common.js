@@ -305,7 +305,7 @@ define('io.ox/backbone/mini-views/common', [
 
     var CustomRadioView = RadioView.extend({
         renderLabel: function (data) {
-            var id = this.options.id || _.uniqueId('custom-');
+            var id = _.uniqueId('custom-');
             return $('<label>').attr('for', id).append(
                 this.renderInput(data).attr('id', id),
                 this.renderToggle(data),
