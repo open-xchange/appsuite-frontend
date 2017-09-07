@@ -107,6 +107,10 @@ define('io.ox/core/export', [
                     // preselect
                     this.model.set('include', true);
 
+                    // hide option in case exclusively distributions lists are selected
+                    var singleContacts = _(this.options.params.list).filter(function (obj) { return !obj.mark_as_distributionlist; });
+                    if (!singleContacts.length) return;
+
                     this.$body.append(
                         new miniViews.CustomCheckboxView({
                             name: 'include',
