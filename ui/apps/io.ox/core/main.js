@@ -1257,7 +1257,12 @@ define('io.ox/core/main', [
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<li id="io-ox-top-logo-small" aria-hidden="true">')
+                    $('<li id="io-ox-top-logo-small">').append(
+                        $('<img>').attr({
+                            alt: ox.serverConfig.productName,
+                            src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
+                        })
+                    )
                 );
             }
         });
