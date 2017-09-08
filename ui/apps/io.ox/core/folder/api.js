@@ -56,7 +56,7 @@ define('io.ox/core/folder/api', [
 
         var renameItems = [].concat(items).filter(function (item) {
                 // only for calendar
-                if (!/^(contacts|calendar|tasks)$/.test(item.module)) return false;
+                if (!/^(contacts|event|tasks)$/.test(item.module)) return false;
                 // rename default calendar
                 if (item.id === String(settings.get('folder/calendar'))) return true;
                 // any shared folder
