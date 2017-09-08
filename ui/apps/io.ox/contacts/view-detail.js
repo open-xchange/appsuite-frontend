@@ -289,7 +289,7 @@ define('io.ox/contacts/view-detail', [
         var args = _(arguments).toArray(),
             rows = _(args.slice(1)).compact(),
             noDl = _.isBoolean(args.slice(-1)[0]) ? removeAndSplice() : false,
-            block = $('<fieldset class="block">'),
+            block = $('<section class="block">'),
             dl = $('<dl class="dl-horizontal">'),
             self = noDl ? block : dl.appendTo(block);
 
@@ -301,7 +301,7 @@ define('io.ox/contacts/view-detail', [
         });
 
         return block.prepend(
-            $('<legend>').text(args[0])
+            $('<h2>').text(args[0])
         );
     }
 
@@ -463,8 +463,8 @@ define('io.ox/contacts/view-detail', [
                 var comment = $.trim(baton.data.note || '');
                 if (comment !== '') {
                     this.append(
-                        $('<fieldset>').append(
-                            $('<legend class="sr-only">').text(gt('Comment')),
+                        $('<section>').append(
+                            $('<h2 class="sr-only">').text(gt('Comment')),
                             _.nltobr(comment, $('<div class="comment">'))
                         )
                     );
