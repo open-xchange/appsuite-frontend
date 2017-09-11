@@ -155,33 +155,33 @@ define('io.ox/calendar/month/perspective', [
         },
 
         updateWeeks: function (opt, useCache) {
-            // fetch appointments
             var self = this,
+                method = useCache === false ? 'reset' : 'set',
                 weeks = opt.weeks || this.updateLoad,
                 apiData = {
                     start: opt.start,
                     end: moment(opt.start).add(weeks, 'weeks').valueOf()
-                };
+                },
+                loader = api.collectionLoader;
+
             // do folder magic
             if (this.folder.id !== 'virtual/all-my-appointments') {
                 apiData.folder = this.folder.id;
             }
 
-            return api.getAll(apiData, useCache).then(function (list) {
-                // update single week view collections
-                function appointmentsBetween(start, end) {
-                    return list.filter(chronosUtil.rangeFilter(start, end));
-                }
-                var start = opt.start;
-                for (var i = 0; i < weeks; i++) {
-                    var end = moment(start).endOf('week').valueOf(),
-                        collection = self.collections[start];
-                    if (collection) {
-                        collection.reset(appointmentsBetween(start, end));
-                    }
-                    start = moment(start).add(8, 'd').startOf('week').valueOf();
-                    collection = null;
-                }
+            // fetch appointments in a single call before loading collections
+            api.getAll(apiData, useCache).then(function () {
+                _(self.collections).each(function (collection, day) {
+                    day = parseInt(day, 10);
+                    loader.collection = collection;
+                    loader.fetch({
+                        start: day,
+                        end: moment(day).endOf('week').valueOf(),
+                        folder: self.folder.id === 'virtual/all-my-appointments' ? 0 : self.folder.id
+                    }).then(function (data) {
+                        collection[method](data, { parse: true });
+                    }, loader.fail);
+                });
             });
         },
 
@@ -240,6 +240,11 @@ define('io.ox/calendar/month/perspective', [
                     }
 
                     // add collection for week
+                    self.collections[day] = api.collectionLoader.getCollection({
+                        start: day,
+                        end: moment(day).endOf('week').valueOf(),
+                        folder: this.folder.id === 'virtual/all-my-appointments' ? 0 : this.folder.id
+                    });
                     self.collections[day] = new chronosModel.Collection([]);
 
                     // new view
@@ -662,7 +667,7 @@ define('io.ox/calendar/month/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', reload)
+            api.on('refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();

@@ -34,7 +34,8 @@ define('io.ox/calendar/chronos-api', [
             if (!response) return;
 
             _(response.created).each(function (event) {
-                if (filter(event)) api.pool.add(event.folder, event);
+                if (filter(event)) api.pool.propagateAdd(event);
+                cache.clear(event.folder);
                 api.trigger('create', event);
                 api.trigger('create:' + util.ecid(event), event);
             });
@@ -42,18 +43,17 @@ define('io.ox/calendar/chronos-api', [
             _(response.deleted).each(function (event) {
                 // if there is a recurrence rule but no recurrenceId this means the whole series was deleted (recurrence master has no recurrenceId)
                 if (event.rrule && !event.recurrenceId) {
-                    var cid = util.ecid(event),
-                        events = api.pool.get(event.folder).filter(function (evt) {
-                            // check if it starts with cid (don't use startsWith because of IE)
-                            return evt.cid.indexOf(cid) === 0;
-                        });
-                    api.pool.get(event.folder).remove(events);
+                    var events = api.pool.findRecurrenceModels(event);
                     _(events).each(function (evt) {
+                        evt.collection.remove(evt);
+                        cache.clear(evt.folder);
                         api.trigger('delete', evt);
                         api.trigger('delete:' + util.ecid(evt), evt);
                     });
                 } else {
-                    api.pool.get(event.folder).remove(util.cid(event));
+                    var model = api.pool.getModel(util.cid(event));
+                    if (model) model.collection.remove(model);
+                    cache.clear(event.folder);
                     api.trigger('delete', event);
                     api.trigger('delete:' + util.ecid(event), event);
                 }
@@ -61,67 +61,107 @@ define('io.ox/calendar/chronos-api', [
 
             _(response.updated).each(function (event) {
                 if (filter(event)) {
-                    // first we must clear the attributes (don't use clear method as that kills the id and we cannot override the model again with add)
+                    // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
                     // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
-                    api.pool.get(event.folder).get(util.cid(event)).attributes = {};
-                    api.pool.add(event.folder, event);
+                    var model = api.pool.getModel(util.cid(event)),
+                        removeAttributes = _.difference(_(model.attributes).keys(), _(event).keys(), ['index', 'cid']);
+                    removeAttributes.forEach(function (attr) {
+                        event[attr] = undefined;
+                    });
+                    api.pool.propagateAdd(event);
                 }
+                cache.clear(event.folder);
                 api.trigger('update', event);
                 api.trigger('update:' + util.ecid(event), event);
             });
 
             return response;
         },
+        cache = {
+            hash: {},
+            get: function (cid) {
+                return this.hash[cid];
+            },
+            put: function (cid, value) {
+                this.hash[cid] = value;
+            },
+            clear: function (folder) {
+                if (folder) {
+                    var self = this;
+                    _(this.hash).each(function (value, key) {
+                        if (key.indexOf('folder=' + folder + '&') >= 0) delete self.hash[key];
+                    });
+                    return;
+                }
+                this.hash = {};
+            }
+        },
         api = {
             // convenience function
             cid: util.cid,
-            getAll: function (obj, useCache) {
-                obj = _.extend({
-                    start: _.now(),
-                    end: moment().add(28, 'days').valueOf(),
-                    order: 'asc'
-                }, obj || {});
-                obj.useCache = obj.useCache !== false && useCache !== false;
-                var collection = api.pool.get(obj.folder),
-                    ranges = collection.getRanges(obj);
-                http.pause();
-                _(ranges).each(function (range) {
-                    http.GET({
+            getAll: (function () {
+                function get(params, opt) {
+                    var paramsString = api.collectionLoader.cid(params);
+                    if (opt.useCache && cache.get(paramsString)) {
+                        var data = _(cache.get(paramsString)).filter(util.rangeFilter(opt.start, opt.end));
+                        return $.when(data);
+                    }
+
+                    return http.GET({
                         module: 'chronos',
                         params: {
                             action: 'all',
-                            folder: obj.folder,
-                            rangeStart: moment(range.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            rangeEnd: moment(range.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            order: obj.order,
+                            folder: params.folder,
+                            rangeStart: params.start.utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                            rangeEnd: params.end.utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                            order: 'asc',
                             expand: true
                         }
+                    }).then(function (data) {
+                        cache.put(paramsString, data);
+                        return _(data).filter(util.rangeFilter(opt.start, opt.end));
                     });
-                });
-                return http.resume().then(function (data) {
-                    var error = _(data).find(function (res) {
-                        return !!res.error;
+                }
+
+                return function (opt, useCache) {
+                    var params = _.extend({
+                        start: _.now(),
+                        end: _.now()
+                    }, opt || {});
+                    opt.useCache = opt.useCache !== false && useCache !== false;
+                    // round start and end to start and end of month
+                    params.start = moment(params.start).startOf('month');
+                    params.end = moment(params.end).endOf('month');
+
+                    http.pause();
+                    var start, limit = params.end.valueOf(), reqs = [];
+                    for (start = params.start.clone(); start.valueOf() < limit; start.add(1, 'month')) {
+                        reqs.push(get({
+                            start: start.clone(),
+                            end: start.clone().endOf('month'),
+                            folder: params.folder
+                        }, opt));
+                    }
+                    return http.resume().then(function () {
+                        return $.when.apply($, reqs);
+                    }).then(function () {
+                        return _(arguments)
+                            .chain()
+                            .flatten()
+                            .uniq(function (event) {
+                                return util.cid(event);
+                            })
+                            .value();
                     });
-                    if (error) throw error;
-                    return data;
-                }).then(function (data) {
-                    data = _(data).chain().pluck('data').flatten().compact().value();
-                    if (data.length > 0) api.pool.add(obj.folder, data);
-                    return api.pool.get(obj.folder).filter(util.rangeFilter(obj.start, obj.end));
-                }).then(function (list) {
-                    // sort is necessary for listview. may be removed if real pagination (with sorting) is enabled
-                    return _(list).sortBy(function (model) {
-                        return model.getTimestamp('startDate');
-                    });
-                });
-            },
+                };
+            }()),
 
             get: function (obj, useCache) {
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
 
                 if (useCache !== false) {
-                    var model = api.pool.get(obj.folder).get(util.cid(obj));
+                    var model = api.pool.getModel(util.cid(obj));
                     if (model) return $.when(model);
                 }
                 // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
@@ -138,8 +178,8 @@ define('io.ox/calendar/chronos-api', [
                     }
                 }).then(function (data) {
                     if (!filter(data)) return new models.Model(data);
-                    api.pool.add(obj.folder, data);
-                    return api.pool.get(obj.folder).get(util.cid(obj));
+                    api.pool.propagateAdd(data);
+                    return api.pool.getModel(data);
                 });
             },
 
@@ -147,7 +187,7 @@ define('io.ox/calendar/chronos-api', [
                 var def, reqList = list;
                 if (useCache !== false) {
                     reqList = list.filter(function (obj) {
-                        return !api.pool.get(obj.folder).get(util.cid(obj));
+                        return !api.pool.getModel(util.cid(obj));
                     });
                 }
                 if (reqList.length > 0) {
@@ -164,13 +204,13 @@ define('io.ox/calendar/chronos-api', [
                 return def.then(function (data) {
                     if (data) {
                         data.filter(filter).forEach(function (obj) {
-                            api.pool.get(obj.folder).add(obj.folder, obj);
+                            api.pool.propagateAdd(obj);
                         });
                     }
                     return list.map(function (obj) {
                         if (!filter(obj)) return new models.Model(obj);
                         var cid = util.cid(obj);
-                        return api.pool.get(obj.folder).get(cid);
+                        return api.pool.getModel(cid);
                     });
                 });
             },
@@ -208,7 +248,7 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    return api.pool.get(obj.folder).findWhere(data.created[0]);
+                    return api.pool.getModel(data.created[0]);
                 });
             },
 
@@ -247,7 +287,7 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    return api.pool.get(obj.folder).findWhere(data.updated[0]);
+                    return api.pool.getModel(data.updated[0]);
                 });
             },
 
@@ -356,7 +396,7 @@ define('io.ox/calendar/chronos-api', [
                 .then(function (response) {
                     if (!response.conflicts) {
                         // updates notification area for example
-                        api.trigger('mark:invite:confirmed', api.pool.get(obj.folder).findWhere(data.updated[0]));
+                        api.trigger('mark:invite:confirmed', api.pool.getModel(data.updated[0]));
                     }
                 });
             },
@@ -393,7 +433,7 @@ define('io.ox/calendar/chronos-api', [
                 list = [].concat(list);
                 models = _(list).map(function (obj) {
                     var cid = util.cid(obj),
-                        collection = api.pool.get(obj.folder),
+                        collection = api.pool.getCollectionsByModel(obj)[0],
                         model = collection.get(cid);
                     collection.remove(model);
                     return model;
@@ -422,7 +462,7 @@ define('io.ox/calendar/chronos-api', [
                         def.reject(error.error);
                         // reset models
                         _(models).each(function (model) {
-                            api.pool.add(model.get('folder'), model.toJSON());
+                            api.pool.propagateAdd(model.toJSON());
                         });
                     } else {
                         def.resolve(data);
@@ -580,6 +620,111 @@ define('io.ox/calendar/chronos-api', [
         data.cid = util.cid(data);
         return data;
     };
+
+    api.pool.getCollectionsByCID = function (cid) {
+        var folder = util.cid(cid).folder;
+        return this.getByFolder(folder).filter(function (collection) {
+            return !!collection.get(cid);
+        });
+    };
+
+    function getByRegex(regex, cid) {
+        var result = regex.exec(cid);
+        if (result && result.length >= 2) return result[1];
+    }
+
+    api.pool.getCollectionsByModel = function (data) {
+        var model = data instanceof Backbone.Model ? data : new models.Model(data);
+        return this.getByFolder(data.folder).filter(function (collection) {
+            var start = getByRegex(/start=([^&]*)/, collection.cid),
+                end = getByRegex(/end=([^&]*)/, collection.cid);
+            // sepcial handling for list-view collection
+            if (!start || !end) {
+                start = moment().startOf('day').valueOf();
+                end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
+            }
+            var inverval = Math.min(end, model.getTimestamp('endDate')) - Math.max(start, model.getTimestamp('startDate'));
+            if (inverval > 0) return true;
+        });
+    };
+
+    api.pool.propagateAdd = function (data) {
+        data.cid = util.cid(data);
+        var collections = api.pool.getCollectionsByModel(data);
+        collections.forEach(function (collection) {
+            api.pool.add(collection.cid, data);
+        });
+    };
+
+    api.pool.getModel = function (data) {
+        var collections, cid;
+        if (_.isString(data)) {
+            cid = data;
+            collections = api.pool.getCollectionsByCID(cid);
+        } else {
+            cid = util.cid(data);
+            collections = api.pool.getCollectionsByModel(data);
+        }
+        if (collections.length === 0) return;
+        return collections[0].get(cid);
+    };
+
+    api.pool.findRecurrenceModels = function (event) {
+        event = event instanceof Backbone.Model ? event.attributes : event;
+        var cid = util.cid({ folder: event.folder, id: event.cid }),
+            collections = api.pool.getByFolder(event.folder),
+            filterRecurrences = function (model) {
+                return model.cid.indexOf(cid) === 0;
+            },
+            models = collections.map(function (collection) {
+                return collection.filter(filterRecurrences);
+            });
+        return _(models)
+            .chain()
+            .flatten()
+            .uniq(function (model) {
+                return model.cid;
+            })
+            .value();
+    };
+
+    api.collectionLoader = new CollectionLoader({
+        module: 'chronos',
+        paginateCompare: false,
+        getQueryParams: function (params) {
+            return params;
+        },
+        httpGet: function (module, params) {
+            // special handling for requests of listview
+            if (params.view === 'list') {
+                var offset = this.collection.offset || 1, start, end;
+                // detect pagination
+                if (params.limit.split(',')[0] === '0') {
+                    start = 0;
+                    end = offset;
+                } else {
+                    start = offset;
+                    end = offset + 1;
+                    this.collection.offset = end;
+                }
+                params.start = moment().startOf('day').add(start, 'month').valueOf();
+                params.end = moment().startOf('day').add(end, 'month').valueOf();
+            }
+            return api.getAll(params, !this.collection.expired).then(function (data) {
+                data.forEach(function (obj) {
+                    obj.cid = util.cid(obj);
+                });
+                return data;
+            });
+        },
+        fail: function (error) {
+            if (error && error.code !== 'APP-0013') {
+                require(['io.ox/core/notifications', 'gettext!io.ox/calendar'], function (notifications, gt) {
+                    notifications.yell('error', gt('An error occurred. Please try again.'));
+                });
+            }
+        }
+    });
 
     _.extend(api, Backbone.Events);
 

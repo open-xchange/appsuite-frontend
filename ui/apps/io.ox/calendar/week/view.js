@@ -156,8 +156,6 @@ define('io.ox/calendar/week/view', [
                     break;
             }
 
-            this.collection
-                .on('change', this.redrawAppointment, this);
             this.setStartDate(this.refDate);
             this.initSettings();
 
@@ -239,6 +237,17 @@ define('io.ox/calendar/week/view', [
                 }
                 this.renderAppointments();
             }
+        },
+
+        setCollection: function (collection) {
+            if (this.collection) this.stopListening(this.collection);
+            this.collection = collection;
+
+            this.renderAppointments();
+
+            this
+                .listenTo(this.collection, 'change', _.debounce(this.redrawAppointment), this)
+                .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
         },
 
         /**
@@ -1113,7 +1122,6 @@ define('io.ox/calendar/week/view', [
          * show and hide timeline
          */
         renderDayLabel: function () {
-
             var days = [],
                 today = moment().startOf('day'),
                 tmpDate = moment(this.startDate);
@@ -1982,8 +1990,8 @@ define('io.ox/calendar/week/view', [
         getRequestParam: function () {
             // return update data
             return {
-                start: this.apiRefTime.valueOf(),
-                end: moment(this.apiRefTime).add(10, 'weeks').valueOf(),
+                start: this.startDate.valueOf(),
+                end: moment(this.startDate).add(this.columns, 'days').valueOf(),
                 folder: this.folderData.id === 'virtual/all-my-appointments' ? 0 : this.folderData.id
             };
         },

@@ -28,7 +28,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         _.extend(this, {
             columns: '1,20',
             module: 'mail',
-            ignore: 'limit max'
+            ignore: 'limit max',
+            paginateCompare: true
         }, options);
 
         this.pool = Pool.create(this.module);
@@ -37,13 +38,12 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.loading = false;
 
         function apply(collection, type, params, loader, data) {
-
             // determine current page size
             var PAGE_SIZE = type === 'load' ? loader.PRIMARY_PAGE_SIZE : loader.SECONDARY_PAGE_SIZE;
 
             // don't use loader.collection to avoid cross-collection issues (see bug 38286)
 
-            if (type === 'paginate' && collection.length > 0) {
+            if (type === 'paginate' && collection.length > 0 && loader.paginateCompare) {
                 // check if first fetched item matches last existing item
                 // use case: reload on new messages; race-conditions with external clients
                 var first = _(data).first(), last = collection.last().toJSON();
