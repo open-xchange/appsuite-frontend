@@ -128,7 +128,7 @@ define('io.ox/core/api/mailfilter', [
      * @fires  api#refresh.all
      * @return { promise }
      */
-    if (capabilities.has('mailfilter')) {
+    if (capabilities.has('mailfilter_v2')) {
         ox.on('refresh^', function () {
             api.refresh();
         });

@@ -1,6 +1,6 @@
 {
     "namespace": ["io.ox/mail/mailfilter/settings/filter/defaults"],
-    "requires": "mailfilter",
+    "requires": "mailfilter_v2",
     "device": "!small"
 }
 
