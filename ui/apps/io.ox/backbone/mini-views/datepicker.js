@@ -31,7 +31,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                 ignoreToggle: false,
                 timezoneButton: false,
                 timezoneAttribute: 'timezone',
-                label: ''
+                label: '',
+                a11y: {}
             }, options);
 
             this.attribute = this.options.attribute;
@@ -77,11 +78,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         }
 
                         // render time input
-                        guid = _.uniqueId('form-control-label-');
-                        self.nodes.timeField = $('<input type="text" class="form-control time-field">').attr({
-                            id: guid,
-                            'aria-describedby': guid + '-aria'
-                        });
+                        self.nodes.timeField = $('<input type="text" class="form-control time-field">');
 
                         // render timezone badge
                         var timezone = moment.tz(self.model.get(self.options.timezoneAttribute)),
@@ -110,8 +107,6 @@ define('io.ox/backbone/mini-views/datepicker', [
                         // add a11y
                         self.nodes.a11yDate = $('<p class="sr-only">').attr('id', ariaID)
                             .text(gt('Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key.'));
-                        self.nodes.a11yTime = $('<p class="sr-only">').attr('id', guid + '-aria')
-                            .text(gt('Use up and down keys to change the time. Close selection by pressing ESC key.'));
 
                         return [
                             self.nodes.dayField,
@@ -148,32 +143,29 @@ define('io.ox/backbone/mini-views/datepicker', [
                     def.resolve();
                 });
             } else {
-                require(['io.ox/backbone/views/datepicker', 'io.ox/core/tk/datepicker'], function (Picker) {
+                require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
 
                     new Picker({ date: self.model.get(self.attribute) }).attachTo(self.nodes.dayField);
 
-                    // build and init timepicker based on combobox plugin
-                    var hours_typeahead = [],
+                    var comboboxOptions = [],
                         filldate = moment().startOf('day'),
                         interval = parseInt(settings.get('interval'), 10) || 30;
+
                     for (var i = 0; i < 1440; i += interval) {
-                        hours_typeahead.push(filldate.format('LT'));
+                        comboboxOptions.push({
+                            name: filldate.format('LT'),
+                            value: filldate.format('LT')
+                        });
                         filldate.add(interval, 'minutes');
                     }
-
-                    var comboboxHours = {
-                        source: hours_typeahead,
-                        items: hours_typeahead.length,
-                        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-                        sorter: function (items) {
-                            items = _(items).sortBy(function (item) {
-                                return +moment(item, 'LT');
-                            });
-                            return items;
-                        }
-                    };
-
-                    self.nodes.timeField.combobox(comboboxHours).addClass('');
+                    var combobox = new Combobox({
+                        options: comboboxOptions,
+                        dropdownClass: 'calendaredit',
+                        input: self.nodes.timeField,
+                        label: self.options.a11y.timeLabel
+                    });
+                    self.nodes.timeField.replaceWith(combobox.$el.addClass('combobox'));
+                    combobox.render();
                     self.nodes.timeField.on('change', _.bind(self.updateModel, self)).on('click', function () {
                         self.trigger('click:time');
                     });
