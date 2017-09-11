@@ -373,8 +373,6 @@ define('io.ox/core/folder/extensions', [
         },
 
         addStorageAccount: (function () {
-            if (_.device('smartphone')) return $.noop;
-
             var links = $('<li class="links" role="presentation">');
 
             function draw() {
