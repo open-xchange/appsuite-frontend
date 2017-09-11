@@ -165,6 +165,7 @@ define('io.ox/calendar/chronos-model', [
             return moment.tz(date.value, date.tzid || moment.defaultZone.name);
         },
         getTimestamp: function (name) {
+            if (!this.get(name)) return;
             return this.getMoment(name).valueOf();
         },
         parse: function (res) {
@@ -199,52 +200,8 @@ define('io.ox/calendar/chronos-model', [
 
         model: Model,
 
-        initialize: function () {
-            this.ranges = [];
-        },
-
-        getRanges: function (opt) {
-            var ranges = [];
-            if (opt.useCache) ranges = this.getRangeDiff(opt);
-            else ranges = [{ start: opt.start, end: opt.end }];
-
-            this.ranges.push(_(opt).pick('start', 'end'));
-            this.consolidateRanges();
-            return ranges;
-        },
-
-        getRangeDiff: function (range) {
-            if (this.ranges.length === 0) return [_(range).pick('start', 'end')];
-            // assume that the ranges are ordered and disjoint
-            var i, ranges = [], start = range.start;
-            for (i = 0; i < this.ranges.length; i++) {
-                if (this.ranges[i].end <= start && i === this.ranges.length - 1) ranges.push(_(range).pick('start', 'end'));
-                if (this.ranges[i].end <= start) continue;
-                if (this.ranges[i].start > range.end) {
-                    ranges.push({ start: start, end: range.end });
-                    break;
-                }
-                if (this.ranges[i].start > start) ranges.push({ start: start, end: this.ranges[i].start });
-                start = this.ranges[i].end;
-            }
-            return ranges;
-        },
-
-        consolidateRanges: function () {
-            var ranges = _(this.ranges).sortBy('start');
-            if (ranges.length === 0) return;
-            var stack = [ranges[0]], i;
-            for (i = 1; i < ranges.length; i++) {
-                var top = _(stack).last();
-                if (top.end < ranges[i].start) {
-                    stack.push(ranges[i]);
-                } else if (top.end < ranges[i].end) {
-                    top.end = ranges[i].end;
-                    stack.pop();
-                    stack.push(top);
-                }
-            }
-            this.ranges = stack;
+        comparator: function (model) {
+            return model.getTimestamp('startDate');
         }
 
     });

@@ -203,16 +203,11 @@ define('io.ox/calendar/week/perspective', [
          */
         getAppointments: function (useCache) {
             // fetch appointments
-            var self = this,
-                obj = self.view.getRequestParam();
-            return api.getAll(obj, useCache).done(function (list) {
-                self.view.reset(obj.start, list);
-            }).fail(function (error) {
-                // no permission to read appointments in this folder
-                if (error && error.code !== 'APP-0013') {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                }
-            });
+            var obj = this.view.getRequestParam(),
+                loader = api.collectionLoader,
+                method = useCache === false ? 'reload' : 'load',
+                collection = loader[method](obj);
+            this.view.setCollection(collection);
         },
 
         /**
@@ -275,13 +270,7 @@ define('io.ox/calendar/week/perspective', [
                 // update view folder data
                 self.view.folder(data);
                 // save folder data to view and update
-                self.getAppointments(useCache).done(function () {
-                    // refocus pane on update
-                    if (self.activeElement) {
-                        self.activeElement.focus();
-                        self.activeElement = null;
-                    }
-                });
+                self.getAppointments(useCache);
 
                 // register event to listen to color changes on current folder
                 if (self.folderModel) {
@@ -321,7 +310,6 @@ define('io.ox/calendar/week/perspective', [
             if (this.views[opt.perspective] === undefined) {
                 this.view = window.weekview = new View({
                     app: app,
-                    collection: this.collection,
                     mode: opt.perspective.split(':')[1],
                     refDate: this.app.refDate,
                     perspective: this,
@@ -414,7 +402,7 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', reload)
+            api.on('refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();

@@ -296,7 +296,7 @@ define('io.ox/calendar/main', [
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true });
             app.listView.model.set({
                 folder: app.folder.get(),
-                thread: true
+                view: 'list'
             });
         },
 

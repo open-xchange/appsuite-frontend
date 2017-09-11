@@ -45,7 +45,7 @@ define('io.ox/calendar/month/view', [
         },
 
         initialize: function (options) {
-            this.collection.on('reset', this.renderAppointments, this);
+            this.listenTo(this.collection, 'add remove reset change', _.debounce(this.renderAppointments));
             this.weekStart = moment(options.day);
             this.weekEnds = moment(this.weekStart).add(1, 'week');
             this.folder = options.folder;

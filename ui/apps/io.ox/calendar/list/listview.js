@@ -206,73 +206,6 @@ define('io.ox/calendar/list/listview', [
         }
     });
 
-    var methods = { 'load': 'reset', 'paginate': 'add', 'reload': 'set' },
-        // use custom collection loader since we do not support real pagination
-        collectionLoader = {
-
-            collections: {},
-
-            getDefaultCollection: function () {
-                return api.pool.getDefault();
-            },
-
-            getCollection: function (name) {
-                if (!this.collections[name]) {
-                    this.collections[name] = new models.Collection();
-                    this.resetCollection(name);
-                }
-                return this.collections[name];
-            },
-
-            resetCollection: function (name) {
-                var collection = this.getCollection(name);
-                collection.startDate = moment().startOf('day').valueOf();
-                collection.lastDate = moment().startOf('day').add(1, 'month').valueOf();
-            },
-
-            apply: function (obj, type) {
-                var self = this,
-                    collection = this.getCollection(obj.folder),
-                    start = moment(type !== 'paginate' ? collection.startDate : collection.lastDate).valueOf(),
-                    end = type !== 'paginate' ? collection.lastDate : moment(collection.lastDate).add(1, 'month').valueOf();
-                this.collection = collection;
-                if (this.loading) return collection;
-                this.loading = true;
-                _.defer(function () {
-                    collection.trigger('before:' + type);
-                    api.getAll({
-                        folder: obj.folder,
-                        start: start,
-                        end: end
-                    }, type !== 'reload').then(function success(models) {
-                        if (type === 'paginate') collection.lastDate = end;
-                        var method = methods[type];
-                        if (collection.length === 0) method = 'reset';
-                        collection[method](models);
-                        self.loading = false;
-                        collection.trigger(type);
-                    }, function fail() {
-                        self.loading = false;
-                        collection.trigger(type + ':fail');
-                    });
-                });
-                return collection;
-            },
-
-            load: function (obj) {
-                return this.apply(obj, 'load');
-            },
-
-            paginate: function (obj) {
-                return this.apply(obj, 'paginate');
-            },
-
-            reload: function (obj) {
-                return this.apply(obj, 'reload');
-            }
-
-        };
-
     return ListView.extend({
 
         ref: 'io.ox/chronos/listview',
@@ -280,7 +213,7 @@ define('io.ox/calendar/list/listview', [
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('chronos-item');
-            this.connect(collectionLoader);
+            this.connect(api.collectionLoader);
             this.on('collection:set', this.onCollectionSet);
         },
 
