@@ -136,8 +136,8 @@ appserver@^0.6.0:
     nopt "~2.2.0"
 
 appserver@^0.7.0-pre1:
-  version "0.7.0-pre6"
-  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre6.tgz#75327de0662fff72acebf44266ca1357d9b28488"
+  version "0.7.0-pre7"
+  resolved "https://registry.yarnpkg.com/appserver/-/appserver-0.7.0-pre7.tgz#c27b78c381dec06f7ff937ae94635a91b75791a3"
   dependencies:
     "@open-xchange/ui-middleware" "^7.10.0-0"
     connect "^3.6.2"
