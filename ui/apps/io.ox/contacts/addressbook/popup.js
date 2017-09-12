@@ -19,12 +19,13 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/contacts/api',
+    'l10n/ja_JP/io.ox/collation',
     'gettext!io.ox/contacts',
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, gtCore, settings, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings) {
 
     'use strict';
 
@@ -352,10 +353,15 @@ define('io.ox/contacts/addressbook/popup', [
     //
     // Sorter for use_count and sort_name
     //
-    function sorter(a, b) {
-        // asc with locale compare
-        return a.sort_name.localeCompare(b.sort_name);
-    }
+    var sorter = (function () {
+
+        if (_.device('ja_JP')) return collation.sorter;
+
+        return function sorter(a, b) {
+            // asc with locale compare
+            return a.sort_name.localeCompare(b.sort_name);
+        };
+    }());
 
     function rankSorter(a, b) {
         return a.rank - b.rank;
