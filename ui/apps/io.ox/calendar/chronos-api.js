@@ -179,7 +179,8 @@ define('io.ox/calendar/chronos-api', [
                 }).then(function (data) {
                     if (!filter(data)) return new models.Model(data);
                     api.pool.propagateAdd(data);
-                    return api.pool.getModel(data);
+                    // if something went wrong in the pool just return the data
+                    return api.pool.getModel(data) || new models.Model(data);
                 });
             },
 
@@ -534,24 +535,8 @@ define('io.ox/calendar/chronos-api', [
                         obj.id = obj.alarmId;
                         return obj;
                     });
-                    var ids = _.uniq(_(data).map(function (obj) {
-                        return { folder: obj.folder, folderId: obj.folder, id: obj.eventId };
-                    }), function (item) { return util.cid(item); });
 
-                    // ugly workaround for now
-                    // todo remove once backend sends us acknowledge times in the until response
-                    api.getList(ids).then(function (evts) {
-                        data = _(data).filter(function (obj) {
-                            var event = _(evts).findWhere({ cid: util.cid({ folder: obj.folder, id: obj.eventId }) });
-                            if (!event) return false;
-                            var alarm = _(event.get('alarms')).findWhere({ id: obj.alarmId });
-                            if (!alarm) return false;
-                            if (!alarm.acknowledged) return true;
-                            obj.acknowledged = alarm.acknowledged;
-                            return moment(obj.time).valueOf() > alarm.acknowledged;
-                        });
-                        api.trigger('resetChronosAlarms', data);
-                    });
+                    api.trigger('resetChronosAlarms', data);
                 });
             },
 
