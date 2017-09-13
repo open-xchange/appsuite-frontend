@@ -14,12 +14,14 @@
 
 define('plugins/notifications/calendar/register', [
     'io.ox/calendar/chronos-api',
+    'io.ox/core/yell',
     'io.ox/core/extensions',
     'io.ox/core/notifications/subview',
     'gettext!plugins/notifications',
     'io.ox/calendar/util',
-    'settings!io.ox/core'
-], function (calAPI, ext, Subview, gt, util, settings) {
+    'settings!io.ox/core',
+    'io.ox/core/tk/sounds-util'
+], function (calAPI, yell, ext, Subview, gt, util, settings, soundUtil) {
 
     'use strict';
 
@@ -216,7 +218,29 @@ define('plugins/notifications/calendar/register', [
                 nextAlarmTimer,
                 nextAlarm,
                 alarmsToShow = [],
-                subview = new Subview(options);
+                subview = new Subview(options),
+                audioQueue = [],
+                playing = false,
+                playAlarm = function (alarm) {
+                    if (alarm) {
+                        audioQueue.push(alarm);
+                    }
+                    if (!playing && audioQueue.length) {
+                        playing = true;
+                        calAPI.get(audioQueue.shift()).done(function (eventModel) {
+                            yell('info', eventModel ? eventModel.get('summary') : gt('Appointment reminder'));
+                            soundUtil.playSound();
+                            calAPI.acknowledgeAlarm(alarm);
+                            setTimeout(function () {
+                                playing = false;
+                                playAlarm();
+                            }, 5000);
+                        }).fail(function () {
+                            playing = false;
+                            playAlarm();
+                        });
+                    }
+                };
 
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
@@ -228,7 +252,11 @@ define('plugins/notifications/calendar/register', [
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
                             if (alarm.time > now) {
-                                subview.addNotifications(alarm);
+                                if (alarm.action === 'AUDIO') {
+                                    playAlarm(alarm);
+                                } else {
+                                    subview.addNotifications(alarm);
+                                }
                             } else if (!nextAlarm || nextAlarm.time > alarm.time) {
                                 if (nextAlarm) {
                                     temp.push(nextAlarm);
@@ -260,6 +288,8 @@ define('plugins/notifications/calendar/register', [
                         } else {
                             alarmsToShow.push(alarm);
                         }
+                    } else if (alarm.action === 'AUDIO') {
+                        playAlarm(alarm);
                     } else {
                         alarmsToAdd.push(alarm);
                     }

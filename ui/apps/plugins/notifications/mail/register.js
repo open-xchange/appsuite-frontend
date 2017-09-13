@@ -25,42 +25,20 @@ define('plugins/notifications/mail/register', [
     'io.ox/backbone/mini-views',
     'io.ox/core/desktopNotifications',
     'io.ox/contacts/api',
-    'settings!io.ox/mail'
-], function (api, ext, gt, util, formUtil, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, settings) {
+    'settings!io.ox/mail',
+    'io.ox/core/tk/sounds-util'
+], function (api, ext, gt, util, formUtil, folderApi, account, cap, miniViews, desktopNotifications, contactsApi, settings, soundUtil) {
 
     'use strict';
 
     var lastCount = -1,
-        SOUND_VOLUME = 0.3, // volume of push notification sound
         DURATION = 5 * 1000, // miliseconds to show the notification
-        path = ox.base + '/apps/themes/default/sounds/', // soundfiles are located in the theme
-        iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png', // fallbackicon shown in desktop notification
-        sound,
-        type = _.device('!windows && !macos && !ios && !android') ? '.ogg' : '.mp3', // linux frickel uses ogg
-        soundList = [
-            { label: gt('Bell'), value: 'bell' },
-            { label: gt('Marimba'), value: 'marimba' },
-            { label: gt('Wood'), value: 'wood' },
-            { label: gt('Chimes'), value: 'chimes' }
-        ];
+        iconPath = ox.base + '/apps/themes/default/fallback-image-contact.png'; // fallbackicon shown in desktop notification
 
     function filter(model) {
         // ignore virtual/all (used by search, for example) and unsubscribed folders
         if (!model.get('subscribed') || (/^default0\/virtual/.test(model.id))) return false;
         return /^default0\D/.test(model.id) && !account.is('spam|confirmed_spam|trash|unseen', model.id) && (folderApi.getSection(model.get('type')) === 'private');
-    }
-
-    // load a soundfile
-    function loadSound(sound) {
-        var d = $.Deferred();
-        // make sure, that sound is one of the values in sound list (see Bug 51473)
-        sound = _(soundList).find({ value: sound }) ? sound : 'bell';
-        sound = new Audio(path + sound + type);
-        sound.volume = SOUND_VOLUME;
-        sound.addEventListener('canplaythrough', function () {
-            d.resolve(sound);
-        });
-        return d;
     }
 
     // show desktopNotification (if enabled) for a new mail
@@ -92,42 +70,6 @@ define('plugins/notifications/mail/register', [
             });
         }).attr('src', imageURL);
     }
-
-    // ensure we do not play a sound twice until the first sound has finished
-    var playSound = _.throttle(function () {
-        if (_.device('smartphone')) return;
-        if (sound) sound.play();
-    }, 2000);
-
-    settings.on('change:notificationSoundName', function () {
-        if (_.device('smartphone')) return;
-        var s = settings.get('notificationSoundName');
-        loadSound(s).done(function (s) {
-            // preview the selected sound by playing it on change
-            if (s) {
-                s.play();
-                sound = s;
-            }
-        });
-    });
-
-    // get and load stored sound
-    if (_.device('!smartphone')) {
-        loadSound(settings.get('notificationSoundName')).done(function (s) {
-            sound = s;
-        });
-    }
-
-    ext.point('io.ox/mail/settings/detail/view').extend({
-        index: 250,
-        id: 'sounds_extend',
-        render: function () {
-            // just publish the array
-            this.getSoundOptions = function () {
-                return soundList;
-            };
-        }
-    });
 
     var update = _.debounce(function () {
 
@@ -255,7 +197,7 @@ define('plugins/notifications/mail/register', [
         // update counters
         update();
         // play sound
-        if (settings.get('playSound')) playSound();
+        if (settings.get('playSound')) soundUtil.playSound();
         // show notification
         newMailDesktopNotification(message);
     });
