@@ -53,15 +53,17 @@
         .overflow-y(scroll);
         .backface-visibility(hidden);
 
+        .month {
+            width: 100%;
+        }
         .week {
             // might be 6 weeks in a month + one row for the months name
             height: 100/7%;
             padding-left: @monthview-cw-width;
 
             .week-info {
-                position: absolute;
                 left: 0;
-                width: @monthview-cw-width - 10px;
+                width: @monthview-cw-width;
                 height: 100/6%;
                 padding: 13px 13px 13px 1px;
                 font-size: 11px;
@@ -69,12 +71,13 @@
                 text-align: right;
                 color: @hc-gray;
                 margin-left: 10px;
+                font-weight: normal;
                 .ellipsis();
+                vertical-align: baseline;
 
                 &.no-border { border: 0; }
 
                 .cw {
-                    position: absolute;
                     right: 13px;
                     top: 5px;
                     z-index: 1;
@@ -202,7 +205,7 @@
         .scrollpane .week {
             padding-left: @adjusted-width;
 
-            .week-info { width: @adjusted-width - 10px; }
+            .week-info { width: @adjusted-width}
         }
     }
 

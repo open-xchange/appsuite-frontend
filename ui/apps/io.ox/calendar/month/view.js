@@ -25,6 +25,7 @@ define('io.ox/calendar/month/view', [
 
     var View = Backbone.View.extend({
 
+        tagName:        'tr',
         className:      'week',
         weekStart:      0,      // week start moment
         weekEnd:        0,      // week ends moment
@@ -132,8 +133,8 @@ define('io.ox/calendar/month/view', [
             var list = util.getWeekScaffold(this.weekStart),
                 firstFound = false,
                 self = this,
-                weekinfo = $('<div>')
-                    .addClass('week-info')
+                // needs clearfix or text is aligned to middle instead of baseline
+                weekinfo = $('<th scope="row" class="week-info clearfix">')
                     .append(
                         $('<span>').addClass('cw').text(
                             gt('CW %1$d', this.weekStart.format('w'))
@@ -145,7 +146,7 @@ define('io.ox/calendar/month/view', [
                     firstFound = true;
                 }
 
-                var dayCell = $('<div>')
+                var dayCell = $('<td>')
                 .addClass((day.isFirst ? ' first' : '') +
                     (day.isFirst && i === 0 ? ' forceleftborder' : '') +
                     (day.isToday ? ' today' : '') +
@@ -164,7 +165,11 @@ define('io.ox/calendar/month/view', [
                     this.$el.append(
                         dayCell
                         .addClass('day')
-                        .attr('id', moment(day.timestamp).format('YYYY-M-D'))
+                        .attr({
+                            id: moment(day.timestamp).format('YYYY-M-D'),
+                            //#. %1$s is a date: october 12th 2017 for example
+                            title: gt('Selected - %1$s', moment(day.timestamp).format('LL'))
+                        })
                         .data('date', day.timestamp)
                         .append(
                             $('<div class="list abs">'),
@@ -327,7 +332,7 @@ define('io.ox/calendar/month/view', [
         days = days.slice(dow, days.length).concat(days.slice(0, dow));
         return $('<div class="abs">')
             .append(
-                $('<div class="footer-container">').append(
+                $('<div class="footer-container">').attr('aria-hidden', true).append(
                     $('<div class="footer">').append(function () {
                         _(days).each(function (day) {
                             tmp.push($('<div class="weekday">').text(day));
