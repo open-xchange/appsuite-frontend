@@ -1964,6 +1964,8 @@ define('io.ox/core/main', [
             run: function () {
                 debug('DONE!');
                 ox.trigger('core:ready');
+                // auto start OX Chat
+                require(['io.ox/chat/main']);
                 baton = null;
             }
         });
