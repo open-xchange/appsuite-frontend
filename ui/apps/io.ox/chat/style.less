@@ -14,17 +14,18 @@
 .ox-chat {
 
     @width: 320px;
-    @pictureSize: 40px;
-    @headerHeight: @pictureSize + 2 * 16px;
+    @pictureSize: 48px;
+    @headerHeight: 80px;
     @searchHeight: 40px;
     @controlsHeight: 80px;
+    @stateSize: 20px;
     @backgroundColor: #f5f5f5;
     @borderColor: #ccc;
 
     // state colors
-    @green: #689F38;
-    @orange: #EF6C00;
-    @red: #C62828;
+    @green: #7CB342;
+    @orange: #FB8C00;
+    @red: #D32F2F;
 
     .leftside {
         width: @width;
@@ -51,17 +52,17 @@
             float: left;
         }
 
-        .name, h2 {
+        .name {
             font-size: 13px;
             font-weight: bold;
-        }
-
-        .name {
             line-height: @pictureSize;
         }
 
         h2 {
-            margin: 0;
+            font-size: 15px;
+            line-height: 24px;
+            font-weight: normal;
+            margin: -1px 0 0 0;
             padding: 0;
         }
     }
@@ -69,7 +70,7 @@
     .leftside .header .state {
         position: absolute;
         left: @pictureSize;
-        top: @pictureSize;
+        top: @pictureSize + 16px - @stateSize;
     }
 
     .search {
@@ -125,10 +126,14 @@
         }
     }
 
-    .chats {
-        flex-grow: 1;
+    ul {
         list-style-type: none;
         margin: 0;
+        padding: 0;
+    }
+
+    .chats {
+        flex-grow: 1;
         .unseen {
             font-weight: bold;
         }
@@ -154,31 +159,38 @@
         flex-grow: 0;
     }
 
-    .conversation {
+    .scrollpane {
         top: @headerHeight;
-        bottom: @controlsHeight;
-        padding: 16px;
         overflow-y: auto;
-        //display: flex;
-        //flex-direction: column;
-        //justify-content: flex-end;
+    }
+
+    .chat .scrollpane {
+        bottom: @controlsHeight;
+    }
+
+    .conversation {
+        padding: 16px;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 
     .message {
 
         padding: 0 96px 0 0;
-        margin-bottom: 16px;
+        margin-bottom: 8px;
         position: relative;
 
         &:last-child {
             margin-bottom: 0;
         }
-        .sender, .time {
-            font-size: 12px;
-            line-height: 24px;
+        .sender, .time, .state {
             color: #707070;
+            font-size: 12px;
         }
         .sender {
+            line-height: 24px;
             font-weight: bold;
         }
         .body {
@@ -193,12 +205,28 @@
             top: 0;
             right: 0;
         }
+        .state {
+            display: none;
+        }
         &.myself {
             text-align: right;
             padding: 0 48px 0 96px;
+            .sender {
+                display: none;
+            }
             .body {
                 color: #fff;
                 background-color: #707070;
+            }
+            .state {
+                display: block;
+                position: absolute;
+                top: 16px;
+                right: 0;
+            }
+            .state.seen:before {
+                color: @green;
+                content: "\f00c\f00c"; // check
             }
         }
     }
@@ -218,9 +246,6 @@
     }
 
     .members {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
         overflow: hidden;
         white-space: nowrap;
         line-height: 24px;
@@ -234,11 +259,12 @@
         color: white;
         border: 1px solid white;
         margin-right: 4px;
-        font-size: 14px;
+        font-size: 12px;
         text-align: center;
-        width: 16px;
-        height: 16px;
-        border-radius: 8px;
+        width: @stateSize;
+        height: @stateSize;
+        border-radius: 10px;
+        padding-top: 3px;
         // colors
         &.online { background-color: @green; }
         &.absent { background-color: @orange; }
@@ -246,8 +272,49 @@
         &.offline { color: #707070; }
         // icon
         &.online:before { content: "\f00c"; } // check
-        &.absent:before { content: "\f186"; } // moon
+        &.absent:before { content: "\f017"; } // clock
         &.busy:before { content: "\f068"; } // minus
         &.offline:before { content: ""; }
+    }
+
+    .channels {
+        .scrollpane {
+            padding: 16px;
+        }
+        .channel {
+            margin-bottom: 16px;
+            line-height: 16px;
+            position: relative;
+            padding-left: 80px;
+            .title {
+                font-weight: bold;
+                display: inline-block;
+                margin-right: 8px;
+            }
+            .members {
+                color: #777;
+            }
+            .join {
+                position: absolute;
+                left: 0;
+                top: 8px;
+            }
+        }
+    }
+
+    .files ul {
+        padding: 16px 0 0 16px;
+        li {
+            width: ~"calc(33.3333% - 16px)";
+            height: 128px;
+            background-size: cover;
+            background-color: #eee;
+            margin: 0 16px 16px 0;
+            float: left;
+        }
+    }
+
+    .history .header h2, .channels .header h2, .files .header h2 {
+        line-height: 48px;
     }
 }

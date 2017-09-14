@@ -22,6 +22,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
         constructor: function (options) {
             this.options = options || {};
             DisposableView.prototype.constructor.apply(this, arguments);
+            this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
         },
 
         render: function () {
@@ -29,7 +30,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
             this.$el.attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
                 $('<div class="abs" role="document">').append(
                     this.$header = $('<div class="floating-header abs">').append(
-                        $('<h1>').attr('id', title_id).text(this.options.title || '\u00A0')
+                        $('<h1>').attr('id', title_id).text(this.options.title || '\u00A0'),
+                        $('<div class="controls">').append(
+                            $('<a href="#" data-action="minimize">').append('<i class="fa fa-window-minimize">')
+                        )
                     ),
                     this.$body = $('<div class="floating-body abs">')
                 )
@@ -50,6 +54,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
         setTitle: function (title) {
             this.$header.find('h1').text(title || '\u00A0');
             return this;
+        },
+
+        onMinimize: function (e) {
+            e.preventDefault();
+            this.$el.addClass('minimized');
+            setTimeout(function ($el) { $el.removeClass('minimized'); }, 1000, this.$el);
         }
     });
 

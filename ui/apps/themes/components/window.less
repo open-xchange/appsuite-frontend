@@ -440,6 +440,8 @@
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     outline: 0;
 
+    .transition(bottom 0.3s ease-in-out);
+
     @headerHeight: 32px;
 
     .floating-header {
@@ -455,6 +457,16 @@
             line-height: @headerHeight;
             color: white;
         }
+        .controls {
+            position: absolute;
+            top: 0;
+            right: 16px;
+            line-height: @headerHeight;
+            height: @headerHeight;
+            a {
+                color: white;
+            }
+        }
     }
 
     .floating-body {
@@ -462,6 +474,10 @@
         background-color: white;
         border: 1px solid rgba(0, 0, 0, 0.3);
         border-width: 0 1px 1px 1px;
+    }
+
+    &.minimized {
+        bottom: -100%;
     }
 }
 
