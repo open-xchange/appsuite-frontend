@@ -36,7 +36,7 @@ describe('Mailfilter', function () {
             .assert.containsText('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .alert.alert-info', 'This rule applies to all messages. Please add a condition to restrict this rule to specific messages.')
             .assert.containsText('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .alert.alert-danger', 'Please define at least one action.');
 
-        // add test & action and check if the warnings disapears
+        // add action and check if the warnings disapears
         client
             .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
             .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="keep"]', 10000)
@@ -103,7 +103,7 @@ describe('Mailfilter', function () {
         // add an action which includes the folder picker
         client
             .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
-            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="keep"]', 10000)
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="move"]', 10000)
             .click('.smart-dropdown-container .dropdown-menu a[data-value="move"]');
 
         client
@@ -184,6 +184,30 @@ describe('Mailfilter', function () {
             .click('.smart-dropdown-container .dropdown-menu a[data-value="not contains"]')
             .assert.containsText('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="0"] .dropdownlink span', 'Contains not')
             .expect.element('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .modal-footer input').to.not.be.selected;
+
+        // action redirect is limitd to MAXREDIRECTS?
+        client
+            // 1
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]', 10000)
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]')
+            // 2
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]', 10000)
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]')
+            // 3
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]', 10000)
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]')
+            // 4
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]', 10000)
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]')
+
+            .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-action a')
+            .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="discard"]', 10000)
+            .assert.elementNotPresent('.smart-dropdown-container .dropdown-menu a[data-value="redirect"]')
+            .click('.smart-dropdown-container .dropdown-menu a[data-value="discard"]');
 
         client
             .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="cancel"]');
