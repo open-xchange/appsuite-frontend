@@ -231,8 +231,8 @@ define('io.ox/core/folder/picker', [
             .on('ok', function () {
                 var id = tree.selection.get();
                 if (id) o.done(id, dialog, tree);
-                o.always(dialog, tree);
                 o.close(dialog, tree);
+                o.always(dialog, tree);
                 this.close();
             })
             .on('alternative', function () {
