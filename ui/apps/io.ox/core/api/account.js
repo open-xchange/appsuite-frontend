@@ -287,6 +287,7 @@ define('io.ox/core/api/account', [
     };
 
     api.isMalicious = function (id, blacklist) {
+        if (!id) return;
         // includes simple subfolder checks
         if (api.is('spam', id)) return true;
         if (api.is('confirmed_spam', id)) return true;
