@@ -30,7 +30,7 @@ define('io.ox/core/import/import', [
         index: 100,
         draw: function (baton) {
 
-            var nodes = {}, formats;
+            var nodes = {};
             nodes.row = $('<div class="form-group">').appendTo($(this));
 
             //lable and select
@@ -38,15 +38,8 @@ define('io.ox/core/import/import', [
             nodes.select = $('<select class="form-control" name="action">')
                 .attr({ id: 'import-format', 'aria-label': gt('select format') })
                 .appendTo(nodes.row);
-
             //add option
-            formats = ext.point('io.ox/core/import/format').invoke('draw', null, baton)._wrapped;
-            formats.forEach(function (node) {
-                if (node) {
-                    node.appendTo(nodes.select);
-                }
-            });
-
+            ext.point('io.ox/core/import/format').invoke('draw', nodes.select, baton);
             //avoid find
             baton.nodes.select = nodes.select;
         }
@@ -56,38 +49,33 @@ define('io.ox/core/import/import', [
         id: 'ical',
         index: 100,
         draw: function (baton) {
-            if (baton.module === 'calendar' || baton.module === 'tasks') {
-                require(['io.ox/' + baton.module + '/api'], function (api) {
-                    baton.api = api;
-                });
-                return $('<option value="ICAL">').text(gt('iCal'));
-            }
+            if (!/^(calendar|tasks)$/.test(baton.module)) return;
+            return this.append(
+                $('<option value="ICAL">').text(gt('iCal'))
+            );
+        }
+    });
+
+
+    ext.point('io.ox/core/import/format').extend({
+        id: 'vcard',
+        index: 200,
+        draw: function (baton) {
+            if (!/^(contacts)$/.test(baton.module)) return;
+            return this.append(
+                $('<option value="VCARD">').text(gt('vCard'))
+            );
         }
     });
 
     ext.point('io.ox/core/import/format').extend({
         id: 'csv',
-        index: 100,
+        index: 300,
         draw: function (baton) {
-            if (baton.module === 'contacts') {
-                require(['io.ox/' + baton.module + '/api'], function (api) {
-                    baton.api = api;
-                });
-                return $('<option value="CSV">').text(gt('CSV'));
-            }
-        }
-    });
-
-    ext.point('io.ox/core/import/format').extend({
-        id: 'vcard',
-        index: 100,
-        draw: function (baton) {
-            if (baton.module === 'contacts') {
-                require(['io.ox/' + baton.module + '/api'], function (api) {
-                    baton.api = api;
-                });
-                return $('<option value="VCARD">').text(gt('vCard'));
-            }
+            if (!/^(contacts)$/.test(baton.module)) return;
+            return this.append(
+                $('<option value="CSV">').text(gt('CSV'))
+            );
         }
     });
 
@@ -258,15 +246,18 @@ define('io.ox/core/import/import', [
 
                         // cache
                         try {
-                            // todo: clean that up; fails for calendar
-                            if (baton.api.caches.all.grepRemove) {
-                                baton.api.caches.all.grepRemove(id + baton.api.DELIM).done(function () {
-                                    // use named refresh.all so apis can differenciate if they wish
-                                    baton.api.trigger('refresh.all:import');
-                                });
-                            } else if (baton.api.refresh) {
-                                baton.api.refresh();
-                            }
+                            require(['io.ox/' + baton.module + '/api'], function (api) {
+                                // todo: clean that up; fails for calendar
+                                if (api.caches.all.grepRemove) {
+                                    api.caches.all.grepRemove(id + api.DELIM).done(function () {
+                                        // use named refresh.all so apis can differenciate if they wish
+                                        api.trigger('refresh.all:import');
+                                    });
+                                } else if (api.refresh) {
+                                    api.refresh();
+                                }
+                            });
+
                         } catch (e) {
                             // if api is unknown, refresh everything
                             if (ox.debug) console.warn('import triggering global refresh because of unknown API', e);
