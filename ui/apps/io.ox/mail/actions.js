@@ -268,7 +268,7 @@ define('io.ox/mail/actions', [
                             id: 'allof',
                             tests: [
                                 _.copy(opt.filterDefaults.tests.subject),
-                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
+                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.from)
                             ]
                         };
 
