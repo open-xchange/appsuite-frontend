@@ -109,7 +109,7 @@ define('io.ox/core/export', [
 
                     // hide option in case exclusively distributions lists are selected
                     var singleContacts = _(this.options.params.list).filter(function (obj) { return !obj.mark_as_distributionlist; });
-                    if (!singleContacts.length) return;
+                    if (!this.options.params.folder && !singleContacts.length) return;
 
                     this.$body.append(
                         new miniViews.CustomCheckboxView({
