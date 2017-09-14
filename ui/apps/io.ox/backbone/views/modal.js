@@ -175,6 +175,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             });
         },
 
+        hideBody: function () {
+            this.$('.modal-body').hide();
+            this.$('.modal-footer').css('border-top', 0);
+            return this;
+        },
+
         // Add a button
         //
         // options:
