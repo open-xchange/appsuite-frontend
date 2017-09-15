@@ -19,11 +19,12 @@ define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/extensions',
     'io.ox/core/tk/textproc',
     'io.ox/mail/api',
+    'io.ox/mail/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings, gt) {
+], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -188,12 +189,11 @@ define('io.ox/core/tk/contenteditable-editor', [
         // and delete it
         ed.execCommand('Delete', false, null);
         if (!_.device('smartphone')) {
+            var defaultStyle = mailUtil.getDefaultStyle().css;
             // apply default font styles
-            if (mailSettings.get('defaultFontStyle/size') && mailSettings.get('defaultFontStyle/size') !== 'browser-default') ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
-
-            if (mailSettings.get('defaultFontStyle/family') && mailSettings.get('defaultFontStyle/family') !== 'browser-default') ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
-
-            if (mailSettings.get('defaultFontStyle/color') && mailSettings.get('defaultFontStyle/color') !== 'transparent') ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
+            if (defaultStyle['font-size']) ed.execCommand('fontSize', false, defaultStyle['font-size']);
+            if (defaultStyle['font-family']) ed.execCommand('fontName', false, defaultStyle['font-family']);
+            if (defaultStyle.color) ed.execCommand('forecolor', false, defaultStyle.color);
         }
     }
 
