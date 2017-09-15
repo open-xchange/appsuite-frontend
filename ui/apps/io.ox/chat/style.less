@@ -23,9 +23,11 @@
     @borderColor: #ccc;
 
     // state colors
-    @green: #7CB342;
+    @green: #529100;
     @orange: #FB8C00;
     @red: #D32F2F;
+    @blue: #2196F3;
+    @gray: #707070;
 
     .leftside {
         width: @width;
@@ -117,12 +119,14 @@
             background-color: transparent;
             border-radius: 0;
             outline: 0;
-            .fa {
-                margin-right: 16px;
-            }
             &:focus {
                 background-color: #ddd;
             }
+        }
+
+        .btn-icon {
+            float: left;
+            width: 32px;
         }
     }
 
@@ -144,11 +148,6 @@
             float: right;
             position: relative;
             top: 1px;
-        }
-        .fa {
-            float: left;
-            font-size: 14px;
-            margin-right: 16px;
         }
         .fa-check-circle {
             color: @green;
@@ -185,12 +184,12 @@
         &:last-child {
             margin-bottom: 0;
         }
-        .sender, .time, .state {
-            color: #707070;
+        .sender, .time {
+            color: @gray;
             font-size: 12px;
+            line-height: 24px;
         }
         .sender {
-            line-height: 24px;
             font-weight: bold;
         }
         .body {
@@ -199,6 +198,14 @@
             border-radius: 8px;
             display: inline-block;
             text-align: left;
+        }
+        .image {
+            img {
+                border: 0;
+                max-width: 100%;
+                max-height: 480px;
+                border-radius: 8px;
+            }
         }
         .time {
             position: absolute;
@@ -214,19 +221,30 @@
             .sender {
                 display: none;
             }
+            .time {
+                line-height: 16px;
+            }
             .body {
                 color: #fff;
-                background-color: #707070;
+                background-color: @gray;
             }
-            .state {
+            .message-state {
                 display: block;
                 position: absolute;
                 top: 16px;
                 right: 0;
-            }
-            .state.seen:before {
-                color: @green;
-                content: "\f00c\f00c"; // check
+                font-size: 14px;
+                color: @gray;
+                &.sent:before {
+                    content: "\f105";
+                }
+                &.received:before {
+                    content: "\f105 \f105";
+                }
+                &.seen:before {
+                    color: @green;
+                    content: "\f00c";
+                }
             }
         }
     }
@@ -252,6 +270,8 @@
         .member {
             display: inline-block;
             margin-right: 12px;
+            max-width: 200px;
+            .ellipsis();
         }
     }
 
@@ -265,6 +285,14 @@
         height: @stateSize;
         border-radius: 10px;
         padding-top: 3px;
+        // small variant
+        &.small {
+            width: 16px;
+            height: 16px;
+            font-size: 12px;
+            line-height: 16px;
+            padding-top: 0;
+        }
         // colors
         &.online { background-color: @green; }
         &.absent { background-color: @orange; }
@@ -307,10 +335,50 @@
         li {
             width: ~"calc(33.3333% - 16px)";
             height: 128px;
-            background-size: cover;
-            background-color: #eee;
             margin: 0 16px 16px 0;
             float: left;
+            button {
+                width: 100%;
+                height: 128px;
+                border: 0;
+                background-size: cover;
+                background-color: #eee;
+            }
+        }
+    }
+
+    .overlay {
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.90);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1px solid transparent;
+        outline: 0;
+        button {
+            @size: 40px;
+            border: 0;
+            color: white;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.50);
+            width: @size;
+            height: @size;
+            line-height: @size;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            margin-top: -(@size / 2);
+        }
+        button[data-cmd="prev-file"] {
+            left: 0;
+        }
+        button[data-cmd="next-file"] {
+            right: 0;
+        }
+        button[data-cmd="close-file"] {
+            top: 0;
+            right: 0;
+            margin-top: 0;
         }
     }
 

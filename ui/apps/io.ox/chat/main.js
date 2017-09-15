@@ -24,19 +24,26 @@ define('io.ox/chat/main', [
 
         events: {
             'click [data-cmd]': 'onCommand',
-            'keydown textarea': 'onEditorKeydown'
+            'keydown textarea': 'onEditorKeydown',
+            'keydown .left-navigation': 'onLeftNavigationKeydown',
+            'keydown .overlay': 'onOverlayEvent',
+            'click .overlay': 'onOverlayEvent'
         },
 
         onCommand: function (e) {
             e.preventDefault();
-            var node = $(e.currentTarget), cmd = node.attr('data-cmd');
-            switch (cmd) {
+            var node = $(e.currentTarget), data = node.data();
+            switch (data.cmd) {
                 case 'start-chat': this.startChat(); break;
-                case 'show-chat': this.showChat(node.attr('data-chat-id')); break;
+                case 'show-chat': this.showChat(data); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
-                default: console.log('Unknown command', cmd); break;
+                case 'show-file': this.showFile(data); break;
+                case 'prev-file': this.moveFile(-1); break;
+                case 'next-file': this.moveFile(+1); break;
+                case 'close-file': this.closeFile(); break;
+                default: console.log('Unknown command', data.cmd, data); break;
             }
         },
 
@@ -44,8 +51,9 @@ define('io.ox/chat/main', [
             console.log('Start chat');
         },
 
-        showChat: function (id) {
-            window.$rightside.empty().append(renderChat(id));
+        showChat: function (data) {
+            window.$rightside.empty().append(renderChat(data.id));
+            this.scrollToBottom();
         },
 
         showRecentConversations: function () {
@@ -60,14 +68,54 @@ define('io.ox/chat/main', [
             window.$rightside.empty().append(renderFiles());
         },
 
+        showFile: function (e) {
+            renderOverlay().appendTo(this.$body).focus();
+            this.updateFile(e.index);
+        },
+
+        moveFile: function (step) {
+            var index = parseInt(this.$('.overlay').attr('data-index'), 10) + step;
+            if (index < 0) index = data.files.length - 1; else if (index >= data.files.length) index = 0;
+            this.updateFile(index);
+        },
+
+        updateFile: function (index) {
+            this.$('.overlay')
+                .attr('data-index', index)
+                .css('backgroundImage', 'url(' + data.files[index].url + ')');
+        },
+
+        closeFile: function () {
+            this.$('.overlay').remove();
+            this.$el.focus();
+        },
+
         onEditorKeydown: function (e) {
             if (e.which !== 13) return;
             e.preventDefault();
             var editor = $(e.currentTarget);
-            this.$('.conversation').append(
-                renderMessage({ sender: 1, body: editor.val(), time: moment().format('LT') })
-            );
+            this.$('.conversation').append(renderMessage({ sender: 1, body: editor.val(), time: moment().format('LT') }));
+            this.scrollToBottom();
             editor.val('').focus();
+        },
+
+        onLeftNavigationKeydown: function (e) {
+            if (e.which !== 38 && e.which !== 40) return;
+            e.preventDefault();
+            var items = this.$('.left-navigation [data-cmd]'),
+                index = items.index(document.activeElement) + (e.which === 38 ? -1 : +1);
+            index = Math.max(0, Math.min(index, items.length - 1));
+            items.eq(index).focus().click();
+        },
+
+        onOverlayEvent: function (e) {
+            if ((e.type === 'click' && $(e.target).is('.overlay')) || e.which === 27) return this.closeFile();
+            if (e.which !== 37 && e.which !== 39) return;
+            this.moveFile(e.which === 37 ? -1 : +1);
+        },
+
+        scrollToBottom: function () {
+            this.$('.scrollpane').scrollTop(0xFFFF);
         }
     });
 
@@ -86,7 +134,8 @@ define('io.ox/chat/main', [
             1: { id: 1, name: 'Mattes', state: 'online' },
             2: { id: 2, name: 'Alex', state: 'online' },
             3: { id: 3, name: 'David', state: 'absent' },
-            4: { id: 4, name: 'Julian', state: 'busy' }
+            4: { id: 4, name: 'Julian', state: 'busy' },
+            5: { id: 5, name: 'Someone with a really long name', state: 'online' }
         },
 
         // CHATS
@@ -105,23 +154,30 @@ define('io.ox/chat/main', [
                 unseen: 1
             },
             2: {
-                type: 'chat',
-                title: 'Another chat with a really long name so that it needs to be cut',
+                type: 'private',
+                title: 'Alex',
                 members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }],
-                messages: []
+                messages: [
+                    { body: 'Can we handle images?', sender: 1, time: '14:33' },
+                    { body: 'Yep ...', sender: 2, time: '14:34' },
+                    { body: 'https://c2.staticflickr.com/6/5826/23795571972_60c5321fbe.jpg', type: 'image', sender: 2, time: '14:35' },
+                    { body: '👍', sender: 1, time: '14:36' }
+                ]
             },
             3: {
                 type: 'group',
-                title: 'Maybe a group chat',
+                title: 'Lorem ipsum',
                 members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
                 messages: [
-                    { body: 'Hello World', sender: 1, time: '11:01' }
+                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01' },
+                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
+                    { body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
                 ]
             },
             4: {
                 type: 'channel',
-                title: 'This could be a channel',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
+                title: 'Another chat with a really long name so that it needs to be cut',
+                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }, { type: 'user', id: 5 }],
                 messages: [
                     { body: 'Hello World', sender: 2, time: '13:37' }
                 ]
@@ -173,9 +229,9 @@ define('io.ox/chat/main', [
                 $('<div class="chats">').append(
                     _(data.chats).map(function (chat, id) {
                         return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                        .attr('data-chat-id', id)
+                        .attr('data-id', id)
                         .append(
-                            $('<i class="fa fa-comment-o">'),
+                            renderChatIcon(chat),
                             $('<span class="label label-default">').text(chat.unseen),
                             $('<div class="title">').toggleClass('unseen', chat.unseen > 0).text(chat.title)
                         );
@@ -183,15 +239,15 @@ define('io.ox/chat/main', [
                 ),
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
-                        $('<i class="fa fa-clock-o">'),
+                        $('<i class="fa fa-clock-o btn-icon">'),
                         $.txt('Recent conversations')
                     ),
                     $('<button type="button" class="btn-nav" data-cmd="show-channels">').append(
-                        $('<i class="fa fa-hashtag">'),
+                        $('<i class="fa fa-hashtag btn-icon">'),
                         $.txt('All channels')
                     ),
                     $('<button type="button" class="btn-nav" data-cmd="show-all-files">').append(
-                        $('<i class="fa fa-paperclip">'),
+                        $('<i class="fa fa-paperclip btn-icon">'),
                         $.txt('All files')
                     )
                 )
@@ -208,18 +264,25 @@ define('io.ox/chat/main', [
         )
     );
 
+    function renderChatIcon(chat) {
+        switch (chat.type) {
+            case 'private': return $('<span class="btn-icon">').append(renderState('online').addClass(' small'));
+            case 'group': return $('<i class="fa fa-group btn-icon">');
+            case 'channel': return $('<i class="fa fa-hashtag btn-icon">');
+            // no default
+        }
+    }
+
+    var previousSender = 0;
+
     function renderChat(id) {
         var chat = data.chats[id];
+        previousSender = 0;
         return !chat ? $() : $('<div class="chat">').append(
             $('<div class="header abs">').append(
                 $('<h2>').append(chat.title),
                 $('<ul class="members">').append(
-                    _(chat.members).map(function (member) {
-                        return $('<li class="member">').append(
-                            renderMemberState(member),
-                            $.txt(getUserName(member.id))
-                        );
-                    })
+                    _(chat.members).map(renderMember)
                 )
             ),
             $('<div class="scrollpane abs">').append(
@@ -233,15 +296,52 @@ define('io.ox/chat/main', [
         );
     }
 
+    function renderMember(member) {
+        return $('<li class="member">').append(
+            renderMemberState(member),
+            $.txt(getUserName(member.id))
+        );
+    }
+
     function renderMessage(message) {
-        return $('<div class="message">')
-            .toggleClass('myself', isMyself(message.sender))
-            .append(
-                $('<div class="sender">').text(getUserName(message.sender)),
-                $('<div class="body">').text(message.body),
-                $('<div class="time">').text(message.time),
-                $('<div class="fa state seen">')
-            );
+        try {
+            return $('<div class="message">')
+                .toggleClass('myself', isMyself(message.sender))
+                .append(
+                    // sender
+                    message.sender === previousSender ? $() : getSender(message),
+                    // message boby
+                    $('<div>').addClass(message.type === 'image' ? 'image' : 'body').html(getMessageBody(message)),
+                    // time
+                    $('<div class="time">').text(message.time),
+                    // delivery state
+                    $('<div class="fa message-state">')
+                )
+                // exemplary animation
+                .delay(100).queue(function () {
+                    $(this).find('.message-state').addClass('sent').delay(500).queue(function () {
+                        $(this).addClass('received').dequeue().delay(2000).queue(function () {
+                            $(this).addClass('seen');
+                        });
+                    });
+                });
+        } finally {
+            previousSender = message.sender;
+        }
+    }
+
+    function getSender(message) {
+        return $('<div class="sender">').text(getUserName(message.sender));
+    }
+
+    function getMessageBody(message) {
+        var body = '';
+        if (message.type === 'image') {
+            body = '<img src="' + message.body + '" alt="">';
+        } else {
+            body = _.escape(message.body).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+        }
+        return body;
     }
 
     function renderRecentConversations() {
@@ -288,11 +388,22 @@ define('io.ox/chat/main', [
             ),
             $('<div class="scrollpane abs">').append(
                 $('<ul>').append(
-                    _(data.files).map(function (file) {
-                        return $('<li>').css('backgroundImage', 'url(' + file.url + ')');
+                    _(data.files).map(function (file, index) {
+                        return $('<li>').append(
+                            $('<button type="button" data-cmd="show-file">').attr('data-index', index)
+                            .css('backgroundImage', 'url(' + file.url + ')')
+                        );
                     })
                 )
             )
+        );
+    }
+
+    function renderOverlay() {
+        return $('<div class="overlay abs" tabindex="-1">').append(
+            $('<button type="button" data-cmd="prev-file"><i class="fa fa-chevron-left"></i></button>'),
+            $('<button type="button" data-cmd="next-file"><i class="fa fa-chevron-right"></i></button>'),
+            $('<button type="button" data-cmd="close-file"><i class="fa fa-close"></i></button>')
         );
     }
 

@@ -288,7 +288,7 @@ define('io.ox/core/a11y', [], function () {
     }
 
     function cursorHorizontalKeydown(e, el) {
-        if (!/(37|39)/.test(e.which)) return;
+        if (!/^(37|39)$/.test(e.which)) return;
         var idx = el.index(el.filter(':focus'));
         if (e.which === 37) idx--; else idx++;
         if (idx < 0) idx = el.length - 1;

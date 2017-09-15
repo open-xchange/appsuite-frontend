@@ -21,8 +21,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
 
         constructor: function (options) {
             this.options = options || {};
+            this.title = this.options.title;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
+            this.minimized = null;
         },
 
         render: function () {
@@ -43,24 +45,66 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
 
         open: function () {
             $('#io-ox-screens').append(this.render().$el);
+            add(this);
+            this.toggle(true);
             return this;
         },
 
         close: function () {
+            remove(this);
             this.$el.remove();
             return this;
         },
 
         setTitle: function (title) {
+            this.title = title;
             this.$header.find('h1').text(title || '\u00A0');
             return this;
         },
 
         onMinimize: function (e) {
             e.preventDefault();
-            this.$el.addClass('minimized');
-            setTimeout(function ($el) { $el.removeClass('minimized'); }, 1000, this.$el);
+            this.toggle(false);
+        },
+
+        toggle: function (state) {
+            this.$el.toggleClass('minimized', !state);
+            this.minimized = !state;
+            // little delay to wait for animation
+            if (state) {
+                collection.trigger('show', this);
+            } else {
+                setTimeout(function () { collection.trigger('hide', this); }, 300);
+            }
         }
+    });
+
+    var collection = WindowView.collection = new Backbone.Collection();
+
+    function add(window) {
+        var model = new Backbone.Model({ id: window.cid, window: window });
+        collection.add(model);
+    }
+
+    function remove(window) {
+        collection.remove(window.cid);
+    }
+
+    collection.on('remove show hide', function () {
+        // get number of minimized windows
+        $('#io-ox-taskbar').empty().append(
+            this.map(function (model) {
+                var window = model.get('window');
+                return window.minimized ? $('<li>').text(window.title).attr('data-cid', window.cid) : $();
+            })
+        );
+        $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
+    });
+
+    $(document).on('click', '#io-ox-taskbar li', function (e) {
+        var cid = $(e.currentTarget).attr('data-cid'),
+            model = collection.get(cid);
+        model.get('window').toggle(true);
     });
 
     return WindowView;
