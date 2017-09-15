@@ -134,7 +134,7 @@ define('io.ox/calendar/month/view', [
                 firstFound = false,
                 self = this,
                 // needs clearfix or text is aligned to middle instead of baseline
-                weekinfo = $('<th scope="row" class="week-info clearfix">')
+                weekinfo = $('<td class="week-info clearfix">')
                     .append(
                         $('<span>').addClass('cw').text(
                             gt('CW %1$d', this.weekStart.format('w'))
@@ -160,7 +160,7 @@ define('io.ox/calendar/month/view', [
                 );
 
                 if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
-                    this.$el.append(dayCell.addClass('day-filler'));
+                    this.$el.append(dayCell.addClass('day-filler').append($('<div class="sr-only">').text(gt('Empty table cell'))));
                 } else {
                     this.$el.append(
                         dayCell
@@ -168,12 +168,12 @@ define('io.ox/calendar/month/view', [
                         .attr({
                             id: moment(day.timestamp).format('YYYY-M-D'),
                             //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', moment(day.timestamp).format('LL'))
+                            title: gt('Selected - %1$s', moment(day.timestamp).format('ddd LL'))
                         })
                         .data('date', day.timestamp)
                         .append(
-                            $('<div class="list abs">'),
-                            $('<div class="number">').text(day.date)
+                            $('<div class="number">').text(day.date),
+                            $('<div class="list abs">')
                         )
                     );
                 }

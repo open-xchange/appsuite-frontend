@@ -277,7 +277,7 @@ define('io.ox/calendar/month/perspective', [
 
                     endDate.add(1, 'd').startOf('month');
                     // add an
-                    views.push($('<caption class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<h1 class="unstyled">').text(endDate.format('MMMM YYYY'))));
+                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<h1 class="unstyled">').text(endDate.format('MMMM YYYY'))));
                     currMonth.push(views[views.length - 1]);
                     if (view) view.$el.addClass('no-border');
 
@@ -298,26 +298,11 @@ define('io.ox/calendar/month/perspective', [
                 }
             }
 
-            var days = moment.weekdaysShort(),
-                dow = moment.localeData().firstDayOfWeek(),
-                tmp = [],
-                scaffold;
-            days = days.slice(dow, days.length).concat(days.slice(0, dow));
-
-            scaffold = $('<tr class="sr-only">').append(function () {
-                _(days).each(function (day) {
-                    tmp.push($('<th scope="col">').text(day));
-                });
-                return tmp;
-            });
-
-            monthGroups = _(monthGroups).map(function (nodes) {
-                return $('<table class="month">').append(
-                    nodes.shift(),
-                    $('<thead>').append(scaffold.clone()),
+            monthGroups = _(_(monthGroups).map(function (nodes) {
+                return [nodes.shift(), $('<table class="month" aria-readonly="true">').append(
                     $('<tbody>').append(nodes)
-                ).css('height', 100 / 7 * nodes.length + '%');
-            });
+                ).css('height', 100 / 7 * nodes.length + '%')];
+            })).flatten();
 
             // add and render view
             if (param.up) {

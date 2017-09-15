@@ -50,21 +50,17 @@
         right: 0;
         bottom: 0;
         left: 0;
+        padding: 0 100px;
+
         .overflow-y(scroll);
         .backface-visibility(hidden);
 
-        .month {
-            width: 100%;
-        }
         .week {
-            // might be 6 weeks in a month + one row for the months name
-            height: 100/7%;
             padding-left: @monthview-cw-width;
 
             .week-info {
                 left: 0;
                 width: @monthview-cw-width;
-                height: 100/6%;
                 padding: 13px 13px 13px 1px;
                 font-size: 11px;
                 line-height: 1.0em;
@@ -85,10 +81,7 @@
             }
 
             .day-filler {
-                position: relative;
-                display: inline-block;
                 width: 100/7%;
-                height: 100%;
                 background-color: @white;
 
                 &.bordertop   { border-top:   1px solid @monthview-border; }
@@ -96,13 +89,11 @@
             }
 
             .day {
-                position: relative;
-                display: inline-block;
                 width: 100/7%;
-                height: 100%;
                 border-top: 1px solid @monthview-border;
                 border-right: 1px solid @monthview-border;
                 background-color: @white;
+                position: relative;
 
                 &.bordertop    { border-top:    1px solid @monthview-border; }
                 &.borderbottom { border-bottom: 1px solid @monthview-border; }
@@ -152,6 +143,7 @@
             text-align: center;
             font-size: 25px;
             min-height: 40px;
+            height: 120px;
             color: #777;
 
             @media (min-height: 850px) { font-size: 35px; }
