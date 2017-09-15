@@ -179,8 +179,7 @@ define('io.ox/calendar/chronos-api', [
                 }).then(function (data) {
                     if (!filter(data)) return new models.Model(data);
                     api.pool.propagateAdd(data);
-                    // if something went wrong in the pool just return the data
-                    return api.pool.getModel(data) || new models.Model(data);
+                    return api.pool.getModel(data);
                 });
             },
 
@@ -607,10 +606,12 @@ define('io.ox/calendar/chronos-api', [
     };
 
     api.pool.getCollectionsByCID = function (cid) {
-        var folder = util.cid(cid).folder;
-        return this.getByFolder(folder).filter(function (collection) {
-            return !!collection.get(cid);
-        });
+        var folder = util.cid(cid).folder,
+            collections = this.getByFolder(folder).filter(function (collection) {
+                return !!collection.get(cid);
+            });
+        if (collections.length === 0) return [api.collectionLoader.getDefaultCollection()];
+        return collections;
     };
 
     function getByRegex(regex, cid) {
@@ -619,18 +620,20 @@ define('io.ox/calendar/chronos-api', [
     }
 
     api.pool.getCollectionsByModel = function (data) {
-        var model = data instanceof Backbone.Model ? data : new models.Model(data);
-        return this.getByFolder(data.folder).filter(function (collection) {
-            var start = getByRegex(/start=([^&]*)/, collection.cid),
-                end = getByRegex(/end=([^&]*)/, collection.cid);
-            // sepcial handling for list-view collection
-            if (!start || !end) {
-                start = moment().startOf('day').valueOf();
-                end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
-            }
-            var inverval = Math.min(end, model.getTimestamp('endDate')) - Math.max(start, model.getTimestamp('startDate'));
-            if (inverval > 0) return true;
-        });
+        var model = data instanceof Backbone.Model ? data : new models.Model(data),
+            collections = this.getByFolder(data.folder).filter(function (collection) {
+                var start = getByRegex(/start=([^&]*)/, collection.cid),
+                    end = getByRegex(/end=([^&]*)/, collection.cid);
+                // sepcial handling for list-view collection
+                if (!start || !end) {
+                    start = moment().startOf('day').valueOf();
+                    end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
+                }
+                var inverval = Math.min(end, model.getTimestamp('endDate')) - Math.max(start, model.getTimestamp('startDate'));
+                if (inverval > 0) return true;
+            });
+        if (collections.length === 0) return [api.collectionLoader.getDefaultCollection()];
+        return collections;
     };
 
     api.pool.propagateAdd = function (data) {
