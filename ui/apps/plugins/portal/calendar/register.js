@@ -23,31 +23,82 @@ define('plugins/portal/calendar/register', [
 
     'use strict';
 
+    var EventsView = Backbone.View.extend({
+
+        tagName: 'ul',
+
+        className: 'content list-unstyled',
+
+        initialize: function () {
+            this.listenTo(this.collection, 'add remove change reset', this.render);
+        },
+
+        render: function () {
+            var self = this,
+                numOfItems = _.device('smartphone') ? 5 : 10;
+            this.$el.empty();
+            this.collection
+                .chain()
+                .filter(function (model) {
+                    return model.getTimestamp('startDate') > _.now();
+                })
+                .first(numOfItems)
+                .each(function (model) {
+                    var declined = util.getConfirmationStatus(model) === 'DECLINED';
+                    if (settings.get('showDeclinedAppointments', false) || !declined) {
+                        var timespan = util.getSmartDate(model, true);
+
+                        self.$el.append(
+                            $('<li class="item" tabindex="0">')
+                            .css('text-decoration', declined ? 'line-through' : 'none')
+                            .data('item', model)
+                            .append(
+                                $('<span class="normal accent">').text(timespan), $.txt('\u00A0'),
+                                $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
+                                $('<span class="gray">').text(model.get('location') || '')
+                            )
+                        );
+                    }
+                })
+                .value();
+
+            return this;
+        }
+
+    });
+
+    function getRequestParams() {
+        return {
+            // TODO remove folder from call as soon as the API supports it
+            folder: 'cal://0/' + folderAPI.getDefaultFolder('calendar'),
+            start: moment().startOf('day').valueOf(),
+            end: moment().startOf('day').add(1, 'month').valueOf()
+        };
+    }
+
     ext.point('io.ox/portal/widget/calendar').extend({
 
         title: gt('Appointments'),
 
         initialize: function (baton) {
-            api.on('update create delete', function () {
-                //refresh portal
-                require(['io.ox/portal/main'], function (portal) {
-                    var portalApp = portal.getApp(),
-                        portalModel = portalApp.getWidgetCollection()._byId[baton.model.id];
-                    if (portalModel) {
-                        portalApp.refreshWidget(portalModel, 0);
-                    }
-                });
-
-            });
+            baton.collection = api.collectionLoader.getCollection(getRequestParams());
         },
 
-        load: function (baton) {
-            // TODO remove folder from call as soon as the API supports it
-            return api.getAll({ folder: 'cal://0/' + folderAPI.getDefaultFolder('calendar') }).then(function (models) {
-                var numOfItems = _.device('smartphone') ? 5 : 10;
-                baton.data = models.slice(0, numOfItems);
-                return baton.data;
-            });
+        load: function () {
+            var def = new $.Deferred();
+
+            api.collectionLoader
+                .load(getRequestParams())
+                .once('load', function () {
+                    def.resolve();
+                    this.off('load:fail');
+                })
+                .once('load:fail', function (error) {
+                    def.reject(error);
+                    this.off('load');
+                });
+
+            return def;
         },
 
         summary: function (baton) {
@@ -77,35 +128,20 @@ define('plugins/portal/calendar/register', [
         },
 
         preview: function (baton) {
-            var models = baton.data,
-                $content = $('<ul class="content list-unstyled">');
+            var collection = baton.collection;
 
-            if (models.length === 0) {
-                $content.append(
-                    $('<li class="line">')
-                    .text(gt('You don\'t have any appointments in the near future.'))
+            if (collection.length === 0) {
+                this.append(
+                    $('<ul class="content list-unstyled">').append(
+                        $('<li class="line">')
+                        .text(gt('You don\'t have any appointments in the near future.'))
+                    )
                 );
             } else {
-                _(models).each(function (model) {
-                    var declined = util.getConfirmationStatus(model) === 'DECLINED';
-                    if (settings.get('showDeclinedAppointments', false) || !declined) {
-                        var timespan = util.getSmartDate(model, true);
-
-                        $content.append(
-                            $('<li class="item" tabindex="0">')
-                            .css('text-decoration', declined ? 'line-through' : 'none')
-                            .data('item', model)
-                            .append(
-                                $('<span class="normal accent">').text(timespan), $.txt('\u00A0'),
-                                $('<span class="bold">').text(model.get('summary') || ''), $.txt('\u00A0'),
-                                $('<span class="gray">').text(model.get('location') || '')
-                            )
-                        );
-                    }
-                });
+                this.append(new EventsView({
+                    collection: collection
+                }).render().$el);
             }
-
-            this.append($content);
         },
 
         draw: function (baton) {
