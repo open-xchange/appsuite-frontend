@@ -42,10 +42,6 @@ define('io.ox/calendar/chronos-util', [
                 return r;
             }
         },
-        ecid: function (o) {
-            var cid = typeof o === 'string' ? o : util.cid(o);
-            return encodeURIComponent(cid).replace(/\./g, ':');
-        },
         // creates an attendee object from a user object or model and contact model or object
         // distribution lists create an array of attendees representing the menmbers of the distribution list
         // used to create default participants and used by addparticipantsview

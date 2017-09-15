@@ -36,7 +36,7 @@ define('io.ox/calendar/detail/main', [
                             'aria-label': gt('Appointment Details')
                         }).append(detailView.draw(model)));
 
-                        api.once('delete:' + chronosUtil.ecid(model.attributes), function () {
+                        api.once('delete:' + chronosUtil.cid(model.attributes), function () {
                             app.quit();
                         });
                     },

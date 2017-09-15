@@ -37,7 +37,7 @@ define('io.ox/calendar/chronos-api', [
                 if (filter(event)) api.pool.propagateAdd(event);
                 cache.clear(event.folder);
                 api.trigger('create', event);
-                api.trigger('create:' + util.ecid(event), event);
+                api.trigger('create:' + util.cid(event), event);
             });
 
             _(response.deleted).each(function (event) {
@@ -48,14 +48,14 @@ define('io.ox/calendar/chronos-api', [
                         evt.collection.remove(evt);
                         cache.clear(evt.folder);
                         api.trigger('delete', evt);
-                        api.trigger('delete:' + util.ecid(evt), evt);
+                        api.trigger('delete:' + util.cid(evt), evt);
                     });
                 } else {
                     var model = api.pool.getModel(util.cid(event));
                     if (model) model.collection.remove(model);
                     cache.clear(event.folder);
                     api.trigger('delete', event);
-                    api.trigger('delete:' + util.ecid(event), event);
+                    api.trigger('delete:' + util.cid(event), event);
                 }
             });
 
@@ -72,7 +72,7 @@ define('io.ox/calendar/chronos-api', [
                 }
                 cache.clear(event.folder);
                 api.trigger('update', event);
-                api.trigger('update:' + util.ecid(event), event);
+                api.trigger('update:' + util.cid(event), event);
             });
 
             return response;
@@ -470,7 +470,7 @@ define('io.ox/calendar/chronos-api', [
                     return def;
                 }).then(processResponse).done(function (list) {
                     _(list).each(function (obj) {
-                        api.trigger('move:' + util.ecid(obj), targetFolderId);
+                        api.trigger('move:' + util.cid(obj), targetFolderId);
                     });
                     api.trigger('refresh.all');
                 });
