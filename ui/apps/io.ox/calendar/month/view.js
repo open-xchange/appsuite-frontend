@@ -172,7 +172,7 @@ define('io.ox/calendar/month/view', [
                         })
                         .data('date', day.timestamp)
                         .append(
-                            $('<div class="number">').text(day.date),
+                            $('<div class="number" aria-hidden="true">').text(day.date),
                             $('<div class="list abs">')
                         )
                     );
