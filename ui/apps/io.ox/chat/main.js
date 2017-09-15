@@ -12,11 +12,14 @@
  */
 
 define('io.ox/chat/main', [
+    'io.ox/chat/data',
     'io.ox/backbone/views/window',
+    'io.ox/chat/views/chat',
+    'io.ox/chat/views/chatList',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
     'less!io.ox/chat/style'
-], function (WindowView, contactsAPI, contactsUtil) {
+], function (data, WindowView, ChatView, ChatListView, contactsAPI, contactsUtil) {
 
     'use strict';
 
@@ -24,7 +27,6 @@ define('io.ox/chat/main', [
 
         events: {
             'click [data-cmd]': 'onCommand',
-            'keydown textarea': 'onEditorKeydown',
             'keydown .left-navigation': 'onLeftNavigationKeydown',
             'keydown .overlay': 'onOverlayEvent',
             'click .overlay': 'onOverlayEvent'
@@ -52,8 +54,9 @@ define('io.ox/chat/main', [
         },
 
         showChat: function (data) {
-            window.$rightside.empty().append(renderChat(data.id));
-            this.scrollToBottom();
+            var view = new ChatView({ id: data.id });
+            window.$rightside.empty().append(view.render().$el);
+            view.scrollToBottom();
         },
 
         showRecentConversations: function () {
@@ -90,15 +93,6 @@ define('io.ox/chat/main', [
             this.$el.focus();
         },
 
-        onEditorKeydown: function (e) {
-            if (e.which !== 13) return;
-            e.preventDefault();
-            var editor = $(e.currentTarget);
-            this.$('.conversation').append(renderMessage({ sender: 1, body: editor.val(), time: moment().format('LT') }));
-            this.scrollToBottom();
-            editor.val('').focus();
-        },
-
         onLeftNavigationKeydown: function (e) {
             if (e.which !== 38 && e.which !== 40) return;
             e.preventDefault();
@@ -112,104 +106,11 @@ define('io.ox/chat/main', [
             if ((e.type === 'click' && $(e.target).is('.overlay')) || e.which === 27) return this.closeFile();
             if (e.which !== 37 && e.which !== 39) return;
             this.moveFile(e.which === 37 ? -1 : +1);
-        },
-
-        scrollToBottom: function () {
-            this.$('.scrollpane').scrollTop(0xFFFF);
         }
     });
 
     var window = new Window({ title: 'OX Chat' }).open(),
         user = ox.rampup.user;
-
-    //
-    // Static data
-    //
-
-    var data = {
-
-        // USERS
-
-        users: {
-            1: { id: 1, name: 'Mattes', state: 'online' },
-            2: { id: 2, name: 'Alex', state: 'online' },
-            3: { id: 3, name: 'David', state: 'absent' },
-            4: { id: 4, name: 'Julian', state: 'busy' },
-            5: { id: 5, name: 'Someone with a really long name', state: 'online' }
-        },
-
-        // CHATS
-
-        chats: {
-            1: {
-                type: 'group',
-                title: 'Appointment: Status Meeting on Friday',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
-                messages: [
-                    { body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05' },
-                    { body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
-                    { body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
-                    { body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10' }
-                ],
-                unseen: 1
-            },
-            2: {
-                type: 'private',
-                title: 'Alex',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }],
-                messages: [
-                    { body: 'Can we handle images?', sender: 1, time: '14:33' },
-                    { body: 'Yep ...', sender: 2, time: '14:34' },
-                    { body: 'https://c2.staticflickr.com/6/5826/23795571972_60c5321fbe.jpg', type: 'image', sender: 2, time: '14:35' },
-                    { body: '👍', sender: 1, time: '14:36' }
-                ]
-            },
-            3: {
-                type: 'group',
-                title: 'Lorem ipsum',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
-                messages: [
-                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01' },
-                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
-                    { body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
-                ]
-            },
-            4: {
-                type: 'channel',
-                title: 'Another chat with a really long name so that it needs to be cut',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }, { type: 'user', id: 5 }],
-                messages: [
-                    { body: 'Hello World', sender: 2, time: '13:37' }
-                ]
-            }
-        },
-
-        // Channels
-
-        channels: [
-            { id: 1, title: 'Office Olpe', description: 'Everything related to the office in Olpe', members: 52 },
-            { id: 2, title: 'Office Cologne', description: 'Everything related to the office in Cologne', members: 11 },
-            { id: 3, title: 'Engineering', description: 'App Suite Core Engineering', members: 71 }
-        ],
-
-        // Files
-
-        files: [
-            // need better more colorful images
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Amanhecer_no_Hercules_--.jpg/640px-Amanhecer_no_Hercules_--.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Anfiteatro%2C_Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_165.JPG/640px-Anfiteatro%2C_Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_165.JPG' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Benkoka_Sabah_Jetty-at-Dataran-Benkoka-Pitas-01.jpg/640px-Benkoka_Sabah_Jetty-at-Dataran-Benkoka-Pitas-01.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/D%C3%BClmen%2C_Wildpark_--_2014_--_3830.jpg/640px-D%C3%BClmen%2C_Wildpark_--_2014_--_3830.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/M%C3%BCnster%2C_Park_Sentmaring_--_2015_--_9925.jpg/600px-M%C3%BCnster%2C_Park_Sentmaring_--_2015_--_9925.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/D%C3%BClmen%2C_Naturschutzgebiet_-Am_Enteborn-_--_2014_--_0202.jpg/640px-D%C3%BClmen%2C_Naturschutzgebiet_-Am_Enteborn-_--_2014_--_0202.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Wuppertal_Nordpark_0004.jpg/640px-Wuppertal_Nordpark_0004.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Haltern_am_See%2C_Sythen%2C_WASAG_--_2015_--_8424.jpg/640px-Haltern_am_See%2C_Sythen%2C_WASAG_--_2015_--_8424.jpg' },
-            // beach
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Mare_in_Marina_di_Pisa.jpg/640px-Mare_in_Marina_di_Pisa.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Naked_Island.jpg/640px-Naked_Island.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Oahu_0076.jpg/640px-Oahu_0076.jpg' }
-        ]
-    };
 
     // start with BAD style and hard-code stuff
 
@@ -226,17 +127,9 @@ define('io.ox/chat/main', [
                 $('<input type="text" spellcheck="false" autocomplete="false" placeholder="Search chat or contact">')
             ),
             $('<div class="left-navigation abs">').append(
-                $('<div class="chats">').append(
-                    _(data.chats).map(function (chat, id) {
-                        return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                        .attr('data-id', id)
-                        .append(
-                            renderChatIcon(chat),
-                            $('<span class="label label-default">').text(chat.unseen),
-                            $('<div class="title">').toggleClass('unseen', chat.unseen > 0).text(chat.title)
-                        );
-                    })
-                ),
+                // chats
+                new ChatListView({ collection: data.backbone.chats }).render().$el,
+                // navigation
                 $('<div class="navigation">').append(
                     $('<button type="button" class="btn-nav" data-cmd="show-recent-conversations">').append(
                         $('<i class="fa fa-clock-o btn-icon">'),
@@ -263,86 +156,6 @@ define('io.ox/chat/main', [
             )
         )
     );
-
-    function renderChatIcon(chat) {
-        switch (chat.type) {
-            case 'private': return $('<span class="btn-icon">').append(renderState('online').addClass(' small'));
-            case 'group': return $('<i class="fa fa-group btn-icon">');
-            case 'channel': return $('<i class="fa fa-hashtag btn-icon">');
-            // no default
-        }
-    }
-
-    var previousSender = 0;
-
-    function renderChat(id) {
-        var chat = data.chats[id];
-        previousSender = 0;
-        return !chat ? $() : $('<div class="chat">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append(chat.title),
-                $('<ul class="members">').append(
-                    _(chat.members).map(renderMember)
-                )
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<div class="conversation ">').append(
-                    _(chat.messages).map(renderMessage)
-                )
-            ),
-            $('<div class="controls abs">').append(
-                $('<textarea class="form-control" placeholder="Enter message here">')
-            )
-        );
-    }
-
-    function renderMember(member) {
-        return $('<li class="member">').append(
-            renderMemberState(member),
-            $.txt(getUserName(member.id))
-        );
-    }
-
-    function renderMessage(message) {
-        try {
-            return $('<div class="message">')
-                .toggleClass('myself', isMyself(message.sender))
-                .append(
-                    // sender
-                    message.sender === previousSender ? $() : getSender(message),
-                    // message boby
-                    $('<div>').addClass(message.type === 'image' ? 'image' : 'body').html(getMessageBody(message)),
-                    // time
-                    $('<div class="time">').text(message.time),
-                    // delivery state
-                    $('<div class="fa message-state">')
-                )
-                // exemplary animation
-                .delay(100).queue(function () {
-                    $(this).find('.message-state').addClass('sent').delay(500).queue(function () {
-                        $(this).addClass('received').dequeue().delay(2000).queue(function () {
-                            $(this).addClass('seen');
-                        });
-                    });
-                });
-        } finally {
-            previousSender = message.sender;
-        }
-    }
-
-    function getSender(message) {
-        return $('<div class="sender">').text(getUserName(message.sender));
-    }
-
-    function getMessageBody(message) {
-        var body = '';
-        if (message.type === 'image') {
-            body = '<img src="' + message.body + '" alt="">';
-        } else {
-            body = _.escape(message.body).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
-        }
-        return body;
-    }
 
     function renderRecentConversations() {
         return $('<div class="history abs">').append(
@@ -407,21 +220,8 @@ define('io.ox/chat/main', [
         );
     }
 
-    function getUserName(id) {
-        return data.users[id].name;
-    }
-
-    function isMyself(id) {
-        return id === 1;
-    }
-
-    function renderMemberState(member) {
-        var state = data.users[member.id].state;
-        return renderState(state);
-    }
-
-    function renderState(state) {
-        return $('<span class="fa state">').addClass(state);
-    }
+    ox.chat = {
+        backbone: data.backbone
+    };
 
 });

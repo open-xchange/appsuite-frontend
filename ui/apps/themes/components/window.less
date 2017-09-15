@@ -32,23 +32,27 @@
 }
 
 #io-ox-taskbar {
-    background-color: rgba(0, 0, 0, 0.40);
+    border-top: 1px solid #ccc;
+    background-color: #f5f5f5;
     top: auto;
     height: 40px;
-    padding: 2px;
+    padding: 3px 56px 2px 2px;
     margin: 0;
     display: none;
     list-style-type: none;
-    li {
-        height: 36px;
-        line-height: 36px;
+    button {
+        border: 0;
+        height: 32px;
+        line-height: 32px;
         color: white;
         font-weight: bold;
-        background-color: #333;
+        background-color: rgba(0, 0, 0, 0.7);
         padding: 0 16px;
         width: 240px;
         float: right;
         margin-left: 8px;
+        text-align: left;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3)
     }
 }
 
@@ -485,11 +489,12 @@
         .controls {
             position: absolute;
             top: 0;
-            right: 16px;
-            line-height: @headerHeight;
-            height: @headerHeight;
+            right: 0;
             a {
                 color: white;
+                line-height: @headerHeight;
+                padding: 0 16px;
+                display: inline-block;
             }
         }
     }

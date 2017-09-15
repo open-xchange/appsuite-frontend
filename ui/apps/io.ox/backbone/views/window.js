@@ -68,13 +68,18 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
         },
 
         toggle: function (state) {
-            this.$el.toggleClass('minimized', !state);
+            if (state) this.$el.show();
+            this.$el.stop().toggleClass('minimized', !state);
             this.minimized = !state;
-            // little delay to wait for animation
             if (state) {
+                this.$el.show();
                 collection.trigger('show', this);
             } else {
-                setTimeout(function () { collection.trigger('hide', this); }, 300);
+                // little delay to wait for animation
+                this.$el.delay(300).queue(function () {
+                    $(this).hide();
+                    collection.trigger('hide', this);
+                });
             }
         }
     });
@@ -95,13 +100,18 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
         $('#io-ox-taskbar').empty().append(
             this.map(function (model) {
                 var window = model.get('window');
-                return window.minimized ? $('<li>').text(window.title).attr('data-cid', window.cid) : $();
+                if (!window.minimized) return $();
+                return $('<li>').append(
+                    $('<button type="button">')
+                        .attr('data-cid', window.cid)
+                        .text(window.title)
+                );
             })
         );
         $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
     });
 
-    $(document).on('click', '#io-ox-taskbar li', function (e) {
+    $(document).on('click', '#io-ox-taskbar button', function (e) {
         var cid = $(e.currentTarget).attr('data-cid'),
             model = collection.get(cid);
         model.get('window').toggle(true);
