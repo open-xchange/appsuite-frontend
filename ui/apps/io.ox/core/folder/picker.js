@@ -138,7 +138,7 @@ define('io.ox/core/folder/picker', [
         }
 
         if (o.alternativeButton) {
-            dialog.addAlternativeButton('alternative', o.alternativeButton);
+            dialog.addAlternativeButton({ action: 'alternative', label: o.alternativeButton });
         }
         dialog.$body.css({ height: o.height });
 
