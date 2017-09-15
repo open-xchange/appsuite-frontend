@@ -178,23 +178,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
         }
         // create new elements
-        var dummySpan = ed.getDoc().createElement('span');
-        dummySpan.innerHTML = '&nbsp;';
-        var para = ed.getDoc().createElement('p');
-        // and both elements to editor
-        para.appendChild(dummySpan);
-        range.insertNode(para);
-        // select the span
-        ed.selection.select(dummySpan);
-        // and delete it
-        ed.execCommand('Delete', false, null);
-        if (!_.device('smartphone')) {
-            var defaultStyle = mailUtil.getDefaultStyle().css;
-            // apply default font styles
-            if (defaultStyle['font-size']) ed.execCommand('fontSize', false, defaultStyle['font-size']);
-            if (defaultStyle['font-family']) ed.execCommand('fontName', false, defaultStyle['font-family']);
-            if (defaultStyle.color) ed.execCommand('forecolor', false, defaultStyle.color);
-        }
+        range.insertNode(mailUtil.getDefaultStyle().node.get(0));
     }
 
     function isInsideBlockquote(range) {
@@ -236,6 +220,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         var rendered = $.Deferred(), initialized = $.Deferred(), ed;
         var toolbar, editor, editorId = el.data('editorId');
+        var defaultStyle = mailUtil.getDefaultStyle();
 
         el.append(
             el = $('<div class="contenteditable-editor">').attr({
@@ -316,6 +301,8 @@ define('io.ox/core/tk/contenteditable-editor', [
             // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
             // this one is stored in mail settings
             forced_root_block: mailSettings.get('simpleLineBreaks', true) ? /* false */ 'p' : 'p',
+
+            forced_root_block_attrs: { 'style': defaultStyle.string, 'class': 'default-style' },
 
             browser_spellcheck: true,
 
