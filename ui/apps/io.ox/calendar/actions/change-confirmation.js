@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/actions/change-confirmation', [
-    'io.ox/calendar/api'
+    'io.ox/calendar/chronos-api'
 ], function (calApi) {
 
     'use strict';
