@@ -977,26 +977,8 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
-            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
-            if (!_.device('smartphone')) {
-                var defaultStyle = mailUtil.getDefaultStyle(), styleNode;
-
-                if (_.isEmpty(defaultStyle.css)) {
-                    // no styles there so just a br
-                    styleNode = $('<br>');
-                } else {
-                    // br must be appended here. Or tinymce just deletes the span.
-                    styleNode = $('<span>').append($('<br>'));
-                    styleNode.css(defaultStyle.css).attr('data-mce-style', defaultStyle.string);
-                }
-
-                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
-            } else {
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            }
-
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },
 
