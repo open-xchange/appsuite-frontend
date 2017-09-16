@@ -20,10 +20,12 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
         className: 'chats',
 
         initialize: function () {
-            this.listenTo(this.collection, 'add', this.onAdd);
-            this.listenTo(this.collection, 'remove', this.onRemove);
-            this.listenTo(this.collection, 'change:title', this.onChangeTitle);
-            this.listenTo(this.collection, 'change:unseen', this.onChangeUnseen);
+            this.listenTo(this.collection, {
+                'add': this.onAdd,
+                'remove': this.onRemove,
+                'change:title': this.onChangeTitle,
+                'change:unseen': this.onChangeUnseen
+            });
         },
 
         render: function () {
@@ -56,8 +58,8 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
             }
         },
 
-        getNodeById: function (id) {
-            return this.$('[data-id="' + $.escape(id) + '"]');
+        getNode: function (model) {
+            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
         },
 
         onAdd: function (model) {
@@ -65,16 +67,18 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
         },
 
         onRemove: function (model) {
-            this.getNodeById(model.id).remove();
+            this.getNode(model).remove();
         },
 
         onChangeTitle: function (model) {
-            this.getNodeById(model.id).find('.title').text(model.get('title') || '\u00A0');
+            this.getNode(model).find('.title').text(model.get('title') || '\u00A0');
         },
 
         onChangeUnseen: function (model) {
             var count = model.get('unseen');
-            this.getNodeById(model.id).toggleClass('unseen', count > 0).find('.label').text(count);
+            this.$el.prepend(
+                this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count).end()
+            );
         }
     });
 

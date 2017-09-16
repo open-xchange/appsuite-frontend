@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chat', ['io.ox/chat/data', 'io.ox/chat/views/state'], function (data, StateView) {
+define('io.ox/chat/views/chat', [
+    'io.ox/chat/data',
+    'io.ox/chat/views/badge'
+], function (data, BadgeView) {
 
     'use strict';
 
@@ -26,15 +29,24 @@ define('io.ox/chat/views/chat', ['io.ox/chat/data', 'io.ox/chat/views/state'], f
         initialize: function (options) {
 
             this.model = data.backbone.chats.get(options.id);
-            this.previousSender = 0;
 
-            this.listenTo(this.model.messages, 'add', this.onAdd);
+            this.listenTo(this.model, {
+                'change:title': this.onChangeTitle
+            });
+
+            this.listenTo(this.model.messages, {
+                'add': this.onAdd,
+                'remove': this.onRemove,
+                'change:body': this.onChangeBody,
+                'change:time': this.onChangeTime,
+                'change:delivery': this.onChangeDelivery
+            });
         },
 
         render: function () {
             this.$el.append(
                 $('<div class="header abs">').append(
-                    $('<h2>').append(this.model.get('title')),
+                    $('<h2 class="title">').append(this.model.get('title') || '\u00a0'),
                     $('<ul class="members">').append(
                         this.model.members.map(this.renderMember, this)
                     )
@@ -52,36 +64,23 @@ define('io.ox/chat/views/chat', ['io.ox/chat/data', 'io.ox/chat/views/state'], f
         },
 
         renderMember: function (model) {
-            return $('<li class="member">').append(
-                renderMemberState(model),
-                $.txt(getUserName(model.id))
-            );
+            return new BadgeView({ model: model }).render().$el;
         },
 
         renderMessage: function (model) {
-            var data = model.toJSON();
-            var $message = $('<div class="message">')
+            return $('<div class="message">')
+                .attr('data-id', model.id)
                 .toggleClass('myself', model.isMyself())
                 .append(
                     // sender
-                    data.sender === this.previousSender ? $() : getSender(data),
+                    model.hasDifferentSender() ? getSender(model) : $(),
                     // message boby
-                    $('<div>').addClass(data.type === 'image' ? 'image' : 'body').html(model.getBody()),
+                    $('<div>').addClass(model.get('type') === 'image' ? 'image' : 'body').html(model.getBody()),
                     // time
                     $('<div class="time">').text(model.get('time')),
                     // delivery state
-                    $('<div class="fa message-state">')
-                )
-                // exemplary animation
-                .delay(100).queue(function () {
-                    $(this).find('.message-state').addClass('sent').delay(500).queue(function () {
-                        $(this).addClass('received').dequeue().delay(2000).queue(function () {
-                            $(this).addClass('seen');
-                        });
-                    });
-                });
-            this.previousSender = data.sender;
-            return $message;
+                    $('<div class="fa delivery">').addClass(model.get('delivery'))
+                );
         },
 
         scrollToBottom: function () {
@@ -92,26 +91,57 @@ define('io.ox/chat/views/chat', ['io.ox/chat/data', 'io.ox/chat/views/state'], f
             if (e.which !== 13) return;
             e.preventDefault();
             var editor = $(e.currentTarget);
-            this.model.messages.add({ sender: 1, body: editor.val(), time: moment().format('LT') });
+            this.model.messages.add({ id: this.model.collection.length + 1, sender: 1, body: editor.val(), time: moment().format('LT') });
             editor.val('').focus();
+        },
+
+        onChangeTitle: function (model) {
+            this.$('.title').text(model.get('title') || '\u00a0');
         },
 
         onAdd: function (model) {
             this.$('.conversation').append(this.renderMessage(model));
             this.scrollToBottom();
+            // exemplary animation
+            setTimeout(function () {
+                model.set('delivery', 'sent');
+                setTimeout(function () {
+                    model.set('delivery', 'received');
+                    setTimeout(function () {
+                        model.set('delivery', 'seen');
+                        model = null;
+                    }, 1000);
+                }, 500);
+            }, 100);
+        },
+
+        getMessageNode: function (model, selector) {
+            return this.$('.message[data-id="' + model.id + '"] ' + (selector || ''));
+        },
+
+        onRemove: function (model) {
+            this.getMessageNode(model).remove();
+        },
+
+        onChangeBody: function (model) {
+            this.getMessageNode(model, '.body').html(model.getBody());
+        },
+
+        onChangeTime: function (model) {
+            this.getMessageNode(model, '.time').text(model.get('time'));
+        },
+
+        onChangeDelivery: function (model) {
+            this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
         }
     });
 
-    function getSender(message) {
-        return $('<div class="sender">').text(getUserName(message.sender));
+    function getSender(model) {
+        return $('<div class="sender">').text(getUserName(model.get('sender')));
     }
 
     function getUserName(id) {
         return data.backbone.users.get(id).get('name');
-    }
-
-    function renderMemberState(model) {
-        return new StateView({ model: model }).render().$el;
     }
 
     return ChatView;

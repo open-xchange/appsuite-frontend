@@ -48,6 +48,17 @@
         background-color: @backgroundColor;
         position: relative;
 
+        h2 {
+            font-size: 15px;
+            line-height: 24px;
+            font-weight: normal;
+            margin: -1px 0 0 0;
+            padding: 0;
+        }
+    }
+
+    .leftside .header {
+
         .picture {
             .picture(@pictureSize, @pictureSize);
             margin-right: 16px;
@@ -60,19 +71,11 @@
             line-height: @pictureSize;
         }
 
-        h2 {
-            font-size: 15px;
-            line-height: 24px;
-            font-weight: normal;
-            margin: -1px 0 0 0;
-            padding: 0;
+        .state {
+            position: absolute;
+            left: @pictureSize;
+            top: @pictureSize + 16px - @stateSize;
         }
-    }
-
-    .leftside .header .state {
-        position: absolute;
-        left: @pictureSize;
-        top: @pictureSize + 16px - @stateSize;
     }
 
     .search {
@@ -138,6 +141,7 @@
 
     .chats {
         flex-grow: 1;
+        margin-bottom: 32px;
         .unseen {
             font-weight: bold;
         }
@@ -232,7 +236,7 @@
                 color: #fff;
                 background-color: @gray;
             }
-            .message-state {
+            .delivery {
                 display: block;
                 position: absolute;
                 top: 16px;
@@ -271,12 +275,13 @@
         overflow: hidden;
         white-space: nowrap;
         line-height: 24px;
-        .member {
-            display: inline-block;
-            margin-right: 12px;
-            max-width: 200px;
-            .ellipsis();
-        }
+    }
+
+    .user-badge {
+        display: inline-block;
+        margin-right: 12px;
+        max-width: 200px;
+        .ellipsis();
     }
 
     .state {
@@ -301,12 +306,12 @@
         &.online { background-color: @green; }
         &.absent { background-color: @orange; }
         &.busy { background-color: @red; }
-        &.offline { color: #707070; }
+        &.offline { background-color: #333; }
         // icon
         &.online:before { content: "\f00c"; } // check
         &.absent:before { content: "\f017"; } // clock
         &.busy:before { content: "\f068"; } // minus
-        &.offline:before { content: ""; }
+        &.offline:before { content: "\f00d"; color: #ccc; }
     }
 
     .channels {

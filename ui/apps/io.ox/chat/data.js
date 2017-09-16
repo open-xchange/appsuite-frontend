@@ -26,7 +26,7 @@ define('io.ox/chat/data', [], function () {
             { id: 2, name: 'Alex', state: 'online' },
             { id: 3, name: 'David', state: 'absent' },
             { id: 4, name: 'Julian', state: 'busy' },
-            { id: 5, name: 'Someone with a really long name', state: 'online' }
+            { id: 5, name: 'Someone with a really long name', state: 'offline' }
         ],
 
         // CHATS
@@ -38,10 +38,10 @@ define('io.ox/chat/data', [], function () {
                 title: 'Appointment: Status Meeting on Friday',
                 members: [1, 2, 3, 4],
                 messages: [
-                    { body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05' },
-                    { body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
-                    { body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
-                    { body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10' }
+                    { id: 1, body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05', delivery: 'seen' },
+                    { id: 2, body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
+                    { id: 3, body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
+                    { id: 4, body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10', delivery: 'seen' }
                 ],
                 unseen: 1
             },
@@ -51,11 +51,12 @@ define('io.ox/chat/data', [], function () {
                 title: 'Alex',
                 members: [2, 1],
                 messages: [
-                    { body: 'Can we handle images?', sender: 1, time: '14:33' },
-                    { body: 'Yep ...', sender: 2, time: '14:34' },
-                    { body: 'https://c2.staticflickr.com/6/5826/23795571972_60c5321fbe.jpg', type: 'image', sender: 2, time: '14:35' },
-                    { body: '👍', sender: 1, time: '14:36' }
-                ]
+                    { id: 1, body: 'Can we handle images?', sender: 1, time: '14:33', delivery: 'seen' },
+                    { id: 2, body: 'Yep ...', sender: 2, time: '14:34' },
+                    { id: 3, body: 'https://c2.staticflickr.com/6/5826/23795571972_60c5321fbe.jpg', type: 'image', sender: 2, time: '14:35' },
+                    { id: 4, body: '👍', sender: 1, time: '14:36', delivery: 'seen' }
+                ],
+                unseen: 0
             },
             {
                 id: 3,
@@ -63,10 +64,11 @@ define('io.ox/chat/data', [], function () {
                 title: 'Lorem ipsum',
                 members: [1, 2, 3, 4],
                 messages: [
-                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01' },
-                    { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
-                    { body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
-                ]
+                    { id: 1, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01', delivery: 'seen' },
+                    { id: 2, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
+                    { id: 3, body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
+                ],
+                unseen: 0
             },
             {
                 id: 4,
@@ -74,8 +76,9 @@ define('io.ox/chat/data', [], function () {
                 title: 'Another chat with a really long name so that it needs to be cut',
                 members: [1, 2, 3, 4, 5],
                 messages: [
-                    { body: 'Hello World', sender: 2, time: '13:37' }
-                ]
+                    { id: 1, body: 'Hello World', sender: 2, time: '13:37' }
+                ],
+                unseen: 0
             }
         ],
 
@@ -129,6 +132,12 @@ define('io.ox/chat/data', [], function () {
 
         isMyself: function () {
             return this.get('sender') === 1;
+        },
+
+        hasDifferentSender: function () {
+            var index = this.collection.indexOf(this);
+            if (index <= 0) return true;
+            return this.collection.at(index - 1).get('sender') !== this.get('sender');
         }
     });
 
@@ -164,6 +173,83 @@ define('io.ox/chat/data', [], function () {
 
     var ChatCollection = Backbone.Collection.extend({ model: ChatModel });
     data.backbone.chats = new ChatCollection(data.chats);
+
+    // some random activity
+    setTimeout(function () {
+
+        function getChatTitle() {
+            return ['Boring', 'Stupid', 'Useless', 'Awesome', 'Good', 'Hilarious'][_.random(5)] + ' ' +
+                ['chat', 'conversation', 'talk', 'discussion', 'flame war', 'debating club'][_.random(5)];
+        }
+
+        function getTime() {
+            return moment().format('LT');
+        }
+
+        function getMessage() {
+            return ['Hi', 'Hello', 'Lorem ipsum', 'Just a test', 'Anyone here?', 'Yay 👍'][_.random(5)];
+        }
+
+        function getImage() {
+            return data.files[_.random(8)].url;
+        }
+
+        function getState() {
+            return ['online', 'absent', 'busy', 'offline'][_.random(3)];
+        }
+
+        setInterval(function () {
+
+            var chat;
+
+            switch (_.random(9)) {
+
+                case 0:
+                    // add group chat
+                    data.backbone.chats.add({
+                        id: data.backbone.chats.length + 1,
+                        type: 'group',
+                        title: getChatTitle(),
+                        members: [],
+                        messages: [
+                            { id: 1, body: 'Hi', sender: 1, time: getTime(), delivery: 'seen' }
+                        ],
+                        unseen: 0
+                    });
+                    break;
+
+                case 1:
+                case 2:
+                case 3:
+                    // change status
+                    var user = data.backbone.users.at(_.random(data.backbone.users.length - 1));
+                    user.set('state', getState());
+                    break;
+
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    // add message
+                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
+                    chat.messages.add({ id: chat.messages.length + 1, body: getMessage(), sender: _.random(1, 5), time: getTime() });
+                    chat.set('unseen', chat.get('unseen') + 1);
+                    break;
+
+                case 8:
+                case 9:
+                    // add image
+                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
+                    chat.messages.add({ id: chat.messages.length + 1, body: getImage(), type: 'image', sender: _.random(1, 5), time: getTime() });
+                    chat.set('unseen', chat.get('unseen') + 1);
+                    break;
+
+                // no default
+            }
+
+        }, 3000);
+
+    }, 3000);
 
     return data;
 });
