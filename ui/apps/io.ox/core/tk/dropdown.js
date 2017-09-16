@@ -15,7 +15,7 @@
     'use strict';
 
     var activeElement,
-        phone = _.device('smartphone');
+        smallPhone = _.device('smartphone && small');
 
     // jquery extension for dropdown
     function Plugin(options) {
@@ -46,7 +46,7 @@
     function clearMenus(e) {
         if (e && e.which === 3) return;
         $('.dropdown-backdrop').remove();
-        if (phone) {
+        if (smallPhone) {
             $('#io-ox-core').removeClass('menu-blur');
             $('.dropdown-menu').hide();
             ox.idle();
@@ -68,7 +68,7 @@
             // if the user clicked on a focusable inputfield we focus that instead of the dropdown root element
             var focusableElement = $(document.activeElement).filter('.editable, input[type="text"], input[type="textarea"], input[type="email"]');
             if (activeElement) {
-                if (!phone && originalEventType === 'click' && focusableElement.length) {
+                if (!smallPhone && originalEventType === 'click' && focusableElement.length) {
                     focusableElement.focus();
                 } else {
                     activeElement.focus();
@@ -104,7 +104,7 @@
 
         // on a phone detach the menu and attach it to the body again
         // with position fixed. Then it will be a modal menu in fullscreen
-        if (phone) {
+        if (smallPhone) {
             var $ul = $parent.find('ul');
             if ($ul.length > 0) {
                 // menu was not re-attched before
@@ -167,7 +167,7 @@
                 .toggleClass('open')
                 .trigger($.Event('shown.bs.dropdown', relatedTarget));
 
-            if (phone) {
+            if (smallPhone) {
                 ox.disable(true);
                 $('#io-ox-core').addClass('menu-blur');
                 $parent.data('menu').show();
