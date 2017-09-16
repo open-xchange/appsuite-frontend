@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chat', ['io.ox/chat/data'], function (data) {
+define('io.ox/chat/views/chat', ['io.ox/chat/data', 'io.ox/chat/views/state'], function (data, StateView) {
 
     'use strict';
 
@@ -53,37 +53,35 @@ define('io.ox/chat/views/chat', ['io.ox/chat/data'], function (data) {
 
         renderMember: function (model) {
             return $('<li class="member">').append(
-                renderMemberState(model.toJSON()),
+                renderMemberState(model),
                 $.txt(getUserName(model.id))
             );
         },
 
         renderMessage: function (model) {
-            var message = model.toJSON();
-            try {
-                return $('<div class="message">')
-                    .toggleClass('myself', model.isMyself())
-                    .append(
-                        // sender
-                        message.sender === this.previousSender ? $() : getSender(message),
-                        // message boby
-                        $('<div>').addClass(message.type === 'image' ? 'image' : 'body').html(model.getBody()),
-                        // time
-                        $('<div class="time">').text(model.get('time')),
-                        // delivery state
-                        $('<div class="fa message-state">')
-                    )
-                    // exemplary animation
-                    .delay(100).queue(function () {
-                        $(this).find('.message-state').addClass('sent').delay(500).queue(function () {
-                            $(this).addClass('received').dequeue().delay(2000).queue(function () {
-                                $(this).addClass('seen');
-                            });
+            var data = model.toJSON();
+            var $message = $('<div class="message">')
+                .toggleClass('myself', model.isMyself())
+                .append(
+                    // sender
+                    data.sender === this.previousSender ? $() : getSender(data),
+                    // message boby
+                    $('<div>').addClass(data.type === 'image' ? 'image' : 'body').html(model.getBody()),
+                    // time
+                    $('<div class="time">').text(model.get('time')),
+                    // delivery state
+                    $('<div class="fa message-state">')
+                )
+                // exemplary animation
+                .delay(100).queue(function () {
+                    $(this).find('.message-state').addClass('sent').delay(500).queue(function () {
+                        $(this).addClass('received').dequeue().delay(2000).queue(function () {
+                            $(this).addClass('seen');
                         });
                     });
-            } finally {
-                this.previousSender = message.sender;
-            }
+                });
+            this.previousSender = data.sender;
+            return $message;
         },
 
         scrollToBottom: function () {
@@ -109,16 +107,11 @@ define('io.ox/chat/views/chat', ['io.ox/chat/data'], function (data) {
     }
 
     function getUserName(id) {
-        return data.users[id].name;
+        return data.backbone.users.get(id).get('name');
     }
 
-    function renderMemberState(member) {
-        var state = data.users[member.id].state;
-        return renderState(state);
-    }
-
-    function renderState(state) {
-        return $('<span class="fa state">').addClass(state);
+    function renderMemberState(model) {
+        return new StateView({ model: model }).render().$el;
     }
 
     return ChatView;

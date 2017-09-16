@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chatList', [], function () {
+define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'], function (data, StateView) {
 
     'use strict';
 
@@ -44,9 +44,14 @@ define('io.ox/chat/views/chatList', [], function () {
 
         renderChatIcon: function (model) {
             switch (model.get('type')) {
-                case 'private': return $('<span class="btn-icon">').append(renderState('online').addClass(' small'));
-                case 'group': return $('<i class="fa fa-group btn-icon">');
-                case 'channel': return $('<i class="fa fa-hashtag btn-icon">');
+                case 'private':
+                    return $('<span class="btn-icon">').append(
+                        new StateView({ model: model.members.at(0) }).render().$el.addClass('small')
+                    );
+                case 'group':
+                    return $('<i class="fa fa-group btn-icon">');
+                case 'channel':
+                    return $('<i class="fa fa-hashtag btn-icon">');
                 // no default
             }
         },
@@ -72,10 +77,6 @@ define('io.ox/chat/views/chatList', [], function () {
             this.getNodeById(model.id).toggleClass('unseen', count > 0).find('.label').text(count);
         }
     });
-
-    function renderState(state) {
-        return $('<span class="fa state">').addClass(state);
-    }
 
     return ChatListView;
 });

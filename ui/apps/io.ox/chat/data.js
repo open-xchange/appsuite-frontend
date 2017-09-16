@@ -21,22 +21,22 @@ define('io.ox/chat/data', [], function () {
 
         // USERS
 
-        users: {
-            1: { id: 1, name: 'Mattes', state: 'online' },
-            2: { id: 2, name: 'Alex', state: 'online' },
-            3: { id: 3, name: 'David', state: 'absent' },
-            4: { id: 4, name: 'Julian', state: 'busy' },
-            5: { id: 5, name: 'Someone with a really long name', state: 'online' }
-        },
+        users: [
+            { id: 1, name: 'Mattes', state: 'online' },
+            { id: 2, name: 'Alex', state: 'online' },
+            { id: 3, name: 'David', state: 'absent' },
+            { id: 4, name: 'Julian', state: 'busy' },
+            { id: 5, name: 'Someone with a really long name', state: 'online' }
+        ],
 
         // CHATS
 
-        chats: {
-            1: {
+        chats: [
+            {
                 id: 1,
                 type: 'group',
                 title: 'Appointment: Status Meeting on Friday',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
+                members: [1, 2, 3, 4],
                 messages: [
                     { body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05' },
                     { body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
@@ -45,11 +45,11 @@ define('io.ox/chat/data', [], function () {
                 ],
                 unseen: 1
             },
-            2: {
+            {
                 id: 2,
                 type: 'private',
                 title: 'Alex',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }],
+                members: [2, 1],
                 messages: [
                     { body: 'Can we handle images?', sender: 1, time: '14:33' },
                     { body: 'Yep ...', sender: 2, time: '14:34' },
@@ -57,27 +57,27 @@ define('io.ox/chat/data', [], function () {
                     { body: '👍', sender: 1, time: '14:36' }
                 ]
             },
-            3: {
+            {
                 id: 3,
                 type: 'group',
                 title: 'Lorem ipsum',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }],
+                members: [1, 2, 3, 4],
                 messages: [
                     { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01' },
                     { body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
                     { body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
                 ]
             },
-            4: {
+            {
                 id: 4,
                 type: 'channel',
                 title: 'Another chat with a really long name so that it needs to be cut',
-                members: [{ type: 'user', id: 1 }, { type: 'user', id: 2 }, { type: 'user', id: 3 }, { type: 'user', id: 4 }, { type: 'user', id: 5 }],
+                members: [1, 2, 3, 4, 5],
                 messages: [
                     { body: 'Hello World', sender: 2, time: '13:37' }
                 ]
             }
-        },
+        ],
 
         // Channels
 
@@ -108,6 +108,16 @@ define('io.ox/chat/data', [], function () {
 
     // Backbone
 
+    data.backbone = {};
+
+    // User
+
+    var UserModel = Backbone.Model.extend({});
+    var UserCollection = Backbone.Collection.extend({ model: UserModel });
+    data.backbone.users = new UserCollection(data.users);
+
+    // Message
+
     var MessageModel = Backbone.Model.extend({
 
         getBody: function () {
@@ -123,6 +133,15 @@ define('io.ox/chat/data', [], function () {
     });
 
     var MessageCollection = Backbone.Collection.extend({ model: MessageModel });
+
+    // Chat
+
+    // denormalize first
+    _(data.chats).each(function (chat) {
+        chat.members = _(chat.members).map(function (id) {
+            return data.backbone.users.get(id);
+        });
+    });
 
     var ChatModel = Backbone.Model.extend({
 
@@ -144,14 +163,7 @@ define('io.ox/chat/data', [], function () {
     });
 
     var ChatCollection = Backbone.Collection.extend({ model: ChatModel });
-
-    data.backbone = {
-        chats: new ChatCollection()
-    };
-
-    _(data.chats).each(function (chat) {
-        data.backbone.chats.add(chat);
-    });
+    data.backbone.chats = new ChatCollection(data.chats);
 
     return data;
 });
