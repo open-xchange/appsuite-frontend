@@ -18,6 +18,7 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/chatList',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
+    'io.ox/chat/socket',
     'less!io.ox/chat/style'
 ], function (data, WindowView, ChatView, ChatListView, contactsAPI, contactsUtil) {
 
@@ -30,6 +31,12 @@ define('io.ox/chat/main', [
             'keydown .left-navigation': 'onLeftNavigationKeydown',
             'keydown .overlay': 'onOverlayEvent',
             'click .overlay': 'onOverlayEvent'
+        },
+
+        initialize: function () {
+            this.listenTo(data.backbone.chats, 'unseen', function (count) {
+                this.setCount(count);
+            });
         },
 
         onCommand: function (e) {

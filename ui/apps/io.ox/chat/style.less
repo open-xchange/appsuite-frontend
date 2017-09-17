@@ -127,6 +127,10 @@
             }
         }
 
+        .btn-nav:focus {
+            font-weight: bold;
+        }
+
         .btn-icon {
             float: left;
             width: 32px;
@@ -142,15 +146,13 @@
     .chats {
         flex-grow: 1;
         margin-bottom: 32px;
-        .unseen {
-            font-weight: bold;
-        }
         .title {
             .ellipsis();
         }
         .label {
             float: right;
             position: relative;
+            margin-left: 4px;
             top: 1px;
             display: none;
         }
@@ -200,14 +202,23 @@
         .sender {
             font-weight: bold;
         }
-        .body {
-            padding: 8px 16px;
-            background-color: #eee;
-            border-radius: 8px;
-            display: inline-block;
-            text-align: left;
+        &.text {
+            .body {
+                padding: 8px 16px;
+                background-color: #eee;
+                border-radius: 8px;
+                display: inline-block;
+                text-align: left;
+            }
         }
-        .image {
+        &.system {
+            padding: 0 32px;
+            .body {
+                color: #707070;
+                text-align: center;
+            }
+        }
+        &.image {
             img {
                 border: 0;
                 max-width: 100%;

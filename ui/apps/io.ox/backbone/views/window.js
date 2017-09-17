@@ -22,6 +22,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
         constructor: function (options) {
             this.options = options || {};
             this.title = this.options.title;
+            this.count = this.options.count || 0;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
             this.minimized = null;
@@ -32,7 +33,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
             this.$el.attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
                 $('<div class="abs" role="document">').append(
                     this.$header = $('<div class="floating-header abs">').append(
-                        $('<h1>').attr('id', title_id).text(this.options.title || '\u00A0'),
+                        $('<h1>').append(
+                            $('<span class="title">').attr('id', title_id).text(this.options.title || '\u00A0'),
+                            $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
+                        ),
                         $('<div class="controls">').append(
                             $('<a href="#" data-action="minimize">').append('<i class="fa fa-window-minimize">')
                         )
@@ -81,6 +85,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
                     collection.trigger('hide', this);
                 });
             }
+        },
+
+        setCount: function (count) {
+            this.count = count;
+            this.$('.floating-header .count').toggle(count > 0).text(count);
+            collection.trigger('change:count', this, count);
         }
     });
 
@@ -104,11 +114,18 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
                 return $('<li>').append(
                     $('<button type="button">')
                         .attr('data-cid', window.cid)
-                        .text(window.title)
+                        .append(
+                            $('<span class="title">').text(window.title),
+                            $('<span class="count label label-danger">').toggle(window.count > 0).text(window.count)
+                        )
                 );
             })
         );
         $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
+    });
+
+    collection.on('change:count', function (window, count) {
+        $('#io-ox-taskbar').find('[data-cid="' + window.cid + '"] .count').toggle(count > 0).text(count);
     });
 
     $(document).on('click', '#io-ox-taskbar button', function (e) {

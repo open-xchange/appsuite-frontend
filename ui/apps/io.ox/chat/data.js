@@ -38,10 +38,11 @@ define('io.ox/chat/data', [], function () {
                 title: 'Appointment: Status Meeting on Friday',
                 members: [1, 2, 3, 4],
                 messages: [
-                    { id: 1, body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05', delivery: 'seen' },
-                    { id: 2, body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
-                    { id: 3, body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
-                    { id: 4, body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10', delivery: 'seen' }
+                    { id: 1, body: 'Julian has joined', type: 'system', sender: 0, time: '12:00' },
+                    { id: 2, body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05', delivery: 'seen' },
+                    { id: 3, body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
+                    { id: 4, body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
+                    { id: 5, body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10', delivery: 'seen' }
                 ],
                 unseen: 1
             },
@@ -134,10 +135,10 @@ define('io.ox/chat/data', [], function () {
             return this.get('sender') === 1;
         },
 
-        hasDifferentSender: function () {
+        hasSameSender: function () {
             var index = this.collection.indexOf(this);
-            if (index <= 0) return true;
-            return this.collection.at(index - 1).get('sender') !== this.get('sender');
+            if (index <= 0) return false;
+            return this.collection.at(index - 1).get('sender') === this.get('sender');
         }
     });
 
@@ -157,6 +158,7 @@ define('io.ox/chat/data', [], function () {
         defaults: { type: 'group', title: 'New conversation' },
 
         initialize: function (attr) {
+            this.set('modified', +moment());
             this.unset('members', { silent: true });
             this.unset('messages', { silent: true });
             this.members = new Backbone.Collection(attr.members);
@@ -167,89 +169,32 @@ define('io.ox/chat/data', [], function () {
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
+                if (name === 'add') this.onMessageAdd();
             });
+        },
+
+        onMessageAdd: function () {
+            this.set('modified', +moment());
         }
     });
 
-    var ChatCollection = Backbone.Collection.extend({ model: ChatModel });
+    var ChatCollection = Backbone.Collection.extend({
+
+        model: ChatModel,
+        comparator: 'modified',
+
+        initialize: function () {
+            this.on('change:unseen', this.onChangeUnseen);
+        },
+
+        onChangeUnseen: function () {
+            this.trigger('unseen', this.reduce(function (sum, model) {
+                return sum + (model.get('unseen') > 0 ? 1 : 0);
+            }, 0));
+        }
+    });
+
     data.backbone.chats = new ChatCollection(data.chats);
-
-    // some random activity
-    setTimeout(function () {
-
-        function getChatTitle() {
-            return ['Boring', 'Stupid', 'Useless', 'Awesome', 'Good', 'Hilarious'][_.random(5)] + ' ' +
-                ['chat', 'conversation', 'talk', 'discussion', 'flame war', 'debating club'][_.random(5)];
-        }
-
-        function getTime() {
-            return moment().format('LT');
-        }
-
-        function getMessage() {
-            return ['Hi', 'Hello', 'Lorem ipsum', 'Just a test', 'Anyone here?', 'Yay 👍'][_.random(5)];
-        }
-
-        function getImage() {
-            return data.files[_.random(8)].url;
-        }
-
-        function getState() {
-            return ['online', 'absent', 'busy', 'offline'][_.random(3)];
-        }
-
-        setInterval(function () {
-
-            var chat;
-
-            switch (_.random(9)) {
-
-                case 0:
-                    // add group chat
-                    data.backbone.chats.add({
-                        id: data.backbone.chats.length + 1,
-                        type: 'group',
-                        title: getChatTitle(),
-                        members: [],
-                        messages: [
-                            { id: 1, body: 'Hi', sender: 1, time: getTime(), delivery: 'seen' }
-                        ],
-                        unseen: 0
-                    });
-                    break;
-
-                case 1:
-                case 2:
-                case 3:
-                    // change status
-                    var user = data.backbone.users.at(_.random(data.backbone.users.length - 1));
-                    user.set('state', getState());
-                    break;
-
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                    // add message
-                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
-                    chat.messages.add({ id: chat.messages.length + 1, body: getMessage(), sender: _.random(1, 5), time: getTime() });
-                    chat.set('unseen', chat.get('unseen') + 1);
-                    break;
-
-                case 8:
-                case 9:
-                    // add image
-                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
-                    chat.messages.add({ id: chat.messages.length + 1, body: getImage(), type: 'image', sender: _.random(1, 5), time: getTime() });
-                    chat.set('unseen', chat.get('unseen') + 1);
-                    break;
-
-                // no default
-            }
-
-        }, 3000);
-
-    }, 3000);
 
     return data;
 });

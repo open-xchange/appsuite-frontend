@@ -24,7 +24,8 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
                 'add': this.onAdd,
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle,
-                'change:unseen': this.onChangeUnseen
+                'change:unseen': this.onChangeUnseen,
+                'change:modified': this.onChangeModified
             });
         },
 
@@ -76,9 +77,14 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
 
         onChangeUnseen: function (model) {
             var count = model.get('unseen');
-            this.$el.prepend(
-                this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count).end()
-            );
+            this.getNode(model).toggleClass('unseen', count > 0).find('.label').text(count);
+        },
+
+        onChangeModified: function (model) {
+            var node = this.getNode(model),
+                hasFocus = node[0] === document.activeElement;
+            this.$el.prepend(node);
+            if (hasFocus) node.focus();
         }
     });
 

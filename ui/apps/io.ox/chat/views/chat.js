@@ -70,12 +70,13 @@ define('io.ox/chat/views/chat', [
         renderMessage: function (model) {
             return $('<div class="message">')
                 .attr('data-id', model.id)
+                .addClass(model.get('type') || 'text')
                 .toggleClass('myself', model.isMyself())
                 .append(
                     // sender
-                    model.hasDifferentSender() ? getSender(model) : $(),
+                    renderSender(model),
                     // message boby
-                    $('<div>').addClass(model.get('type') === 'image' ? 'image' : 'body').html(model.getBody()),
+                    $('<div class="body">').addClass().html(model.getBody()),
                     // time
                     $('<div class="time">').text(model.get('time')),
                     // delivery state
@@ -85,13 +86,14 @@ define('io.ox/chat/views/chat', [
 
         scrollToBottom: function () {
             this.$('.scrollpane').scrollTop(0xFFFF);
+            this.model.set('unseen', 0);
         },
 
         onEditorKeydown: function (e) {
             if (e.which !== 13) return;
             e.preventDefault();
             var editor = $(e.currentTarget);
-            this.model.messages.add({ id: this.model.collection.length + 1, sender: 1, body: editor.val(), time: moment().format('LT') });
+            this.model.messages.add({ id: this.model.messages.length + 1, sender: 1, body: editor.val(), time: moment().format('LT') });
             editor.val('').focus();
         },
 
@@ -136,7 +138,9 @@ define('io.ox/chat/views/chat', [
         }
     });
 
-    function getSender(model) {
+    function renderSender(model) {
+        if (model.get('type') === 'system') return $();
+        if (model.hasSameSender()) return $();
         return $('<div class="sender">').text(getUserName(model.get('sender')));
     }
 
