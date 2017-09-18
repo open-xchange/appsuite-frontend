@@ -875,7 +875,7 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                     };
                     _.extend(opt.defaults.tests, defaults);
                     _.extend(opt.conditionsTranslation, {
-                        'size': gt('Size (bytes)')
+                        'size': gt('Size')
                     });
 
                     _.extend(opt.conditionsMapping, { 'size': ['size'] });
