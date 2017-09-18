@@ -30,25 +30,45 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
 
     var Input = mini.InputView.extend({
         events: { 'change': 'onChange', 'keyup': 'onKeyup' },
-        onChange: function () {
-            if (this.name === 'size') {
-                var isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                if (isValid) {
-                    this.model.set(this.name, parseInt(this.$el.val(), 10));
-                    this.update();
+
+        validationForSize: function () {
+            var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
+                splits = this.$el.val().split(''),
+                number = '',
+                unit = '',
+                stop = false;
+
+            _.each(splits, function (val) {
+                if (/^[0-9]+$/.test(val) && !stop) {
+                    number = number + val;
+                } else {
+                    stop = true;
+                    unit = unit + val;
                 }
+            });
+
+            return /^[0-9]+$/.test(number) && parseInt(number, 10) < 2147483648 && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
+        },
+        onChange: function () {
+            if (this.name === 'size' && this.validationForSize()) {
+                this.model.set(this.name, this.$el.val());
+            } else if (this.name === 'values' || this.name === 'headers') {
+                this.model.set(this.name, [this.$el.val()]);
+            } else {
+                this.model.set(this.name, this.$el.val());
             }
-            if (this.name === 'values' || this.name === 'headers') this.model.set(this.name, [this.$el.val()]);
+
         },
         onKeyup: function () {
-            var state,
-                isValid;
+            var state;
+
             if (this.name === 'size') {
-                isValid = /^[0-9]+$/.test(this.$el.val()) && parseInt(this.$el.val(), 10) < 2147483648 && parseInt(this.$el.val(), 10) >= 0;
-                state = isValid ? 'valid:' : 'invalid:';
+                state = this.validationForSize() ? 'valid:' : 'invalid:';
+
             } else {
                 state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
             }
+
             this.model.trigger(state + this.name);
             this.$el.trigger('toggle:saveButton');
         }
