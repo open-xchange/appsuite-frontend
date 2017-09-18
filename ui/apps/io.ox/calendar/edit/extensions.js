@@ -91,7 +91,14 @@ define('io.ox/calendar/edit/extensions', [
                         // actual moving is done in the app.onSave method, because this method is also called after confirming conflicts, so we don't need duplicated code
                         baton.app.moveAfterSave = folder;
                     }
-
+                    // correct time for allday appointments (remove timezone and add 1 day to enddate)
+                    if (baton.model.get('allDay')) {
+                        // save unchanged dates, so they can be restored on error or when handling conflicts
+                        baton.parentView.tempEndDate = baton.model.get('endDate');
+                        baton.parentView.tempStartDate = baton.model.get('startDate');
+                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD[T000000]') }, { silent: true });
+                        baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD[T000000]') }, { silent: true });
+                    }
                     // make sure alarms are correctly created
                     baton.parentView.alarmsView.updateModel();
 
@@ -271,34 +278,33 @@ define('io.ox/calendar/edit/extensions', [
         id: 'start-date',
         index: 400,
         draw: function (baton) {
-            this.append(
-                new DatePicker({
-                    model: baton.model,
-                    className: 'col-xs-6',
-                    display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
-                    attribute: 'startDate',
-                    label: gt('Starts on'),
-                    timezoneButton: true,
-                    closeOnScroll: true,
-                    a11y: {
-                        timeLabel: gt('Start time')
-                    },
-                    chronos: true
-                }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
-                    this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton)
-                    .on('click:time', function () {
-                        var target = this.$el.find('.dropdown-menu.calendaredit'),
-                            container = target.scrollParent(),
-                            pos = target.offset().top - container.offset().top;
+            baton.parentView.startDatePicker = new DatePicker({
+                model: baton.model,
+                className: 'col-xs-6',
+                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                attribute: 'startDate',
+                label: gt('Starts on'),
+                timezoneButton: true,
+                closeOnScroll: true,
+                a11y: {
+                    timeLabel: gt('Start time')
+                },
+                chronos: true
+            }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
+                this.toggleTimeInput(!fulltime);
+            }).on('click:timezone', openTimezoneDialog, baton)
+                .on('click:time', function () {
+                    var target = this.$el.find('.dropdown-menu.calendaredit'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
 
-                        if ((pos < 0) || (pos + target.height() > container.height())) {
-                            // scroll to Node, leave 16px offset
-                            container.scrollTop(container.scrollTop() + pos - 16);
-                        }
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
 
-                    }).render().$el
-            );
+                });
+            this.append(baton.parentView.startDatePicker.render().$el);
         }
     });
 
@@ -308,34 +314,33 @@ define('io.ox/calendar/edit/extensions', [
         index: 500,
         nextTo: 'start-date',
         draw: function (baton) {
-            this.append(
-                new DatePicker({
-                    model: baton.model,
-                    className: 'col-xs-6',
-                    display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
-                    attribute: 'endDate',
-                    label: gt('Ends on'),
-                    timezoneButton: true,
-                    closeOnScroll: true,
-                    a11y: {
-                        timeLabel: gt('End time')
-                    },
-                    chronos: true
-                }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
-                    this.toggleTimeInput(!fulltime);
-                }).on('click:timezone', openTimezoneDialog, baton)
-                    .on('click:time', function () {
-                        var target = this.$el.find('.dropdown-menu.calendaredit'),
-                            container = target.scrollParent(),
-                            pos = target.offset().top - container.offset().top;
+            baton.parentView.endDatePicker = new DatePicker({
+                model: baton.model,
+                className: 'col-xs-6',
+                display: baton.model.get('allDay') ? 'DATE' : 'DATETIME',
+                attribute: 'endDate',
+                label: gt('Ends on'),
+                timezoneButton: true,
+                closeOnScroll: true,
+                a11y: {
+                    timeLabel: gt('End time')
+                },
+                chronos: true
+            }).listenTo(baton.model, 'change:allDay', function (model, fulltime) {
+                this.toggleTimeInput(!fulltime);
+            }).on('click:timezone', openTimezoneDialog, baton)
+                .on('click:time', function () {
+                    var target = this.$el.find('.dropdown-menu.calendaredit'),
+                        container = target.scrollParent(),
+                        pos = target.offset().top - container.offset().top;
 
-                        if ((pos < 0) || (pos + target.height() > container.height())) {
-                            // scroll to Node, leave 16px offset
-                            container.scrollTop(container.scrollTop() + pos - 16);
-                        }
+                    if ((pos < 0) || (pos + target.height() > container.height())) {
+                        // scroll to Node, leave 16px offset
+                        container.scrollTop(container.scrollTop() + pos - 16);
+                    }
 
-                    }).render().$el
-            );
+                });
+            this.append(baton.parentView.endDatePicker.render().$el);
         }
     });
 
@@ -345,7 +350,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var appointmentTimezoneAbbr = moment.tz(this.model.get('startDate').tzid).zoneAbbr(),
+            var appointmentTimezoneAbbr = moment.tz(this.model.get('startDate').tzid || moment.defaultZone.name).zoneAbbr(),
                 userTimezoneAbbr = moment.tz(coreSettings.get('timezone')).zoneAbbr();
 
             if (appointmentTimezoneAbbr === userTimezoneAbbr) return;

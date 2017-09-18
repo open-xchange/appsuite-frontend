@@ -100,7 +100,12 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
-
+                        if (opt.mode === 'edit' && chronosUtil.isAllday(self.model)) {
+                            // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
+                            // this day will be added again on save
+                            self.model.set('endDate', { value: moment(self.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD[T000000]') });
+                            self.model.set('allDay', true);
+                        }
                         app.view = self.view = new EditView({
                             model: self.model,
                             mode: opt.mode,
@@ -269,6 +274,14 @@ define('io.ox/calendar/edit/main', [
                         conflictView.dialog(data.conflicts)
                             .on('cancel', function () {
                                 self.getWindow().idle();
+
+                                // restore times (we add a day before saving allday appointments)
+                                if (self.tempEndDate && self.tempStartDate) {
+                                    self.model.set('endDate', self.tempEndDate);
+                                    self.model.set('startDate', self.tempStartDate);
+                                    self.tempEndDate = self.tempStartDate = null;
+                                }
+                                // TODO still needed?
                                 // restore model attributes for moving
                                 // if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
                             })
@@ -318,6 +331,13 @@ define('io.ox/calendar/edit/main', [
                 }
                 delete this.moveAfterSave;*/
                 this.getWindow().idle();
+
+                // restore times (we add a day before saving allday appointments)
+                if (this.tempEndDate && self.tempStartDate) {
+                    this.model.set('endDate', this.tempEndDate);
+                    this.model.set('startDate', this.tempStartDate);
+                    this.tempEndDate = this.tempStartDate = null;
+                }
                 // when to do what?
                 // show validation errors inline -> dont yell
                 // show server errors caused -> yell

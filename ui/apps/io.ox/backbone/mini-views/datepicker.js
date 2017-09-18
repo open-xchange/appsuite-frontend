@@ -82,7 +82,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.nodes.timeField = $('<input type="text" class="form-control time-field">');
 
                         // render timezone badge
-                        var timezone = self.chronos ? moment.tz(self.model.get(self.attribute).tzid) : moment.tz(self.model.get(self.options.timezoneAttribute)),
+                        var timezone = self.chronos ? moment.tz(self.model.get(self.attribute).tzid || moment.defaultZone.name) : moment.tz(self.model.get(self.options.timezoneAttribute)),
                             timezoneAbbreviation = timezone.zoneAbbr(),
                             timezoneFullname = (timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' ');
 
@@ -100,7 +100,8 @@ define('io.ox/backbone/mini-views/datepicker', [
                                         {
                                             placement: 'top',
                                             trigger: 'click',
-                                            closeOnScroll: self.options.closeOnScroll
+                                            closeOnScroll: self.options.closeOnScroll,
+                                            attrName: self.attribute
                                         }
                                     );
                                 });
@@ -199,7 +200,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 if (_.isNaN(timestamp)) return;
                 timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             } else {
-                timestamp = moment.tz(this.model.get(this.attribute).value, this.model.get(this.attribute).tzid);
+                timestamp = moment.tz(this.model.get(this.attribute).value, this.model.get(this.attribute).tzid || moment.defaultZone.name);
             }
             this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
@@ -212,11 +213,7 @@ define('io.ox/backbone/mini-views/datepicker', [
 
         updateModel: function () {
             var time = this.getTimestamp();
-            if (this.chronos) {
-                this.model.set(this.attribute, time);
-                return;
-            }
-            if (_.isNull(time) || _.isNumber(time)) {
+            if (this.chronos || _.isNull(time) || _.isNumber(time)) {
                 var params = { validate: true, fulltime: this.isFullTime() };
                 this.model[this.model.setDate ? 'setDate' : 'set'](this.attribute, time, params);
                 this.model.trigger('valid');
@@ -226,8 +223,8 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         isFullTime: function () {
-            if (!this.options.ignoreToggle && this.model.has('full_time')) {
-                return !!this.model.get('full_time');
+            if (!this.options.ignoreToggle && (this.model.has('full_time') || this.model.has('allDay'))) {
+                return !!(this.model.get('full_time') || this.model.has('allDay'));
             }
             return this.options.display === 'DATE';
         },
@@ -259,9 +256,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
 
             // parse string to timestamp
-            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid : this.model.get(this.options.timezoneAttribute));
+            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment.defaultZone.name : this.model.get(this.options.timezoneAttribute));
             if (this.chronos) {
-                return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid };
+                return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment.defaultZone.name };
             }
             // on parse error return null
             return !parsedDate ? undefined : parsedDate.valueOf();
