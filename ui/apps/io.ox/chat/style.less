@@ -243,7 +243,7 @@
             .time {
                 line-height: 16px;
             }
-            .body {
+            &.text .body {
                 color: #fff;
                 background-color: @gray;
             }
@@ -317,12 +317,12 @@
         &.online { background-color: @green; }
         &.absent { background-color: @orange; }
         &.busy { background-color: @red; }
-        &.offline { background-color: #333; }
+        &.offline { background-color: @gray; }
         // icon
         &.online:before { content: "\f00c"; } // check
         &.absent:before { content: "\f017"; } // clock
         &.busy:before { content: "\f068"; } // minus
-        &.offline:before { content: "\f00d"; color: #ccc; }
+        &.offline:before { content: "\f00d"; color: #eee; }
     }
 
     .channels {

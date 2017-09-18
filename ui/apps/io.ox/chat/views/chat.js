@@ -18,6 +18,8 @@ define('io.ox/chat/views/chat', [
 
     'use strict';
 
+    var MESSAGE_LIMIT = 20;
+
     var ChatView = Backbone.View.extend({
 
         className: 'chat',
@@ -48,12 +50,15 @@ define('io.ox/chat/views/chat', [
                 $('<div class="header abs">').append(
                     $('<h2 class="title">').append(this.model.get('title') || '\u00a0'),
                     $('<ul class="members">').append(
-                        this.model.members.map(this.renderMember, this)
+                        this.model.members
+                            .map(this.renderMember, this)
                     )
                 ),
                 $('<div class="scrollpane abs">').append(
                     $('<div class="conversation ">').append(
-                        this.model.messages.map(this.renderMessage, this)
+                        this.model.messages
+                            .last(MESSAGE_LIMIT)
+                            .map(this.renderMessage, this)
                     )
                 ),
                 $('<div class="controls abs">').append(
@@ -103,6 +108,9 @@ define('io.ox/chat/views/chat', [
 
         onAdd: function (model) {
             this.$('.conversation').append(this.renderMessage(model));
+            // too many messages?
+            var children = this.$('.conversation').children();
+            if (children.length > MESSAGE_LIMIT) children.first().remove();
             this.scrollToBottom();
             // exemplary animation
             setTimeout(function () {

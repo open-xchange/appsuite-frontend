@@ -102,8 +102,8 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
 
                 // no default
             }
-        }, 3000);
+        }, 5000);
 
-    }, 3000);
+    }, 5000);
 
 });
