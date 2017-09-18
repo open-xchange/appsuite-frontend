@@ -374,7 +374,9 @@ define('io.ox/calendar/util', [
         addTimezoneLabel: function (parent, data, options) {
 
             var current = moment(data.startDate);
-
+            if (data.startDate.value) {
+                current = moment.tz(data[options.attrName || 'startDate'].value, data[options.attrName || 'startDate'].tzid || moment.defaultZone.name);
+            }
             parent.append(
                 $.txt(this.getTimeInterval(data)),
                 this.addTimezonePopover($('<span class="label label-default pointer" tabindex="0">').text(current.zoneAbbr()), data, options)
@@ -384,8 +386,10 @@ define('io.ox/calendar/util', [
         },
 
         addTimezonePopover: function (parent, data, opt) {
-
             var current = moment(data.startDate);
+            if (data.startDate.value) {
+                current = moment.tz(data[opt.attrName || 'startDate'].value, data[opt.attrName || 'startDate'].tzid || moment.defaultZone.name);
+            }
 
             opt = _.extend({
                 placement: 'left',

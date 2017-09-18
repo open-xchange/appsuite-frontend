@@ -252,7 +252,8 @@ define('io.ox/calendar/chronos-api', [
                 });
             },
 
-            update: function (obj) {
+            update: function (obj, options) {
+                options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
 
@@ -263,7 +264,9 @@ define('io.ox/calendar/chronos-api', [
                     action: 'update',
                     folder: obj.folder,
                     id: obj.id,
-                    timestamp: obj.timestamp
+                    timestamp: obj.timestamp,
+                    // convert to true boolean
+                    ignore_conflicts: !!options.ignore_conflicts
                 };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
