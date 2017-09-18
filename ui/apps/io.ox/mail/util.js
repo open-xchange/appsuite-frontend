@@ -562,7 +562,7 @@ define('io.ox/mail/util', [
             return function (data) {
                 if (!_.isObject(data)) return false;
                 // nested mails don't have their own folder id. So use the parent mails folder id
-                return accountAPI.isMalicious(data.folder_id || data.parent.folder_id, blacklist);
+                return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };
         })(),
 
