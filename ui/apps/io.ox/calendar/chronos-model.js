@@ -67,6 +67,116 @@ define('io.ox/calendar/chronos-model', [
             }
         });
 
+    var RRuleMapModel = Backbone.Model.extend({
+
+        days: ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'],
+
+        initialize: function () {
+            this.model = this.get('model');
+            this.unset('model');
+            this.listenTo(this.model, 'change', this.deserialize);
+            this.deserialize();
+            this.on('change', _.debounce(this.serialize, 25));
+        },
+
+        serialize: function () {
+            var self = this,
+                args = [],
+                days = _(this.days).chain().map(function (day, index) {
+                    if ((self.get('days') & (1 << index)) !== 0) return day.toUpperCase();
+                }).compact().value().join(',');
+            switch (this.get('recurrence_type')) {
+                case 1:
+                    args.push('FREQ=DAILY');
+                    break;
+                case 2:
+                    args.push('FREQ=WEEKLY');
+                    args.push('BYDAY=' + days);
+                    break;
+                case 3:
+                    args.push('FREQ=MONTHLY');
+                    if (self.get('days')) {
+                        args.push('BYDAY=' + days);
+                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                    } else {
+                        args.push('BYMONTHDAY=' + this.get('day_in_month'));
+                    }
+                    break;
+                case 4:
+                    args.push('FREQ=YEARLY');
+                    if (self.get('days')) {
+                        args.push('BYMONTH=' + (this.get('month') + 1));
+                        args.push('BYDAY=' + days);
+                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                    } else {
+                        args.push('BYMONTH=' + (this.get('month') + 1));
+                        args.push('BYMONTHDAY=' + this.get('day_in_month'));
+                    }
+                    break;
+                default:
+            }
+            if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
+            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format('YYYYMMDD[T]HHmmss[Z]'));
+            if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
+            if (args.length > 0) this.model.set('rrule', args.join(';'));
+            else this.model.unset('rrule');
+        },
+
+        deserialize: function () {
+            if (!this.model.get('rrule')) return;
+            var self = this,
+                str = this.model.get('rrule'),
+                attributes = str.split(';'),
+                rrule = {};
+            _(attributes).each(function (attr) {
+                attr = attr.split('=');
+                var name = attr[0],
+                    value = attr[1].split(',');
+                if (value.length === 1) value = value[0];
+                rrule[name] = value;
+                rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
+            });
+            switch (rrule.freq) {
+                case 'daily':
+                    this.set('recurrence_type', 1);
+                    break;
+                case 'weekly':
+                    this.set('recurrence_type', 2);
+                    this.set('days', _([].concat(rrule.byday)).reduce(function (memo, day) {
+                        return memo + (1 << self.days.indexOf(day));
+                    }, 0));
+                    break;
+                case 'monthly':
+                    this.set('recurrence_type', 3);
+                    if (rrule.bymonthday) this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                    if (rrule.byday) {
+                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
+                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    }
+                    break;
+                case 'yearly':
+                    this.set('recurrence_type', 4);
+                    if (rrule.bymonthday) {
+                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
+                        this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                    }
+                    if (rrule.byday) {
+                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
+                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
+                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    }
+                    break;
+                default:
+                    this.set('recurrence_type', 0);
+            }
+            if (rrule.count) this.set('occurrences', parseInt(rrule.count, 10) || 1);
+            if (rrule.UNTIL) this.set('until', moment(rrule.UNTIL).valueOf() || 0);
+            this.set('interval', parseInt(rrule.interval, 10) || 1);
+            this.set('startDate', this.model.getTimestamp('startDate'), 10);
+        }
+
+    });
+
     var Model = BasicModel.extend({
         idAttribute: 'cid',
         ref: 'io.ox/chronos/model/',
@@ -170,6 +280,9 @@ define('io.ox/calendar/chronos-model', [
         },
         parse: function (res) {
             return res;
+        },
+        getRruleMapModel: function () {
+            return new RRuleMapModel({ model: this });
         }
     });
 
