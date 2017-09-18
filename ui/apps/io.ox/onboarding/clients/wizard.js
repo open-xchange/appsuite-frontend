@@ -296,7 +296,8 @@ define('io.ox/onboarding/clients/wizard', [
             Wizard.registry.add(opt, this.render.bind(this));
         },
 
-        // set predefined selections
+        // set predefined selections (deep link)
+        // ...&reg=client-onboarding&regopt=platform:windows,device:windows.desktop,scenario:emclientinstall
         set: function (data) {
             var props = { platform: 'platforms', device: 'devices', scenario: 'scenarios' },
                 obj = {};
@@ -308,7 +309,7 @@ define('io.ox/onboarding/clients/wizard', [
                 // invalid value
                 if (!this.config.hash[prop][value]) return;
                 obj[key] = value;
-            });
+            }.bind(this));
             this.model.set(obj);
         },
 
