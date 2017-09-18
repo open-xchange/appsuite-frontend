@@ -586,9 +586,12 @@ define('io.ox/calendar/chronos-api', [
             },
 
             removeRecurrenceInformation: function (model) {
-                var data = model.toJSON();
+                var data = model instanceof Backbone.Model ? model.toJSON() : _(model).clone();
                 delete data.rrule;
-                return new models.Model(data);
+                delete data.recurrenceId;
+                delete data.seriesId;
+                if (model instanceof Backbone.Model) return new models.Model(data);
+                return data;
             }
         };
 

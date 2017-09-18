@@ -46,7 +46,7 @@ define('io.ox/calendar/actions/acceptdeny', [
 
             $.when(api.get(apiData), folderAPI.get(apiData.folder)).then(function (data, folderData) {
                 // work on a copy for appointments (so we don't accidentally change the pool data)
-                appointmentData = options.taskmode ? data : data.attributes;
+                appointmentData = options.taskmode ? data : data.toJSON();
                 // check if the response is of type [data, timestamp]
                 if (_.isArray(data) && data.length === 2 && _.isNumber(data[1])) {
                     appointmentData = data[0];
@@ -89,12 +89,13 @@ define('io.ox/calendar/actions/acceptdeny', [
                     help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
                 })
                     .build(function () {
+                        debugger;
                         if (!series && o.recurrenceId) {
-                            data = _(appointmentData).omit('rrule');
+                            appointmentData = api.removeRecurrenceInformation(appointmentData);
                         }
 
                         var recurrenceString = util.getRecurrenceString(appointmentData),
-                            description = $('<b>').text(appointmentData.summary),
+                            description = $('<b>').text(appointmentData.title),
                             descriptionId = _.uniqueId('confirmation-dialog-description-');
 
                         if (!options.taskmode) {
@@ -122,7 +123,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             ),
                             $('<div class="form-group">').css({ 'margin-top': '20px' }).append(
                                 $('<label class="control-label">').attr('for', inputid).text(gt('Comment')).append(
-                                    $('<span class="sr-only">').text(data.summary + ' ' + gt('Please comment your confirmation status.'))
+                                    $('<span class="sr-only">').text((data.summary || data.title) + ' ' + gt('Please comment your confirmation status.'))
                                 ),
                                 $('<input type="text" class="form-control" data-property="comment">').attr('id', inputid).val(message),
                                 reminderSelect

@@ -628,6 +628,9 @@ define('io.ox/calendar/util', [
         },
 
         getRecurrenceString: function (data) {
+            if (data.rrule) data = new (require('io.ox/calendar/chronos-model').Model)(data);
+            if (data instanceof Backbone.Model && data.getRruleMapModel) data = data.getRruleMapModel();
+            if (data instanceof Backbone.Model) data = data.toJSON();
             var str = that.getRecurrenceDescription(data);
             if (data.recurrence_type > 0 && (data.until || data.occurrences)) str += ' ' + that.getRecurrenceEnd(data);
             return str;
