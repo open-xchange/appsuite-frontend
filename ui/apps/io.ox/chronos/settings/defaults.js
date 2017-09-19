@@ -22,7 +22,10 @@ define('io.ox/chronos/settings/defaults', ['settings!io.ox/calendar'], function 
         alarmUnit = 'M';
 
     if (isNaN(parseInt(alarmTime, 10))) {
-        settingsDefaults.defaultReminder = settingsDefaults.defaultReminder && settingsDefaults.defaultReminder.trigger ? settingsDefaults.defaultReminder : [];
+        var hasReminderWithTrigger = settingsDefaults.defaultReminder &&
+            settingsDefaults.defaultReminder.length > 0 &&
+            settingsDefaults.defaultReminder[0].trigger;
+        settingsDefaults.defaultReminder = hasReminderWithTrigger ? settingsDefaults.defaultReminder : [];
     } else {
 
         if (alarmTime >= 10080) {

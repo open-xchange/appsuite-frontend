@@ -14,12 +14,12 @@
 define('io.ox/calendar/invitations/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
-    'settings!io.ox/chronos',
     'io.ox/calendar/util',
+    'settings!io.ox/chronos',
     'gettext!io.ox/calendar/main',
     'io.ox/core/notifications',
     'less!io.ox/calendar/style'
-], function (ext, http, settings, util, gt, notifications) {
+], function (ext, http, util, settings, gt, notifications) {
 
     'use strict';
 
@@ -92,39 +92,41 @@ define('io.ox/calendar/invitations/register', [
         });
     }
 
+    //
+    // Abstract View
+    // expects data to be in the this.event variable and works only on the new events model
+    // if other data (external appointments, tasks) are used, overwrite according functions
+    //
     var AbstractView = Backbone.View.extend({
 
         className: 'itip-item',
 
         events: {
-            'click .show-details': 'onShowDetails'
+            'click .show-details': 'onShowDetails',
+            'click .itip-actions button': 'onAction',
+            'keydown': 'onKeydown'
+        },
+
+        onKeydown: function (e) {
+            // temporary fix; bootstrap a11y plugin causes problems here (space key)
+            e.stopPropagation();
         },
 
         onShowDetails: function (e) {
             e.preventDefault();
-            var data = this[this.type] || this.appointment || this.task,
-                module = this.type === 'appointment' ? 'calendar' : 'tasks';
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/' + module + '/view-detail']).done(function (dialogs, view) {
+            var self = this;
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/view-detail']).done(function (dialogs, viewDetail) {
                 new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
-                    popup.append(view.draw(data));
+                    popup.append(viewDetail.draw(self.event));
                 });
             });
         },
 
         renderScaffold: function () {
-
-            var text = this.type !== 'task' ?
-                gt('This email contains an appointment') :
-                gt('This email contains a task');
-
-            var link = this.type !== 'task' ?
-                gt('Show appointment details') :
-                gt('Show task details');
-
             return this.$el.append(
                 $('<div class="headline">').append(
-                    $('<span>').text(text), $.txt('. '),
-                    $('<a href="#" role="button" class="show-details">').text(link)
+                    $('<span>').text(this.getInfoText()), $.txt('. '),
+                    $('<a href="#" role="button" class="show-details">').text(this.getLinkText())
                 ),
                 $('<div class="itip-details">'),
                 $('<div class="itip-annotations">'),
@@ -134,65 +136,95 @@ define('io.ox/calendar/invitations/register', [
             );
         },
 
+        getInfoText: function () {
+            return gt('This email contains an appointment');
+        },
+
+        getLinkText: function () {
+            return gt('Show appointment details');
+        },
+
         renderConfirmation: function () {
+            var status = this.getConfirmationStatus(), // NEEDS-ACTION ACCEPTED DECLINED TENTATIVE
+                message = '';
 
-            var data = this[this.type] || this.appointment || this.task,
-                // 0 = none, 1 = accepted, 2 = declined, 3 = tentative
-                status = util.getConfirmationStatus(data),
-                message = '', className = '';
-
-            if (data.organizerId === ox.user_id) {
+            if (this.isOrganizer()) {
                 message = gt('You are the organizer');
-                className = 'organizer';
-                return $('<div class="confirmation-status">').addClass(className).text(message);
+                return $('<div class="confirmation-status">').addClass('organizer').text(message);
             }
 
-            if (status > 0) {
-                switch (status) {
-                    case 1:
-                        message = this.type !== 'task'
-                            ? gt('You have accepted this appointment')
-                            : gt('You have accepted this task');
-                        className = 'accepted';
-                        break;
-                    case 2:
-                        message = this.type !== 'task'
-                            ? gt('You declined this appointment')
-                            : gt('You declined this task');
-                        className = 'declined';
-                        break;
-                    case 3:
-                        message = this.type !== 'task'
-                            ? gt('You tentatively accepted this invitation')
-                            : gt('You tentatively accepted this task');
-                        className = 'tentative';
-                        break;
-                    // no default
-                }
-                return $('<div class="confirmation-status">').addClass(className).text(message);
+            switch (status) {
+                case 'ACCEPTED':
+                    message = this.getAcceptedMessage();
+                    break;
+                case 'DECLINED':
+                    message = this.getRejectedMessage();
+                    break;
+                case 'TENTATIVE':
+                    message = this.getTentativeMessage();
+                    break;
+                default:
+
             }
 
+            if (message) return $('<div class="confirmation-status">').addClass(status.toLowerCase()).text(message);
             return $();
+        },
+
+        getAcceptedMessage: function () {
+            return gt('You have accepted this appointment');
+        },
+
+        getRejectedMessage: function () {
+            return gt('You declined this appointment');
+        },
+
+        getTentativeMessage: function () {
+            return gt('You tentatively accepted this invitation');
+        },
+
+        isOrganizer: function () {
+            return this.event.has('createdBy') && this.event.get('createdBy').entity === ox.user_id;
+        },
+
+        getConfirmationStatus: function () {
+            return util.getConfirmationStatus(this.event.attributes);
+        },
+
+        getEvent: function () {
+            return this.event;
         },
 
         renderSummary: function () {
 
-            var data = this.appointment,
-                dateStrings = util.getDateTimeIntervalMarkup(data, { output: 'strings' }),
-                recurrenceString = util.getRecurrenceString(data),
-                separator = data.title ? $.txt(', ') : $.txt('');
+            var dateStrings = this.getDateTimeIntervalMarkup(),
+                recurrenceString = this.getRecurrenceString(),
+                title = this.getTitle(),
+                separator = title ? $.txt(', ') : $.txt('');
 
             this.$el.find('.itip-details').append(
-                $('<b>').text(data.title), separator,
+                $('<b>').text(title), separator,
                 $('<span class="day">').append(
                     $.txt(dateStrings.dateStr),
                     $.txt(' '),
                     $.txt(dateStrings.timeStr),
-                    $.txt(recurrenceString !== '' ? ' \u2013 ' + recurrenceString : '')
+                    $.txt(recurrenceString && recurrenceString.length ? ' \u2013 ' + recurrenceString : '')
                 ),
                 // confirmation
                 this.renderConfirmation()
             );
+        },
+
+        getTitle: function () {
+            this.event.get('summary');
+        },
+
+        getDateTimeIntervalMarkup: function () {
+            return util.getDateTimeIntervalMarkup(this.event.attributes, { output: 'strings' });
+        },
+
+        getRecurrenceString: function () {
+            util.getRecurrenceString(this.event);
         },
 
         renderAnnotations: function () {
@@ -206,10 +238,6 @@ define('io.ox/calendar/invitations/register', [
 
         getActions: function () {
             return ['decline', 'tentative', 'accept'];
-        },
-
-        getAppointment: function () {
-            return this.appointment;
         },
 
         getButtons: function (actions) {
@@ -228,9 +256,9 @@ define('io.ox/calendar/invitations/register', [
         },
 
         getConfirmationSelector: function (status) {
-            if (status === 1) return 'button.btn-success.accept';
-            if (status === 2) return 'button.btn-danger';
-            if (status === 3) return 'button.btn-warning';
+            if (status === 'ACCEPTED') return 'button.btn-success.accept';
+            if (status === 'DECLINED') return 'button.btn-danger';
+            if (status === 'TENTATIVE') return 'button.btn-warning';
             return '';
         },
 
@@ -238,7 +266,7 @@ define('io.ox/calendar/invitations/register', [
 
             if (this.supportsComment()) return;
 
-            var status = util.getConfirmationStatus(this.appointment),
+            var status = this.getConfirmationStatus(),
                 selector = this.getConfirmationSelector(status);
             // disable buttons - don't know why we have an array of appointments but just one set of buttons
             // so, let's use the first one
@@ -259,8 +287,12 @@ define('io.ox/calendar/invitations/register', [
             this.$el.find('.itip-comment').append(
                 $('<input type="text" class="form-control" data-property="comment">')
                 .attr('placeholder', gt('Comment'))
-                .val(util.getConfirmationMessage(this.appointment))
+                .val(this.getConfirmationMessage())
             );
+        },
+
+        getConfirmationMessage: function () {
+            return util.getConfirmationMessage(this.event.attributes);
         },
 
         render: function () {
@@ -272,8 +304,8 @@ define('io.ox/calendar/invitations/register', [
             this.renderScaffold();
             this.renderAnnotations();
 
-            this.appointment = this.getAppointment();
-            if (!this.appointment) {
+            this.event = this.getEvent() || this.event;
+            if (!this.event) {
                 // remove "Show appointment" link
                 this.$el.find('.show-details').remove();
                 return this;
@@ -282,8 +314,8 @@ define('io.ox/calendar/invitations/register', [
             this.renderSummary();
             this.renderChanges();
 
-            status = util.getConfirmationStatus(this.appointment);
-            accepted = status === 1;
+            status = this.getConfirmationStatus();
+            accepted = status === 'ACCEPTED';
 
             // don't offer standard buttons if appointment is already accepted
             if (accepted) actions = _(actions).without('decline', 'tentative', 'accept');
@@ -312,21 +344,41 @@ define('io.ox/calendar/invitations/register', [
     });
 
     //
+    // Functions based on json object for tasks and external invitations
+    //
+
+    var jsonExtensions = {
+        getTitle: function () {
+            return this.event.title;
+        },
+
+        isOrganizer: function () {
+            return this.event.organizerId === ox.user_id;
+        },
+
+        getConfirmationStatus: (function () {
+            var confirmations = ['NEEDS-ACTION', 'ACCEPTED', 'DECLINED', 'TENTATIVE'];
+            return function () {
+                var index = this.util.getConfirmationStatus(this.event);
+                if (index >= 0 && index < confirmations.length) return confirmations[index];
+                return 'NEEDS-ACTION';
+            };
+        }()),
+
+        getConfirmationMessage: function () {
+            return this.util.getConfirmationMessage(this.event);
+        },
+
+        getDateTimeIntervalMarkup: function () {
+            return this.util.getDateTimeIntervalMarkup(this.event, { output: 'strings' });
+        }
+    };
+
+    //
     // External invitations
     //
 
-    var ExternalView = AbstractView.extend({
-
-        events: {
-            'click .show-details': 'onShowDetails',
-            'click .itip-actions button': 'onAction',
-            'keydown': 'onKeydown'
-        },
-
-        onKeydown: function (e) {
-            // temporary fix; bootstrap a11y plugin causes problems here (space key)
-            e.stopPropagation();
-        },
+    var ExternalView = AbstractView.extend(_.extend({}, jsonExtensions, {
 
         onAction: function (e) {
 
@@ -353,7 +405,7 @@ define('io.ox/calendar/invitations/register', [
                 .then(
                     function done() {
                         // api refresh
-                        var refresh = require(['io.ox/calendar/api']).then(
+                        var refresh = require(['io.ox/calendar/chronos-api']).then(
                             function (api) {
                                 api.refresh();
                                 if (self.options.yell !== false) {
@@ -361,7 +413,7 @@ define('io.ox/calendar/invitations/register', [
                                 }
                             });
 
-                        if (settings.get('deleteInvitationMailAfterAction', false)) {
+                        if (self.settings.get('deleteInvitationMailAfterAction', false)) {
                             // remove mail
                             require(['io.ox/mail/api'], function (api) {
                                 api.remove([self.imip.mail]);
@@ -406,7 +458,6 @@ define('io.ox/calendar/invitations/register', [
 
         initialize: function (options) {
             this.options = _.extend({}, options);
-            this.type = 'appointment';
             this.imip = options.imip;
             this.$el.hide();
         },
@@ -423,7 +474,7 @@ define('io.ox/calendar/invitations/register', [
                 .value();
         },
 
-        getAppointment: function () {
+        getEvent: function () {
             // extract appointments data from changes
             return _(this.model.get('changes'))
                 .chain()
@@ -466,8 +517,19 @@ define('io.ox/calendar/invitations/register', [
                     this.model.set(data);
                     this.render();
                 }.bind(this));
+        },
+
+        render: function () {
+            var self = this;
+            require(['io.ox/tasks/util'], function (util) {
+                // use tasks util here, since this works on json as well (instead of the new chronos model)
+                self.util = util;
+                AbstractView.prototype.render.call(self);
+            });
+            return this;
         }
-    });
+
+    }));
 
     //
     //  Internal invitations
@@ -475,55 +537,215 @@ define('io.ox/calendar/invitations/register', [
 
     var InternalView = AbstractView.extend({
 
-        events: {
-            'click .show-details': 'onShowDetails',
-            'click button': 'onAction',
-            'keydown': 'onKeydown'
-        },
-
         initialize: function (options) {
             this.options = _.extend({}, options);
             this.listenTo(this.model, 'change:headers', this.render);
             this.$el.on('dispose', this.dispose.bind(this));
             this.cid = options.cid;
-            this.type = options.type === 'Appointments' ? 'appointment' : 'task';
-            this.appointment = {};
             this.$el.hide();
         },
 
-        onKeydown: function (e) {
-            // temporary fix; bootstrap a11y plugin causes problems here (space key)
-            e.stopPropagation();
+        load: function () {
+            return $.when();
+        },
+
+        render: function () {
+            var self = this;
+            this.$el.attr({ 'data-type': this.type, 'data-cid': this.cid });
+            this.load().then(function () {
+                AbstractView.prototype.render.call(self);
+            });
+            return this;
+        }
+
+    });
+
+    var InternalAppointmentView = InternalView.extend({
+
+        load: function () {
+            var self = this;
+            return require([
+                'io.ox/calendar/chronos-api',
+                'io.ox/calendar/util',
+                'settings!io.ox/chronos',
+                'io.ox/backbone/mini-views/alarms'
+            ]).then(function (api, util, settings, AlarmsView) {
+                self.api = api;
+                self.util = util;
+                self.settings = settings;
+                self.AlarmsView = AlarmsView;
+                var cid = api.cid(self.cid);
+                return api.get({ folder: 'cal://0/' + cid.folder, id: cid.id });
+            }).then(function (event) {
+                if (self.event) self.stopListening(self.event);
+                self.listenTo(event, 'change', self.render);
+                self.event = event;
+                self.previousConfirmation = _(event.get('attendees')).findWhere({ entity: ox.user_id });
+            });
+        },
+
+        renderReminder: function () {
+            // backbone model is fine. No need to require chronos model
+            this.alarmsModel = new Backbone.Model(this.event);
+
+            this.$el.find('.itip-actions').before(
+                $('<div class="itip-reminder">').append(
+                    $('<legend>').text(gt('Reminder')),
+                    new this.AlarmsView({ model: this.alarmsModel, smallLayout: true }).render().$el
+                )
+            );
+        },
+
+        onAction: function (e) {
+
+            var self = this,
+                action = $(e.currentTarget).attr('data-action'),
+                hash = { accept: 'ACCEPTED', tentative: 'TENTATIVE', decline: 'DECLINED' },
+                comment = this.getUserComment();
+
+            function performConfirm(checkConflicts) {
+                self.api.confirm({
+                    attendee: _.extend({}, self.previousConfirmation, {
+                        partStat: hash[action],
+                        comment: comment
+                    }),
+                    id: self.event.get('id'),
+                    folder: self.event.get('folder'),
+                    alarms: self.alarmsModel.get('alarms')
+                }, { ignore_conflicts: !checkConflicts })
+                .then(function success(data) {
+                    if (data && data.conflicts) {
+                        ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
+                            conflictView.dialog(data.conflicts)
+                                .on('cancel', function () {
+                                    self.$el.idle();
+                                    self.render();
+                                })
+                                .on('ignore', function () {
+                                    performConfirm(false);
+                                });
+                        });
+                        return;
+                    }
+
+                    if (settings.get('deleteInvitationMailAfterAction', false)) {
+                        // remove mail
+                        if (self.options.yell !== false) {
+                            notifications.yell('success', successInternal[action]);
+                        }
+                        require(['io.ox/mail/api'], function (api) {
+                            api.remove([self.model.toJSON()]);
+                        });
+                    } else {
+                        // update well
+                        self.$el.idle();
+                        self.render();
+                    }
+                }, function fail() {
+                    self.$el.idle().hide();
+                    notifications.yell('error', gt('Failed to update confirmation status; most probably the appointment has been deleted.'));
+                });
+            }
+
+            self.$el.busy(true);
+            performConfirm(true);
+        }
+
+    });
+
+    var InternalTaskView = InternalView.extend(_.extend({}, jsonExtensions, {
+
+        onShowDetails: function (e) {
+            e.preventDefault();
+            var self = this;
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail']).done(function (dialogs, viewDetail) {
+                new dialogs.SidePopup({ tabTrap: true }).show(e, function (popup) {
+                    popup.append(viewDetail.draw(self.event));
+                });
+            });
+        },
+
+        load: function () {
+            var self = this;
+            return require([
+                'io.ox/tasks/api',
+                'io.ox/tasks/util',
+                'settings!io.ox/tasks'
+            ]).then(function (api, util, settings) {
+                self.api = api;
+                self.util = util;
+                self.settings = settings;
+                return api.get(_.cid(self.cid));
+            }).then(function (task) {
+                self.event = task;
+            });
+        },
+
+        getInfoText: function () {
+            return gt('This email contains a task');
+        },
+
+        getLinkText: function () {
+            return gt('Show task details');
+        },
+
+        getAcceptedMessage: function () {
+            return gt('You have accepted this task');
+        },
+
+        getRejectedMessage: function () {
+            return gt('You declined this task');
+        },
+
+        getTentativeMessage: function () {
+            return gt('You tentatively accepted this task');
+        },
+
+        renderReminder: function () {
+            var view = this;
+            this.$el.find('.itip-actions').before(
+                $('<div class="itip-reminder inline">').append(
+                    $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
+                    $('<div class="controls">').append(
+                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder">')
+                        .append(function () {
+                            var self = $(this),
+                                options = view.util.getReminderOptions();
+                            _(options).each(function (label, value) {
+                                self.append($('<option>', { value: value }).text(label));
+                            });
+                        })
+                        .val(this.getDefaultReminder())
+                    )
+                )
+            );
+        },
+
+        getDefaultReminder: function () {
+            return parseInt(this.settings.get('defaultReminder', 15), 10);
         },
 
         onActionSuccess: function (action, updated) {
 
-            var data = this[this.type] || this.appointment || this.task,
-                reminder = this.reminder,
+            var reminder = this.reminder,
                 tempdata;
 
             if (reminder) {
                 // don't use whole data object here, because it overwrites the confirmations with it's users attribute
                 tempdata = {
-                    id: data.id,
-                    folder_id: data.folder_id,
+                    id: this.event.id,
+                    folder_id: this.event.folder_id,
                     alarm: reminder
                 };
-                if (data.recurrence_position) {
-                    tempdata.recurrence_position = data.recurrence_position;
+                if (this.event.recurrence_position) {
+                    tempdata.recurrence_position = this.event.recurrence_position;
                 }
-                if (this.task) {
-                    //tasks use absolute timestamps
-                    tempdata.alarm = _.utc() + tempdata.alarm;
-                }
+                //tasks use absolute timestamps
+                tempdata.alarm = _.utc() + tempdata.alarm;
                 this.api.update(tempdata);
             }
 
-            if (this.type === 'appointment') {
-                this.appointment = updated;
-            } else {
-                this.task = updated;
-            }
+            this.event = updated;
 
             if (settings.get('deleteInvitationMailAfterAction', false)) {
                 // remove mail
@@ -543,11 +765,7 @@ define('io.ox/calendar/invitations/register', [
         onActionFail: function () {
             // appointment or task was deleted in the meantime
             this.$el.idle().hide();
-            notifications.yell('error',
-                this.type === 'appointment'
-                    ? gt('Failed to update confirmation status; most probably the appointment has been deleted.')
-                    : gt('Failed to update confirmation status; most probably the task has been deleted.')
-            );
+            notifications.yell('error', gt('Failed to update confirmation status; most probably the task has been deleted.'));
         },
 
         onAction: function (e) {
@@ -556,104 +774,23 @@ define('io.ox/calendar/invitations/register', [
                 action = $(e.currentTarget).attr('data-action'),
                 hash = { accept: 1, decline: 2, tentative: 3 },
                 confirmation = hash[action],
-                data = this[this.type] || this.appointment || this.task,
-                status = util.getConfirmationStatus(data),
-                accepted = status === 1,
+                status = this.getConfirmationStatus(),
+                accepted = status === 'ACCEPTED',
                 comment = this.getUserComment();
 
             this.reminder = accepted ? false : parseInt(this.$el.find('.reminder-select').val(), 10);
 
-            function performConfirm() {
-                self.$el.busy(true);
+            self.$el.busy(true);
 
-                self.api.confirm({
-                    folder: data.folder_id,
-                    id: data.id,
-                    data: { confirmation: confirmation, confirmmessage: comment }
-                })
-                .then(self.onActionSuccess.bind(self, confirmation), self.onActionFail.bind(self, action));
-            }
-
-            // change-confirmation action is used to do conflict checks. That's only needed for appointments that are not declined
-            if (this.type === 'appointment' && action !== 'decline') {
-                return ox.load(['io.ox/calendar/actions/change-confirmation']).done(function (action) {
-                    action(data).done(performConfirm).fail(function (err) {
-                        if (err) notifications.yell(err);
-                    });
-                });
-            }
-            performConfirm();
-        },
-
-        loadAppointment: function () {
-            var view = this;
-            return require(['io.ox/calendar/api']).then(function (api) {
-                view.api = api;
-                view.settings = settings;
-                return api.get(_.cid(view.cid)).then(
-                    function success(appointment) {
-                        view.appointment = appointment;
-                        view.render = AbstractView.prototype.render;
-                        view.render();
-                        return appointment;
-                    }
-                );
-            });
-        },
-
-        renderAppointment: function () {
-            this.loadAppointment();
-        },
-
-        loadTask: function () {
-            var view = this;
-            return require(['io.ox/tasks/api', 'settings!io.ox/tasks']).then(function (api, settings) {
-                view.api = api;
-                view.settings = settings;
-                return api.get(_.cid(view.cid)).then(
-                    function success(data) {
-                        view.task = data;
-                        view.render = AbstractView.prototype.render;
-                        view.render();
-                        return data;
-                    }
-                );
-            });
-        },
-
-        renderTask: function () {
-            this.loadTask();
-        },
-
-        getDefaultReminder: function () {
-            return parseInt(this.settings.get('defaultReminder', 15), 10);
-        },
-
-        renderReminder: function () {
-            this.$el.find('.itip-actions').before(
-                $('<div class="itip-reminder">').append(
-                    $('<label class="control-label" for="reminderSelect">').text(gt('Reminder')),
-                    $('<div class="controls">').append(
-                        $('<select id="reminderSelect" class="reminder-select form-control" data-property="reminder">')
-                        .append(function () {
-                            var self = $(this),
-                                options = util.getReminderOptions();
-                            _(options).each(function (label, value) {
-                                self.append($('<option>', { value: value }).text(label));
-                            });
-                        })
-                        .val(this.getDefaultReminder())
-                    )
-                )
-            );
-        },
-
-        render: function () {
-            this.$el.attr({ 'data-type': this.type, 'data-cid': this.cid });
-            if (this.type === 'appointment') this.loadAppointment(); else this.loadTask();
-            return this;
+            self.api.confirm({
+                folder: this.event.folder_id,
+                id: this.event.id,
+                data: { confirmation: confirmation, confirmmessage: comment }
+            })
+            .then(self.onActionSuccess.bind(self, confirmation), self.onActionFail.bind(self, action));
         }
-    });
+
+    }));
 
     //
     // Container view. Checks mail data and adds internal or external view
@@ -722,11 +859,12 @@ define('io.ox/calendar/invitations/register', [
             reminder = reminder.split(/,\s*/);
             cid = reminder[1] + '.' + reminder[0];
 
+            var View = type === 'Appointments' ? InternalAppointmentView : InternalTaskView;
+
             this.$el.append(
-                new InternalView({
+                new View({
                     model: this.model,
                     cid: cid,
-                    type: type,
                     yell: yell
                 }).render().$el
             );
