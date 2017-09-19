@@ -47,6 +47,27 @@ define('io.ox/mail/compose/extensions', [
         reply_to: /*#. Must not exceed 8 characters. e.g. German would be: "Antworten an", needs to be abbreviated like "Antw. an" as space is very limited */ gt.pgettext('compose', 'Reply to')
     };
 
+
+    function getSharingSettings() {
+        var sharing = {
+            name:                settings.get('compose/shareAttachments/name'),
+            driveLimit:          settings.get('compose/shareAttachments/driveLimit', -1),
+            defaultExpiryDate:   settings.get('compose/shareAttachments/defaultExpiryDate'),
+            expiryDates:         settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']),
+            requiredExpiration:  settings.get('compose/shareAttachments/requiredExpiration', false),
+            forceAutoDelete:     settings.get('compose/shareAttachments/forceAutoDelete', false),
+            threshold:           settings.get('compose/shareAttachments/threshold', 0),
+            enableNotifications: settings.get('compose/shareAttachments/enableNotifications', false)
+        };
+        // setting fallback: 'no expire'
+        if (!sharing.defaultExpiryDate || sharing.defaultExpiryDate === 'none') sharing.defaultExpiryDate = '';
+        // setting fallback: use longest timespan when expiration is required
+        if (!sharing.defaultExpiryDate && sharing.requiredExpiration) {
+            sharing.defaultExpiryDate = _.last(sharing.expiryDates);
+        }
+        return sharing;
+    }
+
     var extensions = {
 
         header: function (baton) {
@@ -545,8 +566,9 @@ define('io.ox/mail/compose/extensions', [
                         index: 100,
                         draw: function (baton) {
                             var now = _.now(),
-                                defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M'),
-                                durationSeed = settings.get('compose/shareAttachments/expiryDates', ['1d', '1w', '1M', '3M', '6M', '1y']);
+                                sharingSettings = getSharingSettings(),
+                                defaultVal = sharingSettings.defaultExpiryDate,
+                                durationSeed = sharingSettings.expiryDates;
 
                             _(durationSeed).each(function (seed) {
                                 var count = seed.slice(0, seed.length - 1),
@@ -583,15 +605,17 @@ define('io.ox/mail/compose/extensions', [
                         id: 'none-option',
                         index: 200,
                         draw: function (baton) {
-                            if (settings.get('compose/shareAttachments/requiredExpiration', false)) return;
 
-                            var defaultVal = settings.get('compose/shareAttachments/defaultExpiryDate', '1M');
-                            if (!defaultVal && defaultVal === 'none') {
+                            var sharingSettings = getSharingSettings();
+
+                            if (sharingSettings.requiredExpiration) return;
+
+                            if (sharingSettings.defaultExpiryDate === '') {
                                 baton.view.model.set('expiry_date', '');
                             }
 
                             baton.dropdown.option('expiry_date', '', gt('no expiry date'));
-                            if (!settings.get('compose/shareAttachments/forceAutoDelete', false)) {
+                            if (!sharingSettings.forceAutoDelete) {
                                 baton.view.model.on('change:expiry_date', function (settingsModel, value) {
                                     // autodelete makes no sense if links cannot expire
                                     if (value === '') baton.view.model.set('autodelete', false);

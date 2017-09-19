@@ -248,7 +248,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/filter', {
-        capabilities: 'mailfilter',
+        capabilities: 'mailfilter_v2',
         requires: function (e) {
             // must be at least one message and top-level
             if (!e.collection.has('some') || !e.collection.has('toplevel')) return;

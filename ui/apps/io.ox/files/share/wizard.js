@@ -86,9 +86,6 @@ define('io.ox/files/share/wizard', [
         id: 'link-to-clipboard',
         index: INDEX += 100,
         draw: function () {
-            // unsupported: https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
-            if (_.device('safari')) return;
-
             var group = this.find('.link-group'),
                 target = '#' + group.find('input').attr('id'),
                 //.# tooltip for a button that copies the content of a field to operating sytems clipboard

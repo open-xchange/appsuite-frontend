@@ -87,11 +87,10 @@ define('io.ox/files/upload/main', [
 
         this.calculateTotalSíze = function () {
             //update the total size for time estimation
-            if (!totalSize) {
-                uploadCollection.each(function (model) {
-                    totalSize += model.get('file').size;
-                });
-            }
+            uploadCollection.each(function (model) {
+                totalSize += model.get('file').size;
+            });
+
         };
 
         this.changed = function (item, position, files) {
@@ -286,7 +285,6 @@ define('io.ox/files/upload/main', [
                         }
 
                         totalProgress = (position + sub) / files.length;
-
                         //update uploaded size for time estimation
                         uploadCollection.trigger('progress', {
                             progress: totalProgress,
