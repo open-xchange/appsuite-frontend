@@ -234,7 +234,7 @@ define('io.ox/calendar/chronos-api', [
                     },
                     data: obj
                 }).then(function (data) {
-                    if (!data.conflicts && attachmentHandlingNeeded) {
+                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
                         //to make the detailview show the busy animation
                         api.addToUploadList(util.cid(data.created[0]));
                     }
@@ -276,7 +276,7 @@ define('io.ox/calendar/chronos-api', [
                     params: params,
                     data: obj
                 }).then(function (data) {
-                    if (!data.conflicts && attachmentHandlingNeeded) {
+                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
                         //to make the detailview show the busy animation
                         api.addToUploadList(util.cid(data.updated[0]));
                     }
@@ -290,7 +290,8 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    return api.pool.getModel(data.updated[0]);
+                    if (data.updated.length > 0) return api.pool.getModel(data.updated[0]);
+                    return api.pool.getModel(util.cid(obj));
                 });
             },
 
@@ -397,11 +398,13 @@ define('io.ox/calendar/chronos-api', [
                 })
                 .then(processResponse)
                 .then(function (response) {
+                    // TODO check if updated[0] exists
                     if (!response.conflicts) {
                         // updates notification area for example
                         // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
                         api.trigger('mark:invite:confirmed', response.updated[0]);
                     }
+                    return response;
                 });
             },
 
@@ -625,7 +628,7 @@ define('io.ox/calendar/chronos-api', [
             collections = this.getByFolder(folder).filter(function (collection) {
                 return !!collection.get(cid);
             });
-        if (collections.length === 0) return [api.collectionLoader.getDefaultCollection()];
+        if (collections.length === 0) return [this.get('detail')];
         return collections;
     };
 
@@ -647,7 +650,7 @@ define('io.ox/calendar/chronos-api', [
                 var inverval = Math.min(end, model.getTimestamp('endDate')) - Math.max(start, model.getTimestamp('startDate'));
                 if (inverval > 0) return true;
             });
-        if (collections.length === 0) return [api.collectionLoader.getDefaultCollection()];
+        if (collections.length === 0) return [this.get('detail')];
         return collections;
     };
 

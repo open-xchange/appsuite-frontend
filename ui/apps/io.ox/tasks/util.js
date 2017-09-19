@@ -363,7 +363,225 @@ define('io.ox/tasks/util', [
                     return $span;
                 }
 
+            },
+
+            getConfirmations: function (data) {
+                var hash = {};
+                if (data) {
+                    // internal users
+                    _(data.users).each(function (obj) {
+                        hash[String(obj.id)] = {
+                            status: obj.confirmation || 0,
+                            comment: obj.confirmmessage || ''
+                        };
+                    });
+                    // external users
+                    _(data.confirmations).each(function (obj) {
+                        hash[obj.mail] = {
+                            status: obj.status || 0,
+                            comment: obj.message || obj.confirmmessage || ''
+                        };
+                    });
+                }
+                return hash;
+            },
+
+            getConfirmationStatus: function (obj, id) {
+                var hash = util.getConfirmations(obj),
+                    user = id || ox.user_id;
+                return hash[user] ? hash[user].status : 0;
+            },
+
+            getConfirmationMessage: function (obj, id) {
+                var hash = util.getConfirmations(obj),
+                    user = id || ox.user_id;
+                return hash[user] ? hash[user].comment : '';
+            },
+
+            getDateTimeIntervalMarkup: function (data, options) {
+                if (data && data.start_date && data.end_date) {
+
+                    options = _.extend({ timeZoneLabel: { placement:  _.device('touch') ? 'bottom' : 'top' }, a11y: false, output: 'markup' }, options);
+
+                    if (options.container && options.container.parents('#io-ox-core').length < 1) {
+                        // view is not in core (happens with deep links)
+                        // add timezonepopover to body
+                        options.timeZoneLabel.container = 'body';
+                    }
+                    var startDate,
+                        endDate,
+                        dateStr,
+                        timeStr,
+                        timeZoneStr = moment(data.start_date).zoneAbbr(),
+                        fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
+
+                    if (data.full_time) {
+                        startDate = moment.utc(data.start_date).local(true);
+                        endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                    } else {
+                        startDate = moment(data.start_date);
+                        endDate = moment(data.end_date);
+                    }
+                    if (startDate.isSame(endDate, 'day')) {
+                        dateStr = startDate.format(fmtstr);
+                        timeStr = util.getTimeInterval(data, options.zone);
+                    } else if (data.full_time) {
+                        dateStr = util.getDateInterval(data);
+                        timeStr = util.getTimeInterval(data, options.zone);
+                    } else {
+                        // not same day and not fulltime. use interval with date and time, separate date and is confusing
+                        dateStr = startDate.formatInterval(endDate, fmtstr + ' LT');
+                    }
+
+                    // standard markup or object with strings
+                    if (options.output === 'strings') {
+                        return { dateStr: dateStr, timeStr: timeStr || '', timeZoneStr: timeZoneStr };
+                    }
+                    return $('<div class="date-time">').append(
+                        // date
+                        $('<span class="date">').text(dateStr),
+                        // mdash
+                        $.txt(' \u00A0 '),
+                        // time
+                        $('<span class="time">').append(
+                            timeStr ? $.txt(timeStr) : ''
+                        )
+                    );
+                }
+                return '';
+            },
+
+            getDateInterval: function (data, a11y) {
+                if (data && data.start_date && data.end_date) {
+                    var startDate, endDate,
+                        fmtstr = a11y ? 'dddd, l' : 'ddd, l';
+
+                    a11y = a11y || false;
+
+                    if (data.full_time) {
+                        startDate = moment.utc(data.start_date).local(true);
+                        endDate = moment.utc(data.end_date).local(true).subtract(1, 'days');
+                    } else {
+                        startDate = moment(data.start_date);
+                        endDate = moment(data.end_date);
+                    }
+                    if (startDate.isSame(endDate, 'day')) {
+                        return startDate.format(fmtstr);
+                    }
+                    if (a11y && data.full_time) {
+                        //#. date intervals for screenreaders
+                        //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                        //#. %1$s is the start date
+                        //#. %2$s is the end date
+                        //#, c-format
+                        return gt('%1$s to %2$s', startDate.format(fmtstr), endDate.format(fmtstr));
+                    }
+                    return startDate.formatInterval(endDate, fmtstr);
+                }
+                return '';
+            },
+
+            getTimeInterval: function (data, zone, a11y) {
+                if (!data || !data.start_date || !data.end_date) return '';
+                if (data.full_time) {
+                    return util.getFullTimeInterval(data, true);
+                }
+                var start = moment(data.start_date),
+                    end = moment(data.end_date);
+                if (zone) {
+                    start.tz(zone);
+                    end.tz(zone);
+                }
+                if (a11y) {
+                    //#. date intervals for screenreaders
+                    //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
+                    //#. %1$s is the start date
+                    //#. %2$s is the end date
+                    //#, c-format
+                    return gt('%1$s to %2$s', start.format('LT'), end.format('LT'));
+                }
+                return start.formatInterval(end, 'time');
+            },
+
+            getFullTimeInterval: function (data, smart) {
+                var length = util.getDurationInDays(data);
+                return length <= 1 && smart ? gt('Whole day') : gt.format(
+                    //#. General duration (nominative case): X days
+                    //#. %d is the number of days
+                    //#, c-format
+                    gt.ngettext('%d day', '%d days', length), length);
+            },
+
+            getDurationInDays: function (data) {
+                return moment(data.end_date).diff(data.start_date, 'days');
+            },
+
+            getReminderOptions: function () {
+                // TODO: moment.js alternative mode
+                // var opt = {};
+                // [-1,0,5,10,15,30,45,60,120,240,360,480,720,1440,2880,4320,5760,7200,8640,10080,20160,30240,40320].forEach(function (val) {
+                //     opt[val] = val < 0 ? gt('No reminder') : moment.duration(val, 'minutes').humanize();
+                // });
+                // return opt;
+
+                var options = {},
+                    reminderListValues = [
+                        { value: -1, format: 'string' },
+                        { value: 0, format: 'minutes' },
+                        { value: 5, format: 'minutes' },
+                        { value: 10, format: 'minutes' },
+                        { value: 15, format: 'minutes' },
+                        { value: 30, format: 'minutes' },
+                        { value: 45, format: 'minutes' },
+
+                        { value: 60, format: 'hours' },
+                        { value: 120, format: 'hours' },
+                        { value: 240, format: 'hours' },
+                        { value: 360, format: 'hours' },
+                        { value: 480, format: 'hours' },
+                        { value: 720, format: 'hours' },
+
+                        { value: 1440, format: 'days' },
+                        { value: 2880, format: 'days' },
+                        { value: 4320, format: 'days' },
+                        { value: 5760, format: 'days' },
+                        { value: 7200, format: 'days' },
+                        { value: 8640, format: 'days' },
+
+                        { value: 10080, format: 'weeks' },
+                        { value: 20160, format: 'weeks' },
+                        { value: 30240, format: 'weeks' },
+                        { value: 40320, format: 'weeks' }
+                    ];
+
+                _(reminderListValues).each(function (item) {
+                    var i;
+                    switch (item.format) {
+                        case 'string':
+                            options[item.value] = gt('No reminder');
+                            break;
+                        case 'minutes':
+                            options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), item.value);
+                            break;
+                        case 'hours':
+                            i = Math.floor(item.value / 60);
+                            options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), i);
+                            break;
+                        case 'days':
+                            i = Math.floor(item.value / 60 / 24);
+                            options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), i);
+                            break;
+                        case 'weeks':
+                            i = Math.floor(item.value / 60 / 24 / 7);
+                            options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), i);
+                            break;
+                        // no default
+                    }
+                });
+
+                return options;
             }
+
         };
 
     return util;
