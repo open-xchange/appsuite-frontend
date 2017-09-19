@@ -270,7 +270,7 @@
         margin-left: -200px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .progress {
             width: 150px;
             margin-left: -75px;
@@ -638,7 +638,7 @@
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
     .window-sidepanel {
         display: block;
         -webkit-backface-visibility: hidden;

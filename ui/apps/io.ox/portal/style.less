@@ -612,7 +612,7 @@
         margin-bottom: 16px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
         .controls {
             padding-left: 0;
@@ -647,7 +647,7 @@
             .ellipsis();
         }
 
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
             a[data-action="toggle"] {
                 color: #000000;

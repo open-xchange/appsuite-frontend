@@ -233,7 +233,7 @@
 
     .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders, [data-id="virtual/myfolders"] {
         margin-bottom: @default-padding;
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
             margin-bottom: 0;
         }
     }
@@ -306,7 +306,7 @@
         }
     }
 
-    @media(max-width: 480px), (max-device-width: 480px) {
+    @media(max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
         padding-left: 20px;
 

@@ -64,7 +64,7 @@
             }
         }
 
-        @media (min-width: 481px), (min-device-width: 481px) {
+        @media (min-width: @smartphone-breakpoint + 1), (min-device-width: @smartphone-breakpoint + 1) {
             &:focus {
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;
@@ -113,7 +113,7 @@
         .ellipsis();
 
         &.left {
-            left: 3px;
+            left: 8px;
 
             .fa-chevron-left { margin-right: 3px; }
         }
@@ -347,7 +347,7 @@
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .toolbar-button { margin: 0; }
 

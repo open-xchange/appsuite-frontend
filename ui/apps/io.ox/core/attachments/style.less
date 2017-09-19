@@ -127,7 +127,7 @@
             margin: 0 14px 0 0;
             line-height: 20px;
 
-            @media (max-width: 480px) { display: block; }
+            @media (max-width: @smartphone-breakpoint) { display: block; }
 
             .file {
                 background-color: inherit;
@@ -180,7 +180,7 @@
             width: 0;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: @smartphone-breakpoint) {
             .clearfix();
             padding: 8px;
             margin: 0 0 5px 0;
@@ -211,7 +211,7 @@
 
         span.filesize { padding-right: 24px; }
 
-        @media (max-width: 480px) {
+        @media (max-width: @smartphone-breakpoint) {
 
             span.filesize {
                 right: 32px;

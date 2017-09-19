@@ -701,7 +701,7 @@ html:not(.internet-explorer) {
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .default-content-padding { padding: 5px 10px; }
     .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 3px 8px; }

@@ -23,7 +23,7 @@
         &:focus .decoration { background-color: darken(@color, 10%); }
     }
 
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+    @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
         .widget.widget-color-custom.color-linkedin {
             background-color: @color;
 
