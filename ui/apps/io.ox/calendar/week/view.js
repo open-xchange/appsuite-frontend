@@ -1223,7 +1223,7 @@ define('io.ox/calendar/week/view', [
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                appointmentStartDate = moment.tz(model.get('startDate').value, model.get('startDate').tzid || 'UTC');
+                appointmentStartDate = model.getMoment('startDate');
 
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
@@ -1236,12 +1236,12 @@ define('io.ox/calendar/week/view', [
                         var node = this.renderAppointment(model), row,
                             fulltimePos = appointmentStartDate.diff(this.startDate, 'days'),
                             // calculate difference in utc, otherwhise we get wrong results if the appointment starts before a daylight saving change and ends after
-                            fulltimeWidth = Math.max((moment.utc(model.get('endDate').value).local(true).diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos)), 1);
+                            fulltimeWidth = Math.max(model.getMoment('endDate').diff(appointmentStartDate, 'days') + Math.min(0, fulltimePos), 1);
 
                         // loop over all column positions
                         for (row = 0; row < fulltimeColPos.length; row++) {
-                            if (fulltimeColPos[row] <= moment.utc(model.get('startDate').value).valueOf()) {
-                                fulltimeColPos[row] = moment.utc(model.get('endDate').value).valueOf();
+                            if (fulltimeColPos[row] <= model.getTimestamp('startDate')) {
+                                fulltimeColPos[row] = model.getTimestamp('endDate');
                                 break;
                             }
                         }
@@ -1265,7 +1265,7 @@ define('io.ox/calendar/week/view', [
                         }*/
 
                         var startLocal = moment(Math.max(appointmentStartDate.valueOf(), this.startDate.valueOf())),
-                            endLocal = moment.tz(model.get('endDate').value, model.get('endDate').tzid),
+                            endLocal = model.getMoment('endDate').local(),
                             start = moment(startLocal).startOf('day').valueOf(),
                             end = moment(endLocal).startOf('day').valueOf(),
                             maxCount = 0,
@@ -1279,11 +1279,11 @@ define('io.ox/calendar/week/view', [
 
                             if (start !== end) {
                                 endLocal = moment(startLocal).endOf('day');
-                                if (moment.tz(model.get('endDate').value, model.get('endDate').tzid).valueOf() - endLocal.valueOf() > 1) {
+                                if (model.get('endDate').valueOf() - endLocal.valueOf() > 1) {
                                     style += 'rmsouth';
                                 }
                             } else {
-                                endLocal = moment.tz(model.get('endDate').value, model.get('endDate').tzid);
+                                endLocal = model.getMoment('endDate').local();
                             }
 
                             // kill overlap appointments with length null
