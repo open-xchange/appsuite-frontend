@@ -22,8 +22,10 @@
 @padding-base-horizontal:               12px;
 @modal-inner-padding:                   13px;
 
-@light-font-family:                     "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
-@normal-font-family:                    @font-family-sans-serif;
+// Main font family used accross the whole UI
+@light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+@normal-font-family:                    @light-font-family;
+@font-family-sans-serif:                @light-font-family;
 @font-size-touch:                       16px;
 @topbar-font-size:                      13px;
 @window-head-font-size:                 13px;
@@ -279,7 +281,7 @@
 
 // mobile
 //----------------------
-@smartphone-breakpoint:                 540px;
+@smartphone-breakpoint:                 540px; // matches smartphone detection threshold in browser.js
 @pagecontroller-animation-duration:     350ms;
 // size of the menu launcher in the top left
 @mobile-launcher-icon-size:             18px;
