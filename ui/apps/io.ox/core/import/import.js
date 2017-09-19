@@ -51,7 +51,7 @@ define('io.ox/core/import/import', [
         draw: function (baton) {
             if (!/^(calendar|tasks)$/.test(baton.module)) return;
             return this.append(
-                $('<option value="ICAL">').text(gt('iCal'))
+                $('<option value="ICAL">').text(gt('iCalendar'))
             );
         }
     });
