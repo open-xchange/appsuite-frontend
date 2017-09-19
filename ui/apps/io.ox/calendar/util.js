@@ -734,10 +734,15 @@ define('io.ox/calendar/util', [
                     title: confirmTitles[i] || ''
                 };
             });
+
             _.each(conf, function (c) {
+                // tasks
+                if (_.isNumber(c.status)) {
+                    ret[c.status].count++;
+                    ret.count++;
                 // don't count groups or ressources, ignore unknown states (the spec allows custom partstats)
-                if (ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())] && (!c.cuType || c.cuType === 'INDIVIDUAL')) {
-                    ret[c.status || chronosStates.indexOf(c.partStat.toUpperCase())].count++;
+                } else if (ret[chronosStates.indexOf(c.partStat.toUpperCase())] && c.cuType === 'INDIVIDUAL') {
+                    ret[chronosStates.indexOf(c.partStat.toUpperCase())].count++;
                     ret.count++;
                 }
             });

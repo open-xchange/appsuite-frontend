@@ -50,10 +50,14 @@ define('io.ox/core/tk/attachments', [
                     self.model.off('create update', uploadOnSave);
                     var id = response.id || self.model.attributes.id,
                         folder = self.model.attributes.folder || self.model.attributes.folder_id;
-                    // todo remove this once we get a upload request in the chronos api
-                    // until then cut off the additional cal://0/ etc from the folder
-                    folder = folder.split('/');
-                    folder = folder[folder.length - 1];
+
+                    if (_.isString(folder)) {
+                        // todo remove this once we get a upload request in the chronos api
+                        // until then cut off the additional cal://0/ etc from the folder
+                        folder = folder.split('/');
+                        folder = folder[folder.length - 1];
+                    }
+
                     if (folder && id) {
                         self.save(id, folder);
                     }

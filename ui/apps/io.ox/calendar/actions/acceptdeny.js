@@ -89,7 +89,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                     help: 'ox.appsuite.user.sect.calendar.manage.changestatus.html'
                 })
                     .build(function () {
-                        debugger;
+
                         if (!series && o.recurrenceId) {
                             appointmentData = api.removeRecurrenceInformation(appointmentData);
                         }
