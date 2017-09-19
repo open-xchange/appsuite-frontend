@@ -201,6 +201,12 @@
         }
     }
 
+    @media (max-width: 768px) {
+        .scrollpane {
+            padding: 0 40px;
+        }
+    }
+
     // Mobile
     @media (max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
 
@@ -228,9 +234,9 @@
         .scrollpane {
             -webkit-user-select: none;
             top: 33px;
+            padding: 0;
 
             .week {
-                height: 100/6%;
                 min-height: 40px;
                 border-bottom: 1px solid #ccc;
                 padding-left: 0;
@@ -239,6 +245,7 @@
 
                 .day {
                     width: 100/7%;
+                    vertical-align: baseline;
                     border-width: 0;
                     -webkit-user-select: auto;
 
@@ -274,11 +281,14 @@
                 }
 
                 .day-filler {
-                    width: 100/7%;
                     border: 0;
 
                     &.bordertop { border: 0; }
                 }
+            }
+
+            .month {
+                width: 100%;
             }
 
             .month-name {
