@@ -117,6 +117,20 @@ define('io.ox/mail/mobile-toolbar-actions', [
             label: gt.pgettext('verb', 'Archive'),
             ref: 'io.ox/mail/actions/archive',
             cssClasses: 'io-ox-action-link mobile-toolbar-action'
+        },
+        'spam': {
+            prio: 'hi',
+            mobile: 'hi',
+
+            label: gt('Mark as spam'),
+            ref: 'io.ox/mail/actions/spam'
+        },
+        'nospam': {
+            prio: 'hi',
+            mobile: 'hi',
+
+            label: gt('Not spam'),
+            ref: 'io.ox/mail/actions/nospam'
         }
     };
 
@@ -131,7 +145,7 @@ define('io.ox/mail/mobile-toolbar-actions', [
         index = 0;
     }
 
-    addAction(submenu, ['mark-read', 'mark-unread', 'copy']);
+    addAction(submenu, ['mark-read', 'mark-unread', 'spam', 'nospam', 'copy']);
 
     addAction(pointListView, ['compose']);
 
