@@ -76,7 +76,7 @@ define('plugins/notifications/calendar/register', [
                             }
 
                             calAPI.confirm(o.data).done(function (result) {
-                                if (result.conflicts) {
+                                if (result && result.conflicts) {
                                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                         conflictView.dialog(result.conflicts)
                                             .on('ignore', function () {
@@ -85,6 +85,9 @@ define('plugins/notifications/calendar/register', [
                                     });
                                     return;
                                 }
+                            })
+                            .fail(function (error) {
+                                yell(error);
                             });
                         });
                     });

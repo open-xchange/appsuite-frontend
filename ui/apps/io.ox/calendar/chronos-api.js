@@ -399,7 +399,8 @@ define('io.ox/calendar/chronos-api', [
                 .then(function (response) {
                     if (!response.conflicts) {
                         // updates notification area for example
-                        api.trigger('mark:invite:confirmed', api.pool.getModel(data.updated[0]));
+                        // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
+                        api.trigger('mark:invite:confirmed', response.updated[0]);
                     }
                 });
             },
@@ -490,24 +491,34 @@ define('io.ox/calendar/chronos-api', [
                     params: {
                         action: 'updates',
                         folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
-                        timestamp: api.getInvitesSince || moment().subtract(5, 'years').valueOf(),
+                        timestamp: api.getInvitesSince || moment().subtract(1, 'years').valueOf(),
                         rangeStart: moment().subtract(2, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
                         until: moment().add(2, 'years').format('YYYYMMDD[T]HHmmss[Z]')
                     }
                 })
                 .then(function (data) {
-                    // sort by startDate & look for unconfirmed appointments
+
                     // exclude appointments that already ended
-                    var invites = _(data.newAndModified)
+                    // only use the next recurrence for recurring appointments
+                    var recurrences = {},
+                        invites = _(data.newAndModified)
                         .filter(function (item) {
 
-                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid).valueOf() < now,
+                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid || moment.defaultZone.name).valueOf() < now,
                                 isRecurring = !!item.recurrenceId;
 
-                            if (!isRecurring && isOver) {
+                            if (isOver) {
                                 return false;
                             }
 
+                            if (isRecurring) {
+                                // yes use _.ecid here not the util.cid function
+                                // this way we get the id of the recurrence master
+                                if (recurrences[_.ecid(item)]) {
+                                    return false;
+                                }
+                                recurrences[_.ecid(item)] = true;
+                            }
                             return _(item.attendees).any(function (user) {
                                 return user.entity === ox.user_id && user.partStat === 'NEEDS-ACTION';
                             });
@@ -525,8 +536,6 @@ define('io.ox/calendar/chronos-api', [
                     module: 'chronos/alarm',
                     params: {
                         action: 'until',
-                        // 3 days should be enough for the oldest reminder
-                        rangeStart: moment.utc().subtract(3, 'days').format('YYYYMMDD[T]HHmmss[Z]'),
                         rangeEnd: moment.utc().add(10, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
                         actions: 'DISPLAY,AUDIO'
                     }
