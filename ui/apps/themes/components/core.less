@@ -618,9 +618,26 @@ html:not(.internet-explorer) {
     }
 }
 
-
 .blur {
     filter: blur(@bluriness);
+}
+
+h1.unstyled,
+h2.unstyled,
+h3.unstyled,
+h4.unstyled,
+h5.unstyled {
+    margin: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+label.unstyled {
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin-bottom: inherit;
 }
 
 // .radio.custom {

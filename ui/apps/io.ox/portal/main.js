@@ -112,9 +112,10 @@ define('io.ox/portal/main', [
             // greeting
             $greeting = $('<h1 class="greeting">').append(
                 baton.$.greeting = $('<span class="greeting-phrase">'),
-                $('<span class="signin">').text(
+                $('<span class="signin">').append(
                     //#. Portal. Logged in as user
-                    gt('Signed in as %1$s', ox.user)
+                    $('<label class="unstyled">').text(gt('Signed in as')),
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { target: 'identifier' })
                 )
             );
 

@@ -16,6 +16,7 @@ define('io.ox/core/main', [
     'io.ox/core/session',
     'io.ox/core/http',
     'io.ox/core/api/apps',
+    'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
@@ -37,7 +38,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
+], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
 
     'use strict';
 
@@ -1371,7 +1372,7 @@ define('io.ox/core/main', [
                 // show current user
                 content.append(
                     $('<label>').text(gt('Signed in as:')),
-                    $.txt(' '), $.txt(ox.user)
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { target: 'identifier' })
                 );
 
                 content.append(
