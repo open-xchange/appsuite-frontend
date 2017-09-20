@@ -191,7 +191,7 @@ deploy e2e testserver:
   variables:
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
     SERVER: http://10.20.28.164/appsuite/
   script:
     - docker pull $DOCKER_IMAGE
@@ -220,7 +220,7 @@ stop e2e testserver:
     GIT_STRATEGY: none
     DOCKER_HOST: docker.ui.cloud.open-xchange.com
     DOCKER_IMAGE: $CI_REGISTRY_IMAGE:ui_$CI_COMMIT_REF_SLUG
-    CONTAINER_NAME: e2e_$CI_COMMIT_REF_SLUG
+    CONTAINER_NAME: e2e_$CI_PIPELINE_ID
   script:
     - docker container stop $CONTAINER_NAME || true
     - docker container wait $CONTAINER_NAME || true
