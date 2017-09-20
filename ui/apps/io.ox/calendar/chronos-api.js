@@ -236,7 +236,7 @@ define('io.ox/calendar/chronos-api', [
                 }).then(function (data) {
                     if (!data.conflicts && attachmentHandlingNeeded) {
                         //to make the detailview show the busy animation
-                        api.addToUploadList(util.cid(data.updated[0]));
+                        api.addToUploadList(util.cid(data.created[0]));
                     }
                     return data;
                 })
