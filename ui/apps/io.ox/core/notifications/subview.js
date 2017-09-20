@@ -189,13 +189,15 @@ define('io.ox/core/notifications/subview', [
                 if (apiEvents.add) {
                     api.on(apiEvents.add, function () {
                         //strip off the event parameter
-                        self.addNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.addNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.remove) {
                     api.on(apiEvents.remove, function () {
                         //strip off the event parameter
-                        self.removeNotifications.apply(self, _.rest(arguments));
+                        var items = arguments[0] instanceof jQuery.Event ? _.rest(arguments) : arguments;
+                        self.removeNotifications.apply(self, items);
                     });
                 }
                 if (apiEvents.reset) {
@@ -360,6 +362,9 @@ define('io.ox/core/notifications/subview', [
             }
         },
         addNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
@@ -372,6 +377,9 @@ define('io.ox/core/notifications/subview', [
             this.collection.add(items, { silent: silent });
         },
         removeNotifications: function (items, silent) {
+
+            if (!items) return;
+
             if (!_.isArray(items)) {
                 items = [].concat(items);
             }
