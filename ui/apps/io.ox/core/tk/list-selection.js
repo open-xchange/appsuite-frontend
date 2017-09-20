@@ -845,13 +845,8 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
 
             var items = this.getItems(),
                 first = items.filter('[tabindex="0"]:first'),
-                index = items.index(first),
-                selectedItems = this.get();
-            if (selectedItems.length <= 1) {
-                if (index > -1) this.select(index); else this.select(0);
-            } else {
-                this.focus(index, items);
-            }
+                index = items.index(first);
+            this.focus(index, items);
         },
 
         getBehavior: function () {
