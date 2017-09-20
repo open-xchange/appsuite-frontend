@@ -24,9 +24,8 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-model',
-    'gettext!io.ox/calendar',
-    'less!io.ox/calendar/print-style'
-], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt, printStyle) {
+    'gettext!io.ox/calendar'
+], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt) {
 
     'use strict';
 
@@ -237,7 +236,6 @@ define('io.ox/calendar/month/perspective', [
                     end: moment(day).endOf('week').valueOf(),
                     folder: this.folder.id === 'virtual/all-my-appointments' ? 0 : this.folder.id
                 });
-                self.collections[day] = new chronosModel.Collection([]);
 
                 if (weeks !== 1) {
                     // new view
@@ -483,44 +481,11 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
-            var win, data = null,
-                folderID = this.folder.id || this.folder.folder,
-                styleNode = $('<style type="text/css">').text(printStyle);
-
-            if (folderID && folderID !== 'virtual/all-my-appointments') {
-                data = { folder: folderID };
-            }
-            win = print.open('printCalendar', data, {
-                template: 'cp_monthview_table_appsuite.tmpl',
-                start: moment(this.current).utc(true).valueOf(),
-                end: moment(this.current).add(1, 'month').utc(true).valueOf()
+            print.request('io.ox/calendar/month/print', {
+                start: moment(this.current).startOf('week').valueOf(),
+                end: moment(this.current).endOf('month').endOf('week').valueOf(),
+                folder: this.folder.id || this.folder.folder
             });
-
-            if (this.app.props.get('colorScheme') === 'custom') {
-                // apply custom colors
-                win.onload = function () {
-                    $(win.document.head).append(styleNode);
-                    $(win.document.body).addClass('print-view-custom-colors');
-                    win.onload = null;
-                };
-            }
-
-            // firefox opens every window with about:blank, then loads the url. If we are to fast we will just print a blank page(see bug 33415)
-            if (_.browser.firefox) {
-                var limit = 50,
-                    counter = 0,
-                    interval;
-                // onLoad does not work with firefox on mac, so ugly polling is used
-                interval = setInterval(function () {
-                    if (++counter === limit || win.location.pathname === (ox.apiRoot + '/printCalendar')) {
-                        clearInterval(interval);
-                        // add another extra delay for firefox (see bug 48949)
-                        setTimeout(function () { win.print(); }, 300);
-                    }
-                }, 100);
-            } else {
-                win.print();
-            }
         },
 
         refresh: function () {

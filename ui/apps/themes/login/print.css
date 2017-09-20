@@ -260,3 +260,32 @@ body.scaled-preview {
     width: 21cm;
     overflow: hidden;
 }
+
+/* Month view */
+
+.month-view {
+    border-top: 1px solid #C0C0C0;
+    border-left: 1px solid #C0C0C0;
+    border-spacing: 0;
+    table-layout: fixed;
+    font-size: 12px;
+}
+
+.month-view td {
+    vertical-align: top;
+}
+
+.month-view td, .month-view th{
+    border-right: 1px solid #C0C0C0;
+    border-bottom: 1px solid #C0C0C0;
+}
+
+.month-view ul {
+    padding: 2px;
+    margin: 0;
+    list-style-type: none;
+}
+
+.month-view .time{
+    font-weight: bold;
+}

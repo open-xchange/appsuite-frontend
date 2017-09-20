@@ -292,6 +292,38 @@
         <% }); %>
         </script>
 
+        <script type="text/template" class="calendar-month-view">
+        <% _.each(data, function (month) { %>
+            <table class="month-view">
+                <thead>
+                    <tr>
+                    <% _.each(meta.labels, function (label) { %>
+                        <th><%= label %></th>
+                    <% }); %>
+                    <tr>
+                </thead>
+            <% _.each(month, function (week) { %>
+                <tr>
+                <% _.each(week.days, function (day) { %>
+                    <td>
+                        <ul>
+                        <% _.each(day.events, function (event) { %>
+                            <li>
+                            <% if (event.time) { %>
+                                <span class="time"><%= event.time %></span>
+                            <% } %>
+                                <span><%= event.title %></span>
+                            </li>
+                        <% }); %>
+                        </ul>
+                    </td>
+                <% }); %>
+                </tr>
+            <% }); %>
+            </table>
+        <% }); %>
+        </script>
+
         <script type="text/template" class="task">
         <% _.each(data, function(element) { %>
             <section class="item">
