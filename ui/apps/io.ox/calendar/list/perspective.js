@@ -313,8 +313,9 @@ define('io.ox/calendar/list/perspective', [
             self.updateGridOptions();
 
             self.app.folder.getData().done(function (data) {
-                if (this.folderModel) {
-                    this.folderModel.off('change:meta', this.updateColor);
+
+                if (self.folderModel) {
+                    self.folderModel.off('change:meta', self.updateColor);
                 }
                 self.folderModel = folderAPI.pool.getModel(data.id);
                 self.folderModel.on('change:meta', self.updateColor, self);
