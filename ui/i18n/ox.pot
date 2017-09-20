@@ -248,22 +248,6 @@ msgstr ""
 msgid "toggle password visibility"
 msgstr ""
 
-#: apps/io.ox/backbone/mini-views/common.js
-#: module:io.ox/core
-#: apps/io.ox/calendar/mobile-toolbar-actions.js
-#: module:io.ox/calendar
-#: apps/io.ox/calendar/toolbar.js
-#: apps/io.ox/calendar/util.js
-#: apps/io.ox/calendar/week/view.js
-#: apps/io.ox/core/tk/datepicker.js
-#: apps/io.ox/find/date/patterns.js
-#: apps/io.ox/tasks/util.js
-#: module:io.ox/tasks
-#: apps/plugins/portal/birthdays/register.js
-#: module:plugins/portal
-msgid "Today"
-msgstr ""
-
 #: apps/io.ox/backbone/mini-views/date.js
 #: module:io.ox/core
 msgid "Year"
@@ -305,11 +289,6 @@ msgstr ""
 #: module:io.ox/calendar
 #: apps/io.ox/calendar/week/view.js
 msgid "Use cursor keys to change the date. Press ctrl-key at the same time to change year or shift-key to change month. Close date-picker by pressing ESC key."
-msgstr ""
-
-#: apps/io.ox/backbone/mini-views/datepicker.js
-#: module:io.ox/core
-msgid "Use up and down keys to change the time. Close selection by pressing ESC key."
 msgstr ""
 
 #: apps/io.ox/backbone/mini-views/datepicker.js
@@ -650,7 +629,6 @@ msgstr ""
 #: apps/io.ox/core/folder/actions/common.js
 #: apps/io.ox/core/folder/actions/remove.js
 #: apps/io.ox/core/folder/actions/rename.js
-#: apps/io.ox/core/folder/picker.js
 #: apps/io.ox/core/import/import.js
 #: apps/io.ox/core/main.js
 #: apps/io.ox/core/permissions/permissions.js
@@ -683,7 +661,6 @@ msgstr ""
 #: module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js
 #: module:io.ox/mail
-#: apps/io.ox/mail/actions/delete.js
 #: apps/io.ox/mail/actions/reminder.js
 #: apps/io.ox/mail/categories/edit.js
 #: apps/io.ox/mail/compose/checks.js
@@ -1389,6 +1366,16 @@ msgstr ""
 msgid "Starts on"
 msgstr ""
 
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js
+#: module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js
@@ -2049,6 +2036,21 @@ msgstr ""
 
 #: apps/io.ox/calendar/mobile-toolbar-actions.js
 #: module:io.ox/calendar
+#: apps/io.ox/calendar/toolbar.js
+#: apps/io.ox/calendar/util.js
+#: apps/io.ox/calendar/week/view.js
+#: apps/io.ox/core/tk/datepicker.js
+#: module:io.ox/core
+#: apps/io.ox/find/date/patterns.js
+#: apps/io.ox/tasks/util.js
+#: module:io.ox/tasks
+#: apps/plugins/portal/birthdays/register.js
+#: module:plugins/portal
+msgid "Today"
+msgstr ""
+
+#: apps/io.ox/calendar/mobile-toolbar-actions.js
+#: module:io.ox/calendar
 #: apps/io.ox/contacts/mobile-toolbar-actions.js
 #: module:io.ox/mail
 #: apps/io.ox/core/extPatterns/links.js
@@ -2106,6 +2108,17 @@ msgstr ""
 #: apps/io.ox/wizards/upsell.js
 #: module:io.ox/wizards
 msgid "Next"
+msgstr ""
+
+#: apps/io.ox/calendar/month/view.js
+#: module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js
+#: module:io.ox/calendar
+msgid "Selected - %1$s"
 msgstr ""
 
 #. add confirmation status behind appointment title
@@ -2182,7 +2195,7 @@ msgstr[1] ""
 #: module:io.ox/calendar
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail
 msgid "%1$d day"
 msgid_plural "%1$d days"
@@ -4122,7 +4135,7 @@ msgstr ""
 #: module:io.ox/files
 #: apps/io.ox/mail/accounts/view-form.js
 #: module:io.ox/settings
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail
 msgid "Password"
 msgstr ""
@@ -4297,6 +4310,7 @@ msgstr ""
 
 #: apps/io.ox/core/commons.js
 #: module:io.ox/core
+#: apps/io.ox/core/main.js
 #: apps/io.ox/mail/detail/view.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/listview.js
@@ -4362,6 +4376,7 @@ msgstr ""
 
 #: apps/io.ox/core/export.js
 #: module:io.ox/core
+#: apps/io.ox/core/import/import.js
 msgid "iCalendar"
 msgstr ""
 
@@ -4987,11 +5002,6 @@ msgstr ""
 
 #: apps/io.ox/core/import/import.js
 #: module:io.ox/core
-msgid "iCal"
-msgstr ""
-
-#: apps/io.ox/core/import/import.js
-#: module:io.ox/core
 msgid "Upload file"
 msgstr ""
 
@@ -5197,6 +5207,26 @@ msgstr ""
 #: apps/io.ox/core/main.js
 #: module:io.ox/core
 msgid "Sign out now"
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
+msgid "Are you sure?"
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js
+#: module:io.ox/core
+msgid "Logout failed."
 msgstr ""
 
 #. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
@@ -6559,6 +6589,8 @@ msgstr ""
 #: module:io.ox/core/viewer
 #: apps/io.ox/files/view-options.js
 #: module:io.ox/files
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter
 #: apps/io.ox/mail/settings/compose/settings/pane.js
 #: module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
@@ -7939,7 +7971,7 @@ msgstr[1] ""
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js
 #: module:io.ox/files
-#: apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/compose/sharing.js
 #: module:io.ox/mail
 msgid "%1$d week"
 msgid_plural "%1$d weeks"
@@ -8518,12 +8550,14 @@ msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/toolbar.js
 msgid "Mark as spam"
 msgstr ""
 
 #: apps/io.ox/mail/actions.js
 #: module:io.ox/mail
+#: apps/io.ox/mail/mobile-toolbar-actions.js
 #: apps/io.ox/mail/toolbar.js
 msgid "Not spam"
 msgstr ""
@@ -9033,78 +9067,6 @@ msgstr ""
 msgid "Drop attachments here"
 msgstr ""
 
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Attachment file size too large. You have to use %1$s or reduce the attachment file size."
-msgstr ""
-
-#. %1$s is usually "Drive Mail" (product name; might be customized)
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Use %1$s"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "%1$d month"
-msgid_plural "%1$d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "%1$d year"
-msgid_plural "%1$d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "no expiry date"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "delete if expired"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Expiration"
-msgstr ""
-
-#. %1$d represents a time span like "1 month" or "no expire"
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Expiration: %1$d"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Attachment size too large. Please remove attachments or reduce the file size."
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "Notification"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "when the receivers have finished downloading the files"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "when the link is expired"
-msgstr ""
-
-#: apps/io.ox/mail/compose/extensions.js
-#: module:io.ox/mail
-msgid "when the receivers have accessed the files"
-msgstr ""
-
 #. %s is a list of filenames separeted by commas
 #. it is used by screenreaders to indicate which files are currently added to the list of attachments
 #: apps/io.ox/mail/compose/extensions.js
@@ -9168,6 +9130,72 @@ msgstr ""
 #: apps/io.ox/mail/compose/names.js
 #: module:io.ox/mail
 msgid "Edit real names"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Attachment file size too large. You have to use %1$s or reduce the attachment file size."
+msgstr ""
+
+#. %1$s is usually "Drive Mail" (product name; might be customized)
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Use %1$s"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "%1$d month"
+msgid_plural "%1$d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "%1$d year"
+msgid_plural "%1$d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "no expiry date"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Expiration"
+msgstr ""
+
+#. %1$d represents a time span like "1 month" or "no expire"
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Expiration: %1$d"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "delete if expired"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "Notification"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "when the receivers have finished downloading the files"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "when the link is expired"
+msgstr ""
+
+#: apps/io.ox/mail/compose/sharing.js
+#: module:io.ox/mail
+msgid "when the receivers have accessed the files"
 msgstr ""
 
 #. %s is the product name
@@ -9660,11 +9688,6 @@ msgstr ""
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
 msgid "Mailing list"
-msgstr ""
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Size (bytes)"
 msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
@@ -11114,7 +11137,7 @@ msgstr ""
 #. Portal. Logged in as user
 #: apps/io.ox/portal/main.js
 #: module:io.ox/portal
-msgid "Signed in as %1$s"
+msgid "Signed in as"
 msgstr ""
 
 #: apps/io.ox/portal/main.js
@@ -12451,16 +12474,6 @@ msgstr ""
 #: apps/plugins/halo/xing/register.js
 #: module:plugins/portal
 msgid "Sorry, there is no data available for you on %s."
-msgstr ""
-
-#. %1$s is the name of the platform
-#. %2$s is an the "add to home" icon
-#. %3$s and %4$s are markers for bold text.
-#. The words "Home Screen" may not be translated or should match the
-#. string used on an iPhone using the "add to homescreen" function for weblinks
-#: apps/plugins/mobile/addToHomescreen/register.js
-#: module:plugins/mobile/addToHomescreen/i18n
-msgid "Install this web app on your %1$s: Tap %2$s and then %3$s'Add to Home Screen'%4$s"
 msgstr ""
 
 #: apps/plugins/notifications/calendar/register.js
