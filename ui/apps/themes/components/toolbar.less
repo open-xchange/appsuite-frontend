@@ -63,8 +63,8 @@
                 }
             }
         }
-
-        @media (min-width: @smartphone-breakpoint + 1), (min-device-width: @smartphone-breakpoint + 1) {
+        // brackets needed or addition will not perform correctly. => Rule is ignored
+        @media (min-width: (@smartphone-breakpoint + 1)), (min-device-width: (@smartphone-breakpoint + 1)) {
             &:focus {
                 color: darken(@toolbar-button-color, 20%);
                 text-decoration: none;

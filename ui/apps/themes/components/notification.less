@@ -46,8 +46,8 @@
             display:block;
         }
     }
-
-    @media (min-width: @smartphone-breakpoint + 1) {
+    // brackets needed or addition will not perform correctly. => Rule is ignored
+    @media (min-width: (@smartphone-breakpoint + 1)) {
         width: 350px;
         right: -350px;
          &.active {
