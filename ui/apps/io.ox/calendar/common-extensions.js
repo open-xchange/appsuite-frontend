@@ -108,7 +108,7 @@ define('io.ox/calendar/common-extensions', [
         },
 
         privateFlag: function (baton) {
-            if (util.isPrivate(baton.data)) return;
+            if (!util.isPrivate(baton.data)) return;
             this.append(
                 $('<i class="fa fa-lock private-flag" aria-hidden="true" data-animation="false">')
                     .attr('title', gt('Private'))
