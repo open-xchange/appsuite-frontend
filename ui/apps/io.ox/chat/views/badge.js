@@ -17,7 +17,7 @@ define('io.ox/chat/views/badge', ['io.ox/chat/views/state'], function (StateView
 
     var Badgeiew = Backbone.View.extend({
 
-        tagName: 'li',
+        tagName: 'button',
         className: 'user-badge',
 
         initialize: function () {
@@ -25,10 +25,12 @@ define('io.ox/chat/views/badge', ['io.ox/chat/views/state'], function (StateView
         },
 
         render: function () {
-            this.$el.append(
-                new StateView({ model: this.model }).render().$el,
-                $('<span class="name">').text(this.model.get('name'))
-            );
+            this.$el
+                .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.get('id') })
+                .append(
+                    new StateView({ model: this.model }).render().$el,
+                    $('<span class="name">').text(this.model.get('name'))
+                );
             return this;
         },
 

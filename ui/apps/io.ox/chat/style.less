@@ -286,13 +286,26 @@
         overflow: hidden;
         white-space: nowrap;
         line-height: 24px;
+        li { display: inline-block; }
     }
 
     .user-badge {
-        display: inline-block;
-        margin-right: 12px;
+        border: 0;
+        text-align: left;
+        margin-right: 8px;
         max-width: 200px;
+        padding: 0 8px 0 4px;
+        border-radius: 12px;
+        background-color: rgba(0, 0, 0, 0.05);
+        outline: 0;
         .ellipsis();
+        &:focus, &:hover {
+            color: white;
+            background-color: #707070;
+        }
+        .state {
+            margin: 2px 4px 2px 0;
+        }
     }
 
     .state {

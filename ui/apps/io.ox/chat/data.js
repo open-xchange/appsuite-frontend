@@ -124,6 +124,10 @@ define('io.ox/chat/data', [], function () {
 
     var MessageModel = Backbone.Model.extend({
 
+        defaults: function () {
+            return { body: '', sender: 0, time: moment().format('LT') };
+        },
+
         getBody: function () {
             if (this.get('type') === 'image') {
                 return '<img src="' + this.get('body') + '" alt="">';
@@ -146,22 +150,18 @@ define('io.ox/chat/data', [], function () {
 
     // Chat
 
-    // denormalize first
-    _(data.chats).each(function (chat) {
-        chat.members = _(chat.members).map(function (id) {
-            return data.backbone.users.get(id);
-        });
-    });
-
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { type: 'group', title: 'New conversation' },
+        defaults: { type: 'group', title: 'New conversation', unseen: 0 },
 
         initialize: function (attr) {
             this.set('modified', +moment());
             this.unset('members', { silent: true });
             this.unset('messages', { silent: true });
-            this.members = new Backbone.Collection(attr.members);
+            var members = _(attr.members).map(function (arg) {
+                return arg instanceof UserModel ? arg : data.backbone.users.get(arg);
+            });
+            this.members = new Backbone.Collection(members);
             this.messages = new MessageCollection(attr.messages);
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {

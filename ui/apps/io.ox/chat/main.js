@@ -44,6 +44,7 @@ define('io.ox/chat/main', [
             var node = $(e.currentTarget), data = node.data();
             switch (data.cmd) {
                 case 'start-chat': this.startChat(); break;
+                case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'show-chat': this.showChat(data); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
@@ -56,12 +57,19 @@ define('io.ox/chat/main', [
             }
         },
 
-        startChat: function () {
-            console.log('Start chat');
+        startChat: function (cmd) {
+            console.log('Start chat', cmd);
         },
 
-        showChat: function (data) {
-            var view = new ChatView({ id: data.id });
+        startPrivateChat: function (cmd) {
+            var chatId = data.backbone.chats.length + 1,
+                user = data.backbone.users.get(cmd.id);
+            data.backbone.chats.add({ id: chatId, type: 'private', title: user.get('name'), members: [cmd.id, 1], messages: [{ id: 1, body: 'Created private chat', type: 'system' }] });
+            this.showChat({ id: chatId });
+        },
+
+        showChat: function (cmd) {
+            var view = new ChatView({ id: cmd.id });
             window.$rightside.empty().append(view.render().$el);
             view.scrollToBottom();
         },
@@ -78,9 +86,9 @@ define('io.ox/chat/main', [
             window.$rightside.empty().append(renderFiles());
         },
 
-        showFile: function (e) {
+        showFile: function (cmd) {
             renderOverlay().appendTo(this.$body).focus();
-            this.updateFile(e.index);
+            this.updateFile(cmd.index);
         },
 
         moveFile: function (step) {

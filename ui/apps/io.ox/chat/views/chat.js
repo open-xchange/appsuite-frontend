@@ -69,7 +69,9 @@ define('io.ox/chat/views/chat', [
         },
 
         renderMember: function (model) {
-            return new BadgeView({ model: model }).render().$el;
+            return $('<li>').append(
+                new BadgeView({ model: model }).render().$el
+            );
         },
 
         renderMessage: function (model) {
