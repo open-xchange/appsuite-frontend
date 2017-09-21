@@ -11,6 +11,8 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
+/* global tinyMCE:true */
+
 define('io.ox/mail/compose/inline-images', [
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
@@ -39,12 +41,18 @@ define('io.ox/mail/compose/inline-images', [
                         params: { action: 'new', module: 'mail', type: 'image' },
                         data: formData,
                         fixPost: true
+                    }).done(function (response) {
+                        // used to add the keepalive timers
+                        $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
                     });
                 }
                 return http.FORM({
                     module: 'file',
                     form: data.form,
                     params: { module: 'mail', type: 'image' }
+                }).done(function (response) {
+                    // used to add the keepalive timers
+                    $(tinyMCE.activeEditor.getElement()).trigger('addInlineImage', response.data[0]);
                 });
             } catch (e) {
                 // print error to console for debugging

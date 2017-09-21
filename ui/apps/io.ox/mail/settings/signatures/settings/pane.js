@@ -7,27 +7,15 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/api/snippets',
     'io.ox/backbone/mini-views',
-    'io.ox/core/http',
     'io.ox/core/config',
     'io.ox/core/notifications',
     'io.ox/backbone/mini-views/listutils',
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, dialogs, snippets, mini, http, config, notifications, listutils, mailutil, ListView) {
+], function (ext, ExtensibleView, gt, settings, util, dialogs, snippets, mini, config, notifications, listutils, mailutil, ListView) {
 
     'use strict';
-
-    /**
-     * By updating the last access timestamp the referenced file is prevented from being deleted from both session and disk storage.
-     * Needed for inline images
-     */
-    function keepAlive(id) {
-        return http.GET({
-            module: 'file',
-            params: { action: 'keepalive', id: id }
-        });
-    }
 
     ext.point('io.ox/mail/settings/signature-dialog').extend({
         id: 'name',
@@ -65,7 +53,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 )
             );
 
-            require(['io.ox/core/tk/contenteditable-editor'], function (Editor) {
+            require(['io.ox/core/tk/contenteditable-editor', 'io.ox/mail/api'], function (Editor, mailAPI) {
                 new Editor(baton.$.contentEditable, {
                     toolbar1: 'bold italic | alignleft aligncenter alignright | link image',
                     advanced: 'fontselect fontsizeselect forecolor | code',
@@ -75,7 +63,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                         'overflow-y': 'auto'
                     },
                     class: 'io-ox-signature-edit',
-                    keepalive: keepAlive,
+                    keepalive: mailAPI.keepalive,
                     scrollpane: baton.$.contentEditable,
                     oxContext: { signature: true }
                 }).done(function (ed) {
