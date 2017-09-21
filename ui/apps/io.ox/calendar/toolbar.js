@@ -83,6 +83,13 @@ define('io.ox/calendar/toolbar', [
         //
         // --- LO ----
         //
+        'export': {
+            prio: 'lo',
+            mobile: 'lo',
+            label: gt('Export'),
+            drawDisabled: true,
+            ref: 'io.ox/calendar/detail/actions/export'
+        },
         'print': {
             prio: 'lo',
             mobile: 'lo',

@@ -642,41 +642,37 @@ settings!io.ox/mail
 **sendDisplayName**
 > ...
 
+**compose/simpleLineBreaks**
+> EXPERIMENTAL WORKAROUND: use simple line breaks
+
 ## Compose: Attachments and Drive Mail
+
+[middleware configuration](https://documentation.open-xchange.com/components/middleware/config{{ site.baseurl }}/index.html#mode=search&term=compose.share)
 
 **attachments/layout/compose/\[small|medium|large\]**
 > value is 'list' or 'preview'
 
 **compose/shareAttachments/enabled**
-> feature toggle
+> feature toggle for 'drive mail'
 
 **compose/shareAttachments/expiryDates**<br>
 **compose/shareAttachments/defaultExpiryDate**
-> possible expire dates and its default
+> list of aliases (example: '1M') for available expire dates - respectively the preselected default
 
 **compose/shareAttachments/forceAutoDelete**
-> forces auto delete after expire
+> auto delete option is activated and listed as disabled/read only option
 
 **compose/shareAttachments/requiredExpiration**
-> hides option 'no expiry date'
+> hides possible expire option 'no expiry date'
 
 **compose/shareAttachments/name**
 > product name that usually is 'Drive Mail'
 
 **compose/shareAttachments/enableNotifications**
-> enable notification options for the user
-
-**compose/shareAttachments/driveLimit**
-> limit in bytes for all attachments of a single drive mail
+> feature toggle to show notification options for the user
 
 **compose/shareAttachments/threshold**
-> maximal file size for all attachments. Beyond this size drive mail is activated automatically.
-
-
-## Compose: TinyMCE
-
-**simpleLineBreaks**
-> is mappend on TinyMCE's option 'forced_root_block'
+> maximal file size for sum of all attachments in Bytes. Beyond this size drive mail is activated automatically and can not be disabled by user.
 
 
 ## Emoji

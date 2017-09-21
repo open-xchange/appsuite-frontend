@@ -55,7 +55,8 @@
 
     .greeting-phrase { margin: 0 16px 0 0; }
 
-    .signin {
+    .signin,
+    .signin > label {
         font-size: 13px;
         color: #555;
         white-space: nowrap;
@@ -70,7 +71,7 @@
     }
 
     .widget {
-        outline: none;
+        outline: 0;
         position: relative;
         display: inline-block;
         width: 300px;
@@ -235,7 +236,7 @@
 
             &:focus {
                 background-color: rgba(0, 0, 0, 0.10);
-                outline: none;
+                outline: 0;
             }
         }
 
@@ -264,7 +265,7 @@
         &:focus {
             text-decoration: underline;
             color: @white;
-            outline: none;
+            outline: 0;
         }
     }
 
@@ -386,7 +387,7 @@
 
         &:focus {
             background-color: rgba(0, 0, 0, 0.10);
-            outline: none;
+            outline: 0;
         }
     }
 
@@ -520,7 +521,8 @@
 
             .greeting-phrase { display: block; }
 
-            .signin {
+            .signin,
+            .signin > label {
                 font-size: 12px;
                 color: #aaa;
                 white-space: normal;
@@ -612,7 +614,7 @@
         margin-bottom: 16px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
         .controls {
             padding-left: 0;
@@ -647,7 +649,7 @@
             .ellipsis();
         }
 
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
             a[data-action="toggle"] {
                 color: #000000;
@@ -696,7 +698,7 @@
                 width: 28px;
                 height: 22px;
                 border: 1px solid rgba(0, 0, 0, 0.2);
-                .border-radius(@border-radius-base);
+                border-radius: @border-radius-base;
             }
 
             .color-black { background-color: @widget-color-black; }

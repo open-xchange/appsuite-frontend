@@ -565,6 +565,7 @@ define('io.ox/contacts/api', [
         fetchCache.clear();
         api.caches.get.clear();
         api.trigger('import');
+        api.trigger('refresh.all');
     });
 
     /** @define {object} simple contact cache */
@@ -1074,9 +1075,10 @@ define('io.ox/contacts/api', [
             return def.then(function (data) {
                 return _(data).filter(function (item) {
                     return _(words).every(function (word) {
+                        var regexWord = new RegExp('\\b' + escape(word));
                         return _(item.fulltext).some(function (str) {
-                            // server also uses startsWith() / not contains()
-                            return str.indexOf(word) === 0 || str.indexOf(query) === 0;
+                            // server might use startsWith() or contains() depending whether DB uses a fulltext index
+                            return regexWord.test(str) || str.indexOf(query) > -1;
                         });
                     });
                 });
@@ -1097,6 +1099,11 @@ define('io.ox/contacts/api', [
                     return item;
                 });
             });
+        }
+
+        // escape words for regex
+        function escape(str) {
+            return str.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
         }
 
         function search(query, options) {

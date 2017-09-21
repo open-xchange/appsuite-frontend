@@ -172,7 +172,7 @@ ul.dropdown-menu li a.disabled {
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     /** custom bootstrap dropdowns on mobile devices **/
     .custom-dropdown.dropdown-menu {
@@ -185,7 +185,7 @@ ul.dropdown-menu li a.disabled {
         bottom: 0;
         left: 0 !important;
         right: 0;
-        .border-radius(0);
+        border-radius: 0;
         border: 0;
         background-color: transparent;
 

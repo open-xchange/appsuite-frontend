@@ -1,0 +1,408 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+.ox-chat {
+
+    @width: 320px;
+    @pictureSize: 48px;
+    @headerHeight: 80px;
+    @searchHeight: 40px;
+    @controlsHeight: 80px;
+    @stateSize: 20px;
+    @backgroundColor: #f5f5f5;
+    @borderColor: #ccc;
+
+    // state colors
+    @green: #529100;
+    @orange: #FB8C00;
+    @red: #D32F2F;
+    @blue: #2196F3;
+    @gray: #707070;
+
+    .leftside {
+        width: @width;
+        right: auto;
+        background-color: @backgroundColor;
+        border-right: 1px solid @borderColor;
+    }
+
+    .rightside {
+        left: @width;
+    }
+
+    .header {
+
+        height: @headerHeight;
+        padding: 16px 16px 15px 16px;
+        border-bottom: 1px solid @borderColor;
+        background-color: @backgroundColor;
+        position: relative;
+
+        h2 {
+            font-size: 15px;
+            line-height: 24px;
+            font-weight: normal;
+            margin: -1px 0 0 0;
+            padding: 0;
+        }
+    }
+
+    .leftside .header {
+
+        .picture {
+            .picture(@pictureSize, @pictureSize);
+            margin-right: 16px;
+            float: left;
+        }
+
+        .name {
+            font-size: 13px;
+            font-weight: bold;
+            line-height: @pictureSize;
+        }
+
+        .state {
+            position: absolute;
+            left: @pictureSize;
+            top: @pictureSize + 16px - @stateSize;
+        }
+    }
+
+    .search {
+        border: 0;
+        background-color: white;
+        border-bottom: 1px solid @borderColor;
+        height: @searchHeight;
+        input {
+            border: 0;
+            width: 100%;
+            padding: 0 16px;
+            line-height: @searchHeight - 1;
+            height: @searchHeight - 1;
+        }
+    }
+
+    .start-chat {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .btn {
+            padding: 16px;
+            text-align: center;
+            border: 0;
+        }
+        .fa { font-size: 28px; }
+    }
+
+    .left-navigation {
+
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        top: @headerHeight + @searchHeight;
+        padding: 8px 0;
+
+        .btn-nav {
+            border: 0;
+            padding: 8px 16px;
+            line-height: 16px;
+            display: block;
+            width: 100%;
+            text-align: left;
+            background-color: transparent;
+            border-radius: 0;
+            outline: 0;
+            &:focus {
+                background-color: #ddd;
+            }
+        }
+
+        .btn-nav:focus {
+            font-weight: bold;
+        }
+
+        .btn-icon {
+            float: left;
+            width: 32px;
+        }
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .chats {
+        flex-grow: 1;
+        margin-bottom: 32px;
+        .title {
+            .ellipsis();
+        }
+        .label {
+            float: right;
+            position: relative;
+            margin-left: 4px;
+            top: 1px;
+            display: none;
+        }
+        .unseen .label {
+            display: inline-block;
+        }
+        .fa-check-circle {
+            color: @green;
+        }
+    }
+
+    .navigation {
+        flex-grow: 0;
+    }
+
+    .scrollpane {
+        top: @headerHeight;
+        overflow-y: auto;
+    }
+
+    .chat .scrollpane {
+        bottom: @controlsHeight;
+    }
+
+    .conversation {
+        padding: 16px;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    .message {
+
+        padding: 0 96px 0 0;
+        margin-bottom: 8px;
+        position: relative;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+        .sender, .time {
+            color: @gray;
+            font-size: 12px;
+            line-height: 24px;
+        }
+        .sender {
+            font-weight: bold;
+        }
+        &.text {
+            .body {
+                padding: 8px 16px;
+                background-color: #eee;
+                border-radius: 8px;
+                display: inline-block;
+                text-align: left;
+            }
+        }
+        &.system {
+            padding: 0 32px;
+            .body {
+                color: #707070;
+                text-align: center;
+            }
+        }
+        &.image {
+            img {
+                border: 0;
+                max-width: 100%;
+                max-height: 480px;
+                border-radius: 8px;
+            }
+        }
+        .time {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        .state {
+            display: none;
+        }
+        &.myself {
+            text-align: right;
+            padding: 0 48px 0 96px;
+            .sender {
+                display: none;
+            }
+            .time {
+                line-height: 16px;
+            }
+            &.text .body {
+                color: #fff;
+                background-color: @gray;
+            }
+            .delivery {
+                display: block;
+                position: absolute;
+                top: 16px;
+                right: 0;
+                font-size: 14px;
+                color: @gray;
+                &.sent:before {
+                    content: "\f105";
+                }
+                &.received:before {
+                    content: "\f105 \f105";
+                }
+                &.seen:before {
+                    color: @green;
+                    content: "\f00c";
+                }
+            }
+        }
+    }
+
+    .controls {
+        top: auto;
+        height: @controlsHeight;
+        border-top: 1px solid @borderColor;
+        background-color: @backgroundColor;
+        padding: 16px;
+
+        textarea {
+            padding: 8px;
+            line-height: 16px;
+            height: 48px;
+        }
+    }
+
+    .members {
+        overflow: hidden;
+        white-space: nowrap;
+        line-height: 24px;
+    }
+
+    .user-badge {
+        display: inline-block;
+        margin-right: 12px;
+        max-width: 200px;
+        .ellipsis();
+    }
+
+    .state {
+        color: white;
+        border: 1px solid white;
+        margin-right: 4px;
+        font-size: 12px;
+        text-align: center;
+        width: @stateSize;
+        height: @stateSize;
+        border-radius: 10px;
+        padding-top: 3px;
+        // small variant
+        &.small {
+            width: 16px;
+            height: 16px;
+            font-size: 12px;
+            line-height: 16px;
+            padding-top: 0;
+        }
+        // colors
+        &.online { background-color: @green; }
+        &.absent { background-color: @orange; }
+        &.busy { background-color: @red; }
+        &.offline { background-color: @gray; }
+        // icon
+        &.online:before { content: "\f00c"; } // check
+        &.absent:before { content: "\f017"; } // clock
+        &.busy:before { content: "\f068"; } // minus
+        &.offline:before { content: "\f00d"; color: #eee; }
+    }
+
+    .channels {
+        .scrollpane {
+            padding: 16px;
+        }
+        .channel {
+            margin-bottom: 16px;
+            line-height: 16px;
+            position: relative;
+            padding-left: 80px;
+            .title {
+                font-weight: bold;
+                display: inline-block;
+                margin-right: 8px;
+            }
+            .members {
+                color: #777;
+            }
+            .join {
+                position: absolute;
+                left: 0;
+                top: 8px;
+            }
+        }
+    }
+
+    .files ul {
+        padding: 16px 0 0 16px;
+        li {
+            width: ~"calc(33.3333% - 16px)";
+            height: 128px;
+            margin: 0 16px 16px 0;
+            float: left;
+            button {
+                width: 100%;
+                height: 128px;
+                border: 0;
+                background-size: cover;
+                background-color: #eee;
+            }
+        }
+    }
+
+    .overlay {
+        z-index: 2;
+        background-color: rgba(0, 0, 0, 0.90);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        border: 1px solid transparent;
+        outline: 0;
+        button {
+            @size: 40px;
+            border: 0;
+            color: white;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.50);
+            width: @size;
+            height: @size;
+            line-height: @size;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            margin-top: -(@size / 2);
+        }
+        button[data-cmd="prev-file"] {
+            left: 0;
+        }
+        button[data-cmd="next-file"] {
+            right: 0;
+        }
+        button[data-cmd="close-file"] {
+            top: 0;
+            right: 0;
+            margin-top: 0;
+        }
+    }
+
+    .history .header h2, .channels .header h2, .files .header h2 {
+        line-height: 48px;
+    }
+}

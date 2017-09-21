@@ -118,7 +118,12 @@ define('io.ox/files/share/listview', [
     });
 
     var getPermissions = function (baton) {
-            return _(_(baton.model.getPermissions()).pluck('type')).uniq();
+            return _.chain(baton.model.getPermissions())
+                    // ignore current user - only necessary for folders
+                    .reject(function (data) { return data.type === 'user' && data.entity === ox.user_id; })
+                    .pluck('type')
+                    .uniq()
+                    .value();
         },
         hasGuests = function (baton) {
             return _(getPermissions(baton)).contains('guest');
@@ -213,9 +218,9 @@ define('io.ox/files/share/listview', [
                 // show also when gab isn't accessible but shares for users still exists
                 if (capabilities.has('!gab || alone') && !hasUser(baton)) return;
                 this.append(
-                    $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user">')
-                            .toggleClass('gray', !hasUser(baton))
+                    $('<div class="list-item-column type">').append(
+                        $('<i class="fa">')
+                            .addClass(hasUser(baton) ? 'fa-user' : 'fa-circle-thin')
                             .attr('title', gt('Internal users'))
                     )
                 );
@@ -227,9 +232,9 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 if (_.device('smartphone')) return;
                 this.append(
-                    $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-user-plus">')
-                            .toggleClass('gray', !hasGuests(baton))
+                    $('<div class="list-item-column type">').append(
+                        $('<i class="fa">')
+                            .addClass(hasGuests(baton) ? 'fa-user-plus' : 'fa-circle-thin')
                             .attr('title', gt('External guests'))
                     )
                 );
@@ -241,9 +246,9 @@ define('io.ox/files/share/listview', [
             draw: function (baton) {
                 if (_.device('smartphone')) return;
                 this.append(
-                    $('<div class="list-item-column type gray">').append(
-                        $('<i class="fa fa-link">')
-                            .toggleClass('gray', !isPublic(baton))
+                    $('<div class="list-item-column type">').append(
+                        $('<i class="fa">')
+                            .addClass(isPublic(baton) ? 'fa-link' : 'fa-circle-thin')
                             .attr('title', gt('Public link'))
                     )
                 );

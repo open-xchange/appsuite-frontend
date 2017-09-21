@@ -209,6 +209,7 @@ define('plugins/notifications/calendar/register', [
 
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
+                autoOpen = value;
                 subview.model.set('autoOpen', value);
             });
 

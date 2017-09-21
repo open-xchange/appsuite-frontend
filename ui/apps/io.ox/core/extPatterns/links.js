@@ -99,8 +99,8 @@ define('io.ox/core/extPatterns/links', [
             };
 
         this.draw = this.draw || function (baton) {
-
-            baton = ext.Baton.ensure(baton);
+            // clone was introduced as a fix for b54827
+            baton = _.clone(ext.Baton.ensure(baton));
             var link = drawDefault(baton);
 
             this.append(

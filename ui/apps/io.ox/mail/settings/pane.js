@@ -204,7 +204,7 @@ define('io.ox/mail/settings/pane', [
             index: 100,
             render: function () {
 
-                if (!capabilities.has('mailfilter')) return;
+                if (!capabilities.has('mailfilter_v2')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
@@ -239,7 +239,7 @@ define('io.ox/mail/settings/pane', [
             index: 200,
             render: function () {
 
-                if (!capabilities.has('mailfilter')) return;
+                if (!capabilities.has('mailfilter_v2')) return;
 
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-auto-forward">')

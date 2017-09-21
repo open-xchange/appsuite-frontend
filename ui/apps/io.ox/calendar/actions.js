@@ -245,6 +245,16 @@ define('io.ox/calendar/actions', [
         }
     });
 
+
+    new Action('io.ox/calendar/detail/actions/export', {
+        requires: 'some read',
+        action: function (baton) {
+            require(['io.ox/core/export'], function (exportDialog) {
+                exportDialog.open('calendar', { list: [].concat(baton.data) });
+            });
+        }
+    });
+
     new Action('io.ox/calendar/detail/actions/print-appointment-disabled', {
         requires: 'one',
         capabilities: 'calendar-printing',
@@ -524,6 +534,14 @@ define('io.ox/calendar/actions', [
         label: gt('Move'),
         drawDisabled: true,
         ref: 'io.ox/calendar/detail/actions/move'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 550,
+        prio: 'lo',
+        id: 'export',
+        label: gt('Export'),
+        ref: 'io.ox/calendar/detail/actions/export'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({

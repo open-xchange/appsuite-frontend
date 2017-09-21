@@ -104,28 +104,11 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 this.conditionsTranslation = opt.conditionsTranslation;
                 this.actionsTranslations = opt.actionsTranslations;
                 this.defaults = opt.defaults;
+                this.config = opt.config;
 
                 testCapabilities = {};
                 _.each(opt.config.tests, function (value) {
-                    testCapabilities[value.test] = value.comparison;
-                });
-
-                var unsupported = [];
-
-                // filter unsupported actions
-                _.each(opt.actionCapabilities, function (action) {
-                    if (_.indexOf(_.map(opt.config.actioncommands, function (val) { return val.action; }), action) === -1) unsupported.push(action);
-                });
-
-                this.actionsTranslations = _.omit(this.actionsTranslations, unsupported);
-
-                // filter unsupported conditions
-                _.each(opt.conditionsMapping, function (list, conditionGroup) {
-                    if (!_.has(testCapabilities, conditionGroup)) {
-                        _.each(opt.conditionsMapping[conditionGroup], function (condition) {
-                            if (!opt.conditionsTranslation.nested) delete opt.conditionsTranslation[condition];
-                        });
-                    }
+                    testCapabilities[value.id] = value.comparisons;
                 });
 
                 this.listView = opt.listView;
@@ -491,7 +474,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
 
                     }
-                });
+                }),
+                redirectCounter = 0;
 
             appliedConditions = appliedConditions.tests ? appliedConditions.tests : [appliedConditions];
 
@@ -586,6 +570,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 // action point
                 if (action.id !== 'stop') {
                     ext.point('io.ox/mail/mailfilter/actions').get(amodel.get('id'), function (point) {
+                        if (point.id === 'redirect') redirectCounter += 1;
                         point.invoke('draw', actionList, baton, actionKey, amodel, filterValues, action);
                     });
 
@@ -622,6 +607,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 drawDropdown(gt('Add action'), baton.view.actionsTranslations, {
                     type: 'action',
                     toggle: 'dropup',
+                    skip: redirectCounter >= baton.view.config.options.MAXREDIRECTS ? 'redirect' : '',
                     sort: baton.view.defaults.actionsOrder,
                     classes: 'add-action'
                 })

@@ -132,8 +132,13 @@ define('io.ox/participants/add', [
                 });
             }, this);
 
-            // ensure a fixed scroll position when adding participants/members
+            // ensure a fixed scroll position when adding participants/members after the initial rendering
+            this.initialRendering = true;
             var scrollIntoView = _.debounce(function () {
+                if (this.initialRendering) {
+                    this.initialRendering = false;
+                    return;
+                }
                 this.typeahead.el.scrollIntoView();
             }.bind(this), 0);
 

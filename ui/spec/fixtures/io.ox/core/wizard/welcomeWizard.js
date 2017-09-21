@@ -229,7 +229,7 @@ define(['io.ox/core/extensions', 'io.ox/core/wizard/registry'], function (ext, w
                 $('<div />').text('Would you like to be informed of special offers from time to time?'),
                 '<br />',
                 $('<div />').append(
-                    $('<button class="btn btn-primary" />').text('Yes! Send me information about special offers').on('click', function () {
+                    $('<button type="button" class="btn btn-primary" />').text('Yes! Send me information about special offers').on('click', function () {
                         baton.specialOffers = true;
                         baton.buttons.enableNext();
                         baton.wizard.next();
@@ -237,7 +237,7 @@ define(['io.ox/core/extensions', 'io.ox/core/wizard/registry'], function (ext, w
                 ),
                 '<br />',
                 $('<div />').append(
-                    $('<button class="btn" />').text('No, thanks').on('click', function () {
+                    $('<button type="button" class="btn" />').text('No, thanks').on('click', function () {
                         baton.specialOffers = false;
                         baton.buttons.enableNext();
                         baton.wizard.next();

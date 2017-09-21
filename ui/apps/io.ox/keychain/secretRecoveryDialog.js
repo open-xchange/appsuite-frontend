@@ -24,14 +24,15 @@ define('io.ox/keychain/secretRecoveryDialog', [
         show: function () {
             new dialogs.ModalDialog({ easyOut: false, async: true, width: 500, enter: 'migrate' })
                 .build(function () {
+                    var guid = _.uniqueId('form-control-label-');
                     this.getHeader().append(
                         $('<h4>').text(gt('Recover passwords'))
                     );
                     this.getContentNode().append(
                         $('<p>').text(gt('Please provide the old password so the account passwords can be recovered.')),
-                        $('<label>').append(
+                        $('<label>').attr('for', guid).append(
                             $.txt(gt('Your old password')), $('<br>'),
-                            $('<input type="password" name"recovery-password" class="form-control">')
+                            $('<input type="password" name"recovery-password" class="form-control">').attr('id', guid)
                         )
                     );
                 })

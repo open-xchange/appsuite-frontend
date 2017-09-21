@@ -183,10 +183,6 @@ define('io.ox/core/folder/tree', [
 
             _.defer(function () {
 
-                // skip virtual folders
-                var id = this.selection.get('data-contextmenu-id');
-                if (api.isVirtual(id)) return;
-
                 this.$dropdownMenu.css({ top: top, left: left, bottom: 'auto' }).empty().busy();
                 this.dropdown.$toggle = target;
                 this.$dropdownToggle.dropdown('toggle');
@@ -242,6 +238,10 @@ define('io.ox/core/folder/tree', [
                 top = target.offset().top;
                 left = target.offset().left + 40;
                 target.removeData('fixed');
+            }
+            if (e.type === 'contextmenu' && target.hasClass('contextmenu-control')) {
+                // if the contextmenubutton was rightclicked, the selection doesn't change, so we are allowed to prevent the default in this case (Bug 42409 remains fixed)
+                e.preventDefault();
             }
             this.toggleContextMenu(target, top, left);
         },
@@ -300,7 +300,7 @@ define('io.ox/core/folder/tree', [
 
             function show(e) {
                 // load relevant code on demand
-                var contextmenu = $(e.target).attr('data-contextmenu');
+                var contextmenu = $(e.target).attr('data-contextmenu') || this.dropdown.$toggle.attr('data-contextmenu');
                 require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this, contextmenu)));
                 // a11y: The role menu should only be set if there are menuitems in it
                 this.$dropdownMenu.attr('role', 'menu');

@@ -16,6 +16,7 @@ define('io.ox/core/main', [
     'io.ox/core/session',
     'io.ox/core/http',
     'io.ox/core/api/apps',
+    'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
@@ -37,7 +38,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
+], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
 
     'use strict';
 
@@ -108,8 +109,21 @@ define('io.ox/core/main', [
                     });
                 },
                 function cancel() {
-                    $('#io-ox-core').show();
-                    $('#background-loader').fadeOut(DURATION);
+                    // force ignores errors
+                    if (opt.force) {
+                        session.logout().always(function () {
+                            // get logout locations
+                            var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
+                                fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
+                                logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                            // Substitute some variables
+                            _.url.redirect(_.url.vars(logoutLocation));
+                        });
+                    } else {
+                        $('#io-ox-core').show();
+                        $('#background-loader').fadeOut(DURATION);
+                        ox.trigger('logout:failed', arguments);
+                    }
                 }
             );
         });
@@ -489,8 +503,8 @@ define('io.ox/core/main', [
                 var timeLeft = getTimeLeft();
 
                 if (timeLeft <= WARNINGSTART && dialog === null) {
-                    // show warnig dialog
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    // show warning dialog
+                    require(['io.ox/backbone/views/modal'], function (ModalDialog) {
 
                         var countdown = timeLeft,
                             getString = function (sec) {
@@ -515,27 +529,86 @@ define('io.ox/core/main', [
                             }, 1000);
 
                         clearTimeout(timeout);
+                        if (dialog) {
+                            ox.off('logout:failed', dialog.logoutFailed);
+                            dialog.close();
+                        }
 
-                        dialog = new dialogs.ModalDialog({ easyOut: false })
-                            .header($('<h4>').text(gt('Automatic sign out')))
-                            .append(node)
-                            .topmost()
-                            .addPrimaryButton('cancel', gt('Cancel'))
-                            .addAlternativeButton('force', gt('Sign out now'))
-                            .setUnderlayStyle({
-                                backgroundColor: 'white',
-                                opacity: 0.90
-                            })
-                            .show()
-                            .done(function (action) {
-                                resetTimeout();
-                                clearInterval(countdownTimer);
+                        dialog = new ModalDialog({
+                            async: true,
+                            title: gt('Automatic sign out'),
+                            backdrop: true
+                        })
+                        .build(function () {
+                            this.$body.append(node);
+                            this.$el.addClass('auto-logout-dialog');
+                        })
+                        .addCancelButton()
+                        .addButton({ action: 'retry', label: gt('Retry'), className: 'btn-default' })
+                        .addButton({ action: 'force', label: gt('Sign out now') })
+                        .open();
+
+                        dialog.on('cancel', function () {
+                            resetTimeout();
+                            clearInterval(countdownTimer);
+                            dialog = null;
+                            ox.handleLogoutError = false;
+                        });
+                        dialog.on('force', function () {
+                            resetTimeout();
+                            clearInterval(countdownTimer);
+                            if (dialog.$el.hasClass('logout-failed')) {
+                                dialog.pause();
+                                var sure = new ModalDialog({
+                                    async: true,
+                                    title: gt('Are you sure?'),
+                                    backdrop: true
+                                })
+                                .build(function () {
+                                    this.$body.append($('<div class="alert alert-danger">').text(gt('Forcing logout may cause data loss.')));
+                                })
+                                .addCancelButton()
+                                .addButton({ action: 'force', label: gt('Force sign out') })
+                                .open();
+
+                                sure.on('cancel', function () {
+                                    dialog.resume();
+                                });
+                                sure.on('force', function () {
+                                    logout({ force: true });
+                                    dialog.close();
+                                    this.close();
+                                });
+                            } else {
+                                logout();
+                                dialog.close();
                                 dialog = null;
-                                if (action === 'force') {
-                                    logout();
-                                }
-                            });
+                            }
+                        });
+                        dialog.on('retry', function () {
+                            resetTimeout();
+                            clearInterval(countdownTimer);
+                            logout();
+                        });
 
+                        dialog.logoutFailed = function (error) {
+                            if (!dialog) return;
+                            // property to prevent yells from poping up (bad for screenreaders)
+                            // the error is part of the dialog here
+                            ox.handleLogoutError = true;
+
+                            dialog.idle();
+                            dialog.$el.toggleClass('logout-failed', true);
+                            dialog.$el.find('[data-action="force"]').text(gt('Force sign out'));
+                            dialog.$body.empty().append(
+                                $('<div class="alert alert-danger">').append(
+                                    $('<div>').text(gt('Logout failed.')),
+                                    $('<div>').text(error[0])
+                                )
+                            );
+                        };
+
+                        ox.on('logout:failed', dialog.logoutFailed);
                     });
                 }
             }
@@ -694,6 +767,7 @@ define('io.ox/core/main', [
         }
 
         function getCloseIconLabel(docTitle) {
+            //#. Context: Main Top Bar. tooltip text for app close icon (mail compose for example)
             return _.escape(gt('Close for %1$s', docTitle));
         }
 
@@ -1184,7 +1258,12 @@ define('io.ox/core/main', [
             draw: function () {
                 // add small logo to top bar
                 this.append(
-                    $('<li id="io-ox-top-logo-small" aria-hidden="true">')
+                    $('<li id="io-ox-top-logo-small">').append(
+                        $('<img>').attr({
+                            alt: ox.serverConfig.productName,
+                            src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
+                        })
+                    )
                 );
             }
         });
@@ -1293,7 +1372,7 @@ define('io.ox/core/main', [
                 // show current user
                 content.append(
                     $('<label>').text(gt('Signed in as:')),
-                    $.txt(' '), $.txt(ox.user)
+                    $.txt(' '), userAPI.getTextNode(ox.user_id, { target: 'identifier' })
                 );
 
                 content.append(
@@ -1663,7 +1742,7 @@ define('io.ox/core/main', [
                             }
                             this.append(
                                 $('<li class="restore-item">').append(
-                                    $('<a href="#" role="button" class="remove">').data(item).append(
+                                    $('<a href="#" role="button" class="remove">').attr('title', gt('Remove restore point: "%1$s"', info)).data(item).append(
                                         $('<i class="fa fa-trash-o" aria-hidden="true">')
                                     ),
                                     item.icon ? $('<i aria-hidden="true">').addClass(item.icon) : $(),

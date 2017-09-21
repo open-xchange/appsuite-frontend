@@ -72,7 +72,7 @@
 
         .filename,.subject, .from { .ellipsis(); }
     }
-    @media all and (max-width: 480px), all and (max-device-width: 480px) {
+    @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
         &.column-layout .list-item { line-height: 40px; }
         &.column-layout, &.grid-layout, &.icon-layout {
             .list-item { font-size: 15px; }

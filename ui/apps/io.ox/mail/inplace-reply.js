@@ -204,7 +204,7 @@ define('io.ox/mail/inplace-reply', [
         render: function () {
 
             var buttons = [
-                this.$sendall = $('<button class="btn btn-primary btn-sm disabled" data-action="sendall">')
+                this.$sendall = $('<button type="button" class="btn btn-primary btn-sm disabled" data-action="sendall">')
                     .prop('disabled', true)
                     .text(gt('Reply to all'))
             ];
@@ -212,7 +212,7 @@ define('io.ox/mail/inplace-reply', [
             if (this.numberOfRecipients > 1) {
                 buttons.push(
                     $.txt(' '),
-                    this.$send = $('<button class="btn btn-primary btn-sm disabled" data-action="send">')
+                    this.$send = $('<button type="button" class="btn btn-primary btn-sm disabled" data-action="send">')
                         .prop('disabled', true)
                         .text(gt('Reply'))
                 );
@@ -229,7 +229,7 @@ define('io.ox/mail/inplace-reply', [
                 $('<div class="form-group">').append(
                     buttons,
                     $.txt(' '),
-                    $('<button class="btn btn-default btn-sm" data-action="cancel">')
+                    $('<button type="button" class="btn btn-default btn-sm" data-action="cancel">')
                         .text(gt('Cancel'))
                 )
             );

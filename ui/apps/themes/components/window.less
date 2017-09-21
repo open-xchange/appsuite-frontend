@@ -31,9 +31,41 @@
     width: 100%;
 }
 
+#io-ox-taskbar {
+    border-top: 1px solid #ccc;
+    background-color: #f5f5f5;
+    top: auto;
+    height: 40px;
+    padding: 3px 56px 2px 2px;
+    margin: 0;
+    display: none;
+    list-style-type: none;
+    button {
+        border: 0;
+        height: 32px;
+        line-height: 32px;
+        color: white;
+        font-weight: bold;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 0 16px;
+        width: 240px;
+        float: right;
+        margin-left: 8px;
+        text-align: left;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        .title {
+            margin-right: 8px;
+        }
+    }
+}
+
+#io-ox-core.taskbar-visible {
+    #io-ox-screens { bottom: 40px; }
+    #io-ox-taskbar { display: block; }
+}
+
 .touch {
     #io-ox-screens { top: 40px; }
-
     #io-ox-windowmanager .window-container-center { width: 100% !important; }
 }
 
@@ -129,7 +161,7 @@
             padding: 8px 0;
             z-index: 2;
             // yep, a shadow
-            .box-shadow(0 1px 5px rgba(0, 0, 0, 0.10));
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.10);
 
             h1.title {
                 margin: 0.2em 0;
@@ -169,7 +201,7 @@
             padding: 16px 0;
             z-index: 2;
             // yep, a shadow
-            .box-shadow(0 1px 5px rgba(0, 0, 0, 0.10));
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.10);
 
             h1.title {
                 margin: 0.2em 0;
@@ -238,7 +270,7 @@
         margin-left: -200px;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .progress {
             width: 150px;
             margin-left: -75px;
@@ -269,7 +301,7 @@
         }
     }
 
-    .progress .progress-bar { .border-radius(2px); }
+    .progress .progress-bar { border-radius: 2px; }
 }
 
 .window-head {
@@ -417,7 +449,7 @@
 }
 
 .rightside {
-    outline: none;
+    outline: 0;
     position: absolute;
     top: 0;
     right: 0;
@@ -425,6 +457,64 @@
     left: 320px;
     background-color: @background;
     overflow: auto;
+}
+
+.floating-window {
+
+    position: absolute;
+    z-index: 1;
+    width: 960px;
+    height: 640px;
+    max-height: 90%;
+    right: 56px;
+    bottom: 16px;
+    background: transparent;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
+    outline: 0;
+
+    .transition(bottom 0.3s ease-in-out);
+
+    @headerHeight: 32px;
+
+    .floating-header {
+        height: @headerHeight;
+        bottom: auto;
+        background: rgba(0, 0, 0, 0.70);
+        padding: 0 16px;
+        h1 {
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+            font-weight: bold;
+            line-height: @headerHeight;
+            color: white;
+        }
+        .count {
+            margin-left: 8px;
+        }
+        .controls {
+            position: absolute;
+            top: 0;
+            right: 0;
+            a {
+                color: white;
+                line-height: @headerHeight;
+                padding: 0 16px;
+                display: inline-block;
+            }
+        }
+    }
+
+    .floating-body {
+        top: @headerHeight;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        border-width: 0 1px 1px 1px;
+    }
+
+    &.minimized {
+        bottom: -100%;
+    }
 }
 
 .rightside-navbar { display: none; }
@@ -548,7 +638,7 @@
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
     .window-sidepanel {
         display: block;
         -webkit-backface-visibility: hidden;

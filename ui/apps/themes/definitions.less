@@ -22,8 +22,10 @@
 @padding-base-horizontal:               12px;
 @modal-inner-padding:                   13px;
 
-@light-font-family:                     "Helvetica Neue", OpenSans, Helvetica, Arial, sans-serif;
-@normal-font-family:                    @font-family-sans-serif;
+// Main font family used accross the whole UI
+@light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+@normal-font-family:                    @light-font-family;
+@font-family-sans-serif:                @light-font-family;
 @font-size-touch:                       16px;
 @topbar-font-size:                      13px;
 @window-head-font-size:                 13px;
@@ -55,11 +57,15 @@
 
 // Bootstrap overwites
 //----------------------
-@brand-primary:                         #3C73AA; //@link-color uses this
+@brand-primary:                         #3C73AA;
+@brand-success:                         #008500;
+
 @badge-color:                           @white;
 @badge-bg:                              #aaa;   // used by folder tree for unread messages, for example
 @label-info-bg:                         #3a87ad;
 @label-default-bg:                      #666;
+
+@alert-info-text:                       #396ca0;
 
 // Basic colors
 //----------------------
@@ -75,18 +81,18 @@
 @inline-link-color:                     @link-color;
 @inline-link-border-color:              #eee;
 
-@outline-color:                         #006897;
+@outline-color:                         @brand-primary;
 @defaultBorderColor:                    #ddd;
 @error-text-color:                      #a94442; // for validation error, etc.
 // Button colors
 //----------------------
-@btn-primary-bg:                @link-color;
-@btn-info-bg:                   #5bc0de;
-@btn-success-bg:                #198819;
-@btn-warning-bg:                #fbb450;
-@btn-warning-color:             #764500;
-@btn-danger-bg:                 #DF332E;
-@btn-inverse-bg:                #444;
+@btn-primary-bg:                        @link-color;
+@btn-info-bg:                           #5bc0de;
+@btn-success-bg:                        #198819;
+@btn-warning-bg:                        #fbb450;
+@btn-warning-color:                     #764500;
+@btn-danger-bg:                         #DF332E;
+@btn-inverse-bg:                        #444;
 
 // High contrast colors
 @hc-link-color:                         #3774A8;
@@ -101,8 +107,13 @@
 
 @background:                            #fff;
 
-@selected-background:                   #3C73AA;
 @selected-color:                        #f0faff;
+@selected-background:                   @brand-primary;
+@selected-unfocussed-background:        #ddd;
+@selected-focussed-background:          darken(@selected-background, 10%);
+
+@grid-color:                            #676767;
+@grid-checkbox-color:                   #626262;
 @grid-selected-color:                   #fff;
 @grid-selected-checkbox-color:          @grid-selected-color;
 
@@ -149,15 +160,15 @@
 @topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
 @topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
 @topbar-icon-color:                     #fff;
-@topbar-background:                     #3C73AA;
+@topbar-background:                     @brand-primary;
 
 // toolbar
-@toolbar:                               #3C73AA;
+@toolbar:                               @brand-primary;
 @toolbar-button-accent:                 lighten(@link-color, 0%);
 @toolbar-button-color:                  #bbb;
 @toolbar-link-color:                    lighten(@toolbar, 25%);
 @toolbar-link-disabled-color:           @link-disabled-color;
-@toolbar-focus-color:                   #3C73AA;
+@toolbar-focus-color:                   @brand-primary;
 @toolbar-background:                    #333;
 @toolbar-background-alt:                lighten(@toolbar-background, 10%);
 @toolbar-line-height:                   24px;
@@ -172,26 +183,26 @@
 @mail-priority-low:                     lighten(#08c, 10%);
 @mail-attachment-link-color:            #333;
 @mail-attachment-link-color-hover:      #000;
-@mail-thread-size-color:                #3C73AA;
-@mail-thread-size-background:           #e2eefb;
+@mail-thread-size-color:                darken(@brand-primary, 20%); //@brand-primary;
+@mail-thread-size-background:           fade(lighten(@brand-primary, 5%), 15%); // #e2eefb;
 @mail-unseen-icon:                      "\f111"; // fa-circle
 @mail-unseen-icon-seen:                 "\f1db"; // fa-circle-thin
 
 // tasks app
 //----------------------
 @task-priority:                         #ff4700;
-@badge-deferred-bg: #767676;
-@badge-deferred-color: @white;
-@badge-inprogress-bg: #767676;
-@badge-inprogress-color: @white;
-@badge-notstarted-bg: #767676;
-@badge-notstarted-color: @white;
-@badge-done-bg: @green;
-@badge-done-color: @white;
-@badge-waiting-bg: #767676;
-@badge-waiting-color: @white;
-@badge-overdue-bg: @blue;
-@badge-overdue-color: @white;
+@badge-deferred-bg:                     #767676;
+@badge-deferred-color:                  @white;
+@badge-inprogress-bg:                   #767676;
+@badge-inprogress-color:                @white;
+@badge-notstarted-bg:                   #767676;
+@badge-notstarted-color:                @white;
+@badge-done-bg:                         @green;
+@badge-done-color:                      @white;
+@badge-waiting-bg:                      #767676;
+@badge-waiting-color:                   @white;
+@badge-overdue-bg:                      @blue;
+@badge-overdue-color:                   @white;
 
 // calendar app
 //----------------------
@@ -268,9 +279,9 @@
 @pulse-color: fade(@hotspot-color, 70%);
 @pulse-border-color: @hotspot-color;
 
-
 // mobile
 //----------------------
+@smartphone-breakpoint:                 540px; // matches smartphone detection threshold in browser.js
 @pagecontroller-animation-duration:     350ms;
 // size of the menu launcher in the top left
 @mobile-launcher-icon-size:             18px;
@@ -297,3 +308,6 @@
 // onboarding app icons
 @onboarding-mailapp:                    'apps/themes/icons/default/apps/mailapp.png';
 @onboarding-driveapp:                   'apps/themes/icons/default/apps/driveapp.png';
+
+// session expired blur class
+@bluriness: 4px;

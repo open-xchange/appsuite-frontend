@@ -277,7 +277,8 @@ define('io.ox/backbone/views/recurrence-view', [
                 });
 
             return function () {
-                var days = _(_.range(7)).map(function (num) {
+                var guid = guid = _.uniqueId('form-control-label-'),
+                    days = _(_.range(7)).map(function (num) {
                         return moment().weekday(num).format('dd');
                     }),
                     firstDayOfWeek = moment.localeData().firstDayOfWeek(),
@@ -291,6 +292,7 @@ define('io.ox/backbone/views/recurrence-view', [
                         };
                     }),
                     input = new CheckboxButtonsView({
+                        id: guid,
                         className: 'btn-group',
                         model: this.model,
                         list: list
@@ -306,7 +308,7 @@ define('io.ox/backbone/views/recurrence-view', [
 
                 this.$body.append(
                     formGroup = $('<div class="form-group hidden">').append(
-                        $('<label class="control-label col-sm-4">').text(gt('Weekday')),
+                        $('<label class="control-label col-sm-4">').attr('for', guid).text(gt('Weekday')),
                         $('<div class="col-sm-8">').append(
                             input.render().$el,
                             new mini.ErrorView({

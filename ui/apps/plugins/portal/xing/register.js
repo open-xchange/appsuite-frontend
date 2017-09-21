@@ -65,7 +65,7 @@ define('plugins/portal/xing/register', [
 
         new dialogs.ModalDialog()
             .build(function () {
-                var availableLangs;
+                var availableLangs, guid;
 
                 availableLangs = 'de en es fr it nl pl pt ru tr zh'.split(' ');
 
@@ -74,17 +74,17 @@ define('plugins/portal/xing/register', [
                         $('<p>').text(
                             gt('Please select which of the following data we may use to create your %s account:', XING_NAME)
                         ),
-                        $('<label>').text(gt('Mail address')).append(
-                            email = $('<input type="text" name="email">')
+                        $('<label>').text(gt('Mail address')).attr('for', guid = _.uniqueId('form-control-label-')).append(
+                            email = $('<input type="text" name="email">').attr('id', guid)
                         ),
-                        $('<label>').text(gt('First name')).append(
-                            firstname = $('<input type="text" name="firstname">')
+                        $('<label>').text(gt('First name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
+                            firstname = $('<input type="text" name="firstname">').attr('id', guid)
                         ),
-                        $('<label>').text(gt('Last name')).append(
-                            lastname = $('<input type="text" name="lastname">')
+                        $('<label>').text(gt('Last name')).attr('for', guid = _.uniqueId('form-control-label-')).append(
+                            lastname = $('<input type="text" name="lastname">').attr('id', guid)
                         ),
-                        $('<label>').text(gt('Language')).append(
-                            language = $('<select name="language">').append(
+                        $('<label>').text(gt('Language')).attr('for', guid = _.uniqueId('form-control-label-')).append(
+                            language = $('<select name="language">').attr('id', guid).append(
                                 _(availableLangs).map(function (elem) { return $('<option>').val(elem).text(elem); })
                             )
                         )
@@ -144,7 +144,7 @@ define('plugins/portal/xing/register', [
     statusUpdateForm = function () {
         var form = $('<div class="xing comment">').append(
             $('<textarea rows="3" cols "40">'),
-            $('<button class="btn btn-primary">').text(gt('Post a status update'))
+            $('<button type="button" class="btn btn-primary">').text(gt('Post a status update'))
         );
 
         form.on('click', '.btn', function (clickEvent) {

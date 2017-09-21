@@ -136,7 +136,7 @@
         white-space: pre-wrap;
         background-color: transparent;
         border: 0 none;
-        .border-radius(0);
+        border-radius: 0;
     }
 
     table {
@@ -170,7 +170,7 @@
         p { font-size: 13px; }
 
         blockquote {
-            border-color: #3C73AA;
+            border-color: @brand-primary;
             margin: 8px 0;
         }
     }
@@ -183,7 +183,7 @@
     }
 
     &.colorQuoted {
-        blockquote blockquote                                   { .blockquote(#3C73AA); }
+        blockquote blockquote                                   { .blockquote(@brand-primary); }
         blockquote blockquote blockquote                        { .blockquote(#DD0880); }
         blockquote blockquote blockquote blockquote             { .blockquote(#8F09C7); }
         blockquote blockquote blockquote blockquote blockquote  { .blockquote(#777);    }
@@ -213,7 +213,7 @@
             font-size: 14px;
             line-height: 16px;
             cursor: pointer;
-            outline: none;
+            outline: 0;
             position: absolute;
             left: 0;
             border: 0;
@@ -241,7 +241,7 @@
         font-weight: bold;
         font-family: @normal-font-family !important;
         padding: 0.10em 8px;
-        .border-radius(3px);
+        border-radius: 3px;
         &:hover, &:focus, &:active {
             color: white;
             background-color: darken(@btn-primary-bg, 10%);

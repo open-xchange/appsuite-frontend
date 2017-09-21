@@ -1,95 +1,101 @@
 {
     "tests": [
         {
-            "test": "to",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "to",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "body",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "body",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "hasflag",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "hasflag",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "subject",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "subject",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "envelope",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "envelope",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"],
+            "headers": ["from", "to"],
+            "parts": ["all", "domain", "localpart", "detail", "user"]
         },
         {
-            "test": "anyRecipient",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "anyrecipient",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "true",
-            "comparison": []
+            "id": "true",
+            "comparisons": []
         },
         {
-            "test": "from",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "from",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "date",
-            "comparison": ["is", "ge", "le", "not is", "not ge", "not le"]
+            "id": "date",
+            "comparisons": ["is", "ge", "le", "not is", "not ge", "not le"]
         },
         {
-            "test": "header",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "header",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "size",
-            "comparison": ["over", "under", "not over", "not under"]
+            "id": "size",
+            "comparisons": ["over", "under", "not over", "not under"]
         },
         {
-            "test": "not",
-            "comparison": []
+            "id": "not",
+            "comparisons": []
         },
         {
-            "test": "allof",
-            "comparison": []
+            "id": "allof",
+            "comparisons": []
         },
         {
-            "test": "mailingList",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "mailinglist",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         },
         {
-            "test": "currentdate",
-            "comparison": ["is", "ge", "le", "not is", "not ge", "not le"]
+            "id": "currentdate",
+            "comparisons": ["is", "ge", "le", "not is", "not ge", "not le"]
         },
         {
-            "test": "address",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "address",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"],
+            "headers": ["cc", "bcc", "resent-from", "resent-to", "sender", "from", "to"],
+            "parts": ["all", "domain", "localpart", "detail", "user"]
         },
         {
-            "test": "exists",
-            "comparison": []
+            "id": "exists",
+            "comparisons": []
         },
         {
-            "test": "anyof",
-            "comparison": []
+            "id": "anyof",
+            "comparisons": []
         },
         {
-            "test": "cc",
-            "comparison": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
+            "id": "cc",
+            "comparisons": ["regex", "is", "contains", "matches", "startswith", "endswith", "not regex", "not is", "not contains", "not matches", "not startswith", "not endswith"]
         }
     ],
-    "actioncommands": [
-        { "action": "stop" },
-        { "action": "reject" },
-        { "action": "discard" },
-        { "action": "vacation" },
-        { "action": "notify" },
-        { "action": "setflags" },
-        { "action": "addflags" },
-        { "action": "redirect" },
-        { "action": "removeflags" },
-        { "action": "move" },
-        { "action": "copy" },
-        { "action": "keep" }
+    "actioncmds": [
+        { "id": "stop" },
+        { "id": "reject" },
+        { "id": "discard" },
+        { "id": "vacation" },
+        { "id": "notify" },
+        { "id": "setflags" },
+        { "id": "addflags" },
+        { "id": "redirect" },
+        { "id": "removeflags" },
+        { "id": "move" },
+        { "id": "copy" },
+        { "id": "keep" }
     ],
-    "capabilities": ["copy", "subaddress", "regex", "relational", "body", "fileinto", "imap4flags", "vacation", "date", "envelope", "reject"]
+    "options":{
+        "allowNestedTests": true
+    }
 }

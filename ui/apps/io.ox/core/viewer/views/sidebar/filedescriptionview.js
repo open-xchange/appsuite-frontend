@@ -41,7 +41,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
             }
             baton.view.hasWritePermissions().then(function () {
                 panelBody.append(
-                    $('<button href="#" class="btn btn-link description-button">').text(description.length > 0 ? gt('Edit description') : gt('Add a description'))
+                    $('<button type="button" class="btn btn-link description-button">').text(description.length > 0 ? gt('Edit description') : gt('Add a description'))
                 );
             }).fail(function () {
                 panelBody.parent().hide();

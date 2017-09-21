@@ -15,15 +15,26 @@
     "default": {
       "selenium_host": "jenkins.open-xchange.com",
       "silent": true,
+      "screenshots" : {
+        "enabled" : true,
+        "on_failure" : true,
+        "on_error" : true,
+        "path" : "build/e2e/screenshots"
+      },
       "desiredCapabilities": {
         "browserName": "chrome",
         "chromeOptions": {
-          "args": ["--no-sandbox"]
+          "args": ["no-sandbox", "start-maximized"]
         },
         "acceptSslCerts": true
       },
       "globals": {
-        "environment": "default"
+        "environment": "default",
+        "users": [{
+          "username": "tthamm",
+          "password": "secret",
+          "mail": "tthamm@qa.open-xchange.com"
+        }]
       }
     },
 

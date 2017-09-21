@@ -382,11 +382,12 @@ define('io.ox/core/tk/dialogs', [
         };
 
         this.addCheckbox = function (label, action, status) {
+            var guid = _.uniqueId('form-control-label-');
             nodes.footer.prepend(
                 $('<div class="checkbox">').append(
                     $('<div class="controls">'),
-                    $('<label>').text(label).prepend(
-                        $('<input type="checkbox">').attr('data-action', action).prop('checked', status)
+                    $('<label>').attr('for', guid).text(label).prepend(
+                        $('<input type="checkbox">').attr({ 'id': guid, 'data-action': action }).prop('checked', status)
                     )
                 )
             );

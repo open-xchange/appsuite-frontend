@@ -31,7 +31,7 @@ define('plugins/demo/red/register', [
                         'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt.'
                     ),
                     $('<div class="buttons">').append(
-                        $('<button class="btn btn-default">').text('Dismiss')
+                        $('<button type="button" class="btn btn-default">').text('Dismiss')
                     )
                 )
             );

@@ -42,16 +42,17 @@ define('io.ox/mail/actions/copyMove', [
                                 preparedTest = { id: 'anyof', tests: [] };
                                 _.each(senderList, function (item) {
                                     if (opt.filterDefaults.tests.address) {
-                                        preparedTest.tests.push({ comparison: 'all', headers: ['From'], id: 'address', values: [item] });
+                                        preparedTest.tests.push({ comparison: 'is', headers: ['from'], id: 'address', addresspart: 'all', values: [item] });
                                     } else {
                                         preparedTest.tests.push({ comparison: 'contains', headers: ['From'], id: 'header', values: [item] });
                                     }
                                 });
                             } else {
                                 preparedTest = opt.filterDefaults.tests.address ? {
-                                    comparison: 'all',
-                                    headers: ['From'],
+                                    comparison: 'is',
+                                    headers: ['from'],
                                     id: 'address',
+                                    addresspart: 'all',
                                     values: [senderList[0]]
                                 } : {
                                     comparison: 'contains',
@@ -101,10 +102,10 @@ define('io.ox/mail/actions/copyMove', [
 
                         dialog.on('ok', function () { folderId = tree.selection.get(); });
 
-                        if (!capabilities.has('mailfilter') || o.type !== 'move') return;
+                        if (!capabilities.has('mailfilter_v2') || o.type !== 'move') return;
 
                         dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
-                        var checkbox = dialog.getFooter().find('[data-action="create-rule"]'),
+                        var checkbox = dialog.$footer.find('[name="create-rule"]'),
                             infoblock = $('<div class="help-block">');
                         // modify footer and place infoblock
                         checkbox.closest('.checkbox').addClass('checkbox-block text-left')

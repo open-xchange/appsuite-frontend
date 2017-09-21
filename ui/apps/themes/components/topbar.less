@@ -18,30 +18,12 @@
     height: 22px;
     margin: 8px 7px 0 13px;
     float: right;
-    background-image: url('apps/themes/default/logo-small.png');
-    background-repeat: no-repeat;
+
+    img { height: 100%; }
 
     html.high-contrast & { display: none; }
 }
 
-/**
- * High res logo for retina screens and mobile devices
- * The provided icon must have exact twice the size than
- * the standard icon.
- */
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (min--moz-device-pixel-ratio: 1.5),
-    only screen and (min-device-pixel-ratio: 1.5),
-    only screen and (min-resolution: 240dppx) {
-
-    #io-ox-top-logo-small {
-        // tell the browser to scale the image down, this will result
-        // in a sharp image on retina screens
-        background-size: 60px 22px;
-        // important, the large icon is 120x44px
-        background-image: url('apps/themes/default/logo-large.png');
-    }
-}
 
 #io-ox-topbar {
     position: absolute;
@@ -286,7 +268,7 @@
 
     .launcher-dropdown {
 
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
             .dropdown-toggle {
                 font-size: @mobile-launcher-icon-size;
             }
@@ -325,7 +307,7 @@
         a.dropdown-toggle {
             color: white;
             text-decoration: none;
-            outline: none;
+            outline: 0;
         }
 
         li.active-app a { font-weight: bold; }
@@ -440,8 +422,8 @@ html.ios8-standalone-ipad-fix {
 
     #io-ox-screens { top: 40 + @height; }
 }
-
-@media (min-width: 481px), (min-device-width: 481px) {//don't break mobile dropdowns
+// brackets needed or addition will not perform correctly. => Rule is ignored
+@media (min-width: (@smartphone-breakpoint + 1) ), (min-device-width: (@smartphone-breakpoint + 1)) {//don't break mobile dropdowns
 
     #topbar-settings-dropdown {//keep settings dropdown inside the window (Bug #30256)
         top: 40px;
@@ -450,7 +432,7 @@ html.ios8-standalone-ipad-fix {
     }
 }
 // when checking orientation, use max-device-width or keyboard overlay makes problems with some smartphones
-@media(max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+@media(max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
 
     #io-ox-topbar {
 
@@ -470,7 +452,7 @@ html.ios8-standalone-ipad-fix {
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .smartphone {
         #io-ox-topbar {

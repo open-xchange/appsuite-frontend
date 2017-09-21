@@ -97,7 +97,7 @@
     .io-ox-inline-links:first-child { margin: 0 0 20px 0; }
 
     .contact-header {
-        margin-bottom: 26px;
+        margin-bottom: 24px;
         min-height: 80px;
 
         .picture {
@@ -125,10 +125,10 @@
 
         h1 {
             font-family: @light-font-family;
-            font-weight: 200;
+            font-weight: normal;
             font-size: 24px;
-            line-height: 28px;
-            margin: 0;
+            line-height: 32px;
+            margin: -1px 0 1px 0;
 
             &.header-name {
                 word-break: break-all;
@@ -138,14 +138,14 @@
 
         h2 {
             font-size: 16px;
-            line-height: 20px;
-            font-weight: 200;
+            line-height: 24px;
+            font-weight: normal;
 
-            &.header-company { margin: 14px 0 14px 0; }
+            &.header-company { margin: 0 0 2px 0; padding-top: 6px; }
 
             &.header-job {
                 color: @hc-gray;
-                margin: 0 0 14px 0;
+                margin: -2px 0 2px 0;
                 word-break: break-all;
             }
 
@@ -174,10 +174,12 @@
     }
 
     .comment, .description {
-        font-weight: 300;
+        font-weight: normal;
         // twice block-width plus margin
         max-width: 720px;
-        margin-bottom: 26px;
+        line-height: 24px;
+        margin-top: -2px;
+        margin-bottom: 18px;
         clear: both;
     }
 
@@ -185,24 +187,28 @@
         display: inline-block;
         float: left;
         width: 560px;
-        margin: 0 16px 32px 0;
+        margin: 0 16px 24px 0;
 
-        legend {
-            font-family: @light-font-family;
-            font-size: 16px;
-            font-weight: 200;
-            margin-bottom: 14px;
-            border-bottom: 0 none;
+        h2 {
+            font-size: 13px;
+            color: black;
+            font-weight: bold;
+            line-height: 16px;
+            margin-top: 2px;
+            margin-bottom: 6px;
         }
 
         dl {
             margin-bottom: 0;
 
             dt {
+                font-size:13px;
                 width: 192px;
                 text-align: left;
                 color: #767676;
-                font-weight: 300;
+                line-height: 24px;
+                margin-top: -2px;
+                margin-bottom: 2px;
 
                 html.high-contrast & { color: @hc-gray; }
 
@@ -241,7 +247,7 @@
 }
 
 // smartphone
-@media (max-width: 480px), (max-device-width: 480px) {
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
     .io-ox-contacts-window, .io-ox-halo, .io-ox-search-window {
 
         .vgrid-cell.contact {
@@ -289,7 +295,6 @@
 
             .comment {
                 margin-bottom: 16px;
-                line-height: 20px;
             }
 
             .participant-wrapper { margin: 12px 8px; }

@@ -25,10 +25,10 @@ define('io.ox/mail/actions/source', [
             new dialogs.ModalDialog({ width: 700 })
                 .addPrimaryButton('close', gt('Close'), 'close')
                 .header(
-                    $('<h4>').text(gt('Mail source') + ': ' + (data.subject || ''))
+                    $('<h1 class="modal-title" id="mail-source">').text(gt('Mail source') + ': ' + (data.subject || ''))
                 )
                 .append(
-                    $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly">')
+                    $('<textarea class="form-control mail-source-view" rows="15" readonly="readonly" aria-labelledby="mail-source">')
                     .on('keydown', function (e) {
                         if (e.which !== 27) e.stopPropagation();
                     })

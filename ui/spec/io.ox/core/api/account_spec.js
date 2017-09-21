@@ -21,16 +21,6 @@ define([
 
     describe('Core account API', function () {
 
-        var select = $();
-
-        function setValue(from) {
-            sender.set(select, from);
-        }
-
-        function getValue() {
-            return sender.get(select);
-        }
-
         beforeEach(function () {
 
             this.server.respondWith('GET', /api\/user\?action=get/, function (xhr) {
@@ -225,68 +215,6 @@ define([
         it('returns correct default sender address', function () {
             var defaultAddress = sender.getDefaultSendAddress();
             expect(defaultAddress).to.equal('otto.xentner@open-xchange.com');
-        });
-
-        it('creates proper select-box with sender addresses', function () {
-            $('body').append(
-                select = $('<select class="sender-dropdown" size="1">').css('width', '400px')
-            );
-
-            // patch to get test data
-            sender.getNumbers = function () {
-                return $.Deferred().resolve({
-                    cellular_telephone0: '+49 151 00 000 001', // should not appear
-                    cellular_telephone1: '+49 151 99 888 777',
-                    cellular_telephone2: '+49 151 99 999 888',
-                    cellular_telephone3: ' ' // should not appear
-                });
-            };
-
-            sender.getMapping = function () {
-                return ['cellular_telephone1', 'cellular_telephone2', 'cellular_telephone3'];
-            };
-
-            return sender.drawOptions(select).then(function () {
-                expect(select.children().length).to.equal(8);
-                expect(select.find('[default]').length).to.equal(1);
-            });
-        });
-
-        it('sets initial value of select-box correctly', function () {
-            // box should automatically select the default value
-            expect(getValue()).to.deep.equal(['Otto Xentner', 'otto.xentner@open-xchange.com']);
-        });
-
-        it('sets value of select-box correctly', function () {
-            setValue(['Test', 'foo@gmail.com']);
-            var index = select.prop('selectedIndex');
-            expect(index).to.equal(5);
-        });
-
-        it('uses default address if invalid values are set', function () {
-            // an invalid value select first item in the list
-            setValue(['Test', 'not-in@the.list']);
-            var index = select.prop('selectedIndex'),
-                value = select.val();
-            expect(index).to.equal(4);
-            expect(value).to.equal('"Otto Xentner" <otto.xentner@open-xchange.com>');
-        });
-
-        it('selects proper address during initial loading', function () {
-            // clear box
-            select.empty().removeAttr('data-default');
-
-            // set value
-            setValue(['Test', 'foo@gmail.com']);
-
-            expect(select.val()).to.be.null;
-            expect(select.children().length).to.equal(0);
-
-            // an invalid value select first item in the list
-            return sender.drawOptions(select).then(function () {
-                var index = select.prop('selectedIndex');
-                expect(index).to.equal(5);
-            });
         });
 
         // tidy up

@@ -19,11 +19,12 @@ define('io.ox/core/tk/contenteditable-editor', [
     'io.ox/core/extensions',
     'io.ox/core/tk/textproc',
     'io.ox/mail/api',
+    'io.ox/mail/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'gettext!io.ox/core',
     'less!io.ox/core/tk/contenteditable-editor'
-], function (emoji, capabilities, ext, textproc, mailAPI, settings, mailSettings, gt) {
+], function (emoji, capabilities, ext, textproc, mailAPI, mailUtil, settings, mailSettings, gt) {
 
     'use strict';
 
@@ -177,24 +178,7 @@ define('io.ox/core/tk/contenteditable-editor', [
             }
         }
         // create new elements
-        var dummySpan = ed.getDoc().createElement('span');
-        dummySpan.innerHTML = '&nbsp;';
-        var para = ed.getDoc().createElement('p');
-        // and both elements to editor
-        para.appendChild(dummySpan);
-        range.insertNode(para);
-        // select the span
-        ed.selection.select(dummySpan);
-        // and delete it
-        ed.execCommand('Delete', false, null);
-        if (!_.device('smartphone')) {
-            // apply default font styles
-            if (mailSettings.get('defaultFontStyle/size') && mailSettings.get('defaultFontStyle/size') !== 'browser-default') ed.execCommand('fontSize', false, mailSettings.get('defaultFontStyle/size'));
-
-            if (mailSettings.get('defaultFontStyle/family') && mailSettings.get('defaultFontStyle/family') !== 'browser-default') ed.execCommand('fontName', false, mailSettings.get('defaultFontStyle/family'));
-
-            if (mailSettings.get('defaultFontStyle/color') && mailSettings.get('defaultFontStyle/color') !== 'transparent') ed.execCommand('forecolor', false, mailSettings.get('defaultFontStyle/color'));
-        }
+        range.insertNode(mailUtil.getDefaultStyle().node.get(0));
     }
 
     function isInsideBlockquote(range) {
@@ -236,6 +220,7 @@ define('io.ox/core/tk/contenteditable-editor', [
 
         var rendered = $.Deferred(), initialized = $.Deferred(), ed;
         var toolbar, editor, editorId = el.data('editorId');
+        var defaultStyle = mailUtil.getDefaultStyle();
 
         el.append(
             el = $('<div class="contenteditable-editor">').attr({
@@ -246,6 +231,7 @@ define('io.ox/core/tk/contenteditable-editor', [
                 editor = $('<div class="editable" tabindex="0" role="textbox" aria-multiline="true">')
                     .attr('aria-label', gt('Rich Text Area. Press ALT-F10 for toolbar'))
                     .css('margin-bottom', '32px')
+                    .toggleClass('simple-linebreaks', mailSettings.get('compose/simpleLineBreaks', false))
             )
         );
 
@@ -313,10 +299,9 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
-            // simpleLineBreaks = true -> false -> enter insert <br>
-            // simpleLineBreaks = false -> 'p' -> enter inserts new paragraph
-            // this one is stored in mail settings
-            forced_root_block: mailSettings.get('simpleLineBreaks', true) ? /* false */ 'p' : 'p',
+            forced_root_block: 'p',
+
+            forced_root_block_attrs: { 'style': defaultStyle.string, 'class': 'default-style' },
 
             browser_spellcheck: true,
 

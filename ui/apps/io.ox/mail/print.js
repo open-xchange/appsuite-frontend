@@ -88,7 +88,7 @@ define('io.ox/mail/print', [
 
                 get: function (obj) {
                     // is an embedded email?
-                    if (util.isEmbedded(selection[0])) return $.Deferred().resolve(selection[0]);
+                    if (util.isEmbedded(selection[0])) return api.getNestedMail(selection[0]);
                     // fetch normal message
                     return api.get(_.extend({ view: getType(), unseen: true, decrypt: isDecrypted(selection) }, obj));
                 },

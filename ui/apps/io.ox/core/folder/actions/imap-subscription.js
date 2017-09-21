@@ -73,6 +73,7 @@ define('io.ox/core/folder/actions/imap-subscription', [
 
         picker({
 
+            async: true,
             all: true,
             addClass: 'zero-padding subscribe-imap-folder',
             button: gt('Save'),

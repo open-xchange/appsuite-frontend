@@ -296,10 +296,13 @@ define('io.ox/core/tk/list', [
                 // sort all nodes by index
                 items = this.getItems();
                 if (items.length > 1) {
+                    var prevFocus = document.activeElement;
                     detached = items.detach();
                     sorted = _.sortBy(detached, getIndex);
 
                     this.$el.append(sorted);
+                    // restore the lost focus after sorting due to detach() - e.g. in drive when adding new folders b54897
+                    if (prevFocus) { prevFocus.focus(); }
                 }
             };
         }()),
@@ -798,7 +801,7 @@ define('io.ox/core/tk/list', [
 
         busy: function () {
             if (this.isBusy) return;
-            this.$('.notification').addClass('hidden');
+            this.$('.notification').css('display', 'none');
             this.addBusyIndicator().addClass('io-ox-busy').find('i').remove();
             this.isBusy = true;
             return this;
@@ -814,6 +817,7 @@ define('io.ox/core/tk/list', [
             if (!this.isBusy) return;
             this.removeBusyIndicator();
             this.isBusy = false;
+            this.$('.notification').css('display', '');
             return this;
         },
 

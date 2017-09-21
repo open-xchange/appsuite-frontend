@@ -236,11 +236,14 @@ define('io.ox/core/api/user', [
      * @param {string} id of a user
      * @return { object} text node
      */
-    api.getTextNode = function (id) {
-        var node = document.createTextNode('');
+    api.getTextNode = function (id, options) {
+        var opt = _.extend({ target: 'name' }, options),
+            node = document.createTextNode('');
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = data.display_name || data.email1;
+                node.nodeValue = opt.target === 'name' ?
+                    data.display_name || data.email1 :
+                    data.email1 || data.display_name;
             })
             .always(function () {
                 // use defer! otherwise we return null on cache hit
@@ -249,7 +252,6 @@ define('io.ox/core/api/user', [
                     node = null;
                 });
             });
-        window.node = node;
         return node;
     };
 

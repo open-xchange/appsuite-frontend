@@ -402,24 +402,30 @@ define('io.ox/tasks/api', [
         })
         .then(function () {
             // update cache
-            var sortChanged = false;
+            var sortChanged = false,
+                def = $.Deferred();
             //data that is important for sorting changed, so clear the all cache
             if (task.title || task.end_time || task.status) {
                 sortChanged = true;
             }
+            //api.get updates list and get caches
+            api.removeFromCache(key).then(function () {
+                // api.get updates list and get caches
+                api.get({ id: task.id, folder_id: newFolder || useFolder }).done(def.resolve).fail(function (error) {
+                    // don't fail if permission to see the task is denied (update worked fine and user has probably removed himself from the task. Edgecase but possible)
+                    if (error && error.code === 'TSK-0046') def.resolve();
+                    def.reject(arguments);
+                });
+            });
             return $.when(
-                //api.get updates list and get caches
-                api.removeFromCache(key).then(function () {
-                    //api.get updates list and get caches
-                    return api.get({ id: task.id, folder_id: newFolder || useFolder });
-                }),
+                def,
                 sortChanged ? api.caches.all.clear() : updateAllCache([task], useFolder, task));
         })
         .then(function (data) {
             //return object with id and folder id needed to save the attachments correctly
             obj = { folder_id: useFolder, id: task.id };
             //notification check
-            checkForNotifications(data, task, true);
+            if (data) checkForNotifications(data, task, true);
             if (attachmentHandlingNeeded) {
                 //to make the detailview show the busy animation
                 api.addToUploadList(_.ecid(task));

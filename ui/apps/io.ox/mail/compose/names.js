@@ -106,7 +106,7 @@ define('io.ox/mail/compose/names', [
                 names[model.id] = model.pick('name', 'overwrite', 'defaultName');
             });
             settings.set('customDisplayNames', names).save();
-            ox.trigger('change:customDisplayNames', names);
+            ox.trigger('change:customDisplayNames');
         }
     });
 

@@ -86,7 +86,7 @@ define('io.ox/contacts/toolbar', [
         'export': {
             prio: 'lo',
             mobile: 'lo',
-            label: gt('Export as vCard'),
+            label: gt('Export'),
             drawDisabled: true,
             ref: 'io.ox/contacts/actions/export'
         },

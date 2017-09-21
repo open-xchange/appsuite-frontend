@@ -248,7 +248,7 @@ define('io.ox/mail/actions', [
     });
 
     new Action('io.ox/mail/actions/filter', {
-        capabilities: 'mailfilter',
+        capabilities: 'mailfilter_v2',
         requires: function (e) {
             // must be at least one message and top-level
             if (!e.collection.has('some') || !e.collection.has('toplevel')) return;
@@ -268,7 +268,7 @@ define('io.ox/mail/actions', [
                             id: 'allof',
                             tests: [
                                 _.copy(opt.filterDefaults.tests.subject),
-                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.From)
+                                opt.filterDefaults.tests.address ? _.copy(opt.filterDefaults.tests.address) : _.copy(opt.filterDefaults.tests.from)
                             ]
                         };
 

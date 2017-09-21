@@ -175,6 +175,12 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             });
         },
 
+        hideBody: function () {
+            this.$('.modal-body').hide();
+            this.$('.modal-footer').css('border-top', 0);
+            return this;
+        },
+
         // Add a button
         //
         // options:
@@ -210,6 +216,18 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             );
         },
 
+        addCheckbox: function (label, action, status) {
+            this.$footer.prepend(
+                $('<div class="checkbox">').append(
+                    $('<div class="controls">'),
+                    $('<label>').text(label).prepend(
+                        $('<input type="checkbox">').attr('name', action).prop('checked', status)
+                    )
+                )
+            );
+            return this;
+        },
+
         onAction: function (e) {
             this.invokeAction($(e.currentTarget).attr('data-action'));
         },
@@ -227,6 +245,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (e.which !== 13) return;
             if (!this.options.enter) return;
             if (!$(e.target).is('input:text, input:password')) return;
+            e.preventDefault();
             this.invokeAction(this.options.enter);
         },
 
@@ -258,6 +277,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             $(document).on('focusin', $.proxy(this.keepFocus, this));
             this.$el.next().addBack().show();
             this.toggleAriaHidden(true);
+            this.idle();
         }
     });
 

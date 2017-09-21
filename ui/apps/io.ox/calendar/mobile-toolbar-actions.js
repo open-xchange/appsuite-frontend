@@ -109,6 +109,15 @@ define('io.ox/calendar/mobile-toolbar-actions', [
                 drawDisabled: true,
                 ref: 'io.ox/calendar/detail/actions/delete',
                 cssClasses: 'io-ox-action-link mobile-toolbar-action'
+            },
+            'export': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Export'),
+                //icon: 'fa fa-trash-o',
+                drawDisabled: true,
+                ref: 'io.ox/calendar/detail/actions/export',
+                cssClasses: 'io-ox-action-link mobile-toolbar-action'
             }
         };
 

@@ -54,6 +54,7 @@ describe('Mail Compose html signatures', function () {
             // clicked on a-tag with label "Compose"
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
+            .pause(500)
             // check if first signature is selected correctly
             .assert
             .propEquals(
@@ -104,6 +105,7 @@ describe('Mail Compose html signatures', function () {
             // clicked on a-tag with label "Compose"
             .clickWhenEventListener('.io-ox-mail-window a[data-action="compose"]', 'click', 20000)
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
+            .pause(500)
             // check if third signature is selected correctly
             .assert
             .propEquals(
@@ -139,6 +141,7 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-window .window-content a[data-action="more"]')
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
+            .pause(500)
             .assert
             .propRegexp(
                 '.io-ox-mail-compose-window .editor .editable',
@@ -195,6 +198,7 @@ describe('Mail Compose html signatures', function () {
             .clickWhenVisible('.io-ox-mail-window .window-content a[data-action="more"]')
             .clickWhenVisible('.dropdown.open a[data-action="reply"]')
             .waitForElementVisible('.io-ox-mail-compose-window .editor .editable', 5000)
+            .pause(500)
             // check if third signature is selected correctly
             .assert
             .propRegexp(

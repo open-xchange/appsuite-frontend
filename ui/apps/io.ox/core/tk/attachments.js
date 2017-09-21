@@ -295,9 +295,11 @@ define('io.ox/core/tk/attachments', [
             node.append(uploadButton);
         }
 
-        node.on('keypress', function (e) {
-            e.preventDefault();
-            if (/^(13|32)$/.test(e.which)) {
+        uploadButton.on('click keypress', function (e) {
+            if (!$(e.target).is('button')) return;
+            // Note: BUG #55335 - Filepicker fails to open in Firefox
+            if (e.type === 'click' || /^(13|32)$/.test(e.which)) {
+                e.preventDefault();
                 input.focus(); // BUG #34034: FF needs to focus the input-element first
                 input.trigger('click');
                 uploadButton.focus(); // Reset focus to button

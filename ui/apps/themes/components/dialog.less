@@ -16,6 +16,12 @@
     height: 100%;
     width: 100%;
 
+    .modal-title {
+        font-size: 18px;
+        line-height: 24px;
+        margin: -3px 0 2px 0;
+    }
+
     .modal-body {
         overflow-y: auto;
         max-height: 400px;
@@ -56,8 +62,8 @@
     background-color: white;
     z-index: 65001;
     border: 0 none;
-    .box-shadow(0 5px 25px -5px #000);
-    .border-radius(@border-radius-base);
+    box-shadow: 0 5px 25px -5px #000;
+    border-radius: @border-radius-base;
 
     .modal-header {
         position: relative;
@@ -99,7 +105,7 @@
 
             iframe {
                 display: block;
-                .border-radius(5px 5px 0 0);
+                border-radius: 5px 5px 0 0;
             }
         }
 
@@ -128,13 +134,13 @@
     }
 
     .io-ox-sidepopup {
-        &.right { .border-radius(0 5px 5px 0); }
-        &.left  { .border-radius(5px 0 0 5px); }
+        &.right { border-radius: 0 5px 5px 0; }
+        &.left  { border-radius: 5px 0 0 5px; }
     }
 
     &:focus {
-        outline: none;
-        .box-shadow(0 5px 25px -5px darken(@link-color, 20%));
+        outline: 0;
+        box-shadow: 0 5px 25px -5px darken(@link-color, 20%);
     }
 
     &.topmost { z-index: 65003; }
@@ -162,7 +168,7 @@
         .io-ox-fileselection {
              li.file {
                 font-size: @font-size-touch;
-                outline: none;
+                outline: 0;
                 line-height: 40px;
                 padding: 2px 7px;
                 .user-select(none);
@@ -281,7 +287,7 @@
 
         .io-ox-fileselection {
             li.file {
-                outline: none;
+                outline: 0;
                 line-height: 30px;
                 padding: 2px 7px;
                 cursor: pointer;
@@ -354,7 +360,7 @@
     width: 95%;
     margin-top: 0;
     top: 10px;
-    .border-radius(0);
+    border-radius: 0;
 
     .modal-footer {
         margin-top: 0;

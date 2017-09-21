@@ -27,7 +27,7 @@
     }
 
     &:focus {
-        outline: 2px solid #3c73aa;
+        outline: 2px solid @outline-color;
     }
 
     .list-item-title {
@@ -67,7 +67,7 @@
             margin:0;
 
             &:focus {
-                outline: 2px solid #3c73aa;
+                outline: 2px solid @outline-color;
                 text-decoration: underline;
             }
         }
@@ -85,7 +85,7 @@
                 i { color: #fff; }
             }
             &:focus {
-                outline: 2px solid #3c73aa;
+                outline: 2px solid @outline-color;
             }
 
             i { color: #aaa; }
@@ -99,12 +99,12 @@
     }
 
     &.disabled {
-        background-color: #eee;
+        background-color: #F3F3F3;
 
         .list-item-title {
             font-style: italic;
             font-weight: normal;
-            color: #888;
+            color: #707070;
         }
     }
 
@@ -130,7 +130,7 @@
         margin-right: 2em;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
         .list-item-controls {
             .remove {
                 margin-left: 0;

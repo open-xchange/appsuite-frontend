@@ -42,8 +42,8 @@ define('io.ox/core/attachments/backbone', [
         };
     };
 
-    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?)$/i,
-        regIsImage = /\.(gif|bmp|tiff|jpe?g|gmp|png)$/i;
+    var regIsDocument = /\.(pdf|do[ct]x?|xlsx?|o[dt]s|p[po]tx?|txt)$/i,
+        regIsImage = /\.(gif|bmp|jpe?g|gmp|png|psd|tif?f)$/i;
 
     var previewFetcher = {
         localFile: function (model) {
@@ -178,6 +178,8 @@ define('io.ox/core/attachments/backbone', [
             var supportsDocumentPreview = capabilities.has('document_preview'),
                 filename = this.get('filename'), url;
 
+            // special handling for psd and tiff; These can only be previewed by MW, not local (on upload)
+            if (this.isLocalFile() && filename.match(/psd|tif/)) return null;
             if (!this.isFileAttachment()) return null;
             if (!regIsImage.test(filename) && !(supportsDocumentPreview && (regIsDocument.test(filename)) || this.isContact())) return null;
             // no support for localFile document preview
@@ -258,6 +260,15 @@ define('io.ox/core/attachments/backbone', [
             return _(this.filter(function (model) {
                 return model.isLocalFile();
             })).pluck('fileObj');
+        },
+        getSize: function () {
+            return this.reduce(function (memo, model) { return memo + model.getSize(); }, 0);
+        },
+        isValidModel: function (model) {
+            return model.isFileAttachment();
+        },
+        getValidModels: function () {
+            return this.filter(this.isValidModel, this);
         }
     });
 

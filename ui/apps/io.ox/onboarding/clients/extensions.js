@@ -265,7 +265,7 @@ define('io.ox/onboarding/clients/extensions', [
                                     //$('<label class="control-label">').text(gt('Phone Number')),
                                     this._select().$el,
                                     this._input(),
-                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
+                                    $('<button type="button" class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -370,7 +370,7 @@ define('io.ox/onboarding/clients/extensions', [
                                 $('<div class="row">').append(
                                     this._input(),
                                     // action
-                                    $('<button class="btn btn-primary action-call">').text(gt('Send'))
+                                    $('<button type="button" class="btn btn-primary action-call">').text(gt('Send'))
                                 )
                             )
                         )
@@ -438,7 +438,7 @@ define('io.ox/onboarding/clients/extensions', [
                             .attr('id', ref)
                             .text(this.description),
                         // action
-                        $('<button class="btn btn-primary action-call">')
+                        $('<button type="button" class="btn btn-primary action-call">')
                             .attr('aria-describedby', ref)
                             .text(gt('Configure now'))
                     )
@@ -485,7 +485,7 @@ define('io.ox/onboarding/clients/extensions', [
         },
 
         getButton: function () {
-            if (!this.store.image) return $('<button class="btn btn-primary action-call">').text(gt('Download'));
+            if (!this.store.image) return $('<button type="button" class="btn btn-primary action-call">').text(gt('Download'));
             // appstore button
             return $('<a href="#" class="store">').append(
                 $('<img class="store-icon action-call" role="button">').attr({

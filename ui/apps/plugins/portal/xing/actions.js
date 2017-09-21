@@ -65,14 +65,14 @@ define('plugins/portal/xing/actions', [
             container = $('<div>').addClass('comment-form');
             textarea = $('<textarea>').attr({ rows: 3, cols: 40 });
 
-            return $('<div>').addClass('xing possible-action comment').append(
-                $('<span>').addClass('comment-toggle').append(
+            return $('<div class="xing possible-action comment">').append(
+                $('<span class="comment-toggle">').append(
                     $('<i class="fa fa-comment" aria-hidden="true">'),
                     $.txt(gt('Comment'))
                 ).on('click', commentToggle),
                 container.append(
                     textarea,
-                    $('<button>').addClass('btn btn-primary').text(gt('Submit comment'))
+                    $('<button type="button" class="btn btn-primary">').text(gt('Submit comment'))
                 ).on('click', '.btn', formSubmission).hide()
             );
         }

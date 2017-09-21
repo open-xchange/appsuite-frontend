@@ -113,7 +113,7 @@ legend {
         background: red;
         cursor: inherit;
         display: block;
-        outline: none;
+        outline: 0;
     }
 
     i.fa-paperclip:after { content: '\00a0'; }
@@ -203,6 +203,10 @@ div.hopscotch-bubble {
     }
 }
 
+.auto-logout-dialog:not(.logout-failed) [data-action="retry"] {
+    display: none;
+}
+
 .io-ox-busy {
     position: relative;
 
@@ -235,6 +239,8 @@ div.hopscotch-bubble {
         .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
 
+    transition: filter 1s linear;
+
 }
 
 #io-ox-offline {
@@ -253,8 +259,8 @@ div.hopscotch-bubble {
     background-color: #EA4400;
     cursor: default;
     z-index: 650000;
-    .box-shadow(0 0 20px 0 rgba(0, 0, 0, 0.30));
-    .border-radius(5px 5px 0 0);
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.30);
+    border-radius: 5px 5px 0 0;
 }
 
 // defined in core CSS to guarantee an instant response
@@ -350,7 +356,7 @@ html:not(.internet-explorer) {
     cursor: pointer;
 }
 
-.default-content-padding { padding: 20px 30px; }
+.default-content-padding { padding: 32px 32px; }
 
 .border-top {
     border-top: 1px solid @defaultBorderColor;
@@ -418,7 +424,7 @@ html:not(.internet-explorer) {
         font-size: 16px;
         &:focus {
             color: #ffffff;
-            background-color: #3c73aa;
+            background-color: @brand-primary;
         }
     }
     &.has-focus .toggle-asterisks {
@@ -612,6 +618,28 @@ html:not(.internet-explorer) {
     }
 }
 
+.blur {
+    filter: blur(@bluriness);
+}
+
+h1.unstyled,
+h2.unstyled,
+h3.unstyled,
+h4.unstyled,
+h5.unstyled {
+    margin: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+label.unstyled {
+    color: inherit;
+    line-height: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    margin-bottom: inherit;
+}
+
 // .radio.custom {
 
 //     @accent: #7CB342;
@@ -690,7 +718,7 @@ html:not(.internet-explorer) {
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
 
     .default-content-padding { padding: 5px 10px; }
     .internet-explorer .scrollable[tabindex].default-content-padding:focus:not(.no-padding-adjustment) { padding: 3px 8px; }
@@ -700,12 +728,12 @@ html:not(.internet-explorer) {
     textarea.flat, input.flat {
         border-width: 0;
         border-bottom-width: 1px;
-        .box-shadow(none);
-        .border-radius(0);
+        box-shadow: none;
+        border-radius: 0;
 
         &:focus {
             border-width: 0;
-            .box-shadow(none);
+            box-shadow: none;
             border-bottom-width: 1px;
             border-color: initial;
         }

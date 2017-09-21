@@ -118,7 +118,7 @@ define('io.ox/core/folder/actions/move', [
                 });
             }
             picker({
-
+                async: true,
                 button: options.button,
                 filter: options.filter,
                 flat: !!options.flat,

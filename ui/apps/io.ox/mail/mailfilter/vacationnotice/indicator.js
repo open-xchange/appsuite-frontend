@@ -24,7 +24,7 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
 
         point: 'io.ox/mail/vacation-notice/indicator',
 
-        el: '<div class="alert alert-info alert-dismissable" role="alert">',
+        el: '<div class="alert alert-info alert-dismissable ellipsis" role="alert">',
 
         events: {
             'click .close': 'onClose',
@@ -72,9 +72,13 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             id: 'link',
             index: 200,
             render: function () {
+                var title = gt('Your vacation notice is active');
                 this.$el.append(
+                    $('<i class="fa fa-warning">'),
+                    $.txt(' '),
                     $('<a href="#" data-action="edit-vacation-notice">')
-                        .text(gt('Your vacation notice is active'))
+                        .attr('title', title)
+                        .text(title)
                 );
             }
         }

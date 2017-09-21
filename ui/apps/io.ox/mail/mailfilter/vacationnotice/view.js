@@ -135,7 +135,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
             id: 'range',
             render: function (baton) {
                 // supports date?
-                if (!_(this.data.config.tests).findWhere({ test: 'currentdate' })) return;
+                if (!_(this.data.config.tests).findWhere({ id: 'currentdate' })) return;
                 this.$body.append(
                     baton.branch('range', this, $('<div class="form-group date-range">'))
                 );
@@ -331,6 +331,7 @@ define('io.ox/mail/mailfilter/vacationnotice/view', [
 
                 var model = this.model,
                     primaryMail = this.data.primary || this.data.aliases[0];
+                model.set('primaryMail', primaryMail);
 
                 // remove primary mail from aliases
                 this.data.aliases.splice(_(this.data.aliases).indexOf(primaryMail), 1);

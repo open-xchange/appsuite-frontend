@@ -78,10 +78,10 @@ define('io.ox/mail/detail/content', [
 
         linkTarget: function (baton) {
             baton.source = baton.source
-                // fix missing protocol
-                .replace(/(<a.*?href=("|'))www\./g, '$1http://www.')
+                // add missing http protocol prefix
+                .replace(/<a[^>]*href=(?:"|')((?!https?:\/\/)[^'">]+)(?:"|')[^>]*>/g, addMissingProtocol)
                 // fix targets
-                .replace(/<a[^>]*href=(?:"|')(https?:\/\/[^>]+)(?:"|')[^>]*>/g, setLinkTarget);
+                .replace(/<a[^>]*href\s*=\s*(?:"|')(https?:\/\/[^>]+)(?:"|')[^>]*>/g, setLinkTarget);
         },
 
         whitespace: function (baton) {
@@ -225,7 +225,7 @@ define('io.ox/mail/detail/content', [
                 var text = getText(node);
                 if (text.length > 300) text = text.substr(0, 300) + '\u2026'; else return;
                 var blockquoteId = _.uniqueId('collapsed-blockquote-');
-                var ellipsisButton = $('<button class="bqt">').attr('title', gt('Show quoted text')).append(
+                var ellipsisButton = $('<button type="button" class="bqt">').attr('title', gt('Show quoted text')).append(
                     $('<span aria-hidden="true">').text('...')
                 );
                 if (!_.browser.Chrome) {
@@ -540,6 +540,14 @@ define('io.ox/mail/detail/content', [
     function setLinkTarget(match /*, link*/) {
         //replace or add link target to '_blank'
         return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
+    }
+
+    function addMissingProtocol(match, url) {
+        // other protocol (mailto:, ftp://, ...)
+        if (/^[^:.#]+:/.test(url)) return match;
+        // anchor link
+        if (/^#/.test(url)) return match;
+        return match.replace(url, 'http://' + url);
     }
 
     // helper: use native functions to avoid jQuery caches;

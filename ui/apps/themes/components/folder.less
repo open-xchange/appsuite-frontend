@@ -191,7 +191,7 @@
             &.trash { i:before { content: '\f1f8'; }} // fa-trash
             &.spam { i:before { content: '\f05e'; }} // fa-ban
             &.archive { i:before { content: '\f187'; }} // fa-archive
-            &.default { i { color: #aaa; }}
+            &.default { i { color: #aaa; }}
 
             &.myshares { i:before{ content: '\f0c2'; }} // fa-cloud
             &.attachments { i:before{ content: '\f0c6'; }} // fa-paperclip
@@ -231,9 +231,9 @@
         display: block;
     }
 
-    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders {
+    .favorites, .unified-folders, .standard-folders, .other-folders, .myshares, .root-folders, .private-drive-folders, .public-drive-folders, .filestorage-folders, .remote-folders, [data-id="virtual/myfolders"] {
         margin-bottom: @default-padding;
-        @media (max-width: 480px), (max-device-width: 480px) {
+        @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
             margin-bottom: 0;
         }
     }
@@ -276,6 +276,7 @@
     // links
     .links {
 
+        list-style-type: none;
         margin: 0;
         padding: 0 @default-padding @default-padding @indentation;
         font-size: @fontSize;
@@ -306,7 +307,7 @@
         }
     }
 
-    @media(max-width: 480px), (max-device-width: 480px) {
+    @media(max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
 
         padding-left: 20px;
 
@@ -358,6 +359,11 @@
         }
         .links {
             font-size: @font-size-touch;
+            padding-left: 0;
+
+            li {
+                line-height: @mobile-line-height;
+            }
         }
     }
 }
@@ -429,6 +435,7 @@
 
         .links {
             font-size: @font-size-touch;
+            padding-left: 0;
         }
         .flat-tree {
             // set min-width on flat folder to get consistent layout

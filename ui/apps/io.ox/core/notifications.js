@@ -150,18 +150,18 @@ define('io.ox/core/notifications', [
             if (desktopNotifications.getPermissionStatus() === 'default' && settings.get('showDesktopNotifications', true) !== false && !this.handledNotificationInfo) {
                 var self = this,
                     textNode = $('<div>').text(gt('Would you like to enable desktop notifications?')),
-                    laterButton = $('<button class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
+                    laterButton = $('<button type="button" class="later-button btn btn-warning">').text(gt('Later')).on('click', function (e) {
                         e.stopPropagation();
                         cleanup();
                     }),
                     //#. declines the use of desktop notifications
-                    disableButton = $('<button class="disable-button btn btn-danger">').text(gt('Never')).on('click', function (e) {
+                    disableButton = $('<button type="button" class="disable-button btn btn-danger">').text(gt('Never')).on('click', function (e) {
                         settings.set('showDesktopNotifications', false).save();
                         e.stopPropagation();
                         cleanup();
                     }),
                     //#. Opens popup to decide if desktop notifications should be shown
-                    enableButton = $('<button class="enable-button btn btn-success">').text(gt('Decide now')).on('click', function (e) {
+                    enableButton = $('<button type="button" class="enable-button btn btn-success">').text(gt('Decide now')).on('click', function (e) {
                         e.stopPropagation();
                         desktopNotifications.requestPermission(function (result) {
                             if (result === 'granted') {

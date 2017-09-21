@@ -23,7 +23,9 @@ exports.command = function (selector, eventType, timeout) {
     timeout = timeout || 5000;
 
     this.waitForStatement(function (selector, eventType) {
-        var ev = $._data(document.querySelector(selector), 'events');
+        var target = document.querySelector(selector);
+        if (!target) return;
+        var ev = $._data(target, 'events');
         if (ev[eventType]) {
             $(selector).click();
             return true;

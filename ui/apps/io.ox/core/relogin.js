@@ -53,7 +53,7 @@ define('io.ox/core/relogin', [
     }
 
     function showSessionLostDialog(error) {
-        new dialogs.ModalDialog({ easyOut: false, width: 400 })
+        new dialogs.ModalDialog({ easyOut: false, width: 400, container: $('body') })
             .build(function () {
                 this.getPopup().addClass('relogin');
                 this.getContentNode().append(
@@ -65,8 +65,9 @@ define('io.ox/core/relogin', [
             .on('ok', function () {
                 ox.trigger('relogin:cancel');
                 gotoLoginLocation();
-            })
-            .show();
+            }).show(function () {
+                $('#io-ox-core').addClass('blur');
+            });
     }
 
     function relogin(request, deferred, error) {
@@ -90,16 +91,17 @@ define('io.ox/core/relogin', [
             // set flag
             pending = true;
 
-            new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin' })
+            new dialogs.ModalDialog({ easyOut: false, async: true, width: 400, enter: 'relogin', container: $('body') })
                 .build(function () {
+                    var guid = _.uniqueId('form-control-label-');
                     this.getPopup().addClass('relogin');
                     this.getHeader().append(
                         $('<h4>').text(getReason(error)),
                         $('<div>').text(gt('Please sign in again to continue'))
                     );
                     this.getContentNode().append(
-                        $('<label>').text(gt('Password')),
-                        $('<input type="password" name="relogin-password" class="form-control">')
+                        $('<label>').attr('for', guid).text(gt('Password')),
+                        $('<input type="password" name="relogin-password" class="form-control">').attr('id', guid)
                     );
                 })
                 .addPrimaryButton('relogin', gt('Sign in'))
@@ -135,6 +137,7 @@ define('io.ox/core/relogin', [
                             pending = false;
                             ox.trigger('relogin:success');
                             $blocker.css('z-index', '');
+                            $('#io-ox-core').removeClass('blur');
                         },
                         function fail(e) {
                             // eloquentify standard error message ;-)
@@ -153,6 +156,7 @@ define('io.ox/core/relogin', [
                     );
                 })
                 .show(function () {
+                    $('#io-ox-core').addClass('blur');
                     this.find('input').focus();
                 });
 

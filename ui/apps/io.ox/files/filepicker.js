@@ -557,7 +557,7 @@ define('io.ox/files/filepicker', [
         }
 
         function focusButtons() {
-            this.getFooter().find('button').first().focus();
+            this.$footer.find('button').first().focus();
         }
 
         function onResize() {
@@ -584,14 +584,12 @@ define('io.ox/files/filepicker', [
             hideTrashfolder: options.hideTrashfolder || undefined,
             createFolderButton: options.createFolderButton,
 
-            done: function (id, dialog) {
+            done: function () {
                 def.resolve(
                     _(filesPane.find('li.selected input')).map(function (node) {
                         return $(node).data('file');
                     })
                 );
-
-                dialog.close();
             },
 
             filter: options.tree.filter,
@@ -606,7 +604,7 @@ define('io.ox/files/filepicker', [
                 }
                 // standard handling for desktop only
                 if (_.device('!smartphone')) {
-                    dialog.getContentNode().append(filesPane);
+                    dialog.$body.append(filesPane);
                     filesPane.on('dblclick', '.file', function () {
                         var file = $('input', this).data('file');
                         if (!file) return;
@@ -617,7 +615,7 @@ define('io.ox/files/filepicker', [
                     // some re-sorting of nodes for mobile
                     // we have to use the pagecontroller pages instead of the classic
                     // splitview on desktop
-                    var container = dialog.getBody().parent();
+                    var container = dialog.$body.parent();
                     pages.getPage('fileList').append(filesPane);
                     pages.getPage('folderTree').append(dialog.getBody());
 
@@ -631,7 +629,7 @@ define('io.ox/files/filepicker', [
                     });
 
                     // always change pages on click, do not wait for folder-change
-                    dialog.getBody().on('click', 'li .folder.selectable.open', function (e) {
+                    dialog.$body.on('click', 'li .folder.selectable.open', function (e) {
                         if ($(e.target).closest('.folder-arrow').length) return;
                         pages.changePage('fileList', { disableAnimations: true });
                     });

@@ -391,6 +391,10 @@ define('io.ox/mail/main', [
                 quota.getQuota(true);
             });
 
+            api.on('refresh.all', function () {
+                quota.getQuota(true);
+            });
+
             app.treeView.$el.append(
                 quota.render().$el
             );
@@ -1184,6 +1188,7 @@ define('io.ox/mail/main', [
                         app.listView.selection.selectEvents(app.listView.selection.getItems());
                     }
                 }
+                this.listControl.applySizeConstraints();
             };
 
             app.props.on('change:layout', function () {
@@ -1991,7 +1996,7 @@ define('io.ox/mail/main', [
         },
 
         'vacation-notice': function (app) {
-            if (!capabilities.has('mailfilter')) return;
+            if (!capabilities.has('mailfilter_v2')) return;
             require(['io.ox/mail/mailfilter/vacationnotice/indicator'], function (View) {
                 new View().attachTo(app.listControl.$el);
             });

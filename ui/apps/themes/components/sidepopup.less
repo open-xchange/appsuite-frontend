@@ -28,12 +28,12 @@
 
     &.right {
         left: 49.5%;
-        .box-shadow(+20px 0 100px 0 @shadowColor);
+        box-shadow: +20px 0 100px 0 @shadowColor;
     }
 
     &.left {
         right: 49.5%;
-        .box-shadow(-20px 0 100px 0 @shadowColor);
+        box-shadow: -20px 0 100px 0 @shadowColor;
     }
 
     &.first {
@@ -70,7 +70,7 @@
     }
 
      // larger popups for notification overlay
-    @media (min-width: 480px), (min-device-width: 480px) {
+    @media (min-width: @smartphone-breakpoint), (min-device-width: @smartphone-breakpoint) {
         .notifications-overlay &.right { left: 39.5%; }
         .notifications-overlay &.left { right: 39.5%; }
     }
@@ -229,7 +229,7 @@
         }
     }
 }
-@media all and (max-width: 480px), all and (max-device-width: 480px) {
+@media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
     .io-ox-sidepopup-close {
         margin: 0;
         .close {

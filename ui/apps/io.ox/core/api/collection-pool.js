@@ -80,6 +80,8 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
         _(hash).each(function (entry, id) {
             // ignore detail collection
             if (id === 'detail') return;
+            // ignore search collections cause their lack of proper reset handling (TODO)
+            if (id.indexOf('search') === 0) return;
             if (entry.collection.expired) {
                 // remove collections if marked as expired
                 entry.collection.reset();

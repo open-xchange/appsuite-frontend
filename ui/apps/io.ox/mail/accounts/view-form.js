@@ -397,6 +397,7 @@ define.async('io.ox/mail/accounts/view-form', [
                     self = this;
 
                 picker({
+                    async: true,
                     context: 'account',
                     done: function (target) {
                         self.model.set(property, target, { validate: true });

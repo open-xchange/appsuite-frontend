@@ -366,7 +366,11 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         };
 
         this.inspect = function () {
-            console.debug('Extension point', this.id, JSON.stringify(this.all()));
+            console.debug('Extension point', this.id, {
+                disabled: disabled,
+                replacements: replacements,
+                extensions: JSON.stringify(this.all())
+            });
         };
 
         /**

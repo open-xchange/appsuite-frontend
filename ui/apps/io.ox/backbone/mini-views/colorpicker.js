@@ -47,16 +47,20 @@ define('io.ox/backbone/mini-views/colorpicker', [
                 this.options = _.extend({ defaultColors: defaultColors, itemsPerRow: 8 }, options);
                 var rows = [];
                 for (var row = 0; row < this.options.defaultColors.length / this.options.itemsPerRow; row++) {
-                    rows.push($('<tr>'));
+                    rows.push($('<tr role="presentation">'));
                     for (var i = 0; i < this.options.itemsPerRow; i++) {
                         var color = this.options.defaultColors[row * this.options.itemsPerRow + i];
                         if (!color) break;
+                        var item;
                         rows[row].append(
-                            $('<td>').append(
-                                $('<div tabindex="-1" class="colorpicker-item" role="option">').data('value', color.value).attr({ 'data-name': this.name, title: color.name })
-                                    .css('background-color', color.value).toggleClass('fa fa-times', color.value === 'transparent')
+                            $('<td role="listitem">').append(
+                                item = $('<div tabindex="-1" class="colorpicker-item" role="option">')
+                                    .data('value', color.value)
+                                    .attr({ 'data-name': this.name, title: color.name })
+                                    .css('background-color', color.value)
                             )
                         );
+                        if (color.value === 'transparent') item.append($('<i class="fa fa-times" aria-hidden="true">'));
                     }
                 }
                 grid.append(rows);

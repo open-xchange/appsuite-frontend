@@ -24,27 +24,32 @@ exports.command = function (func, args, timeout, pollInterval, errorCallback) {
     timeout = timeout || 5000;
 
     this
-        .timeoutsAsyncScript(timeout + pollInterval)
+        .timeoutsAsyncScript(timeout + 10 * pollInterval)
         .executeAsync(function (funcStr, argStr, timeout, pollInterval, done) {
             var start = new Date().getTime(),
                 pid = setInterval(function () {
-                    var now = new Date().getTime(), func;
+                    var now = new Date().getTime(), func, result;
                     /*eslint no-eval: 0*/
-                    eval('func = ' + funcStr);
-                    if (func.apply(window, JSON.parse(argStr)) === true) {
+                    try {
+                        eval('func = ' + funcStr);
+                        result = func.apply(window, JSON.parse(argStr));
+                    } catch (e) {
+                        return done(e.message);
+                    }
+                    if (result === true) {
                         clearInterval(pid);
                         return done(true);
                     }
                     // wait time is over
                     if (now - start > timeout) {
                         clearInterval(pid);
-                        return done(false);
+                        return done(result);
                     }
                 }, pollInterval);
         }, [func.toString(), JSON.stringify(args), timeout, pollInterval], function (result) {
             if (!result || result.value !== true) {
-                if (errorCallback) errorCallback.call(this);
-                else this.assert.fail('not satisfied', 'statement', 'Timedout while waiting for a statement in a function to be true.');
+                if (errorCallback) errorCallback.call(this, result);
+                else this.assert.fail('not satisfied', 'statement', 'Timedout while waiting for a statement in a function to be true.' + result.value);
             }
         });
 

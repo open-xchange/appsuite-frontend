@@ -76,6 +76,12 @@ define('io.ox/tasks/mobile-toolbar-actions', [
                 mobile: 'hi',
                 label: gt('Move'),
                 ref: 'io.ox/tasks/actions/move'
+            },
+            'export': {
+                prio: 'hi',
+                mobile: 'hi',
+                label: gt('Move'),
+                ref: 'io.ox/tasks/actions/export'
             }
         };
 

@@ -20,14 +20,14 @@ describe('Sessions settings', function () {
             .assert.containsText('.io-ox-session-settings > h1', 'Active clients');
 
         client
-            .waitForElementVisible('.io-ox-session-settings .settings-list-view', 5000);
-        // mobile clients
+            .waitForElementVisible('.io-ox-session-settings .settings-list-item', 5000);
+        // web clients
+        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="0"]');
+        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="1"]');
         client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="2"]');
-        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="3"]');
-        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(2) li[data-id="4"]');
-        // desktop clients
-        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="0"]');
-        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="1"]');
+        // native clients
+        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="3"]');
+        client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(3) li[data-id="4"]');
         // other client
         client.assert.elementPresent('.io-ox-session-settings .session-list-container:nth-child(4) li[data-id="5"]');
 

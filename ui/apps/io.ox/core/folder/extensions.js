@@ -332,7 +332,8 @@ define('io.ox/core/folder/extensions', [
                     icons: tree.options.icons,
                     tree: tree,
                     parent: tree,
-                    isRemote: true
+                    isRemote: true,
+                    empty: false
                 })
                 .render().$el.addClass('remote-folders')
             );
@@ -372,8 +373,6 @@ define('io.ox/core/folder/extensions', [
         },
 
         addStorageAccount: (function () {
-            if (_.device('smartphone')) return $.noop;
-
             var links = $('<li class="links" role="presentation">');
 
             function draw() {
@@ -424,6 +423,8 @@ define('io.ox/core/folder/extensions', [
         },
 
         treeLinks: function () {
+            if (ext.point('io.ox/core/foldertree/mail/treelinks').list().length === 0) return;
+
             var node = $('<ul class="list-unstyled" role="group">');
             ext.point('io.ox/core/foldertree/mail/treelinks').invoke('draw', node);
             this.append($('<li class="links list-unstyled" role="treeitem">').append(node));
@@ -459,7 +460,7 @@ define('io.ox/core/folder/extensions', [
         otherFolders: function (tree) {
             this.append(
                 new TreeNodeView({
-                    //empty: false,
+                    empty: false,
                     filter: function (id, model) {
                         // exclude standard folder
                         if (account.isStandardFolder(model.id)) return false;

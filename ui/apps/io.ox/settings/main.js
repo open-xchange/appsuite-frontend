@@ -196,8 +196,8 @@ define('io.ox/settings/main', [
 
             var def = $.Deferred(),
                 actionPoints = {
-                    'redirect': 'io.ox/autoforward',
-                    'vacation': 'io.ox/vacation'
+                    'redirect': 'auto-forward',
+                    'vacation': 'vacation-notice'
                 };
 
             disabledSettingsPanes = coreSettings.get('disabledSettingsPanes') ? coreSettings.get('disabledSettingsPanes').split(',') : [];
@@ -206,34 +206,29 @@ define('io.ox/settings/main', [
                 return _.indexOf(disabledSettingsPanes, point.id) === -1;
             }
 
-            if (capabilities.has('mailfilter')) {
+            if (capabilities.has('mailfilter_v2')) {
                 mailfilterAPI.getConfig().done(function (config) {
 
                     // disable autoforward or vacationnotice if the needed actions are not available
                     _.each(actionPoints, function (val, key) {
-                        if (_.findIndex(config.actioncommands, function (obj) { return obj.action === key; }) === -1) disabledSettingsPanes.push(val);
+                        if (_.findIndex(config.actioncmds, function (obj) { return obj.id === key; }) === -1) {
+                            ext.point('io.ox/mail/settings/detail/view/buttons').disable(val);
+                        }
                     });
 
-                    appsInitialized.done(function () {
-                        def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
-                    });
-
-                    appsInitialized.fail(def.reject);
                 }).fail(function (response) {
                     yell('error', response.error_desc);
                 }).always(function () {
                     appsInitialized.done(function () {
                         def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
-                    });
+                    }).fail(def.reject);
 
-                    appsInitialized.fail(def.reject);
                 });
             } else {
                 appsInitialized.done(function () {
                     def.resolve(_.filter(ext.point('io.ox/settings/pane').list(), filterAvailableSettings));
-                });
+                }).fail(def.reject);
 
-                appsInitialized.fail(def.reject);
             }
 
             return def;
@@ -248,6 +243,7 @@ define('io.ox/settings/main', [
                 this.append(
 
                     mainGroups.map(function (groupName) {
+                        // if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
                         return new TreeNodeView(_.extend({}, defaults, {
                             model_id: groupName
                         }))
@@ -356,20 +352,6 @@ define('io.ox/settings/main', [
             tree.$container.on('changeMobile', function () {
                 saveSettings('changeGridMobile');
             });
-        }
-
-        function paintTree() {
-            var dfd = $.Deferred();
-            getAllSettingsPanes().done(function (data) {
-                addModelsToPool(data);
-                if (vsplit.left.find('.folder-tree').length === 0) {
-                    vsplit.left.append(tree.render().$el);
-                }
-
-                ignoreChangeEvent = true;
-                dfd.resolve();
-            });
-            return dfd;
         }
 
         function addModelsToPool(groupList) {
@@ -543,6 +525,12 @@ define('io.ox/settings/main', [
         //     subgroup: 'io.ox/settings/pane/sessionlist'
         // });
 
+        ext.point('io.ox/settings/pane').extend({
+            id: 'security',
+            index: 500,
+            subgroup: 'io.ox/settings/pane/security'
+        });
+
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;
@@ -590,16 +578,25 @@ define('io.ox/settings/main', [
         });
 
         app.setSettingsPane = function (options) {
-            if (options && (options.id || options.folder)) {
-                return paintTree().done(function () {
+
+            getAllSettingsPanes().done(function (data) {
+                addModelsToPool(data);
+                if (vsplit.left.find('.folder-tree').length === 0) {
+                    vsplit.left.append(tree.render().$el);
+                }
+                ignoreChangeEvent = true;
+
+                if (options && (options.id || options.folder)) {
+
                     var id = options.folder || ('virtual/settings/' + options.id),
                         baton = new ext.Baton({ data: pool.getModel(id).get('meta'), options: options || {} });
                     tree.trigger('virtual', id, {}, baton);
-                });
-            }
-            if (!_.device('smartphone')) {
-                tree.selection.uncheck().pick(0);
-            }
+                }
+                if (!_.device('smartphone')) {
+                    if (tree.selection.get() === undefined) tree.selection.uncheck().pick(0);
+                }
+            });
+
             return $.when();
         };
 
@@ -607,9 +604,7 @@ define('io.ox/settings/main', [
         commons.addFolderSupport(app, null, 'settings', options.folder || 'virtual/settings/io.ox/core')
             .always(function always() {
                 win.show(function () {
-                    paintTree().done(function () {
-                        app.setSettingsPane(options);
-                    });
+                    app.setSettingsPane(options);
                 });
             })
             .fail(function fail(result) {

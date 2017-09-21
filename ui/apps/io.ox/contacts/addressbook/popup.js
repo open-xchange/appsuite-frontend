@@ -19,16 +19,17 @@ define('io.ox/contacts/addressbook/popup', [
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/contacts/api',
+    'l10n/ja_JP/io.ox/collation',
     'gettext!io.ox/contacts',
     'gettext!io.ox/core',
     'settings!io.ox/contacts',
     'settings!io.ox/mail',
     'less!io.ox/contacts/addressbook/style'
-], function (http, folderAPI, ModalDialog, ListView, ext, util, api, gt, gtCore, settings, mailSettings) {
+], function (http, folderAPI, ModalDialog, ListView, ext, util, api, collation, gt, gtCore, settings, mailSettings) {
 
     'use strict';
 
-    var names = 'last_name first_name display_name'.split(' '),
+    var names = 'yomiLastName yomiFirstName last_name first_name display_name'.split(' '),
         addresses = 'email1 email2 email3'.split(' ');
 
     // limits
@@ -164,7 +165,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,519,555,556,557,592,602,606',
+                columns: '1,20,500,501,502,505,519,555,556,557,592,602,606,610,611',
                 exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch
             }, options);
@@ -208,13 +209,11 @@ define('io.ox/contacts/addressbook/popup', [
             list.forEach(function (item, rank) {
                 // remove quotes from display name (common in collected addresses)
                 item.display_name = getDisplayName(item.display_name);
-                // get sort name
                 var sort_name = [], address;
-                names.forEach(function (name) {
-                    if (item[name]) sort_name.push(item[name]);
-                });
                 // distribution list?
                 if (item.mark_as_distributionlist) {
+                    // get sort name
+                    sort_name = [item.display_name];
                     // get a match for the entire list
                     address = _(item.distribution_list)
                         .map(function (obj) {
@@ -230,6 +229,10 @@ define('io.ox/contacts/addressbook/popup', [
                         result.push((hash[obj.cid] = obj));
                     }
                 } else {
+                    // get sort name
+                    names.forEach(function (name) {
+                        if (item[name]) sort_name.push(item[name]);
+                    });
                     if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
                     addresses.forEach(function (address, i) {
@@ -352,10 +355,15 @@ define('io.ox/contacts/addressbook/popup', [
     //
     // Sorter for use_count and sort_name
     //
-    function sorter(a, b) {
-        // asc with locale compare
-        return a.sort_name.localeCompare(b.sort_name);
-    }
+    var sorter = (function () {
+
+        if (_.device('ja_JP')) return collation.sorter;
+
+        return function sorter(a, b) {
+            // asc with locale compare
+            return a.sort_name.localeCompare(b.sort_name);
+        };
+    }());
 
     function rankSorter(a, b) {
         return a.rank - b.rank;

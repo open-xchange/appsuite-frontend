@@ -294,6 +294,20 @@ define('io.ox/mail/util', [
             return tmp;
         },
 
+        getDefaultStyle: function () {
+            var styles = _.device('smartphone') ? {} : settings.get('defaultFontStyle', {}),
+                obj = { css: {}, string: '', node: $() };
+            // styles
+            if (styles.size && styles.size !== 'browser-default') obj.css['font-size'] = styles.size;
+            if (styles.family && styles.family !== 'browser-default') obj.css['font-family'] = styles.family;
+            if (styles.color && styles.color !== 'transparent') obj.css.color = styles.color;
+            // styles as string
+            obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
+            // node
+            obj.node = $('<p>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
+            return obj;
+        },
+
         // pair: Array of display name and email address
         // options:
         // - showDisplayName: Show display name if available
@@ -326,6 +340,16 @@ define('io.ox/mail/util', [
             }
 
             return display_name || email;
+        },
+
+        getSender: function (item, enabled) {
+            var address = item[1];
+            // disabled
+            if (!enabled) return [null, address];
+            // default or custom
+            var custom = settings.get(['customDisplayNames', address], {}),
+                name = (custom.overwrite ? custom.name : custom.defaultName) || '';
+            return [name, address];
         },
 
         // takes care of special edge-case: no from address
@@ -538,7 +562,7 @@ define('io.ox/mail/util', [
             return function (data) {
                 if (!_.isObject(data)) return false;
                 // nested mails don't have their own folder id. So use the parent mails folder id
-                return accountAPI.isMalicious(data.folder_id || data.parent.folder_id, blacklist);
+                return accountAPI.isMalicious(data.folder_id || data.parent && data.parent.folder_id, blacklist);
             };
         })(),
 

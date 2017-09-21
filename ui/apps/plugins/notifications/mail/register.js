@@ -118,9 +118,9 @@ define('plugins/notifications/mail/register', [
         });
     }
 
-    ext.point('io.ox/mail/settings/detail/pane/view').extend({
-        index: 100,
-        id: 'sounds',
+    ext.point('io.ox/mail/settings/detail/view').extend({
+        index: 250,
+        id: 'sounds_extend',
         render: function () {
             // just publish the array
             this.getSoundOptions = function () {

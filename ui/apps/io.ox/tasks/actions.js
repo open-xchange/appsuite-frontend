@@ -138,6 +138,15 @@ define('io.ox/tasks/actions', [
         }
     });
 
+    new Action('io.ox/tasks/actions/export', {
+        requires: 'some read',
+        multiple: function (list) {
+            require(['io.ox/core/export'], function (exportDialog) {
+                exportDialog.open('tasks', { list: list });
+            });
+        }
+    });
+
     new Action('io.ox/tasks/actions/print', {
         requires: function (e) {
             return e.collection.has('some', 'read') && _.device('!smartphone');
@@ -324,6 +333,15 @@ define('io.ox/tasks/actions', [
         mobile: 'lo',
         label: gt('Change confirmation status'),
         ref: 'io.ox/tasks/actions/confirm'
+    }));
+
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'export',
+        index: 650,
+        prio: 'lo',
+        mobile: 'lo',
+        label: gt('Export'),
+        ref: 'io.ox/tasks/actions/export'
     }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({

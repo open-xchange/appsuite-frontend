@@ -625,9 +625,9 @@ define('io.ox/contacts/edit/view-form', [
                         block = $('<fieldset class="block" role="group">')
                             .attr({ 'data-id': id, 'aria-labelledby': guid })
                             .append(
-                                $('<legend class="group">')
-                                .attr('id', guid)
-                                .text(meta.i18n[id])
+                                $('<legend class="group">').append(
+                                    $('<h2>').attr('id', guid).text(meta.i18n[id])
+                                )
                             );
 
                     if (id === 'attachments') {

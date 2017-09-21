@@ -34,7 +34,7 @@
         outline: 0;
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
         //fill screen, looks weird otherwise
         width: 100%;
         max-height: 100%;
@@ -46,8 +46,8 @@
             display:block;
         }
     }
-
-    @media (min-width: 481px) {
+    // brackets needed or addition will not perform correctly. => Rule is ignored
+    @media (min-width: (@smartphone-breakpoint + 1)) {
         width: 350px;
         right: -350px;
          &.active {
@@ -260,7 +260,7 @@
         }
     }
 
-    @media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+    @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
         #io-ox-notifications-display {
             padding: 8px 14px 14px 14px;
 
@@ -289,11 +289,11 @@
 
     .alert {
         margin-bottom: 0.5em;
-        .box-shadow(1px 1px 3px -1px rgba(0, 0, 0, 0.80));
+        box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 0.80);
     }
 }
 
-@media (max-width: 480px), (max-device-width: 480px) and (orientation: portrait) {
+@media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) and (orientation: portrait) {
     #io-ox-notifications-icon.launcher a.notifications-icon {
         i {
             display: none;
@@ -313,7 +313,7 @@
 // note that we have to target max-width and max-device-width
 // to target all devices which don't support the max-device-width
 // property
-@media(max-width: 480px) and (orientation: portrait), (max-height: 480px) and (orientation: landscape) {
+@media(max-width: @smartphone-breakpoint) and (orientation: portrait), (max-height: @smartphone-breakpoint) and (orientation: landscape) {
     #io-ox-notifications-popups {
         top: -80px;
         left: 10px;

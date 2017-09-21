@@ -18,8 +18,7 @@ describe('Contacts', function () {
 
             client
                 .login('app=io.ox/contacts')
-                .waitForElementVisible('*[data-app-name="io.ox/contacts"]', 20000)
-                .assert.containsText('*[data-app-name="io.ox/contacts"]', 'Address Book');
+                .waitForElementVisible('*[data-app-name="io.ox/contacts"]', 20000);
 
             client
                 .selectFolder({ title: 'Contacts' })
@@ -96,42 +95,42 @@ describe('Contacts', function () {
                 // personal information
                 .assert.containsText('.io-ox-contacts-window .rightside .contact-header .first_name', 'first_name')
                 .assert.containsText('.io-ox-contacts-window .rightside .contact-header .last_name', 'last_name')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="personal"] > dl > dd:nth-of-type(1)', 'title')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="personal"] > dl > dd:nth-of-type(2)', 'second_name')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="personal"] > dl > dd:nth-of-type(3)', 'suffix')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="personal"] > dl > dd:nth-of-type(4)', '5/4/1957')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="personal"] > dl > dd:nth-of-type(5)', 'url')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="personal"] > dl > dd:nth-of-type(1)', 'title')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="personal"] > dl > dd:nth-of-type(2)', 'second_name')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="personal"] > dl > dd:nth-of-type(3)', 'suffix')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="personal"] > dl > dd:nth-of-type(4)', '5/4/1957')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="personal"] > dl > dd:nth-of-type(5)', 'url')
                 // job description
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="job"] > dl > dd:nth-of-type(1)', 'position')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="job"] > dl > dd:nth-of-type(1)', 'position')
                 .assert.containsText('.io-ox-contacts-window .rightside .contact-header .position', 'position')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="job"] > dl > dd:nth-of-type(2)', 'department')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="job"] > dl > dd:nth-of-type(3)', 'profession')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="job"] > dl > dd:nth-of-type(2)', 'department')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="job"] > dl > dd:nth-of-type(3)', 'profession')
                 .assert.containsText('.io-ox-contacts-window .rightside .contact-header .profession', 'profession')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="job"] > dl > dd:nth-of-type(4)', 'company')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="job"] > dl > dd:nth-of-type(4)', 'company')
                 .assert.containsText('.io-ox-contacts-window .rightside .contact-header .company', 'company')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="job"] > dl > dd:nth-of-type(5)', '101')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="job"] > dl > dd:nth-of-type(5)', '101')
                 // mail and messaging
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="messaging"] > dl > dd:nth-of-type(1)', 'email1@test')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="messaging"] > dl > dd:nth-of-type(2)', 'email2@test')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="messaging"] > dl > dd:nth-of-type(3)', 'email3@test')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="messaging"] > dl > dd:nth-of-type(4)', 'instant_messenger1')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="messaging"] > dl > dd:nth-of-type(5)', 'instant_messenger2')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="messaging"] > dl > dd:nth-of-type(1)', 'email1@test')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="messaging"] > dl > dd:nth-of-type(2)', 'email2@test')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="messaging"] > dl > dd:nth-of-type(3)', 'email3@test')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="messaging"] > dl > dd:nth-of-type(4)', 'instant_messenger1')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="messaging"] > dl > dd:nth-of-type(5)', 'instant_messenger2')
                 // phone numbers
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(1)', 'cellular_telephone1')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(2)', 'cellular_telephone2')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(3)', 'telephone_business1')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(4)', 'telephone_business2')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(5)', 'telephone_home1')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(6)', 'telephone_home2')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(7)', 'telephone_other')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(8)', 'fax_business')
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="phone"] > dl > dd:nth-of-type(9)', 'fax_home')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(1)', 'cellular_telephone1')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(2)', 'cellular_telephone2')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(3)', 'telephone_business1')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(4)', 'telephone_business2')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(5)', 'telephone_home1')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(6)', 'telephone_home2')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(7)', 'telephone_other')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(8)', 'fax_business')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="phone"] > dl > dd:nth-of-type(9)', 'fax_home')
                 // business address
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="business-address"] address', 'Business Street\nBusiness City\nBusiness State\n12345\nBusiness County')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="business-address"] address', 'Business Street\nBusiness City\nBusiness State\n12345\nBusiness County')
                 // home address
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="home-address"] address', 'Home Street\nHome City\nHome State\n12345\nHome County')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="home-address"] address', 'Home Street\nHome City\nHome State\n12345\nHome County')
                 // other address
-                .assert.containsText('.io-ox-contacts-window .rightside fieldset[data-block="other-address"] address', 'Other Street\nOther City\nOther State\n12345\nOther County')
+                .assert.containsText('.io-ox-contacts-window .rightside section[data-block="other-address"] address', 'Other Street\nOther City\nOther State\n12345\nOther County')
                 // comment
                 .assert.containsText('.io-ox-contacts-window .rightside .comment', 'a comment in the comment field');
 

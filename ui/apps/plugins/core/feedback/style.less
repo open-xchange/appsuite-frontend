@@ -12,7 +12,7 @@
  */
 
 
-@media all and (max-width: 480px) {
+@media all and (max-width: @smartphone-breakpoint) {
     .modal.flex[data-point="plugins/core/feedback"] {
         .modal-dialog {
             width: auto;
@@ -41,7 +41,7 @@
 .nps-rating {
 
     @score-color: #ccc;
-    @score-color-checked: #3c73aa;
+    @score-color-checked: @brand-primary;
 
     justify-content: space-between;
 

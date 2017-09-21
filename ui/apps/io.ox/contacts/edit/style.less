@@ -45,6 +45,12 @@
         margin-bottom:28px;
         .attachment-list { margin-left: 15px; }
         legend.group { color: @brand-primary }
+        legend.group h2 {
+            font-weight: bold;
+            font-size: 13px;
+            margin-top: 3px;
+            margin-bottom: 3px;
+        }
     }
 
     textarea { height: 221px; }
@@ -62,7 +68,7 @@
 
         input {
             border-color: #B94A48;
-            &:focus { .box-shadow(0 0 6px #D59392); }
+            &:focus { box-shadow: 0 0 6px #D59392; }
         }
 
         .inline-error {

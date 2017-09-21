@@ -15,17 +15,32 @@
 /**
  * :MIXINS
  */
-.mixin-unstyled-list {
+.mixin-unstyled-list() {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.mixin-expanded {
+.mixin-expanded() {
     .content { display: block; }
     .config { display: flex; }
     .fa-chevron-right { display: none; }
     .fa-chevron-down { display: inline-block; }
+}
+
+.mixin-premium() {
+    position: absolute;
+    font-weight: 700;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 4px 16px;
+    background: @brand-primary;
+    border-radius: 12px;
+    color: white;
+    opacity: .8;
+    width: 90%;
+    .fa { padding-right: 4px; }
 }
 
 /**
@@ -75,6 +90,21 @@
     // mobile
     &.mobile.modal.flex {
 
+
+        .premium-container {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            background-color: rgba(0,0,0,.5);
+            margin: -8px 8px 8px -8px;
+            border: 1px lightgray dashed;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .premium {
+            .mixin-premium();
+        }
+
         @space: 16px;
 
         .modal-dialog {
@@ -108,6 +138,7 @@
 
                 .action {
                     padding-bottom: 16px;
+                    position: relative;
 
                     .title { font-size: 14px; }
 
@@ -141,19 +172,12 @@
     // desktop
     .wizard-step {
 
-        .box-shadow (@string) {
-            -webkit-box-shadow: @string;
-            -moz-box-shadow:    @string;
-            box-shadow:         @string;
-        }
-
         .transition(@duration:0.2s, @ease:ease-out) {
             -webkit-transition: all @duration @ease;
             -moz-transition: all @duration @ease;
             -o-transition: all @duration @ease;
             transition: all @duration @ease;
         }
-
 
         /**
          * SIMPLE MODE
@@ -189,7 +213,7 @@
             }
 
             .options {
-                .mixin-unstyled-list;
+                .mixin-unstyled-list();
                 display: flex;
                 white-space: nowrap;
                 // auto expand to full height
@@ -212,20 +236,7 @@
                     }
 
                     .premium {
-                        position: absolute;
-                        font-weight: 700;
-                        left: 50%;
-                        top: 50%;
-                        transform: translate(-50%, -50%);
-                        padding: 4px 16px;
-                        background: #3c73aa;
-                        border-radius: 12px;
-                        color: white;
-                        opacity: .8;
-                        width: 90%;
-                        .fa {
-                            padding-right: 4px;
-                        }
+                        .mixin-premium();
                     }
 
                     .link {
@@ -255,14 +266,14 @@
                             display: inline-block;
                             background-color: #fff;
                             border-radius: 5px;
-                            .box-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+                            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
                             .transition(0.6s cubic-bezier(0.165, 0.84, 0.44, 1));
                             &:hover, &:focus {
                                 z-index:1000;
-                                .box-shadow(rgba(0, 0, 0, 0.3) 0 8px 8px 0)
+                                box-shadow: rgba(0, 0, 0, 0.3) 0 8px 8px 0;
 
                                 &.disabled {
-                                   .box-shadow(none);
+                                   box-shadow: none;
                                 }
                             }
                         }
@@ -304,7 +315,7 @@
                 }
             }
 
-            .descriptions { .mixin-unstyled-list; }
+            .descriptions { .mixin-unstyled-list(); }
 
             .teaser, .descriptions>.description {
                 width: 100%;
@@ -408,13 +419,13 @@
                     }
 
                     &.expanded {
-                        .mixin-expanded;
+                        .mixin-expanded();
                     }
                 }
 
                 // when only one action is visible
                 .single-action .action {
-                    .mixin-expanded;
+                    .mixin-expanded();
                     .section-title {
                         cursor: default;
                         .fa-chevron-right, .fa-chevron-down {

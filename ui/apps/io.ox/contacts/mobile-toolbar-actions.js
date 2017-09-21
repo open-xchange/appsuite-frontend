@@ -49,7 +49,7 @@ define('io.ox/contacts/mobile-toolbar-actions', [
             'export': {
                 prio: 'lo',
                 mobile: 'lo',
-                label: gt('Export as vCard'),
+                label: gt('Export'),
                 ref: 'io.ox/contacts/actions/export',
                 drawDisabled: true
             },

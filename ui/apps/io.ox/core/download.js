@@ -70,6 +70,22 @@ define('io.ox/core/download', ['io.ox/files/api', 'io.ox/mail/api', 'io.ox/core/
             });
         },
 
+        // export list of ids or a complete folder
+        exported: function (options) {
+            if (!/^(VCARD|ICAL|CSV)$/i.test(options.format)) return;
+            var opt = _.extend({ include: true }, options),
+                isSelective = !opt.folder && opt.list;
+            form({
+                url: ox.apiRoot + '/export?' +
+                    'action=' + opt.format.toUpperCase() +
+                    (isSelective ? '' : '&folder=' + opt.folder) +
+                    '&export_dlists=' + (opt.include ? 'true' : 'false') +
+                    '&content_disposition=attachment' +
+                    '&session=' + ox.session,
+                body: (isSelective ? JSON.stringify(_.map(opt.list, map)) : '')
+            });
+        },
+
         // download multiple files as zip file
         files: function (list) {
             form({

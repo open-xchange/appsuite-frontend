@@ -131,16 +131,22 @@ define('io.ox/mail/compose/actions/send', [
         {
             id: 'wait-for-pending-images',
             index: 900,
+            // important: replaces mail.attachments[0].content
             perform: extensions.waitForPendingImages
         },
         {
             id: 'disable-manual-close',
-            index: 900,
+            index: 950,
             perform: function (baton) {
                 var app = ox.ui.apps.get(baton.app.id);
                 baton.close = $(app.get('topbarNode').find('.closelink')).hide();
                 baton.launcherClose = app.get('launcherNode').find('.closelink').hide();
             }
+        },
+        {
+            id: 'simple-linebreaks',
+            index: 990,
+            perform: extensions.applySimpleLinebreaks
         },
         {
             id: 'send',

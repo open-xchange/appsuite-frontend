@@ -34,9 +34,11 @@ define('io.ox/settings/sessions/settings/pane', [
     });
 
     var operatingSystems = {
+        //#. Context: Session Management. Active session on platform/os.
         windows: gt('Windows'),
-        windows8: gt('windows'),
-        macos: gt('MacOS'),
+        //#. Context: Session Management. Active session platform/os.
+        windows8: gt('Windows'),
+        macos: gt('macOS'),
         android: gt('Android'),
         ios: gt('iOS')
     };
@@ -114,46 +116,46 @@ define('io.ox/settings/sessions/settings/pane', [
                 this.set('displayName',
                     //#. %1$s the productname of the mailapp
                     //#. %2$s the operating system
-                    //#. Example: Mailapp on iOS
-                    gt('%1$s on %2$s', settings.get('productname/mailapp'), os)
+                    //#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
+                    gt('%1$s for %2$s', settings.get('productname/mailapp'), os)
                 );
             } else if (client === 'OpenXchange.HTTPClient.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
-                    //#. Example: OXDrive on Windows
-                    gt('%1$s on Windows', settings.get('productname/oxdrive'))
+                    //#. Example: OX Drive for Windows
+                    gt('%1$s for Windows', settings.get('productname/oxdrive'))
                 );
             } else if (client === 'OpenXchange.iosClient.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
-                    //#. Example: OXDrive on iOS
-                    gt('%1$s on iOS', settings.get('productname/oxdrive'))
+                    //#. Example: OX Drive for iOS
+                    gt('%1$s for iOS', settings.get('productname/oxdrive'))
                 );
             } else if (client === 'OpenXchange.Android.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
-                    //#. Example: OXDrive on Android
-                    gt('%1$s on Android', settings.get('productname/oxdrive'))
+                    //#. Example: OX Drive for Android
+                    gt('%1$s for Android', settings.get('productname/oxdrive'))
                 );
             } else if (client === 'OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
                     //#. %2$s the operating system
-                    //#. Example: OXDrive on Windows
-                    gt('%1$s on %2$s', settings.get('productname/oxdrive'), os)
+                    //#. Example: OX Drive for Windows
+                    gt('%1$s for %2$s', settings.get('productname/oxdrive'), os)
                 );
             } else if (client === 'OSX.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
-                    //#. Example: OXDrive on MacOS
+                    //#. Example: OX Drive for macOS
                     gt('%1$s for MacOS', settings.get('productname/oxdrive'))
                 );
             } else if (client === 'USM-EAS') {
-                this.set('displayName', gt('Exchange Active Sync'));
+                this.set({ 'displayName': gt('Exchange Active Sync'), other: true });
             } else if (client === 'USM-JSON') {
-                this.set('displayName', settings.get('productname/oxtender'));
+                this.set({ 'displayName': settings.get('productname/oxtender'), other: true });
             } else {
-                this.set({ displayName: gt('Unknown client'), other: true });
+                this.set({ displayName: this.get('client') || gt('Unkown client'), other: true });
             }
         }
     });
@@ -164,6 +166,8 @@ define('io.ox/settings/sessions/settings/pane', [
 
         comparator: function (model) {
             // sort ascending
+            // current session should always be topmost
+            if (model.get('sessionId') === ox.session) return -10000000000000;
             return -model.get('loginTime');
         },
 
@@ -202,8 +206,7 @@ define('io.ox/settings/sessions/settings/pane', [
                 ) : $('<div class="list-control-placeholder">'),
                 $('<div class="addition-information">').append(
                     $('<span>').append(
-                        this.model.get('location'),
-                        ' &#xb7; ',
+                        this.model.get('location') ? (this.model.get('location') + ' &#xb7; ') : '',
                         moment(this.model.get('loginTime')).fromNow()
                     ),
                     this.model.get('sessionId') === ox.session ? $('<div>').append($('<span class="label label-success">').text(gt('Current session'))) : ''
@@ -345,7 +348,7 @@ define('io.ox/settings/sessions/settings/pane', [
         render: function (baton) {
             this.$el.append(
                 new SessionView({
-                    title: gt('Native clients'),
+                    title: gt('Mobile and Desktop Apps'),
                     collection: baton.view.collection,
                     filter: function (model) {
                         return model.get('client') !== 'open-xchange-appsuite' && !model.get('other');

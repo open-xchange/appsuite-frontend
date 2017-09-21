@@ -62,7 +62,7 @@ module.exports = function (grunt) {
                     {
                         // static lib
                         expand: true,
-                        src: ['jquery-ui.min.js', 'bootstrap-combobox.js'],
+                        src: ['jquery-ui.min.js'],
                         cwd: 'lib/',
                         dest: 'build/static/3rd.party/'
                     },
@@ -79,7 +79,8 @@ module.exports = function (grunt) {
                             'marked/lib/marked.js',
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.jquery.js',
-                            'typeahead.js/dist/typeahead.jquery.js'
+                            'typeahead.js/dist/typeahead.jquery.js',
+                            'dompurify/dist/purify.min.js'
                         ],
                         cwd: 'node_modules',
                         dest: 'build/static/3rd.party/'

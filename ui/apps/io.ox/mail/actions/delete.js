@@ -32,22 +32,25 @@ define('io.ox/mail/actions/delete', [
     }
 
     api.on('delete:fail:quota', function (e, error, list) {
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog()
-                .header(
-                    $('<h4>').text(gt('Mail quota exceeded'))
-                )
-                .append(
+        require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
+            new ModalDialogView({
+                title: gt('Mail quota exceeded'),
+                focus: '.btn-primary',
+                previousFocus: $('[data-ref="io.ox/mail/listview"]')
+            })
+            .on('delete', function () {
+                // true -> force
+                api.remove(list, list, true);
+            })
+            .addCancelButton()
+            .addButton({ action: 'delete', label: gt('Delete') })
+            .build(function () {
+                this.$body.append(
                     $('<div>').text(gt('Emails cannot be put into trash folder while your mail quota is exceeded.')),
                     $('<div>').text(getQuestion(list))
-                )
-                .addPrimaryButton('delete', gt('Delete'), 'delete')
-                .addButton('cancel', gt('Cancel'), 'cancel')
-                .on('delete', function () {
-                    // true -> force
-                    api.remove(list, list, true);
-                })
-                .show();
+                );
+            })
+            .open();
         });
     });
 
@@ -81,16 +84,19 @@ define('io.ox/mail/actions/delete', [
             // }
 
             if (check) {
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .append(
-                            $('<h4>').text(getQuestion(list))
-                        )
-                        .addPrimaryButton('delete', gt('Delete'), 'delete')
-                        .addButton('cancel', gt('Cancel'), 'cancel')
-                        .on('delete', function () {
-                            api.remove(list, all).fail(notifications.yell);
-                        }).show();
+                require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
+                    new ModalDialogView({
+                        title: getQuestion(list),
+                        focus: '.btn-primary',
+                        previousFocus: $('[data-ref="io.ox/mail/listview"]')
+                    })
+                    .on('delete', function () {
+                        api.remove(list, all).fail(notifications.yell);
+                    })
+                    .addCancelButton()
+                    .addButton({ action: 'delete', label: gt('Delete') })
+                    .hideBody()
+                    .open();
                 });
             } else {
                 api.remove(list, all).fail(function (e) {

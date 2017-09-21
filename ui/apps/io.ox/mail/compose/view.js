@@ -95,6 +95,11 @@ define('io.ox/mail/compose/view', [
             draw: extensions.sender
         },
         {
+            id: 'sender-realname',
+            index: INDEX += 100,
+            draw: extensions.senderRealName
+        },
+        {
             id: 'to',
             index: INDEX += 100,
             draw: extensions.tokenfield('to')
@@ -285,6 +290,7 @@ define('io.ox/mail/compose/view', [
         draw: function (baton) {
             var node = $('<div data-extension-id="attachmentPreview" class="col-xs-12">');
             extensions.attachmentPreviewList.call(node, baton);
+            extensions.attachmentSharing.call(node, baton);
             node.appendTo(this);
         }
     });
@@ -292,7 +298,9 @@ define('io.ox/mail/compose/view', [
     ext.point(POINT + '/autosave/error').extend({
         id: 'default',
         handler: function (baton) {
-            notifications.yell('error', baton.error);
+            if (!baton.isLogout && !ox.handleLogoutError) {
+                notifications.yell('error', baton.error);
+            }
             baton.returnValue.reject(baton.error);
         }
     });
@@ -412,7 +420,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft().then(function (result) {
+                    return self.autoSaveDraft({ isLogout: true }).then(function (result) {
                         var base = _(result.split(mailAPI.separator)),
                             id = base.last(),
                             folder = base.without(id).join(mailAPI.separator),
@@ -642,8 +650,8 @@ define('io.ox/mail/compose/view', [
             });
         },
 
-        autoSaveDraft: function () {
-
+        autoSaveDraft: function (options) {
+            options = options || {};
             var def = new $.Deferred(),
                 model = this.model,
                 self = this,
@@ -654,6 +662,7 @@ define('io.ox/mail/compose/view', [
                     var baton = new ext.Baton(result);
                     baton.model = model;
                     baton.view = self;
+                    baton.isLogout = options.isLogout;
                     baton.returnValue = def;
                     ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
                     def = baton.returnValue;
@@ -968,36 +977,8 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
-            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
-            if (!_.device('smartphone')) {
-                var css = {
-                        'font-size': settings.get('defaultFontStyle/size', 'browser-default'),
-                        'font-family': settings.get('defaultFontStyle/family', 'browser-default'),
-                        'color': settings.get('defaultFontStyle/color', 'transparent')
-                    },
-                    styleNode;
-
-                // using '' as a value removes the attribute and thus any previous styling
-                if (css['font-size'] === 'browser-default') delete css['font-size'];
-                if (css['font-family'] === 'browser-default') delete css['font-family'];
-                if (css.color === 'transparent') delete css.color;
-
-                if (_.isEmpty(css)) {
-                    // no styles there so just a br
-                    styleNode = $('<br>');
-                } else {
-                    // br must be appended here. Or tinymce just deletes the span.
-                    styleNode = $('<span>').append($('<br>'));
-                    styleNode.css(css).attr('data-mce-style', css);
-                }
-
-                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
-            } else {
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            }
-
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },
 

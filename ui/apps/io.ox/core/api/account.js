@@ -287,6 +287,7 @@ define('io.ox/core/api/account', [
     };
 
     api.isMalicious = function (id, blacklist) {
+        if (!id) return;
         // includes simple subfolder checks
         if (api.is('spam', id)) return true;
         if (api.is('confirmed_spam', id)) return true;
@@ -378,15 +379,17 @@ define('io.ox/core/api/account', [
     api.getValidAddress = function (data) {
         return api.getAllSenderAddresses().then(function (a) {
             if (_.isEmpty(a)) return;
-            // Find correct display name
-            if (!_.isEmpty(data.from)) data.from = a.filter(function (from) { return from[1] === data.from[0][1]; });
-            // Set default sender if data from is empty
-            if (_.isEmpty(data.from)) {
-                api.getPrimaryAddress().then(function (defaultAddress) {
-                    data.from = [defaultAddress];
+            // set correct display name
+            if (!_.isEmpty(data.from)) {
+                data.from = a.filter(function (from) {
+                    return from[1] === data.from[0][1].toLowerCase();
                 });
             }
-            return data;
+            if (!_.isEmpty(data.from)) return data;
+            // use primary account as fallback
+            return api.getPrimaryAddress().then(function (defaultAddress) {
+                return _.extend(data, { from: [defaultAddress] });
+            });
         });
     };
 
@@ -567,7 +570,7 @@ define('io.ox/core/api/account', [
                 // add inbox first
                 typeHash['default' + account.id + '/INBOX'] = 'inbox';
                 // remember types (explicit order!)
-                _('sent drafts trash spam archive confirmed_spam'.split(' ')).each(function (type) {
+                _('drafts sent spam trash archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
                     var short_name = account[type], full_name = account[type + '_fullname'];
                     typeHash[full_name || short_name] = type;

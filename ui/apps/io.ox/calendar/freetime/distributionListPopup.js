@@ -31,9 +31,10 @@ define('io.ox/calendar/freetime/distributionListPopup', [
                 title: gt('Create distribution list'),
                 async: true
             }),
-            input = $('<input type="text" class="form-control">');
+            guid = _.uniqueId('form-control-label-'),
+            input = $('<input type="text" class="form-control">').attr('id', guid);
 
-        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').text(gt('Name')).append(input),
+        popup.$body.append($('<label class="control-label scheduling-distribution-name-label">').attr('for', guid).text(gt('Name')).append(input),
             $('<div class="help-block">').text(gt('Please note that distribution lists cannot contain ressources.')));
         popup.addCancelButton();
         popup.addButton({ label: options.label || gt('Create distibution list'), action: 'save' });

@@ -287,7 +287,7 @@ define('io.ox/mail/toolbar', [
             .option('alwaysShowSize', true, gt('Message size'))
             .divider();
 
-            if (capabilities.has('mailfilter')) {
+            if (capabilities.has('mailfilter_v2')) {
                 dropdown.link('vacation-notice', gt('Vacation notice'), onOpenVacationNotice);
             }
 

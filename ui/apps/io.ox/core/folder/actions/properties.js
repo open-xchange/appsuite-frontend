@@ -27,11 +27,13 @@ define('io.ox/core/folder/actions/properties', [
     }
 
     function group(label, value) {
+        var guid = _.uniqueId('form-control-label-');
         return $('<div class="form-group">').append(
             // label
-            $('<label class="control-label">').text(label),
+            $('<label class="control-label">').attr('for', guid).text(label),
             // value
             $('<input type="text" class="form-control">')
+                .attr('id', guid)
                 .prop('readonly', true)
                 .val(value)
         );

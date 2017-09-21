@@ -154,6 +154,7 @@ define('io.ox/calendar/edit/extensions', [
             var self = this;
 
             picker({
+                async: true,
                 button: gt('Select'),
                 filter: function (id, model) {
                     return model.id !== 'virtual/all-my-appointments';
@@ -213,7 +214,7 @@ define('io.ox/calendar/edit/extensions', [
             this.$el.append(
                 $('<label class="control-label col-xs-12">').attr('for', guid).append(
                     $.txt(gt('Subject')),
-                    input = new mini.InputView({ id: guid, name: 'title', model: self.model }).render().$el,
+                    input = new mini.InputView({ id: guid, name: 'title', model: self.model, mandatory: true }).render().$el,
                     new mini.ErrorView({ name: 'title', model: self.model }).render().$el
                 )
             );
@@ -262,7 +263,10 @@ define('io.ox/calendar/edit/extensions', [
                     label: gt('Starts on'),
                     timezoneButton: true,
                     timezoneAttribute: 'timezone',
-                    closeOnScroll: true
+                    closeOnScroll: true,
+                    a11y: {
+                        timeLabel: gt('Start time')
+                    }
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)
@@ -296,7 +300,10 @@ define('io.ox/calendar/edit/extensions', [
                     label: gt('Ends on'),
                     timezoneButton: true,
                     timezoneAttribute: 'endTimezone',
-                    closeOnScroll: true
+                    closeOnScroll: true,
+                    a11y: {
+                        timeLabel: gt('End time')
+                    }
                 }).listenTo(baton.model, 'change:full_time', function (model, fulltime) {
                     this.toggleTimeInput(!fulltime);
                 }).on('click:timezone', openTimezoneDialog, baton)

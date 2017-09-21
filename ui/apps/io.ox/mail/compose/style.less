@@ -29,25 +29,36 @@
 
         margin-bottom: 10px;
 
-        &.sender .dropdown { padding-top: 8px; }
+        // first
+        &.sender {
+            .maillabel, .dropdown { padding-top: 10px; }
+        }
+
+        &.sender-realname {
+            display: none;
+            margin-bottom: 16px;
+            color: #767676;
+        }
 
         div.dropdown {
             display: inline-block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
 
             &.signatures { margin-right: 15px; }
         }
 
-        .shareAttachments div.dropdown {
-            margin-bottom: 0px;
+        &.subject {
+            margin-bottom: 7px;
+            .maillabel { padding-top: 5px; }
+            input {
+                padding-top: 3px;
+                font-weight: bold;
+            }
+
         }
 
-        &.subject input { font-weight: bold; }
-
         &.attachments {
-
             .inplace-dropzone { margin: 0 15px; }
-
             .io-ox-core-tk-attachment-list { clear: both; }
         }
 
@@ -65,8 +76,14 @@
             font-weight: bold;
             line-height: 20px;
             display: inline-block;
-            padding-top: 6px;
+            padding-top: 5px;
+            margin-bottom: 4px;
         }
+    }
+
+    & > .mail-compose-fields.no-realname {
+        .sender { margin-bottom: 6px };
+        .sender-realname { display: block };
     }
 
     .sender {
@@ -88,7 +105,7 @@
     .recipient-actions {
 
         position: absolute;
-        top: 7px;
+        top: 5px;
         right: 16px;
 
         a {
@@ -108,7 +125,7 @@
     .open-addressbook-popup {
         font-size: 18px;
         position: absolute;
-        top: 2px;
+        top: 1px;
         right: 24px;
         padding: 2px;
         color: @hc-gray;
@@ -153,8 +170,12 @@
         overflow-x: auto;
 
         &.mce-edit-focus {
-            outline: none;
+            outline: 0;
             .form-control-focus();
+        }
+
+        &.simple-linebreaks > p {
+            margin: 0;
         }
 
         &.simple-mail {
@@ -254,80 +275,62 @@
         }
     }
 
-    .shareAttachments {
-
-        > ul {
-            margin-left: 16px;
+    .attachments {
+        header {
+            display: flex;
+            align-items: center;
+            min-height: 30px;
         }
+        .toggle-details { white-space: nowrap; }
+        // pull right
+        .toggle-mode { margin-left: auto; }
 
-        > div {
+    }
+
+    .attachments .share-attachments {
+
+        display: flex;
+        align-items: center;
+        padding-left: 16px;
+
+        .toggle,
+        .expire.dropdown,
+        .notification.dropdown,
+        .password {
             margin-right: 16px;
+            padding-bottom: 0;
+            margin-bottom: 0;
         }
 
-        .input-group {
+        .password.input-group {
             width: 25%;
             display: inline-table;
-            top: 10px;
         }
 
-        .io-ox-inline-links {
-            display: inline;
-            font-family: @normal-font-family;
-            font-size: 13px;
+        &.active {
 
-            li {
-                padding-top: 3px;
-            }
-
-            a {
-                text-decoration: underline;
-            }
-
-            a[data-action="shareAttachmentseDisable"] {
+            .toggle {
                 text-decoration: none;
                 font-weight: bold;
-            }
-
-            .fa-check, a[data-action="shareAttachmentseDisable"] {
                 color: #FF6E00;
             }
 
-            .fa-check {
-                margin-right: 5px;
+            .fa-fw:before {
+                // fa-check
+                content: '\f00c';
+                color: #FF6E00;
             }
         }
 
-        .dropdownlink, .checkbox {
-            display: inline;
-            position: relative;
 
-            a:hover {
-                text-decoration: none;
+        &:not(.active) {
+            .expire.dropdown,
+            .notification.dropdown,
+            .password.input-group {
+                display: none
             }
-
-            a i.fa-caret-down {
-                color: inherit;
-                display: inline-block;
-                margin-left: 5px;
-            }
-
-        }
-
-    }
-
-    .show-share-attachments {
-
-        margin-top: -12px;
-
-        .toggle-mode {
-            padding-top: 12px;
         }
     }
-
-    .mail-attachment-list header .toggle-details {
-        padding-top: 3px;
-    }
-
 }
 
 .smartphone {
@@ -340,7 +343,7 @@
             padding:8px 16px;
             border:0;
 
-            &:focus { outline: none; }
+            &:focus { outline: 0; }
         }
 
         & > .mail-compose-fields > .row {
@@ -461,7 +464,7 @@
         }
         textarea.editable, .mce-content-body.editable {
             border: none;
-            outline: none;
+            outline: 0;
 
             &.mce-edit-focus:focus { box-shadow: none; }
         }
