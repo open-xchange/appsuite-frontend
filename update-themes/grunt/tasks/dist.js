@@ -43,7 +43,10 @@ module.exports = function (grunt) {
                         'node_modules/grunt-contrib-clean/**/*',
                         'node_modules/assemble-less/**/*',
                         'node_modules/underscore/**/*'],
-                    dest: 'dist/appsuite/share/update-themes/'
+                    dest: 'dist/appsuite/share/update-themes/',
+                    filter: function (f) {
+                        return !/\.bak$/.test(f);
+		    }
                 },
                 {
                     expand: true,
