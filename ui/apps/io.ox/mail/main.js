@@ -1410,8 +1410,8 @@ define('io.ox/mail/main', [
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
-            app.listView.on('selection:delete', function (list) {
-                var baton = ext.Baton({ data: list });
+            app.listView.on('selection:delete', function (list, shiftDelete) {
+                var baton = ext.Baton({ data: list, options: { shiftDelete: shiftDelete } });
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread

@@ -49,9 +49,9 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/delete', {
         requires: 'toplevel some delete',
-        multiple: function (list) {
+        multiple: function (list, baton) {
             require(['io.ox/mail/actions/delete'], function (action) {
-                action.multiple(list);
+                action.multiple(list, baton);
             });
         }
     });

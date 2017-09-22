@@ -56,14 +56,15 @@ define('io.ox/mail/actions/delete', [
 
     return {
 
-        multiple: function (list) {
+        multiple: function (list, baton) {
 
             var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
-            var check = settings.get('removeDeletedPermanently') || _(list).any(function (o) {
-                return account.is('trash', o.folder_id);
-            });
+            var shiftDelete = baton && baton.options.shiftDelete,
+                showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
+                    return account.is('trash', o.folder_id);
+                }));
 
             // this probably needs to be done server-side
             // far too much delay when rushing through folders
@@ -83,7 +84,7 @@ define('io.ox/mail/actions/delete', [
             //     }
             // }
 
-            if (check) {
+            if (showPrompt) {
                 require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
                     new ModalDialogView({
                         title: getQuestion(list),
@@ -99,7 +100,7 @@ define('io.ox/mail/actions/delete', [
                     .open();
                 });
             } else {
-                api.remove(list, all).fail(function (e) {
+                api.remove(list, all, shiftDelete).fail(function (e) {
                     // mail quota exceeded? see above
                     if (e.code === 'MSG-0039') return;
                     notifications.yell(e);
