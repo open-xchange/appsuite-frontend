@@ -467,7 +467,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     // ignore combinations like ctrl+shift+del (see bug 55469)
                     if (e.ctrlKey || e.metaKey || e.altKey) return;
                     e.preventDefault();
-                    this.view.trigger('selection:delete', this.get(), e.shiftKey && settings.get('features/shiftDelete'));
+                    this.view.trigger('selection:delete', this.get(), e.shiftKey);
                     break;
 
                 // home/end cursor left/right up/down

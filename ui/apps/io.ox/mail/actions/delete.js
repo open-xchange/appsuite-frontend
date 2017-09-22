@@ -61,7 +61,7 @@ define('io.ox/mail/actions/delete', [
             var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
-            var shiftDelete = baton && baton.options.shiftDelete,
+            var shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
                 showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
                     return account.is('trash', o.folder_id);
                 }));
