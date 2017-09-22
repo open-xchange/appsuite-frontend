@@ -65,24 +65,16 @@ define('io.ox/mail/settings/compose/settings/pane', [
                         ];
                     },
                     getFontNameOptions: function () {
-                        return [
-                            { label: gt('Use browser default'), value: 'browser-default' },
-                            { label: 'Andale Mono', value: '"andale mono", monospace' },
-                            { label: 'Arial ', value: 'arial, helvetica, sans-serif' },
-                            { label: 'Arial Black', value: '"arial black", sans-serif' },
-                            { label: 'Book Antiqua', value: '"book antiqua", palatino, serif' },
-                            { label: 'Comic Sans MS', value: '"comic sans ms", sans-serif' },
-                            { label: 'Courier New', value: '"courier new", courier, monospace' },
-                            { label: 'Georgia', value: 'georgia, palatino, serif' },
-                            { label: 'Helvetica', value: 'helvetica, arial, sans-serif' },
-                            { label: 'Impact', value: 'impact, sans-serif' },
-                            { label: 'Symbol', value: 'symbol' },
-                            { label: 'Tahoma', value: 'tahoma, arial, helvetica, sans-serif' },
-                            { label: 'Terminal', value: 'terminal, monaco, monospace' },
-                            { label: 'Times New Roman', value: '"times new roman", times, serif' },
-                            { label: 'Trebuchet MS', value: '"trebuchet ms", geneva, sans-serif' },
-                            { label: 'Verdana', value: 'verdana, geneva, sans-serif' }
-                        ];
+                        return [{ label: gt('Use browser default'), value: 'browser-default' }].concat(
+                            mailUtil.getFontFormats().split(';')
+                                .filter(function (str) {
+                                    return !/^(Web|Wing)dings/.test(str);
+                                })
+                                .map(function (pair) {
+                                    pair = pair.split('=');
+                                    return { label: pair[0], value: pair[1] };
+                                })
+                        );
                     },
                     getFontSizeOptions: function () {
                         return [
