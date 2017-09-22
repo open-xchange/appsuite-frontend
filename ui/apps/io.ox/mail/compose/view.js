@@ -967,36 +967,8 @@ define('io.ox/mail/compose/view', [
         prependNewLine: function () {
             // Prepend newline in all modes except when editing draft
             if (this.model.get('mode') === 'edit') return;
-
-            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p><br><\/p>)+/, ''), nl;
-            // don't apply default styles on smartphones. There is no toolbar where a user could change it again.
-            if (!_.device('smartphone')) {
-                var css = {
-                        'font-size': settings.get('defaultFontStyle/size', 'browser-default'),
-                        'font-family': settings.get('defaultFontStyle/family', 'browser-default'),
-                        'color': settings.get('defaultFontStyle/color', 'transparent')
-                    },
-                    styleNode;
-
-                // using '' as a value removes the attribute and thus any previous styling
-                if (css['font-size'] === 'browser-default') delete css['font-size'];
-                if (css['font-family'] === 'browser-default') delete css['font-family'];
-                if (css.color === 'transparent') delete css.color;
-
-                if (_.isEmpty(css)) {
-                    // no styles there so just a br
-                    styleNode = $('<br>');
-                } else {
-                    // br must be appended here. Or tinymce just deletes the span.
-                    styleNode = $('<span>').append($('<br>'));
-                    styleNode.css(css).attr('data-mce-style', css);
-                }
-
-                nl = this.model.get('editorMode') === 'html' ? '<p>' + styleNode[0].outerHTML + '</p>' : '\n';
-            } else {
-                nl = this.model.get('editorMode') === 'html' ? '<p><br></p>' : '\n';
-            }
-
+            var content = this.editor.getContent().replace(/^\n+/, '').replace(/^(<p[^>]*class="default-style"[^>]*><br><\/p>)+/, '');
+            var nl = this.model.get('editorMode') === 'html' ? mailUtil.getDefaultStyle().node.get(0).outerHTML : '\n';
             this.editor.setContent(nl + content);
         },
 

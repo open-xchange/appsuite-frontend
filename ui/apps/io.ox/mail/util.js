@@ -294,6 +294,20 @@ define('io.ox/mail/util', [
             return tmp;
         },
 
+        getDefaultStyle: function () {
+            var styles = _.device('smartphone') ? {} : settings.get('defaultFontStyle', {}),
+                obj = { css: {}, string: '', node: $() };
+            // styles
+            if (styles.size && styles.size !== 'browser-default') obj.css['font-size'] = styles.size;
+            if (styles.family && styles.family !== 'browser-default') obj.css['font-family'] = styles.family;
+            if (styles.color && styles.color !== 'transparent') obj.css.color = styles.color;
+            // styles as string
+            obj.string = _.reduce(_.pairs(obj.css), function (memo, list) { return memo + list[0] + ':' + list[1] + ';'; }, '');
+            // node
+            obj.node = $('<p>').css(obj.css).attr('data-mce-style', obj.string).append('<br>');
+            return obj;
+        },
+
         // pair: Array of display name and email address
         // options:
         // - showDisplayName: Show display name if available
