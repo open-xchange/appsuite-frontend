@@ -16,11 +16,14 @@ define('io.ox/chat/main', [
     'io.ox/backbone/views/window',
     'io.ox/chat/views/chat',
     'io.ox/chat/views/chatList',
+    'io.ox/chat/views/channelList',
+    'io.ox/chat/views/history',
+    'io.ox/chat/views/fileList',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, WindowView, ChatView, ChatListView, contactsAPI, contactsUtil) {
+], function (data, WindowView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
 
     'use strict';
 
@@ -45,6 +48,7 @@ define('io.ox/chat/main', [
             switch (data.cmd) {
                 case 'start-chat': this.startChat(); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
+                case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
@@ -68,6 +72,15 @@ define('io.ox/chat/main', [
             this.showChat({ id: chatId });
         },
 
+        joinChannel: function (cmd) {
+            console.log('joinChannel', cmd);
+            var channel = data.backbone.channels.get(cmd.id);
+            channel.set('subscribed', true);
+            var chatId = data.backbone.chats.length + 1;
+            data.backbone.chats.add({ id: chatId, type: 'channel', title: channel.get('title'), members: [1, 2, 3, 4, 5], messages: [{ id: 1, body: 'Joined channel', type: 'system' }] });
+            this.showChat({ id: chatId });
+        },
+
         showChat: function (cmd) {
             var view = new ChatView({ id: cmd.id });
             window.$rightside.empty().append(view.render().$el);
@@ -75,15 +88,15 @@ define('io.ox/chat/main', [
         },
 
         showRecentConversations: function () {
-            window.$rightside.empty().append(renderRecentConversations());
+            window.$rightside.empty().append(new History().render().$el);
         },
 
         showChannels: function () {
-            window.$rightside.empty().append(renderChannels());
+            window.$rightside.empty().append(new ChannelList().render().$el);
         },
 
         showAllFiles: function () {
-            window.$rightside.empty().append(renderFiles());
+            window.$rightside.empty().append(new FileList().render().$el);
         },
 
         showFile: function (cmd) {
@@ -171,61 +184,6 @@ define('io.ox/chat/main', [
             )
         )
     );
-
-    function renderRecentConversations() {
-        return $('<div class="history abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('Recent conversations')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.history).map(function (chat) {
-                        return $('<li>').text(chat.title);
-                    })
-                )
-            )
-        );
-    }
-
-    function renderChannels() {
-        return $('<div class="channels abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('All channels')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.channels).map(function (channel) {
-                        return $('<li class="channel">').append(
-                            $('<div>').append(
-                                $('<span class="title">').text(channel.title),
-                                $('<span class="members">').text(channel.members + ' member(s)')
-                            ),
-                            $('<div class="description">').text(channel.description),
-                            $('<button type="button" class="btn btn-default join">').text('Join')
-                        );
-                    })
-                )
-            )
-        );
-    }
-
-    function renderFiles() {
-        return $('<div class="files abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('All files')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.files).map(function (file, index) {
-                        return $('<li>').append(
-                            $('<button type="button" data-cmd="show-file">').attr('data-index', index)
-                            .css('backgroundImage', 'url(' + file.url + ')')
-                        );
-                    })
-                )
-            )
-        );
-    }
 
     function renderOverlay() {
         return $('<div class="overlay abs" tabindex="-1">').append(

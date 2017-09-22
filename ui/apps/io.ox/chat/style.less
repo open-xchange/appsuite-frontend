@@ -254,15 +254,18 @@
                 right: 0;
                 font-size: 14px;
                 color: @gray;
+                &:before {
+                    content: "\f017"; // clock-o
+                }
                 &.sent:before {
-                    content: "\f105";
+                    content: "\f0c2"; // cloud
                 }
                 &.received:before {
-                    content: "\f105 \f105";
+                    content: "\f003"; // envelope-o
                 }
                 &.seen:before {
                     color: @green;
-                    content: "\f00c";
+                    content: "\f00c"; // check
                 }
             }
         }
@@ -338,7 +341,7 @@
         &.offline:before { content: "\f00d"; color: #eee; }
     }
 
-    .channels {
+    .channel-list {
         .scrollpane {
             padding: 16px;
         }
@@ -360,6 +363,38 @@
                 left: 0;
                 top: 8px;
             }
+        }
+    }
+
+    .history .scrollpane {
+        padding: 16px;
+        li {
+            position: relative;
+            padding: 0 56px 0 56px;
+            margin-bottom: 16px;
+        }
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #ddd;
+            border-radius: 20px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .title {
+            font-weight: bold;
+            .ellipsis();
+        }
+        .message {
+            color: @gray;
+            .ellipsis();
+        }
+        .date {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: @gray;
         }
     }
 
@@ -415,7 +450,7 @@
         }
     }
 
-    .history .header h2, .channels .header h2, .files .header h2 {
+    .history .header h2, .channel-list .header h2, .files .header h2 {
         line-height: 48px;
     }
 }

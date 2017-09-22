@@ -123,8 +123,8 @@ define('io.ox/chat/views/chat', [
                         model.set('delivery', 'seen');
                         model = null;
                     }, 1000);
-                }, 500);
-            }, 100);
+                }, 700);
+            }, 300);
         },
 
         getMessageNode: function (model, selector) {
