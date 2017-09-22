@@ -1964,9 +1964,7 @@ define('io.ox/core/main', [
             index: 800,
             run: function () {
                 //#. %1$s is the product name, e.g. OX App Suite
-                $('#io-ox-print').text(gt('Please use the build-in print action of %1$s instead. Detailed information can be found on our help pages.', ox.serverConfig.productName));
-                return $.when();
-
+                return $('#io-ox-print').text(gt('Please use the build-in print action of %1$s instead. Detailed information can be found on our help pages.', ox.serverConfig.productName));
             }
         });
 
