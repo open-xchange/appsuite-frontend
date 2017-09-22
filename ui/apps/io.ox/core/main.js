@@ -1960,6 +1960,15 @@ define('io.ox/core/main', [
         });
 
         new Stage('io.ox/core/stages', {
+            id: 'print',
+            index: 800,
+            run: function () {
+                //#. %1$s is the product name, e.g. OX App Suite
+                return $('#io-ox-print').text(gt('Please use the build-in print action of %1$s instead. Detailed information can be found on our help pages.', ox.serverConfig.productName));
+            }
+        });
+
+        new Stage('io.ox/core/stages', {
             id: 'ready',
             index: 1000000000000,
             run: function () {
