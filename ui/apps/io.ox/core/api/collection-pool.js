@@ -35,6 +35,7 @@ define('io.ox/core/api/collection-pool', ['io.ox/core/api/backbone'], function (
             _(collections[module]).each(function (entry) {
                 var target = entry.collection.get(model.cid);
                 if (!target) return;
+                target.preserve = model.preserve;
                 skip = true;
                 entry.collection.remove(target);
             });

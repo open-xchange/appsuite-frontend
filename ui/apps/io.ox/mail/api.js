@@ -370,6 +370,7 @@ define('io.ox/mail/api', [
 
         _(all).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
+            model.preserve = false;
             if (model) collection.remove(model);
         });
     }
