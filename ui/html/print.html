@@ -293,6 +293,7 @@
         </script>
 
         <script type="text/template" class="calendar-month-view">
+            <h1 class="calendar-title"><%= meta.title %></h1>
         <% _.each(data, function (month) { %>
             <table class="month-view">
                 <thead>
@@ -305,7 +306,7 @@
             <% _.each(month, function (week) { %>
                 <tr>
                 <% _.each(week.days, function (day) { %>
-                    <td>
+                    <td class="<%= day.className || '' %>">
                         <ul>
                         <% _.each(day.events, function (event) { %>
                             <li>
@@ -316,6 +317,7 @@
                             </li>
                         <% }); %>
                         </ul>
+                        <span class="date"><%= day.date %></span>
                     </td>
                 <% }); %>
                 </tr>
