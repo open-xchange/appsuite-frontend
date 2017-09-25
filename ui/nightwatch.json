@@ -33,7 +33,7 @@
         "users": [{
           "username": "tthamm",
           "password": "secret",
-          "mail": "tthamm@qa.open-xchange.com"
+          "mail": "tthamm@ox-e2e-backend.novalocal"
         }]
       }
     },
