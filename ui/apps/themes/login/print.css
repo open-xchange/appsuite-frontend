@@ -271,8 +271,29 @@ body.scaled-preview {
     font-size: 12px;
 }
 
+h1.calendar-title {
+    text-align: center;
+}
+
+.month-view tr {
+    min-height: 16%;
+}
+
 .month-view td {
     vertical-align: top;
+    position: relative;
+}
+
+.month-view td.out {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.month-view .date {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0 3px;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 .month-view td, .month-view th{

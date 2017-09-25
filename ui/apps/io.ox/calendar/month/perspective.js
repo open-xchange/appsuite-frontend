@@ -470,9 +470,11 @@ define('io.ox/calendar/month/perspective', [
          */
         print: function () {
             print.request('io.ox/calendar/month/print', {
+                current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),
                 end: moment(this.current).endOf('month').endOf('week').valueOf(),
-                folder: this.folder.id || this.folder.folder
+                folder: this.folder.id || this.folder.folder,
+                title: this.folder.title
             });
         },
 

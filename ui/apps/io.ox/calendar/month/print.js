@@ -60,7 +60,8 @@ define('io.ox/calendar/month/print', [
                         end: selection.end,
                         folder: selection.folder
                     }).then(function (events) {
-                        var weekStart = moment(selection.start),
+                        var currentMonth = moment(selection.current).month(),
+                            weekStart = moment(selection.start),
                             end = moment(selection.end),
                             weeks = [];
 
@@ -81,7 +82,8 @@ define('io.ox/calendar/month/print', [
                                         .filter(getFilter(dayStart, dayEnd))
                                         .sortBy(sortBy)
                                         .map(map)
-                                        .value()
+                                        .value(),
+                                    className: start.month() === currentMonth ? 'in' : 'out'
                                 });
                             }
 
@@ -97,7 +99,8 @@ define('io.ox/calendar/month/print', [
                 meta: {
                     labels: _(_.range(7)).map(function (num) {
                         return moment().weekday(num).format('dddd');
-                    })
+                    }),
+                    title: selection.title + ' - ' + moment(selection.current).format('MMMM YYYY')
                 },
 
                 selector: '.calendar-month-view',
