@@ -22,11 +22,11 @@ define('io.ox/chat/data', [], function () {
         // USERS
 
         users: [
-            { id: 1, name: 'Mattes', state: 'online' },
-            { id: 2, name: 'Alex', state: 'online' },
-            { id: 3, name: 'David', state: 'absent' },
-            { id: 4, name: 'Julian', state: 'busy' },
-            { id: 5, name: 'Someone with a really long name', state: 'offline' }
+            { id: 1, first_name: 'Matthias', last_name: 'Biggeleben', state: 'online' },
+            { id: 2, first_name: 'Alexander', last_name: 'Quast', state: 'online' },
+            { id: 3, first_name: 'David', last_name: 'Bauer', state: 'absent' },
+            { id: 4, first_name: 'Julian', last_name: 'Bäume', state: 'busy' },
+            { id: 5, first_name: 'Someone with a really long name', last_name: '', state: 'offline' }
         ],
 
         // CHATS
@@ -142,7 +142,14 @@ define('io.ox/chat/data', [], function () {
     // User
     //
 
-    var UserModel = Backbone.Model.extend({});
+    var UserModel = Backbone.Model.extend({
+        getName: function () {
+            var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
+            if (first && last) return last + ', ' + first;
+            return first || last || '\u00a0';
+        }
+    });
+
     var UserCollection = Backbone.Collection.extend({ model: UserModel });
     data.backbone.users = new UserCollection(data.users);
 

@@ -187,7 +187,7 @@
 
     .message {
 
-        padding: 0 96px 0 0;
+        padding: 0 96px 0 48px;
         margin-bottom: 8px;
         position: relative;
 
@@ -452,5 +452,33 @@
 
     .history .header h2, .channel-list .header h2, .files .header h2 {
         line-height: 48px;
+    }
+
+    // stupid example for just copying code instead of resuing it
+    // needs a proper solution soon
+    .initials {
+
+        position: absolute;
+        display: inline-block;
+        background-color: #eee;
+        top: 22px;
+        left: 0;
+        .picture(40px, 40px);
+
+        color: rgba(0, 0, 0, 0.60);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.gray { color: #000; }
+        &.red { background-color: #FFA0A5; }
+        &.orange { background-color: #FFA77B; }
+        &.yellow { background-color: #FFD23A; }
+        &.green { background-color: #BFDE45; }
+        &.cyan { background-color: #99E4FB; }
+        &.blue { background-color: #95CEFF; }
+        &.purple { background-color: #E5B0FF; }
+        &.pink { background-color: #FFC2DE; }
     }
 }

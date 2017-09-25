@@ -11,33 +11,33 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/badge', ['io.ox/chat/views/state'], function (StateView) {
+define('io.ox/chat/views/avatar', ['io.ox/contacts/util'], function (util) {
 
     'use strict';
 
-    var Badgeiew = Backbone.View.extend({
+    var AvatarView = Backbone.View.extend({
 
-        tagName: 'button',
-        className: 'user-badge',
+        className: 'avatar initials',
 
         initialize: function () {
             this.listenTo(this.model, 'change:first_name change:last_name', this.onChangeName);
         },
 
         render: function () {
-            this.$el
-                .attr({ 'data-cmd': 'start-private-chat', 'data-id': this.model.get('id') })
-                .append(
-                    new StateView({ model: this.model }).render().$el,
-                    $('<span class="name">').text(this.model.getName())
-                );
+            this.update();
             return this;
         },
 
+        update: function () {
+            var data = this.model.pick('first_name', 'last_name'),
+                initials = util.getInitials(data);
+            this.$el.attr('class', 'avatar initials ' + util.getInitialsColor(initials)).text(initials);
+        },
+
         onChangeName: function () {
-            this.$('.name').text(this.model.getName());
+            this.update();
         }
     });
 
-    return Badgeiew;
+    return AvatarView;
 });

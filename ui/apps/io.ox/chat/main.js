@@ -68,7 +68,7 @@ define('io.ox/chat/main', [
         startPrivateChat: function (cmd) {
             var chatId = data.backbone.chats.length + 1,
                 user = data.backbone.users.get(cmd.id);
-            data.backbone.chats.add({ id: chatId, type: 'private', title: user.get('name'), members: [cmd.id, 1], messages: [{ id: 1, body: 'Created private chat', type: 'system' }] });
+            data.backbone.chats.add({ id: chatId, type: 'private', title: user.getName(), members: [cmd.id, 1], messages: [{ id: 1, body: 'Created private chat', type: 'system' }] });
             this.showChat({ id: chatId });
         },
 
