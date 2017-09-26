@@ -202,27 +202,27 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     actionArray = this.model.get('actioncmds');
 
                 function isValid(tests, actions) {
-                    var result = true;
 
-                    _.each(tests, function (val, key) {
-                        // single test
-                        if (key === 'values') result = val[0] !== '';
+                    var result = true,
+                        emptyValuesAllowed = ['exists', 'not exists'];
 
-                        // multiple tests
-                        if (key === 'tests') {
-                            _.each(val, function (val) {
-                                if (val.values && val.values[0] === '') result = false;
+                    // single test
+                    if (_.has(tests, 'values')) {
+                        if (tests.values && tests.values[0] === '' && !_.contains(emptyValuesAllowed, tests.comparison)) result = false;
+                    }
 
-                                // nested tests
-                                if (val.tests) {
-                                    _.each(val.tests, function (val) {
-                                        if (val.values && val.values[0] === '') result = false;
-                                    });
-                                }
-                            });
-                        }
+                    // multiple test
+                    if (_.has(tests, 'tests')) {
+                        _.each(tests.tests, function (singleTest) {
+                            if (singleTest.values && singleTest.values[0] === '' && !_.contains(emptyValuesAllowed, singleTest.comparison)) result = false;
 
-                    });
+                            if (singleTest.tests) {
+                                _.each(singleTest.tests, function (nestedTest) {
+                                    if (nestedTest.values && nestedTest.values[0] === '' && !_.contains(emptyValuesAllowed, nestedTest.comparison)) result = false;
+                                });
+                            }
+                        });
+                    }
 
                     _.each(actions, function (val) {
                         if (val.to === '' || val.text === '') result = false;
@@ -449,6 +449,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 appliedConditions = baton.model.get('test'),
                 ConditionModel = Backbone.Model.extend({
                     validate: function (attrs) {
+                        var emptyValuesAllowed = ['exists', 'not exists'];
                         if (_.has(attrs, 'size')) {
                             if (_.isNaN(attrs.size) || attrs.size === '') {
                                 this.trigger('invalid:size');
@@ -458,7 +459,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
 
                         if (_.has(attrs, 'headers')) {
-                            if ($.trim(attrs.headers[0]) === '') {
+                            if ($.trim(attrs.headers[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
                                 this.trigger('invalid:headers');
                                 return 'error';
                             }
@@ -466,7 +467,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                         }
 
                         if (_.has(attrs, 'values')) {
-                            if ($.trim(attrs.values[0]) === '') {
+                            if (attrs.values && $.trim(attrs.values[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
                                 this.trigger('invalid:values');
                                 return 'error';
                             }
@@ -528,7 +529,10 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                 // inintial validation to disable save button
                 if (!cmodel.isValid()) {
-                    conditionList.find('[data-test-id=' + conditionKey + '] input').closest('.row').addClass('has-error');
+                    var inputFields = conditionList.find('[data-test-id=' + conditionKey + '] input:enabled');
+                    _.each(inputFields, function (field) {
+                        if ($(field).val() === '') $(field).closest('.row').addClass('has-error');
+                    });
                 }
             });
 
