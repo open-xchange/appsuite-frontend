@@ -66,7 +66,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                 state = this.validationForSize() ? 'valid:' : 'invalid:';
 
             } else {
-                state = $.trim(this.$el.val()) === '' ? 'invalid:' : 'valid:';
+                state = $.trim(this.$el.val()) === '' && this.$el.prop('disabled') === false ? 'invalid:' : 'valid:';
             }
 
             this.model.trigger(state + this.name);
@@ -182,7 +182,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             //#. a given string does not end with a specified pattern
             'not endswith': gt('Ends not with'),
             'regex': gt('Regex'),
-            'not regex': gt('Not Regex')
+            'not regex': gt('Not Regex'),
+            'exists': gt('Exists'),
+            'not exists': gt('Does not exist')
         };
 
         return _.extend(defaults, additionalValues);
@@ -201,7 +203,9 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             'endswith': gt('Ends with'),
             'not endswith': gt('Ends not with'),
             'regex': gt('Regex'),
-            'not regex': gt('Not Regex')
+            'not regex': gt('Not Regex'),
+            'exists': gt('Exists'),
+            'not exists': gt('Does not exist')
         };
     };
 
@@ -267,9 +271,35 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
             label.addClass('unsupported');
         }
         opt.model.on('change:comparison', function () {
-            input.prop('disabled', false);
             label.removeClass('unsupported');
         });
+    };
+
+    var handleSpecialComparisonValues = function (opt) {
+
+        var input = opt.inputName ? opt.$li.find('[name="' + opt.inputName + '"]') : opt.$li.find('input'),
+            emptyValuesAllowed = ['exists', 'not exists'];
+
+        // handle rule from backend
+        if (opt.model.get('comparison') === 'not exists' || opt.model.get('comparison') === 'exists') {
+            input.prop('disabled', true);
+        }
+
+        opt.model.on('change:comparison', function (m, value) {
+            if (!_.contains(emptyValuesAllowed, value)) {
+                input.prop('disabled', false);
+                opt.model.set('values', opt.defaults.values, { silent: true });
+                if (opt.defaults.id !== 'header') opt.model.set('headers', opt.defaults.headers);
+
+            } else {
+                input.prop('disabled', true);
+                input.val('');
+                opt.model.set('values', [''], { silent: true });
+                if (opt.defaults.id !== 'header') opt.model.set('headers', [''], { silent: true });
+            }
+            input.trigger('keyup');
+        });
+
     };
 
     return {
@@ -283,6 +313,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
         filterPartValues: filterPartValues,
         returnDefault: returnDefault,
         DropdownLinkView: DropdownLinkView,
-        handleUnsupportedComparisonValues: handleUnsupportedComparisonValues
+        handleUnsupportedComparisonValues: handleUnsupportedComparisonValues,
+        handleSpecialComparisonValues: handleSpecialComparisonValues
     };
 });

@@ -531,6 +531,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         model: cmodel,
                         inputName: 'values'
                     });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
+                    });
                 }
             });
         }
@@ -584,6 +592,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         model: cmodel,
                         inputName: 'values'
                     });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[condition.id]
+                    });
                 }
 
             });
@@ -636,6 +652,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         values: filterValues(condition.id, util.returnContainsOptions()),
                         model: cmodel,
                         inputName: 'values'
+                    });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
                     });
                 }
 
@@ -691,6 +715,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         model: cmodel,
                         inputName: 'values'
                     });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
+                    });
                 }
 
             });
@@ -744,6 +776,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         values: filterValues(condition.id, util.returnContainsOptions()),
                         model: cmodel,
                         inputName: 'values'
+                    });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
                     });
                 }
 
@@ -799,6 +839,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         model: cmodel,
                         inputName: 'values'
                     });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[condition.id]
+                    });
                 }
 
             });
@@ -852,6 +900,14 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         values: filterValues(condition.id, util.returnContainsOptions()),
                         model: cmodel,
                         inputName: 'values'
+                    });
+
+                    util.handleSpecialComparisonValues({
+                        $li: li,
+                        values: filterValues(condition.id, util.returnContainsOptions()),
+                        model: cmodel,
+                        inputName: 'values',
+                        defaults: baton.view.defaults.tests[baton.view.defaults.conditionsMapping[condition.id]]
                     });
                 }
 
@@ -986,49 +1042,6 @@ define.async('io.ox/mail/mailfilter/settings/filter/tests/register', [
                         inputName: 'values'
                     });
                 }
-            });
-        }
-
-        if (supportedConditions.exists) {
-            ext.point('io.ox/mail/mailfilter/tests').extend({
-
-                id: 'exists',
-
-                index: 1100,
-
-                initialize: function (opt) {
-                    var defaults = {
-                        'exists': {
-                            'headers': [],
-                            'id': 'exists'
-                        }
-                    };
-                    _.extend(opt.defaults.tests, defaults);
-                    _.extend(opt.conditionsTranslation, {
-                        'exists': gt('Header exists')
-                    });
-
-                    _.extend(opt.conditionsMapping, { 'exists': ['exists'] });
-
-                    opt.conditionsOrder.push('exists');
-                },
-
-                draw: function (baton, conditionKey, cmodel, filterValues, condition, addClass) {
-                    var inputId = _.uniqueId('exists_');
-
-                    this.append(
-                        util.drawCondition({
-                            conditionKey: conditionKey,
-                            inputId: inputId,
-                            title: baton.view.conditionsTranslation.exists,
-                            inputLabel: baton.view.conditionsTranslation.exists + ' ' + cmodel.get('headers'),
-                            inputOptions: { name: 'headers', model: cmodel, className: 'form-control', id: inputId },
-                            errorView: true,
-                            addClass: addClass
-                        })
-                    );
-                }
-
             });
         }
 
