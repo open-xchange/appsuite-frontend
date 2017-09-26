@@ -130,22 +130,43 @@ define('l10n/ja_JP/io.ox/collation', function () {
         if (a === undefined && b === undefined) return 0;
         if (a === undefined) return +1;
         if (b === undefined) return -1;
+
         // kana (first)
         if (a in hash && b in hash) {
+            var tempA = a,
+                tempB = b;
+
             // see if this is a half width katakana
             a = isHalfWidthWithDakutenOrHandakuten(a, aSortName);
             b = isHalfWidthWithDakutenOrHandakuten(b, bSortName);
+
+            // same kana? check the next
+            if (a === b) {
+                a = { sort_name: aSortName.slice(tempA === a ? 1 : 2) };
+                b = { sort_name: bSortName.slice(tempB === b ? 1 : 2) };
+                return sorter(a, b);
+            }
             return hash[a] - hash[b];
         }
         if (a in hash) return -1;
         if (b in hash) return +1;
+
         // case-insensitive
         a = a.toUpperCase();
         b = b.toUpperCase();
+
+        // same letter? check the next
+        if (a === b) {
+            a = { sort_name: aSortName.slice(1) };
+            b = { sort_name: bSortName.slice(1) };
+            return sorter(a, b);
+        }
+
         // other (second: not kana / not latin)
         if (!isABC.test(a) && !isABC.test(b)) return a < b ? -1 : (a > b ? +1 : 0);
         if (!isABC.test(a)) return -1;
         if (!isABC.test(b)) return +1;
+
         // latin (third)
         return a < b ? -1 : (a > b ? +1 : 0);
     };
