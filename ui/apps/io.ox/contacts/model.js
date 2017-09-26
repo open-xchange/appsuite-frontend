@@ -203,6 +203,26 @@ define('io.ox/contacts/model', [
             }
         });
 
+        ext.point(ref + '/validation').extend({
+            id: 'first_name',
+            validate: function (attributes) {
+                // if this contact is based on a user, first_name and last_name must not be empty (dipslay name is generated from them)
+                if (attributes.user_id && (!attributes.first_name || _.isEmpty(String(attributes.first_name).trim()))) {
+                    this.add('first_name', gt('First name must not be empty for internal users'));
+                }
+            }
+        });
+
+        ext.point(ref + '/validation').extend({
+            id: 'last_name',
+            validate: function (attributes) {
+                // if this contact is based on a user, first_name and last_name must not be empty (dipslay name is generated from them)
+                if (attributes.user_id && (!attributes.last_name || _.isEmpty(String(attributes.last_name).trim()))) {
+                    this.add('last_name', gt('Last name must not be empty for internal users'));
+                }
+            }
+        });
+
         return factory;
 
     }
