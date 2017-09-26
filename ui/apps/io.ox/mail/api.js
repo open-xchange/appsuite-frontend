@@ -69,7 +69,7 @@ define('io.ox/mail/api', [
     };
 
     var sanitize = sanitizer.isEnabled(),
-        sandboxedCSS = settings.get('features/sandboxedCSS', false);
+        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     // generate basic API
     var api = apiFactory({
