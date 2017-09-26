@@ -330,23 +330,14 @@ define('io.ox/mail/detail/view', [
         id: 'iframe',
         index: 100,
         draw: function (baton) {
-            var iframe = $('<iframe class="mail-detail-frame">');
-
-            iframe.ready(function () {
-                iframe.contents().find('body').addClass('iframe-body');
-            });
-
-            iframe.on('dispose', function () {
-                $(this).contents().find('html').empty();
-            });
-
+            var iframe = $('<iframe src="//:0" class="mail-detail-frame">');
             baton.iframe = iframe;
         }
     });
 
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
-        index: 100,
+        index: 200,
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
             // reuse existing view, to not duplicate event listeners
@@ -384,36 +375,29 @@ define('io.ox/mail/detail/view', [
             }
             // restore height or set minimum height of 100px
             $(node).css('min-height', baton.model.get('visualHeight') || 100);
-            // add to DOM
 
             var resizeFrame = _.throttle(function () {
-                var frame = this.find('.mail-detail-frame');
-                frame.css('height', frame.contents().find('.mail-detail-content').height());
+                var frame = this.find('.mail-detail-frame'),
+                    height = frame.contents().find('.mail-detail-content').height();
+                frame.css('height', height);
             }, 300).bind(this);
 
-            this.idle().append(baton.iframe);
-            baton.iframe.ready(function () {
+
+            baton.iframe.on('load', function () {
                 baton.iframe.contents().find('head').append('<style class="content-style">' + contentStyle + '</style>');
-                baton.iframe.contents().find('body').append(node);
+                baton.iframe.contents().find('body').addClass('iframe-body').append(node);
                 resizeFrame();
             });
+
+            this.idle().append(baton.iframe);
+
             $(window).on('orientationchange resize', resizeFrame);
 
-            // ensure, that the scrollable is a lazyload scrollpane
-            if (this[0] && this[0].host) {
-                // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
-                $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
-                // copy events
-                _($._data(document).events.click).each(function (e) {
-                    if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
-                });
-            } else {
-                this.closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
-            }
-            // now remember height
             baton.model.set('visualHeight', $(node).height(), { silent: true });
 
-            if (_.device('smartphone')) _.delay(resizeFrame, 400);
+            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed due to page controller delay for page change
+            _.delay(resizeFrame, 10); // just a workaround for FF at the moment
+
         }
     });
 
