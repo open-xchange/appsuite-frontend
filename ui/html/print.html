@@ -326,6 +326,52 @@
         <% }); %>
         </script>
 
+        <script type="text/template" class="calendar-week-view">
+            <h1 class="calendar-title"><%= meta.title %></h1>
+        <% data.forEach(function (week) { %>
+            <table class="week-view">
+                <thead>
+                    <tr>
+                        <th></th>
+                    <% _.each(meta.weekdays, function (label) { %>
+                        <th><%= label %></th>
+                    <% }); %>
+                    <tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="allday-slot"></td>
+                    <% week.forEach(function (day) { %>
+                        <td class="allday-slot">
+                        <% (day.slots['allDay'] || []).forEach(function (event) { %>
+                            <div class="event">
+                                <%= event.title %>
+                            </div>
+                        <% }) %>
+                        </td>
+                    <% }) %>
+                    <tr>
+                <% _.range(week[0].start, week[0].end).forEach(function (index) { %>
+                    <tr>
+                        <td class="label"><span><%= meta.timeLabels[index].label %></span></td>
+                    <% week.forEach(function (day) { %>
+                        <td class="slot">
+                            <div class="slot-border"></div>
+                        <% (day.slots[index] || []).forEach(function (event) { %>
+                            <div class="event absolute" style="top: <%= event.top %>px; height: <%= event.height %>px; left: <%= event.left %>%; width: <%= event.width %>%;">
+                                <span class="time"><%= event.time %></span>
+                                <span><%= event.title %></span>
+                            </div>
+                        <% }) %>
+                        </td>
+                    <% }); %>
+                    </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        <% }); %>
+        </script>
+
         <script type="text/template" class="task">
         <% _.each(data, function(element) { %>
             <section class="item">
