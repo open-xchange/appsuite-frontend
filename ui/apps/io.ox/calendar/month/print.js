@@ -26,13 +26,13 @@ define('io.ox/calendar/month/print', [
 
     function getFilter(start, end) {
         return function (event) {
-            var eventStart = getMoment(event, 'startDate'),
-                eventEnd = getMoment(event, 'endDate');
+            var eventStart = getMoment(event, 'startDate').valueOf(),
+                eventEnd = getMoment(event, 'endDate').valueOf();
 
             // check if appointment is on that day
-            if (eventStart > start && eventStart < end) return true;
-            if (eventEnd > start && eventEnd < end) return true;
-            return false;
+            if (eventEnd < start) return false;
+            if (eventStart > end) return false;
+            return true;
         };
     }
 

@@ -234,8 +234,8 @@ define('io.ox/calendar/util', [
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment.tz(data.startDate.value, data.startDate.tzid);
-                    endDate = moment.tz(data.endDate.value, data.endDate.tzid);
+                    startDate = moment.tz(data.startDate.value, data.startDate.tzid || moment.defaultZone.name);
+                    endDate = moment.tz(data.endDate.value, data.endDate.tzid || moment.defaultZone.name);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
