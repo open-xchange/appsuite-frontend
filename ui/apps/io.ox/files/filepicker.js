@@ -617,12 +617,11 @@ define('io.ox/files/filepicker', [
                     // splitview on desktop
                     var container = dialog.$body.parent();
                     pages.getPage('fileList').append(filesPane);
-                    pages.getPage('folderTree').append(dialog.getBody());
+                    pages.getPage('folderTree').append(dialog.$body);
 
                     pcContainer.css('height', containerHeight + 'px');
                     pcContainer.append(navbar, toolbar);
-                    pcContainer.insertAfter('.clearfix', container);
-
+                    pcContainer.insertAfter(dialog.$header, container);
                     $(window).on('resize', onResize);
                     dialog.on('close', function () {
                         $(window).off('resize', onResize);

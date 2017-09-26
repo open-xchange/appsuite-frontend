@@ -134,10 +134,23 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         open: function () {
-            var o = this.options;
+            var o = this.options,
+                self = this;
             if (o.render !== false) this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
+            if (_.device('smartphone')) {
+                // rebuild button section for mobile devices
+                this.$el.addClass('mobile-dialog');
+                this.$footer.rowfluid = $('<div class="row">');
+                this.$footer.append(this.$footer.rowfluid);
+                this.$buttons = this.$footer.find('button');
+                _.each(this.$buttons, function (buttonNode) {
+                    self.$footer.rowfluid.prepend($(buttonNode).addClass('btn-medium'));
+                    $(buttonNode).wrap('<div class="col-xs-12 col-md-3">');
+                });
+            }
+
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
