@@ -104,8 +104,8 @@ define('io.ox/mail/actions/copyMove', [
 
                         if (!capabilities.has('mailfilter_v2') || o.type !== 'move') return;
 
-                        dialog.addCheckbox(gt('Create filter rule'), 'create-rule', false);
-                        var checkbox = dialog.$footer.find('[name="create-rule"]'),
+                        dialog.addCheckbox({ label: gt('Create filter rule'), action: 'create-rule', className: '', status: false });
+                        var checkbox = dialog.$footer.find('[data-action="create-rule"]'),
                             infoblock = $('<div class="help-block">');
                         // modify footer and place infoblock
                         checkbox.closest('.checkbox').addClass('checkbox-block text-left')
