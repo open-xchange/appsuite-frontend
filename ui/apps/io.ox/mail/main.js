@@ -828,7 +828,7 @@ define('io.ox/mail/main', [
             // It has a little optimization to add some delay if a message
             // has recently beeen deleted. This addresses the use-case of
             // cleaning up a mailbox, i.e. deleting several messages in a row.
-            // wWithout the delay, the UI would try to render messages that are
+            // Without the delay, the UI would try to render messages that are
             // just about to be deleted as well.
 
             var recentDeleteEventCount = 0,
@@ -862,16 +862,15 @@ define('io.ox/mail/main', [
             app.showMail = function (cid) {
                 // remember latest message
                 latestMessage = cid;
-                // delay or instant?
-                if (recentDeleteEventCount) {
-                    // clear view instantly
-                    app.threadView.empty();
-                    clearTimeout(messageTimer);
-                    var delay = (recentDeleteEventCount - 1) * 1000;
-                    messageTimer = setTimeout(show, delay);
-                } else {
-                    show();
-                }
+                // instant: no delete case
+                if (!recentDeleteEventCount) return show();
+                // instant: already drawn
+                if (app.threadView.model && app.threadView.model.cid === cid) return show();
+                // delay
+                app.threadView.empty();
+                clearTimeout(messageTimer);
+                var delay = (recentDeleteEventCount - 1) * 1000;
+                messageTimer = setTimeout(show, delay);
             };
 
             // add delay if a mail just got deleted
