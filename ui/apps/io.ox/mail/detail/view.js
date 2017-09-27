@@ -330,7 +330,10 @@ define('io.ox/mail/detail/view', [
         id: 'iframe',
         index: 100,
         draw: function (baton) {
-            var iframe = $('<iframe src="//:0" class="mail-detail-frame">');
+            // "//:0" does not work for src as IE 11 goes crazy when loading the frame
+            var iframe = $('<iframe src="" class="mail-detail-frame">');
+            // restore height if already calculated
+            if (baton.model.get('iframe-height')) iframe.css('height', baton.model.get('iframe-height'));
             baton.iframe = iframe;
         }
     });
@@ -357,7 +360,8 @@ define('io.ox/mail/detail/view', [
         draw: function (baton) {
 
             var data = content.get(baton.data),
-                node = data.content;
+                node = data.content,
+                self = this;
 
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
@@ -373,31 +377,34 @@ define('io.ox/mail/detail/view', [
                 }).value();
                 this.prepend(emojiStyles);
             }
-            // restore height or set minimum height of 100px
-            $(node).css('min-height', baton.model.get('visualHeight') || 100);
 
-            var resizeFrame = _.throttle(function () {
-                var frame = this.find('.mail-detail-frame'),
+            function resizeFrame() {
+                var frame = self.find('.mail-detail-frame'),
                     height = frame.contents().find('.mail-detail-content').height();
+                if (height === 0) {
+                    // TODO: find better solution, might be an endless loop
+                    // height 0 should(!) never happen, the dom node seems to be not rendered yet and
+                    // calculation fails. Give it another try. Actually only an issue on FF
+                    _.delay(resizeFrame, 10);
+                    return;
+                }
+                baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
-            }, 300).bind(this);
+            }
 
+            $(node).on('resize', resizeFrame); // for expanding blockquotes
 
             baton.iframe.on('load', function () {
-                baton.iframe.contents().find('head').append('<style class="content-style">' + contentStyle + '</style>');
-                baton.iframe.contents().find('body').addClass('iframe-body').append(node);
-                resizeFrame();
+                var content = baton.iframe.contents();
+                content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
+                content.find('body').addClass('iframe-body').append(node);
+                resizeFrame(); // initial resize for first draw
             });
 
+            $(window).on('orientationchange resize', _.throttle(resizeFrame, 300)); // general window resize
+            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed resize due to page controller delay for page change
+
             this.idle().append(baton.iframe);
-
-            $(window).on('orientationchange resize', resizeFrame);
-
-            baton.model.set('visualHeight', $(node).height(), { silent: true });
-
-            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed due to page controller delay for page change
-            _.delay(resizeFrame, 10); // just a workaround for FF at the moment
-
         }
     });
 
