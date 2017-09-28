@@ -391,7 +391,6 @@ define('io.ox/calendar/week/perspective', [
                     'role': 'main',
                     'aria-label': gt('Appointment list')
                 });
-            this.collection = new chronosModel.Collection([]);
 
             var refresh = function () { self.refresh(true); },
                 reload = function () { self.refresh(false); };
@@ -403,7 +402,7 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             // watch for api refresh
-            api.on('refresh.all', reload)
+            api.on('create update delete refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
