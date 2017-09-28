@@ -14,7 +14,7 @@
 .iframe-body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-y: hidden;
 }
 
 .mail-detail-content {
@@ -149,9 +149,12 @@
     }
 
     table {
-        border: 0 none;
+        font-family:@normal-font-family;
+        font-size: 13px;
+        font-weight: normal;
+        font-feature-settings: "liga" 0;
         line-height: normal;
-        border-collapse: initial;
+        border-collapse: collapse;
     }
 
     ul, ol {
