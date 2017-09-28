@@ -1447,7 +1447,6 @@ define('io.ox/mail/api', [
 
         var opt = _.extend({ scaleType: 'contain' }, options),
             url = ox.apiRoot + '/mail', first;
-
         if (mode === 'zip') {
             first = _(data).first();
             return url + '?' + $.param({
@@ -1455,6 +1454,7 @@ define('io.ox/mail/api', [
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
+                decrypt: (first.security && first.security.decrypted), // All attachments must be decrypted if Guard emails
                 // required here!
                 session: ox.session
             });
@@ -1485,7 +1485,6 @@ define('io.ox/mail/api', [
 
             return url;
         }
-
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
