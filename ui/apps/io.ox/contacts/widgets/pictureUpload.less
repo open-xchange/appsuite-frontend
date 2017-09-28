@@ -40,7 +40,17 @@
             height: 24px;
             text-align: center;
             background-color: #fff;
+            display: none;
         }
+    }
+
+    &.preview {
+        .file {
+            height: 1px;
+            width: 1px;
+        }
+        .close { display: block };
+        .add-img-text { display: none };
     }
 
     form {

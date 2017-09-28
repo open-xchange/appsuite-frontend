@@ -30,38 +30,28 @@ define('io.ox/contacts/model', [
             factory = new ModelFactory({
                 api: api,
                 ref: ref,
+                updateEvents: ['edit'],
+
+                create: function (model) {
+                    var data = model.toJSON(),
+                        file = data.pictureFileEdited || data.pictureFile;
+                    // clean up data
+                    data = _.omit(data, ['crop', 'pictureFile', 'pictureFileEdited', 'image1']);
+                    return api.create(data, file);
+                },
 
                 update: function (model) {
                     // Some special handling for profile pictures
                     var data = model.changedSinceLoading(),
-                        file = data.pictureFile,
-                        //consistent usage for settings yell handling
+                        file = data.pictureFileEdited || data.pictureFile,
                         yell = !isMyContactData ? _.identity : settingsUtil.yellOnReject;
-                    if (file) {
-                        delete data.pictureFile;
-                        return yell(
-                            api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, data, file)
-                        );
-                    }
+                    // clean up data
+                    data = _.omit(data, ['crop', 'pictureFile', 'pictureFileEdited']);
+                    // update
+                    if (file) return api.editNewImage({ id: model.id, folder_id: model.get('folder_id') }, _.omit(data, 'image1'), file);
                     return yell(
                         api.update({ id: model.id, folder: model.get('folder_id'), last_modified: model.get('last_modified'), data: data })
                     );
-                },
-
-                updateEvents: ['edit'],
-
-                create: function (model) {
-                    // Some special handling for profile pictures
-                    var json, file;
-                    if (model.attributes.pictureFile) {
-                        file = model.get('pictureFile');
-                        json = model.toJSON();
-                        delete json.pictureFile;
-                    } else {
-                        json = model.toJSON();
-                    }
-
-                    return api.create(json, file);
                 },
 
                 destroy: function (model) {
