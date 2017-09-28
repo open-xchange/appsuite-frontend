@@ -35,6 +35,11 @@ define('io.ox/calendar/chronos-api', [
 
             _(response.created).each(function (event) {
                 if (filter(event)) api.pool.propagateAdd(event);
+                // an recurrence exceptions has been created -> remove recurring model
+                if (event.seriesId !== event.id) {
+                    var model = api.pool.getModel(util.cid({ id: event.seriesId, folder: event.folder, recurrenceId: event.recurrenceId }));
+                    if (model) model.collection.remove(model);
+                }
                 cache.clear(event.folder);
                 api.trigger('create', event);
                 api.trigger('create:' + util.cid(event), event);
@@ -292,9 +297,10 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    if (data.updated.length > 0 && !filter(data.updated[0])) return new models.Model(data);
-                    if (data.updated.length > 0) return api.pool.getModel(data.updated[0]);
-                    return api.pool.getModel(util.cid(obj));
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (!filter(updated)) return new models.Model(updated);
+                    return api.pool.getModel(updated);
                 });
             },
 
@@ -671,11 +677,11 @@ define('io.ox/calendar/chronos-api', [
         propagateUpdate: function (data) {
             var cid = _.cid(data),
                 model = this.getModel(cid);
-            if (_.isEqual(data.startDate, model.get('startDate'))
-                && _.isEqual(data.endDate, model.get('endDate'))) return this.propagateAdd(data);
+            if (!model || (_.isEqual(data.startDate, model.get('startDate'))
+                && _.isEqual(data.endDate, model.get('endDate')))) return this.propagateAdd(data);
             var oldCollections = this.getCollectionsByModel(model),
                 newCollections = this.getCollectionsByModel(data);
-            // collections which formerly contain that model but won't contain it in the future
+            // collections which formerly contained that model but won't contain it in the future
             _.difference(oldCollections, newCollections).forEach(function (collection) {
                 collection.remove(cid);
             });
@@ -691,7 +697,7 @@ define('io.ox/calendar/chronos-api', [
                 collections = api.pool.getCollectionsByCID(cid);
             } else {
                 cid = util.cid(data);
-                collections = api.pool.getCollectionsByModel(data);
+                collections = api.pool.getCollectionsByCID(cid);
             }
             if (collections.length === 0) return;
             return collections[0].get(cid);
