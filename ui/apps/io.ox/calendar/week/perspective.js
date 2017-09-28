@@ -99,28 +99,27 @@ define('io.ox/calendar/week/perspective', [
 
         /**
          * update appointment data
-         * @param  {Object} obj new appointment data
+         * @param  {Object} model the appointment model
          */
-        updateAppointment: function (obj) {
+        updateAppointment: function (model) {
             var self = this;
 
             /**
              * call api update function
              * @param  {Object} obj new appointment data
              */
-            var apiUpdate = function (obj) {
-                obj = clean(obj);
-                api.update(obj).fail(function (error) {
-                    if (!error.conflicts) return notifications.yell(error);
+            var apiUpdate = function (model, options) {
+                clean(model);
+                api.update(model, options).done(function (data) {
+                    if (!data || !data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                        conflictView.dialog(error.conflicts)
+                        conflictView.dialog(data.conflicts)
                             .on('cancel', function () {
                                 self.refresh();
                             })
                             .on('ignore', function () {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
+                                apiUpdate(model, { ignore_conflicts: true });
                             });
                     });
                 });
@@ -131,18 +130,16 @@ define('io.ox/calendar/week/perspective', [
              * @param  {Object} obj new appointment data
              * @return { Object}     clean appointment data
              */
-            var clean = function (app) {
-                _.each(app, function (el, i) {
-                    if (el === null || _.indexOf(['old_start_date', 'old_end_date', 'drag_move'], i) >= 0) {
-                        delete app[i];
-                    }
-                });
-                return app;
+            var clean = function (event) {
+                event.unset('oldStartDate', { silent: true });
+                event.unset('oldEndDate', { silent: true });
+                event.unset('dragMove', { silent: true });
+                return event;
             };
 
-            if (obj.recurrence_type > 0) {
+            if (model.get('rrule')) {
                 var dialog;
-                if (obj.drag_move && obj.drag_move !== 0) {
+                if (model.has('dragMove') && model.get('dragMove') !== 0) {
                     dialog = util.getRecurrenceChangeDialog();
                 } else {
                     dialog = util.getRecurrenceEditDialog();
@@ -153,19 +150,23 @@ define('io.ox/calendar/week/perspective', [
                         switch (action) {
                             case 'series':
                                 // get recurrence master object
-                                if (obj.old_start_date || obj.old_end_date) {
-                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                    api.get({ id: obj.id, folder: obj.folder }, false).done(function (data) {
-                                        // calculate new dates if old dates are available
-                                        data.start_date += (obj.start_date - obj.old_start_date);
-                                        data.end_date += (obj.end_date - obj.old_end_date);
-                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
-                                        apiUpdate(data);
+                                // bypass cache to have a fresh last_modified timestamp (see bug 42376)
+                                api.get({ id: model.get('id'), folder: model.get('folder') }, false).done(function (masterModel) {
+                                    // calculate new dates if old dates are available
+                                    masterModel.set({
+                                        'startDate': model.get('startDate'),
+                                        'endDate': model.get('endDate')
                                     });
-                                }
+                                    util.updateRecurrenceDate(masterModel, model.get('oldStartDate'));
+                                    apiUpdate(masterModel);
+                                    // data.start_date += (obj.start_date - obj.old_start_date);
+                                    // data.end_date += (obj.end_date - obj.old_end_date);
+                                    // data = util.updateRecurrenceDate(data, obj.old_start_date);
+                                    // apiUpdate(data);
+                                });
                                 break;
                             case 'appointment':
-                                apiUpdate(api.removeRecurrenceInformation(obj));
+                                apiUpdate(model);
                                 break;
                             default:
                                 self.refresh();
@@ -173,7 +174,7 @@ define('io.ox/calendar/week/perspective', [
                         }
                     });
             } else {
-                apiUpdate(obj);
+                apiUpdate(model);
             }
         },
 
