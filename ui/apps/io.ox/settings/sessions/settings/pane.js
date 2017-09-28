@@ -25,7 +25,7 @@ define('io.ox/settings/sessions/settings/pane', [
 
     'use strict';
 
-    ext.point('io.ox/settings/pane/external').extend({
+    ext.point('io.ox/settings/pane/security').extend({
         id: 'sessions',
         title: gt('Active clients'),
         ref: 'io.ox/settings/sessions',
