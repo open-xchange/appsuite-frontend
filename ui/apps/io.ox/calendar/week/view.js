@@ -245,7 +245,7 @@ define('io.ox/calendar/week/view', [
             this.renderAppointments();
 
             this
-                .listenTo(this.collection, 'change', _.debounce(this.redrawAppointment), this)
+                .listenTo(this.collection, 'change', this.redrawAppointment, this)
                 .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
         },
 
@@ -576,11 +576,11 @@ define('io.ox/calendar/week/view', [
 
         /**
          * handler for appointment updates
-         * @param  { Object } obj appointment object
+         * @param  { Object } event event model
          */
-        onUpdateAppointment: function (obj) {
-            if (obj.start_date && obj.end_date && obj.start_date <= obj.end_date) {
-                this.trigger('updateAppointment', obj);
+        onUpdateAppointment: function (event) {
+            if (event.get('startDate') && event.get('endDate') && event.getTimestamp('startDate') <= event.getTimestamp('endDate')) {
+                this.trigger('updateAppointment', event);
             }
         },
 
@@ -1587,25 +1587,38 @@ define('io.ox/calendar/week/view', [
                     stop: function () {
                         var el = $(this),
                             d = el.data('ui-resizable'),
-                            app = self.collection.get(el.data('cid')).attributes,
-                            tmp = self.getTimeFromDateTag(d.my.day);
+                            // use clone here to to the calculations. the actual update is triggered by the update request
+                            event = self.collection.get(el.data('cid')).clone(),
+                            date, curTimezone, eventTimezone;
                         d.my.all.removeClass('opac');
                         // save for update calculations
-                        app.old_start_date = app.start_date;
-                        app.old_end_date = app.end_date;
+                        event.set({
+                            oldStartDate: event.getMoment('startDate'),
+                            oldEndDate: event.getMoment('endDate')
+                        }, { silent: true });
                         switch (d.my.handle) {
                             case 'n':
-                                app.start_date = tmp.add(self.getTimeFromPos(d.my.top), 'milliseconds').valueOf();
+                                date = event.getMoment('startDate');
+                                curTimezone = moment().tz();
+                                eventTimezone = date.tz();
+                                // translate to current user timezone apply offset and translate back to appointments timezone
+                                date.tz(curTimezone).startOf('day').add(self.getTimeFromPos(d.my.top), 'ms').tz(eventTimezone);
+                                event.set('startDate', { value: date.format('YYYYMMDD[T]HHmmss'), tzid: event.get('startDate').tzid });
                                 break;
                             case 's':
-                                app.end_date = tmp.add(self.getTimeFromPos(d.my.bottom), 'milliseconds').valueOf();
+                                date = event.getMoment('startDate');
+                                curTimezone = moment().tz();
+                                eventTimezone = date.tz();
+                                // translate to current user timezone apply offset and translate back to appointments timezone
+                                date.tz(curTimezone).startOf('day').add(self.getTimeFromPos(d.my.bottom), 'ms').tz(eventTimezone);
+                                event.set('endDate', { value: date.format('YYYYMMDD[T]HHmmss'), tzid: event.get('endDate').tzid });
                                 break;
                             default:
                                 break;
                         }
                         // disable widget
                         el.resizable('disable').busy();
-                        self.onUpdateAppointment(app);
+                        self.onUpdateAppointment(event);
                     }
                 })
                 .draggable({
@@ -1763,26 +1776,29 @@ define('io.ox/calendar/week/view', [
                         var d = $(this).data('ui-draggable'),
                             off = $('.week-container', this.$el).offset(),
                             move = Math.round(ui.position.left / colWidth),
-                            app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = moment(app.start_date)
-                                .add(self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top), 'milliseconds') // milliseconds
-                                .add(move, 'days') // days
-                                .valueOf();
+                            event = self.collection.get($(this).data('cid')).clone(),
+                            startTS = event.getMoment('startDate')
+                                .add(self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top), 'ms') // milliseconds
+                                .add(move, 'days'), // days
+                            endTS = startTS.clone().add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
                         if (e.pageX < window.innerWidth && e.pageX > off.left && e.pageY < window.innerHeight) {
                             // save for update calculations
-                            app.old_start_date = app.start_date;
-                            app.old_end_date = app.end_date;
-                            app.drag_move = move;
-                            _.extend(app, {
-                                start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date)
+                            event.set({
+                                oldStartDate: event.getMoment('startDate'),
+                                oldEndDate: event.getMoment('endDate'),
+                                dragMove: move
+                            }, { silent: true });
+
+                            event.set({
+                                startDate: { value: startTS.format('YYYYMMDD[T]HHmmss'), tzid: event.get('startDate').tzid },
+                                endDate: { value: endTS.format('YYYYMMDD[T]HHmmss'), tzid: event.get('endDate').tzid }
                             });
                             d.my.all.busy();
                             // disable widget
                             $(this).draggable('disable');
 
-                            if (app.start_date !== app.old_start_date) {
-                                self.onUpdateAppointment(app);
+                            if (event.getMoment('startDate').valueOf() !== event.get('oldStartDate').valueOf()) {
+                                self.onUpdateAppointment(event);
                             } else {
                                 self.renderAppointments();
                             }
@@ -1812,17 +1828,21 @@ define('io.ox/calendar/week/view', [
                         if (e.pageX < window.innerWidth && e.pageY < window.innerHeight) {
                             $(this).draggable('disable').busy();
                             var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
-                                startTS = moment(self.startDate).add(newPos, 'days').utc(true).valueOf(),
-                                app = self.collection.get($(this).data('cid')).attributes;
+                                event = self.collection.get($(this).data('cid')).clone(),
+                                startTS = moment(self.startDate).add(newPos, 'days'),
+                                endTS = startTS.clone().add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
                             // save for update calculations
-                            app.old_start_date = app.start_date;
-                            app.old_end_date = app.end_date;
-                            _.extend(app, {
-                                start_date: startTS,
-                                end_date: startTS + (app.end_date - app.start_date)
+                            event.set({
+                                oldStartDate: event.getMoment('startDate'),
+                                oldEndDate: event.getMoment('endDate')
+                            }, { silent: true });
+
+                            event.set({
+                                startDate: { value: startTS.format('YYYYMMDD'), tzid: event.get('startDate').tzid },
+                                endDate: { value: endTS.format('YYYYMMDD'), tzid: event.get('endDate').tzid }
                             });
-                            if (app.start_date !== app.old_start_date) {
-                                self.onUpdateAppointment(app);
+                            if (event.getMoment('startDate').valueOf() !== event.get('oldStartDate').valueOf()) {
+                                self.onUpdateAppointment(event);
                             } else {
                                 self.renderAppointments();
                             }
@@ -1841,21 +1861,25 @@ define('io.ox/calendar/week/view', [
                     },
                     stop: function (e, ui) {
                         var el = $(this),
-                            app = self.collection.get(el.data('cid')).attributes,
+                            event = self.collection.get(el.data('cid')).clone(),
                             newDayCount = Math.round(el.outerWidth() / (self.fulltimePane.width() / self.columns));
                         // save for update calculations
-                        app.old_start_date = app.start_date;
-                        app.old_end_date = app.end_date;
+                        event.set({
+                            oldStartDate: event.getMoment('startDate'),
+                            oldEndDate: event.getMoment('endDate')
+                        }, { silent: true });
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
 
                         if (parseInt(el.position().left, 10) !== parseInt(ui.originalPosition.left, 10)) {
-                            app.start_date = moment(app.end_date).subtract(newDayCount, 'days').valueOf();
+                            var tsEnd = event.getMoment('endDate').subtract(newDayCount, 'days');
+                            event.set('startDate', { value: tsEnd.format('YYYYMMDD'), tzid: event.get('startDate').tzid });
                         } else if (parseInt(el.width(), 10) !== parseInt(ui.originalSize.width, 10)) {
-                            app.end_date = moment(app.start_date).add(newDayCount, 'days').valueOf();
+                            var tsStart = event.getMoment('startDate').add(newDayCount, 'days');
+                            event.set('endDate', { value: tsStart.format('YYYYMMDD'), tzid: event.get('endDate').tzid });
                         }
 
                         el.resizable('disable').busy();
-                        self.onUpdateAppointment(app);
+                        self.onUpdateAppointment(event);
                     }
                 });
             this.updateHiddenIndicators();
