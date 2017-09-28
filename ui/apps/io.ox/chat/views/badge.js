@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/badge', ['io.ox/chat/views/state'], function (StateView) {
+define('io.ox/chat/views/badge', ['io.ox/backbone/views/disposable', 'io.ox/chat/views/state'], function (DisposableView, StateView) {
 
     'use strict';
 
-    var Badgeiew = Backbone.View.extend({
+    var Badgeiew = DisposableView.extend({
 
         tagName: 'button',
         className: 'user-badge',

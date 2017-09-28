@@ -12,16 +12,17 @@
  */
 
 define('io.ox/chat/views/chat', [
-    'io.ox/chat/data',
+    'io.ox/backbone/views/disposable',
     'io.ox/chat/views/badge',
-    'io.ox/chat/views/avatar'
-], function (data, BadgeView, Avatar) {
+    'io.ox/chat/views/avatar',
+    'io.ox/chat/data'
+], function (DisposableView, BadgeView, Avatar, data) {
 
     'use strict';
 
     var MESSAGE_LIMIT = 20;
 
-    var ChatView = Backbone.View.extend({
+    var ChatView = DisposableView.extend({
 
         className: 'chat',
 

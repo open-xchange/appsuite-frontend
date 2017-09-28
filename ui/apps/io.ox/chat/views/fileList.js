@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/fileList', ['io.ox/chat/data'], function (data) {
+define('io.ox/chat/views/fileList', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
 
     'use strict';
 
-    var FileList = Backbone.View.extend({
+    var FileList = DisposableView.extend({
 
         className: 'files abs',
 

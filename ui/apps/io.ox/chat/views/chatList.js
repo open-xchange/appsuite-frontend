@@ -11,11 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'], function (data, StateView) {
+define('io.ox/chat/views/chatList', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/state',
+    'io.ox/chat/data'
+], function (DisposableView, StateView) {
 
     'use strict';
 
-    var ChatListView = Backbone.View.extend({
+    var ChatListView = DisposableView.extend({
 
         className: 'chats',
 

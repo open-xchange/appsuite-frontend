@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/channelList', ['io.ox/chat/data'], function (data) {
+define('io.ox/chat/views/channelList', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
 
     'use strict';
 
-    var ChannelList = Backbone.View.extend({
+    var ChannelList = DisposableView.extend({
 
         className: 'channel-list abs',
 

@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/avatar', ['io.ox/contacts/util'], function (util) {
+define('io.ox/chat/views/avatar', ['io.ox/backbone/views/disposable', 'io.ox/contacts/util'], function (DisposableView, util) {
 
     'use strict';
 
-    var AvatarView = Backbone.View.extend({
+    var AvatarView = DisposableView.extend({
 
         className: 'avatar initials',
 

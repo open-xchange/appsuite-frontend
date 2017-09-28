@@ -11,11 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/history', ['io.ox/chat/data'], function (data) {
+define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
 
     'use strict';
 
-    var History = Backbone.View.extend({
+    var History = DisposableView.extend({
 
         className: 'history abs',
 
