@@ -13,6 +13,7 @@
 
 define('io.ox/calendar/month/view', [
     'io.ox/core/extensions',
+    'io.ox/calendar/chronos-api',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-util',
@@ -20,7 +21,7 @@ define('io.ox/calendar/month/view', [
     'settings!io.ox/chronos',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, folderAPI, util, chronosUtil, gt, settings) {
+], function (ext, api, folderAPI, util, chronosUtil, gt, settings) {
 
     'use strict';
 
@@ -310,7 +311,8 @@ define('io.ox/calendar/month/view', [
                     $('.list', this).append(
                         ui.draggable.show()
                     );
-                    var event = ui.draggable.data('event').clone(),
+                    var cid = ui.draggable.data('cid'),
+                        event = api.pool.getModel(cid).clone(),
                         s = event.getMoment('startDate'),
                         start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }),
                         end = start.add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
