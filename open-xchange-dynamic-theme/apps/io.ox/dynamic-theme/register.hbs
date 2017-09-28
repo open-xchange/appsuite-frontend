@@ -18,7 +18,9 @@ define('io.ox/dynamic-theme/register', [
         {{>functions}}
         {{>colors}}
         {{>tree}}
-        {{{glob "lib/node_modules/less/lib/less/tree/*.js"}}}
+        {{#each (glob "lib/node_modules/less/lib/less/tree/*.js")}}
+            {{{read .}}}
+        {{/each}}
         {{>env}}
         {{>visitor}}
         {{>import-visitor}}
