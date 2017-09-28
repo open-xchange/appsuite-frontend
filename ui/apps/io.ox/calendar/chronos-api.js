@@ -24,12 +24,12 @@ define('io.ox/calendar/chronos-api', [
 
     'use strict';
 
-    // updates pool based on writing operations response (create update delete etc)
     var filter = function (data) {
-            // do not add model to pool if
+            // do not add model to pool if it is a master model of a recurring event
             if (data.rrule && !data.recurrenceId) return false;
             return true;
         },
+        // updates pool based on writing operations response (create update delete etc)
         processResponse = function (response) {
             if (!response) return;
 
@@ -248,6 +248,7 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
+                    if (data.created.length > 0 && !filter(data.created[0])) return new models.Model(data);
                     return api.pool.getModel(data.created[0]);
                 });
             },
@@ -284,12 +285,14 @@ define('io.ox/calendar/chronos-api', [
                 })
                 .then(processResponse)
                 .then(function (data) {
+
                     api.getAlarms();
                     // return conflicts or new model
                     if (data.conflicts) {
                         return data;
                     }
 
+                    if (data.updated.length > 0 && !filter(data.updated[0])) return new models.Model(data);
                     if (data.updated.length > 0) return api.pool.getModel(data.updated[0]);
                     return api.pool.getModel(util.cid(obj));
                 });
