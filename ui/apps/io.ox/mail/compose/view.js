@@ -567,8 +567,6 @@ define('io.ox/mail/compose/view', [
                     if (mode === 'edit' && self.model.get('editorMode') === 'alternative' && content_type === 'text/plain') {
                         self.model.set('editorMode', 'text', { silent: true });
                     }
-                    // We get partial html from the middleware even when we request plain/text
-                    if (content_type === 'text/plain') content = textproc.htmltotext(content);
 
                     var def = $.Deferred();
                     if (content_type === 'text/plain' && self.model.get('editorMode') === 'html') {

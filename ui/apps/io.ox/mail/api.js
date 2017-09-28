@@ -1048,7 +1048,8 @@ define('io.ox/mail/api', [
                 csid: csid,
                 embedded: obj.embedded,
                 max_size: obj.max_size,
-                decrypt: (obj.security && obj.security.decrypted)
+                decrypt: (obj.security && obj.security.decrypted),
+                process_plain_text: false
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);

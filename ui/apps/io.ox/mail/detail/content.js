@@ -684,30 +684,6 @@ define('io.ox/mail/detail/content', [
             return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
         },
 
-        // convert pseudo-plain-text to real plain text
-        adjustPlainText: (function () {
-
-            var div;
-
-            return function (str) {
-
-                return String(str || '')
-                    // convert <br> into newline
-                    .replace(/<br\s?\/?>/gi, '\n')
-                    // simply remove tags
-                    .replace(/<[a-z/].*?>/gi, '')
-                    // replace entities
-                    .replace(/&.*?;/g, decodeEntity);
-            };
-
-            function decodeEntity(str) {
-                div = div || document.createElement('div');
-                div.innerHTML = str;
-                return div.textContent;
-            }
-
-        }()),
-
         beautifyPlainText: function (str) {
             var plain = insertEmoticons(str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n'));
             return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: false, rulers: false })
@@ -716,8 +692,7 @@ define('io.ox/mail/detail/content', [
         },
 
         transformForHTMLEditor: function (str) {
-            var plain = this.adjustPlainText(str);
-            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+            return this.text2html(str, { blockquotes: true, links: true, lists: true, rulers: true });
         },
 
         // convert plain text to html
