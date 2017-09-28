@@ -110,7 +110,7 @@ define('io.ox/calendar/week/perspective', [
              */
             var apiUpdate = function (model, options) {
                 clean(model);
-                api.update(model, options).done(function (data) {
+                api.update(model, options).then(function success(data) {
                     if (!data || !data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
@@ -122,6 +122,8 @@ define('io.ox/calendar/week/perspective', [
                                 apiUpdate(model, { ignore_conflicts: true });
                             });
                     });
+                }, function fail(error) {
+                    notifications.yell(error);
                 });
             };
 
@@ -137,7 +139,7 @@ define('io.ox/calendar/week/perspective', [
                 return event;
             };
 
-            if (model.get('rrule')) {
+            if (model.get('recurrenceId')) {
                 var dialog;
                 if (model.has('dragMove') && model.get('dragMove') !== 0) {
                     dialog = util.getRecurrenceChangeDialog();
@@ -153,16 +155,15 @@ define('io.ox/calendar/week/perspective', [
                                 // bypass cache to have a fresh last_modified timestamp (see bug 42376)
                                 api.get({ id: model.get('id'), folder: model.get('folder') }, false).done(function (masterModel) {
                                     // calculate new dates if old dates are available
+                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                        endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
+                                        format = chronosUtil.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                                     masterModel.set({
-                                        'startDate': model.get('startDate'),
-                                        'endDate': model.get('endDate')
+                                        startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                        endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
                                     util.updateRecurrenceDate(masterModel, model.get('oldStartDate'));
                                     apiUpdate(masterModel);
-                                    // data.start_date += (obj.start_date - obj.old_start_date);
-                                    // data.end_date += (obj.end_date - obj.old_end_date);
-                                    // data = util.updateRecurrenceDate(data, obj.old_start_date);
-                                    // apiUpdate(data);
                                 });
                                 break;
                             case 'appointment':

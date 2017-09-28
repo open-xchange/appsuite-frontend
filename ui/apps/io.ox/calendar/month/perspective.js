@@ -99,49 +99,55 @@ define('io.ox/calendar/month/perspective', [
          * update appointment data
          * @param  {Object} obj new appointment data
          */
-        updateAppointment: function (obj) {
+        updateAppointment: function (model) {
             var self = this;
-            _.each(obj, function (el, i) {
-                if (el === null) {
-                    delete obj[i];
-                }
-            });
 
-            var apiUpdate = function (obj) {
-                api.update(obj).fail(function (error) {
-                    if (!error.conflicts) return notifications.yell(error);
+            var apiUpdate = function (model, options) {
+                clean(model);
+                api.update(model, options).then(function success(data) {
+                    if (!data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
-                        conflictView.dialog(error.conflicts)
+                        conflictView.dialog(data.conflicts)
                             .on('cancel', function () { self.update(); })
                             .on('ignore', function () {
-                                obj.ignore_conflicts = true;
-                                apiUpdate(obj);
+                                apiUpdate(model, { ignore_conflicts: true });
                             });
                     });
+                }, function fail(error) {
+                    notifications.yell(error);
                 });
             };
 
-            if (obj.recurrence_type > 0) {
+            var clean = function (event) {
+                event.unset('oldStartDate', { silent: true });
+                event.unset('oldEndDate', { silent: true });
+                event.unset('dragMove', { silent: true });
+                return event;
+            };
+
+            if (model.has('recurrenceId')) {
                 util.getRecurrenceEditDialog()
                     .show()
                     .done(function (action) {
                         switch (action) {
                             case 'series':
                                 // get recurrence master object
-                                if (obj.old_start_date || obj.old_end_date) {
-                                    // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                    api.get({ id: obj.id, folder: obj.folder }, false).done(function (data) {
-                                        // calculate new dates if old dates are available
-                                        data.startDate += (obj.startDate - obj.old_start_date);
-                                        data.endDate += (obj.endDate - obj.old_end_date);
-                                        data = util.updateRecurrenceDate(data, obj.old_start_date);
-                                        apiUpdate(data);
+                                api.get({ id: model.get('id'), folder: model.get('folder') }, false).done(function (masterModel) {
+                                    // calculate new dates if old dates are available
+                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                        endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
+                                        format = chronosUtil.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                    masterModel.set({
+                                        startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
+                                        endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
-                                }
+                                    util.updateRecurrenceDate(model, model.get('oldStartDate'));
+                                    apiUpdate(masterModel);
+                                });
                                 break;
                             case 'appointment':
-                                apiUpdate(api.removeRecurrenceInformation(obj));
+                                apiUpdate(model);
                                 break;
                             default:
                                 self.update();
@@ -149,7 +155,7 @@ define('io.ox/calendar/month/perspective', [
                         }
                     });
             } else {
-                apiUpdate(obj);
+                apiUpdate(model);
             }
         },
 
@@ -634,7 +640,7 @@ define('io.ox/calendar/month/perspective', [
                 });
 
             // watch for api refresh
-            api.on('refresh.all', reload)
+            api.on('create update delete refresh.all', reload)
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
