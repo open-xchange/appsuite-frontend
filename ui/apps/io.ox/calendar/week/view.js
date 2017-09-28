@@ -239,6 +239,8 @@ define('io.ox/calendar/week/view', [
         },
 
         setCollection: function (collection) {
+            if (this.collection === collection) return;
+
             if (this.collection) this.stopListening(this.collection);
             this.collection = collection;
 
