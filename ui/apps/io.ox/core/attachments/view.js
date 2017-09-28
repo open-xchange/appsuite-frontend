@@ -256,7 +256,7 @@ define('io.ox/core/attachments/view', [
             if (!extension) return;
             color = this.getColor(extension);
             this.$el.append(
-                $('<div class="abs fallback">')
+                $('<div class="abs fallback ellipsis">')
                     .css({ color: color && 'white', backgroundColor: color })
                     .text(extension)
             );
