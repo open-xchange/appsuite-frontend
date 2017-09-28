@@ -68,7 +68,7 @@ define('io.ox/calendar/chronos-api', [
                     removeAttributes.forEach(function (attr) {
                         event[attr] = undefined;
                     });
-                    api.pool.propagateAdd(event);
+                    api.pool.propagateUpdate(event);
                 }
                 cache.clear(event.folder);
                 api.trigger('update', event);
@@ -640,62 +640,83 @@ define('io.ox/calendar/chronos-api', [
         if (result && result.length >= 2) return result[1];
     }
 
-    api.pool.getCollectionsByModel = function (data) {
-        var model = data instanceof Backbone.Model ? data : new models.Model(data),
-            collections = this.getByFolder(data.folder).filter(function (collection) {
-                var start = getByRegex(/start=([^&]*)/, collection.cid),
-                    end = getByRegex(/end=([^&]*)/, collection.cid);
-                // sepcial handling for list-view collection
-                if (!start || !end) {
-                    start = moment().startOf('day').valueOf();
-                    end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
-                }
-                var inverval = Math.min(end, model.getTimestamp('endDate')) - Math.max(start, model.getTimestamp('startDate'));
-                if (inverval > 0) return true;
+    _.extend(api.pool, {
+
+        getCollectionsByModel: function (data) {
+            var model = data instanceof Backbone.Model ? data : new models.Model(data),
+                collections = this.getByFolder(model.get('folder')).filter(function (collection) {
+                    var start = getByRegex(/start=([^&]*)/, collection.cid),
+                        end = getByRegex(/end=([^&]*)/, collection.cid);
+                    // sepcial handling for list-view collection
+                    if (!start || !end) {
+                        start = moment().startOf('day').valueOf();
+                        end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
+                    }
+                    if (model.getTimestamp('endDate') < start) return false;
+                    if (model.getTimestamp('startDate') > end) return false;
+                    return true;
+                });
+            if (collections.length === 0) return [this.get('detail')];
+            return collections;
+        },
+
+        propagateAdd: function (data) {
+            data.cid = util.cid(data);
+            var collections = api.pool.getCollectionsByModel(data);
+            collections.forEach(function (collection) {
+                api.pool.add(collection.cid, data);
             });
-        if (collections.length === 0) return [this.get('detail')];
-        return collections;
-    };
+        },
 
-    api.pool.propagateAdd = function (data) {
-        data.cid = util.cid(data);
-        var collections = api.pool.getCollectionsByModel(data);
-        collections.forEach(function (collection) {
-            api.pool.add(collection.cid, data);
-        });
-    };
+        propagateUpdate: function (data) {
+            var cid = _.cid(data),
+                model = this.getModel(cid);
+            if (_.isEqual(data.startDate, model.get('startDate'))
+                && _.isEqual(data.endDate, model.get('endDate'))) return this.propagateAdd(data);
+            var oldCollections = this.getCollectionsByModel(model),
+                newCollections = this.getCollectionsByModel(data);
+            // collections which formerly contain that model but won't contain it in the future
+            _.difference(oldCollections, newCollections).forEach(function (collection) {
+                collection.remove(cid);
+            });
+            newCollections.forEach(function (collection) {
+                api.pool.add(collection.cid, data);
+            });
+        },
 
-    api.pool.getModel = function (data) {
-        var collections, cid;
-        if (_.isString(data)) {
-            cid = data;
-            collections = api.pool.getCollectionsByCID(cid);
-        } else {
-            cid = util.cid(data);
-            collections = api.pool.getCollectionsByModel(data);
+        getModel: function (data) {
+            var collections, cid;
+            if (_.isString(data)) {
+                cid = data;
+                collections = api.pool.getCollectionsByCID(cid);
+            } else {
+                cid = util.cid(data);
+                collections = api.pool.getCollectionsByModel(data);
+            }
+            if (collections.length === 0) return;
+            return collections[0].get(cid);
+        },
+
+        findRecurrenceModels: function (event) {
+            event = event instanceof Backbone.Model ? event.attributes : event;
+            var cid = util.cid({ folder: event.folder, id: event.cid }),
+                collections = api.pool.getByFolder(event.folder),
+                filterRecurrences = function (model) {
+                    return model.cid.indexOf(cid) === 0;
+                },
+                models = collections.map(function (collection) {
+                    return collection.filter(filterRecurrences);
+                });
+            return _(models)
+                .chain()
+                .flatten()
+                .uniq(function (model) {
+                    return model.cid;
+                })
+                .value();
         }
-        if (collections.length === 0) return;
-        return collections[0].get(cid);
-    };
 
-    api.pool.findRecurrenceModels = function (event) {
-        event = event instanceof Backbone.Model ? event.attributes : event;
-        var cid = util.cid({ folder: event.folder, id: event.cid }),
-            collections = api.pool.getByFolder(event.folder),
-            filterRecurrences = function (model) {
-                return model.cid.indexOf(cid) === 0;
-            },
-            models = collections.map(function (collection) {
-                return collection.filter(filterRecurrences);
-            });
-        return _(models)
-            .chain()
-            .flatten()
-            .uniq(function (model) {
-                return model.cid;
-            })
-            .value();
-    };
+    });
 
     api.collectionLoader = new CollectionLoader({
         module: 'chronos',
