@@ -18,6 +18,7 @@
     @headerHeight: 80px;
     @searchHeight: 40px;
     @controlsHeight: 80px;
+    @buttonsHeight: 64px;
     @stateSize: 20px;
     @backgroundColor: #f5f5f5;
     @borderColor: #ccc;
@@ -50,7 +51,7 @@
 
         h2 {
             font-size: 15px;
-            line-height: 24px;
+            line-height: 48px;
             font-weight: normal;
             margin: -1px 0 0 0;
             padding: 0;
@@ -65,10 +66,27 @@
             float: left;
         }
 
+        .btn {
+            float: right;
+            width: @pictureSize;
+            height: @pictureSize;
+            border-radius: @pictureSize / 2;
+            text-align: center;
+            background-color: transparent;
+            color: @gray;
+            margin-left: 8px;
+            outline: 0;
+            &:focus {
+                color: @blue;
+                border: 2px solid @blue;
+            }
+        }
+
         .name {
             font-size: 13px;
             font-weight: bold;
             line-height: @pictureSize;
+            .ellipsis();
         }
 
         .state {
@@ -173,8 +191,13 @@
         overflow-y: auto;
     }
 
-    .chat .scrollpane {
-        bottom: @controlsHeight;
+    .chat {
+        .header h2 {
+            line-height: 24px;
+        }
+        .scrollpane {
+            bottom: @controlsHeight;
+        }
     }
 
     .conversation {
@@ -258,26 +281,40 @@
                     content: "\f017"; // clock-o
                 }
                 &.sent:before {
-                    content: "\f0c2"; // cloud
+                    content: "\f10c"; // circle-o
                 }
                 &.received:before {
-                    content: "\f003"; // envelope-o
+                    content: "\f05d"; // check-circle-o
                 }
                 &.seen:before {
-                    color: @green;
-                    content: "\f00c"; // check
+                    color: @blue;
+                    content: "\f058"; // check-circle
                 }
             }
         }
     }
 
-    .controls {
+    .controls, .buttons {
         top: auto;
-        height: @controlsHeight;
         border-top: 1px solid @borderColor;
         background-color: @backgroundColor;
         padding: 16px;
+    }
 
+    .buttons {
+        height: @buttonsHeight;
+        text-align: right;
+        .btn {
+            margin-left: 8px;
+        }
+        .btn-primary {
+            background-color: @gray;
+            border-color: darken(@gray, 10%);
+        }
+    }
+
+    .controls {
+        height: @controlsHeight;
         textarea {
             padding: 8px;
             line-height: 16px;
@@ -453,35 +490,17 @@
         }
     }
 
-    .history .header h2, .channel-list .header h2, .files .header h2 {
-        line-height: 48px;
-    }
-
-    // stupid example for just copying code instead of resuing it
-    // needs a proper solution soon
     .initials {
-
         position: absolute;
         display: inline-block;
         background-color: #eee;
         top: 22px;
         left: 0;
         .picture(40px, 40px);
-
         color: rgba(0, 0, 0, 0.60);
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
-
-        &.gray { color: #000; }
-        &.red { background-color: #FFA0A5; }
-        &.orange { background-color: #FFA77B; }
-        &.yellow { background-color: #FFD23A; }
-        &.green { background-color: #BFDE45; }
-        &.cyan { background-color: #99E4FB; }
-        &.blue { background-color: #95CEFF; }
-        &.purple { background-color: #E5B0FF; }
-        &.pink { background-color: #FFC2DE; }
     }
 }

@@ -13,7 +13,9 @@
 
 define('io.ox/chat/main', [
     'io.ox/chat/data',
+    'io.ox/chat/events',
     'io.ox/backbone/views/window',
+    'io.ox/chat/views/empty',
     'io.ox/chat/views/chat',
     'io.ox/chat/views/chatList',
     'io.ox/chat/views/channelList',
@@ -23,14 +25,13 @@ define('io.ox/chat/main', [
     'io.ox/contacts/util',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, WindowView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
+], function (data, events, WindowView, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
 
     'use strict';
 
     var Window = WindowView.extend({
 
         events: {
-            'click [data-cmd]': 'onCommand',
             'keydown .left-navigation': 'onLeftNavigationKeydown',
             'keydown .overlay': 'onOverlayEvent',
             'click .overlay': 'onOverlayEvent'
@@ -40,11 +41,11 @@ define('io.ox/chat/main', [
             this.listenTo(data.backbone.chats, 'unseen', function (count) {
                 this.setCount(count);
             });
+
+            this.listenTo(events, 'cmd', this.onCommand);
         },
 
-        onCommand: function (e) {
-            e.preventDefault();
-            var node = $(e.currentTarget), data = node.data();
+        onCommand: function (data) {
             switch (data.cmd) {
                 case 'start-chat': this.startChat(); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
@@ -57,12 +58,20 @@ define('io.ox/chat/main', [
                 case 'prev-file': this.moveFile(-1); break;
                 case 'next-file': this.moveFile(+1); break;
                 case 'close-file': this.closeFile(); break;
-                default: console.log('Unknown command', data.cmd, data); break;
+                // no default
             }
         },
 
-        startChat: function (cmd) {
-            console.log('Start chat', cmd);
+        startChat: function () {
+            require(['io.ox/chat/views/newConversation'], function (NewConversationView) {
+                window.$rightside.empty().append(
+                    new NewConversationView()
+                    .on('cancel done', function () {
+                        window.$rightside.empty().append(new EmptyView().render().$el);
+                    })
+                    .render().$el
+                );
+            });
         },
 
         startPrivateChat: function (cmd) {
@@ -73,7 +82,6 @@ define('io.ox/chat/main', [
         },
 
         joinChannel: function (cmd) {
-            console.log('joinChannel', cmd);
             var channel = data.backbone.channels.get(cmd.id);
             channel.set('subscribed', true);
             var chatId = data.backbone.chats.length + 1;
@@ -148,6 +156,7 @@ define('io.ox/chat/main', [
                 contactsAPI.pictureHalo(
                     $('<div class="picture" aria-hidden="true">'), user, { width: 40, height: 40 }
                 ),
+                $('<button type="button" class="btn btn-default" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
                 $('<i class="fa state online fa-check-circle">'),
                 $('<div class="name">').text(contactsUtil.getFullName(user))
             ),
@@ -175,13 +184,7 @@ define('io.ox/chat/main', [
             )
         ),
         window.$rightside = $('<div class="rightside abs">').append(
-            $('<div class="start-chat abs">').append(
-                $('<button type="button" class="btn btn-default" data-cmd="start-chat">').append(
-                    $('<i class="fa fa-plus">'),
-                    $('<br>'),
-                    $.txt('Start new chat')
-                )
-            )
+            new EmptyView().render().$el
         )
     );
 

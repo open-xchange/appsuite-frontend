@@ -22,9 +22,9 @@ define('io.ox/chat/data', [], function () {
         // USERS
 
         users: [
-            { id: 1, first_name: 'Matthias', last_name: 'Biggeleben', state: 'online' },
-            { id: 2, first_name: 'Alexander', last_name: 'Quast', state: 'online' },
-            { id: 3, first_name: 'David', last_name: 'Bauer', state: 'absent' },
+            { id: 1, first_name: 'Matthias', last_name: 'Biggeleben', state: 'online', image: 225 },
+            { id: 2, first_name: 'Alexander', last_name: 'Quast', state: 'online', image: 249 },
+            { id: 3, first_name: 'David', last_name: 'Bauer', state: 'absent', image: 382 },
             { id: 4, first_name: 'Julian', last_name: 'Bäume', state: 'busy' },
             { id: 5, first_name: 'Someone with a really long name', last_name: '', state: 'offline' }
         ],
