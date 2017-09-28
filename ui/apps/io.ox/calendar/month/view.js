@@ -201,7 +201,7 @@ define('io.ox/calendar/month/view', [
         renderAppointment: function (a) {
             var self = this,
                 el = $('<div class="appointment" data-extension-point="io.ox/calendar/month/view/appointment">')
-                    .data('app', a)
+                    .data('event', a)
                     .attr({
                         'data-cid': a.cid,
                         'data-composite-id': a.cid
@@ -309,20 +309,25 @@ define('io.ox/calendar/month/view', [
                     $('.list', this).append(
                         ui.draggable.show()
                     );
-                    var app = ui.draggable.data('app').attributes,
-                        s = moment(app.start_date),
-                        start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }).valueOf(),
-                        end = start + app.end_date - app.start_date;
-                    if (app.start_date !== start || app.end_date !== end) {
+                    var event = ui.draggable.data('event').clone(),
+                        s = event.getMoment('startDate'),
+                        start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }),
+                        end = start.add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
+                    if (event.getTimestamp('startDate') !== start.valueOf() || event.getTimestamp('endDate') !== end.valueof()) {
                         // save for update calculations
-                        if (app.recurrence_type > 0) {
-                            app.old_start_date = app.start_date;
-                            app.old_end_date = app.end_date;
+                        if (event.has('rrule')) {
+                            event.set({
+                                oldStartDate: event.getMoment('startDate'),
+                                oldEndDate: event.getMoment('endDate')
+                            }, { silent: true });
                         }
-                        app.start_date = start;
-                        app.end_date = end;
+                        var format = chronosUtil.isAllday(event) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                        event.set({
+                            startDate: { value: start.format(format), tzid: event.get('startDate').tzid },
+                            endDate: { value: end.format(format), tzid: event.get('endDate').tzid }
+                        });
                         ui.draggable.busy().draggable('disable');
-                        self.trigger('updateAppointment', app);
+                        self.trigger('updateAppointment', event);
                     }
                 }
             });
