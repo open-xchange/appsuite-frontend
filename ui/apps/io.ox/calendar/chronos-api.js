@@ -57,7 +57,8 @@ define('io.ox/calendar/chronos-api', [
                     });
                 } else {
                     var model = api.pool.getModel(util.cid(event));
-                    if (model) model.collection.remove(model);
+                    // only remove from pools, if this is no series exception.
+                    if (model && model.get('id') === model.get('seriesId')) model.collection.remove(model);
                     cache.clear(event.folder);
                     api.trigger('delete', event);
                     api.trigger('delete:' + util.cid(event), event);
