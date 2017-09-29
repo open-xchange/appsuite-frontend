@@ -32,10 +32,10 @@ define('io.ox/backbone/views/recurrence-view', [
 
     var recurrenceUtil = {
         getStart: function (model) {
-            return model.get('start_time') || model.get('start_date') || model.get('startDate');
+            return model.get('start_time') || model.get('start_date');
         },
         previousStart: function (model) {
-            return model.previous('start_time') || model.previous('start_date') || model.previous('startDate');
+            return model.previous('start_time') || model.previous('start_date');
         }
     };
 
