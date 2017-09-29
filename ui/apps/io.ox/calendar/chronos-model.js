@@ -123,6 +123,7 @@ define('io.ox/calendar/chronos-model', [
         },
 
         deserialize: function () {
+            this.set('start_date', this.model.getTimestamp('startDate'));
             if (!this.model.get('rrule')) return;
             var self = this,
                 str = this.model.get('rrule'),
