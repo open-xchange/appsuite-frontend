@@ -161,7 +161,7 @@ define('io.ox/core/folder/actions/move', [
                 addClass: 'zero-padding',
                 done: function (target, dialog) {
                     if (!!virtualMapping[target]) target = virtualMapping[target];
-                    api.move(id, target).then(dialog.close, dialog.idle).fail(notifications.yell);
+                    api.move(id, target, { enqueue: true }).then(dialog.close, dialog.idle).fail(notifications.yell);
                 },
                 customize: function (baton) {
 

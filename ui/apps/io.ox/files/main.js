@@ -19,6 +19,7 @@ define('io.ox/files/main', [
     'settings!io.ox/core',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
+    'io.ox/core/api/jobs',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
     'io.ox/files/listview',
@@ -43,7 +44,7 @@ define('io.ox/files/main', [
     'io.ox/files/favorite/toolbar',
     'io.ox/files/upload/dropzone',
     'io.ox/core/folder/breadcrumb'
-], function (commons, gt, settings, coreSettings, ext, folderAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
+], function (commons, gt, settings, coreSettings, ext, folderAPI, jobsAPI, TreeView, FolderView, FileListView, ListViewControl, Toolbar, actions, Bars, PageController, capabilities, api, sidebar, Sidebarview, QuotaView) {
 
     'use strict';
 
@@ -231,6 +232,21 @@ define('io.ox/files/main', [
             app.treeView.$el.append(
                 quota.render().$el
             );
+        },
+
+        'long-running-jobs': function () {
+            jobsAPI.on('added:infostore', function (data) {
+                require(['io.ox/core/yell'], function (yell) {
+                    //#. %1$s: folder name
+                    yell('info', gt(' Moving folder "%1$s" takes longer to finish', data.job.label));
+                });
+            });
+            jobsAPI.on('finished:infostore', _.debounce(function (data) {
+                require(['io.ox/core/yell'], function (yell) {
+                    //#. %1$s: folder name
+                    yell('info', gt(' Finished moving folder "%1$s"', data.job.label));
+                });
+            }, 50));
         },
 
         /*
