@@ -1106,7 +1106,7 @@ define('io.ox/files/api', [
         }
 
         _(folders).each(function (item) {
-            folderAPI.move(item.id, targetFolderId, ignoreWarnings);
+            folderAPI.move(item.id, targetFolderId, { ignoreWarnings: ignoreWarnings, enqueue: true });
         });
 
         return http.resume();
