@@ -18,7 +18,7 @@ define('io.ox/backbone/views/edit-picture', [
     'gettext!io.ox/contacts',
     'static/3rd.party/croppie.min.js',
     'css!3rd.party/croppie/croppie.css',
-    'less!io.ox/backbone/views/editPicture'
+    'less!io.ox/backbone/views/edit-picture'
 ], function (ext, ModalDialog, coreSettings, gt) {
 
     'use strict';
