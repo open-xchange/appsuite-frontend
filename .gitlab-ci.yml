@@ -212,6 +212,8 @@ run e2e tests:
   artifacts:
     paths:
       - ui/build/e2e/screenshots
+    when: on_failure
+    expire_in: 1 day
 
 stop e2e testserver:
   stage: cleanup
