@@ -112,7 +112,7 @@ define('io.ox/calendar/month/perspective', [
                         conflictView.dialog(data.conflicts)
                             .on('cancel', function () { self.update(); })
                             .on('ignore', function () {
-                                apiUpdate(model, { ignore_conflicts: true });
+                                apiUpdate(model, { ignoreConflicts: true });
                             });
                     });
                 }, function fail(error) {

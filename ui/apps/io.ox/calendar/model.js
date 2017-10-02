@@ -253,8 +253,8 @@ define('io.ox/calendar/model', [
                 attributesToSave.folder = this.get('folder');
             }
 
-            if (this.get('ignore_conflicts')) {
-                attributesToSave.ignore_conflicts = this.get('ignore_conflicts');
+            if (this.get('ignoreConflicts')) {
+                attributesToSave.ignoreConflicts = this.get('ignoreConflicts');
             }
 
             return attributesToSave;

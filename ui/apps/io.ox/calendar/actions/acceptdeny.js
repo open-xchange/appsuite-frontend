@@ -144,7 +144,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             requestData;
 
                         function performConfirm(checkConflicts) {
-                            api.confirm(requestData, { ignore_conflicts: !checkConflicts })
+                            api.confirm(requestData, { ignoreConflicts: !checkConflicts })
                                 .done(function (data) {
 
                                     if (data && data.conflicts) {

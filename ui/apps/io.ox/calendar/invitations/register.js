@@ -612,7 +612,7 @@ define('io.ox/calendar/invitations/register', [
                     id: self.event.get('id'),
                     folder: self.event.get('folder'),
                     alarms: self.alarmsModel.get('alarms')
-                }, { ignore_conflicts: !checkConflicts })
+                }, { ignoreConflicts: !checkConflicts })
                 .then(function success(data) {
                     if (data && data.conflicts) {
                         ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
