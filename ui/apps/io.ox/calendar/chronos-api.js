@@ -35,11 +35,6 @@ define('io.ox/calendar/chronos-api', [
 
             _(response.created).each(function (event) {
                 if (filter(event)) api.pool.propagateAdd(event);
-                // an recurrence exceptions has been created -> remove recurring model
-                if (event.seriesId !== event.id) {
-                    var model = api.pool.getModel(util.cid({ id: event.seriesId, folder: event.folder, recurrenceId: event.recurrenceId }));
-                    if (model) model.collection.remove(model);
-                }
                 cache.clear(event.folder);
                 api.trigger('create', event);
                 api.trigger('create:' + util.cid(event), event);
@@ -57,8 +52,7 @@ define('io.ox/calendar/chronos-api', [
                     });
                 } else {
                     var model = api.pool.getModel(util.cid(event));
-                    // only remove from pools, if this is no series exception.
-                    if (model && model.get('id') === model.get('seriesId')) model.collection.remove(model);
+                    model.collection.remove(model);
                     cache.clear(event.folder);
                     api.trigger('delete', event);
                     api.trigger('delete:' + util.cid(event), event);
@@ -197,14 +191,22 @@ define('io.ox/calendar/chronos-api', [
                 var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
                 delete obj.tempAttachmentIndicator;
 
+                var params = {
+                    action: 'new',
+                    folder: obj.folder,
+                    // convert to true boolean
+                    ignoreConflicts: !!options.ignoreConflicts
+                };
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
                 return http.PUT({
                     module: 'chronos',
-                    params: {
-                        action: 'new',
-                        folder: obj.folder,
-                        // convert to true boolean
-                        ignoreConflicts: !!options.ignoreConflicts
-                    },
+                    params: params,
                     data: obj
                 }).then(function (data) {
                     if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
@@ -244,6 +246,12 @@ define('io.ox/calendar/chronos-api', [
                 };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
 
                 return http.PUT({
                     module: 'chronos',
@@ -626,11 +634,10 @@ define('io.ox/calendar/chronos-api', [
                 collections = this.getByFolder(model.get('folder')).filter(function (collection) {
                     var params = urlToHash(collection.cid),
                         start = params.start,
-                        end = params.end,
-                        view = params.view;
-                    if (view === 'list') {
+                        end = params.end;
+                    if (params.view === 'list') {
                         start = moment().startOf('day').valueOf();
-                        end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
+                        end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
                     }
                     if (model.getTimestamp('endDate') < start) return false;
                     if (model.getTimestamp('startDate') > end) return false;

@@ -119,7 +119,7 @@ define('io.ox/calendar/week/perspective', [
                                 self.refresh();
                             })
                             .on('ignore', function () {
-                                apiUpdate(model, { ignoreConflicts: true });
+                                apiUpdate(model, _.extend(options, { ignoreConflicts: true }));
                             });
                     });
                 }, function fail(error) {
@@ -149,6 +149,11 @@ define('io.ox/calendar/week/perspective', [
                 dialog
                     .show()
                     .done(function (action) {
+                        var expanse = {
+                            expand: true,
+                            rangeStart: moment(self.view.startDate).utc().format('YYYYMMDD[T]HHmmss[Z]'),
+                            rangeEnd: moment(self.view.startDate).utc().add(self.view.columns, 'days').format('YYYYMMDD[T]HHmmss[Z]')
+                        };
                         switch (action) {
                             case 'series':
                                 // get recurrence master object
@@ -163,11 +168,11 @@ define('io.ox/calendar/week/perspective', [
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
                                     util.updateRecurrenceDate(masterModel, model.get('oldStartDate'));
-                                    apiUpdate(masterModel);
+                                    apiUpdate(masterModel, expanse);
                                 });
                                 break;
                             case 'appointment':
-                                apiUpdate(model);
+                                apiUpdate(model, expanse);
                                 break;
                             default:
                                 self.refresh();
@@ -410,7 +415,18 @@ define('io.ox/calendar/week/perspective', [
                 });
 
             // watch for api refresh
-            api.on('create update delete refresh.all', reload)
+            api
+                .on('refresh.all', reload)
+                .on('create update delete', _.debounce(function () {
+                    // set all other collections to expired to trigger a fresh load on the next opening
+                    api.pool.grep('view=week').forEach(function (c) {
+                        if (c !== self.view.collection) c.expired = true;
+                    });
+                    // run garbage collection to make sure all other models are removed
+                    api.pool.gc();
+                    // mark current collection as not expired to prevent a reload on the next opening
+                    self.view.collection.expired = false;
+                }))
                 .on('delete', function () {
                     // Close dialog after delete
                     self.dialog.close();
