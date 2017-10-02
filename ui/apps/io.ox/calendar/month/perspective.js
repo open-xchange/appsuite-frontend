@@ -15,6 +15,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
     'io.ox/calendar/chronos-api',
     'io.ox/core/extensions',
+    'io.ox/core/http',
     'io.ox/core/tk/dialogs',
     'io.ox/core/notifications',
     'io.ox/calendar/view-detail',
@@ -25,7 +26,7 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/chronos-util',
     'io.ox/calendar/chronos-model',
     'gettext!io.ox/calendar'
-], function (View, api, ext, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt) {
+], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt) {
 
     'use strict';
 
@@ -175,19 +176,21 @@ define('io.ox/calendar/month/perspective', [
             }
 
             // fetch appointments in a single call before loading collections
-            api.getAll(apiData, useCache).then(function () {
-                _(self.collections).each(function (collection, day) {
-                    day = parseInt(day, 10);
-                    loader.collection = collection;
-                    loader.fetch({
-                        start: day,
-                        end: moment(day).endOf('week').valueOf(),
-                        folder: self.folder.id === 'virtual/all-my-appointments' ? 0 : self.folder.id
-                    }).then(function (data) {
-                        collection[method](data, { parse: true });
-                    }, loader.fail);
-                });
+            http.pause();
+            _(this.collections).each(function (collection, day) {
+                if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) return;
+                day = parseInt(day, 10);
+                loader.collection = collection;
+                loader.httpGet('chronos', {
+                    start: day,
+                    end: moment(day).endOf('week').valueOf(),
+                    folder: self.folder.id === 'virtual/all-my-appointments' ? 0 : self.folder.id,
+                    view: 'month'
+                }).then(function (data) {
+                    collection[method](data, { parse: true });
+                }, loader.fail);
             });
+            http.resume();
         },
 
         // re-trigger event on app
@@ -248,7 +251,8 @@ define('io.ox/calendar/month/perspective', [
                     self.collections[day] = api.collectionLoader.getCollection({
                         start: day,
                         end: moment(day).endOf('week').valueOf(),
-                        folder: this.folder.id === 'virtual/all-my-appointments' ? 0 : this.folder.id
+                        folder: this.folder.id === 'virtual/all-my-appointments' ? 0 : this.folder.id,
+                        view: 'month'
                     });
 
                     // new view
