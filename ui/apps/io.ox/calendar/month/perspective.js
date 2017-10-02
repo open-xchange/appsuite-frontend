@@ -160,20 +160,10 @@ define('io.ox/calendar/month/perspective', [
             }
         },
 
-        updateWeeks: function (opt, useCache) {
+        updateWeeks: function (useCache) {
             var self = this,
                 method = useCache === false ? 'reset' : 'set',
-                weeks = opt.weeks || this.updateLoad,
-                apiData = {
-                    start: opt.start,
-                    end: moment(opt.start).add(weeks, 'weeks').valueOf()
-                },
                 loader = api.collectionLoader;
-
-            // do folder magic
-            if (this.folder.id !== 'virtual/all-my-appointments') {
-                apiData.folder = this.folder.id;
-            }
 
             // fetch appointments in a single call before loading collections
             http.pause();
@@ -207,14 +197,13 @@ define('io.ox/calendar/month/perspective', [
                 months = param.multi * self.updateLoad,
                 currMonth = [],
                 renderedElements = [],
-                weeks = 1, curWeek, start;
+                curWeek;
 
             if (param.up) {
                 curWeek = self.firstWeek.subtract(months, 'months').startOf('month').clone();
             } else {
                 curWeek = self.lastWeek.clone();
             }
-            start = curWeek.valueOf();
 
             function createView(options) {
                 return new View(options)
@@ -277,7 +266,6 @@ define('io.ox/calendar/month/perspective', [
                         $('<tbody>').append(currMonth)
                     ).css('height', 100 / 7 * currMonth.length + '%')
                 );
-                weeks += currMonth.length;
                 currMonth = [];
             }
             if (!param.up) {
@@ -299,10 +287,7 @@ define('io.ox/calendar/month/perspective', [
 
             // update first positions
             self.getFirsts();
-            this.updateWeeks({
-                start: start,
-                weeks: weeks
-            });
+            this.updateWeeks();
             return $.when();
         },
 
@@ -363,10 +348,7 @@ define('io.ox/calendar/month/perspective', [
                 day.addClass('today');
             }
 
-            this.updateWeeks({
-                start: this.firstWeek.valueOf(),
-                weeks: this.lastWeek.diff(this.firstWeek, 'week')
-            }, useCache);
+            this.updateWeeks(useCache);
 
             if (this.folderModel) {
                 this.folderModel.off('change:meta', this.updateColor);
