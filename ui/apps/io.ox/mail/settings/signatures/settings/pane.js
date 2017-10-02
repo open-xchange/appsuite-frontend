@@ -69,15 +69,13 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }).done(function (ed) {
                     baton.editor = ed;
                     baton.editor.show();
-                    baton.content = baton.content || '';
-
-                    if (baton.content && !looksLikeHTML(baton.content)) {
+                    baton.signature.content = baton.signature.content || '';
+                    if (baton.signature.content && !looksLikeHTML(baton.signature.content)) {
                         // convert to html
-                        var str = String(baton.content).replace(/[\s\xA0]+$/g, '');
-                        baton.content = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
+                        var str = String(baton.signature.content).replace(/[\s\xA0]+$/g, '');
+                        baton.signature = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
                     }
-
-                    baton.editor.setContent(baton.content);
+                    baton.editor.setContent(baton.signature.content);
                 });
             });
         }
@@ -100,19 +98,70 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         }
     });
 
+    ext.point('io.ox/mail/settings/signature-dialog/save').extend(
+        {
+            id: 'default',
+            index: 100,
+            perform: function (baton) {
+                baton.data = {
+                    id: baton.signature.id,
+                    type: 'signature',
+                    module: 'io.ox/mail',
+                    displayname: baton.$.name.val(),
+                    misc: { insertion: baton.$.insertion.val(), 'content-type': 'text/html' }
+                };
+            }
+        }, {
+            id: 'wait-for-pending-images',
+            index: 100,
+            perform: function (baton) {
+                if (!window.tinymce || !window.tinymce.activeEditor || !window.tinymce.activeEditor.plugins.oximage) return $.when();
+                var ids = $('img[data-pending="true"]', window.tinymce.activeEditor.getElement()).map(function () {
+                        return $(this).attr('data-id');
+                    }),
+                    deferreds = window.tinymce.activeEditor.plugins.oximage.getPendingDeferreds(ids);
+                return $.when.apply($, deferreds).then(function () {
+                    // maybe image references were updated
+                    baton.data.content = baton.editor.getContent();
+                });
+            }
+        }, {
+            id: 'trailing-whitespace',
+            index: 100,
+            perform: function (baton) {
+                // remove trailing whitespace when copy/paste signatures out of html pages
+                if (baton.data && baton.data.content) baton.data.content = baton.data.content.replace(/(<br>)\s+(\S)/g, '$1$2');
+            }
+        }, {
+            id: 'save',
+            index: 1000,
+            perform: function (baton) {
+                var def = baton.data.id ? snippets.update(baton.data) : snippets.create(baton.data);
+                return def.done(function () {
+                    snippets.getAll('signature').done(function (sigs) {
+                        // set very first signature as default if no other signatures exist
+                        if (sigs.length === 1) {
+                            settings.set('defaultSignature', sigs[0].id).save();
+                        }
+                        baton.view.close();
+                    });
+                }).fail(function (error) {
+                    require(['io.ox/core/notifications'], function (notifications) {
+                        notifications.yell(error);
+                        baton.view.idle();
+                    });
+                });
+            }
+        }
+    );
+
     function looksLikeHTML(str) {
         str = str || '';
         return (/<([A-Za-z][A-Za-z0-9]*)\b[^>]*>(.*?)<\/\1>/).test(str);
     }
 
     function fnEditSignature(evt, signature) {
-        if (!signature) {
-            signature = {
-                id: null,
-                name: '',
-                signature: ''
-            };
-        }
+        signature = signature || { id: null, name: '', signature: '' };
 
         function validateField(field, target) {
             if ($.trim(field.val()) === '') {
@@ -134,54 +183,24 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         popup.header($('<h4>').text(signature.id === null ? gt('Add signature') : gt('Edit signature')));
 
         var baton = new ext.Baton({
+            view: popup,
             editorId: _.uniqueId('editor-'),
-            content: signature.content
+            signature: signature
         });
         ext.point('io.ox/mail/settings/signature-dialog').invoke('draw', popup.getContentNode(), baton);
 
         popup.addPrimaryButton('save', gt('Save'), 'save')
         .addButton('cancel', gt('Cancel'), 'cancel')
         .on('save', function () {
-            if (baton.$.name.val() !== '') {
-                var update = signature.id ? {} : { type: 'signature', module: 'io.ox/mail', displayname: '', content: '', misc: { insertion: 'below', 'content-type': 'text/html' } },
-                    editorContent = baton.editor.getContent();
-
-                update.id = signature.id;
-                update.misc = { insertion: baton.$.insertion.val(), 'content-type': 'text/html' };
-
-                if (editorContent !== signature.content) update.content = editorContent;
-                if (baton.$.name.val() !== signature.displayname) update.displayname = baton.$.name.val();
-
-                // remove trailing whitespace when copy/paste signatures out of html pages
-                if (update && update.content) update.content = update.content.replace(/(<br>)\s+(\S)/g, '$1$2');
-
-                popup.busy();
-
-                var def = null;
-                if (signature.id) {
-                    def = snippets.update(update);
-                } else {
-                    def = snippets.create(update);
-                }
-                def.done(function () {
-                    snippets.getAll('signature').done(function (sigs) {
-                        // set very first signature as default if no other signatures exist
-                        if (sigs.length === 1) {
-                            settings.set('defaultSignature', sigs[0].id).save();
-                        }
-                        popup.idle();
-                        popup.close();
-                    });
-                }).fail(function (error) {
-                    require(['io.ox/core/notifications'], function (notifications) {
-                        notifications.yell(error);
-                        popup.idle();
-                    });
-                });
-            } else {
+            var point = ext.point('io.ox/mail/settings/signature-dialog/save');
+            if (!baton.$.name.val()) {
                 popup.idle();
-                validateField(baton.$.name, baton.$.error);
+                return validateField(baton.$.name, baton.$.error);
             }
+            popup.busy();
+            return point.cascade(baton).always(function () {
+                if (popup && popup.idle) popup.idle();
+            });
         })
         .on('close', function () {
             if (baton.editor) baton.editor.destroy();
