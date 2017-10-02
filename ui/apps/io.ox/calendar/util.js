@@ -999,6 +999,36 @@ define('io.ox/calendar/util', [
         isPrivate: function (data) {
             if (data.attributes) data = data.attributes;
             return data['class'] === 'CONFIDENTIAL';
+        },
+
+        getCurrentRangeOptions: function () {
+            var app = ox.ui.apps.get('io.ox/calendar');
+            if (!app) return {};
+            var window = app.getWindow();
+            if (!window) return {};
+            var perspective = window.getPerspective();
+            if (!perspective) return;
+
+            var rangeStart, rangeEnd;
+            switch (perspective.name) {
+                case 'week':
+                    var view = perspective.view;
+                    rangeStart = moment(view.startDate).utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days').format('YYYYMMDD[T]HHmmss[Z]');
+                    break;
+                case 'month':
+                    rangeStart = moment(perspective.firstWeek).startOf('week').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeEnd = moment(perspective.lastWeek).endOf('week').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    break;
+                case 'list':
+                    rangeStart = moment().startOf('day').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    break;
+                default:
+            }
+
+            if (!rangeStart || !rangeEnd) return {};
+            return { expand: true, rangeStart: rangeStart, rangeEnd: rangeEnd };
         }
     };
 

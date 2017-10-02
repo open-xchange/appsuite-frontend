@@ -121,10 +121,10 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.getWindow().busy();
 
                     if (baton.mode === 'edit') {
-                        api.update(baton.model).then(save, fail);
+                        api.update(baton.model, calendarUtil.getCurrentRangeOptions()).then(save, fail);
                         return;
                     }
-                    api.create(baton.model).then(save, fail);
+                    api.create(baton.model, calendarUtil.getCurrentRangeOptions()).then(save, fail);
                 })
             );
 

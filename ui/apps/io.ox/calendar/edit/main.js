@@ -283,9 +283,15 @@ define('io.ox/calendar/edit/main', [
                             })
                             .on('ignore', function () {
                                 if (self.view.options.mode === 'create') {
-                                    api.create(self.model, { ignoreConflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                    api.create(
+                                        self.model,
+                                        _.extend(util.getCurrentRangeOptions(), { ignoreConflicts: true })
+                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 } else {
-                                    api.update(self.model, { ignoreConflicts: true }).then(_.bind(self.onSave, self), _.bind(self.onError, self));
+                                    api.update(
+                                        self.model,
+                                        _.extend(util.getCurrentRangeOptions(), { ignoreConflicts: true })
+                                    ).then(_.bind(self.onSave, self), _.bind(self.onError, self));
                                 }
                             });
                     });
