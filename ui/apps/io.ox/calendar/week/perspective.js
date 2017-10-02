@@ -119,7 +119,7 @@ define('io.ox/calendar/week/perspective', [
                                 self.refresh();
                             })
                             .on('ignore', function () {
-                                apiUpdate(model, { ignore_conflicts: true });
+                                apiUpdate(model, { ignoreConflicts: true });
                             });
                     });
                 }, function fail(error) {

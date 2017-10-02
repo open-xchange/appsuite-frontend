@@ -80,7 +80,7 @@ define('plugins/notifications/calendar/register', [
                                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                                         conflictView.dialog(result.conflicts)
                                             .on('ignore', function () {
-                                                calAPI.confirm(o.data, { ignore_conflicts: true });
+                                                calAPI.confirm(o.data, { ignoreConflicts: true });
                                             });
                                     });
                                     return;

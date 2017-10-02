@@ -199,7 +199,7 @@ define('io.ox/calendar/chronos-api', [
                         action: 'new',
                         folder: obj.folder,
                         // convert to true boolean
-                        ignore_conflicts: !!options.ignore_conflicts
+                        ignoreConflicts: !!options.ignoreConflicts
                     },
                     data: obj
                 }).then(function (data) {
@@ -236,7 +236,7 @@ define('io.ox/calendar/chronos-api', [
                     id: obj.id,
                     timestamp: obj.timestamp,
                     // convert to true boolean
-                    ignore_conflicts: !!options.ignore_conflicts
+                    ignoreConflicts: !!options.ignoreConflicts
                 };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
@@ -350,7 +350,7 @@ define('io.ox/calendar/chronos-api', [
                         action: 'updateAttendee',
                         id: obj.id,
                         folder: obj.folder,
-                        ignore_conflicts: options.ignore_conflicts,
+                        ignoreConflicts: options.ignoreConflicts,
                         timestamp: _.now()
                     },
                     data = {
