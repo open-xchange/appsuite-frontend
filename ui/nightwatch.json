@@ -13,7 +13,7 @@
   "test_settings": {
 
     "default": {
-      "selenium_host": "jenkins.open-xchange.com",
+      "selenium_host": "10.50.0.94",
       "silent": true,
       "screenshots" : {
         "enabled" : true,
