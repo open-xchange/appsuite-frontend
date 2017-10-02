@@ -237,7 +237,7 @@ define('io.ox/calendar/list/listview', [
 
         drawTail: function () {
             if (this.tail) this.tail.remove();
-            var m = moment(this.collection.lastDate).add(1, 'month');
+            var m = moment().add((this.collection.offset || 0) + 1, 'month');
             this.$el.append(
                 this.tail = $('<li class="tail">').append(
                     $('<a href="#">')
@@ -250,7 +250,7 @@ define('io.ox/calendar/list/listview', [
         onLoadMore: function (e) {
             e.preventDefault();
             if (this.tail) this.tail.remove();
-            this.paginate();
+            this.paginate({ paginate: true });
         },
 
         onSort: $.noop
