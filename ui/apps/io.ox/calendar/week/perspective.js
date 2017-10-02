@@ -153,7 +153,7 @@ define('io.ox/calendar/week/perspective', [
                             case 'series':
                                 // get recurrence master object
                                 // bypass cache to have a fresh last_modified timestamp (see bug 42376)
-                                api.get({ id: model.get('id'), folder: model.get('folder') }, false).done(function (masterModel) {
+                                api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                     // calculate new dates if old dates are available
                                     var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                         endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
