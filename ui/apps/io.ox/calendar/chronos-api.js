@@ -122,6 +122,10 @@ define('io.ox/calendar/chronos-api', [
                         order: 'asc',
                         expand: true
                     }
+                }).then(function (data) {
+                    return _(data).sortBy(function (event) {
+                        return moment.tz(event.startDate.value, event.startDate.tzid || moment().tz());
+                    });
                 });
             },
 
@@ -700,15 +704,18 @@ define('io.ox/calendar/chronos-api', [
         getQueryParams: function (params) {
             return params;
         },
+        // do not add index to these models. position inside collection is sufficient due to special pagination
+        addIndex: $.noop,
         httpGet: function (module, params) {
             // special handling for requests of listview
             if (params.view === 'list') {
-                var offset = this.collection.offset || 1, start, end;
-                // detect pagination
-                if (params.limit.split(',')[0] === '0') {
+                var offset = this.collection.offset || 0, start, end;
+                if (params.pagination === true) {
+                    // reload
                     start = 0;
                     end = offset;
                 } else {
+                    // paginate
                     start = offset;
                     end = offset + 1;
                     this.collection.offset = end;
