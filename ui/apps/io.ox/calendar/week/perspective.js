@@ -210,6 +210,13 @@ define('io.ox/calendar/week/perspective', [
                 method = useCache === false ? 'reload' : 'load',
                 collection = loader[method](obj);
             this.view.setCollection(collection);
+
+            // set manually to expired to trigger reload on next opening
+            if (useCache === false) {
+                api.pool.grep('view=week').forEach(function (c) {
+                    if (c !== collection) c.expired = true;
+                });
+            }
         },
 
         /**

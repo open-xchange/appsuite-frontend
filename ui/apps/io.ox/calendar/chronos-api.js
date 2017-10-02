@@ -105,62 +105,25 @@ define('io.ox/calendar/chronos-api', [
         api = {
             // convenience function
             cid: util.cid,
-            getAll: (function () {
-                function get(params, opt) {
-                    var paramsString = api.collectionLoader.cid(params);
-                    if (opt.useCache && cache.get(paramsString)) {
-                        var data = _(cache.get(paramsString)).filter(util.rangeFilter(opt.start, opt.end));
-                        return $.when(data);
+
+            getAll: function (opt) {
+                var params = _.extend({
+                    start: _.now(),
+                    end: _.now()
+                }, opt || {});
+
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'all',
+                        folder: params.folder,
+                        rangeStart: moment(params.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        rangeEnd: moment(params.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        order: 'asc',
+                        expand: true
                     }
-
-                    return http.GET({
-                        module: 'chronos',
-                        params: {
-                            action: 'all',
-                            folder: params.folder,
-                            rangeStart: params.start.utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            rangeEnd: params.end.utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                            order: 'asc',
-                            expand: true
-                        }
-                    }).then(function (data) {
-                        cache.put(paramsString, data);
-                        return _(data).filter(util.rangeFilter(opt.start, opt.end));
-                    });
-                }
-
-                return function (opt, useCache) {
-                    var params = _.extend({
-                        start: _.now(),
-                        end: _.now()
-                    }, opt || {});
-                    opt.useCache = opt.useCache !== false && useCache !== false;
-                    // round start and end to start and end of month
-                    params.start = moment(params.start).startOf('month');
-                    params.end = moment(params.end).endOf('month');
-
-                    http.pause();
-                    var start, limit = params.end.valueOf(), reqs = [];
-                    for (start = params.start.clone(); start.valueOf() < limit; start.add(1, 'month')) {
-                        reqs.push(get({
-                            start: start.clone(),
-                            end: start.clone().endOf('month'),
-                            folder: params.folder
-                        }, opt));
-                    }
-                    return http.resume().then(function () {
-                        return $.when.apply($, reqs);
-                    }).then(function () {
-                        return _(arguments)
-                            .chain()
-                            .flatten()
-                            .uniq(function (event) {
-                                return util.cid(event);
-                            })
-                            .value();
-                    });
-                };
-            }()),
+                });
+            },
 
             get: function (obj, useCache) {
 
@@ -642,9 +605,14 @@ define('io.ox/calendar/chronos-api', [
         return collections;
     };
 
-    function getByRegex(regex, cid) {
-        var result = regex.exec(cid);
-        if (result && result.length >= 2) return result[1];
+    function urlToHash(url) {
+        var hash = {},
+            s = url.split('&');
+        s.forEach(function (str) {
+            var t = str.split('=');
+            hash[t[0]] = t[1];
+        });
+        return hash;
     }
 
     _.extend(api.pool, {
@@ -652,10 +620,11 @@ define('io.ox/calendar/chronos-api', [
         getCollectionsByModel: function (data) {
             var model = data instanceof Backbone.Model ? data : new models.Model(data),
                 collections = this.getByFolder(model.get('folder')).filter(function (collection) {
-                    var start = getByRegex(/start=([^&]*)/, collection.cid),
-                        end = getByRegex(/end=([^&]*)/, collection.cid);
-                    // sepcial handling for list-view collection
-                    if (!start || !end) {
+                    var params = urlToHash(collection.cid),
+                        start = params.start,
+                        end = params.end,
+                        view = params.view;
+                    if (view === 'list') {
                         start = moment().startOf('day').valueOf();
                         end = moment().startOf('day').add(collection.offset || 1, 'month').valueOf();
                     }
@@ -747,7 +716,7 @@ define('io.ox/calendar/chronos-api', [
                 params.start = moment().startOf('day').add(start, 'month').valueOf();
                 params.end = moment().startOf('day').add(end, 'month').valueOf();
             }
-            return api.getAll(params, !this.collection.expired).then(function (data) {
+            return api.getAll(params).then(function (data) {
                 data.forEach(function (obj) {
                     obj.cid = util.cid(obj);
                 });
