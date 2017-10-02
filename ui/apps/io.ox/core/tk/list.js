@@ -82,6 +82,11 @@ define('io.ox/core/tk/list', [
             this.restoreFocus();
         },
 
+        // note: empty function that is overridden in listview.js
+        onContextMenu: function () {
+            return;
+        },
+
         restoreFocus: function (greedy) {
             // try to find the correct item to focus
             var items = this.getItems(),
@@ -468,6 +473,7 @@ define('io.ox/core/tk/list', [
                     'focus .list-item': 'onItemFocus',
                     'blur .list-item': 'onItemBlur',
                     'click': 'onKeepFocus',
+                    'contextmenu': 'onContextMenu',
                     'keydown .list-item': 'onItemKeydown'
                 };
 

@@ -25,6 +25,34 @@ define('io.ox/files/listview', [
 
     var LISTVIEW = 'io.ox/files/listview', ITEM = LISTVIEW + '/item';
 
+    function listViewKeyHandler(e) {
+
+        var shiftF10 = (e.shiftKey && e.which === 121),
+            menuKey = (_.device('windows') && e.which === 93);
+
+        if (shiftF10 || menuKey) {
+            e.preventDefault();
+            onContextMenu.call(this, e);
+        }
+    }
+
+    function onContextMenu(e) {
+
+        var view = this,
+            app = view.app;
+
+        var list = view.selection.get();
+        if (!list) return;
+        // turn cids into proper objects
+        var cids = list, models = filesAPI.resolve(cids, false);
+        list = _(models).invoke('toJSON');
+        // extract single object if length === 1
+        var data = list.length === 1 ? list[0] : list;
+        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view });
+
+        this.contextMenu.showContextMenu(e, baton);
+    }
+
     //
     // Extend ListView
     //
@@ -36,6 +64,11 @@ define('io.ox/files/listview', [
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
             this.$el.addClass('file-list-view');
+
+            // no context menu on smartphone/tablets
+            if (!(_.device('smartphone') && _.device('tablet'))) {
+                _.defer(this.createContextMenu.bind(this));
+            }
         },
 
         getCompositeKey: function (model) {
@@ -47,8 +80,21 @@ define('io.ox/files/listview', [
             var relevantChanges = _.intersection(_(model.changed).keys(), FileListView.relevantAttributes);
             if (!relevantChanges.length) return;
             ListView.prototype.onChange.apply(this, arguments);
+        },
+
+        onContextMenu: onContextMenu,
+
+        createContextMenu: function () {
+            require(['io.ox/files/contextmenu'], function (Contextmenu) { this.contextMenu = new Contextmenu({ el: this.$el }); }.bind(this));
         }
     });
+
+    // extend the onItemKeydown handler from list by additional handlers
+    var orgListHandler = ListView.prototype.onItemKeydown;
+    ListView.prototype.onItemKeydown = function () {
+        orgListHandler.apply(this, arguments);
+        listViewKeyHandler.apply(this, arguments);
+    };
 
     // we redraw only if a relevant attribute changes (to avoid flickering)
     FileListView.relevantAttributes = ['index', 'id', 'last_modified', 'locked_until', 'filename', 'file_mimetype', 'file_size', 'source', 'title', 'version'];
