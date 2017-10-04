@@ -461,9 +461,8 @@ define('io.ox/calendar/week/perspective', [
                     var current = ox.ui.App.getCurrentApp().getName();
                     if (!/^io.ox\/calendar/.test(current)) return;
                     if (!obj.recurrenceId) {
-                        // select 'All my appointments' if appointment is not in the current folder
                         if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
-                        self.view.setStartDate(moment.tz(obj.startDate.value, obj.startDate.tzid || moment.defaultZone.name).valueOf(), obj.allTime);
+                        self.view.setStartDate(moment.tz(obj.startDate.value, obj.startDate.tzid || moment().tz()).valueOf(), obj.allTime);
                     }
                 });
 

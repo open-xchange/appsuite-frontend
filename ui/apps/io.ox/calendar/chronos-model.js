@@ -273,7 +273,7 @@ define('io.ox/calendar/chronos-model', [
         getMoment: function (name) {
             if (!this.get(name)) return;
             var date = this.get(name);
-            return moment.tz(date.value, date.tzid || moment.defaultZone.name);
+            return moment.tz(date.value, date.tzid || moment().tz());
         },
         getTimestamp: function (name) {
             if (!this.get(name)) return;

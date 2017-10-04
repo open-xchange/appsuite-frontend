@@ -22,7 +22,7 @@ define('io.ox/calendar/week/print', [
     'use strict';
 
     function getMoment(event, attribute) {
-        return moment.tz(event[attribute].value, event[attribute].tzid || moment.defaultZone.name);
+        return moment.tz(event[attribute].value, event[attribute].tzid || moment().tz());
     }
 
     function getFilter(start, end) {

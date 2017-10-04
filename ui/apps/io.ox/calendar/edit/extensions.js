@@ -350,7 +350,7 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var appointmentTimezoneAbbr = moment.tz(this.model.get('startDate').tzid || moment.defaultZone.name).zoneAbbr(),
+            var appointmentTimezoneAbbr = this.model.getMoment('startDate').zoneAbbr(),
                 userTimezoneAbbr = moment.tz(coreSettings.get('timezone')).zoneAbbr();
 
             if (appointmentTimezoneAbbr === userTimezoneAbbr) return;

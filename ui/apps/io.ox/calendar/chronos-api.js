@@ -492,7 +492,7 @@ define('io.ox/calendar/chronos-api', [
                         invites = _(data.newAndModified)
                         .filter(function (item) {
 
-                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid || moment.defaultZone.name).valueOf() < now,
+                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid || moment().tz()).valueOf() < now,
                                 isRecurring = !!item.recurrenceId;
 
                             if (isOver) {
