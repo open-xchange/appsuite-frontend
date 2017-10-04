@@ -136,6 +136,15 @@ define('io.ox/calendar/chronos-api', [
             },
 
             getList: function (list, useCache) {
+
+                list = _(list).map(function (obj) {
+                    // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                    if (obj.eventId) {
+                        return { id: obj.eventId, folderId: obj.folder, folder: obj.folder, recurrenceId: obj.recurrenceId };
+                    }
+                    return obj;
+                });
+
                 var def, reqList = list;
                 if (useCache !== false) {
                     reqList = list.filter(function (obj) {
