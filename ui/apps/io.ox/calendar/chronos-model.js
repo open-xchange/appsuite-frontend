@@ -207,13 +207,22 @@ define('io.ox/calendar/chronos-model', [
                 resetListUpdate = false;
             });
 
-            this.on('change:attendees', function () {
-                if (resetListUpdate) {
-                    return;
+            this.on({
+                'change:startDate': function () {
+                    var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
+                    prevStartDate = moment.tz(prevStartDate.value, prevStartDate.tzid || moment().tz());
+                    endDate = this.getMoment('startDate').add(endDate.diff(prevStartDate, 'ms'), 'ms');
+                    this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+                },
+
+                'change:attendees': function () {
+                    if (resetListUpdate) {
+                        return;
+                    }
+                    changeAttendeesUpdate = true;
+                    self._attendees.reset(self.get('attendees'));
+                    changeAttendeesUpdate = false;
                 }
-                changeAttendeesUpdate = true;
-                self._attendees.reset(self.get('attendees'));
-                changeAttendeesUpdate = false;
             });
             return this._attendees;
         },
