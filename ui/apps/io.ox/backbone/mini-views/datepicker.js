@@ -82,7 +82,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                         self.nodes.timeField = $('<input type="text" class="form-control time-field">');
 
                         // render timezone badge
-                        var timezone = self.chronos ? moment.tz(self.model.get(self.attribute).tzid || moment.defaultZone.name) : moment.tz(self.model.get(self.options.timezoneAttribute)),
+                        var timezone = self.chronos ? self.model.getMoment(self.attribute) : moment.tz(self.model.get(self.options.timezoneAttribute)),
                             timezoneAbbreviation = timezone.zoneAbbr(),
                             timezoneFullname = (timezone.format('Z ') + timezone.zoneAbbr() + ' ' + timezone.tz()).replace(/_/g, ' ');
 
@@ -200,7 +200,7 @@ define('io.ox/backbone/mini-views/datepicker', [
                 if (_.isNaN(timestamp)) return;
                 timestamp = moment.tz(timestamp, this.model.get(this.options.timezoneAttribute));
             } else {
-                timestamp = moment.tz(this.model.get(this.attribute).value, this.model.get(this.attribute).tzid || moment.defaultZone.name);
+                timestamp = this.model.getMoment(this.attribute);
             }
             this.nodes.dayField.val(this.getDateStr(timestamp));
             if (!this.mobileMode) {
@@ -256,9 +256,9 @@ define('io.ox/backbone/mini-views/datepicker', [
             }
 
             // parse string to timestamp
-            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment.defaultZone.name : this.model.get(this.options.timezoneAttribute));
+            var parsedDate = moment.tz(dateStr, formatStr, this.chronos ? this.model.get(this.attribute).tzid || moment().tz() : this.model.get(this.options.timezoneAttribute));
             if (this.chronos) {
-                return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment.defaultZone.name };
+                return { value: parsedDate.format('YYYYMMDD[T]HHmmss'), tzid: this.model.get(this.attribute).tzid || moment().tz() };
             }
             // on parse error return null
             return !parsedDate ? undefined : parsedDate.valueOf();

@@ -234,8 +234,8 @@ define('io.ox/calendar/util', [
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment.tz(data.startDate.value, data.startDate.tzid || moment.defaultZone.name);
-                    endDate = moment.tz(data.endDate.value, data.endDate.tzid || moment.defaultZone.name);
+                    startDate = moment.tz(data.startDate.value, data.startDate.tzid || moment().tz());
+                    endDate = moment.tz(data.endDate.value, data.endDate.tzid || moment().tz());
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
@@ -375,7 +375,7 @@ define('io.ox/calendar/util', [
 
             var current = moment(data.startDate);
             if (data.startDate.value) {
-                current = moment.tz(data[options.attrName || 'startDate'].value, data[options.attrName || 'startDate'].tzid || moment.defaultZone.name);
+                current = moment.tz(data[options.attrName || 'startDate'].value, data[options.attrName || 'startDate'].tzid || moment().tz());
             }
             parent.append(
                 $.txt(this.getTimeInterval(data)),
@@ -388,7 +388,7 @@ define('io.ox/calendar/util', [
         addTimezonePopover: function (parent, data, opt) {
             var current = moment(data.startDate);
             if (data.startDate.value) {
-                current = moment.tz(data[opt.attrName || 'startDate'].value, data[opt.attrName || 'startDate'].tzid || moment.defaultZone.name);
+                current = moment.tz(data[opt.attrName || 'startDate'].value, data[opt.attrName || 'startDate'].tzid || moment().tz());
             }
 
             opt = _.extend({

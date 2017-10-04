@@ -22,8 +22,8 @@ define('io.ox/calendar/chronos-util', [
     var util = {
         rangeFilter: function (start, end) {
             return function (obj) {
-                var tsStart = moment.tz(obj.startDate.value, obj.startDate.tzid || moment.defaultZone.name),
-                    tsEnd = moment.tz(obj.endDate.value, obj.endDate.tzid || moment.defaultZone.name);
+                var tsStart = moment.tz(obj.startDate.value, obj.startDate.tzid || moment().tz()),
+                    tsEnd = moment.tz(obj.endDate.value, obj.endDate.tzid || moment().tz());
                 if (tsEnd < start) return false;
                 if (tsStart > end) return false;
                 return true;
