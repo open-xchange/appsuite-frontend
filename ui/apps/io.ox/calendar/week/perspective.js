@@ -119,7 +119,7 @@ define('io.ox/calendar/week/perspective', [
                                 self.refresh();
                             })
                             .on('ignore', function () {
-                                apiUpdate(model, _.extend(options, { ignoreConflicts: true }));
+                                apiUpdate(model, _.extend(options || {}, { ignoreConflicts: true }));
                             });
                     });
                 }, function fail(error) {
@@ -444,14 +444,15 @@ define('io.ox/calendar/week/perspective', [
             api
                 .on('refresh.all', reload)
                 .on('create update delete', _.debounce(function () {
+                    var collection = self.view.collection;
                     // set all other collections to expired to trigger a fresh load on the next opening
                     api.pool.grep('view=week').forEach(function (c) {
-                        if (c !== self.view.collection) c.expired = true;
+                        if (c === collection) return;
+                        c.reset();
+                        c.expired = true;
                     });
-                    // run garbage collection to make sure all other models are removed
-                    api.pool.gc();
-                    // mark current collection as not expired to prevent a reload on the next opening
-                    self.view.collection.expired = false;
+                    self.prefetch(-1, collection);
+                    collection.trigger('load');
                 }))
                 .on('delete', function () {
                     // Close dialog after delete
