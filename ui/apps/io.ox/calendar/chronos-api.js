@@ -24,43 +24,48 @@ define('io.ox/calendar/chronos-api', [
 
     'use strict';
 
-    var filter = function (data) {
+    var isRecurrenceMaster = function (data) {
             // do not add model to pool if it is a master model of a recurring event
-            if (data.rrule && !data.recurrenceId) return false;
-            return true;
+            if (data.rrule && !data.recurrenceId) return true;
+            return false;
         },
         // updates pool based on writing operations response (create update delete etc)
         processResponse = function (response) {
             if (!response) return;
 
             _(response.created).each(function (event) {
-                if (filter(event)) api.pool.propagateAdd(event);
-                cache.clear(event.folder);
+                if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
                 api.trigger('create', event);
                 api.trigger('create:' + util.cid(event), event);
             });
 
             _(response.deleted).each(function (event) {
                 // if there is a recurrence rule but no recurrenceId this means the whole series was deleted (recurrence master has no recurrenceId)
-                if (event.rrule && !event.recurrenceId) {
+                if (isRecurrenceMaster(event)) {
                     var events = api.pool.findRecurrenceModels(event);
-                    _(events).each(function (evt) {
+                    events.forEach(function (evt) {
                         evt.collection.remove(evt);
-                        cache.clear(evt.folder);
-                        api.trigger('delete', evt);
-                        api.trigger('delete:' + util.cid(evt), evt);
+                        api.trigger('delete', evt.attributes);
+                        api.trigger('delete:' + util.cid(evt), evt.attributes);
                     });
                 } else {
                     var model = api.pool.getModel(util.cid(event));
                     model.collection.remove(model);
-                    cache.clear(event.folder);
                     api.trigger('delete', event);
                     api.trigger('delete:' + util.cid(event), event);
                 }
             });
 
             _(response.updated).each(function (event) {
-                if (filter(event)) {
+                if (isRecurrenceMaster(event)) {
+                    var events = api.pool.findRecurrenceModels(event),
+                        updates = _(event).pick('attendees', 'alarms');
+                    events.forEach(function (evt) {
+                        evt.set(updates);
+                        api.trigger('update', evt.attributes);
+                        api.trigger('update:' + util.cid(evt), evt.attributes);
+                    });
+                } else {
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
                     // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
                     var model = api.pool.getModel(util.cid(event)),
@@ -70,31 +75,11 @@ define('io.ox/calendar/chronos-api', [
                     });
                     api.pool.propagateUpdate(event);
                 }
-                cache.clear(event.folder);
                 api.trigger('update', event);
                 api.trigger('update:' + util.cid(event), event);
             });
 
             return response;
-        },
-        cache = {
-            hash: {},
-            get: function (cid) {
-                return this.hash[cid];
-            },
-            put: function (cid, value) {
-                this.hash[cid] = value;
-            },
-            clear: function (folder) {
-                if (folder) {
-                    var self = this;
-                    _(this.hash).each(function (value, key) {
-                        if (key.indexOf('folder=' + folder + '&') >= 0) delete self.hash[key];
-                    });
-                    return;
-                }
-                this.hash = {};
-            }
         },
         api = {
             // convenience function
@@ -144,7 +129,7 @@ define('io.ox/calendar/chronos-api', [
                         folder: obj.folder
                     }
                 }).then(function (data) {
-                    if (!filter(data)) return new models.Model(data);
+                    if (isRecurrenceMaster(data)) return new models.Model(data);
                     api.pool.propagateAdd(data);
                     return api.pool.getModel(data);
                 });
@@ -170,12 +155,13 @@ define('io.ox/calendar/chronos-api', [
                 }
                 return def.then(function (data) {
                     if (data) {
-                        data.filter(filter).forEach(function (obj) {
+                        data.forEach(function (obj) {
+                            if (isRecurrenceMaster(obj)) return;
                             api.pool.propagateAdd(obj);
                         });
                     }
                     return list.map(function (obj) {
-                        if (!filter(obj)) return new models.Model(obj);
+                        if (isRecurrenceMaster(obj)) return new models.Model(obj);
                         var cid = util.cid(obj);
                         return api.pool.getModel(cid);
                     });
@@ -223,7 +209,7 @@ define('io.ox/calendar/chronos-api', [
                         return data;
                     }
 
-                    if (data.created.length > 0 && !filter(data.created[0])) return new models.Model(data);
+                    if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return new models.Model(data);
                     return api.pool.getModel(data.created[0]);
                 });
             },
@@ -275,7 +261,7 @@ define('io.ox/calendar/chronos-api', [
 
                     var updated = data.updated ? data.updated[0] : undefined;
                     if (!updated) return api.pool.getModel(util.cid(obj));
-                    if (!filter(updated)) return new models.Model(updated);
+                    if (isRecurrenceMaster(updated)) return new models.Model(updated);
                     return api.pool.getModel(updated);
                 });
             },
@@ -686,7 +672,7 @@ define('io.ox/calendar/chronos-api', [
 
         findRecurrenceModels: function (event) {
             event = event instanceof Backbone.Model ? event.attributes : event;
-            var cid = util.cid({ folder: event.folder, id: event.cid }),
+            var cid = util.cid({ folder: event.folder, id: event.id }),
                 collections = api.pool.getByFolder(event.folder),
                 filterRecurrences = function (model) {
                     return model.cid.indexOf(cid) === 0;
