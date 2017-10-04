@@ -4,7 +4,6 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'gettext!io.ox/mail',
     'settings!io.ox/mail',
     'io.ox/core/settings/util',
-    'io.ox/core/tk/dialogs',
     'io.ox/backbone/views/modal',
     'io.ox/core/api/snippets',
     'io.ox/backbone/mini-views',
@@ -14,7 +13,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, ExtensibleView, gt, settings, util, dialogs, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView) {
+], function (ext, ExtensibleView, gt, settings, util, ModalDialog, snippets, mini, config, notifications, listutils, mailutil, ListView) {
 
     'use strict';
 
@@ -175,7 +174,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         }
     );
 
-    function fnEditSignature(evt, signature) {
+    function fnEditSignature(e, signature) {
         signature = signature || { id: null, name: '', signature: '' };
 
         // support for 'old' signatures
@@ -225,48 +224,43 @@ define('io.ox/mail/settings/signatures/settings/pane', [
         .open();
     }
 
-    function fnImportSignatures(evt, signatures) {
+    function fnImportSignatures(e) {
 
-        // create modal dialog with a list of old signatures (ox 6)
-        var dialog = new dialogs.ModalDialog({ async: true }),
-            Model = Backbone.Model.extend({
-                defaults: {
-                    check: false
-                }
-            }),
-            model = new Model();
-        dialog.header($('<h4>').text(gt('Import signatures')))
-        .append(
-            $('<p class="help-block">').text(gt('You can import existing signatures from the previous product generation.')),
-            util.checkbox('check', gt('Delete old signatures after import'), model),
-            $('<ul class="io-ox-signature-import">').append(
-                _(signatures).map(function (sig) {
-                    //replace div and p elements to br's and remove all other tags.
-                    var preview = (sig.signature_text || '')
-                        .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
-                        .replace(/<(?:.|\n)*?>/gm, '')
-                        .replace(/(\n)+/g, '<br>');
+        var signatures = config.get('gui.mail.signatures');
 
-                    // if preview is empty or a single br-tag, do not append a preview
-                    if (preview === '' || preview === '<br>') {
-                        return '';
-                    }
-
-                    return $('<li>').append(
-                        $('<div class="signature-name">').text(sig.signature_name),
-                        $('<div class="signature-preview">').append(preview)
-                    );
-                })
-            )
-        )
-        .addPrimaryButton('import', gt('Import'))
-        .addButton('cancel', gt('Cancel'));
-
-        // show dialog
-        dialog.show();
-
-        dialog.on('import', function () {
-            dialog.busy();
+        return new ModalDialog({
+            width: 640,
+            async: true,
+            title: gt('Import signatures'),
+            point: 'io.ox/mail/settings/signature-dialog/import',
+            model: new Backbone.Model()
+        })
+        .build(function () {
+            this.$body.append(
+                $('<p class="help-block">').text(gt('You can import all existing signatures from the previous product generation at once.')),
+                util.checkbox('delete', gt('Delete old signatures after import'), this.model),
+                $('<ul class="io-ox-signature-import">').append(
+                    _(signatures).map(function (sig) {
+                        //replace div and p elements to br's and remove all other tags.
+                        var preview = (sig.signature_text || '')
+                            .replace(/<(br|\/br|\/p|\/div)>(?!$)/g, '\n')
+                            .replace(/<(?:.|\n)*?>/gm, '')
+                            .replace(/(\n)+/g, '<br>');
+                        // if preview is empty or a single br-tag use fallback
+                        if (preview === '' || preview === '<br>') preview = $('<i>').text(gt('No preview available'));
+                        return $('<li>').append(
+                            $('<div class="signature-name">').text(sig.signature_name),
+                            $('<div class="signature-preview">').append(preview)
+                        );
+                    })
+                )
+            );
+        })
+        .addButton({ action: 'import', label: gt('Import') })
+        .addCancelButton()
+        .on('import', function () {
+            var view = this,
+                button = $(e.target);
 
             var deferreds = _(signatures).map(function (sig) {
                 return snippets.create({
@@ -284,18 +278,18 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                 }).fail(require('io.ox/core/notifications').yell);
             });
 
-            if (model.get('check')) config.remove('gui.mail.signatures');
-
-            $.when.apply(this, deferreds).then(function success() {
-                dialog.close();
-                if (model.get('check')) {
+            $.when.apply($, deferreds).then(function () {
+                if (view.model.get('delete')) {
+                    button.remove();
+                    config.remove('gui.mail.signatures');
                     config.save();
-                    evt.target.remove();
                 }
-            }, function fail() {
-                dialog.idle();
+                view.close();
+            }, function () {
+                view.idle();
             });
-        });
+        })
+        .open();
     }
 
     ext.point('io.ox/mail/settings/signatures/settings/detail').extend({
@@ -353,10 +347,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     $el.append(
                         $('<button type="button" class="btn btn-default">')
                         .text(gt('Import signatures') + ' ...')
-                        .on('click', function (e) {
-                            fnImportSignatures(e, config.get('gui.mail.signatures'));
-                            return false;
-                        })
+                        .on('click', fnImportSignatures)
                     );
                 }
 
