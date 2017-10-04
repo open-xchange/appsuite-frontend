@@ -154,6 +154,7 @@ define('io.ox/calendar/list/perspective', [
             });
 
             self.app.folder.getData().done(function (data) {
+                app.listView.model.set('folder', data.id);
                 self.folderModel = folderAPI.pool.getModel(data.id);
                 self.folderModel.on('change:meta', self.updateColor, self);
             });

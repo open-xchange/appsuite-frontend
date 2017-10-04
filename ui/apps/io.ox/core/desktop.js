@@ -371,6 +371,8 @@ define('io.ox/core/desktop', [
                                 'FLD-0008|' +
                                 // folder storage service no longer available
                                 'FLD-1004|' +
+                                // The supplied folder is not supported. Please select a valid folder and try again.
+                                'CAL-4060|' +
                                 // mail folder "..." could not be found on mail server
                                 'IMAP-1002|' +
                                 // imap no read permission
