@@ -33,30 +33,31 @@ define('io.ox/core/api/jobs', [
             if (jobTimer) return;
 
             jobTimer = setInterval(function () {
-                _(longRunningJobs).each(function (job) {
-                    // maybe this can be changed into a multiple later on (response is broken atm)
-                    api.get(job.id).done(function (data) {
-                        // still running
-                        if (data.job) return;
-                        // finished
-                        data.job = longRunningJobs[job.id];
-                        if (data.error && longRunningJobs[job.id].failCallback) {
-                            longRunningJobs[job.id].failCallback(data);
-                        } else if (longRunningJobs[job.id].successCallback) {
-                            longRunningJobs[job.id].successCallback(data);
+                api.getInfo(_(longRunningJobs).keys()).done(function (data) {
+                    var doneJobs = {};
+                    _(data).each(function (job) {
+                        if (job.data.done) {
+                            doneJobs[job.data.id] = longRunningJobs[job.data.id];
+                            delete longRunningJobs[job.data.id];
                         }
+                    });
+                    api.updateJobTimer();
 
-                        api.trigger('finished:' + job.id, data);
-                        // used to trigger redraw of folderview
-                        api.trigger('finished:' + job.showIn, data);
-                        delete longRunningJobs[job.id];
-                        api.updateJobTimer();
-                    }).fail(function (error) {
-                        // no such job
-                        if (error.code === 'JOB-0002') {
-                            delete longRunningJobs[job.id];
-                            api.updateJobTimer();
-                        }
+                    if (_(doneJobs).size === 0) return;
+
+                    _(_(doneJobs).keys()).each(function (key) {
+                        var job = doneJobs[key];
+                        api.get(job.id).done(function (result) {
+                            if (result.error && doneJobs[job.id].failCallback) {
+                                doneJobs[job.id].failCallback(result);
+                            } else if (doneJobs[job.id].successCallback) {
+                                doneJobs[job.id].successCallback(result);
+                            }
+
+                            api.trigger('finished:' + job.id, result);
+                            // used to trigger redraw of folderview
+                            api.trigger('finished:' + job.showIn, result);
+                        });
                     });
                 });
             }, 60000);
