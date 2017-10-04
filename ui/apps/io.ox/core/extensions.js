@@ -374,14 +374,15 @@ define('io.ox/core/extensions', ['io.ox/core/event'], function (Events) {
         };
 
         // invoke extensions 'perform' as a waterfall
-        this.cascade = function (baton) {
+        this.cascade = function (context, baton) {
+            baton = Baton.ensure(baton);
             var point = this;
             return point.reduce(function (def, ext) {
                 if (!def || !def.then) def = $.when(def);
                 return def.then(function () {
                     if (baton.isPropagationStopped()) return;
                     if (baton.isDisabled(point.id, ext.id)) return;
-                    return ext.perform.apply(undefined, [baton]);
+                    return ext.perform.apply(context, [baton]);
                 });
             }, $.when());
         };
