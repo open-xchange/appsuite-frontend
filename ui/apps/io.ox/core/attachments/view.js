@@ -112,8 +112,8 @@ define('io.ox/core/attachments/view', [
                     $('<span class="summary">'),
                     $('<i class="fa toggle-caret" aria-hidden="true">')
                 ),
-                $('<span class="links">'),
-                $('<a href="#" class="pull-right toggle-mode" role="button">')
+                $('<span class="links" role="presentation">'),
+                $('<a href="#" class="pull-right toggle-mode" role="button">').attr('title', gt('Toggle preview'))
                     .append('<i class="fa" aria-hidden="true">')
             );
 
@@ -162,6 +162,7 @@ define('io.ox/core/attachments/view', [
             if (this.$el.hasClass('show-preview')) id = this.$('.preview-container').attr('id');
             else id = this.$('.list-container').attr('id');
             this.$header.find('.toggle-details').attr('aria-controls', id);
+            this.$header.find('.toggle-mode').attr('aria-pressed', this.$el.hasClass('show-preview'));
         },
 
         toggleDetails: function () {
