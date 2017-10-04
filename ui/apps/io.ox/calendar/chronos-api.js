@@ -707,6 +707,9 @@ define('io.ox/calendar/chronos-api', [
 
     api.collectionLoader = new CollectionLoader({
         module: 'chronos',
+        // listview uses own pagination. just make sure, that the number of items is not cropped
+        PRIMARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+        SECONDARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
         paginateCompare: false,
         getQueryParams: function (params) {
             return params;
