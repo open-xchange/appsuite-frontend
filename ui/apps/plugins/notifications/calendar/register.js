@@ -188,6 +188,7 @@ define('plugins/notifications/calendar/register', [
             var options = {
                     id: 'io.ox/calendarreminder',
                     api: calAPI,
+                    useListRequest: true,
                     //#. Reminders (notifications) about appointments
                     title: gt('Appointment reminders'),
                     extensionPoints: {
