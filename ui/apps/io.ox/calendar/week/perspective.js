@@ -213,7 +213,10 @@ define('io.ox/calendar/week/perspective', [
             var obj = this.view.getRequestParam(),
                 loader = api.collectionLoader,
                 method = useCache === false ? 'reload' : 'load',
-                collection = loader[method](obj);
+                collection = loader.getCollection(obj);
+
+            this.prefetch(-1, collection);
+            collection = loader[method](obj);
             this.view.setCollection(collection);
 
             // set manually to expired to trigger reload on next opening
@@ -221,6 +224,28 @@ define('io.ox/calendar/week/perspective', [
                 api.pool.grep('view=week').forEach(function (c) {
                     if (c !== collection) c.expired = true;
                 });
+            }
+        },
+
+        prefetch: function (index, prevCollection) {
+            var self = this,
+                params = this.view.getRequestParam(),
+                range = moment(params.end).diff(moment(params.start), 'ms'),
+                newParams = _.extend(params, {
+                    start: index < 0 ? params.start - range : params.end,
+                    end: index < 0 ? params.start : params.end + range
+                }),
+                loader = api.collectionLoader,
+                collection = loader.getCollection(newParams),
+                cont = function (c) { if (index < 0) self.prefetch(1, c); };
+
+            if (collection.length > 0 && !collection.expired) {
+                cont(prevCollection);
+            } else {
+                prevCollection.once('load reload', _.debounce(function () {
+                    loader.load(newParams);
+                    cont(collection);
+                }));
             }
         },
 
