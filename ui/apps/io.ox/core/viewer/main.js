@@ -85,6 +85,10 @@ define('io.ox/core/viewer/main', [], function () {
                         if (_.url.hash('app') !== 'io.ox/office/presenter') {
                             _.url.hash('id', null);
                         }
+
+                        if (data.restoreFocus && _.isFunction(data.restoreFocus.focus)) {
+                            data.restoreFocus.focus();
+                        }
                     });
                 });
             }
