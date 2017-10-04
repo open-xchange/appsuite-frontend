@@ -717,16 +717,16 @@ define('io.ox/calendar/chronos-api', [
             // special handling for requests of listview
             if (params.view === 'list') {
                 var offset = this.collection.offset || 0, start, end;
-                if (params.pagination === true) {
-                    // reload
-                    start = 0;
-                    end = offset;
-                } else {
+                if (params.paginate === true) {
                     // paginate
                     start = offset;
                     end = offset + 1;
-                    this.collection.offset = end;
+                } else {
+                    // reload
+                    start = 0;
+                    end = offset || 1;
                 }
+                this.collection.offset = end;
                 params.start = moment().startOf('day').add(start, 'month').valueOf();
                 params.end = moment().startOf('day').add(end, 'month').valueOf();
             }

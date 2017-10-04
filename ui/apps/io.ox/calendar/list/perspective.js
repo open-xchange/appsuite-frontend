@@ -177,7 +177,13 @@ define('io.ox/calendar/list/perspective', [
             });
 
             // refresh listview on all update/delete events
-            api.on('refresh.all', app.listView.reload.bind(app.listView));
+            api.on('refresh.all', function () {
+                // make sure the collection loader uses the correct collection
+                var loader = app.listView.loader,
+                    collection = app.listView.collection;
+                loader.collection = collection;
+                app.listView.reload();
+            });
 
             api.on('create', function (data) {
                 app.listView.collection.once('reload', function () {

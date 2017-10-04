@@ -250,6 +250,8 @@ define('io.ox/calendar/list/listview', [
         onLoadMore: function (e) {
             e.preventDefault();
             if (this.tail) this.tail.remove();
+            this.loader.collection = this.collection;
+            // must send paginate: true because pagination in calendar is somehow special
             this.paginate({ paginate: true });
         },
 

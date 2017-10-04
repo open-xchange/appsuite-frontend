@@ -216,7 +216,8 @@ define('io.ox/calendar/week/perspective', [
                 collection = loader.getCollection(obj);
 
             this.prefetch(-1, collection);
-            collection = loader[method](obj);
+            loader.collection = collection;
+            loader[method](obj);
             this.view.setCollection(collection);
 
             // set manually to expired to trigger reload on next opening
