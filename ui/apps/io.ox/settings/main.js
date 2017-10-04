@@ -531,6 +531,29 @@ define('io.ox/settings/main', [
             subgroup: 'io.ox/settings/pane/security'
         });
 
+        // enqueue is probably a bad name, but since it's not exposed …
+        // only resolve the last object enqueed
+        var enqueue = (function () {
+            var running = [];
+            return function (def) {
+                var index = running.length;
+                running.forEach(function (d) { d.cancelled = true; });
+                running.push({
+                    def: def,
+                    cancelled: false
+                });
+
+                return def.then(function () {
+                    if (running[index].cancelled) return $.Deferred().reject();
+
+                    return $.Deferred().resolve();
+                }).always(function () {
+                    running = running.filter(function (d, i) {
+                        return i !== index;
+                    });
+                });
+            };
+        }());
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;
@@ -538,25 +561,21 @@ define('io.ox/settings/main', [
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
-                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
+                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail'),
+                def = $.Deferred();
 
             right.empty().busy();
 
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
-                return require([settingsPath], function () {
-                    // again, since require makes this async
-                    right.empty().idle();
-                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
-                    ext.point(extPointPart).invoke('draw', right, baton);
-                    if (focus) vsplit.right.focus();
-                });
+                def = require([settingsPath]);
+            } else {
+                def.resolve();
             }
-            return require(['io.ox/contacts/settings/pane'], function () {
-                // again, since require makes this async
-                right.empty().idle();
+            return enqueue(def).then(function () {
                 vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                 ext.point(extPointPart).invoke('draw', right, baton);
                 if (focus) vsplit.right.focus();
+                right.idle();
             });
         };
 
