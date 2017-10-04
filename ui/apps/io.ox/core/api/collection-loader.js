@@ -85,14 +85,14 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection.trigger(type + ':fail', e);
         }
 
-        function process(params, type) {
+        function process(params, type, collection) {
             // get offset
-            var offset = type === 'paginate' ? Math.max(this.collection.length - 1, 0) : 0;
+            var offset = type === 'paginate' ? Math.max(collection.length - 1, 0) : 0;
             // trigger proper event
-            this.collection.trigger('before:' + type);
+            collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, this.collection, type, params, this),
-                cb_fail = _.lfo(fail, this.collection, type),
+            var cb_apply = _.lfo(apply, collection, type, params, this),
+                cb_fail = _.lfo(fail, collection, type),
                 self = this;
             // fetch data
             return this.fetch(params)
@@ -134,7 +134,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
 
             this.loading = true;
             collection.expired = false;
-            _.defer(process.bind(this), params, 'load');
+            _.defer(process.bind(this), params, 'load', collection);
             return collection;
         };
 
@@ -151,7 +151,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.loading = true;
 
             collection.expired = false;
-            _.defer(process.bind(this), params, 'paginate');
+            _.defer(process.bind(this), params, 'paginate', collection);
             return collection;
         };
 
@@ -166,7 +166,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             this.loading = true;
 
             collection.expired = false;
-            _.defer(process.bind(this), params, 'reload');
+            _.defer(process.bind(this), params, 'reload', collection);
             return collection;
         };
     }
