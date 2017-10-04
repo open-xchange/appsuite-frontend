@@ -25,65 +25,6 @@ define('io.ox/core/folder/contextmenu', [
 
     'use strict';
 
-    //
-    // drawing utility functions
-    //
-
-    // var ColorSelectionView = Backbone.View.extend({
-    //     tagName: 'div',
-    //     className: 'custom-colors',
-    //     events: {
-    //         'click .color-label': 'select',
-    //         'remove': 'onRemove'
-    //     },
-    //     initialize: function () {
-    //         this.listenTo(this.model, 'change:meta', this.update);
-    //     },
-    //     update: function () {
-    //         //toggle active class
-    //         $('.active', this.$el).removeClass('active').attr('aria-checked', false);
-    //         $('.color-label-' + (this.model.get('meta') ? this.model.get('meta').color_label || '1' : '1'), this.$el).addClass('active').attr('aria-checked', true);
-    //     },
-    //     select: function (e) {
-    //         var meta = _.extend({},
-    //             this.model.get('meta'),
-    //             { color_label: $(e.currentTarget).data('index') }
-    //         );
-
-    //         api.update(this.model.get('id'), { meta: meta }).fail(function (error) {
-    //             require(['io.ox/core/notifications'], function (notifications) {
-    //                 notifications.yell(error);
-    //             });
-    //         });
-
-    //         //prevent dialog from closing
-    //         e.stopPropagation();
-    //         e.preventDefault();
-    //     },
-    //     render: function (util) {
-    //         var folderColor = util.getFolderColor({ meta: this.model.get('meta') });
-
-    //         this.$el.append(
-    //             _.range(1, 11).map(function (colorNumber) {
-    //                 return $('<div class="color-label pull-left" tabindex="0" role="checkbox">')
-    //                     .addClass('color-label-' + colorNumber)
-    //                     .toggleClass('active', folderColor === colorNumber)
-    //                     .attr({
-    //                         'data-index': colorNumber,
-    //                         'aria-checked': folderColor === colorNumber,
-    //                         'title': util.getColorLabel(colorNumber)
-    //                     })
-    //                     .append($('<i class="fa fa-check" aria-hidden="true">'));
-    //             })
-    //         );
-
-    //         return this;
-    //     },
-    //     onRemove: function () {
-    //         this.stopListening();
-    //     }
-    // });
-
     var extensions = {
 
         //
