@@ -450,7 +450,7 @@ define('io.ox/mail/actions', [
         requires: 'some',
         multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                var options = { files: attachmentList };
+                var options = { files: attachmentList, restoreFocus: baton.restoreFocus };
                 if (baton.startItem) {
                     options.selection = baton.startItem;
                 }
