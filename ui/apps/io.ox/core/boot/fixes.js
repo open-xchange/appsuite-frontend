@@ -132,6 +132,10 @@ define('io.ox/core/boot/fixes', [], function () {
         $('html').addClass('internet-explorer');
     }
 
+    if (_.device('ie <= 11')) {
+        $('html').addClass('ie11');
+    }
+
     //
     // Connection / Window State
     //

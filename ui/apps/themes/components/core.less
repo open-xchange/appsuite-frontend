@@ -239,7 +239,7 @@ div.hopscotch-bubble {
         .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
 
-    transition: filter 1s linear;
+    transition: filter 1s linear, opacity 1s linear;
 
 }
 
@@ -619,6 +619,9 @@ html:not(.internet-explorer) {
 }
 
 .blur {
+    .ie11 & {
+        opacity: 0;
+    }
     filter: blur(@bluriness);
 }
 
