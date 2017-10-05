@@ -22,7 +22,7 @@ describe('Contacts', function () {
 
             client
                 .selectFolder({ title: 'Contacts' })
-                .clickWhenEventListener('.io-ox-contacts-window .classic-toolbar a[data-action="create"]', 'click', 2000)
+                .clickWhenEventListener('.io-ox-contacts-window .classic-toolbar a[data-action="create"]', 'click', 10000)
                 .clickWhenVisible('.dropdown.open a[data-action="io.ox/contacts/actions/create"]', 2000)
                 .waitForElementVisible('.io-ox-contacts-edit-window', 2500);
 
