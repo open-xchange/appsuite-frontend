@@ -26,7 +26,6 @@ variables:
   script:
     - cd ${PROJECT_PATH}
     - yarn
-    - yarn clean
   cache:
     # use one cache per project and branch
     # ex.: ui_feature/gitlab_ci
