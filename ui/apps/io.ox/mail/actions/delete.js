@@ -66,23 +66,6 @@ define('io.ox/mail/actions/delete', [
                     return account.is('trash', o.folder_id);
                 }));
 
-            // this probably needs to be done server-side
-            // far too much delay when rushing through folders
-            // and deleting unimportant unseen stuff, e.g. spam mail
-
-            // function remove(l, a) {
-            //     var spamList = _(l).filter(function (o) {
-            //         return account.is('spam', o.folder_id);
-            //     });
-
-            //     if (spamList && spamList.length > 0) {
-            //         return api.markRead(spamList).always(function () {
-            //             return api.remove(l, a);
-            //         });
-            //     } else {
-            //         return api.remove(l, a);
-            //     }
-            // }
 
             if (showPrompt) {
                 require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
