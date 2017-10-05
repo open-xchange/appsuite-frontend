@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">E-mail</span></h1>
 <h2 class="sr-only">E-mailfilters gebruiken</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Gebruiksvoorbeelden voor e-mailfilters</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>U kan een voorwaarde aanmaken door</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>selecteer een e-mailonderdeel zoals "Onderwerp";</p></li>
-<li class="listitem"><p>kies een voorwaarde, bijvoorbeeld "Is exact";</p></li>
-<li class="listitem"><p>een argument toe te voegen zoals "protocol"</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. Gebruiksvoorbeelden voor e-mailfilters</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">U kan een voorwaarde aanmaken door</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">selecteer een e-mailonderdeel zoals "Onderwerp";</p></li>
+<li class="listitem"><p role="presentation">kies een voorwaarde, bijvoorbeeld "Is exact";</p></li>
+<li class="listitem"><p role="presentation">een argument toe te voegen zoals "protocol"</p></li>
+</ul>
 <p> In dit geval wordt gecontroleerd of het onderwerp van een e-mailbericht exact overeen komt met het argument ("protocol"). U kan instellen of de conditie gehaald wordt met de voorwaarde en de tekst van het argument. Het verschil tussen de verschillende voorwaarden wordt uitgelegd in de voorbeelden hieronder. In deze voorbeelden wordt het onderwerp gebruikt voor het filteren van e-mailberichten.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Voorwaarde: "bevat" Er wordt aan de voorwaarde voldaan als het onderwerp alle karakters van het argument bevat. Voorbeeld: Het argument is "protocol".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt ook gehaald met het onderwerp "vergaderprotocol".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Voorwaarde: "bevat" Er wordt aan de voorwaarde voldaan als het onderwerp alle karakters van het argument bevat. Voorbeeld: Het argument is "protocol".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt ook gehaald met het onderwerp "vergaderprotocol".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>Voorwaarde: "Is exact" De voorwaarde wordt gehaald als het onderwerp exact gelijk is aan de tekst in het argument. Voorbeeld: Het argument is "protocol".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt niet gehaald met het onderwerp "vergaderprotocol".</p></li>
-</ul></div>
+<p role="presentation">Voorwaarde: "Is exact" De voorwaarde wordt gehaald als het onderwerp exact gelijk is aan de tekst in het argument. Voorbeeld: Het argument is "protocol".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt niet gehaald met het onderwerp "vergaderprotocol".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Voorwaarde: "Komt overeen" Aan de voorwaarde is voldaan als het onderwerp exact overeen met de karakters van het argument. De karakterreeks mag ook jokertekens bevatten. Voorbeeld: het argument is "protocol*". Het teken "*" is een jokerteken dat voor willekeurige karakters staat. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt niet gehaald met het onderwerp "vergaderprotocol".</p></li>
-</ul></div>
+<p role="presentation">Voorwaarde: "Komt overeen" Aan de voorwaarde is voldaan als het onderwerp exact overeen met de karakters van het argument. De karakterreeks mag ook jokertekens bevatten. Voorbeeld: het argument is "protocol*". Het teken "*" is een jokerteken dat voor willekeurige karakters staat. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt niet gehaald met het onderwerp "vergaderprotocol".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Voorwaarde: "Regex" Aan de voorwaarde is voldaan als het onderwerp de karakters bevat uit de reguliere expressie van het argument. Reguliere expressies laten complexe voorwaarden toe. Meer informatie kan op de betreffende websites worden gevonden. De volgende, eenvoudige reguliere expressie geeft een indruk hierop. Voorbeeld: het argument is "bedrij(f|v)en". De expressie "(f|v)" staat voor een "f" of een "v" teken. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt ook gehaald met het onderwerp "bedrijfen".</p></li>
-<li class="listitem" style="list-style-type: none"><p>De voorwaarde wordt niet gehaald met het onderwerp "Bedrijvigheid".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Voorwaarde: "Regex" Aan de voorwaarde is voldaan als het onderwerp de karakters bevat uit de reguliere expressie van het argument. Reguliere expressies laten complexe voorwaarden toe. Meer informatie kan op de betreffende websites worden gevonden. De volgende, eenvoudige reguliere expressie geeft een indruk hierop. Voorbeeld: het argument is "bedrij(f|v)en". De expressie "(f|v)" staat voor een "f" of een "v" teken. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt gehaald met het onderwerp "protocol".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt ook gehaald met het onderwerp "bedrijfen".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">De voorwaarde wordt niet gehaald met het onderwerp "Bedrijvigheid".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Zie ook</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Nieuwe regels aanmaken">Nieuwe regels aanmaken</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Een nieuwe regel aanmaken tijdens het verplaatsen">Een nieuwe regel aanmaken tijdens het verplaatsen</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Een regel wijzigen">Een regel wijzigen</a></p>
+<p class="title">Zie ook</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Nieuwe regels aanmaken</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Een nieuwe regel aanmaken tijdens het verplaatsen</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Een regel wijzigen</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. E-mailfilters gebruiken">E-mailfilters gebruiken</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Overkoepelend thema: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">E-mailfilters gebruiken</a></p>
 </div>
           </div>
         </body>
