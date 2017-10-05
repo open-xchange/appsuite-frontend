@@ -256,7 +256,7 @@ describe('Mailfilter', function () {
 
         // open the saved rule
         client
-            .waitForElementPresent('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"]', 10000)
+            .waitForElementNotPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]', 10000)
             .click('.io-ox-settings-window .settings-detail-pane li.settings-list-item[data-id="0"] a[data-action="edit"]');
 
         // ckeck if the rule is correctly displayed
@@ -354,7 +354,7 @@ describe('Mailfilter', function () {
             .assert.value('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]', 'Test Value')
             .assert.elementNotPresent('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="0"] .row.has-error');
 
-         // add condition
+        // add condition
         client
             .click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .add-condition a')
             .waitForElementVisible('.smart-dropdown-container .dropdown-menu a[data-value="to"]', 10000)
