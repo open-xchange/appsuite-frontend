@@ -831,12 +831,12 @@ define('io.ox/files/api', [
             if (model && !model.get('expired') && model.has('description')) return $.when(model.toJSON());
         }
 
-        var params = {
+        var params = _.extend({
             action: 'get',
             id: file.id,
             folder: file.folder_id || file.folder,
             timezone: 'UTC'
-        };
+        }, options.params);
 
         if (options.columns) params.columns = options.columns;
 
@@ -866,12 +866,12 @@ define('io.ox/files/api', [
 
         return http.GET({
             module: 'files',
-            params: {
+            params: _.extend({
                 action: 'all',
                 columns: options.columns,
                 folder: folder,
                 timezone: 'UTC'
-            }
+            }, options.params)
         })
         .then(function (data) {
             pool.add('detail', data);
