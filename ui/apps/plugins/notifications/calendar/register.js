@@ -52,7 +52,7 @@ define('plugins/notifications/calendar/register', [
                     e.stopPropagation();
                     var o = calAPI.reduce(model.attributes),
                         appointmentData = model.attributes;
-                    require(['io.ox/core/folder/api', 'settings!io.ox/chronos'], function (folderAPI, calendarSettings) {
+                    require(['io.ox/core/folder/api', 'settings!io.ox/calendar', 'io.ox/calendar/chronos-util'], function (folderAPI, calendarSettings, chronosUtil) {
                         folderAPI.get(o.folder).done(function (folder) {
                             o.data = {
                                 // default reminder
@@ -65,6 +65,9 @@ define('plugins/notifications/calendar/register', [
                                 id: appointmentData.id,
                                 folder: appointmentData.folder
                             };
+                            // convenience function to convert old alarms into new chronos alarms
+                            // TODO remove once migration process is implemented
+                            o.data.alarms = chronosUtil.convertAlarms(o.data.alarms);
                             o.data.attendee.partStat = 'ACCEPTED';
                             o.data.attendee.comment = '';
 

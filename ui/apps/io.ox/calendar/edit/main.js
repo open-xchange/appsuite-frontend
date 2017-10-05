@@ -21,7 +21,7 @@ define('io.ox/calendar/edit/main', [
     'io.ox/calendar/util',
     'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'io.ox/calendar/chronos-util',
     'less!io.ox/calendar/edit/style',
     // need jquery-ui for scrollParent
@@ -194,6 +194,8 @@ define('io.ox/calendar/edit/main', [
                         description: '',
                         trigger: { duration: '-PT15M', related: 'START' }
                     }]);
+
+                    data.alarms = chronosUtil.convertAlarms(data.alarms);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
                     data.transp = data.transp || (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);

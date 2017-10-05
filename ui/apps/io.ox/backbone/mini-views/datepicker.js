@@ -12,7 +12,7 @@
  */
 
 define('io.ox/backbone/mini-views/datepicker', [
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'gettext!io.ox/core',
     'less!io.ox/backbone/mini-views/datepicker'
 ], function (settings, gt) {

@@ -31,7 +31,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/capabilities',
     'io.ox/core/folder/picker',
     'io.ox/core/folder/api',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/calendar/color-picker',
     'less!io.ox/calendar/style'

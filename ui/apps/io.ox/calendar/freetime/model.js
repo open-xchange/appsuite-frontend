@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/freetime/model', [
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'io.ox/calendar/chronos-model'
 ], function (settings, chronosModel) {
 

@@ -293,7 +293,7 @@ define('io.ox/calendar/actions', [
             });
         },
         multiple: function (list, baton) {
-            ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/chronos']).done(function (move, settings) {
+            ox.load(['io.ox/core/folder/actions/move', 'settings!io.ox/calendar']).done(function (move, settings) {
                 move.item({
                     api: api,
                     button: gt('Move'),
