@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">E-Mail</span></h1>
 <h2 class="sr-only">Using E-Mail Filters</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Use cases for E-Mail filters</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>You can create a condition by</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>selecting an E-Mail component, e.g. "Subject";</p></li>
-<li class="listitem"><p>selecting a criterion, e.g. "Is exactly";</p></li>
-<li class="listitem"><p>entering an argument, e.g. "minutes".</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. Use cases for E-Mail filters</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">You can create a condition by</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">selecting an E-Mail component, e.g. "Subject";</p></li>
+<li class="listitem"><p role="presentation">selecting a criterion, e.g. "Is exactly";</p></li>
+<li class="listitem"><p role="presentation">entering an argument, e.g. "minutes".</p></li>
+</ul>
 <p>In this case it would be verified whether the subject of an E-Mail exactly matches the argument's characters ("minutes"). You can control if the condition is met with the criterion and the character string. The differences between each criteria will be explained in the examples below. In the examples, the subject is used for filtering E-Mail messages.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Criterion: "contains" The condition is met if the subject contains the characters in the argument. Example: The argument is "minutes".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>The condition is met for the subject "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>The condition is also met for the subject "meeting minutes".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterion: "contains" The condition is met if the subject contains the characters in the argument. Example: The argument is "minutes".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is also met for the subject "meeting minutes".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>Criterion: "is exactly" The condition is met if the subject exactly matches the argument's character string. Example: The argument is "minutes".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>The condition is met for the subject "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>The condition is not met for the subject "meeting minutes".</p></li>
-</ul></div>
+<p role="presentation">Criterion: "is exactly" The condition is met if the subject exactly matches the argument's character string. Example: The argument is "minutes".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is not met for the subject "meeting minutes".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterion: "Matches" The condition is met if the subject exactly matches the characters in the argument. The character string can contain wildcards. Example: The argument is "minutes*". The "*" character is a wildcard for any characters. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>The condition is met for the subject "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>The condition is not met for the subject "meeting minutes".</p></li>
-</ul></div>
+<p role="presentation">Criterion: "Matches" The condition is met if the subject exactly matches the characters in the argument. The character string can contain wildcards. Example: The argument is "minutes*". The "*" character is a wildcard for any characters. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is not met for the subject "meeting minutes".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterion: "Regex"  The condition is met if the subject contains the characters provided by the regular expression in the argument. Regular expressions allow complex requests. More information can be found on respective sites on the Web. The following, very simple regular expression should give an insight to the topic. Example: The argument is "organi(z|s)ation". The expression "(z|s)" stands for either the "z" or the "s" character. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>The condition is met for the subject "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>The condition is also met for the subject "organisation".</p></li>
-<li class="listitem" style="list-style-type: none"><p>The condition is not met for the subject "Organic".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterion: "Regex"  The condition is met if the subject contains the characters provided by the regular expression in the argument. Regular expressions allow complex requests. More information can be found on respective sites on the Web. The following, very simple regular expression should give an insight to the topic. Example: The argument is "organi(z|s)ation". The expression "(z|s)" stands for either the "z" or the "s" character. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is met for the subject "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is also met for the subject "organisation".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">The condition is not met for the subject "Organic".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Also see</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Creating new rules">Creating new rules</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Creating a new rule when moving">Creating a new rule when moving</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Changing a rule">Changing a rule</a></p>
+<p class="title">Also see</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Creating new rules</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Creating a new rule when moving</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Changing a rule</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. Using E-Mail Filters">Using E-Mail Filters</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Parent topic: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">Using E-Mail Filters</a></p>
 </div>
           </div>
         </body>
