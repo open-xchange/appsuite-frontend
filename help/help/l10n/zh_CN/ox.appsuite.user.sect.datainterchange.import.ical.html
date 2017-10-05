@@ -31,24 +31,22 @@
 <div class="oxhelp-content">
   <h1 class="sr-only">交换数据</h1>
 <h2 class="sr-only">汇入数据</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.datainterchange.import.ical"></a>12.1.1. 汇入 iCal 格式的约会和任务。</h3></div></div></div>
+<div class="sect2" id="ox.appsuite.user.sect.datainterchange.import.ical">
+<div class="titlepage"><div><div><h3 class="title">12.1.1. 汇入 iCal 格式的约会和任务。</h3></div></div></div>
 <a class="indexterm" name="id-1.13.4.5.2"></a><a class="indexterm" name="id-1.13.4.5.3"></a><a class="indexterm" name="id-1.13.4.5.4"></a><a class="indexterm" name="id-1.13.4.5.5"></a><div class="concept">
-<a name="ox.appsuite.user.concept.datainterchange.import.ical"></a><p>以下表格显示哪些 iCal 对象已汇入，哪些没有。“约会”和“任务”列中的信息具有以下含义：</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>"X" 表示导入该对象。在 RFC2445 中设置了对象值。</p></li>
-<li class="listitem"><p>数字，例如 "255"，表示导入该对象。数字指出字符的最大数量。</p></li>
-<li class="listitem"><p>条目“无限制”表示导入该对象。对字符的最大数量没有限制。</p></li>
-<li class="listitem"><p>条目 "-" 表示不导入该对象。</p></li>
-</ul></div>
+<a name="ox.appsuite.user.concept.datainterchange.import.ical"></a><p id="ox.appsuite.user.concept.datainterchange.import.ical">以下表格显示哪些 iCal 对象已汇入，哪些没有。“约会”和“任务”列中的信息具有以下含义：</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">"X" 表示导入该对象。在 RFC2445 中设置了对象值。</p></li>
+<li class="listitem"><p role="presentation">数字，例如 "255"，表示导入该对象。数字指出字符的最大数量。</p></li>
+<li class="listitem"><p role="presentation">条目“无限制”表示导入该对象。对字符的最大数量没有限制。</p></li>
+<li class="listitem"><p role="presentation">条目 "-" 表示不导入该对象。</p></li>
+</ul>
 <p>所有 iCal 对象的描述可以在<a class="ulink" href="http://tools.ietf.org/html/rfc2445" target="_top">RFC2445</a>文件找到。</p>
 </div>
 <div class="reference">
-<a name="ox.appsuite.user.reference.datainterchange.import.ical"></a><p>
+<a name="ox.appsuite.user.reference.datainterchange.import.ical"></a><p id="ox.appsuite.user.reference.datainterchange.import.ical">
         </p>
-<div class="informaltable">
-<a name="ox.appsuite.user.tab.import.ical"></a><table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
+<div class="informaltable" id="ox.appsuite.user.tab.import.ical"><table style="border-collapse: collapse;border-top: 0.5pt solid ; border-bottom: 0.5pt solid ; ">
 <colgroup>
 <col>
 <col>
@@ -483,42 +481,39 @@
 <td style="" align="center">X</td>
 </tr>
 </tbody>
-</table>
-</div>
+</table></div>
 <p>
       </p>
 </div>
 <div class="concept">
-<a name="ox.appsuite.user.concept.datainterchange.import.ical.restrictions"></a><p>小心以下限制。</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>支持像 "一个月的最后一个星期日" 的约会。不支持以从月底开始计算天数的约会。示例：一个月的倒数第二个星期日。如果一个约会包含此类信息，则不导入该约会。</p></li>
-<li class="listitem"><p>不支持重复警报。例如：“提醒我四次”。如果一个约会包含此类信息，则会忽略此类信息。</p></li>
-<li class="listitem"><p>确保您要导入的文件包含正确的 iCal 数据。</p></li>
-</ul></div>
+<a name="ox.appsuite.user.concept.datainterchange.import.ical.restrictions"></a><p id="ox.appsuite.user.concept.datainterchange.import.ical.restrictions">小心以下限制。</p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">支持像 "一个月的最后一个星期日" 的约会。不支持以从月底开始计算天数的约会。示例：一个月的倒数第二个星期日。如果一个约会包含此类信息，则不导入该约会。</p></li>
+<li class="listitem"><p role="presentation">不支持重复警报。例如：“提醒我四次”。如果一个约会包含此类信息，则会忽略此类信息。</p></li>
+<li class="listitem"><p role="presentation">确保您要导入的文件包含正确的 iCal 数据。</p></li>
+</ul>
 <p>
       </p>
 </div>
-<div class="task">
-<a name="ox.appsuite.user.task.datainterchange.import.ical"></a><p class="title">如何导入 iCal 格式的约会或任务：</p>
+<div class="task" id="ox.appsuite.user.task.datainterchange.import.ical">
+<p class="title">如何导入 iCal 格式的约会或任务：</p>
 <div class="procedure"><ol class="procedure" type="1">
-<li class="step"><p>执行<span class="phrase"><span class="guilabel"><strong>日历</strong></span></span> 或 <span class="phrase"><span class="guilabel"><strong>任务</strong></span></span>应用程序。</p></li>
-<li class="step"><p>在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select" title="如何打开或选择一个文件夹：">选择</a>汇入约会或任务的文件夹。</p></li>
-<li class="step"><p>单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span aria-hidden="true" class="inlinemediaobject"><a name="ox.appsuite.user.fig.import.ical"></a><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>导入</strong></span>。</p></li>
-<li class="step"><p>在系统窗口中单击 <span class="guibutton"><strong>选择文件</strong></span>（在<span class="guilabel"><strong>汇入到</strong></span>窗口）。选择一个 iCal 格式的文件。</p></li>
-<li class="step"><p>单击<span class="guibutton"><strong>导入</strong></span>。</p></li>
+<li class="step"><p role="presentation">执行<span class="phrase"><span class="guilabel"><strong>日历</strong></span></span> 或 <span class="phrase"><span class="guilabel"><strong>任务</strong></span></span>应用程序。</p></li>
+<li class="step"><p role="presentation">在文件夹树里<a class="link" href="ox.appsuite.user.sect.dataorganisation.folder.navigate.html#ox.appsuite.user.task.dataorganisation.folder.select">选择</a>汇入约会或任务的文件夹。</p></li>
+<li class="step"><p role="presentation">单击文件夹名称旁边的<span class="guibutton"><strong>文件夹指定动作</strong></span>图标<span aria-hidden="true" class="inlinemediaobject" id="ox.appsuite.user.fig.import.ical"><img src="../../images/appsuite_user_icon_foldertree_actions.png"></span>。单击<span class="guibutton"><strong>导入</strong></span>。</p></li>
+<li class="step"><p role="presentation">在系统窗口中单击 <span class="guibutton"><strong>选择文件</strong></span>（在<span class="guilabel"><strong>汇入到</strong></span>窗口）。选择一个 iCal 格式的文件。</p></li>
+<li class="step"><p role="presentation">单击<span class="guibutton"><strong>导入</strong></span>。</p></li>
 </ol></div>
 <div class="taskrelated">
           <p><span class="phrase"><strong>结果：</strong></span>约会或任务被添加到文件夹。</p>
         </div>
 </div>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.datainterchange.import.ical.related"></a><p class="title">也请参考</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html" title="12.1.2. 导入 vCard 格式的联系人">导入 vCard 格式的联系人</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html" title="12.1.3. 导入 CSV 格式的联系人">导入 CSV 格式的联系人</a></p>
+<p class="title">也请参考</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.datainterchange.import.ical.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactsvcard.html">导入 vCard 格式的联系人</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.datainterchange.import.contactscsv.html">导入 CSV 格式的联系人</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.datainterchange.import.ical.parent"></a>母主题：<a class="xref" href="ox.appsuite.user.sect.datainterchange.import.html" title="12.1. 汇入数据">汇入数据</a></p>
+<p id="ox.appsuite.user.concept.datainterchange.import.ical.parent">母主题：<a class="xref" href="ox.appsuite.user.sect.datainterchange.import.html">汇入数据</a></p>
 </div>
           </div>
         </body>
