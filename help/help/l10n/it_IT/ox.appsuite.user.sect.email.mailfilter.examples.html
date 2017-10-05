@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Posta elettronica</span></h1>
 <h2 class="sr-only">Utilizzare i filtri di posta elettronica</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Casi d'uso dei filtri di posta elettronica</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>È possibile creare una condizione </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>selezionando un componente del messaggio, ad es. "Oggetto";</p></li>
-<li class="listitem"><p>selezionando un criterio, ad es. "È uguale";</p></li>
-<li class="listitem"><p>digitando un argomento, ad es. "verbale".</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. Casi d'uso dei filtri di posta elettronica</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">È possibile creare una condizione </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">selezionando un componente del messaggio, ad es. "Oggetto";</p></li>
+<li class="listitem"><p role="presentation">selezionando un criterio, ad es. "È uguale";</p></li>
+<li class="listitem"><p role="presentation">digitando un argomento, ad es. "verbale".</p></li>
+</ul>
 <p> In questo caso, dovrebbe essere verificato se l'oggetto di un messaggio corrisponde esattamente ai caratteri dell'argomento ("verbale"). È possibile controllare se la condizione è verificata con il criterio e la stringa di caratteri. Le differenze tra i singoli criteri sono spiegate negli esempi seguenti. Negli esempi, l'oggetto è utilizzato per filtrare i messaggi di posta.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Criterio: "contiene" La condizione è verificata se l'oggetto contiene i caratteri dell'argomento. Esempio: l'argomento è "verbale".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata per l'oggetto "verbale".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata anche per l'oggetto "verbale della riunione".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterio: "contiene" La condizione è verificata se l'oggetto contiene i caratteri dell'argomento. Esempio: l'argomento è "verbale".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata per l'oggetto "verbale".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata anche per l'oggetto "verbale della riunione".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>Criterio: "è uguale" La condizione è verificata se l'oggetto corrisponde esattamente alla stringa di caratteri dell'argomento. Esempio: l'argomento è "verbale".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata per l'oggetto "verbale".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condizione non è verificata per l'oggetto "verbale della riunione".</p></li>
-</ul></div>
+<p role="presentation">Criterio: "è uguale" La condizione è verificata se l'oggetto corrisponde esattamente alla stringa di caratteri dell'argomento. Esempio: l'argomento è "verbale".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata per l'oggetto "verbale".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione non è verificata per l'oggetto "verbale della riunione".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterio: "Corrisponde" La condizione è verificata se l'oggetto corrisponde esattamente ai caratteri nell'argomento. La stringa di caratteri può contenere caratteri speciali. Esempio: l'argomento è "verbale*". Il carattere "*" è un carattere speciale che rappresenta qualsiasi carattere. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata per l'oggetto "verbale".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condizione non è verificata per l'oggetto "verbale della riunione".</p></li>
-</ul></div>
+<p role="presentation">Criterio: "Corrisponde" La condizione è verificata se l'oggetto corrisponde esattamente ai caratteri nell'argomento. La stringa di caratteri può contenere caratteri speciali. Esempio: l'argomento è "verbale*". Il carattere "*" è un carattere speciale che rappresenta qualsiasi carattere. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata per l'oggetto "verbale".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione non è verificata per l'oggetto "verbale della riunione".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterio: "Espressione regolare" La condizione è verificata se l'oggetto contiene i caratteri forniti dall'espressione regolare nell'argomento. Le espressioni regolari consentono richieste complesse. Altre informazioni sono disponibili sui rispettivi siti Internet. La seguente espressione regolare, molto semplice, può dare un'idea a riguardo. Esempio: l'argomento è "organi(z|s)ation". L'espressione "(z|s)" rappresenta il carattere "z" o "s". </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata per l'oggetto "verbale".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condizione è verificata anche per l'oggetto "organizzazione".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condizione non è verificata per l'oggetto "Organico".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterio: "Espressione regolare" La condizione è verificata se l'oggetto contiene i caratteri forniti dall'espressione regolare nell'argomento. Le espressioni regolari consentono richieste complesse. Altre informazioni sono disponibili sui rispettivi siti Internet. La seguente espressione regolare, molto semplice, può dare un'idea a riguardo. Esempio: l'argomento è "organi(z|s)ation". L'espressione "(z|s)" rappresenta il carattere "z" o "s". </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata per l'oggetto "verbale".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione è verificata anche per l'oggetto "organizzazione".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condizione non è verificata per l'oggetto "Organico".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Vedere anche</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Creare nuove regole">Creare nuove regole</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Creare una nuova regola quando si sposta">Creare una nuova regola quando si sposta</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Modificare una regola">Modificare una regola</a></p>
+<p class="title">Vedere anche</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Creare nuove regole</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Creare una nuova regola quando si sposta</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Modificare una regola</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Argomento principale: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. Utilizzare i filtri di posta elettronica">Utilizzare i filtri di posta elettronica</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Argomento principale: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">Utilizzare i filtri di posta elettronica</a></p>
 </div>
           </div>
         </body>
