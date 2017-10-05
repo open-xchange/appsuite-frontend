@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Correo electrónico</span></h1>
 <h2 class="sr-only">Uso de filtros de correo</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Casos de uso para filtros de correo</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>Se puede crear una condición </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>seleccionando un componente de correo, por ejemplo "Asunto";</p></li>
-<li class="listitem"><p>seleccionando un criterio, por ejemplo "Es exactamente";</p></li>
-<li class="listitem"><p>indicando un argumento, por ejemplo "actas".</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. Casos de uso para filtros de correo</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">Se puede crear una condición </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">seleccionando un componente de correo, por ejemplo "Asunto";</p></li>
+<li class="listitem"><p role="presentation">seleccionando un criterio, por ejemplo "Es exactamente";</p></li>
+<li class="listitem"><p role="presentation">indicando un argumento, por ejemplo "actas".</p></li>
+</ul>
 <p>En este caso se comprobaría si el asunto de un correo coincide exactamente con los caracteres del argumento ("actas"). Se puede controlar si la condición se cumple con el criterio y la cadena de caracteres. Las diferencias entre criterios individuales se explicarán en los ejemplos siguientes. En dichos ejemplos se usa el asunto para filtrar correos.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Criterio: "contiene" La condición se cumple si el asunto contiene los caracteres del argumento. Ejemplo: El argumento es "minutos".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condición se cumple para el asunto "minutos".</p></li>
-<li class="listitem" style="list-style-type: none"><p>También se cumple la condición para el asunto "actas de reuniones".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterio: "contiene" La condición se cumple si el asunto contiene los caracteres del argumento. Ejemplo: El argumento es "minutos".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición se cumple para el asunto "minutos".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">También se cumple la condición para el asunto "actas de reuniones".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>Criterio: "es exactamente" La condición se cumple si el asunto coincide exactamente con la cadena de caracteres del argumento. Ejemplo: El argumento es "actas".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condición se cumple para el asunto "minutos".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condición no se cumple para el asunto "actas de reuniones".</p></li>
-</ul></div>
+<p role="presentation">Criterio: "es exactamente" La condición se cumple si el asunto coincide exactamente con la cadena de caracteres del argumento. Ejemplo: El argumento es "actas".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición se cumple para el asunto "minutos".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición no se cumple para el asunto "actas de reuniones".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterio: "Coincide" La condición se cumple si el asunto coincide exactamente con los caracteres del argumento. La cadena de caracteres puede contener comodines. Ejemplo: El argumento es "actas*". El carácter "*" es un comodín para cualesquiera caracteres. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condición se cumple para el asunto "minutos".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condición no se cumple para el asunto "actas de reuniones".</p></li>
-</ul></div>
+<p role="presentation">Criterio: "Coincide" La condición se cumple si el asunto coincide exactamente con los caracteres del argumento. La cadena de caracteres puede contener comodines. Ejemplo: El argumento es "actas*". El carácter "*" es un comodín para cualesquiera caracteres. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición se cumple para el asunto "minutos".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición no se cumple para el asunto "actas de reuniones".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Criterio: "Regex"  La condición se cumple si el asunto contiene los caracteres proporcionados por la expresión regular del argumento. Las expresiones regulares permiten peticiones complejas. Se puede encontrar más información en distintos sitios de la Web. La siguiente, una expresión regular muy sencilla, debería dar una pincelada sobre el tema. Ejemplo: El argumento es "organizaci(ó|o)n". La expresión "(ó|o)" representa tanto al carácter "ó" como a "o". </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condición se cumple para el asunto "minutos".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condición también se cumple para el asunto "organizacion".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condición no se cumple para el asunto "Organiza".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Criterio: "Regex"  La condición se cumple si el asunto contiene los caracteres proporcionados por la expresión regular del argumento. Las expresiones regulares permiten peticiones complejas. Se puede encontrar más información en distintos sitios de la Web. La siguiente, una expresión regular muy sencilla, debería dar una pincelada sobre el tema. Ejemplo: El argumento es "organizaci(ó|o)n". La expresión "(ó|o)" representa tanto al carácter "ó" como a "o". </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición se cumple para el asunto "minutos".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición también se cumple para el asunto "organizacion".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condición no se cumple para el asunto "Organiza".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Vea también</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Creación de nuevas reglas">Creación de nuevas reglas</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Creación de una nueva regla al mover">Creación de una nueva regla al mover</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Modificación de una regla">Modificación de una regla</a></p>
+<p class="title">Vea también</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Creación de nuevas reglas</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Creación de una nueva regla al mover</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Modificación de una regla</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Tema superior: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. Uso de filtros de correo">Uso de filtros de correo</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Tema superior: <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">Uso de filtros de correo</a></p>
 </div>
           </div>
         </body>
