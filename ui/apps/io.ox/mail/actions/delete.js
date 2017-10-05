@@ -19,7 +19,7 @@ define('io.ox/mail/actions/delete', [
     'gettext!io.ox/mail',
     'io.ox/mail/api',
     'io.ox/core/notifications'
-], function (folderAPI, settings, account, gt, api, notifications) {
+], function (folderAPI, settings, accountAPI, gt, api, notifications) {
 
     'use strict';
 
@@ -54,18 +54,43 @@ define('io.ox/mail/actions/delete', [
         });
     });
 
+    function ignoreCurrentlyEdited(list) {
+        var hash = {};
+        _.each(ox.ui.App.get('io.ox/mail/compose'), function (app) {
+            hash[app.view.model.get('msgref')] = true;
+        });
+        if (!Object.keys(hash).length) return list;
+        return _.filter(list, function (mail) {
+            if (!accountAPI.is('drafts', mail.folder_id)) return true;
+            if (!mail.attachment) return true;
+            return !hash[mail.msgref];
+        });
+    }
+
     return {
 
         multiple: function (list, baton) {
 
-            var all = list.slice();
             list = folderAPI.ignoreSentItems(list);
 
-            var shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
+            var all = list.slice(),
+                shiftDelete = baton && baton.options.shiftDelete && settings.get('features/shiftDelete'),
                 showPrompt = !shiftDelete && (settings.get('removeDeletedPermanently') || _(list).any(function (o) {
-                    return account.is('trash', o.folder_id);
+                    return accountAPI.is('trash', o.folder_id);
                 }));
 
+            // pragmatic approach for bug 55442 cause mail is so special (weak spot: empty folder)
+            list = ignoreCurrentlyEdited(list);
+            if (all.length !== list.length) {
+                notifications.yell({
+                    headline: gt('Note'),
+                    type: 'info',
+                    message: gt('Currently edited drafts with attachments can not be deleted until you close the correspondig mail compose window.')
+                });
+                // no messages left
+                if (!list.length) return;
+                all = list.slice();
+            }
 
             if (showPrompt) {
                 require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
