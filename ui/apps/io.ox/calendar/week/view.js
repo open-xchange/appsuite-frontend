@@ -17,7 +17,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/calendar/chronos-util',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'settings!io.ox/core',
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/core/print',

@@ -16,7 +16,7 @@ define('io.ox/calendar/week/print', [
     'io.ox/calendar/chronos-util',
     'io.ox/calendar/util',
     'io.ox/core/print',
-    'settings!io.ox/chronos'
+    'settings!io.ox/calendar'
 ], function (api, chronosUtil, util, print, settings) {
 
     'use strict';

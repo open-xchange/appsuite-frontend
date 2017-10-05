@@ -17,10 +17,11 @@ define('io.ox/calendar/actions/acceptdeny', [
     'io.ox/core/tk/dialogs',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
+    'io.ox/calendar/chronos-util',
     'io.ox/core/notifications',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (calApi, AlarmsView, dialogs, folderAPI, util, notifications, settings, gt) {
+], function (calApi, AlarmsView, dialogs, folderAPI, util, chronosUtil, notifications, settings, gt) {
 
     'use strict';
 
@@ -75,6 +76,11 @@ define('io.ox/calendar/actions/acceptdeny', [
                             description: '',
                             trigger: { duration: '-PT15M' }
                         }]);
+                        // convenience function to convert old alarms into new chronos alarms
+                        // TODO remove once migration process is implemented
+                        if (options.taskmode) {
+                            appointmentData.alarms = chronosUtil.convertAlarms(appointmentData.alarms);
+                        }
                     }
                     // backbone model is fine. No need to require chronos model
                     alarmsModel = new Backbone.Model(appointmentData);

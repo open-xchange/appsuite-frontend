@@ -18,7 +18,7 @@ define('io.ox/calendar/month/view', [
     'io.ox/calendar/util',
     'io.ox/calendar/chronos-util',
     'gettext!io.ox/calendar',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
 ], function (ext, api, folderAPI, util, chronosUtil, gt, settings) {

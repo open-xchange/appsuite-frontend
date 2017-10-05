@@ -13,7 +13,7 @@
 
 define('io.ox/backbone/mini-views/timezonepicker', [
     'io.ox/backbone/mini-views/common',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'settings!io.ox/core',
     'settings!io.ox/core/settingOptions',
     'gettext!io.ox/core'

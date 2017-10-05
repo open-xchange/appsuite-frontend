@@ -18,7 +18,7 @@ define('plugins/portal/calendar/register', [
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',
-    'settings!io.ox/chronos'
+    'settings!io.ox/calendar'
 ], function (ext, api, folderAPI, util, gt, settings) {
 
     'use strict';

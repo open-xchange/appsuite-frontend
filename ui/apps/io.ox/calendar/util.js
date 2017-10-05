@@ -19,7 +19,7 @@ define('io.ox/calendar/util', [
     'io.ox/core/util',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/chronos-util',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
 ], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, chronosUtil, settings, coreSettings, gt) {

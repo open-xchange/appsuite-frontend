@@ -15,7 +15,7 @@ define('io.ox/calendar/invitations/register', [
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/calendar/util',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'gettext!io.ox/calendar/main',
     'io.ox/core/notifications',
     'less!io.ox/calendar/style'
@@ -567,9 +567,8 @@ define('io.ox/calendar/invitations/register', [
             return require([
                 'io.ox/calendar/chronos-api',
                 'io.ox/calendar/util',
-                'settings!io.ox/chronos',
                 'io.ox/backbone/mini-views/alarms'
-            ]).then(function (api, util, settings, AlarmsView) {
+            ]).then(function (api, util, AlarmsView) {
                 self.api = api;
                 self.util = util;
                 self.settings = settings;
@@ -671,10 +670,10 @@ define('io.ox/calendar/invitations/register', [
                 'io.ox/tasks/api',
                 'io.ox/tasks/util',
                 'settings!io.ox/tasks'
-            ]).then(function (api, util, settings) {
+            ]).then(function (api, util, taskSettings) {
                 self.api = api;
                 self.util = util;
-                self.settings = settings;
+                self.settings = taskSettings;
                 return api.get(_.cid(self.cid));
             }).then(function (task) {
                 self.event = task;

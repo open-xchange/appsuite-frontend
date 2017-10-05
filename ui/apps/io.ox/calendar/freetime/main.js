@@ -18,7 +18,7 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/freetime/timeView',
     'io.ox/calendar/chronos-api',
     'gettext!io.ox/calendar',
-    'settings!io.ox/chronos',
+    'settings!io.ox/calendar',
     'settings!io.ox/core',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
