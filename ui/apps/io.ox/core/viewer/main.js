@@ -12,7 +12,7 @@
  * @author Edy Haryono <edy.haryono@open-xchange.com>
  */
 
-define('io.ox/core/viewer/main', [], function () {
+define('io.ox/core/viewer/main', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -47,7 +47,6 @@ define('io.ox/core/viewer/main', [], function () {
 
             if (!data) return console.error('Core.Viewer.main.launch(): no data supplied');
             if (!_.isArray(data.files) || data.files.length === 0) return console.error('Core.Viewer.main.launch(): no files to preview.');
-
             var self = this,
                 el = $('<div class="io-ox-viewer abs">'),
                 fileList = [].concat(data.files),
@@ -73,42 +72,54 @@ define('io.ox/core/viewer/main', [], function () {
                     // create main view and append main view to core
                     self.mainView = new MainView({ collection: self.fileCollection, el: el, app: data.app, standalone: data.standalone, opt: data.opt || {}, openedBy: data.openedBy });
 
-                    self.mainView.on('dispose', function () {
-                        siblings.removeAttr('aria-hidden').each(function () {
-                            var el = $(this);
-                            if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
-                            el.removeData('ox-restore-aria-hidden');
-                        });
-                        // remove id form URL hash (see bug 43410)
-                        // use-case: viewer was opened via deep-link; a page-reload might surprise the user
-                        // but don't remove the id from an OX Presenter URL
-                        if (_.url.hash('app') !== 'io.ox/office/presenter') {
-                            _.url.hash('id', null);
-                        }
+                    self.mainView.on('dispose', close);
 
-                        if (data.restoreFocus && _.isFunction(data.restoreFocus.focus)) {
-                            data.restoreFocus.focus();
-                        }
+                });
+            }
+
+            // Cleanup, remove hidden attributes
+            function close() {
+                siblings.removeAttr('aria-hidden').each(function () {
+                    var el = $(this);
+                    if (el.data('ox-restore-aria-hidden')) el.attr('aria-hidden', el.data('ox-restore-aria-hidden'));
+                    el.removeData('ox-restore-aria-hidden');
+                });
+                // remove id form URL hash (see bug 43410)
+                // use-case: viewer was opened via deep-link; a page-reload might surprise the user
+                // but don't remove the id from an OX Presenter URL
+                if (_.url.hash('app') !== 'io.ox/office/presenter') {
+                    _.url.hash('id', null);
+                }
+
+                if (data.restoreFocus && _.isFunction(data.restoreFocus.focus)) {
+                    data.restoreFocus.focus();
+                }
+
+            }
+
+            // Call extension point for any required performs
+            ext.point('io.ox/core/viewer/main').cascade(this, new ext.Baton({ data: data }))
+            .then(function () {
+                // Bug 50839 - Viewer opens arbitrary document -> don't expand folder for sharing
+                if (data.folder && data.folder !== '10') {
+                    require(['io.ox/files/api'], function (api) {
+                        api.getAll(data.folder).then(function success(files) {
+                            data.selection = data.files[0];
+                            function getter(item) {
+                                return this.get(_.cid(item));
+                            }
+                            // the viewer has listeners that work directly on the model
+                            // so we need to get the pool models instead of creating own models
+                            fileList = _(files).map(getter, api.pool.get('detail'));
+                        }).always(cont);
                     });
-                });
-            }
-
-            // Bug 50839 - Viewer opens arbitrary document -> don't expand folder for sharing
-            if (data.folder && data.folder !== '10') {
-                require(['io.ox/files/api'], function (api) {
-                    api.getAll(data.folder).then(function success(files) {
-                        data.selection = data.files[0];
-                        function getter(item) {
-                            return this.get(_.cid(item));
-                        }
-                        // the viewer has listeners that work directly on the model
-                        // so we need to get the pool models instead of creating own models
-                        fileList = _(files).map(getter, api.pool.get('detail'));
-                    }).always(cont);
-                });
-            } else {
-                cont();
-            }
+                } else {
+                    cont();
+                }
+            }, function () {
+                close();
+                $(el).remove();  // Aborted.  Remove element
+            });
         };
     };
 
