@@ -634,13 +634,14 @@ define('io.ox/mail/main', [
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
-                    .set('layout', data.layout)
-                    .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
+
                 if (_.device('!smartphone')) {
-                    app.settings.set('showCheckboxes', data.checkboxes);
+                    app.settings.set('layout', data.layout)
+                                .set('showCheckboxes', data.checkboxes)
+                                .set('showContactPictures', data.contactPictures);
                 }
                 app.settings.save();
             }, 500));
