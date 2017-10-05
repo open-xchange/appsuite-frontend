@@ -30,7 +30,7 @@ define('io.ox/files/actions', [
         // used by text editor
         allowedFileExtensions = ['csv', 'txt', 'js', 'css', 'md', 'tmpl', 'html'];
 
-    if (capabilities.has('guard-drive')) {
+    if (capabilities.has('guard')) {
         allowedFileExtensions.push('pgp');
     }
 
@@ -118,7 +118,7 @@ define('io.ox/files/actions', [
 
                 // Check if Guard file.  If so, do auth then call with parameters
                 // do not use endsWith because of IE11
-                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard-drive')) {
+                if (((baton.data.meta && baton.data.meta.Encrypted) || baton.data.filename.lastIndexOf('.pgp') === baton.data.filename.length - 4) && capabilities.has('guard')) {
                     require(['io.ox/guard/auth/authorizer'], function (guardAuth) {
                         guardAuth.authorize().then(function (auth) {
                             var params = {
@@ -316,7 +316,7 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/viewer', {
         requires: function (e) {
-            if (e.collection.has('guard') && !capabilities.has('guard-drive')) return false;
+            if (e.collection.has('guard') && !capabilities.has('guard')) return false;
             return e.collection.has('some', 'items');
         },
         action: function (baton) {
@@ -632,7 +632,6 @@ define('io.ox/files/actions', [
             // use current folder
             id = e.baton.app.folder.get();
         }
-        if (e.collection.has('guard')) return false;  // Guard sharing not supported currently
         if (!id) return false;
         // general capability and folder check
         model = folderAPI.pool.getModel(id);
