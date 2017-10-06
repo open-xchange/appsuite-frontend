@@ -298,9 +298,10 @@ define('io.ox/core/folder/tree', [
                 this.renderContextMenuItems(contextmenu);
             }
 
-            function show(e) {
+            function show() {
+                // desktop 'burger' vs. mobile-edit-mode
+                var contextmenu = this.dropdown.$toggle.attr('data-contextmenu') || this.selection.get('data-contextmenu');
                 // load relevant code on demand
-                var contextmenu = $(e.target).attr('data-contextmenu') || this.dropdown.$toggle.attr('data-contextmenu');
                 require(['io.ox/core/folder/contextmenu'], _.lfo(renderItems.bind(this, contextmenu)));
                 // a11y: The role menu should only be set if there are menuitems in it
                 this.$dropdownMenu.attr('role', 'menu');
