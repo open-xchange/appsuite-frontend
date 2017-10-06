@@ -38,8 +38,21 @@
                     color: #fff
                 }
             }
+
             .row {
                 line-height: 30px;
+            }
+
+            @media (max-width: 1024px) {
+                .alarm-remove {
+                    width: 28px;
+                };
+            }
+
+            @media (max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
+                .alarm-remove {
+                    width: 20px;
+                };
             }
         }
     }
