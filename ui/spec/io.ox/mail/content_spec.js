@@ -273,7 +273,7 @@ define(['io.ox/mail/detail/content'], function (content) {
 
         it('should reduce long \n sequences', function () {
             var result = process('text\n\n\n\ntext\n\n', 'text/plain');
-            expect(result.content.innerHTML).to.equal('text<br><br>text');
+            expect(result.content.innerHTML).to.equal('text<br><br><br>text');
         });
 
         it('should simplify links', function () {
