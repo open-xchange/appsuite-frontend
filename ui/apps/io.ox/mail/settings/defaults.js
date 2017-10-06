@@ -32,7 +32,6 @@ define('io.ox/mail/settings/defaults', [], function () {
         'allowHtmlImages': false,
         'displayEmoticons': false,
         'isColorQuoted': false,
-        'beautifyPlainText': false,
         'defaultSignature': false,
         'defaultReplyForwardSignature': false,
         'mobileSignature': undefined,

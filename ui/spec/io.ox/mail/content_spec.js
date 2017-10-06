@@ -112,55 +112,6 @@ define(['io.ox/mail/detail/content'], function (content) {
                 var html = process('> > Lorem ipsum\n> amet\ndolor sit');
                 expect(html).to.equal('<blockquote type="cite"><blockquote type="cite">Lorem ipsum</blockquote>amet</blockquote>dolor sit');
             });
-
-            // UNORDERED LISTS
-
-            it('transforms unordered lists', function () {
-                var html = process('* Lorem ipsum');
-                expect(html).to.equal('<ul><li>Lorem ipsum</li></ul>');
-            });
-
-            it('transforms unordered lists across multiple lines', function () {
-                var html = process('\n* Lorem ipsum\n* dolor sit');
-                expect(html).to.equal('<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>');
-            });
-
-            it('transforms unordered lists with dashes', function () {
-                var html = process('\n- Lorem ipsum\n- dolor sit');
-                expect(html).to.equal('<br><ul><li>Lorem ipsum</li><li>dolor sit</li></ul>');
-            });
-
-            it('transforms unordered lists with links', function () {
-                var html = process('- Lorem http://yeah.com\n- ipsum\n- dolor');
-                expect(html).to.equal('<ul><li>Lorem <a href="http://yeah.com" rel="noopener" target="_blank">http://yeah.com</a></li><li>ipsum</li><li>dolor</li></ul>');
-            });
-
-            it('transforms nested unordered lists', function () {
-                var html = process('* Lorem\n  * ipsum\n  * dolor sit\n* amet');
-                expect(html).to.equal('<ul><li>Lorem<ul><li>ipsum</li><li>dolor sit</li></ul></li><li>amet</li></ul>');
-            });
-
-            it('transforms nested unordered lists (1/2/3/1)', function () {
-                var html = process('* One\n  * Two\n    * Three\n* One');
-                expect(html).to.equal('<ul><li>One<ul><li>Two<ul><li>Three</li></ul></li></ul></li><li>One</li></ul>');
-            });
-
-            // ORDERED LISTS
-
-            it('transforms ordered lists', function () {
-                var html = process('1. Lorem ipsum');
-                expect(html).to.equal('<ol start="1"><li>Lorem ipsum</li></ol>');
-            });
-
-            it('transforms ordered lists across multiple lines', function () {
-                var html = process('1. Lorem ipsum\n2. dolor sit');
-                expect(html).to.equal('<ol start="1"><li>Lorem ipsum</li><li>dolor sit</li></ol>');
-            });
-
-            it('transforms ordered lists starting with specific number', function () {
-                var html = process('29. Lorem ipsum\n30. dolor sit');
-                expect(html).to.equal('<ol start="29"><li>Lorem ipsum</li><li>dolor sit</li></ol>');
-            });
         });
 
         describe('Link Processor', function () {
