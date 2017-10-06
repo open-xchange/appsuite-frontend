@@ -685,7 +685,7 @@ define('io.ox/mail/detail/content', [
         },
 
         beautifyPlainText: function (str) {
-            var plain = insertEmoticons(str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n'));
+            var plain = insertEmoticons(str.trim().replace(/\r/g, '').replace(/\n{4,}/g, '\n\n\n'));
             return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: false, rulers: false })
                 // remove leading BR
                 .replace(/^\s*(<br\s*\/?>\s*)+/g, '');
