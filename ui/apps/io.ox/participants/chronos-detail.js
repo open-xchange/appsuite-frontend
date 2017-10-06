@@ -131,10 +131,15 @@ define('io.ox/participants/chronos-detail', [
 
             if (list.length) {
                 participantsContainer.busy();
-                // get persons
-                var persons = _(list)
+                // get users
+                var users = _(list)
                     .filter(function (obj) {
-                        return obj.cuType === 'INDIVIDUAL';
+                        return obj.cuType === 'INDIVIDUAL' && obj.entity;
+                    });
+                // get external
+                var external = _(list)
+                    .filter(function (obj) {
+                        return obj.cuType === 'INDIVIDUAL' && !obj.entity;
                     });
                 // get resources
                 var resources = _(list)
@@ -144,7 +149,7 @@ define('io.ox/participants/chronos-detail', [
 
                 // loop over persons
                 var participantListNode;
-                if (persons.length) {
+                if (users.length) {
                     participantsContainer.append(
                         $('<fieldset>').append(
                             $('<legend class="io-ox-label">').append(
@@ -155,8 +160,8 @@ define('io.ox/participants/chronos-detail', [
                     );
                 }
 
-                // persons
-                _(persons)
+                // users
+                _(users)
                     .chain()
                     .sortBy(function (obj) {
                         return obj.cn;
@@ -165,6 +170,23 @@ define('io.ox/participants/chronos-detail', [
                         participantListNode.append(drawParticipant(obj, options));
                     });
 
+                //external Participants get their own section
+                var extList;
+                if (external.length > 0) {
+                    participantsContainer.append(
+                        $('<fieldset>').append(
+                            $('<legend class="io-ox-label">').append(
+                                $('<h2>').text(gt('External participants'))
+                            ),
+                            extList = $('<ul class="participant-list list-inline">')
+                        )
+                    );
+                }
+
+                // loop over external participants
+                _(external).each(function (obj) {
+                    extList.append(drawParticipant(obj, options));
+                });
                 // resources
                 if (resources.length) {
                     var plist;
