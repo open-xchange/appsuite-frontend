@@ -240,6 +240,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
             this.$el.prev().show();
             this.$el.show();
+            this.idle();
         }
     });
 
