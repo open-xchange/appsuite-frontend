@@ -69,9 +69,9 @@ define('io.ox/backbone/mini-views/alarms', [
 
             container = $('<li class="alarm-list-item">').append(row = $('<div class="row">')).data('id', alarm.uid);
             if (_(standardTypes).indexOf(alarm.action) === -1) {
-                row.append($('<div class="col-md-6 alarm-action">').text(alarm.action).val(alarm.action));
+                row.append($('<div class="col-xs-6 alarm-action">').text(alarm.action).val(alarm.action));
             } else {
-                row.append($('<div class="col-md-6">').append(
+                row.append($('<div class="col-xs-6">').append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Message')).val('DISPLAY'),
                         $('<option>').text(gt('Audio')).val('AUDIO'),
@@ -82,7 +82,7 @@ define('io.ox/backbone/mini-views/alarms', [
 
             if (alarm.trigger.duration) {
                 var selectbox;
-                row.append($('<div>').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').append(
+                row.append($('<div>').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').append(
                     selectbox = $('<select class="form-control alarm-time">').append(_.map(util.getReminderOptions(), function (key, val) {
                         return '<option value="' + val + '">' + key + '</option>';
                     }))
