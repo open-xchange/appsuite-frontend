@@ -581,8 +581,6 @@ define('io.ox/core/main', [
                                 });
                             } else {
                                 logout();
-                                dialog.close();
-                                dialog = null;
                             }
                         });
                         dialog.on('retry', function () {
