@@ -251,15 +251,13 @@ define('io.ox/core/folder/view', [
                 // edit mode?
                 if (mobileSelectMode === true) {
                     // ignore selection of non-labels in mobile edit mode
-                    if ($(e.target).hasClass('folder-label')) {
-                        tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
-                    }
-                    return;
-                } else if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) {
-                    // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
-                    return;
+                    if (!$(e.target).hasClass('folder-label') || !$(e.target).closest('.folder').attr('data-contextmenu')) return;
+                    return tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                 }
-                // otherwise
+
+                // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
+                if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) return;
+
                 // default 'listView'
                 app.pages.changePage(options.firstResponder);
                 // callback for custom actions after pagechange
