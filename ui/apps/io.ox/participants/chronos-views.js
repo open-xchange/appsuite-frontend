@@ -16,8 +16,9 @@ define('io.ox/participants/chronos-views', [
     'io.ox/core/util',
     'io.ox/core/folder/api',
     'gettext!io.ox/core',
+    'io.ox/core/capabilities',
     'less!io.ox/participants/style'
-], function (api, util, folderAPI, gt) {
+], function (api, util, folderAPI, gt, capabilities) {
 
     'use strict';
 
@@ -106,7 +107,12 @@ define('io.ox/participants/chronos-views', [
 
         setRows: function (mail, extra) {
             if (!this.options.hideMail) {
-                extra = extra || TYPE_LABELS[this.model.get('cuType')] || '';
+                if (!extra && this.model.get('cuType') === 'INDIVIDUAL' && !this.model.get('entity') && capabilities.has('gab')) {
+                    extra = gt('External contact');
+                } else {
+                    extra = extra || TYPE_LABELS[this.model.get('cuType')] || '';
+                }
+
                 this.nodes.$mail.text(mail);
                 this.nodes.$extra.text(extra);
                 if (mail && extra) {
