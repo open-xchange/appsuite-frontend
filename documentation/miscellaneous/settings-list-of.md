@@ -189,6 +189,8 @@ settings!io.ox/core
 **topbar/order**
 > defines order of apps in topbar
 
+**transform/multipleEmptyLines**
+> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
 
 ## Mail compose: tinyMCE
 
