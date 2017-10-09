@@ -11,138 +11,28 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/data', [], function () {
+define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.slim.js'], function (api, io) {
 
     'use strict';
 
-    // Static data
-
     var data = {
-
-        // USERS
-
-        users: [
-            { id: 1, first_name: 'Matthias', last_name: 'Biggeleben', state: 'online', image: 225 },
-            { id: 2, first_name: 'Alexander', last_name: 'Quast', state: 'online', image: 249 },
-            { id: 3, first_name: 'David', last_name: 'Bauer', state: 'absent', image: 382 },
-            { id: 4, first_name: 'Julian', last_name: 'Bäume', state: 'busy' },
-            { id: 5, first_name: 'Someone with a really long name', last_name: '', state: 'offline' }
-        ],
-
-        // CHATS
-
-        chats: [
-            {
-                id: 1,
-                type: 'group',
-                title: 'Appointment: Status Meeting on Friday',
-                members: [1, 2, 3, 4],
-                messages: [
-                    { id: 1, body: 'Julian has joined', type: 'system', sender: 0, time: '12:00' },
-                    { id: 2, body: 'Hi Jessica, just want to know if you will attend the meeting?', sender: 1, time: '12:05', delivery: 'seen' },
-                    { id: 3, body: 'Hi John, yes I will! I hope I can join on time.', sender: 2, time: '12:08' },
-                    { id: 4, body: 'I will be 5 minutes late due to travelling 🚗🚗🚗', sender: 3, time: '12:09' },
-                    { id: 5, body: 'Ok fine 👍', unseen: true, sender: 1, time: '12:10', delivery: 'seen' }
-                ],
-                unseen: 1
-            },
-            {
-                id: 2,
-                type: 'private',
-                title: 'Alex',
-                members: [2, 1],
-                messages: [
-                    { id: 1, body: 'Can we handle images?', sender: 1, time: '14:33', delivery: 'seen' },
-                    { id: 2, body: 'Yep ...', sender: 2, time: '14:34' },
-                    { id: 3, body: 'https://c2.staticflickr.com/6/5826/23795571972_60c5321fbe.jpg', type: 'image', sender: 2, time: '14:35' },
-                    { id: 4, body: '👍', sender: 1, time: '14:36', delivery: 'seen' }
-                ],
-                unseen: 0
-            },
-            {
-                id: 3,
-                type: 'group',
-                title: 'Lorem ipsum',
-                members: [1, 2, 3, 4],
-                messages: [
-                    { id: 1, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 1, time: '11:01', delivery: 'seen' },
-                    { id: 2, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.', sender: 2, time: '11:11' },
-                    { id: 3, body: 'And a link http://www.open-xchange.com 👍', sender: 2, time: '11:12' }
-                ],
-                unseen: 0
-            },
-            {
-                id: 4,
-                type: 'channel',
-                title: 'Another chat with a really long name so that it needs to be cut',
-                members: [1, 2, 3, 4, 5],
-                messages: [
-                    { id: 1, body: 'Hello World', sender: 2, time: '13:37' }
-                ],
-                unseen: 0
-            },
-            // OLD
-            {
-                id: 5,
-                active: false,
-                type: 'group',
-                title: 'And this in an older chat',
-                members: [1, 2, 3, 4, 5],
-                messages: [
-                    { id: 1, body: 'Hi there', sender: 2, time: '13:37' },
-                    { id: 2, body: 'Hiho', sender: 1, time: '13:38' }
-                ],
-                unseen: 0
-            },
-            {
-                id: 6,
-                active: false,
-                type: 'group',
-                title: 'And just another old chat',
-                members: [1, 2, 3],
-                messages: [
-                    { id: 1, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat', sender: 2, time: '13:37' }
-                ],
-                unseen: 0
-            }
-        ],
-
-        // Channels
-
-        channels: [
-            { id: 1, title: 'Office Olpe', description: 'Everything related to the office in Olpe', members: 52, subscribed: false },
-            { id: 2, title: 'Office Cologne', description: 'Everything related to the office in Cologne', members: 11, subscribed: false },
-            { id: 3, title: 'Engineering', description: 'App Suite Core Engineering', members: 71, subscribed: false }
-        ],
-
-        // Files
-
-        files: [
-            // need better more colorful images
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Amanhecer_no_Hercules_--.jpg/640px-Amanhecer_no_Hercules_--.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Anfiteatro%2C_Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_165.JPG/640px-Anfiteatro%2C_Valle_de_la_Luna%2C_San_Pedro_de_Atacama%2C_Chile%2C_2016-02-01%2C_DD_165.JPG' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Benkoka_Sabah_Jetty-at-Dataran-Benkoka-Pitas-01.jpg/640px-Benkoka_Sabah_Jetty-at-Dataran-Benkoka-Pitas-01.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/D%C3%BClmen%2C_Wildpark_--_2014_--_3830.jpg/640px-D%C3%BClmen%2C_Wildpark_--_2014_--_3830.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/M%C3%BCnster%2C_Park_Sentmaring_--_2015_--_9925.jpg/600px-M%C3%BCnster%2C_Park_Sentmaring_--_2015_--_9925.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/D%C3%BClmen%2C_Naturschutzgebiet_-Am_Enteborn-_--_2014_--_0202.jpg/640px-D%C3%BClmen%2C_Naturschutzgebiet_-Am_Enteborn-_--_2014_--_0202.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Wuppertal_Nordpark_0004.jpg/640px-Wuppertal_Nordpark_0004.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Haltern_am_See%2C_Sythen%2C_WASAG_--_2015_--_8424.jpg/640px-Haltern_am_See%2C_Sythen%2C_WASAG_--_2015_--_8424.jpg' },
-            // beach
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Mare_in_Marina_di_Pisa.jpg/640px-Mare_in_Marina_di_Pisa.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Naked_Island.jpg/640px-Naked_Island.jpg' },
-            { name: 'foo', url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Oahu_0076.jpg/640px-Oahu_0076.jpg' }
-        ]
+        user_id: parseInt(_.url.hash('user_id'), 10) || ox.user_id
     };
-
-    // Backbone
-
-    data.backbone = {};
 
     //
     // User
     //
 
     var UserModel = Backbone.Model.extend({
+
+        isSystem: function () {
+            return this.get('id') === 0;
+        },
+
+        isMyself: function () {
+            return this.get('id') === data.user_id;
+        },
+
         getName: function () {
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
             if (first && last) return last + ', ' + first;
@@ -151,7 +41,22 @@ define('io.ox/chat/data', [], function () {
     });
 
     var UserCollection = Backbone.Collection.extend({ model: UserModel });
-    data.backbone.users = new UserCollection(data.users);
+    data.users = new UserCollection([]);
+
+    data.fetchUsers = function () {
+        return api.getAll({ folder: 6, columns: '501,502,524,570' }, false).then(function (result) {
+            result = _(result).map(function (item) {
+                return {
+                    id: item.internal_userid,
+                    first_name: item.first_name,
+                    last_name: item.last_name,
+                    image: !!item['570'],
+                    state: 'online'
+                };
+            });
+            return data.users.reset(result);
+        });
+    };
 
     //
     // Message
@@ -160,7 +65,7 @@ define('io.ox/chat/data', [], function () {
     var MessageModel = Backbone.Model.extend({
 
         defaults: function () {
-            return { body: '', sender: 0, time: moment().format('LT') };
+            return { body: '', senderId: data.user_id, sent: +moment(), type: 'text' };
         },
 
         getBody: function () {
@@ -170,22 +75,38 @@ define('io.ox/chat/data', [], function () {
             return _.escape(this.get('body')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
         },
 
+        getTime: function () {
+            return moment(this.get('sent')).format('LT');
+        },
+
         getTextBody: function () {
             return _.escape(this.get('body'));
         },
 
+        isSystem: function () {
+            return this.get('senderId') === 0;
+        },
+
         isMyself: function () {
-            return this.get('sender') === 1;
+            return this.get('senderId') === data.user_id;
         },
 
         hasSameSender: function () {
             var index = this.collection.indexOf(this);
             if (index <= 0) return false;
-            return this.collection.at(index - 1).get('sender') === this.get('sender');
+            return this.collection.at(index - 1).get('senderId') === this.get('senderId');
         }
     });
 
-    var MessageCollection = Backbone.Collection.extend({ model: MessageModel });
+    var MessageCollection = Backbone.Collection.extend({
+        model: MessageModel,
+        initialize: function (models, options) {
+            this.roomId = options.roomId;
+        },
+        url: function () {
+            return 'http://localhost:2337/api/' + data.user_id + '/rooms/' + this.roomId + '/messages';
+        }
+    });
 
     //
     // Chat
@@ -193,36 +114,46 @@ define('io.ox/chat/data', [], function () {
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { active: true, type: 'group', title: 'New conversation', unseen: 0 },
+        defaults: { active: true, type: 'group', unseen: 0 },
 
         initialize: function (attr) {
             this.set('modified', +moment());
             this.unset('members', { silent: true });
             this.unset('messages', { silent: true });
             var members = _(attr.members).map(function (arg) {
-                return arg instanceof UserModel ? arg : data.backbone.users.get(arg);
+                return arg instanceof UserModel ? arg : data.users.get(arg);
             });
-            this.members = new Backbone.Collection(members);
-            this.messages = new MessageCollection(attr.messages);
+            this.members = new UserCollection(members);
+            this.messages = new MessageCollection([], { roomId: attr.id });
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
-                if (name === 'add') this.onMessageAdd();
             });
         },
 
+        getTitle: function () {
+            return this.get('title') || _(this.members.reject({ id: data.user_id })).invoke('getName').sort().join('; ');
+        },
+
         getLastMessage: function () {
-            return this.messages.last().getTextBody();
+            var last = this.get('lastMessage');
+            return last ? new MessageModel(last).getTextBody() : '\u00a0';
         },
 
         getLastMessageDate: function () {
-            return this.messages.last().get('time');
+            var last = this.get('lastMessage');
+            return last ? moment(new MessageModel(last).get('sent')).format('LT') : '\u00a0';
         },
 
-        onMessageAdd: function () {
+        isActive: function () {
+            return this.get('active');
+        },
+
+        postMessage: function (attr) {
+            this.messages.add(attr).save();
             this.set('modified', +moment());
         }
     });
@@ -232,8 +163,20 @@ define('io.ox/chat/data', [], function () {
         model: ChatModel,
         comparator: 'modified',
 
+        url: function () {
+            return 'http://localhost:2337/api/' + data.user_id + '/rooms';
+        },
+
         initialize: function () {
             this.on('change:unseen', this.onChangeUnseen);
+        },
+
+        create: function (attr) {
+            var collection = this,
+                data = { active: true, members: attr.members, title: '', type: attr.type || 'group' };
+            return $.post(this.url(), data).done(function (data) {
+                collection.add(data);
+            });
         },
 
         onChangeUnseen: function () {
@@ -247,24 +190,70 @@ define('io.ox/chat/data', [], function () {
         },
 
         getHistory: function () {
-            return this.filter({ active: false }).slice(0, 100);
+            return this.filter({ active: false, joined: true }).slice(0, 100);
+        },
+
+        getChannels: function () {
+            return this.filter({ type: 'channel' });
+        },
+
+        getChannelsUnjoined: function () {
+            return this.filter({ type: 'channel', joined: false });
         }
     });
 
-    data.backbone.chats = new ChatCollection(data.chats);
+    data.chats = new ChatCollection();
 
     //
-    // Channels
+    // Files
     //
 
-    var ChannelModel = Backbone.Model.extend({ defaults: { subscribed: false } });
-    var ChannelCollection = Backbone.Collection.extend({
-        model: ChannelModel,
-        getUnsubscribed: function () {
-            return this.filter({ subscribed: false });
+    var FileModel = Backbone.Model.extend({
+
+        getThumbnailUrl: function () {
+            return 'http://localhost:2337/api/' + data.user_id + '/files/' + this.get('id') + '/thumbnail';
+        },
+
+        getPreviewUrl: function () {
+            return 'http://localhost:2337/api/' + data.user_id + '/files/' + this.get('id') + '/thumbnail';
         }
     });
-    data.backbone.channels = new ChannelCollection(data.channels);
+
+
+    var FilesCollection = Backbone.Collection.extend({
+
+        model: FileModel,
+
+        url: function () {
+            return 'http://localhost:2337/api/' + data.user_id + '/files';
+        }
+    });
+
+    data.files = new FilesCollection();
+
+    //
+    // Socket support
+    //
+
+    var socket = data.socket = io.connect('//localhost:2337', { query: 'userId=' + data.user_id });
+
+    socket.on('alive', function () {
+        console.log('Connected socket to server');
+    });
+
+    socket.on('message:change', function (roomId, id, changes) {
+        var collection = data.chats.get(roomId);
+        if (!collection) return;
+        var message = collection.messages.get(id);
+        if (message) message.set(changes);
+    });
+
+    socket.on('message:new', function (roomId, message) {
+        var model = data.chats.get(roomId);
+        if (!model) return;
+        model.messages.add(message);
+        model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+    });
 
     return data;
 });

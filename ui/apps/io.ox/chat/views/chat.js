@@ -32,7 +32,8 @@ define('io.ox/chat/views/chat', [
 
         initialize: function (options) {
 
-            this.model = data.backbone.chats.get(options.id);
+            this.room = options.room;
+            this.model = data.chats.get(this.room);
 
             this.listenTo(this.model, {
                 'change:title': this.onChangeTitle
@@ -45,12 +46,14 @@ define('io.ox/chat/views/chat', [
                 'change:time': this.onChangeTime,
                 'change:delivery': this.onChangeDelivery
             });
+
+            this.model.messages.fetch();
         },
 
         render: function () {
             this.$el.append(
                 $('<div class="header abs">').append(
-                    $('<h2 class="title">').append(this.model.get('title') || '\u00a0'),
+                    $('<h2 class="title">').append(this.model.getTitle() || '\u00a0'),
                     $('<ul class="members">').append(
                         this.model.members
                             .map(this.renderMember, this)
@@ -71,6 +74,7 @@ define('io.ox/chat/views/chat', [
         },
 
         renderMember: function (model) {
+            if (model.isMyself()) return $();
             return $('<li>').append(
                 new BadgeView({ model: model }).render().$el
             );
@@ -78,8 +82,9 @@ define('io.ox/chat/views/chat', [
 
         renderMessage: function (model) {
             return $('<div class="message">')
-                .attr('data-id', model.id)
-                .addClass(model.get('type') || 'text')
+                // here we use cid instead of id, since the id might be unknown
+                .attr('data-cid', model.cid)
+                .addClass(model.isSystem() ? 'system' : model.get('type'))
                 .toggleClass('myself', model.isMyself())
                 .append(
                     // sender avatar & name
@@ -87,17 +92,15 @@ define('io.ox/chat/views/chat', [
                     // message boby
                     $('<div class="body">').addClass().html(model.getBody()),
                     // time
-                    $('<div class="time">').text(model.get('time')),
+                    $('<div class="time">').text(model.getTime()),
                     // delivery state
                     $('<div class="fa delivery">').addClass(model.get('delivery'))
                 );
         },
 
         renderSender: function (model) {
-            if (model.get('type') === 'system') return $();
-            if (model.isMyself()) return $();
-            if (model.hasSameSender()) return $();
-            var user = data.backbone.users.get(model.get('sender'));
+            if (model.isSystem() || model.isMyself() || model.hasSameSender()) return $();
+            var user = data.users.get(model.get('senderId'));
             return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
 
@@ -110,35 +113,32 @@ define('io.ox/chat/views/chat', [
             if (e.which !== 13) return;
             e.preventDefault();
             var editor = $(e.currentTarget);
-            this.model.messages.add({ id: this.model.messages.length + 1, sender: 1, body: editor.val(), time: moment().format('LT') });
+            this.onPostMessage(editor.val());
             editor.val('').focus();
         },
 
-        onChangeTitle: function (model) {
-            this.$('.title').text(model.get('title') || '\u00a0');
+        onPostMessage: function (body) {
+            this.model.postMessage({ body: body });
         },
 
-        onAdd: function (model) {
-            this.$('.conversation').append(this.renderMessage(model));
+        onChangeTitle: function (model) {
+            this.$('.title').text(model.getTitle() || '\u00a0');
+        },
+
+        onAdd: _.debounce(function (model, collection, options) {
+            // render
+            this.$('.conversation').append(
+                options.changes.added.map(this.renderMessage.bind(this))
+            );
             // too many messages?
             var children = this.$('.conversation').children();
-            if (children.length > MESSAGE_LIMIT) children.first().remove();
+            if (children.length > MESSAGE_LIMIT) children.slice(0, children.length - MESSAGE_LIMIT).remove();
+            // proper scroll position
             this.scrollToBottom();
-            // exemplary animation
-            setTimeout(function () {
-                model.set('delivery', 'sent');
-                setTimeout(function () {
-                    model.set('delivery', 'received');
-                    setTimeout(function () {
-                        model.set('delivery', 'seen');
-                        model = null;
-                    }, 1000);
-                }, 700);
-            }, 300);
-        },
+        }, 1),
 
         getMessageNode: function (model, selector) {
-            return this.$('.message[data-id="' + model.id + '"] ' + (selector || ''));
+            return this.$('.message[data-cid="' + model.cid + '"] ' + (selector || ''));
         },
 
         onRemove: function (model) {
@@ -150,7 +150,7 @@ define('io.ox/chat/views/chat', [
         },
 
         onChangeTime: function (model) {
-            this.getMessageNode(model, '.time').text(model.get('time'));
+            this.getMessageNode(model, '.time').text(model.getTime());
         },
 
         onChangeDelivery: function (model) {

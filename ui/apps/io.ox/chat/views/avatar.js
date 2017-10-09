@@ -29,10 +29,10 @@ define('io.ox/chat/views/avatar', ['io.ox/backbone/views/disposable', 'io.ox/con
         },
 
         update: function () {
-            var data = this.model.pick('first_name', 'last_name', 'image');
+            var data = this.model.pick('id', 'first_name', 'last_name', 'image');
             this.$el
                 .text(data.image ? '' : util.getInitials(data))
-                .css('background-image', data.image ? 'url(api/image/user/picture?id=' + data.image + '&width=96&height=96&scaleType=cover)' : null);
+                .css('background-image', data.image ? 'url(api/image/user/picture?id=' + data.id + '&width=96&height=96&scaleType=cover)' : null);
         },
 
         onChangeName: function () {

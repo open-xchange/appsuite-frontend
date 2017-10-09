@@ -167,7 +167,7 @@ define('io.ox/contacts/addressbook/popup', [
 
             options = _.extend({
                 // keep this list really small for good performance!
-                columns: '1,20,500,501,502,505,519,555,556,557,592,602,606,610,611',
+                columns: '1,20,500,501,502,505,519,524,555,556,557,592,602,606,610,611',
                 exclude: useGlobalAddressBook ? [] : ['6'],
                 limit: LIMITS.fetch
             }, options);
@@ -289,7 +289,8 @@ define('io.ox/contacts/addressbook/popup', [
                 // allow sorters to have special handling for sortnames and addresses
                 sort_name_without_mail: sort_name.join('_').toLowerCase().replace(/\s/g, '_'),
                 title: item.title,
-                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i
+                rank: 1000 + ((folder_id === '6' ? 10 : 0) + rank) * 10 + i,
+                user_id: item.internal_userid
             };
         }
 
@@ -408,27 +409,31 @@ define('io.ox/contacts/addressbook/popup', [
         'shared':  gt('Shared address books')
     };
 
-    function open(callback, useGABOnly) {
+    function open(callback, options) {
 
-        if (useGABOnly) folder = 'folder/6';
-
-        // avoid parallel popups
-        if (isOpen) return;
-        isOpen = true;
-
-        return new ModalDialog({
+        options = _.extend({
+            build: _.noop,
             enter: false,
             focus: '.search-field',
             maximize: 600,
             point: 'io.ox/contacts/addressbook-popup',
             help: 'ox.appsuite.user.sect.email.send.addressbook.html',
             title: gt('Select contacts'),
-            useGABOnly: useGABOnly
-        })
+            useGABOnly: false
+        }, options);
+
+        if (options.useGABOnly) folder = 'folder/6';
+
+        // avoid parallel popups
+        if (isOpen) return;
+        isOpen = true;
+
+        return new ModalDialog(options)
         .inject({
             renderFolders: function (folders) {
                 var $dropdown = this.$('.folder-dropdown'),
-                    count = 0, self = this;
+                    useGABOnly = this.options.useGABOnly,
+                    count = 0;
                 // remove global address book?
                 if (!useGlobalAddressBook && folders.public) {
                     folders.public = _(folders.public).reject({ id: '6' });
@@ -444,7 +449,7 @@ define('io.ox/contacts/addressbook/popup', [
                         return $('<optgroup>').attr('label', sections[id]).append(
                             _(section).map(function (folder) {
                                 count++;
-                                if (self.options.useGABOnly && folder.id !== '6') return;
+                                if (useGABOnly && folder.id !== '6') return;
                                 return $('<option>').val('folder/' + folder.id).text(folder.title);
                             })
                         );
@@ -787,7 +792,8 @@ define('io.ox/contacts/addressbook/popup', [
                             id: item.id,
                             folder_id: item.folder_id,
                             email: mail,
-                            field: item.field
+                            field: item.field,
+                            user_id: item.user_id
                         };
                     }, this)
                     .flatten()
@@ -795,6 +801,7 @@ define('io.ox/contacts/addressbook/popup', [
                     .value();
             }
         })
+        .build(options.build)
         .on({
             'close': function () {
                 isOpen = false;

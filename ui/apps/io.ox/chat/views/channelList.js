@@ -21,14 +21,17 @@ define('io.ox/chat/views/channelList', ['io.ox/backbone/views/disposable', 'io.o
 
         initialize: function () {
 
-            this.collection = data.backbone.channels;
+            this.collection = data.chats;
 
             this.listenTo(this.collection, {
                 'add': this.onAdd,
                 'remove': this.onRemove,
-                'change:subscribed': this.onChangeSubscribed,
+                'change:joined': this.onChangeJoined,
                 'change:title': this.onChangeTitle
             });
+
+            // get fresh data
+            this.collection.fetch({ remove: false, data: { type: 'channel' } });
         },
 
         render: function () {
@@ -48,8 +51,8 @@ define('io.ox/chat/views/channelList', ['io.ox/backbone/views/disposable', 'io.o
         renderItem: function (model) {
             return $('<li class="channel">').append(
                 $('<div>').append(
-                    $('<span class="title">').text(model.get('title')),
-                    $('<span class="members">').text(model.get('members') + ' member(s)')
+                    $('<span class="title">').text(model.getTitle()),
+                    $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
                 ),
                 $('<div class="description">').text(model.get('description')),
                 $('<button type="button" class="btn btn-default join" >')
@@ -59,29 +62,29 @@ define('io.ox/chat/views/channelList', ['io.ox/backbone/views/disposable', 'io.o
         },
 
         getItems: function () {
-            return this.collection.getUnsubscribed();
+            return this.collection.getChannelsUnjoined();
         },
 
         getNode: function (model) {
             return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
         },
 
-        onAdd: function () {
+        onAdd: _.debounce(function () {
             this.$('ul').empty().append(
-                this.getItems().map(this.renderChannel, this)
+                this.getItems().map(this.renderItem.bind(this))
             );
-        },
+        }, 1),
 
         onRemove: function (model) {
             this.getNode(model).remove();
         },
 
-        onChangeSubscribed: function (model) {
+        onChangeJoined: function (model) {
             this.onRemove(model);
         },
 
         onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.get('title'));
+            this.getNode(model).find('.title').text(model.getTitle());
         }
     });
 

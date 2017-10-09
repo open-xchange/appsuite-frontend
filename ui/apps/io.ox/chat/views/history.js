@@ -21,7 +21,7 @@ define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/ch
 
         initialize: function () {
 
-            this.collection = data.backbone.chats;
+            this.collection = data.chats;
 
             this.listenTo(this.collection, {
                 'add': this.onAdd,
@@ -52,8 +52,8 @@ define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/ch
         renderItem: function (model) {
             return $('<li>').append(
                 $('<div class="avatar">'),
-                $('<div class="title">').text(model.get('title')),
-                $('<div class="message">').text(model.getLastMessage()),
+                $('<div class="title">').text(model.getTitle()),
+                $('<div class="body">').text(model.getLastMessage()),
                 $('<div class="date">').text(model.getLastMessageDate())
             );
         },

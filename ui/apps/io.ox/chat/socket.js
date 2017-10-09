@@ -15,6 +15,8 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
 
     'use strict';
 
+    if (2 > 1) return;
+
     // some random activity
     setTimeout(function () {
 
@@ -49,17 +51,19 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
 
             var chat;
 
+            if (!data.chats.length) return;
+
             switch (_.random(9)) {
 
                 case 0:
                     if (added++ > 2) return;
                     // add group chat
-                    data.backbone.chats.add({
-                        id: data.backbone.chats.length + 1,
+                    data.chats.add({
+                        id: data.chats.length + 1,
                         type: 'group',
                         title: getChatTitle(),
                         members: [1, 2, 3].map(function (id) {
-                            return data.backbone.users.get(id);
+                            return data.users.get(id);
                         }),
                         messages: [
                             { id: 1, body: 'Hi', sender: 1, time: getTime(), delivery: 'seen' }
@@ -72,7 +76,7 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                 case 2:
                 case 3:
                     // change status
-                    var user = data.backbone.users.at(_.random(data.backbone.users.length - 1));
+                    var user = data.users.at(_.random(data.users.length - 1));
                     user.set('state', getState());
                     break;
 
@@ -80,14 +84,14 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                 case 5:
                 case 6:
                     // add message
-                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
+                    chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getMessage(), sender: _.random(1, 5), time: getTime() });
                     chat.set('unseen', chat.get('unseen') + 1);
                     break;
 
                 case 7:
                     // add system message
-                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
+                    chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getSystemMessage(), type: 'system', sender: 0, time: getTime() });
                     chat.set('unseen', chat.get('unseen') + 1);
                     break;
@@ -95,7 +99,7 @@ define('io.ox/chat/socket', ['io.ox/chat/data'], function (data) {
                 case 8:
                 case 9:
                     // add image
-                    chat = data.backbone.chats.at(_.random(data.backbone.chats.length - 1));
+                    chat = data.chats.at(_.random(data.chats.length - 1));
                     chat.messages.add({ id: chat.messages.length + 1, body: getImage(), type: 'image', sender: _.random(1, 5), time: getTime() });
                     chat.set('unseen', chat.get('unseen') + 1);
                     break;

@@ -332,7 +332,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.activeElement = this.activeElement || document.activeElement;
         if (withAnimation) {
             this.$body.addClass('invisible');
-            this.$('.modal-content').busy();
+            this.$body.parent().busy();
         } else {
             this.$body.css('opacity', 0.50);
         }
@@ -342,7 +342,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
 
     function idle() {
         this.enableFormElements();
-        this.$('.modal-content').idle();
+        this.$body.parent().idle();
         this.$body.removeClass('invisible').css('opacity', '');
         if ($.contains(this.el, this.activeElement)) $(this.activeElement).focus();
         this.activeElement = null;

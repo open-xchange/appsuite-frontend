@@ -34,20 +34,19 @@ define('io.ox/chat/views/chatList', [
         },
 
         render: function () {
-            this.$el.append(
-                this.getItems().map(this.renderItem, this)
-            );
+            // rendering happens via onAdd
+            this.collection.fetch();
             return this;
         },
 
         renderItem: function (model) {
             return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
-                .attr('data-id', model.id)
+                .attr('data-cid', model.cid)
                 .toggleClass('unseen', model.get('unseen') > 0)
                 .append(
                     this.renderIcon(model),
                     $('<span class="label label-default">').text(model.get('unseen')),
-                    $('<div class="title">').text(model.get('title'))
+                    $('<div class="title">').text(model.getTitle())
                 );
         },
 
@@ -70,19 +69,23 @@ define('io.ox/chat/views/chatList', [
         },
 
         getNode: function (model) {
-            return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
+            return this.$('[data-cid="' + model.cid + '"]');
         },
 
-        onAdd: function (model) {
-            this.$el.prepend(this.renderItem(model));
-        },
+        onAdd: _.debounce(function (model, collection, options) {
+            this.$el.prepend(
+                options.changes.added
+                .filter(function (model) { return model.isActive(); })
+                .map(this.renderItem, this)
+            );
+        }, 1),
 
         onRemove: function (model) {
             this.getNode(model).remove();
         },
 
         onChangeTitle: function (model) {
-            this.getNode(model).find('.title').text(model.get('title') || '\u00A0');
+            this.getNode(model).find('.title').text(model.getTitle() || '\u00A0');
         },
 
         onChangeUnseen: function (model) {
@@ -93,6 +96,7 @@ define('io.ox/chat/views/chatList', [
         onChangeModified: function (model) {
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
+            console.log('onChangeModified', model);
             this.$el.prepend(node);
             if (hasFocus) node.focus();
         }
