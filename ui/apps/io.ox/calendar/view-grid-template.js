@@ -30,7 +30,7 @@ define('io.ox/calendar/view-grid-template', [
             build: function () {
                 var title, location, time, date, shown_as, isPrivate;
 
-                this.addClass('calendar').append(
+                this.addClass('calendar calendar-grid-cell').append(
                     time = $('<div class="time">'),
                     date = $('<div class="date">'),
                     isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
@@ -98,7 +98,7 @@ define('io.ox/calendar/view-grid-template', [
                     tagName: 'li',
                     defaultClassName: 'vgrid-cell list-unstyled'
                 }),
-                $ul = $('<ul>');
+                $ul = $('<ul class="calendar-grid">');
 
             // add template
             tmpl.add(that.main);
