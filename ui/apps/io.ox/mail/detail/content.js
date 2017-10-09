@@ -544,11 +544,13 @@ define('io.ox/mail/detail/content', [
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
-            var self = this;
-            $(this).hide().prev().slideDown('fast', function () {
+            $(this).hide().prev().show();
+            // needed for FF to handle the resize
+            _.delay(function () {
                 $(e.delegateTarget).trigger('resize');
-                $(self).remove();
-            });
+            }, 20);
+
+            $(this).remove();
         }
     }
 
