@@ -181,8 +181,13 @@ define('io.ox/core/tk/list',
             this.trigger('add', model, index);
         },
 
-        onRemove: function (model) {
+        keepScrollPosition: _.debounce(function (li) {
+            if (li[0].offsetTop < this.el.scrollTop) {
+                 this.el.scrollTop -= li.outerHeight(true);
+             }
+         }, 100),
 
+        onRemove: function (model) {
             var children = this.getItems(),
                 cid = this.getCID(model),
                 li = children.filter('[data-cid="' + $.escape(cid) + '"]'),
@@ -200,9 +205,7 @@ define('io.ox/core/tk/list',
             }
 
             // keep scroll position if element is above viewport
-            if (li[0].offsetTop < this.el.scrollTop) {
-                this.el.scrollTop -= li.outerHeight(true);
-            }
+            this.keepScrollPosition(li);
 
             this.selection.remove(cid, li);
             li.remove();
