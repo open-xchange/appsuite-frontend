@@ -28,25 +28,25 @@ define('io.ox/calendar/view-grid-template', [
         main: {
 
             build: function () {
-                var title, location, time, date, shown_as, isPrivate;
+                var summary, location, time, date, transp, isPrivate;
 
                 this.addClass('calendar calendar-grid-cell').append(
                     time = $('<div class="time">'),
                     date = $('<div class="date">'),
                     isPrivate = $('<i class="fa fa-lock private-flag" aria-hidden="true">').hide(),
-                    title = $('<div class="title">'),
+                    summary = $('<div class="title">'),
                     $('<div class="location-row">').append(
-                        shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
+                        transp = $('<span class="shown_as label label-info">&nbsp;</span>'),
                         location = $('<span class="location">')
                     )
                 );
 
                 return {
-                    title: title,
+                    summary: summary,
                     location: location,
                     time: time,
                     date: date,
-                    shown_as: shown_as,
+                    transp: transp,
                     isPrivate: isPrivate
                 };
             },
@@ -54,31 +54,31 @@ define('io.ox/calendar/view-grid-template', [
             set: function (data, fields) {
 
                 var self = this,
-                    isPrivate = _.isUndefined(data.title),
-                    title = isPrivate ? gt('Private') : (data.title || '\u00A0'),
+                    isPrivate = _.isUndefined(data.summary),
+                    summary = isPrivate ? gt('Private') : (data.summary || '\u00A0'),
                     a11yLabel = [];
 
                 //conflicts with appointments, where you aren't a participant don't have a folder_id.
                 if (data.folder_id) {
-                    var folder = folderAPI.get(data.folder_id);
+                    var folder = folderAPI.get(data.folder);
                     folder.done(function (folder) {
                         var conf = util.getConfirmationStatus(data, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                         self.addClass(util.getConfirmationClass(conf) + (data.hard_conflict ? ' hardconflict' : ''));
                     });
                 }
 
-                fields.title.text(title);
+                fields.summary.text(summary);
 
                 fields.location.text(data.location || '\u00A0');
                 fields.time.text(util.getTimeInterval(data));
                 fields.date.text(util.getDateInterval(data));
-                fields.shown_as.addClass(util.getShownAsLabel(data)).attr('title', util.getShownAs(data));
+                fields.transp.addClass(util.getShownAsLabel(data)).attr('summary', util.getShownAs(data));
 
                 fields.isPrivate.toggle(isPrivate);
 
                 // a11y: this should be unnecessary!
 
-                a11yLabel.push(title);
+                a11yLabel.push(summary);
                 //#. %1$s is an appointment location (e.g. a room, a telco line, a company, a city)
                 //#. This fragment appears within a long string for screen readers.
                 //#. Some languages (e.g. German) might need to translate "location:".
