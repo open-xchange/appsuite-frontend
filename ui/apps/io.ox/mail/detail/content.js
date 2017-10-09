@@ -418,6 +418,51 @@ define('io.ox/mail/detail/content', [
     // });
 
     //
+    // Beautify
+    //
+
+    ext.point('io.ox/mail/detail/beautify').extend(
+        {
+            id: 'trim',
+            process: function (baton) {
+                baton.data = baton.data.trim();
+            }
+        },
+        {
+            id: 'carriage-return',
+            process: function (baton) {
+                baton.data = baton.data.replace(/\r/g, '');
+            }
+        },
+        {
+            id: 'multiple-empty-lines',
+            process: function (baton) {
+                if (!settings.get('transform/multipleEmptyLines', true)) return;
+                baton.data = baton.data.replace(/\n{4,}/g, '\n\n\n');
+            }
+        },
+        {
+            id: 'emojis',
+            process: function (baton) {
+                baton.data = insertEmoticons(baton.data);
+            }
+        },
+        {
+            id: 'text-to-html',
+            process: function (baton) {
+                baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
+            }
+        },
+        {
+            id: 'br',
+            process: function (baton) {
+                baton.data = baton.data.replace(/^\s*(<br\s*\/?>\s*)+/g, '');
+            }
+        }
+    );
+
+
+    //
     // Helper IIFEs
     //
 
@@ -646,10 +691,9 @@ define('io.ox/mail/detail/content', [
         },
 
         beautifyPlainText: function (str) {
-            var plain = insertEmoticons(str.trim().replace(/\r/g, '').replace(/\n{4,}/g, '\n\n\n'));
-            return this.text2html(plain, { blockquotes: true, images: true, links: true })
-                // remove leading BR
-                .replace(/^\s*(<br\s*\/?>\s*)+/g, '');
+            var baton = ext.Baton({ data: str });
+            ext.point('io.ox/mail/detail/beautify').invoke('process', this, baton);
+            return baton.data;
         },
 
         transformForHTMLEditor: function (str) {
