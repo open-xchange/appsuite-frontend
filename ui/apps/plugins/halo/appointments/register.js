@@ -18,13 +18,10 @@ define('plugins/halo/appointments/register', [
 
     'use strict';
 
-    // Taken From Calendar API
-    var DAY = 60000 * 60 * 24;
-
     ext.point('io.ox/halo/contact:renderer').extend({
         id: 'appointments',
         handles: function (type) {
-            return type === 'com.openexchange.halo.appointments';
+            return type === 'com.openexchange.halo.events';
         },
         draw: function (baton) {
 
@@ -59,14 +56,11 @@ define('plugins/halo/appointments/register', [
     ext.point('io.ox/halo/contact:requestEnhancement').extend({
         id: 'request-appointments',
         enhances: function (type) {
-            return type === 'com.openexchange.halo.appointments';
+            return type === 'com.openexchange.halo.events';
         },
         enhance: function (request) {
-            request.appendColumns = true;
-            request.columnModule = 'calendar';
-            request.params.start = _.now();
-            request.params.end = _.now() + 10 * DAY;
-            request.params.columns = '1,20,200,201,202,220,221,400,401,402';
+            request.params.rangeStart = moment().utc().format('YYYYMMDD[T]HHMMss[Z]');
+            request.params.rangeEnd = moment().utc().add(10, 'days').format('YYYYMMDD[T]HHMMss[Z]');
         }
     });
 });
