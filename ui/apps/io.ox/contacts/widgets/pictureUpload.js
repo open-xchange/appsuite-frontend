@@ -142,7 +142,7 @@ define('io.ox/contacts/widgets/pictureUpload', [
                 self.oldMode = _.browser.IE < 10;
 
                 if (imageUrl) {
-                    imageUrl = util.replacePrefix(imageUrl);
+                    imageUrl = util.replacePrefix(imageUrl, ox.apiRoot);
                     hasImage = true;
                 } else if (this.model.get('image1') && this.model.get('image1_content_type')) {
                     // temporary support for data-url images

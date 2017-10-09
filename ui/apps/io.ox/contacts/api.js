@@ -637,7 +637,7 @@ define('io.ox/contacts/api', [
                     if (data.image1_url) {
                         data.image1_url = data.image1_url
                             .replace(/^https?\:\/\/[^\/]+/i, '');
-                        data.image1_url = coreUtil.replacePrefix(data.image1_url);
+                        data.image1_url = coreUtil.replacePrefix(data.image1_url, ox.apiRoot);
                     }
                     // use first contact
                     return fetchCache.add(address, data);
@@ -754,7 +754,7 @@ define('io.ox/contacts/api', [
                     context: ox.context_id,
                     sequence: data.last_modified
                 });
-                url = data.image1_url = coreUtil.replacePrefix(data.image1_url) + '&' + $.param(params);
+                url = data.image1_url = coreUtil.replacePrefix(data.image1_url, ox.apiRoot) + '&' + $.param(params);
 
             } else if (!data.email && !data.email1 && !data.mail && !data.contact_id && !data.id && !data.internal_userid) {
                 url = fallback;

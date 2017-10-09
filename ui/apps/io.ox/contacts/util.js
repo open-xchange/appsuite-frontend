@@ -316,7 +316,7 @@ define('io.ox/contacts/util', [
             }
 
             var url = arg.replace(/^https?\:\/\/[^\/]+/i, '');
-            return util.replacePrefix(url);
+            return util.replacePrefix(url, ox.apiRoot);
         },
 
         getInitials: (function () {
