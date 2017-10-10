@@ -54,7 +54,7 @@ define('io.ox/chat/views/chatList', [
             switch (model.get('type')) {
                 case 'private':
                     return $('<span class="btn-icon">').append(
-                        new StateView({ model: model.members.at(0) }).render().$el.addClass('small')
+                        new StateView({ model: model.getFirstMember() }).render().$el.addClass('small')
                     );
                 case 'group':
                     return $('<i class="fa fa-group btn-icon" aria-hidden="true">');

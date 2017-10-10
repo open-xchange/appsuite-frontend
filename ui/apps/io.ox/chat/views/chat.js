@@ -15,8 +15,9 @@ define('io.ox/chat/views/chat', [
     'io.ox/backbone/views/disposable',
     'io.ox/chat/views/badge',
     'io.ox/chat/views/avatar',
+    'io.ox/chat/views/chatAvatar',
     'io.ox/chat/data'
-], function (DisposableView, BadgeView, Avatar, data) {
+], function (DisposableView, BadgeView, Avatar, ChatAvatar, data) {
 
     'use strict';
 
@@ -53,17 +54,18 @@ define('io.ox/chat/views/chat', [
         render: function () {
             this.$el.append(
                 $('<div class="header abs">').append(
-                    $('<h2 class="title">').append(this.model.getTitle() || '\u00a0'),
-                    $('<ul class="members">').append(
-                        this.model.members
-                            .map(this.renderMember, this)
-                    )
+                    new ChatAvatar({ model: this.model }).render().$el,
+                    $('<h2 class="title">')
+                        .toggleClass('small-line', !this.model.isPrivate())
+                        .append(this.model.getTitle() || '\u00a0'),
+                    this.model.isPrivate() ? $() :
+                        $('<ul class="members">').append(
+                            this.model.members.map(this.renderMember, this)
+                        )
                 ),
                 $('<div class="scrollpane abs">').append(
                     $('<div class="conversation ">').append(
-                        this.model.messages
-                            .last(MESSAGE_LIMIT)
-                            .map(this.renderMessage, this)
+                        this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
                     )
                 ),
                 $('<div class="controls abs">').append(

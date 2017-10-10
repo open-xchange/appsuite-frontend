@@ -89,10 +89,9 @@ define('io.ox/chat/main', [
         },
 
         startPrivateChat: function (cmd) {
-            var chatId = data.chats.length + 1,
-                user = data.users.get(cmd.id);
-            data.chats.add({ id: chatId, type: 'private', title: user.getName(), members: [cmd.id, 1], messages: [{ id: 1, body: 'Created private chat', type: 'system' }] });
-            this.showChat({ id: chatId });
+            data.chats.create({ type: 'private', members: [cmd.id] }).done(function (result) {
+                this.showChat({ id: result.id });
+            }.bind(this));
         },
 
         joinChannel: function (cmd) {
@@ -104,7 +103,7 @@ define('io.ox/chat/main', [
         },
 
         showChat: function (cmd) {
-            var view = new ChatView({ room: cmd.cid });
+            var view = new ChatView({ room: cmd.id || cmd.cid });
             window.$rightside.empty().append(view.render().$el);
             view.scrollToBottom();
         },

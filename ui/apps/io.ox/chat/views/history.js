@@ -11,7 +11,11 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/chat/data'], function (DisposableView, data) {
+define('io.ox/chat/views/history', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/chatAvatar',
+    'io.ox/chat/data'
+], function (DisposableView, ChatAvatar, data) {
 
     'use strict';
 
@@ -51,7 +55,7 @@ define('io.ox/chat/views/history', ['io.ox/backbone/views/disposable', 'io.ox/ch
 
         renderItem: function (model) {
             return $('<li>').append(
-                $('<div class="avatar">'),
+                new ChatAvatar({ model: model }).render().$el,
                 $('<div class="title">').text(model.getTitle()),
                 $('<div class="body">').text(model.getLastMessage()),
                 $('<div class="date">').text(model.getLastMessageDate())

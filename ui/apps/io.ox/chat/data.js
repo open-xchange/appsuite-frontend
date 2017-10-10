@@ -35,7 +35,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
 
         getName: function () {
             var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
-            if (first && last) return last + ', ' + first;
+            if (first && last) return first + ' ' + last;
             return first || last || '\u00a0';
         }
     });
@@ -69,10 +69,33 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
         },
 
         getBody: function () {
-            if (this.get('type') === 'image') {
-                return '<img src="' + this.get('body') + '" alt="">';
-            }
+            if (this.isSystem()) return this.getSystemMessage();
+            if (this.isImage()) return this.getImage();
+            return this.getFormattedBody();
+        },
+
+        getFormattedBody: function () {
             return _.escape(this.get('body')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+        },
+
+        getSystemMessage: function () {
+            var data = JSON.parse(this.get('body'));
+            switch (data.type) {
+                case 'joinMember':
+                    return _.printf('%1$s joined the conversation', getName(data.member));
+                case 'addMember':
+                    return _.printf('%1$s added %2$s to the conversation', getName(data.originator), getNames(data.members));
+                case 'me':
+                    return _.printf('%1$s %2$s', getName(data.originator), data.message);
+                case 'text':
+                    return data.message;
+                default:
+                    return _.printf('Unknown system message %1$s', data.type);
+            }
+        },
+
+        getImage: function () {
+            return '<img src="' + this.get('body') + '" alt="">';
         },
 
         getTime: function () {
@@ -89,6 +112,10 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
 
         isMyself: function () {
             return this.get('senderId') === data.user_id;
+        },
+
+        isImage: function () {
+            return this.get('type') === 'image';
         },
 
         hasSameSender: function () {
@@ -148,8 +175,25 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
             return last ? moment(new MessageModel(last).get('sent')).format('LT') : '\u00a0';
         },
 
+        getFirstMember: function () {
+            // return first member that is not current user
+            return this.members.reject({ id: data.user_id })[0];
+        },
+
         isActive: function () {
             return this.get('active');
+        },
+
+        isPrivate: function () {
+            return this.get('type') === 'private';
+        },
+
+        isGroup: function () {
+            return this.get('type') === 'group';
+        },
+
+        isChannel: function () {
+            return this.get('type') === 'channel';
         },
 
         postMessage: function (attr) {
@@ -232,6 +276,30 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
     data.files = new FilesCollection();
 
     //
+    // Helpers
+    //
+
+    function getName(id) {
+        return getNames([id]);
+    }
+
+    function getNames(list) {
+        return join(
+            _(list)
+            .map(function (id) {
+                var model = data.users.get(id);
+                return '<span class="name">' + (model ? model.getName() : 'Unknown user') + '</span>';
+            })
+            .sort()
+        );
+    }
+
+    function join(list) {
+        if (list.length <= 2) return list.join(' and ');
+        return list.slice(0, -1).join(', ') + ', and ' + list[list.length - 1];
+    }
+
+    //
     // Socket support
     //
 
@@ -253,6 +321,11 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
         if (!model) return;
         model.messages.add(message);
         model.set({ modified: +moment(), unseen: model.get('unseen') + 1 });
+    });
+
+    socket.on('user:change:state', function (userId, state) {
+        var model = data.users.get(userId);
+        if (model) model.set('state', state);
     });
 
     return data;
