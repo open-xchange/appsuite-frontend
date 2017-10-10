@@ -244,10 +244,10 @@ run e2e tests:
     LAUNCH_URL: http://e2e-$CI_PIPELINE_ID.ui.cloud.open-xchange.com/appsuite/
   script:
     - cd ui
-    - grunt nightwatch
+    - yarn codeceptjs run
   artifacts:
     paths:
-      - ui/build/e2e/screenshots
+      - ui/build/e2e/
     when: on_failure
     expire_in: 1 day
 

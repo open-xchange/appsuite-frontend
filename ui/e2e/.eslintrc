@@ -1,0 +1,22 @@
+{
+    "extends": [
+        "../.eslintrc"
+    ],
+
+    "plugins": [
+        "codeceptjs"
+    ],
+
+    "env": {
+        "mocha": true,
+        "es6": true,
+        "codeceptjs/codeceptjs": true
+    },
+
+    "rules": {
+        "indent": [2, 4, {"SwitchCase": 1, "MemberExpression": "off" }],
+        "no-unused-expressions": 0,
+        "dot-notation": 0,
+        "max-nested-callbacks": [2, 9]
+    }
+}
