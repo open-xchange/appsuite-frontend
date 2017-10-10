@@ -32,7 +32,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 name: 'io.ox/mail/compose',
                 title: gt('Compose'),
                 userContent: true,
-                closable: true
+                closable: true,
+                noTopbarNode: true
             }),
             win;
 
@@ -40,7 +41,11 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             // get window
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/mail/compose',
-                chromeless: true
+                chromeless: true,
+                // attributes for the floating window
+                floating: true,
+                closable: true,
+                title: gt('Compose')
             }));
 
             // use main role on 'outer' to include actions in header

@@ -22,9 +22,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         constructor: function (options) {
             this.options = options || {};
             this.title = this.options.title;
+            // standard windowmanager windowobject. Used by apps
+            this.win = this.options.win;
             this.count = this.options.count || 0;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
+            this.$el.on('click', '[data-action="close"]', this.close.bind(this));
             this.minimized = null;
         },
 
@@ -40,7 +43,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                         $('<div class="controls">').append(
                             $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
                                 $('<i class="fa fa-window-minimize" aria-hidden="true">')
-                            )
+                            ),
+                            this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
                         )
                     ),
                     this.$body = $('<div class="floating-body abs">')
@@ -57,6 +61,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         },
 
         close: function () {
+            if (this.win && !this.closing) {
+                this.closing = true;
+                this.win.close();
+                return this;
+            }
             remove(this);
             this.$el.remove();
             return this;

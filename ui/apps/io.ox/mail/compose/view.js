@@ -50,11 +50,6 @@ define('io.ox/mail/compose/view', [
             index: 200,
             id: 'save',
             draw: extensions.buttons.save
-        },
-        {
-            index: 300,
-            id: 'discard',
-            draw: extensions.buttons.discard
         }
     );
 
@@ -766,6 +761,7 @@ define('io.ox/mail/compose/view', [
         },
 
         discard: function () {
+            debugger;
             var self = this,
                 def = $.when(),
                 isDraft = this.model.keepDraftOnClose();

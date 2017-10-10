@@ -462,12 +462,15 @@
 .floating-window {
 
     position: absolute;
-    z-index: 1;
+    // foldertree has z-index=1 so this must be higher
+    z-index: 2;
     width: 960px;
     height: 640px;
     max-height: 90%;
     right: 56px;
     bottom: 16px;
+    top: auto;
+    left: auto;
     background: transparent;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     outline: 0;

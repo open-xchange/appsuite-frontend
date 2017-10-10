@@ -16,6 +16,7 @@
 
 define('io.ox/core/desktop', [
     'io.ox/core/event',
+    'io.ox/backbone/views/window',
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
     'io.ox/core/cache',
@@ -26,7 +27,7 @@ define('io.ox/core/desktop', [
     'io.ox/find/main',
     'settings!io.ox/core',
     'gettext!io.ox/core'
-], function (Events, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreSettings, gt) {
+], function (Events, windowView, ext, links, cache, notifications, upsell, adaptiveLoader, api, findFactory, coreSettings, gt) {
 
     'use strict';
 
@@ -1056,7 +1057,7 @@ define('io.ox/core/desktop', [
         };
 
         that.on('window.open window.show', function (e, win) {
-            // show window managher
+            // show window manager
             this.show();
             // move/add window to top of stack
             windows = _(windows).without(win);
@@ -1236,6 +1237,7 @@ define('io.ox/core/desktop', [
 
                 this.show = function (cont, resume) {
                     var appchange = false;
+                    //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
                     if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
@@ -1246,7 +1248,9 @@ define('io.ox/core/desktop', [
                     if ((!appchange || resume) && self && (currentWindow !== this || parent.length === 0)) {
                         // show
                         if (node.parent().length === 0) {
-                            if (this.simple) {
+                            if (this.floating) {
+                                this.floating.open();
+                            } else if (this.simple) {
                                 node.insertAfter('#io-ox-topbar');
                                 $('body').css('overflowY', 'auto');
                             } else {
@@ -1257,17 +1261,18 @@ define('io.ox/core/desktop', [
                         this.trigger('beforeshow');
                         this.updateToolbar();
                         //set current appname in url, was lost on returning from edit app
-                        if (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0]) {
+                        if (!this.floating && (!_.url.hash('app') || self.app.getName() !== _.url.hash('app').split(':', 1)[0])) {
                             //just get everything before the first ':' to exclude parameter additions
                             _.url.hash('app', self.app.getName());
                         }
                         node.show();
 
                         if (self === null) return;
-                        if (currentWindow && currentWindow !== self && !this.page) {
+                        // don't hide window if this is a floating one
+                        if (!this.floating && currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
+                            currentWindow = self;
                         }
-                        currentWindow = self;
                         _.call(cont);
                         self.state.visible = true;
                         self.state.open = true;
@@ -1305,6 +1310,9 @@ define('io.ox/core/desktop', [
                 };
 
                 this.hide = function () {
+                    // floating windows have their own hiding mechanism
+                    if (this.floating) return;
+
                     // detach if there are no iframes
                     this.trigger('beforehide');
                     // TODO: decide on whether or not to detach nodes
@@ -1353,11 +1361,17 @@ define('io.ox/core/desktop', [
                                 self.state.open = false;
                                 self.state.running = false;
                                 self = null;
+                                if (self.floating) {
+                                    self.floating.close();
+                                }
                             });
                     } else {
                         this.hide();
                         this.state.open = false;
                         this.trigger('close');
+                        if (this.floating) {
+                            this.floating.close();
+                        }
                         ox.ui.windowManager.trigger('window.close', this);
                     }
                     return this;
@@ -1517,7 +1531,8 @@ define('io.ox/core/desktop', [
                 name: '',
                 title: '',
                 toolbar: false,
-                width: 0
+                width: 0,
+                floating: false
             }, options);
 
             // get width
@@ -1527,8 +1542,12 @@ define('io.ox/core/desktop', [
                 // create new window instance
                 win = new Window(opt);
 
+            if (opt.floating) {
+                win.floating = new windowView({ title: opt.title, win: win, closable: opt.closable });
+            }
             // window container
-            win.nodes.outer = $('<div class="window-container">')
+            win.nodes.outer = (opt.floating ? win.floating.$el : $('<div>'))
+                .addClass('window-container')
                 .attr({ id: opt.id, 'data-window-nr': guid });
 
             // create very simple window?
@@ -1537,11 +1556,39 @@ define('io.ox/core/desktop', [
                 win.nodes.outer.addClass('simple-window').append(
                     win.nodes.main = $('<div class="window-content" tabindex="-1">')
                 );
+                //todo check blocker idle/busy
                 win.nodes.blocker = $();
-                win.nodes.sidepanel = $();
+                //todo needed?
+                //win.nodes.sidepanel = $();
                 win.nodes.head = $();
                 win.nodes.body = $();
+                //todo footer?
 
+            } else if (opt.floating) {
+                win.floating.render();
+                win.nodes.main = win.floating.$body;
+                win.nodes.main.append(
+                    // blocker
+                    win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
+                        $('<div class="abs header">'),
+                        $('<div class="progress first"><div class="progress-bar" style="width:0"></div></div>').hide(),
+                        $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
+                        $('<div class="abs footer">')
+                    ),
+                    // window HEAD
+                    // @deprecated
+                    win.nodes.head = $('<div class="window-head">'),
+                    // window HEADER
+                    win.nodes.header = $('<div class="window-header">'),
+                    // window BODY
+                    win.nodes.body = $('<div class="window-body">'),
+
+                    win.nodes.footer = $('<div class="window-footer">')
+                );
+
+                // draw window head
+                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+                ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             } else {
 
                 win.nodes.outer.append(
