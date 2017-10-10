@@ -62,6 +62,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         close: function () {
             if (this.win && !this.closing) {
+                if (this.win.app) {
+                    this.win.app.quit();
+                    return this;
+                }
                 this.closing = true;
                 this.win.close();
                 return this;
