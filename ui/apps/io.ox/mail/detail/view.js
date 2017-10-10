@@ -380,7 +380,10 @@ define('io.ox/mail/detail/view', [
 
             function resizeFrame() {
                 var frame = self.find('.mail-detail-frame'),
-                    height = frame.contents().find('.mail-detail-content').height();
+                    contents = frame.contents(),
+                    height = contents.find('.mail-detail-content').height(),
+                    htmlHeight = contents.find('html').height();
+
                 if (height === 0) {
                     // TODO: find better solution, might be an endless loop
                     // height 0 should(!) never happen, the dom node seems to be not rendered yet and
@@ -388,6 +391,9 @@ define('io.ox/mail/detail/view', [
                     _.delay(resizeFrame, 10);
                     return;
                 }
+
+                if (_.browser.firefox && height < htmlHeight) height = htmlHeight;
+
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
             }
