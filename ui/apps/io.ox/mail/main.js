@@ -632,7 +632,7 @@ define('io.ox/mail/main', [
          * Store view options
          */
         'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function (model) {
+            app.props.on('change', _.debounce(function () {
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
