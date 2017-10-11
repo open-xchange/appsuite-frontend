@@ -4,12 +4,15 @@ Feature('Calendar: Create new appointment');
 
 Scenario('Create appointment with all fields', function* (I) {
 
+    I.defineTimeout({ implicit: 10000 });
+
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
-    I.selectFolder('All my appointments');
     I.setSetting('io.ox/core', 'autoOpenNotification', false);
     I.setSetting('io.ox/core', 'showDesktopNotifications', false);
+
+    I.selectFolder('All my appointments');
     I.wait(2);
     I.click('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
@@ -66,5 +69,8 @@ Scenario('Create appointment with all fields', function* (I) {
     I.waitForStalenessOf(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
 
     I.logout();
+
+    // reset timeouts
+    I.defineTimeout({ implicit: 0 });
 
 });
