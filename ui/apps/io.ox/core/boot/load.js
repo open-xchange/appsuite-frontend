@@ -107,7 +107,7 @@ define('io.ox/core/boot/load', [
         if (coreSettings.get('autoStart') === 'io.ox/mail/main' && capabilities.has('webmail')) {
 
             var folder = 'default0/INBOX',
-                thread = mailSettings.get(['viewOptions', folder, 'thread'], true),
+                thread = mailSettings.get('threadSupport', true) ? mailSettings.get(['viewOptions', folder, 'thread'], true) : false,
                 sort = mailSettings.get(['viewOptions', folder, 'sort'], 610),
                 action = thread ? 'threadedAll' : 'all',
                 params = {
