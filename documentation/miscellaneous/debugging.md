@@ -64,6 +64,8 @@ require(['settings!io.ox/portal'], function(settings) {
 
 # Debug relogin
 
+Performs a successfully autoLogout almost immediately and shows the corresponding dialog.
+
 ```javascript
 ox.autoLogout.debug();
 ```
