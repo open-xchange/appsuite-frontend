@@ -1,5 +1,5 @@
-module.exports = function* (module, name, value) {
-    var result = yield this.executeAsyncScript(function (module, name, valueStr, done) {
+module.exports = function (module, name, value) {
+    this.executeAsyncScript(function (module, name, valueStr, done) {
         require(['settings!' + module], function (settings) {
             settings.set(name, JSON.parse(valueStr));
             done(true);
@@ -7,5 +7,4 @@ module.exports = function* (module, name, value) {
             done(false);
         });
     }, module, name, JSON.stringify(value));
-    console.log(result);
 };
