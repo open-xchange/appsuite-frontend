@@ -761,7 +761,6 @@ define('io.ox/mail/compose/view', [
         },
 
         discard: function () {
-            debugger;
             var self = this,
                 def = $.when(),
                 isDraft = this.model.keepDraftOnClose();

@@ -77,7 +77,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         setTitle: function (title) {
             this.title = title;
-            this.$header.find('h1').text(title || '\u00A0');
+            this.$header.find('h1 .title').text(title || '\u00A0');
             return this;
         },
 

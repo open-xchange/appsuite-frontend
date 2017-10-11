@@ -550,10 +550,10 @@ define('io.ox/core/desktop', [
                 isDisabled = ox.manifests.isDisabled(name + '/main');
 
             // update hash
-            if (name !== _.url.hash('app')) {
+            if (!this.options.noURLUpdate && name !== _.url.hash('app')) {
                 _.url.hash({ folder: null, perspective: null, id: null });
             }
-            if (name) {
+            if (!this.options.noURLUpdate && name) {
                 _.url.hash('app', name);
             }
 
@@ -1239,7 +1239,7 @@ define('io.ox/core/desktop', [
                     var appchange = false;
                     //todo URL changes on app change? direct links?
                     //use the url app string before the first ':' to exclude parameter additions (see how mail write adds the current mode here)
-                    if (currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
+                    if (!this.floating && currentWindow && _.url.hash('app') && self.name !== _.url.hash('app').split(':', 1)[0]) {
                         appchange = true;
                     }
                     // get node and its parent node
@@ -1271,6 +1271,8 @@ define('io.ox/core/desktop', [
                         // don't hide window if this is a floating one
                         if (!this.floating && currentWindow && currentWindow !== self && !this.page) {
                             currentWindow.hide();
+                        }
+                        if (!this.floating) {
                             currentWindow = self;
                         }
                         _.call(cont);
@@ -1469,6 +1471,9 @@ define('io.ox/core/desktop', [
                                 document.title = document.customTitle = ox.serverConfig.pageTitle || '';
                             }
                         }
+                        if (this.floating) {
+                            this.floating.setTitle(title);
+                        }
                         this.trigger('change:title');
                     } else {
                         console.error('window.setTitle(str) expects string!', str);
@@ -1564,34 +1569,13 @@ define('io.ox/core/desktop', [
                 win.nodes.body = $();
                 //todo footer?
 
-            } else if (opt.floating) {
-                win.floating.render();
-                win.nodes.main = win.floating.$body;
-                win.nodes.main.append(
-                    // blocker
-                    win.nodes.blocker = $('<div class="abs window-blocker">').hide().append(
-                        $('<div class="abs header">'),
-                        $('<div class="progress first"><div class="progress-bar" style="width:0"></div></div>').hide(),
-                        $('<div class="progress second"><div class="progress-bar" style="width: 0"></div></div>').hide(),
-                        $('<div class="abs footer">')
-                    ),
-                    // window HEAD
-                    // @deprecated
-                    win.nodes.head = $('<div class="window-head">'),
-                    // window HEADER
-                    win.nodes.header = $('<div class="window-header">'),
-                    // window BODY
-                    win.nodes.body = $('<div class="window-body">'),
-
-                    win.nodes.footer = $('<div class="window-footer">')
-                );
-
-                // draw window head
-                ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
-                ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
             } else {
 
-                win.nodes.outer.append(
+                if (opt.floating) {
+                    win.floating.render();
+                    win.nodes.main = win.floating.$body;
+                }
+                win.nodes[opt.floating ? 'main' : 'outer'].append(
                     $('<div class="window-container-center">')
                     .data({ width: width + unit })
                     .css({ width: width + unit })

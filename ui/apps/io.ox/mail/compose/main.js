@@ -33,7 +33,8 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 title: gt('Compose'),
                 userContent: true,
                 closable: true,
-                noTopbarNode: true
+                noTopbarNode: true,
+                noURLUpdate: true
             }),
             win;
 
@@ -80,7 +81,6 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
             return function (obj) {
 
                 var def = $.Deferred();
-                _.url.hash('app', 'io.ox/mail/compose:' + type);
 
                 app.cid = 'io.ox/mail:' + type + '.' + _.cid(obj);
 
