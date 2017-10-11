@@ -199,13 +199,12 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
             onSave: function () {
                 var self = this,
                     testsPart = this.model.get('test'),
-                    actionArray = this.model.get('actioncmds');
+                    actionArray = this.model.get('actioncmds'),
+                    emptyValuesAllowed = ['exists', 'not exists'];
 
                 function isValid(tests, actions) {
 
-                    var result = true,
-                        emptyValuesAllowed = ['exists', 'not exists'];
-
+                    var result = true;
                     // single test
                     if (_.has(tests, 'values')) {
                         if (tests.values && tests.values[0] === '' && !_.contains(emptyValuesAllowed, tests.comparison)) result = false;
@@ -255,7 +254,7 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                     this.model.set('test', { id: 'true' });
 
                 } else {
-                    if (testsPart.id === 'header' && testsPart.values[0].trim() === '') {
+                    if (testsPart.id === 'header' && testsPart.values[0].trim() === '' && !_.contains(emptyValuesAllowed, testsPart.comparison)) {
                         this.model.set('test', { id: 'true' });
                     }
                     if (testsPart.id === 'size' && testsPart.size.toString().trim() === '') {
