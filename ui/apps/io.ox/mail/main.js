@@ -524,7 +524,7 @@ define('io.ox/mail/main', [
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({
                 folder: app.folder.get(),
-                thread: true
+                thread: app.settings.get('threadSupport', true)
             });
             // for debugging
             window.list = app.listView;
@@ -566,7 +566,8 @@ define('io.ox/mail/main', [
          */
         'get-view-options': function (app) {
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
+                var options = app.settings.get(['viewOptions', folder], {});
+                if (!app.settings.get('threadSupport', true)) options.thread = false;
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },
