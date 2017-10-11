@@ -41,6 +41,13 @@ module.exports.config = {
     },
     'bootstrap': function (done) {
         var users = localConf.e2e.users || [];
+        if (process.env.CI) {
+            users.push({
+                username: 'tthamm',
+                password: 'secret',
+                mail: 'tthamm@ox-e2e-backend.novalocal'
+            });
+        }
         if (users.length === 0) throw Object({ message: 'Please define at least one user in e2e.users.' });
         global.users = users;
 
