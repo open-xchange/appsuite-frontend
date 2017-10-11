@@ -1,6 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var localConf = {};
+var seleniumProcess;
 
 if (fs.existsSync('grunt/local.conf.json')) {
     localConf = JSON.parse(fs.readFileSync('grunt/local.conf.json')) || {};
@@ -37,7 +38,7 @@ module.exports.config = {
     'include': {
         'I': './e2e/commands.js'
     },
-    'bootstrap': function () {
+    'bootstrap': function (done) {
         var users = localConf.e2e.users || [];
         if (users.length === 0) throw Object({ message: 'Please define at least one user in e2e.users.' });
         global.users = users;
@@ -49,6 +50,36 @@ module.exports.config = {
         global.Assertion = chai.Assertion;
         global.assert = chai.assert;
         chai.Should();
+        try {
+            var config = require('codeceptjs').config.get();
+            if (!/127\.0\.0\.1/.test(config.helpers.WebDriverIO.host)) {
+                throw Object({ code: 'EUSEREMOTE', message: 'Not running selenium-standalone because remote is configured' });
+            }
+            var selenium = require('selenium-standalone'),
+                seleniumOpts = _.extend({}, {
+                    //selenium versions >3.4 don't seem to work on macos, currently
+                    version: '3.4.0'
+                }, localConf.e2e.selenium);
+            selenium.start(seleniumOpts, function (err, child) {
+                if (err) throw err;
+                seleniumProcess = child;
+                done();
+            });
+        } catch (e) {
+            if (e.code === 'EUSEREMOTE') return done();
+            //throw again, to make the error visible
+            throw e;
+        }
+    },
+    'teardown': function () {
+        //HACK: defer killing selenium, because it's still needed for a few ms
+        global.setTimeout(function () {
+            try {
+                seleniumProcess.kill();
+            } catch (e) {
+                //ignore me
+            }
+        }, 100);
     },
     'mocha': {},
     'name': 'App Suite Core UI'
