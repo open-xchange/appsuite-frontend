@@ -392,7 +392,7 @@ define('io.ox/mail/detail/view', [
                     return;
                 }
 
-                if (_.browser.firefox && height < htmlHeight) height = htmlHeight;
+                if ((_.browser.firefox || _.browser.safari) && height < htmlHeight) height = htmlHeight;
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
