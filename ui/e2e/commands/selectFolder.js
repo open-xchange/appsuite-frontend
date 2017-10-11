@@ -37,7 +37,9 @@ module.exports = function (id) {
                         }
                     }
                 }
-                app.folder.set(model.get('id')).always(done);
+                app.folder.set(model.get('id')).always(function () {
+                    done();
+                });
             }, done);
         });
     }, id, webDriver.waitForTimeout);
