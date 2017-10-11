@@ -35,7 +35,9 @@ define('io.ox/contacts/distrib/main', [
             name: 'io.ox/contacts/distrib',
             title: gt('Distribution List'),
             userContent: true,
-            closable: true
+            closable: true,
+            noTopbarNode: true,
+            noURLUpdate: true
         });
 
         app.getContextualHelp = function () {
@@ -158,9 +160,11 @@ define('io.ox/contacts/distrib/main', [
         app.setLauncher(function () {
 
             app.setWindow(win = ox.ui.createWindow({
-                title: '',
                 chromeless: true,
-                name: 'io.ox/contacts/distrib'
+                name: 'io.ox/contacts/distrib',
+                title: gt('Distribution List'),
+                floating: true,
+                closable: true
             }));
 
             function fnToggleSave(isDirty) {

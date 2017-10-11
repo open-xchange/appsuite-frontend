@@ -33,9 +33,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
         render: function () {
             var title_id = _.uniqueId('title');
-            this.$el.attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
+            this.$el.empty().attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
                 $('<div class="abs" role="document">').append(
-                    this.$header = $('<div class="floating-header abs">').append(
+                    this.$header = this.$header || $('<div class="floating-header abs">').append(
                         $('<h1>').append(
                             $('<span class="title">').attr('id', title_id).text(this.options.title || '\u00A0'),
                             $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
@@ -47,7 +47,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                             this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
                         )
                     ),
-                    this.$body = $('<div class="floating-body abs">')
+                    this.$body = this.$body || $('<div class="floating-body abs">')
                 )
             );
             return this;

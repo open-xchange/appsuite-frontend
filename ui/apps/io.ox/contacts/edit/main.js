@@ -39,9 +39,11 @@ define('io.ox/contacts/edit/main', [
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
-            title: 'Edit Contact',
+            title: gt('Edit Contact'),
             userContent: true,
-            closable: true
+            closable: true,
+            noTopbarNode: true,
+            noURLUpdate: true
         });
 
         app.setLauncher(function () {
@@ -49,8 +51,10 @@ define('io.ox/contacts/edit/main', [
             var def = $.Deferred();
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
-                title: 'Edit Contact',
-                chromeless: true
+                chromeless: true,
+                floating: true,
+                closable: true,
+                title: gt('Edit Contact')
             });
 
             app.setWindow(win);

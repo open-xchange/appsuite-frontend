@@ -33,9 +33,11 @@ define('io.ox/calendar/edit/main', [
 
         var app = ox.ui.createApp({
             name: 'io.ox/calendar/edit',
-            title: 'Edit Appointment',
+            title: gt('Edit Appointment'),
             userContent: true,
-            closable: true
+            closable: true,
+            noTopbarNode: true,
+            noURLUpdate: true
         });
 
         _.extend(app, {
@@ -81,7 +83,10 @@ define('io.ox/calendar/edit/main', [
                     // create app window
                     var win = ox.ui.createWindow({
                         name: 'io.ox/calendar/edit',
-                        chromeless: true
+                        chromeless: true,
+                        floating: true,
+                        closable: true,
+                        title: gt('Edit Appointment')
                     });
 
                     self.setWindow(win);

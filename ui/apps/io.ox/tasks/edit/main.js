@@ -25,7 +25,14 @@ define('io.ox/tasks/edit/main', [
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: gt('Edit task'), userContent: true, closable: true }),
+        var app = ox.ui.createApp({
+                name: 'io.ox/tasks/edit',
+                title: gt('Edit task'),
+                userContent: true,
+                closable: true,
+                noTopbarNode: true,
+                noURLUpdate: true
+            }),
             // app window
             win,
             //app
@@ -109,7 +116,10 @@ define('io.ox/tasks/edit/main', [
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
-                chromeless: true
+                chromeless: true,
+                floating: true,
+                closable: true,
+                title: gt('Edit task')
             });
 
             win.addClass('io-ox-tasks-edit-main');
