@@ -13,13 +13,6 @@
 'use strict';
 
 module.exports = function (grunt) {
-    if (!grunt.isPeerDependencyInstalled('nightwatch')) return;
-
-    var nightwatch = require('nightwatch');
-    var _ = require('underscore');
-    nightwatch.initGrunt(grunt);
-
-    var config = grunt.config('local.nightwatch') || { test_settings: {} };
 
     if (!grunt.config('local.appserver.fixturesPath')) {
         grunt.config('local.appserver.fixturesPath', 'e2e/fixtures');
@@ -27,33 +20,14 @@ module.exports = function (grunt) {
 
     grunt.config.merge({
         copy: {
-            specs_nightwatch: {
+            specs_e2e_fixtures: {
                 files: [{
                     expand: true,
                     src: ['fixtures/**/*'],
                     dest: 'build/e2e',
-                    cwd: 'nightwatch/'
+                    cwd: 'e2e/'
                 }]
             }
         }
     });
-
-    if (process.env.LAUNCH_URL) {
-        config.test_settings['default'] = _.extend(
-            {},
-            config.test_settings['default'],
-            {
-                launch_url: process.env.LAUNCH_URL
-            }
-        );
-    }
-
-    grunt.config.merge({
-        nightwatch: {
-            options: config
-        }
-    });
-
-    grunt.loadNpmTasks('grunt-nightwatch');
-
 };

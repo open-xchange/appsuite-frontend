@@ -232,7 +232,7 @@ deploy e2e testserver:
   script:
     - docker pull $DOCKER_IMAGE
     - docker container create --name $CONTAINER_NAME -e SERVER=$SERVER -v /app/build/e2e $DOCKER_IMAGE e2e
-    - docker container cp ui/nightwatch/fixtures $CONTAINER_NAME:/app/build/e2e
+    - docker container cp ui/e2e/fixtures $CONTAINER_NAME:/app/build/e2e
     - docker container start $CONTAINER_NAME
 
 run e2e tests:
