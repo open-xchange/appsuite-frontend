@@ -35,9 +35,21 @@ module.exports.config = {
         }, localConf.e2e.helpers.WebDriverIO || {})
     },
     'include': {
-        'I': './e2e/steps_file.js'
+        'I': './e2e/commands.js'
     },
-    'bootstrap': false,
+    'bootstrap': function () {
+        var users = localConf.e2e.users || [];
+        if (users.length === 0) throw Object({ message: 'Please define at least one user in e2e.users.' });
+        global.users = users;
+
+        var chai = require('chai');
+        chai.config.includeStack = true;
+        global.expect = chai.expect;
+        global.AssertionError = chai.AssertionError;
+        global.Assertion = chai.Assertion;
+        global.assert = chai.assert;
+        chai.Should();
+    },
     'mocha': {},
     'name': 'App Suite Core UI'
 };
