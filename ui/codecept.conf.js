@@ -9,7 +9,7 @@ localConf.e2e = localConf.e2e || {};
 localConf.e2e.helpers = localConf.e2e.helpers || {};
 
 module.exports.config = {
-    'tests': './e2e/**/*_test.js',
+    'tests': './e2e/tests/**/*_test.js',
     'timeout': 10000,
     'smartwait': 10000,
     'output': './build/e2e/',
