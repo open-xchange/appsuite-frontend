@@ -530,8 +530,6 @@ define('io.ox/mail/main', [
                 folder: app.folder.get(),
                 thread: true
             });
-            // for debugging
-            window.list = app.listView;
         },
 
         'list-view-checkboxes': function (app) {
@@ -633,11 +631,11 @@ define('io.ox/mail/main', [
          * Store view options
          */
         'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function (model, options) {
+            app.props.on('change', _.debounce(function (model) {
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
+                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
