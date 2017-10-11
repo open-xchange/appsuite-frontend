@@ -13,7 +13,7 @@ module.exports = function (id) {
                     iterate = function () {
                         var result = cb();
                         if (!!result) return def.resolve(result);
-                        if (_.now() - start < timeout) return _.delay(iterate);
+                        if (_.now() - start < timeout) return _.delay(iterate, interval);
                         def.reject();
                     };
                 iterate();
@@ -28,12 +28,12 @@ module.exports = function (id) {
             }, 100, timeout).then(function (model) {
                 var app = ox.ui.App.getCurrentApp();
                 // special handling for virtual folders
-                if (id.indexOf('virtual/') === 0) {
+                if (model.get('id').indexOf('virtual/') === 0) {
                     var body = app.getWindow().nodes.body;
                     if (body) {
                         var view = body.find('.folder-tree').data('view');
                         if (view) {
-                            view.trigger('virtual', id);
+                            view.trigger('virtual', model.get('id'));
                         }
                     }
                 }
