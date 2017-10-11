@@ -7,6 +7,10 @@
         "codeceptjs"
     ],
 
+    "globals": {
+        "expect": true
+    },
+
     "env": {
         "mocha": true,
         "es6": true,

@@ -19,12 +19,14 @@ module.exports.config = {
             'url': process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
             'host': process.env.SELENIUM_HOST || '10.50.0.94',
             'smartWait': 5000,
+            'waitForTimeout': 30000,
             'browser': 'chrome',
             'restart': false,
             'windowSize': 'maximize',
             'timeouts': {
                 'script': 60000,
-                'page load': 10000
+                'page load': 10000,
+                'implicit': 10000
             },
             'desiredCapabilities': {
                 'browserName': 'chrome',
