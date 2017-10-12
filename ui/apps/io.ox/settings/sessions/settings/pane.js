@@ -87,17 +87,36 @@ define('io.ox/settings/sessions/settings/pane', [
                 os = _(operatingSystems).find(function (value, key) {
                     return !!self.browser[key];
                 }) || gt('Unknown Operating System');
-            // .# Used to display the current version on the current platform, i.e. Firefox 50 on Windows
-            if (this.browser.firefox) this.set('displayName', gt('Firefox %1$s on %2$s', this.browser.firefox, os));
-            // .# Used to display the current version on the current platform, i.e. Chrome 50 on Windows
-            else if (this.browser.chrome) this.set('displayName', gt('Chrome %1$s on %2$s', this.browser.chrome, os));
-            // .# Used to display the current version on the current platform, i.e. Safari 50 on OS X
-            else if (this.browser.safari) this.set('displayName', gt('Safari %1$s on %2$s', this.browser.safari, os));
-            // .# Used to display the current version on the current platform, i.e. Internet Explorer 11 on Windows
-            else if (this.browser.ie) this.set('displayName', gt('Internet Explorer on %1$s', os));
-            // .# Used to display the current version on the current platform, i.e. Edge on Windows
-            else if (this.browser.edge) this.set('displayName', gt('Edge on %1$s', os));
-            else this.set({ displayName: gt('Unknown client'), other: true });
+
+            if (this.browser.firefox) {
+                // .# Used to display the current version on the current platform, i.e. Firefox 50 on Windows
+                this.set('displayName', gt('Firefox %1$s on %2$s', this.browser.firefox, os));
+                this.set('icon', 'ff');
+
+            } else if (this.browser.chrome) {
+                // .# Used to display the current version on the current platform, i.e. Chrome 50 on Windows
+                this.set('displayName', gt('Chrome %1$s on %2$s', this.browser.chrome, os));
+                this.set('icon', 'chrome');
+
+            } else if (this.browser.safari) {
+                // .# Used to display the current version on the current platform, i.e. Safari 50 on OS X
+                this.set('displayName', gt('Safari %1$s on %2$s', this.browser.safari, os));
+                this.set('icon', 'safari');
+
+            } else if (this.browser.ie) {
+                // .# Used to display the current version on the current platform, i.e. Internet Explorer 11 on Windows
+                this.set('displayName', gt('Internet Explorer on %1$s', os));
+                this.set('icon', 'ie');
+
+            } else if (this.browser.edge) {
+                // .# Used to display the current version on the current platform, i.e. Edge on Windows
+                this.set('displayName', gt('Edge on %1$s', os));
+                this.set('icon', 'ie');
+
+            } else {
+                this.set({ displayName: gt('Unknown client'), other: true });
+
+            }
         }
     });
 
@@ -119,24 +138,28 @@ define('io.ox/settings/sessions/settings/pane', [
                     //#. Example: "OX Mail for iOS" or "Vodafone Mail for Android"
                     gt('%1$s for %2$s', settings.get('productname/mailapp'), os)
                 );
+                this.set('icon', 'phone-generic');
             } else if (client === 'OpenXchange.HTTPClient.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
                     //#. Example: OX Drive for Windows
                     gt('%1$s for Windows', settings.get('productname/oxdrive'))
                 );
+                this.set('icon', 'desktop-generic');
             } else if (client === 'OpenXchange.iosClient.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
                     //#. Example: OX Drive for iOS
                     gt('%1$s for iOS', settings.get('productname/oxdrive'))
                 );
+                this.set('icon', 'phone-generic');
             } else if (client === 'OpenXchange.Android.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
                     //#. Example: OX Drive for Android
                     gt('%1$s for Android', settings.get('productname/oxdrive'))
                 );
+                this.set('icon', 'phone-generic');
             } else if (client === 'OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
@@ -144,18 +167,23 @@ define('io.ox/settings/sessions/settings/pane', [
                     //#. Example: OX Drive for Windows
                     gt('%1$s for %2$s', settings.get('productname/oxdrive'), os)
                 );
+                this.set('icon', 'desktop-generic');
             } else if (client === 'OSX.OXDrive') {
                 this.set('displayName',
                     //#. %1$s the producname of the drive app
                     //#. Example: OX Drive for macOS
                     gt('%1$s for MacOS', settings.get('productname/oxdrive'))
                 );
+                this.set('icon', 'desktop-generic');
             } else if (client === 'USM-EAS') {
                 this.set({ 'displayName': gt('Exchange Active Sync'), other: true });
+                this.set('icon', 'phone-generic');
             } else if (client === 'USM-JSON') {
                 this.set({ 'displayName': settings.get('productname/oxtender'), other: true });
+                this.set('icon', 'desktop-generic');
             } else {
                 this.set({ displayName: this.get('client') || gt('Unkown client'), other: true });
+                this.set('icon', 'desktop-generic');
             }
         }
     });
@@ -198,23 +226,26 @@ define('io.ox/settings/sessions/settings/pane', [
         render: function () {
             this.$el.empty().append(
                 $('<div>').append(
-                    $('<div>').text(this.model.get('displayName')),
-                    $('<div>').text(gt('IP Address: %1$s', this.model.get('ipAddress')))
-                ),
-                this.model.get('sessionId') !== ox.session ? listUtils.makeControls().append(
-                    listUtils.controlsDelete({ title: gt('Delete %1$s', this.model.get('displayName')) })
-                ) : $('<div class="list-control-placeholder">'),
-                $('<div class="addition-information">').append(
-                    $('<span>').append(
-                        this.model.get('location') ? (this.model.get('location') + ' &#xb7; ') : '',
-                        moment(this.model.get('loginTime')).fromNow()
+                    $('<div>').append(
+                        $('<div class="client-icon">').addClass(this.model.get('icon')),
+                        $('<div>').text(this.model.get('displayName'))
                     ),
-                    this.model.get('sessionId') === ox.session ? $('<div>').append($('<span class="label label-success">').text(gt('Current session'))) : ''
+                    $('<div class="location">').append(
+                        $('<span>')
+                            .text(this.model.get('location') || gt('Unkown location'))
+                            .tooltip({ title: gt('IP: %s', this.model.get('ipAddress')) })
+                    ),
+                    $('<div class="logintime">').text(moment(this.model.get('loginTime')).fromNow())
+                ),
+                (this.model.get('sessionId') !== ox.session ? listUtils.makeControls().append(
+                    listUtils.controlsDelete({
+                        title: gt('Delete %1$s', this.model.get('displayName'))
+                    })) : $('<div class="list-item-controls">')
                 )
             );
             return this;
         },
-
+        // this.model.get('sessionId') !== ox.session ?
         onDelete: function (e) {
             var self = this,
                 // assign collection here since the view might be removed later

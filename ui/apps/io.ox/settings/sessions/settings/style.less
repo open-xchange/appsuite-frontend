@@ -1,8 +1,21 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ */
+
 .rightside .scrollable-pane .io-ox-session-settings {
 
     .settings-list-item {
         position: relative;
-
+        cursor: default;
         > *:not(.list-item-controls) {
             .flex-display(flex);
             .flex-wrap(wrap);
@@ -12,7 +25,7 @@
 
             > * {
                 .flex(1);
-                padding-top: 16px;
+                padding: 16px 0px;
                 padding-right: 53px;
             }
         }
@@ -27,12 +40,35 @@
             top: 0;
         }
 
-        .list-control-placeholder {
-            width: 53px;
-        }
+        .client-icon {
+            position: relative;
+            top: -2px;
+            float: left;
+            margin-right: 8px;
+            width: 24px;
+            height: 24px;
+            background-size: 24px 24px;
+            background-repeat: no-repeat;
+            background-position: center;
 
-        .addition-information {
-            color: #666;
+            &.ff {
+                background-image: url(apps/themes/default/firefox_64x64.png);
+            }
+            &.chrome {
+                background-image: url(apps/themes/default/chrome_64x64.png);
+            }
+            &.ie {
+                background-image: url(apps/themes/default/ie_64x64.png);
+            }
+            &.safari {
+                background-image: url(apps/themes/default/safari_64x64.png);
+            }
+            &.phone-generic {
+                background-image: url(apps/themes/default/phone_generic_64x64.png);
+            }
+            &.desktop-generic {
+                background-image: url(apps/themes/default/desktop_generic_64x64.png);
+            }
         }
     }
 
