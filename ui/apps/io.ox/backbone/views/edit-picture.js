@@ -117,7 +117,8 @@ define('io.ox/backbone/views/edit-picture', [
                 'default': function () {
                     this.$el.addClass('edit-picture');
                     this.busy();
-                    var dimension = Math.min(window.innerWidth - 64, window.innerHeight - 64, 400);
+                    // reserve some more space for the stacked buttons on small devices
+                    var dimension = Math.min(window.innerWidth - 64, window.innerHeight - 64, _.device('small') ? 300 : 400);
                     var options = {
                         viewport: { width: dimension - 100, height: dimension - 100, type: 'square' },
                         boundary: { width: dimension, height: dimension },
