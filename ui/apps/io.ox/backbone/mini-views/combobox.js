@@ -115,22 +115,20 @@ define('io.ox/backbone/mini-views/combobox', [], function () {
             if (!_.isUndefined(this.index)) this.index += incr;
             if (this.index < 0) this.index = this.opt.options.length - 1;
             if (this.index >= this.opt.options.length) this.index = 0;
-            // no index set. try to select matching option. if none is available, select the first option
+            // no index set. try to select matching option.
             if (_.isUndefined(this.index)) {
                 var val = this.$input.val();
                 this.index = _(this.opt.options).findIndex(function (option) {
                     return option.name.toLowerCase().indexOf(val.toLowerCase()) === 0;
                 });
-                if (this.index < 0) {
-                    if (incr < 0) this.index = this.opt.options.length - 1;
-                    else this.index = 0;
-                }
             }
             this.$dropdown.find('.active').removeClass('active');
-            var target = this.$dropdown.children().eq(this.index);
-            target.addClass('active');
-            this.$input.attr('aria-activedescendant', target.attr('id'));
-            this.scrollIntoView(target);
+            if (this.index >= 0) {
+                var target = this.$dropdown.children().eq(this.index);
+                target.addClass('active');
+                this.$input.attr('aria-activedescendant', target.attr('id'));
+                this.scrollIntoView(target);
+            }
         },
 
         scrollIntoView: function (target) {
