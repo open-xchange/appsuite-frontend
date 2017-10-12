@@ -464,16 +464,48 @@
     position: absolute;
     // foldertree has z-index=1 so this must be higher
     z-index: 2;
-    width: 960px;
-    height: 640px;
-    max-height: 90%;
-    right: 56px;
-    bottom: 16px;
-    top: auto;
-    left: auto;
     background: transparent;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     outline: 0;
+
+    .floating-window-content {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
+    }
+
+    &.cornered {
+        width: 960px;
+        height: 640px;
+        max-height: 90%;
+        right: 56px;
+        bottom: 16px;
+        top: auto;
+        left: auto;
+
+        .floating-header .controls a[data-action="cornered"] {
+            display: none;
+        }
+    }
+
+    &.centered {
+        width: 960px;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        max-height: 100%;
+        right: auto;
+        margin: 0 auto;
+        bottom: 0;
+        top: 0;
+
+        .floating-window-content {
+            top: 16px;
+            bottom: 16px;
+        }
+
+        .floating-header .controls a[data-action="centered"] {
+            display: none;
+        }
+    }
 
     .transition(0.3s ease-in-out);
     transform-origin: 100% 0;

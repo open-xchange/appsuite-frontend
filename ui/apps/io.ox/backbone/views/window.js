@@ -28,28 +28,38 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
             this.$el.on('click', '[data-action="close"]', this.close.bind(this));
+            this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
+            this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
             this.minimized = null;
+            // possible values are: cornered, centered, sticky
+            // minimized is saved separately so we know to which style we need to change the window again.
+            this.displayStyle = this.options.displayStyle || 'cornered';
         },
 
         render: function () {
             var title_id = _.uniqueId('title');
-            this.$el.empty().attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id }).append(
-                $('<div class="abs" role="document">').append(
-                    this.$header = this.$header || $('<div class="floating-header abs">').append(
-                        $('<h1>').append(
-                            $('<span class="title">').attr('id', title_id).text(this.options.title || '\u00A0'),
-                            $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
-                        ),
-                        $('<div class="controls">').append(
-                            $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
-                                $('<i class="fa fa-window-minimize" aria-hidden="true">')
+            this.$el.removeClass('cornered centered sticky')
+                .addClass(this.displayStyle)
+                .attr({ tabindex: -1, role: 'dialog', 'aria-labelledby': title_id })
+                .empty().append(
+                    $('<div class="abs floating-window-content" role="document">').append(
+                        this.$header = this.$header || $('<div class="floating-header abs">').append(
+                            $('<h1>').append(
+                                $('<span class="title">').attr('id', title_id).text(this.options.title || '\u00A0'),
+                                $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
                             ),
-                            this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
-                        )
-                    ),
-                    this.$body = this.$body || $('<div class="floating-body abs">')
-                )
-            );
+                            $('<div class="controls">').append(
+                                $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
+                                    $('<i class="fa fa-window-minimize" aria-hidden="true">')
+                                ),
+                                $('<a href="#" data-action="cornered">').append('<i class="fa fa-window-restore">'),
+                                $('<a href="#" data-action="centered">').append('<i class="fa fa-window-maximize">'),
+                                this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
+                            )
+                        ),
+                        this.$body = this.$body || $('<div class="floating-body abs">')
+                    )
+                );
             return this;
         },
 
@@ -73,6 +83,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             remove(this);
             this.$el.remove();
             return this;
+        },
+
+        changeDisplayStyle: function (style) {
+            if (!style) return;
+            this.displayStyle = style;
+            this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
         },
 
         setTitle: function (title) {
