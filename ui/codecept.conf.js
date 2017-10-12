@@ -34,7 +34,10 @@ module.exports.config = {
                 },
                 'acceptSslCerts': true
             }
-        }, localConf.e2e.helpers.WebDriverIO || {})
+        }, localConf.e2e.helpers.WebDriverIO || {}),
+        WebDriverIOExtension: {
+            require: './e2e/helper/webdriverioextension_helper.js'
+        }
     },
     'include': {
         'I': './e2e/commands.js'

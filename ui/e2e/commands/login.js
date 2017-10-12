@@ -19,6 +19,7 @@ module.exports = function (params, options) {
     launchURL += 'appsuite/';
 
     this.amOnPage(launchURL + '#' + params.join('&'));
+    this.waitForFocus('input[name="username"]');
     this.fillField('username', global.users[options.userIndex].username);
     this.fillField('password', global.users[options.userIndex].password);
     this.waitToHide('.busy');
