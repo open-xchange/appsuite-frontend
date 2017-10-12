@@ -19,9 +19,9 @@ Scenario('adds a contact with all fields', function (I) {
     I.fillField('Last name', 'Petersen');
     I.fillField('Middle name', 'Holger');
     I.fillField('Suffix', 'Pro');
-    I.selectOption('select[name="month"]', 'May');
-    I.selectOption('select[name="date"]', '4');
-    I.selectOption('select[name="year"]', '1957');
+    I.selectOption('month', 'May');
+    I.selectOption('date', '4');
+    I.selectOption('year', '1957');
     I.fillField('URL', 'my.homepage.com');
     // job description
     I.fillField('Profession', 'Developer');
@@ -46,25 +46,25 @@ Scenario('adds a contact with all fields', function (I) {
     I.fillField('Fax', 'fax');
     I.fillField('Fax (Home)', 'fax home');
     // home address
-    I.fillField('input[name="street_home"]', 'Home Street');
-    I.fillField('input[name="postal_code_home"]', '12345');
-    I.fillField('input[name="city_home"]', 'Home City');
-    I.fillField('input[name="state_home"]', 'Home State');
-    I.fillField('input[name="country_home"]', 'Home County');
+    I.fillField('street_home', 'Home Street');
+    I.fillField('postal_code_home', '12345');
+    I.fillField('city_home', 'Home City');
+    I.fillField('state_home', 'Home State');
+    I.fillField('country_home', 'Home County');
     // business address
-    I.fillField('input[name="street_business"]', 'Business Street');
-    I.fillField('input[name="postal_code_business"]', '23456');
-    I.fillField('input[name="city_business"]', 'Business City');
-    I.fillField('input[name="state_business"]', 'Business State');
-    I.fillField('input[name="country_business"]', 'Business County');
+    I.fillField('street_business', 'Business Street');
+    I.fillField('postal_code_business', '23456');
+    I.fillField('city_business', 'Business City');
+    I.fillField('state_business', 'Business State');
+    I.fillField('country_business', 'Business County');
     // other address
-    I.fillField('input[name="street_other"]', 'Other Street');
-    I.fillField('input[name="postal_code_other"]', '34567');
-    I.fillField('input[name="city_other"]', 'Other City');
-    I.fillField('input[name="state_other"]', 'Other State');
-    I.fillField('input[name="country_other"]', 'Other County');
+    I.fillField('street_other', 'Other Street');
+    I.fillField('postal_code_other', '34567');
+    I.fillField('city_other', 'Other City');
+    I.fillField('state_other', 'Other State');
+    I.fillField('country_other', 'Other County');
     // coment
-    I.fillField('textarea[name="note"]', 'a comment in the comment field');
+    I.fillField('note', 'a comment in the comment field');
 
     I.click('Save');
     I.waitForStalenessOf('.io-ox-contacts-edit-window');
