@@ -996,7 +996,7 @@ define('io.ox/core/folder/extensions', [
                 id: 'color',
                 index: 400,
                 draw: function (baton) {
-                    if (!/^event$/.test(baton.data.module)) return;
+                    if (!/^calendar$/.test(baton.data.module)) return;
                     if (!api.is('private', baton.data)) return;
                     if (/^virtual/.test(baton.data.id)) return;
 
