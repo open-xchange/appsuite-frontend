@@ -130,11 +130,12 @@ define('io.ox/core/boot/fixes', [], function () {
     // so we can add browser specific css (currently only needed for IE)
     if (_.device('ie')) {
         $('html').addClass('internet-explorer');
+
+        if (_.device('ie <= 11')) {
+            $('html').addClass('ie11');
+        }
     }
 
-    if (_.device('ie <= 11')) {
-        $('html').addClass('ie11');
-    }
 
     //
     // Connection / Window State
