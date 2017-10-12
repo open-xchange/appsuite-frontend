@@ -1554,7 +1554,7 @@ define('io.ox/calendar/week/view', [
             return {
                 start: this.startDate.valueOf(),
                 end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                folder: this.folderData.id === 'virtual/all-my-appointments' ? 0 : this.folderData.id,
+                folder: this.folderData.id,
                 view: 'week'
             };
         },

@@ -255,7 +255,7 @@ define('io.ox/core/folder/view', [
                     return tree.dropdown.$('.dropdown-toggle').trigger('click', 'foldertree');
                 }
 
-                // return here as we can not change the page to a virtual folder with the exception if the all-my-appointments folder
+                // return here as we can not change the page to a virtual folder with the exception of a selectable virtual folder
                 if (targetFolder.is('.virtual') && tree.selection.selectableVirtualFolders[targetFolder.data().id] !== true) return;
 
                 // default 'listView'

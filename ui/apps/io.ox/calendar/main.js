@@ -601,14 +601,6 @@ define('io.ox/calendar/main', [
             });
         },
 
-        /*
-         * Add support for virtual folder "All my appointments"
-         */
-        'all-my-appointments': function (app) {
-
-            app.folderView.tree.selection.addSelectableVirtualFolder('virtual/all-my-appointments');
-        },
-
         'contextual-help': function (app) {
             app.getContextualHelp = function () {
                 return 'ox.appsuite.user.sect.calendar.gui.html#ox.appsuite.user.sect.calendar.gui';
@@ -789,7 +781,6 @@ define('io.ox/calendar/main', [
         // TODO change core settings so the default folder isnt just a number
         var defaultFolder  = options.folder || ('cal://0/' + folderAPI.getDefaultFolder('calendar'));
         if (!options.folder && capabilities.has('guest')) {
-            // guests don't have the all-my-appointments folder
             // try to select the first shared folder available
             if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {
                 addFolderSupport(folderAPI.getFlatCollection('calendar', 'shared').models[0].get('id'));

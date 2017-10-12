@@ -448,19 +448,6 @@ define('io.ox/core/folder/api', [
     // Define virtual folders
     //
 
-    pool.addModel({
-        folder_id: '1',
-        id: 'virtual/all-my-appointments',
-        module: 'calendar',
-        own_rights: 403710016, // all rights but admin
-        permissions: [{ bits: 403710016, entity: ox.user_id, group: false }],
-        standard_folder: true,
-        supported_capabilities: [],
-        title: gt('All my appointments'),
-        total: -1,
-        type: 1
-    });
-
     if (capabilities.has('webmail')) {
         // only define if the user actually has mail
         // otherwise the folder refresh tries to fetch 'default0'
@@ -825,10 +812,6 @@ define('io.ox/core/folder/api', [
         return pool.getCollection(getFlatCollectionId(module, section));
     }
 
-    function injectVirtualCalendarFolder(array) {
-        array.unshift(pool.getModel('virtual/all-my-appointments').toJSON());
-    }
-
     function getFlatViews() {
         return _(pool.collections).chain()
             .keys()
@@ -922,8 +905,6 @@ define('io.ox/core/folder/api', [
                     // otherwise
                     return true;
                 });
-                // inject 'All my appointments' for calender/private
-                if (module === 'calendar' && id === 'private') injectVirtualCalendarFolder(array);
                 // process response and add to pool
                 collectionId = getFlatCollectionId(module, id);
                 array = processListResponse(collectionId, array);
