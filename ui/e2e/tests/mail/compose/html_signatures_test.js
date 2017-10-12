@@ -87,7 +87,7 @@ Scenario('compose new mail with signature below correctly placed initially', fun
 Scenario('Reply to mail with signature above correctly placed and changed', function* (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
-    I.setSetting('io.ox/mail', 'defaultSignature', '0');
+    I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '0');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
 
     // click on first email
@@ -104,11 +104,11 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
         new RegExp(`^<p><br></p><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`)
     );
 
-    selectAndAssertSignature(I, 2, new RegExp(`^<p><br></p><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
-    selectAndAssertSignature(I, 3, new RegExp(`^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
-    selectAndAssertSignature(I, 4, new RegExp(`^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
-    selectAndAssertSignature(I, 0, new RegExp('^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p>$'));
-    selectAndAssertSignature(I, 1, new RegExp(`^<p><br></p><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    yield* selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<p><br></p><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    yield* selectAndAssertSignature(I, 'First signature below', new RegExp(`^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
+    yield* selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
+    yield* selectAndAssertSignature(I, 'No signature', new RegExp('^<p><br></p><blockquote type="cite">.*</blockquote><p><br></p>$'));
+    yield* selectAndAssertSignature(I, 'First signature above', new RegExp(`^<p><br></p><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
 
     // insert some text
     I.appendField('.io-ox-mail-compose-window .editor .editable', 'some user input');
@@ -116,11 +116,11 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
         /^<p>some user input<\/p><div class="io-ox-signature">.*<\/div><blockquote type="cite">.*<\/blockquote>$/
     );
 
-    selectAndAssertSignature(I, 2, new RegExp(`^<p>some user input</p><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
-    selectAndAssertSignature(I, 3, new RegExp(`^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
-    selectAndAssertSignature(I, 4, new RegExp(`^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
-    selectAndAssertSignature(I, 0, new RegExp('^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p>$'));
-    selectAndAssertSignature(I, 1, new RegExp(`^<p>some user input</p><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    yield* selectAndAssertSignature(I, 'Second signature above', new RegExp(`^<p>some user input</p><div class="io-ox-signature"><p>${signatures[1]}</p></div><blockquote type="cite">.*</blockquote>$`));
+    yield* selectAndAssertSignature(I, 'First signature below', new RegExp(`^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[2]}</p></div>$`));
+    yield* selectAndAssertSignature(I, 'Second signature below', new RegExp(`^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p><div class="io-ox-signature"><p>${signatures[3]}</p></div>$`));
+    yield* selectAndAssertSignature(I, 'No signature', new RegExp('^<p>some user input</p><blockquote type="cite">.*</blockquote><p><br></p>$'));
+    yield* selectAndAssertSignature(I, 'First signature above', new RegExp(`^<p>some user input</p><div class="io-ox-signature"><p>${signatures[0]}</p></div><blockquote type="cite">.*</blockquote>$`));
 
     // discard mail
     I.click('Discard');
@@ -133,7 +133,7 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
 Scenario('Reply to mail with signature below correctly placed initially', function* (I) {
     I.login('app=io.ox/mail', { prefix: 'io.ox/mail/signatures' });
     I.waitForVisible('.io-ox-mail-window');
-    I.setSetting('io.ox/mail', 'defaultSignature', '2');
+    I.setSetting('io.ox/mail', 'defaultReplyForwardSignature', '2');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
 
     // click on first email
