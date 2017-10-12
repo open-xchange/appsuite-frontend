@@ -14,7 +14,7 @@
 
 Feature('Mailfilter');
 
-Scenario('add and removes Mail Filter Rules', function (I) {
+Scenario('add and removes Mail Filter Rules', function* (I) {
 
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
@@ -40,7 +40,7 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     I.click('Keep');
 
     // warnig gone?
-    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .alert.alert-danger');
+    I.dontSee('Please define at least one action.');
 
     // action and all components visible?
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"]');
@@ -52,7 +52,7 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     I.click('From');
 
     // alert gone?
-    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .alert.alert-info');
+    I.dontSee('This rule applies to all messages. Please add a condition to restrict this rule to specific messages.');
 
     // condition and all components visible?
     I.see('From', '.list-title');
@@ -61,7 +61,7 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
     I.fillField('values', 'Test Value');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] .row.has-error');
-    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
 
     // add nested condition
@@ -77,9 +77,9 @@ Scenario('add and removes Mail Filter Rules', function (I) {
 
     // condition and all components visible?
     I.see('From', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] .nested[data-test-id="1_0"] .list-title');
-    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
-    I.fillField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1_0"] input[name="values"]', 'Test Value');
-    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+    expect(yield I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).to.exist;
+    I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1_0"] input[name="values"]' }, 'Test Value');
+    expect(yield I.grabAttributeFrom('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]', 'disabled')).not.to.exist;
 
     // add an action which includes the folder picker
     I.click('Add action');
@@ -134,7 +134,7 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     I.click('Contains');
 
     // set the value
-    I.fillField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]', 'Test Value');
+    I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]' }, 'Test Value');
 
     // check if "Contains" is properly set
     I.see('Contains', '.dropdown-label');
@@ -145,14 +145,14 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="headers"]');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="values"]');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="0"] .row.has-error');
-    I.fillField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]', 'Test headers');
+    I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]' }, 'Test headers');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="headers"]');
-    I.fillField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]', 'Test values');
+    I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]' }, 'Test values');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="values"]');
     I.click('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .dropdownlink span');
     I.click('.smart-dropdown-container .dropdown-menu a[data-value="exists"]');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] input[name="values"]:disabled');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]', '');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]' }, '');
 
     // save the form
     I.click('Save');
@@ -162,13 +162,13 @@ Scenario('add and removes Mail Filter Rules', function (I) {
 
     // ckeck if the rule is correctly displayed
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="0"] .row.has-error');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]', 'Test Value');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]' }, 'Test Value');
 
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="headers"]');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="values"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]', 'Test headers');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]' }, 'Test headers');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] input[name="values"]:disabled');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]', '');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]' }, '');
 
     I.see('Keep', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] .list-title');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
@@ -180,8 +180,8 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     // check if "Exists" is properly set
     I.see('Contains', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] .dropdown-label');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] input[name="values"]:disabled');
-    I.fillField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]', 'Test values');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]', 'Test headers');
+    I.fillField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]' }, 'Test values');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]' }, 'Test headers');
 
     // save the form
     I.click('Save');
@@ -193,12 +193,12 @@ Scenario('add and removes Mail Filter Rules', function (I) {
     // ckeck if the rule is correctly displayed
     I.waitForVisible('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="0"] .row.has-error');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]', 'Test Value');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="0"] input[name="values"]' }, 'Test Value');
 
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="headers"]');
     I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] li[data-test-id="1"] .row.has-error input[name="values"]');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]', 'Test headers');
-    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]', 'Test values');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="headers"]' }, 'Test headers');
+    I.seeInField({ css: '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-test-id="1"] input[name="values"]' }, 'Test values');
     I.see('Keep', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] .list-title');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
 
