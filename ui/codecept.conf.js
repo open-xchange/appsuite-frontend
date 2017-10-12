@@ -12,21 +12,16 @@ localConf.e2e.helpers = localConf.e2e.helpers || {};
 module.exports.config = {
     'tests': './e2e/tests/**/*_test.js',
     'timeout': 10000,
-    'smartwait': 10000,
     'output': './build/e2e/',
     'helpers': {
         'WebDriverIO': _.extend({}, {
             'url': process.env.LAUNCH_URL || 'http://localhost:8337/appsuite/',
             'host': process.env.SELENIUM_HOST || '10.50.0.94',
-            'smartWait': 5000,
+            'smartWait': 1000,
             'waitForTimeout': 30000,
             'browser': 'chrome',
             'restart': false,
             'windowSize': 'maximize',
-            'timeouts': {
-                'script': 60000,
-                'page load': 10000
-            },
             'desiredCapabilities': {
                 'browserName': 'chrome',
                 'chromeOptions': {

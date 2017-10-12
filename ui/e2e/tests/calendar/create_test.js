@@ -4,8 +4,6 @@ Feature('Calendar: Create new appointment');
 
 Scenario('Create appointment with all fields', function* (I) {
 
-    I.defineTimeout({ implicit: 10000 });
-
     I.login('app=io.ox/calendar');
     I.waitForVisible('*[data-app-name="io.ox/calendar"]');
 
@@ -33,6 +31,7 @@ Scenario('Create appointment with all fields', function* (I) {
 
     // // check appointment in all views
     // // 1) day view
+    I.wait(2);
     I.click('View');
     I.click('Day');
     I.waitForVisible('.week.dayview .appointment');
@@ -63,14 +62,12 @@ Scenario('Create appointment with all fields', function* (I) {
 
     // // delete the appointment thus it does not create conflicts for upcoming appointments
     I.click(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
+    I.waitForVisible('[data-action="delete"]');
     I.click('Delete');
     I.waitForVisible('.io-ox-dialog-popup .modal-body');
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForStalenessOf(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
 
     I.logout();
-
-    // reset timeouts
-    I.defineTimeout({ implicit: 0 });
 
 });
