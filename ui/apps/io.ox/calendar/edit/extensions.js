@@ -180,9 +180,6 @@ define('io.ox/calendar/edit/extensions', [
             picker({
                 async: true,
                 button: gt('Select'),
-                filter: function (id, model) {
-                    return model.id !== 'virtual/all-my-appointments';
-                },
                 flat: true,
                 indent: false,
                 module: 'calendar',

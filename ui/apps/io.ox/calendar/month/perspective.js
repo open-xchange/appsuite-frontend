@@ -174,7 +174,7 @@ define('io.ox/calendar/month/perspective', [
                 loader.httpGet('chronos', {
                     start: day,
                     end: moment(day).endOf('week').valueOf(),
-                    folder: self.folder.id === 'virtual/all-my-appointments' ? 0 : self.folder.id,
+                    folder: self.folder.id,
                     view: 'month'
                 }).then(function (data) {
                     collection[method](data, { parse: true });
@@ -232,7 +232,7 @@ define('io.ox/calendar/month/perspective', [
                 self.collections[day] = api.collectionLoader.getCollection({
                     start: day,
                     end: moment(day).endOf('week').valueOf(),
-                    folder: this.folder.id === 'virtual/all-my-appointments' ? 0 : this.folder.id,
+                    folder: this.folder.id,
                     view: 'month'
                 });
 
