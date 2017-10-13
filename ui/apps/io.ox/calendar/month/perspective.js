@@ -171,6 +171,7 @@ define('io.ox/calendar/month/perspective', [
                 if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) return;
                 day = parseInt(day, 10);
                 loader.collection = collection;
+                collection.expired = false;
                 loader.httpGet('chronos', {
                     start: day,
                     end: moment(day).endOf('week').valueOf(),
