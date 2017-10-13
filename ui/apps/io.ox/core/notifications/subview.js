@@ -412,7 +412,8 @@ define('io.ox/core/notifications/subview', [
                 api = this.model.get('api'),
                 fullModel = this.model.get('fullModel'),
                 sidepopupNode = notifications.nodes.sidepopup,
-                status = notifications.getStatus();
+                status = notifications.getStatus(),
+                getCid = this.model.get('api').cid || _.cid;
             // toggle?
             if (status === 'sidepopup' && cid === String(sidepopupNode.find('[data-cid]').data('cid'))) {
                 //sidepopup.close();
@@ -421,9 +422,9 @@ define('io.ox/core/notifications/subview', [
                 notifications.closeSidepopup();
                 var data;
                 if (api && !fullModel) {
-                    data = api.get(_.extend({}, _.cid(cid), { unseen: true }));
+                    data = api.get(_.extend({}, getCid(cid), { unseen: true }));
                 } else {
-                    data = this.collection.get(_.cid(cid)).attributes;
+                    data = this.collection.get(getCid(cid)).attributes;
                 }
                 if (!data) {
                     return;
