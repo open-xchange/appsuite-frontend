@@ -35,6 +35,13 @@ These are the options available when you creating a new action.
 - baton is available to the action as parameter
 - a callback function, called when the action is triggered for **multiple** (a list of) elements
 
+**capabilities (optional)**
+
+- type: string
+- outcome depends of state of capability and it's corresponding upsell config
+- draw action link only if at least one capability is active OR corresponding upsell is available
+- example: `capabilities: '!alone infostore'` expresses 'not alone OR infostore'
+
 ## ActionLink
 
 - id: must be unique

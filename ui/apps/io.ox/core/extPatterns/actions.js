@@ -243,7 +243,7 @@ define('io.ox/core/extPatterns/actions', [
                         // link is disabled
                         return def.resolve({ link: link, state: false });
                     }
-                    // store capabilities
+                    // concat all extensions valid capability properties
                     var capabilities = ext.point(link.ref).pluck('capabilities');
                     if (!upsell.visible(capabilities)) {
                         // no capabilities match AND no upsell available

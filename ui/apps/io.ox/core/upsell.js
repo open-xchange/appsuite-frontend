@@ -132,12 +132,12 @@ define('io.ox/core/upsell', [
             }
 
             return function (array) {
-                if (!array) return true;
-                return _([].concat(array)).reduce(function (memo, capability) {
+                var list = _.compact([].concat(array));
+                return !list.length || _.reduce(list, function (memo, capability) {
                     // consider egde cases here
                     // for example 'active_sync clientonboarding' with cap['active_sync'] = false and cap['client-onboarding'] = true
                     // and upsell['active_sync'] = true but upsell['cient-onboarding'] = false should return true
-                    return memo || capability === undefined || isEnabledOrHas(capability);
+                    return memo || isEnabledOrHas(capability);
                 }, false);
             };
         })(),
