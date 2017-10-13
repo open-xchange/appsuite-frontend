@@ -1420,7 +1420,9 @@ define('io.ox/mail/main', [
                     obj = _.cid(cid),
                     isDraft = account.is('drafts', obj.folder_id);
                 if (isDraft) {
-                    ox.registry.call('mail-compose', 'edit', obj);
+                    api.get(obj).then(function (data) {
+                        actions.invoke('io.ox/mail/actions/edit', null, ext.Baton({ data: data }));
+                    });
                 } else {
                     ox.launch('io.ox/mail/detail/main', { cid: cid });
                 }
