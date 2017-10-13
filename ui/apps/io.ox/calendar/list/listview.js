@@ -236,6 +236,8 @@ define('io.ox/calendar/list/listview', [
         },
 
         drawTail: function () {
+            // only render if in listview. not in search
+            if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
             var m = moment().add((this.collection.offset || 0) + 1, 'month');
             this.$el.append(

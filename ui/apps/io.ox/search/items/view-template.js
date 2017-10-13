@@ -31,7 +31,7 @@ define('io.ox/search/items/view-template', [
                 mail: ['io.ox/mail/listview', 'io.ox/mail/api'],
                 tasks: ['io.ox/tasks/listview', 'io.ox/tasks/api'],
                 contacts: ['io.ox/contacts/listview', 'io.ox/contacts/api'],
-                calendar: ['io.ox/calendar/listview', 'io.ox/calendar/api'],
+                calendar: ['io.ox/calendar/listview', 'io.ox/calendar/chronos-api'],
                 files: ['io.ox/files/listview', 'io.ox/files/api']
             };
             $.extend(config.dependencies, defaults);
@@ -197,7 +197,7 @@ define('io.ox/search/items/view-template', [
 
             ext.point('io.ox/search/items/calendar').extend({
                 draw: function (baton) {
-                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/api', { deeplink: true });
+                    draw.call(this, baton, 'io.ox/calendar/view-detail', 'io.ox/calendar/chronos-api', { deeplink: true });
                 }
             });
 

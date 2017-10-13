@@ -31,10 +31,12 @@ define('io.ox/calendar/list/view-options', [
                 folderCount;
 
             function updateFolder() {
+                var collection = view.listView.collection,
+                    find = collection.cid ? collection.cid.indexOf('view=list') < 0 : false;
                 folderAPI.get(app.folder.get()).then(function (folder) {
-                    folderName.text(folder.title);
+                    folderName.text(find ? gt('Results') : folder.title);
                 });
-                folderCount.text('(' + view.listView.collection.length + ')');
+                folderCount.text('(' + collection.length + ')');
             }
 
             this.append(
@@ -47,7 +49,7 @@ define('io.ox/calendar/list/view-options', [
 
             updateFolder();
             app.on('folder:change', updateFolder);
-            view.listenTo(view.listView, 'reset add remove', updateFolder);
+            view.listenTo(view.listView, 'reset add remove', _.debounce(updateFolder));
         }
     });
 
