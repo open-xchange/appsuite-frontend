@@ -241,7 +241,7 @@ define('io.ox/calendar/view-detail', [
     return {
 
         draw: function (baton, options) {
-            if (baton && baton.data) {
+            if (baton && !(baton instanceof ext.Baton) && baton.data) {
                 baton = baton.data;
             }
             // make sure we have a baton
