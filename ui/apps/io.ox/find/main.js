@@ -242,10 +242,10 @@ define('io.ox/find/main', [
 
                         // define collection loader for search results
                         var collectionLoader = new CollectionLoader({
-                            module: app.getModuleParam(),
+                            module: app.getModuleParam() === 'calendar' ? 'chronos' : app.getModuleParam(),
                             mode: 'search',
-                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_PAGE_SIZE,
-                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_PAGE_SIZE,
+                            PRIMARY_PAGE_SIZE: defaultLoader.PRIMARY_SEARCH_PAGE_SIZE || defaultLoader.PRIMARY_PAGE_SIZE,
+                            SECONDARY_PAGE_SIZE: defaultLoader.SECONDARY_SEARCH_PAGE_SIZE || defaultLoader.SECONDARY_PAGE_SIZE,
                             isBad: $.noop,
                             fetch: function (p) {
                                 var self = this,
