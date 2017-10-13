@@ -24,7 +24,12 @@
     z-index: 10;
 }
 
-#io-ox-windowmanager { overflow: hidden; }
+#io-ox-windowmanager {
+    overflow: hidden;
+    &.has-sticky-window {
+        right: 920px;
+    }
+}
 
 #io-ox-windowmanager-pane {
     left: 0;
@@ -40,7 +45,7 @@
     margin: 0;
     display: none;
     list-style-type: none;
-    button {
+    .taskbar-button {
         border: 0;
         height: 32px;
         line-height: 32px;
@@ -55,6 +60,12 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         .title {
             margin-right: 8px;
+        }
+
+        a[data-action="close"] {
+            color: white;
+                line-height: 32px;
+                display: inline-block;
         }
     }
 }
@@ -491,7 +502,6 @@
         position: relative;
         display: flex;
         align-items: center;
-        max-height: 100%;
         right: auto;
         margin: 0 auto;
         bottom: 0;
@@ -504,6 +514,22 @@
 
         .floating-header .controls a[data-action="centered"] {
             display: none;
+        }
+    }
+
+    &.sticky {
+        width: 920px;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        left: auto;
+
+        .floating-header .controls a[data-action="sticky"] {
+            display: none;
+        }
+
+        .floating-window-content {
+            box-shadow: none;
         }
     }
 

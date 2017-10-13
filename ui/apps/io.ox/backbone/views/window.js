@@ -30,6 +30,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.$el.on('click', '[data-action="close"]', this.close.bind(this));
             this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
             this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
+            this.$el.on('click', '[data-action="sticky"]', this.changeDisplayStyle.bind(this, 'sticky'));
+            this.on('dispose', function () { remove(this); });
             this.minimized = null;
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
@@ -54,6 +56,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                 ),
                                 $('<a href="#" data-action="cornered">').append('<i class="fa fa-window-restore">'),
                                 $('<a href="#" data-action="centered">').append('<i class="fa fa-window-maximize">'),
+                                $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">'),
                                 this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
                             )
                         ),
@@ -70,7 +73,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             return this;
         },
 
-        close: function () {
+        close: function (e) {
+            if (e) {
+                e.stopPropagation();
+            }
             if (this.win && !this.closing) {
                 if (this.win.app) {
                     this.win.app.quit();
@@ -80,7 +86,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 this.win.close();
                 return this;
             }
-            remove(this);
+
+            if (this.disposed) return this;
             this.$el.remove();
             return this;
         },
@@ -88,6 +95,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         changeDisplayStyle: function (style) {
             if (!style) return;
             this.displayStyle = style;
+            // sticky windows push the rest of appsuite to the left. So an indicator class is needed
+            $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
         },
 
@@ -137,21 +146,29 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     }
 
     collection.on('remove show hide', function () {
+
+        var hasStickyWindows = false;
+
         // get number of minimized windows
         $('#io-ox-taskbar').empty().append(
             this.map(function (model) {
-                var window = model.get('window');
-                if (!window.minimized) return $();
+                var floatingWindow = model.get('window');
+                if (!hasStickyWindows && !floatingWindow.minimized) {
+                    hasStickyWindows = floatingWindow.displayStyle === 'sticky';
+                }
+                if (!floatingWindow.minimized) return $();
                 return $('<li>').append(
-                    $('<button type="button">')
-                        .attr('data-cid', window.cid)
+                    $('<button class="taskbar-button" type="button">')
+                        .attr('data-cid', floatingWindow.cid)
                         .append(
-                            $('<span class="title">').text(window.title),
-                            $('<span class="count label label-danger">').toggle(window.count > 0).text(window.count)
+                            $('<span class="title">').text(floatingWindow.title),
+                            $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count),
+                            floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-window-close">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
                         )
                 );
             })
         );
+        $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
         $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
     });
 
