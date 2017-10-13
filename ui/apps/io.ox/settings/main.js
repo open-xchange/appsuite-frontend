@@ -243,8 +243,9 @@ define('io.ox/settings/main', [
                 this.append(
 
                     mainGroups.map(function (groupName) {
-                        // if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
+                        if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
                         return new TreeNodeView(_.extend({}, defaults, {
+                            className: groupName === 'virtual/settings/security' ? 'folder un-selectable' : 'folder selectable',
                             model_id: groupName
                         }))
                         .render().$el.addClass('standard-folders');
