@@ -478,6 +478,11 @@
     background: transparent;
     outline: 0;
 
+    // display the active window on top
+    &.active {
+        z-index: 3;
+    }
+
     .floating-window-content {
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     }

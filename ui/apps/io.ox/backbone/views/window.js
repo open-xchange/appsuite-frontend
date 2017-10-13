@@ -27,6 +27,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.count = this.options.count || 0;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
+            this.$el.on('click', this.makeActive.bind(this));
             this.$el.on('click', '[data-action="close"]', this.close.bind(this));
             this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
             this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
@@ -36,6 +37,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
             this.displayStyle = this.options.displayStyle || 'cornered';
+            // new windows are active by default
+            this.makeActive();
         },
 
         render: function () {
@@ -98,6 +101,16 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
+        },
+
+        makeActive: function (e) {
+            if (e) {
+                e.stopPropagation();
+            }
+            var self = this;
+            collection.each(function (model) {
+                model.get('window').$el.toggleClass('active', model.get('window').cid === self.cid);
+            });
         },
 
         setTitle: function (title) {
