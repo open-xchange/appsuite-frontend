@@ -1149,7 +1149,6 @@ define('io.ox/mail/main', [
                     savedHeight = app.settings.get('listview/height/' + _.display());
 
                 function applyWidth(x) {
-                    console.log('apply', x);
                     var width = x === undefined ? '' : x + 'px';
                     app.right.css('left', width);
                     app.left.css('width', width);
