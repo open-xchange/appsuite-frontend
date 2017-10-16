@@ -667,6 +667,7 @@ define('io.ox/core/desktop', [
                         ids = _(list).pluck('id');
                         pos = _(ids).indexOf(uniqueID);
                         if (data) {
+                            data.floating = self.get('floating');
                             data.id = uniqueID;
                             data.timestamp = _.now();
                             data.version = ox.version;

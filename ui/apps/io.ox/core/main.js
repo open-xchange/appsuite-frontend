@@ -1726,7 +1726,13 @@ define('io.ox/core/main', [
 
                     // draw savepoints to allow the user removing them
                     ox.ui.App.getSavePoints().done(function (list) {
+
+                        // check if we restore only floating windows => if yes we need to load the default app too
+                        baton.onlyFloating = true;
+
                         _(list).each(function (item) {
+                            if (baton.onlyFloating && !item.floating) baton.onlyFloating = false;
+
                             var info = item.description || item.module,
                                 versionInfo = $();
                             if (item.version !== ox.version) {
@@ -1755,6 +1761,7 @@ define('io.ox/core/main', [
                         ox.ui.App.removeAllRestorePoints().done(function () {
                             _.url.hash(baton.restoreHash);
                             baton.canRestore = false;
+                            baton.onlyFloating = false;
                             def.resolve();
                         });
                     });
@@ -1766,6 +1773,9 @@ define('io.ox/core/main', [
                         node.closest('li').remove();
                         // remove restore point
                         ox.ui.App.removeRestorePoint(id).done(function (list) {
+                            baton.onlyFloating = _(list).filter(function (item) {
+                                return !item.floating;
+                            }).length > 0;
                             // continue if list is empty
                             if (list.length === 0) {
                                 _.url.hash(baton.restoreHash);
@@ -1792,7 +1802,8 @@ define('io.ox/core/main', [
 
                 debug('Stage "restore"');
 
-                if (baton.canRestore && !baton.isDeepLink) {
+                // check if we restore only floating windows => if yes we need to load the default app too
+                if (baton.canRestore && !baton.isDeepLink && !baton.onlyFloating) {
                     // clear auto start stuff (just conflicts)
                     baton.autoLaunch = [];
                     baton.autoLaunchApps = [];
