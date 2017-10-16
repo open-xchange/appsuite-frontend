@@ -763,7 +763,7 @@ define('io.ox/core/main', [
         ox.ui.apps.on('add', function (model) {
 
             if (model.get('title') === undefined) return;
-            if (model.get('noTopbarNode')) return;
+            if (model.get('floating')) return;
 
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
@@ -825,7 +825,7 @@ define('io.ox/core/main', [
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
-            if (model.options.noTopbarNode) {
+            if (model.options.floating) {
                 if (model.getWindow().floating) {
                     model.getWindow().floating.setTitle(value);
                 }

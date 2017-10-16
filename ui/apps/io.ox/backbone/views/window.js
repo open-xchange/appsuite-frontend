@@ -27,13 +27,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.count = this.options.count || 0;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
-            this.$el.on('click', this.makeActive.bind(this));
             this.$el.on('click', '[data-action="close"]', this.close.bind(this));
             this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
             this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
             this.$el.on('click', '[data-action="sticky"]', this.changeDisplayStyle.bind(this, 'sticky'));
             this.on('dispose', function () { remove(this); });
-            this.minimized = null;
+            this.minimized = false;
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
             this.displayStyle = this.options.displayStyle || 'cornered';
@@ -59,8 +58,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                 ),
                                 $('<a href="#" data-action="cornered">').append('<i class="fa fa-window-restore">'),
                                 $('<a href="#" data-action="centered">').append('<i class="fa fa-window-maximize">'),
-                                $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">'),
-                                this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-window-close">') : ''
+                                this.options.showStickybutton ? $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
+                                this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-times">') : ''
                             )
                         ),
                         this.$body = this.$body || $('<div class="floating-body abs">')
@@ -103,14 +102,16 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
         },
 
-        makeActive: function (e) {
-            if (e) {
-                e.stopPropagation();
-            }
+        makeActive: function () {
             var self = this;
+
             collection.each(function (model) {
-                model.get('window').$el.toggleClass('active', model.get('window').cid === self.cid);
+                //update silent, so the bar isn't redrawn for each window
+                model.get('window').toggle(model.get('window').cid === self.cid, true);
             });
+
+            // trigger , so the taskbar redraws
+            collection.trigger('show', this);
         },
 
         setTitle: function (title) {
@@ -124,18 +125,21 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.toggle(false);
         },
 
-        toggle: function (state) {
+        toggle: function (state, silent) {
+            // already in the correct state. nothing to do
+            if (state !== this.minimized) return;
+
             if (state) this.$el.show();
             this.$el.stop().toggleClass('minimized', !state);
             this.minimized = !state;
             if (state) {
                 this.$el.show();
-                collection.trigger('show', this);
+                if (!silent) collection.trigger('show', this);
             } else {
                 // little delay to wait for animation
                 this.$el.delay(300).queue(function () {
                     $(this).hide();
-                    collection.trigger('hide', this);
+                    if (!silent) collection.trigger('hide', this);
                 });
             }
         },
@@ -176,7 +180,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                         .append(
                             $('<span class="title">').text(floatingWindow.title),
                             $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count),
-                            floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-window-close">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
+                            floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
                         )
                 );
             })
@@ -192,7 +196,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     $(document).on('click', '#io-ox-taskbar button', function (e) {
         var cid = $(e.currentTarget).attr('data-cid'),
             model = collection.get(cid);
-        model.get('window').toggle(true);
+        model.get('window').makeActive();
     });
 
     return WindowView;

@@ -550,10 +550,10 @@ define('io.ox/core/desktop', [
                 isDisabled = ox.manifests.isDisabled(name + '/main');
 
             // update hash
-            if (!this.options.noURLUpdate && name !== _.url.hash('app')) {
+            if (!this.options.floating && name !== _.url.hash('app')) {
                 _.url.hash({ folder: null, perspective: null, id: null });
             }
-            if (!this.options.noURLUpdate && name) {
+            if (!this.options.floating && name) {
                 _.url.hash('app', name);
             }
 

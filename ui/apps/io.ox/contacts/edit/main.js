@@ -42,8 +42,7 @@ define('io.ox/contacts/edit/main', [
             title: gt('Edit Contact'),
             userContent: true,
             closable: true,
-            noTopbarNode: true,
-            noURLUpdate: true
+            floating: true
         });
 
         app.setLauncher(function () {

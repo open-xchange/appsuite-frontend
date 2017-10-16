@@ -36,8 +36,7 @@ define('io.ox/contacts/distrib/main', [
             title: gt('Distribution List'),
             userContent: true,
             closable: true,
-            noTopbarNode: true,
-            noURLUpdate: true
+            floating: true
         });
 
         app.getContextualHelp = function () {

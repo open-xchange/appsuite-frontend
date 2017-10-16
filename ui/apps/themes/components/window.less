@@ -478,11 +478,6 @@
     background: transparent;
     outline: 0;
 
-    // display the active window on top
-    &.active {
-        z-index: 3;
-    }
-
     .floating-window-content {
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     }
@@ -563,11 +558,16 @@
             position: absolute;
             top: 0;
             right: 0;
+            padding: 0 8px;
+
             a {
                 color: white;
                 line-height: @headerHeight;
-                padding: 0 16px;
+                padding: 0 8px;
                 display: inline-block;
+                &[data-action="close"] {
+                    font-size: 18px;
+                }
             }
         }
     }

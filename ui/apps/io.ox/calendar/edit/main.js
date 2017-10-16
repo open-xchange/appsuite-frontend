@@ -36,8 +36,7 @@ define('io.ox/calendar/edit/main', [
             title: gt('Edit Appointment'),
             userContent: true,
             closable: true,
-            noTopbarNode: true,
-            noURLUpdate: true
+            floating: true
         });
 
         _.extend(app, {

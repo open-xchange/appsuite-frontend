@@ -30,8 +30,7 @@ define('io.ox/tasks/edit/main', [
                 title: gt('Edit task'),
                 userContent: true,
                 closable: true,
-                noTopbarNode: true,
-                noURLUpdate: true
+                floating: true
             }),
             // app window
             win,
