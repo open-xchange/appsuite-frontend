@@ -128,7 +128,8 @@ define('io.ox/mail/compose/signatures', [
 
         // set default signature dependant on mode, there are settings that correspond to this
         getDefaultSignature: function () {
-            return /compose|edit/.test(this.get('mode')) ?
+            // no differentiation between compose/edit and reply/forward on mobile
+            return /compose|edit/.test(this.get('mode')) || _.device('smartphone') ?
                 this.get('defaultSignatureId') :
                 mailUtil.getDefaultSignature('reply/forward');
         },
