@@ -24,7 +24,7 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
 
         point: 'io.ox/mail/vacation-notice/indicator',
 
-        el: '<div class="alert alert-info alert-dismissable ellipsis" role="alert">',
+        el: '<div class="alert alert-info alert-dismissable ellipsis indicator" role="alert">',
 
         events: {
             'click .close': 'onClose',
@@ -47,13 +47,30 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
             }.bind(this));
         },
 
-        onClose: function () {
-            this.$el.hide().next().css('top', '');
+        onClose: function (e) {
+            var $listview = $(e.delegateTarget).nextAll('.list-view-control');
+            this.$el.hide();
+            $listview.css('top', ($listview.position().top - 40));
         },
 
         onChange: function (model) {
-            var active = model.isActive();
-            this.$el.toggle(active).next().css('top', active ? '40px' : '');
+            var active = model.isActive(),
+                $listview = this.$el.nextAll('.list-view-control'),
+                top = parseInt($listview.css('top'), 0);
+
+            this.$el.toggle(active);
+
+            if (top === 40) {
+                // one already showing
+                $listview.css('top', active ? 80 : 0);
+            } else if (top === 80) {
+                // two showing
+                $listview.css('top', 40);
+            } else {
+                // nothing is shown
+                $listview.css('top', active ? 40 : 0);
+            }
+
         }
     });
 

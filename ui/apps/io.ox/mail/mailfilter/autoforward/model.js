@@ -119,7 +119,7 @@ define('io.ox/mail/mailfilter/autoforward/model', [
         },
 
         isActive: function () {
-            if (!this.get('active')) return false;
+            return !!this.get('active');
         }
     });
 

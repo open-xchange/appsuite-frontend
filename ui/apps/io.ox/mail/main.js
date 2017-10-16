@@ -1985,7 +1985,7 @@ define('io.ox/mail/main', [
         'sockets': function (app) {
             ox.on('socket:mail:new', function (data) {
                 folderAPI.reload(data.folder);
-                // push arries, other folder selected
+                // push arrives, other folder selected
                 if (data.folder !== app.folder.get(data.folder)) {
                     _(api.pool.getByFolder(data.folder)).each(function (collection) {
                         collection.expired = true;
@@ -2000,6 +2000,13 @@ define('io.ox/mail/main', [
             if (!capabilities.has('mailfilter_v2')) return;
             require(['io.ox/mail/mailfilter/vacationnotice/indicator'], function (View) {
                 new View().attachTo(app.listControl.$el);
+            });
+        },
+
+        'autoforward-notice': function (app) {
+            if (!capabilities.has('mailfilter_v2')) return;
+            require(['io.ox/mail/mailfilter/autoforward/indicator'], function (View) {
+               new View().attachTo(app.listControl.$el);
             });
         }
     });
