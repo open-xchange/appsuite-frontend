@@ -2006,7 +2006,7 @@ define('io.ox/mail/main', [
         'autoforward-notice': function (app) {
             if (!capabilities.has('mailfilter_v2')) return;
             require(['io.ox/mail/mailfilter/autoforward/indicator'], function (View) {
-               new View().attachTo(app.listControl.$el);
+                new View().attachTo(app.listControl.$el);
             });
         }
     });
