@@ -484,12 +484,17 @@
 
     &.cornered {
         width: 960px;
-        height: 640px;
-        max-height: 90%;
+        height: 65%;
+        min-height: 640px;
         right: 56px;
         bottom: 16px;
         top: auto;
         left: auto;
+
+        @media (max-height: 800px) {
+            height: calc(~"100% - 32px");
+            min-height: auto;
+        }
 
         .floating-header .controls a[data-action="cornered"] {
             display: none;
