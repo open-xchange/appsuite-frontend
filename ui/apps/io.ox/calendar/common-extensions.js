@@ -175,6 +175,25 @@ define('io.ox/calendar/common-extensions', [
             );
         },
 
+        sentBy: function (baton) {
+            if (!baton.data.organizer || !baton.data.organizer.sentBy) return;
+
+            var sentBy = baton.data.organizer.sentBy;
+            this.append(
+                $('<tr>').append(
+                    $('<th>').text(gt('Send by')),
+                    $('<td class="detail sendby">').append(
+                        coreUtil.renderPersonalName({
+                            $el: baton.sendbyNode,
+                            name: sentBy.cn,
+                            email: sentBy.email,
+                            user_id: sentBy.entity
+                        }, baton.data)
+                    )
+                )
+            );
+        },
+
         noHalos: function () {
             this.find('*').removeClass('halo-link');
         },

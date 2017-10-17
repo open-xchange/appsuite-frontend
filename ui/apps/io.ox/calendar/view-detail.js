@@ -128,6 +128,13 @@ define('io.ox/calendar/view-detail', [
         draw: extensions.organizer
     });
 
+    // sentby
+    ext.point('io.ox/calendar/detail/details').extend({
+        index: 150,
+        id: 'sentby',
+        draw: extensions.sentBy
+    });
+
     // show as
     ext.point('io.ox/calendar/detail/details').extend({
         index: 200,
