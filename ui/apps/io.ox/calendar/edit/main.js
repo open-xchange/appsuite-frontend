@@ -279,9 +279,6 @@ define('io.ox/calendar/edit/main', [
                                     self.model.set('startDate', self.tempStartDate);
                                     self.tempEndDate = self.tempStartDate = null;
                                 }
-                                // TODO still needed?
-                                // restore model attributes for moving
-                                // if (self.moveAfterSave) self.model.set('folder', self.moveAfterSave, { silent: true });
                             })
                             .on('ignore', function () {
                                 if (self.view.options.mode === 'create') {

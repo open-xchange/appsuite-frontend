@@ -265,11 +265,10 @@ define('io.ox/calendar/view-detail', [
 
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
-                // TODO: check if this is an exception from a series (this check will change when flags are introduced)
-                if (baton.data.recurrence_id && baton.data.recurrence_id !== baton.data.id) {
-                    calAPI.on('update:' + chronosUtil.cid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), { node: node }, showInfo);
+                if (baton.data.recurrenceId && baton.data.id !== baton.data.seriesId) {
+                    calAPI.on('update:' + chronosUtil.cid({ folder: baton.data.folder, id: baton.data.seriesId }), { node: node }, showInfo);
                     node.one('remove', function () {
-                        calAPI.off('update:' + chronosUtil.cid({ folder_id: baton.data.folder_id, id: baton.data.recurrence_id }), showInfo);
+                        calAPI.off('update:' + chronosUtil.cid({ folder: baton.data.folder, id: baton.data.seriesId }), showInfo);
                     });
                 }
                 return node;

@@ -35,8 +35,7 @@ define('io.ox/calendar/actions/follow-up', function () {
                 d.add(1, 'w');
                 isBefore = true;
             }
-            // TODO consider date without time here. We need a general solution for that
-            copy[field] = { value: d.format('YYYYMMDD[T]HHmmss'), tzid: d._z ? d._z.name : undefined };
+            copy[field] = { value: d.format('YYYYMMDD[T]HHmmss'), tzid: ref.tzid };
         });
 
         // use ox.launch to have an indicator for slow connections

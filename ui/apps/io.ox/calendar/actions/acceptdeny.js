@@ -201,12 +201,6 @@ define('io.ox/calendar/actions/acceptdeny', [
                             checkConflicts = action !== 'declined' && appointmentData.transp === 'OPAQUE' && (!previousConfirmation || requestData.attendee.partStat !== previousConfirmation.partStat);
                         }
 
-                        // todo why is this in here?
-                        // add current user id in shared or public folder
-                        if (folderAPI.is('shared', folder)) {
-                            apiData.data.id = folder.created_by;
-                        }
-
                         performConfirm(checkConflicts);
                     })
                     .show(function () {

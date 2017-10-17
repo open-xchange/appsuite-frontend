@@ -293,12 +293,6 @@ define('io.ox/calendar/util', [
         },
 
         getReminderOptions: function () {
-            // TODO: moment.js alternative mode
-            // var opt = {};
-            // [-1,0,5,10,15,30,45,60,120,240,360,480,720,1440,2880,4320,5760,7200,8640,10080,20160,30240,40320].forEach(function (val) {
-            //     opt[val] = val < 0 ? gt('No reminder') : moment.duration(val, 'minutes').humanize();
-            // });
-            // return opt;
 
             var options = {},
                 reminderListValues = [
