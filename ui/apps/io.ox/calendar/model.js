@@ -159,28 +159,21 @@ define('io.ox/calendar/model', [
         },
 
         getParticipants: function () {
-            if (this._participants) {
-                return this._participants;
-            }
+            if (this._participants) return this._participants;
             var self = this,
                 resetListUpdate = false,
                 changeParticipantsUpdate = false;
-
+            // create collection
             this._participants = new pModel.Participants(this.get('participants'), { silent: false });
-
+            // sync property and collection
             this._participants.on('add remove reset', function () {
-                if (changeParticipantsUpdate) {
-                    return;
-                }
+                if (changeParticipantsUpdate) return;
                 resetListUpdate = true;
                 self.set('participants', this.getAPIData(), { validate: true });
                 resetListUpdate = false;
             });
-
             this.on('change:participants', function () {
-                if (resetListUpdate) {
-                    return;
-                }
+                if (resetListUpdate) return;
                 changeParticipantsUpdate = true;
                 self._participants.reset(self.get('participants'));
                 changeParticipantsUpdate = false;
@@ -189,31 +182,24 @@ define('io.ox/calendar/model', [
         },
 
         setDefaultParticipants: function (options) {
-            var self = this;
             return folderAPI.get(this.get('folder_id')).then(function (folder) {
-                if (folderAPI.is('private', folder)) {
-                    if (options.create) {
-                        // if private folder, current user will be the organizer
-                        self.set('organizerId', ox.user_id);
-                        // set participants now or model will be dirty
-                        self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: ox.user_id, type: 1 }]));
-                        self.getParticipants();
-                    }
-                } else if (folderAPI.is('public', folder)) {
-                    // if public folder, current user will be added
-                    if (options.create) {
-                        // set participants now or model will be dirty
-                        self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: ox.user_id, type: 1 }]));
-                        self.getParticipants();
-                    }
-                } else if (folderAPI.is('shared', folder)) {
-                    // set participants now or model will be dirty
-                    self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: folder.created_by, type: 1 }]));
-                    // in a shared folder the owner (created_by) will be added by default
-                    self.getParticipants();
-                }
-            });
+                if (!options.create) return;
+                var isPrivate = folderAPI.is('private', folder),
+                    isShared = folderAPI.is('shared', folder);
+                // if public / shared folder owner (created_by) will be added by default
+                if (isPrivate) this.set('organizerId', ox.user_id);
+                // set participants first before participant collection is created (getParticipants())
+                this.set('participants', _(this.get('participants')).concat([{
+                    field: 'email1',
+                    // BossyAppointmentHandling
+                    id: isShared ? folder.created_by : ox.user_id,
+                    type: 1
+                }]));
+                // first call of getParticipants creates participant collection
+                this.getParticipants();
+            }.bind(this));
         },
+
         getUpdatedAttributes: function () {
             var attributesToSave = this.changedSinceLoading();
             attributesToSave.id = this.id;
