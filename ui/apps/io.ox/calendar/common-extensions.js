@@ -181,7 +181,7 @@ define('io.ox/calendar/common-extensions', [
             var sentBy = baton.data.organizer.sentBy;
             this.append(
                 $('<tr>').append(
-                    $('<th>').text(gt('Send by')),
+                    $('<th>').text(gt('Sent by')),
                     $('<td class="detail sendby">').append(
                         coreUtil.renderPersonalName({
                             $el: baton.sendbyNode,
