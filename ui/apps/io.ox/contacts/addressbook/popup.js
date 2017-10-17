@@ -215,6 +215,9 @@ define('io.ox/contacts/addressbook/popup', [
                 if (item.mark_as_distributionlist) {
                     // get a match for the entire list
                     address = _(item.distribution_list)
+                        .filter(function (obj) {
+                            return obj.mail;
+                        })
                         .map(function (obj) {
                             // mail address only
                             return $.trim(obj.mail).toLowerCase();
@@ -807,6 +810,10 @@ define('io.ox/contacts/addressbook/popup', [
             function flatten(list) {
                 return _(list)
                     .chain()
+                    .filter(function (item) {
+                        // only distribution lists and items with a mail address
+                        return (item.list || item.label) || (item.mail || item.email);
+                    })
                     .map(function (item) {
                         if (item.list || item.label) return flatten(item.list || item.label);
                         var name = item.mail_full_name, mail = item.mail || item.email;

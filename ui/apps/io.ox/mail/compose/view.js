@@ -292,7 +292,9 @@ define('io.ox/mail/compose/view', [
     ext.point(POINT + '/autosave/error').extend({
         id: 'default',
         handler: function (baton) {
-            notifications.yell('error', baton.error);
+            if (!baton.isLogout && !ox.handleLogoutError) {
+                notifications.yell('error', baton.error);
+            }
             baton.returnValue.reject(baton.error);
         }
     });
@@ -412,7 +414,7 @@ define('io.ox/mail/compose/view', [
                 id: this.logoutPointId,
                 index: 1000 + this.app.guid,
                 logout: function () {
-                    return self.autoSaveDraft().then(function (result) {
+                    return self.autoSaveDraft({ isLogout: true }).then(function (result) {
                         var base = _(result.split(mailAPI.separator)),
                             id = base.last(),
                             folder = base.without(id).join(mailAPI.separator),
@@ -641,8 +643,8 @@ define('io.ox/mail/compose/view', [
             });
         },
 
-        autoSaveDraft: function () {
-
+        autoSaveDraft: function (options) {
+            options = options || {};
             var def = new $.Deferred(),
                 model = this.model,
                 self = this,
@@ -653,6 +655,7 @@ define('io.ox/mail/compose/view', [
                     var baton = new ext.Baton(result);
                     baton.model = model;
                     baton.view = self;
+                    baton.isLogout = options.isLogout;
                     baton.returnValue = def;
                     ext.point('io.ox/mail/compose/autosave/error').invoke('handler', self, baton);
                     def = baton.returnValue;

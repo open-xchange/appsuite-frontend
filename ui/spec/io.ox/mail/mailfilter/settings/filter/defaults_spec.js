@@ -111,11 +111,6 @@ define([
             defaults.tests.address.should.be.deep.equal({ 'id': 'address', 'addresspart': 'all', 'comparison': 'is', 'headers': ['from'], 'values': [''] });
         });
 
-        it('should provide defaults for test exists', function () {
-            defaults.tests.should.have.a.property('exists');
-            defaults.tests.exists.should.be.deep.equal({ 'headers': [], 'id': 'exists' });
-        });
-
         it('should provide defaults for test date', function () {
             defaults.tests.should.have.a.property('date');
             defaults.tests.date.should.be.deep.equal({ 'id': 'date', 'comparison': 'ge', 'zone': 'original', 'header': 'Date', 'datepart': 'date', 'datevalue': [] });
