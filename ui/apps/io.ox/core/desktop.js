@@ -1250,7 +1250,7 @@ define('io.ox/core/desktop', [
                         // show
                         if (node.parent().length === 0) {
                             if (this.floating) {
-                                this.floating.open();
+                                this.floating.open(true);
                             } else if (this.simple) {
                                 node.insertAfter('#io-ox-topbar');
                                 $('body').css('overflowY', 'auto');

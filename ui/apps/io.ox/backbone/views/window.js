@@ -33,6 +33,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.$el.on('click', '[data-action="sticky"]', this.changeDisplayStyle.bind(this, 'sticky'));
             this.on('dispose', function () { remove(this); });
             this.minimized = false;
+            this.opened = false;
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
             this.displayStyle = this.options.displayStyle || 'cornered';
@@ -56,8 +57,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                 $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
                                     $('<i class="fa fa-window-minimize" aria-hidden="true">')
                                 ),
-                                $('<a href="#" data-action="cornered">').append('<i class="fa fa-window-restore">'),
-                                $('<a href="#" data-action="centered">').append('<i class="fa fa-window-maximize">'),
+                                $('<a href="#" data-action="cornered">').append('<i class="fa fa-compress">'),
+                                $('<a href="#" data-action="centered">').append('<i class="fa fa-arrows-alt">'),
                                 this.options.showStickybutton ? $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
                                 this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-times">') : ''
                             )
@@ -68,8 +69,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             return this;
         },
 
-        open: function () {
-            $('#io-ox-screens').append(this.render().$el);
+        open: function (noRerender) {
+            // only open this one time or the window is emptied and rerendered multiple times and also added multiple times to the collection (overwriting itself)
+            if (this.opened) return;
+            this.opened = true;
+            // sometimes it's important that there is no rerender, because of losing event listeners or triggering on remove listeners
+            if (!this.$header || !noRerender) this.render();
+            $('#io-ox-screens').append(this.$el);
             add(this);
             this.toggle(true);
             return this;
