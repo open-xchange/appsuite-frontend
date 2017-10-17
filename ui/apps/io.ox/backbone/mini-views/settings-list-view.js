@@ -33,7 +33,7 @@ define('io.ox/backbone/mini-views/settings-list-view', [
 
         render: function () {
             this.$el.empty().addClass(this.opt.sortable ? 'draggable' : '').append(
-                this.opt.sortable ? listUtils.dragHandle() : null,
+                this.opt.sortable ? listUtils.dragHandle(gt('Drag to reorder items')) : null,
                 listUtils.makeTitle(this.model.get(this.opt.titleAttribute)),
                 listUtils.makeControls()
             );
@@ -52,7 +52,8 @@ define('io.ox/backbone/mini-views/settings-list-view', [
 
         events: {
             'click *[data-action]': 'onClickAction',
-            'keydown .settings-list-item': 'onKeydownDragHandle'
+            'keydown .drag-handle': 'onKeydown',
+            'blur .drag-handle': 'onBlurDragHandle'
         },
 
         initialize: function (opt) {
@@ -179,10 +180,24 @@ define('io.ox/backbone/mini-views/settings-list-view', [
             e.preventDefault();
         },
 
+        onKeydown: function (e) {
+            var target = $(e.target);
+            // toggle state on enter or spacebar
+            if (e.which === 13 || e.which === 32) {
+                target.toggleClass('selected');
+                target.attr('aria-pressed', target.hasClass('selected'));
+                return;
+            }
+
+            if (!target.hasClass('selected')) return;
+
+            this.onKeydownDragHandle(e);
+        },
+
         onKeydownDragHandle: function (e) {
-            if ($(e.target).is('a')) return;
             var self = this,
-                current = $(e.currentTarget),
+                target = $(e.currentTarget),
+                current = $(e.currentTarget).closest('.draggable'),
                 items = self.$el.children('.draggable'),
                 index = items.index(current),
                 id = current.attr(this.opt.dataIdAttribute);
@@ -191,7 +206,11 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 var newText = gt('%1$s moved to position %2$s of %3$s', current.find('.list-item-title').text(), curIndex + 1, items.length),
                     oldText = self.opt.notification.text();
                 self.opt.update.call(self);
-                self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"]').focus();
+                if (target.hasClass('drag-handle')) {
+                    self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"] .drag-handle').focus().addClass('selected');
+                } else {
+                    self.$el.find('[' + self.opt.dataIdAttribute + '="' + id + '"]').focus();
+                }
                 // the selection of aria-relevant is important, because if the same text should be read to the user, aria-relevant="all" is required
                 // if other text will be inserted in the notification, "all" would cause the screenreader to read the old and the new text
                 self.opt.notification
@@ -219,6 +238,10 @@ define('io.ox/backbone/mini-views/settings-list-view', [
                 default:
                     break;
             }
+        },
+
+        onBlurDragHandle: function (e) {
+            $(e.currentTarget).removeClass('selected');
         }
 
     });

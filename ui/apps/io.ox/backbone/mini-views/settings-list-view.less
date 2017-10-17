@@ -52,6 +52,15 @@
             margin: -5px 0 0 -6px;
             color: #aaa;
         }
+
+        &:focus {
+            outline: 2px solid @outline-color;
+            text-decoration: underline;
+        }
+
+        &.selected {
+            background-color: #ddd;
+        }
     }
 
     .list-item-controls {
