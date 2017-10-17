@@ -37,7 +37,7 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         className: 'modal flex',
 
         events: {
-            'click [data-action]': 'onAction',
+            'click .modal-footer [data-action]': 'onAction',
             'keydown input:text, input:password': 'onKeypress',
             'keydown': 'onKeydown'
         },
@@ -87,6 +87,28 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                     );
                 }.bind(this));
             }
+            // track focusin
+            $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
+            this.on('dispose', function () {
+                $(document).off('focusin.ox.modal', this.keepFocus);
+            });
+        },
+
+        keepFocus: function (e) {
+            var target = $(e.target);
+            // if child is target of this dialog, event handling is done by bootstrap
+            if (this.$el.has(target).length) return;
+
+            // we have to consider that two popups might be open
+            // so we cannot just refocus the current popup
+            var insidePopup = $(e.target).closest('.io-ox-dialog-popup, .io-ox-sidepopup, .mce-window, .date-picker').length > 0;
+            // should not keep focus if smart dropdown is open
+            var smartDropdown = $('body > .smart-dropdown-container').length > 0;
+
+            // stop immediate propagation to prevent bootstrap modal event listener from getting the focus
+            if (insidePopup || smartDropdown) {
+                e.stopImmediatePropagation();
+            }
         },
 
         render: function () {
@@ -110,6 +132,8 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
                 this.activeElement = elem[0];
                 elem[0].focus();
             }
+            // track open instances
+            open.add(this);
             return this;
         },
 
@@ -202,6 +226,21 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         onTab: function (e) {
             if (e.which !== 9) return;
             a11y.trapFocus(this.$el, e);
+        },
+
+        // hide dialog without disposing it
+        pause: function () {
+            $(document).off('focusin.ox.modal', this.keepFocus);
+            // hide backdrop
+            this.$el.prev().hide();
+            this.$el.hide();
+        },
+
+        resume: function () {
+            $(document).on('focusin.ox.modal', $.proxy(this.keepFocus, this));
+            this.$el.prev().show();
+            this.$el.show();
+            this.idle();
         }
     });
 
@@ -214,12 +253,10 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         }
         this.$el.siblings(':not(script,noscript)').removeAttr('aria-hidden');
         this.trigger('close');
-        if (this.previousFocus) this.previousFocus.focus();
+        var previousFocus = this.previousFocus;
         this.$el.remove();
-        // if multiple modal dialogs are open, set the modal-open class correctly
-        if ($(document.body).children().hasClass('modal')) {
-            $(document.body).addClass('modal-open');
-        }
+        open.remove(this);
+        if (previousFocus) previousFocus.focus();
         return this;
     }
 
@@ -244,6 +281,24 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         this.activeElement = null;
         return this;
     }
+
+    // track open instances
+
+    var open = {
+
+        queue: [],
+
+        add: function (dialog) {
+            if (this.queue.indexOf(dialog) > -1) return;
+            if (this.queue.length) _(this.queue).last().pause();
+            this.queue.push(dialog);
+        },
+
+        remove: function (dialog) {
+            this.queue = _(this.queue).without(dialog);
+            if (this.queue.length) _(this.queue).last().resume();
+        }
+    };
 
     /*
 
