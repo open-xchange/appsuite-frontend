@@ -378,8 +378,7 @@ define('io.ox/calendar/chronos-api', [
                 })
                 .then(processResponse)
                 .then(function (response) {
-                    // TODO check if updated[0] exists
-                    if (!response.conflicts) {
+                    if (!response.conflicts && response.updated && response.updated.length > 0) {
                         // updates notification area for example
                         // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
                         api.trigger('mark:invite:confirmed', response.updated[0]);
@@ -416,9 +415,8 @@ define('io.ox/calendar/chronos-api', [
             },
 
             move: function (list, targetFolderId) {
-                var folders = [String(targetFolderId)];
                 list = [].concat(list);
-                models = _(list).map(function (obj) {
+                var models = _(list).map(function (obj) {
                     var cid = util.cid(obj),
                         collection = api.pool.getCollectionsByModel(obj)[0],
                         model = collection.get(cid);
@@ -428,13 +426,13 @@ define('io.ox/calendar/chronos-api', [
 
                 http.pause();
                 _(models).map(function (model) {
-                    folders.push(model.get('folder'));
                     return http.PUT({
                         module: 'chronos',
                         params: {
                             action: 'move',
                             id: model.get('id'),
-                            folder: targetFolderId,
+                            folder: model.get('folder'),
+                            targetFolder: targetFolderId,
                             recurrenceId: model.get('recurrenceId'),
                             timestamp: model.get('lastModified')
                         }

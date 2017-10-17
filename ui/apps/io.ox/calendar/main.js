@@ -538,8 +538,6 @@ define('io.ox/calendar/main', [
                 // additional handler: switch to list perspective (and back)
                 find.on({
                     'find:query': function () {
-                        // TODO hide sort options
-                        // app.grid.getToolbar().find('.grid-options:first').hide();
                         // switch to supported perspective
                         lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
                         if (lastPerspective !== SEARCH_PERSPECTIVE) {
@@ -555,8 +553,6 @@ define('io.ox/calendar/main', [
                         if (lastPerspective && lastPerspective !== currentPerspective) {
                             app.props.set('layout', lastPerspective);
                         }
-                        // TODO show sort options again
-                        // app.grid.getToolbar().find('.grid-options:first').show();
                         // disable
                         app.props.off('change', find.cancel);
                         // reset
