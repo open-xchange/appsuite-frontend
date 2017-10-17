@@ -14,7 +14,6 @@
 define('io.ox/calendar/week/view', [
     'io.ox/core/extensions',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
@@ -23,7 +22,7 @@ define('io.ox/calendar/week/view', [
     'io.ox/core/print',
     'static/3rd.party/jquery-ui.min.js',
     'io.ox/calendar/week/extensions'
-], function (ext, util, chronosUtil, folderAPI, gt, settings, coreSettings, Dropdown, print) {
+], function (ext, util, folderAPI, gt, settings, coreSettings, Dropdown, print) {
 
     'use strict';
 
@@ -224,7 +223,7 @@ define('io.ox/calendar/week/view', [
             if (startDate === this.apiRefTime.valueOf()) {
                 var ws = this.startDate.valueOf(),
                     we = moment(this.startDate).add(this.columns, 'days').valueOf();
-                models = _(models).filter(chronosUtil.rangeFilter(ws, we));
+                models = _(models).filter(util.rangeFilter(ws, we));
                 // reset collection; transform raw dato to proper models
                 this.collection.reset(models);
                 if (this.collection.length > this.limit) {
@@ -372,7 +371,7 @@ define('io.ox/calendar/week/view', [
          */
         onHover: function (e) {
             if (!this.lasso) {
-                var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
+                var cid = util.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]', this.$el),
                     bg = el.data('background-color');
                 switch (e.type) {
@@ -516,7 +515,7 @@ define('io.ox/calendar/week/view', [
             var cT = $(e[(e.type === 'keydown') ? 'target' : 'currentTarget']);
             if (cT.hasClass('appointment') && !this.lasso && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = chronosUtil.cid(String(cT.data('cid')));
+                    obj = util.cid(String(cT.data('cid')));
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
@@ -1230,7 +1229,7 @@ define('io.ox/calendar/week/view', [
                 // is declined?
                 if (util.getConfirmationStatus(model.attributes, ox.user_id) !== 2 || this.showDeclined) {
                     // is fulltime?
-                    if (chronosUtil.isAllday(model) && this.options.showFulltime) {
+                    if (util.isAllday(model) && this.options.showFulltime) {
                         // make sure we have full days when calculating the difference or we might get wrong results
                         appointmentStartDate.startOf('day');
 

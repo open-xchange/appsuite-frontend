@@ -18,11 +18,10 @@ define('io.ox/calendar/util', [
     'io.ox/core/folder/api',
     'io.ox/core/util',
     'io.ox/core/tk/dialogs',
-    'io.ox/calendar/chronos-util',
     'settings!io.ox/calendar',
     'settings!io.ox/core',
     'gettext!io.ox/calendar'
-], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, chronosUtil, settings, coreSettings, gt) {
+], function (userAPI, contactAPI, groupAPI, folderAPI, util, dialogs, settings, coreSettings, gt) {
 
     'use strict';
 
@@ -59,7 +58,8 @@ define('io.ox/calendar/util', [
             //#. superessive of the weekday
             //#. will only be used in a form like “Happens every week on $weekday”
             gt.pgettext('superessive', 'Saturday')
-        ];
+        ],
+        attendeeLookupArray = ['', 'INDIVIDUAL', 'GROUP', 'RESOURCE', 'RESOURCE', 'INDIVIDUAL'];
 
     var that = {
 
@@ -185,7 +185,7 @@ define('io.ox/calendar/util', [
                     timeZoneStr = moment.tz(data.startDate.value, data.startDate.tzid).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
-                if (chronosUtil.isAllday(data)) {
+                if (that.isAllday(data)) {
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
@@ -195,7 +195,7 @@ define('io.ox/calendar/util', [
                 if (startDate.isSame(endDate, 'day')) {
                     dateStr = startDate.format(fmtstr);
                     timeStr = this.getTimeInterval(data, options.zone);
-                } else if (chronosUtil.isAllday(data)) {
+                } else if (that.isAllday(data)) {
                     dateStr = this.getDateInterval(data);
                     timeStr = this.getTimeInterval(data, options.zone);
                 } else {
@@ -230,7 +230,7 @@ define('io.ox/calendar/util', [
 
                 a11y = a11y || false;
 
-                if (chronosUtil.isAllday(data)) {
+                if (that.isAllday(data)) {
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
@@ -240,7 +240,7 @@ define('io.ox/calendar/util', [
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
                 }
-                if (a11y && chronosUtil.isAllday(data)) {
+                if (a11y && that.isAllday(data)) {
                     //#. date intervals for screenreaders
                     //#. please keep the 'to' do not use dashes here because this text will be spoken by the screenreaders
                     //#. %1$s is the start date
@@ -259,7 +259,7 @@ define('io.ox/calendar/util', [
 
         getTimeInterval: function (data, zone, a11y) {
             if (!data || !data.startDate || !data.endDate) return '';
-            if (chronosUtil.isAllday(data)) {
+            if (that.isAllday(data)) {
                 return this.getFullTimeInterval(data, true);
             }
             var start = moment.tz(data.startDate.value, data.startDate.tzid),
@@ -357,7 +357,7 @@ define('io.ox/calendar/util', [
         getStartAndEndTime: function (data) {
             var ret = [];
             if (!data || !data.startDate || !data.endDate) return ret;
-            if (chronosUtil.isAllday(data)) {
+            if (that.isAllday(data)) {
                 ret.push(this.getFullTimeInterval(data, false));
             } else {
                 ret.push(moment.tz(data.startDate.value, data.startDate.tzid).format('LT'), moment.tz(data.endDate.value, data.endDate.tzid).format('LT'));
@@ -626,7 +626,7 @@ define('io.ox/calendar/util', [
         },
 
         getRecurrenceString: function (data) {
-            if (data.rrule) data = new (require('io.ox/calendar/chronos-model').Model)(data);
+            if (data.rrule) data = new (require('io.ox/calendar/model').Model)(data);
             if (data instanceof Backbone.Model && data.getRruleMapModel) data = data.getRruleMapModel();
             if (data instanceof Backbone.Model) data = data.toJSON();
             var str = that.getRecurrenceDescription(data);
@@ -1023,7 +1023,127 @@ define('io.ox/calendar/util', [
 
             if (!rangeStart || !rangeEnd) return {};
             return { expand: true, rangeStart: rangeStart, rangeEnd: rangeEnd };
+        },
+
+        rangeFilter: function (start, end) {
+            return function (obj) {
+                var tsStart = moment.tz(obj.startDate.value, obj.startDate.tzid || moment().tz()),
+                    tsEnd = moment.tz(obj.endDate.value, obj.endDate.tzid || moment().tz());
+                if (tsEnd < start) return false;
+                if (tsStart > end) return false;
+                return true;
+            };
+        },
+
+        cid: function (o) {
+            if (_.isObject(o)) {
+                if (o.attributes) o = o.attributes;
+                var cid = o.folder + '.' + o.id;
+                if (o.recurrenceId) cid += '.' + o.recurrenceId;
+                return cid;
+            } else if (_.isString(o)) {
+                var s = o.split('.'),
+                    r = { folder: s[0], id: s[1] };
+                if (s.length === 3) r.recurrenceId = s[2];
+                return r;
+            }
+        },
+
+        // creates an attendee object from a user object or model and contact model or object
+        // distribution lists create an array of attendees representing the menmbers of the distribution list
+        // used to create default participants and used by addparticipantsview
+        // options can contain attendee object fields that should be prefilled (usually partStat: 'ACCEPTED')
+        createAttendee: function (user, options) {
+
+            if (!user) return;
+            // make it work for models and objects
+            user = user instanceof Backbone.Model ? user.attributes : user;
+
+            // distribution lists are split into members
+            if (user.mark_as_distributionlist) {
+                return _(user.distribution_list).map(this.createAttendee);
+            }
+            options = options || {};
+            var attendee = {
+                cuType: attendeeLookupArray[user.type] || 'INDIVIDUAL',
+                cn: user.display_name,
+                partStat: 'NEEDS-ACTION',
+                comment: ''
+            };
+
+            if (attendee.cuType !== 'RESOURCE') {
+                if (user.user_id && user.type !== 5) attendee.entity = user.user_id;
+                attendee.email = user.field ? user[user.field] : (user.email1 || user.mail);
+                attendee.uri = 'mailto:' + attendee.email;
+            } else {
+                attendee.partStat = 'ACCEPTED';
+                attendee.comment = user.description;
+                attendee.entity = user.id;
+            }
+
+            if (attendee.cuType === 'GROUP') {
+                attendee.entity = user.id;
+                // not really needed. Added just for convenience. Helps if group should be resolved
+                attendee.members = user.members;
+            }
+            // not really needed. Added just for convenience. Helps if distibution list should be created
+            if (attendee.cuType === 'INDIVIDUAL') {
+                attendee.contactInformation = { folder: user.folder_id, contact_id: user.contact_id || user.id };
+            }
+            // override with predefined values if given
+            return _.extend(attendee, options);
+        },
+
+        // all day appointments have no timezone and the start and end dates are in date format not date-time
+        // checking the start date is sufficient as the end date must be of the same type, according to the spec
+        isAllday: function (app) {
+            if (!app) return false;
+            app = app instanceof Backbone.Model ? app.attributes : app;
+            if (_(app).has('allDay')) return app.allDay;
+
+            var time = app.startDate;
+            // there is either no time value or the time value is only 0s
+            return this.isLocal(app) && (time.value.indexOf('T') === -1 || time.value.search(/T0*$/) !== -1);
+        },
+
+        // appointments may be in local time. This means they do not move when the timezone changes. Do not confuse this with UTC time
+        isLocal: function (app) {
+            if (!app) return false;
+            var time = app instanceof Backbone.Model ? app.get('startDate') : app.startDate;
+            return time && time.value && !time.tzid;
+        },
+
+        // convenience function to convert old alarms into new chronos alarms
+        // TODO remove once migration process is implemented
+        convertAlarms: function (alarm) {
+            // already converted
+            if (_.isArray(alarm)) return alarm;
+            var alarmTime = alarm,
+                alarmUnit = 'M';
+
+            if (isNaN(parseInt(alarmTime, 10))) {
+                // ignore unparsable alarms
+                return [];
+            }
+
+            if (alarmTime >= 10080) {
+                alarmTime = alarmTime / 10080;
+                alarmUnit = 'W';
+            } else if (alarmTime >= 1440) {
+                alarmTime = alarmTime / 1440;
+                alarmUnit = 'D';
+            } else if (alarmTime >= 60) {
+                alarmTime = alarmTime / 60;
+                alarmUnit = 'H';
+            }
+
+            return [{
+                action: 'DISPLAY',
+                description: '',
+                trigger: { duration: '-PT' + alarmTime + alarmUnit, related: 'START' }
+            }];
         }
+
     };
 
     return that;

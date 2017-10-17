@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/print', [
     'io.ox/core/print',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/contacts/util',
     'io.ox/core/api/user',

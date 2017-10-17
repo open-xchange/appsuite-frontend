@@ -13,15 +13,14 @@
 
 define('io.ox/calendar/list/listview', [
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
-    'io.ox/calendar/chronos-model',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/model',
+    'io.ox/calendar/api',
     'io.ox/core/extensions',
     'io.ox/core/folder/api',
     'io.ox/core/tk/list',
     'gettext!io.ox/calendar',
     'io.ox/calendar/list/view-options'
-], function (util, chronosUtil, models, api, ext, folderAPI, ListView, gt) {
+], function (util, models, api, ext, folderAPI, ListView, gt) {
 
     'use strict';
 
@@ -87,7 +86,7 @@ define('io.ox/calendar/list/listview', [
             this.append(
                 $('<div class="date">')
                     .text(util.getDateInterval(model.attributes))
-                    .toggle(!chronosUtil.isAllday(model) && (util.getDurationInDays(model.attributes) > 0))
+                    .toggle(!util.isAllday(model) && (util.getDurationInDays(model.attributes) > 0))
             );
         }
     });

@@ -14,9 +14,8 @@
 define('io.ox/calendar/actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/print',
     'gettext!io.ox/calendar',
@@ -24,7 +23,7 @@ define('io.ox/calendar/actions', [
     'io.ox/calendar/actions/change-confirmation',
     'io.ox/core/folder/api',
     'settings!io.ox/calendar'
-], function (ext, links, api, util, chronosUtil, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
+], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
 
     'use strict';
 
@@ -354,7 +353,7 @@ define('io.ox/calendar/actions', [
                         }
                     }
 
-                    freetime.getApp().launch({ startDate: startDate, attendees: [chronosUtil.createAttendee(user, { partStat: 'ACCEPTED' })] });
+                    freetime.getApp().launch({ startDate: startDate, attendees: [util.createAttendee(user, { partStat: 'ACCEPTED' })] });
                 });
             });
         }

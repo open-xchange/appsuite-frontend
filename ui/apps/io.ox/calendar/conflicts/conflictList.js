@@ -14,7 +14,7 @@
 define('io.ox/calendar/conflicts/conflictList', [
     'io.ox/core/extensions',
     'io.ox/calendar/common-extensions',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/folder/api',
     'io.ox/core/util',
     'io.ox/calendar/util',

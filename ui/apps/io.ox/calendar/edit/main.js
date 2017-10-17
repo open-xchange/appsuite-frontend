@@ -12,8 +12,8 @@
  */
 
 define('io.ox/calendar/edit/main', [
-    'io.ox/calendar/chronos-model',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/model',
+    'io.ox/calendar/api',
     'io.ox/core/extPatterns/dnd',
     'io.ox/calendar/edit/view',
     'io.ox/core/notifications',
@@ -22,11 +22,10 @@ define('io.ox/calendar/edit/main', [
     'io.ox/core/http',
     'gettext!io.ox/calendar/edit/main',
     'settings!io.ox/calendar',
-    'io.ox/calendar/chronos-util',
     'less!io.ox/calendar/edit/style',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings, chronosUtil) {
+], function (AppointmentModel, api, dnd, EditView, notifications, folderAPI, util, http, gt, settings) {
 
     'use strict';
 
@@ -84,7 +83,7 @@ define('io.ox/calendar/edit/main', [
                     mode: 'edit'
                 }, opt);
 
-                app.cid = 'io.ox/calendar:' + opt.mode + '.' + chronosUtil.cid(model);
+                app.cid = 'io.ox/calendar:' + opt.mode + '.' + util.cid(model);
 
                 function cont() {
                     // create app window
@@ -96,7 +95,7 @@ define('io.ox/calendar/edit/main', [
                     self.setWindow(win);
 
                     self.model.setDefaultAttendees({ create: opt.mode === 'create' }).done(function () {
-                        if (opt.mode === 'edit' && chronosUtil.isAllday(self.model)) {
+                        if (opt.mode === 'edit' && util.isAllday(self.model)) {
                             // allday apointments do not include the last day. To not misslead the user we subtract a day (so one day appointments only show one date for example)
                             // this day will be added again on save
                             self.model.set('endDate', { value: moment(self.model.get('endDate').value).subtract('1', 'days').format('YYYYMMDD[T000000]') });
@@ -191,9 +190,9 @@ define('io.ox/calendar/edit/main', [
                         trigger: { duration: '-PT15M', related: 'START' }
                     }]);
 
-                    data.alarms = chronosUtil.convertAlarms(data.alarms);
+                    data.alarms = util.convertAlarms(data.alarms);
                     // transparency is the new shown_as property. It only has 2 values, TRANSPARENT and OPAQUE
-                    data.transp = data.transp || (chronosUtil.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
+                    data.transp = data.transp || (util.isAllday(data) && settings.get('markFulltimeAppointmentsAsFree', false)) ? 'TRANSPARENT' : 'OPAQUE';
                     self.model = new AppointmentModel.Model(data);
                     if (!data.folder || /^virtual/.test(data.folder)) {
                         self.model.set('folder', data.folder = folderAPI.getDefaultFolder('calendar'));
@@ -414,7 +413,7 @@ define('io.ox/calendar/edit/main', [
         getApp: createInstance,
         reuse: function (type, data) {
             if (type === 'edit') {
-                return ox.ui.App.reuse('io.ox/calendar:edit.' + chronosUtil.cid(data));
+                return ox.ui.App.reuse('io.ox/calendar:edit.' + util.cid(data));
             }
         }
     };

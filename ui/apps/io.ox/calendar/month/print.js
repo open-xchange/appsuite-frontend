@@ -12,11 +12,10 @@
  */
 
 define('io.ox/calendar/month/print', [
-    'io.ox/calendar/chronos-api',
-    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/print'
-], function (api, chronosUtil, util, print) {
+], function (api, util, print) {
 
     'use strict';
 
@@ -37,12 +36,12 @@ define('io.ox/calendar/month/print', [
     }
 
     function sortBy(event) {
-        return chronosUtil.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
+        return util.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
     }
 
     function map(event) {
         return {
-            time: chronosUtil.isAllday(event) ? undefined : getMoment(event, 'startDate').format('LT'),
+            time: util.isAllday(event) ? undefined : getMoment(event, 'startDate').format('LT'),
             title: event.summary
         };
     }

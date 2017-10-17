@@ -14,10 +14,10 @@
 define('io.ox/calendar/mobile-toolbar-actions', [
     'io.ox/core/extensions',
     'io.ox/core/extPatterns/links',
-    'io.ox/calendar/chronos-api',
-    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
     'gettext!io.ox/calendar'
-], function (ext, links, api, chronosUtil, gt) {
+], function (ext, links, api, util, gt) {
 
     'use strict';
 
@@ -177,7 +177,7 @@ define('io.ox/calendar/mobile-toolbar-actions', [
     function prepareUpdateToolbar(app) {
         var list = app.pages.getCurrentPage().name === 'list' ? app.listView.selection.get() : {};
         list = _(list).map(function (item) {
-            if (_.isString(item)) return chronosUtil.cid(item);
+            if (_.isString(item)) return util.cid(item);
             return item;
         });
         app.updateToolbar(list);
