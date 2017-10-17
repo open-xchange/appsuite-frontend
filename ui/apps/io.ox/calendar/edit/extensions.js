@@ -15,7 +15,6 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/extensions',
     'gettext!io.ox/calendar/edit/main',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'io.ox/contacts/util',
     'io.ox/mail/util',
     'io.ox/core/util',
@@ -25,7 +24,7 @@ define('io.ox/calendar/edit/extensions', [
     'io.ox/core/tk/attachments',
     'io.ox/backbone/views/recurrence-view',
     'io.ox/backbone/mini-views/alarms',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/participants/add',
     'io.ox/participants/chronos-views',
     'io.ox/core/capabilities',
@@ -35,7 +34,7 @@ define('io.ox/calendar/edit/extensions', [
     'settings!io.ox/core',
     'io.ox/calendar/color-picker',
     'less!io.ox/calendar/style'
-], function (ext, gt, calendarUtil, chronosUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker) {
+], function (ext, gt, calendarUtil, contactUtil, mailUtil, coreUtil, views, mini, DatePicker, attachments, RecurrenceView, AlarmsView, api, AddParticipantView, pViews, capabilities, picker, folderAPI, settings, coreSettings, ColorPicker) {
 
     'use strict';
 
