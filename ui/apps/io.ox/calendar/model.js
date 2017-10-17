@@ -196,19 +196,19 @@ define('io.ox/calendar/model', [
                         // if private folder, current user will be the organizer
                         self.set('organizerId', ox.user_id);
                         // set participants now or model will be dirty
-                        self.set('participants', [{ field: 'email1', id: ox.user_id, type: 1 }]);
+                        self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: ox.user_id, type: 1 }]));
                         self.getParticipants();
                     }
                 } else if (folderAPI.is('public', folder)) {
                     // if public folder, current user will be added
                     if (options.create) {
                         // set participants now or model will be dirty
-                        self.set('participants', [{ field: 'email1', id: ox.user_id, type: 1 }]);
+                        self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: ox.user_id, type: 1 }]));
                         self.getParticipants();
                     }
                 } else if (folderAPI.is('shared', folder)) {
                     // set participants now or model will be dirty
-                    self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: ox.user_id, type: 1 }]));
+                    self.set('participants', _(self.get('participants')).concat([{ field: 'email1', id: folder.created_by, type: 1 }]));
                     // in a shared folder the owner (created_by) will be added by default
                     self.getParticipants();
                 }
