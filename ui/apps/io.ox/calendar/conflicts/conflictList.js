@@ -136,6 +136,15 @@ define('io.ox/calendar/conflicts/conflictList', [
 
     ext.point('io.ox/calendar/conflicts/details/list').extend({
         index: INDEX += 100,
+        id: 'sentby',
+        draw: function (baton) {
+            baton.sendbyNode = $('<span>');
+            extensions.sentBy.bind(this)(baton);
+        }
+    });
+
+    ext.point('io.ox/calendar/conflicts/details/list').extend({
+        index: INDEX += 100,
         id: 'shownAs',
         draw: extensions.shownAs
     });
