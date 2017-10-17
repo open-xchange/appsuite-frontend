@@ -14,7 +14,7 @@
 
 define('plugins/portal/calendar/register', [
     'io.ox/core/extensions',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
     'gettext!plugins/portal',

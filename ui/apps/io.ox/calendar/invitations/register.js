@@ -405,7 +405,7 @@ define('io.ox/calendar/invitations/register', [
                 .then(
                     function done() {
                         // api refresh
-                        var refresh = require(['io.ox/calendar/chronos-api']).then(
+                        var refresh = require(['io.ox/calendar/api']).then(
                             function (api) {
                                 api.refresh();
                                 if (self.options.yell !== false) {
@@ -565,7 +565,7 @@ define('io.ox/calendar/invitations/register', [
         load: function () {
             var self = this;
             return require([
-                'io.ox/calendar/chronos-api',
+                'io.ox/calendar/api',
                 'io.ox/calendar/util',
                 'io.ox/backbone/mini-views/alarms'
             ]).then(function (api, util, AlarmsView) {

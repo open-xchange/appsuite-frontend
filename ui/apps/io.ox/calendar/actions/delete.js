@@ -12,7 +12,7 @@
  */
 
 define('io.ox/calendar/actions/delete', [
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/notifications',
     'gettext!io.ox/calendar'
 ], function (api, notifications, gt) {

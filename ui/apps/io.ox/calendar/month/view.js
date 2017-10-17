@@ -13,15 +13,14 @@
 
 define('io.ox/calendar/month/view', [
     'io.ox/core/extensions',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
     'less!io.ox/calendar/month/style',
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, api, folderAPI, util, chronosUtil, gt, settings) {
+], function (ext, api, folderAPI, util, gt, settings) {
 
     'use strict';
 
@@ -61,7 +60,7 @@ define('io.ox/calendar/month/view', [
                 cT = $('[data-cid="' + cid + '"]', this.pane);
             if (cT.hasClass('appointment') && !cT.hasClass('disabled')) {
                 var self = this,
-                    obj = chronosUtil.cid(String(cid));
+                    obj = util.cid(String(cid));
 
                 if (!cT.hasClass('current') || _.device('smartphone')) {
                     self.trigger('showAppointment', e, obj);
@@ -111,7 +110,7 @@ define('io.ox/calendar/month/view', [
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
+            var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.addClass('hover');
@@ -120,7 +119,7 @@ define('io.ox/calendar/month/view', [
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            var cid = chronosUtil.cid(String($(e.currentTarget).data('cid'))),
+            var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.removeClass('hover');
@@ -239,7 +238,7 @@ define('io.ox/calendar/month/view', [
                     maxCount = 7;
 
                 // fix full-time values
-                if (chronosUtil.isAllday(model)) endMoment.subtract(1, 'millisecond');
+                if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
 
                 // reduce to dates inside the current week
                 startMoment = moment.max(startMoment, this.weekStart).clone();
@@ -327,7 +326,7 @@ define('io.ox/calendar/month/view', [
                                 oldEndDate: event.getMoment('endDate')
                             }, { silent: true });
                         }
-                        var format = chronosUtil.isAllday(event) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                        var format = util.isAllday(event) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                         event.set({
                             startDate: { value: start.format(format), tzid: event.get('startDate').tzid },
                             endDate: { value: end.format(format), tzid: event.get('endDate').tzid }

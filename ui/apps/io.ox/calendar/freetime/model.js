@@ -13,8 +13,8 @@
 
 define('io.ox/calendar/freetime/model', [
     'settings!io.ox/calendar',
-    'io.ox/calendar/chronos-model'
-], function (settings, chronosModel) {
+    'io.ox/calendar/model'
+], function (settings, models) {
 
     'use strict';
 
@@ -29,7 +29,7 @@ define('io.ox/calendar/freetime/model', [
                 onlyWorkingHours: settings.get('scheduling/onlyWorkingHours', true),
                 startHour: Math.max(parseInt(settings.get('startTime', 8), 10) - 1, 0),
                 endHour: Math.min(parseInt(settings.get('endTime', 18), 10), 24),
-                attendees: new chronosModel.AttendeeCollection(null, { resolveGroups: true }),
+                attendees: new models.AttendeeCollection(null, { resolveGroups: true }),
                 showFree: settings.get('scheduling/showFree', false),
                 showReserved: settings.get('scheduling/showReserved', true),
                 appointments: {}

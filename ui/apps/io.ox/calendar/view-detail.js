@@ -15,15 +15,14 @@ define('io.ox/calendar/view-detail', [
     'io.ox/core/extensions',
     'io.ox/calendar/common-extensions',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/tk/attachments',
     'io.ox/participants/chronos-detail',
     'gettext!io.ox/calendar',
-    'io.ox/calendar/chronos-model',
+    'io.ox/calendar/model',
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style'
-], function (ext, extensions, util, chronosUtil, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
+], function (ext, extensions, util, calAPI, attachments, ParticipantsView, gt, ChronosModel) {
 
     'use strict';
 
@@ -218,8 +217,8 @@ define('io.ox/calendar/view-detail', [
                 )
             );
 
-            if (calAPI.uploadInProgress(chronosUtil.cid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: chronosUtil.cid(baton.data) });
+            if (calAPI.uploadInProgress(util.cid(baton.data))) {
+                var progressview = new attachments.progressView({ cid: util.cid(baton.data) });
                 this.append(
                     $node.append(progressview.render().$el)
                 );
@@ -268,14 +267,14 @@ define('io.ox/calendar/view-detail', [
             }
             try {
                 var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
-                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(chronosUtil.cid(baton.data)));
+                node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
 
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
 
                 if (baton.data.recurrenceId && baton.data.id !== baton.data.seriesId) {
-                    calAPI.on('update:' + chronosUtil.cid({ folder: baton.data.folder, id: baton.data.seriesId }), { node: node }, showInfo);
+                    calAPI.on('update:' + util.cid({ folder: baton.data.folder, id: baton.data.seriesId }), { node: node }, showInfo);
                     node.one('remove', function () {
-                        calAPI.off('update:' + chronosUtil.cid({ folder: baton.data.folder, id: baton.data.seriesId }), showInfo);
+                        calAPI.off('update:' + util.cid({ folder: baton.data.folder, id: baton.data.seriesId }), showInfo);
                     });
                 }
                 return node;

@@ -101,7 +101,7 @@ define('io.ox/core/links', [
         e.preventDefault();
         var data = $(this).data();
         if (data.id) {
-            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/chronos-api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
+            ox.load(['io.ox/core/tk/dialogs', 'io.ox/calendar/api', 'io.ox/calendar/view-detail']).done(function (dialogs, api, view) {
                 // chrome uses a shadowdom, this prevents the sidepopup from finding the correct parent to attach.
                 var sidepopup = new dialogs.SidePopup({ arrow: !_.device('chrome'), tabTrap: true });
                 if (_.device('chrome')) {

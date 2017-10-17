@@ -15,13 +15,12 @@ define('io.ox/calendar/freetime/timeView', [
     'io.ox/backbone/disposable',
     'io.ox/core/extensions',
     'gettext!io.ox/calendar',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/backbone/mini-views/dropdown',
     'settings!io.ox/calendar',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'io.ox/backbone/views/datepicker'
-], function (DisposableView, ext, gt, api, Dropdown, settings, util, chronosUtil, DatePicker) {
+], function (DisposableView, ext, gt, api, Dropdown, settings, util, DatePicker) {
 
     'use strict';
 
@@ -265,7 +264,7 @@ define('io.ox/calendar/freetime/timeView', [
                     if (100 - left - right === 0) {
                         return;
                     }
-                    appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.transp]] + index + (chronosUtil.isAllday(appointment) ? 0 : 2000));
+                    appointmentNode.css('z-index', 1 + zIndexbase[availabilityClasses[appointment.transp]] + index + (util.isAllday(appointment) ? 0 : 2000));
 
                     if (appointment.summary) {
                         appointmentNode.addClass(100 - right - left < baton.view.grid * 4 ? 'under-one-hour' : '').append(

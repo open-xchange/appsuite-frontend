@@ -12,12 +12,11 @@
  */
 
 define('io.ox/calendar/week/print', [
-    'io.ox/calendar/chronos-api',
-    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/api',
     'io.ox/calendar/util',
     'io.ox/core/print',
     'settings!io.ox/calendar'
-], function (api, chronosUtil, util, print, settings) {
+], function (api, util, print, settings) {
 
     'use strict';
 
@@ -37,7 +36,7 @@ define('io.ox/calendar/week/print', [
     }
 
     function sortBy(event) {
-        return chronosUtil.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
+        return util.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
     }
 
     function getIntersection(event, list) {
@@ -55,7 +54,7 @@ define('io.ox/calendar/week/print', [
     function getMap(dayStart, minHour, maxHour) {
         return function (event, index, list) {
             var parts = [],
-                isAllday = chronosUtil.isAllday(event),
+                isAllday = util.isAllday(event),
                 intersection = getIntersection(event, list),
                 startDate = moment.max(getMoment(event, 'startDate'), dayStart),
                 endDate = getMoment(event, 'endDate'),

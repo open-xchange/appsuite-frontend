@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/month/perspective', [
     'io.ox/calendar/month/view',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/extensions',
     'io.ox/core/http',
     'io.ox/core/tk/dialogs',
@@ -23,10 +23,9 @@ define('io.ox/calendar/month/perspective', [
     'io.ox/core/print',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
-    'io.ox/calendar/chronos-model',
+    'io.ox/calendar/model',
     'gettext!io.ox/calendar'
-], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosUtil, chronosModel, gt) {
+], function (View, api, ext, http, dialogs, notifications, detailView, conflictView, print, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
@@ -138,7 +137,7 @@ define('io.ox/calendar/month/perspective', [
                                     // calculate new dates if old dates are available
                                     var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                         endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
-                                        format = chronosUtil.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                        format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                                     masterModel.set({
                                         startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
@@ -324,7 +323,7 @@ define('io.ox/calendar/month/perspective', [
                 $('.appointment', this.pane).each(function () {
                     var $elem = $(this),
                         cid = $elem.data('cid'),
-                        folder = chronosUtil.cid(cid).folder,
+                        folder = util.cid(cid).folder,
                         model = api.pool.get(folder).get(cid),
                         folderModel = folderAPI.pool.models[folder];
                     if (!model || !folderModel) return;

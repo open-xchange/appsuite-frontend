@@ -6,265 +6,262 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
+ *
  */
+
 define('io.ox/calendar/model', [
-    'io.ox/calendar/chronos-api',
     'io.ox/core/extensions',
-    'io.ox/backbone/extendedModel',
-    'gettext!io.ox/calendar',
-    'io.ox/backbone/validation',
+    'io.ox/calendar/util',
     'io.ox/core/folder/api',
-    'io.ox/core/strings',
-    'settings!io.ox/calendar',
-    'settings!io.ox/core'
-], function (api, ext, extendedModel, gt, Validators, folderAPI, strings, settings, coreSettings) {
+    'gettext!io.ox/calendar',
+    'io.ox/backbone/basicModel',
+    'io.ox/backbone/validation',
+    'io.ox/core/strings'
+], function (ext, util, folderAPI, gt, BasicModel, Validators, strings) {
 
     'use strict';
 
-    var RECURRENCE_FIELDS = 'recurrence_type interval days day_in_month month until occurrences'.split(' ');
-
-    var model = extendedModel.extend({
-
-        idAttribute: 'id',
-        ref: 'io.ox/calendar/model/',
-        api: api,
-        defaults: {
-            recurrence_type: 0,
-            notification: true,
-            shown_as: 1,
-            timezone: coreSettings.get('timezone'),
-            endTimezone: coreSettings.get('timezone')
-        },
-
-        init: function () {
-
-            var m = moment().startOf('hour').add(1, 'hours'),
-                defStart = m.valueOf(),
-                defEnd = m.add(1, 'hours').valueOf();
-
-            // set default time
-            this.attributes = _.extend({
-                startDate: defStart,
-                endDate: defEnd
-            }, this.attributes);
-
-            // End date automatically shifts with start date
-            var length = this.get('endDate') - this.get('startDate');
-
-            // internal storage for last timestamps
-            this.cache = {
-                start: this.get('allDay') ? defStart : this.get('startDate'),
-                end: this.get('allDay') ? defEnd : this.get('endDate')
-            };
-
-            // overwrites model.cid with our _.cid
-            this.cid = this.attributes.cid = _.cid(this.attributes);
-
-            // bind events
-            this.on({
-
-                'create:fail update:fail': function (response) {
-                    if (response.conflicts) {
-                        this.trigger('conflicts', response.conflicts);
-                    }
-                },
-
-                'change:startDate': function (model, startDate) {
-                    if (length < 0) return;
-                    if (startDate && _.isNumber(length)) {
-                        model.set('endDate', startDate + length, { validate: true });
-                    }
-                },
-
-                // 'change:endDate': function (model, endDate) { },
-                //
-                // We DO NOT anything else if the length gets negative
-                //
-                // Actually you have three major optons
-                // 1. shift the startDate to keep the current length
-                // 2. shift the startDate for example 1 hour before the new end date (OX6)
-                // 3. do nothing so that the user recognizes that the start date has also changed
-                //
-                // We could show a hint right away but this is here is still rocket science
-                // and triggering a simple validation seems impossible.
-                // Therefore TODO: completely rewrite this whole model-validaten-magic!
-
-                'change:allDay': function (model, fulltime) {
-                    // handle shown as
-                    if (settings.get('markFulltimeAppointmentsAsFree', false)) {
-                        model.set('shown_as', fulltime ? 4 : 1, { validate: true });
-                    }
-
-                    var startDate, endDate;
-
-                    if (fulltime === true) {
-                        // save to cache, convert to UTC and save
-                        startDate = moment(this.cache.start = model.get('startDate')).startOf('day').utc(true).valueOf();
-                        endDate = moment(this.cache.end = model.get('endDate')).startOf('day').add(1, 'day').utc(true).valueOf();
+    var // be careful with the add method. If the option resolveGroups is present it changes from synchronous to asynchronous (must get the proper user data first)
+        AttendeeCollection = Backbone.Collection.extend({
+            // if an email is present distinguisch the attendees by email address (provides support for attendee with multiple mail addresses).
+            // Some attendee types don't have an email address (groups and resources), but have entity numbers. Use those as id to prevent duplicates
+            modelId: function (attrs) {
+                return attrs.email || attrs.entity;
+            },
+            initialize: function (models, options) {
+                this.options = options || {};
+                if (this.options.resolveGroups) {
+                    this.oldAdd = this.add;
+                    this.add = this.addAsync;
+                }
+            },
+            // special add function that allows resolving of groups
+            // is used when option resolveGroups is active (used by scheduling view)
+            addAsync: function (models, options) {
+                var usersToResolve  = [],
+                    modelsToAdd = [],
+                    self = this,
+                    def = $.Deferred();
+                models = [].concat(models);
+                _(models).each(function (model) {
+                    if (model.cuType === 'GROUP' || (model.get && model.get('cuType') === 'GROUP')) {
+                        usersToResolve = _.uniq(usersToResolve.concat(model instanceof Backbone.Model ? model.get('members') : model.members));
                     } else {
-                        var oldStart = moment(this.cache.start),
-                            oldEnd = moment(this.cache.end);
-
-                        // save to cache
-                        this.cache.start = moment.utc(model.get('startDate')).local(true).valueOf();
-                        this.cache.end = moment.utc(model.get('endDate')).local(true).valueOf();
-
-                        // handle time
-                        startDate = moment(this.cache.start).startOf('day').hours(oldStart.hours()).minutes(oldStart.minutes()).valueOf();
-                        endDate = moment(this.cache.end).startOf('day').hours(oldEnd.hours()).minutes(oldEnd.minutes()).subtract(1, 'day').valueOf();
+                        modelsToAdd.push(model);
                     }
-                    // save
-                    length = endDate - startDate;
-                    model.set('startDate', startDate, { validate: true });
-                    model.set('endDate', endDate, { validate: true });
-                }
+                });
+                require(['io.ox/core/api/user'], function (userAPI) {
+                    userAPI.getList(usersToResolve).done(function (users) {
+                        modelsToAdd = _.uniq(_.union(modelsToAdd, _(users).map(function (user) {
+                            return util.createAttendee(user);
+                        })));
+                        // no merge here or we would overwrite the confirm status
+                        def.resolve(self.oldAdd(modelsToAdd, options));
+                    }).fail(def.reject);
+                });
+
+                return def;
+            }
+        });
+
+    var RRuleMapModel = Backbone.Model.extend({
+
+        days: ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'],
+
+        initialize: function () {
+            this.model = this.get('model');
+            this.unset('model');
+            this.listenTo(this.model, 'change', this.deserialize);
+            this.deserialize();
+            this.on('change', _.debounce(this.serialize, 25));
+        },
+
+        serialize: function () {
+            var self = this,
+                args = [],
+                days = _(this.days).chain().map(function (day, index) {
+                    if ((self.get('days') & (1 << index)) !== 0) return day.toUpperCase();
+                }).compact().value().join(',');
+            switch (this.get('recurrence_type')) {
+                case 1:
+                    args.push('FREQ=DAILY');
+                    break;
+                case 2:
+                    args.push('FREQ=WEEKLY');
+                    args.push('BYDAY=' + days);
+                    break;
+                case 3:
+                    args.push('FREQ=MONTHLY');
+                    if (self.get('days')) {
+                        args.push('BYDAY=' + days);
+                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                    } else {
+                        args.push('BYMONTHDAY=' + this.get('day_in_month'));
+                    }
+                    break;
+                case 4:
+                    args.push('FREQ=YEARLY');
+                    if (self.get('days')) {
+                        args.push('BYMONTH=' + (this.get('month') + 1));
+                        args.push('BYDAY=' + days);
+                        args.push('BYSETPOS=' + this.get('day_in_month'));
+                    } else {
+                        args.push('BYMONTH=' + (this.get('month') + 1));
+                        args.push('BYMONTHDAY=' + this.get('day_in_month'));
+                    }
+                    break;
+                default:
+            }
+            if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
+            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format('YYYYMMDD[T]HHmmss[Z]'));
+            if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
+            if (args.length > 0) this.model.set('rrule', args.join(';'));
+            else this.model.unset('rrule');
+        },
+
+        deserialize: function () {
+            this.set('start_date', this.model.getTimestamp('startDate'));
+            if (!this.model.get('rrule')) return;
+            var self = this,
+                str = this.model.get('rrule'),
+                attributes = str.split(';'),
+                rrule = {};
+            _(attributes).each(function (attr) {
+                attr = attr.split('=');
+                var name = attr[0],
+                    value = attr[1].split(',');
+                if (value.length === 1) value = value[0];
+                rrule[name] = value;
+                rrule[name.toLowerCase()] = _.isArray(value) ? attr[1].toLowerCase().split(',') : value.toLowerCase();
             });
-        },
-
-        // special get function for datepicker
-        getDate: function (attr, options) {
-            var time = this.get.apply(this, arguments);
-            options = options || {};
-            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('allDay');
-            if (options.fulltime) {
-                time = moment.utc(time).local(true);
-                // fake end date for datepicker
-                if (attr === 'endDate') {
-                    time.subtract(1, 'day');
-                }
-                time = time.valueOf();
+            switch (rrule.freq) {
+                case 'daily':
+                    this.set('recurrence_type', 1);
+                    break;
+                case 'weekly':
+                    this.set('recurrence_type', 2);
+                    this.set('days', _([].concat(rrule.byday)).reduce(function (memo, day) {
+                        return memo + (1 << self.days.indexOf(day));
+                    }, 0));
+                    break;
+                case 'monthly':
+                    this.set('recurrence_type', 3);
+                    if (rrule.bymonthday) this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                    if (rrule.byday) {
+                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
+                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    }
+                    break;
+                case 'yearly':
+                    this.set('recurrence_type', 4);
+                    if (rrule.bymonthday) {
+                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
+                        this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                    }
+                    if (rrule.byday) {
+                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
+                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
+                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    }
+                    break;
+                default:
+                    this.set('recurrence_type', 0);
             }
-            return time;
-        },
+            if (rrule.count) this.set('occurrences', parseInt(rrule.count, 10) || 1);
+            if (rrule.UNTIL) this.set('until', moment(rrule.UNTIL).valueOf() || 0);
+            this.set('interval', parseInt(rrule.interval, 10) || 1);
+            this.set('startDate', this.model.getTimestamp('startDate'), 10);
+        }
 
-        // special set function for datepicker
-        setDate: function (attr, time, options) {
-            options = options || {};
-            // use this.get('fulltime') only as a backup, some datepickers have ignore fulltime enabled which would not be honored this way
-            options.fulltime = _.isBoolean(options.fulltime) ? options.fulltime : this.get('allDay');
-            if (options.fulltime) {
-                time = moment(time);
-                // fix fake end date for model
-                if (attr === 'endDate') {
-                    time.add(1, 'day');
-                }
-                arguments[1] = time.utc(true).valueOf();
+    });
+
+    var Model = BasicModel.extend({
+        idAttribute: 'cid',
+        ref: 'io.ox/chronos/model/',
+        init: function () {
+            // models in create view do not have an id yet. avoid undefined.undefined cids
+            if (this.attributes.folder && this.attributes.id) {
+                this.cid = this.attributes.cid = util.cid(this.attributes);
             }
-            return this.set.apply(this, arguments);
         },
-
-        getParticipants: function () {
-            if (this._participants) return this._participants;
+        getAttendees: function () {
+            if (this._attendees) return this._attendees;
             var self = this,
                 resetListUpdate = false,
-                changeParticipantsUpdate = false;
+                changeAttendeesUpdate = false;
 
-            this._participants = new Backbone.Collection(this.get('attendees'), { silent: false });
+            this._attendees = new AttendeeCollection(this.get('attendees'), { silent: false });
 
-            this._participants.on('add remove reset', function () {
-                if (changeParticipantsUpdate) return;
+            this._attendees.on('add remove reset', function () {
+                if (changeAttendeesUpdate) return;
                 resetListUpdate = true;
                 self.set('attendees', this.toJSON(), { validate: true });
                 resetListUpdate = false;
             });
 
-            this.on('change:attendees', function () {
-                if (resetListUpdate) return;
-                changeParticipantsUpdate = true;
-                self._participants.reset(self.get('attendees'));
-                changeParticipantsUpdate = false;
+            this.on({
+                'change:startDate': function () {
+                    var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
+                    prevStartDate = moment.tz(prevStartDate.value, prevStartDate.tzid || moment().tz());
+                    endDate = this.getMoment('startDate').add(endDate.diff(prevStartDate, 'ms'), 'ms');
+                    this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
+                },
+
+                'change:attendees': function () {
+                    if (resetListUpdate) return;
+                    changeAttendeesUpdate = true;
+                    self._attendees.reset(self.get('attendees'));
+                    changeAttendeesUpdate = false;
+                }
             });
-            return this._participants;
+            return this._attendees;
         },
 
         setDefaultParticipants: function (options) {
+            var self;
             return folderAPI.get(this.get('folder')).then(function (folder) {
                 if (!options.create) return;
                 var isPrivate = folderAPI.is('private', folder),
                     isShared = folderAPI.is('shared', folder);
-                // if public / shared folder owner (created_by) will be added by default
-                if (isPrivate) this.set('organizerId', ox.user_id);
-                // set participants first before participant collection is created (getParticipants())
-                this.set('participants', _(this.get('participants')).concat([{
-                    field: 'email1',
-                    // BossyAppointmentHandling
-                    id: isShared ? folder.created_by : ox.user_id,
-                    type: 1
-                }]));
-                // first call of getParticipants creates participant collection
-                this.getParticipants();
-            }.bind(this));
-        },
-
-        getUpdatedAttributes: function () {
-            var attributesToSave = this.changedSinceLoading();
-            attributesToSave.id = this.id;
-
-            if (this.mode === 'series') {
-                // fields for recurrences
-                var x = 0,
-                    fields = [
-                        'recurrence_date_position',
-                        'change_exceptions',
-                        'delete_exceptions',
-                        'recurrence_type',
-                        'days',
-                        'day_in_month',
-                        'month',
-                        'interval',
-                        'until',
-                        'occurrences'
-                    ];
-
-                // ensure theses fields will be send to backend to edit the whole series
-                for (; x < fields.length; x++) {
-                    attributesToSave[fields[x]] = this.get(fields[x]);
-                }
-            } else {
-                if (this.mode === 'appointment') {
-                    attributesToSave.recurrence_position = this.get('recurrence_position');
-                }
-
-                var anyRecurrenceFieldChanged = _(RECURRENCE_FIELDS).any(function (attribute) {
-                    return !_.isUndefined(attributesToSave[attribute]);
+                return require(['io.ox/core/api/user']).then(function (userAPI) {
+                    return userAPI.get({ id: isShared ? folder.created_by : undefined });
+                }).then(function (user) {
+                    if (isPrivate) {
+                        self.set('organizer', {
+                            cn: user.display_name,
+                            email: user.email1,
+                            uri: 'mailto:' + user.email1,
+                            entity: ox.user_id
+                        });
+                    }
+                    self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                 });
-
-                if (anyRecurrenceFieldChanged) {
-                    var self = this;
-                    _(RECURRENCE_FIELDS).each(function (attribute) {
-                        var value = self.get(attribute);
-                        if (!_.isUndefined(value)) {
-                            attributesToSave[attribute] = value;
-                        }
-                    });
-                }
-            }
-
-            if (this.get('recurrence_type') > 0) {
-                attributesToSave.startDate = this.get('startDate');
-                attributesToSave.endDate = this.get('endDate');
-            }
-
-            if (!attributesToSave.folder) {
-                attributesToSave.folder = this.get('folder');
-            }
-
-            if (this.get('ignoreConflicts')) {
-                attributesToSave.ignoreConflicts = this.get('ignoreConflicts');
-            }
-
-            return attributesToSave;
+            });
+        },
+        getMoment: function (name) {
+            if (!this.get(name)) return;
+            var date = this.get(name);
+            return moment.tz(date.value, date.tzid || moment().tz());
+        },
+        getTimestamp: function (name) {
+            if (!this.get(name)) return;
+            return this.getMoment(name).valueOf();
+        },
+        parse: function (res) {
+            return res;
+        },
+        getRruleMapModel: function () {
+            return new RRuleMapModel({ model: this });
         }
     });
 
-    ext.point('io.ox/calendar/model/validation').extend({
+    ext.point('io.ox/chronos/model/validation').extend({
         id: 'start-date-before-end-date',
-        validate: function (attributes) {
-            if (attributes.startDate && attributes.endDate && attributes.endDate < attributes.startDate) {
+        validate: function (attr, err, model) {
+            if (model.getTimestamp('endDate') < model.getTimestamp('startDate')) {
                 this.add('endDate', gt('The end date must be after the start date.'));
             }
         }
@@ -280,11 +277,23 @@ define('io.ox/calendar/model', [
         }
     });
 
-    Validators.validationFor('io.ox/calendar/model', {
-        title: { format: 'string', mandatory: true },
-        startDate: { format: 'date', mandatory: true },
-        endDate: { format: 'date', mandatory: true }
+    Validators.validationFor('io.ox/chronos/model', {
+        summary: { format: 'string', mandatory: true }
     });
 
-    return model;
+    var Collection = Backbone.Collection.extend({
+
+        model: Model,
+
+        comparator: function (model) {
+            return model.getTimestamp('startDate');
+        }
+
+    });
+
+    return {
+        Model: Model,
+        Collection: Collection,
+        AttendeeCollection: AttendeeCollection
+    };
 });

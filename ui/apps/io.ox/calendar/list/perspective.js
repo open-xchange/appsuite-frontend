@@ -12,17 +12,16 @@
  */
 
 define('io.ox/calendar/list/perspective', [
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/calendar/view-detail',
     'io.ox/core/commons',
     'io.ox/core/extensions',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
     'io.ox/core/extPatterns/actions',
     'io.ox/core/folder/api',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/list/style'
-], function (api, viewDetail, commons, ext, util, chronosUtil, actions, folderAPI, gt) {
+], function (api, viewDetail, commons, ext, util, actions, folderAPI, gt) {
 
     'use strict';
 
@@ -45,7 +44,7 @@ define('io.ox/calendar/list/perspective', [
                 $('.appointment', this.pane).each(function () {
                     var $this = $(this),
                         cid = $this.data('cid'),
-                        folder = chronosUtil.cid(cid).folder,
+                        folder = util.cid(cid).folder,
                         model = api.pool.get(folder).get(cid),
                         folderModel = folderAPI.pool.models[folder];
                     if (!model || !folderModel) return;
@@ -141,7 +140,7 @@ define('io.ox/calendar/list/perspective', [
                     self.drawMessageRight(gt('No appointment selected'));
                 },
                 'selection:one': function (list) {
-                    self.showAppointment(chronosUtil.cid(list[0]));
+                    self.showAppointment(util.cid(list[0]));
                 },
                 'selection:multiple': function (list) {
                     var count = $('<span class="number">').text(list.length).prop('outerHTML');
@@ -172,7 +171,7 @@ define('io.ox/calendar/list/perspective', [
 
             api.on('beforedelete', function (ids) {
                 var selection = app.listView.selection.get(),
-                    cids = _.map(ids, chronosUtil.cid);
+                    cids = _.map(ids, util.cid);
                 if (_.intersection(cids, selection).length) app.listView.selection.dodge();
             });
 
@@ -187,7 +186,7 @@ define('io.ox/calendar/list/perspective', [
 
             api.on('create', function (data) {
                 app.listView.collection.once('reload', function () {
-                    app.listView.selection.set([chronosUtil.cid(data)]);
+                    app.listView.selection.set([util.cid(data)]);
                 });
             });
 
@@ -196,7 +195,7 @@ define('io.ox/calendar/list/perspective', [
 
             // drag & drop support
             win.nodes.outer.on('selection:drop', function (e, baton) {
-                var list = _.map(baton.data, chronosUtil.cid);
+                var list = _.map(baton.data, util.cid);
                 api.getList(list).then(function (models) {
                     baton.data = _(models).map(api.reduce);
                     actions.invoke('io.ox/calendar/detail/actions/move', null, baton);

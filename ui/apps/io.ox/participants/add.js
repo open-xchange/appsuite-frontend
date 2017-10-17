@@ -19,7 +19,7 @@ define('io.ox/participants/add', [
     'io.ox/mail/util',
     'io.ox/contacts/util',
     'io.ox/core/util',
-    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/util',
     'io.ox/core/yell',
     'gettext!io.ox/core',
     'io.ox/core/capabilities',
@@ -27,7 +27,7 @@ define('io.ox/participants/add', [
     'io.ox/backbone/mini-views/addresspicker',
     // need jquery-ui for scrollParent
     'static/3rd.party/jquery-ui.min.js'
-], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, chronosUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
+], function (ext, pModel, pViews, Typeahead, util, contactsUtil, coreUtil, calendarUtil, yell, gt, capabilities, settingsContacts, AddressPickerView) {
 
     'use strict';
 
@@ -178,7 +178,7 @@ define('io.ox/participants/add', [
 
             if (this.options.convertToAttendee) {
                 list = _(list).chain().map(function (item) {
-                    return chronosUtil.createAttendee(item);
+                    return calendarUtil.createAttendee(item);
                 }).flatten().value();
             }
 

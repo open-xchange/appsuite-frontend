@@ -6,841 +6,745 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Richard Petersen <richard.petersen@open-xchange.com>
  *
  */
 
 define('io.ox/calendar/api', [
     'io.ox/core/http',
-    'io.ox/core/event',
-    'settings!io.ox/core',
-    'io.ox/core/notifications',
+    'io.ox/core/api/collection-pool',
+    'io.ox/core/api/collection-loader',
     'io.ox/core/folder/api',
-    'io.ox/core/api/factory',
+    'io.ox/calendar/util',
+    'io.ox/calendar/model',
     'io.ox/core/capabilities'
-], function (http, Events, coreSettings, notifications, folderAPI, factory, capabilities) {
+], function (http, Pool, CollectionLoader, folderApi, util, models, capabilities) {
 
     'use strict';
 
-    var api = {
-
-        // fluent caches
-        caches: {
-            freebusy: {},
-            all: {},
-            get: {},
-            // object to store appointments, that have attachments uploading atm
-            upload: {}
+    var isRecurrenceMaster = function (data) {
+            // do not add model to pool if it is a master model of a recurring event
+            if (data.rrule && !data.recurrenceId) return true;
+            return false;
         },
+        // updates pool based on writing operations response (create update delete etc)
+        processResponse = function (response) {
+            if (!response) return;
 
-        getInvitesSince: 0,
-
-        reduce: factory.reduce,
-
-        get: function (o, useCache) {
-
-            o = o || {};
-            useCache = useCache === undefined ? true : !!useCache;
-            var params = {
-                action: 'get',
-                id: o.id,
-                folder: o.folder || o.folder_id,
-                timezone: 'UTC'
-            };
-
-            if (o.recurrence_position !== null) {
-                params.recurrence_position = o.recurrence_position;
-            }
-
-            var key = (o.folder || o.folder_id) + '.' + o.id + '.' + (o.recurrence_position || 0);
-
-            if (api.caches.get[key] === undefined || !useCache) {
-                return http.GET({
-                    module: 'calendar',
-                    params: params
-                })
-                .done(function (data) {
-                    api.caches.get[key] = data;
-                }).fail(function (error) {
-                    api.trigger('error error:' + error.code, error);
-                    return error;
-                });
-            }
-            return $.Deferred().resolve(api.caches.get[key]);
-        },
-
-        getAll: function (o, useCache) {
-
-            o = $.extend({
-                start: _.now(),
-                end: moment().add(28, 'days').valueOf(),
-                order: 'asc'
-            }, o || {});
-            useCache = useCache === undefined ? true : !!useCache;
-            var folderId = o.folder !== undefined ? o.folder : o.folder_id,
-                key = folderId + '.' + o.start + '.' + o.end + '.' + o.order,
-                params = {
-                    action: 'all',
-                    // id, folder_id, last_modified, private_flag, color_label, recurrence_id, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
-                    // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
-                    columns: '1,20,5,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
-                    start: o.start,
-                    end: o.end,
-                    showPrivate: true,
-                    recurrence_master: false,
-                    sort: '201',
-                    order: o.order,
-                    timezone: 'UTC'
-                };
-
-            if (o.folder !== undefined) {
-                params.folder = o.folder;
-            }
-            if (api.caches.all[key] === undefined || !useCache) {
-                return http.GET({
-                    module: 'calendar',
-                    params: params
-                })
-                .done(function (data) {
-                    api.caches.all[key] = JSON.stringify(data);
-                }).fail(function (error) {
-                    api.trigger('error error:' + error.code, error);
-                    return error;
-                });
-            }
-            return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
-        },
-
-        getList: function (ids) {
-            return http.fixList(ids,
-                http.PUT({
-                    module: 'calendar',
-                    params: {
-                        action: 'list',
-                        timezone: 'UTC'
-                    },
-                    data: http.simplify(ids)
-                })
-            );
-        },
-
-        getUpdates: function (o) {
-            o = $.extend({
-                start: _.now(),
-                end: moment().add(28, 'days').valueOf(),
-                timestamp:  moment().subtract(2, 'days').valueOf(),
-                ignore: 'deleted',
-                recurrence_master: false
-            }, o || {});
-
-            var key = (o.folder || o.folder_id) + '.' + o.start + '.' + o.end,
-                params = {
-                    action: 'updates',
-                    // id, folder_id, private_flag, color_label, recurrence_id, recurrence_position, start_date,
-                    // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
-                    columns: '1,20,101,102,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222,216,220',
-                    start: o.start,
-                    end: o.end,
-                    showPrivate: true,
-                    recurrence_master: o.recurrence_master,
-                    timestamp: o.timestamp,
-                    ignore: o.ignore,
-                    sort: '201',
-                    order: 'asc',
-                    timezone: 'UTC'
-                };
-
-            if (o.folder !== 'all') {
-                params.folder = o.folder || coreSettings.get('folder/calendar');
-            }
-
-            // do not know if cache is a good idea
-            if (api.caches.all[key] === undefined) {
-                return http.GET({
-                    module: 'calendar',
-                    params: params
-                })
-                .done(function (data) {
-                    api.caches.all[key] = JSON.stringify(data);
-                });
-            }
-            return $.Deferred().resolve(JSON.parse(api.caches.all[key]));
-        },
-
-        search: function (query) {
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'search',
-                    sort: '201',
-                    // top-down makes more sense
-                    order: 'desc',
-                    timezone: 'UTC'
-                },
-                data: {
-                    pattern: query
-                }
+            _(response.created).each(function (event) {
+                if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
+                api.trigger('create', event);
+                api.trigger('create:' + util.cid(event), event);
             });
-        },
 
-        needsRefresh: function (folder) {
-            // has entries in 'all' cache for specific folder
-            return api.caches.all[folder] !== undefined;
-        },
-
-        /**
-         * update appointment
-         * @param  {object} o (id, folder and changed attributes/values)
-         * @fires  api#update (data)
-         * @fires  api#update: + cid
-         * @return { deferred} returns current appointment object
-         */
-        update: function (o) {
-            var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0),
-                attachmentHandlingNeeded = o.tempAttachmentIndicator;
-
-            delete o.cid;
-            delete o.tempAttachmentIndicator;
-
-            if (_.isEmpty(o)) return $.when();
-
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'update',
-                    id: o.id,
-                    folder: folder_id,
-                    timestamp: o.last_modified || o.timestamp || _.then(),
-                    timezone: 'UTC'
-                },
-                data: o,
-                appendColumns: false
-            })
-            .then(function (obj) {
-                // check for conflicts
-                if (!_.isUndefined(obj.conflicts)) {
-                    return $.Deferred().reject(obj);
-                }
-
-                checkForNotification(o);
-
-                var getObj = {
-                    id: obj.id || o.id,
-                    folder: folder_id
-                };
-
-                if (o.recurrence_position && o.recurrence_position !== null && obj.id === o.id) {
-                    getObj.recurrence_position = o.recurrence_position;
-                }
-
-                // clear caches
-                api.caches.all = {};
-                delete api.caches.get[key];
-                // if master, delete all appointments from cache
-                if (o.recurrence_type > 0 && !o.recurrence_position) {
-                    var deleteKey = folder_id + '.' + o.id;
-                    for (var i in api.caches.get) {
-                        if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
-                    }
-                }
-
-                return api.get(getObj)
-                    .then(function (data) {
-                        if (attachmentHandlingNeeded) {
-                            //to make the detailview show the busy animation
-                            api.addToUploadList(_.ecid(data));
-                        }
-                        api.trigger('update', data);
-                        api.trigger('update:' + _.ecid(o), data);
-                        return data;
+            _(response.deleted).each(function (event) {
+                // if there is a recurrence rule but no recurrenceId this means the whole series was deleted (recurrence master has no recurrenceId)
+                if (isRecurrenceMaster(event)) {
+                    var events = api.pool.findRecurrenceModels(event);
+                    events.forEach(function (evt) {
+                        evt.collection.remove(evt);
+                        api.trigger('delete', evt.attributes);
+                        api.trigger('delete:' + util.cid(evt), evt.attributes);
                     });
-            }, function (error) {
-                api.caches.all = {};
-                api.trigger('delete', o);
-                throw error;
-            });
-        },
-
-        /**
-         * used to cleanup Cache and trigger refresh after attachmentHandling
-         * @param  {object} o (appointment object)
-         * @fires  api#update (data)
-         * @return { deferred }
-         */
-        attachmentCallback: function (o) {
-            var doCallback = api.uploadInProgress(_.ecid(o)),
-                folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.recurrence_position || 0);
-
-            // clear caches
-            if (doCallback) {
-                // clear caches
-                api.caches.all = {};
-                delete api.caches.get[key];
-                // if master, delete all appointments from cache
-                if (o.recurrence_type > 0 && !o.recurrence_position) {
-                    var deleteKey = folder_id + '.' + o.id;
-                    for (var i in api.caches.get) {
-                        if (i.indexOf(deleteKey) === 0) delete api.caches.get[i];
-                    }
-                }
-            }
-
-            return api.get(o, !doCallback)
-                .then(function (data) {
-                    api.trigger('update', data);
-                    api.trigger('update:' + _.ecid(o), data);
-                    //to make the detailview remove the busy animation
-                    api.removeFromUploadList(_.ecid(data));
-                    return data;
-                });
-        },
-
-        /**
-         * create appointment
-         * @param  {object} o
-         * @fires  api#create (data)
-         * @fires  api#update: + cid
-         * @return { deferred} returns appointment
-         */
-        create: function (o) {
-            var attachmentHandlingNeeded = o.tempAttachmentIndicator;
-            delete o.cid;
-            delete o.tempAttachmentIndicator;
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: 'new',
-                    timezone: 'UTC'
-                },
-                data: o,
-                appendColumns: false
-            })
-            .then(function (obj) {
-                // update foldermodel so total attribute is correct (export option uses this)
-                folderAPI.reload(o);
-                if (!_.isUndefined(obj.conflicts)) {
-                    return $.Deferred().reject(obj);
-                }
-
-                checkForNotification(o);
-
-                var getObj = {
-                    id: obj.id,
-                    folder: o.folder_id
-                };
-                api.caches.all = {};
-
-                if (o.recurrence_position && o.recurrence_position !== null) {
-                    getObj.recurrence_position = o.recurrence_position;
-                }
-
-                return api.get(getObj)
-                    .then(function (data) {
-                        if (attachmentHandlingNeeded) {
-                            //to make the detailview show the busy animation
-                            api.addToUploadList(_.ecid(data));
-                        }
-                        api.trigger('create', data);
-                        api.trigger('update:' + _.ecid(data), data);
-                        return data;
-                    });
-            });
-        },
-
-        // appointment on the server
-        remove: function (o) {
-            var keys = [],
-                folders = [];
-
-            o = _.isArray(o) ? o : [o];
-
-            // pause http layer
-            http.pause();
-
-            api.trigger('beforedelete', o);
-
-            _(o).each(function (obj) {
-                keys.push((obj.folder_id || obj.folder) + '.' + obj.id + '.' + (obj.recurrence_position || 0));
-                return http.PUT({
-                    module: 'calendar',
-                    params: {
-                        action: 'delete',
-                        timestamp: _.then()
-                    },
-                    data: obj,
-                    appendColumns: false
-                })
-                .done(function () {
-                    // gather folders to refresh
-                    folders.push(String(obj.folder_id || obj.folder));
-                    api.caches.all = {};
-                    _(keys).each(function (key) {
-                        delete api.caches.get[key];
-                    });
-                    api.trigger('delete', obj);
-                    api.trigger('delete:' + _.ecid(obj), obj);
-                    //remove Reminders in Notification Area
-                    checkForNotification(obj, true);
-                }).fail(function () {
-                    api.caches.all = {};
-                    api.trigger('delete');
-                });
-            });
-
-            return http.resume().then(function () {
-                folderAPI.reload(folders);
-                api.trigger('refresh.all');
-            });
-        },
-
-        /**
-         * move appointments to a folder
-         * @param  {array} list
-         * @param  {string} targetFolderId
-         * @return { deferred }
-         */
-        move: function (list, targetFolderId) {
-            return copymove(list, 'update', targetFolderId);
-        },
-
-        /**
-         * copy appointments to a folder
-         * @param  {array} list
-         * @param  {string} targetFolderId
-         * @return { deferred }
-         */
-        copy: function (list, targetFolderId) {
-            return copymove(list, 'copy', targetFolderId);
-        },
-
-        //shouldn't be needed anymore
-        /**
-         * check if you have appointments confirmed that conflict with the given appointment and returns them
-         * @param  {object} appointment
-         * @return {deferred}
-         */
-        /*checkConflicts: function (appointment) {
-
-            // no conflicts for free appointments
-            if (appointment.shown_as === 4) {
-                return $.Deferred().resolve([]);
-            }
-            var data = appointment,
-                //conflicts with appointments in the past are of no interest
-                start = Math.max(_.now(), appointment.start_date);
-
-            return http.GET({
-                module: 'calendar',
-                params: {
-                    action: 'all',
-                    // id, created_by, folder_id, private_flag, title, start_date, end_date, recurrence_position, users, location, shown_as
-                    columns: '1,2,20,101,200,201,202,207,221,400,402',
-                    start: start,
-                    end: appointment.end_date,
-                    showPrivate: true,
-                    recurrence_master: false,
-                    sort: '201',
-                    order: 'asc',
-                    timezone: 'UTC'
-                }
-            })
-            .then(function (items) {
-
-                var conflicts = [],
-                    //maximum number of conflicts to return (to reduce calculations and prevent cases with really high numbers of appointments)
-                    max = 50;
-
-                for (var i = 0; i < items.length && conflicts.length < max; i++) {
-                    if (items[i].id !== data.id) {
-                        //no conflict with itself
-                        if (items[i].shown_as !== 4) {
-                            //4 = free
-                            var found = false;
-                            for (var a = 0; a < items[i].users.length && !found; a++) {
-                                if (items[i].users[a].id === ox.user_id && (items[i].users[a].confirmation === 1 || items[i].users[a].confirmation === 3)) {
-                                    //confirmed or tentative
-                                    conflicts.push(items[i]);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                return conflicts;
-            });
-        },*/
-
-        /**
-         * change confirmation status
-         * @param  {object} o (properties: id, folder, data, occurrence)
-         * @fires  api#mark:invite:confirmed (o)
-         * @fires  api#update (data)
-         * @fires  api#update: + cid
-         * @return { deferred }
-         */
-        confirm: function (o) {
-            var folder_id = o.folder_id || o.folder,
-                key = folder_id + '.' + o.id + '.' + (o.occurrence || 0),
-                alarm = -1,
-                params = {
-                    action: 'confirm',
-                    folder: folder_id,
-                    id: o.id,
-                    timestamp: _.then(),
-                    timezone: 'UTC'
-                };
-
-            // contains alarm?
-            if ('alarm' in o.data) {
-                alarm = o.data.alarm;
-                delete o.data.alarm;
-            }
-
-            // occurrence
-            if (o.occurrence) {
-                params.occurrence = o.occurrence;
-            }
-
-            return http.PUT({
-                module: 'calendar',
-                params: params,
-                data: o.data,
-                appendColumns: false
-            })
-            .then(function (resp, timestamp) {
-                if (alarm === -1) return;
-                return api.update({
-                    folder: o.folder,
-                    id: o.id,
-                    // ie gets conflict error so manual timestamp is needed here
-                    timestamp: timestamp,
-                    alarm: alarm
-                });
-            })
-            .then(function () {
-                api.caches.get = {};
-                api.caches.all = {};
-                // redraw detailview to be responsive and remove invites
-                api.trigger('mark:invite:confirmed', o);
-                delete api.caches.get[key];
-                return api.get(o);
-            })
-            .then(function (data) {
-                // fix confirmation data
-                // this is necessary when changing the confirmation for a single appointment
-                // within a series as it becomes an exception.
-                // the series does not update, however (see bug 40137)
-                // careful here when confirming in a shared calendar the user confirms on behalf of the calendar owner (o.data.id !== ox.user_id) see (Bug 55075)
-                var user = _(data.users).findWhere({ id: o.data.id || ox.user_id });
-                if (user) _.extend(user, _(o.data).pick('confirmation', 'confirmmessage'));
-                // events
-                api.trigger('update', data);
-                api.trigger('update:' + _.ecid(data), data);
-                return data;
-            });
-        },
-
-        /**
-         * removes recurrence information
-         * @param  {object} obj (appointment object)
-         * @return { object} reduced copy of appointment object
-         */
-        removeRecurrenceInformation: function (obj) {
-            var recAttr = ['change_exceptions', 'delete_exceptions', 'days', 'day_in_month', 'month', 'interval', 'until', 'occurrences'],
-                ret = _.clone(obj);
-            for (var i = 0; i < recAttr.length; i++) {
-                if (ret[recAttr[i]]) {
-                    delete ret[recAttr[i]];
-                }
-            }
-            ret.recurrence_type = 0;
-            return ret;
-        },
-
-        /**
-         * get invites
-         * @fires  api#new-invites (invites)
-         * @return { deferred} returns sorted array of appointments
-         */
-        getInvites: function () {
-
-            var now = _.now(),
-                start = moment(now).subtract(2, 'hours').valueOf(),
-                end = moment(now).add(2, 'years').valueOf();
-
-            return this.getUpdates({
-                folder: 'all',
-                start: start,
-                end: end,
-                timestamp: api.getInvitesSince || moment().subtract(5, 'years').valueOf(),
-                recurrence_master: true
-            })
-            .then(function (list) {
-                // sort by start_date & look for unconfirmed appointments
-                // exclude appointments that already ended
-                var invites = _.chain(list)
-                    .filter(function (item) {
-
-                        var isOver = item.end_date < now,
-                            isRecurring = !!item.recurrence_type;
-
-                        if (!isRecurring && isOver) {
-                            return false;
-                        }
-
-                        return _(item.users).any(function (user) {
-                            return user.id === ox.user_id && user.confirmation === 0;
-                        });
-                    })
-                    .sortBy('start_date')
-                    .value();
-                // even if empty array is given it needs to be triggered to remove
-                // notifications that does not exist anymore (already handled in ox6 etc)
-                api.trigger('new-invites', invites);
-                return invites;
-            });
-        },
-
-        /**
-         * get participants appointments
-         * @param  {array} list  (participants)
-         * @param  {object} options
-         * @param  {boolean} useCache [optional]
-         * @return { deferred} returns a nested array with participants and their appointments
-         */
-        freebusy: function (list, options, useCache) {
-            list = [].concat(list);
-            useCache = useCache === undefined ? true : !!useCache;
-
-            if (list.length === 0) {
-                return $.Deferred().resolve([]);
-            }
-
-            options = _.extend({
-                start: _.now(),
-                end: moment().add(1, 'day').valueOf()
-            }, options);
-
-            var result = [], requests = [];
-
-            _(list).each(function (obj) {
-                // freebusy only supports internal users and resources
-                if (obj.type === 1 || obj.type === 3) {
-                    var key = [obj.type, obj.id, options.start, options.end].join('-');
-                    // in cache?
-                    if (key in api.caches.freebusy && useCache) {
-                        result.push(api.caches.freebusy[key]);
-                    } else {
-                        result.push(key);
-                        requests.push({
-                            module: 'calendar',
-                            action: 'freebusy',
-                            id: obj.id,
-                            type: obj.type,
-                            start: options.start,
-                            end: options.end,
-                            timezone: 'UTC',
-                            sort: 201,
-                            order: 'asc'
-                        });
-                    }
                 } else {
-                    result.push({ data: [] });
+                    var model = api.pool.getModel(util.cid(event));
+                    model.collection.remove(model);
+                    api.trigger('delete', event);
+                    api.trigger('delete:' + util.cid(event), event);
                 }
             });
 
-            if (requests.length === 0) {
-                return $.Deferred().resolve(result);
-            }
+            _(response.updated).each(function (event) {
+                if (isRecurrenceMaster(event)) {
+                    var events = api.pool.findRecurrenceModels(event),
+                        updates = _(event).pick('attendees', 'alarms');
+                    events.forEach(function (evt) {
+                        evt.set(updates);
+                        api.trigger('update', evt.attributes);
+                        api.trigger('update:' + util.cid(evt), evt.attributes);
+                    });
+                } else {
+                    // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
+                    // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
+                    var model = api.pool.getModel(util.cid(event)),
+                        removeAttributes = _.difference(_(model.attributes).keys(), _(event).keys(), ['index', 'cid']);
+                    removeAttributes.forEach(function (attr) {
+                        event[attr] = undefined;
+                    });
+                    api.pool.propagateUpdate(event);
+                }
+                api.trigger('update', event);
+                api.trigger('update:' + util.cid(event), event);
+            });
 
-            return http.PUT({
-                module: 'multiple',
-                data: requests,
-                appendColumns: false,
-                'continue': true
-            })
-            .then(function (response) {
-                return _(result).map(function (obj) {
-                    if (_.isString(obj)) {
-                        // use fresh server data
-                        return (api.caches.freebusy[obj] = response.shift());
+            return response;
+        },
+        api = {
+            // convenience function
+            cid: util.cid,
+
+            getAll: function (opt) {
+                var params = _.extend({
+                    start: _.now(),
+                    end: _.now()
+                }, opt || {});
+
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'all',
+                        folder: params.folder,
+                        rangeStart: moment(params.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        rangeEnd: moment(params.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        order: 'asc',
+                        expand: true
                     }
-                    // use cached data
+                }).then(function (data) {
+                    return _(data).sortBy(function (event) {
+                        return moment.tz(event.startDate.value, event.startDate.tzid || moment().tz());
+                    });
+                });
+            },
+
+            get: function (obj, useCache) {
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                if (useCache !== false) {
+                    var model = api.pool.getModel(util.cid(obj));
+                    if (model) return $.when(model);
+                }
+                // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                if (obj.eventId) {
+                    obj.id = obj.eventId;
+                }
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'get',
+                        id: obj.id,
+                        recurrenceId: obj.recurrenceId,
+                        folder: obj.folder
+                    }
+                }).then(function (data) {
+                    if (isRecurrenceMaster(data)) return new models.Model(data);
+                    api.pool.propagateAdd(data);
+                    return api.pool.getModel(data);
+                });
+            },
+
+            getList: function (list, useCache) {
+
+                list = _(list).map(function (obj) {
+                    // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                    if (obj.eventId) {
+                        return { id: obj.eventId, folderId: obj.folder, folder: obj.folder, recurrenceId: obj.recurrenceId };
+                    }
                     return obj;
                 });
-            });
-        },
 
-        /**
-         * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
-         * @param  {string} key (task id)
-         * @return { boolean }
-         */
-        uploadInProgress: function (key) {
-            // return true boolean
-            return this.caches.upload[key] || false;
-        },
-
-        /**
-         * add appointment to the list
-         * @param {string} key (task id)
-         * @return { undefined }
-         */
-        addToUploadList: function (key) {
-            this.caches.upload[key] = true;
-        },
-
-        /**
-         * remove appointment from the list
-         * @param  {string} key (task id)
-         * @fires  api#update: + key
-         * @return { undefined }
-         */
-        removeFromUploadList: function (key) {
-            delete this.caches.upload[key];
-            //trigger refresh
-            api.trigger('update:' + key);
-        },
-
-        /**
-         * bind to global refresh; clears caches and trigger refresh.all
-         * @fires  api#refresh.all
-         * @return { promise }
-         */
-        refresh: function () {
-            // check capabilities
-            if (capabilities.has('calendar')) {
-                api.getInvites().done(function () {
-                    // clear caches
-                    api.caches.all = {};
-                    api.caches.get = {};
-                    // clear freebusy cache too
-                    if (capabilities.has('freebusy')) {
-                        api.caches.freebusy = {};
+                var def, reqList = list;
+                if (useCache !== false) {
+                    reqList = list.filter(function (obj) {
+                        return !api.pool.getModel(util.cid(obj));
+                    });
+                }
+                if (reqList.length > 0) {
+                    def = http.PUT({
+                        module: 'chronos',
+                        params: {
+                            action: 'list'
+                        },
+                        data: reqList
+                    });
+                } else {
+                    def = $.when();
+                }
+                return def.then(function (data) {
+                    if (data) {
+                        data.forEach(function (obj) {
+                            if (isRecurrenceMaster(obj)) return;
+                            api.pool.propagateAdd(obj);
+                        });
                     }
-                    // trigger local refresh
+                    return list.map(function (obj) {
+                        if (isRecurrenceMaster(obj)) return new models.Model(obj);
+                        var cid = util.cid(obj);
+                        return api.pool.getModel(cid);
+                    });
+                });
+            },
+
+            create: function (obj, options) {
+
+                options = options || {};
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
+                delete obj.tempAttachmentIndicator;
+
+                var params = {
+                    action: 'new',
+                    folder: obj.folder,
+                    // convert to true boolean
+                    ignoreConflicts: !!options.ignoreConflicts
+                };
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: obj
+                }).then(function (data) {
+                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
+                        //to make the detailview show the busy animation
+                        api.addToUploadList(util.cid(data.created[0]));
+                    }
+                    return data;
+                })
+                .then(processResponse)
+                .then(function (data) {
+                    api.getAlarms();
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
+
+                    if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return new models.Model(data);
+                    return api.pool.getModel(data.created[0]);
+                });
+            },
+
+            update: function (obj, options) {
+                options = options || {};
+
+                obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+
+                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
+                delete obj.tempAttachmentIndicator;
+
+                var params = {
+                    action: 'update',
+                    folder: obj.folder,
+                    id: obj.id,
+                    timestamp: obj.timestamp,
+                    // convert to true boolean
+                    ignoreConflicts: !!options.ignoreConflicts
+                };
+
+                if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
+
+                if (options.expand) {
+                    params.expand = true;
+                    params.rangeStart = options.rangeStart;
+                    params.rangeEnd = options.rangeEnd;
+                }
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: obj
+                }).then(function (data) {
+                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
+                        //to make the detailview show the busy animation
+                        api.addToUploadList(util.cid(data.updated[0]));
+                    }
+                    return data;
+                })
+                .then(processResponse)
+                .then(function (data) {
+
+                    api.getAlarms();
+                    // return conflicts or new model
+                    if (data.conflicts) {
+                        return data;
+                    }
+
+                    var updated = data.updated ? data.updated[0] : undefined;
+                    if (!updated) return api.pool.getModel(util.cid(obj));
+                    if (isRecurrenceMaster(updated)) return new models.Model(updated);
+                    return api.pool.getModel(updated);
+                });
+            },
+
+            //TODO see if that needs reworking after attachmenthandling is not done via attachment api
+
+            uploadCache: {},
+
+            /**
+             * used to cleanup Cache and trigger refresh after attachmentHandling
+             * @param  {object} o (appointment object)
+             * @fires  api#update (data)
+             * @return { deferred }
+             */
+            attachmentCallback: function (o) {
+                return api.get(o, !api.uploadInProgress(util.cid(o)))
+                    .then(function (data) {
+                        //to make the detailview remove the busy animation
+                        api.removeFromUploadList(util.cid(o));
+                        api.trigger('update', data.toJSON());
+                        api.trigger('update:' + util.cid(o), data.toJSON());
+                        return data;
+                    });
+            },
+
+            /**
+             * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
+             * @param  {string} key (task id)
+             * @return { boolean }
+             */
+            uploadInProgress: function (key) {
+                // return true boolean
+                return this.uploadCache[key] || false;
+            },
+
+            /**
+             * add appointment to the list
+             * @param {string} key (task id)
+             * @return { undefined }
+             */
+            addToUploadList: function (key) {
+                this.uploadCache[key] = true;
+            },
+
+            /**
+             * remove appointment from the list
+             * @param  {string} key (task id)
+             * @fires  api#update: + key
+             * @return { undefined }
+             */
+            removeFromUploadList: function (key) {
+                delete this.uploadCache[key];
+            },
+
+            remove: function (list) {
+                api.trigger('beforedelete', list);
+                list = _.isArray(list) ? list : [list];
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: {
+                        action: 'delete',
+                        timestamp: _.now()
+                    },
+                    data: _(list).map(function (obj) {
+                        obj = obj instanceof Backbone.Model ? obj.attributes : obj;
+                        return {
+                            id: obj.id,
+                            recurrenceId: obj.recurrenceId,
+                            folderId: obj.folder
+                        };
+                    })
+                })
+                .then(processResponse)
+                .then(function (data) {
+                    api.getAlarms();
+                    return data;
+                });
+            },
+
+            confirm: function (obj, options) {
+                options = options || {};
+                var params = {
+                        action: 'updateAttendee',
+                        id: obj.id,
+                        folder: obj.folder,
+                        ignoreConflicts: options.ignoreConflicts,
+                        timestamp: _.now()
+                    },
+                    data = {
+                        attendee: obj.attendee
+                    };
+
+                if (obj.recurrenceId) {
+                    params.recurrenceId = obj.recurrenceId;
+                }
+                if (obj.alarms) {
+                    data.alarms = obj.alarms;
+                }
+
+                return http.PUT({
+                    module: 'chronos',
+                    params: params,
+                    data: data
+                })
+                .then(processResponse)
+                .then(function (response) {
+                    if (!response.conflicts && response.updated && response.updated.length > 0) {
+                        // updates notification area for example
+                        // don't use api.pool.getModel as this returns undefined if the recurrence master was updated
+                        api.trigger('mark:invite:confirmed', response.updated[0]);
+                    }
+                    return response;
+                });
+            },
+
+            // returns events for a list of attendees, using the freebusy api
+            freebusyEvents: function (list, options) {
+                if (list.length === 0) {
+                    return $.Deferred().resolve([]);
+                }
+
+                options = _.extend({
+                    from: moment().startOf('day').format('YYYYMMDD[T]HHmmss[Z]'),
+                    until: moment().startOf('day').add(1, 'day').format('YYYYMMDD[T]HHmmss[Z]')
+                }, options);
+
+                return http.GET({
+                    module: 'chronos/freebusy',
+                    params: {
+                        action: 'events',
+                        from: options.from,
+                        until: options.until,
+                        attendees: list
+                    }
+                });
+            },
+
+            reduce: function (obj) {
+                obj = obj instanceof Backbone.Model ? obj : _(obj);
+                return obj.pick('id', 'folder', 'recurrenceId');
+            },
+
+            move: function (list, targetFolderId) {
+                list = [].concat(list);
+                var models = _(list).map(function (obj) {
+                    var cid = util.cid(obj),
+                        collection = api.pool.getCollectionsByModel(obj)[0],
+                        model = collection.get(cid);
+                    collection.remove(model);
+                    return model;
+                });
+
+                http.pause();
+                _(models).map(function (model) {
+                    return http.PUT({
+                        module: 'chronos',
+                        params: {
+                            action: 'move',
+                            id: model.get('id'),
+                            folder: model.get('folder'),
+                            targetFolder: targetFolderId,
+                            recurrenceId: model.get('recurrenceId'),
+                            timestamp: model.get('lastModified')
+                        }
+                    });
+                });
+                return http.resume().then(function (data) {
+                    var def = $.Deferred(),
+                        error = _(data).find(function (res) {
+                            return !!res.error;
+                        });
+                    if (error) {
+                        def.reject(error.error);
+                        // reset models
+                        _(models).each(function (model) {
+                            api.pool.propagateAdd(model.toJSON());
+                        });
+                    } else {
+                        def.resolve(data);
+                    }
+                    return def;
+                }).then(processResponse).done(function (list) {
+                    _(list).each(function (obj) {
+                        api.trigger('move:' + util.cid(obj), targetFolderId);
+                    });
                     api.trigger('refresh.all');
                 });
+            },
+
+            // store last time we checked for invites
+            getInvitesSince: 0,
+
+            getInvites: function () {
+                var now = moment().valueOf();
+
+                return http.GET({
+                    module: 'chronos',
+                    params: {
+                        action: 'updates',
+                        folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
+                        timestamp: api.getInvitesSince || moment().subtract(1, 'years').valueOf(),
+                        rangeStart: moment().subtract(2, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
+                        until: moment().add(2, 'years').format('YYYYMMDD[T]HHmmss[Z]')
+                    }
+                })
+                .then(function (data) {
+
+                    // exclude appointments that already ended
+                    // only use the next recurrence for recurring appointments
+                    var recurrences = {},
+                        invites = _(data.newAndModified)
+                        .filter(function (item) {
+
+                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid || moment().tz()).valueOf() < now,
+                                isRecurring = !!item.recurrenceId;
+
+                            if (isOver) {
+                                return false;
+                            }
+
+                            if (isRecurring) {
+                                // yes use _.ecid here not the util.cid function
+                                // this way we get the id of the recurrence master
+                                if (recurrences[_.ecid(item)]) {
+                                    return false;
+                                }
+                                recurrences[_.ecid(item)] = true;
+                            }
+                            return _(item.attendees).any(function (user) {
+                                return user.entity === ox.user_id && user.partStat === 'NEEDS-ACTION';
+                            });
+                        });
+                    api.getInvitesSince = now;
+                    // even if empty array is given it needs to be triggered to remove
+                    // notifications that does not exist anymore (already handled in ox6 etc)
+                    api.trigger('new-invites', { invitesToAdd: invites, invitesToRemove: data.deleted });
+                    return invites;
+                });
+            },
+
+            getAlarms: function () {
+                return http.GET({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'until',
+                        rangeEnd: moment.utc().add(10, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
+                        actions: 'DISPLAY,AUDIO'
+                    }
+                })
+                .then(function (data) {
+                    // add alarmId as id (makes it easier to use in backbone collections)
+                    data = _(data).map(function (obj) {
+                        obj.id = obj.alarmId;
+                        return obj;
+                    });
+
+                    api.trigger('resetChronosAlarms', data);
+                });
+            },
+
+            acknowledgeAlarm: function (obj) {
+                if (!obj) return $.Deferred().reject();
+                if (_(obj).isArray()) {
+                    http.pause();
+                    _(obj).each(function (alarm) {
+                        api.acknowledgeAlarm(alarm);
+                    });
+                    return http.resume();
+                }
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'ack',
+                        folder: obj.folder,
+                        id: obj.eventId,
+                        alarmId: obj.alarmId
+                    }
+                })
+                .then(processResponse);
+            },
+
+            remindMeAgain: function (obj) {
+                if (!obj) return $.Deferred().reject();
+
+                return http.PUT({
+                    module: 'chronos/alarm',
+                    params: {
+                        action: 'snooze',
+                        folder: obj.folder,
+                        id: obj.eventId,
+                        alarmId: obj.alarmId,
+                        snoozeTime: obj.time || 300000
+                    }
+                })
+                .then(processResponse);
+            },
+
+            refresh: function () {
+                // check capabilities
+                if (capabilities.has('calendar')) {
+                    api.getInvites();
+                    api.getAlarms();
+                    api.trigger('refresh.all');
+                }
+            },
+
+            removeRecurrenceInformation: function (model) {
+                var data = model instanceof Backbone.Model ? model.toJSON() : _(model).clone();
+                delete data.rrule;
+                delete data.recurrenceId;
+                delete data.seriesId;
+                if (model instanceof Backbone.Model) return new models.Model(data);
+                return data;
             }
-        }
-
-    };
-
-    Events.extend(api);
-
-    var copymove = function (list, action, targetFolderId) {
-        var folders = [String(targetFolderId)];
-        // allow single object and arrays
-        list = _.isArray(list) ? list : [list];
-        // pause http layer
-        http.pause();
-        // process all updates
-        _(list).map(function (o) {
-            folders.push(String(o.folder_id || o.folder));
-            return http.PUT({
-                module: 'calendar',
-                params: {
-                    action: action || 'update',
-                    id: o.id,
-                    folder: o.folder_id || o.folder,
-                    // mandatory for 'update'
-                    timestamp: o.last_modified || o.timestamp || _.then()
-                },
-                data: { folder_id: targetFolderId },
-                appendColumns: false
-            });
-        });
-        // resume & trigger refresh
-        return http.resume()
-            .then(function (result) {
-
-                folderAPI.reload(folders);
-                var def = $.Deferred();
-
-                _(result).each(function (item) {
-                    if (item.error) def.reject(item.error);
-                });
-
-                if (def.state() === 'rejected') return def;
-
-                return def.resolve();
-            })
-            .done(function () {
-                // clear cache and trigger local refresh
-                api.caches.all = {};
-                api.caches.get = {};
-                _(list).each(function (obj) {
-                    api.trigger('move:' + _.ecid(obj), targetFolderId);
-                });
-                api.trigger('refresh.all');
-            });
-    };
-
-    var checkForNotification = function (obj, removeAction) {
-        if (removeAction) {
-            api.trigger('delete:appointment', obj);
-        } else if (obj.alarm !== '-1' && obj.end_date > _.now()) {
-            //new appointments
-            require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                reminderAPI.getReminders();
-            });
-        } else if (obj.alarm || obj.end_date || obj.start_date) {
-            //if one of this has changed during update action
-            require(['io.ox/core/api/reminder'], function (reminderAPI) {
-                reminderAPI.getReminders();
-            });
-        }
-    };
-
-    // removes entries from the freebusy cache that belong to the current user
-    var cleanupFreeBusyCache = function () {
-        api.caches.freebusy = _(api.caches.freebusy).pick(function (value, key) {
-            //keys start with '1-', '3-' etc depending on type, so the id is at index 2
-            return key.indexOf(ox.user_id) !== 2;
-        });
-    };
-
-    // clear freebusy cache for current user
-    if (capabilities.has('freebusy')) {
-        api.on('create update delete', cleanupFreeBusyCache);
-    }
-
-    api.on('create update', function (e, obj) {
-        // has participants?
-        if (obj && _.isArray(obj.participants) && obj.participants.length > 0) {
-            // check for external participants
-            var hasExternalParticipants = _(obj.participants).some(function (participant) {
-                return participant.type === 5;
-            });
-            if (hasExternalParticipants) {
-                require(['io.ox/contacts/api'], function (contactsApi) {
-                    contactsApi.trigger('maybeNewContact');
-                });
-            }
-        }
-    });
-
-    folderAPI.on({
-        'before:remove before:move': function (data) {
-            if (data.module === 'calendar') {
-                //remove cache for "All my appointments"
-                var cleanedAllCache = _.omit(api.caches.all, function (value, key) {
-                    return key.split('.')[0] === '0';
-                });
-                api.caches.all = cleanedAllCache;
-            }
-
-        }
-    });
+        };
 
     ox.on('refresh^', function () {
         api.refresh();
     });
+
+    api.pool = Pool.create('chronos', {
+        Collection: models.Collection
+    });
+
+    api.pool.map = function (data) {
+        data.cid = util.cid(data);
+        return data;
+    };
+
+    api.pool.getCollectionsByCID = function (cid) {
+        var folder = util.cid(cid).folder,
+            collections = this.getByFolder(folder).filter(function (collection) {
+                return !!collection.get(cid);
+            });
+        if (collections.length === 0) return [this.get('detail')];
+        return collections;
+    };
+
+    function urlToHash(url) {
+        var hash = {},
+            s = url.split('&');
+        s.forEach(function (str) {
+            var t = str.split('=');
+            hash[t[0]] = t[1];
+        });
+        return hash;
+    }
+
+    _.extend(api.pool, {
+
+        getCollectionsByModel: function (data) {
+            var model = data instanceof Backbone.Model ? data : new models.Model(data),
+                collections = this.getByFolder(model.get('folder')).filter(function (collection) {
+                    var params = urlToHash(collection.cid),
+                        start = params.start,
+                        end = params.end;
+                    if (params.view === 'list') {
+                        start = moment().startOf('day').valueOf();
+                        end = moment().startOf('day').add((collection.offset || 0) + 1, 'month').valueOf();
+                    }
+                    if (model.getTimestamp('endDate') < start) return false;
+                    if (model.getTimestamp('startDate') > end) return false;
+                    return true;
+                });
+            if (collections.length === 0) return [this.get('detail')];
+            return collections;
+        },
+
+        propagateAdd: function (data) {
+            data.cid = util.cid(data);
+            var collections = api.pool.getCollectionsByModel(data);
+            collections.forEach(function (collection) {
+                api.pool.add(collection.cid, data);
+            });
+        },
+
+        propagateUpdate: function (data) {
+            var cid = _.cid(data),
+                model = this.getModel(cid);
+            if (!model || (_.isEqual(data.startDate, model.get('startDate'))
+                && _.isEqual(data.endDate, model.get('endDate')))) return this.propagateAdd(data);
+            var oldCollections = this.getCollectionsByModel(model),
+                newCollections = this.getCollectionsByModel(data);
+            // collections which formerly contained that model but won't contain it in the future
+            _.difference(oldCollections, newCollections).forEach(function (collection) {
+                collection.remove(cid);
+            });
+            newCollections.forEach(function (collection) {
+                api.pool.add(collection.cid, data);
+            });
+        },
+
+        getModel: function (data) {
+            var collections, cid;
+            if (_.isString(data)) {
+                cid = data;
+                collections = api.pool.getCollectionsByCID(cid);
+            } else {
+                cid = util.cid(data);
+                collections = api.pool.getCollectionsByCID(cid);
+            }
+            if (collections.length === 0) return;
+            return collections[0].get(cid);
+        },
+
+        findRecurrenceModels: function (event) {
+            event = event instanceof Backbone.Model ? event.attributes : event;
+            var cid = util.cid({ folder: event.folder, id: event.id }),
+                collections = api.pool.getByFolder(event.folder),
+                filterRecurrences = function (model) {
+                    return model.cid.indexOf(cid) === 0;
+                },
+                models = collections.map(function (collection) {
+                    return collection.filter(filterRecurrences);
+                });
+            return _(models)
+                .chain()
+                .flatten()
+                .uniq(function (model) {
+                    return model.cid;
+                })
+                .value();
+        }
+
+    });
+
+    api.collectionLoader = new CollectionLoader({
+        module: 'chronos',
+        // listview uses own pagination. just make sure, that the number of items is not cropped
+        PRIMARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+        SECONDARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+        PRIMARY_SEARCH_PAGE_SIZE: 100,
+        SECONDARY_SEARCH_PAGE_SIZE: 200,
+        paginateCompare: false,
+        getQueryParams: function (params) {
+            return params;
+        },
+        // do not add index to these models. position inside collection is sufficient due to special pagination
+        addIndex: $.noop,
+        httpGet: function (module, params) {
+            // special handling for requests of listview
+            if (params.view === 'list') {
+                var offset = this.collection.offset || 0, start, end;
+                if (params.paginate === true) {
+                    // paginate
+                    start = offset;
+                    end = offset + 1;
+                } else {
+                    // reload
+                    start = 0;
+                    end = offset || 1;
+                }
+                this.collection.offset = end;
+                params.start = moment().startOf('day').add(start, 'month').valueOf();
+                params.end = moment().startOf('day').add(end, 'month').valueOf();
+            }
+            return api.getAll(params).then(function (data) {
+                data.forEach(function (obj) {
+                    obj.cid = util.cid(obj);
+                });
+                return data;
+            });
+        },
+        fail: function (error) {
+            if (error && error.code !== 'APP-0013') {
+                require(['io.ox/core/notifications', 'gettext!io.ox/calendar'], function (notifications, gt) {
+                    notifications.yell('error', gt('An error occurred. Please try again.'));
+                });
+            }
+        }
+    });
+
+    _.extend(api, Backbone.Events);
 
     return api;
 });

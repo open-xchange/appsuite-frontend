@@ -13,13 +13,13 @@
  */
 
 define('io.ox/calendar/detail/main', [
-    'io.ox/calendar/chronos-api',
-    'io.ox/calendar/chronos-util',
+    'io.ox/calendar/api',
+    'io.ox/calendar/util',
     'io.ox/core/extensions',
     'io.ox/calendar/view-detail',
     'gettext!io.ox/calendar',
     'io.ox/core/notifications'
-], function (api, chronosUtil, ext, detailView, gt, notifications) {
+], function (api, util, ext, detailView, gt, notifications) {
 
     'use strict';
 
@@ -36,7 +36,7 @@ define('io.ox/calendar/detail/main', [
                             'aria-label': gt('Appointment Details')
                         }).append(detailView.draw(model)));
 
-                        api.once('delete:' + chronosUtil.cid(model.attributes), function () {
+                        api.once('delete:' + util.cid(model.attributes), function () {
                             app.quit();
                         });
                     },
@@ -102,7 +102,7 @@ define('io.ox/calendar/detail/main', [
             var cid = options.cid, obj;
             if (cid !== undefined) {
                 // called from calendar app
-                obj = chronosUtil.cid(cid);
+                obj = util.cid(cid);
                 app.setState({ folder: obj.folder, id: obj.id, recurrenceId: obj.recurrenceId || null });
                 app.showAppointment(obj);
                 return;

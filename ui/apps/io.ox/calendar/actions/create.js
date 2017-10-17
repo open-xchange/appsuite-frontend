@@ -23,9 +23,9 @@ define('io.ox/calendar/actions/create', [
     'use strict';
 
     function openEditDialog(params) {
-        ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/chronos-model']).done(function (edit, chronosModel) {
+        ox.load(['io.ox/calendar/edit/main', 'io.ox/calendar/model']).done(function (edit, models) {
             edit.getApp().launch().done(function () {
-                this.create(new chronosModel.Model(params));
+                this.create(new models.Model(params));
             });
         });
     }

@@ -13,7 +13,7 @@
 
 define('io.ox/calendar/week/perspective', [
     'io.ox/calendar/week/view',
-    'io.ox/calendar/chronos-api',
+    'io.ox/calendar/api',
     'io.ox/core/extensions',
     'io.ox/core/tk/dialogs',
     'io.ox/calendar/view-detail',
@@ -21,11 +21,10 @@ define('io.ox/calendar/week/perspective', [
     'io.ox/core/notifications',
     'io.ox/core/folder/api',
     'io.ox/calendar/util',
-    'io.ox/calendar/chronos-util',
-    'io.ox/calendar/chronos-model',
+    'io.ox/calendar/model',
     'gettext!io.ox/calendar',
     'less!io.ox/calendar/week/style'
-], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosUtil, chronosModel, gt) {
+], function (View, api, ext, dialogs, detailView, conflictView, notifications, folderAPI, util, chronosModel, gt) {
 
     'use strict';
 
@@ -162,7 +161,7 @@ define('io.ox/calendar/week/perspective', [
                                     // calculate new dates if old dates are available
                                     var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                         endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
-                                        format = chronosUtil.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
+                                        format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                                     masterModel.set({
                                         startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
@@ -281,7 +280,7 @@ define('io.ox/calendar/week/perspective', [
                 $('.appointment', this.pane).each(function () {
                     var $elem = $(this),
                         cid = $elem.data('cid'),
-                        folder = chronosUtil.cid(cid).folder,
+                        folder = util.cid(cid).folder,
                         model = api.pool.get(folder).get(cid),
                         folderModel = folderAPI.pool.models[folder];
                     if (!model || !folderModel) return;
@@ -408,7 +407,7 @@ define('io.ox/calendar/week/perspective', [
 
                     //marker to make the view open in the correct week
                     this.setNewStart = true;
-                    this.showAppointment(e, chronosUtil.cid(cid), { arrow: false });
+                    this.showAppointment(e, util.cid(cid), { arrow: false });
                 }
             }
         },
