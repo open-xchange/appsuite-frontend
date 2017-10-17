@@ -44,7 +44,8 @@ define('io.ox/calendar/actions/delete', [
             };
 
             var hasSeries = _(list).some(function (app) {
-                return !!(app.get ? app.get('recurrenceId') : app.recurrenceId);
+                app = app instanceof Backbone.Model ? app.attributes : app;
+                return app.recurrenceId && app.id === app.seriesId;
             });
             if (hasSeries) {
                 new dialogs.ModalDialog()

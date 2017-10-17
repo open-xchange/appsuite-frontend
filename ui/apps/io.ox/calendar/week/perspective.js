@@ -139,7 +139,7 @@ define('io.ox/calendar/week/perspective', [
                 return event;
             };
 
-            if (model.get('recurrenceId')) {
+            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 var dialog;
                 if (model.has('dragMove') && model.get('dragMove') !== 0) {
                     dialog = util.getRecurrenceChangeDialog();

@@ -218,7 +218,7 @@ define('io.ox/calendar/actions/acceptdeny', [
         }
 
         // series?
-        if (!options.taskmode && o.recurrenceId) {
+        if (!options.taskmode && o.recurrenceId && o.id === o.seriesId) {
             return new dialogs.ModalDialog()
                 .text(gt('Do you want to confirm the whole series or just one appointment within the series?'))
                 .addPrimaryButton('series',

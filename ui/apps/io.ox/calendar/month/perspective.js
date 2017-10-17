@@ -127,7 +127,7 @@ define('io.ox/calendar/month/perspective', [
                 return event;
             };
 
-            if (model.has('recurrenceId')) {
+            if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 util.getRecurrenceEditDialog()
                     .show()
                     .done(function (action) {

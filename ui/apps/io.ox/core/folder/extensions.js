@@ -927,6 +927,7 @@ define('io.ox/core/folder/extensions', [
         }
 
         function openSubSettings(e) {
+            // TODO make sure chronos module is used here
             var options = { id: 'io.ox/core/sub', data: e.data.folder, refresh: true };
             ox.launch('io.ox/settings/main', options).done(function () {
                 this.setSettingsPane(options);
