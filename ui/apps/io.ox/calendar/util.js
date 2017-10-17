@@ -1072,7 +1072,7 @@ define('io.ox/calendar/util', [
             };
 
             if (attendee.cuType !== 'RESOURCE') {
-                if (user.user_id && user.type !== 5) attendee.entity = user.user_id;
+                if ((user.user_id || user.contact_id) && user.type !== 5) attendee.entity = user.user_id || user.id;
                 attendee.email = user.field ? user[user.field] : (user.email1 || user.mail);
                 attendee.uri = 'mailto:' + attendee.email;
             } else {

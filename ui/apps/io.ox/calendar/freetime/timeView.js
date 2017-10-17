@@ -475,6 +475,14 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             return api.freebusyEvents(attendees.toString(), { from: from.format('YYYYMMDD[T]HHmmss[Z]'), until: until.format('YYYYMMDD[T]HHmmss[Z]') }).done(function (items) {
+                if (items.length === 0) {
+                    // remove busy animation again
+                    self.bodyNode.idle();
+                    require(['io.ox/core/yell'], function (yell) {
+                        yell('error', gt('Could not get appointment information'));
+                    });
+                    return;
+                }
                 if (addOnly === true) {
                     appointments = self.model.get('appointments');
                 }
