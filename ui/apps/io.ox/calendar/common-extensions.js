@@ -207,12 +207,12 @@ define('io.ox/calendar/common-extensions', [
                 $('<tr>').append(
                     $('<th>').text(gt('Created')),
                     $('<td class="created">').append(
-                        baton.data.creation_date ? [
+                        baton.data.created ? [
                             $('<span>').text(util.getDate(baton.data.created)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
                         baton.data.createdBy ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.createdBy),
+                            html: userAPI.getTextNode(baton.data.createdBy.entity),
                             user_id: baton.data.createdBy.entity
                         }, baton.data) : []
                     )
@@ -221,18 +221,18 @@ define('io.ox/calendar/common-extensions', [
         },
 
         modified: function (baton) {
-            if (!baton.data.last_modified && !baton.data.modified_by) return;
+            if (!baton.data.lastModified && !baton.data.modifiedBy) return;
             this.append(
                 $('<tr>').append(
                     $('<th>').text(gt('Modified')),
                     $('<td class="modified">').append(
-                        baton.data.last_modified ? [
-                            $('<span>').text(util.getDate(baton.data.last_modified)),
+                        baton.data.lastModified ? [
+                            $('<span>').text(util.getDate(baton.data.lastModified)),
                             $('<span>').text(' \u2013 ')
                         ] : [],
-                        baton.data.modified_by ? coreUtil.renderPersonalName({
-                            html: userAPI.getTextNode(baton.data.modified_by),
-                            user_id: baton.data.modified_by
+                        baton.data.modifiedBy ? coreUtil.renderPersonalName({
+                            html: userAPI.getTextNode(baton.data.modifiedBy.entity),
+                            user_id: baton.data.modifiedBy.entity
                         }, baton.data) : []
                     )
                 )

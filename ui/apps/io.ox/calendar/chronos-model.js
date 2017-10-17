@@ -268,7 +268,7 @@ define('io.ox/calendar/chronos-model', [
                 } else if (folderAPI.is('shared', folder)) {
                     // in a shared folder the owner (created_by) will be added by default
                     require(['io.ox/core/api/user'], function (userAPI) {
-                        userAPI.get(folder.created_by).done(function (user) {
+                        userAPI.get({ id: folder.created_by }).done(function (user) {
 
                             self.getAttendees().add(util.createAttendee(user, { partStat: 'ACCEPTED' }));
                             def.resolve();
