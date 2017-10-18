@@ -133,6 +133,7 @@ define('io.ox/contacts/settings/pane', [
             id: 'map-service',
             index: INDEX += 100,
             render: function () {
+                if (!settings.isConfigurable('mapService')) return;
                 this.$el.append(
                     util.fieldset(
                         gt('Link postal addresses with map service'),

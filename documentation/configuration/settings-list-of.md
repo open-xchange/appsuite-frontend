@@ -790,7 +790,7 @@ settings!io.ox/contacts
 > Start in global addressbook when Contacts App is launched (true/false)
 
 **mapService**
-> Which external map service should be included to generate the href for the contact address ('google' or 'apple'). Defaults to 'google', 'apple' only works on iOS and MacOS
+> Which external map service should be used by default to generate the href for the contact address ('google', 'osm' or 'apple'). Defaults to 'google'. 'osm' is Open Street Maps. 'apple' only works on iOS and MacOS
 
 ## Addressbook picker
 
