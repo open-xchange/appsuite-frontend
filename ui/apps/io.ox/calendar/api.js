@@ -482,7 +482,6 @@ define('io.ox/calendar/api', [
          * @return { deferred }
          */
         confirm: function (o) {
-
             var folder_id = o.folder_id || o.folder,
                 key = folder_id + '.' + o.id + '.' + (o.occurrence || 0),
                 alarm = -1,
