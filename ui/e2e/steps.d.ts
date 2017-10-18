@@ -97,8 +97,9 @@ declare namespace CodeceptJS {
     debugSection: (section, msg) => any;
     login: (params, options) => any;
     logout: () => any;
-    selectFolder: () => any;
-    setSetting: () => any;
+    selectFolder: (id) => any;
+    setSetting: (context, name, value) => any;
+    clickToolbar: (selector) => any;
     say: (msg) => any;
 
   }

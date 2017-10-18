@@ -12,8 +12,6 @@ class OpenxchangeHelper extends Helper {
             return browser.waitUntil(() => {
                 return wdio._locateClickable(selector).then(secondResult => {
                     if (!!firstResult && !!secondResult && firstResult.length === 1 && secondResult.length === 1 && firstResult[0].ELEMENT === secondResult[0].ELEMENT) return true;
-                    console.log('first result: ', firstResult);
-                    console.log('second result: ', secondResult);
                     firstResult = secondResult;
                     return false;
                 });
