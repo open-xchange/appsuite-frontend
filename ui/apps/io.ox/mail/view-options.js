@@ -72,7 +72,7 @@ define('io.ox/mail/view-options', [
                     if (criteria.after) filters.push(['>', { field: 'received_date' }, String(criteria.after)]);
                     if (criteria.before) filters.push(['<', { field: 'received_date' }, String(criteria.before)]);
 
-                    var folder = criteria.folder === 'all' ? 'default0/virtual/all' : baton.app.folder.get();
+                    var folder = criteria.folder === 'all' ? mailAPI.allMessagesFolder : baton.app.folder.get();
 
                     return {
                         action: 'search',
