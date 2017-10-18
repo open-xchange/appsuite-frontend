@@ -1,6 +1,4 @@
 
-'use strict';
-
 class WebDriverIOExtension extends Helper {
 
     waitForFocus(selector, timeout, interval) {

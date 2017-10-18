@@ -24,8 +24,7 @@ Scenario('compose new mail with signature above correctly placed and changed', f
     I.setSetting('io.ox/mail', 'defaultSignature', '0');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
 
-    I.wait(2);
-    I.click('Compose');
+    I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
     expect(yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([
@@ -67,8 +66,7 @@ Scenario('compose new mail with signature below correctly placed initially', fun
     I.setSetting('io.ox/mail', 'defaultSignature', '2');
     I.setSetting('io.ox/mail', 'messageFormat', 'html');
 
-    I.wait(2);
-    I.click('Compose');
+    I.clickToolbar('Compose');
     I.waitForVisible('.io-ox-mail-compose-window .editor .editable');
     I.wait(1);
     expect(yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *')).to.deep.equal([

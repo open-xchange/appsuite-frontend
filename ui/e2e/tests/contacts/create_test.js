@@ -7,8 +7,7 @@ Scenario('adds a contact with all fields', function (I) {
     I.waitForVisible('*[data-app-name="io.ox/contacts"]');
 
     I.selectFolder('Contacts');
-    I.wait(2);
-    I.click('New');
+    I.clickToolbar('New');
     I.click('Add contact');
     I.waitForVisible('.io-ox-contacts-edit-window');
 

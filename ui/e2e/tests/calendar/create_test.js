@@ -11,8 +11,7 @@ Scenario('Create appointment with all fields', function* (I) {
     I.setSetting('io.ox/core', 'showDesktopNotifications', false);
 
     I.selectFolder('All my appointments');
-    I.wait(2);
-    I.click('New');
+    I.clickToolbar('New');
     I.waitForVisible('.io-ox-calendar-edit-window');
 
     I.fillField('Subject', 'test title');
@@ -31,29 +30,28 @@ Scenario('Create appointment with all fields', function* (I) {
 
     // // check appointment in all views
     // // 1) day view
-    I.wait(2);
-    I.click('View');
+    I.clickToolbar('View');
     I.click('Day');
     I.waitForVisible('.week.dayview .appointment');
     expect(yield I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
     expect(yield I.grabTextFrom(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
     I.seeElement(`.week.dayview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
     // // 2) week view
-    I.click('View');
+    I.clickToolbar('View');
     I.click('Week');
     I.waitForVisible('.week.weekview .appointment');
     expect(yield I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
     expect(yield I.grabTextFrom(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
     I.seeElement(`.week.weekview .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
     // // 3) month view
-    I.click('View');
+    I.clickToolbar('View');
     I.click('Month');
     I.waitForVisible('.month-view .appointment');
     expect(yield I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .title`)).to.equal('test title');
     expect(yield I.grabTextFrom(`.month-view .appointment[data-cid="${newAppointmentCID}"] .location`)).to.equal('test location');
     I.seeElement(`.month-view .appointment[data-cid="${newAppointmentCID}"] .private-flag`);
     // // 4) list view
-    I.click('View');
+    I.clickToolbar('View');
     I.click('List');
     I.waitForVisible(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"]`);
     expect(yield I.grabTextFrom(`.calendar-list-view .vgrid-cell[data-obj-id^="${newAppointmentCID}"] .title`)).to.equal('test title');

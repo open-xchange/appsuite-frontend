@@ -32,6 +32,9 @@ module.exports.config = {
         }, localConf.e2e.helpers.WebDriverIO || {}),
         WebDriverIOExtension: {
             require: './e2e/helper/webdriverioextension_helper.js'
+        },
+        OpenXchange: {
+            require: './e2e/helper/openxchange_helper.js'
         }
     },
     'include': {
