@@ -738,8 +738,8 @@ define('io.ox/calendar/util', [
                     ret[c.status].count++;
                     ret.count++;
                 // don't count groups or ressources, ignore unknown states (the spec allows custom partstats)
-                } else if (ret[chronosStates.indexOf(c.partStat.toUpperCase())] && c.cuType === 'INDIVIDUAL') {
-                    ret[chronosStates.indexOf(c.partStat.toUpperCase())].count++;
+                } else if (ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())] && c.cuType === 'INDIVIDUAL') {
+                    ret[chronosStates.indexOf((c.partStat || 'NEEDS-ACTION').toUpperCase())].count++;
                     ret.count++;
                 }
             });
