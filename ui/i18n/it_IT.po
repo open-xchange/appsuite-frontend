@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: info@open-xchange.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-17 14:27+0200\n"
+"PO-Revision-Date: 2017-10-19 14:27+0200\n"
 "Last-Translator: Vincenzo Reale <vincenzo@bureau-cornavin.com>\n"
 "Language-Team: Italian <it@bureau-cornavin.com>\n"
 "Language: it_IT\n"
@@ -3185,6 +3185,10 @@ msgstr "Modalità non in linea"
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "La funzionalità dei cookie del tuo browser è disabilitata. Attivala."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr "Connessione scaduta. Prova a ricaricare la pagina."
+
 #. number of selected item
 #. %1$s is the number surrounded by a tag
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -3236,7 +3240,7 @@ msgstr "Chiudi le funzionalità premium"
 msgid "Try now!"
 msgstr "Prova subito!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
 msgid "Retry"
 msgstr "Ritenta"
 
@@ -4035,6 +4039,22 @@ msgstr "Disconnessione automatica"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Esci subito"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Sei sicuro?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -7008,7 +7028,8 @@ msgstr "Sincronizza con Outlook"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 #, c-format
@@ -7507,6 +7528,7 @@ msgid "Compose"
 msgstr "Componi"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Posta"
 
@@ -11473,9 +11495,6 @@ msgstr "Aggiungi su %s"
 #~ msgstr ""
 #~ "Sei sicuro di voler eliminare permanentemente tutti i messaggi di posta "
 #~ "da questa cartella? I messaggi eliminati non potranno essere recuperati."
-
-#~ msgid "Are you sure?"
-#~ msgstr "Sei sicuro?"
 
 #~ msgid "Argentina"
 #~ msgstr "Argentina"
