@@ -9,6 +9,8 @@ if (fs.existsSync('grunt/local.conf.json')) {
 localConf.e2e = localConf.e2e || {};
 localConf.e2e.helpers = localConf.e2e.helpers || {};
 
+global.Helper =
+
 module.exports.config = {
     'tests': './e2e/tests/**/*_test.js',
     'timeout': 10000,
@@ -30,15 +32,12 @@ module.exports.config = {
                 'acceptSslCerts': true
             }
         }, localConf.e2e.helpers.WebDriverIO || {}),
-        WebDriverIOExtension: {
-            require: './e2e/helper/webdriverioextension_helper.js'
-        },
         OpenXchange: {
-            require: './e2e/helper/openxchange_helper.js'
+            require: './node_modules/@open-xchange/codecept-helper/src/helper'
         }
     },
     'include': {
-        'I': './e2e/commands.js'
+        'I': './node_modules/@open-xchange/codecept-helper/src/actor'
     },
     'bootstrap': function (done) {
         var users = localConf.e2e.users || [];
