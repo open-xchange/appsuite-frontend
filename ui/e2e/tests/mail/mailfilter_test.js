@@ -212,3 +212,116 @@ Scenario('add and removes Mail Filter Rules', function* (I) {
 
     I.logout();
 });
+
+Scenario('adds and removes Mail Filter Rules with modified config', function (I) {
+    I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
+    I.waitForVisible('.io-ox-settings-main');
+    I.selectFolder('Mail');
+
+    // open mailfilter settings
+    I.selectFolder('Filter Rules');
+
+    // checks the h1 and the empty message
+
+    I.waitForVisible('.io-ox-settings-window .settings-detail-pane .io-ox-mailfilter-settings h1');
+    I.see('Mail Filter Rules');
+
+    // two rules with all components should be pressent
+
+    I.see('This rule contains unsupported properties.', '.io-ox-mailfilter-settings li[data-id="25"] .warning-message');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="edit"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="toggle"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="toggle-process-subsequent"]');
+    I.seeElement('.io-ox-mailfilter-settings li[data-id="26"] [data-action="delete"]');
+
+    // open the second rule
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="26"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] input[name="rulename"]', 'rule with discard');
+
+    // check if all components are present as expected if an usupported comparison is involved
+    I.see('From', 'li[data-test-id="0"] .list-title');
+    I.see('contains', 'li[data-test-id="0"] .dropdownlink span.unsupported');
+    I.click('contains');
+    I.dontSee('contains', '.dropdown-menu');
+    I.see('Contains not', '.dropdown-menu');
+    I.click('Contains not');
+    I.dontSeeElement('li[data-test-id="0"] .dropdownlink span.unsupported');
+    I.see('Contains not', 'li[data-test-id="0"] .dropdownlink span');
+    I.dontSeeCheckboxIsChecked('Process subsequent rules');
+
+    // check input handling for exists comparison for single test
+    I.click('Contains not');
+    I.click('Exists');
+    I.seeElement('li[data-test-id="0"] input:disabled');
+    I.seeInField('[data-test-id="0"] input[name="values"]', '');
+    I.click('Exists');
+    I.click('Contains not');
+    I.dontSeeElement('li[data-test-id="0"] input:disabled');
+    I.seeElement('li[data-test-id="0"] .row.has-error');
+    I.seeElement('li[data-test-id="0"] .row.has-error');
+    I.fillField('[data-test-id="0"] input[name="values"]', 'Test Value');
+    I.dontSeeElement('li[data-test-id="0"] .row.has-error');
+
+    // add condition
+    I.click('Add condition');
+    I.click('To');
+    I.seeElement('li[data-test-id="1"] .row.has-error');
+    I.fillField('[data-test-id="1"] input[name="values"]', 'Test Value');
+    I.dontSeeElement('li[data-test-id="1"] .row.has-error');
+
+    // remove first condition and check
+    I.click({ css: 'li[data-test-id="0"] [data-action="remove-test"]' });
+    I.see('To', 'li[data-test-id="0"]');
+
+    // for header
+    I.click('Add condition');
+    I.click('Header');
+    I.seeElement('li[data-test-id="1"] .row.has-error input[name="headers"]');
+    I.seeElement('li[data-test-id="1"] .row.has-error input[name="values"]');
+    I.fillField('li[data-test-id="1"] input[name="headers"]', 'Test Value');
+    I.dontSeeElement('li[data-test-id="1"] .row.has-error input[name="headers"]');
+    I.fillField('li[data-test-id="1"] input[name="values"]', 'Test Value');
+    I.dontSeeElement('li[data-test-id="1"] .row.has-error input[name="values"]');
+    I.click('Regex', { css: 'li[data-test-id="1"]' });
+    I.click('Exists', '.smart-dropdown-container .dropdown-menu');
+    I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
+    I.seeInField({ css: '[data-test-id="1"] input[name="values"]' }, '');
+
+    // action redirect is limitd to MAXREDIRECTS?
+    I.click('Add action');
+    I.click('Redirect to');
+    I.click('Add action');
+    I.click('Redirect to');
+    I.click('Add action');
+    I.click('Redirect to');
+    I.click('Add action');
+    I.click('Redirect to');
+    I.click('Add action');
+    I.dontSee('Redirect to', '.dropdown-menu');
+    I.click('Discard');
+
+    I.click('Cancel');
+
+    // open the second rule
+    I.waitForVisible('.io-ox-mailfilter-settings li[data-id="27"] [data-action="edit"]');
+    I.click('Edit', '.io-ox-mailfilter-settings li[data-id="27"]');
+    I.waitForElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"]');
+    I.seeInField('rulename', 'New rule');
+
+    // check if all components are present as expected if an usupported comparison is involved and switched to "exist"
+    I.see('From', 'li[data-test-id="0"]');
+    I.see('contains', 'li[data-test-id="0"] .dropdownlink span.unsupported');
+    I.see('Header', 'li[data-test-id="1"]');
+    I.see('matches', 'li[data-test-id="1"] .dropdownlink span.unsupported');
+    I.click('matches', 'li[data-test-id="1"]');
+    I.click('Exists', '.smart-dropdown-container');
+    I.dontSeeElement('li[data-test-id="1"] .dropdownlink span.unsupported');
+    I.see('Exists', { css: 'li[data-test-id="1"] .dropdownlink' });
+    I.dontSeeElement('li[data-test-id="1"] input[name="headers"]:disabled');
+    I.seeElement('li[data-test-id="1"] input[name="values"]:disabled');
+
+    I.click('Cancel');
+
+    I.logout();
+});
