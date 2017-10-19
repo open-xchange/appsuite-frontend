@@ -223,6 +223,12 @@ define('io.ox/participants/add', [
             if (this.options.usePicker) {
                 this.addresspicker = new AddressPickerView({
                     process: function (e, member) {
+                        if (self.options.convertToAttendee) {
+                            // fix type 5 that are actually type 1
+                            member.magic();
+                            self.options.collection.add(calendarUtil.createAttendee(member));
+                            return;
+                        }
                         self.options.collection.add(member);
                     }
                 });
