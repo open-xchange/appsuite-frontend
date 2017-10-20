@@ -952,7 +952,7 @@ define('io.ox/calendar/util', [
 
         getFolderColor: function (folder) {
             var defaultColor = settings.get('defaultFolderColor', 1),
-                color = folder.meta ? folder.meta.color || defaultColor : defaultColor;
+                color = folder['cal.color'] || defaultColor;
             // fallback if color is an index
             if (_.isNumber(color)) color = that.colors[color - 1].value;
             return color;

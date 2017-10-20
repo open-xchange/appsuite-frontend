@@ -313,10 +313,10 @@ define('io.ox/calendar/week/perspective', [
 
                 // register event to listen to color changes on current folder
                 if (self.folderModel) {
-                    self.folderModel.off('change:meta', self.updateColor);
+                    self.folderModel.off('change:cal.color', self.updateColor);
                 }
                 self.folderModel = folderAPI.pool.getModel(data.id);
-                self.folderModel.on('change:meta', self.updateColor, self);
+                self.folderModel.on('change:cal.color', self.updateColor, self);
             });
         },
         /**

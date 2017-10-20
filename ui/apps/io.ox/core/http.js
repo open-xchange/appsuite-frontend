@@ -164,40 +164,6 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '611': 'yomiLastName',
                 '612': 'yomiCompany'
             },
-            'calendar': {
-                '200': 'title',
-                '201': 'start_date',
-                '202': 'end_date',
-                '203': 'note',
-                '204': 'alarm',
-                '206': 'recurrence_id',
-                '207': 'recurrence_position',
-                '208': 'recurrence_date_position',
-                '209': 'recurrence_type',
-                '210': 'change_exceptions',
-                '211': 'delete_exceptions',
-                '212': 'days',
-                '213': 'day_in_month',
-                '214': 'month',
-                '215': 'interval',
-                '216': 'until',
-                '217': 'notification',
-                '220': 'participants',
-                '221': 'users',
-                '222': 'occurrences',
-                '223': 'uid',
-                '224': 'organizer',
-                '225': 'sequence',
-                '226': 'confirmations',
-                '227': 'organizerId',
-                '228': 'principal',
-                '229': 'principalId',
-                '400': 'location',
-                '401': 'full_time',
-                '402': 'shown_as',
-                '408': 'timezone',
-                '410': 'recurrence_start'
-            },
             'files': {
                 '23': 'meta',
                 '108': 'object_permissions',
@@ -281,7 +247,8 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 '3030': 'com.openexchange.folderstorage.displayName',
                 // 3040 exists; around EAS; no need for it
                 '3050': 'com.openexchange.imap.extAccount',
-                '3060': 'com.openexchange.share.extendedPermissions'
+                '3060': 'com.openexchange.share.extendedPermissions',
+                '3201': 'cal.color'
             },
             'user': {
                 '610': 'aliases',
