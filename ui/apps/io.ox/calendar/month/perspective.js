@@ -351,10 +351,10 @@ define('io.ox/calendar/month/perspective', [
             this.updateWeeks(useCache);
 
             if (this.folderModel) {
-                this.folderModel.off('change:meta', this.updateColor);
+                this.folderModel.off('change:cal.color', this.updateColor);
             }
             this.folderModel = folderAPI.pool.getModel(this.folder.id);
-            this.folderModel.on('change:meta', this.updateColor, this);
+            this.folderModel.on('change:cal.color', this.updateColor, this);
         },
 
         /**
@@ -580,7 +580,7 @@ define('io.ox/calendar/month/perspective', [
 
             self.getFolder().done(function () {
                 self.folderModel = folderAPI.pool.getModel(self.folder.id);
-                self.folderModel.on('change:meta', self.updateColor, self);
+                self.folderModel.on('change:cal.color', self.updateColor, self);
 
                 self.drawWeeks({ multi: self.initLoad }).done(function () {
                     self.gotoMonth();

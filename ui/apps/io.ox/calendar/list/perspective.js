@@ -154,7 +154,7 @@ define('io.ox/calendar/list/perspective', [
             self.app.folder.getData().done(function (data) {
                 app.listView.model.set('folder', data.id);
                 self.folderModel = folderAPI.pool.getModel(data.id);
-                self.folderModel.on('change:meta', self.updateColor, self);
+                self.folderModel.on('change:cal.color', self.updateColor, self);
             });
 
             app.on('folder:change', function (id) {
@@ -162,10 +162,10 @@ define('io.ox/calendar/list/perspective', [
 
                 self.app.folder.getData().done(function (data) {
                     if (self.folderModel) {
-                        self.folderModel.off('change:meta', self.updateColor);
+                        self.folderModel.off('change:cal.color', self.updateColor);
                     }
                     self.folderModel = folderAPI.pool.getModel(data.id);
-                    self.folderModel.on('change:meta', self.updateColor, self);
+                    self.folderModel.on('change:cal.color', self.updateColor, self);
                 });
             });
 
