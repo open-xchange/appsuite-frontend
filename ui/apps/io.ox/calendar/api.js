@@ -90,21 +90,28 @@ define('io.ox/calendar/api', [
             cid: util.cid,
 
             getAll: function (opt) {
-                var params = _.extend({
+                opt = _.extend({
                     start: _.now(),
                     end: _.now()
                 }, opt || {});
 
-                return http.GET({
-                    module: 'chronos',
-                    params: {
+                var method = opt.folders ? 'PUT' : 'GET',
+                    params = {
                         action: 'all',
-                        folder: params.folder,
-                        rangeStart: moment(params.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                        rangeEnd: moment(params.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        rangeStart: moment(opt.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        rangeEnd: moment(opt.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
                         order: 'asc',
                         expand: true
-                    }
+                    },
+                    data;
+
+                if (opt.folders) data = { folders: opt.folders };
+                else params.folder = opt.folder;
+
+                return http[method]({
+                    module: 'chronos',
+                    params: params,
+                    data: data
                 }).then(function (data) {
                     return _(data).sortBy(function (event) {
                         return moment.tz(event.startDate.value, event.startDate.tzid || moment().tz());
@@ -711,6 +718,7 @@ define('io.ox/calendar/api', [
         },
         // do not add index to these models. position inside collection is sufficient due to special pagination
         addIndex: $.noop,
+        isBad: function () { return false; },
         httpGet: function (module, params) {
             // special handling for requests of listview
             if (params.view === 'list') {

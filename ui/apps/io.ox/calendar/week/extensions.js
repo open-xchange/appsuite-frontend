@@ -26,7 +26,7 @@ define('io.ox/calendar/week/extensions', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folder,
+                folder = baton.folders[a.get('folder')],
                 conf = 1,
                 confString = '%1$s',
                 classes = '';
@@ -59,7 +59,7 @@ define('io.ox/calendar/week/extensions', [
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
-                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');
                 if (conf === 'TENTATIVE') {
                     confString =
                         //#. add confirmation status behind appointment title
