@@ -128,7 +128,8 @@ define('io.ox/calendar/model', [
             var self = this,
                 str = this.model.get('rrule'),
                 attributes = str.split(';'),
-                rrule = {};
+                rrule = {},
+                date = this.model.getMoment('startDate');
             _(attributes).each(function (attr) {
                 attr = attr.split('=');
                 var name = attr[0],
@@ -149,10 +150,13 @@ define('io.ox/calendar/model', [
                     break;
                 case 'monthly':
                     this.set('recurrence_type', 3);
-                    if (rrule.bymonthday) this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
-                    if (rrule.byday) {
+                    if (rrule.bymonthday) {
+                        this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                    } else if (rrule.byday) {
                         this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
                         this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    } else {
+                        this.set('day_in_month', date.date());
                     }
                     break;
                 case 'yearly':
@@ -160,11 +164,13 @@ define('io.ox/calendar/model', [
                     if (rrule.bymonthday) {
                         this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
                         this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
-                    }
-                    if (rrule.byday) {
+                    } else if (rrule.byday) {
                         this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
                         this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
                         this.set('days', 1 << this.days.indexOf(rrule.byday));
+                    } else {
+                        this.set('month', date.month());
+                        this.set('day_in_month', date.date());
                     }
                     break;
                 default:
