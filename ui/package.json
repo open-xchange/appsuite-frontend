@@ -31,7 +31,6 @@
     "@open-xchange/codecept-helper": "^0.0.1",
     "appserver": "^0.7.0-pre1",
     "chai": "^4.0.2",
-    "chromedriver": "^2.25.1",
     "codeceptjs-webdriverio": "^1.1.0",
     "eslint-plugin-codeceptjs": "^0.2.0",
     "grunt-contrib-connect": "^1.0.2",

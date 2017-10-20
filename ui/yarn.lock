@@ -644,16 +644,6 @@ chokidar@^1.4.1:
   optionalDependencies:
     fsevents "^1.0.0"
 
-chromedriver@^2.25.1:
-  version "2.31.0"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-2.31.0.tgz#82c758ee4015aa880f45008bba346433cf9db14a"
-  dependencies:
-    extract-zip "^1.6.5"
-    kew "^0.7.0"
-    mkdirp "^0.5.1"
-    request "^2.81.0"
-    rimraf "^2.5.4"
-
 circular-json@^0.3.1:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.3.3.tgz#815c99ea84f6809529d2f45791bdf82711352d66"
@@ -840,7 +830,7 @@ concat-stream@1.5.0:
     readable-stream "~2.0.0"
     typedarray "~0.0.5"
 
-concat-stream@1.6.0, concat-stream@^1.4.1, concat-stream@^1.6.0:
+concat-stream@^1.4.1, concat-stream@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.0.tgz#0aac662fd52be78964d5532f694784e70110acf7"
   dependencies:
@@ -1644,15 +1634,6 @@ extglob@^0.3.1:
   resolved "https://registry.yarnpkg.com/extglob/-/extglob-0.3.2.tgz#2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
   dependencies:
     is-extglob "^1.0.0"
-
-extract-zip@^1.6.5:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/extract-zip/-/extract-zip-1.6.5.tgz#99a06735b6ea20ea9b705d779acffcc87cff0440"
-  dependencies:
-    concat-stream "1.6.0"
-    debug "2.2.0"
-    mkdirp "0.5.0"
-    yauzl "2.4.1"
 
 extract-zip@~1.5.0:
   version "1.5.0"
@@ -2841,7 +2822,7 @@ karma@^1.6.0:
     tmp "0.0.31"
     useragent "^2.1.12"
 
-kew@^0.7.0, kew@~0.7.0:
+kew@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/kew/-/kew-0.7.0.tgz#79d93d2d33363d6fdd2970b335d9141ad591d79b"
 
@@ -4075,7 +4056,7 @@ rgb2hex@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.0.tgz#ccd55f860ae0c5c4ea37504b958e442d8d12325b"
 
-rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.5.2, rimraf@^2.5.4, rimraf@^2.6.0, rimraf@^2.6.1:
+rimraf@2, rimraf@^2.2.8, rimraf@^2.5.1, rimraf@^2.5.2, rimraf@^2.6.0, rimraf@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-2.6.1.tgz#c2338ec643df7a1b7fe5c54fa86f57428a55f33d"
   dependencies:
