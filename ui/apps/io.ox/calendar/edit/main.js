@@ -301,7 +301,7 @@ define('io.ox/calendar/edit/main', [
                 }
 
                 // update model with current data
-                this.model.set(data.toJSON());
+                if (data) this.model.set(data.toJSON());
 
                 // needed for attachment uploads to work
                 if (this.view.options.mode === 'create') {
@@ -310,6 +310,7 @@ define('io.ox/calendar/edit/main', [
                     this.model.trigger('update');
                 }
 
+                // TODO can this be removed?
                 /*if (this.moveAfterSave) {
                     var save = _.bind(this.onSave, this),
                         fail = _.partial(_.bind(this.onError, this), _, { isMoveOperation: true }),

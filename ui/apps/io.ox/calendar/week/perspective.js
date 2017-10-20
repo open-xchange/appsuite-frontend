@@ -227,7 +227,7 @@ define('io.ox/calendar/week/perspective', [
             }
         },
 
-        prefetch: function (index, prevCollection) {
+        prefetch: _.debounce(function (index, prevCollection) {
             var self = this,
                 params = this.view.getRequestParam(),
                 range = moment(params.end).diff(moment(params.start), 'ms'),
@@ -247,7 +247,7 @@ define('io.ox/calendar/week/perspective', [
                     cont(collection);
                 }));
             }
-        },
+        }, 200),
 
         /**
          * call view print function
@@ -460,7 +460,7 @@ define('io.ox/calendar/week/perspective', [
                 .on('create update', function (obj) {
                     var current = ox.ui.App.getCurrentApp().getName();
                     if (!/^io.ox\/calendar/.test(current)) return;
-                    if (!obj.recurrenceId) {
+                    if (!obj.seriesId || obj.seriesId !== obj.id) {
                         if (app.folder.get() !== String(obj.folder)) app.folder.set(obj.folder);
                         self.view.setStartDate(moment.tz(obj.startDate.value, obj.startDate.tzid || moment().tz()).valueOf(), obj.allTime);
                     }
