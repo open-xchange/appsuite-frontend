@@ -28,7 +28,7 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre2"
   },
   "devDependencies": {
-    "@open-xchange/codecept-helper": "https://gitlab.open-xchange.com/frontend/codecept-helpers.git",
+    "@open-xchange/codecept-helper": "^0.0.1",
     "appserver": "^0.7.0-pre1",
     "chai": "^4.0.2",
     "chromedriver": "^2.25.1",

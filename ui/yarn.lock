@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@https://gitlab.open-xchange.com/frontend/codecept-helpers.git":
-  version "0.1.0"
-  resolved "https://gitlab.open-xchange.com/frontend/codecept-helpers.git#aa05f4917e9eff3f45d819fe4640830d84e08d7e"
+"@open-xchange/codecept-helper@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.1.tgz#43255f89781e7fee99675aa0882c8e603196221a"
 
 "@open-xchange/emoji@0.0.1":
   version "0.0.1"
