@@ -535,24 +535,17 @@ define('io.ox/settings/main', [
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed
         var enqueue = (function () {
-            var running = [];
+            var active;
             return function (def) {
-                var index = running.length;
-                running.forEach(function (d) { d.cancelled = true; });
-                running.push({
-                    def: def,
-                    cancelled: false
-                });
+                if (active) active.cancelled = true;
+                active = def;
 
                 return def.then(function () {
-                    if (running[index].cancelled) return $.Deferred().reject();
+                    if (this.cancelled) return $.Deferred().reject();
 
+                    active = null;
                     return $.Deferred().resolve();
-                }).always(function () {
-                    running = running.filter(function (d, i) {
-                        return i !== index;
-                    });
-                });
+                }.bind(active));
             };
         }());
         var showSettings = function (baton, focus) {
