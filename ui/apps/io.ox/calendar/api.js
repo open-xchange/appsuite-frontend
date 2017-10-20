@@ -40,20 +40,15 @@ define('io.ox/calendar/api', [
             });
 
             _(response.deleted).each(function (event) {
-                // if there is a recurrence rule but no recurrenceId this means the whole series was deleted (recurrence master has no recurrenceId)
-                if (isRecurrenceMaster(event)) {
-                    var events = api.pool.findRecurrenceModels(event);
-                    events.forEach(function (evt) {
-                        evt.collection.remove(evt);
-                        api.trigger('delete', evt.attributes);
-                        api.trigger('delete:' + util.cid(evt), evt.attributes);
-                    });
-                } else {
-                    var model = api.pool.getModel(util.cid(event));
-                    model.collection.remove(model);
-                    api.trigger('delete', event);
-                    api.trigger('delete:' + util.cid(event), event);
-                }
+                // cannot find event when it is recurrence master
+                var events = api.pool.getModel(util.cid(event));
+                if (events) events = [events];
+                else events = api.pool.findRecurrenceModels(event);
+                events.forEach(function (evt) {
+                    evt.collection.remove(evt);
+                    api.trigger('delete', evt.attributes);
+                    api.trigger('delete:' + util.cid(evt), evt.attributes);
+                });
             });
 
             _(response.updated).each(function (event) {
@@ -64,6 +59,15 @@ define('io.ox/calendar/api', [
                         evt.set(updates);
                         api.trigger('update', evt.attributes);
                         api.trigger('update:' + util.cid(evt), evt.attributes);
+                    });
+                    // make sure that appointents inside deleteExceptionDates do not exist
+                    (event.deleteExceptionDates || []).forEach(function (recurrenceId) {
+                        var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
+                        if (model) {
+                            model.collection.remove(model);
+                            api.trigger('delete', model.attributes);
+                            api.trigger('delete:' + util.cid(model), model.attributes);
+                        }
                     });
                 } else {
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
@@ -676,10 +680,9 @@ define('io.ox/calendar/api', [
 
         findRecurrenceModels: function (event) {
             event = event instanceof Backbone.Model ? event.attributes : event;
-            var cid = util.cid({ folder: event.folder, id: event.id }),
-                collections = api.pool.getByFolder(event.folder),
+            var collections = api.pool.getByFolder(event.folder),
                 filterRecurrences = function (model) {
-                    return model.cid.indexOf(cid) === 0;
+                    return model.get('seriesId') === event.id;
                 },
                 models = collections.map(function (collection) {
                     return collection.filter(filterRecurrences);
