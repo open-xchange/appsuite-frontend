@@ -305,18 +305,24 @@ define('io.ox/calendar/week/perspective', [
             if ($.contains(self.view.el, document.activeElement)) {
                 self.activeElement = $(document.activeElement);
             }
-            this.app.folder.getData().done(function (data) {
+            $.when(this.app.folder.getData(), this.app.folders.getData()).done(function (data, folders) {
                 // update view folder data
+                self.view.setFolders(folders);
                 self.view.folder(data);
                 // save folder data to view and update
                 self.getAppointments(useCache);
 
                 // register event to listen to color changes on current folder
-                if (self.folderModel) {
-                    self.folderModel.off('change:cal.color', self.updateColor);
+                if (self.folderModels) {
+                    self.folderModels.forEach(function (folderModel) {
+                        folderModel.off('change:cal.color', self.updateColor);
+                    });
                 }
-                self.folderModel = folderAPI.pool.getModel(data.id);
-                self.folderModel.on('change:cal.color', self.updateColor, self);
+                self.folderModels = _(folders).map(function (folder) {
+                    var model = folderAPI.pool.getModel(folder.id);
+                    model.on('change:cal.color', self.updateColor, self);
+                    return model;
+                });
             });
         },
         /**
@@ -468,8 +474,12 @@ define('io.ox/calendar/week/perspective', [
 
             // watch for folder change
             this.app
-                .on('folder:change', refresh)
-                .on('folder:delete', reload);
+                .on('folders:change', refresh)
+                .on('folder:change', function () {
+                    app.folder.getData().done(function (data) {
+                        self.view.folder(data);
+                    });
+                });
             this.app.getWindow()
                 .on('beforehide', $.proxy(this.save, this))
                 .on('show', $.proxy(this.restore, this))

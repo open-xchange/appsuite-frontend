@@ -1417,7 +1417,7 @@ define('io.ox/calendar/week/view', [
             $('.week-container .day', this.$el).droppable();
 
             ext.point('io.ox/calendar/week/view').invoke('draw', this, {
-                folder: this.folder()
+                folders: this.getFolders()
             });
 
             this.updateHiddenIndicators();
@@ -1440,7 +1440,7 @@ define('io.ox/calendar/week/view', [
                 });
 
             ext.point(this.extPoint)
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folder: this.folder() })));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folders: this.getFolders() })));
             return el;
         },
 
@@ -1544,18 +1544,28 @@ define('io.ox/calendar/week/view', [
             return this.folderData;
         },
 
+        setFolders: function (folders) {
+            this.folders = folders;
+        },
+
+        getFolders: function () {
+            return this.folders;
+        },
+
         /**
          * collect request parameter to realize monthly chunks
          * @return { Object } object with startdate, enddate and folderID
          */
         getRequestParam: function () {
-            // return update data
-            return {
-                start: this.startDate.valueOf(),
-                end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                folder: this.folderData.id,
-                view: 'week'
-            };
+            var folders = _(this.getFolders()).pluck('id'),
+                params = {
+                    start: this.startDate.valueOf(),
+                    end: moment(this.startDate).add(this.columns, 'days').valueOf(),
+                    view: 'week'
+                };
+            if (folders.length === 1) params.folder = folders[0];
+            else params.folders = folders;
+            return params;
         },
 
         /**
@@ -1577,6 +1587,7 @@ define('io.ox/calendar/week/view', [
         },
 
         print: function () {
+            // TODO update print template
             var folder = this.folder();
             print.request('io.ox/calendar/week/print', {
                 start: moment(this.startDate).valueOf(),

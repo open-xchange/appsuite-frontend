@@ -238,8 +238,6 @@
     position: relative;
 
     .color-label {
-        content: "";
-        display: inline-block;
         width: 16px;
         height: 16px;
         position: absolute;
@@ -247,6 +245,16 @@
         top: 4px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         background-clip: border-box;
+
+        &.selected:before {
+            display: block;
+            font-family: 'FontAwesome';
+            content: '\f00c';
+            text-align: center;
+            font-size: 13px;
+            line-height: 16px;
+            color: #333;
+        }
     }
 
     @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {

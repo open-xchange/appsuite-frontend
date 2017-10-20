@@ -938,9 +938,13 @@ define('io.ox/core/folder/extensions', [
             });
         }
 
-        function openColorSelection(e) {
-            e.type = 'contextmenu';
-            e.data.view.$el.trigger(e);
+        function toggleFolder(e) {
+            e.preventDefault();
+            var app = e.data.app,
+                folder = e.data.folder;
+            if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
+            else app.folders.add(folder.id);
+            e.data.target.toggleClass('selected', app.folders.isSelected(folder.id));
         }
 
         ext.point('io.ox/core/foldertree/node').extend(
@@ -994,21 +998,24 @@ define('io.ox/core/folder/extensions', [
                 }
             },
             {
-                id: 'color',
+                id: 'is-selected',
                 index: 400,
                 draw: function (baton) {
                     if (!/^calendar$/.test(baton.data.module)) return;
-                    if (!api.is('private', baton.data)) return;
-                    if (/^virtual/.test(baton.data.id)) return;
 
-                    var folderLabel = this.find('.folder-label');
+                    var folderLabel = this.find('.folder-label'),
+                        app = ox.ui.apps.get('io.ox/calendar');
+
+                    if (!app) return;
 
                     require(['io.ox/calendar/util'], function (util) {
                         var folderColor = util.getFolderColor(baton.data),
                             target = folderLabel.find('.color-label');
+
                         if (target.length === 0) target = $('<div class="color-label">');
+                        target.toggleClass('selected', app.folders.isSelected(baton.data.id));
                         target.css('background-color', folderColor);
-                        target.off('click').on('click', { view: baton.view, folder: baton.data }, openColorSelection);
+                        target.off('click').on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                         folderLabel.prepend(target);
                     });
                 }

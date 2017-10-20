@@ -268,6 +268,42 @@ define('io.ox/calendar/main', [
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
         },
 
+        'multi-folder-selection': function (app) {
+            var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]);
+            app.folders = {
+                getData: function () {
+                    return $.when.apply($, folders.map(function (folder) {
+                        return folderAPI.get(folder);
+                    })).then(function () {
+                        var data = _(arguments).toArray();
+                        return _.object(folders, data);
+                    });
+                },
+                isSelected: function (id) {
+                    if (_.isObject(id)) id = id.id;
+                    return folders.indexOf(id) >= 0;
+                },
+                list: function () {
+                    return folders;
+                },
+                add: function (folder) {
+                    folders = [].concat(folders);
+                    folders.push(folder);
+                    app.trigger('folders:change');
+                    settings.set('selectedFolders', folders);
+                },
+                remove: function (folder) {
+                    var index = folders.indexOf(folder);
+                    if (index >= 0) {
+                        folders = [].concat(folders);
+                        folders.splice(index, 1);
+                        app.trigger('folders:change');
+                        settings.set('selectedFolders', folders);
+                    }
+                }
+            };
+        },
+
         'toggle-folder-view': function (app) {
             app.toggleFolderView = function (e) {
                 e.preventDefault();
