@@ -193,7 +193,7 @@ define('io.ox/calendar/api', [
                     ignoreConflicts: !!options.ignoreConflicts
                 };
 
-                if (options.expand) {
+                if (options.expand && obj.rrule) {
                     params.expand = true;
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
@@ -219,7 +219,7 @@ define('io.ox/calendar/api', [
                     }
 
                     if (data.created.length > 0 && isRecurrenceMaster(data.created[0])) return new models.Model(data);
-                    return api.pool.getModel(data.created[0]);
+                    if (data.created.length > 0) return api.pool.getModel(data.created[0]);
                 });
             },
 
@@ -665,16 +665,13 @@ define('io.ox/calendar/api', [
         },
 
         getModel: function (data) {
-            var collections, cid;
-            if (_.isString(data)) {
-                cid = data;
-                collections = api.pool.getCollectionsByCID(cid);
-            } else {
-                cid = util.cid(data);
-                collections = api.pool.getCollectionsByCID(cid);
-            }
+            var cid = data;
+            if (!_.isString(data)) cid = util.cid(data);
+            var collections = api.pool.getCollectionsByCID(cid);
             if (collections.length === 0) return;
-            return collections[0].get(cid);
+            var model = collections[0].get(cid);
+            if (!model && _.isObject(data)) model = collections[0].add(data);
+            return model;
         },
 
         findRecurrenceModels: function (event) {

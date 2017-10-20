@@ -1007,22 +1007,26 @@ define('io.ox/calendar/util', [
             switch (perspective.name) {
                 case 'week':
                     var view = perspective.view;
-                    rangeStart = moment(view.startDate).utc().format('YYYYMMDD[T]HHmmss[Z]');
-                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days').format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeStart = moment(view.startDate).utc();
+                    rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstWeek).startOf('week').utc().format('YYYYMMDD[T]HHmmss[Z]');
-                    rangeEnd = moment(perspective.lastWeek).endOf('week').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeStart = moment(perspective.firstWeek).startOf('week').utc();
+                    rangeEnd = moment(perspective.lastWeek).endOf('week').utc();
                     break;
                 case 'list':
-                    rangeStart = moment().startOf('day').utc().format('YYYYMMDD[T]HHmmss[Z]');
-                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc().format('YYYYMMDD[T]HHmmss[Z]');
+                    rangeStart = moment().startOf('day').utc();
+                    rangeEnd = moment().startOf('day').add((app.listView.collection.offset || 0) + 1, 'month').utc();
                     break;
                 default:
             }
 
             if (!rangeStart || !rangeEnd) return {};
-            return { expand: true, rangeStart: rangeStart, rangeEnd: rangeEnd };
+            return {
+                expand: true,
+                rangeStart: rangeStart.format('YYYYMMDD[T]HHmmss[Z]'),
+                rangeEnd: rangeEnd.format('YYYYMMDD[T]HHmmss[Z]')
+            };
         },
 
         rangeFilter: function (start, end) {
