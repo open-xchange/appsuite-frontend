@@ -110,7 +110,7 @@ define('io.ox/backbone/mini-views/alarms', [
                 }
                 selectbox.val(alarm.trigger.duration);
             } else {
-                row.append($('<div class="alarm-time">').addClass(self.options.smallLayout ? 'col-md-4' : 'col-md-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
+                row.append($('<div class="alarm-time">').addClass(self.options.smallLayout ? 'col-xs-4' : 'col-xs-5').text(new moment(alarm.trigger.dateTime).format('LLL')).val(alarm.trigger.dateTime));
             }
 
             row.append(

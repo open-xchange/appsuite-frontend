@@ -343,7 +343,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
 
                 items.length.should.equal(6);
 
-                $(items[0]).find('.col-md-6').text().should.equal('SMS');
+                $(items[0]).find('.col-xs-6').text().should.equal('SMS');
 
                 $(items[1]).find('.alarm-time').val().should.equal('-PT55M');
                 //#. %1$s is the reminder time (for example: 2 hours)
@@ -361,7 +361,7 @@ define(['io.ox/backbone/mini-views/common', 'io.ox/backbone/mini-views/alarms', 
                 //#. %1$s is the reminder time (for example: 2 hours)
                 $(items[4]).find('.alarm-time option:last').text().should.equal(gt.format('%1$s after the end time', new moment.duration('PT55M').humanize()));
 
-                $(items[5]).find('.col-md-5').text().should.equal(new moment('20170708T220000Z').format('LLL'));
+                $(items[5]).find('.col-xs-5').text().should.equal(new moment('20170708T220000Z').format('LLL'));
             });
 
             it('should create missing data but preserve the rest', function () {
