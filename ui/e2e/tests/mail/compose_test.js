@@ -20,7 +20,8 @@ Scenario('Compose plain text mail', function (I) {
     I.waitForVisible('.io-ox-settings-main');
 
     // open mail settings
-    I.selectFolder('virtual/settings/io.ox/mail/settings/compose');
+    I.selectFolder('Mail');
+    I.selectFolder('Compose');
 
     // set compose mode to html
     I.waitForVisible('[name="messageFormat"][value="html"] + i');
