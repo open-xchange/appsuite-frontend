@@ -40,7 +40,6 @@
         right: 0;
         bottom: 0;
         left: 0;
-        padding: 0 100px;
 
         .overflow-y(scroll);
         .backface-visibility(hidden);
@@ -187,13 +186,10 @@
         .scrollpane .week {
             padding-left: @adjusted-width;
 
-            .week-info { width: @adjusted-width}
-        }
-    }
-
-    @media (max-width: 768px) {
-        .scrollpane {
-            padding: 0 40px;
+            .week-info {
+                width: @adjusted-width;
+                min-width: @adjusted-width;
+            }
         }
     }
 
@@ -224,7 +220,6 @@
         .scrollpane {
             -webkit-user-select: none;
             top: 33px;
-            padding: 0;
 
             .week {
                 min-height: 40px;
