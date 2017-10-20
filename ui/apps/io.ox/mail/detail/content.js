@@ -402,20 +402,20 @@ define('io.ox/mail/detail/content', [
         process: extensions.formSubmit
     });
 
-    // commented out DUE TO BUGS! (27.01.2016)
-    // ext.point('io.ox/mail/detail/content').extend({
-    //     id: 'lazyload-images',
-    //     index: 1200,
-    //     process: function () {
-    //         $(this).find('img[src!=""]').each(function () {
-    //             var img = $(this);
-    //             img.attr({
-    //                 'data-original': img.attr('src'),
-    //                 'src': '//:0'
-    //             }).addClass('lazyload');
-    //         });
-    //     }
-    // });
+    // forward image load event to trigger resize in view
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'image-load',
+        index: 1200,
+        process: function () {
+            var self = this;
+            $(self).find('img[src!=""]').each(function () {
+                var img = $(this);
+                img.on('load error', function () {
+                    $(self).trigger('imageload');
+                });
+            });
+        }
+    });
 
     //
     // Beautify

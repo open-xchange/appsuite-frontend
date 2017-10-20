@@ -392,13 +392,13 @@ define('io.ox/mail/detail/view', [
                     return;
                 }
 
-                if ((_.browser.firefox || _.browser.safari) && height < htmlHeight) height = htmlHeight;
+                if (height < htmlHeight) height = htmlHeight;
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
             }
 
-            $(node).on('resize', resizeFrame); // for expanding blockquotes
+            $(node).on('resize imageload', resizeFrame); // for expanding blockquotes and inline images
 
             baton.iframe.on('load', function () {
                 var content = baton.iframe.contents();
