@@ -270,6 +270,9 @@ define('io.ox/calendar/main', [
 
         'multi-folder-selection': function (app) {
             var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]);
+            folderAPI.on('remove', function (id) {
+                app.fodlers.remove(id);
+            });
             app.folders = {
                 getData: function () {
                     return $.when.apply($, folders.map(function (folder) {
@@ -290,7 +293,7 @@ define('io.ox/calendar/main', [
                     folders = [].concat(folders);
                     folders.push(folder);
                     app.trigger('folders:change');
-                    settings.set('selectedFolders', folders);
+                    settings.set('selectedFolders', folders).save();
                 },
                 remove: function (folder) {
                     var index = folders.indexOf(folder);
@@ -298,7 +301,7 @@ define('io.ox/calendar/main', [
                         folders = [].concat(folders);
                         folders.splice(index, 1);
                         app.trigger('folders:change');
-                        settings.set('selectedFolders', folders);
+                        settings.set('selectedFolders', folders).save();
                     }
                 }
             };
