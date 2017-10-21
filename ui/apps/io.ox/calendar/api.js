@@ -607,20 +607,6 @@ define('io.ox/calendar/api', [
         Collection: models.Collection
     });
 
-    api.pool.map = function (data) {
-        data.cid = util.cid(data);
-        return data;
-    };
-
-    api.pool.getCollectionsByCID = function (cid) {
-        var folder = util.cid(cid).folder,
-            collections = this.getByFolder(folder).filter(function (collection) {
-                return !!collection.get(cid);
-            });
-        if (collections.length === 0) return [this.get('detail')];
-        return collections;
-    };
-
     function urlToHash(url) {
         var hash = {},
             s = url.split('&');
@@ -632,6 +618,31 @@ define('io.ox/calendar/api', [
     }
 
     _.extend(api.pool, {
+
+        map: function (data) {
+            data.cid = util.cid(data);
+            return data;
+        },
+
+        getByFolder: function (folder) {
+            var regex = new RegExp('(folders=[^&]*' + folder + '|folder=' + folder + '&)');
+            return _(this.getCollections())
+                .chain()
+                .filter(function (entry, id) {
+                    return regex.test(id);
+                })
+                .pluck('collection')
+                .value();
+        },
+
+        getCollectionsByCID: function (cid) {
+            var folder = util.cid(cid).folder,
+                collections = this.getByFolder(folder).filter(function (collection) {
+                    return !!collection.get(cid);
+                });
+            if (collections.length === 0) return [this.get('detail')];
+            return collections;
+        },
 
         getCollectionsByModel: function (data) {
             var model = data instanceof Backbone.Model ? data : new models.Model(data),
