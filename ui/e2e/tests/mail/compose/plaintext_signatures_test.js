@@ -109,9 +109,9 @@ Scenario('Reply to mail with signature above correctly placed and changed', func
     yield* selectAndAssertSignature(I, 'No signature', /^\n\n(>[^\n]*(\n)?)+$/);
     yield* selectAndAssertSignature(I, 'First signature above', new RegExp(`^\\n\\n${signatures[0]}\\n\\n(>[^\\n]*(\\n)?)+$`));
 
-    // insert some text
+    // insert some text at the very beginning
     I.click('.io-ox-mail-compose textarea.plain-text');
-    I.pressKey(['Up arrow', 'Up arrow', 'Up arrow', 'Up arrow', 'Up arrow', 'Up arrow', 'some user input']);
+    I.pressKey(['PageUp', 'some user input']);
     expect(yield I.grabValueFrom('.io-ox-mail-compose textarea.plain-text')).to.match(
         new RegExp(`^some user input\\n\\n${signatures[0]}\\n\\n(>[^\\n]*(\\n)?)+$`)
     );
