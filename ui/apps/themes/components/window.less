@@ -496,6 +496,21 @@
             min-height: auto;
         }
 
+        @media (max-width: 1072px) {
+            position: relative;
+            right: auto;
+            margin: 0 auto;
+            // to make it stick to the bottom without JS
+            top: calc(~"100% - 16px");
+            transform: translateY(-100%);
+        }
+
+        @media (max-width: 992px) {
+            width: auto;
+            margin-right: 16px;
+            margin-left: 16px;
+        }
+
         .floating-header .controls a[data-action="cornered"] {
             display: none;
         }
@@ -519,6 +534,12 @@
 
         .floating-header .controls a[data-action="centered"] {
             display: none;
+        }
+
+        @media (max-width: 992px) {
+            width: auto;
+            margin-right: 16px;
+            margin-left: 16px;
         }
     }
 
