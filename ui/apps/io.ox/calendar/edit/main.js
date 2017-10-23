@@ -36,7 +36,7 @@ define('io.ox/calendar/edit/main', [
             title: gt('Edit Appointment'),
             userContent: true,
             closable: true,
-            floating: true
+            floating: !_.device('smartphone')
         });
 
         _.extend(app, {
@@ -83,7 +83,7 @@ define('io.ox/calendar/edit/main', [
                     var win = ox.ui.createWindow({
                         name: 'io.ox/calendar/edit',
                         chromeless: true,
-                        floating: true,
+                        floating: !_.device('smartphone'),
                         closable: true,
                         title: gt('Edit Appointment')
                     });

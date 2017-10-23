@@ -185,9 +185,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                         .attr('data-cid', floatingWindow.cid)
                         .append(
                             $('<span class="title">').text(floatingWindow.title),
-                            $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count),
-                            floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
-                        )
+                            $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count)
+                        ),
+                    floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
                 );
             })
         );

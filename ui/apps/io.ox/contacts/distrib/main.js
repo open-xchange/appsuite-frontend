@@ -36,7 +36,7 @@ define('io.ox/contacts/distrib/main', [
             title: gt('Distribution List'),
             userContent: true,
             closable: true,
-            floating: true
+            floating: !_.device('smartphone')
         });
 
         app.getContextualHelp = function () {
@@ -162,7 +162,7 @@ define('io.ox/contacts/distrib/main', [
                 chromeless: true,
                 name: 'io.ox/contacts/distrib',
                 title: gt('Distribution List'),
-                floating: true,
+                floating: !_.device('smartphone'),
                 closable: true
             }));
 

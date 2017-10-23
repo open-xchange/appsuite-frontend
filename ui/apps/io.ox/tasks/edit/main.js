@@ -30,7 +30,7 @@ define('io.ox/tasks/edit/main', [
                 title: gt('Edit task'),
                 userContent: true,
                 closable: true,
-                floating: true
+                floating: !_.device('smartphone')
             }),
             // app window
             win,
@@ -116,7 +116,7 @@ define('io.ox/tasks/edit/main', [
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
                 chromeless: true,
-                floating: true,
+                floating: !_.device('smartphone'),
                 closable: true,
                 title: gt('Edit task')
             });

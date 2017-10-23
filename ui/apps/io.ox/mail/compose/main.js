@@ -33,7 +33,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 title: gt('Compose'),
                 userContent: true,
                 closable: true,
-                floating: true
+                floating: !_.device('smartphone')
             }),
             win;
 
@@ -43,7 +43,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                 name: 'io.ox/mail/compose',
                 chromeless: true,
                 // attributes for the floating window
-                floating: true,
+                floating: !_.device('smartphone'),
                 closable: true,
                 title: gt('Compose')
             }));

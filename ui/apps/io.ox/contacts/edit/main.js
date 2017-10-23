@@ -42,7 +42,7 @@ define('io.ox/contacts/edit/main', [
             title: gt('Edit Contact'),
             userContent: true,
             closable: true,
-            floating: true
+            floating: !_.device('smartphone')
         });
 
         app.setLauncher(function () {
@@ -51,7 +51,7 @@ define('io.ox/contacts/edit/main', [
             var win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
                 chromeless: true,
-                floating: true,
+                floating: !_.device('smartphone'),
                 closable: true,
                 title: gt('Edit Contact')
             });
