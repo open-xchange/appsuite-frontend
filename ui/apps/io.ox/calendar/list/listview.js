@@ -185,7 +185,8 @@ define('io.ox/calendar/list/listview', [
             var i;
             this.append(
                 $('<a href="#" class="toolbar-item select-all" data-name="select-all" role="checkbox" aria-checked="false">').append(
-                    i = $('<i class="fa fa-square-o" aria-hidden="true">')
+                    i = $('<i class="fa fa-square-o" aria-hidden="true">'),
+                    $.txt(gt('Select all'))
                 )
                 .on('click', { baton: baton }, toggleSelection)
                 .on('dblclick', function (e) {

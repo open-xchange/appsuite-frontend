@@ -151,21 +151,29 @@ define('io.ox/calendar/list/perspective', [
                 }
             });
 
-            self.app.folder.getData().done(function (data) {
-                app.listView.model.set('folder', data.id);
-                self.folderModel = folderAPI.pool.getModel(data.id);
-                self.folderModel.on('change:cal.color', self.updateColor, self);
+            $.when(app.folder.getData(), app.folders.getData()).done(function (data, folders) {
+                app.listView.model.set('folders', _(folders).pluck('id'));
+                self.folderModels = _(folders).map(function (folder) {
+                    var model = folderAPI.pool.getModel(folder.id);
+                    model.on('change:cal.color', self.updateColor, self);
+                    return model;
+                });
             });
 
-            app.on('folder:change', function (id) {
-                app.listView.model.set('folder', id);
+            app.on('folders:change', function () {
+                app.listView.model.set('folders', app.folders.list());
 
-                self.app.folder.getData().done(function (data) {
-                    if (self.folderModel) {
-                        self.folderModel.off('change:cal.color', self.updateColor);
+                $.when(app.folder.getData(), app.folders.getData()).done(function (data, folders) {
+                    if (self.folderModels) {
+                        self.folderModels.forEach(function (model) {
+                            model.off('change:cal.color', self.updateColor);
+                        });
                     }
-                    self.folderModel = folderAPI.pool.getModel(data.id);
-                    self.folderModel.on('change:cal.color', self.updateColor, self);
+                    self.folderModels = _(folders).map(function (folder) {
+                        var model = folderAPI.pool.getModel(folder.id);
+                        model.on('change:cal.color', self.updateColor, self);
+                        return model;
+                    });
                 });
             });
 

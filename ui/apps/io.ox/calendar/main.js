@@ -271,7 +271,7 @@ define('io.ox/calendar/main', [
         'multi-folder-selection': function (app) {
             var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]);
             folderAPI.on('remove', function (id) {
-                app.fodlers.remove(id);
+                app.folders.remove(id);
             });
             app.folders = {
                 getData: function () {
