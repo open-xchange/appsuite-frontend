@@ -1557,14 +1557,12 @@ define('io.ox/calendar/week/view', [
          * @return { Object } object with startdate, enddate and folderID
          */
         getRequestParam: function () {
-            var folders = _(this.getFolders()).pluck('id'),
-                params = {
-                    start: this.startDate.valueOf(),
-                    end: moment(this.startDate).add(this.columns, 'days').valueOf(),
-                    view: 'week'
-                };
-            if (folders.length === 1) params.folder = folders[0];
-            else params.folders = folders;
+            var params = {
+                start: this.startDate.valueOf(),
+                end: moment(this.startDate).add(this.columns, 'days').valueOf(),
+                view: 'week',
+                folders: _(this.getFolders()).pluck('id')
+            };
             return params;
         },
 

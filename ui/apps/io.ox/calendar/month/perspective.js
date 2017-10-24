@@ -167,6 +167,7 @@ define('io.ox/calendar/month/perspective', [
             http.pause();
             _(this.views).each(function (view) {
                 var collection = loader.getCollection(view.getRequestParams());
+                view.setCollection(collection);
                 if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) return;
                 loader.collection = collection;
                 collection.expired = false;
@@ -219,7 +220,7 @@ define('io.ox/calendar/month/perspective', [
 
                 var view = createOrReuseView({
                     start: curMonth.clone(),
-                    folder: self.folder,
+                    folders: this.folders,
                     pane: this.pane,
                     app: this.app,
                     perspective: this
@@ -287,12 +288,6 @@ define('io.ox/calendar/month/perspective', [
             }
 
             this.updateWeeks(useCache);
-
-            if (this.folderModel) {
-                this.folderModel.off('change:cal.color', this.updateColor);
-            }
-            this.folderModel = folderAPI.pool.getModel(this.folder.id);
-            this.folderModel.on('change:cal.color', this.updateColor, this);
         },
 
         /**
@@ -376,13 +371,27 @@ define('io.ox/calendar/month/perspective', [
          * @return { Deferred} Deferred with folder data on resolve
          */
         getFolder: function () {
-            var self = this,
-                def = $.Deferred();
-            self.app.folder.getData().done(function (data) {
+            var self = this;
+
+            return $.when(this.app.folder.getData(), this.app.folders.getData()).then(function (data, folders) {
                 self.folder = data;
-                def.resolve(data);
+                self.folders = folders;
+
+                _(self.views).each(function (view) {
+                    view.folders = folders;
+                });
+
+                if (self.folderModels) {
+                    self.folderModels.forEach(function (model) {
+                        model.off('change:cal.color', self.updateColor);
+                    });
+                }
+                self.folderModels = _(self.folders).map(function (folder) {
+                    var model = folderAPI.pool.getModel(folder.id);
+                    model.on('change:cal.color', self.updateColor, self);
+                    return model;
+                });
             });
-            return def;
         },
 
         /**
@@ -399,6 +408,7 @@ define('io.ox/calendar/month/perspective', [
          * print current month
          */
         print: function () {
+            // TODO update print view
             print.request('io.ox/calendar/month/print', {
                 current: this.current,
                 start: moment(this.current).startOf('week').valueOf(),
@@ -513,9 +523,6 @@ define('io.ox/calendar/month/perspective', [
             $(window).on('resize', this.getFirsts);
 
             self.getFolder().done(function () {
-                self.folderModel = folderAPI.pool.getModel(self.folder.id);
-                self.folderModel.on('change:cal.color', self.updateColor, self);
-
                 self.drawWeeks({ multi: self.initLoad }).done(function () {
                     self.gotoMonth();
                 });
@@ -566,8 +573,12 @@ define('io.ox/calendar/month/perspective', [
                     self.dialog.close();
                     refresh();
                 });
-            app.on('folder:change', refresh)
-                .on('folder:delete', reload)
+            app.on('folders:change', refresh)
+                .on('folder:change', function () {
+                    app.folder.getData().done(function (data) {
+                        self.folder = data;
+                    });
+                })
                 .getWindow()
                 .on('show', refresh)
                 .on('show', $.proxy(this.restore, this))
