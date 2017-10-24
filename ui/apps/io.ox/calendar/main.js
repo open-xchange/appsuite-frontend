@@ -275,8 +275,12 @@ define('io.ox/calendar/main', [
             });
             app.folders = {
                 getData: function () {
-                    return $.when.apply($, folders.map(function (folder) {
-                        return folderAPI.get(folder);
+                    $.when.apply($, folders.map(function (folder) {
+                        return folderAPI.get(folder).then(function (folder) {
+                            return folder;
+                        }, function () {
+                            app.folders.remove(folder);
+                        });
                     })).then(function () {
                         var data = _(arguments).toArray();
                         return _.object(folders, data);
@@ -333,7 +337,7 @@ define('io.ox/calendar/main', [
 
         'listview': function (app) {
             app.listView = new CalendarListView({ app: app, draggable: false, pagination: false, labels: true, ignoreFocus: true });
-            app.listView.model.set({ view: 'list' });
+            app.listView.model.set({ view: 'list' }, { silent: true });
         },
 
         'list-view-control': function (app) {
