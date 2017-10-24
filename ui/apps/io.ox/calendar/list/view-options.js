@@ -19,40 +19,6 @@ define('io.ox/calendar/list/view-options', [
 
     'use strict';
 
-    ext.point('io.ox/chronos/list-view/toolbar/top').extend({
-        id: 'folder',
-        index: 200,
-        draw: function (baton) {
-            if (_.device('smartphone')) return;
-
-            var app = baton.app,
-                view = baton.view,
-                folderName,
-                folderCount;
-
-            function updateFolder() {
-                var collection = view.listView.collection,
-                    find = collection.cid ? collection.cid.indexOf('view=list') < 0 : false;
-                folderAPI.get(app.folder.get()).then(function (folder) {
-                    folderName.text(find ? gt('Results') : folder.title);
-                });
-                folderCount.text('(' + collection.length + ')');
-            }
-
-            this.append(
-                $('<div class="folder-info">').append(
-                    folderName = $('<span class="folder-name">'),
-                    $.txt(' '),
-                    folderCount = $('<span class="folder-count">')
-                )
-            );
-
-            updateFolder();
-            app.on('folder:change', updateFolder);
-            view.listenTo(view.listView, 'reset add remove', _.debounce(updateFolder));
-        }
-    });
-
     function onFolderViewOpen(app) {
         app.getWindow().nodes.sidepanel.show();
         app.listControl.$el.removeClass('toolbar-bottom-visible');
