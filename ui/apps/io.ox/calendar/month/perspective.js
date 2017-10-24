@@ -37,13 +37,13 @@ define('io.ox/calendar/month/perspective', [
         pane:           $(),    // scrollpane
         monthInfo:      $(),    //
         tops:           {},     // scrollTop positions of the shown weeks
-        firstWeek:      0,      // moment of the first week
-        lastWeek:       0,      // moment of the last week
+        firstMonth:     null,   // moment of the first month
+        lastMonth:      null,   // moment of the last month
         updateLoad:     2,      // amount of months to be loaded on scroll events
         initLoad:       2,      // amount of initial called updates
         scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
-        collections:    {},     // all week collections of appointments
-        current:        null,   // current month as date object
+        views:          {},     // all month views
+        current:        null,   // moment of current month
         folder:         null,
         app:            null,   // the current application
         dialog:         $(),    // sidepopup
@@ -160,23 +160,17 @@ define('io.ox/calendar/month/perspective', [
         },
 
         updateWeeks: function (useCache) {
-            var self = this,
-                method = useCache === false ? 'reset' : 'set',
+            var method = useCache === false ? 'reset' : 'set',
                 loader = api.collectionLoader;
 
             // fetch appointments in a single call before loading collections
             http.pause();
-            _(this.collections).each(function (collection, day) {
+            _(this.views).each(function (view) {
+                var collection = loader.getCollection(view.getRequestParams());
                 if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) return;
-                day = parseInt(day, 10);
                 loader.collection = collection;
                 collection.expired = false;
-                loader.httpGet('chronos', {
-                    start: day,
-                    end: moment(day).endOf('week').valueOf(),
-                    folder: self.folder.id,
-                    view: 'month'
-                }).then(function (data) {
+                loader.httpGet('chronos', view.getRequestParams()).then(function (data) {
                     collection[method](data, { parse: true });
                 }, loader.fail);
             });
@@ -189,122 +183,53 @@ define('io.ox/calendar/month/perspective', [
         },
 
         drawWeeks: function (opt) {
-            var self = this,
-                param = $.extend({
-                    up: false,
-                    multi: 1
-                }, opt),
-                views = [],
-                months = param.multi * self.updateLoad,
-                currMonth = [],
-                monthGroups = [],
-                weeks = 1, curWeek;
+            var self = this;
 
+            opt = _.extend({
+                up: false,
+                down: false,
+                multi: 1
+            }, opt);
 
-            if (param.up) {
-                if (self.firstWeek.date() === 1) {
-                    curWeek = self.firstWeek.subtract(months, 'months').startOf('week').clone();
-                } else {
-                    curWeek = self.firstWeek.add(1, 'week').subtract(months, 'months').startOf('month').startOf('week').clone();
+            if (opt.up) this.firstMonth.subtract(opt.multi * this.updateLoad, 'months');
+            else if (opt.down) this.lastMonth.add(opt.multi * this.updateLoad, 'months');
+
+            function createOrReuseView(options) {
+                var identifier = options.start.valueOf(), collection, view;
+
+                if (!self.views[identifier]) {
+                    self.views[identifier] = new View(options)
+                        .on('showAppointment', self.showAppointment, self)
+                        .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
+                        .on('createAppointment', self.createAppointment, self)
+                        .on('createAppointment', _.bind(self.bubble, self, 'createAppointment'))
+                        .on('openEditAppointment', self.openEditAppointment, self)
+                        .on('updateAppointment', self.updateAppointment, self)
+                        .render();
                 }
-            } else {
-                curWeek = self.lastWeek.clone();
+
+                view = self.views[identifier];
+                collection = api.collectionLoader.getCollection(view.getRequestParams());
+                view.setCollection(collection);
+
+                return view;
             }
 
-            function createView(options) {
-                return new View(options)
-                    .on('showAppointment', self.showAppointment, self)
-                    .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
-                    .on('createAppointment', self.createAppointment, self)
-                    .on('createAppointment', _.bind(self.bubble, self, 'createAppointment'))
-                    .on('openEditAppointment', self.openEditAppointment, self)
-                    .on('updateAppointment', self.updateAppointment, self);
-            }
+            for (var curMonth = this.firstMonth.clone(); curMonth.isSameOrBefore(this.lastMonth); curMonth.add(1, 'month')) {
 
-            // draw all weeks
-            for (; monthGroups.length < months; weeks++, curWeek.add(8, 'd').startOf('week')) {
-                var day = curWeek.valueOf(),
-                    endDate = curWeek.clone().endOf('week'),
-                    monthDelimiter = curWeek.clone().endOf('month').isSameOrBefore(endDate),
-                    view;
-
-                // add collection for week
-                self.collections[day] = api.collectionLoader.getCollection({
-                    start: day,
-                    end: moment(day).endOf('week').valueOf(),
-                    folder: this.folder.id,
-                    view: 'month'
+                var view = createOrReuseView({
+                    start: curMonth.clone(),
+                    folder: self.folder,
+                    pane: this.pane,
+                    app: this.app,
+                    perspective: this
                 });
 
-                if (weeks !== 1) {
-                    // new view
-                    view = createView({
-                        collection: self.collections[day],
-                        day: day,
-                        folder: self.folder,
-                        pane: this.pane,
-                        app: this.app,
-                        perspective: this,
-                        weekType: monthDelimiter ? 'last' : ''
-                    });
-                    views.push(view.render().el);
-                    currMonth.push(view.el);
-                }
-                if (monthDelimiter && currMonth.length) {
-                    monthGroups.push(currMonth);
-                    currMonth = [];
-                }
+                this.pane.append(view.$el);
 
-                if (monthGroups.length === months) {
-                    if (!param.up) {
-                        this.lastWeek = curWeek;
-                    }
-                    break;
-                }
-
-                // seperate last days if month before and first days of next month
-                if (monthDelimiter || weeks === 1) {
-
-                    endDate.add(1, 'd').startOf('month');
-                    // add an
-                    views.push($('<div class="week month-name">').attr('id', endDate.format('YYYY-MM')).append($('<h1 class="unstyled">').text(endDate.format('MMMM YYYY'))));
-                    currMonth.push(views[views.length - 1]);
-                    if (view) view.$el.addClass('no-border');
-
-                    if (!endDate.clone().startOf('week').isSame(endDate)) {
-                        // do not render this, if start of current week is the same as start of current month
-                        views.push(createView({
-                            collection: self.collections[day],
-                            day: day,
-                            folder: self.folder,
-                            pane: this.pane,
-                            app: this.app,
-                            perspective: this,
-                            weekType: 'first'
-                        }).render().el);
-
-                        currMonth.push(views[views.length - 1]);
-                    }
-                }
             }
 
-            monthGroups = _(_(monthGroups).map(function (nodes) {
-                return [nodes.shift(), $('<table class="month" aria-readonly="true">').append(
-                    $('<tbody>').append(nodes)
-                ).css('height', 100 / 7 * nodes.length + '%')];
-            })).flatten();
-
-            // add and render view
-            if (param.up) {
-                var firstWeek = $('.week:first', this.pane),
-                    curOffset = firstWeek.offset().top - this.scrollTop();
-                // don't scroll under the scrollOffset, as this will cause infine scrolling
-                this.pane.prepend(monthGroups).scrollTop(Math.max(-monthGroups[0].offset().top - curOffset, this.scrollOffset + 1));
-            } else {
-                this.pane.append(monthGroups);
-            }
-
-            // update first positions
+            // // update first positions
             self.getFirsts();
             this.updateWeeks();
             return $.when();
@@ -496,8 +421,8 @@ define('io.ox/calendar/month/perspective', [
             this.app = app;
             this.current = moment(app.refDate || moment()).startOf('month');
             this.previous = moment(this.current).subtract(1, 'month');
-            this.firstWeek = moment(this.previous).startOf('week');
-            this.lastWeek = this.firstWeek.clone();
+            this.firstMonth = this.current.clone().subtract(this.updateLoad, 'months');
+            this.lastMonth = this.current.clone().add(this.updateLoad, 'months');
 
             this.main
                 .addClass('month-view')
@@ -547,7 +472,7 @@ define('io.ox/calendar/month/perspective', [
             this.pane
                 .on('scroll', $.proxy(function (e) {
                     if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                        this.drawWeeks();
+                        this.drawWeeks({ down: true });
                     }
                     if (this.scrollTop() <= this.scrollOffset) {
                         this.drawWeeks({ up: true });
