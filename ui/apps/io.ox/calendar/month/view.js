@@ -29,7 +29,7 @@ define('io.ox/calendar/month/view', [
         tagName:        'table',
         className:      'month',
         start:          null,   // moment of start of the month
-        folder:         null,
+        folders:        null,
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         pane:           $(),
@@ -46,7 +46,7 @@ define('io.ox/calendar/month/view', [
         initialize: function (options) {
             this.start = moment(options.start);
             this.end = moment(options.start).endOf('month');
-            this.folder = options.folder;
+            this.folders = options.folders;
             this.pane = options.pane;
             this.app = options.app;
             this.perspective = options.perspective;
@@ -70,7 +70,7 @@ define('io.ox/calendar/month/view', [
             return {
                 start: this.start.valueOf(),
                 end: this.end.valueOf(),
-                folder: this.folder.id,
+                folders: _(this.folders).pluck('id'),
                 view: 'month'
             };
         },
@@ -257,7 +257,7 @@ define('io.ox/calendar/month/view', [
                     });
 
             ext.point('io.ox/calendar/month/view/appointment')
-                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folder: self.folder, app: self.app })));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, { model: a, folders: self.folders, app: self.app })));
             return el;
         },
 
@@ -409,7 +409,7 @@ define('io.ox/calendar/month/view', [
         draw: function (baton) {
             var self = this,
                 a = baton.model,
-                folder = baton.folder,
+                folder = baton.folders[a.get('folder')],
                 conf = 1,
                 confString = '%1$s',
                 classes = '';
@@ -442,7 +442,7 @@ define('io.ox/calendar/month/view', [
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
                 classes = (util.isPrivate(a) ? 'private ' : '') + util.getShownAsClass(a) +
                     ' ' + util.getConfirmationClass(conf) +
-                    (folderAPI.can('write', baton.folder, a.attributes) ? ' modify' : '');
+                    (folderAPI.can('write', folder, a.attributes) ? ' modify' : '');
                 if (conf === 3) {
                     confString =
                         //#. add confirmation status behind appointment title
