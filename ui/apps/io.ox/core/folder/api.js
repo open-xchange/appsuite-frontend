@@ -617,7 +617,7 @@ define('io.ox/core/folder/api', [
             },
             function (error) {
                 api.trigger('error error:' + error.code, error);
-                throw error;
+                return error;
             }
         )
         .pipe(function (data) {
