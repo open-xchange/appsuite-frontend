@@ -21,6 +21,7 @@ Scenario('Compose plain text mail', function (I) {
 
     // open mail settings
     I.selectFolder('Mail');
+    I.waitForVisible('.rightside h1');
     I.selectFolder('Compose');
 
     // set compose mode to html

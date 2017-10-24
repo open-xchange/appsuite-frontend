@@ -19,6 +19,7 @@ Scenario('add and removes Mail Filter Rules', function* (I) {
     I.login('app=io.ox/settings');
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
+    I.waitForVisible('.rightside h1');
 
     // open mailfilter settings
     I.selectFolder('Filter Rules');
@@ -217,6 +218,7 @@ Scenario('adds and removes Mail Filter Rules with modified config', function (I)
     I.login('app=io.ox/settings', { prefix: 'io.ox/mail/mailfilter' });
     I.waitForVisible('.io-ox-settings-main');
     I.selectFolder('Mail');
+    I.waitForVisible('.rightside h1');
 
     // open mailfilter settings
     I.selectFolder('Filter Rules');
