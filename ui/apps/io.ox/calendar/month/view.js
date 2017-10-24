@@ -26,10 +26,9 @@ define('io.ox/calendar/month/view', [
 
     var View = Backbone.View.extend({
 
-        tagName:        'tr',
-        className:      'week',
-        weekStart:      0,      // week start moment
-        weekEnd:        0,      // week ends moment
+        tagName:        'table',
+        className:      'month',
+        start:          null,   // moment of start of the month
         folder:         null,
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
@@ -45,14 +44,35 @@ define('io.ox/calendar/month/view', [
         },
 
         initialize: function (options) {
-            this.listenTo(this.collection, 'add remove reset change', _.debounce(this.renderAppointments));
-            this.weekStart = moment(options.day);
-            this.weekEnds = moment(this.weekStart).add(1, 'week');
+            this.start = moment(options.start);
+            this.end = moment(options.start).endOf('month');
             this.folder = options.folder;
             this.pane = options.pane;
             this.app = options.app;
             this.perspective = options.perspective;
             this.weekType = options.weekType;
+        },
+
+        setCollection: function (collection) {
+            if (this.collection === collection) return;
+
+            if (this.collection) this.stopListening(this.collection);
+            this.collection = collection;
+
+            this.renderAppointments();
+
+            this
+                .listenTo(this.collection, 'change', this.renderAppointments, this)
+                .listenTo(this.collection, 'add remove reset', _.debounce(this.renderAppointments), this);
+        },
+
+        getRequestParams: function () {
+            return {
+                start: this.start.valueOf(),
+                end: this.end.valueOf(),
+                folder: this.folder.id,
+                view: 'month'
+            };
         },
 
         onClickAppointment: function (e) {
@@ -136,56 +156,85 @@ define('io.ox/calendar/month/view', [
         },
 
         render: function () {
-            // TODO: fix this workaround
-            var list = util.getWeekScaffold(this.weekStart),
-                firstFound = false,
-                self = this,
-                // needs clearfix or text is aligned to middle instead of baseline
-                weekinfo = $('<td class="week-info clearfix">')
-                    .append(
-                        $('<span>').addClass('cw').text(
-                            gt('CW %1$d', this.weekStart.format('w'))
-                        )
-                    );
-
-            _(list.days).each(function (day, i) {
-                if (day.isFirst) {
-                    firstFound = true;
-                }
-
-                var dayCell = $('<td>')
-                .addClass((day.isFirst ? ' first' : '') +
-                    (day.isFirst && i === 0 ? ' forceleftborder' : '') +
-                    (day.isToday ? ' today' : '') +
-                    (day.isWeekend ? ' weekend' : '') +
-                    (day.isFirst || i === 0 ? ' borderleft' : '') +
-                    (day.isLast ? ' borderright' : '') +
-                    /*eslint-disable no-nested-ternary */
-                    (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '') +
-                    /*eslint-enable no-nested-ternary */
-                    (list.hasLast && !firstFound ? ' borderbottom' : '')
-                );
-
-                if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
+            var self = this,
+                day = moment(this.start),
+                firstDayOfWeek = moment.localeData().firstDayOfWeek(),
+                lastDayOfWeek = firstDayOfWeek + 6 % 7,
+                getRow = function (date) {
+                    var row = $('<tr class="week">');
+                    if (_.device('!smartphone')) {
+                        row.append(
+                            $('<td class="week-info">').append(
+                                $('<span>').addClass('cw').text(
+                                    gt('CW %1$d', date.format('w'))
+                                )
+                            )
+                        );
+                    }
+                    return row;
+                },
+                getEmptyCell = function () {
                     //#. text for screenreaders when an empty table cell is selected (empty is not a verb here)
-                    this.$el.append(dayCell.addClass('day-filler').append($('<div class="sr-only">').text(gt('Empty table cell'))));
-                } else {
-                    this.$el.append(
-                        dayCell
-                        .addClass('day')
+                    return $('<td class="day-filler">').append($('<div class="sr-only">').text(gt('Empty table cell')));
+                },
+                row = getRow(day),
+                i;
+
+            this.$el.empty().append(
+                $('<caption class="week month-name">')
+                    .attr('id', this.start.format('YYYY-MM'))
+                    .append(
+                        $('<h1 class="unstyled">')
+                            .text(this.start.format('MMMM YYYY'))
+                    )
+            );
+
+            // prepend empty days
+            for (i = 0; i < day.day(); i++) row.append(getEmptyCell());
+            row.children().last().addClass('borderright');
+
+            // add days
+            for (; day.isBefore(this.end); day.add(1, 'day')) {
+                var dayCell = $('<td>');
+                if (!row) row = getRow(day);
+                row.append(
+                    dayCell.addClass('day')
                         .attr({
-                            id: moment(day.timestamp).format('YYYY-M-D'),
+                            id: day.format('YYYY-M-D'),
                             //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', moment(day.timestamp).format('ddd LL'))
+                            title: gt('Selected - %1$s', day.format('ddd LL'))
                         })
-                        .data('date', day.timestamp)
+                        .data('date', day.valueOf())
                         .append(
-                            $('<div class="number" aria-hidden="true">').text(day.date),
+                            $('<div class="number" aria-hidden="true">').text(day.date()),
                             $('<div class="list abs">')
                         )
-                    );
+                );
+
+                if (day.date() === 1) dayCell.addClass('first');
+                if (day.date() === 1 && day.day() === firstDayOfWeek) dayCell.addClass('forceleftborder');
+                if (day.isSame(moment(), 'day')) dayCell.addClass('today');
+                if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
+                if (day.date() === 1 || day.day() === firstDayOfWeek) dayCell.addClass('borderleft');
+                if (day.isSame(this.end, 'day')) dayCell.addClass('borderright');
+                if (day.day() <= lastDayOfWeek) dayCell.addClass('bordertop');
+
+                if (day.isSame(day.clone().endOf('week'), 'day')) {
+                    this.$el.append(row);
+                    row = undefined;
                 }
-            }, this);
+            }
+
+            // append empty days
+            for (i = this.end.day(); i < lastDayOfWeek; i++) row.append(getEmptyCell().addClass('bordertop'));
+            if (row) this.$el.append(row);
+
+            // set borders in the last row
+            this.$el
+                .find('.week:last-child').addClass('no-border')
+                .find('> .day').addClass('borderbottom');
+
+            this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
 
             if (_.device('smartphone')) {
                 // on mobile we switch to the day view after a tap
@@ -193,11 +242,7 @@ define('io.ox/calendar/month/view', [
                 this.$el.on('tap', '.day', function () {
                     self.changeToSelectedDay($(this).data('date'));
                 });
-            } else {
-                this.$el.prepend(weekinfo);
             }
-
-            if (this.collection.length > 0) this.renderAppointments();
 
             return this;
         },
@@ -241,8 +286,8 @@ define('io.ox/calendar/month/view', [
                 if (util.isAllday(model)) endMoment.subtract(1, 'millisecond');
 
                 // reduce to dates inside the current week
-                startMoment = moment.max(startMoment, this.weekStart).clone();
-                endMoment = moment.min(endMoment, this.weekEnds).clone();
+                startMoment = moment.max(startMoment, this.start).clone();
+                endMoment = moment.min(endMoment, this.end).clone();
 
                 if (_.device('smartphone')) {
                     var cell = $('#' + startMoment.format('YYYY-M-D') + ' .list', this.$el);
