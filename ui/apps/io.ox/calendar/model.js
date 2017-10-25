@@ -227,7 +227,7 @@ define('io.ox/calendar/model', [
         },
 
         setDefaultAttendees: function (options) {
-            var self;
+            var self = this;
             return folderAPI.get(this.get('folder')).then(function (folder) {
                 if (!options.create) return;
                 var isPrivate = folderAPI.is('private', folder),
