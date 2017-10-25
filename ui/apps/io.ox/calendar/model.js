@@ -226,7 +226,7 @@ define('io.ox/calendar/model', [
             return this._attendees;
         },
 
-        setDefaultParticipants: function (options) {
+        setDefaultAttendees: function (options) {
             var self;
             return folderAPI.get(this.get('folder')).then(function (folder) {
                 if (!options.create) return;
