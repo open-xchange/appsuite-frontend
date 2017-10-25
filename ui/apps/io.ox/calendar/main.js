@@ -545,6 +545,14 @@ define('io.ox/calendar/main', [
             app.folder.handleErrors();
         },
 
+        'create': function (app) {
+            api.on('create', function (event) {
+                app.folders.add(event.folder);
+                var model = folderAPI.pool.getModel(event.folder);
+                model.trigger('change', model);
+            });
+        },
+
         /*
          * Handle page change on delete on mobiles
          */
