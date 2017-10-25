@@ -638,6 +638,7 @@ define('io.ox/calendar/api', [
                 .value();
 
         collection.add(models, { silent: true });
+        if (collection.length > 0) collection.expired = true;
 
         return collection;
     });
@@ -741,52 +742,60 @@ define('io.ox/calendar/api', [
 
     });
 
-    api.collectionLoader = new CollectionLoader({
-        module: 'chronos',
-        // listview uses own pagination. just make sure, that the number of items is not cropped
-        PRIMARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
-        SECONDARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
-        PRIMARY_SEARCH_PAGE_SIZE: 100,
-        SECONDARY_SEARCH_PAGE_SIZE: 200,
-        paginateCompare: false,
-        getQueryParams: function (params) {
-            return params;
-        },
-        // do not add index to these models. position inside collection is sufficient due to special pagination
-        addIndex: $.noop,
-        isBad: function () { return false; },
-        httpGet: function (module, params) {
-            // special handling for requests of listview
-            if (params.view === 'list') {
-                var offset = this.collection.offset || 0, start, end;
-                if (params.paginate === true) {
-                    // paginate
-                    start = offset;
-                    end = offset + 1;
-                } else {
-                    // reload
-                    start = 0;
-                    end = offset || 1;
-                }
-                this.collection.offset = end;
-                params.start = moment().startOf('day').add(start, 'month').valueOf();
-                params.end = moment().startOf('day').add(end, 'month').valueOf();
-            }
-            return api.getAll(params).then(function (data) {
-                data.forEach(function (obj) {
-                    obj.cid = util.cid(obj);
+    api.getCollectionLoader = (function () {
+        var hash = [];
+        return function (view) {
+            if (!hash[view]) {
+                hash[view] = new CollectionLoader({
+                    module: 'chronos',
+                    // listview uses own pagination. just make sure, that the number of items is not cropped
+                    PRIMARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+                    SECONDARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+                    PRIMARY_SEARCH_PAGE_SIZE: 100,
+                    SECONDARY_SEARCH_PAGE_SIZE: 200,
+                    paginateCompare: false,
+                    getQueryParams: function (params) {
+                        return params;
+                    },
+                    // do not add index to these models. position inside collection is sufficient due to special pagination
+                    addIndex: $.noop,
+                    isBad: function () { return false; },
+                    httpGet: function (module, params) {
+                        // special handling for requests of listview
+                        if (params.view === 'list') {
+                            var offset = this.collection.offset || 0, start, end;
+                            if (params.paginate === true) {
+                                // paginate
+                                start = offset;
+                                end = offset + 1;
+                            } else {
+                                // reload
+                                start = 0;
+                                end = offset || 1;
+                            }
+                            this.collection.offset = end;
+                            params.start = moment().startOf('day').add(start, 'month').valueOf();
+                            params.end = moment().startOf('day').add(end, 'month').valueOf();
+                        }
+                        return api.getAll(params).then(function (data) {
+                            data.forEach(function (obj) {
+                                obj.cid = util.cid(obj);
+                            });
+                            return data;
+                        });
+                    },
+                    fail: function (error) {
+                        if (error && error.code !== 'APP-0013') {
+                            require(['io.ox/core/notifications', 'gettext!io.ox/calendar'], function (notifications, gt) {
+                                notifications.yell('error', gt('An error occurred. Please try again.'));
+                            });
+                        }
+                    }
                 });
-                return data;
-            });
-        },
-        fail: function (error) {
-            if (error && error.code !== 'APP-0013') {
-                require(['io.ox/core/notifications', 'gettext!io.ox/calendar'], function (notifications, gt) {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                });
             }
-        }
-    });
+            return hash[view];
+        };
+    }());
 
     _.extend(api, Backbone.Events);
 
