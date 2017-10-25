@@ -617,6 +617,31 @@ define('io.ox/calendar/api', [
         return hash;
     }
 
+    api.pool.get = _.wrap(api.pool.get, function (get, cid) {
+        var hasCollection = !!this.getCollections()[cid],
+            hash = urlToHash(cid);
+        if (hasCollection || cid === 'detail' || !hash.folders || hash.folders.length === 0) return get.call(this, cid);
+        // find models which should be in this collection
+        var list = this.grep('start=' + hash.start, 'end=' + hash.end),
+            collection = get.call(this, cid),
+            models = _(list)
+                .chain()
+                .pluck('models')
+                .flatten()
+                .uniq(function (model) {
+                    return model.cid;
+                })
+                .filter(function (model) {
+                    return hash.folders.indexOf(model.get('folder')) >= 0;
+                })
+                .invoke('toJSON')
+                .value();
+
+        collection.add(models, { silent: true });
+
+        return collection;
+    });
+
     _.extend(api.pool, {
 
         map: function (data) {
