@@ -81,13 +81,13 @@ define('plugins/portal/calendar/register', [
         title: gt('Appointments'),
 
         initialize: function (baton) {
-            baton.collection = api.collectionLoader.getCollection(getRequestParams());
+            baton.collection = api.getCollectionLoader('portal').getCollection(getRequestParams());
         },
 
         load: function () {
             var def = new $.Deferred();
 
-            api.collectionLoader
+            api.getCollectionLoader('portal')
                 .load(getRequestParams())
                 .once('load', function () {
                     def.resolve();

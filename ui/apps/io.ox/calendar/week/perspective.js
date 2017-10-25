@@ -210,7 +210,7 @@ define('io.ox/calendar/week/perspective', [
         getAppointments: function (useCache) {
             // fetch appointments
             var obj = this.view.getRequestParam(),
-                loader = api.collectionLoader,
+                loader = api.getCollectionLoader('week'),
                 method = useCache === false ? 'reload' : 'load',
                 collection = loader.getCollection(obj);
 
@@ -235,7 +235,7 @@ define('io.ox/calendar/week/perspective', [
                     start: index < 0 ? params.start - range : params.end,
                     end: index < 0 ? params.start : params.end + range
                 }),
-                loader = api.collectionLoader,
+                loader = api.getCollectionLoader('week'),
                 collection = loader.getCollection(newParams),
                 cont = function (c) { if (index < 0) self.prefetch(1, c); };
 
