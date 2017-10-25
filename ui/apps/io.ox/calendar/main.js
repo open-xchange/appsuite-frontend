@@ -275,7 +275,7 @@ define('io.ox/calendar/main', [
             });
             app.folders = {
                 getData: function () {
-                    $.when.apply($, folders.map(function (folder) {
+                    return $.when.apply($, folders.map(function (folder) {
                         return folderAPI.get(folder).then(function (folder) {
                             return folder;
                         }, function () {
@@ -283,7 +283,7 @@ define('io.ox/calendar/main', [
                         });
                     })).then(function () {
                         var data = _(arguments).toArray();
-                        return _.object(folders, data);
+                        return _.indexBy(data, 'id');
                     });
                 },
                 isSelected: function (id) {
