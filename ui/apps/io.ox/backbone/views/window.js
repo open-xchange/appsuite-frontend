@@ -37,8 +37,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
             this.displayStyle = this.options.displayStyle || 'cornered';
-            // new windows are active by default
-            this.makeActive();
         },
 
         render: function () {
@@ -77,7 +75,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             if (!this.$header || !noRerender) this.render();
             $('#io-ox-screens').append(this.$el);
             add(this);
-            this.toggle(true);
+            this.makeActive();
             return this;
         },
 
@@ -112,8 +110,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             var self = this;
 
             collection.each(function (model) {
-                //update silent, so the bar isn't redrawn for each window
-                model.get('window').toggle(model.get('window').cid === self.cid, true);
+                model.get('window').toggle(model.get('window').cid === self.cid);
             });
 
             // trigger , so the taskbar redraws
@@ -131,7 +128,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.toggle(false);
         },
 
-        toggle: function (state, silent) {
+        toggle: function (state) {
             // already in the correct state. nothing to do
             if (state !== this.minimized) return;
 
@@ -140,12 +137,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.minimized = !state;
             if (state) {
                 this.$el.show();
-                if (!silent) collection.trigger('show', this);
+                collection.trigger('show', this);
             } else {
                 // little delay to wait for animation
                 this.$el.delay(300).queue(function () {
                     $(this).hide();
-                    if (!silent) collection.trigger('hide', this);
+                    collection.trigger('hide', this);
                 });
             }
         },
@@ -168,7 +165,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         collection.remove(window.cid);
     }
 
-    collection.on('remove show hide', function () {
+    // use debounce here, to reduce redraws (may happen if multiple edit dialogs are restored)
+    collection.on('remove show hide', _.debounce(function () {
 
         var hasStickyWindows = false;
 
@@ -193,7 +191,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         );
         $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
         $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
-    });
+        updateScrollControllState();
+    }, 20));
 
     collection.on('change:count', function (window, count) {
         $('#io-ox-taskbar').find('[data-cid="' + window.cid + '"] .count').toggle(count > 0).text(count);
@@ -204,6 +203,72 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             model = collection.get(cid);
         model.get('window').makeActive();
     });
+
+    var scrolling = false,
+        keepScrolling = true;
+        // add controls to taskbar-container
+    $('#io-ox-taskbar-container')
+        .prepend($('<button type="button" class="taskbar-control control-left">').append('<i class="fa fa-chevron-left">').on('mousedown', scroll)
+            .on('mouseup mouseleave', function () {
+                scrolling = false;
+                keepScrolling = false;
+            }))
+        .append($('<button type="button" class="taskbar-control control-right">').append('<i class="fa fa-chevron-right">').on('mousedown', { right: true }, scroll)
+            .on('mouseup mouseleave', function () {
+                scrolling = false;
+                keepScrolling = false;
+            }));
+
+    function scroll(e) {
+        keepScrolling = true;
+
+        var node = $('#io-ox-taskbar'),
+            right = e.data && e.data.right,
+            distance = 0,
+            doScroll = function (dist) {
+
+                // already scrolling, so we're done
+                if (scrolling) return;
+                scrolling = true;
+
+                // defer is needed because the callback returns instantly, while the animation isn't finished yet
+                node.animate({ 'scrollLeft': (right ? '+=' : '-=') + (dist || distance) }, (dist || distance) * 2, 'linear', function () {
+                    scrolling = false;
+                    updateScrollControllState();
+                    // failsave to prevent infinite scrolling
+                    if ((right && $('#io-ox-taskbar-container .control-right').prop('disabled')) || (!right && $('#io-ox-taskbar-container .control-left').prop('disabled'))) {
+                        keepScrolling = false;
+                    }
+                    if (keepScrolling) {
+                        doScroll(98);
+                    }
+                });
+            };
+
+        // children are sorted right to left
+        _(node.children()).each(function (tab, index) {
+            // scroll to tab if more than half of the tab (width 90px + margin 8px)is out of the view or if it's the first/last tab
+            if (!right && distance === 0 && (index === node.children().length - 1 || $(tab).offset().left - node.offset().left < -49)) {
+                distance = node.offset().left - $(tab).offset().left;
+            } else if (right && (index === 0 || tab.getBoundingClientRect().right - node[0].getBoundingClientRect().right > 49)) {
+                distance = tab.getBoundingClientRect().right - node[0].getBoundingClientRect().right;
+            }
+        });
+
+        if (distance === 0) {
+            return;
+        }
+
+        doScroll();
+    }
+
+    function updateScrollControllState() {
+        var node = $('#io-ox-taskbar');
+        $('#io-ox-taskbar-container .control-left').prop('disabled', node.scrollLeft() === 0);
+        $('#io-ox-taskbar-container .control-right').prop('disabled', node.scrollLeft() === node[0].scrollWidth - node.width());
+    }
+
+    $(window).on('resize', _.debounce(updateScrollControllState, 50));
 
     return WindowView;
 
