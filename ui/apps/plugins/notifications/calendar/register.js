@@ -251,11 +251,11 @@ define('plugins/notifications/calendar/register', [
 
             calAPI.on('resetChronosAlarms', function (alarms) {
                 var alarmsToAdd = [],
-                    now = new moment().utc().format('YYYYMMDD[T]HHmmss[Z]'),
+                    now = new moment().utc().format(util.ZULU_FORMAT),
                     timerFunction = function () {
                         subview.addNotifications(nextAlarm);
                         nextAlarm = undefined;
-                        now = new moment().utc().format('YYYYMMDD[T]HHmmss[Z]');
+                        now = new moment().utc().format(util.ZULU_FORMAT);
                         var temp = [];
                         _(alarmsToShow).each(function (alarm) {
                             if (alarm.time > now) {

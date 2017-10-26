@@ -474,7 +474,7 @@ define('io.ox/calendar/freetime/timeView', [
                 until = moment(from).add(1, 'weeks');
             }
 
-            return api.freebusyEvents(attendees.toString(), { from: from.format('YYYYMMDD[T]HHmmss[Z]'), until: until.format('YYYYMMDD[T]HHmmss[Z]') }).done(function (items) {
+            return api.freebusyEvents(attendees.toString(), { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) }).done(function (items) {
                 if (items.length === 0) {
                     // remove busy animation again
                     self.bodyNode.idle();

@@ -150,8 +150,8 @@ define('io.ox/calendar/week/perspective', [
                     .done(function (action) {
                         var expanse = {
                             expand: true,
-                            rangeStart: moment(self.view.startDate).utc().format('YYYYMMDD[T]HHmmss[Z]'),
-                            rangeEnd: moment(self.view.startDate).utc().add(self.view.columns, 'days').format('YYYYMMDD[T]HHmmss[Z]')
+                            rangeStart: moment(self.view.startDate).utc().format(util.ZULU_FORMAT),
+                            rangeEnd: moment(self.view.startDate).utc().add(self.view.columns, 'days').format(util.ZULU_FORMAT)
                         };
                         switch (action) {
                             case 'series':

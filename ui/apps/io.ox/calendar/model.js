@@ -116,7 +116,7 @@ define('io.ox/calendar/model', [
                 default:
             }
             if (this.get('interval') > 1) args.push('INTERVAL=' + this.get('interval'));
-            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format('YYYYMMDD[T]HHmmss[Z]'));
+            if (this.get('until')) args.push('UNTIL=' + moment(this.get('until')).utc().format(util.ZULU_FORMAT));
             if (this.get('occurrences')) args.push('COUNT=' + this.get('occurrences'));
             if (args.length > 0) this.model.set('rrule', args.join(';'));
             else this.model.unset('rrule');
