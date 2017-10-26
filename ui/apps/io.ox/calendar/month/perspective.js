@@ -42,6 +42,7 @@ define('io.ox/calendar/month/perspective', [
         updateLoad:     2,      // amount of months to be loaded on scroll events
         initLoad:       2,      // amount of initial called updates
         scrollOffset:   _.device('smartphone') ? 130 : 250,  // offset space to trigger update event on scroll stop
+        currentView:    $(),    // the view with the current month
         views:          {},     // all month views
         current:        null,   // moment of current month
         folder:         null,
@@ -183,22 +184,31 @@ define('io.ox/calendar/month/perspective', [
             this.app.trigger(eventname, e, data, this.name);
         },
 
-        drawWeeks: function (opt) {
+        drawMonths: function (opt) {
             var self = this;
 
             opt = _.extend({
                 up: false,
-                down: false,
-                multi: 1
+                down: false
             }, opt);
 
             if (opt.up) {
-                if (opt.date) this.firstMonth = moment.min(this.firstMonth, moment(opt.date).startOf('month'));
-                this.firstMonth.subtract(opt.multi * this.updateLoad, 'months');
+                this.firstMonth.subtract(1, 'month');
+                this.lastMonth.subtract(1, 'month');
             } else if (opt.down) {
-                if (opt.date) this.lastMonth = moment.max(this.lastMonth, moment(opt.date).startOf('month'));
-                this.lastMonth.add(opt.multi * this.updateLoad, 'months');
+                this.firstMonth.add(1, 'month');
+                this.lastMonth.add(1, 'month');
+            } else if (opt.date) {
+                this.firstMonth = moment(opt.date).startOf('month').subtract(this.updateLoad, 'months');
+                this.lastMonth = moment(opt.date).startOf('month').add(this.updateLoad, 'months');
             }
+
+            this.current = this.firstMonth.clone().add(this.updateLoad, 'months');
+
+            // mark old views as expired
+            _(this.views).each(function (view) {
+                view.$el.addClass('hidden');
+            });
 
             function createOrReuseView(options) {
                 var identifier = options.start.valueOf(), collection, view;
@@ -217,6 +227,7 @@ define('io.ox/calendar/month/perspective', [
                 view = self.views[identifier];
                 collection = api.getCollectionLoader('month').getCollection(view.getRequestParams());
                 view.setCollection(collection);
+                view.$el.removeClass('hidden');
 
                 return view;
             }
@@ -233,15 +244,14 @@ define('io.ox/calendar/month/perspective', [
 
                 this.pane.append(view.$el);
 
+                if (this.current.isSame(curMonth, 'month')) this.currentView = view;
+
             }
             if (_.device('ie <= 11')) {
                 this.calculateHeights();
             }
 
-            // // update first positions
-            self.getFirsts();
             this.updateWeeks();
-            return $.when();
         },
 
         // IE 11 needs a fixed height or appointments are not displayed
@@ -305,79 +315,32 @@ define('io.ox/calendar/month/perspective', [
         },
 
         /**
-         * update global 'tops' object with current positions of all first days of all months
-         */
-        getFirsts: function () {
-            if (!this.pane) return;
-
-            var self = this;
-            this.tops = {};
-
-            $('.day.first', this.pane).each(function (i, el) {
-                var elem = $(el);
-                // >> 0 parses a floating point number to an integer
-                self.tops[($(el).position().top - elem.height() / 2 + self.pane.scrollTop()) >> 0] = elem;
-            });
-        },
-
-        /**
-         * Called after the perspective is shown.
-         */
-        afterShow: function () {
-            // See Bug 36417 - calendar jumps to wrong month with IE10
-            // If month perspectice is rendered the first time after another perspective was already rendered, the tops will all be 0.
-            // That happens, because the perspective is made visible after rendering but only when there was already another calendar perspective rendered;
-            if (_.keys(this.tops).length <= 1) this.getFirsts();
-        },
-
-        /**
          * scroll to given month
          * @param  {object} opt
          *          string|LocalDate date: date target as LocalDate or string (next|prev|today)
          *          number           duration: duration of the scroll animation
          */
         gotoMonth: function (target) {
-            var self = this,
-                isPrev;
+            var self = this;
 
             target = target || self.app.refDate || moment();
 
             if (typeof target === 'string') {
-                if (target === 'today') {
-                    target = moment();
-                } else if (target === 'prev') {
-                    isPrev = true;
-                    target = moment(self.previous);
-                } else {
-                    target = moment(self.current).add(1, 'month');
-                }
+                if (target === 'today') target = moment();
+                else if (target === 'prev') target = this.current.clone().subtract(1, 'month');
+                else if (target === 'next') target = this.current.clone().add(1, 'month');
+                else throw Object({ message: 'Unknown target ' + target });
             }
 
-            // we cannot use target.month() + 1 or we might get month 13 in 2015 instead of month 1 in 2016
-            var nextMonth = moment(target).add(1, 'month'),
-                firstDay = $('#' + target.format('YYYY-MM'), self.pane),
-                nextFirstDay = $('#' + nextMonth.format('YYYY-MM'), self.pane),
-                // don't scroll to the first shown month (causes infinte scrolling because the scrollpos cannot be reached), draw a previous month first
-                isFirst = isPrev && $('.month-name', self.pane).first().attr('id') === target.format('YYYY-MM'),
+            var firstDay = $('#' + target.format('YYYY-MM'), self.pane),
                 scrollToDate = function () {
-                    // scroll to position
                     if (firstDay.length === 0) return;
                     firstDay.get(0).scrollIntoView();
                 };
 
-            if (!isFirst && firstDay.length > 0 && nextFirstDay.length > 0) {
-                scrollToDate();
-            } else if (isFirst || target.valueOf() < self.current.valueOf()) {
-                this.drawWeeks({ up: true, date: target }).done(function () {
-                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
-                    scrollToDate();
-                });
-            } else {
-                this.drawWeeks({ down: true, date: target }).done(function () {
-                    firstDay = $('#' + target.format('YYYY-MM'), self.pane);
-                    scrollToDate();
-                });
-            }
+            this.drawMonths({ date: target });
+            firstDay = $('#' + target.format('YYYY-MM'), self.pane);
+            scrollToDate();
         },
 
         /**
@@ -494,44 +457,23 @@ define('io.ox/calendar/month/perspective', [
             }
 
             this.pane
+                .css('right', -util.getScrollBarWidth() + 'px')
                 .on('scroll', $.proxy(function (e) {
-                    if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight - this.scrollOffset) {
-                        this.drawWeeks({ down: true });
-                    }
-                    if (this.scrollTop() <= this.scrollOffset) {
-                        this.drawWeeks({ up: true });
+                    // debugger;
+                    var $current = this.currentView.$el,
+                        current = $current.get(0),
+                        top = current.offsetTop,
+                        height = current.offsetHeight;
+                    if (top + height < e.target.scrollTop) {
+                        this.drawMonths({ down: true });
+                        e.target.scrollTop += $current.get(0).offsetTop - top;
+                    } else if (top > e.target.scrollTop + e.target.offsetHeight) {
+                        this.drawMonths({ up: true });
+                        e.target.scrollTop += $current.get(0).offsetTop - top;
                     }
                 }, this))
                 .on('scrollend', $.proxy(function () {
-                    var month = false,
-                        prevMonth = 0,
-                        scrollTop = this.scrollTop(),
-                        height = this.pane.height();
-
-                    // find first visible month on scroll-position
-                    for (var y in this.tops) {
-                        y = y >> 0;
-                        if ((y + this.tops[y].height()) > scrollTop && (scrollTop + height / 3) > y) {
-                            // select month where title is in upper half of the screen
-                            month = this.tops[y].data('date');
-                            break;
-                        } else if (y > scrollTop + height / 3) {
-                            // on first element, which is not in the upper visible third, stop.
-                            break;
-                        }
-
-                        prevMonth = this.tops[y].data('date');
-                        month = this.tops[y].data('date');
-                    }
-
-                    if (prevMonth !== this.previous.valueOf()) {
-                        this.previous = moment(prevMonth);
-                    }
-
-                    if (month !== this.current.valueOf()) {
-                        this.current = moment(month);
-                        self.app.refDate.year(this.current.year()).month(this.current.month());
-                    }
+                    this.app.refDate.year(this.current.year()).month(this.current.month());
                 }, this));
 
             $(window).on('resize', this.getFirsts);
@@ -541,9 +483,8 @@ define('io.ox/calendar/month/perspective', [
             }
 
             self.getFolder().done(function () {
-                self.drawWeeks({ multi: self.initLoad }).done(function () {
-                    self.gotoMonth();
-                });
+                self.drawMonths();
+                self.gotoMonth();
             });
 
             if (_.keys(this.tops).length <= 1) {
