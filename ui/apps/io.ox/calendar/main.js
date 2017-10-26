@@ -177,6 +177,11 @@ define('io.ox/calendar/main', [
                 classes: 'rightside'
             });
 
+            app.pages.addPage({
+                name: 'year',
+                container: c
+            });
+
         },
 
         'subscription': function (app) {
