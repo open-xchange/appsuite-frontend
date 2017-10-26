@@ -155,96 +155,111 @@ define('io.ox/calendar/month/view', [
             ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
         },
 
-        render: function () {
-            var self = this,
-                day = moment(this.start),
-                firstDayOfWeek = moment.localeData().firstDayOfWeek(),
-                lastDayOfWeek = firstDayOfWeek + 6 % 7,
-                getRow = function (date) {
-                    var row = $('<tr class="week">');
-                    if (_.device('!smartphone')) {
-                        row.append(
-                            $('<td class="week-info">').append(
-                                $('<span>').addClass('cw').text(
-                                    gt('CW %1$d', date.format('w'))
-                                )
+        render: (function () {
+            function getRow(date) {
+                var row = $('<tr class="week">');
+                if (_.device('!smartphone')) {
+                    row.append(
+                        $('<td class="week-info">').append(
+                            $('<span>').addClass('cw').text(
+                                gt('CW %1$d', date.format('w'))
                             )
-                        );
-                    }
-                    return row;
-                },
-                getEmptyCell = function () {
-                    return $('<td class="day-filler">').append($('<div class="sr-only">').text(gt('Empty table cell')));
-                },
-                row = getRow(day),
-                i;
+                        )
+                    );
+                }
+                return row;
+            }
 
-            this.$el.empty().append(
-                $('<caption class="week month-name">')
-                    .attr('id', this.start.format('YYYY-MM'))
-                    .append(
-                        $('<h1 class="unstyled">')
-                            .text(this.start.format('MMMM YYYY'))
-                    )
-            );
+            function getEmptyCell() {
+                return $('<td class="day-filler">').append($('<div class="sr-only">').text(gt('Empty table cell')));
+            }
 
-            // prepend empty days
-            for (i = 0; i < day.day(); i++) row.append(getEmptyCell());
-            row.children().last().addClass('borderright');
+            function subtractDays(a, b) {
+                var result = (a - b) % 7;
+                if (result < 0) result += 7;
+                return result;
+            }
 
-            // add days
-            for (; day.isBefore(this.end); day.add(1, 'day')) {
-                var dayCell = $('<td>');
-                if (!row) row = getRow(day);
-                row.append(
-                    dayCell.addClass('day')
-                        .attr({
-                            id: day.format('YYYY-M-D'),
-                            //#. %1$s is a date: october 12th 2017 for example
-                            title: gt('Selected - %1$s', day.format('ddd LL'))
-                        })
-                        .data('date', day.valueOf())
+            return function render() {
+                var self = this,
+                    day = moment(this.start),
+                    firstDayOfWeek = moment.localeData().firstDayOfWeek(),
+                    lastDayOfWeek = firstDayOfWeek + 6 % 7,
+                    row = getRow(day),
+                    i, end;
+
+                this.$el.empty().append(
+                    $('<caption class="week month-name">')
+                        .attr('id', this.start.format('YYYY-MM'))
                         .append(
-                            $('<div class="number" aria-hidden="true">').text(day.date()),
-                            $('<div class="list abs">')
+                            $('<h1 class="unstyled">')
+                                .text(this.start.format('MMMM YYYY'))
                         )
                 );
 
-                if (day.date() === 1) dayCell.addClass('first');
-                if (day.date() === 1 && day.day() === firstDayOfWeek) dayCell.addClass('forceleftborder');
-                if (day.isSame(moment(), 'day')) dayCell.addClass('today');
-                if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
-                if (day.date() === 1 || day.day() === firstDayOfWeek) dayCell.addClass('borderleft');
-                if (day.isSame(this.end, 'day')) dayCell.addClass('borderright');
-                if (day.day() <= lastDayOfWeek) dayCell.addClass('bordertop');
+                // prepend empty days
+                end = subtractDays(day.day(), firstDayOfWeek);
+                for (i = 0; i < end; i++) row.append(getEmptyCell());
+                row.children().last().addClass('borderright');
 
-                if (day.isSame(day.clone().endOf('week'), 'day')) {
-                    this.$el.append(row);
-                    row = undefined;
+                // add days
+                for (; day.isBefore(this.end); day.add(1, 'day')) {
+                    var dayCell = $('<td>');
+                    if (!row) row = getRow(day);
+                    row.append(
+                        dayCell.addClass('day')
+                            .attr({
+                                id: day.format('YYYY-M-D'),
+                                //#. %1$s is a date: october 12th 2017 for example
+                                title: gt('Selected - %1$s', day.format('ddd LL'))
+                            })
+                            .data('date', day.valueOf())
+                            .append(
+                                $('<div class="number" aria-hidden="true">').text(day.date()),
+                                $('<div class="list abs">')
+                            )
+                    );
+
+                    if (day.date() === 1) dayCell.addClass('first');
+                    if (day.date() === 1 && day.day() === firstDayOfWeek) dayCell.addClass('forceleftborder');
+                    if (day.isSame(moment(), 'day')) dayCell.addClass('today');
+                    if (day.day() === 0 || day.day() === 6) dayCell.addClass('weekend');
+                    if (day.date() === 1 || day.day() === firstDayOfWeek) dayCell.addClass('borderleft');
+                    if (day.isSame(this.end, 'day')) dayCell.addClass('borderright');
+
+                    if (day.isSame(day.clone().endOf('week'), 'day')) {
+                        this.$el.append(row);
+                        row = undefined;
+                    }
                 }
-            }
 
-            // append empty days
-            for (i = this.end.day(); i < lastDayOfWeek; i++) row.append(getEmptyCell().addClass('bordertop'));
-            if (row) this.$el.append(row);
+                // append empty days
+                end = subtractDays(lastDayOfWeek, this.end.day());
+                for (i = 0; i < end; i++) row.append(getEmptyCell().addClass('bordertop'));
+                if (row) this.$el.append(row);
 
-            // set borders in the last row
-            this.$el
-                .find('.week:last-child').addClass('no-border')
-                .find('> .day').addClass('borderbottom');
+                // set borders in the first row
+                this.$el
+                    .find('.week:not(.month-name)').first()
+                    .find('> .day').addClass('bordertop');
+                // set borders in the last row
+                this.$el
+                    .find('.week:last-child').addClass('no-border')
+                    .find('> .day').addClass('borderbottom');
 
-            this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
+                this.$el.css('height', 100 / 7 * this.$el.children(':not(.month-name)').length + '%');
 
-            if (_.device('smartphone')) {
-                // on mobile we switch to the day view after a tap
-                // on a day-cell was performed
-                this.$el.on('tap', '.day', function () {
-                    self.changeToSelectedDay($(this).data('date'));
-                });
-            }
+                if (_.device('smartphone')) {
+                    // on mobile we switch to the day view after a tap
+                    // on a day-cell was performed
+                    this.$el.on('tap', '.day', function () {
+                        self.changeToSelectedDay($(this).data('date'));
+                    });
+                }
 
-            return this;
-        },
+                return this;
+            };
+        }()),
 
         renderAppointment: function (a) {
             var self = this,
