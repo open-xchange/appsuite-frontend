@@ -155,7 +155,7 @@ define('io.ox/calendar/list/perspective', [
                 app.listView.model.set('folders', _(folders).pluck('id'));
                 self.folderModels = _(folders).map(function (folder) {
                     var model = folderAPI.pool.getModel(folder.id);
-                    model.on('change:cal.color', self.updateColor, self);
+                    model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
                     return model;
                 });
             });
@@ -166,12 +166,12 @@ define('io.ox/calendar/list/perspective', [
                 $.when(app.folder.getData(), app.folders.getData()).done(function (data, folders) {
                     if (self.folderModels) {
                         self.folderModels.forEach(function (model) {
-                            model.off('change:cal.color', self.updateColor);
+                            model.off('change:com.openexchange.calendar.extendedProperties', self.updateColor);
                         });
                     }
                     self.folderModels = _(folders).map(function (folder) {
                         var model = folderAPI.pool.getModel(folder.id);
-                        model.on('change:cal.color', self.updateColor, self);
+                        model.on('change:com.openexchange.calendar.extendedProperties', self.updateColor, self);
                         return model;
                     });
                 });
