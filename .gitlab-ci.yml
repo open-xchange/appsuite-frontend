@@ -95,6 +95,25 @@ copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties
   tags:
     - openstack
 
+build documentation:
+  image: gitlab.open-xchange.com:4567/engineering/documentation:latest
+  stage: build
+  script:
+    - ln -s $CI_PROJECT_DIR/documentation /documentation/jekyll/_ui
+    - cd /documentation
+    - bundle exec jekyll b --config _config.yml,_config_develop.yml
+    - cd $CI_PROJECT_DIR
+    - export VERSION=`grep -oP '"version"\s*:\s*"\K[\d.]+' ui/package.json`
+    - mkdir -p doku/$VERSION
+    - cp -r /documentation/_build/* doku/$VERSION
+  dependencies: []
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - doku/
+    expire_in: 2 hours
+
 docker_image_ui:
   script:
     - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
