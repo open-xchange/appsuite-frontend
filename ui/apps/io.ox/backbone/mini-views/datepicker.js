@@ -45,6 +45,11 @@ define('io.ox/backbone/mini-views/datepicker', [
             this.listenTo(this.model, 'invalid:' + this.attribute, this.onError);
             this.listenTo(this.model, 'valid', this.onValid);
             this.listenTo(this.model, 'change:' + this.options.timezoneAttribute, this.updateView);
+
+            // add attribute information
+            if (this.options.attribute) {
+                this.$el.attr('data-attribute', this.options.attribute);
+            }
         },
 
         events: {
