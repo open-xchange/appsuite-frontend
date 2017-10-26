@@ -89,6 +89,38 @@ define('io.ox/calendar/api', [
             // convenience function
             cid: util.cid,
 
+            request: (function () {
+                function getParams(opt, start, end) {
+                    opt = _.clone(opt);
+                    opt.params = _.extend({}, opt.params, {
+                        rangeStart: start.format(util.ZULU_FORMAT),
+                        rangeEnd: end.format(util.ZULU_FORMAT)
+                    });
+                    return opt;
+                }
+                return function request(opt, method) {
+                    method = method || 'GET';
+                    return http[method](opt)['catch'](function (err) {
+                        if (err.code !== 'CAL-5072') throw err;
+
+                        var start = moment(opt.params.rangeStart),
+                            end = moment(opt.params.rangeEnd),
+                            middle = moment(start).add(end.diff(start, 'ms') / 2, 'ms');
+
+                        return request(getParams(opt, start, middle), method).then(function (data1) {
+                            return request(getParams(opt, middle, end), method).then(function (data2) {
+                                return _(data1)
+                                    .chain()
+                                    .union(data2)
+                                    .uniq(function (event) { return util.cid(event); })
+                                    .compact()
+                                    .value();
+                            });
+                        });
+                    });
+                };
+            }()),
+
             getAll: function (opt) {
                 opt = _.extend({
                     start: _.now(),
@@ -98,8 +130,8 @@ define('io.ox/calendar/api', [
                 var method = opt.folders ? 'PUT' : 'GET',
                     params = {
                         action: 'all',
-                        rangeStart: moment(opt.start).utc().format('YYYYMMDD[T]HHmmss[Z]'),
-                        rangeEnd: moment(opt.end).utc().format('YYYYMMDD[T]HHmmss[Z]'),
+                        rangeStart: moment(opt.start).utc().format(util.ZULU_FORMAT),
+                        rangeEnd: moment(opt.end).utc().format(util.ZULU_FORMAT),
                         order: 'asc',
                         expand: true
                     },
@@ -108,11 +140,11 @@ define('io.ox/calendar/api', [
                 if (opt.folders) data = { folders: opt.folders };
                 else params.folder = opt.folder;
 
-                return http[method]({
+                return api.request({
                     module: 'chronos',
                     params: params,
                     data: data
-                }).then(function (data) {
+                }, method).then(function (data) {
                     return _(data).sortBy(function (event) {
                         return moment.tz(event.startDate.value, event.startDate.tzid || moment().tz());
                     });
@@ -146,47 +178,61 @@ define('io.ox/calendar/api', [
                 });
             },
 
-            getList: function (list, useCache) {
-
-                list = _(list).map(function (obj) {
-                    // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
-                    if (obj.eventId) {
-                        return { id: obj.eventId, folderId: obj.folder, folder: obj.folder, recurrenceId: obj.recurrenceId };
-                    }
-                    return obj;
-                });
-
-                var def, reqList = list;
-                if (useCache !== false) {
-                    reqList = list.filter(function (obj) {
-                        return !api.pool.getModel(util.cid(obj));
-                    });
-                }
-                if (reqList.length > 0) {
-                    def = http.PUT({
+            getList: (function () {
+                function requestList(list) {
+                    return http.PUT({
                         module: 'chronos',
                         params: {
                             action: 'list'
                         },
-                        data: reqList
+                        data: list
+                    })['catch'](function (err) {
+                        if (err.code !== 'CAL-5072') throw err;
+                        // split list in half if error code suggested a too large list
+                        var list1 = _(list).first(Math.ceil(list.length / 2)),
+                            list2 = _(list).last(Math.floor(list.length / 2));
+                        return requestList(list1).then(function (data1) {
+                            return requestList(list2).then(function (data2) {
+                                return [].concat(data1).concat(data2);
+                            });
+                        });
                     });
-                } else {
-                    def = $.when();
                 }
-                return def.then(function (data) {
-                    if (data) {
-                        data.forEach(function (obj) {
-                            if (isRecurrenceMaster(obj)) return;
-                            api.pool.propagateAdd(obj);
+                return function (list, useCache) {
+
+                    list = _(list).map(function (obj) {
+                        // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
+                        if (obj.eventId) {
+                            return { id: obj.eventId, folderId: obj.folder, folder: obj.folder, recurrenceId: obj.recurrenceId };
+                        }
+                        return obj;
+                    });
+
+                    var def, reqList = list;
+                    if (useCache !== false) {
+                        reqList = list.filter(function (obj) {
+                            return !api.pool.getModel(util.cid(obj));
                         });
                     }
-                    return list.map(function (obj) {
-                        if (isRecurrenceMaster(obj)) return new models.Model(obj);
-                        var cid = util.cid(obj);
-                        return api.pool.getModel(cid);
+
+                    if (reqList.length > 0) def = requestList(reqList);
+                    else def = $.when();
+
+                    return def.then(function (data) {
+                        if (data) {
+                            data.forEach(function (obj) {
+                                if (isRecurrenceMaster(obj)) return;
+                                api.pool.propagateAdd(obj);
+                            });
+                        }
+                        return list.map(function (obj) {
+                            if (isRecurrenceMaster(obj)) return new models.Model(obj);
+                            var cid = util.cid(obj);
+                            return api.pool.getModel(cid);
+                        });
                     });
-                });
-            },
+                };
+            }()),
 
             create: function (obj, options) {
 
@@ -405,8 +451,8 @@ define('io.ox/calendar/api', [
                 }
 
                 options = _.extend({
-                    from: moment().startOf('day').format('YYYYMMDD[T]HHmmss[Z]'),
-                    until: moment().startOf('day').add(1, 'day').format('YYYYMMDD[T]HHmmss[Z]')
+                    from: moment().startOf('day').format(util.ZULU_FORMAT),
+                    until: moment().startOf('day').add(1, 'day').format(util.ZULU_FORMAT)
                 }, options);
 
                 return http.GET({
@@ -478,17 +524,16 @@ define('io.ox/calendar/api', [
             getInvites: function () {
                 var now = moment().valueOf();
 
-                return http.GET({
+                return api.request({
                     module: 'chronos',
                     params: {
                         action: 'updates',
                         folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
                         timestamp: api.getInvitesSince || moment().subtract(1, 'years').valueOf(),
-                        rangeStart: moment().subtract(2, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
-                        until: moment().add(2, 'years').format('YYYYMMDD[T]HHmmss[Z]')
+                        rangeStart: moment().subtract(2, 'hours').format(util.ZULU_FORMAT),
+                        rangeEnd: moment().add(2, 'years').format(util.ZULU_FORMAT)
                     }
-                })
-                .then(function (data) {
+                }, 'GET').then(function (data) {
 
                     // exclude appointments that already ended
                     // only use the next recurrence for recurring appointments
@@ -528,7 +573,7 @@ define('io.ox/calendar/api', [
                     module: 'chronos/alarm',
                     params: {
                         action: 'pending',
-                        rangeEnd: moment.utc().add(10, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
+                        rangeEnd: moment.utc().add(10, 'hours').format(util.ZULU_FORMAT),
                         actions: 'DISPLAY,AUDIO'
                     }
                 })

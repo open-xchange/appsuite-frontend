@@ -96,6 +96,8 @@ define('io.ox/calendar/util', [
 
         PRIVATE_EVENT_COLOR: '#616161',
 
+        ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
+
         isBossyAppointmentHandling: function (opt) {
 
             opt = _.extend({
@@ -1025,8 +1027,8 @@ define('io.ox/calendar/util', [
             if (!rangeStart || !rangeEnd) return {};
             return {
                 expand: true,
-                rangeStart: rangeStart.format('YYYYMMDD[T]HHmmss[Z]'),
-                rangeEnd: rangeEnd.format('YYYYMMDD[T]HHmmss[Z]')
+                rangeStart: rangeStart.format(that.ZULU_FORMAT),
+                rangeEnd: rangeEnd.format(that.ZULU_FORMAT)
             };
         },
 
