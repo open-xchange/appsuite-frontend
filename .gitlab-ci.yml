@@ -209,7 +209,7 @@ deploy documentation:
     GIT_STRATEGY: none
   script:
     - cp -r doku/* /var/www/documentation/
-    - find /var/www/documentation -user gitlab-runner -exec chown g+w '{}' \;
+    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
     - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
   dependencies:
     - build documentation
