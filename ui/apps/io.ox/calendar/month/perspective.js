@@ -192,8 +192,13 @@ define('io.ox/calendar/month/perspective', [
                 multi: 1
             }, opt);
 
-            if (opt.up) this.firstMonth.subtract(opt.multi * this.updateLoad, 'months');
-            else if (opt.down) this.lastMonth.add(opt.multi * this.updateLoad, 'months');
+            if (opt.up) {
+                if (opt.date) this.firstMonth = moment.min(this.firstMonth, moment(opt.date).startOf('month'));
+                this.firstMonth.subtract(opt.multi * this.updateLoad, 'months');
+            } else if (opt.down) {
+                if (opt.date) this.lastMonth = moment.max(this.lastMonth, moment(opt.date).startOf('month'));
+                this.lastMonth.add(opt.multi * this.updateLoad, 'months');
+            }
 
             function createOrReuseView(options) {
                 var identifier = options.start.valueOf(), collection, view;
@@ -363,12 +368,12 @@ define('io.ox/calendar/month/perspective', [
             if (!isFirst && firstDay.length > 0 && nextFirstDay.length > 0) {
                 scrollToDate();
             } else if (isFirst || target.valueOf() < self.current.valueOf()) {
-                this.drawWeeks({ up: true }).done(function () {
+                this.drawWeeks({ up: true, date: target }).done(function () {
                     firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });
             } else {
-                this.drawWeeks().done(function () {
+                this.drawWeeks({ down: true, date: target }).done(function () {
                     firstDay = $('#' + target.format('YYYY-MM'), self.pane);
                     scrollToDate();
                 });

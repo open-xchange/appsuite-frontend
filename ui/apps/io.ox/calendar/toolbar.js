@@ -167,10 +167,11 @@ define('io.ox/calendar/toolbar', [
             //#. View is used as a noun in the toolbar. Clicking the button opens a popup with options related to the View
             var dropdown = new Dropdown({ caret: true, model: baton.app.props, label: gt('View'), tagName: 'li' })
             .header(gt('Layout'))
-            .option('layout', 'week:day', gt('Day'), { radio: true })
-            .option('layout', 'week:workweek', gt('Workweek'), { radio: true })
-            .option('layout', 'week:week', gt('Week'), { radio: true })
+            .option('layout', 'week:day', gt('Day'), { radio: true });
+            if (_.device('!smartphone')) dropdown.option('layout', 'week:workweek', gt('Workweek'), { radio: true });
+            dropdown.option('layout', 'week:week', gt('Week'), { radio: true })
             .option('layout', 'month', gt('Month'), { radio: true })
+            .option('layout', 'year', gt('Year'), { radio: true })
             .option('layout', 'list', gt('List'), { radio: true })
             .divider()
             .header(gt('Options'))
