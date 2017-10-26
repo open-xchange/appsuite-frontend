@@ -79,6 +79,12 @@ define('io.ox/backbone/views/datepicker', [
                 this.close(false);
             }, 1);
             this.$el.on('focusout', $.proxy(this.focusOut, this));
+
+            // add attribute information
+            if (this.options.attribute) {
+                this.$el.attr('data-attribute', this.options.attribute);
+            }
+
             $(window).on('resize', $.proxy(this.onWindowResize, this));
         },
 
