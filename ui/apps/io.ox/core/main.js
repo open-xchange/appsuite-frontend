@@ -29,6 +29,7 @@ define('io.ox/core/main', [
     'io.ox/core/capabilities',
     'io.ox/core/ping',
     'io.ox/core/folder/api',
+    'io.ox/onboarding/clients/api',
     'io.ox/core/a11y',
     'settings!io.ox/core',
     'settings!io.ox/contacts',
@@ -38,7 +39,7 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, a11y, settings, contactsSettings, gt) {
+], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, onboardingAPI, a11y, settings, contactsSettings, gt) {
 
     'use strict';
 
@@ -983,33 +984,33 @@ define('io.ox/core/main', [
             draw: function () {
                 if (capabilities.has('!client-onboarding')) return;
 
-                var isEnabled = (function isEnabled() {
-                    // on mobile devices only clients for the current device are listed
-                    var device;
-                    if (_.device('desktop')) return true;
-                    if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
-                    if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
-                    return ox.rampup.onboardingDevices[device] || false;
-                })();
+                var device, $link, self = this;
+                if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
+                if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
 
-                this.append(
+                self.append(
                     $('<li role="presentation">').append(
-                        $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
-                        //#. starts the client onboarding wizard that helps users
-                        //#. to configure their devices to access/sync appsuites
-                        //#. data (f.e. install ox mail app)
-                        .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
-                        .toggleClass('disabled ui-disabled', !isEnabled)
-                        .attr('aria-disabled', !isEnabled)
+                        $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
+                            //#. starts the client onboarding wizard that helps users
+                            //#. to configure their devices to access/sync appsuites
+                            //#. data (f.e. install ox mail app)
+                            .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
                     )
-                    .on('click', function (e) {
-                        e.preventDefault();
-                        if (!isEnabled) return e.stopPropagation();
-                        require(['io.ox/onboarding/clients/wizard'], function (wizard) {
-                            wizard.run();
-                        });
-                    })
                 );
+
+                onboardingAPI.enabledDevices(device).then(function (config) {
+                    var enabled = _.device('desktop') ? true : (config[device] || false);
+
+                    $link.toggleClass('disabled ui-disabled', !enabled)
+                        .attr('aria-disabled', !enabled)
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            if (!enabled) return e.stopPropagation();
+                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                                wizard.run();
+                            });
+                        });
+                });
             }
         });
 

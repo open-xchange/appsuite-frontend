@@ -17,15 +17,45 @@ define('io.ox/onboarding/clients/api', [
 
     'use strict';
 
-    return {
+    var cache = {
+        config: {},
+        onboardingDevices: ox.rampup ? ox.rampup.onboardingDevices : undefined
+    };
+
+    window.c = cache;
+    var api = {
+
+        enabledDevices: function () {
+            if (cache.onboardingDevices) return $.when(cache.onboardingDevices);
+
+            return api.config().then(function (config) {
+                var f = {};
+                _(config.devices).each(function (device) {
+                    f[device.id] = device.enabled;
+                });
+                cache.onboardingDevices = f;
+                return f;
+            });
+        },
 
         config: function (device) {
+            if (!device && !_.isEmpty(cache.config)) return $.when(cache.config);
+            if (device && cache.config[device]) return $.when(cache.config[device]);
+
             return http.GET({
                 module: 'onboarding',
                 params: {
                     action: 'config',
                     client: device
                 }
+            }).then(function (config) {
+
+                if (device) {
+                    cache.config[device] = config;
+                } else {
+                    cache.config = config;
+                }
+                return config;
             });
         },
 
@@ -51,4 +81,6 @@ define('io.ox/onboarding/clients/api', [
                     '&session=' + ox.session;
         }
     };
+
+    return api;
 });
