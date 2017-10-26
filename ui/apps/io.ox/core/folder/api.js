@@ -1204,7 +1204,7 @@ define('io.ox/core/folder/api', [
                         var pathOrId = (response[index] ? response[index].new_path : id);
                         api.get(pathOrId, { cache: false }).fail(function (error) {
                             // folder does not exist
-                            if (error.code === 'FLD-0008') {
+                            if (error.code === 'FLD-0008' || error.code === 'IMAP-1002') {
                                 api.pool.removeCollection(id, { removeModels: true });
                             }
                         });
