@@ -85,7 +85,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                     $('<span>').addClass('list-title').text(o.title)
                 ),
                 $('<div>').addClass('col-sm-10').append(
-                    $('<div>').addClass('row').append(
+                    $('<div>').addClass('row flex').append(
                         $('<div>').addClass('col-sm-4 dualdropdown').append(
                             $('<div>').addClass('row').append(
                                 $('<label class="col-sm-4">').text(gt('Header')),
@@ -100,7 +100,7 @@ define('io.ox/mail/mailfilter/settings/filter/tests/util', [
                                 )
                             )
                         ),
-                        $('<div>').addClass('col-sm-3 dropdownadjust').append(
+                        $('<div>').addClass('col-sm-3').append(
                             new DropdownLinkView(o.dropdownOptions).render().$el
                         ),
                         $('<div>').addClass('col-sm-5 doubleline').append(
