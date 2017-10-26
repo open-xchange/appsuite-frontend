@@ -21,10 +21,12 @@ define('io.ox/chat/main', [
     'io.ox/chat/views/channelList',
     'io.ox/chat/views/history',
     'io.ox/chat/views/fileList',
+    'io.ox/chat/views/search',
+    'io.ox/chat/views/searchResult',
     'io.ox/contacts/api',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI) {
+], function (data, events, FloatingWindow, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, searchView, SearchResultView, contactsAPI) {
 
     'use strict';
 
@@ -58,7 +60,7 @@ define('io.ox/chat/main', [
                 case 'start-chat': this.startChat(data); break;
                 case 'start-private-chat': this.startPrivateChat(data); break;
                 case 'join-channel': this.joinChannel(data); break;
-                case 'show-chat': this.showChat(data); break;
+                case 'show-chat': this.showChat(data.id || data.cid); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
                 case 'show-all-files': this.showAllFiles(); break;
@@ -66,6 +68,9 @@ define('io.ox/chat/main', [
                 case 'prev-file': this.moveFile(-1); break;
                 case 'next-file': this.moveFile(+1); break;
                 case 'close-file': this.closeFile(); break;
+                case 'open-chat': this.toggleChat(data.id, true); break;
+                case 'close-chat': this.toggleChat(data.id, false); break;
+                case 'add-member': this.addMember(data.id); break;
                 // no default
             }
         },
@@ -82,7 +87,9 @@ define('io.ox/chat/main', [
                         build: function () {
                             this.$el.addClass('ox-chat-popup');
                         },
-                        useGABOnly: true
+                        useGABOnly: true,
+                        title: 'Start new conversation',
+                        button: 'Start conversation'
                     }
                 );
             });
@@ -90,7 +97,7 @@ define('io.ox/chat/main', [
 
         startPrivateChat: function (cmd) {
             data.chats.create({ type: 'private', members: [cmd.id] }).done(function (result) {
-                this.showChat({ id: result.id });
+                this.showChat(result.id);
             }.bind(this));
         },
 
@@ -99,11 +106,11 @@ define('io.ox/chat/main', [
             channel.set('joined', true);
             var chatId = data.chats.length + 1;
             data.chats.add({ id: chatId, type: 'channel', title: channel.getTitle(), members: [1, 2, 3, 4, 5], messages: [{ id: 1, body: 'Joined channel', type: 'system' }] });
-            this.showChat({ id: chatId });
+            this.showChat(chatId);
         },
 
-        showChat: function (cmd) {
-            var view = new ChatView({ room: cmd.id || cmd.cid });
+        showChat: function (id) {
+            var view = new ChatView({ room: id });
             window.$rightside.empty().append(view.render().$el);
             view.scrollToBottom();
         },
@@ -159,6 +166,35 @@ define('io.ox/chat/main', [
             if ((e.type === 'click' && $(e.target).is('.overlay')) || e.which === 27) return this.closeFile();
             if (e.which !== 37 && e.which !== 39) return;
             this.moveFile(e.which === 37 ? -1 : +1);
+        },
+
+        toggleChat: function (id, state) {
+            var model = data.chats.get(id);
+            if (!model) return;
+            model.toggle(state);
+            if (state) this.showChat(id); else window.$rightside.empty();
+        },
+
+        addMember: function (id) {
+            var model = data.chats.get(id);
+            if (!model) return;
+            require(['io.ox/contacts/addressbook/popup'], function (picker) {
+                picker.open(
+                    function callback(items) {
+                        var ids = _(items).pluck('user_id');
+                        model.addMembers(ids);
+                    },
+                    {
+                        help: false,
+                        build: function () {
+                            this.$el.addClass('ox-chat-popup');
+                        },
+                        useGABOnly: true,
+                        title: 'Add members',
+                        button: 'Add'
+                    }
+                );
+            });
         }
     });
 
@@ -175,14 +211,14 @@ define('io.ox/chat/main', [
                     contactsAPI.pictureHalo(
                         $('<div class="picture" aria-hidden="true">'), { internal_userid: data.user_id }, { width: 40, height: 40 }
                     ),
-                    $('<button type="button" class="btn btn-default" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
+                    $('<button type="button" class="btn btn-default btn-circle" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
                     $('<i class="fa state online fa-check-circle">'),
                     $('<div class="name">').text(user.getName())
                 ),
-                $('<div class="search">').append(
-                    $('<input type="text" spellcheck="false" autocomplete="false" placeholder="Search chat or contact">')
-                ),
+                new searchView().render().$el,
                 $('<div class="left-navigation abs">').append(
+                    // search results
+                    new SearchResultView().render().$el,
                     // chats
                     new ChatListView({ collection: data.chats }).render().$el,
                     // navigation

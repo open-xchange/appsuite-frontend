@@ -29,7 +29,8 @@ define('io.ox/chat/views/chatList', [
                 'remove': this.onRemove,
                 'change:title': this.onChangeTitle,
                 'change:unseen': this.onChangeUnseen,
-                'change:modified': this.onChangeModified
+                'change:modified': this.onChangeModified,
+                'change:open': this.onChangeOpen
             });
         },
 
@@ -65,7 +66,7 @@ define('io.ox/chat/views/chatList', [
         },
 
         getItems: function () {
-            return this.collection.getActive();
+            return this.collection.getOpen();
         },
 
         getNode: function (model) {
@@ -75,7 +76,7 @@ define('io.ox/chat/views/chatList', [
         onAdd: _.debounce(function (model, collection, options) {
             this.$el.prepend(
                 options.changes.added
-                .filter(function (model) { return model.isActive(); })
+                .filter(function (model) { return model.isOpen(); })
                 .map(this.renderItem, this)
             );
         }, 1),
@@ -96,9 +97,16 @@ define('io.ox/chat/views/chatList', [
         onChangeModified: function (model) {
             var node = this.getNode(model),
                 hasFocus = node[0] === document.activeElement;
-            console.log('onChangeModified', model);
             this.$el.prepend(node);
             if (hasFocus) node.focus();
+        },
+
+        onChangeOpen: function (model, value) {
+            if (value) {
+                this.$el.prepend(this.renderItem(model));
+            } else {
+                this.onRemove(model);
+            }
         }
     });
 

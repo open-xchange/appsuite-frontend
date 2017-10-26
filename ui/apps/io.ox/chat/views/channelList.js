@@ -60,7 +60,7 @@ define('io.ox/chat/views/channelList', [
                     $('<span class="members">').text((model.get('members') || []).length + ' member(s)')
                 ),
                 $('<div class="description">').text(model.get('description')),
-                $('<button type="button" class="btn btn-default join" >')
+                $('<button type="button" class="btn btn-default btn-action join" >')
                     .attr({ 'data-cmd': 'join-channel', 'data-id': model.get('id') })
                     .text('Join')
             );

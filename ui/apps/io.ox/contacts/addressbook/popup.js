@@ -413,6 +413,8 @@ define('io.ox/contacts/addressbook/popup', [
 
         options = _.extend({
             build: _.noop,
+            //#. Context: Add selected contacts; German "Auswählen", for example
+            button: gt.pgettext('select-contacts', 'Select'),
             enter: false,
             focus: '.search-field',
             maximize: 600,
@@ -817,7 +819,7 @@ define('io.ox/contacts/addressbook/popup', [
         })
         .addCancelButton()
         //#. Context: Add selected contacts; German "Auswählen", for example
-        .addButton({ label: gt.pgettext('select-contacts', 'Select'), action: 'select' })
+        .addButton({ label: options.button, action: 'select' })
         .open();
     }
 

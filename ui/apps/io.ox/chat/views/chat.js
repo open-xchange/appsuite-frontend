@@ -13,11 +13,12 @@
 
 define('io.ox/chat/views/chat', [
     'io.ox/backbone/views/disposable',
-    'io.ox/chat/views/badge',
     'io.ox/chat/views/avatar',
     'io.ox/chat/views/chatAvatar',
+    'io.ox/chat/views/chatMember',
+    'io.ox/chat/events',
     'io.ox/chat/data'
-], function (DisposableView, BadgeView, Avatar, ChatAvatar, data) {
+], function (DisposableView, Avatar, ChatAvatar, ChatMember, events, data) {
 
     'use strict';
 
@@ -28,7 +29,8 @@ define('io.ox/chat/views/chat', [
         className: 'chat',
 
         events: {
-            'keydown textarea': 'onEditorKeydown'
+            'keydown textarea': 'onEditorKeydown',
+            'input textarea': 'onEditorInput'
         },
 
         initialize: function (options) {
@@ -49,23 +51,66 @@ define('io.ox/chat/views/chat', [
             });
 
             this.model.messages.fetch();
+
+
+            // tracking typing
+            this.typing = {
+                $el: $('<div class="typing">'),
+                timer: {},
+                show: function (userId, name) {
+                    this.reset(userId);
+                    var $span = this.span(userId);
+                    if (!$span.length) this.add(userId, name);
+                    this.timer[userId] = setTimeout(this.hide.bind(this), 5000, userId);
+                },
+                span: function (userId) {
+                    return this.$el.find('[data-user-id="' + userId + '"]');
+                },
+                reset: function (userId) {
+                    if (!this.timer[userId]) return;
+                    window.clearTimeout(this.timer[userId]);
+                    delete this.timer[userId];
+                },
+                add: function (userId, name) {
+                    this.$el.append($('<div class="name">').attr('data-user-id', userId).text(name + ' is typing'));
+                    this.$el.closest('.scrollpane').scrollTop(0xFFFFFF);
+                },
+                hide: function (userId) {
+                    this.reset(userId);
+                    this.span(userId).remove();
+                }
+            };
+
+            this.listenTo(events, 'typing:' + this.model.id, function (userId) {
+                var model = data.users.get(userId);
+                if (!model) return;
+                this.typing.show(model.id, model.getName());
+            });
         },
 
         render: function () {
             this.$el.append(
                 $('<div class="header abs">').append(
                     new ChatAvatar({ model: this.model }).render().$el,
-                    $('<h2 class="title">')
-                        .toggleClass('small-line', !this.model.isPrivate())
-                        .append(this.model.getTitle() || '\u00a0'),
-                    this.model.isPrivate() ? $() :
-                        $('<ul class="members">').append(
-                            this.model.members.map(this.renderMember, this)
-                        )
+                    this.model.isPrivate() ?
+                        // private chat
+                        this.renderTitle().addClass('flex-grow') :
+                        // groups / channels
+                        $('<div class="flex-grow">').append(
+                            this.renderTitle().addClass('small-line'),
+                            new ChatMember({ collection: this.model.members }).render().$el
+                        ),
+                    // burger menu (pull-right just to have the popup right aligned)
+                    $('<div class="dropdown pull-right">').append(
+                        $('<button type="button" class="btn btn-default btn-circle dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">')
+                        .append('<i class="fa fa-bars" aria-hidden="true">'),
+                        this.renderDropdown()
+                    )
                 ),
                 $('<div class="scrollpane abs">').append(
-                    $('<div class="conversation ">').append(
-                        this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this)
+                    $('<div class="conversation">').append(
+                        this.model.messages.last(MESSAGE_LIMIT).map(this.renderMessage, this),
+                        this.typing.$el
                     )
                 ),
                 $('<div class="controls abs">').append(
@@ -75,11 +120,29 @@ define('io.ox/chat/views/chat', [
             return this;
         },
 
-        renderMember: function (model) {
-            if (model.isMyself()) return $();
-            return $('<li>').append(
-                new BadgeView({ model: model }).render().$el
-            );
+        renderDropdown: function () {
+
+            var $ul = $('<ul class="dropdown-menu">');
+
+            function renderItem(text, data) {
+                return $('<li>').append(
+                    $('<a href="#" role="button">').attr(data).text(text)
+                );
+            }
+
+            // add member
+            if (this.model.isGroup()) {
+                $ul.append(renderItem('Add member', { 'data-cmd': 'add-member', 'data-id': this.model.id }));
+            }
+
+            // close
+            $ul.append(renderItem('Close chat', { 'data-cmd': 'close-chat', 'data-id': this.model.id }));
+
+            return $ul;
+        },
+
+        renderTitle: function () {
+            return $('<h2 class="title">').append(this.model.getTitle() || '\u00a0');
         },
 
         renderMessage: function (model) {
@@ -119,6 +182,10 @@ define('io.ox/chat/views/chat', [
             editor.val('').focus();
         },
 
+        onEditorInput: function () {
+            data.socket.emit('typing', { roomId: this.model.id });
+        },
+
         onPostMessage: function (body) {
             this.model.postMessage({ body: body });
         },
@@ -129,7 +196,7 @@ define('io.ox/chat/views/chat', [
 
         onAdd: _.debounce(function (model, collection, options) {
             // render
-            this.$('.conversation').append(
+            this.$('.conversation .typing').insertBefore(
                 options.changes.added.map(this.renderMessage.bind(this))
             );
             // too many messages?
@@ -157,6 +224,10 @@ define('io.ox/chat/views/chat', [
 
         onChangeDelivery: function (model) {
             this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
+        },
+
+        onTyping: function () {
+
         }
     });
 

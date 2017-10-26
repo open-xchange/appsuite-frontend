@@ -11,12 +11,18 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.slim.js'], function (api, io) {
+define('io.ox/chat/data', ['io.ox/chat/events', 'io.ox/contacts/api', 'static/3rd.party/socket.io.slim.js'], function (events, api, io) {
 
     'use strict';
 
+    var user_id = parseInt(_.url.hash('user_id'), 10) || ox.user_id,
+        chatHost = _.url.hash('chatHost') || 'devtank.de';
+
     var data = {
-        user_id: parseInt(_.url.hash('user_id'), 10) || ox.user_id
+        // yes, it contains the user_id; just a POC; no auth
+        API_ROOT: 'https://' + chatHost + '/api/' + user_id,
+        SOCKET: 'https://' + chatHost,
+        user_id: user_id
     };
 
     //
@@ -57,6 +63,29 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
             return data.users.reset(result);
         });
     };
+
+    var MemberCollection = Backbone.Collection.extend({
+
+        model: UserModel,
+
+        initialize: function (models, options) {
+            this.roomId = options.roomId;
+        },
+
+        url: function () {
+            return data.API_ROOT + '/rooms/' + this.roomId + '/members';
+        },
+
+        parse: function (array) {
+            return _(array).map(function (item) {
+                return _.isNumber(item) ? data.users.get(item) : item;
+            });
+        },
+
+        toArray: function () {
+            return this.pluck('id').sort();
+        }
+    });
 
     //
     // Message
@@ -131,7 +160,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
             this.roomId = options.roomId;
         },
         url: function () {
-            return 'http://localhost:2337/api/' + data.user_id + '/rooms/' + this.roomId + '/messages';
+            return data.API_ROOT + '/rooms/' + this.roomId + '/messages';
         }
     });
 
@@ -141,20 +170,17 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { active: true, type: 'group', unseen: 0 },
+        defaults: { open: true, type: 'group', unseen: 0 },
 
         initialize: function (attr) {
             this.set('modified', +moment());
-            this.unset('members', { silent: true });
             this.unset('messages', { silent: true });
-            var members = _(attr.members).map(function (arg) {
-                return arg instanceof UserModel ? arg : data.users.get(arg);
-            });
-            this.members = new UserCollection(members);
+            this.members = new MemberCollection(attr.members, { parse: true, roomId: attr.id });
             this.messages = new MessageCollection([], { roomId: attr.id });
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('member:' + name);
+                this.set('members', this.members.toArray());
             });
             this.listenTo(this.messages, 'all', function (name) {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
@@ -180,8 +206,8 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
             return this.members.reject({ id: data.user_id })[0];
         },
 
-        isActive: function () {
-            return this.get('active');
+        isOpen: function () {
+            return this.get('open');
         },
 
         isPrivate: function () {
@@ -199,6 +225,15 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
         postMessage: function (attr) {
             this.messages.add(attr).save();
             this.set('modified', +moment());
+        },
+
+        addMembers: function (ids) {
+            this.members.add(ids, { parse: true });
+            return $.post(this.members.url(), { members: ids });
+        },
+
+        toggle: function (state) {
+            this.set('open', !!state).save({ open: !!state }, { patch: true });
         }
     });
 
@@ -208,7 +243,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
         comparator: 'modified',
 
         url: function () {
-            return 'http://localhost:2337/api/' + data.user_id + '/rooms';
+            return data.API_ROOT + '/rooms';
         },
 
         initialize: function () {
@@ -217,7 +252,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
 
         create: function (attr) {
             var collection = this,
-                data = { active: true, members: attr.members, title: '', type: attr.type || 'group' };
+                data = { open: true, members: attr.members, title: '', type: attr.type || 'group' };
             return $.post(this.url(), data).done(function (data) {
                 collection.add(data);
             });
@@ -229,12 +264,12 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
             }, 0));
         },
 
-        getActive: function () {
-            return this.filter({ active: true });
+        getOpen: function () {
+            return this.filter({ open: true });
         },
 
         getHistory: function () {
-            return this.filter({ active: false, joined: true }).slice(0, 100);
+            return this.filter({ open: false, joined: true }).slice(0, 100);
         },
 
         getChannels: function () {
@@ -255,11 +290,11 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
     var FileModel = Backbone.Model.extend({
 
         getThumbnailUrl: function () {
-            return 'http://localhost:2337/api/' + data.user_id + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
         },
 
         getPreviewUrl: function () {
-            return 'http://localhost:2337/api/' + data.user_id + '/files/' + this.get('id') + '/thumbnail';
+            return data.API_ROOT + '/files/' + this.get('id') + '/thumbnail';
         }
     });
 
@@ -269,7 +304,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
         model: FileModel,
 
         url: function () {
-            return 'http://localhost:2337/api/' + data.user_id + '/files';
+            return data.API_ROOT + '/files';
         }
     });
 
@@ -303,7 +338,7 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
     // Socket support
     //
 
-    var socket = data.socket = io.connect('//localhost:2337', { query: 'userId=' + data.user_id });
+    var socket = data.socket = io.connect(data.SOCKET, { query: 'userId=' + data.user_id });
 
     socket.on('alive', function () {
         console.log('Connected socket to server');
@@ -326,6 +361,10 @@ define('io.ox/chat/data', ['io.ox/contacts/api', 'static/3rd.party/socket.io.sli
     socket.on('user:change:state', function (userId, state) {
         var model = data.users.get(userId);
         if (model) model.set('state', state);
+    });
+
+    socket.on('typing', function (roomId, userId) {
+        events.trigger('typing:' + roomId, userId);
     });
 
     return data;
