@@ -203,6 +203,24 @@ stop_review:
     - /^bug\//
     - /^poc\//
 
+deploy documentation:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cp -r doku/* /var/www/documentation/
+    - find /var/www/documentation -user gitlab-runner -exec chown g+w '{}' \;
+    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
+  dependencies:
+    - build documentation
+  tags:
+    - shell
+    - documentation
+  only:
+    - develop
+    - master
+    - master-*
+
 deploy e2e testserver:
   stage: deploy
   dependencies: []
