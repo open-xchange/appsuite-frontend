@@ -952,7 +952,8 @@ define('io.ox/calendar/util', [
 
         getFolderColor: function (folder) {
             var defaultColor = settings.get('defaultFolderColor', 1),
-                color = folder['cal.color'] || defaultColor;
+                extendedProperties = folder['com.openexchange.calendar.extendedProperties'],
+                color = extendedProperties.color ? (extendedProperties.color.value || defaultColor) : defaultColor;
             // fallback if color is an index
             if (_.isNumber(color)) color = that.colors[color - 1].value;
             return color;

@@ -248,7 +248,7 @@ define('io.ox/core/http', ['io.ox/core/event'], function (Events) {
                 // 3040 exists; around EAS; no need for it
                 '3050': 'com.openexchange.imap.extAccount',
                 '3060': 'com.openexchange.share.extendedPermissions',
-                '3201': 'cal.color'
+                '3201': 'com.openexchange.calendar.extendedProperties'
             },
             'user': {
                 '610': 'aliases',

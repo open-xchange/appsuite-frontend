@@ -468,12 +468,10 @@ define('io.ox/core/folder/contextmenu', [
                             new ColorPicker({
                                 model: api.pool.getModel(baton.data.id),
                                 getValue: function () {
-                                    var value = this.model.get('cal.color') || 1;
-                                    if (_.isNumber(value)) value = calendarUtil.colors[value - 1].value;
-                                    return value;
+                                    return calendarUtil.getFolderColor(this.model.attributes);
                                 },
                                 setValue: function (value) {
-                                    api.update(this.model.get('id'), { 'cal.color': value }).fail(function (error) {
+                                    api.update(this.model.get('id'), { 'com.openexchange.calendar.extendedProperties': { color: { value: value } } }).fail(function (error) {
                                         require(['io.ox/core/notifications'], function (notifications) {
                                             notifications.yell(error);
                                         });
