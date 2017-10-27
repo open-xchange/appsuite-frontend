@@ -101,7 +101,7 @@ build documentation:
   script:
     - export VERSION=`grep '"version":' ui/package.json | cut -d\" -f4 | cut -d- -f1`
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
-    - docker run --rm -it -p 4000:4000 -v $(pwd)/doku:/documentation/dist -v $(pwd):/documentation/jekyll/_ui gitlab.open-xchange.com:4567/engineering/documentation:latest b --baseurl /$VERSION --config _config.yml
+    - docker run --rm -v $(pwd)/doku:/documentation/dist -v $(pwd):/documentation/jekyll/_ui gitlab.open-xchange.com:4567/engineering/documentation:latest b --baseurl /$VERSION --config _config.yml
   dependencies: []
   tags:
     - docker
