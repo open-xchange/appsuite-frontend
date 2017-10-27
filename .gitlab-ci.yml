@@ -96,16 +96,12 @@ copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties
     - openstack
 
 build documentation:
-  image: gitlab.open-xchange.com:4567/engineering/documentation:latest
+  image: docker:latest
   stage: build
   script:
     - export VERSION=`grep -oP '"version"\s*:\s*"\K[\d.]+' ui/package.json`
-    - ln -s $CI_PROJECT_DIR/documentation /documentation/jekyll/_ui
-    - cd /documentation
-    - bundle exec jekyll b --config _config.yml --baseurl /$VERSION
-    - cd $CI_PROJECT_DIR
-    - mkdir -p doku/$VERSION
-    - cp -r /documentation/_build/* doku/$VERSION
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
+    - docker run --rm -it -p 4000:4000 -v $(pwd)/doku:/documentation/dist -v $(pwd):/documentation/jekyll/_ui gitlab.open-xchange.com:4567/engineering/documentation:latest b --baseurl /$VERSION --config _config.yml
   dependencies: []
   tags:
     - docker
