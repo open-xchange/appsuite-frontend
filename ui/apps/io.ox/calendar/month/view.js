@@ -86,9 +86,9 @@ define('io.ox/calendar/month/view', [
                     self.trigger('showAppointment', e, obj);
                     self.pane.find('.appointment')
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.pane))
+                        .not($('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.pane))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac');
-                    $('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.pane).addClass('current');
+                    $('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.pane).addClass('current');
                 } else {
                     $('.appointment', self.pane).removeClass('opac');
                 }
@@ -131,7 +131,7 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
+                el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.addClass('hover');
             if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
@@ -140,7 +140,7 @@ define('io.ox/calendar/month/view', [
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
-                el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
+                el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
                 bg = el.data('background-color');
             el.removeClass('hover');
             if (bg) el.css('background-color', bg);
@@ -268,6 +268,7 @@ define('io.ox/calendar/month/view', [
                     .data('event', a)
                     .attr({
                         'data-cid': a.cid,
+                        'data-master-id': util.cid({ id: a.get('id'), folder: a.get('folder') }),
                         'data-composite-id': a.cid
                     });
 

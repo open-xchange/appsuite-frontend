@@ -372,7 +372,7 @@ define('io.ox/calendar/week/view', [
         onHover: function (e) {
             if (!this.lasso) {
                 var cid = util.cid(String($(e.currentTarget).data('cid'))),
-                    el = $('[data-cid^="' + cid.folder + '.' + cid.id + '"]', this.$el),
+                    el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
                     bg = el.data('background-color');
                 switch (e.type) {
                     case 'mouseenter':
@@ -520,9 +520,9 @@ define('io.ox/calendar/week/view', [
                     // ignore the "current" check on smartphones
                     $('.appointment', self.$el)
                         .removeClass('current opac')
-                        .not($('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.$el))
+                        .not($('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.$el))
                         .addClass((this.collection.length > this.limit || _.device('smartphone')) ? '' : 'opac'); // do not add opac class on phones or if collection is too large
-                    $('[data-cid^="' + obj.folder + '.' + obj.id + '"]', self.$el).addClass('current');
+                    $('[data-master-id="' + obj.folder + '.' + obj.id + '"]', self.$el).addClass('current');
                     self.trigger('showAppointment', e, obj);
 
                 } else {
@@ -1435,6 +1435,7 @@ define('io.ox/calendar/week/view', [
             var el = $('<div class="appointment">')
                 .attr({
                     'data-cid': a.cid,
+                    'data-master-id': util.cid({ id: a.get('id'), folder: a.get('folder') }),
                     'data-extension-point': this.extPoint,
                     'data-composite-id': a.cid
                 });
