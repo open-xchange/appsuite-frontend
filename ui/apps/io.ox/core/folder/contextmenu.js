@@ -456,7 +456,8 @@ define('io.ox/core/folder/contextmenu', [
             return function (baton) {
 
                 if (!/^calendar$/.test(baton.module)) return;
-                if (!api.is('private', baton.data)) return;
+                var extProps = baton.data['com.openexchange.calendar.extendedProperties'];
+                if (extProps && extProps.color && extProps.color.proected === false) return;
 
                 if (baton.app && baton.app.props && baton.app.props.get('colorScheme') === 'custom') {
                     var listItem, container = this.parent();
