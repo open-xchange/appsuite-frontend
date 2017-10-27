@@ -527,7 +527,7 @@ define('io.ox/calendar/api', [
                 return http.GET({
                     module: 'chronos/alarm',
                     params: {
-                        action: 'until',
+                        action: 'pending',
                         rangeEnd: moment.utc().add(10, 'hours').format('YYYYMMDD[T]HHmmss[Z]'),
                         actions: 'DISPLAY,AUDIO'
                     }
