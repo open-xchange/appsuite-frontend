@@ -296,16 +296,20 @@ define('io.ox/calendar/main', [
                 add: function (folder) {
                     folders = [].concat(folders);
                     folders.push(folder);
-                    app.trigger('folders:change');
-                    settings.set('selectedFolders', folders).save();
+                    _.defer(function () {
+                        app.trigger('folders:change');
+                        settings.set('selectedFolders', folders).save();
+                    });
                 },
                 remove: function (folder) {
                     var index = folders.indexOf(folder);
                     if (index >= 0) {
                         folders = [].concat(folders);
                         folders.splice(index, 1);
-                        app.trigger('folders:change');
-                        settings.set('selectedFolders', folders).save();
+                        _.defer(function () {
+                            app.trigger('folders:change');
+                            settings.set('selectedFolders', folders).save();
+                        });
                     }
                 }
             };
