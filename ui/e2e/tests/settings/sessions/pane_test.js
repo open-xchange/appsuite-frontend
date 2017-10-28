@@ -13,6 +13,8 @@
 
 /// <reference path="../../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Sessions settings');
 
 Scenario('lists all sessions', function* (I) {

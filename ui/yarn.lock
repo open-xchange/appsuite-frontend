@@ -2,9 +2,11 @@
 # yarn lockfile v1
 
 
-"@open-xchange/codecept-helper@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.1.tgz#43255f89781e7fee99675aa0882c8e603196221a"
+"@open-xchange/codecept-helper@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@open-xchange/codecept-helper/-/codecept-helper-0.0.2.tgz#083919ffbbb496661e8985df658a8f56cda5dea6"
+  dependencies:
+    underscore "^1.8.3"
 
 "@open-xchange/emoji@0.0.1":
   version "0.0.1"
@@ -711,7 +713,7 @@ codeceptjs-webdriverio@^1.1.0:
     codeceptjs "*"
     webdriverio "*"
 
-codeceptjs@*:
+codeceptjs@*, codeceptjs@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-1.0.3.tgz#9236b4bcbc74e034bb9890a25da7bc6d3430d1c1"
   dependencies:

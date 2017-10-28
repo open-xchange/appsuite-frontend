@@ -12,6 +12,8 @@
  */
 ///  <reference path="../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Mailfilter');
 
 Scenario('add and removes Mail Filter Rules', function* (I) {

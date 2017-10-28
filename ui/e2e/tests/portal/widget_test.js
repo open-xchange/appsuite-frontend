@@ -11,6 +11,8 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Portal widgets');
 
 Scenario('add and remove Inbox widget', function* (I) {
@@ -21,9 +23,9 @@ Scenario('add and remove Inbox widget', function* (I) {
     I.click('Inbox', '.dropdown.open');
     I.click('Save', '.io-ox-dialog-popup');
     let [widgetId] = yield I.grabAttributeFrom('.io-ox-portal-window .widgets li:first-child', 'data-widget-id');
-    oldWidgetId.should.not.equal(widgetId);
+    expect(oldWidgetId).not.equal(widgetId);
     let title = yield I.grabTextFrom(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .title`);
-    title.should.contain('Inbox');
+    expect(title).to.contain('Inbox');
     I.click(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"] .disable-widget`);
     I.click('Delete', '.io-ox-dialog-popup');
     I.waitForStalenessOf(`.io-ox-portal-window .widgets li[data-widget-id="${widgetId}"]`);

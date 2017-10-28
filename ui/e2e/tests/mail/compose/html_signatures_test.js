@@ -11,9 +11,11 @@
  */
 /// <reference path="../../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Mail compose: HTML signatures');
 
-var signatures = [
+const signatures = [
     'The content of the first signature',
     'The content of the second signature',
     'The content of the third signature',
@@ -25,8 +27,8 @@ function* selectAndAssertSignature(I, name, compare) {
     I.click(name);
     let result = yield I.grabHTMLFrom('.io-ox-mail-compose-window .editor .editable > *');
     result = [].concat(result).join('');
-    if (compare instanceof RegExp) result.should.match(compare);
-    else result.should.equal(compare);
+    if (compare instanceof RegExp) expect(result).to.match(compare);
+    else expect(result).to.equal(compare);
 }
 
 Scenario('compose new mail with signature above correctly placed and changed', function* (I) {

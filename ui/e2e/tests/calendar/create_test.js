@@ -11,6 +11,8 @@
  */
 /// <reference path="../../steps.d.ts" />
 
+const expect = require('chai').expect;
+
 Feature('Calendar: Create new appointment');
 
 Scenario('Create appointment with all fields', function* (I) {
