@@ -69,7 +69,7 @@ define('io.ox/mail/compose/actions/extensions', [
 
         var mailContent;
 
-        if (baton.view.editor.content_type === 'text/html') {
+        if (baton.view.editor.getMode() === 'html') {
             mailContent = $(baton.view.editor.getContent()).not('blockquote,.io-ox-signature').text();
         } else {
             mailContent = baton.view.editor.getContent().replace(/^>.*\n/gm, '');
@@ -87,7 +87,7 @@ define('io.ox/mail/compose/actions/extensions', [
                 def.reject();
             })
             .on('send', function () { def.resolve(); })
-            .addButton({ action: 'send', label: gt('Yes, send without attachment') })
+            .addButton({ action: 'send', label: gt('Send without attachment') })
             .addAlternativeButton({ action: 'add', label: gt('Add attachment') })
             .build(function () {
                 this.$body.append(
