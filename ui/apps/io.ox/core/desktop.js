@@ -103,6 +103,12 @@ define('io.ox/core/desktop', [
 
         setTitle: function (title) {
             this.set('title', title);
+            if (this.options.floating) {
+                if (this.getWindow().floating) {
+                    this.getWindow().floating.setTitle(title);
+                }
+                return;
+            }
             return this;
         },
 
@@ -1549,7 +1555,7 @@ define('io.ox/core/desktop', [
                 win = new Window(opt);
 
             if (opt.floating) {
-                win.floating = new windowView({ title: opt.title, win: win, closable: opt.closable });
+                win.floating = new windowView({ title: opt.title, win: win, closable: opt.closable, displayStyle: options.displayStyle });
             }
             // window container
             win.nodes.outer = (opt.floating ? win.floating.$el : $('<div>'))

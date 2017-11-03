@@ -96,6 +96,7 @@ define('io.ox/mail/detail/main', [
         // application object
         var app = ox.ui.createApp({
             closable: true,
+            floating: !_.device('smartphone'),
             name: NAME,
             title: ''
         });
@@ -120,7 +121,11 @@ define('io.ox/mail/detail/main', [
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
-                toolbar: false
+                toolbar: false,
+                closable: true,
+                floating: !_.device('smartphone'),
+                // detailview is used to view a single item in a bigger window, so start centered
+                displayStyle: 'centered'
             });
 
             app.setWindow(win);

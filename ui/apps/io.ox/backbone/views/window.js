@@ -18,6 +18,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     var WindowView = DisposableView.extend({
 
         className: 'floating-window',
+        events: {
+            'click [data-action="minimize"]': 'onMinimize',
+            'click [data-action="close"]': 'close',
+            'dblclick .floating-header': 'toggleDisplaystyle'
+        },
 
         constructor: function (options) {
             this.options = options || {};
@@ -26,8 +31,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.win = this.options.win;
             this.count = this.options.count || 0;
             DisposableView.prototype.constructor.apply(this, arguments);
-            this.$el.on('click', '[data-action="minimize"]', this.onMinimize.bind(this));
-            this.$el.on('click', '[data-action="close"]', this.close.bind(this));
             this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
             this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
             this.$el.on('click', '[data-action="sticky"]', this.changeDisplayStyle.bind(this, 'sticky'));
@@ -104,6 +107,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
+        },
+
+        toggleDisplaystyle: function () {
+            if (this.minimized || this.displayStyle === 'sticky') return;
+            this.changeDisplayStyle(this.displayStyle === 'cornered' ? 'centered' : 'cornered');
         },
 
         makeActive: function () {

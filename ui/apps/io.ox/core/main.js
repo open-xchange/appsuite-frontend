@@ -825,12 +825,6 @@ define('io.ox/core/main', [
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
-            if (model.options.floating) {
-                if (model.getWindow().floating) {
-                    model.getWindow().floating.setTitle(value);
-                }
-                return;
-            }
             var node = $('[data-app-guid="' + model.guid + '"]', launchers);
             $('a.apptitle', node).text(value);
             addUserContent(model, node);

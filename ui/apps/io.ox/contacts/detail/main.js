@@ -89,7 +89,8 @@ define('io.ox/contacts/detail/main', [
         var app = ox.ui.createApp({
             closable: true,
             name: NAME,
-            title: ''
+            title: '',
+            floating: !_.device('smartphone')
         });
 
         // launcher
@@ -98,7 +99,11 @@ define('io.ox/contacts/detail/main', [
             var win = ox.ui.createWindow({
                 chromeless: true,
                 name: NAME,
-                toolbar: false
+                toolbar: false,
+                floating: !_.device('smartphone'),
+                closable: true,
+                // detailview is used to view a single item in a bigger window, so start centered
+                displayStyle: 'centered'
             });
 
             app.setWindow(win);

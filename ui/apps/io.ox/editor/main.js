@@ -196,7 +196,7 @@ define('io.ox/editor/main', [
 
         var app, win, model = new api.Model(), view, previous = {};
 
-        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true });
+        app = ox.ui.createApp({ name: 'io.ox/editor', title: 'Editor', closable: true, floating: true });
 
         // launcher
         app.setLauncher(function (options) {
@@ -205,7 +205,9 @@ define('io.ox/editor/main', [
             app.setWindow(win = ox.ui.createWindow({
                 name: 'io.ox/editor',
                 title: gt('Editor'),
-                chromeless: true
+                chromeless: true,
+                floating: true,
+                closable: true
             }));
 
             app.view = view = new EditorView({ model: model, app: app });
