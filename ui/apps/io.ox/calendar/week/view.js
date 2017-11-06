@@ -596,6 +596,7 @@ define('io.ox/calendar/week/view', [
                 case 'mousedown':
                     if (this.lasso === false && $(e.target).hasClass('timeslot')) {
                         this.lasso = true;
+                        this.mousedownAt = e.pageY + this.pane.scrollTop();
                     }
                     break;
 
@@ -603,7 +604,8 @@ define('io.ox/calendar/week/view', [
                     e.preventDefault();
                     var cT = $(e.currentTarget),
                         curDay = parseInt(cT.attr('date'), 10),
-                        mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+                        mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop()),
+                        thresholdExceeded = Math.abs(this.mousedownAt - (e.pageY + this.pane.scrollTop())) > 4;
 
                     // normal move
                     if (_.isObject(this.lasso) && e.which === 1) {
@@ -686,6 +688,7 @@ define('io.ox/calendar/week/view', [
 
                     // first move
                     if (this.lasso === true && $(e.target).hasClass('timeslot')) {
+                        if (!thresholdExceeded) return;
                         this.lasso = $('<div>')
                             .addClass('appointment lasso')
                             .css({
