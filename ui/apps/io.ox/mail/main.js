@@ -487,7 +487,7 @@ define('io.ox/mail/main', [
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({
                 folder: app.folder.get(),
-                thread: true
+                thread: app.settings.get('threadSupport', true)
             });
             // for debugging
             window.list = app.listView;
@@ -529,7 +529,8 @@ define('io.ox/mail/main', [
          */
         'get-view-options': function (app) {
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
+                var options = app.settings.get(['viewOptions', folder], {});
+                if (!app.settings.get('threadSupport', true)) options.thread = false;
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },
@@ -611,13 +612,14 @@ define('io.ox/mail/main', [
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
                     .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
-                    .set('layout', data.layout)
-                    .set('showContactPictures', data.contactPictures)
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
+
                 if (_.device('!smartphone')) {
-                    app.settings.set('showCheckboxes', data.checkboxes);
+                    app.settings.set('layout', data.layout)
+                                .set('showCheckboxes', data.checkboxes)
+                                .set('showContactPictures', data.contactPictures);
                 }
                 app.settings.save();
             }, 500));
