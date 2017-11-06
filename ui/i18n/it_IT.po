@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "Report-Msgid-Bugs-To: info@open-xchange.com\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-03 20:18+0200\n"
+"PO-Revision-Date: 2017-10-19 13:55+0200\n"
 "Last-Translator: Vincenzo Reale\n"
 "Language-Team: Italian <it@bureau-cornavin.com>\n"
 "Language: it_IT\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 2.0\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -2368,6 +2368,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Seleziona"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Rimuovi"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2375,12 +2380,24 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d elemento selezionato"
 msgstr[1] "%1$d elementi selezionati"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d indirizzo selezionato"
 msgstr[1] "%1$d indirizzi selezionati"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Cancella la selezione"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3273,6 +3290,10 @@ msgstr "Modalità non in linea"
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "La funzionalità dei cookie del tuo browser è disabilitata. Attivala."
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr "Connessione scaduta. Prova a ricaricare la pagina."
+
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
 msgstr "Avviso!"
@@ -3325,8 +3346,8 @@ msgstr "Chiudi le funzionalità premium"
 msgid "Try now!"
 msgstr "Prova subito!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Ritenta"
@@ -4055,11 +4076,6 @@ msgstr "Non c'erano dati di attività da importare"
 msgid "There was no appointment data to import"
 msgstr "Non ci sono dati di appuntamento da importare"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Riga %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selezionare un file da importare"
@@ -4175,6 +4191,22 @@ msgstr "Disconnessione automatica"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Esci subito"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Sei sicuro?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5373,7 +5405,8 @@ msgstr "Aggiungi una descrizione"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Dimensione"
@@ -6360,10 +6393,6 @@ msgstr "Ruolo amministrativo"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Utente"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Rimuovi"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7961,8 +7990,8 @@ msgstr "continua se tutte le condizioni sono verificate"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "continua se una qualsiasi di queste condizioni viene verificata"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8080,11 +8109,6 @@ msgstr "Lista di distribuzione"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Dimensione (byte)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "È maggiore di"
 
@@ -8119,11 +8143,6 @@ msgstr "Rediretto-Da"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Rediretto-A"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "L'intestazione esiste"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8181,6 +8200,16 @@ msgstr "Espressione regolare"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Non espressione regolare"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Esiste"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8598,12 +8627,6 @@ msgstr "Colora le righe citate"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Usa un carattere a larghezza fissa per il testo dei messaggi"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Abbellisci i messaggi di testo semplice"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9140,6 +9163,11 @@ msgid "Install"
 msgstr "Installa"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Connetti il tuo dispositivo"
 
@@ -9155,10 +9183,6 @@ msgstr "Porta %1$s con te! Mantieni aggiornati i tuoi dispositivi preferiti."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "indietro"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11212,8 +11236,20 @@ msgstr "Invita a %s"
 msgid "Add on %s"
 msgstr "Aggiungi su %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Cancella la selezione"
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Riga %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continua se una qualsiasi di queste condizioni viene verificata"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Dimensione (byte)"
+
+#~ msgid "Header exists"
+#~ msgstr "L'intestazione esiste"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Abbellisci i messaggi di testo semplice"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Configura %1$s"
@@ -11256,9 +11292,6 @@ msgstr "Aggiungi su %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "La regola non si applica fino a"
-
-#~ msgid "Exists"
-#~ msgstr "Esiste"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Applica la regola se qualsiasi condizione viene verificata."
@@ -11921,9 +11954,6 @@ msgstr "Aggiungi su %s"
 #~ msgstr ""
 #~ "Sei sicuro di voler eliminare permanentemente tutti i messaggi di posta "
 #~ "da questa cartella? I messaggi eliminati non potranno essere recuperati."
-
-#~ msgid "Are you sure?"
-#~ msgstr "Sei sicuro?"
 
 #~ msgid "Armenia"
 #~ msgstr "Armenia"
