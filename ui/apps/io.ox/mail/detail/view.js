@@ -478,6 +478,7 @@ define('io.ox/mail/detail/view', [
         },
 
         onChangeSecurity: function () {
+            if (_.device('small')) return;  // Need to redraw action links on desktop only
             var data = this.model.toJSON(),
                 baton = ext.Baton({
                     view: this,
@@ -594,6 +595,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
+            if (data.security || data.security_info) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {
