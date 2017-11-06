@@ -243,8 +243,9 @@ define('io.ox/settings/main', [
                 this.append(
 
                     mainGroups.map(function (groupName) {
-                        if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
-                        return new TreeNodeView(_.extend({}, defaults, {
+                        var folderOptions = _.extend({}, defaults);
+                        if (groupName === 'virtual/settings/security') _.extend(folderOptions, { headless: false, title: gt('Security') });
+                        return new TreeNodeView(_.extend({}, folderOptions, {
                             className: groupName === 'virtual/settings/security' ? 'folder un-selectable' : 'folder selectable',
                             model_id: groupName
                         }))
@@ -494,6 +495,12 @@ define('io.ox/settings/main', [
             id: 'io.ox/core'
         });
 
+        ext.point('io.ox/settings/pane').extend({
+            id: 'security',
+            index: 200,
+            subgroup: 'io.ox/settings/pane/security'
+        });
+
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
             return !submodule.canAdd || submodule.canAdd.apply(this);
         });
@@ -503,34 +510,29 @@ define('io.ox/settings/main', [
         if (!capabilities.has('guest') && (capabilities.has('webmail') || submodules.length > 0)) {
             ext.point('io.ox/settings/pane/general').extend({
                 title: gt('Accounts'),
-                index: 200,
+                index: 300,
                 id: 'io.ox/settings/accounts'
             });
         }
 
         ext.point('io.ox/settings/pane').extend({
             id: 'tools',
-            index: 300,
+            index: 400,
             subgroup: 'io.ox/settings/pane/tools'
         });
 
         ext.point('io.ox/settings/pane').extend({
             id: 'external',
-            index: 400,
+            index: 500,
             subgroup: 'io.ox/settings/pane/external'
         });
 
         // ext.point('io.ox/settings/pane').extend({
         //     id: 'sessions',
-        //     index: 500,
+        //     index: 600,
         //     subgroup: 'io.ox/settings/pane/sessionlist'
         // });
 
-        ext.point('io.ox/settings/pane').extend({
-            id: 'security',
-            index: 500,
-            subgroup: 'io.ox/settings/pane/security'
-        });
 
         // enqueue is probably a bad name, but since it's not exposed …
         // only resolve the last object enqueed
