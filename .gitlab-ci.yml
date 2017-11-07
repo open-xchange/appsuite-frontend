@@ -219,7 +219,7 @@ deploy documentation:
   only:
     - develop
     - master
-    - master-*
+    - /^master-.*$/
 
 deploy e2e testserver:
   stage: deploy
