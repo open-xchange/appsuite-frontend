@@ -134,6 +134,7 @@ define('io.ox/calendar/settings/timezones/favorite-view', [
             this.model.set('favoriteTimezones', list);
             // make sure, that a timezone which is deleted is not rendered in the week view as timezone label anymore
             this.model.set('renderTimezones', _.intersection(list, this.model.get('renderTimezones', [])));
+            this.model.save();
         }
 
     });
