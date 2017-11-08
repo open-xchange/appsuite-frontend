@@ -327,6 +327,12 @@ define('io.ox/calendar/week/view', [
             this.workEnd = settings.get('endTime', this.workEnd) * 1;
             settings.on('change', function (key) {
                 switch (key) {
+                    case 'favoriteTimezones':
+                    case 'renderTimezones':
+                        self.app.getWindow().one('show', function () {
+                            self.adjustCellHeight(true);
+                        });
+                        break;
                     case 'interval':
                         var calculateTimescale = function () {
                             // save scroll ratio
@@ -1003,7 +1009,6 @@ define('io.ox/calendar/week/view', [
             );
 
             var renderSecondaryTimeLabels = _.throttle(function () {
-
                 var list = getTimezoneLabels();
 
                 $('.secondary-timezone', self.pane).remove();
