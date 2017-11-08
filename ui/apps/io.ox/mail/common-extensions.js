@@ -583,7 +583,7 @@ define('io.ox/mail/common-extensions', [
 
                     id = node.attr('data-id');
                     data = collection.get(id).toJSON();
-                    baton = ext.Baton({ startItem: data, data: list });
+                    baton = ext.Baton({ startItem: data, data: list, restoreFocus: clickTarget });
 
                     actions.invoke('io.ox/mail/actions/view-attachment', null, baton);
                 });

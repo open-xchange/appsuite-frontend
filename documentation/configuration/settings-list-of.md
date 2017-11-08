@@ -33,10 +33,10 @@ settings!io.ox/core
 ## Accessibility
 
 **features/accessibility)**
-> Use accessibility improvements (true/false)
+> Use accessibility improvements (true/false) **Deprecated**
 
 **highcontrast**
-> enable/disable high contrast theme (true/false)
+> enable/disable high contrast theme (true/false) **Deprecated**
 
 
 ## Settings
@@ -64,9 +64,6 @@ settings!io.ox/core
 
 
 ## Restore and save points
-
-**savepoints**
-> UI stores draft mail ids here. Those are created when the user logs out while writing a mail. Used to restore the mail compose dialog on next login.
 
 **features/storeSavePoints**
 > no saving in the background, no restore dialog  (true/false)
@@ -102,7 +99,7 @@ settings!io.ox/core
 ## Ping
 
 **ping/enabled**
-> frequently ping calls (true/false)
+> frequently ping calls for health check (true/false)
 
 **ping/interval**
 > specifies frequency in milliseconds
@@ -168,9 +165,6 @@ settings!io.ox/core
 
 ## Special
 
-**pdf/enableRangeRequests**
-> if the server supports range requests the PDF will be fetched in chunks (true/false)
-
 **refreshInterval**
 > automatic refresh interval in milliseconds
 
@@ -189,6 +183,8 @@ settings!io.ox/core
 **topbar/order**
 > defines order of apps in topbar
 
+**transform/multipleEmptyLines**
+> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
 
 ## Mail compose: tinyMCE
 
@@ -332,15 +328,6 @@ settings!io.ox/core
 > customize upsell 'decoration' appearance
 
 
-## Viewer
-
-**viewer/sidebarActiveTab**
-> last active sidebar navigation tab
-
-**viewer/sidebarOpenState**
-> stores active sidebar tab
-
-
 ## Password
 
 **password/showStrength**
@@ -367,21 +354,6 @@ settings!io.ox/core
 **features/clientOnboardingHint/remaining**
 > sets number of times hint is beeing shown.
 > IMPORTANT: The protection of this setting needs to be disabled in `/opt/open-xchange/etc/meta/ui.yml` cause it's used as starting value AND as storage for the remaining hints afterwards.
-
-
-## Unused/Deprecated?
-
-**settings/downloadDisabled**
-> ...
-
-**settings/advancedMode**
-> ...
-
-**viewer:sidebar:state**
-> ...
-
-**identifier**
-> ...
 
 
 ## Misc
@@ -425,10 +397,10 @@ settings!io.ox/portal
 ## API keys
 
 **apiKeys/flickr**
-> ...
+> API key for flickr usage
 
 **apiKeys/tumblr**
-> ...
+> API key for tumblr usage
 
 ## Sets
 
@@ -501,11 +473,6 @@ settings!io.ox/portal
 **mobile/summaryView**
 > show only summary of portal widgets on mobile
 
-
-## Unused?
-
-**force**
-> ...
 
 # Mail
 
@@ -741,16 +708,6 @@ settings!io.ox/mail
 **maliciousFolders**
 > extends list of considered folders
 
-
-## Dovecot Smart Cache
-
-**dsc/enabled**
-> ...
-
-**dsc/folder**
-> ...
-
-
 ## Misc
 
 **attachOriginalMessage**
@@ -817,6 +774,40 @@ settings!io.ox/mail
 **viewOptions/<folder>/sort**<br>
 **viewOptions/<folder>/thread**<br>
 > stores display settings for each folder individually
+
+# Contacts
+
+```
+settings!io.ox/contacts
+```
+
+## General
+
+**showAdmin**
+> show the context admin in addressbook (true/false)
+
+**startInGlobalAddressbook**
+> Start in global addressbook when Contacts App is launched (true/false)
+
+**mapService**
+> Which external map service should be used by default to generate the href for the contact address ('google', 'osm' or 'apple'). Defaults to 'google'. 'osm' is Open Street Maps. 'apple' only works on iOS and MacOS
+
+## Addressbook picker
+
+**picker/limits/departments**
+> Maxium departments to show (Default 100)
+
+**picker/limits/fetch**
+> Contact fetch limit for the HTTP request (Default 10000)
+
+**picker/limits/more**
+> Paginate limit, shows n elements more on reached scroll threshold (default 100)
+
+**picker/limits/list**
+> Max elements shown in the list before first paginate, (default 100)
+
+**picker/limits/search**
+> Maximum search results (default 50)
 
 # Calendar
 
@@ -918,9 +909,6 @@ settings!io.ox/calendar
 
 ## Misc
 
-**bossyAppointmentHandling**
-> ...
-
 **colorScheme**
 > value is 'classic', 'dark' or 'custom'
 
@@ -962,16 +950,6 @@ settings!io.ox/files
 **videoEnabled**
 > (true/false)
 
-## Folder
-
-**rootFolderId**
-> ...
-
-**folder/documents**
-> ...
-
-**folder/trash**
-> ...
 
 ## Folderpopup
 
@@ -988,7 +966,6 @@ settings!io.ox/files
 
 **features/comments**
 > allow comments when uploaded a new version of a file
-
 
 
 # Tasks
@@ -1041,19 +1018,7 @@ settings!io.ox/tasks
 > list of available currencies (3-digits) in edit/new dialog
 
 
-## Unused?
-
-**interval**
-> ...
-
-
 # Other
-
-## Settings: configjump
-
-```
-settings!io.ox/settings/configjump
-```
 
 ## Portal: oxdriveclients
 
@@ -1062,7 +1027,7 @@ settings!plugins/portal/oxdriveclients
 ```
 
 **appIconAsBase64**
-> ...
+> App icon encoded as base64 string to be displayed in the UI
 
 **l10nImages**
 > array of languages like 'en'

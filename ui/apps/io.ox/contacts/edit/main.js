@@ -293,7 +293,7 @@ define('io.ox/contacts/edit/main', [
                 return {
                     description: gt('Contact') + (title ? ': ' + title : ''),
                     module: 'io.ox/contacts/edit',
-                    point: this.contact.attributes
+                    point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited')
                 };
             }
             return false;

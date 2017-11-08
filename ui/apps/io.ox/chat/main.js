@@ -13,21 +13,25 @@
 
 define('io.ox/chat/main', [
     'io.ox/chat/data',
+    'io.ox/chat/events',
     'io.ox/backbone/views/window',
+    'io.ox/chat/views/empty',
     'io.ox/chat/views/chat',
     'io.ox/chat/views/chatList',
+    'io.ox/chat/views/channelList',
+    'io.ox/chat/views/history',
+    'io.ox/chat/views/fileList',
     'io.ox/contacts/api',
     'io.ox/contacts/util',
     'io.ox/chat/socket',
     'less!io.ox/chat/style'
-], function (data, WindowView, ChatView, ChatListView, contactsAPI, contactsUtil) {
+], function (data, events, WindowView, EmptyView, ChatView, ChatListView, ChannelList, History, FileList, contactsAPI, contactsUtil) {
 
     'use strict';
 
     var Window = WindowView.extend({
 
         events: {
-            'click [data-cmd]': 'onCommand',
             'keydown .left-navigation': 'onLeftNavigationKeydown',
             'keydown .overlay': 'onOverlayEvent',
             'click .overlay': 'onOverlayEvent'
@@ -37,13 +41,15 @@ define('io.ox/chat/main', [
             this.listenTo(data.backbone.chats, 'unseen', function (count) {
                 this.setCount(count);
             });
+
+            this.listenTo(events, 'cmd', this.onCommand);
         },
 
-        onCommand: function (e) {
-            e.preventDefault();
-            var node = $(e.currentTarget), data = node.data();
+        onCommand: function (data) {
             switch (data.cmd) {
                 case 'start-chat': this.startChat(); break;
+                case 'start-private-chat': this.startPrivateChat(data); break;
+                case 'join-channel': this.joinChannel(data); break;
                 case 'show-chat': this.showChat(data); break;
                 case 'show-recent-conversations': this.showRecentConversations(); break;
                 case 'show-channels': this.showChannels(); break;
@@ -52,35 +58,58 @@ define('io.ox/chat/main', [
                 case 'prev-file': this.moveFile(-1); break;
                 case 'next-file': this.moveFile(+1); break;
                 case 'close-file': this.closeFile(); break;
-                default: console.log('Unknown command', data.cmd, data); break;
+                // no default
             }
         },
 
         startChat: function () {
-            console.log('Start chat');
+            require(['io.ox/chat/views/newConversation'], function (NewConversationView) {
+                window.$rightside.empty().append(
+                    new NewConversationView()
+                    .on('cancel done', function () {
+                        window.$rightside.empty().append(new EmptyView().render().$el);
+                    })
+                    .render().$el
+                );
+            });
         },
 
-        showChat: function (data) {
-            var view = new ChatView({ id: data.id });
+        startPrivateChat: function (cmd) {
+            var chatId = data.backbone.chats.length + 1,
+                user = data.backbone.users.get(cmd.id);
+            data.backbone.chats.add({ id: chatId, type: 'private', title: user.getName(), members: [cmd.id, 1], messages: [{ id: 1, body: 'Created private chat', type: 'system' }] });
+            this.showChat({ id: chatId });
+        },
+
+        joinChannel: function (cmd) {
+            var channel = data.backbone.channels.get(cmd.id);
+            channel.set('subscribed', true);
+            var chatId = data.backbone.chats.length + 1;
+            data.backbone.chats.add({ id: chatId, type: 'channel', title: channel.get('title'), members: [1, 2, 3, 4, 5], messages: [{ id: 1, body: 'Joined channel', type: 'system' }] });
+            this.showChat({ id: chatId });
+        },
+
+        showChat: function (cmd) {
+            var view = new ChatView({ id: cmd.id });
             window.$rightside.empty().append(view.render().$el);
             view.scrollToBottom();
         },
 
         showRecentConversations: function () {
-            window.$rightside.empty().append(renderRecentConversations());
+            window.$rightside.empty().append(new History().render().$el);
         },
 
         showChannels: function () {
-            window.$rightside.empty().append(renderChannels());
+            window.$rightside.empty().append(new ChannelList().render().$el);
         },
 
         showAllFiles: function () {
-            window.$rightside.empty().append(renderFiles());
+            window.$rightside.empty().append(new FileList().render().$el);
         },
 
-        showFile: function (e) {
+        showFile: function (cmd) {
             renderOverlay().appendTo(this.$body).focus();
-            this.updateFile(e.index);
+            this.updateFile(cmd.index);
         },
 
         moveFile: function (step) {
@@ -127,6 +156,7 @@ define('io.ox/chat/main', [
                 contactsAPI.pictureHalo(
                     $('<div class="picture" aria-hidden="true">'), user, { width: 40, height: 40 }
                 ),
+                $('<button type="button" class="btn btn-default" data-cmd="start-chat"><i class="fa fa-plus"></i></button>'),
                 $('<i class="fa state online fa-check-circle">'),
                 $('<div class="name">').text(contactsUtil.getFullName(user))
             ),
@@ -154,70 +184,9 @@ define('io.ox/chat/main', [
             )
         ),
         window.$rightside = $('<div class="rightside abs">').append(
-            $('<div class="start-chat abs">').append(
-                $('<button type="button" class="btn btn-default" data-cmd="start-chat">').append(
-                    $('<i class="fa fa-plus">'),
-                    $('<br>'),
-                    $.txt('Start new chat')
-                )
-            )
+            new EmptyView().render().$el
         )
     );
-
-    function renderRecentConversations() {
-        return $('<div class="history abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('Recent conversations')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.history).map(function (chat) {
-                        return $('<li>').text(chat.title);
-                    })
-                )
-            )
-        );
-    }
-
-    function renderChannels() {
-        return $('<div class="channels abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('All channels')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.channels).map(function (channel) {
-                        return $('<li class="channel">').append(
-                            $('<div>').append(
-                                $('<span class="title">').text(channel.title),
-                                $('<span class="members">').text(channel.members + ' member(s)')
-                            ),
-                            $('<div class="description">').text(channel.description),
-                            $('<button type="button" class="btn btn-default join">').text('Join')
-                        );
-                    })
-                )
-            )
-        );
-    }
-
-    function renderFiles() {
-        return $('<div class="files abs">').append(
-            $('<div class="header abs">').append(
-                $('<h2>').append('All files')
-            ),
-            $('<div class="scrollpane abs">').append(
-                $('<ul>').append(
-                    _(data.files).map(function (file, index) {
-                        return $('<li>').append(
-                            $('<button type="button" data-cmd="show-file">').attr('data-index', index)
-                            .css('backgroundImage', 'url(' + file.url + ')')
-                        );
-                    })
-                )
-            )
-        );
-    }
 
     function renderOverlay() {
         return $('<div class="overlay abs" tabindex="-1">').append(

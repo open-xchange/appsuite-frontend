@@ -68,7 +68,8 @@ define('io.ox/mail/api', [
         return data;
     };
 
-    var sanitize = sanitizer.isEnabled();
+    var sanitize = sanitizer.isEnabled(),
+        sandboxedCSS = settings.get('features/sandboxedCSS', true);
 
     // generate basic API
     var api = apiFactory({
@@ -96,7 +97,7 @@ define('io.ox/mail/api', [
             },
             get: {
                 action: 'get',
-                embedded: 'true',
+                embedded: String(!sandboxedCSS),
                 sanitize: String(!sanitize)
             },
             getUnmodified: {
@@ -280,8 +281,6 @@ define('io.ox/mail/api', [
         obj.max_size = settings.get('maxSize/view', 1024 * 100);
 
         // do not process plain text if we prettify text client-side
-        // was !settings.get('beautifyPlainText');
-        // false until bug 52294 is fixed
         obj.process_plain_text = false;
 
         // never use factory's internal cache, therefore always 'false' at this point
@@ -299,7 +298,6 @@ define('io.ox/mail/api', [
                     if (sanitize) attachment = sanitizer.sanitize(attachment);
                 }
             });
-
             // either update or add model
             if (model) {
                 // if we already have a model we promote changes for threads
@@ -370,7 +368,10 @@ define('io.ox/mail/api', [
 
         _(all).each(function (item) {
             var cid = _.cid(item), model = collection.get(cid);
-            if (model) collection.remove(model);
+            if (model) {
+                model.preserve = false;
+                collection.remove(model);
+            }
         });
     }
 
@@ -1047,7 +1048,8 @@ define('io.ox/mail/api', [
                 csid: csid,
                 embedded: obj.embedded,
                 max_size: obj.max_size,
-                decrypt: (obj.security && obj.security.decrypted)
+                decrypt: (obj.security && obj.security.decrypted),
+                process_plain_text: false
             }),
             data: _([].concat(obj)).map(function (obj) {
                 return api.reduce(obj);
@@ -1445,7 +1447,6 @@ define('io.ox/mail/api', [
 
         var opt = _.extend({ scaleType: 'contain' }, options),
             url = ox.apiRoot + '/mail', first;
-
         if (mode === 'zip') {
             first = _(data).first();
             return url + '?' + $.param({
@@ -1453,6 +1454,7 @@ define('io.ox/mail/api', [
                 folder: (first.parent || first.mail).folder_id,
                 id: (first.parent || first.mail).id,
                 attachment: _(data).pluck('id').join(','),
+                decrypt: (first.security && first.security.decrypted), // All attachments must be decrypted if Guard emails
                 // required here!
                 session: ox.session
             });
@@ -1483,7 +1485,6 @@ define('io.ox/mail/api', [
 
             return url;
         }
-
         // inject filename for more convenient file downloads
         var filename = data.filename ? data.filename.replace(/[\\:/]/g, '_').replace(/\(/g, '%28').replace(/\)/, '%29') : undefined,
             // scaling options
@@ -1696,7 +1697,7 @@ define('io.ox/mail/api', [
     };
 
     // some settings need a reset of the mail content cache
-    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted change:beautifyPlainText', function () {
+    settings.on('change:allowHtmlMessages change:allowHtmlImages change:isColorQuoted', function () {
         pool.get('detail').each(function (model) {
             model.unset('attachments', { silent: true });
         });
@@ -2042,7 +2043,7 @@ define('io.ox/mail/api', [
         // special handling for top-level mail account folders (e.g. bug 34818)
         if (/^default\d+$/.test(options.folder)) return true;
         // allow virtual/all
-        if (options.folder === 'default0/virtual/all') return false;
+        if (options.folder === api.allMessagesFolder) return false;
         // check read access
         var model = folderAPI.pool.getModel(options.folder);
         return !model.can('read');

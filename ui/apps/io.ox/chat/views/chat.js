@@ -12,15 +12,17 @@
  */
 
 define('io.ox/chat/views/chat', [
-    'io.ox/chat/data',
-    'io.ox/chat/views/badge'
-], function (data, BadgeView) {
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/badge',
+    'io.ox/chat/views/avatar',
+    'io.ox/chat/data'
+], function (DisposableView, BadgeView, Avatar, data) {
 
     'use strict';
 
     var MESSAGE_LIMIT = 20;
 
-    var ChatView = Backbone.View.extend({
+    var ChatView = DisposableView.extend({
 
         className: 'chat',
 
@@ -69,7 +71,9 @@ define('io.ox/chat/views/chat', [
         },
 
         renderMember: function (model) {
-            return new BadgeView({ model: model }).render().$el;
+            return $('<li>').append(
+                new BadgeView({ model: model }).render().$el
+            );
         },
 
         renderMessage: function (model) {
@@ -78,8 +82,8 @@ define('io.ox/chat/views/chat', [
                 .addClass(model.get('type') || 'text')
                 .toggleClass('myself', model.isMyself())
                 .append(
-                    // sender
-                    renderSender(model),
+                    // sender avatar & name
+                    this.renderSender(model),
                     // message boby
                     $('<div class="body">').addClass().html(model.getBody()),
                     // time
@@ -87,6 +91,14 @@ define('io.ox/chat/views/chat', [
                     // delivery state
                     $('<div class="fa delivery">').addClass(model.get('delivery'))
                 );
+        },
+
+        renderSender: function (model) {
+            if (model.get('type') === 'system') return $();
+            if (model.isMyself()) return $();
+            if (model.hasSameSender()) return $();
+            var user = data.backbone.users.get(model.get('sender'));
+            return [new Avatar({ model: user }).render().$el, $('<div class="sender">').text(user.getName())];
         },
 
         scrollToBottom: function () {
@@ -121,8 +133,8 @@ define('io.ox/chat/views/chat', [
                         model.set('delivery', 'seen');
                         model = null;
                     }, 1000);
-                }, 500);
-            }, 100);
+                }, 700);
+            }, 300);
         },
 
         getMessageNode: function (model, selector) {
@@ -145,16 +157,6 @@ define('io.ox/chat/views/chat', [
             this.getMessageNode(model, '.delivery').attr('class', 'fa delivery ' + model.get('delivery'));
         }
     });
-
-    function renderSender(model) {
-        if (model.get('type') === 'system') return $();
-        if (model.hasSameSender()) return $();
-        return $('<div class="sender">').text(getUserName(model.get('sender')));
-    }
-
-    function getUserName(id) {
-        return data.backbone.users.get(id).get('name');
-    }
 
     return ChatView;
 });

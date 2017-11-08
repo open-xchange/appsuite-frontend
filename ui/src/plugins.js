@@ -37,11 +37,8 @@
         eval('//# sourceURL=' + name + '.js\n' + code);
     }
 
-    // needs to be reviewed: "force websql for mobile" (July 2013)
-    // plus: don't know why Safari is explicitly excluded as it doesn't support indexedDB at all
-    // for example, IDBVersionChangeEvent is always undefined for Safari
-    // note: (11.8.2016) changed file cache for Android from localStorage to indexDB
-    if (Modernizr.indexeddb && window.indexedDB && (_.device('desktop && !safari') || _.device('android')) && window.IDBVersionChangeEvent !== undefined) {
+    // With 7.10 Indexeddb should work with all browsers. We do not need to exclude Safari here any more
+    if (Modernizr.indexeddb && window.indexedDB && window.IDBVersionChangeEvent !== undefined) {
 
         // IndexedDB
         (function () {

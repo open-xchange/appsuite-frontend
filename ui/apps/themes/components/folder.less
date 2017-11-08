@@ -299,70 +299,10 @@
     }
 
     .mobile-edit-mode & {
-        .selectable {
+        .selectable[data-contextmenu] {
             .folder-label {
                 color: @link-color;
                 text-decoration: underline;
-            }
-        }
-    }
-
-    @media(max-width: @smartphone-breakpoint), (max-device-width: @smartphone-breakpoint) {
-
-        padding-left: 20px;
-
-        // custom mobile values
-        @mobile-height: 48px;
-        @mobile-line-height: @mobile-height;
-        @mobile-arrow-size: 20px;
-        @mobile-label-size: 15px;
-
-        .folder {
-            line-height: @mobile-line-height;
-        }
-        .folder-icon {
-            float: left;
-        }
-        .folder-node {
-            height: @mobile-height;
-
-            .folder-arrow {
-                font-size: @mobile-arrow-size;
-                position: absolute;
-                right: 0;
-                text-align: center;
-                padding-left: 0;
-                // .fa-caret-right:before {
-                //     content: "\f0d8";
-                // }
-                .fa-caret-down:before {
-                    content: "\f0d7";
-                }
-            }
-            .folder-label {
-                float: left;
-            }
-            .folder-label, .folder-counter, .folder-options {
-                font-size: @mobile-label-size;
-            }
-            .folder-label > div {
-                max-width: 160px;
-                .ellipsis();
-            }
-        }
-        li[data-id="virtual/settings"] {
-            .folder-node {
-                .folder-label > div {
-                    max-width: 280px;
-                }
-            }
-        }
-        .links {
-            font-size: @font-size-touch;
-            padding-left: 0;
-
-            li {
-                line-height: @mobile-line-height;
             }
         }
     }
@@ -411,7 +351,7 @@
                 }
             }
             .folder-label {
-                float: left;
+                //float: left;
             }
             .folder-label, .folder-counter, .folder-options {
                 font-size: @mobile-label-size;
@@ -436,6 +376,9 @@
         .links {
             font-size: @font-size-touch;
             padding-left: 0;
+            a {
+                margin-bottom: 8px;
+            }
         }
         .flat-tree {
             // set min-width on flat folder to get consistent layout

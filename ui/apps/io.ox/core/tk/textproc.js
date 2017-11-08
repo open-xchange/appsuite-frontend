@@ -359,14 +359,21 @@ define('io.ox/core/tk/textproc', [
             }
 
             function cleanUp(string) {
-                return string
+                string = string
                     .replace(/<!--(.*?)-->/g, '')             // Remove comments
                     .replace(/<img[^>]* data-emoji-unicode="([^"]*)"[^>]*>/gi, '$1')
                     .replace(/(<\/?\w+(\s[^<>]*)?\/?>)/g, '') // Remove all remaining tags except mail addresses
-                    .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '')    // Trim leading/trailing whitespace
-                    .replace(/\n\s+\n/g, '\n\n')
-                    .replace(/\n{3,}/g, '\n\n')              // limit consecutive linebreaks to 2
-                    //replace html entities last, because things like &gt; and &lt; might get removed otherwise
+                    .replace(/^[\t\r\n]+|[\t\r\n]+$/g, '');    // Trim leading/trailing whitespace
+
+                // limit consecutive linebreaks to 2
+                if (mailSettings.get('transform/emptyLines', true)) {
+                    string = string
+                        .replace(/\n\s+\n\s+\n/g, '\n\n\n')
+                        .replace(/\n{3,}/g, '\n\n\n');
+                }
+
+                //replace html entities last, because things like &gt; and &lt; might get removed otherwise
+                return string
                     .replace(/&nbsp;/g, ' ')
                     .replace(/&gt;/g, '>')
                     .replace(/&lt;/g, '<')

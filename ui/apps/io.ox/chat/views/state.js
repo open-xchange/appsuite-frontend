@@ -11,13 +11,13 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/state', [], function () {
+define('io.ox/chat/views/state', ['io.ox/backbone/views/disposable'], function (DisposableView) {
 
     'use strict';
 
     var states = ['online', 'absent', 'busy', 'offline'];
 
-    var StateView = Backbone.View.extend({
+    var StateView = DisposableView.extend({
 
         tagName: 'span',
         className: 'fa state',

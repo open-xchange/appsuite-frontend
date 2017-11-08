@@ -19,8 +19,11 @@ define('io.ox/calendar/actions', [
     'io.ox/core/extPatterns/actions',
     'io.ox/core/print',
     'gettext!io.ox/calendar',
-    'io.ox/core/capabilities'
-], function (ext, links, api, util, actions, print, gt, capabilities) {
+    'io.ox/core/capabilities',
+    'io.ox/calendar/actions/change-confirmation',
+    'io.ox/core/folder/api',
+    'settings!io.ox/calendar'
+], function (ext, links, api, util, actions, print, gt, capabilities, changeStatus, folderAPI, settings) {
 
     'use strict';
 
@@ -436,6 +439,43 @@ define('io.ox/calendar/actions', [
         }
     });
 
+    new Action('io.ox/calendar/actions/accept-appointment', {
+        requires: true,
+        action: function (baton) {
+            var appointment = api.reduce(baton.data);
+            changeStatus(baton.data).done(function success() {
+                folderAPI.get(appointment.folder).done(function (folder) {
+                    appointment.data = {
+                        // default reminder
+                        alarm: parseInt(settings.get('defaultReminder', 15), 10),
+                        confirmmessage: '',
+                        confirmation: 1
+                    };
+
+                    // add current user id in shared or public folder
+                    if (folderAPI.is('shared', folder)) {
+                        appointment.data.id = folder.created_by;
+                    }
+
+                    api.confirm(appointment);
+
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/actions/decline-appointment', {
+        requires: true,
+        action: function (baton) {
+            var o = api.reduce(baton.data);
+            o.data = {
+                confirmmessage: '',
+                confirmation: 2
+            };
+            api.confirm(o);
+        }
+    });
+
     // Mobile multi select extension points
     // delete appointment(s)
     ext.point('io.ox/calendar/mobileMultiSelect/toolbar').extend({
@@ -490,21 +530,39 @@ define('io.ox/calendar/actions', [
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 100,
+        index: 110,
         prio: 'hi',
-        mobile: 'lo',
-        id: 'edit',
-        label: gt('Edit'),
-        ref: 'io.ox/calendar/detail/actions/edit'
+        mobile: 'hi',
+        id: 'accept',
+        label: gt('Accept'),
+        ref: 'io.ox/calendar/actions/accept-appointment'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 200,
+        index: 120,
+        prio: 'hi',
+        mobile: 'hi',
+        id: 'decline',
+        label: gt('Decline'),
+        ref: 'io.ox/calendar/actions/decline-appointment'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 150,
         prio: 'hi',
         mobile: 'hi',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
+        mobile: 'lo',
+        id: 'edit',
+        label: gt('Edit'),
+        ref: 'io.ox/calendar/detail/actions/edit'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({

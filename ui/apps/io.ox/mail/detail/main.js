@@ -56,14 +56,7 @@ define('io.ox/mail/detail/main', [
             // if the mail is too big and we get some scrollbars,
             // toggle bigscreen by default
             app.threadView.on('mail:detail:body:render', function () {
-                var rootNode;
-                if (_.device('chrome')) {
-                    // chrome uses shadow-dom which can not be found by jquery by default
-                    rootNode = app.threadView.$el.find('.shadow-root-container')[0].shadowRoot;
-                } else {
-                    rootNode = app.threadView.$el;
-                }
-                var width = $(rootNode).find('.mail-detail-content').width();
+                var width = $(app.threadView.$el).find('.mail-detail-frame').contents().find('.mail-detail-content').width();
                 if (width >= 850) app.threadView.toggleBigScreen(true);
             });
         },

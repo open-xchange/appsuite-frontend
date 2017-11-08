@@ -22,11 +22,11 @@ define('io.ox/chat/data', [], function () {
         // USERS
 
         users: [
-            { id: 1, name: 'Mattes', state: 'online' },
-            { id: 2, name: 'Alex', state: 'online' },
-            { id: 3, name: 'David', state: 'absent' },
-            { id: 4, name: 'Julian', state: 'busy' },
-            { id: 5, name: 'Someone with a really long name', state: 'offline' }
+            { id: 1, first_name: 'Matthias', last_name: 'Biggeleben', state: 'online', image: 225 },
+            { id: 2, first_name: 'Alexander', last_name: 'Quast', state: 'online', image: 249 },
+            { id: 3, first_name: 'David', last_name: 'Bauer', state: 'absent', image: 382 },
+            { id: 4, first_name: 'Julian', last_name: 'Bäume', state: 'busy' },
+            { id: 5, first_name: 'Someone with a really long name', last_name: '', state: 'offline' }
         ],
 
         // CHATS
@@ -80,15 +80,39 @@ define('io.ox/chat/data', [], function () {
                     { id: 1, body: 'Hello World', sender: 2, time: '13:37' }
                 ],
                 unseen: 0
+            },
+            // OLD
+            {
+                id: 5,
+                active: false,
+                type: 'group',
+                title: 'And this in an older chat',
+                members: [1, 2, 3, 4, 5],
+                messages: [
+                    { id: 1, body: 'Hi there', sender: 2, time: '13:37' },
+                    { id: 2, body: 'Hiho', sender: 1, time: '13:38' }
+                ],
+                unseen: 0
+            },
+            {
+                id: 6,
+                active: false,
+                type: 'group',
+                title: 'And just another old chat',
+                members: [1, 2, 3],
+                messages: [
+                    { id: 1, body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat', sender: 2, time: '13:37' }
+                ],
+                unseen: 0
             }
         ],
 
         // Channels
 
         channels: [
-            { id: 1, title: 'Office Olpe', description: 'Everything related to the office in Olpe', members: 52 },
-            { id: 2, title: 'Office Cologne', description: 'Everything related to the office in Cologne', members: 11 },
-            { id: 3, title: 'Engineering', description: 'App Suite Core Engineering', members: 71 }
+            { id: 1, title: 'Office Olpe', description: 'Everything related to the office in Olpe', members: 52, subscribed: false },
+            { id: 2, title: 'Office Cologne', description: 'Everything related to the office in Cologne', members: 11, subscribed: false },
+            { id: 3, title: 'Engineering', description: 'App Suite Core Engineering', members: 71, subscribed: false }
         ],
 
         // Files
@@ -114,21 +138,40 @@ define('io.ox/chat/data', [], function () {
 
     data.backbone = {};
 
+    //
     // User
+    //
 
-    var UserModel = Backbone.Model.extend({});
+    var UserModel = Backbone.Model.extend({
+        getName: function () {
+            var first = $.trim(this.get('first_name')), last = $.trim(this.get('last_name'));
+            if (first && last) return last + ', ' + first;
+            return first || last || '\u00a0';
+        }
+    });
+
     var UserCollection = Backbone.Collection.extend({ model: UserModel });
     data.backbone.users = new UserCollection(data.users);
 
+    //
     // Message
+    //
 
     var MessageModel = Backbone.Model.extend({
+
+        defaults: function () {
+            return { body: '', sender: 0, time: moment().format('LT') };
+        },
 
         getBody: function () {
             if (this.get('type') === 'image') {
                 return '<img src="' + this.get('body') + '" alt="">';
             }
             return _.escape(this.get('body')).replace(/(https?:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
+        },
+
+        getTextBody: function () {
+            return _.escape(this.get('body'));
         },
 
         isMyself: function () {
@@ -144,24 +187,22 @@ define('io.ox/chat/data', [], function () {
 
     var MessageCollection = Backbone.Collection.extend({ model: MessageModel });
 
+    //
     // Chat
-
-    // denormalize first
-    _(data.chats).each(function (chat) {
-        chat.members = _(chat.members).map(function (id) {
-            return data.backbone.users.get(id);
-        });
-    });
+    //
 
     var ChatModel = Backbone.Model.extend({
 
-        defaults: { type: 'group', title: 'New conversation' },
+        defaults: { active: true, type: 'group', title: 'New conversation', unseen: 0 },
 
         initialize: function (attr) {
             this.set('modified', +moment());
             this.unset('members', { silent: true });
             this.unset('messages', { silent: true });
-            this.members = new Backbone.Collection(attr.members);
+            var members = _(attr.members).map(function (arg) {
+                return arg instanceof UserModel ? arg : data.backbone.users.get(arg);
+            });
+            this.members = new Backbone.Collection(members);
             this.messages = new MessageCollection(attr.messages);
             // forward specific events
             this.listenTo(this.members, 'all', function (name) {
@@ -171,6 +212,14 @@ define('io.ox/chat/data', [], function () {
                 if (/^(add|change|remove)$/.test(name)) this.trigger('message:' + name);
                 if (name === 'add') this.onMessageAdd();
             });
+        },
+
+        getLastMessage: function () {
+            return this.messages.last().getTextBody();
+        },
+
+        getLastMessageDate: function () {
+            return this.messages.last().get('time');
         },
 
         onMessageAdd: function () {
@@ -191,10 +240,31 @@ define('io.ox/chat/data', [], function () {
             this.trigger('unseen', this.reduce(function (sum, model) {
                 return sum + (model.get('unseen') > 0 ? 1 : 0);
             }, 0));
+        },
+
+        getActive: function () {
+            return this.filter({ active: true });
+        },
+
+        getHistory: function () {
+            return this.filter({ active: false }).slice(0, 100);
         }
     });
 
     data.backbone.chats = new ChatCollection(data.chats);
+
+    //
+    // Channels
+    //
+
+    var ChannelModel = Backbone.Model.extend({ defaults: { subscribed: false } });
+    var ChannelCollection = Backbone.Collection.extend({
+        model: ChannelModel,
+        getUnsubscribed: function () {
+            return this.filter({ subscribed: false });
+        }
+    });
+    data.backbone.channels = new ChannelCollection(data.channels);
 
     return data;
 });

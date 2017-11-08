@@ -11,11 +11,15 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'], function (data, StateView) {
+define('io.ox/chat/views/chatList', [
+    'io.ox/backbone/views/disposable',
+    'io.ox/chat/views/state',
+    'io.ox/chat/data'
+], function (DisposableView, StateView) {
 
     'use strict';
 
-    var ChatListView = Backbone.View.extend({
+    var ChatListView = DisposableView.extend({
 
         className: 'chats',
 
@@ -30,22 +34,24 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
         },
 
         render: function () {
-            this.$el.append(this.collection.map(this.renderChat, this));
+            this.$el.append(
+                this.getItems().map(this.renderItem, this)
+            );
             return this;
         },
 
-        renderChat: function (model) {
+        renderItem: function (model) {
             return $('<button type="button" class="btn-nav" data-cmd="show-chat">')
                 .attr('data-id', model.id)
                 .toggleClass('unseen', model.get('unseen') > 0)
                 .append(
-                    this.renderChatIcon(model),
+                    this.renderIcon(model),
                     $('<span class="label label-default">').text(model.get('unseen')),
                     $('<div class="title">').text(model.get('title'))
                 );
         },
 
-        renderChatIcon: function (model) {
+        renderIcon: function (model) {
             switch (model.get('type')) {
                 case 'private':
                     return $('<span class="btn-icon">').append(
@@ -59,12 +65,16 @@ define('io.ox/chat/views/chatList', ['io.ox/chat/data', 'io.ox/chat/views/state'
             }
         },
 
+        getItems: function () {
+            return this.collection.getActive();
+        },
+
         getNode: function (model) {
             return this.$('[data-id="' + $.escape(model.get('id')) + '"]');
         },
 
         onAdd: function (model) {
-            this.$el.prepend(this.renderChat(model));
+            this.$el.prepend(this.renderItem(model));
         },
 
         onRemove: function (model) {

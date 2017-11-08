@@ -336,9 +336,9 @@ msgstr "Клиент %s для Windows"
 #. Example: OX Drive for iOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$s of %2$s"
+#| msgid "%s client for iOS"
 msgid "%1$s for iOS"
-msgstr "%1$s из %2$s"
+msgstr "Клиент %s для iOS"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -975,9 +975,9 @@ msgstr "Адрес (другой)"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
+#| msgid "Address Home"
 msgid "Address book name"
-msgstr "Адресная книга"
+msgstr "Адрес (домашний)"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
@@ -6543,7 +6543,7 @@ msgstr "Другие адреса"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Other Address"
+#| msgid "Other address"
 msgid "Other clients"
 msgstr "Другие адреса"
 
@@ -9590,8 +9590,6 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "Эту папка не может быть переименована."
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "This is how your message text will look like."
 msgid "This is how your message text will look like."
 msgstr "Вот как будет выглядеть текст вашего сообщения"
 
@@ -11435,11 +11433,6 @@ msgstr "вашей платформы"
 #~ msgstr[1] "%1$s сообщения, не прочитано: %2$s"
 #~ msgstr[2] "%1$s сообщений, не прочитано: %2$s"
 
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s on %2$s"
-#~ msgstr "%1$s из %2$s"
-
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s изменил(а) свой профиль:"
 
@@ -12353,11 +12346,6 @@ msgstr "вашей платформы"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "Закрыть полноэкранный режим"
 
-#, fuzzy
-#~| msgid "Send as vCard"
-#~ msgid "Export as vCard"
-#~ msgstr "Отправить vCard"
-
 #~ msgid "Extended view"
 #~ msgstr "Развернутый вид"
 
@@ -12795,6 +12783,9 @@ msgstr "вашей платформы"
 #~ msgid "Mailfilter updated"
 #~ msgstr "Фильтр обновлен"
 
+#~ msgid "Main window"
+#~ msgstr "Главное окно"
+
 #~ msgid "Manage applications"
 #~ msgstr "Управление приложениями"
 
@@ -12861,11 +12852,6 @@ msgstr "вашей платформы"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "Имена и электронные адреса"
-
-#, fuzzy
-#~| msgid "Drive Client"
-#~ msgid "Native clients"
-#~ msgstr "Клиент Drive"
 
 #~ msgid "Navigation bar"
 #~ msgstr "Панель навигации"
@@ -14736,11 +14722,6 @@ msgstr "вашей платформы"
 
 #~ msgid "weekly"
 #~ msgstr "каждую неделю"
-
-#, fuzzy
-#~| msgid "Main window"
-#~ msgid "windows"
-#~ msgstr "Главное окно"
 
 #~ msgid "work days"
 #~ msgstr "рабочие дни"

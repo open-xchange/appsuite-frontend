@@ -64,7 +64,7 @@ define('io.ox/onboarding/clients/wizard', [
             if (!_.contains(['device', 'scenario'], type)) return;
             // tabindex needed (wizard tabtrap)
             return $('<li class="option centered" data-value="back">').append(
-                $('<button class="link box" role="menuitem">').append(
+                $('<button class="link box navigation" role="menuitem">').append(
                     $('<div class="icon-list">').append(options._getIcons('fa-angle-left')),
                     // a11y
                     options._getTitle({ title: gt('back') }).addClass('sr-only')
@@ -152,6 +152,10 @@ define('io.ox/onboarding/clients/wizard', [
         this.parent.model.set(type, value);
         wizard.trigger(type + ':select', value);
         this.trigger('next');
+    }
+
+    function focus() {
+        this.$('.wizard-content').find('button[tabindex!="-1"][disabled!="disabled"]:not(.navigation):visible:first').focus();
     }
 
     function drawPlatforms() {
@@ -433,6 +437,7 @@ define('io.ox/onboarding/clients/wizard', [
                     minWidth: '540px'
                 })
                 .on('before:show', drawPlatforms)
+                .on('show', focus)
                 .end()
                 // device
                 .step({
@@ -443,6 +448,7 @@ define('io.ox/onboarding/clients/wizard', [
                     minWidth: '540px'
                 })
                 .on('before:show', drawDevices)
+                .on('show', focus)
                 .end()
                 // scenarios
                 .step({
@@ -453,6 +459,7 @@ define('io.ox/onboarding/clients/wizard', [
                     width: 'auto',
                     minWidth: '540px'
                 })
+                .on('show', focus)
                 .on('before:show', drawScenarios)
                 .end();
             // add some references to steps

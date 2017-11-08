@@ -147,7 +147,7 @@ define('io.ox/backbone/mini-views/datepicker', [
             } else {
                 require(['io.ox/backbone/views/datepicker', 'io.ox/backbone/mini-views/combobox', 'io.ox/core/tk/datepicker'], function (Picker, Combobox) {
 
-                    new Picker({ date: self.model.get(self.attribute) }).attachTo(self.nodes.dayField);
+                    new Picker({ date: self.model.get(self.attribute), attribute: self.attribute }).attachTo(self.nodes.dayField);
 
                     var comboboxOptions = [],
                         filldate = moment().startOf('day'),

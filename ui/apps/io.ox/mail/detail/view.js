@@ -27,7 +27,7 @@ define('io.ox/mail/detail/view', [
     'less!io.ox/mail/detail/style',
     'less!io.ox/mail/style',
     'io.ox/mail/actions'
-], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, shadowStyle) {
+], function (DisposableView, extensions, ext, api, util, Pool, content, links, emoji, a11y, gt, contentStyle) {
 
     'use strict';
 
@@ -301,32 +301,46 @@ define('io.ox/mail/detail/view', [
         id: 'body',
         index: INDEX += 100,
         draw: function () {
-            var $body;
             this.append(
                 $('<section class="attachments">'),
                 // must have tabindex=-1, otherwise tabindex inside Shadow DOM doesn't work
-                $body = $('<section class="body user-select-text focusable" tabindex="-1">')
+                $('<section class="body user-select-text focusable" tabindex="-1">')
             );
+            /*
             // rendering mails in chrome is slow if we do not use a shadow dom
-            if ($body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
+            if (false && $body[0].createShadowRoot && _.device('chrome') && !_.device('smartphone')) {
                 $body[0].createShadowRoot();
                 $body.addClass('shadow-root-container');
             }
+
             $body.on('dispose', function () {
                 var $content = $(this.shadowRoot || this);
                 if ($content[0] && $content[0].children.length > 0) {
+
                     //cleanup content manually, since this subtree might get very large
                     //content only contains the mail and should not have any handlers assigned
                     //no need for jQuery.fn.empty to clean up, here (see Bug #33308)
                     $content[0].innerHTML = '';
                 }
-            });
+            });*/
+        }
+    });
+
+    ext.point('io.ox/mail/detail/body').extend({
+        id: 'iframe',
+        index: 100,
+        draw: function (baton) {
+            // "//:0" does not work for src as IE 11 goes crazy when loading the frame
+            var iframe = $('<iframe src="" class="mail-detail-frame">');
+            // restore height if already calculated
+            if (baton.model.get('iframe-height')) iframe.css('height', baton.model.get('iframe-height'));
+            baton.iframe = iframe;
         }
     });
 
     ext.point('io.ox/mail/detail/attachments').extend({
         id: 'attachment-list',
-        index: 100,
+        index: 200,
         draw: function (baton) {
             if (baton.attachments.length === 0) return;
             // reuse existing view, to not duplicate event listeners
@@ -346,7 +360,8 @@ define('io.ox/mail/detail/view', [
         draw: function (baton) {
 
             var data = content.get(baton.data),
-                node = data.content;
+                node = data.content,
+                self = this;
 
             if (!data.isLarge && !data.processedEmoji && data.type === 'text/html') {
                 emoji.processEmoji(node.innerHTML, function (html, lib) {
@@ -356,29 +371,46 @@ define('io.ox/mail/detail/view', [
                 });
             }
 
-            if (this.find('.shadow-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
+            if (this.find('.content-style').length === 1 && /[\u203c\u2049\u20e3\u2123-\uffff]/.test(node.innerHTML)) {
                 var emojiStyles = ext.point('3rd.party/emoji/editor_css').map(function (point) {
                     return require('css!' + point.css).clone();
                 }).value();
                 this.prepend(emojiStyles);
             }
-            // restore height or set minimum height of 100px
-            $(node).css('min-height', baton.model.get('visualHeight') || 100);
-            // add to DOM
-            this.idle().append(node);
-            // ensure, that the scrollable is a lazyload scrollpane
-            if (this[0] && this[0].host) {
-                // if it is a shadow dom, we must trigger add.lazyload to ensure, that lazyloading is updated at least once
-                $(this[0].host).closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
-                // copy events
-                _($._data(document).events.click).each(function (e) {
-                    if (!e.namespace && e.selector) $(node).on('click', e.selector, e.handler);
-                });
-            } else {
-                this.closest('.scrollable').lazyloadScrollpane().trigger('add.lazyload');
+
+            function resizeFrame() {
+                var frame = self.find('.mail-detail-frame'),
+                    contents = frame.contents(),
+                    height = contents.find('.mail-detail-content').height(),
+                    htmlHeight = contents.find('html').height();
+
+                if (height === 0) {
+                    // TODO: find better solution, might be an endless loop
+                    // height 0 should(!) never happen, the dom node seems to be not rendered yet and
+                    // calculation fails. Give it another try. Actually only an issue on FF
+                    _.delay(resizeFrame, 10);
+                    return;
+                }
+
+                if (height < htmlHeight) height = htmlHeight;
+
+                baton.model.set('iframe-height', height, { silent: true });
+                frame.css('height', height);
             }
-            // now remember height
-            baton.model.set('visualHeight', $(node).height(), { silent: true });
+
+            $(node).on('resize imageload', resizeFrame); // for expanding blockquotes and inline images
+
+            baton.iframe.on('load', function () {
+                var content = baton.iframe.contents();
+                content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
+                content.find('body').addClass('iframe-body').append(node);
+                resizeFrame(); // initial resize for first draw
+            });
+
+            $(window).on('orientationchange resize', _.throttle(resizeFrame, 300)); // general window resize
+            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed resize due to page controller delay for page change
+
+            this.idle().append(baton.iframe);
         }
     });
 
@@ -461,7 +493,7 @@ define('io.ox/mail/detail/view', [
             // get shadow DOM or body node
             var body = this.$el.find('section.body'),
                 shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + shadowStyle + '</style>'; else body.empty();
+            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + contentStyle + '</style>'; else body.empty();
             return $(shadowRoot || body);
         },
 

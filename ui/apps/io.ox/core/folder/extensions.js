@@ -202,6 +202,8 @@ define('io.ox/core/folder/extensions', [
     function getAvailableServices() {
         var services = ['google', 'dropbox', 'boxcom', 'msliveconnect'];
 
+        ext.point('io.ox/core/folder/storage-accounts/list').invoke('customize', services);
+
         return require(['io.ox/core/api/filestorage']).then(function (filestorageApi) {
             var availableFilestorageServices = filestorageApi.rampup().then(function () {
                 return _(filestorageApi.isStorageAvailable()).map(function (service) { return service.match(/\w*?$/)[0]; });

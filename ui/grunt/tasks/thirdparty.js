@@ -76,6 +76,7 @@ module.exports = function (grunt) {
                             'bootstrap-tokenfield/js/bootstrap-tokenfield.js',
                             'chart.js/dist/Chart.min.js',
                             'clipboard/dist/clipboard.min.js',
+                            'croppie/croppie.min.js',
                             'marked/lib/marked.js',
                             'resize-polyfill/lib/polyfill-resize.js',
                             'swiper/dist/js/swiper.jquery.js',
@@ -101,6 +102,12 @@ module.exports = function (grunt) {
                         src: ['*.css'],
                         cwd: 'node_modules/swiper/dist/css/',
                         dest: 'build/apps/3rd.party/swiper'
+                    },
+                    {
+                        expand: true,
+                        src: ['croppie.css'],
+                        cwd: 'node_modules/croppie',
+                        dest: 'build/apps/3rd.party/croppie'
                     },
                     {
                         expand: true,

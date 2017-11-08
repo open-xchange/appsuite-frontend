@@ -126,7 +126,7 @@ define('io.ox/core/session', [
                             action: 'autologin',
                             client: that.client(),
                             rampup: true,
-                            rampupFor: CLIENT,
+                            rampUpFor: CLIENT,
                             version: that.version()
                         }
                     })
@@ -154,7 +154,7 @@ define('io.ox/core/session', [
                             serverToken: _.url.hash('serverToken'),
                             clientToken: _.url.hash('clientToken'),
                             rampup: true,
-                            rampupFor: CLIENT
+                            rampUpFor: CLIENT
                         }
                     })
                     .then(function (response) {
@@ -216,9 +216,9 @@ define('io.ox/core/session', [
                         version: that.version(),
                         timeout: TIMEOUTS.LOGIN,
                         rampup: true,
-                        rampupFor: 'open-xchange-appsuite'
+                        rampUpFor: 'open-xchange-appsuite'
                     },
-                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampupFor', 'share', 'target')
+                    _(options).pick('action', 'name', 'password', 'language', 'rampup', 'rampUpFor', 'share', 'target')
                 );
 
                 if (options.forceLanguage) params.storeLanguage = true;
@@ -265,7 +265,7 @@ define('io.ox/core/session', [
                 params: {
                     action: 'rampup',
                     rampup: true,
-                    rampupFor: CLIENT
+                    rampUpFor: CLIENT
                 },
                 appendColumns: false,
                 processResponse: false

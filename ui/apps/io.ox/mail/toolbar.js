@@ -280,8 +280,11 @@ define('io.ox/mail/toolbar', [
 
             dropdown
             .header(gt('Options'))
-            .option('folderview', true, gt('Folder view'))
-            .option('checkboxes', true, gt('Checkboxes'))
+            .option('folderview', true, gt('Folder view'));
+            if (settings.get('selectionMode') !== 'alternative') {
+                dropdown.option('checkboxes', true, gt('Checkboxes'));
+            }
+            dropdown
             .option('contactPictures', true, gt('Contact pictures'))
             .option('exactDates', true, gt('Exact dates'))
             .option('alwaysShowSize', true, gt('Message size'))

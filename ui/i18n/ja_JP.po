@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-06-29 12:35+0200\n"
+"PO-Revision-Date: 2017-05-23 14:11+0200\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -137,7 +137,7 @@ msgstr "10ポイント中%1$d "
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "%1$d of 5 stars"
-msgstr "星 %1$dつ"
+msgstr "５つ星の%1$d"
 
 #. estimated upload duration
 #: apps/io.ox/files/upload/main.js module:io.ox/files
@@ -302,9 +302,9 @@ msgstr "%s クライアント (Windows 用)"
 #. Example: OX Drive for iOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$s of %2$s"
+#| msgid "%s client for iOS"
 msgid "%1$s for iOS"
-msgstr "%2$s 中の %1$s"
+msgstr "%s クライアント (iOS 用)"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -722,7 +722,7 @@ msgstr "ファイルを追加"
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add from Drive"
-msgstr "Drive から追加"
+msgstr "ドライブから追加"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -939,9 +939,9 @@ msgstr "住所 (その他)"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
+#| msgid "Address Home"
 msgid "Address book name"
-msgstr "アドレス帳"
+msgstr "住所 (自宅)"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
@@ -1991,7 +1991,7 @@ msgstr "コメント"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Comments and suggestions"
-msgstr "コメントとアドバイス"
+msgstr "コメントおよびヒント"
 
 #: apps/io.ox/contacts/model.js module:io.ox/contacts
 msgid "Commercial Register"
@@ -3177,7 +3177,7 @@ msgstr "ドライブ"
 #: apps/io.ox/files/guidance/main.js module:io.ox/files
 msgctxt "help"
 msgid "Drive Settings"
-msgstr "Drive の設定"
+msgstr "ドライブの設定"
 
 #: apps/io.ox/mail/import.js module:io.ox/mail
 msgid "Drop EML file here for import"
@@ -4327,7 +4327,7 @@ msgstr "メールでデバイスの構成をしましょう！"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Give feedback"
-msgstr "フィードバック"
+msgstr "フィードバックを提供"
 
 #: apps/io.ox/backbone/views/datepicker.js module:io.ox/core
 msgid "Go to next decade"
@@ -4614,13 +4614,13 @@ msgstr "友達への%1$sのオススメ度はどれくらいですか？"
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "I don't like it"
-msgstr "悪い"
+msgstr "気に入りません。"
 
 #. 4 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "I like it"
-msgstr "良い"
+msgstr "気に入っています。"
 
 #: apps/io.ox/onboarding/clients/config.js module:io.ox/core/onboarding
 msgid "IMAP"
@@ -4906,19 +4906,19 @@ msgstr "一般的なメールを既定のタブに割り当てるに時間がか
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's awesome"
-msgstr "非常に良い"
+msgstr "すばらしいです。"
 
 #. 3 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's ok"
-msgstr "普通"
+msgstr "大丈夫です。"
 
 #. 1 of 5 star rating
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgctxt "rating"
 msgid "It's really bad"
-msgstr "非常に悪い"
+msgstr "非常に悪いです。"
 
 #: apps/io.ox/core/commons.js module:io.ox/core
 msgid "Item list"
@@ -6864,8 +6864,8 @@ msgid ""
 "Please note that support requests cannot be handled via the feedback form. "
 "If you have questions or problems please contact our support directly."
 msgstr ""
-"サポートのご依頼はこのフィードバックでは送れません。ご質問や問題についてはサ"
-"ポートへのコンタクトをお願いします。"
+"サポートのご依頼はフィードバックでご送信ください。ご質問や不明な点がありまし"
+"たら、ネクスト・イット株式会社までご連絡ください。"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid ""
@@ -6891,7 +6891,7 @@ msgstr ""
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate the following application:"
-msgstr "評価するアプリケーションの選択:"
+msgstr "次のアプリケーションを評価してください。"
 
 #: apps/plugins/core/feedback/register.js module:io.ox/core
 msgid "Please rate this product"
@@ -7117,7 +7117,7 @@ msgstr "印刷"
 
 #: apps/io.ox/core/viewer/views/toolbarview.js module:io.ox/core
 msgid "Print as PDF"
-msgstr "Drive として保存"
+msgstr "PDFとして印刷する"
 
 #: apps/io.ox/contacts/actions/print.js module:io.ox/contacts
 msgid "Print preview"
@@ -8948,7 +8948,7 @@ msgstr ""
 #: apps/io.ox/files/guidance/main.js module:io.ox/files
 msgctxt "help"
 msgid "The Drive App"
-msgstr "Drive アプリケーション"
+msgstr "ドライブアプリケーション"
 
 #: apps/io.ox/mail/mailfilter/vacationnotice/view.js module:io.ox/mail
 msgid ""
@@ -9493,8 +9493,6 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "これは標準フォルダです。名前を変更できません。"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "This is how your message text will look like."
 msgid "This is how your message text will look like."
 msgstr "メッセージテキストは次のように表示されます。"
 
@@ -11359,11 +11357,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "%1$s mail, %2$s unread"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s 通のメールのうち %2$s 通が未読"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s on %2$s"
-#~ msgstr "%2$s 中の %1$s"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s がプロファイルを次に変更:"
@@ -14306,11 +14299,6 @@ msgstr "ご利用のプラットフォーム"
 #~ msgid "Expand the panel"
 #~ msgstr "パネルを拡張"
 
-#, fuzzy
-#~| msgid "Send as vCard"
-#~ msgid "Export as vCard"
-#~ msgstr "vCard を送信"
-
 #~ msgid "Extended view"
 #~ msgstr "拡張ビュー"
 
@@ -15657,11 +15645,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "Namibia"
 #~ msgstr "ナミビア"
-
-#, fuzzy
-#~| msgid "Drive Client"
-#~ msgid "Native clients"
-#~ msgstr "Drive Client"
 
 #~ msgid "Nauru"
 #~ msgstr "ナウル"
@@ -19753,11 +19736,6 @@ msgstr "ご利用のプラットフォーム"
 
 #~ msgid "who|From"
 #~ msgstr "差出人"
-
-#, fuzzy
-#~| msgid "Windows PC"
-#~ msgid "windows"
-#~ msgstr "ウィンドウ"
 
 #~ msgid "work days"
 #~ msgstr "稼働日"

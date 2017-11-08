@@ -84,11 +84,15 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
+                var helpPlaceholder = $('<a class="io-ox-context-help">');
+                this.$header.append(helpPlaceholder);
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
-                    this.$header.addClass('help').append(
+                    var parent = helpPlaceholder.parent();
+                    parent.addClass('help');
+                    helpPlaceholder.replaceWith(
                         new HelpView({ href: options.help }).render().$el
                     );
-                }.bind(this));
+                });
             }
 
             // scroll inputs into view when smartphone keyboard shows up
@@ -134,10 +138,23 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
         },
 
         open: function () {
-            var o = this.options;
+            var o = this.options,
+                self = this;
             if (o.render !== false) this.render().$el.appendTo('body');
             // remember previous focus
             this.previousFocus = o.previousFocus || $(document.activeElement);
+            if (_.device('smartphone')) {
+                // rebuild button section for mobile devices
+                this.$el.addClass('mobile-dialog');
+                this.$footer.rowfluid = $('<div class="row">');
+                this.$footer.append(this.$footer.rowfluid);
+                this.$buttons = this.$footer.find('button');
+                _.each(this.$buttons, function (buttonNode) {
+                    self.$footer.rowfluid.prepend($(buttonNode).addClass('btn-medium'));
+                    $(buttonNode).wrap('<div class="col-xs-12 col-md-3">');
+                });
+            }
+
             this.trigger('before:open');
             // keyboard: false to support preventDefault on escape key
             this.$el.modal({ backdrop: o.backdrop || 'static', keyboard: false }).modal('show');
@@ -216,14 +233,15 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             );
         },
 
-        addCheckbox: function (label, action, status) {
+        addCheckbox: function (options) {
+            var o = _.extend({ className: 'pull-left' }, options);
             this.$footer.prepend(
                 $('<div class="checkbox">').append(
-                    $('<div class="controls">'),
-                    $('<label>').text(label).prepend(
-                        $('<input type="checkbox">').attr('name', action).prop('checked', status)
+                    $('<label>').text(o.label).prepend(
+                        $('<input type="checkbox">').attr('data-action', o.action).prop('checked', o.status)
                     )
                 )
+                .addClass(o.className)
             );
             return this;
         },
@@ -282,6 +300,9 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     });
 
     function close(e) {
+
+        if (!this.$el) return;
+
         this.trigger('before:close');
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');

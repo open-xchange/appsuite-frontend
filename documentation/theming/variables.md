@@ -1,0 +1,442 @@
+---
+title: Variables
+---
+
+# Content of ui/apps/themes/definitions.less
+
+```less
+/*
+ * - Variables containing the word 'background' will always refer to the background color.
+ * - Variables containing 'color' will refer to the foreground color of an element, like color of a font.
+ * - Hover in most cases means 'hovered' elements.
+ * - Selected relates to the currently selected item.
+ * - The most significant visual change is achieved by changing the following variables:
+ *   - @brand-primary
+ *   - @link-color
+ */
+
+/*
+ * 1. GLOBALS
+ */
+
+/*
+ * 1.1 Base colors
+ */
+
+@brand-primary:                         #3c73aa;    /* Bootstrap overwrite */
+@brand-success:                         #008500;    /* Bootstrap overwrite */
+// e.g. used for window-content
+@background:                            @white;
+
+
+/*
+ * 1.2 Accent colors
+ */
+
+@white:                                 #fff;
+@black:                                 #000;
+@blue:                                  #017fb3;
+@blue-dark:                             #0064cd;
+@blue-light:                            lighten(#049cdb, 25%);
+@green:                                 #198819;
+@green-light:                           #92d050;
+@red:                                   #cc0000;
+@yellow:                                #f8e400;
+@orange:                                #f89406;
+@pink:                                  #e01cd9;
+@purple:                                #7e16cf;
+
+/*
+ * 1.3 High contrast colors
+ */
+
+@hc-gray:                               #767676;
+@hc-green:                              #198919;
+
+@hc-link-color:                         #3774a8;
+@hc-border-color:                       @hc-gray;
+
+/*
+ * 1.4 Typographie
+ */
+
+@light-font-family:                     -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+@normal-font-family:                    @light-font-family;
+@font-family-sans-serif:                @light-font-family;     /* Bootstrap overwrite */
+
+@font-size-touch:                       16px;
+@topbar-font-size:                      13px;
+@window-head-font-size:                 13px;
+@vgrid-font-size:                       13px;
+@inline-link-font-size:                 14px;
+
+/*
+ * 1.5 Base layout
+ */
+
+@padding-base-vertical:                  4px;    /* Bootstrap overwrite */
+@padding-base-horizontal:               12px;    /* Bootstrap overwrite */
+@modal-inner-padding:                   13px;    /* Bootstrap overwrite */
+
+@base-padding:                          4px;
+@default-padding:                       @base-padding * 4;
+@list-view-padding:                     @default-padding;
+
+/*
+ * 1.6 Links
+ */
+
+@link-color:                            #3c73aa;    /* Bootstrap overwrite */
+@link-on-dark:                          #3bf;
+@person-link-color:                     @link-color;
+@inline-link-color:                     @link-color;
+@inline-link-border-color:              #eee;
+@inline-links-margin:                   18px 0;
+
+/*
+ * 1.7 Icons
+ */
+
+@fa-font-path:                          "apps/3rd.party/font-awesome/fonts";
+
+@trash-icon-hover-background:           @red;
+@trash-icon-hover-color:                @white;
+
+/*
+ * 1.8 Images
+ */
+
+@theme:                                 'default';
+@fallback-image-contact:                'apps/themes/@{theme}/fallback-image-contact.png';
+@fallback-image-group:                  'apps/themes/@{theme}/fallback-image-group.png';
+@fallback-image-resource:               'apps/themes/@{theme}/fallback-image-resource.png';
+
+@onboarding-mailapp:                    'apps/themes/icons/default/apps/mailapp.png';
+@onboarding-driveapp:                   'apps/themes/icons/default/apps/driveapp.png';
+
+/*
+ * 1.9 Border radius
+ */
+
+@border-radius-large:                   3px;    /* Bootstrap overwrite */
+@border-radius-base:                    3px;    /* Bootstrap overwrite */
+@border-radius-small:                   3px;    /* Bootstrap overwrite */
+
+@contact-picture-radius:                50%;
+
+/*
+ * 1.10 Devices
+ */
+
+@container-desktop:                     (870px + @grid-gutter-width);    /* Bootstrap overwrite */
+@container-large-desktop:               @container-desktop;              /* Bootstrap overwrite */
+
+// matches smartphone detection threshold in browser.js
+@smartphone-breakpoint:                 540px;
+@pagecontroller-animation-duration:     350ms;
+// size of the menu launcher in the top left
+@mobile-launcher-icon-size:             18px;
+
+/*
+ * 1.11 Misc
+ */
+
+@default-border-color:                  #ddd;
+@error-text-color:                      #a94442;
+@outline-color:                         @brand-primary;
+@ui-disabled-color:                     #ccc;
+
+// session expired blur class
+@bluriness: 4px;
+
+
+/*
+ * 2. COMMONS
+ */
+
+/*
+ * 2.1 Alerts
+ */
+
+@alert-info-text:                       #396ca0;    /* Bootstrap overwrite */
+
+/*
+ * 2.2 Badges
+ * f.e. unread messages count in folder tree
+ */
+
+@badge-color:                           @white;     /* Bootstrap overwrite */
+@badge-bg:                              #aaa;       /* Bootstrap overwrite */
+
+/*
+ * 2.3 Buttons
+ */
+
+@btn-primary-bg:                        @link-color;  /* Bootstrap overwrite */
+@btn-info-bg:                           #5bc0de;      /* Bootstrap overwrite */
+@btn-success-bg:                        #198819;      /* Bootstrap overwrite */
+@btn-warning-bg:                        #fbb450;      /* Bootstrap overwrite */
+@btn-warning-color:                     #764500;      /* Bootstrap overwrite */
+@btn-danger-bg:                         #df332e;      /* Bootstrap overwrite */
+@btn-inverse-bg:                        #444;         /* Bootstrap overwrite */
+
+/*
+ * 2.4 Labels
+ */
+
+@label-info-bg:                         #3a87ad;    /* Bootstrap overwrite */
+@label-default-bg:                      #666;       /* Bootstrap overwrite */
+
+/*
+ * 2.5 Selection
+ */
+
+@selected-color:                        #f0faff;
+@selected-background:                   @brand-primary;
+@selected-unfocussed-background:        #ddd;
+@selected-focussed-background:          darken(@selected-background, 10%);
+
+/*
+ * 2.6 Wallpaper
+ * - use for gradiant
+ * - unused?
+ */
+@wallpaper-color-1:                     rgba(255, 255, 255, 1);
+@wallpaper-color-2:                     rgba(246, 246, 246, 1);
+@wallpaper-color-3:                     rgba(168, 168, 168, 1);
+
+/*
+ * 3. COMPONENTS
+ */
+
+/*
+ * 3.1 Window
+ */
+
+// window head (e.g used as button bar in mail compose or contacts edit)
+@window-header-color:                   #f5f5f5;
+@window-head-color:                     @white;
+@window-head-border-color:              #eee;
+@window-head-width:                     50px;
+@window-title-color:                    @white;
+
+/*
+ * 3.2 Topbar
+ */
+
+@topbar-background:                     @brand-primary;
+@topbar-icon-color:                     @white;
+@topbar-launcher-color:                 rgba(255, 255, 255, 0.95);
+@topbar-launcher-color-hover:           @white;
+@topbar-launcher-color-active:          @white;
+@topbar-launcher-background-hover:      rgba(0, 0, 0, 0.15);
+@topbar-launcher-background-active:     rgba(0, 0, 0, 0.25);
+
+/*
+ * 3.3 Notification
+ */
+
+@notification-icon-color:               rgba(255, 255, 255, 1);
+@notification-icon-background:          rgba(200, 0, 0, 1);
+@notification-icon-color-active:        #333;
+@notification-icon-background-active:   @white;
+@notification-pane-background:          rgba(255, 255, 255, 1);
+@notification-pane-item-background:     rgba(0, 0, 0, 0.10);
+
+/*
+ * 3.4 Folder tree
+ */
+
+@foldertree-badge-background:           @badge-bg;
+@foldertree-badge-color:                @badge-color;
+@foldertree-badge-focus-background:     #006597;
+
+@foldertree-selected-label-color:       #333;
+@foldertree-focused-label-color:        @white;
+@foldertree-active-label-color:         #333;
+@foldertree-passive-label-color:        @hc-gray;
+
+@foldertree-selected-background:                rgba(0, 0, 0, 0.10);
+@foldertree-selected-focus-background:          @selected-background;
+@foldertree-selected-focus-counter-color:       rgba(255, 255, 255, 0.95);
+@foldertree-selected-focus-options-background:  rgba(0, 0, 0, 0.20);
+
+@foldertree-account-link-color:         #333;
+@foldertree-counter-color:              #0076b3;
+@foldertree-sidepanel-background:       #f5f5f5;
+@foldertree-section-title-color:        #888;
+@foldertree-hover-background:           rgba(0, 0, 0, 0.05);
+
+/*
+ * 3.5 Toolbar
+ */
+
+@toolbar:                               @brand-primary;
+@toolbar-button-accent:                 lighten(@link-color, 0%);
+@toolbar-button-color:                  #bbb;
+
+@toolbar-link-color:                    lighten(@toolbar, 25%);
+@toolbar-link-disabled-color:           @link-disabled-color;
+
+@toolbar-background:                    #333;
+@toolbar-background-alt:                lighten(@toolbar-background, 10%);
+
+@toolbar-focus-color:                   @brand-primary;
+@toolbar-line-height:                   24px;
+@toolbar-vertical-padding:              8px;
+@toolbar-height:                        @toolbar-line-height + 2 * @toolbar-vertical-padding;
+
+@link-disabled-color:                   #aaa;
+@link-accent-color:                     #ffad00;
+
+/*
+ * 3.6 Premium toolbar
+ */
+
+@premium-toolbar-background:            darken(@brand-primary, 10%);
+@premium-toolbar-header-background:     lighten(@premium-toolbar-background, 10%);
+@premium-toolbar-link-color:            @white;
+@premium-toolbar-header-color:          lighten(@premium-toolbar-header-background, 35%);
+
+/*
+ * 3.7 Custom controls
+ */
+
+@control-color: white;
+@control-background: @brand-primary;
+@control-border-color: #aaa;
+@control-border-color-checked: transparent;
+@control-focus: #03a9f4;
+@checkbox-radius: 3px;
+@switch-background: #558B2F; /* green */
+
+/*
+ * 3.8 Grid
+ */
+
+@grid-color:                            #676767;
+@grid-checkbox-color:                   #626262;
+@grid-selected-color:                   @white;
+@grid-selected-checkbox-color:          @grid-selected-color;
+
+/*
+ * 3.9 Wizard & tours
+ */
+
+@wizard-backdrop-color: rgba(0, 0, 0, 0.15);
+
+// hotspot (e.g. used as visual marker in guided tours)
+@hotspot-color: #FD057C;
+@pulse-color: fade(@hotspot-color, 70%);
+@pulse-border-color: @hotspot-color;
+
+
+/*
+ * 4. OX APPS
+ */
+
+/*
+ * 4.1 mail
+ */
+
+@mail-priority:                         #ff4700;
+@mail-priority-low:                     lighten(#08c, 10%);
+
+@mail-attachment-link-color:            #333;
+@mail-attachment-link-color-hover:      #000;
+
+@mail-thread-size-color:                darken(@brand-primary, 20%);
+@mail-thread-size-background:           fade(lighten(@brand-primary, 5%), 15%);
+
+@mail-unseen-icon:                      "\f111";    /* fa-circle */
+@mail-unseen-icon-seen:                 "\f1db";    /* fa-circle-thin */
+
+/*
+ * 4.2 calendar
+ */
+
+@appointment-reserved:                  #3774a8;    /* blue */
+@appointment-temporary:                 #ffbb00;    /* yellow */
+@appointment-absent:                    #913f3f;    /* red */
+@appointment-free:                      #8eb360;    /* green */
+@appointment-free-dark:                 #198819;    /* dark green */
+@appointment-private:                   #555;       /* dark gray */
+@appointment-unconfirmed-font:          #555;       /* dark gray */
+@appointment-declined-font:             #6b6b6b;    /* gray */
+@appointment-unconfirmed:               #f0f0f0;
+@appointment-declined:                  #e8e8e8;
+
+// Percentage increase of the dark pigment content on hover effect
+@appointment-hover-pct:                 15%;
+
+@weekview-appointment-lasso:            #d0eaff;    /* light blue */
+@weekview-background:                   @white;
+@weekview-border:                       #c0c0c0;
+@weekview-border-light:                 #e6e6e6;
+@weekview-time-width:                   80px;
+@weekview-footer-height:                34px;
+@weekview-working-time-border:          #333;
+
+@monthview-border:                      #ddd;
+// not in focus
+@monthview-appointment-out:             #aaa;       /* light gray */
+@monthview-cw-width:                    80px;
+
+@calendar-today-background:             #f5f5f5;    /* gray */
+@calendar-today:                        #cf3239;    /* red */
+@calendar-toolbar-height:               35px;
+@calendar-toolbar-top-padding:          13px;
+
+// calender custom colors (ordered by spectrum)
+// used in a a LESS loop by color-label-bg-@{counter}
+@color-label-bg-1:                      #cee7ff;    /* light blue */
+@color-label-bg-2:                      #96bbe8;    /* blue */
+@color-label-bg-3:                      #c4afe3;    /* purple */
+@color-label-bg-4:                      #f0d8f0;    /* pink */
+@color-label-bg-5:                      #f2d1d2;    /* red */
+@color-label-bg-6:                      #ffd1a3;    /* orange */
+@color-label-bg-7:                      #f7ebb6;    /* yellow */
+@color-label-bg-8:                      #d4dea7;    /* light green */
+@color-label-bg-9:                      #99af6e;    /* green */
+@color-label-bg-10:                     #666666;    /* dark gray */
+
+// used in a a LESS loop by color-label-fg-@{counter}
+@color-label-fg-1:                      #2a4b6c;    /* for light blue bg */
+@color-label-fg-2:                      #0b1624;    /* for blue bg */
+@color-label-fg-3:                      #3f0e84;    /* for purple bg */
+@color-label-fg-4:                      #8a1c8c;    /* for pink bg */
+@color-label-fg-5:                      #a83336;    /* for red bg */
+@color-label-fg-6:                      #622906;    /* for orange bg */
+@color-label-fg-7:                      #5c4209;    /* for yellow bg */
+@color-label-fg-8:                      #526107;    /* for light green bg */
+@color-label-fg-9:                      #28350f;    /* for green bg */
+@color-label-fg-10:                     @white;     /* for dark gray bg */
+
+// used as 'amount' param for 'darken'
+@custom-color-hover-pct:                10%;
+@custom-color-pattern-pct:              3%;
+
+/*
+ * 4.3 Tasks
+ */
+
+@task-priority:                         #ff4700;
+
+@badge-deferred-bg:                     #767676;
+@badge-deferred-color:                  @white;
+
+@badge-inprogress-bg:                   #767676;
+@badge-inprogress-color:                @white;
+
+@badge-notstarted-bg:                   #767676;
+@badge-notstarted-color:                @white;
+
+@badge-done-bg:                         @green;
+@badge-done-color:                      @white;
+
+@badge-waiting-bg:                      #767676;
+@badge-waiting-color:                   @white;
+@badge-overdue-bg:                      @blue;
+@badge-overdue-color:                   @white;
+
+```

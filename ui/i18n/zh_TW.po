@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.zh_TW.po\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-04 23:05+0800\n"
+"PO-Revision-Date: 2017-05-22 22:25+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_TW\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.2\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,731,-1,-1,-1,-1,-1\n"
 
 #. recurrence string
@@ -315,9 +315,9 @@ msgstr "%s Windows 客戶端"
 #. Example: OX Drive for iOS
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "%1$s of %2$s"
+#| msgid "%s client for iOS"
 msgid "%1$s for iOS"
-msgstr "%2$s 的 %1$s"
+msgstr "%s iOS 客戶端"
 
 #: apps/plugins/portal/xing/activities.js module:plugins/portal
 msgid "%1$s has a new contact:"
@@ -735,7 +735,7 @@ msgstr "新增檔案"
 #: apps/io.ox/core/tk/attachments.js module:io.ox/core
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
 msgid "Add from Drive"
-msgstr "自 Drive 新增"
+msgstr "自雲端空間新增"
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -948,9 +948,9 @@ msgstr "位址（其他）"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #, fuzzy
-#| msgid "Address Book"
+#| msgid "Address Home"
 msgid "Address book name"
-msgstr "通訊錄"
+msgstr "地址（住家）"
 
 #: apps/io.ox/files/util.js module:io.ox/files
 msgid "Adjust"
@@ -6436,7 +6436,7 @@ msgstr "其他地址"
 
 #: apps/io.ox/settings/sessions/settings/pane.js module:io.ox/core
 #, fuzzy
-#| msgid "Other Address"
+#| msgid "Other address"
 msgid "Other clients"
 msgstr "其他地址"
 
@@ -9411,8 +9411,6 @@ msgid "This is a standard folder, which can't be renamed."
 msgstr "這是標準資料夾，無法更名。"
 
 #: apps/io.ox/mail/settings/compose/settings/pane.js module:io.ox/mail
-#, fuzzy
-#| msgid "This is how your message text will look like."
 msgid "This is how your message text will look like."
 msgstr ""
 "您的訊息文字將長得像這個樣子。\n"
@@ -11255,11 +11253,6 @@ msgstr "您的平台"
 #~ msgid_plural "%1$s mails, %2$s unread"
 #~ msgstr[0] "%1$s 封郵件，%2$s 未讀"
 #~ msgstr[1] "%1$s 封郵件，%2$s 未讀"
-
-#, fuzzy
-#~| msgid "%1$s of %2$s"
-#~ msgid "%1$s on %2$s"
-#~ msgstr "%2$s 的 %1$s"
 
 #~ msgid "%1$s updated their profile:"
 #~ msgstr "%1$s 更新了個人資料:"
@@ -13258,11 +13251,6 @@ msgstr "您的平台"
 #~ msgid "Exit Fullscreen"
 #~ msgstr "離開全螢幕"
 
-#, fuzzy
-#~| msgid "Send as vCard"
-#~ msgid "Export as vCard"
-#~ msgstr "以 vCard 傳送"
-
 #~ msgid "Extended view"
 #~ msgstr "擴展面板"
 
@@ -13828,6 +13816,9 @@ msgstr "您的平台"
 #~ msgid "Mailfilter updated"
 #~ msgstr "已更新郵件篩選"
 
+#~ msgid "Main window"
+#~ msgstr "主視窗"
+
 #~ msgid "Manage applications"
 #~ msgstr "管理應用程式"
 
@@ -13912,11 +13903,6 @@ msgstr "您的平台"
 
 #~ msgid "Names and email addresses"
 #~ msgstr "姓名與電子郵件位址"
-
-#, fuzzy
-#~| msgid "Drive Client"
-#~ msgid "Native clients"
-#~ msgstr "Drive 客戶端"
 
 #~ msgid "Navigation bar"
 #~ msgstr "導覽列"
@@ -15924,11 +15910,6 @@ msgstr "您的平台"
 
 #~ msgid "weekly"
 #~ msgstr "每週"
-
-#, fuzzy
-#~| msgid "Main window"
-#~ msgid "windows"
-#~ msgstr "主視窗"
 
 #~ msgid "work days"
 #~ msgstr "工作日"

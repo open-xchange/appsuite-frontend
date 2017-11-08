@@ -17,7 +17,11 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build',
-        ['lint', 'copy_build', 'compile_po', 'newer:compile-handlebars', 'newer:concat', 'newer:less']);
+        ['copy_build', 'compile_po', 'newer:compile-handlebars', 'newer:concat', 'newer:less']);
+
+    grunt.registerTask('dist:build', 'build a distribution ready version into dist/',
+        ['clean', 'build', 'copy_dist', 'uglify']
+    );
 
     grunt.loadNpmTasks('grunt-compile-handlebars');
 };

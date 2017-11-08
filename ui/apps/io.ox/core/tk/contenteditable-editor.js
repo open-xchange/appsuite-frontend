@@ -297,10 +297,10 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             entity_encoding: 'raw',
 
+            font_formats: mailUtil.getFontFormats(),
             fontsize_formats: '8pt 10pt 11pt 12pt 13pt 14pt 16pt 18pt 24pt 36pt',
 
             forced_root_block: 'p',
-
             forced_root_block_attrs: { 'style': defaultStyle.string, 'class': 'default-style' },
 
             browser_spellcheck: true,

@@ -472,7 +472,8 @@
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     outline: 0;
 
-    .transition(bottom 0.3s ease-in-out);
+    .transition(0.3s ease-in-out);
+    transform-origin: 100% 0;
 
     @headerHeight: 32px;
 
@@ -514,6 +515,7 @@
 
     &.minimized {
         bottom: -100%;
+        transform: scale(0.1);
     }
 }
 

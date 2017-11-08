@@ -243,8 +243,9 @@ define('io.ox/settings/main', [
                 this.append(
 
                     mainGroups.map(function (groupName) {
-                        // if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
+                        if (groupName === 'virtual/settings/security') _.extend(defaults, { headless: false, title: gt('Security') });
                         return new TreeNodeView(_.extend({}, defaults, {
+                            className: groupName === 'virtual/settings/security' ? 'folder un-selectable' : 'folder selectable',
                             model_id: groupName
                         }))
                         .render().$el.addClass('standard-folders');
@@ -531,6 +532,22 @@ define('io.ox/settings/main', [
             subgroup: 'io.ox/settings/pane/security'
         });
 
+        // enqueue is probably a bad name, but since it's not exposed …
+        // only resolve the last object enqueed
+        var enqueue = (function () {
+            var active;
+            return function (def) {
+                if (active) active.cancelled = true;
+                active = def;
+
+                return def.then(function () {
+                    if (this.cancelled) return $.Deferred().reject();
+
+                    active = null;
+                    return $.Deferred().resolve();
+                }.bind(active));
+            };
+        }());
         var showSettings = function (baton, focus) {
             baton = ext.Baton.ensure(baton);
             baton.tree = tree;
@@ -538,25 +555,21 @@ define('io.ox/settings/main', [
 
             var data = baton.data,
                 settingsPath = data.pane || ((data.ref || data.id) + '/settings/pane'),
-                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail');
+                extPointPart = data.pane || ((data.ref || data.id) + '/settings/detail'),
+                def = $.Deferred();
 
             right.empty().busy();
 
             if (data.loadSettingPane || _.isUndefined(data.loadSettingPane)) {
-                return require([settingsPath], function () {
-                    // again, since require makes this async
-                    right.empty().idle();
-                    vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
-                    ext.point(extPointPart).invoke('draw', right, baton);
-                    if (focus) vsplit.right.focus();
-                });
+                def = require([settingsPath]);
+            } else {
+                def.resolve();
             }
-            return require(['io.ox/contacts/settings/pane'], function () {
-                // again, since require makes this async
-                right.empty().idle();
+            return enqueue(def).then(function () {
                 vsplit.right.attr('aria-label', /*#, dynamic*/gt.pgettext('app', baton.data.title));
                 ext.point(extPointPart).invoke('draw', right, baton);
                 if (focus) vsplit.right.focus();
+                right.idle();
             });
         };
 

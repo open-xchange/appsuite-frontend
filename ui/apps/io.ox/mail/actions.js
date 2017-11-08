@@ -49,9 +49,9 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/delete', {
         requires: 'toplevel some delete',
-        multiple: function (list) {
+        multiple: function (list, baton) {
             require(['io.ox/mail/actions/delete'], function (action) {
-                action.multiple(list);
+                action.multiple(list, baton);
             });
         }
     });
@@ -159,23 +159,33 @@ define('io.ox/mail/actions', [
         }
     });
 
-    new Action('io.ox/mail/actions/edit', {
-        requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel')) return;
-            // multiple selection
-            if (e.baton.selection && e.baton.selection.length > 1) return;
-            // multiple and not a thread?
-            if (!e.collection.has('one') && !e.baton.isThread) return;
-            // get first mail
-            var data = e.baton.first();
-            // Can't edit encrypted E-mail
-            if (data && data.security_info && data.security_info.encrypted) return;
-            // must be draft folder
-            return data && isDraftMail(data);
-        },
-        action: function (baton) {
+    var validDraft = function (e) {
+        // must be top-level
+        if (!e.collection.has('toplevel')) return;
+        // multiple selection
+        if (e.baton.selection && e.baton.selection.length > 1) return;
+        // multiple and not a thread?
+        if (!e.collection.has('one') && !e.baton.isThread) return;
+        // get first mail
+        var data = e.baton.first();
+        // Can't edit encrypted E-mail
+        if (data && data.security_info && data.security_info.encrypted) return;
+        // must be draft folder
+        return data && isDraftMail(data);
+    };
 
+    var setEditorMode = function (settings, data) {
+        // Open Drafts in HTML mode if content type is html even if text-editor is default
+        if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
+            data.preferredEditorMode = 'html';
+            data.editorMode = 'html';
+        }
+        return data;
+    };
+
+    new Action('io.ox/mail/actions/edit', {
+        requires: validDraft,
+        action: function (baton) {
             var data = baton.first(),
                 app = _(ox.ui.apps.models).find(function (model) {
                     return model.refId === data.id;
@@ -185,45 +195,28 @@ define('io.ox/mail/actions', [
             if (app) return app.launch();
 
             require(['settings!io.ox/mail'], function (settings) {
-
-                // Open Drafts in HTML mode if content type is html even if text-editor is default
-                if (data.content_type === 'text/html' && settings.get('messageFormat', 'html') === 'text') {
-                    data.preferredEditorMode = 'html';
-                    data.editorMode = 'html';
-                }
-
+                data = setEditorMode(settings, data);
                 ox.registry.call('mail-compose', 'edit', data);
             });
         }
     });
 
     new Action('io.ox/mail/actions/edit-copy', {
-        requires: function (e) {
-            // must be top-level
-            if (!e.collection.has('toplevel')) return;
-            // multiple selection
-            if (e.baton.selection && e.baton.selection.length > 1) return;
-            // multiple and not a thread?
-            if (!e.collection.has('one') && !e.baton.isThread) return;
-            // get first mail
-            var data = e.baton.first();
-            // Can't edit encrypted E-mail
-            if (data && data.security_info && data.security_info.encrypted) return;
-            // must be draft folder
-            return data && isDraftMail(data);
-        },
+        requires: validDraft,
         action: function (baton) {
-
             var data = baton.first();
 
             api.copy(data, data.folder_id).done(function (list) {
                 api.refresh();
-                ox.registry.call('mail-compose', 'edit', list[0]).done(function (window) {
-                    var model = window.app.model;
-                    //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
-                    //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
-                    //#. %1$s the original subject of the mail
-                    model.set('subject', gt('[Copy] %1$s', model.get('subject')));
+                require(['settings!io.ox/mail'], function (settings) {
+                    data = setEditorMode(settings, _.extend(data, list[0]));
+                    ox.registry.call('mail-compose', 'edit', data).done(function (window) {
+                        var model = window.app.model;
+                        //#. If the user selects 'copy of' in the drafts folder, the subject of the email is prefixed with [Copy].
+                        //#. Please make sure that this is a prefix in every translation since it will be removed when the mail is sent.
+                        //#. %1$s the original subject of the mail
+                        model.set('subject', gt('[Copy] %1$s', model.get('subject')));
+                    });
                 });
             });
         }
@@ -457,7 +450,7 @@ define('io.ox/mail/actions', [
         requires: 'some',
         multiple: function (attachmentList, baton) {
             ox.load(['io.ox/mail/actions/viewer']).done(function (action) {
-                var options = { files: attachmentList };
+                var options = { files: attachmentList, restoreFocus: baton.restoreFocus };
                 if (baton.startItem) {
                     options.selection = baton.startItem;
                 }

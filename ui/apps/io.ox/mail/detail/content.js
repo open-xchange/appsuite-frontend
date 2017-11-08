@@ -27,9 +27,7 @@ define('io.ox/mail/detail/content', [
 
     'use strict';
 
-    var regHTML = /^text\/html$/i,
-        regMailComplexReplace = /(&quot;([^&]+)&quot;|"([^"]+)"|'([^']+)')(\s|<br>)+&lt;([^@]+@[^&\s]+)&gt;/g, /* "name" <address> */
-        regIsURL = /^https?:\S+$/i;
+    var regHTML = /^text\/html$/i;
 
     //
     // Extensions
@@ -404,20 +402,65 @@ define('io.ox/mail/detail/content', [
         process: extensions.formSubmit
     });
 
-    // commented out DUE TO BUGS! (27.01.2016)
-    // ext.point('io.ox/mail/detail/content').extend({
-    //     id: 'lazyload-images',
-    //     index: 1200,
-    //     process: function () {
-    //         $(this).find('img[src!=""]').each(function () {
-    //             var img = $(this);
-    //             img.attr({
-    //                 'data-original': img.attr('src'),
-    //                 'src': '//:0'
-    //             }).addClass('lazyload');
-    //         });
-    //     }
-    // });
+    // forward image load event to trigger resize in view
+    ext.point('io.ox/mail/detail/content').extend({
+        id: 'image-load',
+        index: 1200,
+        process: function () {
+            var self = this;
+            $(self).find('img[src!=""]').each(function () {
+                var img = $(this);
+                img.on('load error', function () {
+                    $(self).trigger('imageload');
+                });
+            });
+        }
+    });
+
+    //
+    // Beautify
+    //
+
+    ext.point('io.ox/mail/detail/beautify').extend(
+        {
+            id: 'trim',
+            process: function (baton) {
+                baton.data = baton.data.trim();
+            }
+        },
+        {
+            id: 'carriage-return',
+            process: function (baton) {
+                baton.data = baton.data.replace(/\r/g, '');
+            }
+        },
+        {
+            id: 'multiple-empty-lines',
+            process: function (baton) {
+                if (!settings.get('transform/multipleEmptyLines', true)) return;
+                baton.data = baton.data.replace(/\n{4,}/g, '\n\n\n');
+            }
+        },
+        {
+            id: 'emojis',
+            process: function (baton) {
+                baton.data = insertEmoticons(baton.data);
+            }
+        },
+        {
+            id: 'text-to-html',
+            process: function (baton) {
+                baton.data = this.text2html(baton.data, { blockquotes: true, images: true, links: true });
+            }
+        },
+        {
+            id: 'br',
+            process: function (baton) {
+                baton.data = baton.data.replace(/^\s*(<br\s*\/?>\s*)+/g, '');
+            }
+        }
+    );
+
 
     //
     // Helper IIFEs
@@ -501,42 +544,6 @@ define('io.ox/mail/detail/content', [
     // Helpers
     //
 
-    function beautifyText(text) {
-        text = $.trim(text)
-            // remove line breaks
-            .replace(/[\n\r]/g, '')
-            // remove leading BR
-            .replace(/^\s*(<br\s*\/?>\s*)+/g, '')
-            // reduce long BR sequences
-            .replace(/(<br\/?>\s*){3,}/g, '<br><br>')
-            // combine split block quotes
-            .replace(/<\/blockquote>\s*(<br\/?>\s*)*<blockquote[^>]+>/g, '<br><br>')
-            // add markup for email addresses
-            .replace(regMailComplexReplace, function () {
-                var args = _(arguments).toArray();
-                // need to ignore line breaks, i.e. <br> tags inside this pattern (see Bug 28960)
-                if (/<br\/?>/.test(args[0])) return args[0];
-                // ignore if display name is again mail address
-                if (/@/.test(args[2])) return args[0];
-                return '<a href="mailto:' + args[6] + '" target="_blank">' + args[2] + (args[3] || '') + '</a>';
-            });
-
-        // split source to safely ignore tags
-        text = _(text.split(/(<[^>]+>)/))
-            .map(function (line) {
-                // ignore tags
-                if (line[0] === '<') return line;
-                // ignore URLs
-                if (regIsURL.test(line)) return line;
-                // process plain text
-                line = insertEmoticons(line);
-                return line;
-            })
-            .join('');
-
-        return text;
-    }
-
     function setLinkTarget(match /*, link*/) {
         //replace or add link target to '_blank'
         return (/target/).test(match) ? match.replace(/(target="[^"]*")/i, 'target="_blank"') : match.replace('>', ' target="_blank">');
@@ -582,11 +589,13 @@ define('io.ox/mail/detail/content', [
         if (e.which === 13 || e.which === 23 || e.type === 'click') {
             e.preventDefault();
             e.stopPropagation();
-            var self = this;
-            $(this).hide().prev().slideDown('fast', function () {
+            $(this).hide().prev().show();
+            // needed for FF to handle the resize
+            _.delay(function () {
                 $(e.delegateTarget).trigger('resize');
-                $(self).remove();
-            });
+            }, 20);
+
+            $(this).remove();
         }
     }
 
@@ -602,9 +611,6 @@ define('io.ox/mail/detail/content', [
             }
 
             var baton = new ext.Baton({ data: data, options: options || {}, source: '', type: 'text/plain' }), content,
-                // was: beautifyPlainText = settings.get('beautifyPlainText'),
-                // true until bug 52294 gets fixed
-                beautifyPlainText = true,
                 isTextOrHTML = /^text\/(plain|html)$/i,
                 isImage = /^image\//i;
 
@@ -625,8 +631,8 @@ define('io.ox/mail/detail/content', [
                     if (attachment.content_type === baton.type) {
                         // add content parts
                         baton.source += attachment.content;
-                    } else if (baton.type === 'text/plain' && beautifyPlainText && isImage.test(attachment.content_type)) {
-                        // add images if text and using beautifyPlainText
+                    } else if (baton.type === 'text/plain' && isImage.test(attachment.content_type)) {
+                        // add images if text
                         baton.source += '\n!(api/image/mail/picture?' +
                             $.param({ folder: data.folder_id, id: data.id, uid: attachment.filename, scaleType: 'contain', width: 1024 }) +
                             ')\n';
@@ -658,7 +664,7 @@ define('io.ox/mail/detail/content', [
                     // plain TEXT
                     content = document.createElement('DIV');
                     content.className = 'mail-detail-content plain-text noI18n';
-                    baton.source = beautifyPlainText ? that.beautifyPlainText(baton.source) : beautifyText(baton.source);
+                    baton.source = that.beautifyPlainText(baton.source);
                     content.innerHTML = baton.source;
                     // process emoji now (and don't do it again)
                     baton.processedEmoji = true;
@@ -684,57 +690,28 @@ define('io.ox/mail/detail/content', [
             return { content: content, isLarge: baton.isLarge, type: baton.type, processedEmoji: baton.processedEmoji };
         },
 
-        // convert pseudo-plain-text to real plain text
-        adjustPlainText: (function () {
-
-            var div;
-
-            return function (str) {
-
-                return String(str || '')
-                    // convert <br> into newline
-                    .replace(/<br\s?\/?>/gi, '\n')
-                    // simply remove tags
-                    .replace(/<[a-z/].*?>/gi, '')
-                    // replace entities
-                    .replace(/&.*?;/g, decodeEntity);
-            };
-
-            function decodeEntity(str) {
-                div = div || document.createElement('div');
-                div.innerHTML = str;
-                return div.textContent;
-            }
-
-        }()),
-
         beautifyPlainText: function (str) {
-            var plain = insertEmoticons(str.trim().replace(/\r/g, '').replace(/\n{3,}/g, '\n\n'));
-            return this.text2html(plain, { blockquotes: true, images: true, links: true, lists: false, rulers: false })
-                // remove leading BR
-                .replace(/^\s*(<br\s*\/?>\s*)+/g, '');
+            var baton = ext.Baton({ data: str });
+            ext.point('io.ox/mail/detail/beautify').invoke('process', this, baton);
+            return baton.data;
         },
 
         transformForHTMLEditor: function (str) {
-            var plain = this.adjustPlainText(str);
-            return this.text2html(plain, { blockquotes: true, links: true, lists: true, rulers: true });
+            return this.text2html(str, { blockquotes: true, links: true });
         },
 
         // convert plain text to html
-        // supports blockquotes and lists
+        // supports blockquotes
         // note: this does not work with our pseudo text mails that still contain markup (e.g. <br> and <a href>)
         text2html: (function () {
 
             var regBlockquote = /^>+( [^\n]*|)(\n>+( [^\n]*|))*\n?/,
-                regIsUnordered = /^(\*|-) [^\n]*(\n(\*|-) [^\n]*|\n {2,}(\*|-) [^\n]*)*/,
-                regIsOrdered = /^\d+\. [^\n]*(\n\d+\. [^\n]*|\n {2}\d+\. [^\n]*)*/,
                 regNewline = /^\n+/,
-                regText = /^[^\n]*(\n(?![ ]*(\* |- |> |\d+\. ))[^\n]*)*/,
+                regText = /^[^\n]*(\n(?![ ]*(> ))[^\n]*)*/,
                 regLink = /(https?:\/\/.*?)([!?.,>()]\s|\s|[!?.,>()]$|$)/gi,
                 regMailAddress = /([^@"\s<,:;|()[\]\u0100-\uFFFF]+?@[^@\s]*?\.\w+)/g,
-                regRuler = /(^|\n)(-|=|\u2014){10,}(\n|$)/g,
                 regImage = /^!\([^)]+\)$/gm,
-                defaults = { blockquotes: true, images: true, links: true, lists: true, rulers: true };
+                defaults = { blockquotes: true, images: true, links: true };
 
             function exec(regex, str) {
                 var match = regex.exec(str);
@@ -743,7 +720,7 @@ define('io.ox/mail/detail/content', [
 
             function parse(str, options) {
 
-                var out = '', match, start;
+                var out = '', match;
 
                 options = options || defaults;
 
@@ -757,23 +734,6 @@ define('io.ox/mail/detail/content', [
                         continue;
                     }
 
-                    if (options.lists && (match = exec(regIsUnordered, str))) {
-                        str = str.substr(match.length);
-                        match = match.replace(/^../gm, '');
-                        match = parse(match, options).replace(/<br><ul>/g, '<ul>').replace(/<br>/g, '</li><li>');
-                        out += '<ul><li>' + match + '</li></ul>';
-                        continue;
-                    }
-
-                    if (options.lists && (match = exec(regIsOrdered, str))) {
-                        str = str.substr(match.length);
-                        start = parseInt(match, 10);
-                        match = match.replace(/^\d+\. /gm, '');
-                        match = parse(match, options).replace(/<br>(<ol[^>]*>)/g, '$1').replace(/<br>/g, '</li><li>');
-                        out += '<ol start="' + start + '"><li>' + match + '</li></ol>';
-                        continue;
-                    }
-
                     if (match = exec(regNewline, str)) {
                         str = str.substr(match.length);
                         out += match.replace(/\n/g, '<br>');
@@ -782,15 +742,11 @@ define('io.ox/mail/detail/content', [
 
                     if (match = exec(regText, str)) {
                         // advance
-                        str = str.substr(match.length + (options.lists ? 1 : 0));
+                        str = str.substr(match.length);
                         // escape first (otherwise we escape our own markup later)
                         // however, we just escape < (not quotes, not closing brackets)
                         // we add a \r to avoid &lt; become part of URLs
                         match = match.replace(/</g, '\r&lt;');
-                        // rulers
-                        if (options.rulers) {
-                            match = match.replace(regRuler, replaceRuler);
-                        }
                         // images
                         if (options.images) {
                             match = match.replace(regImage, replaceImage);
@@ -819,15 +775,6 @@ define('io.ox/mail/detail/content', [
                 }
 
                 return out;
-            }
-
-            function replaceRuler(str) {
-                switch (str[0]) {
-                    case '=':
-                        return '<hr style="height: 0; border: 0; border-top: 3px double #555; margin: 8px 0;">';
-                    default:
-                        return '<hr style="height: 0; border: 0; border-top: 1px solid #aaa; margin: 8px 0;">';
-                }
             }
 
             function replaceImage(str) {

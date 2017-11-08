@@ -166,7 +166,11 @@ wbr:after { content: "\00200B" }
 .alert {
     padding: 8px 35px 8px 14px;
     margin-bottom: 20px;
+    &.indicator {
+        margin-bottom: 0px;
+    }
 }
+
 
 .row label { padding-top: 8px; }
 
@@ -239,7 +243,7 @@ div.hopscotch-bubble {
         .radial-gradient(@wallpaper-color-1, @wallpaper-color-2, @wallpaper-color-3);
     }
 
-    transition: filter 1s linear;
+    transition: filter 1s linear, opacity 1s linear;
 
 }
 
@@ -359,26 +363,26 @@ html:not(.internet-explorer) {
 .default-content-padding { padding: 32px 32px; }
 
 .border-top {
-    border-top: 1px solid @defaultBorderColor;
+    border-top: 1px solid @default-border-color;
 
     html.high-contrast & { border-top: 1px solid @hc-border-color; }
 }
 
 .border-right {
-    border-right: 1px solid @defaultBorderColor;
+    border-right: 1px solid @default-border-color;
 
     html.high-contrast & { border-right: 1px solid @hc-border-color; }
 }
 
 .border-bottom {
-    border-bottom: 1px solid @defaultBorderColor;
+    border-bottom: 1px solid @default-border-color;
 
     html.high-contrast & { border-bottom: 1px solid @hc-border-color; }
 
 }
 
 .border-left {
-    border-left: 1px solid @defaultBorderColor;
+    border-left: 1px solid @default-border-color;
 
     html.high-contrast & { border-left: 1px solid @hc-border-color; }
 }
@@ -619,6 +623,9 @@ html:not(.internet-explorer) {
 }
 
 .blur {
+    .ie11 & {
+        opacity: 0;
+    }
     filter: blur(@bluriness);
 }
 

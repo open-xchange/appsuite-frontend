@@ -528,10 +528,8 @@ define('io.ox/mail/main', [
             app.listView = new MailListView({ swipe: true, app: app, draggable: true, ignoreFocus: true, selectionOptions: { mode: 'special' } });
             app.listView.model.set({
                 folder: app.folder.get(),
-                thread: true
+                thread: app.settings.get('threadSupport', true)
             });
-            // for debugging
-            window.list = app.listView;
         },
 
         'list-view-checkboxes': function (app) {
@@ -570,7 +568,8 @@ define('io.ox/mail/main', [
          */
         'get-view-options': function (app) {
             app.getViewOptions = function (folder) {
-                var options = app.settings.get(['viewOptions', folder]);
+                var options = app.settings.get(['viewOptions', folder], {});
+                if (!app.settings.get('threadSupport', true)) options.thread = false;
                 return _.extend({ sort: 610, order: 'desc', thread: false }, options);
             };
         },
@@ -633,18 +632,19 @@ define('io.ox/mail/main', [
          * Store view options
          */
         'store-view-options': function (app) {
-            app.props.on('change', _.debounce(function (model, options) {
+            app.props.on('change', _.debounce(function () {
                 if (app.props.get('find-result')) return;
                 var folder = app.folder.get(), data = app.props.toJSON();
                 app.settings
-                    .set(['viewOptions', folder], _.extend({ sort: data.sort, order: data.order, thread: data.thread }, options.viewOptions || {}))
-                    .set('layout', data.layout)
-                    .set('showContactPictures', data.contactPictures)
+                    .set(['viewOptions', folder], { sort: data.sort, order: data.order, thread: data.thread })
                     .set('showExactDates', data.exactDates)
                     .set('alwaysShowSize', data.alwaysShowSize)
                     .set('categories/enabled', data.categories);
+
                 if (_.device('!smartphone')) {
-                    app.settings.set('showCheckboxes', data.checkboxes);
+                    app.settings.set('layout', data.layout)
+                                .set('showCheckboxes', data.checkboxes)
+                                .set('showContactPictures', data.contactPictures);
                 }
                 app.settings.save();
             }, 500));
@@ -828,7 +828,7 @@ define('io.ox/mail/main', [
             // It has a little optimization to add some delay if a message
             // has recently beeen deleted. This addresses the use-case of
             // cleaning up a mailbox, i.e. deleting several messages in a row.
-            // wWithout the delay, the UI would try to render messages that are
+            // Without the delay, the UI would try to render messages that are
             // just about to be deleted as well.
 
             var recentDeleteEventCount = 0,
@@ -862,16 +862,15 @@ define('io.ox/mail/main', [
             app.showMail = function (cid) {
                 // remember latest message
                 latestMessage = cid;
-                // delay or instant?
-                if (recentDeleteEventCount) {
-                    // clear view instantly
-                    app.threadView.empty();
-                    clearTimeout(messageTimer);
-                    var delay = (recentDeleteEventCount - 1) * 1000;
-                    messageTimer = setTimeout(show, delay);
-                } else {
-                    show();
-                }
+                // instant: no delete case
+                if (!recentDeleteEventCount) return show();
+                // instant: already drawn
+                if (app.threadView.model && app.threadView.model.cid === cid) return show();
+                // delay
+                app.threadView.empty();
+                clearTimeout(messageTimer);
+                var delay = (recentDeleteEventCount - 1) * 1000;
+                messageTimer = setTimeout(show, delay);
             };
 
             // add delay if a mail just got deleted
@@ -1188,7 +1187,10 @@ define('io.ox/mail/main', [
                         app.listView.selection.selectEvents(app.listView.selection.getItems());
                     }
                 }
-                this.listControl.applySizeConstraints();
+                // don't save for list layout, doesn't make sense and breaks it for other layouts
+                if (layout !== 'list') {
+                    this.listControl.applySizeConstraints();
+                }
             };
 
             app.props.on('change:layout', function () {
@@ -1225,10 +1227,11 @@ define('io.ox/mail/main', [
             app.listView.on('first-reset', function () {
                 // defer to have a visible window
                 _.defer(function () {
-                    app.listView.collection.find(function (model) {
+                    app.listView.collection.find(function (model, index) {
                         if (!util.isUnseen(model.get('flags'))) {
                             app.autoSelect = true;
-                            app.listView.selection.set([model.cid], false);
+                            // select but keep focus in topbar. Don't use set here, as it breaks alternative selection mode (message is selected instead of displayed)
+                            app.listView.selection.select(index, false, false);
                             return true;
                         }
                     });
@@ -1410,8 +1413,8 @@ define('io.ox/mail/main', [
          * Handle delete event based on keyboard shortcut or swipe gesture
          */
         'selection-delete': function () {
-            app.listView.on('selection:delete', function (list) {
-                var baton = ext.Baton({ data: list });
+            app.listView.on('selection:delete', function (list, shiftDelete) {
+                var baton = ext.Baton({ data: list, options: { shiftDelete: shiftDelete } });
                 // remember if this list is based on a single thread
                 baton.isThread = baton.data.length === 1 && /^thread\./.test(baton.data[0]);
                 // resolve thread
@@ -1437,7 +1440,9 @@ define('io.ox/mail/main', [
                     obj = _.cid(cid),
                     isDraft = account.is('drafts', obj.folder_id);
                 if (isDraft) {
-                    ox.registry.call('mail-compose', 'edit', obj);
+                    api.get(obj).then(function (data) {
+                        actions.invoke('io.ox/mail/actions/edit', null, ext.Baton({ data: data }));
+                    });
                 } else {
                     ox.launch('io.ox/mail/detail/main', { cid: cid });
                 }
@@ -1984,7 +1989,7 @@ define('io.ox/mail/main', [
         'sockets': function (app) {
             ox.on('socket:mail:new', function (data) {
                 folderAPI.reload(data.folder);
-                // push arries, other folder selected
+                // push arrives, other folder selected
                 if (data.folder !== app.folder.get(data.folder)) {
                     _(api.pool.getByFolder(data.folder)).each(function (collection) {
                         collection.expired = true;
@@ -1998,6 +2003,13 @@ define('io.ox/mail/main', [
         'vacation-notice': function (app) {
             if (!capabilities.has('mailfilter_v2')) return;
             require(['io.ox/mail/mailfilter/vacationnotice/indicator'], function (View) {
+                new View().attachTo(app.listControl.$el);
+            });
+        },
+
+        'autoforward-notice': function (app) {
+            if (!capabilities.has('mailfilter_v2')) return;
+            require(['io.ox/mail/mailfilter/autoforward/indicator'], function (View) {
                 new View().attachTo(app.listControl.$el);
             });
         }

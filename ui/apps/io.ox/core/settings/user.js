@@ -16,101 +16,87 @@ define('io.ox/core/settings/user', [
     'io.ox/core/api/user',
     'io.ox/contacts/model',
     'io.ox/contacts/edit/view-form',
-    'io.ox/core/tk/dialogs',
+    'io.ox/backbone/views/modal',
     'io.ox/contacts/util',
     'io.ox/core/yell',
     'io.ox/core/a11y',
     'gettext!io.ox/contacts'
-], function (ext, api, contactModel, ViewForm, dialogs, util, yell, a11y, gt) {
+], function (ext, api, contactModel, ViewForm, ModalDialog, util, yell, a11y, gt) {
 
     'use strict';
 
     // Model Factory for use with the edit dialog
     var factory = contactModel.protectedMethods.buildFactory('io.ox/core/user/model', api);
 
+    function getCurrentUser() {
+        return factory.realm('default').get({});
+    }
+
     return {
 
-        getCurrentUser: function () {
-            return factory.realm('default').get({});
-        },
+        getCurrentUser: getCurrentUser,
 
         openModalDialog: function () {
-
-            var dialog = new dialogs.ModalDialog({
-                top: 20,
+            var self = this;
+            return new ModalDialog({
                 width: 910,
-                center: false,
                 maximize: true,
-                async: true
+                async: true,
+                title: gt('My contact data'),
+                point: 'io.ox/core/settings/user'
             })
-            .addPrimaryButton('save', gt('Save'), 'save')
-            .addButton('discard', gt('Discard'), 'discard');
-
-            var guid = _.uniqueId('form-control-label-');
-            dialog.getContentControls()
-                .prepend(
-                    $('<label class="checkbox-inline pull-left">').attr('for', guid).append(
-                        $('<input type="checkbox" class="toggle-check">').attr('id', guid)
-                            .on('change', function (e) {
-                                e.preventDefault();
-                                view.toggle.call(view.$el);
-                            }),
-                        $.txt(gt('Show all fields'))
-                    )
-                );
-
-            var self = this,
-                $node = dialog.getContentNode(),
-                usermodel,
-                view;
-
-            factory.realm('edit').get({})
-                .then(
-                    function success(user) {
-                        usermodel = user;
-                        // The edit dialog
-                        var UserEdit = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
-                        view = new UserEdit({ model: user });
-                        $node.append(view.render().$el);
-                        a11y.getTabbable($node).first().focus();
-
-                        user.on('change:first_name change:last_name', function () {
-                            user.set('display_name', util.getFullName(user.toJSON(), { validate: true }));
+            .extend({
+                'edit-view': function (baton) {
+                    var EditView = ViewForm.protectedMethods.createContactEdit('io.ox/core/user');
+                    baton.realm = factory.realm('edit').get({}).then(function (user) {
+                        baton.view.editView = new EditView({ model: user });
+                    });
+                },
+                'render': function (baton) {
+                    baton.realm = baton.realm.then(function () {
+                        var dialog = baton.view,
+                            model = dialog.editView.model;
+                        // render
+                        dialog.$body.append(dialog.editView.render().$el);
+                        a11y.getTabbable(dialog.$body).first().focus();
+                        dialog.editView.on('sync:start', function () {
+                            // if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
+                            if (model.get('birthday') !== null) return;
+                            dialog.$body.find('[data-field="birthday"]').find('.year,.month,.date').val('');
                         });
-                        user.on('sync:start', function () {
-                            //if birthday is null on save, set selectors to empty. Otherwise the user might think a partially filled birthday is saved
-                            if (user.get('birthday') === null) {
-                                $node.find('[data-field="birthday"]').find('.year,.month,.date').val('');
-                            }
-                            dialogs.busy($node);
-                        });
-                        user.on('sync:always', function () {
-                            dialogs.idle($node);
-                        });
-                    },
-                    function fail() {
-                        $node.append(
+                    });
+
+                },
+                'fail': function (baton) {
+                    baton.realm.fail(function () {
+                        var dialog = baton.view;
+                        dialog.$footer.empty();
+                        dialog.addButton({ label: gt('Cancel'), action: 'cancel' });
+                        dialog.disableFormElements();
+                        return dialog.$body.append(
                             $.fail(gt('Couldn\'t load your contact data.'), function () {
-                                self.editCurrentUser($node).done(function () {
-                                    $node.find('[data-action="discard"]').hide();
-                                });
+                                dialog.close();
+                                self.openModalDialog();
                             })
                         );
-                    }
-                );
-
-            dialog.show();
-
-            dialog.on('save', function () {
-                if (usermodel._valid) {
-                    usermodel.save().fail(yell);
-                    dialog.close();
-                } else {
-                    dialog.idle();
+                    });
                 }
-            }).on('discard', function () {
-                dialog.close();
-            });
+            })
+            .addButton({ label: gt('Discard'), action: 'discard', className: 'btn-default' })
+            .addButton({ label: gt('Save'), action: 'save' })
+            .addCheckbox({ label: gt('Show all fields'), action: 'toggle', status: false })
+            .on('toggle', function () {
+                this.idle();
+                this.editView.toggle.call(this.editView.$el);
+            })
+            .on('discard', function () { this.close(); })
+            .on('save', function () {
+                var model = this.editView.model;
+                if (!model._valid) return this.idle();
+                model.save().fail(yell);
+                this.close();
+            })
+            .open();
         }
     };
 });

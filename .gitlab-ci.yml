@@ -26,7 +26,6 @@ variables:
   script:
     - cd ${PROJECT_PATH}
     - yarn
-    - yarn clean
   cache:
     # use one cache per project and branch
     # ex.: ui_feature/gitlab_ci
@@ -95,6 +94,25 @@ copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties
   <<: *build_ui
   tags:
     - openstack
+
+build documentation:
+  image: gitlab.open-xchange.com:4567/engineering/documentation:latest
+  stage: build
+  script:
+    - ln -s $CI_PROJECT_DIR/documentation /documentation/jekyll/_ui
+    - cd /documentation
+    - bundle exec jekyll b --config _config.yml,_config_develop.yml
+    - cd $CI_PROJECT_DIR
+    - export VERSION=`grep -oP '"version"\s*:\s*"\K[\d.]+' ui/package.json`
+    - mkdir -p doku/$VERSION
+    - cp -r /documentation/_build/* doku/$VERSION
+  dependencies: []
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - doku/
+    expire_in: 2 hours
 
 docker_image_ui:
   script:
@@ -185,6 +203,24 @@ stop_review:
     - /^bug\//
     - /^poc\//
 
+deploy documentation:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - cp -r doku/* /var/www/documentation/
+    - find /var/www/documentation -user gitlab-runner -exec chmod g+w '{}' \;
+    - find /var/www/documentation -user gitlab-runner -exec chgrp www-data '{}' \;
+  dependencies:
+    - build documentation
+  tags:
+    - shell
+    - documentation
+  only:
+    - develop
+    - master
+    - master-*
+
 deploy e2e testserver:
   stage: deploy
   dependencies: []
@@ -212,6 +248,8 @@ run e2e tests:
   artifacts:
     paths:
       - ui/build/e2e/screenshots
+    when: on_failure
+    expire_in: 1 day
 
 stop e2e testserver:
   stage: cleanup

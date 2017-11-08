@@ -102,6 +102,11 @@ define('io.ox/mail/compose/actions/send', [
             index: 550,
             perform: extensions.publishMailAttachments
         },
+        {
+            id: 'check:attachment-missing',
+            index: 560,
+            perform: extensions.attachmentMissingCheck
+        },
         // Placeholder for Guard extensions at index 600-630
         {
             id: 'busy:start',

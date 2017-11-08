@@ -193,13 +193,19 @@ define('io.ox/mail/detail/mobileView', [
     });
 
     ext.point('io.ox/mail/mobile/detail/body').extend({
-        id: 'content',
-        index: 1000,
+        id: 'iframe+content',
+        index: 100,
         draw: function (baton) {
-            var data = content.get(baton.data);
-            this.idle().append(data.content);
+            var self = this;
+            ext.point('io.ox/mail/detail/body').get('iframe', function (extension) {
+                extension.invoke('draw', self, baton);
+            });
+            ext.point('io.ox/mail/detail/body').get('content', function (extension) {
+                extension.invoke('draw', self, baton);
+            });
         }
     });
+
 
     ext.point('io.ox/mail/mobile/detail/body').extend({
         id: 'max-size',
