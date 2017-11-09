@@ -238,8 +238,8 @@ define('io.ox/contacts/addressbook/popup', [
                     });
                     if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
-                    addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), rank, i);
+                    addresses.forEach(function (field, i) {
+                        var obj = process(item, sort_name, (item[field] || '').toLowerCase(), rank, i, field);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -247,7 +247,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, rank, i) {
+        function process(item, sort_name, address, rank, i, field) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -267,6 +267,7 @@ define('io.ox/contacts/addressbook/popup', [
                 department: department,
                 display_name: item.display_name,
                 email: address,
+                field: field,
                 first_name: item.first_name,
                 folder_id: folder_id,
                 full_name: full_name,
@@ -779,7 +780,8 @@ define('io.ox/contacts/addressbook/popup', [
                             display_name: name,
                             id: item.id,
                             folder_id: item.folder_id,
-                            email: mail
+                            email: mail,
+                            field: item.field
                         };
                     }, this)
                     .flatten()
