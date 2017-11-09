@@ -354,7 +354,7 @@ define('io.ox/mail/detail/view', [
         index: 100,
         draw: function (baton) {
             // "//:0" does not work for src as IE 11 goes crazy when loading the frame
-            var iframe = $('<iframe src="" class="mail-detail-frame">');
+            var iframe = $('<iframe src="" class="mail-detail-frame">').attr('title', gt('Email content'));
             // restore height if already calculated
             if (baton.model.get('iframe-height')) iframe.css('height', baton.model.get('iframe-height'));
             baton.iframe = iframe;
