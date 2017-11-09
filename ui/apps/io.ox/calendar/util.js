@@ -82,17 +82,19 @@ define('io.ox/calendar/util', [
         },
 
         colors: [
-            { label: gt('light blue'), value: '#CEE7FF', foreground: '#2A4B6C' },
-            { label: gt('dark blue'), value: '#96BBE8', foreground: '#0B1624' },
-            { label: gt('purple'), value: '#C4AFE3', foreground: '#3F0E84' },
-            { label: gt('pink'), value: '#F0D8F0', foreground: '#8A1C8C' },
-            { label: gt('red'), value: '#F2D1D2', foreground: '#A83336' },
-            { label: gt('orange'), value: '#FFD1A3', foreground: '#622906' },
-            { label: gt('yellow'), value: '#F7EBB6', foreground: '#5C4209' },
-            { label: gt('light green'), value: '#D4DEA7', foreground: '#526107' },
-            { label: gt('dark green'), value: '#99AF6E', foreground: '#28350F' },
-            { label: gt('gray'), value: '#666666', foreground: '#FFFFFF' }
+            { label: gt('blue'), value: '#64B5F6' },
+            { label: gt('indigo'), value: '#7986CB' },
+            { label: gt('purple'), value: '#BA68C8' },
+            { label: gt('pink'), value: '#F06292' },
+            { label: gt('red'), value: '#E57373' },
+            { label: gt('orange'), value: '#FFB74D' },
+            { label: gt('yellow'), value: '#FFF176' },
+            { label: gt('light green'), value: '#AED581' },
+            { label: gt('green'), value: '#81C784' },
+            { label: gt('gray'), value: '#BDBDBD' }
         ],
+
+        PRIVATE_EVENT_COLOR: '#616161',
 
         isBossyAppointmentHandling: function (opt) {
 
@@ -875,7 +877,7 @@ define('io.ox/calendar/util', [
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (that.isPrivate(eventModel)) folderColor = _(that.colors).last().value;
+            if (that.isPrivate(eventModel)) eventColor = that.PRIVATE_EVENT_COLOR;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -931,8 +933,6 @@ define('io.ox/calendar/util', [
         },
 
         getForegroundColor: function (color) {
-            var c = _(that.colors).findWhere({ value: color });
-            if (c) return c.foreground;
             color = that.colorToHex(color);
             return color > 0xffffff / 2 ? 'black' : 'white';
         },
@@ -954,7 +954,7 @@ define('io.ox/calendar/util', [
             var defaultColor = settings.get('defaultFolderColor', 1),
                 extendedProperties = folder['com.openexchange.calendar.extendedProperties'],
                 color = extendedProperties.color ? (extendedProperties.color.value || defaultColor) : defaultColor;
-            // fallback if color is an index
+            // fallback if color is an index (might still occur due to defaultFolderColor)
             if (_.isNumber(color)) color = that.colors[color - 1].value;
             return color;
         },

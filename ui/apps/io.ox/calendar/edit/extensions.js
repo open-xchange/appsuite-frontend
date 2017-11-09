@@ -476,10 +476,7 @@ define('io.ox/calendar/edit/extensions', [
                 model: this.model,
                 attribute: 'color',
                 noColorOption: true,
-                additionalColor: this.model.get('color') ? {
-                    value: this.model.get('color'),
-                    foreground: calendarUtil.getForegroundColor(this.model.get('color'))
-                } : undefined
+                additionalColor: this.model.get('color') ? { value: this.model.get('color') } : undefined
             });
 
             this.$el.append(
@@ -490,7 +487,7 @@ define('io.ox/calendar/edit/extensions', [
                 var elem = picker.$('.no-color .box');
                 if (calendarUtil.isPrivate(picker.model)) {
                     elem.css({
-                        'background-color': '#666',
+                        'background-color': calendarUtil.PRIVATE_EVENT_COLOR,
                         color: '#fff'
                     });
                 } else {

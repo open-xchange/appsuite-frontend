@@ -1014,7 +1014,10 @@ define('io.ox/core/folder/extensions', [
 
                         if (target.length === 0) target = $('<div class="color-label">');
                         target.toggleClass('selected', app.folders.isSelected(baton.data.id));
-                        target.css('background-color', folderColor);
+                        target.css({
+                            'background-color': folderColor,
+                            'color': util.getForegroundColor(folderColor)
+                        });
                         target.off('click').on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
                         folderLabel.prepend(target);
                     });

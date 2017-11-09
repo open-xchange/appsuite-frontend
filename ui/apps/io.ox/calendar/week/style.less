@@ -40,6 +40,29 @@
         .footer {
             .overflow-y(scroll);
             .overflow-x(hidden);
+            padding-top: 20px;
+
+            .weekday {
+                color: gray;
+                text-align: left;
+                line-height: 24px;
+                font-size: 14px;
+
+                .number {
+                    font-size: 20px;
+                    .fontWeight(bold);
+                    color: black;
+                }
+
+                &.today {
+                    color: @calendar-today;
+                    background-color: transparent;
+
+                    .number {
+                        color: @calendar-today;
+                    }
+                }
+            }
         }
     }
 
@@ -50,7 +73,7 @@
         bottom: 0;
         // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
         // but that doesn't make sense, result is close however
-        top: 67px;
+        top: 86px;
 
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
@@ -146,7 +169,8 @@
                 .timeline {
                     position: absolute;
                     height: 0;
-                    width: 100%;
+                    left: -1px;
+                    right: 0;
                     border-bottom: 3px solid @calendar-today;
                     z-index: 10;
                     .user-select(none);
