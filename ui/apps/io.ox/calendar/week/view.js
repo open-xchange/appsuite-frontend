@@ -1152,7 +1152,10 @@ define('io.ox/calendar/week/view', [
                         date: d,
                         title: gt('Create all-day appointment')
                     })
-                    .text(tmpDate.format('ddd D'))
+                    .append(
+                        $.txt(tmpDate.format('ddd ')),
+                        $('<span class="number">').text(tmpDate.format('D'))
+                    )
                     .width(100 / this.columns + '%');
                 // mark today
                 if (util.isToday(tmpDate)) {
@@ -1179,7 +1182,7 @@ define('io.ox/calendar/week/view', [
             this.kwInfo.empty().append(
                 $('<span>').text(
                     this.columns > 1
-                        ? this.startDate.formatInterval(moment(this.startDate).add(this.columns - 1, 'days'))
+                        ? this.startDate.format('MMMM YYYY')
                         : this.startDate.format('ddd, l')
                 ),
                 $.txt(' '),
@@ -1400,10 +1403,10 @@ define('io.ox/calendar/week/view', [
 
                     node.css({
                         top: pos.top,
-                        left: left + '%',
+                        left: 'calc(' + left + '% - 1px)',
                         height: height + 'px',
                         lineHeight: self.minCellHeight + 'px',
-                        width: width + '%',
+                        width: 'calc(' + width + '% - 10px)',
                         minHeight: (self.minCellHeight - (border ? 2 : 1)) + 'px',
                         maxWidth: self.appWidth + '%'
                         // zIndex: j

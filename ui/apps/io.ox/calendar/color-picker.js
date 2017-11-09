@@ -31,7 +31,7 @@ define('io.ox/calendar/color-picker', [
             }, opt);
 
             // make sure, that the additional color is not a duplicate
-            if (_(util.colors).findWhere({ color: this.opt.additionalColor })) this.opt.additionalColor = undefined;
+            if (opt.additionalColor && _(util.colors).findWhere({ color: this.opt.additionalColor })) this.opt.additionalColor = undefined;
             this.onChangeColor = this.onChangeColor.bind(this);
 
             // allow custom getter and setter
@@ -65,7 +65,7 @@ define('io.ox/calendar/color-picker', [
                     .attr('title', color.label)
                     .css({
                         'background-color': color.value,
-                        color: color.foreground
+                        color: util.getForegroundColor(color.value)
                     })
             );
         },
@@ -82,7 +82,7 @@ define('io.ox/calendar/color-picker', [
                 self.$el.append(self.renderOption(util.colors[index]));
             });
             if (this.opt.additionalColor) {
-                this.$el.append(this.additionalColor);
+                this.$el.append(this.renderOption(this.opt.additionalColor));
             }
             return this;
         }
