@@ -74,6 +74,29 @@ define('io.ox/mail/detail/view', [
     var INDEX_header = 0;
 
     ext.point('io.ox/mail/detail/header').extend({
+        id: 'threadcontrol',
+        index: INDEX_header += 100,
+        draw: function (baton) {
+            var data = baton.data,
+                subject = util.getSubject(data),
+                title = util.hasFrom(data) ?
+                    //#. %1$s: Mail sender
+                    //#. %2$s: Mail subject
+                    gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+            this.append(
+                $('<h2 class="toggle-mail-body">').append(
+                    $('<button type="button" class="toggle-mail-body-btn">')
+                        .attr('aria-expanded', baton.view.$el.hasClass('expanded'))
+                        .append(
+                            $('<span class="sr-only">').text(title)
+                        )
+                )
+            );
+        }
+    });
+
+
+    ext.point('io.ox/mail/detail/header').extend({
         id: 'picture',
         index: INDEX_header += 100,
         draw: extensions.senderPicture
@@ -448,6 +471,7 @@ define('io.ox/mail/detail/view', [
         events: {
             'keydown': 'onToggle',
             'click .detail-view-header': 'onToggle',
+            'click .toggle-mail-body-btn': 'onToggle',
             'click a[data-action="retry"]': 'onRetry'
         },
 
@@ -542,10 +566,12 @@ define('io.ox/mail/detail/view', [
             // this is required even if a-tags are tabbable elements since some links are removed from dom on click
             if ($(e.target).closest('a').length) return;
 
-            // ignore clicks on tabbable elements
-            var tabbable = a11y.getTabbable(this.$el);
-            if (tabbable.index(e.target) >= 0) return;
-            if (tabbable.find($(e.target)).length) return;
+            if (!$(e.currentTarget).hasClass('toggle-mail-body-btn')) {
+                // ignore clicks on tabbable elements
+                var tabbable = a11y.getTabbable(this.$el);
+                if (tabbable.index(e.target) >= 0) return;
+                if (tabbable.find($(e.target)).length) return;
+            }
 
             // ignore click on dropdowns
             if ($(e.target).hasClass('dropdown-menu')) return;
@@ -560,8 +586,7 @@ define('io.ox/mail/detail/view', [
             this.$el.find('.collapsed-blockquote').hide();
             this.$el.find('.blockquote-toggle').show();
 
-            var cid = $(e.currentTarget).closest('li').data('cid');
-            this.toggle(cid);
+            this.toggle();
         },
 
         onRetry: function (e) {
@@ -620,15 +645,12 @@ define('io.ox/mail/detail/view', [
         },
 
         toggle: function (state) {
-            var $li = this.$el;
+            var $li = this.$el,
+                $button = $li.find('.toggle-mail-body-btn');
 
-            if (state === undefined) {
-                $li.toggleClass('expanded');
-                $li.attr('aria-expanded', !$li.attr('aria-expanded'));
-            } else {
-                $li.toggleClass('expanded', state);
-                $li.attr('aria-expanded', state);
-            }
+            $li.toggleClass('expanded', state);
+
+            $button.attr('aria-expanded', $li.hasClass('expanded'));
 
             // trigger DOM event that bubbles
             this.$el.trigger('toggle');
@@ -698,12 +720,7 @@ define('io.ox/mail/detail/view', [
         render: function () {
 
             var data = this.model.toJSON(),
-                baton = ext.Baton({ data: data, model: this.model, view: this }),
-                subject = util.getSubject(data),
-                title = util.hasFrom(data) ?
-                    //#. %1$s: Mail sender
-                    //#. %2$s: Mail subject
-                    gt('Email from %1$s: %2$s', util.getDisplayName(data.from[0]), subject) : subject;
+                baton = ext.Baton({ data: data, model: this.model, view: this });
 
             // disable extensions?
             _(this.options.disable).each(function (extension, point) {
@@ -718,9 +735,7 @@ define('io.ox/mail/detail/view', [
 
             this.$el.attr({
                 'data-cid': this.model.cid,
-                'aria-expanded': 'false',
-                'data-loaded': 'false',
-                'aria-label': title
+                'data-loaded': 'false'
             });
 
             this.$el.data({ view: this, model: this.model });
