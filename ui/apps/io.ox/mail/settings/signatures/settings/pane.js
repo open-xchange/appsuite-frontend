@@ -12,7 +12,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
     'io.ox/mail/util',
     'io.ox/backbone/mini-views/settings-list-view',
     'less!io.ox/mail/settings/signatures/style'
-], function (ext, gt, settings, util, dialogs, snippets, mini, http, config, notifications, listutils, mailutil, ListView) {
+], function (ext, gt, settings, util, dialogs, snippets, mini, config, notifications, listutils, mailutil, ListView) {
 
     'use strict';
 
