@@ -204,7 +204,7 @@ define('io.ox/contacts/addressbook/popup', [
 
         function processAddresses(list, result, hash, opt) {
 
-            list.forEach(function (item) {
+            list.forEach(function (item, rank) {
                 // remove quotes from display name (common in collected addresses)
                 item.display_name = getDisplayName(item.display_name);
                 // get sort name
@@ -226,7 +226,7 @@ define('io.ox/contacts/addressbook/popup', [
                         .join(', ');
                     // overwrite last name to get a nicer full name
                     item.last_name = item.display_name;
-                    var obj = process(item, sort_name, address, 0);
+                    var obj = process(item, sort_name, address, 0, rank);
                     if (obj) {
                         obj.full_name_html += ' <span class="gray">' + gt('Distribution list') + '</span>';
                         result.push((hash[obj.cid] = obj));
@@ -234,8 +234,8 @@ define('io.ox/contacts/addressbook/popup', [
                 } else {
                     if (opt.useGABOnly) addresses = ['email1'];
                     // get a match for each address
-                    addresses.forEach(function (address, i) {
-                        var obj = process(item, sort_name, (item[address] || '').toLowerCase(), i);
+                    addresses.forEach(function (field, i) {
+                        var obj = process(item, sort_name, (item[field] || '').toLowerCase(), rank, i, field);
                         if (obj) result.push((hash[obj.cid] = obj));
                     });
                 }
@@ -243,7 +243,7 @@ define('io.ox/contacts/addressbook/popup', [
             return { items: result, hash: hash, index: buildIndex(result) };
         }
 
-        function process(item, sort_name, address, i) {
+        function process(item, sort_name, address, rank, i, field) {
             // skip if empty
             address = $.trim(address);
             if (!address) return;
@@ -263,6 +263,7 @@ define('io.ox/contacts/addressbook/popup', [
                 department: department,
                 display_name: item.display_name,
                 email: address,
+                field: field,
                 first_name: item.first_name,
                 folder_id: folder_id,
                 full_name: full_name,
@@ -842,9 +843,7 @@ define('io.ox/contacts/addressbook/popup', [
                             id: item.id,
                             folder_id: item.folder_id,
                             email: mail,
-                            // mail_field is used in distribution lists
-                            field: item.mail_field ? 'email' + item.mail_field : item.field,
-                            user_id: item.user_id
+                            field: item.field
                         };
                     }, this)
                     .flatten()

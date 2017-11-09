@@ -46,6 +46,8 @@ define('io.ox/backbone/mini-views/addresspicker', [
                         var member;
                         if (singleData.folder_id) {
                             api.get(singleData).done(function (data) {
+                                // specifiy address field (email1, email2, ...)
+                                if (singleData.field) data.field = singleData.field;
                                 member = new pModel.Participant(data);
                                 self.opt.process(e, member, singleData);
                             });
