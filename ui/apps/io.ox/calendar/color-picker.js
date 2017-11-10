@@ -31,7 +31,7 @@ define('io.ox/calendar/color-picker', [
             }, opt);
 
             // make sure, that the additional color is not a duplicate
-            if (opt.additionalColor && _(util.colors).findWhere({ color: this.opt.additionalColor })) this.opt.additionalColor = undefined;
+            if (opt.additionalColor && _(util.colors).findWhere({ value: this.opt.additionalColor.value })) this.opt.additionalColor = undefined;
             this.onChangeColor = this.onChangeColor.bind(this);
 
             // allow custom getter and setter
