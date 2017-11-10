@@ -16,6 +16,7 @@
 define('io.ox/files/api', [
     'io.ox/core/http',
     'io.ox/core/folder/api',
+    'io.ox/core/api/user',
     'io.ox/core/api/backbone',
     'io.ox/core/api/collection-pool',
     'io.ox/core/api/collection-loader',
@@ -26,7 +27,7 @@ define('io.ox/files/api', [
     'settings!io.ox/core',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (http, folderAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
+], function (http, folderAPI, userAPI, backbone, Pool, CollectionLoader, capabilities, ext, util, FindAPI, coreSettings, settings, gt) {
 
     'use strict';
 
@@ -292,20 +293,25 @@ define('io.ox/files/api', [
         },
 
         hasWritePermissions: function () {
-            var array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
+            var def = $.Deferred(),
+                array = this.get('object_permissions') || this.get('com.openexchange.share.extendedObjectPermissions') || [],
                 myself = _(array).findWhere({ entity: ox.user_id, group: false });
 
             // check if there is a permission for a group, the user is a member of
             // use max permissions available
-            if ((!myself || (myself && myself.bits < 2))) {
-                return array.filter(function (perm) {
-                    // use rampup data so this is not deferred
-                    return perm.group === true && _.contains(ox.rampup.user.groups, perm.entity);
-                }).reduce(function (acc, perm) {
-                    return acc || perm.bits >= 2;
-                }, false);
+            if (!myself || (myself && myself.bits < 2)) {
+                userAPI.get().done(function (userData) {
+                    def.resolve(array.filter(function (perm) {
+                        return perm.group === true && _.contains(userData.groups, perm.entity);
+                    }).reduce(function (acc, perm) {
+                        return acc || perm.bits >= 2;
+                    }, false));
+                }).fail(function () { def.resolve(false); });
+            } else {
+                def.resolve(!!(myself && (myself.bits >= 2)));
             }
-            return !!(myself && (myself.bits >= 2));
+
+            return def;
         }
     });
 

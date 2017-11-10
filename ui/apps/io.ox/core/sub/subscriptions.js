@@ -48,9 +48,9 @@ define('io.ox/core/sub/subscriptions', [
 
         availableServices = (function () {
             var s = { calendar: false, contacts: false };
-            _(ox.rampup.oauth.services).each(function (service) {
-                if (service.availableScopes.indexOf('contacts') !== -1 || service.availableScopes.indexOf('contacts_ro') !== -1) s.contacts = true;
-                if (service.availableScopes.indexOf('calendar') !== -1 || service.availableScopes.indexOf('calendar_ro') !== -1) s.calendar = true;
+            _(oauthAPI.services.models).each(function (service) {
+                if (service.get('availableScopes').indexOf('contacts') !== -1 || service.get('availableScopes').indexOf('contacts_ro') !== -1) s.contacts = true;
+                if (service.get('availableScopes').indexOf('calendar') !== -1 || service.get('availableScopes').indexOf('calendar_ro') !== -1) s.calendar = true;
             });
             return s;
         }()),
