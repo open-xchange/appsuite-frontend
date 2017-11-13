@@ -533,9 +533,13 @@
         box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
     }
 
+    .container {
+        width: 100%;
+        min-width: 560px;
+    }
+
     &.cornered {
         width: 960px;
-        max-width: 50%
         height: 65%;
         min-height: 640px;
         right: 56px;
@@ -569,7 +573,9 @@
 
         @media (max-width: 592px) {
             width: auto;
+            min-width: auto;
         }
+
          @media (max-height: 800px) {
             height: calc(~"100% - 32px");
             min-height: auto;
