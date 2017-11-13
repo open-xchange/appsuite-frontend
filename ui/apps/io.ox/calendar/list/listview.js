@@ -140,8 +140,9 @@ define('io.ox/calendar/list/listview', [
         id: 'empty-label',
         index: 100,
         draw: function (baton) {
-            var collection = baton.listView.collection;
-            this.addClass('empty').text(gt.format(gt('No appointments found until %s'), moment(collection.lastDate).format('LLL')));
+            var collection = baton.listView.collection,
+                m = moment().add(collection.offset || 0, 'month').startOf('day');
+            this.addClass('empty').text(gt.format(gt('No appointments found until %s'), m.format('LLL')));
             baton.listView.drawTail();
         }
     });
@@ -218,7 +219,7 @@ define('io.ox/calendar/list/listview', [
         },
 
         onCollectionSet: function () {
-            this.listenTo(this.collection, 'paginate', _.debounce(this.drawTail, 20));
+            this.listenTo(this.collection, 'paginate', _.debounce(this.onPaginatenEvent, 20));
         },
 
         getLabel: function (model) {
@@ -233,6 +234,11 @@ define('io.ox/calendar/list/listview', [
         renderListItem: function (model) {
             if (model === this.collection.last()) _.defer(this.drawTail.bind(this));
             return ListView.prototype.renderListItem.apply(this, arguments);
+        },
+
+        onPaginatenEvent: function () {
+            this.drawTail();
+            if (this.collection.length === 0) this.renderEmpty();
         },
 
         drawTail: function () {
