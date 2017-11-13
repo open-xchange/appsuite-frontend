@@ -255,21 +255,23 @@ define('io.ox/editor/main', [
             var fixFolder = function () {
 
                 // check file permissions first
-                if (model.hasWritePermissions()) return $.when();
+                return model.hasWritePermissions().then(function (permissionGranted) {
+                    if (permissionGranted) return $.when();
 
-                // switch to default folder on missing grants (or special folders)
-                return folderAPI.get(model.get('folder_id')).done(function (data) {
-                    var required = (model.has('id') && !folderAPI.can('write', data)) ||
-                                   (!model.has('id') && !folderAPI.can('create', data)) ||
-                                   _.contains(['14', '15'], data.id);
-                    if (!required) return;
-                    var defaultFolder = folderAPI.getDefaultFolder('infostore');
-                    if (defaultFolder) {
-                        // update mode and notify user
-                        model.set('folder_id', defaultFolder);
-                        model.unset('id');
-                        notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
-                    }
+                    // switch to default folder on missing grants (or special folders)
+                    return folderAPI.get(model.get('folder_id')).done(function (data) {
+                        var required = (model.has('id') && !folderAPI.can('write', data)) ||
+                                       (!model.has('id') && !folderAPI.can('create', data)) ||
+                                       _.contains(['14', '15'], data.id);
+                        if (!required) return;
+                        var defaultFolder = folderAPI.getDefaultFolder('infostore');
+                        if (defaultFolder) {
+                            // update mode and notify user
+                            model.set('folder_id', defaultFolder);
+                            model.unset('id');
+                            notifications.yell('info', gt('This file will be written in your default folder to allow editing'));
+                        }
+                    });
                 });
             };
 

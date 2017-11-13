@@ -8,7 +8,7 @@
   },
   "license": "CC-BY-NC-SA-2.5",
   "scripts": {
-    "e2e:local": "grunt build copy:specs_nightwatch connect:server:mock nightwatch:local",
+    "e2e": "codeceptjs run",
     "test": "grunt build copy:specs karma:continuous"
   },
   "optionalDependencies": {
@@ -28,13 +28,15 @@
     "open-xchange-shared-grunt-config": "^0.15.0-pre2"
   },
   "devDependencies": {
+    "@open-xchange/codecept-helper": "^0.0.2",
     "appserver": "^0.7.0-pre1",
     "chai": "^4.0.2",
-    "chromedriver": "^2.25.1",
+    "codeceptjs": "^1.0.3",
+    "codeceptjs-webdriverio": "^1.1.0",
+    "eslint-plugin-codeceptjs": "^0.2.0",
     "grunt-contrib-connect": "^1.0.2",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-karma": "^2.0.0",
-    "grunt-nightwatch": "^0.5.4",
     "grunt-retire": "^1.0.7",
     "karma": "^1.6.0",
     "karma-chai": "^0.1.0",
@@ -46,7 +48,6 @@
     "karma-sinon": "^1.0.4",
     "karma-spec-reporter": "^0.0.31",
     "mocha": "^3.2.0",
-    "nightwatch": "^0.9.13",
     "phantomjs-prebuilt": "^2.1.4",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.11.0",
@@ -59,7 +60,7 @@
     "@open-xchange/emoji": "0.0.1",
     "@open-xchange/hopscotch": "0.0.1",
     "@open-xchange/moment-interval": "0.0.1",
-    "@open-xchange/tinymce": "4.6.3-2",
+    "@open-xchange/tinymce": "4.6.3-4",
     "backbone": "1.3.3",
     "backbone-validation": "0.11.5",
     "bigscreen": "2.0.5",

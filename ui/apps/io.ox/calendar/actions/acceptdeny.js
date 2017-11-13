@@ -153,7 +153,7 @@ define('io.ox/calendar/actions/acceptdeny', [
                             confirmmessage: $.trim(this.getContentNode().find('[data-property="comment"]').val())
                         };
 
-                        // add current user id in shared or public folder
+                        // add folderowner in shared or public folder
                         if (folderAPI.is('shared', folder)) {
                             apiData.data.id = folder.created_by;
                         }

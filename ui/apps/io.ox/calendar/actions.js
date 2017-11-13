@@ -439,41 +439,72 @@ define('io.ox/calendar/actions', [
         }
     });
 
-    new Action('io.ox/calendar/actions/accept-appointment', {
-        requires: true,
-        action: function (baton) {
-            var appointment = api.reduce(baton.data);
-            changeStatus(baton.data).done(function success() {
-                folderAPI.get(appointment.folder).done(function (folder) {
-                    appointment.data = {
-                        // default reminder
-                        alarm: parseInt(settings.get('defaultReminder', 15), 10),
-                        confirmmessage: '',
-                        confirmation: 1
-                    };
+    function acceptDecline(baton, accept) {
+        if ($(baton.e.target).hasClass('disabled')) return;
+        var appointment = api.reduce(baton.data);
+        changeStatus(baton.data).done(function success() {
+            folderAPI.get(appointment.folder).done(function (folder) {
+                appointment.data = {
+                    confirmmessage: '',
+                    confirmation: accept ? 1 : 2
+                };
 
-                    // add current user id in shared or public folder
-                    if (folderAPI.is('shared', folder)) {
-                        appointment.data.id = folder.created_by;
-                    }
+                if (accept) {
+                    // default reminder
+                    appointment.data.alarm = parseInt(settings.get('defaultReminder', 15), 10);
+                }
 
-                    api.confirm(appointment);
+                // add folder owner in shared folder
+                if (folderAPI.is('shared', folder)) {
+                    appointment.data.id = folder.created_by;
+                }
 
-                });
+                // check if only one appointment or the whole series should be accepted
+                // you need to check the recurrence_type too. Exceptions have a recurrence position but no recurrence_type
+                if (baton.data.recurrence_type > 0 && appointment.recurrence_position) {
+                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        new dialogs.ModalDialog()
+                            .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
+                                gt('Do you want to decline the whole series or just one appointment within the series?'))
+                            .addPrimaryButton('series',
+                                //#. Use singular in this context
+                                gt('Series'), 'series')
+                            .addButton('appointment', gt('Appointment'), 'appointment')
+                            .addButton('cancel', gt('Cancel'), 'cancel')
+                            .show()
+                            .then(function (action) {
+                                if (action === 'cancel') {
+                                    return;
+                                }
+                                if (action === 'appointment') {
+                                    appointment.occurrence = appointment.recurrence_position;
+                                }
+                                $(baton.e.target).addClass('disabled');
+                                api.confirm(appointment);
+                            });
+                    });
+                    return;
+                }
+                $(baton.e.target).addClass('disabled');
+                api.confirm(appointment);
             });
-        }
+        });
+    }
+
+    new Action('io.ox/calendar/actions/accept-appointment', {
+        requires: function (e) {
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
+            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 1;
+        },
+        action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
-        requires: true,
-        action: function (baton) {
-            var o = api.reduce(baton.data);
-            o.data = {
-                confirmmessage: '',
-                confirmation: 2
-            };
-            api.confirm(o);
-        }
+        requires: function (e) {
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
+            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 2;
+        },
+        action: acceptDecline
     });
 
     // Mobile multi select extension points

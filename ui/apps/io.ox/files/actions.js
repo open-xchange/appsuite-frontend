@@ -14,6 +14,7 @@
 define('io.ox/files/actions', [
     'io.ox/core/folder/api',
     'io.ox/files/api',
+    'io.ox/core/api/user',
     'io.ox/files/util',
     'io.ox/core/api/filestorage',
     'io.ox/core/extensions',
@@ -21,7 +22,7 @@ define('io.ox/files/actions', [
     'io.ox/core/capabilities',
     'settings!io.ox/files',
     'gettext!io.ox/files'
-], function (folderAPI, api, util, filestorageApi, ext, links, capabilities, settings, gt) {
+], function (folderAPI, api, userAPI, util, filestorageApi, ext, links, capabilities, settings, gt) {
 
     'use strict';
 
@@ -414,8 +415,15 @@ define('io.ox/files/actions', [
         // check if there is a permission for a group, the user is a member of
         // use max permissions available
         if ((!myself || (myself && myself.bits < 2)) && _(array).findWhere({ group: true })) {
-            // use rampup data so this is not deferred
-            myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(ox.rampup.user.groups)[0] });
+            var def = $.Deferred();
+
+            userAPI.get().done(function (userData) {
+                myself = _(array).findWhere({ entity: _(_.pluck(array, 'entity')).intersection(userData.groups)[0] });
+                def.resolve(!!(myself && (myself.bits >= 2)));
+            }).fail(function () { def.reject(); });
+
+            return def;
+
         }
 
         return !!(myself && (myself.bits >= 2));
@@ -468,8 +476,7 @@ define('io.ox/files/actions', [
             // bug 54493: no "Save as PDF" for anonymous guests (same solution as in bug 42621)
             if (capabilities.has('guest && anonymous')) return false;
 
-            var
-                model         = e.baton.models[0];
+            var model = e.baton.models[0];
             //    isAccessWrite = folderAPI.can('create', folderAPI.pool.models[model.get('folder_id')].toJSON());
             //
             //if (!isAccessWrite(e)) return false;

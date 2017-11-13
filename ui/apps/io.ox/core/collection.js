@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
+define('io.ox/core/collection', ['io.ox/core/folder/api', 'io.ox/core/api/user'], function (api, userAPI) {
 
     'use strict';
 
@@ -96,21 +96,21 @@ define('io.ox/core/collection', ['io.ox/core/folder/api'], function (api) {
                 return $.when(props);
             }
 
-            function findUserPermissions(item) {
+            function findUserPermissions(item, userData) {
                 // see if user has direct permission or as a member of a group
-                // use rampup data for groups to avoid a request and making this deferred
-                return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(ox.rampup.user.groups).contains(item.entity));
+                return (item.group === false && item.entity === ox.user_id) || (item.group === true && _(userData.groups).contains(item.entity));
             }
 
             // pipe/then
-            return api.multiple(folders).pipe(function (array) {
-
+            return $.when(api.multiple(folders), userAPI.get()).pipe(function (array, userData) {
                 var i = 0, item = null, folder = null, hash = _.toHash(array, 'id'), folders = false, items = false, objectPermission;
 
                 for (; i < $l; i++) {
 
                     item = collection[i];
-                    objectPermission = item && item.object_permissions && _(item.object_permissions).find(findUserPermissions);
+                    objectPermission = item && item.object_permissions && _(item.object_permissions).find(function (item) {
+                        return findUserPermissions(item, userData);
+                    });
                     folder = hash[getFolderId(item)];
 
                     // Check for Guard files or folders

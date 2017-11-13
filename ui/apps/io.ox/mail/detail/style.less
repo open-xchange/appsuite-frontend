@@ -75,3 +75,22 @@
 
     .io-ox-pagecontroller.page .mail-detail .mail-detail-content { margin: 0; }
 }
+
+.toggle-mail-body, .toggle-mail-body-btn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    padding: 0;
+    margin: 0;
+}
+.toggle-mail-body-btn {
+    display: inline-block;
+    border: 0;
+    outline: 0;
+    background-color: transparent;
+    &:focus {
+        background-color: @brand-primary;
+    }
+}

@@ -65,7 +65,7 @@ define('io.ox/core/viewer/views/sidebar/filedescriptionview', [
 
         onEdit: function (e) {
 
-            var touchDevice = _.device('smartphone || tablet'),
+            var touchDevice = _.device('smartphone || tablet'),
                 empty = !this.model.get('description');
 
             e.preventDefault();

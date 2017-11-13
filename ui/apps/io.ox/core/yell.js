@@ -100,11 +100,11 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     }
 
     function pause() {
-        timer.pause();
+        if (timer) timer.pause();
     }
 
     function resume() {
-        timer.resume();
+        if (timer) timer.resume();
     }
 
     function screenreaderMessage(message) {
