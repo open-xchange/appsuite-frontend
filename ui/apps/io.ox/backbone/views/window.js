@@ -115,12 +115,21 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.changeDisplayStyle(this.displayStyle === 'cornered' ? 'centered' : 'cornered');
         },
 
-        makeActive: function () {
+        makeActive: function (powermove) {
             var self = this;
-
-            collection.each(function (model) {
-                model.get('window').toggle(model.get('window').cid === self.cid);
-            });
+            // don't use powermove if there are only minimized windows
+            if (powermove && _(collection.pluck('window')).where({ minimized: true }).length !== collection.length && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {
+                if (powerMoveWindow) {
+                    powerMoveWindow.toggle(false);
+                }
+                powerMoveWindow = this;
+                this.$el.addClass('powermove');
+                this.toggle(true);
+            } else {
+                collection.each(function (model) {
+                    model.get('window').toggle(model.get('window').cid === self.cid || (powerMoveWindow && model.get('window').cid === powerMoveWindow.cid));
+                });
+            }
 
             // trigger , so the taskbar redraws
             collection.trigger('show', this);
@@ -135,9 +144,15 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         onMinimize: function (e) {
             e.preventDefault();
             this.toggle(false);
+            if (powerMoveWindow) {
+                powerMoveWindow.$el.removeClass('powermove');
+                powerMoveWindow = null;
+            }
         },
 
-        toggle: function (state) {
+        toggle: function (state, keepPowerMoveWindow) {
+            //create true boolean
+            state = !!state;
             // already in the correct state. nothing to do
             if (state !== this.minimized) return;
 
@@ -148,6 +163,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 this.$el.show();
                 collection.trigger('show', this);
             } else {
+                if (!keepPowerMoveWindow && powerMoveWindow && powerMoveWindow.cid === this.cid) {
+                    powerMoveWindow.$el.removeClass('powermove');
+                    powerMoveWindow = null;
+                }
                 // little delay to wait for animation
                 this.$el.delay(300).queue(function () {
                     $(this).hide();
@@ -163,15 +182,20 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         }
     });
 
-    var collection = WindowView.collection = new Backbone.Collection();
+    var collection = WindowView.collection = new Backbone.Collection(),
+        powerMoveWindow;
 
     function add(window) {
         var model = new Backbone.Model({ id: window.cid, window: window });
         collection.add(model);
     }
 
-    function remove(window) {
-        collection.remove(window.cid);
+    function remove(win) {
+        if (powerMoveWindow && (powerMoveWindow.cid === win.cid || !win.minimized)) {
+            powerMoveWindow.$el.removeClass('powermove');
+            powerMoveWindow = null;
+        }
+        collection.remove(win.cid);
     }
 
     // use debounce here, to reduce redraws (may happen if multiple edit dialogs are restored)
@@ -210,7 +234,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     $(document).on('click', '#io-ox-taskbar button', function (e) {
         var cid = $(e.currentTarget).attr('data-cid'),
             model = collection.get(cid);
-        model.get('window').makeActive();
+
+        model.get('window').makeActive(e.altKey && window.innerWidth >= 1192);
     });
 
     var scrolling = false,
@@ -275,6 +300,12 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         var node = $('#io-ox-taskbar');
         $('#io-ox-taskbar-container .control-left').prop('disabled', node.scrollLeft() === 0);
         $('#io-ox-taskbar-container .control-right').prop('disabled', node.scrollLeft() === node[0].scrollWidth - node.width());
+
+        if (powerMoveWindow && window.innerWidth < 1192) {
+            powerMoveWindow.toggle(false, true);
+        } else if (powerMoveWindow) {
+            powerMoveWindow.toggle(true);
+        }
     }
 
     $(window).on('resize', _.debounce(updateScrollControllState, 50));

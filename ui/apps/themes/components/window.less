@@ -63,8 +63,10 @@
             height: 32px;
             line-height: 32px;
             min-width: 90px;
+            border-radius: 4px;
 
             .taskbar-button {
+                border-radius: 0;
                 border: 0;
                 color: white;
                 font-weight: bold;
@@ -533,6 +535,7 @@
 
     &.cornered {
         width: 960px;
+        max-width: 50%
         height: 65%;
         min-height: 640px;
         right: 56px;
@@ -540,26 +543,37 @@
         top: auto;
         left: auto;
 
-        @media (max-height: 800px) {
+        &.powermove {
+            right: 1032px;
+        }
+
+        @media (max-width: 1992px) {
+            width: 800px;
+            &.powermove {
+                right: 872px;
+            }
+        }
+
+        @media (max-width: 1672px) {
+            width: 560px;
+            &.powermove {
+                right: 632px;
+            }
+        }
+
+        @media (max-width: 672px) {
+            margin: 0 auto;
+            left: 16px;
+            right: 16px;
+        }
+
+        @media (max-width: 592px) {
+            width: auto;
+        }
+         @media (max-height: 800px) {
             height: calc(~"100% - 32px");
             min-height: auto;
         }
-
-        @media (max-width: 1072px) {
-            position: relative;
-            right: auto;
-            margin: 0 auto;
-            // to make it stick to the bottom without JS
-            top: calc(~"100% - 16px");
-            transform: translateY(-100%);
-        }
-
-        @media (max-width: 992px) {
-            width: auto;
-            margin-right: 16px;
-            margin-left: 16px;
-        }
-
         .floating-header .controls a[data-action="cornered"] {
             display: none;
         }
