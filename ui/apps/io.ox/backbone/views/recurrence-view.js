@@ -738,6 +738,8 @@ define('io.ox/backbone/views/recurrence-view', [
             var oldDate = moment(this.model.previous('start_time') || this.model.previous('start_date')),
                 date = moment(this.model.get('start_time') || this.model.get('start_date'));
 
+            if (this.model.get('full_time') === true) date.utc();
+
             // if weekly and only single day selected
             if (type === 2 && this.model.get('days') === 1 << oldDate.day()) {
                 this.model.set('days', 1 << date.day());
