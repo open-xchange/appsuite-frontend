@@ -69,8 +69,6 @@ define('plugins/portal/calendar/register', [
 
     function getRequestParams() {
         return {
-            // TODO remove folder from call as soon as the API supports it
-            folder: 'cal://0/' + folderAPI.getDefaultFolder('calendar'),
             start: moment().startOf('day').valueOf(),
             end: moment().startOf('day').add(1, 'month').valueOf()
         };
