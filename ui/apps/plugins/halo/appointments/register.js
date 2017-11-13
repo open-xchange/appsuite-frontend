@@ -59,8 +59,8 @@ define('plugins/halo/appointments/register', [
             return type === 'com.openexchange.halo.events';
         },
         enhance: function (request) {
-            request.params.rangeStart = moment().utc().format('YYYYMMDD[T]HHMMss[Z]');
-            request.params.rangeEnd = moment().utc().add(10, 'days').format('YYYYMMDD[T]HHMMss[Z]');
+            request.params.rangeStart = moment().utc().format('YYYYMMDD[T]HHmmss[Z]');
+            request.params.rangeEnd = moment().utc().add(10, 'days').format('YYYYMMDD[T]HHmmss[Z]');
         }
     });
 });

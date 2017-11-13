@@ -98,8 +98,8 @@ define('io.ox/calendar/api', [
                 var method = opt.folders ? 'PUT' : 'GET',
                     params = {
                         action: 'all',
-                        rangeStart: moment(opt.start).utc().format('YYYYMMDD[T]HHMMss[Z]'),
-                        rangeEnd: moment(opt.end).utc().format('YYYYMMDD[T]HHMMss[Z]'),
+                        rangeStart: moment(opt.start).utc().format('YYYYMMDD[T]HHmmss[Z]'),
+                        rangeEnd: moment(opt.end).utc().format('YYYYMMDD[T]HHmmss[Z]'),
                         order: 'asc',
                         expand: true
                     },
