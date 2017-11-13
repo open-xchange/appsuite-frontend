@@ -877,7 +877,7 @@ define('io.ox/calendar/util', [
             if (/^(needs-action|declined)$/.test(that.getConfirmationClass(conf))) return '';
 
             // private appointments are colored with gray instead of folder color
-            if (that.isPrivate(eventModel)) eventColor = that.PRIVATE_EVENT_COLOR;
+            if (that.isPrivate(eventModel)) folderColor = that.PRIVATE_EVENT_COLOR;
 
             // if (folderAPI.is('public', folder) && ox.user_id !== appointment.created_by) {
             //     // public appointments which are not from you are always colored in the calendar color
@@ -952,7 +952,7 @@ define('io.ox/calendar/util', [
 
         getFolderColor: function (folder) {
             var defaultColor = settings.get('defaultFolderColor', 1),
-                extendedProperties = folder['com.openexchange.calendar.extendedProperties'],
+                extendedProperties = folder['com.openexchange.calendar.extendedProperties'] || {},
                 color = extendedProperties.color ? (extendedProperties.color.value || defaultColor) : defaultColor;
             // fallback if color is an index (might still occur due to defaultFolderColor)
             if (_.isNumber(color)) color = that.colors[color - 1].value;

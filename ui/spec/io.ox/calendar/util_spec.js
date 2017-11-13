@@ -401,7 +401,8 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
         describe('can compute folder color', function () {
             describe('resolves folder color', function () {
                 it('without color label', function () {
-                    expect(util.getFolderColor({})).to.equal('#CEE7FF');
+                    var defaultColor = util.colors[0].value;
+                    expect(util.getFolderColor({})).to.equal(defaultColor);
                 });
                 it('with color label', function () {
                     expect(util.getFolderColor({ 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } })).to.equal('lightblue');
@@ -424,7 +425,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
                     var folder = { 'com.openexchange.calendar.extendedProperties': { color: { value: 'lightblue' } } },
                         appointment = new Backbone.Model({ class: 'CONFIDENTIAL', attendees: [{ entity: 1337, partStat: 'ACCEPTED' }] });
 
-                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#666666');
+                    expect(util.getAppointmentColor(folder, appointment)).to.equal('#616161');
                 });
 
                 it('with private appointment with color', function () {
