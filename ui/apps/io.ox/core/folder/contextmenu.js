@@ -520,6 +520,21 @@ define('io.ox/core/folder/contextmenu', [
             };
         })(),
 
+        //
+        // Only select that calendar folder
+        //
+        selectOnly: function (baton) {
+            if (!/^calendar$/.test(baton.module)) return;
+
+            contextUtils.addLink(this, {
+                action: 'select-only',
+                data: { folder: baton.data },
+                enabled: true,
+                handler: actions.selectOnly,
+                text: gt('Only show this folder')
+            });
+        },
+
         divider: contextUtils.divider
     };
 
@@ -654,6 +669,16 @@ define('io.ox/core/folder/contextmenu', [
             id: 'delete',
             index: 6500,
             draw: extensions.removeFolder
+        },
+        {
+            id: 'divider-6',
+            index: 7000,
+            draw: contextUtils.divider
+        },
+        {
+            id: 'select-only',
+            index: 7100,
+            draw: extensions.selectOnly
         }
     );
 

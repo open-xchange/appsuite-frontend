@@ -21,6 +21,7 @@ define('io.ox/core/folder/selection', [], function () {
 
         this.view.$el
             .on('click contextmenu', '.selectable', $.proxy(this.onClick, this))
+            .on('dblclick', $.proxy(this.onDblClick, this))
             .on('keydown', '.selectable', $.proxy(this.onKeydown, this))
             // bug 54193: do not set focus
             .on('mousedown contextmenu', '.selectable', function (e) { e.preventDefault(); });
@@ -140,6 +141,16 @@ define('io.ox/core/folder/selection', [], function () {
             this.pick(index, items);
         },
 
+        onDblClick: function (e) {
+            // ignore native checkbox
+            if ($(e.target).is(':checkbox')) return;
+
+            var target = $(e.target),
+                folder = target.closest('.folder').attr('data-id');
+            console.log('trigger dblclick');
+            this.triggerEvent('dblclick', folder);
+        },
+
         onKeydown: function (e) {
             if (!/38|40/.test(e.which)) return;
 
@@ -197,7 +208,8 @@ define('io.ox/core/folder/selection', [], function () {
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.view.$container.attr('aria-activedescendant', node.attr('id'));
-            this.triggerChange(items);
+            console.log('trigger change');
+            this.triggerEvent('change', items);
         },
 
         resetTabIndex: function (items, skip) {
@@ -246,12 +258,14 @@ define('io.ox/core/folder/selection', [], function () {
             this.selectableVirtualFolders[id] = true;
         },
 
-        /**
-         * Open folder or show in drive on tree view selection.
-         */
-        triggerChange: _.debounce(function (items) {
+        triggerEvent: _.debounce(function (event) {
+            if (event === 'change') this.triggerChange.apply(this, _(arguments).toArray().splice(1));
+            else this.view.trigger.apply(this.view, arguments);
+        }, 300),
+
+        triggerChange: function (items) {
             var self = this,
-                item = (items || self.getItems()).filter('.selected').first(),
+                item = (items || this.getItems()).filter('.selected').first(),
                 id = item.attr('data-id'),
 
                 // Only true for files in Drive
@@ -269,7 +283,7 @@ define('io.ox/core/folder/selection', [], function () {
             } else if (self.view) {
                 self.view.trigger(isVirtual && !self.selectableVirtualFolders[id] ? 'virtual' : 'change', id, item);
             }
-        }, 300)
+        }
     });
 
     return Selection;
