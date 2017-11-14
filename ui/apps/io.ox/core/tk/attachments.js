@@ -63,7 +63,10 @@ define('io.ox/core/tk/attachments', [
                     }
                 }
 
-                this.model.on('create update', uploadOnSave);
+                // some apps have their own upload mechanism (Chronos)
+                if (!options.noUploadOnSave) {
+                    this.model.on('create update', uploadOnSave);
+                }
             },
 
             finishedCallback: function (model) {

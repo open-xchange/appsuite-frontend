@@ -217,12 +217,7 @@ define('io.ox/calendar/view-detail', [
                 )
             );
 
-            if (calAPI.uploadInProgress(util.cid(baton.data))) {
-                var progressview = new attachments.progressView({ cid: util.cid(baton.data) });
-                this.append(
-                    $node.append(progressview.render().$el)
-                );
-            } else if (baton.data.attachments && baton.data.attachments.length) {
+            if (baton.data.attachments && baton.data.attachments.length) {
                 this.append($node);
                 ext.point('io.ox/calendar/detail/attachments').invoke('draw', $node, baton);
             }
