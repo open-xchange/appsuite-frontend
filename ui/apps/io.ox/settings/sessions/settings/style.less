@@ -16,23 +16,15 @@
     .settings-list-item {
         position: relative;
         cursor: default;
-        > *:not(.list-item-controls) {
-            .flex-display(flex);
-            .flex-wrap(wrap);
-            padding-top: 0;
-            white-space: nowrap;
-            width: 100%;
+        // > *:not(.list-item-controls) {
+        //     padding-top: 0;
+        //     white-space: nowrap;
+        //     width: 100%;
+        // }
 
-            > * {
-                .flex(1);
-                padding: 16px 0px;
-                padding-right: 53px;
-            }
-        }
-
-        > *:not(:last-child) {
-            padding-bottom: 0;
-        }
+        // > *:not(:last-child) {
+        //     padding-bottom: 0;
+        // }
 
         .list-item-controls {
             position: absolute;
@@ -40,38 +32,42 @@
             top: 0;
         }
 
-        .client-icon {
-            position: relative;
-            top: -2px;
-            float: left;
-            margin-right: 8px;
-            width: 24px;
-            height: 24px;
-            background-size: 24px 24px;
-            background-repeat: no-repeat;
-            background-position: center;
+        .primary {
+            > *:not(.client-icon) {
+                margin-left: 8px;
+                font-weight: bold;
+            }
+        }
 
-            &.ff {
-                background-image: url(apps/themes/default/firefox_64x64.png);
+        .secondary {
+            margin-top: 5px;
+            color: #797979;
+
+            > * {
+                margin-right: 12px;
             }
-            &.chrome {
-                background-image: url(apps/themes/default/chrome_64x64.png);
+        }
+
+        .client-icon {
+            width: 35px;
+            &.desktop {
+                .device:before {
+                    content: "\f108";
+                    font-size: 2em;
+                }
+                .os {
+                    top: -5px;
+                }
             }
-            &.edge {
-                background-image: url(apps/themes/default/edge_64x64.png);
+            &.phone {
+                .device:before {
+                    content: "\f10b";
+                    font-size: 3.5em;
+                }
             }
-            &.ie {
-                background-image: url(apps/themes/default/ie_64x64.png);
-            }
-            &.safari {
-                background-image: url(apps/themes/default/safari_64x64.png);
-            }
-            &.phone-generic {
-                background-image: url(apps/themes/default/phone_generic_64x64.png);
-            }
-            &.desktop-generic {
-                background-image: url(apps/themes/default/desktop_generic_64x64.png);
-            }
+            &.apple .os:before { content: "\f179"; }
+            &.windows .os:before { content: "\f17a"; }
+            &.android .os:before { content: "\f17b"; }
         }
     }
 
