@@ -871,7 +871,9 @@ define('io.ox/calendar/util', [
         getAppointmentColor: function (folder, eventModel) {
             var folderColor = that.getFolderColor(folder),
                 eventColor = eventModel.get('color'),
-                conf = that.getConfirmationStatus(eventModel.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 'ACCEPTED' : 'NEEDS-ACTION');
+                user = folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                defaultStatus = folderAPI.is('public', folder) || folderAPI.is('private', folder) ? 'ACCEPTED' : 'NEEDS-ACTION',
+                conf = that.getConfirmationStatus(eventModel.attributes, user, defaultStatus);
 
             if (_.isNumber(eventColor)) eventColor = that.colors[eventColor - 1].value;
 

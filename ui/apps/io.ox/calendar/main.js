@@ -274,7 +274,8 @@ define('io.ox/calendar/main', [
         },
 
         'multi-folder-selection': function (app) {
-            var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]);
+            var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]),
+                prevFolders;
             folderAPI.on('remove', function (id) {
                 app.folders.remove(id);
             });
@@ -292,8 +293,9 @@ define('io.ox/calendar/main', [
                     });
                 },
                 isSelected: function (id) {
+                    var list = prevFolders ? prevFolders : folders;
                     if (_.isObject(id)) id = id.id;
-                    return folders.indexOf(id) >= 0;
+                    return list.indexOf(id) >= 0;
                 },
                 list: function () {
                     return folders;
@@ -316,8 +318,30 @@ define('io.ox/calendar/main', [
                             settings.set('selectedFolders', folders).save();
                         });
                     }
+                },
+                set: function (folder) {
+                    if (!prevFolders) prevFolders = folders;
+                    folders = [].concat([folder]);
+                    app.folderView.tree.$el.addClass('selection-only');
+                    _.defer(function () {
+                        app.trigger('folders:change');
+                    });
+                },
+                reset: function () {
+                    if (!prevFolders) return;
+                    folders = prevFolders;
+                    prevFolders = undefined;
+                    app.folderView.tree.$el.removeClass('selection-only');
+                    _.defer(function () {
+                        app.trigger('folders:change');
+                    });
                 }
             };
+            app.on('folder:change', app.folders.reset);
+            app.folderView.tree.on('dblclick', function (folder) {
+                app.folder.set(folder);
+                app.folders.set(folder);
+            });
         },
 
         'toggle-folder-view': function (app) {

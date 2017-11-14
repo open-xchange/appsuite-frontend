@@ -25,6 +25,11 @@ define('io.ox/core/folder/actions/common', [
 
     return {
 
+        selectOnly: function (e) {
+            var app = ox.ui.apps.get('io.ox/calendar');
+            app.folders.set(e.data.folder.id);
+        },
+
         markFolderSeen: function (e) {
             mailAPI.allSeen(e.data.folder);
         },
