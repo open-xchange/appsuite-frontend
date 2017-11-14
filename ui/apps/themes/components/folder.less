@@ -258,7 +258,10 @@
     .selected > .folder-node > .folder-label {
         font-weight: @bold;
         vertical-align: top;
-        .ellipsis();
+
+        > div {
+            .ellipsis();
+        }
     }
 
     .flat-tree {

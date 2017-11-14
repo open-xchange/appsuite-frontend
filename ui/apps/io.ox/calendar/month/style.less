@@ -33,6 +33,7 @@
 
         .footer {
             left: 0;
+            padding-top: 10px;
 
             .weekday {
                 width: 100/7%;
@@ -61,7 +62,7 @@
             .week-info {
                 left: 0;
                 width: @monthview-cw-width;
-                padding: 13px 13px 13px 1px;
+                padding: 5px 13px 13px 1px;
                 font-size: 11px;
                 line-height: 1.0em;
                 text-align: right;
@@ -131,7 +132,7 @@
                 &.weekend:not(.today) .number { color: #a00; }
 
                 .list {
-                    top: 25px;
+                    top: 20px;
                     margin: 2px;
                     .overflow-y(auto);
                     z-index: 0;
@@ -145,6 +146,8 @@
             min-height: 40px;
             height: 120px;
             color: #777;
+            // need one pixel here. otherwise, the bottom border of the table above will be within the view
+            margin-top: 1px;
 
             @media (min-height: 850px) { font-size: 35px; }
 
