@@ -116,7 +116,7 @@ define('io.ox/mail/compose/main', ['io.ox/mail/api', 'settings!io.ox/mail', 'get
                         win.nodes.header.removeClass('sr-only');
                         win.nodes.body.removeClass('sr-only').find('.scrollable').scrollTop(0);
                         win.idle();
-                        win.setTitle(gt('Compose'));
+                        win.setTitle(obj.subject || gt('Compose'));
                         def.resolve({ app: app });
                         ox.trigger('mail:' + type + ':ready', obj, app);
                     })

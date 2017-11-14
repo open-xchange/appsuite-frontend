@@ -20,6 +20,15 @@
         margin: 0 8px;
         padding-top: 6px;
     }
+
+    &.cornered {
+        // if the floating window is small we need more space for the labels (560px)
+        @media (max-width: 1672px) {
+            .mail-input {
+                padding-left: 25px;
+            }
+        }
+    }
 }
 .io-ox-mail-compose {
     // baseline adjustment
