@@ -12,8 +12,8 @@
  */
 
 define('io.ox/calendar/year/view', [
-
-], function () {
+    'gettext!io.ox/calendar'
+], function (gt) {
 
     'use strict';
 
@@ -44,6 +44,7 @@ define('io.ox/calendar/year/view', [
         renderHeader: function () {
             var firstDayOfWeek = moment.localeData().firstDayOfWeek();
             return $('<thead>').append(
+                $('<th class="cw">').text(gt('CW')),
                 _.range(firstDayOfWeek, firstDayOfWeek + 7).map(function (index) {
                     var day = moment().day(index % 7),
                         cell = $('<th>').text(day.format('dd'));
@@ -56,7 +57,7 @@ define('io.ox/calendar/year/view', [
         renderBody: function () {
             var body = $('<tbody>'),
                 week = moment(this.date).startOf('week'),
-                endOfMonth = moment(this.date).add(5, 'weeks').endOf('week'),
+                endOfMonth = moment(this.date).endOf('month').endOf('week'),
                 today = moment();
 
             for (; week.isBefore(endOfMonth); week.add(1, 'week')) {
@@ -64,10 +65,14 @@ define('io.ox/calendar/year/view', [
                     day = moment(week),
                     endOfWeek = moment(week).endOf('week');
 
+                row.append($('<td class=cw>').text(day.format('w')));
                 for (; day.isBefore(endOfWeek); day.add(1, 'day')) {
                     var cell = $('<td>').text(day.date());
                     if (day.day() === 0 || day.day() === 6) cell.addClass('weekend');
-                    if (!day.isSame(this.date, 'month')) cell.addClass('out');
+                    if (!day.isSame(this.date, 'month')) {
+                        cell.addClass('out');
+                        cell.empty().append($('<span aria-hidden="true">').text(day.date()));
+                    }
                     if (day.isSame(today, 'day')) cell.addClass('today');
                     row.append(cell);
                 }
@@ -90,7 +95,8 @@ define('io.ox/calendar/year/view', [
         onClick: function () {
             this.app.refDate = moment(this.date);
             this.app.props.set('layout', 'month');
-            this.$el.closest('.year-view').busy();
+            this.$el.closest('.year-view').busy()
+                .find('button').prop('disabled', true);
         }
 
     });

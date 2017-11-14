@@ -1,6 +1,5 @@
 .year-view {
     @red:   #a00;
-    @gray: #707070;
     @toolbar-height: 45px;
 
     overflow: hidden;
@@ -20,8 +19,7 @@
 
     .month-container {
         float: left;
-
-        padding: 10px 0px;
+        min-height: 300px;
     }
 
     .month {
@@ -30,6 +28,7 @@
 
         th {
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         td, th {
@@ -61,19 +60,25 @@
             }
         }
 
+        .cw {
+            color: #707070;
+            font-size: 10px;
+            font-weight: 300;
+        }
+
         .weekend {
             color: @red;
         }
 
         .out {
-            color: @gray;
+            color: #ccc;
         }
     }
 
     &.io-ox-busy {
         .month {
-            th, td, caption, .weekend {
-                color: @gray;
+            th, td, caption, .weekend, button {
+                color: #ccc;
             }
         }
     }

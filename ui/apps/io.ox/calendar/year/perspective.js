@@ -24,6 +24,10 @@ define('io.ox/calendar/year/perspective', [
         switchMode: function (mode, value) {
             this.trigger('select:year', value);
             this.close();
+        },
+        onToday: function () {
+            this.setDate(this.getToday());
+            this.$grid.focus();
         }
     });
 
@@ -146,6 +150,7 @@ define('io.ox/calendar/year/perspective', [
             this.changeYear(this.app.refDate.year());
             this.main.find('.toolbar .info').text(this.year);
             this.main.idle();
+            this.main.find('button').prop('disabled', false);
         },
 
         changeYear: function (year) {
