@@ -535,7 +535,8 @@
 
     .container {
         width: 100%;
-        min-width: 500px;
+        // needed or tiny-mce toolbar has resize issues
+        min-width: 930px;
     }
 
     &.cornered {
@@ -556,12 +557,20 @@
             &.powermove {
                 right: 872px;
             }
+
+            .container {
+                min-width: 770px;
+            }
         }
 
         @media (max-width: 1672px) {
             width: 560px;
             &.powermove {
                 right: 632px;
+            }
+
+            .container {
+                min-width: 530px;
             }
         }
 
@@ -574,6 +583,9 @@
         @media (max-width: 592px) {
             width: auto;
             min-width: auto;
+            .container {
+                min-width: auto;
+            }
         }
 
          @media (max-height: 800px) {
@@ -629,6 +641,9 @@
             width: auto;
             margin-right: 16px;
             margin-left: 16px;
+            .container {
+                min-width: auto;
+            }
         }
     }
 
