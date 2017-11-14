@@ -33,6 +33,9 @@ define('io.ox/calendar/api', [
         processResponse = function (response) {
             if (!response) return;
 
+            // post request responses are arrays with data and timestamp
+            response = response.data || response;
+
             _(response.created).each(function (event) {
                 if (!isRecurrenceMaster(event)) api.pool.propagateAdd(event);
                 api.trigger('create', event);
@@ -240,35 +243,44 @@ define('io.ox/calendar/api', [
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
 
-                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
-                delete obj.tempAttachmentIndicator;
-
                 var params = {
-                    action: 'new',
-                    folder: obj.folder,
-                    // convert to true boolean
-                    ignoreConflicts: !!options.ignoreConflicts
-                };
+                        action: 'new',
+                        folder: obj.folder,
+                        // convert to true boolean
+                        ignoreConflicts: !!options.ignoreConflicts
+                    },
+                    def;
 
                 if (options.expand && obj.rrule) {
                     params.expand = true;
                     params.rangeStart = options.rangeStart;
                     params.rangeEnd = options.rangeEnd;
                 }
+                if (options.attachments && options.attachments.length) {
+                    var formData = new FormData();
 
-                return http.PUT({
-                    module: 'chronos',
-                    params: params,
-                    data: obj
-                }).then(function (data) {
-                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
-                        //to make the detailview show the busy animation
-                        api.addToUploadList(util.cid(data.created[0]));
+                    formData.append('json_0', JSON.stringify(obj));
+                    for (var i = 0; i < options.attachments.length; i++) {
+                        // the attachment data is given via the options parameter
+                        formData.append('file_' + options.attachments[i].cid, options.attachments[i].file);
                     }
-                    return data;
-                })
-                .then(processResponse)
+                    def = http.UPLOAD({
+                        module: 'chronos',
+                        params: params,
+                        data: formData,
+                        fixPost: true
+                    });
+                } else {
+                    def = http.PUT({
+                        module: 'chronos',
+                        params: params,
+                        data: obj
+                    });
+                }
+                return def.then(processResponse)
                 .then(function (data) {
+                    // post request responses are arrays with data and timestamp
+                    data = data.data || data;
                     api.getAlarms();
                     // return conflicts or new model
                     if (data.conflicts) {
@@ -285,17 +297,15 @@ define('io.ox/calendar/api', [
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
 
-                var attachmentHandlingNeeded = obj.tempAttachmentIndicator;
-                delete obj.tempAttachmentIndicator;
-
-                var params = {
-                    action: 'update',
-                    folder: obj.folder,
-                    id: obj.id,
-                    timestamp: obj.timestamp,
-                    // convert to true boolean
-                    ignoreConflicts: !!options.ignoreConflicts
-                };
+                var def,
+                    params = {
+                        action: 'update',
+                        folder: obj.folder,
+                        id: obj.id,
+                        timestamp: obj.timestamp,
+                        // convert to true boolean
+                        ignoreConflicts: !!options.ignoreConflicts
+                    };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
 
@@ -305,81 +315,44 @@ define('io.ox/calendar/api', [
                     params.rangeEnd = options.rangeEnd;
                 }
 
-                return http.PUT({
-                    module: 'chronos',
-                    params: params,
-                    data: obj
-                }).then(function (data) {
-                    if (!data.conflicts && attachmentHandlingNeeded && data.updated.length > 0) {
-                        //to make the detailview show the busy animation
-                        api.addToUploadList(util.cid(data.updated[0]));
+                if (options.attachments && options.attachments.length) {
+                    var formData = new FormData();
+
+                    formData.append('json_0', JSON.stringify(obj));
+                    for (var i = 0; i < options.attachments.length; i++) {
+                        // the attachment data is given via the options parameter
+                        formData.append('file_' + options.attachments[i].cid, options.attachments[i].file);
                     }
-                    return data;
-                })
-                .then(processResponse)
-                .then(function (data) {
-
-                    api.getAlarms();
-                    // return conflicts or new model
-                    if (data.conflicts) {
-                        return data;
-                    }
-
-                    var updated = data.updated ? data.updated[0] : undefined;
-                    if (!updated) return api.pool.getModel(util.cid(obj));
-                    if (isRecurrenceMaster(updated)) return new models.Model(updated);
-                    return api.pool.getModel(updated);
-                });
-            },
-
-            //TODO see if that needs reworking after attachmenthandling is not done via attachment api
-
-            uploadCache: {},
-
-            /**
-             * used to cleanup Cache and trigger refresh after attachmentHandling
-             * @param  {object} o (appointment object)
-             * @fires  api#update (data)
-             * @return { deferred }
-             */
-            attachmentCallback: function (o) {
-                return api.get(o, !api.uploadInProgress(util.cid(o)))
-                    .then(function (data) {
-                        //to make the detailview remove the busy animation
-                        api.removeFromUploadList(util.cid(o));
-                        api.trigger('update', data.toJSON());
-                        api.trigger('update:' + util.cid(o), data.toJSON());
-                        return data;
+                    def = http.UPLOAD({
+                        module: 'chronos',
+                        params: params,
+                        data: formData,
+                        fixPost: true
                     });
-            },
+                } else {
+                    def = http.PUT({
+                        module: 'chronos',
+                        params: params,
+                        data: obj
+                    });
+                }
+                return def.then(processResponse)
+                    .then(function (data) {
+                        debugger;
+                        // post request responses are arrays with data and timestamp
+                        data = data.data || data;
 
-            /**
-             * ask if this appointment has attachments uploading at the moment (busy animation in detail View)
-             * @param  {string} key (task id)
-             * @return { boolean }
-             */
-            uploadInProgress: function (key) {
-                // return true boolean
-                return this.uploadCache[key] || false;
-            },
+                        api.getAlarms();
+                        // return conflicts or new model
+                        if (data.conflicts) {
+                            return data;
+                        }
 
-            /**
-             * add appointment to the list
-             * @param {string} key (task id)
-             * @return { undefined }
-             */
-            addToUploadList: function (key) {
-                this.uploadCache[key] = true;
-            },
-
-            /**
-             * remove appointment from the list
-             * @param  {string} key (task id)
-             * @fires  api#update: + key
-             * @return { undefined }
-             */
-            removeFromUploadList: function (key) {
-                delete this.uploadCache[key];
+                        var updated = data.updated ? data.updated[0] : undefined;
+                        if (!updated) return api.pool.getModel(util.cid(obj));
+                        if (isRecurrenceMaster(updated)) return new models.Model(updated);
+                        return api.pool.getModel(updated);
+                    });
             },
 
             remove: function (list) {

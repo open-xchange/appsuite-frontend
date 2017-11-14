@@ -57,7 +57,7 @@ define('io.ox/calendar/edit/extensions', [
         id: 'title',
         draw: function (baton) {
             this.append($('<h1>').addClass('sr-only').text(baton.mode === 'edit' ? gt('Edit appointment') : gt('Create appointment')));
-        }// jkmrftjtk
+        }
     });
 
     // buttons
@@ -72,17 +72,16 @@ define('io.ox/calendar/edit/extensions', [
                     var save = _.bind(baton.app.onSave || _.noop, baton.app),
                         fail = _.bind(baton.app.onError || _.noop, baton.app),
                         folder = baton.model.get('folder'),
+                        attachments = [],
                         inputfieldVal = baton.parentView.$el.find('.add-participant.tt-input').val();
 
                     // check if attachments have changed
                     if (baton.attachmentList.attachmentsToDelete.length > 0) {
-                        // attachments can be deleted without the need of another api call
                         baton.model.set('attachments', _(baton.model.get('attachments')).difference(baton.attachmentList.attachmentsToDelete));
                         baton.attachmentList.attachmentsToDelete = [];
                     }
                     if (baton.attachmentList.attachmentsToAdd.length > 0) {
-                        //temporary indicator so the api knows that attachments needs to be handled even if nothing else changes
-                        baton.model.attributes.tempAttachmentIndicator = true;
+                        attachments = attachments.concat(baton.attachmentList.attachmentsToAdd);
                     }
 
                     if (oldFolder !== folder && baton.mode === 'edit') {
@@ -100,6 +99,19 @@ define('io.ox/calendar/edit/extensions', [
                     }
                     // make sure alarms are correctly created
                     baton.parentView.alarmsView.updateModel();
+
+                    // save attachment data to model
+                    if (attachments.length) {
+                        var attachmentData = [];
+                        _(attachments).each(function (attachment) {
+                            attachmentData.push({
+                                filename: attachment.filename,
+                                fmtType: attachment.file.type,
+                                uri: 'ATTACH:CID:' + 'file_' + attachment.cid
+                            });
+                        });
+                        baton.model.set('attachments', attachmentData, { silent: true });
+                    }
 
                     // check if participants inputfield contains a valid email address
                     if (!_.isEmpty(inputfieldVal.replace(/\s*/, '')) && coreUtil.isValidMailAddress(inputfieldVal)) {
@@ -120,10 +132,11 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.getWindow().busy();
 
                     if (baton.mode === 'edit') {
-                        api.update(baton.model, calendarUtil.getCurrentRangeOptions()).then(save, fail);
+                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments })).then(save, fail);
                         return;
                     }
-                    api.create(baton.model, calendarUtil.getCurrentRangeOptions()).then(save, fail);
+
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments })).then(save, fail);
                 })
             );
 
@@ -630,14 +643,8 @@ define('io.ox/calendar/edit/extensions', [
         registerAs: 'attachmentList',
         className: 'div',
         index: 1700,
-        module: 1,
-        finishedCallback: function (model, id) {
-            var obj = model.attributes;
-            //new objects have no id in model yet
-            obj.id = id || model.attributes.id;
-            obj.folder_id = model.attributes.folder_id || model.attributes.folder;
-            api.attachmentCallback(obj);
-        }
+        noUploadOnSave: true,
+        module: 1
     }), {
         rowClass: 'collapsed'
     });
