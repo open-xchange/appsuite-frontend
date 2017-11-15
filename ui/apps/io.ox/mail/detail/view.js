@@ -415,6 +415,9 @@ define('io.ox/mail/detail/view', [
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
+
+                // fixes overflow (see bug 55876)
+                if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
             }
 
             $(node).on('resize imageload', resizeFrame); // for expanding blockquotes and inline images
