@@ -445,27 +445,55 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
                 appliedConditions = baton.model.get('test'),
                 ConditionModel = Backbone.Model.extend({
                     validate: function (attrs) {
+                        function sizeValidation(size) {
+                            var listOfUnits = ['B', 'K', 'KB', 'M', 'MB', 'G', 'GB'],
+                                splits = size.split(''),
+                                number = '',
+                                unit = '',
+                                stop = false;
+
+                            _.each(splits, function (val) {
+                                if (/^[0-9]+$/.test(val) && !stop) {
+                                    number = number + val;
+                                } else {
+                                    stop = true;
+                                    unit = unit + val;
+                                }
+                            });
+
+                            return /^[0-9]+$/.test(number) && parseInt(number, 10) < 2147483648 && parseInt(number, 10) >= 0 && (unit === '' || _.contains(listOfUnits, unit.toUpperCase()));
+                        }
+
                         var emptyValuesAllowed = ['exists', 'not exists'];
                         if (_.has(attrs, 'size')) {
-                            if (_.isNaN(attrs.size) || attrs.size === '') {
+
+                            if (!sizeValidation(attrs.size)) {
                                 this.trigger('invalid:size');
-                                return 'error';
+                                return 'size';
                             }
                             this.trigger('valid:size');
                         }
 
                         if (_.has(attrs, 'headers')) {
                             if ($.trim(attrs.headers[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
+                                if (attrs.values && $.trim(attrs.values[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
+                                    return 'headers values';
+                                }
                                 this.trigger('invalid:headers');
-                                return 'error';
+                                return 'headers';
                             }
+
+                            if ($.trim(attrs.headers[0]) === '' && _.contains(emptyValuesAllowed, attrs.comparison) && attrs.id === 'header') {
+                                return 'headers';
+                            }
+
                             this.trigger('valid:headers');
                         }
 
                         if (_.has(attrs, 'values')) {
                             if (attrs.values && $.trim(attrs.values[0]) === '' && !_.contains(emptyValuesAllowed, attrs.comparison)) {
                                 this.trigger('invalid:values');
-                                return 'error';
+                                return 'values';
                             }
                             this.trigger('valid::values');
                         }
@@ -525,9 +553,8 @@ define('io.ox/mail/mailfilter/settings/filter/view-form', [
 
                  // inintial validation to disable save button
                 if (!cmodel.isValid()) {
-                    var inputFields = conditionList.find('[data-test-id=' + conditionKey + '] input:enabled');
-                    _.each(inputFields, function (field) {
-                        if ($(field).val() === '') $(field).closest('.row').addClass('has-error');
+                    _.each(cmodel.validationError.split(' '), function (name) {
+                        conditionList.find('[data-test-id=' + conditionKey + '] input[name="' + name + '"]').closest('.row').addClass('has-error');
                     });
                 }
             });
