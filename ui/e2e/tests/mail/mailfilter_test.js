@@ -205,6 +205,60 @@ Scenario('add and removes Mail Filter Rules', function* (I) {
     I.see('Keep', '[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] .list-title');
     I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] [data-action-id="0"] a.remove');
 
+    I.click('Add condition');
+    I.click('Size');
+
+    // check size validation
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
+    // add action to redraw
+    I.click('Add action');
+    I.click('Keep');
+
+    // check size validation
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
+    I.fillField('[data-test-id="2"] input[name="size"]', 'sdsds');
+
+    // check size validation
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
+    // add action to redraw
+    I.click('Add action');
+    I.click('Discard');
+
+    // check size validation
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
+    I.fillField('[data-test-id="2"] input[name="size"]', '22MB');
+
+    // check size validation
+    I.dontSeeElement('li[data-test-id="2"] .row.has-error');
+    I.dontSeeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"]');
+
+    // ckeck header validation
+    I.click('[data-test-id="1"] a[data-action="remove-test"]');
+    I.click('Add condition');
+    I.click('Header');
+
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
+    I.click('Matches', { css: 'li[data-test-id="2"]' });
+    I.click('Exists', '.smart-dropdown-container .dropdown-menu');
+
+    // add action to redraw
+    I.click('Add action');
+    I.click('Discard');
+
+    I.seeElement('li[data-test-id="2"] .row.has-error');
+    I.seeElement('[data-point="io.ox/settings/mailfilter/filter/settings/detail/dialog"] button[data-action="save"][disabled]');
+
     // cancel the form
     I.click('Cancel');
 
