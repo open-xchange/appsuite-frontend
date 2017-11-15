@@ -15,10 +15,11 @@ define('io.ox/calendar/settings/pane', [
     'io.ox/core/extensions',
     'io.ox/backbone/views/extensible',
     'io.ox/backbone/mini-views',
+    'io.ox/backbone/mini-views/alarms',
     'io.ox/core/settings/util',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar'
-], function (ext, ExtensibleView, mini, util, settings, gt) {
+], function (ext, ExtensibleView, mini, AlarmsView, util, settings, gt) {
 
     'use strict';
 
@@ -42,18 +43,6 @@ define('io.ox/calendar/settings/pane', [
                             m.add(1, 'hour');
                         }
                         return array;
-                    },
-                    getReminderOptions: function () {
-                        var minInt = [15, 30, 45, 60, 120, 240, 360, 480, 720, 1440, 2880, 4320, 5760, 7200, 8640, 10080, 20160, 30240, 40320],
-                            list = [
-                                { label: gt('No reminder'), value: '-1' },
-                                { label: gt.format(gt.ngettext('%d minute', '%d minutes', 0), 0), value: '0' }
-                            ];
-                        _(minInt).each(function (m) {
-                            var dur = moment.duration(m, 'minutes');
-                            list.push({ label: dur.humanize(), value: String(dur.asMinutes()) });
-                        });
-                        return list;
                     },
                     getWeekDays: function () {
                         return _(new Array(7)).map(function (num, index) {
@@ -172,8 +161,11 @@ define('io.ox/calendar/settings/pane', [
                 this.$el.append(
                     util.fieldset(
                         gt('New appointment'),
-                        // reminder
-                        util.compactSelect('defaultReminder', gt('Default reminder'), settings, this.getReminderOptions(), { width: 4 }),
+                        // same width as col-md-10 but without the strange input and hover issues
+                        $('<div>').css('width', '83.33333333%').append(
+                            $('<label>').text(gt('Default reminder')),
+                            new AlarmsView({ model: settings, attribute: 'defaultReminder' }).render().$el
+                        ),
                         // all day
                         util.checkbox('markFulltimeAppointmentsAsFree', gt('Mark all day appointments as free'), settings)
                     )
