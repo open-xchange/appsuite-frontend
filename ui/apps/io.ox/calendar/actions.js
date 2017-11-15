@@ -414,70 +414,72 @@ define('io.ox/calendar/actions', [
 
     function acceptDecline(baton, accept) {
         if ($(baton.e.target).hasClass('disabled')) return;
-        var appointment = api.reduce(baton.data),
-            // no need to check for conflicts if appointment is declined
-            def = accept ? changeStatus(baton.data) : $.when();
-        def.done(function success() {
-            folderAPI.get(appointment.folder).done(function (folder) {
-                appointment.data = {
-                    confirmmessage: '',
-                    confirmation: accept ? 1 : 2
-                };
+        var appointment = api.reduce(baton.data);
+        folderAPI.get(appointment.folder).done(function (folder) {
 
-                if (accept) {
-                    // default reminder
-                    appointment.data.alarm = parseInt(settings.get('defaultReminder', 15), 10);
-                }
+            appointment.attendee = {
+                // act as folder owner in shared folder
+                entity: folderAPI.is('shared', folder) ? folder.created_by : ox.user_id,
+                comment: '',
+                partStat: accept ? 'ACCEPTED' : 'DECLINED'
+            };
 
-                // add folder owner in shared folder
-                if (folderAPI.is('shared', folder)) {
-                    appointment.data.id = folder.created_by;
-                }
+            if (accept) {
+                // default reminder
+                appointment.alarms = settings.get('defaultReminder', [{
+                    action: 'DISPLAY',
+                    description: '',
+                    trigger: { duration: '-PT15M' }
+                }]);
+            }
 
-                // check if only one appointment or the whole series should be accepted
-                // you need to check the recurrence_type too. Exceptions have a recurrence position but no recurrence_type
-                if (baton.data.recurrence_type > 0 && appointment.recurrence_position) {
-                    require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
-                                gt('Do you want to decline the whole series or just one appointment within the series?'))
-                            .addPrimaryButton('series',
-                                //#. Use singular in this context
-                                gt('Series'), 'series')
-                            .addButton('appointment', gt('Appointment'), 'appointment')
-                            .addButton('cancel', gt('Cancel'), 'cancel')
-                            .show()
-                            .then(function (action) {
-                                if (action === 'cancel') {
-                                    return;
-                                }
-                                if (action === 'appointment') {
-                                    appointment.occurrence = appointment.recurrence_position;
-                                }
-                                $(baton.e.target).addClass('disabled');
-                                api.confirm(appointment);
-                            });
-                    });
-                    return;
-                }
-                $(baton.e.target).addClass('disabled');
-                api.confirm(appointment);
-            });
+            // check if only one appointment or the whole series should be accepted
+            // exceptions don't have the same id and seriesId
+            if (baton.data.seriesId === baton.data.id && appointment.recurrenceId) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(accept ? gt('Do you want to confirm the whole series or just one appointment within the series?') :
+                            gt('Do you want to decline the whole series or just one appointment within the series?'))
+                        .addPrimaryButton('series',
+                            //#. Use singular in this context
+                            gt('Series'), 'series')
+                        .addButton('appointment', gt('Appointment'), 'appointment')
+                        .addButton('cancel', gt('Cancel'), 'cancel')
+                        .show()
+                        .then(function (action) {
+                            if (action === 'cancel') {
+                                return;
+                            }
+                            if (action === 'series') {
+                                delete appointment.recurrenceId;
+                            }
+                            $(baton.e.target).addClass('disabled');
+                            // those links are for fast accept/decline, so ignore conflicts
+                            // TODO discuss this with alex
+                            api.confirm(appointment, { ignoreConflicts: true });
+                        });
+                });
+                return;
+            }
+            $(baton.e.target).addClass('disabled');
+            // those links are for fast accept/decline, so ignore conflicts
+            // TODO discuss this with alex
+            api.confirm(appointment, { ignoreConflicts: true });
         });
     }
 
     new Action('io.ox/calendar/actions/accept-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
-            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 1;
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
+            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'ACCEPTED';
         },
         action: _.partial(acceptDecline, _, true)
     });
 
     new Action('io.ox/calendar/actions/decline-appointment', {
         requires: function (e) {
-            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.users).findWhere({ id: ox.user_id })) return false;
-            return _(e.baton.data.users).findWhere({ id: ox.user_id }).confirmation !== 2;
+            if (!e || !e.baton || !e.baton.data || !_(e.baton.data.attendees).findWhere({ entity: ox.user_id })) return false;
+            return _(e.baton.data.attendees).findWhere({ entity: ox.user_id }).partStat !== 'DECLINED';
         },
         action: acceptDecline
     });
