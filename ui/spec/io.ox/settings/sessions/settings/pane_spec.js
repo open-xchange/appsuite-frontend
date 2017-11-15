@@ -18,7 +18,8 @@ define([
 
     describe('Session settings', function () {
 
-        describe('Model displayName', function () {
+        //TODO: moved to middleware? Remove those tests here?
+        describe.skip('Model displayName', function () {
 
             it('should recognize a desktop device with useragent', function () {
                 var model = new session.Model({
