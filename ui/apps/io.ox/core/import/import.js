@@ -247,13 +247,16 @@ define('io.ox/core/import/import', [
                         // cache
                         try {
                             require(['io.ox/' + baton.module + '/api'], function (api) {
-                                // todo: clean that up; fails for calendar
-                                if (api.caches.all.grepRemove) {
+                                if (api.caches && api.caches.all.grepRemove) {
                                     api.caches.all.grepRemove(id + api.DELIM).done(function () {
                                         // use named refresh.all so apis can differenciate if they wish
                                         api.trigger('refresh.all:import');
                                     });
                                 } else if (api.refresh) {
+                                    // use gc to invalidate caches if the api uses a collection-pool
+                                    if (api.pool) {
+                                        api.pool.gc();
+                                    }
                                     api.refresh();
                                 }
                             });
