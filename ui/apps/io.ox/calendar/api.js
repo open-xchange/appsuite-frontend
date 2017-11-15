@@ -338,7 +338,6 @@ define('io.ox/calendar/api', [
                 }
                 return def.then(processResponse)
                     .then(function (data) {
-                        debugger;
                         // post request responses are arrays with data and timestamp
                         data = data.data || data;
 
