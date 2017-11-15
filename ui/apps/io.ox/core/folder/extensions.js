@@ -38,15 +38,11 @@ define('io.ox/core/folder/extensions', [
     if (capabilities.has('webmail')) {
         // define virtual/standard
         api.virtual.add('virtual/standard', function () {
+            var defaultFolders = mailSettings.get('defaultFolder') || {},
+                list = [];
             http.pause();
-            var list = [
-                    // inbox
-                    api.get(INBOX),
-                    // sent, drafts, spam, trash, archive
-                    // default0 is alternative for IMAP server that list standard folders below INBOX
-                    api.list('default0')
-                ],
-                defaultFolders = mailSettings.get('defaultFolder') || {};
+            // collect get requests
+            list.push(api.get(INBOX));
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
             // sent, drafts, spam, trash, archive
