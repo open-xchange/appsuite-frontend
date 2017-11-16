@@ -34,12 +34,16 @@ define('io.ox/mail/actions', [
         isDraftMail = function (mail) {
             return isDraftFolder(mail.folder_id) || ((mail.flags & 4) > 0);
         },
-        Action = links.Action;
+        Action = links.Action,
+        isGuest = function () {
+            return capabilities.has('guest');
+        };
 
     // actions
 
     new Action('io.ox/mail/actions/compose', {
         requires: function () {
+            if (isGuest()) return false;
             return true;
         },
         action: function (baton) {
@@ -67,7 +71,7 @@ define('io.ox/mail/actions', [
             // get first mail
             var data = e.baton.first();
             // has sender? not a draft mail and not a decrypted mail
-            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data);
+            return util.hasFrom(data) && !isDraftMail(data) && !util.isDecrypted(data) && !isGuest();
         },
         action: function (baton) {
             // also called by inplace-reply-recover extension
@@ -142,6 +146,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/forward', {
         requires: function (e) {
+            if (isGuest()) return false;
             return e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
