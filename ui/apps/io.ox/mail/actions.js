@@ -43,8 +43,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/compose', {
         requires: function () {
-            if (isGuest()) return false;
-            return true;
+            return !isGuest();
         },
         action: function (baton) {
             ox.registry.call('mail-compose', 'compose', { folder_id: baton.app.folder.get() });
@@ -146,8 +145,7 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/forward', {
         requires: function (e) {
-            if (isGuest()) return false;
-            return e.collection.has('toplevel', 'some');
+            return !isGuest() && e.collection.has('toplevel', 'some');
         },
         action: function (baton) {
 
