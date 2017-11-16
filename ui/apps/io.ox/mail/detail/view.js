@@ -401,6 +401,7 @@ define('io.ox/mail/detail/view', [
                 var frame = self.find('.mail-detail-frame'),
                     contents = frame.contents(),
                     height = contents.find('.mail-detail-content').height(),
+                    prevHeight = height,
                     htmlHeight = contents.find('html').height();
 
                 // frame was removed, we can stop here
@@ -415,16 +416,26 @@ define('io.ox/mail/detail/view', [
                     return;
                 }
 
-                if (height < htmlHeight) height = htmlHeight;
-
-                // only check one time... otherwise it is possible to create endless growing iframes with this. See mail from bug 56129 (always to big as it has 100% + 22px height)
-                if (!baton.model.get('iframe-height')) {
-                    // check heigth again as there might be slow loading external images
-                    _.delay(resizeFrame, 1000);
+                // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
+                if (height === baton.model.get('iframe-height-change')) {
+                    _.delay(resizeFrame, 300);
+                    return;
                 }
+
+                if (height < htmlHeight) height = htmlHeight;
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
+
+                // check again. If the height we calculated earlier is not the same as before we applied it we have an infinite growing mail
+                // prevent endless growing iframes. See mail from bug 56129 (always to big as it has 100% + 22px height)
+                if (prevHeight !== contents.find('.mail-detail-content').height()) {
+                    // save heightchange so we can distinguish between pictureload and broken mail css
+                    baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
+                }
+
+                // check height again as there might be slow loading external images
+                _.delay(resizeFrame, 300);
 
                 // fixes overflow (see bug 55876)
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
