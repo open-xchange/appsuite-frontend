@@ -200,6 +200,8 @@ settings!io.ox/core
 **tinyMCE/theme_advanced_buttons3**
 > list of tinyMCE toolbar actions separated by space - targets toolbar3
 
+**tinyMCE/font_format**
+> list of availabe fonts (also used for settings pane). Details: [link](http://archive.tinymce.com/wiki.php/Configuration:font_formats)
 
 ## Folders
 
