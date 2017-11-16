@@ -403,8 +403,12 @@ define('io.ox/mail/detail/view', [
                     height = contents.find('.mail-detail-content').height(),
                     htmlHeight = contents.find('html').height();
 
+                // frame was removed, we can stop here
+                if (contents.length === 0) {
+                    return;
+                }
+
                 if (height === 0) {
-                    // TODO: find better solution, might be an endless loop
                     // height 0 should(!) never happen, the dom node seems to be not rendered yet and
                     // calculation fails. Give it another try. Actually only an issue on FF
                     _.delay(resizeFrame, 10);
@@ -412,6 +416,12 @@ define('io.ox/mail/detail/view', [
                 }
 
                 if (height < htmlHeight) height = htmlHeight;
+
+                // only check one time... otherwise it is possible to create endless growing iframes with this. See mail from bug 56129 (always to big as it has 100% + 22px height)
+                if (!baton.model.get('iframe-height')) {
+                    // check heigth again as there might be slow loading external images
+                    _.delay(resizeFrame, 1000);
+                }
 
                 baton.model.set('iframe-height', height, { silent: true });
                 frame.css('height', height);
