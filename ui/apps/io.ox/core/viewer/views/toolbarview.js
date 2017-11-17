@@ -285,12 +285,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             mail: {
-                'openmailattachment': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/mail/actions/open-attachment'
-                },
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',
@@ -313,12 +307,6 @@ define('io.ox/core/viewer/views/toolbarview', [
                 }
             },
             pim: {
-                'openmailattachment': {
-                    prio: 'lo',
-                    mobile: 'lo',
-                    label: gt('Open in browser tab'),
-                    ref: 'io.ox/core/tk/actions/open-attachment'
-                },
                 'print': {
                     prio: 'lo',
                     mobile: 'lo',

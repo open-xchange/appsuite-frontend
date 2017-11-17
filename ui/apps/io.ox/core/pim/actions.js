@@ -10,7 +10,6 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-/* global blankshield */
 
 define('io.ox/core/pim/actions', [
     'io.ox/core/api/attachment',
@@ -34,15 +33,6 @@ define('io.ox/core/pim/actions', [
                     var viewer = new Viewer();
                     viewer.launch({ files: baton, opt: { disableFolderInfo: true, disableFileDetail: true } });
                 });
-            }
-        },
-
-        // open attachment
-        open: {
-            requires: 'one',
-            action: function (baton) {
-                var url = attachmentAPI.getUrl(baton.data, 'view');
-                blankshield.open(url);
             }
         },
 
@@ -76,7 +66,6 @@ define('io.ox/core/pim/actions', [
 
     var labels = {
         view: gt('View'),
-        open: gt('Open in browser'),
         download: gt('Download'),
         //#. %1$s is usually "Drive" (product name; might be customized)
         save: gt('Save to %1$s', gt.pgettext('app', 'Drive'))

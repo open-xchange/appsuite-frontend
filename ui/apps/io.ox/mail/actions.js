@@ -870,14 +870,6 @@ define('io.ox/mail/actions', [
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'open',
-        index: 300,
-        mobile: 'high',
-        label: gt('Open in browser'),
-        ref: 'io.ox/mail/actions/open-attachment'
-    }));
-
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
         index: 400,
         mobile: 'high',
