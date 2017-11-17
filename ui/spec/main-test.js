@@ -14,7 +14,7 @@ for (var file in window.__karma__.files) {
 
 //console.log('-----[ running ' + tests.length + ' test files ]-----');
 
-require(['io.ox/core/extPatterns/stage'], function (Stage) {
+require(['io.ox/core/extPatterns/stage', 'io.ox/core/boot/login/auto'], function (Stage) {
 
     'use strict';
 
@@ -23,6 +23,18 @@ require(['io.ox/core/extPatterns/stage'], function (Stage) {
     server.respondWith('GET', /api\/account\?action=all/, function (xhr) {
         xhr.respond('[]');
     });
+    server.respondWith('GET', /api\/login\?action=autologin/, function (xhr) {
+        var session = {
+            context_id: 0,
+            locale: 'de_DE',
+            random: '44444444444444444444444444444444',
+            session: '13371337133713371337133713371337',
+            user: 'jan.doe',
+            user_id: 1337
+        };
+        xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' }, JSON.stringify(session));
+    });
+
     server.autoRespond = true;
 
     new Stage('io.ox/core/stages', {
