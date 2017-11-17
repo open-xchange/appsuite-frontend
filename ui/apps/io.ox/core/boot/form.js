@@ -249,14 +249,12 @@ define('io.ox/core/boot/form', [
             gt('Please enter your email address associated with %1$s. You will receive an email that contains a link to reset your password.', sc.productName)
         );
 
-        util.debug('Load "signin" plugins & set default language');
+        util.debug('Set default language');
 
         // make sure we get 'signin' plugins
         manifests.reset();
 
         return $.when(
-            // load extensions
-            manifests.manager.loadPluginsFor('signin'),
             // use browser language
             language.setDefaultLanguage()
         )

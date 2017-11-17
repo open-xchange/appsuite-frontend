@@ -40,7 +40,17 @@ define('io.ox/core/boot/login/openid', [
         }
     });
 
-    return function openIdConnectLogin(options) {
+    if (ox.serverConfig.oidcLogin === true) {
+        ext.point('io.ox/core/boot/login').extend({
+            id: 'openid_connect',
+            after: 'autologin',
+            login: function () {
+                return openIdConnectLogin({ flow: 'login' });
+            }
+        });
+    }
+
+    function openIdConnectLogin(options) {
         util.debug('Open ID Login ...');
         options = _.extend({
             flow: 'login'
@@ -58,5 +68,7 @@ define('io.ox/core/boot/login/openid', [
                 version: session.version()
             })
         ].join('');
-    };
+    }
+
+    return openIdConnectLogin;
 });
