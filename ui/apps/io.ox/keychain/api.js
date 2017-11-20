@@ -136,7 +136,9 @@ define('io.ox/keychain/api', [
         if (account.attributes) {
             account = account.toJSON();
         }
-        return invokeExtension(account.accountType, 'remove', account);
+        return invokeExtension(account.accountType, 'remove', account)
+                // refresh accounts base folder
+                .always(function () { ox.trigger('please:refresh-folder', 1); });
     };
 
     api.update = function (account) {
