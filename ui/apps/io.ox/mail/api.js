@@ -55,6 +55,16 @@ define('io.ox/mail/api', [
             data.headers = _.extend(data.headers, model.get('headers'));
         }
 
+        // sanitize content types (we want lowercase 'text/plain' or 'text/html')
+        // split by ; because this field might contain further unwanted data
+        _([data].concat(data.attachments)).each(function (attachment) {
+            if (!attachment) return;
+            if (/^text\/(plain|html)/i.test(attachment.content_type)) {
+                // only clean-up text and html; otherwise we lose data (see bug 43727)
+                attachment.content_type = String(attachment.content_type).toLowerCase().split(';')[0];
+            }
+        });
+
         // next clean up needs model
         if (!model) return data;
         // client-side fix for missing to/cc/bcc fields
