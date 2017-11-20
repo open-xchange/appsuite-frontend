@@ -70,11 +70,10 @@ define('io.ox/core/folder/actions/move', [
                     return notifications.yell('error', gt('You cannot move items to virtual folders'));
                 }
 
-                // final check for write privileges
-                if (!api.pool.getModel(target).can('create')) {
+                // final check for write privileges; if it's only folders the server check the privilegs.
+                if (!onlyFolder && !api.pool.getModel(target).can('create')) {
                     return notifications.yell('error', gt('You cannot move items to this folder'));
                 }
-
                 // support for move, moveAll, and copy
                 options.api[type](input, target, options.all).then(
                     function (response) {
@@ -105,11 +104,6 @@ define('io.ox/core/folder/actions/move', [
                 );
             }
 
-            if (options.target) {
-                if (current !== options.target) commit(options.target);
-                return;
-            }
-
             if (type !== 'moveAll') {
                 onlyFolder = true;
                 _(options.list).each(function (item) {
@@ -117,6 +111,12 @@ define('io.ox/core/folder/actions/move', [
                     onlyFolder = item.folder_id === 'folder';
                 });
             }
+
+            if (options.target) {
+                if (current !== options.target) commit(options.target);
+                return;
+            }
+
             picker({
                 async: true,
                 button: options.button,
