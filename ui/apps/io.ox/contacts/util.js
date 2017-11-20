@@ -293,7 +293,7 @@ define('io.ox/contacts/util', [
             birthday = moment.utc(birthday);
             // Year 1 and year 1604 are  special for birthdays without year
             // therefore, return full date if year is not 1
-            if (birthday.year() > 1 && !birthday.year === 1604) return birthday.format('l');
+            if (birthday.year() > 1 && birthday.year() !== 1604) return birthday.format('l');
             // get localized format without the year otherwise
             // i.e. remove dashes and slashes but keep dots
             return birthday.format(
