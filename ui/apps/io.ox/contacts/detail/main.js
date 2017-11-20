@@ -101,9 +101,7 @@ define('io.ox/contacts/detail/main', [
                 name: NAME,
                 toolbar: false,
                 floating: !_.device('smartphone'),
-                closable: true,
-                // detailview is used to view a single item in a bigger window, so start centered
-                displayStyle: 'centered'
+                closable: true
             });
 
             app.setWindow(win);

@@ -93,9 +93,7 @@ define('io.ox/calendar/detail/main', [
                 name: NAME,
                 toolbar: false,
                 closable: true,
-                floating: !_.device('smartphone'),
-                // detailview is used to view a single item in a bigger window, so start centered
-                displayStyle: 'centered'
+                floating: !_.device('smartphone')
             });
             app.setWindow(win);
             app.mediate();

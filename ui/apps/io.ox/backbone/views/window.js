@@ -123,6 +123,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                     powerMoveWindow.toggle(false);
                 }
                 powerMoveWindow = this;
+                $('#io-ox-screens').addClass('powermove-window-open');
                 this.$el.addClass('powermove');
                 this.toggle(true);
             } else {
@@ -145,12 +146,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             e.preventDefault();
             this.toggle(false);
             if (powerMoveWindow) {
+                $('#io-ox-screens').removeClass('powermove-window-open');
                 powerMoveWindow.$el.removeClass('powermove');
                 powerMoveWindow = null;
             }
         },
 
-        toggle: function (state, keepPowerMoveWindow) {
+        toggle: function (state) {
             //create true boolean
             state = !!state;
             // already in the correct state. nothing to do
@@ -163,7 +165,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 this.$el.show();
                 collection.trigger('show', this);
             } else {
-                if (!keepPowerMoveWindow && powerMoveWindow && powerMoveWindow.cid === this.cid) {
+                if (powerMoveWindow && powerMoveWindow.cid === this.cid) {
+                    $('#io-ox-screens').removeClass('powermove-window-open');
                     powerMoveWindow.$el.removeClass('powermove');
                     powerMoveWindow = null;
                 }
@@ -183,11 +186,24 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     });
 
     var collection = WindowView.collection = new Backbone.Collection(),
+        handlerAttached = false,
         powerMoveWindow;
 
     function add(window) {
         var model = new Backbone.Model({ id: window.cid, window: window });
         collection.add(model);
+        // attach on add to make sure ox.ui.apps exists (in case this file is loaded early there might be race conditions otherwise)
+        if (!handlerAttached) {
+            handlerAttached = true;
+            // minimize on appchange
+            ox.ui.apps.on('launch resume', function (model) {
+                if (model && !model.get('floating')) {
+                    _(collection.pluck('window')).each(function (win) {
+                        win.toggle(false);
+                    });
+                }
+            });
+        }
     }
 
     function remove(win) {
@@ -302,9 +318,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         $('#io-ox-taskbar-container .control-right').prop('disabled', node.scrollLeft() === node[0].scrollWidth - node.width());
 
         if (powerMoveWindow && window.innerWidth < 1192) {
-            powerMoveWindow.toggle(false, true);
-        } else if (powerMoveWindow) {
-            powerMoveWindow.toggle(true);
+            powerMoveWindow.toggle(false);
         }
     }
 
