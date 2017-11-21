@@ -49,18 +49,6 @@ define('io.ox/mail/detail/main', [
             };
         },
 
-        /*
-         * toogle big screen mode for wide mails
-         */
-        'big-screen-toggle': function (app) {
-            // if the mail is too big and we get some scrollbars,
-            // toggle bigscreen by default
-            app.threadView.on('mail:detail:body:render', function () {
-                var width = $(app.threadView.$el).find('.mail-detail-frame').contents().find('.mail-detail-content').width();
-                if (width >= 850) app.threadView.toggleBigScreen(true);
-            });
-        },
-
         'metrics': function (app) {
             require(['io.ox/metrics/main'], function (metrics) {
                 if (!metrics.isEnabled()) return;

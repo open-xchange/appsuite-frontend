@@ -59,7 +59,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                     $('<i class="fa fa-window-minimize" aria-hidden="true">')
                                 ),
                                 $('<a href="#" data-action="cornered">').append('<i class="fa fa-compress">'),
-                                $('<a href="#" data-action="centered">').append('<i class="fa fa-arrows-alt">'),
+                                $('<a href="#" data-action="centered">').append('<i class="fa fa-expand">'),
                                 this.options.showStickybutton ? $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
                                 this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-times">') : ''
                             )

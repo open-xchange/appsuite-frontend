@@ -15,9 +15,13 @@
 
     .title { font-weight: bold; }
 
-    form, .body, .body > div { height: 100%; }
+    form, .body > div { height: 100%; }
 
-    .body { padding-bottom: 55px; }
+    .body {
+        height: ~"calc(100% - 20px)";
+    }
+
+    .body { padding-bottom: 35px; }
 
     textarea.form-control {
         font-family: monospace;
@@ -33,6 +37,8 @@
     }
 
     @media (max-width: @screen-xs-max) {
-        .body { padding-bottom: 100px; }
+        .body {
+            height: ~"calc(100% - 40px)";
+        }
     }
  }
