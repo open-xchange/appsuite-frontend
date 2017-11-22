@@ -64,8 +64,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                 this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-times">') : ''
                             )
                         ),
-                        this.$body = this.$body || $('<div class="floating-body abs">'),
-                        this.$footer = this.options.footer ? this.$footer || $('<div class="floating-footer">') : ''
+                        this.$body = this.$body || $('<div class="floating-body abs">')
                     )
                 );
             return this;

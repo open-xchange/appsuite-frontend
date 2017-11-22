@@ -15,6 +15,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/contacts/edit/view-form',
     'io.ox/contacts/model',
     'gettext!io.ox/contacts',
+    'io.ox/core/api/user',
     'io.ox/core/extensions',
     'io.ox/contacts/util',
     'io.ox/core/extPatterns/dnd',
@@ -24,7 +25,7 @@ define('io.ox/contacts/edit/main', [
     'io.ox/core/a11y',
     'settings!io.ox/core',
     'less!io.ox/contacts/edit/style'
-], function (view, model, gt, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
+], function (view, model, gt, userApi, ext, util, dnd, capabilities, notifications, coreUtil, a11y, settings) {
 
     'use strict';
 
@@ -72,17 +73,23 @@ define('io.ox/contacts/edit/main', [
                     var considerSaved = false;
 
                     function cont(contact) {
-
                         // fix "display_name only" contacts, e.g. in collected addresses folder
                         var data = contact.toJSON();
                         if (($.trim(data.first_name) + $.trim(data.yomiFirstName) === '') &&
                             ($.trim(data.last_name) + $.trim(data.yomiLastName)) === '') {
                             contact.set('last_name', coreUtil.unescapeDisplayName(contact.get('display_name')), { silent: true });
                         }
-                        app.setTitle(getTitle(contact));
-                        win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
+
+                        if (app.userMode) {
+                            app.setTitle(gt('My contact data'));
+                        } else {
+                            app.setTitle(getTitle(contact));
+                            win.setTitle(contact.has('id') ? gt('Edit contact') : gt('Create contact'));
+                        }
+
                         app.contact = contact;
-                        editView = new view.ContactEditView({ model: contact, app: app });
+                        var editViewtoUse = app.userMode ? view.protectedMethods.createContactEdit('io.ox/core/user') : view.ContactEditView;
+                        editView = new editViewtoUse({ model: contact, app: app });
                         container.append(
                             editView.render().$el
                         );
@@ -214,7 +221,10 @@ define('io.ox/contacts/edit/main', [
 
                     // create model & view
                     if (data.id) {
-                        model.factory.realm('edit').retain().get({
+                        app.userMode = data.id === data.user_id;
+                        var factory = app.userMode ? model.protectedMethods.buildFactory('io.ox/core/user/model', userApi) : model.factory;
+
+                        factory.realm('edit').retain().get({
                             id: data.id,
                             folder: data.folder_id
                         })
