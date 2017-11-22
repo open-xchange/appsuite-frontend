@@ -373,6 +373,9 @@ define('io.ox/editor/main', [
             var def = $.Deferred();
             if (app.isDirty()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    if (app.getWindow().floating) {
+                        app.getWindow().floating.toggle(true);
+                    }
                     new dialogs.ModalDialog()
                     .text(gt('Do you really want to discard your changes?'))
                     //#. "Discard changes" appears in combination with "Cancel" (this action)
