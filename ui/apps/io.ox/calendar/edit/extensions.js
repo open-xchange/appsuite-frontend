@@ -107,7 +107,7 @@ define('io.ox/calendar/edit/extensions', [
                             attachmentData.push({
                                 filename: attachment.filename,
                                 fmtType: attachment.file.type,
-                                uri: 'ATTACH:CID:' + 'file_' + attachment.cid
+                                uri: 'cid:' + 'file_' + attachment.cid
                             });
                         });
                         baton.model.set('attachments', attachmentData, { silent: true });
