@@ -103,11 +103,6 @@ define('io.ox/core/folder/favorites', [
             model.set('standard_folder', true);
         }
 
-        // respond to collection remove event to sync favorites
-        api.on('collection:remove', function (id, model) {
-            collection.remove(model);
-        });
-
         var extension = {
             id: 'favorites',
             index: 1,
@@ -145,27 +140,40 @@ define('io.ox/core/folder/favorites', [
         });
     }
 
-    //
-    // Add to contextmenu
-    //
+    function remove(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
+            collection = api.pool.getCollection(collectionId);
+        collection.remove(model);
+    }
 
-    function add(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collectionId = 'virtual/favorites/' + module,
+    function add(id, model) {
+        model = model || api.pool.getModel(id);
+        if (!model.get('module')) return;
+        var collectionId = 'virtual/favorites/' + model.get('module'),
             collection = api.pool.getCollection(collectionId);
         model.set('index/' + collectionId, collection.length, { silent: true });
         collection.add(model);
         collection.sort();
     }
 
-    function remove(e) {
-        var id = e.data.id,
-            module = e.data.module,
-            model = api.pool.getModel(id),
-            collection = api.pool.getCollection('virtual/favorites/' + module);
-        collection.remove(model);
+    //
+    // Folder API listeners
+    //
+
+    api.on('collection:remove', remove);
+
+    //
+    // Add to contextmenu
+    //
+
+    function onAdd(e) {
+        add(e.data.id);
+    }
+
+    function onRemove(e) {
+        remove(e.data.id);
     }
 
     function a(action, text) {
@@ -204,9 +212,14 @@ define('io.ox/core/folder/favorites', [
                 action: 'toggle-favorite',
                 data: { id: id, module: module },
                 enabled: true,
-                handler: isFavorite ? remove : add,
+                handler: isFavorite ? onRemove : onAdd,
                 text: isFavorite ? gt('Remove from favorites') : gt('Add to favorites')
             });
         }
     });
+
+    return {
+        add: add,
+        remove: remove
+    };
 });
