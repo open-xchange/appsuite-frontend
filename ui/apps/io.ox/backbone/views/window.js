@@ -85,6 +85,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         close: function (e) {
             if (e) {
                 e.stopPropagation();
+                e.preventDefault();
             }
             if (this.win && !this.closing) {
                 if (this.win.app) {
@@ -101,7 +102,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             return this;
         },
 
-        changeDisplayStyle: function (style) {
+        changeDisplayStyle: function (style, e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
             if (!style) return;
             this.displayStyle = style;
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
@@ -109,7 +114,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
         },
 
-        toggleDisplaystyle: function () {
+        toggleDisplaystyle: function (e) {
+            if (e) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
             if (this.minimized || this.displayStyle === 'sticky') return;
             this.changeDisplayStyle(this.displayStyle === 'cornered' ? 'centered' : 'cornered');
         },
