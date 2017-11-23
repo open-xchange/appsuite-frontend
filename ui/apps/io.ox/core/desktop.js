@@ -817,7 +817,7 @@ define('io.ox/core/desktop', [
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
-                            return m.getApp().launch().then(function () {
+                            return m.getApp(obj.passPointOnGetApp ? obj.point : undefined).launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {

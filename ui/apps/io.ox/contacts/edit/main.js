@@ -305,12 +305,17 @@ define('io.ox/contacts/edit/main', [
 
         app.failSave = function () {
             if (this.contact) {
-                var title = this.contact.get('display_name');
-                return {
-                    description: gt('Contact') + (title ? ': ' + title : ''),
-                    module: 'io.ox/contacts/edit',
-                    point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited')
-                };
+                var title = this.contact.get('display_name'),
+                    savePoint = {
+                        description: gt('Contact') + (title ? ': ' + title : ''),
+                        module: 'io.ox/contacts/edit',
+                        point: _.omit(this.contact.attributes, 'crop', 'pictureFile', 'pictureFileEdited')
+                    };
+                // to restore the my contact data dialog, we need to pass the data on the getApp call
+                if (app.userMode) {
+                    savePoint.passPointOnGetApp = true;
+                }
+                return savePoint;
             }
             return false;
         };
