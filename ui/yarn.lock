@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@open-xchange/tinymce@4.6.3-2":
-  version "4.6.3-2"
-  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-2.tgz#e6d361b17472290c1926b57a0ea5a831fdc8cbd3"
+"@open-xchange/tinymce@4.6.3-4":
+  version "4.6.3-4"
+  resolved "https://registry.yarnpkg.com/@open-xchange/tinymce/-/tinymce-4.6.3-4.tgz#fa2516decd3f5fb6aeca7ec376485c6ab7a26d94"
   dependencies:
     tinymce "^4.6.3"
 
@@ -44,9 +44,9 @@ acorn@^4.0.3:
   version "4.0.13"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-4.0.13.tgz#105495ae5361d697bd195c825192e1ad7f253787"
 
-acorn@^5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.1.1.tgz#53fe161111f912ab999ee887a90a0bc52822fd75"
+acorn@^5.0.1:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.3.0.tgz#7446d39459c54fb49a80e6ee6478149b940ec822"
 
 after@0.8.2:
   version "0.8.2"
@@ -4511,7 +4511,11 @@ tiny-lr-fork@0.0.5:
     noptify "~0.0.3"
     qs "~0.5.2"
 
-tinymce@4.6.5, tinymce@^4.6.3:
+tinymce@4.6.6:
+  version "4.6.6"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.6.tgz#d9282f35707bee29d3e1542fded249e0a86cafd4"
+
+tinymce@^4.6.3:
   version "4.6.5"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.5.tgz#b5ea976738e819bf07a44f7d5653fb160880b9ee"
 
