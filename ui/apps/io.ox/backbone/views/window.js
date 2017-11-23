@@ -30,16 +30,26 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // standard windowmanager windowobject. Used by apps
             this.win = this.options.win;
             this.count = this.options.count || 0;
+            // dummy windows are windows that start minimized and call a callback function when they are clicked on
+            // this is used for restore points to load on demand
+            this.dummy = !!this.options.dummyCallback;
             DisposableView.prototype.constructor.apply(this, arguments);
             this.$el.on('click', '[data-action="cornered"]', this.changeDisplayStyle.bind(this, 'cornered'));
             this.$el.on('click', '[data-action="centered"]', this.changeDisplayStyle.bind(this, 'centered'));
             this.$el.on('click', '[data-action="sticky"]', this.changeDisplayStyle.bind(this, 'sticky'));
             this.on('dispose', function () { remove(this); });
-            this.minimized = false;
+            // dummies start minimized
+            this.minimized = this.dummy;
             this.opened = false;
             // possible values are: cornered, centered, sticky
             // minimized is saved separately so we know to which style we need to change the window again.
             this.displayStyle = this.options.displayStyle || 'cornered';
+            // add dummys before they are opened.
+            if (this.dummy) {
+                add(this);
+                // just trigger show to invoke rendering of the taskbar
+                collection.trigger('show');
+            }
         },
 
         render: function () {
@@ -124,6 +134,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         },
 
         makeActive: function (powermove) {
+            if (this.dummy) {
+                this.dummy = false;
+                this.options.dummyCallback();
+                return;
+            }
             var self = this;
             // don't use powermove if there are only minimized windows
             if (powermove && _(collection.pluck('window')).where({ minimized: true }).length !== collection.length && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {

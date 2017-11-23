@@ -817,7 +817,23 @@ define('io.ox/core/desktop', [
                         adaptiveLoader.stop();
                         var requirements = adaptiveLoader.startAndEnhance(obj.module, [obj.module + '/main']);
                         return ox.load(requirements).then(function (m) {
-                            return m.getApp(obj.passPointOnGetApp ? obj.point : undefined).launch().then(function () {
+                            var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
+                            // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
+                            if (_.device('!smartphone') && app.options.floating) {
+                                var dummyWindow = new windowView({ title: obj.description, closable: true, dummyCallback: function () {
+                                    dummyWindow.close();
+                                    app.launch().then(function () {
+                                        // update unique id
+                                        obj.id = this.get('uniqueID');
+                                        if (this.failRestore) {
+                                            // restore
+                                            return this.failRestore(obj.point);
+                                        }
+                                    });
+                                } });
+                                return $.when();
+                            }
+                            return app.launch().then(function () {
                                 // update unique id
                                 obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
