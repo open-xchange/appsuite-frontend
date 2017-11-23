@@ -262,7 +262,9 @@ define('io.ox/core/api/filestorage', [
                     accountsCache.remove(data);
                     idsCache = _(idsCache).without(data.qualifiedId);
                     api.trigger('delete', model || data);
-                    ox.trigger('please:refresh-folder', 1);
+                    require(['io.ox/core/folder/api'], function (api) {
+                        api.propagate('account:delete');
+                    });
                     return value;
                 }
 

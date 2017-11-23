@@ -1328,8 +1328,6 @@ define('io.ox/core/folder/api', [
 
     ox.on('please:refresh refresh^', refresh);
 
-    ox.on('please:refresh-folder', _.partial(list, _, { cache: false, test: true }));
-
     // If there is a new filestorage refresh the folders
     filestorageApi.on('create delete update', refresh);
 
