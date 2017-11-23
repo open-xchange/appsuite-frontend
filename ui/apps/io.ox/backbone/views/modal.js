@@ -84,11 +84,15 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
             if (_.isNumber(options.maximize)) this.$('.modal-content').css('max-height', options.maximize);
             // add help icon?
             if (options.help) {
+                var helpPlaceholder = $('<a class="io-ox-context-help">');
+                this.$header.append(helpPlaceholder);
                 require(['io.ox/backbone/mini-views/help'], function (HelpView) {
-                    this.$header.addClass('help').append(
+                    var parent = helpPlaceholder.parent();
+                    parent.addClass('help');
+                    helpPlaceholder.replaceWith(
                         new HelpView({ href: options.help }).render().$el
                     );
-                }.bind(this));
+                });
             }
 
             // scroll inputs into view when smartphone keyboard shows up

@@ -31,62 +31,59 @@
 <div class="oxhelp-content">
   <h1 class="sr-only"><span class="phrase">Courriel</span></h1>
 <h2 class="sr-only">Utiliser les filtres de courriel</h2>
-<div class="sect2">
-<div class="titlepage"><div><div><h3 class="title">
-<a name="ox.appsuite.user.sect.email.mailfilter.examples"></a>5.6.4. Cas d'utilisation des filtres de courrier</h3></div></div></div>
-<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p><a name="ox.appsuite.user.concept.email.mailfilter.examples"></a>Vous pouvez créer une condition en </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
-<li class="listitem"><p>sélectionnant un composant d'un courrier, par exemple le "Sujet";</p></li>
-<li class="listitem"><p>choisissant un critère, par exemple "Vaut exactement";</p></li>
-<li class="listitem"><p>saisissant un argument, par exemple "minutes".</p></li>
-</ul></div>
+<div class="sect2" id="ox.appsuite.user.sect.email.mailfilter.examples">
+<div class="titlepage"><div><div><h3 class="title">5.6.4. Cas d'utilisation des filtres de courrier</h3></div></div></div>
+<a class="indexterm" name="id-1.6.13.9.2"></a><a class="indexterm" name="id-1.6.13.9.3"></a><p id="ox.appsuite.user.concept.email.mailfilter.examples">Vous pouvez créer une condition en </p>
+<ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem"><p role="presentation">sélectionnant un composant d'un courrier, par exemple le "Sujet";</p></li>
+<li class="listitem"><p role="presentation">choisissant un critère, par exemple "Vaut exactement";</p></li>
+<li class="listitem"><p role="presentation">saisissant un argument, par exemple "minutes".</p></li>
+</ul>
 <p>L'exemple présenté ici vérifierait donc si le sujet d'un courriel correspond exactement aux caractères de l'argument ("minutes"). Vous pouvez contrôler si les conditions sont vérifiées au moyen du critère et de la chaîne de caractères. Les différences entre critères individuels seront expliquées dans les exemples ci-dessous. Dans ces exemples, nous utiliserons le sujet pour filtrer les courriels.</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
-<p>Critère : "contient" La condition est vérifiée si le sujet contient les caractères de l'argument. Exemple : l'argument est "minutes".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condition est vérifiée par le sujet "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condition est également vérifiée par le sujet "minutes de la réunion".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Critère : "contient" La condition est vérifiée si le sujet contient les caractères de l'argument. Exemple : l'argument est "minutes".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est également vérifiée par le sujet "minutes de la réunion".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
 <li class="listitem">
-<p>Critère : "vaut exactement" La condition est vérifiée si le sujet correspond exactement à la chaîne de caractères de l'argument.  Exemple : l'argument est "minutes".</p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condition est vérifiée par le sujet "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condition n'est pas vérifiée par le sujet "minutes de la réunion".</p></li>
-</ul></div>
+<p role="presentation">Critère : "vaut exactement" La condition est vérifiée si le sujet correspond exactement à la chaîne de caractères de l'argument.  Exemple : l'argument est "minutes".</p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition n'est pas vérifiée par le sujet "minutes de la réunion".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Critère : "Correspond" La condition est vérifiée si le sujet correspond exactement aux caractères de l'argument. La chaîne de caractères peut contenir des caractères de remplacement.   Exemple : l'argument est "minutes*". Le caractère "*" est un caractère de remplacement représentant n'importe quelle série d'autres caractères. </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condition est vérifiée par le sujet "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condition n'est pas vérifiée par le sujet "minutes de la réunion".</p></li>
-</ul></div>
+<p role="presentation">Critère : "Correspond" La condition est vérifiée si le sujet correspond exactement aux caractères de l'argument. La chaîne de caractères peut contenir des caractères de remplacement.   Exemple : l'argument est "minutes*". Le caractère "*" est un caractère de remplacement représentant n'importe quelle série d'autres caractères. </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition n'est pas vérifiée par le sujet "minutes de la réunion".</p></li>
+</ul>
 </li>
 <li class="listitem">
-<p>Critère : "Expression rationnelle"  La condition est vérifiée si le sujet contient les caractères fournis par l'expression rationnelle en argument. Les expressions rationnelles permettent d'effectuer des requêtes complexes. Vous pouvez trouver davantage d'informations à leur sujet sur de nombreux sites web. L'expression rationnelle suivante, très simple, devrait vous donner une petite idée du sujet.  Exemple : l'argument est "organi(z|s)ation". L'expression "(z|s)" représente soit le caractère "z", soit le caractère "s". </p>
-<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: none; ">
-<li class="listitem" style="list-style-type: none"><p>La condition est vérifiée par le sujet "minutes".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condition est vérifiée par le sujet "organisation".</p></li>
-<li class="listitem" style="list-style-type: none"><p>La condition n'est pas vérifiée par le sujet "Organique".</p></li>
-</ul></div>
-<p>
+<p role="presentation">Critère : "Expression rationnelle"  La condition est vérifiée si le sujet contient les caractères fournis par l'expression rationnelle en argument. Les expressions rationnelles permettent d'effectuer des requêtes complexes. Vous pouvez trouver davantage d'informations à leur sujet sur de nombreux sites web. L'expression rationnelle suivante, très simple, devrait vous donner une petite idée du sujet.  Exemple : l'argument est "organi(z|s)ation". L'expression "(z|s)" représente soit le caractère "z", soit le caractère "s". </p>
+<ul class="itemizedlist" style="list-style-type: none; ">
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est vérifiée par le sujet "minutes".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition est vérifiée par le sujet "organisation".</p></li>
+<li class="listitem" style="list-style-type: none"><p role="presentation">La condition n'est pas vérifiée par le sujet "Organique".</p></li>
+</ul>
+<p role="presentation">
             </p>
 </li>
-</ul></div>
+</ul>
 <p>
       </p>
-<div class="itemizedlist">
-<a name="ox.appsuite.user.concept.email.mailfilter.examples.related"></a><p class="title">Voir également</p>
-<ul class="itemizedlist" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html" title="5.6.1. Pour créer une nouvelle règle :">Pour créer une nouvelle règle :</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html" title="5.6.2. Créer une nouvelle règle lors du déplacement d'un courriel">Créer une nouvelle règle lors du déplacement d'un courriel</a></p>
-<p><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html" title="5.6.3. Modifier une règle">Modifier une règle</a></p>
+<p class="title">Voir également</p>
+<ul class="itemizedlist" id="ox.appsuite.user.concept.email.mailfilter.examples.related" style="list-style-type: none; "><li class="listitem" style="list-style-type: none">
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.create.html">Pour créer une nouvelle règle :</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.createmove.html">Créer une nouvelle règle lors du déplacement d'un courriel</a></p>
+<p role="presentation"><a class="xref" href="ox.appsuite.user.sect.email.mailfilter.change.html">Modifier une règle</a></p>
 </li></ul>
-</div>
-<p><a name="ox.appsuite.user.concept.email.mailfilter.examples.parent"></a>Sujet parent : <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html" title="5.6. Utiliser les filtres de courriel">Utiliser les filtres de courriel</a></p>
+<p id="ox.appsuite.user.concept.email.mailfilter.examples.parent">Sujet parent : <a class="xref" href="ox.appsuite.user.sect.email.mailfilter.html">Utiliser les filtres de courriel</a></p>
 </div>
           </div>
         </body>

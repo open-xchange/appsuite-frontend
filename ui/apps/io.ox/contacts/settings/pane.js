@@ -98,7 +98,7 @@ define('io.ox/contacts/settings/pane', [
         index: 300,
         id: 'map-service',
         draw: function () {
-
+            if (!settings.isConfigurable('mapService')) return;
             var options = [
                 { label: gt('Google Maps'), value: 'google' },
                 { label: gt('Open Street Map'), value: 'osm' },

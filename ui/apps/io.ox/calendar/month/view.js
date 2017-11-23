@@ -25,6 +25,7 @@ define('io.ox/calendar/month/view', [
 
     var View = Backbone.View.extend({
 
+        tagName:        'tr',
         className:      'week',
         weekStart:      0,      // week start moment
         weekEnd:        0,      // week ends moment
@@ -132,8 +133,8 @@ define('io.ox/calendar/month/view', [
             var list = util.getWeekScaffold(this.weekStart),
                 firstFound = false,
                 self = this,
-                weekinfo = $('<div>')
-                    .addClass('week-info')
+                // needs clearfix or text is aligned to middle instead of baseline
+                weekinfo = $('<td class="week-info clearfix">')
                     .append(
                         $('<span>').addClass('cw').text(
                             gt('CW %1$d', this.weekStart.format('w'))
@@ -145,7 +146,7 @@ define('io.ox/calendar/month/view', [
                     firstFound = true;
                 }
 
-                var dayCell = $('<div>')
+                var dayCell = $('<td>')
                 .addClass((day.isFirst ? ' first' : '') +
                     (day.isFirst && i === 0 ? ' forceleftborder' : '') +
                     (day.isToday ? ' today' : '') +
@@ -159,16 +160,20 @@ define('io.ox/calendar/month/view', [
                 );
 
                 if ((this.weekType === 'first' && !firstFound) || (this.weekType === 'last' && firstFound)) {
-                    this.$el.append(dayCell.addClass('day-filler'));
+                    this.$el.append(dayCell.addClass('day-filler').append($('<div class="sr-only">').text(gt('Empty table cell'))));
                 } else {
                     this.$el.append(
                         dayCell
                         .addClass('day')
-                        .attr('id', moment(day.timestamp).format('YYYY-M-D'))
+                        .attr({
+                            id: moment(day.timestamp).format('YYYY-M-D'),
+                            //#. %1$s is a date: october 12th 2017 for example
+                            title: gt('Selected - %1$s', moment(day.timestamp).format('ddd LL'))
+                        })
                         .data('date', day.timestamp)
                         .append(
-                            $('<div>').addClass('list abs'),
-                            $('<div>').addClass('number').text(gt.noI18n(day.date))
+                            $('<div class="number" aria-hidden="true">').text(day.date),
+                            $('<div class="list abs">')
                         )
                     );
                 }
@@ -325,8 +330,8 @@ define('io.ox/calendar/month/view', [
         return $('<div>')
             .addClass('abs')
             .append(
-                $('<div>').addClass('footer-container').append(
-                    $('<div>').addClass('footer').append(function () {
+                $('<div class="footer-container">').attr('aria-hidden', true).append(
+                    $('<div class="footer">').append(function () {
                         _(days).each(function (day) {
                             tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                         });

@@ -139,6 +139,7 @@ define('io.ox/core/settings/pane', [
         index: 100,
         className: 'form-group',
         render: function () {
+            if (!settings.isConfigurable('language')) return;
             var options = _.map(ox.serverConfig.languages, function (key, val) { return { label: key, value: val }; });
             this.listenTo(this.baton.model, 'change:language', function (language) {
                 _.setCookie('language', language);
