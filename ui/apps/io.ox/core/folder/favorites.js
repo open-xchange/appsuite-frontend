@@ -48,7 +48,8 @@ define('io.ox/core/folder/favorites', [
 
         // define virtual folder
         api.virtual.add(id, function () {
-            return api.multiple(settings.get('favorites/' + module, []), { errors: true }).then(function (response) {
+            var cache = !collection.expired && collection.fetched;
+            return api.multiple(settings.get('favorites/' + module, []), { errors: true, cache: cache }).then(function (response) {
                 // remove non-existent entries
                 var list = _(response).filter(function (item) {
                     // FLD-0008 -> not found
@@ -56,7 +57,8 @@ define('io.ox/core/folder/favorites', [
                     // ACC-0002 -> account not found (see bug 46481)
                     // FLD-1004 -> folder storage service no longer available (see bug 47089)
                     // IMAP-1002 -> mail folder "..." could not be found on mail server (see bug 47847)
-                    if (item.error && (item.code === 'FLD-0008' || item.code === 'FLD-0003' || item.code === 'ACC-0002' || item.code === 'FLD-1004' || item.code === 'IMAP-1002')) {
+                    // FILE_STORAGE-0004 -> The associated (infostore) account no longer exists
+                    if (item.error && /^(FLD-0008|FLD-0003|ACC-0002|FLD-1004|IMAP-1002|FILE_STORAGE-0004)$/.test(item.code)) {
                         invalid[item.id] = true;
                         return false;
                     }

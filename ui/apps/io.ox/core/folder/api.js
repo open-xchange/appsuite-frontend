@@ -369,6 +369,7 @@ define('io.ox/core/folder/api', [
                 var data = this.models[id].toJSON();
                 this.models[id] = null;
                 delete this.models[id];
+                api.trigger('before:remove', data);
                 api.trigger('remove', id, data);
                 api.trigger('remove:' + id, data);
                 api.trigger('remove:' + data.module, data);
@@ -622,7 +623,7 @@ define('io.ox/core/folder/api', [
                 return renameDefaultCalendarFolders(data);
             },
             function (error) {
-                api.trigger('error error:' + error.code, error);
+                api.trigger('error error:' + error.code, error, id);
                 return error;
             }
         )
@@ -713,8 +714,8 @@ define('io.ox/core/folder/api', [
             appendColumns: true
         })
         .then(renameDefaultCalendarFolders, function (error) {
-            api.trigger('error error:' + error.code, error);
-            return error;
+            api.trigger('error error:' + error.code, error, id);
+            throw error;
         })
         .then(function (array) {
             array = processListResponse(id, array);
