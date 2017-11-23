@@ -553,8 +553,8 @@
 .floating-window {
 
     position: absolute;
-    // foldertree has z-index=1 so this must be higher
-    z-index: 2;
+    // higher than sidepopup
+    z-index: 4;
     background: transparent;
     outline: 0;
 
@@ -610,8 +610,8 @@
 
     &.centered {
         // higher z-index because of powermove windows
-        z-index: 3;
-        width: 960px;
+        z-index: 5;
+        width: 1060px;
         height: 100%;
         position: relative;
         display: flex;
@@ -631,7 +631,7 @@
             display: none;
         }
 
-        @media (max-width: 992px) {
+        @media (max-width: 1092px) {
             width: auto;
             margin-right: 16px;
             margin-left: 16px;
@@ -657,7 +657,6 @@
         }
     }
 
-    .transition(0.3s ease-in-out);
     transform-origin: 100% 0;
 
     @headerHeight: 32px;
@@ -704,6 +703,7 @@
     }
 
     &.minimized {
+        .transition(0.3s ease-in-out);
         bottom: -100%;
         transform: scale(0.1);
     }
