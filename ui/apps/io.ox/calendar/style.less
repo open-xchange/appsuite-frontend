@@ -751,8 +751,25 @@
     .label { margin-left: 5px; }
 }
 
-.folder-tree.selection-only .folder:not(.selected) > .folder-node > .folder-label > .color-label {
-    opacity: 0.3;
+.folder-tree.selection-only .folder {
+
+    &:not(.selected) > .folder-node > .folder-label > .color-label {
+        opacity: 0.3;
+        background-color: transparent!important;
+
+        &:before {
+            content: '';
+        }
+    }
+
+    &.selected > .folder-node > .folder-label > .color-label:before {
+        display: block;
+        font-family: 'FontAwesome';
+        content: '\f00c';
+        text-align: center;
+        font-size: 13px;
+        line-height: 16px;
+    }
 }
 
 li {
