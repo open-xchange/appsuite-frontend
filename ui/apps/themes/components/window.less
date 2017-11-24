@@ -550,11 +550,20 @@
     overflow: auto;
 }
 
+#floating-window-backdrop {
+    z-index: 4;
+    height: 100%;
+    width: 100%;
+    // almost transparent
+    background-color: rgba(255, 255, 255, 0.01);
+    position: absolute;
+}
+
 .floating-window {
 
     position: absolute;
     // higher than sidepopup
-    z-index: 4;
+    z-index: 5;
     background: transparent;
     outline: 0;
 
@@ -610,7 +619,7 @@
 
     &.centered {
         // higher z-index because of powermove windows
-        z-index: 5;
+        z-index: 6;
         width: 1060px;
         height: 100%;
         position: relative;

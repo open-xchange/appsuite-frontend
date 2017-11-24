@@ -15,6 +15,15 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
     'use strict';
 
+    var backdrop = $('<div id="floating-window-backdrop">').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        _(collection.pluck('window')).each(function (win) {
+            win.toggle(false);
+        });
+        backdrop.hide();
+    }).hide();
+
     var WindowView = DisposableView.extend({
 
         className: 'floating-window',
@@ -88,6 +97,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             if (!this.$header || !noRerender) this.render();
             $('#io-ox-screens').append(this.$el);
             add(this);
+            if (backdrop.parents().length === 0) {
+                $('#io-ox-screens').append(backdrop);
+            }
             this.makeActive();
             return this;
         },
@@ -122,6 +134,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
+            // trigger resize so the new height is correctly calculated
+            $(window).trigger('resize');
         },
 
         toggleDisplaystyle: function (e) {
@@ -149,12 +163,14 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 $('#io-ox-screens').addClass('powermove-window-open');
                 this.$el.addClass('powermove');
                 this.toggle(true);
+                // trigger resize so the new height is correctly calculated
+                $(window).trigger('resize');
             } else {
                 collection.each(function (model) {
                     model.get('window').toggle(model.get('window').cid === self.cid || (powerMoveWindow && model.get('window').cid === powerMoveWindow.cid));
                 });
             }
-
+            backdrop.show();
             // trigger , so the taskbar redraws
             collection.trigger('show', this);
         },
@@ -172,6 +188,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 $('#io-ox-screens').removeClass('powermove-window-open');
                 powerMoveWindow.$el.removeClass('powermove');
                 powerMoveWindow = null;
+                // trigger resize so the new height is correctly calculated
+                $(window).trigger('resize');
             }
         },
 
@@ -192,6 +210,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                     $('#io-ox-screens').removeClass('powermove-window-open');
                     powerMoveWindow.$el.removeClass('powermove');
                     powerMoveWindow = null;
+                    // trigger resize so the new height is correctly calculated
+                    $(window).trigger('resize');
                 }
                 // little delay to wait for animation
                 this.$el.delay(300).queue(function () {
