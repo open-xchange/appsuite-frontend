@@ -283,7 +283,7 @@ define('io.ox/calendar/week/perspective', [
                     var $elem = $(this),
                         cid = $elem.data('cid'),
                         folder = util.cid(cid).folder,
-                        model = api.pool.get(folder).get(cid),
+                        model = api.pool.getModel(cid),
                         folderModel = folderAPI.pool.models[folder];
                     if (!model || !folderModel) return;
                     var color = util.getAppointmentColor(folderModel.attributes, model);
