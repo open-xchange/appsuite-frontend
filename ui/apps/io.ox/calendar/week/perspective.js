@@ -227,27 +227,29 @@ define('io.ox/calendar/week/perspective', [
             }
         },
 
-        prefetch: _.debounce(function (index, prevCollection) {
-            var self = this,
-                params = this.view.getRequestParam(),
-                range = moment(params.end).diff(moment(params.start), 'ms'),
-                newParams = _.extend(params, {
+        prefetch: (function () {
+            function getNewParams(params, index) {
+                var range = moment(params.end).diff(moment(params.start), 'ms');
+                return _.extend({}, params, {
                     start: index < 0 ? params.start - range : params.end,
                     end: index < 0 ? params.start : params.end + range
-                }),
-                loader = api.getCollectionLoader('week'),
-                collection = loader.getCollection(newParams),
-                cont = function (c) { if (index < 0) self.prefetch(1, c); };
-
-            if (collection.length > 0 && !collection.expired) {
-                cont(prevCollection);
-            } else {
-                prevCollection.once('load reload', _.debounce(function () {
-                    loader.load(newParams);
-                    cont(collection);
-                }));
+                });
             }
-        }, 200),
+            return _.debounce(function (index, prevCollection) {
+                var self = this,
+                    params = this.view.getRequestParam(),
+                    newParams = getNewParams(params, index),
+                    loader = api.getCollectionLoader('week'),
+                    collection = loader.getCollection(newParams),
+                    cont = function () {
+                        if (collection.length === 0 || collection.expired) loader.load(newParams);
+                        if (index < 0) self.prefetch(1, collection);
+                    };
+
+                if (prevCollection.length > 0 && !prevCollection.expired) return cont();
+                prevCollection.once('load reload', cont);
+            }, 200);
+        }()),
 
         /**
          * call view print function
