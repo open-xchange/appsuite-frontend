@@ -64,7 +64,7 @@ define('io.ox/calendar/year/perspective', [
                 this.$yearInfo = $('<a href="#" class="info">').text(moment().year())
             );
 
-            new YearDatepicker({ date: moment().year(self.app.refDate.year()) })
+            new YearDatepicker({ date: moment().year(self.app.refDate.year()), todayButton: false })
                 .attachTo(this.$yearInfo)
                 .on('before:open', function () {
                     this.setDate(moment().year(self.app.refDate.year()));

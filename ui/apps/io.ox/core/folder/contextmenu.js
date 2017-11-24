@@ -531,7 +531,7 @@ define('io.ox/core/folder/contextmenu', [
                 data: { folder: baton.data },
                 enabled: true,
                 handler: actions.selectOnly,
-                text: gt('Only show this folder')
+                text: gt('Show this folder only')
             });
         },
 

@@ -36,7 +36,7 @@ define('io.ox/calendar/year/view', [
         renderCaption: function () {
             return $('<caption>').append(
                 $('<h2>').append(
-                    $('<button type="button" class="btn btn-link">').text(this.date.format('MMMM YYYY'))
+                    $('<button type="button" class="btn btn-link">').text(this.date.format('MMMM'))
                 )
             );
         },
@@ -71,7 +71,7 @@ define('io.ox/calendar/year/view', [
                     if (day.day() === 0 || day.day() === 6) cell.addClass('weekend');
                     if (!day.isSame(this.date, 'month')) {
                         cell.addClass('out');
-                        cell.empty().append($('<span aria-hidden="true">').text(day.date()));
+                        cell.empty().append($('<span aria-hidden="true" role="presentation">').text(day.date()));
                     }
                     if (day.isSame(today, 'day')) cell.addClass('today');
                     row.append(cell);
