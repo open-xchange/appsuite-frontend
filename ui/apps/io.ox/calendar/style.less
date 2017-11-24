@@ -234,33 +234,38 @@
     }
 }
 
-.custom-colors .folder-tree .folder-node .folder-label {
-
-    position: relative;
-
-    .color-label {
-        width: 16px;
-        height: 16px;
-        position: absolute;
-        left: -25px;
-        top: 4px;
-        border: 1px solid rgba(0, 0, 0, 0.2);
-        background-clip: border-box;
-
-        &.selected:before {
-            display: block;
-            font-family: 'FontAwesome';
-            content: '\f00c';
-            text-align: center;
-            font-size: 13px;
-            line-height: 16px;
-        }
+.io-ox-calendar-main {
+    &:not(.custom-colors) .folder-tree .folder-node .folder-label .color-label {
+        background-color: transparent!important;
     }
 
-    @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
+    .folder-tree .folder-node .folder-label {
+        position: relative;
+
         .color-label {
-            margin-left: 25px;
-            top: 12px;
+            width: 16px;
+            height: 16px;
+            position: absolute;
+            left: -25px;
+            top: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            background-clip: border-box;
+
+            &.selected:before {
+                display: block;
+                font-family: 'FontAwesome';
+                content: '\f00c';
+                text-align: center;
+                font-size: 13px;
+                line-height: 16px;
+            }
+
+            @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
+                .color-label {
+                    margin-left: 25px;
+                    top: 12px;
+                }
+            }
         }
     }
 }
