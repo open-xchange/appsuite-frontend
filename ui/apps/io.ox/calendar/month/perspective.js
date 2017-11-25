@@ -265,7 +265,7 @@ define('io.ox/calendar/month/perspective', [
                         weekType: weekType
                     }).render().el);
 
-                    curWeek.add(8, 'd').startOf('week');
+                    curWeek.add(1, 'week').startOf('week');
                 }
 
                 // add an
