@@ -1588,6 +1588,8 @@ define('io.ox/mail/main', [
                     api.pool.add('detail', obj);
                 };
 
+            if (!find) return;  // Find not available for this user / module
+
             find.on('collectionLoader:created', function (loader) {
                 loader.each = each;
             });
