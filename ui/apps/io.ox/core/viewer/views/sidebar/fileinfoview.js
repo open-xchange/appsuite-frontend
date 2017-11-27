@@ -41,12 +41,17 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
         });
     }
 
-    function renderFileName(model) {
-        var name = model.getDisplayName() || '-',
-            link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
+    function renderFileName(model, options) {
+        var name = model.getDisplayName() || '-';
+        var disableLink = options.disableLink || false;
 
+        //fix for 53324
         if (model.get('source') !== 'drive') return $.txt(name);
 
+        // fix for 56070
+        if (disableLink) return $.txt(name);
+
+        var link =  util.getDeepLink('io.ox/files', model.isFile() ? model.pick('folder_id', 'id') : model.pick('id'));
         return $('<a href="#" target="_blank" style="word-break: break-all">')
             .attr('href', link)
             .text(name);
@@ -75,7 +80,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 // filename
                 $('<dt>').text(gt('Name')),
                 $('<dd class="file-name">').append(
-                    renderFileName(model)
+                    renderFileName(model, options)
                 ),
                 // size
                 $('<dt>').text(gt('Size')),
