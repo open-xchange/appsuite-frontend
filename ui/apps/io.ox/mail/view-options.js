@@ -205,6 +205,7 @@ define('io.ox/mail/view-options', [
                 caret: true,
                 //#. Sort options drop-down
                 label: gt.pgettext('dropdown', 'Sort'),
+                dataAction: 'sort',
                 model: model
             });
 
@@ -255,6 +256,7 @@ define('io.ox/mail/view-options', [
                 caret: true,
                 //#. 'All' options drop-down (lead to 'Delete ALL messages', 'Mark ALL messages as read', etc.)
                 label: gt.pgettext('dropdown', 'All'),
+                dataAction: 'all',
                 model: model
             });
 
