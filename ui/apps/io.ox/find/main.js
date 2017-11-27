@@ -301,8 +301,6 @@ define('io.ox/find/main', [
                             var view = app.view.model,
                                 // remember original setCollection
                                 setCollection = parent.listView.setCollection;
-                            // hide sort options
-                            parent.listControl.$el.find('.grid-options:first').hide();
                             parent.listView.connect(collectionLoader);
                             mode = 'search';
                             // wrap setCollection
@@ -317,8 +315,6 @@ define('io.ox/find/main', [
                         app.on({
                             'find:idle': function () {
                                 if (mode === 'search') {
-                                    // show sort options
-                                    parent.listControl.$el.find('.grid-options:first').show();
                                     // reset collection loader
                                     parent.listView.connect(defaultLoader);
                                     parent.listView.load();
