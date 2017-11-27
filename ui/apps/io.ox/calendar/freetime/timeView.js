@@ -455,14 +455,16 @@ define('io.ox/calendar/freetime/timeView', [
             var self = this,
                 from,
                 until,
-                attendees = this.model.get('attendees').pluck('entity'),
+                attendees = attendees = this.model.get('attendees').toJSON(),
                 appointments = {};
+
+            if (attendees.length === 0) return $.when();
 
             // no need to get appointments for every participant all the time
             if (addOnly === true) {
                 var keys = _(self.model.get('appointments')).keys();
                 attendees = _(attendees).filter(function (attendee) {
-                    return _(keys).indexOf(String(attendee)) === -1;
+                    return _(keys).indexOf(String(attendee.entity)) === -1;
                 });
             }
 
@@ -473,8 +475,7 @@ define('io.ox/calendar/freetime/timeView', [
                 from = moment(this.model.get('currentWeek')).startOf('day');
                 until = moment(from).add(1, 'weeks');
             }
-
-            return api.freebusyEvents(attendees.toString(), { from: from.format(util.ZULU_FORMAT), until: until.format(util.ZULU_FORMAT) }).done(function (items) {
+            return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT_DAY_ONLY), until: until.format(util.ZULU_FORMAT_DAY_ONLY) }).done(function (items) {
                 if (items.length === 0) {
                     // remove busy animation again
                     self.bodyNode.idle();
@@ -486,11 +487,9 @@ define('io.ox/calendar/freetime/timeView', [
                 if (addOnly === true) {
                     appointments = self.model.get('appointments');
                 }
-                var sorted;
+
                 for (var i = 0; i < attendees.length; i++) {
-                    // sort by startDate
-                    sorted = _(items[i].events).sortBy('startDate');
-                    appointments[attendees[i]] = sorted;
+                    appointments[attendees[i].entity] = _(items[i].freeBusyTime).pluck('event');
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
