@@ -923,11 +923,11 @@
             return tmp;
         },
 
-        noI18n: function () {
-            return !_.url.hash('debug-i18n') ? _.identity(arguments[0]) : function (text) {
+        noI18n: (function () {
+            return !_.url.hash('debug-i18n') ? _.identity : function (text) {
                 return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
             };
-        }
+        }())
     });
 
     _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {
