@@ -1148,6 +1148,11 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
+    var currentlyDeleted = [];
+    function isBeingDeleted(id) {
+        return _(currentlyDeleted).contains(id);
+    }
+
     function remove(ids, options) {
 
         // ensure array
@@ -1199,6 +1204,7 @@ define('io.ox/core/folder/api', [
                     if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
                         api.pool.removeCollection(id, { removeModels: true });
                     } else {
+                        currentlyDeleted.push(id);
                         // use new path if available, else use id
                         var pathOrId = (response[index] ? response[index].new_path : id);
                         api.get(pathOrId, { cache: false }).fail(function (error) {
@@ -1206,6 +1212,8 @@ define('io.ox/core/folder/api', [
                             if (error.code === 'FLD-0008') {
                                 api.pool.removeCollection(id, { removeModels: true });
                             }
+                        }).always(function () {
+                            currentlyDeleted = _(currentlyDeleted).without(id);
                         });
                     }
                 }
@@ -1497,6 +1505,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        isBeingDeleted: isBeingDeleted,
         clear: clear,
         reload: reload,
         hide: hide,
