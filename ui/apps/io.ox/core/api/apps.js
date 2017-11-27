@@ -16,8 +16,9 @@ define('io.ox/core/api/apps', [
     'io.ox/core/extensions',
     'io.ox/core/manifests',
     'io.ox/core/capabilities',
-    'settings!io.ox/core'
-], function (Events, ext, manifests, capabilities, settings) {
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (Events, ext, manifests, capabilities, settings, gt) {
 
     'use strict';
 
@@ -41,6 +42,8 @@ define('io.ox/core/api/apps', [
         var id = appManifest.path.substr(0, appManifest.path.length - 5);
 
         appData.installed.push(id);
+        //dynamically translate the title
+        appManifest.title = /*#, dynamic*/gt.pgettext('app', appManifest.title);
         appData.apps[id] = appManifest;
         appData.categories.push(appManifest.category);
 

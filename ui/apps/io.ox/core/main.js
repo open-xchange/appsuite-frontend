@@ -352,7 +352,7 @@ define('io.ox/core/main', [
         //construct
         node.append(function () {
             if (_.isString(label)) {
-                return $('<a href="#" class="apptitle">').text(/*#, dynamic*/gt.pgettext('app', label));
+                return $('<a href="#" class="apptitle">').text(label);
             } else if (label[0].tagName === 'I') {
                 return $('<a href="#" class="apptitle" role="button">').attr('aria-label', arialabel ? _.escape(arialabel) : null).append(label);
             }
