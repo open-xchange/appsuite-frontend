@@ -97,6 +97,7 @@ define('io.ox/calendar/util', [
         PRIVATE_EVENT_COLOR: '#616161',
 
         ZULU_FORMAT: 'YYYYMMDD[T]HHmmss[Z]',
+        ZULU_FORMAT_DAY_ONLY: 'YYYYMMDD',
 
         isBossyAppointmentHandling: function (opt) {
 

@@ -416,25 +416,25 @@ define('io.ox/calendar/api', [
                 });
             },
 
-            // returns events for a list of attendees, using the freebusy api
-            freebusyEvents: function (list, options) {
+            // returns freebusy data
+            freebusy: function (list, options) {
                 if (list.length === 0) {
                     return $.Deferred().resolve([]);
                 }
 
                 options = _.extend({
-                    from: moment().startOf('day').format(util.ZULU_FORMAT),
-                    until: moment().startOf('day').add(1, 'day').format(util.ZULU_FORMAT)
+                    from: moment().startOf('day').format(util.ZULU_FORMAT_DAY_ONLY),
+                    until: moment().startOf('day').add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
                 }, options);
 
-                return http.GET({
-                    module: 'chronos/freebusy',
+                return http.PUT({
+                    module: 'chronos',
                     params: {
-                        action: 'events',
+                        action: 'freeBusy',
                         from: options.from,
-                        until: options.until,
-                        attendees: list
-                    }
+                        until: options.until
+                    },
+                    data: { attendees: list }
                 });
             },
 
