@@ -389,6 +389,8 @@ define('io.ox/core/desktop', [
                             self.listenTo(ox, 'http:error', function (error, request) {
                                 var folder = request.params.folder || request.data.folder || error.folder || request.params.id;
                                 if (folder !== self.folder.get()) return;
+                                // don't show expected errors see Bug 56276
+                                if ((error.code === 'IMAP-1002' || error.code === 'FLD-0008') && api.isBeingDeleted(folder)) return;
                                 if (!regex.test(error.code)) return;
                                 // special handling for no permission. if api.get fails, 'http-error' is triggered again
                                 if (/(IMAP-2041|IFO-0400|APP-0013|CON-0104|TSK-0023)/.test(error.code)) return api.get(self.folder.get(), { cache: false });
