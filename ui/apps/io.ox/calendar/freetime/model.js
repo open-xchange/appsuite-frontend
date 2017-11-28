@@ -32,6 +32,7 @@ define('io.ox/calendar/freetime/model', [
                 attendees: new models.AttendeeCollection(null, { resolveGroups: true }),
                 showFree: settings.get('scheduling/showFree', false),
                 showReserved: settings.get('scheduling/showReserved', true),
+                showFineGrid: settings.get('scheduling/showFineGrid', false),
                 appointments: {}
             });
         }

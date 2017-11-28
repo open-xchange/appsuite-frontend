@@ -204,6 +204,12 @@
             }
         }
     }
+
+    &.show-fine-grid.zoomlevel-1000 .freetime-time-view-header .freetime-timeline .daylabel-container,
+    &.show-fine-grid.zoomlevel-1000 .freetime-time-view-header .freetime-timeline .freetime-hour {
+        border-left-color: #333;
+    }
+
     .freetime-time-view-header {
         flex: 1;
         -webkit-flex: 1;
@@ -393,6 +399,32 @@
                 padding-top: 0px;
             }
         }
+    }
+
+    &.show-fine-grid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #aaa 0px, transparent 1px);
+        //needed to draw the borders correctly for the day-start and today cells
+        background-origin: border-box;
+    }
+
+    &.zoomlevel-100.show-fine-grid .freetime-table-cell {
+        width: 60px;
+        background-size: 15px 1px;
+    }
+    &.zoomlevel-200.show-fine-grid .freetime-table-cell {
+        width: 120px;
+        background-size: 30px 1px;
+    }
+    &.zoomlevel-400.show-fine-grid .freetime-table-cell {
+        width: 240px;
+        background-size: 60px 1px;
+    }
+    &.zoomlevel-1000.show-fine-grid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
+        background-size: 150px 1px;
+    }
+    &.show-fine-grid.zoomlevel-1000 .freetime-time-view-body .freetime-table .freetime-time-table .freetime-table-cell:not(.today) {
+        border-left: none;
     }
 
     &.zoomlevel-100 .appointment{
