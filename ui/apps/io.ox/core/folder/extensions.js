@@ -419,6 +419,20 @@ define('io.ox/core/folder/extensions', [
             });
         },
 
+        subscribeSchedjoules: function (baton) {
+            if (baton.module === 'calendar') {
+                var self = this;
+
+                require(['io.ox/calendar/settings/schedjoules/schedjoules'], function (schedjoules) {
+                    self.append(
+                        $('<li role="presentation">').append(
+                            $('<a href="#" data-action="subscribe-schedjoules-calendar" role="treeitem">').text(gt('Subscribe schedjoules calendar')).on('click', schedjoules.open)
+                        )
+                    );
+                });
+            }
+        },
+
         treeLinks: function () {
             if (ext.point('io.ox/core/foldertree/mail/treelinks').list().length === 0) return;
 
@@ -750,6 +764,12 @@ define('io.ox/core/folder/extensions', [
             index: 300,
             capabilities: ['subscription'],
             draw: extensions.subscribe
+        },
+        {
+            id: 'subscribeSchedjoules',
+            index: 300,
+            // capabilities: ['subscription'], ??
+            draw: extensions.subscribeSchedjoules
         }
     );
 
