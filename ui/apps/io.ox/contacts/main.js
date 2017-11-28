@@ -856,8 +856,9 @@ define('io.ox/contacts/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
 
-            app.searchable();
+            app.initFind();
         },
 
         'contextual-help': function (app) {

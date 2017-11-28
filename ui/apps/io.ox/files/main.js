@@ -1203,8 +1203,9 @@ define('io.ox/files/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
 
-            app.searchable();
+            app.initFind();
         },
 
         // respond to search results

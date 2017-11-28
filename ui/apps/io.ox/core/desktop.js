@@ -434,17 +434,18 @@ define('io.ox/core/desktop', [
             return this.get('window');
         },
 
-        searchable: function () {
-            if (this.get('find')) return;
+        isFindSupported: function () {
+            return supportsFind(this.getName());
+        },
 
-            // break for non supported apps
-            if (!supportsFind(this.getName())) return;
+        initFind: function () {
+            if (this.get('find')) return true;
 
             var find = findFactory.getApp({ parent: this });
             //TODO: bottleneck
             find.prepare();
             this.set('find', find);
-            return this;
+            return find;
         },
 
         getWindowNode: function () {

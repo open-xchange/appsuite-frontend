@@ -589,51 +589,48 @@ define('io.ox/calendar/main', [
         'inplace-find': function (app) {
 
             if (_.device('smartphone') || !capabilities.has('search')) return;
-
-            app.searchable();
+            if (!app.isFindSupported()) return;
 
             var lastPerspective,
                 SEARCH_PERSPECTIVE = 'list',
-                find = app.get('find'),
+                find = app.initFind(),
                 emptyMessage = function findResultEmptyMessage() { return gt('No matching items found.'); };
 
-            if (find) {
-                // WORKAROUND: no suitable way other of wrapping getEmptyMessage
-                app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
-                    if (app.grid.getMode() === 'search') return emptyMessage;
-                    // return function set by grid.setEmptyMessage
-                    return fn.apply(fn);
-                });
+            // WORKAROUND: no suitable way other of wrapping getEmptyMessage
+            app.grid.getEmptyMessage = _.wrap(app.grid.getEmptyMessage, function (fn) {
+                if (app.grid.getMode() === 'search') return emptyMessage;
+                // return function set by grid.setEmptyMessage
+                return fn.apply(fn);
+            });
 
-                // additional handler: switch to list perspective (and back)
-                find.on({
-                    'find:query': function () {
-                        // hide sort options
-                        app.grid.getToolbar().find('.grid-options:first').hide();
-                        // switch to supported perspective
-                        lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
-                        if (lastPerspective !== SEARCH_PERSPECTIVE) {
-                            // fluent option: do not write to user settings
-                            app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
-                            // cancel search when user changes view
-                            app.props.on('change', find.cancel);
-                        }
-                    },
-                    'find:cancel': function () {
-                        // switch back to perspective used before
-                        var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
-                        if (lastPerspective && lastPerspective !== currentPerspective) {
-                            app.props.set('layout', lastPerspective);
-                        }
-                        // show sort options again
-                        app.grid.getToolbar().find('.grid-options:first').show();
-                        // disable
-                        app.props.off('change', find.cancel);
-                        // reset
-                        lastPerspective = undefined;
+            // additional handler: switch to list perspective (and back)
+            find.on({
+                'find:query': function () {
+                    // hide sort options
+                    app.grid.getToolbar().find('.grid-options:first').hide();
+                    // switch to supported perspective
+                    lastPerspective = lastPerspective || app.props.get('layout') || _.url.hash('perspective');
+                    if (lastPerspective !== SEARCH_PERSPECTIVE) {
+                        // fluent option: do not write to user settings
+                        app.props.set('layout', SEARCH_PERSPECTIVE, { fluent: true });
+                        // cancel search when user changes view
+                        app.props.on('change', find.cancel);
                     }
-                });
-            }
+                },
+                'find:cancel': function () {
+                    // switch back to perspective used before
+                    var currentPerspective = _.url.hash('perspective') || app.props.get('layout');
+                    if (lastPerspective && lastPerspective !== currentPerspective) {
+                        app.props.set('layout', lastPerspective);
+                    }
+                    // show sort options again
+                    app.grid.getToolbar().find('.grid-options:first').show();
+                    // disable
+                    app.props.off('change', find.cancel);
+                    // reset
+                    lastPerspective = undefined;
+                }
+            });
         },
 
         /*

@@ -1578,20 +1578,13 @@ define('io.ox/mail/main', [
         },
 
         'inplace-find': function (app) {
-
             if (_.device('smartphone') || !capabilities.has('search')) return;
+            if (!app.isFindSupported()) return;
 
-            app.searchable();
-
-            var find = app.get('find'),
-                each = function (obj) {
+            app.initFind().on('collectionLoader:created', function (loader) {
+                loader.each = function (obj) {
                     api.pool.add('detail', obj);
                 };
-
-            if (!find) return;  // Find not available for this user / module
-
-            find.on('collectionLoader:created', function (loader) {
-                loader.each = each;
             });
         },
         // respond to pull-to-refresh in mail list on mobiles
