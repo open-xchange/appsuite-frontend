@@ -94,37 +94,29 @@ define('io.ox/core/main', [
             autologout: false
         }, opt || {});
 
-        function sessionLogout() {
-            session.logout().always(function () {
-                // get logout locations
-                var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
-                    fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                    logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
-                // Substitute some variables
-                _.url.redirect(_.url.vars(logoutLocation));
-                // prevent empty white pane (see bug 56170)
-                if (/#autologout=true/.test(logoutLocation)) _.defer(location.reload.bind(location, true));
-            });
-        }
-
         $('#background-loader').fadeIn(DURATION, function () {
             $('#io-ox-core').hide();
-            var extensions = ext.point('io.ox/core/logout').list();
-            _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt)).then(
-                function logout() {
-                    sessionLogout();
-                },
-                function cancel() {
-                    // force ignores errors
-                    if (opt.force) {
-                        sessionLogout();
-                    } else {
-                        $('#io-ox-core').show();
-                        $('#background-loader').fadeOut(DURATION);
-                        ox.trigger('logout:failed', arguments);
-                    }
-                }
-            );
+            var extensions = ext.point('io.ox/core/logout').list(),
+                def = _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt))
+                    .always(function () {
+                        // force ignores errors
+                        if (def.state() === 'rejected' && !opt.force) {
+                            $('#io-ox-core').show();
+                            $('#background-loader').fadeOut(DURATION);
+                            return ox.trigger('logout:failed', arguments);
+                        }
+
+                        session.logout().always(function () {
+                            // get logout locations
+                            var targetLocation = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
+                                fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
+                                logoutLocation = targetLocation || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                            // Substitute some variables
+                            _.url.redirect(_.url.vars(logoutLocation));
+                            // prevent empty white pane (see bug 56170)
+                            if (/#autologout=true/.test(logoutLocation)) _.defer(location.reload.bind(location, true));
+                        });
+                    });
         });
     };
 
