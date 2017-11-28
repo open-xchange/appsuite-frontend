@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-10-23 14:00+0200\n"
+"PO-Revision-Date: 2017-11-28 09:57+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3565,8 +3565,9 @@ msgid "Export folder"
 msgstr "Ordner exportieren"
 
 #: apps/io.ox/core/export.js module:io.ox/core
+#, fuzzy
 msgid "Export selected"
-msgstr "Export gewählt"
+msgstr "Auswahl exportieren"
 
 #. Warning dialog
 #. %1$s is file format for data export
