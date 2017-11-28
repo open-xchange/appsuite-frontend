@@ -213,7 +213,8 @@ define('io.ox/backbone/mini-views/common', [
         setValue: function () {
             var val = this.model.get(this.name) || this.options.defaultVal;
             if (this.options.customValues && this.options.customValues['true'] && this.options.customValues['false']) {
-                val = this.options.customValues['true'] === val;
+                // val = this.options.customValues['true'] === val;
+                val = _.isEqual(this.options.customValues['true'], val);
             } else {
                 // make true boolean
                 val = !!val;
