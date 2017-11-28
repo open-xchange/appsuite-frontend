@@ -101,6 +101,7 @@ define('io.ox/calendar/freetime/timeView', [
                 .divider()
                 .header(gt('Rows'))
                 .option('compact', true, gt('Compact'))
+                .option('showFineGrid', true, gt('Show fine grid'))
                 .divider()
                 .header(gt('Appointment types'))
                 .option('showFree', true, gt('Free'))

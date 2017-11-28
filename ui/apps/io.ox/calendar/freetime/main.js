@@ -61,7 +61,8 @@ define('io.ox/calendar/freetime/main', [
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:compact', self.updateCompact.bind(this));
             this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
-            this.model.on('change:onlyWorkingHours change:compact change:zoom change:showFree change:showReserved', self.updateSettings.bind(this));
+            this.model.on('change:showFineGrid', self.updateFineGrid.bind(this));
+            this.model.on('change:showFineGrid change:onlyWorkingHours change:compact change:zoom change:showFree change:showReserved', self.updateSettings.bind(this));
 
             api.on('refresh.all update', refresh);
             this.on('dispose', function () {
@@ -80,6 +81,7 @@ define('io.ox/calendar/freetime/main', [
             this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));
             this.updateWorkingHours();
             this.updateCompact();
+            this.updateFineGrid();
             return this.model.get('attendees').add(attendeesToAdd);
         },
 
@@ -89,12 +91,18 @@ define('io.ox/calendar/freetime/main', [
             settings.set('scheduling/showFree', this.model.get('showFree'));
             settings.set('scheduling/showReserved', this.model.get('showReserved'));
             settings.set('scheduling/compact', this.model.get('compact'));
+            settings.set('scheduling/showFineGrid', this.model.get('showFineGrid'));
             settings.save();
         },
 
         updateZoom: function () {
             this.header.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
             this.body.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
+        },
+
+        updateFineGrid: function () {
+            this.header.toggleClass('show-fine-grid', this.model.get('showFineGrid'));
+            this.body.toggleClass('show-fine-grid', this.model.get('showFineGrid'));
         },
 
         updateWorkingHours: function () {
