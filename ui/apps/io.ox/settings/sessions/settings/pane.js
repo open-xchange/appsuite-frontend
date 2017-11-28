@@ -196,16 +196,16 @@ define('io.ox/settings/sessions/settings/pane', [
             var isCurrent = this.model.get('sessionId') === ox.session;
             this.$el.empty().append(
                 $('<div>').append(
+                    $('<div class="fa-stack client-icon">').addClass(this.model.get('deviceType')).addClass(this.model.get('os')).append(
+                        $('<i class="fa fa-stack-1x device" aria-hidden="true">'),
+                        $('<i class="fa fa-stack-1x os" aria-hidden="true">')
+                    ),
                     $('<div class="primary">').append(
-                        $('<span class="fa-stack client-icon">').addClass(this.model.get('deviceType')).addClass(this.model.get('os')).append(
-                            $('<i class="fa fa-stack-1x device" aria-hidden="true">'),
-                            $('<i class="fa fa-stack-1x os" aria-hidden="true">')
-                        ),
-                        $('<span>').text(this.model.get('operatingSystem') || gt('Unknown device')),
-                        $('<span>').text(this.model.get('location'))
+                        $('<span>').text(this.model.get('application')),
+                        $('<span>').text('(' + (this.model.get('operatingSystem') || gt('Unknown device')) + ')')
                     ),
                     $('<div class="secondary">').append(
-                        $('<span>').text(this.model.get('application')),
+                        $('<span>').text(this.model.get('location')),
                         isCurrent ? $('<span class="label label-success">').text(gt('Now active')) : $('<span>').text(moment(this.model.get('lastActive')).fromNow())
                     )
                 ),

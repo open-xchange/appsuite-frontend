@@ -16,15 +16,6 @@
     .settings-list-item {
         position: relative;
         cursor: default;
-        // > *:not(.list-item-controls) {
-        //     padding-top: 0;
-        //     white-space: nowrap;
-        //     width: 100%;
-        // }
-
-        // > *:not(:last-child) {
-        //     padding-bottom: 0;
-        // }
 
         .list-item-controls {
             position: absolute;
@@ -32,37 +23,48 @@
             top: 0;
         }
 
-        .primary {
-            > *:not(.client-icon) {
-                margin-left: 8px;
-                font-weight: bold;
+        .primary, .secondary {
+            margin-left: 64px;
+            > * {
+                margin-right: 12px;
+                &:empty {
+                    display: none;
+                }
             }
+        }
+
+        .primary {
+            font-weight: bold;
         }
 
         .secondary {
             margin-top: 5px;
             color: #797979;
-
-            > * {
-                margin-right: 12px;
-            }
         }
 
         .client-icon {
-            width: 35px;
+            float: left;
+            width: 44px;
+            margin-top: 7px;
+
+            .os {
+                color: #777;
+            }
+
             &.desktop {
                 .device:before {
-                    content: "\f108";
-                    font-size: 2em;
+                    content: "\f109";
+                    font-size: 3em;
+                    line-height: 31px;
                 }
                 .os {
-                    top: -5px;
+                    top: -3px;
                 }
             }
             &.phone {
                 .device:before {
                     content: "\f10b";
-                    font-size: 3.5em;
+                    font-size: 4em;
                 }
             }
             &.apple .os:before { content: "\f179"; }
