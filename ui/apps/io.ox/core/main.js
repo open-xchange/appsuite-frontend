@@ -91,32 +91,30 @@ define('io.ox/core/main', [
             autologout: false
         }, opt || {});
 
-        $('#background-loader').fadeIn(DURATION, function () {
+        function sessionLogout() {
+            session.logout().always(function () {
+                // get logout locations
+                var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
+                    fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
+                    logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
+                // Substitute some variables
+                _.url.redirect(_.url.vars(logoutLocation));
+                // prevent empty white pane (see bug 56170)
+                if (/#autologout=true/.test(logoutLocation)) _.defer(window.location.reload.bind(window.location, true));
+            });
+        }
 
+        $('#background-loader').fadeIn(DURATION, function () {
             $('#io-ox-core').hide();
             var extensions = ext.point('io.ox/core/logout').list();
             _.stepwiseInvoke(extensions, 'logout', this, new ext.Baton(opt)).then(
                 function logout() {
-                    session.logout().always(function () {
-                        // get logout locations
-                        var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
-                            fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                            logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
-                        // Substitute some variables
-                        _.url.redirect(_.url.vars(logoutLocation));
-                    });
+                    sessionLogout();
                 },
                 function cancel() {
                     // force ignores errors
                     if (opt.force) {
-                        session.logout().always(function () {
-                            // get logout locations
-                            var location = (capabilities.has('guest') && ox.serverConfig.guestLogoutLocation) ? ox.serverConfig.guestLogoutLocation : settings.get('customLocations/logout'),
-                                fallback = ox.serverConfig.logoutLocation || ox.logoutLocation,
-                                logoutLocation = location || (fallback + (opt.autologout ? '#autologout=true' : ''));
-                            // Substitute some variables
-                            _.url.redirect(_.url.vars(logoutLocation));
-                        });
+                        sessionLogout();
                     } else {
                         $('#io-ox-core').show();
                         $('#background-loader').fadeOut(DURATION);
