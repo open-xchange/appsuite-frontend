@@ -44,6 +44,14 @@ For every active area, the `draw` method of the extension point will be invoked.
 The `reload` method of the area extension point will be invoked in a regular interval defined by the value of `reloadAfter`.
 The configuration object will be passed to each method invocation.
 
+## Configuration provided by middleware API
+
+The configuration for ad spaces can be stored via middleware API.
+Beginning with the 1.3.0 release, configuration is requested via this API by default.
+When running against versions of OX App Suite which don't support this API, this will result in
+404 errors logged during user login.
+To deactivate this feature, the setting `io.ox/ads//features/useMiddlewareConfig=false` needs to
+be configured on the server.
 
 ## API
 
@@ -122,7 +130,7 @@ That's where `Cooldown` timers come in handy.
 
 To use those timers, a new instance of the `Cooldown` util class is needed:
 
-```
+```JavaScript
 var config = loadConfig(); // the current list of configured ads
 var Cooldown = require('io.ox/ads/util').Cooldown;
 var cooldown = new Cooldown(config);
@@ -130,7 +138,7 @@ var cooldown = new Cooldown(config);
 
 The instance can then be used like this:
 
-```
+```JavaScript
 ext.point('io.ox/ads/leaderboard').extend({
     reload: function (baton) {
         cooldown.touch(baton.data.id).then(function () {
@@ -154,7 +162,7 @@ cooldown.reset();
 For convenience, there is a list of ad spaces provided through the utility class.
 It can be used to iterate over all spaces:
 
-```
+```JavaScript
 util.spaces.forEach(function (space) {
     ext.point(space).extend(/* … */);
 });
@@ -166,7 +174,7 @@ For convenience, a mapping from generic “module names” to specific module id
 This mapping can be used to refer to a group of modules which belong together, like a mapping from `mail` to `['io.ox/mail', 'io.ox/mail/detail', 'io.ox/mail/compose']`.
 The main purpose is to use it in the configuration:
 
-```
+```JavaScript
 [{
   "space": "io.ox/ads/leaderboard",
   "showInModules": ["mail", "portal"]
@@ -200,7 +208,7 @@ This is achieved using the [default values](#Default values) feature.
 
 A minimal configuration for the `io.ox/ads/leaderboard` ad space might look like this:
 
-```
+```JavaScript
 [{
     "space": "io.ox/ads/leaderboard",
     "gpt": {
@@ -222,12 +230,12 @@ Banners will be served from the ad unit `/1234567/test_ads`, which needs to be d
 Filters that can easily be implemented in the middleware, have been removed from frontend code.
 Those attributes are not used to filter the list of active ads any longer:
 
-* capabilities
-* active
+- capabilities
+- active
 
 In order to add custom support this, use the `io.ox/ads` extension point and implement a custom `filter` method.
 
-```
+```JavaScript
 ext.point('io.ox/ads').extend({
     filter: function (baton) {
         baton.activeAds = baton.activeAds.filter(function(conf) {
