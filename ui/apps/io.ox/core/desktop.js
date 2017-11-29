@@ -881,6 +881,7 @@ define('io.ox/core/desktop', [
      */
     ox.ui.createApp = function (options) {
         options.guid = appGuid++;
+        if (_.isString(options.title)) options.title = /*#, dynamic */gt.pgettext('app', options.title);
         return new ox.ui.App(options);
     };
 
