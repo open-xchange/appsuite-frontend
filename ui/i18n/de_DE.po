@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-17 13:55+0200\n"
+"PO-Revision-Date: 2017-11-29 09:17+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -3202,6 +3202,12 @@ msgstr ""
 "In Ihrem Browser sind Cookies nicht aktiviert. Bitte aktivieren Sie diese "
 "Funktionalität. "
 
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
+"Zeitüberschreitung bei der Verbindung. Bittte versuchen Sie, die Seite neu "
+"zu laden."
+
 #. number of selected item
 #. %1$s is the number surrounded by a tag
 #: apps/io.ox/core/commons.js module:io.ox/core
@@ -3253,7 +3259,7 @@ msgstr "Premium-Funktionen schließen"
 msgid "Try now!"
 msgstr "Jetzt testen!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
 msgid "Retry"
 msgstr "Erneut versuchen"
 
@@ -4057,6 +4063,22 @@ msgstr "Automatisch abmelden"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Jetzt abmelden"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Sind Sie sich sicher?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr "Ein erzwungenes Abmelden kann zu Datenverlust führen."
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr "Abmelden erzwingen"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr "Abmelden fehlgeschlagen."
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -7045,7 +7067,8 @@ msgstr "Mit Outlook synchronisieren"
 #. %1$s mail sender
 #. %2$s mail subject
 #: apps/io.ox/mail/actions/addToPortal.js module:io.ox/mail
-#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/util.js module:io.ox/core
+#: apps/io.ox/mail/compose/model.js apps/io.ox/mail/compose/view.js
+#: apps/io.ox/mail/util.js module:io.ox/core
 #: apps/plugins/notifications/mail/register.js module:plugins/notifications
 #: apps/plugins/portal/mail/register.js module:plugins/portal
 #, c-format
@@ -7550,6 +7573,7 @@ msgid "Compose"
 msgstr "Verfassen"
 
 #: apps/io.ox/mail/compose/model.js module:io.ox/mail
+#: apps/io.ox/mail/compose/view.js
 msgid "Mail"
 msgstr "Mail"
 
@@ -7695,6 +7719,10 @@ msgstr "Gesamte Nachricht anzeigen"
 #: apps/io.ox/mail/detail/view.js
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr "Gesamte Nachricht einschließlich aller externen Bilder anzeigen"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error while loading message content"
@@ -11622,9 +11650,6 @@ msgstr "Zu %s hinzufügen"
 #~ "Are you really sure about your decision? Are you aware of all "
 #~ "consequences you have to live with?"
 #~ msgstr "Sind Sie sich wirklich sicher? Sind Ihnen alle Konsequenzen klar?"
-
-#~ msgid "Are you sure?"
-#~ msgstr "Sind Sie sich sicher?"
 
 #~ msgid "Argentina"
 #~ msgstr "Argentinien"
