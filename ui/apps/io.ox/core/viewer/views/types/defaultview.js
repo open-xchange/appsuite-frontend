@@ -46,7 +46,7 @@ define('io.ox/core/viewer/views/types/defaultview', [
         render: function () {
 
             this.$el.empty().append(
-                this.createNotificationNode(gt('There is no preview for this file type'))
+                this.displayDownloadNotification(gt('There is no preview for this file type.'))
             );
 
             return this;

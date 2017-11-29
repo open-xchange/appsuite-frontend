@@ -18,9 +18,10 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
     'io.ox/core/util',
     'io.ox/mail/util',
     'io.ox/core/capabilities',
+    'io.ox/core/viewer/util',
     'settings!io.ox/core',
     'gettext!io.ox/core/viewer'
-], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, settings, gt) {
+], function (PanelBaseView, Ext, folderAPI, UserAPI, util, mailUtil, capabilities, ViewerUtil, settings, gt) {
 
     'use strict';
 
@@ -57,20 +58,6 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
             .text(name);
     }
 
-    function renderItemSize(model) {
-        var size, total, sizeString;
-
-        if (model.isFile()) {
-            size = model.get('file_size');
-            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
-        } else {
-            total = model.get('total');
-            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
-        }
-
-        return sizeString;
-    }
-
     function renderDateString(model) {
         var modified = model.get('last_modified');
         var isToday = moment().isSame(moment(modified), 'day');
@@ -102,7 +89,7 @@ define('io.ox/core/viewer/views/sidebar/fileinfoview', [
                 ),
                 // size
                 $('<dt>').text(gt('Size')),
-                $('<dd class="size">').text(renderItemSize(model))
+                $('<dd class="size">').text(ViewerUtil.renderItemSize(model))
             );
             if (!isAttachmentView) {
                 dl.append(

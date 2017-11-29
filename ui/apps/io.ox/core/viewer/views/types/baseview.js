@@ -15,8 +15,11 @@ define('io.ox/core/viewer/views/types/baseview', [
     'io.ox/mail/api',
     'io.ox/core/api/attachment',
     'io.ox/backbone/disposable',
-    'io.ox/core/viewer/util'
-], function (FilesAPI, MailAPI, AttachmentAPI, DisposableView, Util) {
+    'io.ox/core/viewer/util',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/extensions',
+    'gettext!io.ox/core'
+], function (FilesAPI, MailAPI, AttachmentAPI, DisposableView, Util, ActionsPattern, ext, gt) {
 
     'use strict';
 
@@ -65,6 +68,28 @@ define('io.ox/core/viewer/views/types/baseview', [
         displayNotification: function (notification, iconClass) {
             var notificationNode = this.createNotificationNode(notification, iconClass);
             this.$el.idle().empty().append(notificationNode);
+            return notificationNode;
+        },
+
+        /**
+         * Gives the user a notification message with a download button to download the
+         * file.
+         * @param {String} notification The notification message string
+         * @param {String} [iconClass] A CSS class name to be applied on the file icon.
+         */
+        displayDownloadNotification: function (notification, iconClass) {
+
+            var notificationNode = this.displayNotification(notification + gt('\n Please download the file using the button below.'), iconClass);
+            notificationNode.css('white-space', 'pre');
+            var fileSize = Util.renderItemSize(this.model);
+            fileSize = fileSize.indexOf('-') === 0 ? '' : ' (' + fileSize + ')';
+            var downloadButton = $('<button type="button" class="btn btn-primary btn-file">').text(gt('Download%1$s', fileSize)).attr('aria-label', gt('Downlad')).attr('id', 'downloadviewerfile');
+            notificationNode.append(downloadButton);
+            var self = this;
+            downloadButton.on('mouseup keydown', function () {
+                var data = self.model.isFile() ? self.model.toJSON() : self.model.get('origData');
+                ActionsPattern.invoke(Util.getRefByModelSource(self.model.get('source')), self, ext.Baton({ model: self.model, data: data }));
+            });
         },
 
         /**

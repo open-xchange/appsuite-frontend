@@ -202,7 +202,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'io.ox/files/actions/download'
+                    ref: Util.getRefByModelSource('drive')
                 },
                 'open': {
                     prio: 'lo',
@@ -296,7 +296,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     mobile: 'lo',
                     icon: 'fa fa-download',
                     label: gt('Download'),
-                    ref: 'io.ox/mail/actions/download-attachment'
+                    ref: Util.getRefByModelSource('mail')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -317,7 +317,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     prio: 'lo',
                     mobile: 'lo',
                     label: gt('Download'),
-                    ref: 'io.ox/core/tk/actions/download-attachment'
+                    ref: Util.getRefByModelSource('pim')
                 },
                 'savemailattachmenttodrive': {
                     prio: 'lo',
@@ -354,7 +354,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     icon: 'fa fa-download',
                     label: gt('Download'),
                     section: 'export',
-                    ref: 'oxguard/download'
+                    ref: Util.getRefByModelSource('guardDrive')
                 },
                 'open': {
                     prio: 'lo',

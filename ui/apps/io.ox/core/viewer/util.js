@@ -10,7 +10,8 @@
  * @author Mario Schroeder <mario.schroeder@open-xchange.com>
  */
 define('io.ox/core/viewer/util', [
-], function () {
+    'gettext!io.ox/core/viewer'
+], function (gt) {
 
     'use strict';
 
@@ -168,6 +169,31 @@ define('io.ox/core/viewer/util', [
         return _.extend($.Deferred(), {
             abort: abortFunction
         });
+    };
+
+    Util.renderItemSize = function (model) {
+        var size, total, sizeString;
+
+        if (model.isFile()) {
+            size = model.get('file_size');
+            sizeString = (_.isNumber(size)) ? _.filesize(size) : '-';
+        } else {
+            total = model.get('total');
+            sizeString = (_.isNumber(total)) ? gt.format(gt.ngettext('1 item', '%1$d items', total), total) : '-';
+        }
+
+        return sizeString;
+    };
+
+    var ModelSourceRefMap = {
+        drive: 'io.ox/files/actions/download',
+        mail: 'io.ox/mail/actions/download-attachment',
+        pim: 'io.ox/core/tk/actions/download-attachment',
+        guardDrive: 'oxguard/download'
+    };
+
+    Util.getRefByModelSource = function (app) {
+        return ModelSourceRefMap[app];
     };
 
     /**

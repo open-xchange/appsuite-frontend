@@ -671,7 +671,7 @@ define('io.ox/core/viewer/views/types/documentview', [
                 var notificationIconClass = (response.cause === 'passwordProtected') ? 'fa-lock' : null;
 
                 // display error message
-                this.displayNotification(notificationText, notificationIconClass);
+                this.displayDownloadNotification(notificationText, notificationIconClass);
 
                 // store error info in meta data of the file model
                 if (this.model.isFile()) {
@@ -684,7 +684,7 @@ define('io.ox/core/viewer/views/types/documentview', [
             }
 
             if (isPasswordProtected(this.model)) {
-                this.displayNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
+                this.displayDownloadNotification(PDF_ERROR_NOTIFICATIONS.passwordProtected, 'fa-lock');
                 this.documentLoad.reject();
                 return this;
             }
