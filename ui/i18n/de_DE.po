@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-11-29 10:05+0100\n"
+"PO-Revision-Date: 2017-11-29 12:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -7931,6 +7931,10 @@ msgstr "Gesamte Nachricht anzeigen"
 #: apps/io.ox/mail/detail/view.js
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr "Gesamte Nachricht einschließlich aller externen Bilder anzeigen"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
