@@ -89,15 +89,6 @@ define('io.ox/contacts/distrib/main', [
                 }
             });
 
-            win.on('show', function () {
-                if (app.model.get('id')) {
-                    //set url parameters
-                    app.setState({ folder: app.model.get('folder_id'), id: app.model.get('id') });
-                } else {
-                    app.setState({ folder: app.model.get('folder_id'), id: null });
-                }
-            });
-
             // go!
             container.append(app.view.render().$el);
             win.show();

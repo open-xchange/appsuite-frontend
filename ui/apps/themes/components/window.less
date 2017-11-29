@@ -75,7 +75,8 @@
     display: none;
 
     #io-ox-taskbar {
-        padding: 0;
+        // when the arrow controls are enabled again, set the padding to 0
+        padding: 0 16px;
         flex-direction: row-reverse;
         list-style-type: none;
         overflow: hidden;
@@ -554,6 +555,7 @@
     z-index: 4;
     height: 100%;
     width: 100%;
+    top: 0;
     // almost transparent
     background-color: rgba(255, 255, 255, 0.01);
     position: absolute;
@@ -568,7 +570,7 @@
     outline: 0;
 
     .floating-window-content {
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
+        box-shadow: -20px 0 100px 0 rgba(0, 0, 0, 0.5);
     }
 
     .container {

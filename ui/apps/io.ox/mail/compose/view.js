@@ -775,7 +775,8 @@ define('io.ox/mail/compose/view', [
                 var discardText = isDraft ? gt.pgettext('dialog', 'Delete draft') : gt.pgettext('dialog', 'Discard message'),
                     saveText = isDraft ? gt('Keep draft') : gt('Save as draft'),
                     modalText = isDraft ? gt('Do you really want to delete this draft?') : gt('Do you really want to discard your message?');
-                if (this.app.getWindow().floating) {
+
+                if (this.app.getWindow && this.app.getWindow().floating) {
                     this.app.getWindow().floating.toggle(true);
                 }
                 // button texts may become quite large in some languages (e. g. french, see Bug 35581)

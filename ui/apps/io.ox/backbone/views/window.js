@@ -135,7 +135,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
             // trigger resize so the new height is correctly calculated
-            $(window).trigger('resize');
+            _.delay(function () {
+                $(window).trigger('resize');
+            }, 100);
         },
 
         toggleDisplaystyle: function (e) {
@@ -170,7 +172,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                     model.get('window').toggle(model.get('window').cid === self.cid || (powerMoveWindow && model.get('window').cid === powerMoveWindow.cid));
                 });
             }
-            backdrop.show();
             // trigger , so the taskbar redraws
             collection.trigger('show', this);
         },
@@ -283,7 +284,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         );
         $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
         $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
-        updateScrollControllState();
+
+        backdrop.toggle($('#io-ox-taskbar').children().length !== collection.size());
+        // updateScrollControllState();
     }, 20));
 
     collection.on('change:count', function (window, count) {
@@ -297,7 +300,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         model.get('window').makeActive(e.altKey && window.innerWidth >= 1192);
     });
 
-    var scrolling = false,
+    /*var scrolling = false,
         keepScrolling = true;
         // add controls to taskbar-container
     $('#io-ox-taskbar-container')
@@ -365,7 +368,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         }
     }
 
-    $(window).on('resize', _.debounce(updateScrollControllState, 50));
+    $(window).on('resize', _.debounce(updateScrollControllState, 50));*/
 
     return WindowView;
 
