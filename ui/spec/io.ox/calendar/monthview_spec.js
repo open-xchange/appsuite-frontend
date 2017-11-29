@@ -29,7 +29,6 @@ define([
             expect($el.find('.first.day').toArray().map(function (el) { return el.id; }), 'first days rendered element ids').to.contain('2017-10-1').and.to.contain('2017-11-1');
 
             expect($el.find('table.month:first .week:last .day').toArray().map(function (el) { return el.id.slice(5, 7); }), 'Last week of October does not contain November days').not.to.contain('11');
-            console.log($el.find('table.month:first .week:nth-child(2) .day').toArray().map(function (el) { return el.id.slice(8, 10); }));
             expect($el.find('table.month:first .week:nth-child(2) .day').toArray().map(function (el) { return el.id.slice(8, 10); }), 'Second week of October in present').to.contain('2').and.to.contain('8');
             expect($el.find('table.month:last .week:first .day').toArray().map(function (el) { return el.id.slice(5, 7); }), 'First week of November does not contain October days').not.to.contain('10');
 
