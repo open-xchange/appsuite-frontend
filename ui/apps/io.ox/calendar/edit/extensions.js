@@ -110,6 +110,8 @@ define('io.ox/calendar/edit/extensions', [
                                 uri: 'cid:' + 'file_' + attachment.cid
                             });
                         });
+                        // add already uploaded attachments (you can distinguish them as they have no uri but a managedId)
+                        attachmentData = attachmentData.concat(baton.model.get('attachments') || []);
                         baton.model.set('attachments', attachmentData, { silent: true });
                     }
 
