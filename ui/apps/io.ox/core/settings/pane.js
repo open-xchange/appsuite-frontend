@@ -211,7 +211,7 @@ define('io.ox/core/settings/pane', [
             id: 'buttons',
             render: function () {
 
-                var $group = $('<div class="form-group">');
+                var $group = $('<div class="form-group buttons">');
 
                 // check if users can edit their own data (see bug 34617)
                 if (settings.get('user/internalUserEdit', true)) {
