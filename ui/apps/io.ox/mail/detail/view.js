@@ -397,7 +397,24 @@ define('io.ox/mail/detail/view', [
                 this.prepend(emojiStyles);
             }
 
-            function resizeFrame() {
+
+            var resizeLoop = 0;
+            // function to make sure there is only one resize loop
+            function startResizeLoop() {
+                resizeFrame(resizeLoop);
+            }
+
+            function resizeFrame(once) {
+                // increase the delay by 300ms until we max out at 5s
+                // we do this to reduce the load
+                if (!once) resizeLoop = Math.min(resizeLoop + 300, 5000);
+
+                // stop if mail is collapsed or removed
+                if (!baton.view.$el || !baton.view.$el.hasClass('expanded')) {
+                    if (!once) resizeLoop = 0;
+                    return;
+                }
+
                 var frame = self.find('.mail-detail-frame'),
                     contents = frame.contents(),
                     height = contents.find('.mail-detail-content').height(),
@@ -406,10 +423,11 @@ define('io.ox/mail/detail/view', [
 
                 // frame was removed, we can stop here
                 if (contents.length === 0) {
+                    if (!once) resizeLoop = 0;
                     return;
                 }
 
-                if (height === 0) {
+                if (height === 0 && !once) {
                     // height 0 should(!) never happen, the dom node seems to be not rendered yet and
                     // calculation fails. Give it another try. Actually only an issue on FF
                     _.delay(resizeFrame, 10);
@@ -417,8 +435,8 @@ define('io.ox/mail/detail/view', [
                 }
 
                 // check if mail content is really grown or if the mail just has broken css (content size always above 100%)
-                if (height === baton.model.get('iframe-height-change')) {
-                    _.delay(resizeFrame, 300);
+                if (!once && height === baton.model.get('iframe-height-change')) {
+                    _.delay(resizeFrame, resizeLoop);
                     return;
                 }
 
@@ -434,24 +452,24 @@ define('io.ox/mail/detail/view', [
                     baton.model.set('iframe-height-change', contents.find('.mail-detail-content').height());
                 }
 
-                // check height again as there might be slow loading external images
-                _.delay(resizeFrame, 300);
-
                 // fixes overflow (see bug 55876)
                 if (_.device('ios')) contents.find('.iframe-body').css('width', self.width());
+
+                // check height again as there might be slow loading external images
+                if (!once) _.delay(resizeFrame, resizeLoop);
             }
 
-            $(node).on('resize imageload', resizeFrame); // for expanding blockquotes and inline images
+            $(node).on('resize imageload', startResizeLoop); // for expanding blockquotes and inline images
 
             baton.iframe.on('load', function () {
                 var content = baton.iframe.contents();
                 content.find('head').append('<style class="content-style">' + contentStyle + '</style>');
                 content.find('body').addClass('iframe-body').append(node);
-                resizeFrame(); // initial resize for first draw
+                startResizeLoop(); // initial resize for first draw
             });
 
-            $(window).on('orientationchange resize', _.throttle(resizeFrame, 300)); // general window resize
-            if (_.device('smartphone')) _.delay(resizeFrame, 400); // delayed resize due to page controller delay for page change
+            $(window).on('orientationchange resize', _.throttle(startResizeLoop, 300)); // general window resize
+            if (_.device('smartphone')) _.delay(startResizeLoop, 400); // delayed resize due to page controller delay for page change
 
             this.idle().append(baton.iframe);
         }
@@ -703,6 +721,9 @@ define('io.ox/mail/detail/view', [
                         );
                     }
                 }
+            } else if ($li.hasClass('expanded')) {
+                // trigger resize to restart resizeloop
+                this.$el.find('.mail-detail-frame').contents().find('.mail-detail-content').trigger('resize');
             }
 
             return this;
