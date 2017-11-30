@@ -48,7 +48,7 @@ define('io.ox/files/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view });
+        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: view.contextLinkAdder || '/default' });
 
         this.contextMenu.showContextMenu(e, baton);
     }
@@ -63,12 +63,9 @@ define('io.ox/files/listview', [
 
         initialize: function () {
             ListView.prototype.initialize.apply(this, arguments);
-            this.$el.addClass('file-list-view');
+            this.contextMenu = arguments[0].contextMenu;
 
-            // no context menu on smartphone/tablets
-            if (!(_.device('smartphone') && _.device('tablet'))) {
-                _.defer(this.createContextMenu.bind(this));
-            }
+            this.$el.addClass('file-list-view');
         },
 
         getCompositeKey: function (model) {
@@ -82,11 +79,7 @@ define('io.ox/files/listview', [
             ListView.prototype.onChange.apply(this, arguments);
         },
 
-        onContextMenu: onContextMenu,
-
-        createContextMenu: function () {
-            require(['io.ox/files/contextmenu'], function (Contextmenu) { this.contextMenu = new Contextmenu({ el: this.$el }); }.bind(this));
-        }
+        onContextMenu: onContextMenu
     });
 
     // extend the onItemKeydown handler from list by additional handlers

@@ -17,11 +17,12 @@ define('io.ox/files/share/listview', [
     'io.ox/core/folder/breadcrumb',
     'io.ox/core/tk/list',
     'io.ox/files/common-extensions',
+    'io.ox/files/api',
     'io.ox/core/capabilities',
     'gettext!io.ox/files',
     'less!io.ox/files/share/style',
     'io.ox/files/share/view-options'
-], function (api, ext, BreadcrumbView, ListView, extensions, capabilities, gt) {
+], function (api, ext, BreadcrumbView, ListView, extensions, filesAPI, capabilities, gt) {
 
     'use strict';
 
@@ -38,6 +39,8 @@ define('io.ox/files/share/listview', [
             ListView.prototype.initialize.call(this, options);
 
             this.$el.addClass('myshares-list column-layout');
+
+            this.contextMenu = arguments[0].contextMenu;
 
             this.load();
 
@@ -114,8 +117,38 @@ define('io.ox/files/share/listview', [
             });
             this.collection.trigger('sort');
             this.app.props.set(this.model.attributes);
+        },
+
+        /**
+         * Function to create the context menu for the myshare viewList.
+         * @param {jQuery.Event} event
+         */
+        onContextMenu: function (event) {
+            var view = this,
+                app = view.app,
+                list = view.selection.get();
+
+            if (!list) return;
+
+            // turn cids into proper objects
+            var cids = list,
+                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : [view.collection.get(cids)];
+
+            list = _(models).invoke('toJSON');
+            // extract single object if length === 1
+            var data = list.length === 1 ? list[0] : list;
+            var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: '/myshares' });
+
+            this.contextMenu.showContextMenu(event, baton);
         }
     });
+
+    // Overrides the onItemKeyDown function in ListView and extends it with the contextLinkAdder
+    var orgListHandler = ListView.prototype.onItemKeydown;
+    MyShareListView.prototype.onItemKeydown = function () {
+        this.contextLinkAdder = '/myshares';
+        orgListHandler.apply(this, arguments);
+    };
 
     var getPermissions = function (baton) {
             return _.chain(baton.model.getPermissions())

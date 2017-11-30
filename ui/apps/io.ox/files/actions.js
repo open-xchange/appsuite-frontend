@@ -760,6 +760,56 @@ define('io.ox/files/actions', [
         }
     });
 
+    // Action to switch to the folder of a shared file
+    new Action('io.ox/files/actions/show-in-folder', {
+        requires: function (e) {
+            if (_.device('smartphone')) return false;
+            if (!e.collection.has('one')) return false;
+            if (e.collection.has('folders')) return false;
+
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            return folderAPI.pool.getModel(id).isShareable();
+        },
+        action: function (baton) {
+            goToFolder(baton);
+        }
+    });
+
+    // Action to switch to the folder in the tree
+    new Action('io.ox/files/actions/show-folder', {
+        requires: function (e) {
+            if (_.device('smartphone')) return false;
+            if (!e.collection.has('one')) return false;
+            if (!e.collection.has('folders')) return false;
+
+            // get proper id
+            var id = e.collection.has('folders') ? e.baton.data.id : e.baton.data.folder_id;
+            return folderAPI.pool.getModel(id).isShareable();
+        },
+        action: function (baton) {
+            goToFolder(baton);
+        }
+    });
+
+    /**
+     * Switch to a specified folder in the listView.
+     * @param {Object} [baton]
+     *  Required parameters:
+     *  @param {Object} [baton.app]
+     *      The current listView app
+     *  @param {Array} [baton.models]
+     *      An Array with only one file/folder model
+     */
+    function goToFolder(baton) {
+        var app = baton.app,
+            model = baton.models[0],
+            attr = model.attributes,
+            folder = app.folder,
+            folder_id = model.isFile() ? attr.folder_id : attr.id;
+        folder.set(folder_id);
+    }
+
     // 'new' dropdown
     new links.ActionLink('io.ox/files/links/toolbar/default', {
         index: 100,

@@ -52,7 +52,8 @@ define('io.ox/files/main', [
     var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Drive' }),
         // app window
         win,
-        sidebarView = new Sidebarview({ closable: true, app: app });
+        sidebarView = new Sidebarview({ closable: true, app: app }),
+        contextmenu;
 
     app.mediator({
 
@@ -338,7 +339,7 @@ define('io.ox/files/main', [
          * Setup list view
          */
         'list-view': function (app) {
-            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true });
+            app.listView = new FileListView({ app: app, draggable: true, ignoreFocus: true, noSwipe: true, noPullToRefresh: true, contextMenu: contextmenu });
             app.listView.model.set({ folder: app.folder.get(), sort: app.props.get('sort'), order: app.props.get('order') });
             // for debugging
             window.list = app.listView;
@@ -438,7 +439,8 @@ define('io.ox/files/main', [
                             draggable: false,
                             ignoreFocus: true,
                             noSwipe: true,
-                            noPullToRefresh: true
+                            noPullToRefresh: true,
+                            contextMenu: contextmenu
                         });
 
                         app.mysharesListViewControl = new ListViewControl({
@@ -1509,6 +1511,13 @@ define('io.ox/files/main', [
 
         // fix missing default folder
         options.folder = options.folder || folderAPI.getDefaultFolder('infostore') || 9;
+
+        // contextmenu for all listviews
+        if (!(_.device('smartphone') && _.device('tablet'))) {
+            require(['io.ox/files/contextmenu'], function (Contextmenu) {
+                contextmenu = new Contextmenu({ el: win.nodes.outer });
+            });
+        }
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)

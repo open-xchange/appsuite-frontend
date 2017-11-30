@@ -113,7 +113,7 @@ define('io.ox/files/contextmenu', [
         return def.promise();
     }
 
-    // define point for the file context menu
+    // define point for the default file context menu
     ext.point('io.ox/core/file/contextmenu/default').extend({
         id: 'drive-list-dropdown',
         index: 10000,
@@ -122,7 +122,41 @@ define('io.ox/files/contextmenu', [
         }
     });
 
-    // file context menu definition
+    // define point for the myshares file context menu
+    ext.point('io.ox/core/file/contextmenu/myshares').extend({
+        id: 'drive-list-dropdown-myshares',
+        index: 10000,
+        draw: function (baton) {
+            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/myshares/items', baton);
+        }
+    });
+
+    // myshares file context menu definition
+    ext.point('io.ox/core/file/contextmenu/myshares/items').extend(
+        {
+            id: 'permissions',
+            index: 1000,
+            ref: 'io.ox/files/actions/permissions',
+            section: '10',
+            label: gt('Permissions')
+        },
+        {
+            id: 'show-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-folder',
+            section: '20',
+            label: gt('Show folder')
+        },
+        {
+            id: 'show-in-folder',
+            index: 1100,
+            ref: 'io.ox/files/actions/show-in-folder',
+            section: '20',
+            label: gt('Show in folder')
+        }
+    );
+
+    // default file context menu definition
     ext.point('io.ox/core/file/contextmenu/default/items').extend(
 
         {
@@ -222,7 +256,7 @@ define('io.ox/files/contextmenu', [
                 margin: 24
             });
 
-            option.el.after(
+            option.el.append(
                 this.dropdown.render().$el
             );
 
@@ -273,7 +307,7 @@ define('io.ox/files/contextmenu', [
 
             var ul = this.$dropdownMenu.empty();
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
-            var finishedRendering = ext.point('io.ox/core/file/contextmenu/default').invoke('draw', ul, baton);
+            var finishedRendering = ext.point('io.ox/core/file/contextmenu' + baton.contextLinkAdder).invoke('draw', ul, baton);
             return finishedRendering;
         }
     });
