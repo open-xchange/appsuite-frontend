@@ -490,7 +490,8 @@ define('io.ox/calendar/freetime/timeView', [
                 }
 
                 for (var i = 0; i < attendees.length; i++) {
-                    appointments[attendees[i].entity] = _(items[i].freeBusyTime).pluck('event');
+                    // only events for now
+                    appointments[attendees[i].entity] = _.compact(_(items[i].freeBusyTime).pluck('event'));
                 }
                 // remove busy animation again
                 self.bodyNode.idle();
