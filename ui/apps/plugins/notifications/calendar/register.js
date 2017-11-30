@@ -97,7 +97,9 @@ define('plugins/notifications/calendar/register', [
                 };
 
             var cid = _.cid(model.attributes),
-                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' });
+                strings = util.getDateTimeIntervalMarkup(model.attributes, { output: 'strings' }),
+                recurrenceString = util.getRecurrenceString(model.attributes);
+
             node.attr({
                 'data-cid': cid,
                 'focus-id': 'calendar-invite-' + cid,
@@ -108,6 +110,7 @@ define('plugins/notifications/calendar/register', [
                 $('<a class="notification-info" role="button">').append(
                     $('<span class="span-to-div time">').text(strings.timeStr).attr('aria-label', util.getTimeIntervalA11y(model.attributes)),
                     $('<span class="span-to-div date">').text(strings.dateStr).attr('aria-label', util.getDateIntervalA11y(model.attributes)),
+                    recurrenceString === '' ? [] : $('<span class="span-to-div recurrence">').text(recurrenceString),
                     $('<span class="span-to-div title">').text(model.get('summary')),
                     $('<span class="span-to-div location">').text(model.get('location')),
                     $('<span class="span-to-div organizer">').text(model.get('organizer').cn),
@@ -326,6 +329,7 @@ define('plugins/notifications/calendar/register', [
                     api: calAPI,
                     fullModel: true,
                     apiEvents: {
+                        reset: 'new-invites',
                         remove: 'delete:appointment mark:invite:confirmed'
                     },
                     useListRequest: true,
@@ -363,14 +367,6 @@ define('plugins/notifications/calendar/register', [
             //react to changes in settings
             settings.on('change:autoOpenNotification', function (e, value) {
                 subview.model.set('autoOpen', value);
-            });
-            calAPI.on('new-invites', function (invites) {
-                var oldAppointments = subview.collection.filter(function (model) {
-                    return moment.tz(model.get('endDate').value, model.get('endDate').tzid).valueOf() < _.now();
-                });
-                subview.removeNotifications(oldAppointments);
-                subview.addNotifications(invites.invitesToAdd);
-                subview.removeNotifications(invites.invitesToRemove);
             });
 
             calAPI.getInvites();
