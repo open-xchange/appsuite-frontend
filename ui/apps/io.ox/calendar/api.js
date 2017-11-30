@@ -490,53 +490,21 @@ define('io.ox/calendar/api', [
                 });
             },
 
-            // store last time we checked for invites
-            getInvitesSince: 0,
-
             getInvites: function () {
-                var now = moment().valueOf();
-
                 return api.request({
                     module: 'chronos',
                     params: {
-                        action: 'updates',
+                        action: 'needsAction',
                         folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
-                        timestamp: api.getInvitesSince || moment().subtract(1, 'years').valueOf(),
                         rangeStart: moment().subtract(2, 'hours').format(util.ZULU_FORMAT),
-                        rangeEnd: moment().add(2, 'years').format(util.ZULU_FORMAT)
+                        rangeEnd: moment().add(1, 'years').format(util.ZULU_FORMAT)
                     }
                 }, 'GET').then(function (data) {
-
-                    // exclude appointments that already ended
-                    // only use the next recurrence for recurring appointments
-                    var recurrences = {},
-                        invites = _(data.newAndModified)
-                        .filter(function (item) {
-
-                            var isOver = moment.tz(item.endDate.value, item.endDate.tzid || moment().tz()).valueOf() < now,
-                                isRecurring = !!item.recurrenceId;
-
-                            if (isOver) {
-                                return false;
-                            }
-
-                            if (isRecurring) {
-                                // yes use _.ecid here not the util.cid function
-                                // this way we get the id of the recurrence master
-                                if (recurrences[_.ecid(item)]) {
-                                    return false;
-                                }
-                                recurrences[_.ecid(item)] = true;
-                            }
-                            return _(item.attendees).any(function (user) {
-                                return user.entity === ox.user_id && user.partStat === 'NEEDS-ACTION';
-                            });
-                        });
-                    api.getInvitesSince = now;
                     // even if empty array is given it needs to be triggered to remove
                     // notifications that does not exist anymore (already handled in ox6 etc)
-                    api.trigger('new-invites', { invitesToAdd: invites, invitesToRemove: data.deleted });
-                    return invites;
+                    // no filtering needed because of new needsAction request
+                    api.trigger('new-invites', data);
+                    return data;
                 });
             },
 
