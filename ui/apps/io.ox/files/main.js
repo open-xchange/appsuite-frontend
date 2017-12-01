@@ -1512,20 +1512,23 @@ define('io.ox/files/main', [
         // fix missing default folder
         options.folder = options.folder || folderAPI.getDefaultFolder('infostore') || 9;
 
-        // contextmenu for all listviews
-        if (!(_.device('smartphone') && _.device('tablet'))) {
-            require(['io.ox/files/contextmenu'], function (Contextmenu) {
-                contextmenu = new Contextmenu({ el: win.nodes.outer });
-            });
-        }
-
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
-                app.mediate();
-                win.show(function () {
-                    // trigger grid resize
-                    $(window).trigger('resize');
+                // contextmenu for all listviews
+                var def = $.Deferred();
+                require(['io.ox/files/contextmenu'], function (Contextmenu) {
+                    if (!(_.device('smartphone') && _.device('tablet'))) {
+                        contextmenu = new Contextmenu({ el: win.nodes.outer });
+                    }
+                    def.resolve();
+                });
+                def.done(function () {
+                    app.mediate();
+                    win.show(function () {
+                        // trigger grid resize
+                        $(window).trigger('resize');
+                    });
                 });
             });
     });
