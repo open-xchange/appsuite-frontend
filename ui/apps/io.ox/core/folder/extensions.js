@@ -967,8 +967,9 @@ define('io.ox/core/folder/extensions', [
                     if (baton.data.module === 'infostore') return;
                     if (!api.is('unlocked', baton.data)) return;
 
+                    // TODO - A11y: Click handler on icon?
                     baton.view.$.buttons.append(
-                        $('<i class="fa folder-shared">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
+                        $('<i class="fa folder-shared" aria-hidden="true">').attr('title', gt('You share this folder with other users')).on('click', { id: baton.data.id }, openPermissions)
                     );
                     baton.view.addA11yDescription(gt('You share this folder with other users'));
                 }
@@ -986,6 +987,7 @@ define('io.ox/core/folder/extensions', [
                     if (api.is('shared', baton.data)) return;
                     if (!api.is('subscribed', baton.data)) return;
 
+                    // TODO - A11y: Click handler on icon?
                     baton.view.$.buttons.append(
                         $('<i class="fa folder-sub">').attr('title', gt('This folder has subscriptions')).on('click', { folder: baton.data }, openSubSettings)
                     );

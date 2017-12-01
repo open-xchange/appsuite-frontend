@@ -511,7 +511,7 @@ define('io.ox/files/share/permissions', [
                     // groups and links
                     column.append(
                         node.addClass('group').append(
-                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'link') + '">')
+                            $('<i class="fa fa-' + (baton.model.get('type') === 'group' ? 'group' : 'link') + '" aria-hidden="true">')
                         )
                     );
                 }

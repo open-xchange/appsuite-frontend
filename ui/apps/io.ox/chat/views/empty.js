@@ -21,7 +21,7 @@ define('io.ox/chat/views/empty', ['io.ox/backbone/views/disposable'], function (
             this.$el.append(
                 $('<div class="start-chat abs">').append(
                     $('<button type="button" class="btn btn-default" data-cmd="start-chat">').append(
-                        $('<i class="fa fa-plus">'),
+                        $('<i class="fa fa-plus" aria-hidden="true">'),
                         $('<br>'),
                         $.txt('Start new chat')
                     )

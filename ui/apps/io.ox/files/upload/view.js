@@ -41,7 +41,7 @@ define('io.ox/files/upload/view', [
                             .off('click')
                             .empty()
                             .append(
-                                $('<i class="fa fa-lg fa-check">')
+                                $('<i class="fa fa-lg fa-check" aria-hidden="true">')
                             );
                     } else {
                         var progress = self.$el.find('.progress-bar');
@@ -84,13 +84,8 @@ define('io.ox/files/upload/view', [
                         $('<div class="file-size">').text(gt.format('%1$s\u00A0', strings.fileSize(this.model.get('file').size))),
                         removeIcon,
                         $('<div class="progress">').addClass(this.model.get('progress') < 1 ? '' : 'invisible').append(
-                            $('<div class="progress-bar progress-bar-striped active">')
-                                .attr({
-                                    'role': 'progressbar',
-                                    'aria-valuenow': val,
-                                    'aria-valuemin': '0',
-                                    'aria-valuemax': '100'
-                                })
+                            $('<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">')
+                                .attr('aria-valuenow', val)
                                 .css({ 'width': val + '%' })
                                 .append(
                                     $('<span class="sr-only">').text(
@@ -107,7 +102,7 @@ define('io.ox/files/upload/view', [
                     );
                 } else {
                     removeIcon.append(
-                        $('<i class="fa fa-lg fa-check">')
+                        $('<i class="fa fa-lg fa-check" aria-hidden="true">')
                     );
                 }
             },

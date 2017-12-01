@@ -309,7 +309,7 @@ define('plugins/notifications/tasks/register', [
                             'aria-label': gt('Accept invitation') + ' ' + task.title,
                             'focus-id': 'task-invite-accept-' + _.ecid(baton.model.attributes)
                         })
-                        .append('<i class="fa fa-check">')
+                        .append('<i class="fa fa-check" aria-hidden="true">')
                         .on('click', onClickAccept)
                 )
             );

@@ -135,7 +135,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
     };
 
     var drawDeleteButton = function (type) {
-        return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o">'));
+        return $('<a href="#" class="remove" tabindex="0">').attr('data-action', 'remove-' + type).append($('<i class="fa fa-trash-o" aria-hidden="true">'));
     };
 
     var drawColorDropdown = function (activeColor, colors, colorflags) {
@@ -146,7 +146,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
         }
 
         var flagclass = 'flag_' + colorflags[activeColor];
-        return $('<div class="dropup flag-dropdown clear-title flag">').attr({ 'data-color-value': activeColor })
+        return $('<div class="dropup flag-dropdown clear-title flag">').attr('data-color-value', activeColor)
         .addClass(flagclass)
         .append(
             // box
@@ -156,7 +156,7 @@ define('io.ox/mail/mailfilter/settings/filter/actions/util', [
             .append(
                 _(colors).map(function (colorObject) {
                     return $('<li>').append(
-                        $('<a href="#">').attr({ 'data-action': 'change-color', 'tabindex': '1' }).append(
+                        $('<a href="#" data-action="change-color" tabindex="1">').append(
                             colorObject.value > 0 ? $('<span class="flag-example">').addClass('flag_' + colorObject.value) : $(),
                             $.txt(colorObject.text)
                         )

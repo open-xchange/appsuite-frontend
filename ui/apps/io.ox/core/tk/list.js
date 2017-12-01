@@ -45,12 +45,12 @@ define('io.ox/core/tk/list', [
 
         scaffold: $(
             '<li class="list-item">' +
-            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"/></div>' +
+            '<div class="list-item-checkmark"><i class="fa fa-checkmark" aria-hidden="true"></i></div>' +
             '<div class="list-item-content"></div><div class="list-item-swipe-conent"></div>' +
             '</li>'
         ),
 
-        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down"/></li>'),
+        busyIndicator: $('<li class="busy-indicator"><i class="fa fa-chevron-down" aria-hidden="true"></i></li>'),
 
         // disabled by default via 'hidden class'
         notification: $('<li class="abs notification hidden" role="presentation"></li>'),
@@ -58,7 +58,7 @@ define('io.ox/core/tk/list', [
         pullToRefreshIndicator: $(
             '<div class="pull-to-refresh" style="transform: translate3d(0, -70px,0)">' +
             '<div class="spinner slight-drop-shadow" style="opacity: 1">' +
-            '<i id="ptr-spinner" class="fa fa-refresh"/></div></div>'
+            '<i id="ptr-spinner" class="fa fa-refresh" aria-hidden="true"></i></div></div>'
         ),
 
         onItemFocus: function () {

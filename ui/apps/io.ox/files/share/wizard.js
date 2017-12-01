@@ -99,7 +99,7 @@ define('io.ox/files/share/wizard', [
             group.append(
                 $('<span class="input-group-btn">').append(
                     button = $('<button type="button" class="btn btn-default">')
-                    .append($('<i class="fa fa-clipboard clippy">'))
+                    .append($('<i class="fa fa-clipboard clippy" aria-hidden="true">'))
                     .attr({
                         'data-clipboard-target': target,
                         'data-toggle': 'tooltip',

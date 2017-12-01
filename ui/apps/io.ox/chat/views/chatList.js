@@ -58,9 +58,9 @@ define('io.ox/chat/views/chatList', [
                         new StateView({ model: model.members.at(0) }).render().$el.addClass('small')
                     );
                 case 'group':
-                    return $('<i class="fa fa-group btn-icon">');
+                    return $('<i class="fa fa-group btn-icon" aria-hidden="true">');
                 case 'channel':
-                    return $('<i class="fa fa-hashtag btn-icon">');
+                    return $('<i class="fa fa-hashtag btn-icon" aria-hidden="true">');
                 // no default
             }
         },

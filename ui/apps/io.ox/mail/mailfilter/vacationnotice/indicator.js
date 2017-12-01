@@ -27,7 +27,7 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
         el: '<div class="alert alert-info alert-dismissable ellipsis indicator" role="alert">',
 
         events: {
-            'click .close': 'onClose',
+            'click .btn-close': 'onClose',
             'click a[data-action="edit-vacation-notice"]': 'onEdit'
         },
 
@@ -76,26 +76,25 @@ define('io.ox/mail/mailfilter/vacationnotice/indicator', [
 
     ext.point('io.ox/mail/vacation-notice/indicator').extend(
         {
-            id: 'close',
+            id: 'link',
             index: 100,
             render: function () {
+                var title = gt('Your vacation notice is active');
                 this.$el.append(
-                    $('<button type="button" class="close"><span aria-hidden="true">&times;</span></button>')
-                        .attr('aria-label', gt('Close'))
+                    $('<i class="fa fa-warning" aria-hidden="true">'),
+                    $('<span class="sr-only">').text(gt('Warning')),
+                    $('<a href="#" data-action="edit-vacation-notice">').text(title)
                 );
             }
         },
         {
-            id: 'link',
+            id: 'close',
             index: 200,
             render: function () {
-                var title = gt('Your vacation notice is active');
                 this.$el.append(
-                    $('<i class="fa fa-warning">'),
-                    $.txt(' '),
-                    $('<a href="#" data-action="edit-vacation-notice">')
-                        .attr('title', title)
-                        .text(title)
+                    $('<button type="button" class="btn btn-link btn-close">').attr('title', gt('Close')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
                 );
             }
         }

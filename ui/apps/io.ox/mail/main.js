@@ -263,6 +263,9 @@ define('io.ox/mail/main', [
 
         'folder-view-dsc-folder-setup-notice': function () {
 
+            // TODO - A11y: Why is this in the Tree?
+            // The Foldertree is for Folders only!
+
             function returnFakeFolder(account) {
                 var fakeFolder = $('<li class="folder remote-account-setup">').attr({
                     'data-id': account.root_folder,
@@ -277,11 +280,11 @@ define('io.ox/mail/main', [
                     'aria-expanded': 'false'
                 })
                 .append(
-                    $('<div class="folder-node" style="padding-left: 0px;">').attr('aria-hidden', 'true').append(
+                    $('<div class="folder-node" style="padding-left: 0px;" aria-hidden="true">').append(
                         $('<div class="folder-arrow">').append(
                         ),
                         $('<div class="folder-icon">').append(
-                            $('<i class="fa fa-fw">')
+                            $('<i class="fa fa-fw" aria-hidden="true">')
                         ),
                         $('<div class="folder-label">').append(
                             $('<div>').text(account.name)
@@ -289,9 +292,9 @@ define('io.ox/mail/main', [
                         $('<div class="folder-counter">'),
                         $('<a href="#" class="account-link">').attr({
                             'data-dsc': account.root_folder,
-                            title: 'Account is being created'
+                            title: gt('Account is being created')
                         }).append(
-                            $('<i class="fa fa-exclamation-triangle">')
+                            $('<i class="fa fa-exclamation-triangle" aria-hidden="true">')
                         ),
                         $('<ul class="subfolders" role="group">')
                     )

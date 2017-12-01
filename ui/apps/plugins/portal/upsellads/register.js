@@ -119,7 +119,7 @@ define('plugins/portal/upsellads/register', [
                     .on('click', function () {
                         return nextAd(content, ad, slides);
                     })
-                    .append($('<i class="fa fa-circle-arrow-right fa-2x">'))
+                    .append($('<i class="fa fa-circle-arrow-right fa-2x" aria-hidden="true">'))
             );
             content.on('click', function () {
                 var def = $.Deferred();

@@ -258,7 +258,7 @@ define('io.ox/mail/compose/extensions', [
         },
 
         recipientActionLinkMobile: function () {
-            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right">'));
+            var node = $('<a href="#" data-action="add" role="checkbox" aria-checked="false">').append($('<span class="fa fa-angle-right" aria-hidden="true">'));
             this.append(node);
         },
 

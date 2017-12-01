@@ -223,7 +223,7 @@ define('io.ox/core/permissions/permissions', [
             } else {
                 this.append(
                     $('<div class="pull-left contact-picture group">').append(
-                        $('<i class="fa fa-group">')
+                        $('<i class="fa fa-group" aria-hidden="true">')
                     )
                 );
             }

@@ -126,7 +126,7 @@ define('plugins/notifications/calendar/register', [
                             'focus-id': 'calendar-invite-' + cid + '-accept'
                         })
                         .on('click', onClickAccept)
-                        .append('<i class="fa fa-check">')
+                        .append($('<i class="fa fa-check" aria-hidden="true">'))
                 )
             );
         }

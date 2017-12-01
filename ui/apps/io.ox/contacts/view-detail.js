@@ -159,7 +159,7 @@ define('io.ox/contacts/view-detail', [
             this.append(
                 $('<div class="next-to-picture">').append(
                     // right side
-                    $('<i class="fa fa-lock private-flag">').attr('title', gt('Private')).hide(),
+                    $('<i class="fa fa-lock private-flag" aria-hidden="true">').attr('title', gt('Private')).hide(),
                     name.children().length ? name.addClass('header-name') : [],
                     company ? $('<h2 class="header-company">').append($('<span class="company">').text(company)) : [],
                     job.length ? $('<h2 class="header-job">').append(job) : [],

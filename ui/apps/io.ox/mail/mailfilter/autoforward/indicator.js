@@ -26,7 +26,7 @@ define('io.ox/mail/mailfilter/autoforward/indicator', [
         point: 'io.ox/mail/autoforward/indicator',
 
         events: {
-            'click .close': 'onClose',
+            'click .btn-close': 'onClose',
             'click a[data-action="edit-autoforward-notice"]': 'onEdit'
         },
 
@@ -49,26 +49,25 @@ define('io.ox/mail/mailfilter/autoforward/indicator', [
 
     ext.point('io.ox/mail/autoforward/indicator').extend(
         {
-            id: 'close',
+            id: 'link',
             index: 100,
             render: function () {
+                var title = gt('Auto forwarding is active');
                 this.$el.append(
-                    $('<button type="button" class="close"><span aria-hidden="true">&times;</span></button>')
-                        .attr('aria-label', gt('Close'))
+                    $('<i class="fa fa-warning" aria-hidden="true">'),
+                    $('<span class="sr-only">').text(gt('Warning')),
+                    $('<a href="#" data-action="edit-autoforward-notice">').text(title)
                 );
             }
         },
         {
-            id: 'link',
+            id: 'close',
             index: 200,
             render: function () {
-                var title = gt('Auto forwarding is active');
                 this.$el.append(
-                    $('<i class="fa fa-warning">'),
-                    $.txt(' '),
-                    $('<a href="#" data-action="edit-autoforward-notice">')
-                        .attr('title', title)
-                        .text(title)
+                    $('<button type="button" class="btn btn-link btn-close">').attr('title', gt('Close')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
                 );
             }
         }

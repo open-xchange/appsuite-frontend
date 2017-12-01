@@ -228,7 +228,7 @@ define('io.ox/core/viewer/views/toolbarview', [
                     ref: 'io.ox/files/dropdown/share',
                     customize: function (baton) {
                         var self = this;
-                        this.append('<i class="fa fa-caret-down" aria-hidden="true">');
+                        this.append('<i class="fa fa-caret-down" aria-hidden="true"></i>');
 
                         new Dropdown({
                             el: this.parent().addClass('dropdown'),

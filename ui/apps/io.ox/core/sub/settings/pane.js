@@ -231,7 +231,7 @@ define('io.ox/core/sub/settings/pane', [
             if (data.source && (baton.model.refreshState() === 'pending')) {
                 // this is a subscription and we are refreshing
                 this.find('.name').append(
-                    $('<i class="fa fa-refresh fa-spin">')
+                    $('<i class="fa fa-refresh fa-spin" aria-hidden="true">')
                 );
             }
         }

@@ -124,9 +124,9 @@ define('io.ox/core/emoji/view', [
                         $('<div class="emoji-options dropdown pull-right">').append(
                             // link
                             $('<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="menuitem" aria-haspopup="true">')
-                            .attr('arial-label', gt('Options'))
+                            .attr('title', gt('Options'))
                             .append(
-                                $('<i class="fa fa-cog" aria-hidden="true" role="presentation">')
+                                $('<i class="fa fa-cog" aria-hidden="true">')
                             ),
                             // list
                             $('<ul class="dropdown-menu" role="menu">')

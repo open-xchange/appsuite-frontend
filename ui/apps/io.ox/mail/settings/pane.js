@@ -201,7 +201,7 @@ define('io.ox/mail/settings/pane', [
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-vacation-notice">')
                     .append(
-                        $('<i class="fa fa-toggle-on">').hide(),
+                        $('<i class="fa fa-toggle-on" aria-hidden="true">').hide(),
                         $.txt(gt('Vacation notice') + ' ...')
                     )
                     .on('click', openDialog)
@@ -236,7 +236,7 @@ define('io.ox/mail/settings/pane', [
                 this.append(
                     $('<button type="button" class="btn btn-default" data-action="edit-auto-forward">')
                     .append(
-                        $('<i class="fa fa-toggle-on">').hide(),
+                        $('<i class="fa fa-toggle-on" aria-hidden="true">').hide(),
                         $.txt(gt('Auto forward') + ' ...')
                     )
                     .on('click', openDialog)

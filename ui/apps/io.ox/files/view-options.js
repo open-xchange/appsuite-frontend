@@ -170,14 +170,14 @@ define('io.ox/files/view-options', [
             if (_.device('!smartphone')) return;
 
             this.append(
-                $('<div class="grid-options toolbar-item pull-left" >').append(
+                $('<div class="grid-options toolbar-item pull-left">').append(
                     $('<a href="#" role="button">').append(
                         $('<span class="folder-up fa-stack">').append(
-                            $('<i class="fa fa-folder fa-stack-2x">'),
-                            $('<i class="fa fa-level-up fa-stack-1x fa-inverse">')
+                            $('<i class="fa fa-folder fa-stack-2x" aria-hidden="true">'),
+                            $('<i class="fa fa-level-up fa-stack-1x fa-inverse" aria-hidden="true">')
                         )
                     ).attr({
-                        'aria-label': gt('Switch to parent folder')
+                        'title': gt('Switch to parent folder')
                     }).on('click', function (e) {
                         e.preventDefault();
 

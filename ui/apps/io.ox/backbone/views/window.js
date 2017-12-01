@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], function (DisposableView) {
+define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gettext!io.ox/core'], function (DisposableView, gt) {
 
     'use strict';
 
@@ -38,7 +38,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable'], funct
                             $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
                         ),
                         $('<div class="controls">').append(
-                            $('<a href="#" data-action="minimize">').append('<i class="fa fa-window-minimize">')
+                            $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
+                                $('<i class="fa fa-window-minimize" aria-hidden="true">')
+                            )
                         )
                     ),
                     this.$body = $('<div class="floating-body abs">')

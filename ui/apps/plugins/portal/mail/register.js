@@ -68,7 +68,7 @@ define('plugins/portal/mail/register', [
                 .append(
                     (function () {
                         if ((self.model.get('flags') & 32) === 0) {
-                            return $('<i class="fa fa-circle new-item accent">');
+                            return $('<i class="fa fa-circle new-item accent" aria-hidden="true">');
                         }
                     })(),
                     $('<span class="bold">').text(util.getDisplayName(this.model.get('from')[0])), $.txt(' '),

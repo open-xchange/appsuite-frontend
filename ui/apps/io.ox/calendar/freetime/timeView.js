@@ -57,7 +57,7 @@ define('io.ox/calendar/freetime/timeView', [
                             //#. %1$d = Calendar week
                             gt('CW %1$d', moment(baton.model.get('currentWeek')).isoWeek())
                         ),
-                        $('<i class="fa fa-caret-down fa-fw">').attr('aria-hidden', true)
+                        $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
                     );
                 };
 
