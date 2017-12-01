@@ -1,3 +1,9 @@
+open-xchange-dynamic-theme (7.10.0-1) stable; urgency=medium
+
+  * First preview for 7.10.0 release
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Fri, 01 Dec 2017 19:14:18 +0000
+
 open-xchange-dynamic-theme (7.10.0-0) unstable; urgency=medium
 
   * prepare for 7.10.0 release
