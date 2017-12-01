@@ -269,8 +269,8 @@ define('io.ox/contacts/view-detail', [
             _(list)
                 .chain()
                 .filter(function (member) {
-                    if (hash[member.mail]) return false;
-                    return (hash[member.mail] = true);
+                    if (hash[member.display_name + '_' + member.mail]) return false;
+                    return (hash[member.display_name + '_' + member.mail] = true);
                 })
                 .each(function (member) {
                     ext.point('io.ox/contacts/detail/member').invoke('draw', $list, member);
