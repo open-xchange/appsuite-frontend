@@ -822,6 +822,7 @@ define('io.ox/core/desktop', [
                             if (_.device('!smartphone') && app.options.floating) {
                                 var dummyWindow = new windowView({ title: obj.description, closable: true, dummyCallback: function () {
                                     dummyWindow.close();
+                                    var oldId = obj.id;
                                     app.launch().then(function () {
                                         // update unique id
                                         obj.id = this.get('uniqueID');
@@ -829,6 +830,13 @@ define('io.ox/core/desktop', [
                                             // restore
                                             return this.failRestore(obj.point);
                                         }
+                                        return $.when();
+                                    }).done(function () {
+                                        // replace restore point with old id with restore point with new id (prevents duplicates)
+                                        self.removeRestorePoint(oldId).then(self.getSavePoints).then(function (sp) {
+                                            sp.push(obj);
+                                            self.setSavePoints(sp);
+                                        });
                                     });
                                 } });
                                 return $.when();
