@@ -238,17 +238,23 @@ define('io.ox/settings/main', [
             id: 'standard-folders',
             index: 100,
             draw: function (tree) {
-                var defaults = { headless: true, count: 0, empty: false, indent: false, open: true, tree: tree, parent: tree, folder: 'virtual/settings' };
+                var defaults = {
+                    headless: true,
+                    count: 0,
+                    empty: false,
+                    indent: false,
+                    open: true,
+                    tree: tree,
+                    parent: tree,
+                    folder: 'virtual/settings',
+                    className: 'folder selectable'
+                };
 
                 this.append(
 
-                    mainGroups.map(function (groupName) {
-                        var folderOptions = _.extend({}, defaults);
-                        if (groupName === 'virtual/settings/security') _.extend(folderOptions, { headless: false, title: gt('Security') });
-                        return new TreeNodeView(_.extend({}, folderOptions, {
-                            className: groupName === 'virtual/settings/security' ? 'folder un-selectable' : 'folder selectable',
-                            model_id: groupName
-                        }))
+                    mainGroups.map(function (group) {
+                        var folderOptions = _.extend({}, defaults, group.folderOptions || {}, { model_id: group.id });
+                        return new TreeNodeView(folderOptions)
                         .render().$el.addClass('standard-folders');
                     })
 
@@ -385,7 +391,10 @@ define('io.ox/settings/main', [
             _.each(groupList, function (val) {
 
                 if (val.subgroup) {
-                    mainGroups.push('virtual/settings/' + val.id);
+                    mainGroups.push({
+                        id: 'virtual/settings/' + val.id,
+                        folderOptions: val.folderOptions
+                    });
                     disableListetSettingsPanes(val.subgroup);
                     var list = _(ext.point(val.subgroup).list()).map(function (p) {
                         processSubgroup(p, val.subgroup);
@@ -498,7 +507,13 @@ define('io.ox/settings/main', [
         ext.point('io.ox/settings/pane').extend({
             id: 'security',
             index: 200,
-            subgroup: 'io.ox/settings/pane/security'
+            subgroup: 'io.ox/settings/pane/security',
+            folderOptions: {
+                title: gt('Security'),
+                headless: false,
+                indent: true,
+                className: 'folder un-selectable'
+            }
         });
 
         var submodules = _(keychainAPI.submodules).filter(function (submodule) {
