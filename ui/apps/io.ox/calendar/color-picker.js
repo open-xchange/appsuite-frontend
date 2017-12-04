@@ -74,12 +74,12 @@ define('io.ox/calendar/color-picker', [
             var self = this;
             if (this.opt.noColorOption) {
                 this.$el.append(
-                    this.renderOption({ label: gt('no color'), foreground: '#000' })
+                    this.renderOption({ label: gt('no color') })
                         .addClass('no-color')
                 );
             }
-            _.range(0, 10).forEach(function (index) {
-                self.$el.append(self.renderOption(util.colors[index]));
+            util.colors.forEach(function (color) {
+                self.$el.append(self.renderOption(color));
             });
             if (this.opt.additionalColor) {
                 this.$el.append(this.renderOption(this.opt.additionalColor));

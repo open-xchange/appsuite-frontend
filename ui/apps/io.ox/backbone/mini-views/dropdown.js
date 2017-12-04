@@ -39,6 +39,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
             if (_.device('smartphone')) return;
             if (this.smart === false && !this.$overlay) return;
             if (!this.$el.hasClass('open')) return;
+            this.$ul.css({ width: 'auto', height: 'auto' });
             this.adjustBounds();
         },
 
