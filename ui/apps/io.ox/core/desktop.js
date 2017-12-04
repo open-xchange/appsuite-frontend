@@ -820,7 +820,7 @@ define('io.ox/core/desktop', [
                             var app = m.getApp(obj.passPointOnGetApp ? obj.point : undefined);
                             // floating windows are restored as dummies. On click the dummy starts the complete app. This speeds up the restore process.
                             if (_.device('!smartphone') && app.options.floating) {
-                                var dummyWindow = new windowView({ title: obj.description, closable: true, dummyCallback: function () {
+                                var dummyWindow = new windowView.WindowView({ title: obj.description, closable: true, dummyCallback: function () {
                                     dummyWindow.close();
                                     var oldId = obj.id;
                                     app.launch().then(function () {
@@ -1580,7 +1580,7 @@ define('io.ox/core/desktop', [
                 win = new Window(opt);
 
             if (opt.floating) {
-                win.floating = new windowView({ title: opt.title, win: win, closable: opt.closable, displayStyle: options.displayStyle });
+                win.floating = new windowView.WindowView({ title: opt.title, win: win, closable: opt.closable, displayStyle: options.displayStyle });
             }
             // window container
             win.nodes.outer = (opt.floating ? win.floating.$el : $('<div>'))

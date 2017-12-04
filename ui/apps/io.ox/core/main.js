@@ -34,12 +34,13 @@ define('io.ox/core/main', [
     'settings!io.ox/core',
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
+    'io.ox/backbone/views/window',
     'io.ox/core/relogin',
     'io.ox/core/links',
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started'
-], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, onboardingAPI, a11y, settings, contactsSettings, gt) {
+], function (desktop, session, http, appAPI, userAPI, ext, Stage, notifications, HelpView, Dropdown, commons, upsell, UpsellView, capabilities, ping, folderAPI, onboardingAPI, a11y, settings, contactsSettings, gt, windowview) {
 
     'use strict';
 
@@ -765,10 +766,16 @@ define('io.ox/core/main', [
             if (model.get('title') === undefined) return;
             if (model.get('floating')) return;
 
+            var closable = model.get('closable') && !_.device('smartphone');
+
+            if (closable) {
+                windowview.addNonFloatingApp(model);
+                return;
+            }
+
             // create topbar launcher
             var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
                 title = model.get('title'),
-                closable = model.get('closable') && !_.device('smartphone'),
                 name;
 
             model.set('topbarNode', node);

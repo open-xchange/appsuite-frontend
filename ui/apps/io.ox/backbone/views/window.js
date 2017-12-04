@@ -242,8 +242,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // minimize on appchange
             ox.ui.apps.on('launch resume', function (model) {
                 if (model && !model.get('floating')) {
-                    _(collection.pluck('window')).each(function (win) {
-                        win.toggle(false);
+                    _(collection.filter(function (model) { return !model.get('nonFloating'); })).each(function (model) {
+                        model.get('window').toggle(false);
                     });
                 }
             });
@@ -270,15 +270,22 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 if (!hasStickyWindows && !floatingWindow.minimized) {
                     hasStickyWindows = floatingWindow.displayStyle === 'sticky';
                 }
-                if (!floatingWindow.minimized) return $();
+                if (!floatingWindow.minimized && !model.get('nonFloating')) return $();
                 return $('<li>').append(
                     $('<button class="taskbar-button" type="button">')
-                        .attr('data-cid', floatingWindow.cid)
+                        .attr('data-cid', floatingWindow.cid || model.cid)
                         .append(
-                            $('<span class="title">').text(floatingWindow.title),
+                            $('<span class="title">').text(floatingWindow.title || model.get('title')),
                             $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count)
                         ),
-                    floatingWindow.options.closable ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">').on('click', floatingWindow.close.bind(floatingWindow)) : ''
+                    floatingWindow.options.closable || model.get('closable') ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">')
+                    .on('click', function (e) {
+                        if (model.get('nonFloating')) {
+                            model.quit();
+                            return;
+                        }
+                        floatingWindow.close(e);
+                    }) : ''
                 );
             })
         );
@@ -294,9 +301,14 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     });
 
     $(document).on('click', '#io-ox-taskbar button', function (e) {
+        e.preventDefault();
         var cid = $(e.currentTarget).attr('data-cid'),
             model = collection.get(cid);
 
+        if (model.get('nonFloating')) {
+            model.launch();
+            return;
+        }
         model.get('window').makeActive(e.altKey && window.innerWidth >= 1192);
     });
 
@@ -370,6 +382,22 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
     $(window).on('resize', _.debounce(updateScrollControllState, 50));*/
 
-    return WindowView;
+    // used to add apps that do not use floating windows to the taskbar => office, planningview etc
+    var addNonFloatingApp = function (model) {
+        if (!model) return;
+        model.set('nonFloating', true);
+        model.on('quit', function () { remove(model); });
+        model.on('change:title', function () {
+            var node = $('#io-ox-taskbar').find('[data-cid="' + model.cid + '"] .title');
+            if (node) node.text(model.getTitle());
+        });
+        collection.add(model).trigger('show', this);
+    };
+
+    return {
+        WindowView: WindowView,
+        windowCollection: collection,
+        addNonFloatingApp: addNonFloatingApp
+    };
 
 });
