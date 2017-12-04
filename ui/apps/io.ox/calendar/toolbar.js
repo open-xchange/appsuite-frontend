@@ -185,7 +185,7 @@ define('io.ox/calendar/toolbar', [
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
-            if (capabilities.has('calendar-printing')) {
+            if (capabilities.has('calendar-printing') && baton.app.props.get('layout') !== 'year') {
                 dropdown
                 .divider()
                 .link('print', gt('Print'), print.bind(null, baton));
