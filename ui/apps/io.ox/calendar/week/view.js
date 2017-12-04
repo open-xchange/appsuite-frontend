@@ -571,7 +571,8 @@ define('io.ox/calendar/week/view', [
                 // calculate timestamp for current position
                 this.trigger('openCreateAppointment', e, {
                     startDate: { value: start.utc(true).format('YYYYMMDD') },
-                    endDate: { value: start.add(1, 'day').format('YYYYMMDD') }
+                    endDate: { value: start.utc(true).format('YYYYMMDD') },
+                    allDay: true
                 });
             }
         },
