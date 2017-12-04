@@ -126,10 +126,12 @@ docker_image_ui:
     - copy_build compile_po concat uglify:dist uglify:dist_i18n create_i18n_properties copy_dist
 
 test_ui:
-  image: gitlab.open-xchange.com:4567/frontend/dev_env:0.0.2
+  image: gitlab.open-xchange.com:4567/frontend/dev_env/browser:latest
+  variables:
+    BROWSERS: DockerHeadless
   script:
     - cd ui
-    - /app/run.sh test
+    - yarn test
   stage: test
   dependencies:
     - install_deps_ui
