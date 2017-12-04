@@ -295,8 +295,10 @@ define('io.ox/core/tk/doc-utils/pageloader', [
          *  The new zoom factor, as floating point number (the value 1
          *  represents the original page size).
          *
-         * @returns {PageLoader}
-         *  A reference to this instance.
+         * @returns {jquery.Promise}
+         *  The promise of the rendering function, that is resolved, when
+         *  rendering is finshed. If no rendering is required, the promise
+         *  is resolved immediately.
          */
         this.setPageZoom = function (pageNode, pageZoom) {
             var // the page number
@@ -310,18 +312,20 @@ define('io.ox/core/tk/doc-utils/pageloader', [
                 // the resulting width/height
                 width = Math.ceil(pageSize.width * pageZoom),
                 height = Math.ceil(pageSize.height * pageZoom),
-                newPageSize = { width: width, height: height };
+                newPageSize = { width: width, height: height },
+                // pdf render proimse
+                renderPromise = null;
 
             jqPageNode.data('page-zoom', pageZoom).attr(newPageSize).css(newPageSize);
 
             if (renderType === 'pdf') {
                 // <canvas> element: render page into canvas and create text overlay
-                pdfView.renderPDFPage(jqPageNode, pageNumber, pageZoom).then(function () {
+                renderPromise = pdfView.renderPDFPage(jqPageNode, pageNumber, pageZoom).then(function () {
                     jqPageNode.data('page-zoom', pageZoom).attr(newPageSize).css(ACTIVE_STYLE);
                 });
             }
 
-            return this;
+            return renderPromise ? renderPromise : $.when();
         };
 
         // initialization -----------------------------------------------------

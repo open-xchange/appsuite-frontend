@@ -47,6 +47,9 @@ define('io.ox/core/viewer/views/types/documentview', [
     var DocumentView =  BaseView.extend({
 
         initialize: function (options) {
+
+            Util.logPerformanceTimer('DocumentView:initialize');
+
             _.extend(this, options);
             // amount of page side margins in pixels
             this.PAGE_SIDE_MARGIN = _.device('desktop') ? 20 : 10;
@@ -297,6 +300,8 @@ define('io.ox/core/viewer/views/types/documentview', [
         loadVisiblePages: function () {
             this.documentLoad.done(function () {
 
+                Util.logPerformanceTimer('DocumentView:loadVisiblePages');
+
                 var pagesToRender = this.getPagesToRender();
                 var beginPageNumber = _.first(pagesToRender);
                 var endPageNumber = _.last(pagesToRender);
@@ -391,15 +396,20 @@ define('io.ox/core/viewer/views/types/documentview', [
                 if (_.isNumber(pageNumberToRefresh)) {
                     // Process the page node
                     var pageNode = this.getPageNode(pageNumberToRefresh);
-                    this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100);
+                    Util.logPerformanceTimer('DocumentView:refresh_before_pdf_render_' + pageNumberToRefresh);
+                    this.pageLoader.setPageZoom(pageNode, this.currentZoomFactor / 100).done(function () {
+                        Util.logPerformanceTimer('DocumentView:refresh_' + pageNumberToRefresh);
+                    });
 
                 } else {
                     // empty all pages in case of a complete refresh request
                     this.pages.detach().each(function () {
                         self.emptyPageNode($(this));
-                        self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100);
-
-                    }).appendTo(self.documentContainer);
+                        Util.logPerformanceTimer('DocumentView:refresh_before_pdf_render_' + pageNumberToRefresh);
+                        self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100).done(function () {
+                            Util.logPerformanceTimer('DocumentView:refresh_' + pageNumberToRefresh);
+                        }).appendTo(self.documentContainer);
+                    });
                 }
 
                 if (_.isNumber(pageNumberToSelect)) {
@@ -575,6 +585,9 @@ define('io.ox/core/viewer/views/types/documentview', [
          *  the DocumentView instance.
          */
         show: function (options) {
+
+            Util.logPerformanceTimer('DocumentView:show');
+
             // ignore already loaded documents
             if (this.$el.find('.document-page').length > 0) {
                 // document pages are drawn, but there is no visible page rendered yet
@@ -599,6 +612,9 @@ define('io.ox/core/viewer/views/types/documentview', [
              *  page count of the pdf document delivered by the PDF.js library.
              */
             function pdfDocumentLoadSuccess(pageCount) {
+
+                Util.logPerformanceTimer('DocumentView:pdfDocumentLoadSuccess');
+
                 // do nothing and quit if a document is already disposed.
                 if (this.disposed || !this.pdfDocument) {
                     return;

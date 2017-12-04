@@ -42,6 +42,9 @@ define('io.ox/core/viewer/views/mainview', [
         },
 
         initialize: function (options) {
+
+            Util.logPerformanceTimer('MainView:initialize');
+
             _.extend(this, options);
             // apps with 'simple window' class (Portal) scrolls behind the viewer.
             // Hide it for the moment as a workaround.
