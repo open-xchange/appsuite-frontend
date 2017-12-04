@@ -429,8 +429,8 @@ define('io.ox/core/tk/contenteditable-editor', [
 
             ln2br = function (str) {
                 return String(str || '').replace(/\r/g, '')
-                    // '\n' is for IE
-                    .replace(new RegExp('\\n', 'g'), '<br>');
+                    // '\n' is for IE; do not add for signatures
+                    .replace(new RegExp('\\n', 'g'), str.indexOf('io-ox-signature') > -1 ? '\n' : '<br>');
             },
 
             // get editor content
