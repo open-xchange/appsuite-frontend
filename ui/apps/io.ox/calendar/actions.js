@@ -431,6 +431,9 @@ define('io.ox/calendar/actions', [
                     description: '',
                     trigger: { duration: '-PT15M' }
                 }]);
+                // convenience function to convert old alarms into new chronos alarms
+                // TODO remove once migration process is implemented
+                appointment.alarms = util.convertAlarms(appointment.alarms);
             }
 
             // check if only one appointment or the whole series should be accepted
