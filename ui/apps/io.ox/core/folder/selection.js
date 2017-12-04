@@ -16,15 +16,15 @@ define('io.ox/core/folder/selection', [], function () {
     'use strict';
 
     function Selection(view) {
-
         this.view = view;
 
         this.view.$el
             .on('click contextmenu', '.selectable', $.proxy(this.onClick, this))
-            .on('dblclick', $.proxy(this.onDblClick, this))
             .on('keydown', '.selectable', $.proxy(this.onKeydown, this))
             // bug 54193: do not set focus
             .on('mousedown contextmenu', '.selectable', function (e) { e.preventDefault(); });
+
+        if (view.options.dblclick) this.view.$el.on('dblclick', $.proxy(this.onDblClick, this));
 
         this.view.$el.addClass('dropzone')
             .attr('data-dropzones', '.selectable')
@@ -144,10 +144,10 @@ define('io.ox/core/folder/selection', [], function () {
         onDblClick: function (e) {
             // ignore native checkbox
             if ($(e.target).is(':checkbox')) return;
+            if ($(e.target).closest('.contextmenu-control').length > 0) return;
 
             var target = $(e.target),
                 folder = target.closest('.folder').attr('data-id');
-            console.log('trigger dblclick');
             this.triggerEvent('dblclick', folder);
         },
 
@@ -208,7 +208,6 @@ define('io.ox/core/folder/selection', [], function () {
             var node = opt.focus ? this.focus(index, items) : (items || this.getItems()).eq(index);
             this.check(node);
             this.view.$container.attr('aria-activedescendant', node.attr('id'));
-            console.log('trigger change');
             this.triggerEvent('change', items);
         },
 

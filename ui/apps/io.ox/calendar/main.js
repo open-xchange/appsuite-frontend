@@ -267,7 +267,7 @@ define('io.ox/calendar/main', [
          */
         'folder-view': function (app) {
 
-            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar' });
+            app.treeView = new TreeView({ app: app, contextmenu: true, flat: true, indent: false, module: 'calendar', dblclick: true });
             FolderView.initialize({ app: app, tree: app.treeView });
             app.folderView.resize.enable();
             app.folderView.tree.$el.attr('aria-label', gt('Calendars'));
