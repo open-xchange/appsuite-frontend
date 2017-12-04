@@ -677,6 +677,7 @@ define('io.ox/calendar/util', [
             if (rruleMapModel.get('until') && moment(rruleMapModel.get('until')).isBefore(date)) {
                 rruleMapModel.set('until', date.add(1, ['d', 'w', 'M', 'y'][rruleMapModel.get('recurrence_type') - 1]).valueOf());
             }
+            rruleMapModel.serialize();
             return event;
         },
 
