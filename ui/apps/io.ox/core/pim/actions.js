@@ -40,11 +40,15 @@ define('io.ox/core/pim/actions', [
         download: {
             requires: function (e) {
                 // browser support for downloading more than one file at once is pretty bad (see Bug #36212)
-                return e.collection.has('one') && _.device('!ios');
+                return e.collection.has('one');
             },
             action: function (baton) {
                 var url = attachmentAPI.getUrl(baton.data, 'download');
-                downloadAPI.url(url);
+                if (_.device('ios >= 11') || _.device('android')) {
+                    downloadAPI.window(url);
+                } else {
+                    downloadAPI.url(url);
+                }
             }
         },
 
