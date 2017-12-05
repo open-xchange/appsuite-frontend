@@ -127,6 +127,8 @@ define('io.ox/search/items/view-template', [
                             item = model.get('data'),
                             baton = new ext.Baton({ data: item });
 
+                        if (api.pool && api.pool.Model) baton.model = new api.pool.Model(item);
+
                         node.attr({
                             'data-id': model.get('id'),
                             'data-folder': model.get('folder'),
