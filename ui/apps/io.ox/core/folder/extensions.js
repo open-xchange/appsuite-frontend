@@ -890,8 +890,12 @@ define('io.ox/core/folder/extensions', [
                     folder = api.getDefaultFolder(module),
                     title = gt('Add new folder');
 
-                if (module === 'calendar') title = gt('Add new calendar');
-                else if (module === 'contacts') title = gt('Add new address book');
+                if (module === 'calendar') {
+                    title = gt('Add new calendar');
+                    folder = '1';
+                } else if (module === 'contacts') {
+                    title = gt('Add new address book');
+                }
 
                 // guests might have no default folder
                 if (!folder) return;

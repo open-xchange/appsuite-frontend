@@ -1091,8 +1091,8 @@ define('io.ox/core/folder/api', [
                 subscribed: 1,
                 title: gt('New Folder')
             }, options);
-            // don't inherit permissions for private flat folders
-            if (isFlat(options.module) && !(parent.id === '2' || util.is('public', parent))) {
+            // inherit permissions for private flat non-calendar folders
+            if (isFlat(options.module) && options.module !== 'calendar' && !(parent.id === '2' || util.is('public', parent))) {
                 // empty array doesn't work; we heve to copy the admins
                 options.permissions = _(parent.permissions).filter(function (item) {
                     return !!(item.bits & 268435456);
