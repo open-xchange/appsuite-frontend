@@ -43,9 +43,6 @@ define('io.ox/calendar/actions/edit', [
                         function (data) {
                             if (m.reuse('edit', data, { action: action })) return;
                             m.getApp().launch().done(function () {
-                                if (action === 'appointment') {
-                                    data = api.removeRecurrenceInformation(data);
-                                }
                                 this.edit(data, { action: action });
                             });
                         },

@@ -64,7 +64,9 @@ define('io.ox/calendar/api', [
                         api.trigger('update:' + util.cid(evt), evt.attributes);
                     });
                     // make sure that appointents inside deleteExceptionDates do not exist
-                    (event.deleteExceptionDates || []).forEach(function (recurrenceId) {
+                    var exceptions = [].concat(event.deleteExceptionDates).concat(event.changeExceptionDates);
+                    exceptions = _(exceptions).compact();
+                    exceptions.forEach(function (recurrenceId) {
                         var model = api.pool.getModel(util.cid({ id: event.id, folder: event.folder, recurrenceId: recurrenceId }));
                         if (model) {
                             model.collection.remove(model);
@@ -710,8 +712,11 @@ define('io.ox/calendar/api', [
         findRecurrenceModels: function (event) {
             event = event instanceof Backbone.Model ? event.attributes : event;
             var collections = api.pool.getByFolder(event.folder),
+                exceptions = _([].concat(event.changeExceptionDates).concat(event.deleteExceptionDates)).compact(),
                 filterRecurrences = function (model) {
-                    return model.get('seriesId') === event.id;
+                    if (model.get('seriesId') !== event.id) return false;
+                    if (exceptions.indexOf(model.get('recurrenceId')) >= 0) return false;
+                    return true;
                 },
                 models = collections.map(function (collection) {
                     return collection.filter(filterRecurrences);
