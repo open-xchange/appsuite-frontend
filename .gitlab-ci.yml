@@ -4,7 +4,6 @@ stages:
   - prepare
   - build
   - test
-  - docker
   - deploy
   - e2e
   - cleanup
@@ -114,12 +113,12 @@ build documentation:
       - doku/
     expire_in: 2 hours
 
-docker_image_ui:
+build ui docker image:
   script:
     - docker build -t ${CI_REGISTRY_IMAGE}:ui_${CI_COMMIT_REF_SLUG} ui/
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.open-xchange.com:4567
     - docker push gitlab.open-xchange.com:4567/frontend/core:ui_${CI_COMMIT_REF_SLUG}
-  stage: docker
+  stage: test
   dependencies:
     - install_deps_ui
     - lint copy_build compile_po concat:bootjs uglify:dist_largeFiles less copy_dist
