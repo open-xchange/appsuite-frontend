@@ -1169,6 +1169,7 @@ define('io.ox/core/folder/api', [
             model.set('unread', 0);
             // update collection (now)
             removeFromAllCollections(model);
+            delete pool.models[id];
             model.trigger('destroy');
         });
 

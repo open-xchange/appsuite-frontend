@@ -30,6 +30,8 @@ define('io.ox/core/folder/util', [
 
     function getDefaultFolder(type) {
         type = type || 'mail';
+        // TODO can we get this out of a setting?
+        if (type === 'calendar') return 'cal://0/' + coreSettings.get('folder/calendar');
         return type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
     }
 

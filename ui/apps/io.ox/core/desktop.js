@@ -256,8 +256,8 @@ define('io.ox/core/desktop', [
                     },
 
                     setDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
-                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
+                        return $.when().then(function () {
+                            var defaultFolder = api.getDefaultFolder(type);
                             if (defaultFolder) {
                                 return that.set(defaultFolder);
                             }
@@ -273,8 +273,8 @@ define('io.ox/core/desktop', [
                     },
 
                     isDefault: function () {
-                        return require(['settings!io.ox/mail']).then(function (mailSettings) {
-                            var defaultFolder = type === 'mail' ? mailSettings.get('folder/inbox') : coreSettings.get('folder/' + type);
+                        return $.when().then(function () {
+                            var defaultFolder = api.getDefaultFolder(type);
                             return String(folder) === String(defaultFolder);
                         });
                     },
