@@ -464,18 +464,22 @@ define('io.ox/mail/actions', [
 
     new Action('io.ox/mail/actions/download-attachment', {
         requires: function (e) {
-            return _.device('!ios') && e.collection.has('some');
+            // ios 11 supports file downloads
+            return e.collection.has('some') && (_.device('ios >= 11') || _.device('android'));
         },
         multiple: function (list) {
-
             // download single attachment or zip file
             var url = list.length === 1 ?
                 api.getUrl(_(list).first(), 'download') :
                 api.getUrl(list, 'zip');
 
-            // download via iframe
+            // download via iframe or window open
             require(['io.ox/core/download'], function (download) {
-                download.url(url);
+                if (_.device('ios')) {
+                    download.window(url);
+                } else {
+                    download.url(url);
+                }
             });
         }
     });
@@ -801,7 +805,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'none',
+        mobile: 'lo',
         id: 'source',
         //#. source in terms of source code
         label: gt('View source'),
@@ -843,7 +847,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'vcard',
-        mobile: 'high',
+        mobile: 'hi',
         index: 50,
         label: gt('Add to address book'),
         ref: 'io.ox/mail/actions/vcard'
@@ -851,7 +855,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'ical',
-        mobile: 'high',
+        mobile: 'hi',
         index: 50,
         label: gt('Add to calendar'),
         ref: 'io.ox/mail/actions/ical'
@@ -860,7 +864,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'view_new',
         index: 100,
-        mobile: 'high',
+        mobile: 'hi',
         label: gt('View'),
         ref: 'io.ox/mail/actions/view-attachment'
     }));
@@ -868,7 +872,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
         index: 400,
-        mobile: 'high',
+        mobile: 'hi',
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
@@ -876,18 +880,18 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
         index: 500,
-        mobile: 'high',
+        mobile: 'hi',
         //#. %1$s is usually "Drive" (product name; might be customized)
         label: gt('Save to %1$s', gt.pgettext('app', 'Drive')),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
-    // the mighty Viewer 2.0
+    // uses internal viewer, not "view in browser"
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'viewer',
         index: 600,
-        mobile: 'high',
-        label: gt('View attachment'),
+        mobile: 'hi',
+        label: gt('View kack'),
         ref: 'io.ox/mail/actions/viewer'
     }));
 

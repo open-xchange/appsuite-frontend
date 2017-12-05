@@ -196,7 +196,6 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download-folder', {
         requires: function (e) {
-            // no file-system, no download
             if (_.device('ios < 11')) return false;
             // single folders only
             if (!e.collection.has('one', 'folders')) return false;
