@@ -29,7 +29,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             columns: '1,20',
             module: 'mail',
             ignore: 'limit max',
-            paginateCompare: true
+            paginateCompare: true,
+            lfo: _.lfo
         }, options);
 
         this.pool = Pool.create(this.module);
@@ -91,8 +92,8 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             // trigger proper event
             collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = _.lfo(apply, collection, type, params, this),
-                cb_fail = _.lfo(fail, collection, type),
+            var cb_apply = this.lfo(apply, collection, type, params, this),
+                cb_fail = this.lfo(fail, collection, type),
                 self = this;
             // fetch data
             return this.fetch(params)

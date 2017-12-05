@@ -162,7 +162,7 @@ define('io.ox/calendar/month/perspective', [
 
         updateWeeks: function (useCache) {
             var method = useCache === false ? 'reset' : 'set',
-                loader = api.getCollectionLoader('month');
+                loader = api.collectionLoader;
 
             // fetch appointments in a single call before loading collections
             http.pause();
@@ -225,7 +225,7 @@ define('io.ox/calendar/month/perspective', [
                 }
 
                 view = self.views[identifier];
-                collection = api.getCollectionLoader('month').getCollection(view.getRequestParams());
+                collection = api.collectionLoader.getCollection(view.getRequestParams());
                 view.setCollection(collection);
                 view.$el.removeClass('hidden');
 

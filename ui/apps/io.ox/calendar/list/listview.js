@@ -214,7 +214,7 @@ define('io.ox/calendar/list/listview', [
         initialize: function (options) {
             ListView.prototype.initialize.call(this, options);
             this.$el.addClass('chronos-item');
-            this.connect(api.getCollectionLoader('list'));
+            this.connect(api.collectionLoader);
             this.on('collection:set', this.onCollectionSet);
         },
 
