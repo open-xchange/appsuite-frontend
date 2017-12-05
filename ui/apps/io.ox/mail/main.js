@@ -984,6 +984,12 @@ define('io.ox/mail/main', [
             };
         },
 
+        'page-change-detail-view-mobile': function () {
+            app.pages.getPage('detailView').on('header_ready', function () {
+                app.pages.changePage('detailView');
+            });
+        },
+
         'selection-mobile': function (app) {
 
             if (!_.device('smartphone')) return;
@@ -1011,8 +1017,8 @@ define('io.ox/mail/main', [
                             app.showThreadOverview(cid);
                             app.pages.changePage('threadView');
                         } else {
+                            // no page change here, bound via event
                             app.showMail(cid);
-                            app.pages.changePage('detailView');
                         }
                     }
                 }

@@ -593,11 +593,7 @@ define('io.ox/mail/detail/view', [
         },
 
         getEmptyBodyNode: function () {
-            // get shadow DOM or body node
-            var body = this.$el.find('section.body'),
-                shadowRoot = body.prop('shadowRoot');
-            if (shadowRoot) shadowRoot.innerHTML = '<style class="shadow-style">' + contentStyle + '</style>'; else body.empty();
-            return $(shadowRoot || body);
+            return this.$el.find('section.body').empty();
         },
 
         onChangeSubject: function () {
@@ -799,7 +795,6 @@ define('io.ox/mail/detail/view', [
         },
 
         render: function () {
-
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this });
 

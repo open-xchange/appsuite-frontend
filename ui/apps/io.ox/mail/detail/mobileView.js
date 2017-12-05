@@ -46,6 +46,7 @@ define('io.ox/mail/detail/mobileView', [
             var header = $('<header class="mobile-detail-view-mail detail-view-header">');
             ext.point('io.ox/mail/mobile/detail/header').invoke('draw', header, baton);
             this.append(header);
+
         }
     });
 
@@ -251,17 +252,7 @@ define('io.ox/mail/detail/mobileView', [
      * uses extionsion point defined in this file
      */
     var MobileDetailView = DetailView.View.extend({
-        showMail: function () {
-            var $li = this.$el;
-            if ($li.attr('data-loaded') === 'false') {
-                $li.attr('data-loaded', true);
-                $li.find('section.body').addClass('loading');
-                this.trigger('load');
-                // load detailed email data
-                api.get(_.cid(this.cid)).then(this.onLoad.bind(this), this.onLoadFail.bind(this));
-            }
-            return this;
-        },
+
         onChangeAttachments: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ view: this, data: data, attachments: util.getAttachments(data) }),
@@ -282,8 +273,10 @@ define('io.ox/mail/detail/mobileView', [
                     attachments: util.getAttachments(data)
                 }),
                 node = this.getEmptyBodyNode();
+            // draw mail body
             ext.point('io.ox/mail/mobile/detail/body').invoke('draw', node, baton);
         },
+
         render: function () {
             var data = this.model.toJSON(),
                 baton = ext.Baton({ data: data, model: this.model, view: this }),
@@ -313,6 +306,7 @@ define('io.ox/mail/detail/mobileView', [
             this.baton = baton;
             ext.point('io.ox/mail/mobile/detail').invoke('draw', this.$el, baton);
 
+            $('[data-page-id="io.ox/mail/detailView"]').trigger('header_ready');
             return this;
         }
     });
