@@ -278,6 +278,10 @@ define('io.ox/files/contextmenu', [
                 var appHasNotChanged = ox.ui.App.getCurrentApp().getName() === baton.app.options.name;
 
                 if (appHasNotChanged) {
+
+                    // a11y: The role menu should only be set if there are menuitems in it - as we don't have a case with no items in the menu no check is needed so far
+                    view.$dropdownMenu.attr('role', 'menu');
+
                     view.$dropdownMenu.css({ top: positionData.top, left: positionData.left, bottom: 'auto' });
                     view.dropdown.$toggle = positionData.target;
                     view.$dropdownToggle.dropdown('toggle');
@@ -306,6 +310,10 @@ define('io.ox/files/contextmenu', [
         updateContextMenu: function (baton) {
 
             var ul = this.$dropdownMenu.empty();
+
+            // a11y: remove menu role when no items in the menu on empty
+            this.$dropdownMenu.removeAttr('role');
+
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
             var finishedRendering = ext.point('io.ox/core/file/contextmenu' + baton.contextLinkAdder).invoke('draw', ul, baton);
             return finishedRendering;
