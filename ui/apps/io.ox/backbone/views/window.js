@@ -18,8 +18,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     var backdrop = $('<div id="floating-window-backdrop">').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
-        _(collection.pluck('window')).each(function (win) {
-            win.toggle(false);
+        _(collection.filter(function (model) { return !model.get('nonFloating'); })).each(function (model) {
+            model.get('window').toggle(false);
         });
         backdrop.hide();
     }).hide();
@@ -157,7 +157,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             }
             var self = this;
             // don't use powermove if there are only minimized windows
-            if (powermove && _(collection.pluck('window')).where({ minimized: true }).length !== collection.length && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {
+            if (powermove && collection.openWindows > 0 && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {
                 if (powerMoveWindow) {
                     powerMoveWindow.toggle(false);
                 }
@@ -169,6 +169,9 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 $(window).trigger('resize');
             } else {
                 collection.each(function (model) {
+                    // ignore non floating windows, windowmanager handles them
+                    if (model.get('nonFloating')) return;
+
                     model.get('window').toggle(model.get('window').cid === self.cid || (powerMoveWindow && model.get('window').cid === powerMoveWindow.cid));
                 });
             }
@@ -232,18 +235,28 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     var collection = WindowView.collection = new Backbone.Collection(),
         handlerAttached = false,
         powerMoveWindow;
+    collection.openWindows = 0;
 
     function add(window) {
         var model = new Backbone.Model({ id: window.cid, window: window });
         collection.add(model);
         // attach on add to make sure ox.ui.apps exists (in case this file is loaded early there might be race conditions otherwise)
+        attachHandler();
+    }
+
+    function attachHandler() {
         if (!handlerAttached) {
             handlerAttached = true;
             // minimize on appchange
             ox.ui.apps.on('launch resume', function (model) {
                 if (model && !model.get('floating')) {
-                    _(collection.filter(function (model) { return !model.get('nonFloating'); })).each(function (model) {
-                        model.get('window').toggle(false);
+                    collection.each(function (m) {
+                        if (m.get('nonFloating')) {
+                            // if the lauched/resumed app is in the taskbar, make it active, set all others to inactive
+                            $('#io-ox-taskbar').find('[data-cid="' + m.cid + '"]').parent().toggleClass('active', m.cid === model.cid);
+                            return;
+                        }
+                        m.get('window').toggle(false);
                     });
                 }
             });
@@ -262,16 +275,19 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     collection.on('remove show hide', _.debounce(function () {
 
         var hasStickyWindows = false;
+        collection.openWindows = 0;
 
         // get number of minimized windows
         $('#io-ox-taskbar').empty().append(
             this.map(function (model) {
-                var floatingWindow = model.get('window');
+                var floatingWindow = model.get('window'),
+                    open = !model.get('nonFloating') && !floatingWindow.minimized;
                 if (!hasStickyWindows && !floatingWindow.minimized) {
                     hasStickyWindows = floatingWindow.displayStyle === 'sticky';
                 }
-                if (!floatingWindow.minimized && !model.get('nonFloating')) return $();
-                return $('<li>').append(
+                if (open) collection.openWindows++;
+
+                return $('<li>').addClass(open || (floatingWindow.state && floatingWindow.state.visible) ? 'active' : '').append(
                     $('<button class="taskbar-button" type="button">')
                         .attr('data-cid', floatingWindow.cid || model.cid)
                         .append(
@@ -288,11 +304,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                     }) : ''
                 );
             })
+            // use reverse to keep the source order correct (keep position of existing windows and add new windows on the left)
+            .reverse()
         );
         $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
-        $('#io-ox-core').toggleClass('taskbar-visible', $('#io-ox-taskbar').children().length > 0);
+        $('#io-ox-core').toggleClass('taskbar-visible', collection.size() > collection.openWindows);
 
-        backdrop.toggle($('#io-ox-taskbar').children().length !== collection.size());
+        backdrop.toggle(collection.openWindows > 0);
         // updateScrollControllState();
     }, 20));
 
@@ -392,6 +410,8 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             if (node) node.text(model.getTitle());
         });
         collection.add(model).trigger('show', this);
+        // attach on add to make sure ox.ui.apps exists (in case this file is loaded early there might be race conditions otherwise)
+        attachHandler();
     };
 
     return {

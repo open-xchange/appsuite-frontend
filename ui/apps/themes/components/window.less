@@ -77,10 +77,9 @@
     #io-ox-taskbar {
         // when the arrow controls are enabled again, set the padding to 0
         padding: 0 16px;
-        flex-direction: row-reverse;
         list-style-type: none;
         overflow: hidden;
-        justify-content: start;
+        justify-content: flex-end;
         margin: 0;
         width: 100%;
 
@@ -94,6 +93,10 @@
             line-height: 32px;
             min-width: 90px;
             border-radius: 4px;
+
+            &.active .taskbar-button,&.active a[data-action="close"] {
+                background-color: @brand-primary;
+            }
 
             .taskbar-button {
                 border-radius: 0;
