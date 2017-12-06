@@ -134,18 +134,11 @@ define('io.ox/calendar/week/perspective', [
             var clean = function (event) {
                 event.unset('oldStartDate', { silent: true });
                 event.unset('oldEndDate', { silent: true });
-                event.unset('dragMove', { silent: true });
                 return event;
             };
 
             if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
-                var dialog;
-                if (model.has('dragMove') && model.get('dragMove') !== 0) {
-                    dialog = util.getRecurrenceChangeDialog();
-                } else {
-                    dialog = util.getRecurrenceEditDialog();
-                }
-                dialog
+                util.getRecurrenceEditDialog()
                     .show()
                     .done(function (action) {
                         var expanse = {
@@ -159,14 +152,15 @@ define('io.ox/calendar/week/perspective', [
                                 // bypass cache to have a fresh last_modified timestamp (see bug 42376)
                                 api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                     // calculate new dates if old dates are available
-                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                    var oldStartDate = masterModel.getMoment('startDate'),
+                                        startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                         endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
                                         format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                                     masterModel.set({
                                         startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
-                                    util.updateRecurrenceDate(masterModel, model.get('oldStartDate'));
+                                    util.updateRecurrenceDate(masterModel, oldStartDate);
                                     apiUpdate(masterModel, expanse);
                                 });
                                 break;

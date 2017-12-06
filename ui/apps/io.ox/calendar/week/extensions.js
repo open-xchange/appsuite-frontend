@@ -486,8 +486,7 @@ define('io.ox/calendar/week/extensions', [
                         // save for update calculations
                         event.set({
                             oldStartDate: event.getMoment('startDate'),
-                            oldEndDate: event.getMoment('endDate'),
-                            dragMove: move
+                            oldEndDate: event.getMoment('endDate')
                         }, { silent: true });
 
                         event.set({

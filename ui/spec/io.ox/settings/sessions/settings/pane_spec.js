@@ -16,7 +16,7 @@ define([
     'settings!io.ox/core'
 ], function (session, gt, settings) {
 
-    describe('Session settings', function () {
+    describe.skip('Session settings', function () {
 
         describe('Model displayName', function () {
 

@@ -666,7 +666,7 @@ define('io.ox/backbone/views/recurrence-view', [
         initialize: function () {
             this.originalModel = this.model;
             this.model = this.getMappedModel();
-            this.listenTo(this.model, 'change:recurrence_type change:interval change:days change:day_in_month change:month change:occurrences change:until', _.debounce(this.updateSummary, 50));
+            this.listenTo(this.model, 'change:recurrence_type change:interval change:days change:day_in_month change:month change:occurrences change:until', this.updateSummary);
             this.listenTo(this.model, 'change:start_time change:start_date change:startDate', this.onChangeStart);
         },
 
@@ -736,8 +736,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 visible = this.model.get('recurrence_type') > 0;
             this.$('.summary').toggleClass('hidden', !visible);
             if (visible) {
-                var data = this.model.toJSON();
-                $summary.text(util.getRecurrenceString(data));
+                $summary.text(util.getRecurrenceString(this.model));
             }
         },
 
@@ -749,9 +748,16 @@ define('io.ox/backbone/views/recurrence-view', [
 
             if (this.model.get('full_time') === true) date.utc();
 
-            // if weekly and only single day selected
-            if (type === 2 && this.model.get('days') === 1 << oldDate.day()) {
-                this.model.set('days', 1 << date.day());
+            // if weekly, shift bits
+            if (type === 2) {
+                var shift = date.day() - oldDate.day(),
+                    days = this.model.get('days');
+                if (shift < 0) shift += 7;
+                for (var i = 0; i < shift; i++) {
+                    days = days << 1;
+                    if (days > 127) days -= 127;
+                }
+                this.model.set('days', days);
             }
 
             // if monthly or yeary, adjust date/day of week

@@ -671,9 +671,16 @@ define('io.ox/calendar/util', [
 
             var date = event.getMoment('startDate');
 
-            // if weekly and only single day selected
-            if (type === 2 && rruleMapModel.get('days') === 1 << oldDate.day()) {
-                rruleMapModel.set('days', 1 << date.day);
+            // if weekly, shift bits
+            if (type === 2) {
+                var shift = date.day() - oldDate.day(),
+                    days = rruleMapModel.get('days');
+                if (shift < 0) shift += 7;
+                for (var i = 0; i < shift; i++) {
+                    days = days << 1;
+                    if (days > 127) days -= 127;
+                }
+                rruleMapModel.set('days', days);
             }
 
             // if monthly or yeary, adjust date/day of week
@@ -1000,13 +1007,6 @@ define('io.ox/calendar/util', [
                 '&folder=',
                 data.folder_id || data.folder
             ].join('');
-        },
-
-        getRecurrenceChangeDialog: function () {
-            return new dialogs.ModalDialog()
-                    .text(gt('By changing the date of this appointment you are creating an appointment exception to the series.'))
-                    .addPrimaryButton('appointment', gt('Create exception'), 'appointment')
-                    .addButton('cancel', gt('Cancel'), 'cancel');
         },
 
         getRecurrenceEditDialog: function () {

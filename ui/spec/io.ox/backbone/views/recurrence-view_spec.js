@@ -104,9 +104,9 @@ define([
             it('changes selected days on start date change', function () {
                 var day = 24 * 60 * 60 * 1000;
 
+                model.set('start_date', 1481720709550); // 12/14/2016
                 model.set({
                     recurrence_type: 2,
-                    start_date: 1481720709550, // 12/14/2016
                     days: 1 << 3 // wednesday
                 });
 
@@ -120,9 +120,9 @@ define([
             it('change date on start date change', function () {
                 var day = 24 * 60 * 60 * 1000;
 
+                model.set('start_date', 1481720709550); // 12/14/2016
                 model.set({
                     recurrence_type: 3,
-                    start_date: 1481720709550, // 12/14/2016
                     day_in_month: 14
                 });
 
@@ -247,13 +247,6 @@ define([
 
         describe('change rrule of original model on mapping model changes', function () {
 
-            function waitForRruleChange() {
-                var def = new $.Deferred();
-                model.once('change:rrule', function () {
-                    _.delay(def.resolve, 10);
-                });
-                return def.promise();
-            }
             beforeEach(function () {
                 model = new models.Model({
                     rrule: 'FREQ=DAILY',
@@ -266,55 +259,41 @@ define([
 
             it('for daily / weekly recurrences', function () {
                 view.model.set('interval', 10);
-                return waitForRruleChange().then(function () {
-                    model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
-                    view.model.set({ 'recurrence_type': 2, days: 8 }); // weekly recurrence
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=WE;INTERVAL=10');
-                    view.model.set('days', 62); // set days to all week days
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=10');
-                    view.model.set('recurrence_type', 1); // daily recurrence
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
-                });
+                model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
+
+                view.model.set({ 'recurrence_type': 2, days: 8 }); // weekly recurrence
+                model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=WE;INTERVAL=10');
+
+                view.model.set('days', 62); // set days to all week days
+                model.get('rrule').should.equal('FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;INTERVAL=10');
+
+                view.model.set('recurrence_type', 1); // daily recurrence
+                model.get('rrule').should.equal('FREQ=DAILY;INTERVAL=10');
             });
 
             it('for monthly recurrences', function () {
                 view.model.set({ 'recurrence_type': 3, day_in_month: 14 }); // monthly recurrence by date
-                return waitForRruleChange().then(function () {
-                    model.get('rrule').should.equal('FREQ=MONTHLY;BYMONTHDAY=14');
-                    view.model.set({ day_in_month: 2, days: 8 });
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=MONTHLY;BYDAY=WE;BYSETPOS=2');
-                });
+                model.get('rrule').should.equal('FREQ=MONTHLY;BYMONTHDAY=14');
+
+                view.model.set({ day_in_month: 2, days: 8 });
+                model.get('rrule').should.equal('FREQ=MONTHLY;BYDAY=WE;BYSETPOS=2');
             });
 
             it('for yearly recurrences', function () {
                 view.model.set({ 'recurrence_type': 4, day_in_month: 14, month: 11 }); // yearly recurrence by date
-                return waitForRruleChange().then(function () {
-                    model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=14');
-                    view.model.set({ day_in_month: 2, days: 8, month: 11 });
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYDAY=WE;BYSETPOS=2');
-                });
+                model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=14');
+
+                view.model.set({ day_in_month: 2, days: 8, month: 11 });
+                model.get('rrule').should.equal('FREQ=YEARLY;BYMONTH=12;BYDAY=WE;BYSETPOS=2');
             });
 
             it('for recurrence endings', function () {
                 view.model.set('until', 1482584709550); // Saturday, December 24, 2016 2:05 PM
-                return waitForRruleChange().then(function () {
-                    model.get('rrule').should.equal('FREQ=DAILY;UNTIL=20161224T130509Z');
-                    view.model.unset('until');
-                    view.model.set('occurrences', 10);
-                    return waitForRruleChange();
-                }).then(function () {
-                    model.get('rrule').should.equal('FREQ=DAILY;COUNT=10');
-                });
+                model.get('rrule').should.equal('FREQ=DAILY;UNTIL=20161224T130509Z');
+
+                view.model.unset('until');
+                view.model.set('occurrences', 10);
+                model.get('rrule').should.equal('FREQ=DAILY;COUNT=10');
             });
 
         });

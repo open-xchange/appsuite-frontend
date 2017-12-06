@@ -76,7 +76,7 @@ define('io.ox/calendar/model', [
             this.unset('model');
             this.listenTo(this.model, 'change', this.deserialize);
             this.deserialize();
-            this.on('change', _.debounce(this.serialize, 25));
+            this.on('change', this.serialize);
         },
 
         serialize: function () {
@@ -123,8 +123,9 @@ define('io.ox/calendar/model', [
         },
 
         deserialize: function () {
-            this.set('start_date', this.model.getTimestamp('startDate'));
-            if (!this.model.get('rrule')) return;
+            var changes = {};
+            changes.start_date = this.model.getTimestamp('startDate');
+            if (!this.model.get('rrule')) return this.set(changes);
             var self = this,
                 str = this.model.get('rrule'),
                 attributes = str.split(';'),
@@ -140,46 +141,46 @@ define('io.ox/calendar/model', [
             });
             switch (rrule.freq) {
                 case 'daily':
-                    this.set('recurrence_type', 1);
+                    changes.recurrence_type = 1;
                     break;
                 case 'weekly':
-                    this.set('recurrence_type', 2);
-                    this.set('days', _([].concat(rrule.byday)).reduce(function (memo, day) {
+                    changes.recurrence_type = 2;
+                    changes.days = _([].concat(rrule.byday)).reduce(function (memo, day) {
                         return memo + (1 << self.days.indexOf(day));
-                    }, 0));
+                    }, 0);
                     break;
                 case 'monthly':
-                    this.set('recurrence_type', 3);
+                    changes.recurrence_type = 3;
                     if (rrule.bymonthday) {
-                        this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                        changes.day_in_month = parseInt(rrule.bymonthday, 10) || 0;
                     } else if (rrule.byday) {
-                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
-                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                        changes.day_in_month = parseInt(rrule.bysetpos, 10) || 0;
+                        changes.days = 1 << this.days.indexOf(rrule.byday);
                     } else {
-                        this.set('day_in_month', date.date());
+                        changes.day_in_month = date.date();
                     }
                     break;
                 case 'yearly':
-                    this.set('recurrence_type', 4);
+                    changes.recurrence_type = 4;
                     if (rrule.bymonthday) {
-                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
-                        this.set('day_in_month', parseInt(rrule.bymonthday, 10) || 0);
+                        changes.month = (parseInt(rrule.bymonth, 10) || 0) - 1;
+                        changes.day_in_month = parseInt(rrule.bymonthday, 10) || 0;
                     } else if (rrule.byday) {
-                        this.set('month', (parseInt(rrule.bymonth, 10) || 0) - 1);
-                        this.set('day_in_month', parseInt(rrule.bysetpos, 10) || 0);
-                        this.set('days', 1 << this.days.indexOf(rrule.byday));
+                        changes.month = (parseInt(rrule.bymonth, 10) || 0) - 1;
+                        changes.day_in_month = parseInt(rrule.bysetpos, 10) || 0;
+                        changes.days = 1 << this.days.indexOf(rrule.byday);
                     } else {
-                        this.set('month', date.month());
-                        this.set('day_in_month', date.date());
+                        changes.month = date.month();
+                        changes.day_in_month = date.date();
                     }
                     break;
                 default:
-                    this.set('recurrence_type', 0);
+                    changes.recurrence_type = 0;
             }
-            if (rrule.count) this.set('occurrences', parseInt(rrule.count, 10) || 1);
-            if (rrule.UNTIL) this.set('until', moment(rrule.UNTIL).valueOf() || 0);
-            this.set('interval', parseInt(rrule.interval, 10) || 1);
-            this.set('startDate', this.model.getTimestamp('startDate'), 10);
+            if (rrule.count) changes.occurrences = parseInt(rrule.count, 10) || 1;
+            if (rrule.UNTIL) changes.until = moment(rrule.UNTIL).valueOf() || 0;
+            changes.interval = parseInt(rrule.interval, 10) || 1;
+            this.set(changes);
         }
 
     });

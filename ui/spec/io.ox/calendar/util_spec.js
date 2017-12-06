@@ -398,6 +398,31 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             });
         });
 
+        describe('updates recurrence patterns on date change', function () {
+
+            it('shifts single day', function () {
+                // originally on 12/04/2017 and repeated monday, wednesday and friday
+                var event = new models.Model({
+                    startDate: {
+                        value: '20171204T130000',
+                        tzid: 'Europe/Berlin'
+                    },
+                    rrule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR'
+                });
+
+                // change to 12/08/2017
+                event.set('startDate', {
+                    value: '20171208T130000',
+                    tzid: 'Europe/Berlin'
+                });
+
+                util.updateRecurrenceDate(event, moment('20171204T130000'));
+
+                // repeated days should have changed to friday, sunday and tuesday
+                expect(event.get('rrule')).to.equal('FREQ=WEEKLY;BYDAY=SU,TU,FR');
+            });
+        });
+
         describe('can compute folder color', function () {
             describe('resolves folder color', function () {
                 it('without color label', function () {
