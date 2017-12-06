@@ -497,7 +497,7 @@ define('io.ox/calendar/api', [
                     module: 'chronos',
                     params: {
                         action: 'needsAction',
-                        folder: 'cal://0/' + folderApi.getDefaultFolder('calendar'),
+                        folder: folderApi.getDefaultFolder('calendar'),
                         rangeStart: moment().subtract(2, 'hours').format(util.ZULU_FORMAT),
                         rangeEnd: moment().add(1, 'years').format(util.ZULU_FORMAT)
                     }

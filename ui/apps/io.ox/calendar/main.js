@@ -274,7 +274,7 @@ define('io.ox/calendar/main', [
         },
 
         'multi-folder-selection': function (app) {
-            var folders = settings.get('selectedFolders', ['cal://0/' + folderAPI.getDefaultFolder('calendar')]),
+            var folders = settings.get('selectedFolders', [folderAPI.getDefaultFolder('calendar')]),
                 prevFolders;
             folderAPI.on('remove', function (id) {
                 app.folders.remove(id);
@@ -859,7 +859,7 @@ define('io.ox/calendar/main', [
 
         // go!
         // TODO change core settings so the default folder isnt just a number
-        var defaultFolder  = options.folder || ('cal://0/' + folderAPI.getDefaultFolder('calendar'));
+        var defaultFolder  = options.folder || folderAPI.getDefaultFolder('calendar');
         if (!options.folder && capabilities.has('guest')) {
             // try to select the first shared folder available
             if (folderAPI.getFlatCollection('calendar', 'shared').fetched) {

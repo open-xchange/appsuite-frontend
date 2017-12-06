@@ -19,10 +19,10 @@ define('io.ox/calendar/freetime/main', [
     'io.ox/calendar/api',
     'gettext!io.ox/calendar',
     'settings!io.ox/calendar',
-    'settings!io.ox/core',
+    'io.ox/core/folder/api',
     'less!io.ox/calendar/freetime/style',
     'less!io.ox/calendar/style'
-], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, coreSettings) {
+], function (DisposableView, FreetimeModel, ParticipantsView, TimeView, api, gt, settings, folderAPI) {
 
     'use strict';
 
@@ -160,7 +160,7 @@ define('io.ox/calendar/freetime/main', [
 
                 if (appointment) {
                     // TODO change core settings so the default folder isn't just a number
-                    appointment.folder = 'cal://0/' + coreSettings.get('folder/calendar');
+                    appointment.folder = folderAPI.getDefaultFolder('calendar');
                     ox.load(['io.ox/calendar/edit/main']).done(function (edit) {
                         edit.getApp().launch().done(function () {
                             this.create(appointment);
