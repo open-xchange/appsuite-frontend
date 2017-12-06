@@ -138,21 +138,21 @@ define('io.ox/files/contextmenu', [
             index: 1000,
             ref: 'io.ox/files/actions/permissions',
             section: '10',
-            label: gt('Permissions')
+            label: gt('Edit Share')
         },
         {
             id: 'show-folder',
             index: 1100,
             ref: 'io.ox/files/actions/show-folder',
             section: '20',
-            label: gt('Show folder')
+            label: gt('Reveal in Drive')
         },
         {
             id: 'show-in-folder',
             index: 1100,
             ref: 'io.ox/files/actions/show-in-folder',
             section: '20',
-            label: gt('Show in folder')
+            label: gt('Show in Drive')
         }
     );
 
