@@ -160,7 +160,7 @@ define('io.ox/calendar/month/perspective', [
             }
         },
 
-        updateWeeks: function (useCache) {
+        updateMonths: function (useCache) {
             var method = useCache === false ? 'reset' : 'set',
                 loader = api.collectionLoader;
 
@@ -251,7 +251,7 @@ define('io.ox/calendar/month/perspective', [
                 this.calculateHeights();
             }
 
-            this.updateWeeks();
+            this.updateMonths();
         },
 
         // IE 11 needs a fixed height or appointments are not displayed
@@ -311,7 +311,7 @@ define('io.ox/calendar/month/perspective', [
                 day.addClass('today');
             }
 
-            this.updateWeeks(useCache);
+            this.updateMonths(useCache);
         },
 
         /**
