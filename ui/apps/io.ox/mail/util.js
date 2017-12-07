@@ -227,7 +227,7 @@ define('io.ox/mail/util', [
 
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
-                tmp = $('<div>'), obj, email, node, sender;
+                tmp = $('<div>'), obj, email, node;
 
             for (; i < $i; i++) {
 
@@ -237,21 +237,6 @@ define('io.ox/mail/util', [
                 node = util.renderPersonalName(obj);
                 if (obj.email) node.addClass('person-link person-' + field);
                 tmp.append(node);
-
-                // add 'on behalf of'?
-                if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
-                    sender = this.parseRecipients(data.headers.Sender);
-                    // only show if display names differ (otherwise it looks like a senseless duplicate)
-                    if (sender[0][0] !== data.from[0][0] && sender[0][1] !== data.from[0][1]) {
-                        tmp.append(
-                            $.txt(_.noI18n(' ')),
-                            //#. (From) email1 via email2. Appears in email detail view.
-                            gt('via'),
-                            $.txt(_.noI18n(' ')),
-                            this.serializeList({ sender: sender }, 'sender')
-                        );
-                    }
-                }
 
                 if (i < $i - 1) {
                     tmp.append(
