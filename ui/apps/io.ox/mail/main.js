@@ -488,7 +488,7 @@ define('io.ox/mail/main', [
                         data.id = data.original_id;
                         data.folder_id = data.original_folder_id;
                         // drop messages from spam and trash
-                        return !accountAPI.is('spam|trash', data.folder_id);
+                        return !accountAPI.is('spam|confirmed_spam|trash', data.folder_id);
                     }).pluck('folder_id').uniq().value();
                     folderAPI.multiple(folders);
                 });

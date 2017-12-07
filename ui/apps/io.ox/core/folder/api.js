@@ -125,9 +125,7 @@ define('io.ox/core/folder/api', [
             // use account API so it works with non standard accounts as well
             var type = account.getType(model.get('id'));
             // don't count trash or spam root folders
-            if (type === 'trash' || type === 'spam') {
-                return total;
-            }
+            if (type === 'trash' || type === 'spam' || type === 'confirmed_spam') return total;
             return total + (model.get('subtotal') || 0) + (model.get('unread') || 0);
         }, 0);
     }
@@ -334,7 +332,7 @@ define('io.ox/core/folder/api', [
                 for (var i = 0; i < models.length; i++) {
                     // use account API so it works with non standard accounts as well
                     var ctype = account.getType(models[i].get('id'));
-                    if (ctype !== 'trash' && ctype !== 'spam') {
+                    if (ctype !== 'trash' && ctype !== 'spam' && ctype !== 'confirmed_spam') {
                         subtotal += (models[i].get('subtotal') || 0) + (models[i].get('unread') || 0);
                         // add virtual parent references
                         if (isVirtual(id)) {

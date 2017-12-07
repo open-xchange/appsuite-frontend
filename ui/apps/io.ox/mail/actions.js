@@ -394,12 +394,8 @@ define('io.ox/mail/actions', [
                 if (memo === false) return false;
                 // is not primary account?
                 if (!account.isPrimary(obj.folder_id)) return false;
-                // is spam folder?
-                if (account.is('spam', obj.folder_id)) return false;
-                // is sent folder?
-                if (account.is('sent', obj.folder_id)) return false;
-                // is drafts folder?
-                if (account.is('drafts', obj.folder_id)) return false;
+                // is spam/confirmed_spam/sent/drafts folder?
+                if (account.is('spam|confirmed_spam|sent|drafts', obj.folder_id)) return false;
                 // is marked as spam already?
                 if (util.isSpam(obj)) return false;
                 // else
@@ -426,7 +422,7 @@ define('io.ox/mail/actions', [
                 // is not primary account?
                 if (!account.isPrimary(obj.folder_id)) return false;
                 // else
-                return account.is('spam', obj.folder_id) || util.isSpam(obj);
+                return account.is('spam|confirmed_spam', obj.folder_id) || util.isSpam(obj);
             }, true);
         },
         multiple: function (list) {

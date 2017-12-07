@@ -67,7 +67,7 @@ define('io.ox/core/folder/actions/common', [
                         .addPrimaryButton('delete', gt('Empty folder'), 'delete')
                         .addButton('cancel', gt('Cancel'), 'cancel')
                         .on('delete', function () {
-                            if (account.is('spam', id)) {
+                            if (account.is('spam|confirmed_spam', id)) {
                                 http.pause();
                                 mailAPI.allSeen(id);
                                 clear(id, folder.module);
