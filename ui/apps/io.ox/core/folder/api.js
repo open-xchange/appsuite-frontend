@@ -294,6 +294,15 @@ define('io.ox/core/folder/api', [
             return model;
         },
 
+        removeModels: function (accountId) {
+            if (!accountId) return;
+            _.each(this.models, function (model, id) {
+                if (!model.get('account_id')) return true;
+                if (model.get('account_id') !== accountId) return true;
+                delete this.models[id];
+            }.bind(this));
+        },
+
         addCollection: function (id, list, options) {
             // drop 'subfolders' attribute unless all=true (see bug 46677)
             if (options && !options.all) {
@@ -1424,9 +1433,10 @@ define('io.ox/core/folder/api', [
     }
 
     ox.on('please:refresh refresh^', refresh);
+    ox.on('account:delete', pool.removeModels.bind(pool));
 
     // If there is a new filestorage refresh the folders
-    filestorageApi.on('create delete update', refresh);
+    filestorageApi.on('create update', refresh);
 
     //
     // Get standard mail folders
