@@ -114,7 +114,7 @@ define('io.ox/mail/detail/view', [
     });
 
     /* move the actions menu to the top in sidepanel on smartphones */
-    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row4';
+    var extPoint = _.device('smartphone') ? 'io.ox/mail/detail' : 'io.ox/mail/detail/header/row5';
 
     ext.point(extPoint).extend(new links.InlineLinks({
         id: 'actions',
@@ -148,7 +148,7 @@ define('io.ox/mail/detail/view', [
             id: 'rows',
             index: INDEX_header += 100,
             draw: function (baton) {
-                for (var i = 1, node; i <= 4; i++) {
+                for (var i = 1, node; i <= 5; i++) {
                     node = $('<div class="detail-view-row row-' + i + ' clearfix">');
                     ext.point('io.ox/mail/detail/header/row' + i).invoke('draw', node, baton);
                     this.append(node);
@@ -166,11 +166,35 @@ define('io.ox/mail/detail/view', [
             id: 'from',
             index: INDEX_header += 100,
             draw: function (baton) {
-                this.append(
-                    $('<div class="from">').append(
-                        util.serializeList(baton.data, 'from')
-                    )
-                );
+
+                var $el = $('<div class="from">'),
+                    data = baton.data,
+                    from = data.from || [],
+                    length = from.length;
+
+                // from is special as we need to consider the "sender" header
+                // plus making the mail address visible (see bug 56407)
+
+                _(from).each(function (item, i) {
+
+                    var email = String(item[1] || '').toLowerCase(),
+                        name = util.getDisplayName(item);
+                    if (!email) return;
+
+                    $el.append(
+                        $('<a href="#" role="button" class="halo-link person-link person-from ellipsis">')
+                            .data({ email: email })
+                            .text(name)
+                    );
+
+                    if (name !== email) {
+                        $el.append($('<span class="address">').text('<' + email + '>'));
+                    }
+
+                    if (i < length - 1) $el.append('<span class="delimiter">,</span>');
+                });
+
+                this.append($el);
             }
         },
         {
@@ -205,6 +229,46 @@ define('io.ox/mail/detail/view', [
     //
     ext.point('io.ox/mail/detail/header/row2').extend(
         {
+            id: 'sender',
+            index: 100,
+            draw: function (baton) {
+                ext.point('io.ox/mail/detail/header/sender').invoke('draw', this, baton);
+            }
+        }
+    );
+
+    ext.point('io.ox/mail/detail/header/sender').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+
+            var data = baton.data, from = data.from || [];
+
+            // add 'on behalf of'?
+            if (!('headers' in data)) return;
+            if (!('Sender' in data.headers)) return;
+
+            var sender = util.parseRecipients(data.headers.Sender);
+            if (from[0] && from[0][1] === sender[0][1]) return;
+
+            this.append(
+                $('<div class="sender">').append(
+                    $('<span class="io-ox-label">').append(
+                        //#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+                        $.txt(gt('Via')),
+                        $.txt('\u00A0\u00A0')
+                    ),
+                    $('<span class="address">').text((sender[0][0] || '') + ' <' + sender[0][1] + '>')
+                )
+            );
+        }
+    });
+
+    //
+    // Row 3
+    //
+    ext.point('io.ox/mail/detail/header/row3').extend(
+        {
             id: 'recipients',
             index: 100,
             draw: function (baton) {
@@ -220,9 +284,9 @@ define('io.ox/mail/detail/view', [
     });
 
     //
-    // Row 3
+    // Row 4
     //
-    ext.point('io.ox/mail/detail/header/row3').extend(
+    ext.point('io.ox/mail/detail/header/row4').extend(
         {
             id: 'different-subject',
             index: 100,
