@@ -96,51 +96,6 @@ define('io.ox/settings/main', [
             });
         }
 
-        var changeStatus = false,
-            ignoreChangeEvent,
-
-            saveSettings = function (triggeredBy) {
-                var settingsID;
-                switch (triggeredBy) {
-                    case 'changeMain':
-                        if (currentSelection !== null && currentSelection.lazySaveSettings !== true) {
-                            settingsID = currentSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
-                        } else if (currentSelection !== null && currentSelection.lazySaveSettings === true) {
-                            changeStatus = true;
-                        }
-                        break;
-                    case 'changeGrid':
-                        if (previousSelection !== null && previousSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = previousSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save', null, right);
-                            changeStatus = false;
-                        }
-                        break;
-                    case 'changeGridMobile':
-                        if (currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = currentSelection.id + '/settings';
-                            ext.point(settingsID + '/detail').invoke('save');
-                            changeStatus = false;
-                        }
-                        break;
-                    case 'hide':
-                    case 'logout':
-                        if (currentSelection !== null && currentSelection.lazySaveSettings === true && changeStatus === true) {
-                            settingsID = currentSelection.id + '/settings';
-                            var defs = ext.point(settingsID + '/detail').invoke('save').compact().value();
-                            changeStatus = false;
-                            return $.when.apply($, defs);
-                        }
-                        break;
-                    default:
-                        settingsID = currentSelection.id + '/settings';
-                        ext.point(settingsID + '/detail').invoke('save');
-                }
-
-                return $.when();
-            };
-
         win.addClass('io-ox-settings-main');
 
         var vsplit = commons.vsplit(win.nodes.main, app);
@@ -328,12 +283,6 @@ define('io.ox/settings/main', [
 
             left.trigger('select');
 
-            // change event
-            if (ignoreChangeEvent) {
-                ignoreChangeEvent = false;
-                return;
-            }
-            saveSettings('changeGrid');
         }
 
         // metrics
@@ -357,9 +306,6 @@ define('io.ox/settings/main', [
                 left.trigger('select');
             });
 
-            tree.$container.on('changeMobile', function () {
-                saveSettings('changeGridMobile');
-            });
         }
 
         function addModelsToPool(groupList) {
@@ -590,23 +536,6 @@ define('io.ox/settings/main', [
             });
         };
 
-        // trigger auto save on any change
-
-        win.nodes.main.on('change', function () {
-            saveSettings('changeMain');
-        });
-        win.on('hide', function () {
-            saveSettings('hide');
-        });
-
-        // listen for logout event
-        ext.point('io.ox/core/logout').extend({
-            id: 'saveSettings',
-            logout: function () {
-                return saveSettings('logout');
-            }
-        });
-
         app.setSettingsPane = function (options) {
 
             getAllSettingsPanes().done(function (data) {
@@ -614,7 +543,6 @@ define('io.ox/settings/main', [
                 if (vsplit.left.find('.folder-tree').length === 0) {
                     vsplit.left.append(tree.render().$el);
                 }
-                ignoreChangeEvent = true;
 
                 if (options && (options.id || options.folder)) {
 
