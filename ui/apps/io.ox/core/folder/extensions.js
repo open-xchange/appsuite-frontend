@@ -959,12 +959,18 @@ define('io.ox/core/folder/extensions', [
         }
 
         function toggleFolder(e) {
-            e.preventDefault();
-            var app = e.data.app,
+            var target = e.data.target,
+                app = e.data.app,
                 folder = e.data.folder;
+            if (target.closest('.selection-only').length > 0) return;
+            e.preventDefault();
+            // TODO remove this after bugfix
+            if (window.testtoggle) console.log('before:toggleFolder', folder.id, app.folders.isSelected(folder.id));
             if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
             else app.folders.add(folder.id);
-            e.data.target.toggleClass('selected', app.folders.isSelected(folder.id));
+            target.toggleClass('selected', app.folders.isSelected(folder.id));
+            // TODO remove this after bugfix
+            if (window.testtoggle) console.log('after:toggleFolder', folder.id, app.folders.isSelected(folder.id));
         }
 
         ext.point('io.ox/core/foldertree/node').extend(
