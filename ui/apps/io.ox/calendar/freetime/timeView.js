@@ -597,7 +597,8 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         setToGrid: function (coord) {
-            return this.grid * (Math.round(coord / this.grid));
+            var grid = this.model.get('showFineGrid') && (this.model.get('zoom') === '1000' || this.model.get('zoom') === 1000) ? this.grid / 3 : this.grid;
+            return grid * (Math.round(coord / grid));
         },
 
         updateLasso: function (Timeupdate) {
