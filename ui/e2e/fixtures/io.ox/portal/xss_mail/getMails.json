@@ -1,0 +1,9 @@
+{
+    "namespace": "io.ox/portal/xss_mail",
+    "request": "api\\/mail\\?action=all&folder=default0%2FINBOX",
+    "response": {
+        "data": [
+            [0, "1337", "default0/INBOX", false, [["Tobias Thamm", "tthamm@ox-e2e-backend.novalocal"]], [[null, "tthamm@ox-e2e-backend.novalocal"]], [], [], "Test subject <img src=\"x\" onerror=\"alert(666);\">", 729, 1512548052000, 32, 3, "E-Mail", "text/plain; charset=UTF-8", null]
+        ]
+    }
+}
