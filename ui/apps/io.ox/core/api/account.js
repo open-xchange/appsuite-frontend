@@ -627,8 +627,10 @@ define('io.ox/core/api/account', [
             appendColumns: false
         })
         .done(function () {
+            var accountId = (api.cache[data] || {}).root_folder;
             // remove from local cache
             delete api.cache[data];
+            ox.trigger('account:delete', accountId);
             api.trigger('refresh.all');
             api.trigger('delete');
             require(['io.ox/core/folder/api'], function (api) {
