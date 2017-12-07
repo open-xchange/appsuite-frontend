@@ -42,21 +42,38 @@ Oct 16 | 7.8.3   | Resolving remaining issues from recent audit
 Dec 16 | 7.8.3   | Retest accessibility audit by [the Paciello Group][TPG]
 Jan 17 | 7.8.4   | Fixed newly identified minor issues from Dec 16 TPG retest
 Feb 17 | 7.8.4   | (Address book) Thumb index is now accessible by keyboard
+Mar 17 | 7.8.4   | Accessibility improvements to search and login
+Apr 17 | 7.8.4   | Fixed multiple issues regardings JAWs (labels, verbosity)
+Apr 17 | 7.8.4   | Folder tree improvements for screen readers and keyboard support for home/end
+Apr 17 | 7.8.4   | Added document role to dialogs to force screen readers in correct mode
+Apr 17 | 7.8.4   | Multiple focus improvents throughout apps
+Jul 17 | 7.8.4   | Added distinguishable focus styles for tabbed inbox
+Jul 17 | 7.10    | Added explicit labels for form fields where they were missing
+Aug 17 | 7.10    | Improved color contrast in Alerts, Settings
+Aug 17 | 7.10    | Introduced visual line indicator for list view and vgrid
+Aug 17 | 7.8.4   | Fixed invalid labels in dialogs (calendar, mail, settings)
+Aug 17 | 7.10    | Added more contrast to drag and drop helper
+Sep 17 | 7.8.4   | Attachment preview list has now appropriate ARIA roles, states and properties
+Sep 17 | 7.8.4   | Header logo changed to image with alt text
+Sep 17 | 7.8.4   | Signature settings now have proper textual roles and descriptions
+Sep 17 | 7.8.4   | Replaced combobox component with an accessible implementation
+Sep 17 | 7.8.4   | Implicit calendar and address book headings changed to semantically correct headings
+Oct 17 | 7.8.4   | (Help) Landing pages markup improved for users with screen readers
+Oct 17 | 7.8.4   | Fixed guided tours accessiblity issues (keyboard, focus)
+Nov 17 | 7.10    | Mail threads expandibles were implemented in an accessible manner
+Nov 17 | 7.10    | Workshop/Review with accessibility expert [Marco Zehe][MZ] in Dortmund
+Dec 17 | 7.10    | Accessibility audit by [the Paciello Group][TPG]
 
 # Roadmap
 
 Date   | Version | Activity
 -------| --------| -----------------------------------------------------------------------
-Mar 17 | 7.8.4   | Focussing on JAWs issues
-Q1 17  | 7.8.4   | Working on open issues (see below)
-Q2 17  | 7.8.4   | New accessibility audit
+Dec 17 | 7.10    | Working on issues identified in the last Workshop and Audit
 
 # Open issues
 
 - (Calendar) Timezone popup cannot be explored by screen reader users
 - (General) Tokenfield and autocomplete keyboard interaction and screen reader supports needs improvement
-- (General) Folder tree context menu does not respond properly in JAWS (when toggled by button)
-- (General) Folder tree aria markup needs improvement for screen readers (is too verbose)
 
 [WCAG-TR]: https://www.w3.org/TR/WCAG20/
 [WCAG-WAI]: https://www.w3.org/WAI/WCAG2AA-Conformance

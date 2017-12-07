@@ -1,14 +1,14 @@
 ---
 title: VPAT 1.3
-description: Voluntary Product Accessibility Template (VPAT™) Version 1.3 (July 12, 2016)
+description: Voluntary Product Accessibility Template (VPAT™) Version 1.3
 ---
 
 The purpose of the Voluntary Product Accessibility Template, or VPAT™, is to assist Federal contracting officials and other buyers in making preliminary assessments regarding the availability of commercial “Electronic and Information Technology” products and services with features that support accessibility.  It is assumed and recommended that offerers will provide additional contact information to facilitate more detailed inquiries.
 The first table of the Template provides a summary view of the Section 508 Standards.  The subsequent tables provide more detailed views of each subsection.  There are three columns in each table.  Column one of the Summary Table describes the subsections of subparts B and C of the Standards.  The second column describes the supporting features of the product or refers you to the corresponding detailed table, e.g., “equivalent facilitation."  The third column contains any additional remarks and explanations regarding the product.  In the subsequent tables, the first column contains the lettered paragraphs of the subsections.  The second column describes the supporting features of the product with regard to that paragraph.  The third column contains any additional remarks and explanations regarding the product.
 
-**Date:** May 5, 2017
+**Date:** TBD
 
-**Name of product:** Open-Xchange App Suite UI (Core) 7.8.4
+**Name of product:** Open-Xchange App Suite UI (Core) 7.10
 
 **Contact for more information:** <a href="mailto:info@open-xchange.com">info@open-xchange.com</a>
 
