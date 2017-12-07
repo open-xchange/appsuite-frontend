@@ -232,15 +232,17 @@
                 &.today {
                     .daylabel-container {
                         border-left-color: @today;
+                        border-bottom: 1px solid @today;
+
+                        .day-label {
+                            color:  @today;
+                        }
                         .day-label-wrapper:first-child {
                             .day-label {
                                 background: @today;
                                 color: #fff;
                             }
                         }
-                    }
-                    .day-start {
-                        border-left-color: @today;
                     }
                 }
 
@@ -495,10 +497,6 @@
                     &.first {
                         border-left: none;
                     }
-
-                    &.today {
-                        border-left-color: @today
-                    }
                 }
             }
             .freetime-lasso {
@@ -510,6 +508,17 @@
                 position: absolute;
                 border: 1px solid #63b7ff;
                 border-width: 0 1px 0 1px;
+                // high z index to leave room for dynamic appointment z index
+                z-index: 9001;
+            }
+            .current-time {
+                // important or the lasso prevents clicks on the appointments
+                pointer-events:none;
+                background-color: @today;
+                width: 2px;
+                bottom: 0;
+                top: 0;
+                position: absolute;
                 // high z index to leave room for dynamic appointment z index
                 z-index: 9000;
             }

@@ -320,6 +320,31 @@ define('io.ox/calendar/freetime/timeView', [
         }
     });
 
+    // current time indicator
+    pointBody.extend({
+        id: 'currentime',
+        index: 400,
+        draw: function (baton) {
+            var table = this.find('.freetime-table'),
+                setTime = function () {
+                    var pos = baton.view.timeToPosition(_.now());
+                    // hide if pos is 0 or 100 -> current time is in week before or after the displayed week
+                    baton.view.currentTimeNode.css('left', pos + '%').toggle(pos !== 0 && pos !== 100);
+                };
+
+            if (!baton.view.currentTimeNode) {
+                baton.view.currentTimeNode = $('<div class="current-time" draggable="false">');
+                var timer = setInterval(setTime, 30000);
+                baton.view.on('dispose', function () {
+                    clearInterval(timer);
+                });
+            }
+
+            setTime();
+            table.append(baton.view.currentTimeNode);
+        }
+    });
+
     //
     // timeview. Subview of freetimeview to show the current day and the participants appointments
     //
