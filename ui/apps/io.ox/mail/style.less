@@ -284,7 +284,10 @@
     }
 
     .from {
-        .ellipsis();
+
+        display: flex;
+        align-content: flex-start;
+        & > * { margin-right: 8px; }
 
         span.person {
             color: inherit;
@@ -294,11 +297,23 @@
         &.list { display: block; }
 
         .person-link {
+            .ellipsis();
             &.person-sender { color: #333; }
             &.person-from {
                 .fontWeight(bold);
                 color: black;
             }
+        }
+
+        .address {
+            color: #767676;
+        }
+    }
+
+    .sender {
+        margin-bottom: 8px;
+        .address {
+            color: #767676;
         }
     }
 
@@ -382,7 +397,6 @@
     &.no-padding .contact-picture { left: 0; }
 
     .io-ox-label {
-        font-size: 12px;
         font-weight: bold;
         white-space: nowrap;
         html.high-contrast & { color: @hc-gray; }
