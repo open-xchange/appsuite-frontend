@@ -1459,9 +1459,14 @@ define('io.ox/calendar/week/view', [
             if (positionFieldChanged) {
                 this.renderAppointments();
             } else {
-                var el = $('[data-cid="' + a.id + '"]', this.$el);
-                el.replaceWith(this.renderAppointment(a)
-                    .attr('style', el.attr('style')));
+                var el = $('[data-cid="' + a.id + '"]', this.$el),
+                    newAppointment = this.renderAppointment(a),
+                    color = newAppointment.css('color'),
+                    backgroundColor = newAppointment.css('background-color');
+                el.replaceWith(newAppointment
+                    .attr('style', el.attr('style'))
+                    .css({ color: color, 'background-color': backgroundColor })
+                );
             }
         },
 
