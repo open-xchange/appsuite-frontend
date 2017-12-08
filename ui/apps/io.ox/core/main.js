@@ -268,7 +268,6 @@ define('io.ox/core/main', [
 
         // we don't show any launcher in top-bar on small devices
         if (_.device('smartphone') && !forceDesktopLaunchers) {
-            items.hide();
             return;
         }
 
@@ -349,6 +348,7 @@ define('io.ox/core/main', [
             return label;
         });
 
+        if (side === 'left' && _.device('smartphone')) node.hide();
         return node.appendTo(side === 'left' ? launchers : topbar);
     };
 
