@@ -84,8 +84,11 @@ define('io.ox/calendar/view-detail', [
     ext.point('io.ox/calendar/detail').extend({
         index: 450,
         id: 'recurrence-warning',
-        draw: function () {
-            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).hide());
+        draw: function (baton) {
+            if (!(baton.data.recurrenceId && baton.data.id !== baton.data.seriesId)) return;
+
+            // use exact check for isCreateEvent === false here or the recurrence warning is drawn on initial drawing too
+            this.append($('<p class="alert alert-info recurrence-warning" role="alert">').text(gt('This appointment is an exception. Changing the series does not affect exceptions.')).toggle(baton.isCreateEvent === false));
         }
     });
 
@@ -235,15 +238,18 @@ define('io.ox/calendar/view-detail', [
         $(this).replaceWith(e.data.view.draw(baton));
     }
 
-    function showInfo(e) {
-        e.data.node.find('.recurrence-warning').show();
-    }
-
     return {
 
         draw: function (baton, options) {
             if (baton && !(baton instanceof ext.Baton) && baton.data) {
                 baton = baton.data;
+            }
+
+            // keep event info but remove it from baton (baton sometimes is the actual event model)
+            var isCreateEvent;
+            if (baton && baton.isCreateEvent !== undefined) {
+                isCreateEvent = baton.isCreateEvent;
+                delete baton.isCreateEvent;
             }
             // make sure we have a baton
             baton = baton instanceof Backbone.Model ? new ext.Baton({ model: baton, data: baton.toJSON() }) : ext.Baton.ensure(baton);
@@ -263,15 +269,8 @@ define('io.ox/calendar/view-detail', [
             try {
                 var node = $.createViewContainer(baton.data, calAPI).on('redraw', { view: this }, redraw);
                 node.addClass('calendar-detail view user-select-text').attr('data-cid', String(util.cid(baton.data)));
-
+                baton.isCreateEvent = isCreateEvent;
                 ext.point('io.ox/calendar/detail').invoke('draw', node, baton, options);
-
-                if (baton.data.recurrenceId && baton.data.id !== baton.data.seriesId) {
-                    calAPI.on('update:' + util.cid({ folder: baton.data.folder, id: baton.data.seriesId }), { node: node }, showInfo);
-                    node.one('remove', function () {
-                        calAPI.off('update:' + util.cid({ folder: baton.data.folder, id: baton.data.seriesId }), showInfo);
-                    });
-                }
                 return node;
 
             } catch (e) {

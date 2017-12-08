@@ -755,7 +755,8 @@ define('io.ox/core/commons', [
 
                 if (getter = (getter || (api ? api.get : null))) {
                     // fallback for create trigger
-                    if (!data.id) {
+                    var createevent = !data.id;
+                    if (createevent) {
                         data.id = arguments[1].id;
                     }
                     // get fresh object
@@ -765,6 +766,7 @@ define('io.ox/core/commons', [
                         } else {
                             baton = data;
                         }
+                        baton.isCreateEvent = createevent;
                         if (node) node.triggerHandler('redraw', baton);
                     });
                 }
