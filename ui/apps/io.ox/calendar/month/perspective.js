@@ -101,11 +101,6 @@ define('io.ox/calendar/month/perspective', [
          * @param  {Object} obj new appointment data
          */
         updateAppointment: function (model) {
-            var prevDates = {
-                startDate: model.previous('startDate'),
-                endDate: model.previous('endDate')
-            };
-
             function apiUpdate(model, options) {
                 clean(model);
                 api.update(model, options).then(function success(data) {
@@ -131,10 +126,9 @@ define('io.ox/calendar/month/perspective', [
             }
 
             function reset() {
-                model.set(prevDates);
                 clean(model);
                 api.pool.getCollectionsByModel(model).forEach(function (collection) {
-                    collection.trigger('change', model);
+                    collection.trigger('reset');
                 });
             }
 
