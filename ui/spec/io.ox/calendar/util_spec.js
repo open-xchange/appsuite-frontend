@@ -398,7 +398,7 @@ define(['io.ox/calendar/util', 'io.ox/core/moment', 'io.ox/calendar/model'], fun
             });
         });
 
-        describe.only('updates recurrence patterns on date change', function () {
+        describe('updates recurrence patterns on date change', function () {
 
             it('shifts single day', function () {
                 // originally on 12/04/2017 and repeated monday, wednesday and friday
