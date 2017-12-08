@@ -292,6 +292,9 @@ define('io.ox/calendar/month/perspective', [
             } else {
                 this.pane.append(renderedElements);
             }
+            if (_.device('ie <= 11')) {
+                this.calculateHeights();
+            }
 
             // update first positions
             self.getFirsts();
@@ -301,6 +304,12 @@ define('io.ox/calendar/month/perspective', [
             });
             return $.when();
         },
+
+        // IE 11 needs a fixed height or appointments are not displayed
+        calculateHeights: _.debounce(function () {
+            var height = (this.pane.height() * (1 / 7) - 26) + 'px';
+            this.pane.find('.list').css('height', height);
+        }, 100),
 
         /**
          * wrapper for scrollTop funciton
@@ -586,6 +595,10 @@ define('io.ox/calendar/month/perspective', [
                 }, this));
 
             $(window).on('resize', this.getFirsts);
+
+            if (_.device('ie <= 11')) {
+                $(window).on('resize', _(this.calculateHeights).bind(this));
+            }
 
             self.getFolder().done(function () {
                 self.folderModel = folderAPI.pool.getModel(self.folder.id);
