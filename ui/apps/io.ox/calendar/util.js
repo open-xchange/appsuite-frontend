@@ -673,7 +673,7 @@ define('io.ox/calendar/util', [
 
             // if weekly, shift bits
             if (type === 2) {
-                var shift = date.day() - oldDate.day(),
+                var shift = date.diff(oldDate, 'days') % 7,
                     days = rruleMapModel.get('days');
                 if (shift < 0) shift += 7;
                 for (var i = 0; i < shift; i++) {
@@ -1040,8 +1040,8 @@ define('io.ox/calendar/util', [
                     rangeEnd = moment(view.startDate).utc().add(view.columns, 'days');
                     break;
                 case 'month':
-                    rangeStart = moment(perspective.firstWeek).startOf('week').utc();
-                    rangeEnd = moment(perspective.lastWeek).endOf('week').utc();
+                    rangeStart = moment(perspective.firstMonth).startOf('week').utc();
+                    rangeEnd = moment(perspective.lastMonth).endOf('month').endOf('week').utc();
                     break;
                 case 'list':
                     rangeStart = moment().startOf('day').utc();

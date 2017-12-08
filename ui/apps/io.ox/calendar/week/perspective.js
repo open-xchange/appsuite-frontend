@@ -141,11 +141,6 @@ define('io.ox/calendar/week/perspective', [
                 util.getRecurrenceEditDialog()
                     .show()
                     .done(function (action) {
-                        var expanse = {
-                            expand: true,
-                            rangeStart: moment(self.view.startDate).utc().format(util.ZULU_FORMAT),
-                            rangeEnd: moment(self.view.startDate).utc().add(self.view.columns, 'days').format(util.ZULU_FORMAT)
-                        };
                         switch (action) {
                             case 'series':
                                 // get recurrence master object
@@ -161,11 +156,11 @@ define('io.ox/calendar/week/perspective', [
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
                                     util.updateRecurrenceDate(masterModel, oldStartDate);
-                                    apiUpdate(masterModel, expanse);
+                                    apiUpdate(masterModel, util.getCurrentRangeOptions());
                                 });
                                 break;
                             case 'appointment':
-                                apiUpdate(model, expanse);
+                                apiUpdate(model, util.getCurrentRangeOptions());
                                 break;
                             default:
                                 self.refresh();

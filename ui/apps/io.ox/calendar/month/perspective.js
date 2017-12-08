@@ -101,31 +101,42 @@ define('io.ox/calendar/month/perspective', [
          * @param  {Object} obj new appointment data
          */
         updateAppointment: function (model) {
-            var self = this;
+            var prevDates = {
+                startDate: model.previous('startDate'),
+                endDate: model.previous('endDate')
+            };
 
-            var apiUpdate = function (model, options) {
+            function apiUpdate(model, options) {
                 clean(model);
                 api.update(model, options).then(function success(data) {
-                    if (!data.conflicts) return;
+                    if (!data || !data.conflicts) return;
 
                     ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
                         conflictView.dialog(data.conflicts)
-                            .on('cancel', function () { self.update(); })
+                            .on('cancel', reset)
                             .on('ignore', function () {
-                                apiUpdate(model, { ignoreConflicts: true });
+                                apiUpdate(model, _.extend(options || {}, { ignoreConflicts: true }));
                             });
                     });
                 }, function fail(error) {
                     notifications.yell(error);
                 });
-            };
+            }
 
-            var clean = function (event) {
+            function clean(event) {
                 event.unset('oldStartDate', { silent: true });
                 event.unset('oldEndDate', { silent: true });
                 event.unset('dragMove', { silent: true });
                 return event;
-            };
+            }
+
+            function reset() {
+                model.set(prevDates);
+                clean(model);
+                api.pool.getCollectionsByModel(model).forEach(function (collection) {
+                    collection.trigger('change', model);
+                });
+            }
 
             if (model.get('recurrenceId') && model.get('id') === model.get('seriesId')) {
                 util.getRecurrenceEditDialog()
@@ -136,22 +147,23 @@ define('io.ox/calendar/month/perspective', [
                                 // get recurrence master object
                                 api.get({ id: model.get('seriesId'), folder: model.get('folder') }, false).done(function (masterModel) {
                                     // calculate new dates if old dates are available
-                                    var startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
+                                    var oldStartDate = masterModel.getMoment('startDate'),
+                                        startDate = masterModel.getMoment('startDate').add(model.getMoment('startDate').diff(model.get('oldStartDate'), 'ms'), 'ms'),
                                         endDate = masterModel.getMoment('endDate').add(model.getMoment('endDate').diff(model.get('oldEndDate'), 'ms'), 'ms'),
                                         format = util.isAllday(model) ? 'YYYYMMDD' : 'YYYYMMDD[T]HHmmss';
                                     masterModel.set({
                                         startDate: { value: startDate.format(format), tzid: masterModel.get('startDate').tzid },
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
-                                    util.updateRecurrenceDate(model, model.get('oldStartDate'));
-                                    apiUpdate(masterModel);
+                                    util.updateRecurrenceDate(masterModel, oldStartDate);
+                                    apiUpdate(masterModel, util.getCurrentRangeOptions());
                                 });
                                 break;
                             case 'appointment':
-                                apiUpdate(model);
+                                apiUpdate(model, util.getCurrentRangeOptions());
                                 break;
                             default:
-                                self.update();
+                                reset();
                                 return;
                         }
                     });

@@ -750,7 +750,7 @@ define('io.ox/backbone/views/recurrence-view', [
 
             // if weekly, shift bits
             if (type === 2) {
-                var shift = date.day() - oldDate.day(),
+                var shift = date.diff(oldDate, 'days') % 7,
                     days = this.model.get('days');
                 if (shift < 0) shift += 7;
                 for (var i = 0; i < shift; i++) {

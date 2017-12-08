@@ -379,7 +379,7 @@ define('io.ox/calendar/month/view', [
                         s = event.getMoment('startDate'),
                         start = moment($(this).data('date')).set({ 'hour': s.hours(), 'minute': s.minutes(), 'second': s.seconds(), 'millisecond': s.milliseconds() }),
                         end = start.add(event.getMoment('endDate').diff(event.getMoment('startDate'), 'ms'), 'ms');
-                    if (event.getTimestamp('startDate') !== start.valueOf() || event.getTimestamp('endDate') !== end.valueof()) {
+                    if (event.getTimestamp('startDate') !== start.valueOf() || event.getTimestamp('endDate') !== end.valueOf()) {
                         // save for update calculations
                         if (event.has('rrule')) {
                             event.set({
@@ -391,7 +391,7 @@ define('io.ox/calendar/month/view', [
                         event.set({
                             startDate: { value: start.format(format), tzid: event.get('startDate').tzid },
                             endDate: { value: end.format(format), tzid: event.get('endDate').tzid }
-                        });
+                        }, { silent: true });
                         ui.draggable.busy().draggable('disable');
                         self.trigger('updateAppointment', event);
                     }
