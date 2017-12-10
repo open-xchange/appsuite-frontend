@@ -1308,7 +1308,6 @@ body.dragging .categories-toolbar-container {
         }
     }
 
-
     .thread-view-list {
 
         padding: 0;
@@ -1355,31 +1354,8 @@ body.dragging .categories-toolbar-container {
         .mail-detail:not(.expanded) .recipients { max-height: initial; }
     }
 
-    .mail-detail {
-        .subject { margin-right: 32px; }
-    }
-
     .mail-item  {
 
-        .unread-toggle {
-            display: inline-block;
-            position: relative;
-            top: 0;
-            left: auto;
-            float: right;
-            right: @default-padding;
-            bottom: auto;
-            margin-top: @default-padding;
-        }
-
-        .attachments .io-ox-inline-links {
-            font-size: @phone-font-size;
-            margin-left: 0;
-        }
-
-        .from {
-            max-height: none;
-        }
     }
 
     .thread-view.list-view {
@@ -1403,38 +1379,66 @@ body.dragging .categories-toolbar-container {
     }
 
     .mail-detail {
+        @font-size: 16px;
+        @line-height: 24px;
+        @unit: 2px;
+
         list-style-type: none;
         border-bottom: 0;
 
+        .unread-toggle {
+            display: inline-block;
+            position: relative;
+            top: 0;
+            left: auto;
+            float: right;
+            bottom: auto;
+            margin: 0;
+        }
+
+        .attachments .io-ox-inline-links {
+            font-size: @phone-font-size;
+            margin-left: 0;
+        }
+
         .contact-picture { display: none; }
 
-        //&.expanded .detail-view-header { border:0; }
-
         .detail-view-header {
-            padding: 0 0 @default-padding 0;
+            padding: 0;
+            font-size: @font-size;
+            line-height: @line-height;
 
-            .from, .recipients, .subject { padding: @default-padding; }
+            .from, .subject, .unread-toggle {
+                // leading element in block
+                padding: (@unit * 2) (@unit * 8);
+                padding-top: (@unit * 3);
+                padding-bottom: @unit;
+             }
+
+            .recipients, time, .flags {
+                // trailing element in block
+                padding: (@unit * 2) (@unit * 8);
+                padding-top: @unit;
+                padding-bottom: (@unit * 3);
+            }
 
             .from {
-                padding-bottom: 5px;
+                max-height: none;
 
                 .person-link.person-from { font-weight: 500; }
             }
 
-            .recipients {
-                line-height: 23px;
-                padding-top:  (@default-padding / 2);
-                border-bottom: 1px solid #eee; // shows up in detail view
-            }
+            .recipients { border-bottom: 1px solid #eee; }
 
             .subject {
-                font-size: @phone-font-size;
-                padding-bottom: (@default-padding / 2);
-                line-height: 23px;
+                font-size: @font-size;
                 font-weight: 700;
+                margin-right: 32px;
             }
 
-            time { padding-left: @default-padding; }
+            time {
+                padding-left: @default-padding;
+            }
 
             .sp { margin-right: 4px; }
         }
@@ -1473,7 +1477,6 @@ body.dragging .categories-toolbar-container {
                 .flags {
                     display: inline-block;
                     float: right;
-                    margin-right: @default-padding;
                     & > * {
                         margin-left: 8px;
                         float: none;
