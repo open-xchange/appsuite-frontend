@@ -1426,6 +1426,16 @@ body.dragging .categories-toolbar-container {
                 max-height: none;
 
                 .person-link.person-from { font-weight: 500; }
+                .address { display: none; }
+
+                &.show-address {
+                    flex-wrap: wrap;
+                    .address {
+                        .ellipsis();
+                        display: block;
+                        padding-bottom: 4px;
+                    }
+                }
             }
 
             .recipients { border-bottom: 1px solid #eee; }
