@@ -350,7 +350,7 @@ define('io.ox/backbone/mini-views/dropdown', ['io.ox/backbone/mini-views/abstrac
 
             items
                 .find('a:not([role])')
-                .attr({ role: 'menuitem', tabIndex: '-1' });
+                .attr({ role: 'menuitem', tabindex: '-1' });
         },
 
         prepareReuse: function () {

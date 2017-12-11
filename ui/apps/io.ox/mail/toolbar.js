@@ -110,8 +110,9 @@ define('io.ox/mail/toolbar', [
             label: gt('Set category'),
             ref: 'io.ox/mail/actions/category',
             customize: function (baton) {
+                if (!mailSettings.get('categories/enabled')) return;
                 require(['io.ox/mail/categories/picker'], function (picker) {
-                    picker(this, { props: baton.app.props, data: baton.data });
+                    picker.attach(this, { props: baton.app.props, data: baton.data });
                 }.bind(this));
             }
         },

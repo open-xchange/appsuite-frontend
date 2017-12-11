@@ -83,14 +83,18 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
     }
 
     function click(e) {
-
         var alert = $('.io-ox-alert');
         if (alert.length === 0) return;
 
         if (_.device('smartphone')) return remove();
 
-        // close on escape
-        if (e.type === 'keydown' && e.which === 27) return remove();
+        if (e.type === 'keydown') {
+            // close on escape or enter and space on close button
+            if ($(e.target).closest('.close').length || e.which === 27) {
+                if (e.which === 13 || e.which === 32 || e.which === 27) return remove();
+            }
+            return;
+        }
 
         // close if clicked outside notifications
         if (!$.contains(alert.get(0), e.target)) return remove();
@@ -244,9 +248,9 @@ define('io.ox/core/yell', ['gettext!io.ox/core'], function (gt) {
             // closeOnClick: only show a close button when the yell can be closed on click
             if (o.closeOnClick) {
                 node.append(
-                    $('<a href="#" role="button" class="close">').append(
-                        $('<i class="fa fa-times" aria-hidden="true">'),
-                        $('<span class="sr-only">').text(gt('Close this notification')))
+                    $('<button type="button" class="btn btn-link close">').attr('title', gt('Close this notification')).append(
+                        $('<i class="fa fa-times" aria-hidden="true">')
+                    )
                 );
             }
 

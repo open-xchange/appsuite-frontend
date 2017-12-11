@@ -25,7 +25,7 @@ define('io.ox/mail/categories/edit', [
     function isEnabled() { return settings.get('categories/enabled'); }
 
     function onCategoryChange() {
-        $(this).parent().find('.name').text($(this).val().trim());
+        $(this).parent().find('.name.sr-only').text($(this).val().trim());
     }
 
     function drawCategoryItems(model) {
@@ -60,7 +60,6 @@ define('io.ox/mail/categories/edit', [
                 async: true,
                 collection: api.collection,
                 enter: 'save',
-                focus: '.form-inline',
                 maximize: false,
                 point: 'io.ox/mail/categories/edit',
                 title: gt('Configure categories')

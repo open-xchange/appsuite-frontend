@@ -1121,49 +1121,22 @@ textarea.inplace-editor {
 // CATEGORIES
 
 .io-ox-alert .category-toast {
-    .status {
-        padding: 0 32px 0 0;
-    }
-    p {
-        margin-bottom: 16px;
-    }
+    .status { padding: 0 32px 0 0; }
+    p { margin-bottom: 16px; }
 }
 
 .mail-categories-dialog {
-
     .description {
         padding-left: 34px;
         padding-bottom: 6px;
     }
-
     .category-item {
+        position: relative;
         display: flex;
         padding-bottom: 6px;
 
-        .status {
-            height: 14px;
-            width: 14px;
-            margin: 0;
-            margin-right: 8px;
-            &.disabled {
-                visibility: hidden;
-            }
-        }
-        .name {
-            margin-top: 6px;
-        }
-
-        label {
-            margin-bottom: 0;
-            width: 100%;
-            // adjust default style
-            .form-control {
-                box-shadow: none;
-                border: 0;
-            }
-        }
+        .name { margin-top: 6px; }
     }
-
     .hint { padding-top: 16px; }
 }
 
@@ -1171,36 +1144,29 @@ textarea.inplace-editor {
 .window-container.mail-categories-visible {
 
     &:not(.io-ox-find-active) {
-
-        .categories-toolbar-container {
-            display: flex;
-        }
-        .classic-toolbar-container .classic-toolbar {
-            top: 40px;
-        }
+        .categories-toolbar-container { display: flex; }
+        .classic-toolbar-container .classic-toolbar { top: 40px; }
 
         // layout: vertical, horizontal, list
-        .window-body.classic-toolbar-visible {
-            .abs.window-content {  top: 80px; }
-        }
+        .window-body.classic-toolbar-visible .abs.window-content { top: 80px; }
     }
 }
 
 
 // drag and drop helper text
 .categories-toolbar-container {
-    .link { line-height: 42px; }
+    button { line-height: 42px; }
     .category-drop-helper { display: none; }
 }
 
 body.dragging .categories-toolbar-container {
     .category.hover {
-        a, .category-drop-helper, .link .category-counter .counter {
+        button, .category-drop-helper, button .category-counter .counter {
             background: @selected-focussed-background;
             color: white;
         }
     }
-    .category .link {
+    .category button {
         line-height: 20px;
         height: 20px;
         border-bottom: 0;
@@ -1217,7 +1183,6 @@ body.dragging .categories-toolbar-container {
 }
 
 .categories-toolbar-container {
-
     display: none;
     justify-content: flex-start;
     align-items: center;
@@ -1231,9 +1196,7 @@ body.dragging .categories-toolbar-container {
 
     .free-space { flex: 1; }
 
-    .category:not(.selected) a, .free-space {
-        border-bottom: 1px solid #dddddd;
-    }
+    .category:not(.selected) button, .free-space { border-bottom: 1px solid #dddddd; }
 
     .category {
         font-size: 13px;
@@ -1246,7 +1209,11 @@ body.dragging .categories-toolbar-container {
         // vertical separation
         max-width: 160px;
         min-width: 0;
-        a, .category-drop-helper {
+
+        .category-name { .ellipsis(); }
+        .category-name, .category-counter { display: inline-block; }
+
+        button, .category-drop-helper {
             border-right: 1px solid #dddddd;
             &:focus {
                 font-weight: 500;
@@ -1255,19 +1222,20 @@ body.dragging .categories-toolbar-container {
         }
         &.selected {
             background: white;
-            a {
+            button {
                 font-weight: bold;
                 &:focus {background: white; }
             }
         }
 
-        .link {
+        button {
             padding: 0 16px;
             display: flex;
             width: 100%;
             color: inherit;
 
-            .category-icon { padding-right: 8px; }
+            &:focus, &:hover { text-decoration: none; }
+            &:focus { outline: 0; }
 
             .category-counter .counter {
                 padding-left: 8px;
@@ -1275,16 +1243,10 @@ body.dragging .categories-toolbar-container {
                 font-weight: 700;
             }
 
-            .category-icon, .category-name, .category-counter {
-                display: inline-block;
-            }
-
             // hide empty child nodes (like counter)
             div:empty, span:empty { display: none; }
         }
     }
-
-    .truncate { .ellipsis(); }
 }
 
 @media (max-width: 768px) {
