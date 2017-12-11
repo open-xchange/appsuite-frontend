@@ -971,7 +971,7 @@ define('io.ox/files/share/permissions', [
                     usePicker = !_.device('smartphone') && capabilities.has('contacts') && settingsContacts.get('picker/enabled', true),
                     click = function (e, member) {
                         // build extended permission object
-                        var isInternal = member.get('type') === 2 || member.get('type') === 1,
+                        var isInternal = /^(1|2)$/.test(member.get('type')) || member.has('user_id'),
                             isGuest = member.get('type') === 5,
                             obj = {
                                 bits: isInternal ? 4227332 : getBitsExternal(objModel), // Author : (Viewer for folders: Viewer for files)
@@ -980,7 +980,7 @@ define('io.ox/files/share/permissions', [
                                 new: true
                             };
                         if (isInternal) {
-                            obj.entity = member.get('id');
+                            obj.entity = member.has('user_id') ? member.get('user_id') : member.get('id');
                         }
                         obj.contact = member.toJSON();
                         obj.display_name = member.getDisplayName();
