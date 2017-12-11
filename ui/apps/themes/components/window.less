@@ -680,6 +680,9 @@
         bottom: auto;
         background: rgba(0, 0, 0, 0.70);
         padding: 0 16px;
+        display: flex;
+        justify-content: space-between;
+
         h1 {
             margin: 0;
             padding: 0;
@@ -687,6 +690,9 @@
             font-weight: bold;
             line-height: @headerHeight;
             color: white;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
         .count {
             margin-left: 8px;
@@ -696,6 +702,7 @@
             top: 0;
             right: 0;
             padding: 0 8px;
+            flex-shrink: 0;
 
             a {
                 color: white;
