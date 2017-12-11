@@ -568,10 +568,10 @@ define('io.ox/backbone/views/recurrence-view', [
         })()
     });
 
-    var SerializeCheckboxView = mini.CheckboxView.extend({
+    var SerializeCheckboxView = mini.CustomCheckboxView.extend({
 
             onChange: function () {
-                var val = this.$el.prop('checked'),
+                var val = this.$input.prop('checked'),
                     old = this.model.get('recurrence_type') > 0;
                 if (!old && val) {
                     var startAttribute = this.model.get('start_time') || this.model.get('start_date'),
@@ -594,7 +594,7 @@ define('io.ox/backbone/views/recurrence-view', [
                 }
             },
             update: function () {
-                this.$el.prop('checked', this.model.get('recurrence_type') > 0);
+                this.$input.prop('checked', this.model.get('recurrence_type') > 0);
             }
         }),
         RecurrenceModel = Backbone.Model.extend({
@@ -704,19 +704,13 @@ define('io.ox/backbone/views/recurrence-view', [
         },
 
         render: function () {
-            var guid = _.uniqueId('form-control-label-');
             this.$el.append(
-                $('<div class="checkbox">').append(
-                    $('<label>').attr('for', guid).append(
-                        new SerializeCheckboxView({
-                            id: guid,
-                            model: this.model,
-                            name: 'recurrence_type'
-                        }).render().$el,
-                        gt('Repeat')
-                    ),
-                    $('<a href="#" class="summary">').append()
-                )
+                new SerializeCheckboxView({
+                    model: this.model,
+                    name: 'recurrence_type',
+                    label: gt('Repeat')
+                }).render().$el,
+                $('<button type="button" class="btn btn-link summary">')
             );
             this.updateSummary();
             return this;
