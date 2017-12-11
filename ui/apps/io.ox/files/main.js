@@ -501,6 +501,7 @@ define('io.ox/files/main', [
                 'change': function () {
                     if (app.mysharesListViewControl) {
                         app.mysharesListViewControl.$el.hide().siblings().show();
+                        app.mysharesListView.trigger('listview:shown');
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -596,6 +597,7 @@ define('io.ox/files/main', [
                     if (app.myFavoritesListViewControl) {
                         app.myFavoritesListViewControl.$el.hide().siblings().show();
                         app.myFavoriteListView.selection.clear();
+                        app.mysharesListView.trigger('listview:shown');
                     }
                     if (loading) {
                         app.getWindow().nodes.body.idle().children().show();
@@ -1413,28 +1415,12 @@ define('io.ox/files/main', [
         'select-file': function (app) {
 
             app.selectFile = function (obj) {
-
-                function isCurrentFolder() {
-                    return app.listView.collection.cid && app.listView.collection.cid.indexOf('folder=' + obj.folder_id) > -1;
-                }
-
-                function select() {
-                    if (!isCurrentFolder()) return;
-                    app.listView.off('collection:load', select);
-                    app.listView.selection.set([obj], true);
-
-                    // must trigger for a updated toolbar
-                    app.listView.trigger('selection:change');
-                }
-
                 obj = _.isString(obj) ? _.cid(obj) : obj;
 
-                if (isCurrentFolder()) {
-                    select();
-                } else {
-                    app.listView.on('collection:load', select);
-                    app.folder.set(obj.folder_id);
-                }
+                api.get(obj).done(function (model) {
+                    var models = api.resolve(model, false);
+                    actions.invoke('io.ox/files/actions/show-in-folder', null, ext.Baton({ models: models, app: app }));
+                });
             };
         },
 

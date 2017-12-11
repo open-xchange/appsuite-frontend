@@ -137,7 +137,7 @@ define('io.ox/files/share/listview', [
             list = _(models).invoke('toJSON');
             // extract single object if length === 1
             var data = list.length === 1 ? list[0] : list;
-            var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: '/myshares' });
+            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: '/myshares' });
 
             this.contextMenu.showContextMenu(event, baton);
         }

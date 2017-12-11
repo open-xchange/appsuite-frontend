@@ -202,6 +202,7 @@ define('io.ox/core/tk/list', [
                 this.trigger('first-content', this.collection);
                 this.firstContent = false;
             }
+            this.trigger('listview:reset');
         },
 
         // bundle draws

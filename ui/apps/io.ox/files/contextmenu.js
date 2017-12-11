@@ -18,7 +18,8 @@ define('io.ox/files/contextmenu', [
     'io.ox/backbone/mini-views/dropdown',
     'io.ox/backbone/mini-views/contextmenu-utils',
     'io.ox/core/collection',
-    'gettext!io.ox/core'
+    'gettext!io.ox/core',
+    'io.ox/files/share/toolbar'
 ], function (ext, extAction, AbstractView, Dropdown, ContextUtils, Collection, gt) {
 
     'use strict';
@@ -138,14 +139,7 @@ define('io.ox/files/contextmenu', [
             index: 1000,
             ref: 'io.ox/files/actions/permissions',
             section: '10',
-            label: gt('Edit Share')
-        },
-        {
-            id: 'show-folder',
-            index: 1100,
-            ref: 'io.ox/files/actions/show-folder',
-            section: '20',
-            label: gt('Reveal in Drive')
+            label: gt('Edit share')
         },
         {
             id: 'show-in-folder',
@@ -153,6 +147,13 @@ define('io.ox/files/contextmenu', [
             ref: 'io.ox/files/actions/show-in-folder',
             section: '20',
             label: gt('Show in Drive')
+        },
+        {
+            id: 'revoke-access',
+            index: '1200',
+            ref: 'io.ox/files/share/revoke',
+            section: '30',
+            label: gt('Revoke access')
         }
     );
 
