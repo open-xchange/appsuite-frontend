@@ -134,10 +134,15 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // sticky windows push the rest of appsuite to the left. So an indicator class is needed
             $('#io-ox-windowmanager').toggleClass('has-sticky-window', style === 'sticky');
             this.$el.removeClass('cornered centered sticky').addClass(this.displayStyle);
+            // calculate animation origin (so window minimizes to the correct position)
+            var node = $('#io-ox-taskbar').find('[data-cid="' + this.cid + '"]');
+            if (node && node.length > 0) {
+                this.$el.css('transform-origin', node.offset().left + node.width() / 2 - this.$el.offset().left + 'px 100%');
+            }
             // trigger resize so the new height is correctly calculated
             _.delay(function () {
                 $(window).trigger('resize');
-            }, 100);
+            }, 500);
         },
 
         toggleDisplaystyle: function (e) {
@@ -157,7 +162,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             }
             var self = this;
             // don't use powermove if there are only minimized windows
-            if (powermove && collection.openWindows > 0 && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {
+            if (powermove && collection.openWindows.length > 0 && this.minimized === true && (!powerMoveWindow || powerMoveWindow.cid !== this.cid)) {
                 if (powerMoveWindow) {
                     powerMoveWindow.toggle(false);
                 }
@@ -203,7 +208,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             // already in the correct state. nothing to do
             if (state !== this.minimized) return;
 
-            if (state) this.$el.show();
+            if (state) {
+                this.$el.show();
+            }
+
             this.$el.stop().toggleClass('minimized', !state);
             this.minimized = !state;
             if (state) {
@@ -218,10 +226,10 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                     $(window).trigger('resize');
                 }
                 // little delay to wait for animation
-                this.$el.delay(300).queue(function () {
+                this.$el.delay(500).queue(function () {
                     $(this).hide();
-                    collection.trigger('hide', this);
                 });
+                collection.trigger('hide', this);
             }
         },
 
@@ -235,7 +243,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     var collection = WindowView.collection = new Backbone.Collection(),
         handlerAttached = false,
         powerMoveWindow;
-    collection.openWindows = 0;
+    collection.openWindows = [];
 
     function add(window) {
         var model = new Backbone.Model({ id: window.cid, window: window });
@@ -275,7 +283,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
     collection.on('remove show hide', _.debounce(function () {
 
         var hasStickyWindows = false;
-        collection.openWindows = 0;
+        collection.openWindows = [];
 
         // get number of minimized windows
         $('#io-ox-taskbar').empty().append(
@@ -285,7 +293,7 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                 if (!hasStickyWindows && !floatingWindow.minimized) {
                     hasStickyWindows = floatingWindow.displayStyle === 'sticky';
                 }
-                if (open) collection.openWindows++;
+                if (open) collection.openWindows.push(floatingWindow);
 
                 return $('<li>').addClass(open || (floatingWindow.state && floatingWindow.state.visible) ? 'active' : '').append(
                     $('<button class="taskbar-button" type="button">')
@@ -308,9 +316,15 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
             .reverse()
         );
         $('#io-ox-windowmanager').toggleClass('has-sticky-window', hasStickyWindows);
-        $('#io-ox-core').toggleClass('taskbar-visible', collection.size() > collection.openWindows);
+        $('#io-ox-core').toggleClass('taskbar-visible', collection.size() > collection.openWindows.length);
 
-        backdrop.toggle(collection.openWindows > 0);
+        // calculate animation origin (so window minimizes to the correct position)
+        _(collection.openWindows).each(function (floatwin) {
+            var node = $('#io-ox-taskbar').find('[data-cid="' + floatwin.cid + '"]');
+            floatwin.$el.css('transform-origin', node.offset().left + node.width() / 2 - floatwin.$el.offset().left + 'px 100%');
+        });
+
+        backdrop.toggle(collection.openWindows.length > 0);
         // updateScrollControllState();
     }, 20));
 
