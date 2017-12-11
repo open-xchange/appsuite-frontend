@@ -383,7 +383,7 @@ define('io.ox/mail/common-extensions', [
 
         unread: function (baton) {
             var isUnseen = util.isUnseen(baton.data);
-            if (isUnseen) extensions.envelope.call(this).attr('title', 'Unread');
+            if (isUnseen) extensions.envelope.call(this).attr('title', gt('Unread'));
         },
 
         answered: function (baton) {
