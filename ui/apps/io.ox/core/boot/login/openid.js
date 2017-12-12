@@ -33,6 +33,7 @@ define('io.ox/core/boot/login/openid', [
                     redirect: true,
                     client: session.client(),
                     version: session.version(),
+                    deeplink: window.location.href,
                     session: ox.session
                 })
             ].join('');
