@@ -13,19 +13,26 @@
 define([
     'plugins/portal/quota/register',
     'io.ox/core/extensions',
-    'spec/shared/capabilities',
-    'io.ox/core/api/quota'
-], function (quotaPlugin, ext, caputil, quotaAPI) {
+    'io.ox/core/api/quota',
+    'io.ox/core/capabilities'
+], function (quotaPlugin, ext, quotaAPI, capabilities) {
     'use strict';
 
-    var capabilities = caputil.preset('common').init('plugins/portal/quota/register', quotaPlugin);
-
     describe('Portal Quota plugin', function () {
+        let capStub;
         beforeEach(function () {
             this.server.responses = this.server.responses.filter(function (r) {
                 return r.method !== 'PUT' || String(r.url) !== '/api\\/multiple\\?/';
             });
-            return capabilities.reset();
+            capStub = sinon.stub(capabilities, 'has');
+            //Default
+            capStub.returns(true);
+            // we are not a guest
+            capStub.withArgs('guest').returns(false);
+        });
+
+        afterEach(function () {
+            capStub.restore();
         });
 
         function drawQuotaTo(node) {
@@ -102,12 +109,11 @@ define([
                 //quotaAPI.fileQuota.fetched = true;
             });
             beforeEach(function () {
-                capabilities.disable('infostore');
                 this.server.respondWith('PUT', /api\/multiple/, function (xhr) {
                     xhr.respond(200, { 'Content-Type': 'text/javascript;charset=UTF-8' },
                         '[{ "timestamp":1368791630910,"data": {"quota":0, "countquota":-1, "use":0, "countuse":5}}]');
                 });
-
+                capStub.withArgs('infostore').returns(false);
                 return drawQuotaTo(node.empty());
             });
             it('react to missing infostore capability', function () {
