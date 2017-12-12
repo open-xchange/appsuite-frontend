@@ -274,12 +274,33 @@ define('io.ox/calendar/main', [
         },
 
         'multi-folder-selection': function (app) {
-            var folders = settings.get('selectedFolders', [folderAPI.getDefaultFolder('calendar')]),
-                prevFolders;
-            folders = _(folders).unique();
+            var folders, prevFolders;
             folderAPI.on('remove', function (id) {
                 app.folders.remove(id);
             });
+            function setFolders(list) {
+                folders = _(list).unique();
+                sort();
+                _.defer(function () {
+                    app.trigger('folders:change', folders);
+                    settings.set('selectedFolders', folders).save();
+                });
+            }
+            function sort() {
+                var base = _(folderAPI.pool.models).keys().length,
+                    failed = [],
+                    sorted = _(folders).sortBy(function (folderId) {
+                        var folder = folderAPI.pool.models[folderId];
+                        if (!folder) return failed.push(folderId);
+                        if (folderAPI.is('private', folder.attributes)) return folder.get('index/flat/event/private');
+                        if (folderAPI.is('public', folder.attributes)) return folder.get('index/flat/event/public') + base;
+                        if (folderAPI.is('shared', folder.attributes)) return folder.get('index/flat/event/shared') + base * base;
+                    });
+                if (failed.length === 0) folders = sorted;
+                // Keep this for debugging purposes
+                // else console.error('Sort was impossible due to missing folders in cache. ', failed);
+            }
+            setFolders(settings.get('selectedFolders', [folderAPI.getDefaultFolder('calendar')]));
             app.folders = {
                 getData: function () {
                     return $.when.apply($, folders.map(function (folder) {
@@ -302,45 +323,33 @@ define('io.ox/calendar/main', [
                     return folders;
                 },
                 add: function (folder) {
-                    if (folders.indexOf(folder) < 0) {
-                        folders = [].concat(folders);
-                        folders.push(folder);
-                        _.defer(function () {
-                            app.trigger('folders:change');
-                            settings.set('selectedFolders', folders).save();
-                        });
-                    }
+                    var list = [].concat(folders);
+                    list.push(folder);
+                    setFolders(list);
                 },
                 remove: function (folder) {
-                    folders = _(folders).without(folder);
-                    _.defer(function () {
-                        app.trigger('folders:change');
-                        settings.set('selectedFolders', folders).save();
-                    });
+                    var list = _(folders).without(folder);
+                    setFolders(list);
                 },
-                set: function (folder) {
+                setOnly: function (folder) {
                     if (!prevFolders) prevFolders = folders;
                     folders = [].concat([folder]);
                     app.folderView.tree.$el.addClass('selection-only');
-                    _.defer(function () {
-                        app.trigger('folders:change');
-                    });
+                    _.defer(app.trigger.bind(app, 'folders:change', folders));
                 },
                 reset: function () {
                     if (!prevFolders) return;
                     folders = prevFolders;
                     prevFolders = undefined;
                     app.folderView.tree.$el.removeClass('selection-only');
-                    _.defer(function () {
-                        app.trigger('folders:change');
-                    });
+                    _.defer(app.trigger.bind(app, 'folders:change', folders));
                 }
             };
             app.on('folder:change', app.folders.reset);
             app.folderView.tree.on('dblclick', function (e, folder) {
                 if ($(e.target).hasClass('color-label')) return;
                 app.folder.set(folder);
-                app.folders.set(folder);
+                app.folders.setOnly(folder);
             });
         },
 

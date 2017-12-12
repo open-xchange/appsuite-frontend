@@ -926,15 +926,15 @@ define('io.ox/calendar/util', [
             return !eventColor ? folderColor : eventColor;
         },
 
-        lightenDarkenColor: function (col, amt) {
+        lightenDarkenColor: _.memoize(function (col, amt) {
             if (_.isString(col)) col = this.colorToHex(col);
             col = that.hexToHSL(col);
             col[2] = Math.floor(col[2] * amt);
             col[2] = Math.max(Math.min(100, col[2]), 0);
             return 'hsl(' + col[0] + ',' + col[1] + '%,' + col[2] + '%)';
-        },
+        }),
 
-        colorToHex: function (color) {
+        colorToHex: _.memoize(function (color) {
             var canvas = document.createElement('canvas'), context = canvas.getContext('2d'), data;
             canvas.width = 1;
             canvas.height = 1;
@@ -944,9 +944,9 @@ define('io.ox/calendar/util', [
             context.fillRect(0, 0, 1, 1);
             data = context.getImageData(0, 0, 1, 1).data;
             return (data[0] << 16) + (data[1] << 8) + data[2];
-        },
+        }),
 
-        hexToHSL: function (color) {
+        hexToHSL: _.memoize(function (color) {
             var r = (color >> 16) / 255,
                 g = ((color >> 8) & 0x00FF) / 255,
                 b = (color & 0x0000FF) / 255,
@@ -968,12 +968,12 @@ define('io.ox/calendar/util', [
             }
 
             return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
-        },
+        }),
 
-        getForegroundColor: function (color) {
+        getForegroundColor: _.memoize(function (color) {
             color = that.colorToHex(color);
             return color > 0xffffff / 2 ? 'black' : 'white';
-        },
+        }),
 
         canAppointmentChangeColor: function (folder, eventModel) {
             var eventColor = eventModel.get('color'),

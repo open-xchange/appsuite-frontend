@@ -38,10 +38,13 @@
     }
 
     .footer-container {
+        position: relative;
+        height: 50px;
+
         .footer {
             .overflow-y(scroll);
             .overflow-x(hidden);
-            padding-top: 20px;
+            padding-top: 19px;
 
             .weekday {
                 color: #767676;
@@ -49,6 +52,12 @@
                 line-height: 24px;
                 font-size: 14px;
                 text-decoration: none;
+
+                &.merge-view-label {
+                    border-bottom: 2px solid;
+                    margin-right: 1px;
+                    margin-left: 1px;
+                }
 
                 .number {
                     font-size: 20px;
@@ -79,7 +88,7 @@
         bottom: 0;
         // top: was @calendar-toolbar-height + @calendar-toolbar-top-padding;
         // but that doesn't make sense, result is close however
-        top: 86px;
+        top: 90px;
 
         // see Bug 33927 - Mini calendar doesn't block hover of underlying appointment
         z-index: 1;
@@ -102,7 +111,6 @@
             height: @weekview-footer-height;
             .overflow-y(scroll);
             .overflow-x(hidden);
-            border-bottom: 1px solid @weekview-border;
             margin-left: @weekview-time-width;
             right: 0;
 
@@ -123,7 +131,7 @@
                     padding: 0 10px;
                 }
 
-                .day { border-top: 1px solid @weekview-border; }
+                .day { border: none; }
             }
         }
 
@@ -132,6 +140,7 @@
             .overflow-x(hidden);
             position: absolute;
             top: @weekview-footer-height;
+            border-top: 1px solid @weekview-border;
             left: 0;
             right: 0;
             bottom: 0;
@@ -177,14 +186,14 @@
                     height: 0;
                     left: -1px;
                     right: 0;
-                    border-bottom: 3px solid @calendar-today;
+                    border-bottom: 2px solid @calendar-today;
                     z-index: 10;
                     .user-select(none);
                 }
 
                 .appointment-content {
                     line-height: 16px;
-                    padding: 4px 7px;
+                    padding: 4px;
                 }
 
                 .dark-colors & .appointment-content {
@@ -223,7 +232,6 @@
             position: relative;
             height: 100%;
             float: left;
-            background-color: rgba(0, 0, 0, 0.01);
             border-left: 1px solid @weekview-border;
             .user-select(none);
 
@@ -232,7 +240,7 @@
                 border-bottom: 1px solid @weekview-border-light;
                 height: 24px;
 
-                &.out { border-color: transparent; }
+                &.out { border-color: transparent; background-color: rgba(0, 0, 0, 0.02); }
 
                 &:last-child, .time:last-child { border: none; }
 
@@ -300,10 +308,7 @@
     }
 
     // Hide days in dayview
-    .dayview {
-        .fulltime .day:not(.node) {
-            display: none;
-        }
+    .dayview:not(.merge-view)  {
 
         .toolbar { padding-bottom: @calendar-toolbar-top-padding; }
 
@@ -364,7 +369,7 @@
         .appointment-content {
             height: 100%;
             font-size: 12px;
-            padding: 0 7px;
+            padding: 0 4px;
             border-left: 2px solid;
             border-color: inherit;
             .ellipsis();
@@ -427,7 +432,6 @@
 
             .scrollpane.secondary .week-container-label{ width: @weekview-time-width; }
 
-            .fulltime-container,
             .scrollpane .week-container  { margin-left: @adjusted-width; }
 
             .more-appointments-container { left: @adjusted-width; }
@@ -461,7 +465,7 @@
             }
         }
 
-        .dayview .week-view-container { top: 0; }
+        .dayview:not(.merge-view) .week-view-container { top: 0; }
     }
 }
 

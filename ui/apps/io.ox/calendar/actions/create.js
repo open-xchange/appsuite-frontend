@@ -63,10 +63,11 @@ define('io.ox/calendar/actions/create', [
 
     return function (baton, obj) {
 
+        obj = obj || {};
         // FIXME: if this action is invoked by the menu button, both
         // arguments are the same (the app)
         var params = {
-            folder: baton.app.folder.get()
+            folder: obj.folder || baton.app.folder.get()
         };
 
         if (obj && obj.startDate) {
