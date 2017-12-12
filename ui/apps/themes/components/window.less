@@ -96,7 +96,7 @@
             min-width: 90px;
             border-radius: 4px;
 
-            &.active .taskbar-button,&.active a[data-action="close"] {
+            &.active .taskbar-button,&.active button[data-action="close"] {
                 background-color: @brand-primary;
             }
 
@@ -111,12 +111,17 @@
                 background-color: rgba(0, 0, 0, 0.7);
                 text-overflow: ellipsis;
                 padding-left: 16px;
+                &.io-ox-busy:before {
+                    color: white;
+                    margin-top: -15px;
+                }
 
                 .title {
                     margin-right: 8px;
+
                 }
             }
-            a[data-action="close"] {
+            button[data-action="close"] {
                 color: white;
                 background-color: rgba(0, 0, 0, 0.7);
                 display: inline-block;
@@ -614,7 +619,7 @@
             height: calc(~"100% - 32px");
             min-height: auto;
         }
-        .floating-header .controls a[data-action="cornered"] {
+        .floating-header .controls button[data-action="cornered"] {
             display: none;
         }
     }
@@ -638,7 +643,7 @@
             bottom: 16px;
         }
 
-        .floating-header .controls a[data-action="centered"] {
+        .floating-header .controls button[data-action="centered"] {
             display: none;
         }
 
@@ -659,7 +664,7 @@
         top: 0;
         left: auto;
 
-        .floating-header .controls a[data-action="sticky"] {
+        .floating-header .controls button[data-action="sticky"] {
             display: none;
         }
 
@@ -701,7 +706,7 @@
             padding: 0 8px;
             flex-shrink: 0;
 
-            a {
+            button {
                 color: white;
                 line-height: @headerHeight;
                 padding: 0 8px;

@@ -74,13 +74,13 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
                                 $('<span class="count label label-danger">').toggle(this.count > 0).text(this.count)
                             ),
                             $('<div class="controls">').append(
-                                $('<a href="#" data-action="minimize">').attr('title', gt('Minimize')).append(
+                                $('<button type="button" class="btn btn-link" data-action="minimize">').attr('title', gt('Minimize')).append(
                                     $('<i class="fa fa-window-minimize" aria-hidden="true">')
                                 ),
-                                $('<a href="#" data-action="cornered">').append('<i class="fa fa-compress">'),
-                                $('<a href="#" data-action="centered">').append('<i class="fa fa-expand">'),
-                                this.options.showStickybutton ? $('<a href="#" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
-                                this.options.closable ? $('<a href="#" data-action="close">').append('<i class="fa fa-times">') : ''
+                                $('<button type="button" class="btn btn-link" data-action="cornered">').append('<i class="fa fa-compress">'),
+                                $('<button type="button" class="btn btn-link" data-action="centered">').append('<i class="fa fa-expand">'),
+                                this.options.showStickybutton ? $('<button type="button" class="btn btn-link" data-action="sticky">').append('<i class="fa fa-thumb-tack">') : '',
+                                this.options.closable ? $('<button type="button" class="btn btn-link" data-action="close">').append('<i class="fa fa-times">') : ''
                             )
                         ),
                         this.$body = this.$body || $('<div class="floating-body abs">')
@@ -289,20 +289,29 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         $('#io-ox-taskbar').empty().append(
             this.map(function (model) {
                 var floatingWindow = model.get('window'),
-                    open = !model.get('nonFloating') && !floatingWindow.minimized;
+                    open = !model.get('nonFloating') && !floatingWindow.minimized,
+                    title = floatingWindow.title || model.get('title');
+
                 if (!hasStickyWindows && !floatingWindow.minimized) {
                     hasStickyWindows = floatingWindow.displayStyle === 'sticky';
                 }
                 if (open) collection.openWindows.push(floatingWindow);
 
                 return $('<li>').addClass(open || (floatingWindow.state && floatingWindow.state.visible) ? 'active' : '').append(
-                    $('<button class="taskbar-button" type="button">')
+                    $('<button class="taskbar-button" type="button">').toggleClass('io-ox-busy', !!(model.get('nonFloating') && (!title || title.trim().length === 0) && !model.titleChanged))
                         .attr('data-cid', floatingWindow.cid || model.cid)
                         .append(
-                            $('<span class="title">').text(floatingWindow.title || model.get('title')),
+                            $('<span class="title">').text(title),
                             $('<span class="count label label-danger">').toggle(floatingWindow.count > 0).text(floatingWindow.count)
-                        ),
-                    floatingWindow.options.closable || model.get('closable') ? $('<a role="button" href="#" class="pull-right" data-action="close">').append('<i class="fa fa-times">')
+                        )
+                        .on('click', function (e) {
+                            if (model.get('nonFloating')) {
+                                model.launch();
+                                return;
+                            }
+                            floatingWindow.makeActive(e.altKey && window.innerWidth >= 1192);
+                        }),
+                    floatingWindow.options.closable || model.get('closable') ? $('<button type="button" class="btn btn-link pull-right" data-action="close">').append('<i class="fa fa-times">')
                     .on('click', function (e) {
                         if (model.get('nonFloating')) {
                             model.quit();
@@ -330,18 +339,6 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
 
     collection.on('change:count', function (window, count) {
         $('#io-ox-taskbar').find('[data-cid="' + window.cid + '"] .count').toggle(count > 0).text(count);
-    });
-
-    $(document).on('click', '#io-ox-taskbar button', function (e) {
-        e.preventDefault();
-        var cid = $(e.currentTarget).attr('data-cid'),
-            model = collection.get(cid);
-
-        if (model.get('nonFloating')) {
-            model.launch();
-            return;
-        }
-        model.get('window').makeActive(e.altKey && window.innerWidth >= 1192);
     });
 
     /*var scrolling = false,
@@ -420,8 +417,11 @@ define('io.ox/backbone/views/window', ['io.ox/backbone/views/disposable', 'gette
         model.set('nonFloating', true);
         model.on('quit', function () { remove(model); });
         model.on('change:title', function () {
-            var node = $('#io-ox-taskbar').find('[data-cid="' + model.cid + '"] .title');
-            if (node) node.text(model.getTitle());
+            var node = $('#io-ox-taskbar').find('[data-cid="' + model.cid + '"]');
+            if (node) {
+                node.removeClass('io-ox-busy').find('.title').text(model.getTitle());
+                model.titleChanged = true;
+            }
         });
         collection.add(model).trigger('show', this);
         // attach on add to make sure ox.ui.apps exists (in case this file is loaded early there might be race conditions otherwise)

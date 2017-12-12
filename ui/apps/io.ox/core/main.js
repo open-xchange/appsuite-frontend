@@ -271,6 +271,7 @@ define('io.ox/core/main', [
         if (_.device('smartphone') && !forceDesktopLaunchers) {
             return;
         }
+        items.show();
 
         var itemsLeftWidth = launchers.offset().left;
 
