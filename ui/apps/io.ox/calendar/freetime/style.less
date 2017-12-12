@@ -300,7 +300,28 @@
         }
     }
 
-    &.zoomlevel-100  {
+    // only show every 4th hour
+    &.zoomlevel-25,{
+        .freetime-hour {
+            width: 60px;
+            display: none;
+            &:nth-child(4n+1) {
+                display: block;
+            }
+        }
+    }
+
+    // only show every 2nd hour
+    &.zoomlevel-50 {
+        .freetime-hour {
+            width: 60px;
+            &:nth-child(even) {
+                display: none;
+            }
+        }
+    }
+
+    &.zoomlevel-25, &.zoomlevel-50 , &.zoomlevel-100  {
         .freetime-timeline .timeline-day .daylabel-container .level-2{
             display: none;
         }
@@ -312,9 +333,6 @@
         &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .level-1{
             display: none;
         }
-        .freetime-hour {
-            min-width: 60px;
-        }
     }
     &.zoomlevel-200 {
         &.only-workinghours .freetime-timeline .timeline-day .daylabel-container .day-label-wrapper {
@@ -323,16 +341,6 @@
                 display: none;
             }
         }
-        .freetime-hour {
-            min-width: 120px;
-        }
-    }
-    &.zoomlevel-400 .freetime-hour {
-        min-width: 240px;
-    }
-
-    &.zoomlevel-1000 .freetime-hour {
-        min-width: 600px;
     }
 }
 
@@ -409,16 +417,21 @@
         background-origin: border-box;
     }
 
+    // zoomlevel is too low to show a fine grid
+    &.zoomlevel-25.show-fine-grid .freetime-table-cell,&.zoomlevel-50.show-fine-grid .freetime-table-cell {
+        background-image: none;
+    }
+        &.zoomlevel-1000.show-fine-grid .freetime-table-cell {
+        background-image: linear-gradient(90deg, #333 0px, transparent 1px, transparent 49px, #ccc 50px, transparent 51px, transparent 99px, #ccc 100px, transparent 101px, transparent 149px);
+        background-size: 150px 1px;
+    }
     &.zoomlevel-100.show-fine-grid .freetime-table-cell {
-        width: 60px;
         background-size: 15px 1px;
     }
     &.zoomlevel-200.show-fine-grid .freetime-table-cell {
-        width: 120px;
         background-size: 30px 1px;
     }
     &.zoomlevel-400.show-fine-grid .freetime-table-cell {
-        width: 240px;
         background-size: 60px 1px;
     }
     &.zoomlevel-1000.show-fine-grid .freetime-table-cell {
@@ -435,17 +448,10 @@
         }
     }
 
-    &.zoomlevel-100 .freetime-table-cell {
-        width: 60px;
-    }
-    &.zoomlevel-200 .freetime-table-cell {
-        width: 120px;
-    }
-    &.zoomlevel-400 .freetime-table-cell {
-        width: 240px;
-    }
-    &.zoomlevel-1000 .freetime-table-cell {
-        width: 600px;
+    &.zoomlevel-25 .appointment, &.zoomlevel-50 .appointment{
+        .title,.location{
+            display: none;
+        }
     }
 
     .freetime-time-view-body {

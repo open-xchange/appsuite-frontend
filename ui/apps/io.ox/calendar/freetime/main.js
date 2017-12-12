@@ -96,8 +96,8 @@ define('io.ox/calendar/freetime/main', [
         },
 
         updateZoom: function () {
-            this.header.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
-            this.body.removeClass('zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
+            this.header.removeClass('zoomlevel-25 zoomlevel-50 zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
+            this.body.removeClass('zoomlevel-25 zoomlevel-50 zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
         },
 
         updateFineGrid: function () {

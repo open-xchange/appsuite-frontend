@@ -33,7 +33,9 @@ define('io.ox/calendar/freetime/timeView', [
         zIndexbase = {
             free: 0,
             reserved: 1000
-        };
+        },
+        // width of a tablecell at 100%
+        BASEWIDTH = 60;
 
     // header
     pointHeader.extend({
@@ -94,6 +96,8 @@ define('io.ox/calendar/freetime/timeView', [
         draw: function (baton) {
             var dropdown = new Dropdown({ keep: true, caret: true, model: baton.model, label: gt('Options'), tagName: 'span' })
                 .header(gt('Zoom'))
+                .option('zoom', '25', '25%', { radio: true })
+                .option('zoom', '50', '50%', { radio: true })
                 .option('zoom', '100', '100%', { radio: true })
                 .option('zoom', '200', '200%', { radio: true })
                 .option('zoom', '400', '400%', { radio: true })
@@ -147,7 +151,8 @@ define('io.ox/calendar/freetime/timeView', [
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
                     var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p');
-                    sections.push($('<span class="freetime-hour">').text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
+                    sections.push($('<span class="freetime-hour">').css('min-width', BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px')
+                        .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
                         .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour-start-end' : ''));
@@ -173,7 +178,8 @@ define('io.ox/calendar/freetime/timeView', [
         id: 'timetable',
         index: 100,
         draw: function (baton) {
-            var node, table, width,
+            var node, table,
+                width = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100),
                 worktimeStart = parseInt(settings.get('startTime', 8), 10),
                 worktimeEnd = parseInt(settings.get('endTime', 18), 10),
                 start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
@@ -190,7 +196,7 @@ define('io.ox/calendar/freetime/timeView', [
 
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
-                    cells.push($('<span class="freetime-table-cell">').val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
+                    cells.push($('<span class="freetime-table-cell">').css('width', width + 'px').val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                                .addClass(i === worktimeEnd || i === worktimeStart ? 'working-hour-start-end' : '')
                                .addClass(i === start ? 'day-start' : '')
                                .addClass(time.valueOf() === today.valueOf() ? 'today' : '')
@@ -200,7 +206,7 @@ define('io.ox/calendar/freetime/timeView', [
                 node.append(cells);
                 time.add(1, 'days');
             }
-            width = node.children().length * 60 * (parseInt(baton.model.get('zoom'), 10) / 100);
+            width = node.children().length * width;
             table.css('width', width + 'px');
             if (baton.view.keepScrollpos === 'today') {
                 if (baton.view.headerNodeRow2.find('.today').length) {
@@ -416,9 +422,11 @@ define('io.ox/calendar/freetime/timeView', [
                 var nodes = table.find('.freetime-time-table').children().length,
                     oldWidth = table.width(),
                     oldScrollPos = table.parent().scrollLeft(),
-                    newWidth = nodes * 60 * (parseInt(this.model.get('zoom'), 10) / 100);
+                    newWidth = BASEWIDTH * (parseInt(this.model.get('zoom'), 10) / 100);
 
-                table.css('width', newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * newWidth);
+                this.headerNodeRow2.find('.freetime-hour').css('min-width', newWidth + 'px');
+                table.find('.freetime-table-cell').css('width', newWidth + 'px');
+                table.css('width', nodes * newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * nodes * newWidth);
             }
         },
         updateVisibility: function () {
