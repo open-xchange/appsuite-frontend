@@ -126,7 +126,9 @@ define('io.ox/files/share/listview', [
         onContextMenu: function (event) {
             var view = this,
                 app = view.app,
-                list = view.selection.get();
+                list = view.selection.get(),
+                // the link to render the context menu with it's entries
+                link = 'io.ox/core/file/contextmenu/myshares';
 
             if (!list) return;
 
@@ -137,7 +139,7 @@ define('io.ox/files/share/listview', [
             list = _(models).invoke('toJSON');
             // extract single object if length === 1
             var data = list.length === 1 ? list[0] : list;
-            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: '/myshares' });
+            var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link });
 
             this.contextMenu.showContextMenu(event, baton);
         }

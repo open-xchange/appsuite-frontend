@@ -108,7 +108,14 @@ define('io.ox/files/contextmenu', [
                 lastSection = currentSection;
             });
 
-            def.resolve();
+            // reject when no entry available to prevent that a empty context
+            // menu is shown (would be only visible in the DOM, not for the user)
+            if (menuIsEmtpy) {
+                def.reject();
+            } else {
+                def.resolve();
+            }
+
         });
 
         return def.promise();
@@ -123,14 +130,36 @@ define('io.ox/files/contextmenu', [
         }
     });
 
+    // define point for the off-site context menu
+    ext.point('io.ox/core/file/contextmenu/default/offsite').extend({
+        id: 'drive-list-dropdown-offsite',
+        index: 10000,
+        draw: function (baton) {
+            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/default/offsite/items', baton);
+        }
+    });
+
     // define point for the myshares file context menu
     ext.point('io.ox/core/file/contextmenu/myshares').extend({
-        id: 'drive-list-dropdown-myshares',
+        id: 'drive-myshares-dropdown',
         index: 10000,
         draw: function (baton) {
             return renderActionPointItems(this, 'io.ox/core/file/contextmenu/myshares/items', baton);
         }
     });
+
+    // ======  context menu definition ======
+
+    // default/offsite file context menu definition
+    ext.point('io.ox/core/file/contextmenu/default/offsite/items').extend(
+        {
+            id: 'addfolder',
+            index: 1000,
+            ref: 'io.ox/files/actions/add-folder',
+            section: '5',
+            label: gt('Add folder')
+        }
+    );
 
     // myshares file context menu definition
     ext.point('io.ox/core/file/contextmenu/myshares/items').extend(
@@ -266,8 +295,12 @@ define('io.ox/files/contextmenu', [
 
         showContextMenu: function (e, baton) {
 
+            var link = this.getLink(e, baton);
+            // when no link available cancel the current process to show the context menu
+            if (!link) { return; }
+
             var positionData = this.calcPositionFromEvent(e);
-            var updateFinished = this.updateContextMenu(baton);
+            var updateFinished = this.updateContextMenu(link, baton);
             var view = this;
             $.when.apply($, updateFinished.value()).done(function () {
 
@@ -308,7 +341,30 @@ define('io.ox/files/contextmenu', [
             return { target: target, top: top, left: left };
         },
 
-        updateContextMenu: function (baton) {
+        // Check if clicked below the list entries in the off site area.
+        checkEventTargetOffsite: function (e) {
+            // target when clicking in a empty folder
+            var emptyList = $(e.target).hasClass('abs notification');
+            // target when clicked below a list
+            var areaBelowList = $(e.target).is('ul');
+
+            return areaBelowList || emptyList;
+        },
+
+        // Get the link depending on on the target.
+        getLink: function (e, baton) {
+            var link = null;
+
+            if (this.checkEventTargetOffsite(e)) {
+                link = baton.linkContextMenuOffsite;
+            } else {
+                link = baton.linkContextMenu;
+            }
+
+            return link;
+        },
+
+        updateContextMenu: function (link, baton) {
 
             var ul = this.$dropdownMenu.empty();
 
@@ -316,7 +372,7 @@ define('io.ox/files/contextmenu', [
             this.$dropdownMenu.removeAttr('role');
 
             //baton.$el = ul; NOTE: found no case were needed, but when there is a bug with certain actions, check if this helps
-            var finishedRendering = ext.point('io.ox/core/file/contextmenu' + baton.contextLinkAdder).invoke('draw', ul, baton);
+            var finishedRendering = ext.point(link).invoke('draw', ul, baton);
             return finishedRendering;
         }
     });

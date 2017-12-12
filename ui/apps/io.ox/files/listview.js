@@ -38,8 +38,12 @@ define('io.ox/files/listview', [
 
     function onContextMenu(e) {
 
-        var view = this,
-            app = view.app;
+        var view = this;
+        var app = view.app;
+        // the link to render the context menu with it's entries
+        var link = 'io.ox/core/file/contextmenu/default'; //contextLinkAdder: view.contextLinkAdder || '/default'TODO?
+        // context menu when clicked below the list
+        var linkOffsite = link + '/offsite';
 
         var list = view.selection.get();
         if (!list) return;
@@ -48,7 +52,7 @@ define('io.ox/files/listview', [
         list = _(models).invoke('toJSON');
         // extract single object if length === 1
         var data = list.length === 1 ? list[0] : list;
-        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, contextLinkAdder: view.contextLinkAdder || '/default' });
+        var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link, linkContextMenuOffsite: linkOffsite });
 
         this.contextMenu.showContextMenu(e, baton);
     }
