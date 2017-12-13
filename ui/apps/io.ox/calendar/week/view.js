@@ -373,7 +373,7 @@ define('io.ox/calendar/week/view', [
             if (!this.lasso) {
                 var cid = util.cid(String($(e.currentTarget).data('cid'))),
                     el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]', this.$el),
-                    bg = el.data('background-color');
+                    bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
                 switch (e.type) {
                     case 'mouseenter':
                         if (e.relatedTarget && e.relatedTarget.tagName !== 'TD') {

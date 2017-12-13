@@ -132,7 +132,7 @@ define('io.ox/calendar/month/view', [
         onEnterAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = el.data('background-color');
+                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
             el.addClass('hover');
             if (bg) el.css('background-color', util.lightenDarkenColor(bg, 0.9));
         },
@@ -141,7 +141,7 @@ define('io.ox/calendar/month/view', [
         onLeaveAppointment: function (e) {
             var cid = util.cid(String($(e.currentTarget).data('cid'))),
                 el = $('[data-master-id="' + cid.folder + '.' + cid.id + '"]:visible', this.pane),
-                bg = el.data('background-color');
+                bg = this.app.getWindow().nodes.outer.hasClass('custom-colors') ? el.data('background-color') : null;
             el.removeClass('hover');
             if (bg) el.css('background-color', bg);
         },
