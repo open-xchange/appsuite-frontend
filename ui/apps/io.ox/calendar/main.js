@@ -337,7 +337,8 @@ define('io.ox/calendar/main', [
                 }
             };
             app.on('folder:change', app.folders.reset);
-            app.folderView.tree.on('dblclick', function (folder) {
+            app.folderView.tree.on('dblclick', function (e, folder) {
+                if ($(e.target).hasClass('color-label')) return;
                 app.folder.set(folder);
                 app.folders.set(folder);
             });

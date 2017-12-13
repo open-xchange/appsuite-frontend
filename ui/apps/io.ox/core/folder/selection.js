@@ -147,8 +147,9 @@ define('io.ox/core/folder/selection', [], function () {
             if ($(e.target).closest('.contextmenu-control').length > 0) return;
 
             var target = $(e.target),
-                folder = target.closest('.folder').attr('data-id');
-            this.triggerEvent('dblclick', folder);
+                node = target.closest('.folder'),
+                folder = node.attr('data-id');
+            this.triggerEvent('dblclick', e, folder);
         },
 
         onKeydown: function (e) {
