@@ -567,7 +567,7 @@ define('io.ox/calendar/week/view', [
                     endDate: { value: start.add(1, 'hour').format('YYYYMMDD[T]HHmmss'), tzid:  start.tz() }
                 });
             }
-            if ($(e.target).hasClass('day') || $(e.target).hasClass('weekday')) {
+            if ($(e.target).hasClass('day') || $(e.target).closest('.weekday').length > 0) {
                 // calculate timestamp for current position
                 this.trigger('openCreateAppointment', e, {
                     startDate: { value: start.utc(true).format('YYYYMMDD') },
