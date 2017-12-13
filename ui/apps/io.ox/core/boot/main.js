@@ -11,23 +11,21 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/boot/main', [
+define.async('io.ox/core/boot/main', [
 
     'themes',
     'gettext',
     'io.ox/core/extensions',
+    'io.ox/core/extPatterns/stage',
     'io.ox/core/manifests',
     'io.ox/core/session',
     'io.ox/core/boot/util',
     'io.ox/core/boot/form',
-    'io.ox/core/boot/config',
-    'io.ox/core/boot/login/auto',
-    'io.ox/core/boot/login/token'
+    'io.ox/core/boot/config'
 
-], function (themes, gettext, ext, manifests, session, util, form, config, autologin, tokenlogin) {
+], function (themes, gettext, ext, Stage, manifests, session, util, form, config) {
 
     'use strict';
-
     var synonyms = {
         guest: 'useForm',
         guest_password: 'useForm',
@@ -39,13 +37,14 @@ define('io.ox/core/boot/main', [
 
     var exports = {
 
-        start: function () {
+        start: function (options) {
+            options = options || {};
             // use extensions to determine proper login method
-            var baton = ext.Baton({ hash: _.url.hash() });
-            ext.point('io.ox/core/boot/login').invoke('login', this, baton);
-
-            // a11y: remove meta viewport for desktop
-            if (_.device('desktop')) $('meta[name="viewport"]').remove();
+            var baton = ext.Baton({ hash: _.url.hash(), logins: this });
+            return Stage.run('io.ox/core/boot/login', baton, { methodName: 'login', beginAfter: options.after, softFail: true }).then(function () {
+                // a11y: remove meta viewport for desktop
+                if (_.device('desktop')) $('meta[name="viewport"]').remove();
+            });
         },
 
         invoke: function (loginType) {
@@ -53,61 +52,57 @@ define('io.ox/core/boot/main', [
             var type = synonyms[loginType] || loginType;
             if (_.isFunction(this[type])) {
                 util.debug('Using login type', type);
-                this[type]();
-            } else {
-                $('#io-ox-login-container').empty().append(
-                    $('<div class="alert alert-info">').text('Unknown login type.')
-                );
-                $('#background-loader').fadeOut(250);
+                return this[type]();
+            }
+            $('#io-ox-login-container').empty().append(
+                $('<div class="alert alert-info">').text('Unknown login type.')
+            );
+            $('#background-loader').fadeOut(250);
+        },
+        defaultLogin: function () {
+            if (!Stage.isRunning('io.ox/core/boot/login')) {
+                this.start({ after: 'autologin' });
             }
         },
-
         useForm: function () {
 
             // avoid multiple calls
             this.useForm = $.noop;
 
-            config.server().done(function serverConfigLoaded() {
+            // forceHTTPS
+            if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:' && !ox.debug) {
+                location.href = 'https:' + location.href.substring(location.protocol.length);
+                return;
+            }
 
-                // forceHTTPS
-                if (ox.serverConfig.forceHTTPS && location.protocol !== 'https:' && !ox.debug) {
-                    location.href = 'https:' + location.href.substring(location.protocol.length);
-                    return;
-                }
+            // set page title now
+            ox.on('language', function (lang, gt) {
+                util.setPageTitle(ox.serverConfig.pageTitle + ' ' + gt.pgettext('word', 'Sign in'));
+            });
 
-                // set page title now
-                ox.on('language', function (lang, gt) {
-                    util.setPageTitle(ox.serverConfig.pageTitle + ' ' + gt.pgettext('word', 'Sign in'));
-                });
+            gettext.setLanguage('en_US');
 
-                gettext.setLanguage('en_US');
+            var theme = _.url.hash('theme') || ox.serverConfig.signinTheme || 'login';
+            util.debug('Load default language and theme ...', theme);
 
-                var theme = _.url.hash('theme') || ox.serverConfig.signinTheme || 'login';
-                util.debug('Load default language and theme ...', theme);
-
-                // theme
-                $.when(
-                    themes.set(theme),
-                    require(['io.ox/core/boot/i18n'])
-                )
-                .done(function () {
-                    // log
-                    util.debug('Load default language and theme DONE.');
-                    form();
-                });
-            })
-            .fail(function (error) {
-                util.debug('Error while loading config from server', error);
-                ox.trigger('server:down', error);
+            // theme
+            $.when(
+                themes.set(theme),
+                require(['io.ox/core/boot/i18n'])
+            )
+            .done(function () {
+                // log
+                util.debug('Load default language and theme DONE.');
+                form();
             });
         },
 
         useToken: function () {
-            tokenlogin();
+            require('io.ox/core/boot/login/token')();
         },
 
         useCookie: function () {
-            autologin();
+            return require('io.ox/core/boot/login/auto')();
         },
 
         loadUI: function () {
@@ -154,17 +149,7 @@ define('io.ox/core/boot/main', [
             login: function (baton) {
                 if (baton.hash.login_type !== undefined) {
                     baton.stopPropagation();
-                    this.invoke(baton.hash.login_type);
-                }
-            }
-        },
-        {
-            id: 'token',
-            index: 200,
-            login: function (baton) {
-                if (baton.hash.tokenSession || baton.hash.session) {
-                    baton.stopPropagation();
-                    this.invoke('useToken');
+                    baton.logins.invoke(baton.hash.login_type);
                 }
             }
         },
@@ -173,16 +158,15 @@ define('io.ox/core/boot/main', [
             index: 300,
             login: function (baton) {
                 if (baton.hash.autologin === 'false') {
-                    baton.stopPropagation();
-                    this.invoke('useForm');
+                    baton.disable('io.ox/core/boot/login', 'autologin'); // Skip autologin
                 }
             }
         },
         {
             id: 'default',
             index: 1000000000000,
-            login: function () {
-                this.invoke('useCookie');
+            login: function (baton) {
+                baton.logins.useForm();
             }
         }
     );
@@ -194,6 +178,7 @@ define('io.ox/core/boot/main', [
     ox.once({
 
         'login:success': function (data) {
+            Stage.abortAll('io.ox/core/boot/login');
 
             $('#background-loader').fadeIn(util.DURATION, function () {
                 $('#io-ox-login-screen').hide().empty();
@@ -210,10 +195,20 @@ define('io.ox/core/boot/main', [
         },
 
         'login:fail': function () {
-            exports.useForm();
+            if (!Stage.isRunning('io.ox/core/boot/login')) {
+                exports.start({ after: 'autologin' });
+            } // Otherwise continue thru the other login stages
         }
     });
 
-    return exports;
-
+    return config.server().then(function () {
+        return ox.manifests.loadPluginsFor('signin');
+    }, function serverConfigFail(error) {
+        util.debug('Error while loading config from server', error);
+        ox.trigger('server:down', error);
+        // module should be defined despite from server being "down"
+        return $.Deferred().resolve();
+    }).then(function () {
+        return exports;
+    });
 });

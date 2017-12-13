@@ -14,13 +14,25 @@
 define('io.ox/core/boot/login/auto', [
     'io.ox/core/boot/util',
     'io.ox/core/boot/config',
-    'io.ox/core/session'
-], function (util, config, session) {
+    'io.ox/core/session',
+    'io.ox/core/extensions'
+], function (util, config, session, ext) {
 
     'use strict';
 
-    return function autoLogin() {
+    ext.point('io.ox/core/boot/login').extend({
+        id: 'autologin',
+        index: 400,
+        login: function () {
+            return autoLogin().then(_.identity, function () {
+                // catch the error and normally resume in the pipeline
+                // error should have been handled by 'login:fail' error handlers
+                return $.Deferred().resolve();
+            });
+        }
+    });
 
+    function autoLogin() {
         util.debug('Auto login ...');
 
         // try auto login!?
@@ -35,8 +47,7 @@ define('io.ox/core/boot/login/auto', [
                 _.setCookie('language', ox.language);
                 // event
                 ox.trigger('login:success', data);
-            })
-            .fail(function (error) {
+            }, function failAutoLogin(error) {
                 // log
                 util.debug('Auto login FAIL', error);
                 // special autologin error handling. redirect user to an
@@ -47,5 +58,7 @@ define('io.ox/core/boot/login/auto', [
                     ox.trigger('login:fail', error);
                 }
             });
-    };
+    }
+
+    return autoLogin;
 });

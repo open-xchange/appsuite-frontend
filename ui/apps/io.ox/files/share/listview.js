@@ -134,7 +134,9 @@ define('io.ox/files/share/listview', [
 
             // turn cids into proper objects
             var cids = list,
-                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : [view.collection.get(cids)];
+                cidList = view.collection.get(cids),
+                modelList = cidList ? [cidList] : [],
+                models = (/^folder\./).test(cids) ? filesAPI.resolve(cids, false) : modelList;
 
             list = _(models).invoke('toJSON');
             // extract single object if length === 1
@@ -148,7 +150,7 @@ define('io.ox/files/share/listview', [
     // Overrides the onItemKeyDown function in ListView and extends it with the contextLinkAdder
     var orgListHandler = ListView.prototype.onItemKeydown;
     MyShareListView.prototype.onItemKeydown = function () {
-        this.contextLinkAdder = '/myshares';
+        this.linkContextMenu = 'io.ox/core/file/contextmenu/myshares';
         orgListHandler.apply(this, arguments);
     };
 
