@@ -40,6 +40,21 @@ define('io.ox/mail/common-extensions', [
         return !!baton.app && !!baton.app.props.get('find-result');
     }
 
+    function pictureHalo(node, data) {
+        // user should be in cache from rampup data
+        // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
+        var address = _.isArray(data) ? data && data[0] && data[0][1] : data;
+        userAPI.get({ id: ox.user_id }).then(function (user) {
+            var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
+                useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
+            contactsAPI.pictureHalo(
+                node,
+                (useUserApi ? { id: ox.user_id } : { email: address }),
+                { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
+            );
+        });
+    }
+
     var extensions = {
 
         a11yLabel: function (baton) {
@@ -85,27 +100,8 @@ define('io.ox/mail/common-extensions', [
 
             this.append(node);
 
-            if (isSearchResult(baton) && data.picture) {
-                return contactsAPI.pictureHalo(
-                    node,
-                    { email: data.picture },
-                    { width: 40, height: 40, effect: 'fadeIn' }
-                );
-            }
-
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                contactsAPI.pictureHalo(
-                    node,
-                    (useUserApi ? { id: ox.user_id } : { email: address }),
-                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                );
-            });
+            if (isSearchResult(baton) && data.picture) return pictureHalo(node, data.picture);
+            pictureHalo(node, addresses);
         },
 
         senderPicture: function (baton) {
@@ -114,20 +110,7 @@ define('io.ox/mail/common-extensions', [
                 node = $('<div class="contact-picture" aria-hidden="true">');
 
             this.append(node);
-
-            // user should be in cache from rampup data
-            // use userapi if possible, otherwise webmail users don't see their own contact picture (missing gab)
-            userAPI.get({ id: ox.user_id }).then(function (user) {
-                var mailAdresses = _.compact([user.email1, user.email2, user.email3]),
-                    address = addresses && addresses[0] && addresses[0][1],
-                    useUserApi = _(mailAdresses).contains(address) && user.number_of_images > 0;
-
-                contactsAPI.pictureHalo(
-                    node,
-                    (useUserApi ? { id: ox.user_id } : { email: address }),
-                    { width: 40, height: 40, effect: 'fadeIn', api: (useUserApi ? 'user' : 'contact') }
-                );
-            });
+            pictureHalo(node, addresses);
         },
 
         date: function (baton, options) {
