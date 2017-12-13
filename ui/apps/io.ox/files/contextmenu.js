@@ -130,12 +130,12 @@ define('io.ox/files/contextmenu', [
         }
     });
 
-    // define point for the off-site context menu
-    ext.point('io.ox/core/file/contextmenu/default/offsite').extend({
-        id: 'drive-list-dropdown-offsite',
+    // define point for the outside-list context menu
+    ext.point('io.ox/core/file/contextmenu/default/outsideList').extend({
+        id: 'drive-list-dropdown-outsideList',
         index: 10000,
         draw: function (baton) {
-            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/default/offsite/items', baton);
+            return renderActionPointItems(this, 'io.ox/core/file/contextmenu/default/outsideList/items', baton);
         }
     });
 
@@ -150,8 +150,8 @@ define('io.ox/files/contextmenu', [
 
     // ======  context menu definition ======
 
-    // default/offsite file context menu definition
-    ext.point('io.ox/core/file/contextmenu/default/offsite/items').extend(
+    // default/outside-list file context menu definition
+    ext.point('io.ox/core/file/contextmenu/default/outsideList/items').extend(
         {
             id: 'addfolder',
             index: 1000,
@@ -341,8 +341,8 @@ define('io.ox/files/contextmenu', [
             return { target: target, top: top, left: left };
         },
 
-        // Check if clicked below the list entries in the off site area.
-        checkEventTargetOffsite: function (e) {
+        // Check if clicked below the list entries in the outside-list area.
+        checkEventTargetOutsideList: function (e) {
             // target when clicking in a empty folder
             var emptyList = $(e.target).hasClass('abs notification');
             // target when clicked below a list
@@ -351,12 +351,21 @@ define('io.ox/files/contextmenu', [
             return areaBelowList || emptyList;
         },
 
-        // Get the link depending on on the target.
+        /**
+         * Get the link depending on on the target (list | outside-list).
+         * @param e
+         * @param baton
+         *   @param {String} baton.linkContextMenu
+         *   @param {String} baton.linkContextMenuOutsideList [optional]
+         *   In case outside-list context-menu is wanted.
+         *
+         * @returns {String} link
+         */
         getLink: function (e, baton) {
             var link = null;
 
-            if (this.checkEventTargetOffsite(e)) {
-                link = baton.linkContextMenuOffsite;
+            if (this.checkEventTargetOutsideList(e)) {
+                link = baton.linkContextMenuOutsideList;
             } else {
                 link = baton.linkContextMenu;
             }
