@@ -33,7 +33,7 @@ define(function () {
             return require(['file/doesnt/exist']).then(function () {
                 sinon.FakeXMLHttpRequest.useFilters = true;
                 fakeServer.restore();
-                expect(recordAppsLoad.calledOnce).to.be.true;
+                expect(recordAppsLoad.calledOnce, 'apps/load called once').to.be.true;
             });
         });
 
