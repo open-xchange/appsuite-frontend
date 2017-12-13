@@ -208,7 +208,7 @@ define('io.ox/calendar/api', [
                     list = _(list).map(function (obj) {
                         // if an alarm object was used to get the associated event we need to use the eventId not the alarm Id
                         if (obj.eventId) {
-                            return { id: obj.eventId, folderId: obj.folder, folder: obj.folder, recurrenceId: obj.recurrenceId };
+                            return { id: obj.eventId, folder: obj.folder, recurrenceId: obj.recurrenceId };
                         }
                         return obj;
                     });
@@ -371,7 +371,7 @@ define('io.ox/calendar/api', [
                         return {
                             id: obj.id,
                             recurrenceId: obj.recurrenceId,
-                            folderId: obj.folder
+                            folder: obj.folder
                         };
                     })
                 })
