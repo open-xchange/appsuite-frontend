@@ -1334,6 +1334,7 @@ define('io.ox/calendar/week/view', [
             }
             this.fulltimeCon.css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
+            this.moreAppointmentsIndicators.css({ top: ftHeight + 'px' });
             if (this.timeLabelBar) this.timeLabelBar.css({ top: (ftHeight - 22) + 'px' });
 
             this.fulltimeNote[fulltimeCount === 0 ? 'show' : 'hide']();
