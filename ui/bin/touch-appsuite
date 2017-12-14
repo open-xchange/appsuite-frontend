@@ -50,8 +50,8 @@ if [ ! -f core ]; then
 fi
 
 VERSION=$(sed -n \
-    '/v=/{s/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p;q}' \
-    core)
+    's/^.*v=\([0-9A-Za-z._-]*\)\.[0-9]\{8\}\.[0-9]\{6\}.*$/\1/p' \
+    core | head -n1)
 
 for f in core signin boot.js; do
     sed -i "s/${VERSION}"'\.[0-9]\{8\}\.[0-9]\{6\}/'"${VERSION}.${NOW}/g" "$f"

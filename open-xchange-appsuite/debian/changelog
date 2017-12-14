@@ -1,3 +1,9 @@
+open-xchange-appsuite (7.6.3-29) stable; urgency=medium
+
+  * Build for patch 2017-12-11 (hotfix-4470)
+
+ -- Markus Wagner <markus.wagner@open-xchange.com>  Mon, 04 Dec 2017 16:03:54 +0000
+
 open-xchange-appsuite (7.6.3-28) stable; urgency=medium
 
   * Build for patch 2017-11-30 (4438)
