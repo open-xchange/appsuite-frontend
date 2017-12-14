@@ -6,9 +6,9 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * © 2016 OX Software GmbH, Germany. info@open-xchange.com
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
  *
- * @author Viktor Pracht <viktor.pracht@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/core/i18n', ['gettext!io.ox/core'], function (gt) {

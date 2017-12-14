@@ -1,7 +1,18 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
 
 define('io.ox/core/main/stages', [
     'io.ox/core/extensions',
-    'io.ox/core/extPatterns/stage',
     'io.ox/core/notifications',
     'io.ox/core/capabilities',
     'io.ox/core/api/apps',
@@ -12,9 +23,7 @@ define('io.ox/core/main/stages', [
     'settings!io.ox/contacts',
     'gettext!io.ox/core',
     'io.ox/core/main/restore'
-], function (ext, Stage, notifications, capabilities, appAPI, folderAPI, debug, tb, settings, contactsSettings, gt) {
-
-    var DURATION = 250;
+], function (ext, notifications, capabilities, appAPI, folderAPI, debug, tb, settings, contactsSettings, gt) {
 
     var topbar = tb.topbar;
 
@@ -56,15 +65,13 @@ define('io.ox/core/main/stages', [
         return autoStart;
     };
 
-    new Stage('io.ox/core/stages', {
+    ext.point('io.ox/core/stages').extend({
         id: 'first',
         index: 100,
         run: function () {
             debug('Stage "first"');
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'appcheck',
         index: 101,
         run: function (baton) {
@@ -141,9 +148,7 @@ define('io.ox/core/main/stages', [
                 baton.autoLaunch = autoLaunchArray();
             }
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'autoLaunchApps',
         index: 102,
         run: function (baton) {
@@ -155,9 +160,7 @@ define('io.ox/core/main/stages', [
                 return ox.manifests.apps[m] !== undefined && !ox.manifests.isDisabled(m);
             }).compact().value();
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'startLoad',
         index: 103,
         run: function (baton) {
@@ -183,9 +186,7 @@ define('io.ox/core/main/stages', [
                 )
             );
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'secretCheck',
         index: 250,
         run: function () {
@@ -200,158 +201,149 @@ define('io.ox/core/main/stages', [
                 }
             }
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'load',
         index: 600,
         run: function (baton) {
-
             debug('Stage "load"', baton);
 
-            return baton.loaded.done(function (instantFadeOut) {
-
-                debug('Stage "load" > loaded.done');
-
-                // draw top bar now
-                // ext.point('io.ox/core/banner').invoke('draw');
-                ext.point('io.ox/core/appcontrol').invoke('draw');
-                ext.point('io.ox/core/topbar').invoke('draw');
-                ext.point('io.ox/core/mobile').invoke('draw');
-
-                // help here
-                if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
-                    $('#io-ox-screens').css('top', '0px');
-                    topbar.hide();
-                }
-                //draw plugins
-                ext.point('io.ox/core/plugins').invoke('draw');
-
-                debug('Stage "load" > autoLaunch ...');
-
-                // store hash now or restored apps might have changed url
-                var hash = _.copy(_.url.hash());
-
-                // restore apps
-                ox.ui.App.restore().always(function () {
-                    // is set false, if no autoLaunch is available.
-                    // for example if default app is 'none' (see Bug 51207) or app is restored (see Bug Bug 51211)
-                    var allUnavailable = baton.autoLaunch.length > 0;
-                    // auto launch
-                    _(baton.autoLaunch)
-                    .chain()
-                    .map(function (id) {
-                        return getAutoLaunchDetails(id);
-                    })
-                    .filter(function (details) {
-                        //don’t autoload without manifest
-                        //don’t autoload disabled apps
-                        return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
-                    })
-                    .each(function (details, index) {
-                        //only load first app on small devices
-                        if (index === 0) allUnavailable = false;
-                        if (_.device('smartphone') && index > 0) return;
-                        // split app/call
-                        var launch, method, options = _(hash).pick('folder', 'id');
-                        debug('Auto launch:', details.app, options);
-                        launch = ox.launch(details.app, options);
-                        method = details.method;
-                        // TODO: all pretty hard-wired here; looks for better solution
-                        // special case: open viewer too?
-                        if (hash.app === 'io.ox/files' && hash.id !== undefined) {
-                            require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
-                                folderAPI.get(hash.folder)
-                                    .done(function () {
-                                        api.get(hash).done(function (data) {
-                                            new Viewer().launch({ files: [data], folder: hash.folder });
-                                        });
-                                    })
-                                    .fail(function (error) {
-                                        _.url.hash('id', null);
-                                        notifications.yell(error);
-                                    });
-                            });
-                        }
-                        // explicit call?
-                        if (method) {
-                            launch.done(function () {
-                                if (_.isFunction(this[method])) {
-                                    this[method]();
-                                }
-                            });
-                        }
-                        // non-app deeplinks
-                        var id = _.url.hash('reg'),
-                            // be case insensitive
-                            showFeedback = _(_.url.hash()).reduce(function (memo, value, key) {
-                                if (key.toLowerCase() === 'showfeedbackdialog') {
-                                    return value;
-                                }
-                                return memo;
-                            });
-
-                        if (id && ox.registry.get(id)) {
-                            // normalise args
-                            var list = (_.url.hash('regopt') || '').split(','),
-                                data = {}, parts;
-                            // key:value, key:value... -> object
-                            _.each(list, function (str) {
-                                parts = str.split(':');
-                                data[parts[0]] = parts[1];
-                            });
-                            // call after app is ready
-                            launch.done(function () {
-                                ox.registry.call(id, 'client-onboarding', { data: data });
-                            });
-                        }
-
-                        if (showFeedback === 'true' && capabilities.has('feedback')) {
-                            launch.done(function () {
-                                require(['plugins/core/feedback/register'], function (feedback) {
-                                    feedback.show();
-                                });
-                            });
-                        }
-
-                        if (contactsSettings.get('features/furigana', false)) {
-                            require(['l10n/ja_JP/io.ox/register']);
-                        }
-                    });
-                    if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
-                        var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
-                        message = message || gt('The requested application is not available at this moment.');
-                        notifications.yell({ type: 'error', error: message, duration: -1 });
-                    }
-                });
-
-                baton.instantFadeOut = instantFadeOut;
-            })
-            .fail(function () {
-                console.warn('core: Stage "load" > loaded.fail!', baton);
-            });
+            return baton.loaded;
         }
-    });
+    }, {
+        id: 'topbars',
+        index: 610,
+        run: function () {
 
-    new Stage('io.ox/core/stages', {
-        id: 'curtain',
-        index: 700,
+            debug('Stage "load" > loaded.done');
+
+            // draw top bar now
+            // ext.point('io.ox/core/banner').invoke('draw');
+            ext.point('io.ox/core/appcontrol').invoke('draw');
+            ext.point('io.ox/core/topbar').invoke('draw');
+            ext.point('io.ox/core/mobile').invoke('draw');
+
+            // help here
+            if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
+                $('#io-ox-screens').css('top', '0px');
+                topbar.hide();
+            }
+            //draw plugins
+            ext.point('io.ox/core/plugins').invoke('draw');
+
+            debug('Stage "load" > autoLaunch ...');
+
+            // restore apps
+            return ox.ui.App.restore();
+        }
+    }, {
+        id: 'restoreLaunch',
+        index: 620,
         run: function (baton) {
 
+            // store hash now or restored apps might have changed url
+            var hash = _.copy(_.url.hash());
+
+            // is set false, if no autoLaunch is available.
+            // for example if default app is 'none' (see Bug 51207) or app is restored (see Bug Bug 51211)
+            var allUnavailable = baton.autoLaunch.length > 0;
+            // auto launch
+            _(baton.autoLaunch)
+            .chain()
+            .map(function (id) {
+                return getAutoLaunchDetails(id);
+            })
+            .filter(function (details) {
+                //don’t autoload without manifest
+                //don’t autoload disabled apps
+                return ox.manifests.apps[details.app] !== undefined && !ox.manifests.isDisabled(details.app);
+            })
+            .each(function (details, index) {
+                //only load first app on small devices
+                if (index === 0) allUnavailable = false;
+                if (_.device('smartphone') && index > 0) return;
+                // split app/call
+                var launch, method, options = _(hash).pick('folder', 'id');
+                debug('Auto launch:', details.app, options);
+                launch = ox.launch(details.app, options);
+                method = details.method;
+                // TODO: all pretty hard-wired here; looks for better solution
+                // special case: open viewer too?
+                if (hash.app === 'io.ox/files' && hash.id !== undefined) {
+                    require(['io.ox/core/viewer/main', 'io.ox/files/api'], function (Viewer, api) {
+                        folderAPI.get(hash.folder)
+                            .done(function () {
+                                api.get(hash).done(function (data) {
+                                    new Viewer().launch({ files: [data], folder: hash.folder });
+                                });
+                            })
+                            .fail(function (error) {
+                                _.url.hash('id', null);
+                                notifications.yell(error);
+                            });
+                    });
+                }
+                // explicit call?
+                if (method) {
+                    launch.done(function () {
+                        if (_.isFunction(this[method])) {
+                            this[method]();
+                        }
+                    });
+                }
+                // non-app deeplinks
+                var id = _.url.hash('reg'),
+                    // be case insensitive
+                    showFeedback = _(_.url.hash()).reduce(function (memo, value, key) {
+                        if (key.toLowerCase() === 'showfeedbackdialog') {
+                            return value;
+                        }
+                        return memo;
+                    });
+
+                if (id && ox.registry.get(id)) {
+                    // normalise args
+                    var list = (_.url.hash('regopt') || '').split(','),
+                        data = {}, parts;
+                    // key:value, key:value... -> object
+                    _.each(list, function (str) {
+                        parts = str.split(':');
+                        data[parts[0]] = parts[1];
+                    });
+                    // call after app is ready
+                    launch.done(function () {
+                        ox.registry.call(id, 'client-onboarding', { data: data });
+                    });
+                }
+
+                if (showFeedback === 'true' && capabilities.has('feedback')) {
+                    launch.done(function () {
+                        require(['plugins/core/feedback/register'], function (feedback) {
+                            feedback.show();
+                        });
+                    });
+                }
+
+                if (contactsSettings.get('features/furigana', false)) {
+                    require(['l10n/ja_JP/io.ox/register']);
+                }
+            });
+            if (allUnavailable || (ox.rampup && ox.rampup.errors)) {
+                var message = _.pluck(ox.rampup.errors, 'error').join('\n\n');
+                message = message || gt('The requested application is not available at this moment.');
+                notifications.yell({ type: 'error', error: message, duration: -1 });
+            }
+        }
+    }, {
+        id: 'curtain',
+        index: 700,
+        run: function () {
             debug('Stage "curtain"');
 
-            if (baton.instantFadeOut) {
-                // instant fade out
-                $('#background-loader').idle().hide();
-                return $.when();
-            }
             var def = $.Deferred();
-            $('#background-loader').idle().fadeOut(DURATION, def.resolve);
+            $('#background-loader').idle().fadeOut(250, def.resolve);
             return def;
         }
-    });
-
-    new Stage('io.ox/core/stages', {
+    }, {
         id: 'ready',
         index: 1000000000000,
         run: function () {
