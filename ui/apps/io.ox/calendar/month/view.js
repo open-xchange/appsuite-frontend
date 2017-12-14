@@ -452,7 +452,7 @@ define('io.ox/calendar/month/view', [
                 }
             }
 
-            if (util.isPrivate(a) && ox.user_id !== a.get('created_by') && !folderAPI.is('private', folder)) {
+            if (util.isPrivate(a) && ox.user_id !== a.get('createdBy') && !folderAPI.is('private', folder)) {
                 classes = 'private';
             } else {
                 conf = util.getConfirmationStatus(a.attributes, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
@@ -474,7 +474,7 @@ define('io.ox/calendar/month/view', [
                 .append(
                     $('<div>')
                     .addClass('appointment-content')
-                    .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                    .css('lineHeight', (util.isAllday(a) ? this.fulltimeHeight : this.cellHeight) + 'px')
                     .append(
                         util.isPrivate(a) ? $('<span class="private-flag">').append($('<i class="fa fa-lock" aria-hidden="true">'), $('<span class="sr-only">').text(gt('Private'))) : '',
                         a.get('summary') ? $('<div class="title">').text(gt.format(confString, a.get('summary') || '\u00A0')) : '',

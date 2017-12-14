@@ -264,8 +264,8 @@ define('io.ox/calendar/util', [
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment.tz(data.startDate.value, data.startDate.tzid || moment().tz());
-                    endDate = moment.tz(data.endDate.value, data.endDate.tzid || moment().tz());
+                    startDate = that.getMoment(data.startDate);
+                    endDate = that.getMoment(data.endDate);
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     return startDate.format(fmtstr);
@@ -381,7 +381,7 @@ define('io.ox/calendar/util', [
         },
 
         getDurationInDays: function (data) {
-            return moment(data.endDate.value).diff(data.startDate.value, 'days');
+            return that.getMoment(data.endDate).diff(that.getMoment(data.startDate), 'days');
         },
 
         getStartAndEndTime: function (data) {
@@ -399,7 +399,7 @@ define('io.ox/calendar/util', [
 
             var current = moment(data.startDate);
             if (data.startDate.value) {
-                current = moment.tz(data[options.attrName || 'startDate'].value, data[options.attrName || 'startDate'].tzid || moment().tz());
+                current = that.getMoment(data[options.attrName || 'startDate']);
             }
             parent.append(
                 $.txt(this.getTimeInterval(data)),
@@ -412,7 +412,7 @@ define('io.ox/calendar/util', [
         addTimezonePopover: function (parent, data, opt) {
             var current = moment(data.startDate);
             if (data.startDate.value) {
-                current = moment.tz(data[opt.attrName || 'startDate'].value, data[opt.attrName || 'startDate'].tzid || moment().tz());
+                current = that.getMoment(data[opt.attrName || 'startDate']);
             }
 
             opt = _.extend({
@@ -1063,8 +1063,8 @@ define('io.ox/calendar/util', [
 
         rangeFilter: function (start, end) {
             return function (obj) {
-                var tsStart = moment.tz(obj.startDate.value, obj.startDate.tzid || moment().tz()),
-                    tsEnd = moment.tz(obj.endDate.value, obj.endDate.tzid || moment().tz());
+                var tsStart = that.getMoment(obj.startDate),
+                    tsEnd = that.getMoment(obj.endDate);
                 if (tsEnd < start) return false;
                 if (tsStart > end) return false;
                 return true;
@@ -1185,7 +1185,12 @@ define('io.ox/calendar/util', [
                 widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
             $outer.remove();
             return 100 - widthWithScroll;
-        })
+        }),
+
+        getMoment: function (date) {
+            if (_.isObject(date)) return moment.tz(date.value, date.tzid || moment().tz());
+            return moment(date);
+        }
 
     };
 

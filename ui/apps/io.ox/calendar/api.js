@@ -151,7 +151,7 @@ define('io.ox/calendar/api', [
                     data: data
                 }, method).then(function (data) {
                     return _(data).sortBy(function (event) {
-                        return moment.tz(event.startDate.value, event.startDate.tzid || moment().tz());
+                        return util.getMoment(event.startDate);
                     });
                 });
             },

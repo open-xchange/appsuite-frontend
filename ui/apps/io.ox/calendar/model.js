@@ -212,7 +212,7 @@ define('io.ox/calendar/model', [
             this.on({
                 'change:startDate': function () {
                     var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
-                    prevStartDate = moment.tz(prevStartDate.value, prevStartDate.tzid || moment().tz());
+                    prevStartDate = util.getMoment(prevStartDate);
                     endDate = this.getMoment('startDate').add(endDate.diff(prevStartDate, 'ms'), 'ms');
                     this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
                 },
@@ -249,9 +249,8 @@ define('io.ox/calendar/model', [
             });
         },
         getMoment: function (name) {
-            if (!this.get(name)) return;
-            var date = this.get(name);
-            return moment.tz(date.value, date.tzid || moment().tz());
+            if (!this.has(name)) return;
+            return util.getMoment(this.get(name));
         },
         getTimestamp: function (name) {
             if (!this.get(name)) return;

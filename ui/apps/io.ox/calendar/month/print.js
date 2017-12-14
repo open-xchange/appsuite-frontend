@@ -19,14 +19,10 @@ define('io.ox/calendar/month/print', [
 
     'use strict';
 
-    function getMoment(event, attribute) {
-        return moment.tz(event[attribute].value, event[attribute].tzid || moment().tz());
-    }
-
     function getFilter(start, end) {
         return function (event) {
-            var eventStart = getMoment(event, 'startDate').valueOf(),
-                eventEnd = getMoment(event, 'endDate').valueOf();
+            var eventStart = util.getMoment(event.get('startDate')).valueOf(),
+                eventEnd = util.getMoment(event.get('endDate')).valueOf();
 
             // check if appointment is on that day
             if (eventEnd < start) return false;
@@ -36,12 +32,12 @@ define('io.ox/calendar/month/print', [
     }
 
     function sortBy(event) {
-        return util.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
+        return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
     }
 
     function map(event) {
         return {
-            time: util.isAllday(event) ? undefined : getMoment(event, 'startDate').format('LT'),
+            time: util.isAllday(event) ? undefined : util.getMoment(event.get('startDate')).format('LT'),
             title: event.summary
         };
     }

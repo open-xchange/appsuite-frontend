@@ -20,14 +20,10 @@ define('io.ox/calendar/week/print', [
 
     'use strict';
 
-    function getMoment(event, attribute) {
-        return moment.tz(event[attribute].value, event[attribute].tzid || moment().tz());
-    }
-
     function getFilter(start, end) {
         return function (event) {
-            var eventStart = getMoment(event, 'startDate').valueOf(),
-                eventEnd = getMoment(event, 'endDate').valueOf();
+            var eventStart = util.getMoment(event.get('startDate')).valueOf(),
+                eventEnd = util.getMoment(event.get('endDate')).valueOf();
 
             if (eventEnd <= start) return false;
             if (eventStart >= end) return false;
@@ -36,13 +32,13 @@ define('io.ox/calendar/week/print', [
     }
 
     function sortBy(event) {
-        return util.isAllday(event) ? -1 : getMoment(event, 'startDate').valueOf();
+        return util.isAllday(event) ? -1 : util.getMoment(event.get('startDate')).valueOf();
     }
 
     function getIntersection(event, list) {
         var intersecting = _(list).filter(function (ev) {
-            if (getMoment(event, 'endDate').valueOf() <= getMoment(ev, 'startDate').valueOf()) return false;
-            if (getMoment(event, 'startDate').valueOf() >= getMoment(ev, 'endDate').valueOf()) return false;
+            if (util.getMoment(event.get('endDate')).valueOf() <= util.getMoment(ev.get('startDate')).valueOf()) return false;
+            if (util.getMoment(event.get('startDate')).valueOf() >= util.getMoment(ev.get('endDate')).valueOf()) return false;
             return true;
         });
         return {
@@ -56,8 +52,8 @@ define('io.ox/calendar/week/print', [
             var parts = [],
                 isAllday = util.isAllday(event),
                 intersection = getIntersection(event, list),
-                startDate = moment.max(getMoment(event, 'startDate'), dayStart),
-                endDate = getMoment(event, 'endDate'),
+                startDate = moment.max(util.getMoment(event.get('startDate')), dayStart),
+                endDate = util.getMoment(event.get('endDate')),
                 startRange = Math.max(startDate.hour(), minHour),
                 endRange = Math.max(startDate.hour() + 1, startDate.hour() + endDate.diff(startDate, 'hours') + 1);
 
@@ -103,8 +99,8 @@ define('io.ox/calendar/week/print', [
                             days = [],
                             minHour = Number.MAX_SAFE_INTEGER, maxHour = Number.MIN_SAFE_INTEGER;
                         events.forEach(function (event) {
-                            minHour = Math.min(Math.min(minHour, getMoment(event, 'startDate').hour()), getMoment(event, 'endDate').hour());
-                            maxHour = Math.max(Math.max(maxHour, getMoment(event, 'startDate').hour()), getMoment(event, 'endDate').hour());
+                            minHour = Math.min(Math.min(minHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
+                            maxHour = Math.max(Math.max(maxHour, util.getMoment(event.get('startDate')).hour()), util.getMoment(event.get('endDate')).hour());
                         });
                         minHour = Math.max(0, Math.min(parseInt(settings.get('startHour', 8), 10), minHour - 1));
                         maxHour = Math.min(24, Math.max(parseInt(settings.get('endHour', 18), 10), maxHour + 2));

@@ -225,7 +225,7 @@ define('io.ox/core/folder/util', [
             isAdmin = perm(rights, 28) === 1,
             isMail = data.module === 'mail',
             // is my folder ?
-            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, 0)) ? 1 : 0;
+            compareValue = (obj && ox.user_id !== _.firstOf(obj.created_by, obj.createdBy, 0)) ? 1 : 0;
         // switch
         switch (action) {
             case 'read':
