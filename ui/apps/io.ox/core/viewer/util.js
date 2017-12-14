@@ -11,14 +11,13 @@
  */
 define('io.ox/core/viewer/util', [
     'io.ox/core/http',
-    'settings!io.ox/office',
     'gettext!io.ox/core/viewer'
-], function (http, settings, gt) {
+], function (http, gt) {
 
     'use strict';
 
     var // whether the loading performance of the viewer shall be measured
-        logPerformance = settings.get('module/logPerformanceData', false),
+        logPerformance = false,
         // a global timer that can be used for performance debugging
         performanceTimer = null,
         // object for logging several time stamps
