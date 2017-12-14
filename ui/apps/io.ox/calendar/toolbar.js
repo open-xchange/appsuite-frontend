@@ -179,9 +179,9 @@ define('io.ox/calendar/toolbar', [
             .option('checkboxes', true, gt('Checkboxes'))
             .divider()
             .header(gt('Color scheme'))
+            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
             .option('colorScheme', 'classic', gt('Classic colors'), { radio: true })
             .option('colorScheme', 'dark', gt('Dark colors'), { radio: true })
-            .option('colorScheme', 'custom', gt('Custom colors'), { radio: true })
             .listenTo(baton.app.props, 'change:layout', updateCheckboxOption)
             .listenTo(baton.app.props, 'change:layout', updateColorOption);
 
