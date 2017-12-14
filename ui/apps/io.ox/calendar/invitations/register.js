@@ -611,7 +611,7 @@ define('io.ox/calendar/invitations/register', [
                     id: self.event.get('id'),
                     folder: self.event.get('folder'),
                     alarms: self.alarmsModel.get('alarms')
-                }, { ignoreConflicts: !checkConflicts })
+                }, { checkConflicts: !!checkConflicts })
                 .then(function success(data) {
                     if (data && data.conflicts) {
                         ox.load(['io.ox/calendar/conflicts/conflictList']).done(function (conflictView) {
@@ -741,7 +741,7 @@ define('io.ox/calendar/invitations/register', [
                 }
                 //tasks use absolute timestamps
                 tempdata.alarm = _.utc() + tempdata.alarm;
-                this.api.update(tempdata);
+                this.api.update(tempdata, { checkConflicts: true });
             }
 
             this.event = updated;

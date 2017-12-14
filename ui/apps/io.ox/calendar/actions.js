@@ -457,17 +457,17 @@ define('io.ox/calendar/actions', [
                                 delete appointment.recurrenceId;
                             }
                             $(baton.e.target).addClass('disabled');
-                            // those links are for fast accept/decline, so ignore conflicts
+                            // those links are for fast accept/decline, so don't check conflicts
                             // TODO discuss this with alex
-                            api.confirm(appointment, { ignoreConflicts: true });
+                            api.confirm(appointment);
                         });
                 });
                 return;
             }
             $(baton.e.target).addClass('disabled');
-            // those links are for fast accept/decline, so ignore conflicts
+            // those links are for fast accept/decline, so don't check conflicts
             // TODO discuss this with alex
-            api.confirm(appointment, { ignoreConflicts: true });
+            api.confirm(appointment);
         });
     }
 

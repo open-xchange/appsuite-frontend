@@ -134,11 +134,11 @@ define('io.ox/calendar/edit/extensions', [
                     baton.app.getWindow().busy();
 
                     if (baton.mode === 'edit') {
-                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments })).then(save, fail);
+                        api.update(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true })).then(save, fail);
                         return;
                     }
 
-                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments })).then(save, fail);
+                    api.create(baton.model, _.extend(calendarUtil.getCurrentRangeOptions(), { attachments: attachments, checkConflicts: true })).then(save, fail);
                 })
             );
 

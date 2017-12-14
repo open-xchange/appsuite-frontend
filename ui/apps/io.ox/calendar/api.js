@@ -240,7 +240,6 @@ define('io.ox/calendar/api', [
             }()),
 
             create: function (obj, options) {
-
                 options = options || {};
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
@@ -249,7 +248,7 @@ define('io.ox/calendar/api', [
                         action: 'new',
                         folder: obj.folder,
                         // convert to true boolean
-                        ignoreConflicts: !!options.ignoreConflicts
+                        checkConflicts: !!options.checkConflicts
                     },
                     def;
 
@@ -306,7 +305,7 @@ define('io.ox/calendar/api', [
                         id: obj.id,
                         timestamp: obj.timestamp,
                         // convert to true boolean
-                        ignoreConflicts: !!options.ignoreConflicts
+                        checkConflicts: !!options.checkConflicts
                     };
 
                 if (obj.recurrenceId) params.recurrenceId = obj.recurrenceId;
@@ -388,7 +387,7 @@ define('io.ox/calendar/api', [
                         action: 'updateAttendee',
                         id: obj.id,
                         folder: obj.folder,
-                        ignoreConflicts: options.ignoreConflicts,
+                        checkConflicts: options.checkConflicts,
                         timestamp: _.now()
                     },
                     data = {

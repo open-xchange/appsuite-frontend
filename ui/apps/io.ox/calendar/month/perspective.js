@@ -110,7 +110,7 @@ define('io.ox/calendar/month/perspective', [
                         conflictView.dialog(data.conflicts)
                             .on('cancel', reset)
                             .on('ignore', function () {
-                                apiUpdate(model, _.extend(options || {}, { ignoreConflicts: true }));
+                                apiUpdate(model, _.extend(options || {}, { checkConflicts: false }));
                             });
                     });
                 }, function fail(error) {
@@ -150,11 +150,11 @@ define('io.ox/calendar/month/perspective', [
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
                                     util.updateRecurrenceDate(masterModel, oldStartDate);
-                                    apiUpdate(masterModel, util.getCurrentRangeOptions());
+                                    apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
                                 });
                                 break;
                             case 'appointment':
-                                apiUpdate(model, util.getCurrentRangeOptions());
+                                apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
                                 break;
                             default:
                                 reset();
@@ -162,7 +162,7 @@ define('io.ox/calendar/month/perspective', [
                         }
                     });
             } else {
-                apiUpdate(model);
+                apiUpdate(model, { checkConflicts: true });
             }
         },
 
