@@ -251,93 +251,97 @@ define('io.ox/core/viewer/util', [
 
     if (officeInstalled) {
 
-        require(['settings!io.ox/office']).done(function (settings) {
+        // check if the capability for at least one office application is specified
+        var isOfficeEnabled = Capabilities.has('text') || Capabilities.has('spreadsheet') || Capabilities.has('presentation');
 
-            // check if the capability for at least one office application is specified
-            var isOfficeEnabled = Capabilities.has('text') || Capabilities.has('spreadsheet') || Capabilities.has('presentation');
+        if (isOfficeEnabled) {
 
-            // if office is installed and enabled the property can be checked
-            if (isOfficeEnabled) { logPerformance = settings.get('module/logPerformanceData', false); }
+            // office is installed and enabled -> now office settings can be required
+            require(['settings!io.ox/office']).done(function (settings) {
 
-            if (logPerformance) {
+                // if office is installed and enabled the property can be checked
+                logPerformance = settings.get('module/logPerformanceData', false);
 
-                /**
-                 * Starting the performance timer.
-                 */
-                Util.startPerformanceTimer = function () {
-                    performanceLogger = {};
-                    performanceTimer = _.now();
-                };
+                if (logPerformance) {
 
-                /**
-                 * Logging info with the performance timer.
-                 *
-                 * @param {String} key
-                 *  A message that is saved at the performance timer.
-                 */
-                Util.logPerformanceTimer = function (key) {
-                    if (performanceTimer) { Util.addToPerformanceLogger(key, (_.now() - performanceTimer)); }
-                };
+                    /**
+                     * Starting the performance timer.
+                     */
+                    Util.startPerformanceTimer = function () {
+                        performanceLogger = {};
+                        performanceTimer = _.now();
+                    };
 
-                /**
-                 * Adding one key-value pair to the performance logger object.
-                 *
-                 * @param {String} key
-                 *  The key for the performance logger object.
-                 *
-                 * @param {any} value
-                 *  The value for the performance logger object.
-                 */
-                Util.addToPerformanceLogger = function (key, value) {
-                    if (performanceLogger) { performanceLogger[key] = value; }
-                };
+                    /**
+                     * Logging info with the performance timer.
+                     *
+                     * @param {String} key
+                     *  A message that is saved at the performance timer.
+                     */
+                    Util.logPerformanceTimer = function (key) {
+                        if (performanceTimer) { Util.addToPerformanceLogger(key, (_.now() - performanceTimer)); }
+                    };
 
-                /**
-                 * Adding some default information about browser, appsuite version, ...
-                 * to the performance data.
-                 *
-                 * @param {Object} [data]
-                 *  The data object given to the launcher of the OX Viewer.
-                 */
-                Util.addDefaultPerformanceInfo = function (data) {
-                    Util.addToPerformanceLogger('user-agent', navigator.userAgent);
-                    Util.addToPerformanceLogger('platform', navigator.platform);
-                    Util.addToPerformanceLogger('user', ox.user);
-                    Util.addToPerformanceLogger('version', ox.version);
-                    Util.addToPerformanceLogger('server', ox.abs);
-                    Util.addToPerformanceLogger('application', 'viewer');
-                    Util.addToPerformanceLogger('filename', (data && data.selection && data.selection.filename) ? data.selection.filename : '');
-                };
+                    /**
+                     * Adding one key-value pair to the performance logger object.
+                     *
+                     * @param {String} key
+                     *  The key for the performance logger object.
+                     *
+                     * @param {any} value
+                     *  The value for the performance logger object.
+                     */
+                    Util.addToPerformanceLogger = function (key, value) {
+                        if (performanceLogger) { performanceLogger[key] = value; }
+                    };
 
-                /**
-                 * Saving the collected performance data and sending them to the server.
-                 *
-                 * @param {Object} [data]
-                 *  The data object given to the launcher of the OX Viewer.
-                 *
-                 * @returns {jQuery.Promise}
-                 *  The promise from the http request. If no request is made, the promise
-                 *  is already resolved.
-                 */
-                Util.savePerformanceTimer = function (data) {
+                    /**
+                     * Adding some default information about browser, appsuite version, ...
+                     * to the performance data.
+                     *
+                     * @param {Object} [data]
+                     *  The data object given to the launcher of the OX Viewer.
+                     */
+                    Util.addDefaultPerformanceInfo = function (data) {
+                        Util.addToPerformanceLogger('user-agent', navigator.userAgent);
+                        Util.addToPerformanceLogger('platform', navigator.platform);
+                        Util.addToPerformanceLogger('user', ox.user);
+                        Util.addToPerformanceLogger('version', ox.version);
+                        Util.addToPerformanceLogger('server', ox.abs);
+                        Util.addToPerformanceLogger('application', 'viewer');
+                        Util.addToPerformanceLogger('filename', (data && data.selection && data.selection.filename) ? data.selection.filename : '');
+                    };
 
-                    var httpPromise = null;
+                    /**
+                     * Saving the collected performance data and sending them to the server.
+                     *
+                     * @param {Object} [data]
+                     *  The data object given to the launcher of the OX Viewer.
+                     *
+                     * @returns {jQuery.Promise}
+                     *  The promise from the http request. If no request is made, the promise
+                     *  is already resolved.
+                     */
+                    Util.savePerformanceTimer = function (data) {
 
-                    if (performanceTimer && performanceLogger) {
-                        // adding default information to the performance logger object
-                        Util.addDefaultPerformanceInfo(data);
-                        // sending the http post request to save data
-                        httpPromise = http.POST({ module: 'oxodocumentfilter', params: { action: 'logperformancedata', performanceData: JSON.stringify(performanceLogger) } });
-                        // resetting the logger and the timer
-                        performanceLogger = null;
-                        performanceTimer = null;
-                    }
+                        var httpPromise = null;
 
-                    return httpPromise ? httpPromise : $.when();
+                        if (performanceTimer && performanceLogger) {
+                            // adding default information to the performance logger object
+                            Util.addDefaultPerformanceInfo(data);
+                            // sending the http post request to save data
+                            httpPromise = http.POST({ module: 'oxodocumentfilter', params: { action: 'logperformancedata', performanceData: JSON.stringify(performanceLogger) } });
+                            // resetting the logger and the timer
+                            performanceLogger = null;
+                            performanceTimer = null;
+                        }
 
-                };
-            }
-        });
+                        return httpPromise ? httpPromise : $.when();
+
+                    };
+                }
+            });
+        }
     }
 
     return Util;
