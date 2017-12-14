@@ -34,8 +34,11 @@ define('io.ox/calendar/freetime/timeView', [
             free: 0,
             reserved: 1000
         },
-        // width of a tablecell at 100%
-        BASEWIDTH = 60;
+        // width of a tablecell at 100% in week range
+        BASEWIDTH = 60,
+        ZOOM_LEVELS = [10, 25, 50, 100, 200, 400, 1000],
+        // moment does not support localized formats without year and it seems this not going to be fixed soon... so we need to do this ugly hacky surgery... hopefully it works with most languages
+        superHackyFormatWithoutYear = moment.localeData().longDateFormat('ll').replace(/Y/g, '').replace(/^\W|\W$/, '');
 
     // header
     pointHeader.extend({
@@ -48,19 +51,19 @@ define('io.ox/calendar/freetime/timeView', [
                 fillInfo = function () {
                     info.empty().append(
                         $('<span>').text(
-                            baton.model.get('currentWeek').formatInterval(moment(baton.model.get('currentWeek')).add(6, 'days'))
+                            baton.model.get('startDate').formatInterval(moment(baton.model.get('startDate')).add((baton.model.get('dateRange') === 'week' ? 6 : baton.model.get('startDate').daysInMonth() - 1), 'days'))
                         ),
                         $.txt(' '),
                         $('<span class="cw">').text(
                             //#. %1$d = Calendar week
-                            gt('CW %1$d', moment(baton.model.get('currentWeek')).isoWeek())
+                            gt('CW %1$d', moment(baton.model.get('startDate')).isoWeek())
                         ),
                         $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
                     );
                 };
 
             fillInfo();
-            baton.model.on('change:currentWeek', fillInfo);
+            baton.model.on('change:startDate change:dateRange', fillInfo);
 
             // append datepicker
             new DatePicker({ parent: this.closest('.modal,#io-ox-core') })
@@ -69,19 +72,19 @@ define('io.ox/calendar/freetime/timeView', [
                     baton.view.setDate(date.valueOf());
                 })
                 .on('before:open', function () {
-                    this.setDate(baton.model.get('currentWeek'));
+                    this.setDate(baton.model.get('startDate'));
                 });
 
             this.append(
                 $('<span class="controls-container">').append(
                     $('<a href="#" role="button" class="control prev">').attr({
-                        title: gt('Previous Day'),
-                        'aria-label': gt('Previous Day')
+                        title:  baton.model.get('dateRange') === 'week' ? gt('Previous week') : gt('Previous month'),
+                        'aria-label': baton.model.get('dateRange') === 'week' ? gt('Previous week') : gt('Previous month')
                     })
                     .append($('<i class="fa fa-chevron-left" aria-hidden="true">')),
                     $('<a href="#" role="button" class="control next">').attr({
-                        title: gt('Next Day'),
-                        'aria-label': gt('Next Day')
+                        title: baton.model.get('dateRange') === 'week' ? gt('Next week') : gt('Next month'),
+                        'aria-label': baton.model.get('dateRange') === 'week' ? gt('Next week') : gt('Next month')
                     })
                     .append($('<i class="fa fa-chevron-right" aria-hidden="true">'))
                 ),
@@ -91,18 +94,34 @@ define('io.ox/calendar/freetime/timeView', [
     });
 
     pointHeader.extend({
-        id: 'options',
+        id: 'zoomlevels',
         index: 200,
         draw: function (baton) {
+            var inputField = $('<input type="text" disabled="disabled" class="form-control">').val(baton.model.get('zoom') + '%'),
+                plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-plus">'))),
+                minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-minus">'))),
+                changefunction = function (e) {
+                    var index = _(ZOOM_LEVELS).indexOf(parseInt(baton.model.get('zoom'), 10));
+                    if (e.data.direction === 'plus' && index + 1 < ZOOM_LEVELS.length) {
+                        baton.model.set('zoom', ZOOM_LEVELS[index + 1]);
+                    } else if (e.data.direction === 'minus' && index > 0) {
+                        baton.model.set('zoom', ZOOM_LEVELS[index - 1]);
+                    }
+                    inputField.val(baton.model.get('zoom') + '%');
+                };
+
+            plus.on('click', { direction: 'plus' }, changefunction);
+            minus.on('click', { direction: 'minus' }, changefunction);
+
+            baton.view.headerNodeRow1.append($('<div class="right-controls pull-right">').append($('<span class="zoomlevel-selector">').append($('<div class="input-group">').append(minus, inputField, plus))));
+        }
+    });
+
+    pointHeader.extend({
+        id: 'options',
+        index: 300,
+        draw: function (baton) {
             var dropdown = new Dropdown({ keep: true, caret: true, model: baton.model, label: gt('Options'), tagName: 'span' })
-                .header(gt('Zoom'))
-                .option('zoom', '25', '25%', { radio: true })
-                .option('zoom', '50', '50%', { radio: true })
-                .option('zoom', '100', '100%', { radio: true })
-                .option('zoom', '200', '200%', { radio: true })
-                .option('zoom', '400', '400%', { radio: true })
-                .option('zoom', '1000', '1000%', { radio: true })
-                .divider()
                 .header(gt('Rows'))
                 .option('compact', true, gt('Compact'))
                 .option('showFineGrid', true, gt('Show fine grid'))
@@ -111,9 +130,13 @@ define('io.ox/calendar/freetime/timeView', [
                 .option('showFree', true, gt('Free'))
                 .option('showReserved', true, gt('Reserved'))
                 .divider()
+                .header(gt('Date range'))
+                .option('dateRange', 'week', gt('Week'), { radio: true })
+                .option('dateRange', 'month', gt('Month'), { radio: true })
+                .divider()
                 .option('onlyWorkingHours', true, gt('Hide non-working time'));
 
-            baton.view.headerNodeRow1.append(
+            baton.view.headerNodeRow1.find('.right-controls').append(
                 // pull right class needed for correct dropdown placement
                 dropdown.render().$el.addClass('options pull-right').attr('data-dropdown', 'options')
             );
@@ -123,20 +146,23 @@ define('io.ox/calendar/freetime/timeView', [
     // timeline
     pointHeader.extend({
         id: 'timeline',
-        index: 300,
+        index: 400,
         draw: function (baton) {
-            var day = moment(baton.model.get('currentWeek')).startOf('day'),
+            var day = moment(baton.model.get('startDate')).startOf('day'),
                 today = moment().startOf('day'),
+                numberOfDays = baton.model.get('dateRange') === 'week' ? 7 : moment(baton.model.get('startDate')).daysInMonth(),
                 node;
+
             baton.view.headerNodeRow2.append(node = $('<div class="freetime-timeline">'));
-            for (var counter = 0; counter < 7; counter++) {
+            for (var counter = 0; counter < numberOfDays; counter++) {
                 var time = moment().startOf('hour'),
                     worktimeStart = parseInt(settings.get('startTime', 8), 10),
                     worktimeEnd = parseInt(settings.get('endTime', 18), 10),
                     start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
                     end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
                     sections = [],
-                    dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '').text(day.format('ddd, ll'))),
+                    dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '')
+                        .text(day.format(parseInt(baton.model.get('zoom'), 10) !== 10 ? 'ddd, ll' : superHackyFormatWithoutYear))),
                     dayNode;
 
                 node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append(
@@ -151,7 +177,7 @@ define('io.ox/calendar/freetime/timeView', [
                 for (var i = start; i <= end; i++) {
                     time.hours(i);
                     var timeformat = time.format('LT').replace('AM', 'a').replace('PM', 'p');
-                    sections.push($('<span class="freetime-hour">').css('min-width', BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px')
+                    sections.push($('<span class="freetime-hour">').css('width', BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100) + 'px')
                         .text(timeformat).val(counter * (end - start + 1) + (baton.model.get('onlyWorkingHours') ? i - baton.model.get('startHour') : i))
                         .addClass(i === start ? 'day-start' : '')
                         .addClass(i === start && counter === 0 ? 'first' : '')
@@ -160,13 +186,13 @@ define('io.ox/calendar/freetime/timeView', [
                 dayNode.append(sections);
                 day.add(1, 'days');
             }
-            baton.model.on('change:currentWeek', function () {
+            baton.model.on('change:startDate change:zoom', function () {
                 var labels = node.find('.timeline-day'),
-                    day = moment(baton.model.get('currentWeek')).startOf('day'),
+                    day = moment(baton.model.get('startDate')).startOf('day'),
                     today = moment().startOf('day');
 
                 for (var i = 0; i <= labels.length; i++) {
-                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format('ddd, ll'));
+                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format(parseInt(baton.model.get('zoom'), 10) !== 10 ? 'ddd, ll' : superHackyFormatWithoutYear));
                     day.add(1, 'days');
                 }
             });
@@ -179,19 +205,20 @@ define('io.ox/calendar/freetime/timeView', [
         index: 100,
         draw: function (baton) {
             var node, table,
+                numberOfDays = baton.model.get('dateRange') === 'week' ? 7 : moment(baton.model.get('startDate')).daysInMonth(),
                 width = BASEWIDTH * (parseInt(baton.model.get('zoom'), 10) / 100),
                 worktimeStart = parseInt(settings.get('startTime', 8), 10),
                 worktimeEnd = parseInt(settings.get('endTime', 18), 10),
                 start = baton.model.get('onlyWorkingHours') ? baton.model.get('startHour') : 0,
                 end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
-                time = moment(baton.model.get('currentWeek')).startOf('day'),
+                time = moment(baton.model.get('startDate')).startOf('day'),
                 today = moment().startOf('day');
 
             today.hours(start);
 
             this.append(table = $('<div class="freetime-table" draggable="false">').append(node = $('<div class="freetime-time-table">')));
 
-            for (var counter = 0; counter < 7; counter++) {
+            for (var counter = 0; counter < numberOfDays; counter++) {
                 var cells = [];
 
                 for (var i = start; i <= end; i++) {
@@ -380,7 +407,14 @@ define('io.ox/calendar/freetime/timeView', [
             // no need to fire a server request when removing a participant
             this.model.get('attendees').on('remove', self.removeParticipant.bind(this));
             this.model.on('change:onlyWorkingHours', self.onChangeWorkingHours.bind(this));
-            this.model.on('change:currentWeek', self.getAppointmentsInstant.bind(this));
+            this.model.on('change:startDate', function () {
+                // we need to redraw the header in month mode because the number of days varies
+                if (self.model.get('dateRange') === 'month') {
+                    self.renderHeader(true);
+                }
+                self.getAppointmentsInstant();
+            });
+            this.model.on('change:dateRange', self.onChangeDateRange.bind(this));
             this.model.on('change:appointments', self.renderBody.bind(this));
             this.model.on('change:zoom', self.updateZoom.bind(this));
             this.model.on('change:showFree change:showTemporary change:showReserved change:showAbsent', self.updateVisibility.bind(this));
@@ -394,9 +428,9 @@ define('io.ox/calendar/freetime/timeView', [
                     self.renderBody();
                 });
             }
-
+            var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
             // calculate 15min grid for lasso
-            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 28);
+            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 * numberOfDays);
 
             // preselect lasso
             if (options.parentModel && options.parentModel.get('startDate') !== undefined && options.parentModel.get('endDate') !== undefined) {
@@ -409,7 +443,7 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             // must use start of week. Otherwise we get the wrong iso week in countries where the first day of the week is a sunday
-            if (!options.parentModel && moment().startOf('week').isoWeek() === this.model.get('currentWeek').isoWeek()) {
+            if (!options.parentModel && moment().startOf(this.model.get('dateRange')).isoWeek() === this.model.get('startDate').isoWeek()) {
                 // special scrollposition on start
                 this.keepScrollpos = 'today';
             }
@@ -424,7 +458,7 @@ define('io.ox/calendar/freetime/timeView', [
                     oldScrollPos = table.parent().scrollLeft(),
                     newWidth = BASEWIDTH * (parseInt(this.model.get('zoom'), 10) / 100);
 
-                this.headerNodeRow2.find('.freetime-hour').css('min-width', newWidth + 'px');
+                this.headerNodeRow2.find('.freetime-hour').css('width', newWidth + 'px');
                 table.find('.freetime-table-cell').css('width', newWidth + 'px');
                 table.css('width', nodes * newWidth + 'px').parent().scrollLeft((oldScrollPos / oldWidth) * nodes * newWidth);
             }
@@ -439,8 +473,14 @@ define('io.ox/calendar/freetime/timeView', [
             this.headerNodeRow2.scrollLeft(this.bodyNode.scrollLeft());
         },
 
-        onChangeWorkingHours: function () {
-            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 28);
+        onChangeDateRange: function (model, val) {
+            this.model.set('startDate', this.model.get('startDate').startOf(val), { silent: true });
+            this.onChangeWorkingHours();
+        },
+
+        onChangeWorkingHours: function (fullrender) {
+            var numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth();
+            this.grid = 100 / ((this.model.get('onlyWorkingHours') ? (this.model.get('endHour') - this.model.get('startHour') + 1) : 24) * 4 + numberOfDays);
             // correct lasso positions
             // use time based lasso positions to calculate because they is unaffected by display changes
             if (this.lassoNode && this.lassoStart) {
@@ -456,7 +496,7 @@ define('io.ox/calendar/freetime/timeView', [
                 this.keepScrollpos = this.positionToTime(oldScrollPos / oldWidth * 100, true);
             }
 
-            this.renderHeader(true);
+            this.renderHeader(!fullrender);
             this.getAppointmentsInstant();
         },
 
@@ -511,11 +551,11 @@ define('io.ox/calendar/freetime/timeView', [
             }
 
             if (this.model.get('onlyWorkingHours')) {
-                from = moment(this.model.get('currentWeek')).add(this.model.get('startHour'), 'hours');
-                until = moment(from).add(6, 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
+                from = moment(this.model.get('startDate')).add(this.model.get('startHour'), 'hours');
+                until = moment(from).add((this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth() - 1), 'days').add(this.model.get('endHour') - this.model.get('startHour'), 'hours');
             } else {
-                from = moment(this.model.get('currentWeek')).startOf('day');
-                until = moment(from).add(1, 'weeks');
+                from = moment(this.model.get('startDate')).startOf('day');
+                until = moment(from).add(1, this.model.get('dateRange') + 's');
             }
             return api.freebusy(attendees, { from: from.format(util.ZULU_FORMAT_DAY_ONLY), until: until.format(util.ZULU_FORMAT_DAY_ONLY) }).done(function (items) {
                 if (items.length === 0) {
@@ -559,7 +599,9 @@ define('io.ox/calendar/freetime/timeView', [
 
         onSelectHour: function (e) {
             var index = parseInt($(e.target).val(), 10),
-                width = 100 / (7 * (this.model.get('onlyWorkingHours') ? this.model.get('endHour') - this.model.get('startHour') + 1 : 24));
+                numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth(),
+                width = 100 / (numberOfDays * (this.model.get('onlyWorkingHours') ? this.model.get('endHour') - this.model.get('startHour') + 1 : 24));
+
             this.lassoStart = index * width;
             this.lassoEnd = (index + 1) * width;
             this.updateLasso(true);
@@ -570,25 +612,26 @@ define('io.ox/calendar/freetime/timeView', [
 
         // utility function to get the position in percent for a given time
         timeToPosition: function (timestamp) {
-            var start = moment(this.model.get('currentWeek')).startOf('day'),
+            var start = moment(this.model.get('startDate')).startOf('day'),
                 end = moment(start).add(1, 'days'),
                 day = 0,
                 // if we have a daylight saving time change within the week we need to compensate the loss/addition of an hour
                 dstOffset = this.model.get('onlyWorkingHours') ? 24 - end.diff(start, 'hours') : 0,
-                width = 100 / (7 * (this.model.get('endHour') - this.model.get('startHour') + 1)),
+                numberOfDays = this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth(),
+                width = 100 / (numberOfDays * (this.model.get('endHour') - this.model.get('startHour') + 1)),
                 prevStart,
-                percent = 100 / 7,
+                percent = 100 / numberOfDays,
                 notOnScale = false;
 
             if (this.model.get('onlyWorkingHours')) {
-                start = moment(this.model.get('currentWeek')).add(this.model.get('startHour'), 'hours');
+                start = moment(this.model.get('startDate')).add(this.model.get('startHour'), 'hours');
                 end = moment(start).add(this.model.get('endHour') - this.model.get('startHour') + 1, 'hours');
             } else {
-                start = moment(this.model.get('currentWeek')).startOf('day');
+                start = moment(this.model.get('startDate')).startOf('day');
                 end = moment(start).add(1, 'days');
             }
 
-            for (; day < 7; day++) {
+            for (; day < numberOfDays; day++) {
                 if (timestamp < start.valueOf()) {
                     notOnScale = true;
                     break;
@@ -597,7 +640,7 @@ define('io.ox/calendar/freetime/timeView', [
                     break;
                 }
                 // exception for last day
-                if (day === 6 && timestamp > end.valueOf()) {
+                if (day === numberOfDays - 1 && timestamp > end.valueOf()) {
                     notOnScale = true;
                     day++;
                     break;
@@ -617,12 +660,12 @@ define('io.ox/calendar/freetime/timeView', [
         // utility function, position is given in %
         // inverse is used to keep scrollposition, needs to calculate before change
         positionToTime: function (position, inverse) {
-            var dayWidth = 100 / 7,
+            var dayWidth = 100 / (this.model.get('dateRange') === 'week' ? 7 : this.model.get('startDate').daysInMonth()),
                 fullDays = Math.floor(position / dayWidth),
                 partialDay = position - dayWidth * fullDays,
                 dayInMilliseconds = ((inverse ? !this.model.get('onlyWorkingHours') : this.model.get('onlyWorkingHours')) ? this.model.get('endHour') - this.model.get('startHour') + 1 : 24) * 3600000,
                 millisecondsFromDayStart = Math.round(partialDay / dayWidth * dayInMilliseconds),
-                start = moment(this.model.get('currentWeek')).add(fullDays, 'days');
+                start = moment(this.model.get('startDate')).add(fullDays, 'days');
             if (inverse ? !this.model.get('onlyWorkingHours') : this.model.get('onlyWorkingHours')) {
                 start.add(this.model.get('startHour'), 'hours');
             }
@@ -744,17 +787,17 @@ define('io.ox/calendar/freetime/timeView', [
         },
 
         setDate: function (option) {
-            var week  = moment(this.model.get('currentWeek'));
+            var startDate  = moment(this.model.get('startDate'));
             if (_.isString(option)) {
                 switch (option) {
                     case 'prev':
-                        week.subtract(1, 'weeks');
+                        startDate.subtract(1, this.model.get('dateRange') + 's');
                         break;
                     case 'next':
-                        week.add(1, 'weeks');
+                        startDate.add(1, this.model.get('dateRange') + 's');
                         break;
                     case 'today':
-                        week = moment().startOf('week');
+                        startDate = moment().startOf(this.model.get('dateRange'));
                         break;
                     // no default
                 }
@@ -762,10 +805,10 @@ define('io.ox/calendar/freetime/timeView', [
                 // scroll to date
                 var hours = (this.model.get('onlyWorkingHours') ? this.model.get('startHour') : 0);
                 this.keepScrollpos = moment(option).hours(hours).valueOf();
-                week = moment(option).startOf('week');
+                startDate = moment(option).startOf(this.model.get('dateRange'));
             }
-            week.startOf('day');
-            this.model.set('currentWeek', week);
+            startDate.startOf('day');
+            this.model.set('startDate', startDate);
         },
 
         /**

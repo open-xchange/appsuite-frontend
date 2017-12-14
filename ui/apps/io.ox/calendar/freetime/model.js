@@ -20,10 +20,10 @@ define('io.ox/calendar/freetime/model', [
 
     var model = Backbone.Model.extend({
         initialize: function () {
-            var now = moment().startOf('week');
+            var now = moment().startOf(settings.get('scheduling/dateRange', 'week'));
             this.set({
                 timezone: now.tz(),
-                currentWeek: now,
+                startDate: now,
                 compact: settings.get('scheduling/compact', false),
                 zoom: settings.get('scheduling/zoom', '100'),
                 onlyWorkingHours: settings.get('scheduling/onlyWorkingHours', true),
@@ -33,7 +33,8 @@ define('io.ox/calendar/freetime/model', [
                 showFree: settings.get('scheduling/showFree', false),
                 showReserved: settings.get('scheduling/showReserved', true),
                 showFineGrid: settings.get('scheduling/showFineGrid', false),
-                appointments: {}
+                appointments: {},
+                dateRange: settings.get('scheduling/dateRange', 'week')
             });
         }
     });

@@ -26,6 +26,10 @@ define('io.ox/calendar/freetime/main', [
 
     'use strict';
 
+    // helper variables
+    var SETTINGS_KEYS = ['zoom', 'onlyWorkingHours', 'showFree', 'showReserved', 'compact', 'dateRange', 'showFineGrid'],
+        ZOOM_LEVELS = _([10, 25, 50, 100, 200, 400, 1000]).map(function (level) { return 'zoomlevel-' + level; }).join(' ');
+
     //
     // Freetimeview. Simple view used to coordinate appointments with multiple participants
     //
@@ -45,10 +49,10 @@ define('io.ox/calendar/freetime/main', [
             var attendeesToAdd = [];
             if (options.parentModel) {
                 attendeesToAdd = options.parentModel.get('attendees');
-                this.model.set('currentWeek', moment(options.parentModel.get('startDate')).startOf('week'));
+                this.model.set('startDate', moment(options.parentModel.get('startDate')).startOf(this.model.get('dateRange')));
             } else {
                 if (options.startDate) {
-                    this.model.set('currentWeek', moment(options.startDate).startOf('week').startOf('week'));
+                    this.model.set('startDate', moment(options.startDate).startOf(this.model.get('dateRange')));
                 }
                 if (options.attendees) {
                     attendeesToAdd = options.attendees;
@@ -59,10 +63,10 @@ define('io.ox/calendar/freetime/main', [
             this.timeSubview = new TimeView({ model: this.model, parentModel: options.parentModel, parentView: this });
 
             this.model.on('change:zoom', self.updateZoom.bind(this));
-            this.model.on('change:compact', self.updateCompact.bind(this));
-            this.model.on('change:onlyWorkingHours', self.updateWorkingHours.bind(this));
-            this.model.on('change:showFineGrid', self.updateFineGrid.bind(this));
-            this.model.on('change:showFineGrid change:onlyWorkingHours change:compact change:zoom change:showFree change:showReserved', self.updateSettings.bind(this));
+            this.model.on('change:compact', self.updateClasses.bind(this, 'compact'));
+            this.model.on('change:onlyWorkingHours', self.updateClasses.bind(this, 'onlyWorkingHours'));
+            this.model.on('change:showFineGrid', self.updateClasses.bind(this, 'showFineGrid'));
+            this.model.on(_(SETTINGS_KEYS).map(function (setting) { return 'change:' + setting; }).join(' '), self.updateSettings.bind(this));
 
             api.on('refresh.all update', refresh);
             this.on('dispose', function () {
@@ -79,40 +83,30 @@ define('io.ox/calendar/freetime/main', [
 
             this.header = $('<div class="freetime-view freetime-view-header">').addClass('zoomlevel-' + this.model.get('zoom'));
             this.body = $('<div class="freetime-view freetime-view-body">').addClass('zoomlevel-' + this.model.get('zoom'));
-            this.updateWorkingHours();
-            this.updateCompact();
-            this.updateFineGrid();
+
+            this.updateClasses('onlyWorkingHours');
+            this.updateClasses('showFineGrid');
+            this.updateClasses('compact');
+
             return this.model.get('attendees').add(attendeesToAdd);
         },
 
+        updateClasses: function (className) {
+            this.header.toggleClass(className, this.model.get(className));
+            this.body.toggleClass(className, this.model.get(className));
+        },
+
         updateSettings: function () {
-            settings.set('scheduling/zoom', this.model.get('zoom'));
-            settings.set('scheduling/onlyWorkingHours', this.model.get('onlyWorkingHours'));
-            settings.set('scheduling/showFree', this.model.get('showFree'));
-            settings.set('scheduling/showReserved', this.model.get('showReserved'));
-            settings.set('scheduling/compact', this.model.get('compact'));
-            settings.set('scheduling/showFineGrid', this.model.get('showFineGrid'));
+            var self = this;
+            _(SETTINGS_KEYS).each(function (key) {
+                settings.set('scheduling/' + key, self.model.get(key));
+            });
             settings.save();
         },
 
         updateZoom: function () {
-            this.header.removeClass('zoomlevel-25 zoomlevel-50 zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
-            this.body.removeClass('zoomlevel-25 zoomlevel-50 zoomlevel-100 zoomlevel-200 zoomlevel-400 zoomlevel-1000').addClass('zoomlevel-' + this.model.get('zoom'));
-        },
-
-        updateFineGrid: function () {
-            this.header.toggleClass('show-fine-grid', this.model.get('showFineGrid'));
-            this.body.toggleClass('show-fine-grid', this.model.get('showFineGrid'));
-        },
-
-        updateWorkingHours: function () {
-            this.header.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
-            this.body.toggleClass('only-workinghours', this.model.get('onlyWorkingHours'));
-        },
-
-        updateCompact: function () {
-            this.header.toggleClass('compact', this.model.get('compact'));
-            this.body.toggleClass('compact', this.model.get('compact'));
+            this.header.removeClass(ZOOM_LEVELS).addClass('zoomlevel-' + this.model.get('zoom'));
+            this.body.removeClass(ZOOM_LEVELS).addClass('zoomlevel-' + this.model.get('zoom'));
         },
 
         renderHeader: function () {
@@ -278,7 +272,7 @@ define('io.ox/calendar/freetime/main', [
                     module: 'io.ox/calendar/freetime',
                     point:  {
                         attendees: this.view.model.get('attendees'),
-                        currentWeek: this.view.model.get('currentWeek').valueOf(),
+                        startDate: this.view.model.get('startDate').valueOf(),
                         lassoStart: this.view.timeSubview.lassoStart,
                         lassoEnd: this.view.timeSubview.lassoEnd
                     }
@@ -291,7 +285,7 @@ define('io.ox/calendar/freetime/main', [
 
             this.view.timeSubview.lassoStart = point.lassoStart;
             this.view.timeSubview.lassoEnd = point.lassoEnd;
-            this.view.timeSubview.setDate(point.currentWeek);
+            this.view.timeSubview.setDate(point.startDate);
             this.view.timeSubview.updateLasso(true);
             if (!point.lassoStart) {
                 this.view.timeSubview.keepScrollpos = 'today';
