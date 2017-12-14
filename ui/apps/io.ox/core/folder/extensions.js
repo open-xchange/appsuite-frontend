@@ -959,6 +959,10 @@ define('io.ox/core/folder/extensions', [
         }
 
         function toggleFolder(e) {
+            if (e.type === 'keydown') {
+                if (e.which !== 32) return;
+                e.stopImmediatePropagation();
+            }
             var target = e.data.target,
                 app = e.data.app,
                 folder = e.data.folder;
@@ -967,6 +971,7 @@ define('io.ox/core/folder/extensions', [
             if (app.folders.isSelected(folder.id)) app.folders.remove(folder.id);
             else app.folders.add(folder.id);
             target.toggleClass('selected', app.folders.isSelected(folder.id));
+            target.closest('.folder').attr('aria-checked', app.folders.isSelected(folder.id));
         }
 
         ext.point('io.ox/core/foldertree/node').extend(
@@ -1027,22 +1032,26 @@ define('io.ox/core/folder/extensions', [
                 draw: function (baton) {
                     if (!/^calendar$/.test(baton.data.module)) return;
 
-                    var folderLabel = this.find('.folder-label'),
+                    var self = this,
+                        folderLabel = this.find('.folder-label'),
                         app = ox.ui.apps.get('io.ox/calendar');
 
                     if (!app) return;
+
+                    this.attr('aria-checked', app.folders.isSelected(baton.data.id));
 
                     require(['io.ox/calendar/util'], function (util) {
                         var folderColor = util.getFolderColor(baton.data),
                             target = folderLabel.find('.color-label');
 
-                        if (target.length === 0) target = $('<div class="color-label">');
+                        if (target.length === 0) target = $('<div class="color-label" aria-hidden="true">');
                         target.toggleClass('selected', app.folders.isSelected(baton.data.id));
                         target.css({
                             'background-color': folderColor,
                             'color': util.getForegroundColor(folderColor)
                         });
                         target.off('click').on('click', { folder: baton.data, app: app, target: target }, toggleFolder);
+                        self.off('keydown', toggleFolder).on('keydown', { folder: baton.data, app: app, target: target }, toggleFolder);
                         folderLabel.prepend(target);
                     });
                 }
