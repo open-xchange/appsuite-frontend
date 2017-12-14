@@ -1500,22 +1500,17 @@ define('io.ox/files/main', [
 
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
-            .always(function () {
-                app.mediate();
-
+            .then(function () {
+                return require(['io.ox/files/contextmenu']);
+            }).then(function (Contextmenu) {
                 // contextmenu for all listviews
-                var def = $.Deferred();
-                require(['io.ox/files/contextmenu'], function (Contextmenu) {
-                    if (!(_.device('smartphone') && _.device('tablet'))) {
-                        contextmenu = new Contextmenu({ el: win.nodes.outer });
-                    }
-                    def.resolve();
-                });
-                def.done(function () {
-                    win.show(function () {
-                        // trigger grid resize
-                        $(window).trigger('resize');
-                    });
+                if (!(_.device('smartphone') && _.device('tablet'))) {
+                    contextmenu = new Contextmenu({ el: win.nodes.outer });
+                }
+                app.mediate();
+                win.show(function () {
+                    // trigger grid resize
+                    $(window).trigger('resize');
                 });
             });
     });
