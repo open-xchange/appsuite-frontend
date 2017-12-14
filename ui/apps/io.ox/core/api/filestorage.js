@@ -257,42 +257,33 @@ define('io.ox/core/api/filestorage', [
                     data = data.attributes;
                 }
 
-                // softDelete options only cleans the caches
-                // since the backend removes filestorage accounts automatically when an Oauth account is deleted, we don't need to send a delete request
-                if (options.softDelete) {
+                // identity-like
+                function cleanStorage(value) {
                     accountsCache.remove(data);
                     idsCache = _(idsCache).without(data.qualifiedId);
                     api.trigger('delete', model || data);
-
-                    return true;
+                    require(['io.ox/core/folder/api'], function (api) {
+                        ox.trigger('account:delete', data.qualifiedId);
+                        api.propagate('account:delete');
+                    });
+                    return value;
                 }
 
-                return http.PUT({
-                    module: 'fileaccount',
-                    params: {
-                        action: 'delete',
-                        id: data.id,
-                        filestorageService: data.filestorageService
-                    }
-                })
-                .then(
-                    function success(response) {
-                        accountsCache.remove(data);
-                        idsCache = _(idsCache).without(data.qualifiedId);
-                        api.trigger('delete', model || data);
+                // hint: middleware removes filestorage accounts automatically when an OAuth account is deleted
+                var def = options.softDelete ?
+                    // softDelete options only cleans the caches
+                    $.Deferred().resolve() :
+                    // fail-case: may be it was deleted already
+                    http.PUT({
+                        module: 'fileaccount',
+                        params: {
+                            action: 'delete',
+                            id: data.id,
+                            filestorageService: data.filestorageService
+                        }
+                    });
 
-                        return response;
-                    },
-                    function fail(error) {
-                        // may be it was deleted already. If it's in the cache, delete it
-                        // deleting an Oauth account with a matching filestorage account normally deletes the filestorageaccount too.
-                        accountsCache.remove(data);
-                        idsCache = _(idsCache).without(data.qualifiedId);
-                        api.trigger('delete', model || data);
-
-                        return error;
-                    }
-                );
+                return def.then(cleanStorage, cleanStorage);
             },
             // utility function to find storage accounts for a given oauth account, also used to limit storage accounts to one per oauth account
             // fails if rampup was not done before (configscache empty)

@@ -139,7 +139,12 @@ define('io.ox/keychain/api', [
         if (account.attributes) {
             account = account.toJSON();
         }
-        return invokeExtension(account.accountType, 'remove', account);
+        return invokeExtension(account.accountType, 'remove', account)
+                .always(function () {
+                    require(['io.ox/core/folder/api'], function (api) {
+                        api.propagate('account:delete');
+                    });
+                });
     };
 
     api.update = function (account) {
