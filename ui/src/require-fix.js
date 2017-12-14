@@ -1,4 +1,8 @@
 /* eslint requirejs/no-invalid-require: 0, requirejs/no-invalid-define: 0 */
+
+requirejs.onError = function (e) {
+    console.error('requirejs', e.message, arguments);
+};
 // Override nextTick to enable collection of dependencies for concatenation.
 (function () {
     var timeout = null, finalCallback = null;

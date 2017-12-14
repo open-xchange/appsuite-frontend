@@ -1,0 +1,469 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * © 2017 OX Software GmbH, Germany. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define('io.ox/core/main/topbar_right', [
+    'io.ox/core/session',
+    'io.ox/core/http',
+    'io.ox/core/extensions',
+    'io.ox/core/capabilities',
+    'io.ox/core/notifications',
+    'io.ox/backbone/mini-views/help',
+    'io.ox/backbone/mini-views/dropdown',
+    'io.ox/backbone/mini-views/upsell',
+    'io.ox/core/main/logout',
+    'io.ox/core/main/refresh',
+    'io.ox/core/main/topbar',
+    'io.ox/core/main/addLauncher',
+    'settings!io.ox/core',
+    'gettext!io.ox/core'
+], function (session, http, ext, capabilities, notifications, HelpView, Dropdown, UpsellView, logout, refresh, topbar, addLauncher, settings, gt) {
+
+    function getHelp() {
+        var currentApp = ox.ui.App.getCurrentApp();
+
+        if (currentApp && currentApp.getContextualHelp) return currentApp.getContextualHelp();
+
+        var currentType = currentApp && currentApp.getName(),
+            manifest = _.defaults(
+                ox.manifests.apps[currentType] || {},
+                ox.manifests.apps[currentType + '/main'] || {},
+                {
+                    help: {
+                        base: 'help',
+                        target: 'index.html'
+                    }
+                }
+            ).help;
+
+        return manifest;
+    }
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'upsell',
+        index: 50,
+        draw: function () {
+            if (_.device('smartphone')) return;
+
+            var view = new UpsellView({
+                tagName: 'li',
+                className: 'launcher',
+                id: 'secondary-launcher',
+                requires: 'active_sync || caldav || carddav',
+                customize: function () {
+                    $('i', this.$el).addClass('launcher-icon');
+                }
+            });
+
+            if (view.visible) this.append(view.render().$el);
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'notifications',
+        index: 100,
+        draw: function () {
+            // disable notifications if there is no capability of the following (e.g. drive as only app)
+            if (!capabilities.has('webmail') && !capabilities.has('calendar') && !capabilities.has('tasks')) return;
+
+            var self = this, DELAY = 5000;
+
+            if (ox.online) {
+                // we don't need this right from the start,
+                // so let's delay this for responsiveness!
+                // only requests are delayed by 5s, the badge is drawn normally
+                self.append(notifications.attach(addLauncher, DELAY));
+                ox.trigger('recalculate-topbarsize');
+            } else {
+                //lets wait till we are online
+                ox.once('connection:online', function () {
+                    self.append(notifications.attach(addLauncher, DELAY));
+                    ox.trigger('recalculate-topbarsize');
+                });
+            }
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'search-mobile',
+        index: 150,
+        draw: function () {
+            if (capabilities.has('search') && _.device('smartphone')) {
+                this.append(
+                    addLauncher('right', $('<i class="fa fa-search launcher-icon" aria-hidden="true">'), function () {
+                        require(['io.ox/search/main'], function (searchapp) {
+                            searchapp.run({ reset: true });
+                        });
+                    }, gt('Search'))
+                    .attr('id', 'io-ox-search-topbar-icon')
+                );
+            }
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'refresh',
+        index: 200,
+        draw: function () {
+            this.append(
+                addLauncher(
+                    'right',
+                    $('<i class="fa fa-refresh launcher-icon" aria-hidden="true">').attr('title', gt('Refresh')),
+                    function () {
+                        refresh();
+                        return $.when();
+                    },
+                    gt('Refresh')
+                ).attr('id', 'io-ox-refresh-icon')
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'help',
+        index: 300,
+        draw: function () {
+            if (_.device('smartphone')) return;
+            var helpView = new HelpView({
+                iconClass: 'launcher-icon',
+                href: getHelp
+            });
+            if (helpView.$el.hasClass('hidden')) return;
+            this.append(
+                addLauncher('right', helpView.render().$el)
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'upsell',
+        index: 50,
+        draw: function () {
+            var view = new UpsellView({
+                tagName: 'li',
+                id: 'topbar-dropdown',
+                requires: 'active_sync || caldav || carddav',
+                title: 'Upgrade your account',
+                customize: function () {
+                    $('i', this.$el).css({ 'width': 'auto' });
+                }
+            });
+
+            if (view.visible) {
+                this.append(
+                    view.render().$el,
+                    $('<li class="divider" role="separator">')
+                );
+            }
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'settings',
+        index: 100,
+        draw: function () {
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-app-name="io.ox/settings" data-action="settings" role="menuitem">').text(gt('Settings'))
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    ox.launch('io.ox/settings/main');
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'onboarding',
+        index: 120,
+        draw: function () {
+            if (capabilities.has('!client-onboarding')) return;
+
+            var device, $link, self = this;
+            if (_.device('android')) device = _.device('smartphone') ? 'android.phone' : 'android.tablet';
+            if (_.device('ios')) device = _.device('smartphone') ? 'apple.iphone' : 'apple.ipad';
+
+            self.append(
+                $('<li role="presentation">').append(
+                    $link = $('<a href="#" data-app-name="io.ox/settings" data-action="client-onboarding" role="menuitem">')
+                        //#. starts the client onboarding wizard that helps users
+                        //#. to configure their devices to access/sync appsuites
+                        //#. data (f.e. install ox mail app)
+                        .text(_.device('desktop') ? gt('Connect your Device') : gt('Connect this Device'))
+                )
+            );
+
+            require(['io.ox/onboarding/clients/api'], function (onboardingAPI) {
+
+                onboardingAPI.enabledDevices(device).then(function (config) {
+                    var enabled = _.device('desktop') ? true : (config[device] || false);
+
+                    $link.toggleClass('disabled ui-disabled', !enabled)
+                        .attr('aria-disabled', !enabled)
+                        .on('click', function (e) {
+                            e.preventDefault();
+                            if (!enabled) return e.stopPropagation();
+                            require(['io.ox/onboarding/clients/wizard'], function (wizard) {
+                                wizard.run();
+                            });
+                        });
+                });
+            });
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'change-user-data',
+        index: 150,
+        draw: function () {
+
+            // check if users can edit their own data (see bug 34617)
+            if (settings.get('user/internalUserEdit', true) === false) return;
+
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-app-name="io.ox/settings" data-action="my-contact-data" role="menuitem">')
+                    .text(gt('My contact data'))
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    require(['io.ox/core/settings/user'], function (userSettings) {
+                        userSettings.openModalDialog();
+                    });
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'change-user-password',
+        index: 175,
+        draw: function () {
+
+            if (!capabilities.has('edit_password && guest')) return;
+
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-app-name="io.ox/settings" data-action="password" role="menuitem">')
+                    .text(gt('Change password'))
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    require(['plugins/portal/userSettings/register'], function (userSettings) {
+                        userSettings.changePassword();
+                    });
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'app-specific-help',
+        index: 200,
+        draw: function () {
+            //replaced by module
+            var node = this,
+                helpView = new HelpView({
+                    content: gt('Help'),
+                    href: getHelp
+                });
+            node.append(
+                $('<li class="divider" role="separator"></li>')
+            );
+            if (helpView.$el.hasClass('hidden')) return;
+            node.append(
+                $('<li class="io-ox-specificHelp" role="presentation">').append(
+                    helpView.render().$el.attr('role', 'menuitem')
+                )
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'divider-before-about',
+        index: 290,
+        draw: function () {
+            this.append(
+                $('<li class="divider" role="separator">')
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'about',
+        index: 400,
+        draw: function () {
+            this.append(
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="about" role="menuitem">').text(gt('About'))
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    require(['io.ox/core/about/about'], function (about) {
+                        about.show();
+                    });
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right/dropdown').extend({
+        id: 'logout',
+        index: 1000,
+        draw: function () {
+            this.append(
+                $('<li class="divider" role="separator">'),
+                $('<li role="presentation">').append(
+                    $('<a href="#" data-action="logout" role="menuitem">').text(gt('Sign out'))
+                )
+                .on('click', function (e) {
+                    e.preventDefault();
+                    logout();
+                })
+            );
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'dropdown',
+        index: 1000,
+        draw: function () {
+            var ul = $('<ul id="topbar-settings-dropdown" class="dropdown-menu" role="menu">'),
+                a = $('<a href="#" role="button" class="dropdown-toggle f6-target" data-toggle="dropdown">').attr('aria-label', gt('Settings')).append(
+                    $('<i class="fa fa-bars launcher-icon" aria-hidden="true">').attr('title', gt('Settings'))
+                );
+            this.append(
+                new Dropdown({
+                    tagName: 'li',
+                    id: 'io-ox-topbar-dropdown-icon',
+                    className: 'launcher dropdown',
+                    $ul: ul,
+                    $toggle: a
+                }).render().$el
+            );
+            ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
+        }
+    });
+
+    var dedicatedLogoutButton = settings.get('features/dedicatedLogoutButton', false) === true && _.device('!small');
+    if (dedicatedLogoutButton) {
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'logout-button',
+            index: 2000,
+            draw: function () {
+                var logoutButton = addLauncher('right', $('<i class="fa fa-sign-out launcher-icon" aria-hidden="true">'), function () {
+                    logout();
+                }, gt('Sign out'));
+                logoutButton.find('a')
+                .attr('data-action', 'sign-out')
+                .tooltip({
+                    title: gt('Sign out'),
+                    placement: function (tip, el) {
+                        return ($(window).width() - $(el).offset().left - el.offsetWidth) < 80 ? 'left' : 'auto';
+                    }
+                });
+                this.append(logoutButton);
+            }
+        });
+    }
+
+    (function logoutHint() {
+
+        var data = _.clone(settings.get('features/logoutButtonHint', {}));
+
+        if (!data.enabled) return;
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'logout-button-hint',
+            index: 2100,
+            draw: function () {
+                settings.set('features/logoutButtonHint/active', true).save();
+                // exit: first start with enabled feature
+                if (!_.isBoolean(data.active)) return;
+                // exit: logged out successfully
+                if (!data.active) return;
+                // exit: tab reload with autologin
+                if (_.device('reload') && session.isAutoLogin()) return;
+
+                // banner action, topbar action, dropdown action
+                var link = $('#io-ox-banner [data-action="logout"]');
+                if (!link.length) link = this.find('[data-action="sign-out"]');
+                if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // popover
+                link.popover({
+                    content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
+                    template: '<div class="popover popover-signout" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-signout"></div></div>',
+                    placement: 'bottom'
+                });
+                // prevent logout action when clicking hint
+                this.get(0).addEventListener('click', function (e) {
+                    if (e.target.classList.contains('popover-content-signout')) e.stopImmediatePropagation();
+                    link.popover('destroy');
+                }, true);
+                // close on click
+                $(document).one('click', link.popover.bind(link, 'destroy'));
+                // show
+                _.defer(link.popover.bind(link, 'show'));
+            }
+        });
+    })();
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'client-onboarding-hint',
+        index: 2200,
+        draw: function () {
+            if (capabilities.has('!client-onboarding')) return;
+            if (!_.device('smartphone')) return;
+            // exit: tab reload with autologin
+            if (_.device('reload') && session.isAutoLogin()) return;
+
+            var conf = _.extend({ enabled: true, remaining: 2 }, settings.get('features/clientOnboardingHint', {}));
+            // server prop
+            if (!conf.enabled || !conf.remaining) return;
+            // banner action, topbar action, dropdown action
+            var link = this.find('#io-ox-topbar-dropdown-icon > a');
+            // popover
+            link.popover({
+                content: gt("Did you know that you can take OX App Suite with you? Just click this icon and choose 'Connect your device' from the menu."),
+                template: '<div class="popover popover-onboarding" role="tooltip"><div class="arrow"></div><div class="popover-content popover-content-onboarding"></div></div>',
+                placement: 'bottom'
+            });
+            // show
+            _.defer(link.popover.bind(link, 'show'));
+            // close on any click
+            document.body.addEventListener('click', close, true);
+            function close() {
+                settings.set('features/clientOnboardingHint/remaining', Math.max(0, conf.remaining - 1)).save();
+                link.popover('destroy');
+                document.body.removeEventListener('click', close, true);
+            }
+        }
+    });
+
+    ext.point('io.ox/core/topbar/right').extend({
+        id: 'logo',
+        index: 10000,
+        draw: function () {
+            // add small logo to top bar
+            this.append(
+                $('<li id="io-ox-top-logo-small">').append(
+                    $('<img>').attr({
+                        alt: ox.serverConfig.productName,
+                        src: ox.base + '/apps/themes/' + ox.theme + '/logo-large.png'
+                    })
+                )
+            );
+        }
+    });
+
+});

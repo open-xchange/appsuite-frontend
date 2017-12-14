@@ -1,0 +1,85 @@
+#io-ox-appcontrol {
+    .vertical-gradient(darken(@topbar-background, 15%), darken(@topbar-background, 12%));
+    position: absolute;
+    left: 0;
+    right: 0;
+    line-height: 32px;
+    z-index: 12;
+    color: #fff;
+    height: 64px;
+    padding: 0;
+
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    & > div {
+        display: block;
+    }
+
+    #io-ox-launcher {
+        order: 1;
+        flex: 0 1 auto;
+        align-self: auto;
+        min-width: 0;
+        min-height: auto;
+        button {
+            display: inline-block;
+            padding: 16px;
+            line-height: 32px;
+            &:hover, &:focus { background: white; color: @brand-primary; outline: 0 }
+        }
+    }
+
+    #io-ox-quicklaunch {
+        background: yellow;
+        order: 2;
+        flex: 0 1 auto;
+        align-self: auto;
+        min-width: 0;
+        min-height: auto;
+    }
+
+    #io-ox-topsearch {
+        background: blue;
+        order: 3;
+        flex: 1 1 auto;
+        align-self: auto;
+        min-width: 0;
+        min-height: auto;
+    }
+
+    #io-ox-toprightbar {
+        order: 4;
+        flex: 0 1 auto;
+        align-self: auto;
+        min-width: 0;
+        min-height: auto;
+
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+
+        .launcher {
+           display: inline-block;
+            a {
+                display: inline-block;
+                padding: 16px;
+                cursor: pointer;
+                font-size: 18px;
+                text-decoration: none;
+
+                 &:hover, &:focus {
+                    background: white;
+                    outline: 0;
+                }
+            }
+
+
+        }
+    }
+}
