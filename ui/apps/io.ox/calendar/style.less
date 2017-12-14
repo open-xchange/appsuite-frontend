@@ -256,12 +256,17 @@
                 font-size: 13px;
                 line-height: 16px;
             }
+        }
 
-            @media all and (max-width: @smartphone-breakpoint), all and (max-device-width: @smartphone-breakpoint) {
-                .color-label {
-                    margin-left: 25px;
-                    top: 12px;
-                }
+        .smartphone & {
+            > * {
+                margin-left: 24px;
+            }
+
+            .color-label {
+                left: 0;
+                top: 16px;
+                margin-left: 0;
             }
         }
     }
