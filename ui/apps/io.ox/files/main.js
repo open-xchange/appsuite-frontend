@@ -1501,8 +1501,6 @@ define('io.ox/files/main', [
         // go!
         return commons.addFolderSupport(app, null, 'infostore', options.folder)
             .always(function () {
-                app.mediate();
-
                 // contextmenu for all listviews
                 var def = $.Deferred();
                 require(['io.ox/files/contextmenu'], function (Contextmenu) {
@@ -1512,6 +1510,7 @@ define('io.ox/files/main', [
                     def.resolve();
                 });
                 def.done(function () {
+                    app.mediate();
                     win.show(function () {
                         // trigger grid resize
                         $(window).trigger('resize');
