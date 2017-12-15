@@ -36,7 +36,6 @@ define('io.ox/core/main', [
     'io.ox/core/http_errors',
     'io.ox/backbone/disposable',
     'io.ox/tours/get-started',
-    'io.ox/core/main/banner',
     'io.ox/core/main/appcontrol',
     'io.ox/core/main/stages'
 ], function (desktop, ext, Stage, notifications, commons, upsell, ping, a11y, logout, refresh, tb, tbr, debug, settings, gt) {

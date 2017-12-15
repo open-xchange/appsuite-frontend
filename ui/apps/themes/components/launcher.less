@@ -1,12 +1,41 @@
+@appcontrol-height: 64px;
+
+@launcher-fg: #666;
+@launcher-bg: #f5f5f5;
+@launcher-fg-hover: #fff;
+@launcher-bg-hover: @brand-primary;
+
+@launcher-size: 84px;
+@launcher-vertical-amount: 3;
+@launcher-spacing: 2px;
+
+@quicklaunch-width: @appcontrol-height;
+
+// adjust positions of top-bar and screens
+#io-ox-core {
+    @height: 64px;
+    #io-ox-topbar { top: @height; }
+    #io-ox-screens { top: @height + 40; }
+}
+
+// less height on smaller screens; desktop-only
+// typical maximized browser window on 1280x800 should run into this, therefore 640px
+@media all and (max-height: 640px) {
+    #io-ox-core {
+        @height: 48px;
+        #io-ox-topbar { top: @height; }
+        #io-ox-screens { top: @height + 40; }
+    }
+}
+
 #io-ox-appcontrol {
     .vertical-gradient(darken(@topbar-background, 15%), darken(@topbar-background, 12%));
     position: absolute;
     left: 0;
     right: 0;
-    line-height: 32px;
     z-index: 12;
     color: #fff;
-    height: 64px;
+    height: @appcontrol-height;
     padding: 0;
 
 
@@ -27,24 +56,27 @@
         min-width: 0;
         min-height: auto;
         button {
+            height: @appcontrol-height;
+            width: @appcontrol-height;
             display: inline-block;
             padding: 16px;
-            line-height: 32px;
-            &:hover, &:focus { background: white; color: @brand-primary; outline: 0 }
+            border: 0;
+            i { font-size: 28px; }
         }
+        &.open button, button:hover, button:focus { background: white; color: @brand-primary; outline: 0 }
     }
 
     #io-ox-quicklaunch {
-        background: yellow;
+        padding-left: 16px;
         order: 2;
         flex: 0 1 auto;
         align-self: auto;
-        min-width: 0;
+        min-width: @quicklaunch-width;
         min-height: auto;
     }
 
     #io-ox-topsearch {
-        background: blue;
+        margin-left: 64px;
         order: 3;
         flex: 1 1 auto;
         align-self: auto;
@@ -72,14 +104,91 @@
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
+                line-height: 32px;
 
                  &:hover, &:focus {
                     background: white;
                     outline: 0;
                 }
             }
-
-
         }
     }
+}
+
+.open #io-ox-launchgrid {
+    display: block;
+    opacity: 1;
+}
+
+#io-ox-launchgrid {
+    display: none;
+    opacity: 0;
+
+    position: absolute;
+    background: white;
+    box-shadow: 0 5px 25px -5px #000000;
+    z-index: 65001;
+    transition: opacity .367s cubic-bezier(0.1, 0.9, 0.2, 1);
+
+    .cflex {
+        display: flex;
+        flex-direction: row;
+        align-items: left;
+        vertical-align: top;
+        flex-wrap: wrap;
+        padding: @launcher-spacing;
+        width: @launcher-vertical-amount * (@launcher-size + @launcher-spacing * 2) + @launcher-spacing * 2;
+    }
+
+    .lcell {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        margin: @launcher-spacing;
+        height: @launcher-size;
+        width: @launcher-size;
+
+        background: @launcher-bg;
+
+        cursor: pointer;
+
+        .title {
+            color: @launcher-fg;
+            font-size: 11px;
+            text-align: center;
+        }
+        .svgwrap {
+            width: 50px;
+            height: 60px;
+        }
+        svg {
+            height: 100%;
+            width: 100%;
+            overflow: visible;
+
+            .stroke-c1 { stroke: @launcher-fg; }
+            .fill-none { fill: none;   }
+            .fill-c1   { fill: @launcher-fg;   }
+        }
+        &:focus, &:hover {
+            svg .stroke-c1 { stroke: @launcher-fg-hover; }
+            svg .fill-c1   { fill: @launcher-fg-hover;   }
+        }
+        &:focus, &:hover {
+            background: @launcher-bg-hover;
+            .title { color: white; }
+        }
+    }
+}
+
+#io-ox-launchgrid-overlay {
+    display:none;
+    background-color: rgba(255, 255, 255, 0.4);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: @appcontrol-height;
+    &.open { display:block; }
 }

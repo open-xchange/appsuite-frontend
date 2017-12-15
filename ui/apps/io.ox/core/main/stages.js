@@ -217,7 +217,6 @@ define('io.ox/core/main/stages', [
             debug('Stage "load" > loaded.done');
 
             // draw top bar now
-            // ext.point('io.ox/core/banner').invoke('draw');
             ext.point('io.ox/core/appcontrol').invoke('draw');
             ext.point('io.ox/core/topbar').invoke('draw');
             ext.point('io.ox/core/mobile').invoke('draw');

@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/i18n', ['gettext!io.ox/core'], function (gt) {
+define('io.ox/core/main/i18n', ['gettext!io.ox/core'], function (gt) {
 
     'use strict';
 

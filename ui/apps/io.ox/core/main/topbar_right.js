@@ -152,7 +152,7 @@ define('io.ox/core/main/topbar_right', [
                 tagName: 'li',
                 id: 'topbar-dropdown',
                 requires: 'active_sync || caldav || carddav',
-                title: 'Upgrade your account',
+                title: gt('Upgrade your account'),
                 customize: function () {
                     $('i', this.$el).css({ 'width': 'auto' });
                 }
@@ -377,7 +377,9 @@ define('io.ox/core/main/topbar_right', [
         });
     }
 
-    (function logoutHint() {
+    // TODO: APPCONTROL
+
+    /* (function logoutHint() {
 
         var data = _.clone(settings.get('features/logoutButtonHint', {}));
 
@@ -395,10 +397,8 @@ define('io.ox/core/main/topbar_right', [
                 // exit: tab reload with autologin
                 if (_.device('reload') && session.isAutoLogin()) return;
 
-                // banner action, topbar action, dropdown action
-                var link = $('#io-ox-banner [data-action="logout"]');
-                if (!link.length) link = this.find('[data-action="sign-out"]');
-                if (!link.length) link = this.find('#io-ox-topbar-dropdown-icon > a');
+                // topbar action, dropdown action
+                var link = this.find('[data-action="sign-out"], #io-ox-topbar-dropdown-icon > a');
                 // popover
                 link.popover({
                     content: data[ox.language] || gt('You forgot to sign out last time. Always use the sign-out button when you finished your work.'),
@@ -449,6 +449,7 @@ define('io.ox/core/main/topbar_right', [
             }
         }
     });
+    */
 
     ext.point('io.ox/core/topbar/right').extend({
         id: 'logo',

@@ -79,7 +79,7 @@ define('plugins/demo/customize/register', [
     $('#customize-dialog').modal({ backdrop: false, keyboard: true, show: false });
 
     // show modal dialog
-    $(document).on('click', '#io-ox-top-logo-small, #io-ox-banner', function (e) {
+    $(document).on('click', '#io-ox-appcontrol', function (e) {
         if (e.altKey) $('#customize-dialog').modal('toggle');
     });
 
