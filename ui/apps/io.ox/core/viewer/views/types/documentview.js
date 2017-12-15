@@ -408,8 +408,8 @@ define('io.ox/core/viewer/views/types/documentview', [
                         Util.logPerformanceTimer('DocumentView:refresh_before_pdf_render_' + pageNumberToRefresh);
                         self.pageLoader.setPageZoom($(this), self.currentZoomFactor / 100).done(function () {
                             Util.logPerformanceTimer('DocumentView:refresh_' + pageNumberToRefresh);
-                        }).appendTo(self.documentContainer);
-                    });
+                        });
+                    }).appendTo(self.documentContainer);
                 }
 
                 if (_.isNumber(pageNumberToSelect)) {
