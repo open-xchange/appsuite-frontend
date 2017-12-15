@@ -648,10 +648,10 @@ define('io.ox/calendar/util', [
             return hash;
         },
 
-        getConfirmationStatus: function (obj, id) {
+        getConfirmationStatus: function (obj, id, defaultStatus) {
             var hash = this.getConfirmations(obj),
                 user = id || ox.user_id;
-            return hash[user] ? hash[user].status : 0;
+            return hash[user] ? hash[user].status : (defaultStatus || 0);
         },
 
         getConfirmationMessage: function (obj, id) {
@@ -805,7 +805,7 @@ define('io.ox/calendar/util', [
 
             var folderColor = that.getFolderColor(folder),
                 appointmentColor = appointment.color_label || 0,
-                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id);
+                conf = that.getConfirmationStatus(appointment, folderAPI.is('shared', folder) ? folder.created_by : ox.user_id, folderAPI.is('public', folder) ? 1 : 0);
 
             // shared appointments which are unconfirmed or declined don't receive color classes
             if (/^(unconfirmed|declined)$/.test(that.getConfirmationClass(conf))) return '';

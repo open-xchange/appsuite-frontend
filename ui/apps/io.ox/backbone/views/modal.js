@@ -270,6 +270,9 @@ define('io.ox/backbone/views/modal', ['io.ox/backbone/views/extensible', 'io.ox/
     });
 
     function close(e) {
+
+        if (!this.$el) return;
+
         this.trigger('before:close');
         // stop listening to hidden event (avoid infinite loops)
         this.$el.off('hidden.bs.modal');

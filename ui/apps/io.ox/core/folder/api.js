@@ -20,13 +20,14 @@ define('io.ox/core/folder/api', [
     'io.ox/core/folder/bitmask',
     'io.ox/core/api/account',
     'io.ox/core/api/user',
+    'io.ox/core/api/jobs',
     'io.ox/core/capabilities',
     'io.ox/contacts/util',
     'settings!io.ox/core',
     'settings!io.ox/mail',
     'io.ox/core/api/filestorage',
     'gettext!io.ox/core'
-], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
+], function (http, util, sort, blacklist, getFolderTitle, Bitmask, account, userAPI, jobsAPI, capabilities, contactUtil, settings, mailSettings, filestorageApi, gt) {
 
     'use strict';
 
@@ -291,6 +292,15 @@ define('io.ox/core/folder/api', [
                 model.set(data);
             }
             return model;
+        },
+
+        removeModels: function (accountId) {
+            if (!accountId) return;
+            _.each(this.models, function (model, id) {
+                if (!model.get('account_id')) return true;
+                if (model.get('account_id') !== accountId) return true;
+                delete this.models[id];
+            }.bind(this));
         },
 
         addCollection: function (id, list, options) {
@@ -939,31 +949,8 @@ define('io.ox/core/folder/api', [
         if (isVirtual(id)) return $.when();
 
         // build data object
-        var data = { folder: changes };
-
-        if (options.notification && !_.isEmpty(options.notification)) {
-            data.notification = options.notification;
-        }
-
-        return http.PUT({
-            module: 'folders',
-            params: {
-                action: 'update',
-                id: id,
-                timezone: 'UTC',
-                tree: tree(id),
-                cascadePermissions: options.cascadePermissions,
-                ignoreWarnings: options.ignoreWarnings
-            },
-            data: data,
-            appendColumns: false
-        })
-        .done(function () {
-            var data = model.toJSON();
-            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
-        })
-        .then(
-            function success(newId) {
+        var data = { folder: changes },
+            successCallback = function (newId) {
                 // id change? (caused by rename or move)
                 if (id !== newId) model.set('id', newId);
                 if (options.cascadePermissions) refresh();
@@ -984,7 +971,7 @@ define('io.ox/core/folder/api', [
                             });
                 }
             },
-            function fail(error) {
+            failCallback = function (error) {
                 //get fresh data for the model (the current ones are wrong since we applied the changes early to be responsive)
                 api.get(id, { cache: false });
                 if (error && error.code && error.code === 'FLD-0018') {
@@ -994,7 +981,48 @@ define('io.ox/core/folder/api', [
                     api.trigger('update:fail', error, id);
                 }
                 return error;
-            }
+            };
+
+        if (options.notification && !_.isEmpty(options.notification)) {
+            data.notification = options.notification;
+        }
+
+        return http.PUT({
+            module: 'folders',
+            params: {
+                action: 'update',
+                id: id,
+                timezone: 'UTC',
+                tree: tree(id),
+                cascadePermissions: options.cascadePermissions,
+                ignoreWarnings: options.ignoreWarnings,
+                // special parameter for long running operations (drive folder move/copy)
+                allow_enqueue: options.enqueue
+            },
+            data: data,
+            appendColumns: false
+        })
+        .done(function () {
+            var data = model.toJSON();
+            if (!blacklist.visible(data)) api.trigger('warn:hidden', data);
+        })
+        .then(
+            function success(result) {
+                if (result && options.enqueue && (result.code === 'JOB-0003' || result.job)) {
+                    // long running job. Add to jobs list and return here
+                    //#. %1$s: Folder name
+                    jobsAPI.addJob({
+                        module: 'folders',
+                        action: 'update',
+                        done: false,
+                        showIn: model.get('module'),
+                        label: model.get('title'), id: result.job || result.data.job,
+                        successCallback: successCallback,
+                        failCallback: failCallback });
+                    return result;
+                }
+                return successCallback(result);
+            }, failCallback
         );
     }
 
@@ -1002,10 +1030,11 @@ define('io.ox/core/folder/api', [
     // Move folder
     //
 
-    function move(id, target, ignoreWarnings) {
-
+    function move(id, target, options) {
         // doesn't make sense but let's silently finish
         if (id === target) return $.when();
+
+        options = options || {};
 
         // prepare move
         var model = pool.getModel(id),
@@ -1019,16 +1048,33 @@ define('io.ox/core/folder/api', [
         //set unread to 0 to update subtotal attributes of parent folders (bubbles through the tree)
         model.set('unread', 0);
 
-        return update(id, { folder_id: target }, { ignoreWarnings: ignoreWarnings }).then(
+        return update(id, { folder_id: target }, options).then(
             function success(newId) {
-                // update new parent folder
-                pool.getModel(target).set('subscr_subflds', true);
-                // update all virtual folders
-                virtual.refresh();
-                // add folder to collection
-                pool.getCollection(target).add(model);
-                // trigger event
-                api.trigger('move', id, newId);
+                var cont = function (data) {
+                    if (data.error) {
+                        // re-add folder
+                        pool.getModel(folderId).set('subscr_subflds', true);
+                        virtual.refresh();
+                        pool.getCollection(folderId).add(model);
+                        throw data;
+                    }
+                    // update new parent folder
+                    pool.getModel(target).set('subscr_subflds', true);
+                    // update all virtual folders
+                    virtual.refresh();
+                    // add folder to collection
+                    pool.getCollection(target).add(model);
+                    // trigger event
+                    api.trigger('move', id, data);
+                };
+
+                // check if we have a long running job
+                if (newId && (newId.code === 'JOB-0003' || newId.job)) {
+                    api.trigger('new:longrunningjob');
+                    jobsAPI.on('finished:' + (newId.job || newId.data.job), cont);
+                    return;
+                }
+                cont(newId);
             },
             function fail(error) {
                 // re-add folder
@@ -1111,6 +1157,11 @@ define('io.ox/core/folder/api', [
         _(pool.collections).invoke('remove', model);
     }
 
+    var currentlyDeleted = [];
+    function isBeingDeleted(id) {
+        return _(currentlyDeleted).contains(id);
+    }
+
     function remove(ids, options) {
 
         // ensure array
@@ -1162,6 +1213,7 @@ define('io.ox/core/folder/api', [
                     if (api.is('trash', data) || (response[index] && _.isEmpty(response[index].new_path))) {
                         api.pool.removeCollection(id, { removeModels: true });
                     } else {
+                        currentlyDeleted.push(id);
                         // use new path if available, else use id
                         var pathOrId = (response[index] ? response[index].new_path : id);
                         api.get(pathOrId, { cache: false }).fail(function (error) {
@@ -1169,6 +1221,8 @@ define('io.ox/core/folder/api', [
                             if (error.code === 'FLD-0008') {
                                 api.pool.removeCollection(id, { removeModels: true });
                             }
+                        }).always(function () {
+                            currentlyDeleted = _(currentlyDeleted).without(id);
                         });
                     }
                 }
@@ -1379,9 +1433,10 @@ define('io.ox/core/folder/api', [
     }
 
     ox.on('please:refresh refresh^', refresh);
+    ox.on('account:delete', pool.removeModels.bind(pool));
 
     // If there is a new filestorage refresh the folders
-    filestorageApi.on('create delete update', refresh);
+    filestorageApi.on('create update', refresh);
 
     //
     // Get standard mail folders
@@ -1460,6 +1515,7 @@ define('io.ox/core/folder/api', [
         move: move,
         create: create,
         remove: remove,
+        isBeingDeleted: isBeingDeleted,
         clear: clear,
         reload: reload,
         hide: hide,
