@@ -361,16 +361,31 @@ define('io.ox/calendar/edit/extensions', [
         index: 550,
         nextTo: 'end-date',
         render: function () {
-            var appointmentTimezoneAbbr = this.model.getMoment('startDate').zoneAbbr(),
-                userTimezoneAbbr = moment.tz(coreSettings.get('timezone')).zoneAbbr();
+            var model = this.model,
+                userTimezone = moment().zoneAbbr(),
+                helpBlock = $('<div class="col-xs-12 help-block">').hide();
 
-            if (appointmentTimezoneAbbr === userTimezoneAbbr) return;
-
-            this.$el.append($('<div class="col-xs-12 help-block">').text(
-                //#. %1$s timezone abbreviation of the appointment
-                //#. %2$s default user timezone
-                gt('The timezone of this appointment (%1$s) differs from your default timezone (%2$s).', appointmentTimezoneAbbr, userTimezoneAbbr)
-            ));
+            function setHint() {
+                var startTimezone = model.getMoment('startDate').zoneAbbr(),
+                    endTimezone = model.getMoment('endDate').zoneAbbr(),
+                    isVisible = startTimezone !== userTimezone || endTimezone !== userTimezone;
+                helpBlock.toggle(isVisible);
+                if (isVisible) {
+                    var start = model.getMoment('startDate'),
+                        end = model.getMoment('endDate'),
+                        interval = calendarUtil.getTimeInterval(model.attributes, moment().tz()),
+                        duration = moment.duration(end.diff(start, 'ms')).humanize();
+                    helpBlock.text(
+                        //#. %1$s timezone abbreviation of the user
+                        //#. %2$s time interval of event
+                        //#. %2$s duration of event
+                        gt('In your timezone (%1$s): %2$s (Duration: %3$s)', userTimezone, interval, duration)
+                    );
+                }
+            }
+            this.$el.append(helpBlock);
+            this.listenTo(model, 'change:startDate change:endDate', setHint);
+            setHint();
         }
     });
 

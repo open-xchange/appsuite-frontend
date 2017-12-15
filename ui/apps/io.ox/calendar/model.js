@@ -213,7 +213,7 @@ define('io.ox/calendar/model', [
                 'change:startDate': function () {
                     var prevStartDate = this.previous('startDate'), endDate = this.getMoment('endDate');
                     prevStartDate = util.getMoment(prevStartDate);
-                    endDate = this.getMoment('startDate').add(endDate.diff(prevStartDate, 'ms'), 'ms');
+                    endDate = this.getMoment('startDate').tz(endDate.tz()).add(endDate.diff(prevStartDate, 'ms'), 'ms');
                     this.set('endDate', { value: endDate.format('YYYYMMDD[T]HHmmss'), tzid: endDate.tz() });
                 },
 

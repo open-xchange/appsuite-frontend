@@ -53,7 +53,7 @@ define('io.ox/backbone/mini-views/datepicker', [
         },
 
         events: {
-            'click .timezone button': 'clickTimezone'
+            'click .timezone': 'clickTimezone'
         },
 
         render: function () {
@@ -96,8 +96,10 @@ define('io.ox/backbone/mini-views/datepicker', [
                         } else {
                             // we need <a> tag to make firefox happy (no <button> doesn't work) and tabindex to make safari happy, otherwise they wont close on click outside of the popover
                             // see https://github.com/twbs/bootstrap/issues/14038 and Bug 51690
-                            timezoneContainer = self.nodes.timezoneField = $('<a role="button" class="timezone input-group-addon btn" data-toggle="popover">').attr('tabindex', 0).text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
-                            if ((self.chronos && self.model.has('startDate') && self.model.has('endDate')) || (self.model.has('start_date') && self.model.has('end_date'))) {
+                            timezoneContainer = self.nodes.timezoneField = $('<a role="button" class="timezone input-group-addon btn">').attr('tabindex', 0).text(timezoneAbbreviation).attr('aria-label', timezoneFullname);
+
+                            if (self.model.has('start_date') && self.model.has('end_date')) {
+                                timezoneContainer.attr('data-toggle', 'popover');
                                 require(['io.ox/calendar/util'], function (calendarUtil) {
                                     calendarUtil.addTimezonePopover(
                                         timezoneContainer,

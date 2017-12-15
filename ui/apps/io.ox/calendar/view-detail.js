@@ -56,7 +56,7 @@ define('io.ox/calendar/view-detail', [
         id: 'date-time',
         draw: function (baton, options) {
             var node = $('<div class="date-time-recurrence">');
-            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, options);
+            ext.point('io.ox/calendar/detail/date').invoke('draw', node, baton, _.extend({ zone: moment().tz() }, options));
             this.append(node);
         }
     });

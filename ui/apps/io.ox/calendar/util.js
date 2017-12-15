@@ -212,15 +212,20 @@ define('io.ox/calendar/util', [
                     endDate,
                     dateStr,
                     timeStr,
-                    timeZoneStr = moment.tz(data.startDate.value, data.startDate.tzid).zoneAbbr(),
+                    timeZoneStr = that.getMoment(data.startDate).zoneAbbr(),
                     fmtstr = options.a11y ? 'dddd, l' : 'ddd, l';
 
                 if (that.isAllday(data)) {
                     startDate = moment.utc(data.startDate.value).local(true);
                     endDate = moment.utc(data.endDate.value).local(true).subtract(1, 'days');
                 } else {
-                    startDate = moment.tz(data.startDate.value, data.startDate.tzid);
-                    endDate = moment.tz(data.endDate.value, data.startDate.tzid);
+                    startDate = that.getMoment(data.startDate);
+                    endDate = that.getMoment(data.endDate);
+                    if (options.zone) {
+                        startDate.tz(options.zone);
+                        endDate.tz(options.zone);
+                        timeZoneStr = startDate.zoneAbbr();
+                    }
                 }
                 if (startDate.isSame(endDate, 'day')) {
                     dateStr = startDate.format(fmtstr);
@@ -292,8 +297,8 @@ define('io.ox/calendar/util', [
             if (that.isAllday(data)) {
                 return this.getFullTimeInterval(data, true);
             }
-            var start = moment.tz(data.startDate.value, data.startDate.tzid),
-                end = moment.tz(data.endDate.value, data.startDate.tzid);
+            var start = that.getMoment(data.startDate),
+                end = that.getMoment(data.endDate);
             if (zone) {
                 start.tz(zone);
                 end.tz(zone);
@@ -410,10 +415,6 @@ define('io.ox/calendar/util', [
         },
 
         addTimezonePopover: function (parent, data, opt) {
-            var current = moment(data.startDate);
-            if (data.startDate.value) {
-                current = that.getMoment(data[opt.attrName || 'startDate']);
-            }
 
             opt = _.extend({
                 placement: 'left',
@@ -451,7 +452,7 @@ define('io.ox/calendar/util', [
             }
 
             function getTitle() {
-                return that.getTimeInterval(data) + ' ' + current.zoneAbbr();
+                return that.getTimeInterval(data, moment().tz()) + ' ' + moment().zoneAbbr();
             }
 
             parent.popover({

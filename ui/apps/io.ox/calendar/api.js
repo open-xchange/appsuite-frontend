@@ -399,8 +399,8 @@ define('io.ox/calendar/api', [
                 }
 
                 options = _.extend({
-                    from: moment().startOf('day').format(util.ZULU_FORMAT_DAY_ONLY),
-                    until: moment().startOf('day').add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
+                    from: moment().startOf('day').utc().format(util.ZULU_FORMAT_DAY_ONLY),
+                    until: moment().startOf('day').utc().add(1, 'day').format(util.ZULU_FORMAT_DAY_ONLY)
                 }, options);
 
                 return http.PUT({
@@ -472,8 +472,8 @@ define('io.ox/calendar/api', [
                     params: {
                         action: 'needsAction',
                         folder: folderApi.getDefaultFolder('calendar'),
-                        rangeStart: moment().subtract(2, 'hours').format(util.ZULU_FORMAT),
-                        rangeEnd: moment().add(1, 'years').format(util.ZULU_FORMAT)
+                        rangeStart: moment().subtract(2, 'hours').utc().format(util.ZULU_FORMAT),
+                        rangeEnd: moment().add(1, 'years').utc().format(util.ZULU_FORMAT)
                     }
                 }, 'GET').then(function (data) {
                     // even if empty array is given it needs to be triggered to remove
