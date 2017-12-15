@@ -64,7 +64,7 @@
     }
     .freetime-time-view-header {
         &.row1 {
-            padding-top: 8px;
+            padding-top: 9px;
         }
     }
     .scheduling-app-close {
@@ -100,18 +100,12 @@
         padding: 0 0 0 16px;
     }
     .info {
-        left: auto;
-        text-align: left;
-        max-width: 30%;
-        position: absolute;
         margin-left: 16px;
-        line-height: 18px;
-        font-size: 16px;
+        line-height: 24px;
+        font-size: 20px;
         color: #333;
         text-decoration: none;
-
-        .ellipsis();
-        .fontWeight(300);
+        .fontWeight(bold);
 
         .cw {
             font-size: 14px;
@@ -123,19 +117,12 @@
     .zoomlevel-selector {
         width: 150px;
         display: inline-block;
-        margin-right: 16px;
+        margin-right: 32px;
+        margin-top: -6px;
 
         input {
             text-align: center;
             background-color: #fff;
-        }
-
-        button, input {
-            height: 20px;
-        }
-
-        button {
-            padding: 0 8px;
         }
     }
 
@@ -184,16 +171,8 @@
     .freetime-time-view-header {
         flex: 1;
         -webkit-flex: 1;
-        &.row1 {
-            margin-top: 1px;
-        }
 
-        .controls-container {
-            display: inline-block;
-            width: auto;
-
-            a { padding: 9px; }
-        }
+        .controls-container a { padding: 9px; }
     }
     .dropdown-menu {
         // stay over dynamic appointment indexes
@@ -260,6 +239,9 @@
                             .day-label {
                                 background: @today;
                                 color: #fff;
+                                .number {
+                                    color: #fff;
+                                }
                             }
                         }
                     }
@@ -268,17 +250,30 @@
                 .daylabel-container {
                     display: flex;
                     display: -webkit-flex;
-                    height: 24px;
+                    height: 28px;
                     border-left: 1px solid #888;
                     .day-label-wrapper {
                         font-weight: bold;
                         display: inline;
                         min-width: 25%;
+
                         .day-label {
-                            padding: 2px 8px 4px 8px;
                             display: inline-block;
+                            padding: 0 8px;
+                            color: #767676;
+                            font-size: 14px;
+
+                            .number {
+                                font-size: 20px;
+                                font-weight: bold;
+                                color: black;
+                                margin-left: 2px;
+                            }
                             &.weekend {
                                 color: @weekend;
+                                .number {
+                                    color: @weekend;
+                                }
                             }
                         }
                     }
@@ -291,7 +286,7 @@
                 .day-hours {
                     display: flex;
                     display: -webkit-flex;
-                    height: 31px
+                    height: 27px
                 }
             }
 
@@ -328,18 +323,11 @@
             }
              // push the hours under the table
             .daylabel-container {
-                margin-top: 32px;
+                margin-top: 24px;
+                height: 32px;
                 border-bottom: 1px solid #ccc;
-
-                .level-1{
-                    display: none;
-                }
-                .day-label-wrapper .day-label {
-                    padding: 0 0 0 2px;
-                }
             }
         }
-
 
     }
 

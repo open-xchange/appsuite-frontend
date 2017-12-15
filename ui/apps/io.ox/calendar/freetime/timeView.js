@@ -36,9 +36,7 @@ define('io.ox/calendar/freetime/timeView', [
         },
         // width of a tablecell at 100% in week range
         BASEWIDTH = 60,
-        ZOOM_LEVELS = [10, 25, 50, 100, 200, 400, 1000],
-        // moment does not support localized formats without year and it seems this not going to be fixed soon... so we need to do this ugly hacky surgery... hopefully it works with most languages
-        superHackyFormatWithoutYear = moment.localeData().longDateFormat('ll').replace(/Y/g, '').replace(/^\W|\W$/, '');
+        ZOOM_LEVELS = [10, 25, 50, 100, 200, 400, 1000];
 
     // header
     pointHeader.extend({
@@ -51,13 +49,15 @@ define('io.ox/calendar/freetime/timeView', [
                 fillInfo = function () {
                     info.empty().append(
                         $('<span>').text(
-                            baton.model.get('startDate').formatInterval(moment(baton.model.get('startDate')).add((baton.model.get('dateRange') === 'week' ? 6 : baton.model.get('startDate').daysInMonth() - 1), 'days'))
+                            baton.model.get('dateRange') === 'week' ? baton.model.get('startDate').formatInterval(moment(baton.model.get('startDate')).add(6, 'days')) :
+                                baton.model.get('startDate').format('MMMM YYYY')
                         ),
                         $.txt(' '),
                         $('<span class="cw">').text(
                             //#. %1$d = Calendar week
                             gt('CW %1$d', moment(baton.model.get('startDate')).isoWeek())
-                        ),
+                            // only makes sense when date range is week
+                        ).toggle(baton.model.get('dateRange') === 'week'),
                         $('<i class="fa fa-caret-down fa-fw" aria-hidden="true">')
                     );
                 };
@@ -97,7 +97,7 @@ define('io.ox/calendar/freetime/timeView', [
         id: 'zoomlevels',
         index: 200,
         draw: function (baton) {
-            var inputField = $('<input type="text" disabled="disabled" class="form-control">').val(baton.model.get('zoom') + '%'),
+            var inputField = $('<input type="text" readonly="readonly" class="form-control">').val(baton.model.get('zoom') + '%'),
                 plus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-plus">'))),
                 minus = $('<span class="input-group-btn">').append($('<button class="btn btn-default" type="button">').append($('<i class="fa fa-minus">'))),
                 changefunction = function (e) {
@@ -162,7 +162,7 @@ define('io.ox/calendar/freetime/timeView', [
                     end = baton.model.get('onlyWorkingHours') ? baton.model.get('endHour') : 23,
                     sections = [],
                     dayLabel = $('<div class="day-label-wrapper">').append($('<div class="day-label">').addClass(day.day() === 0 || day.day() === 6 ? 'weekend' : '')
-                        .text(day.format(parseInt(baton.model.get('zoom'), 10) !== 10 ? 'ddd, ll' : superHackyFormatWithoutYear))),
+                            .text(day.format('ddd')).append($('<span class="number">').text(day.format('D')))),
                     dayNode;
 
                 node.append($('<div class=timeline-day>').addClass(today.valueOf() === day.valueOf() ? 'today' : '').append(
@@ -186,13 +186,13 @@ define('io.ox/calendar/freetime/timeView', [
                 dayNode.append(sections);
                 day.add(1, 'days');
             }
-            baton.model.on('change:startDate change:zoom', function () {
+            baton.model.on('change:startDate', function () {
                 var labels = node.find('.timeline-day'),
                     day = moment(baton.model.get('startDate')).startOf('day'),
                     today = moment().startOf('day');
 
                 for (var i = 0; i <= labels.length; i++) {
-                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format(parseInt(baton.model.get('zoom'), 10) !== 10 ? 'ddd, ll' : superHackyFormatWithoutYear));
+                    $(labels[i]).toggleClass('today', day.valueOf() === today.valueOf()).find('.day-label').text(day.format('ddd')).append($('<span class="number">').text(day.format('D')));
                     day.add(1, 'days');
                 }
             });
