@@ -291,8 +291,57 @@ define('io.ox/calendar/model', [
 
         model: Model,
 
+        setOptions: function (opt) {
+            this.folders = opt.folders;
+            this.start = opt.start;
+            this.end = opt.end;
+        },
+
         comparator: function (model) {
             return model.getTimestamp('startDate');
+        },
+
+        sync: function (opt) {
+            var self = this;
+            opt = opt || {};
+            if ((!this.expired && this.length > 0) || (this.folders && this.folders.length === 0)) {
+                _.defer(self.trigger.bind(self, 'load'));
+                return $.when();
+            }
+
+            var api = require('io.ox/calendar/api'), // require directly because of circular dependency
+                params = {
+                    action: 'all',
+                    rangeStart: moment(this.start).utc().format(util.ZULU_FORMAT),
+                    rangeEnd: moment(this.end).utc().format(util.ZULU_FORMAT),
+                    order: 'asc',
+                    expand: true
+                };
+
+            this.expired = false;
+            _.defer(this.trigger.bind(this, 'before:load'));
+
+            return api.request({
+                module: 'chronos',
+                params: params,
+                data: { folders: this.folders }
+            }, this.folders ? 'PUT' : 'GET').then(function success(data) {
+                var method = opt.paginate === true ? 'add' : 'set';
+                data = _(data)
+                    .chain()
+                    .each(function (event) {
+                        event.cid = util.cid(event);
+                    })
+                    .sortBy(function (event) {
+                        return util.getMoment(event.startDate).valueOf();
+                    })
+                    .value();
+                self[method](data);
+                self.trigger('load');
+                return data;
+            }, function fail(err) {
+                self.trigger('load:fail', err);
+            });
         }
 
     });

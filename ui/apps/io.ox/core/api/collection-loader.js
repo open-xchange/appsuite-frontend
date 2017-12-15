@@ -28,9 +28,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         _.extend(this, {
             columns: '1,20',
             module: 'mail',
-            ignore: 'limit max',
-            paginateCompare: true,
-            lfo: _.lfo
+            ignore: 'limit max'
         }, options);
 
         this.pool = Pool.create(this.module);
@@ -39,12 +37,13 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
         this.loading = false;
 
         function apply(collection, type, params, loader, data) {
+
             // determine current page size
             var PAGE_SIZE = type === 'load' ? loader.PRIMARY_PAGE_SIZE : loader.SECONDARY_PAGE_SIZE;
 
             // don't use loader.collection to avoid cross-collection issues (see bug 38286)
 
-            if (type === 'paginate' && collection.length > 0 && loader.paginateCompare) {
+            if (type === 'paginate' && collection.length > 0) {
                 // check if first fetched item matches last existing item
                 // use case: reload on new messages; race-conditions with external clients
                 var first = _(data).first(), last = collection.last().toJSON();
@@ -86,14 +85,14 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             collection.trigger(type + ':fail', e);
         }
 
-        function process(params, type, collection) {
+        function process(params, type) {
             // get offset
-            var offset = type === 'paginate' ? Math.max(collection.length - 1, 0) : 0;
+            var offset = type === 'paginate' ? Math.max(this.collection.length - 1, 0) : 0;
             // trigger proper event
-            collection.trigger('before:' + type);
+            this.collection.trigger('before:' + type);
             // create callbacks
-            var cb_apply = this.lfo(apply, collection, type, params, this),
-                cb_fail = this.lfo(fail, collection, type),
+            var cb_apply = _.lfo(apply, this.collection, type, params, this),
+                cb_fail = _.lfo(fail, this.collection, type),
                 self = this;
             // fetch data
             return this.fetch(params)
@@ -134,7 +133,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             }
 
             this.loading = true;
-            _.defer(process.bind(this), params, 'load', collection);
+            _.defer(process.bind(this), params, 'load');
             return collection;
         };
 
@@ -150,7 +149,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params.limit = offset + ',' + (collection.length + this.SECONDARY_PAGE_SIZE);
             this.loading = true;
 
-            _.defer(process.bind(this), params, 'paginate', collection);
+            _.defer(process.bind(this), params, 'paginate');
             return collection;
         };
 
@@ -164,7 +163,7 @@ define('io.ox/core/api/collection-loader', ['io.ox/core/api/collection-pool', 'i
             params.limit = '0,' + Math.max(collection.length + (tail || 0), this.PRIMARY_PAGE_SIZE);
             this.loading = true;
 
-            _.defer(process.bind(this), params, 'reload', collection);
+            _.defer(process.bind(this), params, 'reload');
             return collection;
         };
     }

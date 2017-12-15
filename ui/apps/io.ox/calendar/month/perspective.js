@@ -167,20 +167,13 @@ define('io.ox/calendar/month/perspective', [
         },
 
         updateMonths: function (useCache) {
-            var method = useCache === false ? 'reset' : 'set',
-                loader = api.collectionLoader;
-
             // fetch appointments in a single call before loading collections
             http.pause();
             _(this.views).each(function (view) {
-                var collection = loader.getCollection(view.getRequestParams());
-                view.setCollection(collection);
-                if (collection.length > 0 && !collection.expired && collection.sorted && !collection.preserve) return;
-                loader.collection = collection;
-                collection.expired = false;
-                loader.httpGet('chronos', view.getRequestParams()).then(function (data) {
-                    collection[method](data, { parse: true });
-                }, loader.fail);
+                if (view.$el.hasClass('hidden')) return;
+                var collection = view.collection;
+                if (useCache === false) collection.expired = true;
+                collection.sync();
             });
             http.resume();
         },
@@ -231,7 +224,7 @@ define('io.ox/calendar/month/perspective', [
                 }
 
                 view = self.views[identifier];
-                collection = api.collectionLoader.getCollection(view.getRequestParams());
+                collection = api.getCollection(view.getRequestParams());
                 view.setCollection(collection);
                 view.$el.removeClass('hidden');
 

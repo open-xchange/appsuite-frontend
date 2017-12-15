@@ -126,36 +126,6 @@ define('io.ox/calendar/api', [
                 };
             }()),
 
-            getAll: function (opt) {
-                opt = _.extend({
-                    start: _.now(),
-                    end: _.now()
-                }, opt || {});
-
-                var method = opt.folders ? 'PUT' : 'GET',
-                    params = {
-                        action: 'all',
-                        rangeStart: moment(opt.start).utc().format(util.ZULU_FORMAT),
-                        rangeEnd: moment(opt.end).utc().format(util.ZULU_FORMAT),
-                        order: 'asc',
-                        expand: true
-                    },
-                    data;
-
-                if (opt.folders) data = { folders: opt.folders };
-                else params.folder = opt.folder;
-
-                return api.request({
-                    module: 'chronos',
-                    params: params,
-                    data: data
-                }, method).then(function (data) {
-                    return _(data).sortBy(function (event) {
-                        return util.getMoment(event.startDate);
-                    });
-                });
-            },
-
             get: function (obj, useCache) {
 
                 obj = obj instanceof Backbone.Model ? obj.attributes : obj;
@@ -582,6 +552,17 @@ define('io.ox/calendar/api', [
                 delete data.seriesId;
                 if (model instanceof Backbone.Model) return new models.Model(data);
                 return data;
+            },
+
+            getCollection: function (obj) {
+                // TODO expand start/end to start/end of week if range is less than a week
+                var cid = _(obj).map(function (val, key) {
+                        val = _.isString(val) ? val : JSON.stringify(val);
+                        return key + '=' + val;
+                    }).join('&'),
+                    collection = api.pool.get(cid);
+                collection.setOptions(obj);
+                return collection;
             }
         };
 
@@ -731,58 +712,52 @@ define('io.ox/calendar/api', [
 
     });
 
-    api.collectionLoader = new CollectionLoader({
-        module: 'chronos',
-        // listview uses own pagination. just make sure, that the number of items is not cropped
-        PRIMARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
-        SECONDARY_PAGE_SIZE: Number.MAX_SAFE_INTEGER,
+    api.collectionLoader = {
         PRIMARY_SEARCH_PAGE_SIZE: 100,
         SECONDARY_SEARCH_PAGE_SIZE: 200,
-        paginateCompare: false,
-        getQueryParams: function (params) {
-            return params;
+        getDefaultCollection: function () {
+            return new models.Collection();
         },
-        // do not add index to these models. position inside collection is sufficient due to special pagination
-        addIndex: $.noop,
-        isBad: function () { return false; },
-        httpGet: function (module, params) {
-            // special handling for requests of listview
-            if (params.view === 'list') {
-                var offset = this.collection.offset || 0, start, end;
-                if (params.paginate === true) {
-                    // paginate
-                    start = offset;
-                    end = offset + 1;
-                } else {
-                    // reload
-                    start = 0;
-                    end = offset || 1;
-                }
-                this.collection.offset = end;
-                params.start = moment().startOf('day').add(start, 'month').valueOf();
-                params.end = moment().startOf('day').add(end, 'month').valueOf();
-            }
-            return api.getAll(params).then(function (data) {
-                data.forEach(function (obj) {
-                    obj.cid = util.cid(obj);
-                });
-                return data;
+        load: function (params) {
+            var collection = this.collection = api.getCollection(params);
+            collection.originalStart = collection.originalStart || moment().startOf('day');
+            collection.range = collection.range || 1;
+            collection.setOptions({
+                start: collection.originalStart.valueOf() + 1,
+                end: collection.originalStart.clone().add(collection.range, 'months').valueOf(),
+                folders: params.folders || []
             });
+            collection.sync().then(function (data) {
+                // trigger reset when data comes from cache
+                if (!data || data.length === 0) collection.trigger('reset');
+            });
+            return collection;
         },
-        fail: function (error) {
-            if (error && error.code !== 'APP-0013') {
-                require(['io.ox/core/notifications', 'gettext!io.ox/calendar'], function (notifications, gt) {
-                    notifications.yell('error', gt('An error occurred. Please try again.'));
-                });
-            }
+        reload: function (params) {
+            var collection = this.collection = api.getCollection(params);
+            collection.expired = true;
+            collection.setOptions({
+                start: collection.originalStart.valueOf() + 1,
+                end: collection.originalStart.clone().add(collection.range, 'months').valueOf(),
+                folders: params.folders || []
+            });
+            collection.sync();
+            return collection;
         },
-        lfo: function () {
-            var args = _(arguments).toArray(),
-                func = args.shift();
-            args.unshift(this);
-            return Function.prototype.bind.apply(func, args);
+        paginate: function () {
+            var collection = this.collection;
+            if (!collection) return;
+            collection.range++;
+            collection.expired = true;
+            collection.setOptions({
+                start: collection.originalStart.clone().add(collection.range - 1, 'months').valueOf() + 1,
+                end: collection.originalStart.clone().add(collection.range, 'months').valueOf(),
+                folders: collection.folders || []
+            });
+            collection.sync({ paginate: true });
+            return collection;
         }
-    });
+    };
 
     _.extend(api, Backbone.Events);
 

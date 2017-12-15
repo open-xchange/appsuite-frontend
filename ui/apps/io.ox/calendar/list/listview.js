@@ -141,7 +141,7 @@ define('io.ox/calendar/list/listview', [
         index: 100,
         draw: function (baton) {
             var collection = baton.listView.collection,
-                m = moment().add(collection.offset || 0, 'month').startOf('day');
+                m = moment(collection.originalStart).add(collection.range || 0, 'month').startOf('day');
             this.addClass('empty').text(gt.format(gt('No appointments found until %s'), m.format('LLL')));
             baton.listView.drawTail();
         }
@@ -245,7 +245,7 @@ define('io.ox/calendar/list/listview', [
             // only render if in listview. not in search
             if (this.collection.cid.indexOf('view=list') < 0) return;
             if (this.tail) this.tail.remove();
-            var m = moment().add((this.collection.offset || 0) + 1, 'month');
+            var m = moment(this.collection.originalStart).add(this.collection.range, 'month');
             this.$el.append(
                 this.tail = $('<li class="tail">').append(
                     $('<a href="#">')
@@ -260,7 +260,7 @@ define('io.ox/calendar/list/listview', [
             if (this.tail) this.tail.remove();
             this.loader.collection = this.collection;
             // must send paginate: true because pagination in calendar is somehow special
-            this.paginate({ paginate: true });
+            this.paginate();
         },
 
         onSort: $.noop
