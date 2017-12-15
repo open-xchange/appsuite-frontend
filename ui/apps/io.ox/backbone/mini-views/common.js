@@ -144,7 +144,8 @@ define('io.ox/backbone/mini-views/common', [
         },
         onFocusChange: _.debounce(function () {
             this.$el.toggleClass('has-focus', $(document.activeElement).closest('.password-container').length > 0);
-        }, 20),
+            // use long delay here as safari messes up the focus order
+        }, 200),
         onKeyPress: function (e) {
             // Windows Key / Left ⌘ / Chromebook Search key
             if (e.which !== 91) return;
@@ -154,6 +155,10 @@ define('io.ox/backbone/mini-views/common', [
             state = _.isBoolean(state) ? state : undefined;
             this.passwordView.toggle(state);
             this.$el.find('i.fa').removeClass('fa-eye fa-eye-slash').addClass(this.icons[this.passwordView.$el.attr('type')]);
+            // safari needs manual focus
+            if (_.device('safari')) {
+                this.$el.find('.toggle-asterisks').focus();
+            }
         },
         render: function () {
             this.$el.empty().append(
