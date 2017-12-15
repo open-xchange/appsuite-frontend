@@ -10,21 +10,19 @@
 @launcher-spacing: 2px;
 
 @quicklaunch-width: @appcontrol-height;
-
 // adjust positions of top-bar and screens
 #io-ox-core {
-    @height: 64px;
-    #io-ox-topbar { top: @height; }
-    #io-ox-screens { top: @height + 40; }
+    #io-ox-topbar { display: none; }
+    #io-ox-screens { top: @appcontrol-height; }
 }
 
 // less height on smaller screens; desktop-only
 // typical maximized browser window on 1280x800 should run into this, therefore 640px
 @media all and (max-height: 640px) {
     #io-ox-core {
-        @height: 48px;
-        #io-ox-topbar { top: @height; }
-        #io-ox-screens { top: @height + 40; }
+        @appcontrol-height: 48px;
+        #io-ox-topbar { top: @appcontrol-height; }
+        #io-ox-screens { top: @appcontrol-height + 40; }
     }
 }
 
@@ -49,6 +47,15 @@
         display: block;
     }
 
+    #io-ox-top-logo-small {
+        width: auto;
+        float: none;
+        img {
+            height: 33%;
+            margin: 16px;
+        }
+    }
+
     #io-ox-launcher {
         order: 1;
         flex: 0 1 auto;
@@ -56,6 +63,8 @@
         min-width: 0;
         min-height: auto;
         button {
+            position: relative;
+            z-index: 2;
             height: @appcontrol-height;
             width: @appcontrol-height;
             display: inline-block;
@@ -63,7 +72,12 @@
             border: 0;
             i { font-size: 28px; }
         }
-        &.open button, button:hover, button:focus { background: white; color: @brand-primary; outline: 0 }
+    }
+
+    &.open #io-ox-launcher button,
+    #io-ox-launcher button:hover,
+    #io-ox-launcher button:focus {
+         background: white; color: @brand-primary; outline: 0;
     }
 
     #io-ox-quicklaunch {
@@ -79,32 +93,27 @@
         margin-left: 64px;
         order: 3;
         flex: 1 1 auto;
-        align-self: auto;
-        min-width: 0;
-        min-height: auto;
+    }
+    #io-ox-toprightbar,
+    #io-ox-toprightbar > ul,
+    #io-ox-toprightbar > ul li,
+    #io-ox-toprightbar > ul li a {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+        margin: 0;
     }
 
     #io-ox-toprightbar {
         order: 4;
         flex: 0 1 auto;
-        align-self: auto;
-        min-width: 0;
-        min-height: auto;
-
-        ul {
-            padding: 0;
-            margin: 0;
-        }
 
         .launcher {
-           display: inline-block;
             a {
-                display: inline-block;
                 padding: 16px;
                 cursor: pointer;
                 font-size: 18px;
                 text-decoration: none;
-                line-height: 32px;
 
                  &:hover, &:focus {
                     background: white;
@@ -126,9 +135,10 @@
 
     position: absolute;
     background: white;
-    box-shadow: 0 5px 25px -5px #000000;
-    z-index: 65001;
+    box-shadow: 20px 0 100px 0 rgba(0, 0, 0, 0.5);
+    z-index: 1;
     transition: opacity .367s cubic-bezier(0.1, 0.9, 0.2, 1);
+    top: @appcontrol-height;
 
     .cflex {
         display: flex;
@@ -144,6 +154,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        position: relative;
 
         margin: @launcher-spacing;
         height: @launcher-size;
@@ -154,15 +165,19 @@
         cursor: pointer;
 
         .title {
+            position: absolute;
+            top: 75%;
             color: @launcher-fg;
             font-size: 11px;
             text-align: center;
         }
         .svgwrap {
-            width: 50px;
-            height: 60px;
+            width: 57%;
+            height: 100%;
         }
         svg {
+            position: relative;
+            top: -10px;
             height: 100%;
             width: 100%;
             overflow: visible;
@@ -183,6 +198,7 @@
 }
 
 #io-ox-launchgrid-overlay {
+    z-index:11;
     display:none;
     background-color: rgba(255, 255, 255, 0.4);
     position: absolute;
@@ -191,4 +207,14 @@
     right: 0;
     top: @appcontrol-height;
     &.open { display:block; }
+}
+
+#io-ox-launchgrid-overlay-inner {
+    position: absolute;
+    display:none;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1;
 }

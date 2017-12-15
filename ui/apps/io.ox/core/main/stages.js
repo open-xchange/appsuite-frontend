@@ -216,10 +216,14 @@ define('io.ox/core/main/stages', [
 
             debug('Stage "load" > loaded.done');
 
-            // draw top bar now
-            ext.point('io.ox/core/appcontrol').invoke('draw');
-            ext.point('io.ox/core/topbar').invoke('draw');
-            ext.point('io.ox/core/mobile').invoke('draw');
+            if (_.device('smartphone')) {
+                ext.point('io.ox/core/topbar').invoke('draw');
+                ext.point('io.ox/core/mobile').invoke('draw');
+                $('#io-ox-screens').css('top', '40px');
+                $('#io-ox-core #io-ox-topbar').css('top', '0');
+            } else {
+                ext.point('io.ox/core/appcontrol').invoke('draw');
+            }
 
             // help here
             if (!ext.point('io.ox/core/topbar').isEnabled('default')) {

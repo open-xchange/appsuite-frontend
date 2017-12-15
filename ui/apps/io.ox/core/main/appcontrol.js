@@ -44,6 +44,11 @@ define('io.ox/core/main/appcontrol', [
         svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(15 24)" fill="none" fill-rule="evenodd"><g class="fill-c1"><path d="M33.384 13.509v14.064H46.62c-.592 6.574-6.117 11.725-12.845 11.725-7.123 0-12.898-5.774-12.898-12.897 0-6.993 5.565-12.686 12.507-12.892z"/><path d="M35.614 11.058c.13-.003.26-.005.39-.005 7.124 0 12.899 5.774 12.899 12.897 0 .396-.018.787-.053 1.173H35.614V11.058z"/></g><rect class="stroke-c1" stroke-width="2.456" x="1.228" y="1.228" width="67.544" height="49.123" rx="1.228"/></g></svg>'
     }];
 
+    function toggleOverlay() {
+        $('#io-ox-appcontrol').toggleClass('open');
+        $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
+    }
+
     ext.point('io.ox/core/appcontrol').extend({
         id: 'default',
         draw: function () {
@@ -56,20 +61,11 @@ define('io.ox/core/main/appcontrol', [
             banner.append(
                 $('<div id="io-ox-launcher">').append(
                     $('<button type="button" class="btn btn-link" aria-haspopup="true" aria-expanded="false" aria-label="Navigate to:">').on('click', function () {
-                        $('#io-ox-launcher, #io-ox-launchgrid-overlay').toggleClass('open');
+                        $('#io-ox-appcontrol').toggleClass('open');
+                        $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
                     }).append(
                         $('<i class="fa fa-th" aria-hidden="true">')
-                    )
-                ),
-                $('<div id="io-ox-quicklaunch">').text('Quicklaunch'),
-                $('<div id="io-ox-topsearch">').text('Search'),
-                $('<div id="io-ox-toprightbar">').append(
-                    taskbar = $('<ul class="taskbar list-unstyled">')
-                )
-            );
-
-            $('body').append(
-                $('<div id="io-ox-launchgrid-overlay">').append(
+                    ),
                     $('<div id="io-ox-launchgrid">').append(
                         $('<div class="cflex">').append(
                             meta.map(function (o) {
@@ -85,10 +81,18 @@ define('io.ox/core/main/appcontrol', [
                                 );
                             })
                         )
-                    )
-                ).on('click', function () {
-                    $('#io-ox-launcher, #io-ox-launchgrid-overlay').toggleClass('open');
-                })
+                    ),
+                    $('<div id="io-ox-launchgrid-overlay-inner">').on('click', toggleOverlay)
+                ),
+                $('<div id="io-ox-quicklaunch">').text('Quicklaunch'),
+                $('<div id="io-ox-topsearch">').text('Search'),
+                $('<div id="io-ox-toprightbar">').append(
+                    taskbar = $('<ul class="taskbar list-unstyled">')
+                )
+            );
+
+            $('#io-ox-core').append(
+                $('<div id="io-ox-launchgrid-overlay">').on('click', toggleOverlay)
             );
 
             ext.point('io.ox/core/topbar/right').invoke('draw', taskbar);
