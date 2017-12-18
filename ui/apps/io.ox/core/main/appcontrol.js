@@ -15,6 +15,8 @@ define('io.ox/core/main/appcontrol', [
     'io.ox/core/extensions'
 ], function (ext) {
 
+    var appLauncherIcon = '<svg viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><g class="fill-c1" fill-rule="evenodd"><path d="M0 0h16v16H0zM25 0h16v16H25zM50 0h16v16H50zM0 25h16v16H0zM25 25h16v16H25zM50 25h16v16H50zM0 50h16v16H0zM25 50h16v16H25zM50 50h16v16H50z"/></g></svg>';
+
     var meta = [{
         name: 'Mail',
         svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g class="stroke-c1 fill-none" stroke-width="2" fill-rule="evenodd"><path d="M17.012 25.012l66 .192a4 4 0 0 1 3.988 4V71a4 4 0 0 1-4 4H17a4 4 0 0 1-4-4V29.012a4 4 0 0 1 4.012-4z"/><path d="M13 28l37 26 37-25.73"/></g></svg>'
@@ -44,9 +46,39 @@ define('io.ox/core/main/appcontrol', [
         svg: '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g transform="translate(15 24)" fill="none" fill-rule="evenodd"><g class="fill-c1"><path d="M33.384 13.509v14.064H46.62c-.592 6.574-6.117 11.725-12.845 11.725-7.123 0-12.898-5.774-12.898-12.897 0-6.993 5.565-12.686 12.507-12.892z"/><path d="M35.614 11.058c.13-.003.26-.005.39-.005 7.124 0 12.899 5.774 12.899 12.897 0 .396-.018.787-.053 1.173H35.614V11.058z"/></g><rect class="stroke-c1" stroke-width="2.456" x="1.228" y="1.228" width="67.544" height="49.123" rx="1.228"/></g></svg>'
     }];
 
+    var quicklaunchSettings = 'Mail,Calendar';
+
     function toggleOverlay() {
         $('#io-ox-appcontrol').toggleClass('open');
         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
+    }
+
+    function drawIcon(o) {
+        var svg = o.svg,
+            badge = $();
+        if (o.name === 'Calendar') {
+            svg = $(o.svg);
+            svg.find('tspan:first').text(moment().format('D'));
+            svg.find('tspan:last').text(moment().format('dddd'));
+        }
+        if (o.name === 'Mail') {
+            badge = $('<span class="badge" aria-hidden="true">').text(
+                '99+'
+            );
+        }
+        return $('<div class="lcell">').append(
+            badge,
+            $('<div class="svgwrap">').append(svg),
+            $('<div class="title">').text(o.name)
+        );
+    }
+
+    function drawQuicklaunch() {
+        return meta.filter(function (o) {
+            return quicklaunchSettings.indexOf(o.name) > -1;
+        }).map(function (o) {
+            return $('<button type="button" class="btn btn-link">').append(drawIcon(o));
+        });
     }
 
     ext.point('io.ox/core/appcontrol').extend({
@@ -64,27 +96,18 @@ define('io.ox/core/main/appcontrol', [
                         $('#io-ox-appcontrol').toggleClass('open');
                         $('#io-ox-launchgrid-overlay, #io-ox-launchgrid-overlay-inner').toggle();
                     }).append(
-                        $('<i class="fa fa-th" aria-hidden="true">')
+                        appLauncherIcon
                     ),
                     $('<div id="io-ox-launchgrid">').append(
                         $('<div class="cflex">').append(
-                            meta.map(function (o) {
-                                if (o.name === 'Calendar') {
-                                    var svg = $(o.svg);
-                                    svg.find('tspan:first').text(moment().format('D'));
-                                    svg.find('tspan:last').text(moment().format('dddd'));
-                                    o.svg = svg;
-                                }
-                                return $('<div class="lcell" tabindex="0">').append(
-                                    $('<div class="svgwrap">').append(o.svg),
-                                    $('<div class="title">').text(o.name)
-                                );
-                            })
+                            meta.map(drawIcon)
                         )
                     ),
                     $('<div id="io-ox-launchgrid-overlay-inner">').on('click', toggleOverlay)
                 ),
-                $('<div id="io-ox-quicklaunch">').text('Quicklaunch'),
+                $('<div id="io-ox-quicklaunch">').append(
+                    drawQuicklaunch()
+                ),
                 $('<div id="io-ox-topsearch">').text('Search'),
                 $('<div id="io-ox-toprightbar">').append(
                     taskbar = $('<ul class="taskbar list-unstyled">')

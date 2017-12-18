@@ -68,25 +68,68 @@
             height: @appcontrol-height;
             width: @appcontrol-height;
             display: inline-block;
-            padding: 16px;
+            padding: 24px;
             border: 0;
-            i { font-size: 28px; }
+            svg .fill-c1 { fill: #fff; }
         }
     }
 
     &.open #io-ox-launcher button,
     #io-ox-launcher button:hover,
-    #io-ox-launcher button:focus {
-         background: white; color: @brand-primary; outline: 0;
+    #io-ox-launcher button:focus,
+    #io-ox-quicklaunch  button:hover,
+    #io-ox-quicklaunch  button:focus {
+        background: white; color: @brand-primary; outline: 0;
+        svg .fill-c1 { fill: @brand-primary; }
+        svg .stroke-c1 { fill: @brand-primary; }
     }
 
     #io-ox-quicklaunch {
-        padding-left: 16px;
         order: 2;
         flex: 0 1 auto;
         align-self: auto;
         min-width: @quicklaunch-width;
         min-height: auto;
+
+        .svgwrap {
+            padding: 16px;
+            height: 100%;
+        }
+        svg {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: visible;
+
+            .stroke-c1 { stroke: #fff; }
+            .fill-none { fill: none;   }
+            .fill-c1   { fill: #fff;   }
+
+        }
+
+        button {
+            position: relative;
+            z-index: 2;
+            height: @appcontrol-height;
+            width: @appcontrol-height;
+            display: inline-block;
+            padding:0;
+            border: 0;
+            outline: 0;
+            .title { display: none; }
+            .badge {
+                position: absolute;
+                top: 55%;
+                font-size: 9px;
+                z-index: 1;
+                background-color: #c80000;
+            }
+
+            &:focus, &:hover {
+                svg .stroke-c1 { stroke: @launcher-fg-hover; }
+                svg .fill-c1   { fill: @launcher-fg-hover;   }
+            }
+        }
     }
 
     #io-ox-topsearch {
@@ -170,6 +213,14 @@
             color: @launcher-fg;
             font-size: 11px;
             text-align: center;
+        }
+        .badge {
+            position: absolute;
+            top: 43%;
+            right: 17%;
+            font-size: 9px;
+            z-index: 1;
+            background-color: #c80000;
         }
         .svgwrap {
             width: 57%;
