@@ -189,9 +189,6 @@ settings!io.ox/core
 **topbar/order**
 > defines order of apps in topbar
 
-**transform/multipleEmptyLines**
-> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
-
 ## Mail compose: tinyMCE
 
 **maxUploadIdleTimeout**
@@ -818,6 +815,9 @@ settings!io.ox/mail
 
 **prefetch/next**
 > Prefetch the next \[number\] mails in line
+
+**transform/multipleEmptyLines**
+> reduce multiple empty lines in plain text mails to a maximum of 2 (detail view, compose: html-to-text)
 
 **viewOptions/<folder>/order**<br>
 **viewOptions/<folder>/sort**<br>
