@@ -25,7 +25,7 @@ define([
      * Suite: Contacts Test
      */
 
-    describe('Contact edit', function () {
+    describe.skip('Contact edit', function () {
         var app = null;
 
         /*beforeEach(function () {
