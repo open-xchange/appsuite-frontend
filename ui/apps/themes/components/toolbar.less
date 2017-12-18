@@ -104,11 +104,11 @@
 
 .mobile-navbar {
     text-align: center;
-    font-size: 15px;
+    font-size: 16px;
 
     .navbar-action {
         position: absolute;
-        top: 10px;
+        top: 14px;
         max-width: 24%;
         .ellipsis();
 
@@ -123,7 +123,7 @@
 
     .navbar-title {
         .ellipsis();
-        margin: 10px 24%;
+        margin: 14px 24%;
         font-weight: 500;
     }
 }
@@ -132,7 +132,7 @@
     position: fixed;
     bottom: 0;
     background-color: #fff;
-    height: @toolbar-height;
+    height: @mobile-toolbar-height;
     z-index: 10;
     margin: 0;
     border-top: 1px solid #ccc;
@@ -140,10 +140,10 @@
 
     .list-unstyled > li, .io-ox-action-link.mobile-toolbar-action {
         display: inline-block;
-        font-size: 20px;
-        line-height: @toolbar-height;
+        font-size: 22px;
+        line-height: @mobile-toolbar-height;
         width: 19.9%;
-        height: @toolbar-height;
+        height: @mobile-toolbar-height;
         text-align: center;
         margin: 0;
         vertical-align: middle;
@@ -161,12 +161,17 @@
     }
 }
 
+.smartphone .classic-toolbar-visible .window-content, .abs.below-toolbar { top: @mobile-toolbar-height; }
 .classic-toolbar-visible .window-content, .abs.below-toolbar { top: @toolbar-height; }
 
 .bottom-toolbar.bottom-toolbar-visible .window-content { bottom: @toolbar-height; }
 .chromeless-window .window-body:not(.mobile-toolbar-visible) { bottom: 0;}
 .chromeless-window .window-body.mobile-toolbar-visible { bottom: @toolbar-height; }
 .chromeless-window.header-bottom .window-body:not(.mobile-toolbar-visible) { bottom: 64px; }
+
+.smartphone .mobile-navbar {
+    height: @mobile-toolbar-height;
+}
 
 .classic-toolbar, .inline-toolbar, .mobile-navbar {
 

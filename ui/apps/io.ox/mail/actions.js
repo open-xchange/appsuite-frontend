@@ -826,7 +826,7 @@ define('io.ox/mail/actions', [
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: INDEX += 100,
         prio: 'lo',
-        mobile: 'lo',
+        mobile: 'none',
         id: 'reminder',
         label: gt('Reminder'),
         ref: 'io.ox/mail/actions/reminder',

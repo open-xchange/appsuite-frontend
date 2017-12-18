@@ -503,7 +503,7 @@ define('io.ox/mail/detail/view', [
             });
 
             $(window).on('orientationchange resize', _.throttle(startResizeLoop, 300)); // general window resize
-            if (_.device('smartphone')) _.delay(startResizeLoop, 400); // delayed resize due to page controller delay for page change
+            if (_.device('smartphone')) _.delay(startResizeLoop, 600); // delayed resize due to page controller delay for page change
 
             this.idle().append(baton.iframe);
         }
