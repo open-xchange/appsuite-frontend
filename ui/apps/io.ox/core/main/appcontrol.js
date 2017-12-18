@@ -118,7 +118,7 @@ define('io.ox/core/main/appcontrol', [
                 $('<div id="io-ox-launchgrid-overlay">').on('click', toggleOverlay)
             );
 
-            ext.point('io.ox/core/topbar/right').invoke('draw', taskbar);
+            ext.point('io.ox/core/appcontrol/right').invoke('draw', taskbar);
         }
     });
 });
