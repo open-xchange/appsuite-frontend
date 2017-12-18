@@ -4511,9 +4511,9 @@ tiny-lr-fork@0.0.5:
     noptify "~0.0.3"
     qs "~0.5.2"
 
-tinymce@4.6.6:
-  version "4.6.6"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.6.tgz#d9282f35707bee29d3e1542fded249e0a86cafd4"
+tinymce@4.6.7:
+  version "4.6.7"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.6.7.tgz#ef2e82828989073d187a4e3491c74eb6a8cd92f3"
 
 tinymce@^4.6.3:
   version "4.6.5"
