@@ -20,8 +20,8 @@ define('io.ox/backbone/mini-views/alarms', [
 ], function (util, DisposableView, gt, mailSettings) {
 
     'use strict';
-
-    var standardTypes = ['DISPLAY', 'AUDIO', 'EMAIL'];
+    // TODO enable when mw supports this
+    var standardTypes = ['DISPLAY', 'AUDIO'/*, 'EMAIL'*/];
 
     var alarms = DisposableView.extend({
         className: 'alarms-view',
@@ -74,8 +74,9 @@ define('io.ox/backbone/mini-views/alarms', [
                 row.append($('<div class="col-xs-6">').append(
                     $('<select class="form-control alarm-action">').append(
                         $('<option>').text(gt('Message')).val('DISPLAY'),
-                        $('<option>').text(gt('Audio')).val('AUDIO'),
-                        $('<option>').text(gt('Mail')).val('EMAIL')
+                        $('<option>').text(gt('Audio')).val('AUDIO')
+                        // TODO enable when mw supports this
+                        //$('<option>').text(gt('Mail')).val('EMAIL')
                     ).val(alarm.action)
                 ));
             }
