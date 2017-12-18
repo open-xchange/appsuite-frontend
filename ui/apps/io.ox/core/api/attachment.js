@@ -23,7 +23,7 @@ define('io.ox/core/api/attachment', [
 
     var api = {
         /**
-         * gets all attachments for a specific object, for exsample a task
+         * gets all attachments for a specific object, for example a task
          * @param  {object} options
          * @return { deferred }
          */
