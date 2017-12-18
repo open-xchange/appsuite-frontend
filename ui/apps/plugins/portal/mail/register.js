@@ -22,8 +22,9 @@ define('plugins/portal/mail/register', [
     'gettext!plugins/portal',
     'io.ox/backbone/disposable',
     'io.ox/core/api/collection-loader',
-    'io.ox/core/emoji/util'
-], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji) {
+    'io.ox/core/emoji/util',
+    'io.ox/core/capabilities'
+], function (ext, api, util, accountAPI, portalWidgets, dialogs, gt, DisposableView, CollectionLoader, emoji, capabilities) {
 
     'use strict';
 
@@ -248,10 +249,10 @@ define('plugins/portal/mail/register', [
             dialog.header($('<h4>').text(gt('Inbox')))
                 .build(function () {
                     this.getContentNode().append(
-                        options.length > 1 ?
+                        capabilities.has('multiple_mail_accounts') ?
                             $('<div class="form-group">').append(
                                 $('<label>').attr('for', accId).text(gt('Account')),
-                                accSelect = $('<select class="form-control">').attr('id', accId).append(options)
+                                accSelect = $('<select class="form-control">').attr('id', accId).prop('disabled', options.length <= 1).append(options)
                             ) : $(),
                         $('<div class="form-group">').append(
                             $('<label>').attr('for', nameId).text(gt('Description')),
@@ -300,7 +301,7 @@ define('plugins/portal/mail/register', [
         type: 'mail',
         editable: true,
         edit: edit,
-        unique: false
+        unique: !capabilities.has('multiple_mail_accounts')
     });
 
     ext.point('io.ox/portal/widget/stickymail').extend({
