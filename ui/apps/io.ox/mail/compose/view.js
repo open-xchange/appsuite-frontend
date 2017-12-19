@@ -26,13 +26,14 @@ define('io.ox/mail/compose/view', [
     'gettext!io.ox/mail',
     'io.ox/mail/actions/attachmentEmpty',
     'io.ox/mail/actions/attachmentQuota',
+    'io.ox/core/attachments/backbone',
     'io.ox/core/tk/dialogs',
     'io.ox/mail/compose/signatures',
     'less!io.ox/mail/style',
     'less!io.ox/mail/compose/style',
     'io.ox/mail/compose/actions/send',
     'io.ox/mail/compose/actions/save'
-], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, dialogs, signatureUtil) {
+], function (extensions, Dropdown, ext, mailAPI, mailUtil, textproc, settings, coreSettings, notifications, snippetAPI, accountAPI, gt, attachmentEmpty, attachmentQuota, Attachments, dialogs, signatureUtil) {
 
     'use strict';
 
@@ -467,7 +468,7 @@ define('io.ox/mail/compose/view', [
             delete obj.mode;
 
             if (obj.initial === false) {
-                obj.attachments = new Backbone.Collection(_.clone(obj.attachments));
+                obj.attachments = new Attachments.Collection(_.clone(obj.attachments));
                 this.model.set(obj);
                 obj = null;
                 return $.when();
