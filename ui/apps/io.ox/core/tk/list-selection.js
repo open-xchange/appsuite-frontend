@@ -30,7 +30,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
         UNFOLD_TIME =       100,
         UNFOLD_TIME_FULL =   50,
         RESET_CELL_TIME =   100,
-        CELL_HEIGHT = '-68px', // todo: calculate this
+        CELL_HEIGHT = '-84px', // todo: calculate this
         cell,
         recentWindowsKey = false;
 
@@ -553,7 +553,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 }, {
                     duration: MOVE_UP_TIME,
                     complete: function () {
-                        self.view.trigger('selection:delete', [cid]);
                         self.view.on('remove-mobile', resetStyle, cellsBelow);
                         self.view.trigger('selection:delete', [cid]);
                         self.currentSelection.swipeCell.remove();
@@ -563,7 +562,6 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                     }
                 });
             } else {
-                self.view.trigger('selection:delete', [cid]);
                 self.view.on('remove-mobile', resetStyle, cellsBelow);
                 self.view.trigger('selection:delete', [cid]);
                 self.currentSelection.swipeCell.remove();
@@ -741,6 +739,7 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
             }
 
             cell = $(this); // save for later animation
+
             if (this.unfold) {
                 this.expandDelete = false;
 
@@ -813,6 +812,15 @@ define('io.ox/core/tk/list-selection', ['settings!io.ox/core'], function (settin
                 e.data.resetSwipeCell.call(this, e.data, Math.abs(this.distanceX));
                 return false;
             }
+
+            // maybe the deletion will be canceled, keep reference for reverting
+            // the transformation
+            ox.off('delete:canceled').on('delete:canceled', function () {
+                cell.removeAttr('style');
+                cell.nextAll().velocity({
+                    translateY: -CELL_HEIGHT
+                });
+            });
         },
 
         onSwipeLeft: function (e) {

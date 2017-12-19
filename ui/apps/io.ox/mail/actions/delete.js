@@ -93,19 +93,21 @@ define('io.ox/mail/actions/delete', [
             }
 
             if (showPrompt) {
-                require(['io.ox/backbone/views/modal'], function (ModalDialogView) {
-                    new ModalDialogView({
-                        title: getQuestion(list),
-                        focus: '.btn-primary',
-                        previousFocus: $('[data-ref="io.ox/mail/listview"]')
-                    })
-                    .on('delete', function () {
-                        api.remove(list, all).fail(notifications.yell);
-                    })
-                    .addCancelButton()
-                    .addButton({ action: 'delete', label: gt('Delete') })
-                    .hideBody()
-                    .open();
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .addPrimaryButton('delete', gt('Delete'))
+                        .addButton('cancel', gt('Cancel'))
+                        .text(getQuestion(list))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                api.remove(list, all).fail(notifications.yell);
+                            } else {
+                                // trigger back event, used for mobile swipe delete reset
+                                ox.trigger('delete:canceled', list);
+                            }
+
+                        });
                 });
             } else {
                 api.remove(list, all, shiftDelete).fail(function (e) {
