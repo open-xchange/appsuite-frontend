@@ -556,6 +556,9 @@ define('io.ox/mail/compose/view', [
                         address[0] = settings.get(['customDisplayNames', address[1], 'name'], address[0]);
                     }
 
+                    // recover notification option (boolean)
+                    if (mode === 'edit') data.disp_notification_to = !!data.disp_notification_to;
+
                     self.model.set(data);
 
                     var attachmentCollection = self.model.get('attachments');
