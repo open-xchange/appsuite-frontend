@@ -72,7 +72,7 @@ define('io.ox/core/attachments/backbone', [
             // get URL of preview image
             meta.previewUrl = model.get('image1_url') || api.getFallbackImage();
             model.set('meta', meta);
-            return meta.previewUrl;
+            return $.Deferred().resolve(meta.previewUrl);
         },
         file: function (model) {
             var def = $.Deferred();
