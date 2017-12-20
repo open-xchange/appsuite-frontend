@@ -104,6 +104,7 @@ define.async('io.ox/mail/compose/model', [
                 }
             });
 
+            // special case #1: 'alternative'
             if (this.get('preferredEditorMode') === 'alternative') {
                 this.set('editorMode', 'html', { silent: true });
                 if (this.get('content_type') === 'text/plain') {
@@ -264,6 +265,9 @@ define.async('io.ox/mail/compose/model', [
                     attachment.content = attachment.content.replace(/<img[^>]*src=\\?"data:[^>]*>/gi, '');
                 }
             });
+
+            // special case #1: 'alternative'
+            if (mail.preferredEditorMode === 'alternative') mail.content_type = mail.editorMode === 'html' ? 'text/html' : 'text/plain';
 
             return {
                 description: gt('Mail') + ': ' + (mail.subject || gt('No subject')),
