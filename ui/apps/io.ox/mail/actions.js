@@ -465,7 +465,7 @@ define('io.ox/mail/actions', [
     new Action('io.ox/mail/actions/download-attachment', {
         requires: function (e) {
             // ios 11 supports file downloads
-            return e.collection.has('some') && (_.device('ios >= 11') || _.device('android'));
+            return e.collection.has('some') && _.device('!ios || ios >= 11');
         },
         multiple: function (list) {
             // download single attachment or zip file
