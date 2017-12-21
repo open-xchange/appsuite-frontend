@@ -77,7 +77,6 @@ define('io.ox/calendar/week/perspective', [
                         // view should change week to the start of this appointment(used by deeplinks)
                         // one time only
                         self.setNewStart = false;
-                        self.app.refDate = moment(model.get('startDate'));
                         if (self.view) {
                             //view is rendered already
                             self.view.setStartDate(model.get('startDate'));
@@ -341,13 +340,26 @@ define('io.ox/calendar/week/perspective', [
 
             // init views
             if (this.views[opt.perspective] === undefined) {
+
                 this.view = window.weekview = new View({
                     app: app,
                     mode: opt.perspective.split(':')[1],
-                    refDate: this.app.refDate,
+                    startDate: app.getDate(),
                     perspective: this,
                     appExtPoint: 'io.ox/calendar/week/view/appointment'
                 });
+
+                // populate date change from view to app
+                this.view.on('change:date', function (date) {
+                    app.setDate(date);
+                });
+
+                // respond to date change on app level
+                this.view.listenTo(app.props, 'change:date', _.debounce(function (model, value) {
+                    if (!this.$el.is(':visible')) return;
+                    if (ox.debug) console.log('week: change date by app', value);
+                    this.setStartDate(value);
+                }, 100, true));
 
                 this.main.attr('aria-label', {
                     'day': gt('Calendar Day View'),
@@ -371,7 +383,7 @@ define('io.ox/calendar/week/perspective', [
                 this.view.setScrollPos();
             } else {
                 this.view = this.views[opt.perspective];
-                this.view.setStartDate(app.refDate);
+                this.view.setStartDate(app.getDate());
                 this.view.$el.show();
             }
 

@@ -148,10 +148,9 @@ define('io.ox/calendar/month/view', [
 
         // handler for mobile month view day-change
         changeToSelectedDay: function (timestamp) {
-            var d = moment(timestamp);
-            // set refDate for app to selected day and change
+            // set date for app to selected day and change
             // perspective afterwards
-            this.app.refDate = d;
+            this.app.setDate(timestamp);
             ox.ui.Perspective.show(this.app, 'week:day', { animation: 'slideleft' });
         },
 

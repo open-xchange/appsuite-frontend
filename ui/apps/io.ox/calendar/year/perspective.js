@@ -64,15 +64,23 @@ define('io.ox/calendar/year/perspective', [
                 this.$yearInfo = $('<a href="#" class="info">').text(moment().year())
             );
 
-            new YearDatepicker({ date: moment().year(self.app.refDate.year()), todayButton: false })
+            new YearDatepicker({ date: this.app.getDate().year(), todayButton: false })
                 .attachTo(this.$yearInfo)
                 .on('before:open', function () {
-                    this.setDate(moment().year(self.app.refDate.year()));
+                    var year = self.app.getDate().year();
+                    this.setDate(moment().year(year));
                     this.mode = 'decade';
                 })
                 .on('select:year', function (year) {
                     self.setYear({ year: year });
                 });
+
+            this.listenTo(this.app.props, 'change:date', function () {
+                if (!this.$el.is(':visible')) return;
+                var year = this.app.getDate().year();
+                if (ox.debug) console.log('year: change:date', year);
+                this.setYear({ year: year });
+            });
 
             return this;
         },
@@ -92,9 +100,9 @@ define('io.ox/calendar/year/perspective', [
         },
 
         setYear: function (opt) {
-            var year = opt.year || (this.app.refDate.year() + (opt.inc || 0));
+            var year = opt.year || (this.app.getDate().year() + (opt.inc || 0));
             this.trigger('change:year', year);
-            this.app.refDate.year(year);
+            this.app.setDate(moment([year]));
             this.$yearInfo.text(year);
         }
 
@@ -129,7 +137,7 @@ define('io.ox/calendar/year/perspective', [
             var self = this;
 
             this.app = app;
-            if (app.refDate) this.year = app.refDate.year();
+            this.year = app.getDate().year();
 
             this.main.addClass('year-view').append(
                 new ToolbarView({ app: app }).on('change:year', this.changeYear.bind(this)).render().$el,
@@ -147,7 +155,7 @@ define('io.ox/calendar/year/perspective', [
         },
 
         restore: function () {
-            this.changeYear(this.app.refDate.year());
+            this.changeYear(this.app.getDate().year());
             this.main.find('.toolbar .info').text(this.year);
             this.main.idle();
             this.main.find('button').prop('disabled', false);

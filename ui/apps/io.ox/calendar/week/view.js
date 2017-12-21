@@ -138,7 +138,6 @@ define('io.ox/calendar/week/view', [
             this.perspective = opt.perspective;
             this.mode = opt.mode || 'day';
             this.extPoint = opt.appExtPoint;
-            this.refDate = opt.refDate || moment();
             this.isMergeView = _.device('!smartphone') && this.mode === 'day' && this.app.folders.list().length > 1 && settings.get('mergeview');
 
             switch (this.mode) {
@@ -158,7 +157,7 @@ define('io.ox/calendar/week/view', [
                     break;
             }
 
-            this.setStartDate(this.refDate);
+            this.setStartDate(opt.startDate || moment());
             this.initSettings();
 
             //append datepicker
@@ -168,7 +167,6 @@ define('io.ox/calendar/week/view', [
                         .attachTo(self.kwInfo)
                         .on('select', function (date) {
                             self.setStartDate(date, false);
-                            self.trigger('onRefresh');
                         })
                         .on('before:open', function () {
                             this.setDate(self.startDate);
@@ -215,7 +213,6 @@ define('io.ox/calendar/week/view', [
                             .attachTo(self.kwInfo)
                             .on('select', function (date) {
                                 self.setStartDate(date);
-                                self.trigger('onRefresh');
                             });
                     });
                 }
@@ -272,6 +269,9 @@ define('io.ox/calendar/week/view', [
          * @param { boolean } utc     true if full-time appointment
          */
         setStartDate: function (opt, utc) {
+
+            var previous = moment(this.startDate);
+
             utc = utc || false;
             if (opt) {
                 // number | LocalDate
@@ -280,19 +280,15 @@ define('io.ox/calendar/week/view', [
                         opt = moment.utc(opt).local(true).valueOf();
                     }
                     this.startDate = moment(opt);
-                    this.refDate = moment(this.startDate);
                 }
                 //string
                 if (typeof opt === 'string') {
                     this.startDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
-                    this.refDate[opt === 'prev' ? 'subtract' : 'add'](1, this.columns === 1 ? 'day' : 'week');
                 }
             } else {
                 // today button
                 this.startDate = moment();
-                this.refDate = moment(this.startDate);
             }
-
             // normalize startDate to beginning of the week or day
             switch (this.mode) {
                 case 'day':
@@ -307,21 +303,18 @@ define('io.ox/calendar/week/view', [
                     this.startDate.startOf('week');
                     break;
             }
+
             // set api reference date to the beginning of the month
             var month = this.startDate.month();
-            if (month % 2 === 1) {
-                month--;
-            }
+            if (month % 2 === 1) month--;
             this.apiRefTime = moment(this.startDate).month(month).date(1);
-            if (this.app) this.app.refDate = this.refDate;
-        },
 
-        /**
-         * apply new reference date and refresh view
-         */
-        applyRefDate: function () {
-            this.setStartDate(this.refDate.valueOf());
-            this.trigger('onRefresh');
+            // only trigger change event if date has changed
+            if (!this.startDate.isSame(previous)) {
+                this.trigger('change:date', this.startDate);
+                if (ox.debug) console.log('refresh calendar data');
+                this.trigger('onRefresh');
+            }
         },
 
         /**
@@ -416,7 +409,6 @@ define('io.ox/calendar/week/view', [
             if (cT.hasClass('prev') || (e.type === 'swiperight' && !this.lasso)) {
                 this.setStartDate('prev');
             }
-            this.trigger('onRefresh');
             return false;
         },
 
@@ -500,12 +492,10 @@ define('io.ox/calendar/week/view', [
                 case 37:
                     // left
                     this.setStartDate('prev');
-                    this.trigger('onRefresh');
                     break;
                 case 39:
                     // right
                     this.setStartDate('next');
-                    this.trigger('onRefresh');
                     break;
                 case 13:
                     // enter

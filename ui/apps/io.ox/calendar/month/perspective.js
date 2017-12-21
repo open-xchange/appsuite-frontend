@@ -210,10 +210,14 @@ define('io.ox/calendar/month/perspective', [
             });
 
             function createOrReuseView(options) {
-                var identifier = options.start.valueOf(), collection, view;
 
-                if (!self.views[identifier]) {
-                    self.views[identifier] = new View(options)
+                var identifier = options.start.valueOf(),
+                    view = self.views[identifier],
+                    collection;
+
+                if (!view) {
+
+                    view = self.views[identifier] = new View(options)
                         .on('showAppointment', self.showAppointment, self)
                         .on('showAppointment', _.bind(self.bubble, self, 'showAppointment'))
                         .on('createAppointment', self.createAppointment, self)
@@ -223,7 +227,6 @@ define('io.ox/calendar/month/perspective', [
                         .render();
                 }
 
-                view = self.views[identifier];
                 collection = api.getCollection(view.getRequestParams());
                 view.setCollection(collection);
                 view.$el.removeClass('hidden');
@@ -320,9 +323,10 @@ define('io.ox/calendar/month/perspective', [
          *          number           duration: duration of the scroll animation
          */
         gotoMonth: function (target) {
-            var self = this;
 
-            target = target || self.app.refDate || moment();
+            var self = this, previous = this.current;
+
+            target = target || moment();
 
             if (typeof target === 'string') {
                 if (target === 'today') target = moment();
@@ -340,6 +344,10 @@ define('io.ox/calendar/month/perspective', [
             this.drawMonths({ date: target });
             firstDay = $('#' + target.format('YYYY-MM'), self.pane);
             scrollToDate();
+
+            if (!this.current.isSame(previous, 'month')) {
+                this.app.setDate(this.current);
+            }
         },
 
         /**
@@ -405,7 +413,7 @@ define('io.ox/calendar/month/perspective', [
 
             var self = this;
             this.app = app;
-            this.current = moment(app.refDate || moment()).startOf('month');
+            this.current = app.getDate().startOf('month');
             this.previous = moment(this.current).subtract(1, 'month');
             this.firstMonth = this.current.clone().subtract(this.updateLoad, 'months');
             this.lastMonth = this.current.clone().add(this.updateLoad, 'months');
@@ -472,8 +480,14 @@ define('io.ox/calendar/month/perspective', [
                     }
                 }, this))
                 .on('scrollend', $.proxy(function () {
-                    this.app.refDate.year(this.current.year()).month(this.current.month());
+                    this.app.setDate(moment([this.current.year(), this.current.month()]));
                 }, this));
+
+            app.props.on('change:date', function (model, value) {
+                if (!this.pane.is(':visible')) return;
+                if (ox.debug) console.log('month: change date by app', value);
+                this.gotoMonth(app.getDate());
+            }.bind(this));
 
             $(window).on('resize', this.getFirsts);
 

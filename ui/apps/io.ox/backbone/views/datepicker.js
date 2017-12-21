@@ -205,11 +205,16 @@ define('io.ox/backbone/views/datepicker', [
                     $('<button type="button" class="btn-next pull-right"><i class="fa fa-chevron-right" aria-hidden="true"></i></button>')
                 ),
                 this.$grid = $('<table class="grid" role="grid" tabindex="0">')
-                    .attr('aria-label', gt('Use cursor keys to navigate, press enter to select a date')),
-                this.options.todayButton !== false ? $('<button type="button" class="btn-today">')
-                    .attr('aria-label', 'Go to today')
-                    .text(gt('Today: %1$s', moment().format('l'))) : ''
+                    .attr('aria-label', gt('Use cursor keys to navigate, press enter to select a date'))
             );
+            // today button
+            if (this.options.showTodayButton !== false) {
+                this.$el.append(
+                    $('<button type="button" class="btn-today">')
+                    .attr('aria-label', 'Go to today')
+                    .text(gt('Today: %1$s', moment().format('l')))
+                );
+            }
         },
 
         renderHeader: function () {

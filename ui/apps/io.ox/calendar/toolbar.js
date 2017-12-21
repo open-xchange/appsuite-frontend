@@ -176,6 +176,7 @@ define('io.ox/calendar/toolbar', [
             .divider()
             .header(gt('Options'))
             .option('folderview', true, gt('Folder view'))
+            .option('showMiniCalendar', true, gt('Mini calendar'))
             .option('checkboxes', true, gt('Checkboxes'))
             .divider()
             .header(gt('Color scheme'))

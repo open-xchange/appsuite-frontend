@@ -18,6 +18,7 @@ define('io.ox/calendar/main', [
     'io.ox/core/folder/api',
     'io.ox/core/folder/tree',
     'io.ox/core/folder/view',
+    'io.ox/backbone/views/datepicker',
     'settings!io.ox/calendar',
     'gettext!io.ox/calendar',
     'io.ox/core/tk/list-control',
@@ -31,7 +32,7 @@ define('io.ox/calendar/main', [
     'io.ox/calendar/actions',
     'less!io.ox/calendar/style',
     'io.ox/calendar/week/view'
-], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api) {
+], function (commons, ext, capabilities, folderAPI, TreeView, FolderView, DatePicker, settings, gt, ListViewControl, CalendarListView, Bars, PageController, api) {
 
     'use strict';
 
@@ -262,6 +263,35 @@ define('io.ox/calendar/main', [
             });
         },
 
+        //
+        // Mini calendar
+        //
+        'mini-calendar': function (app) {
+
+            ext.point('io.ox/calendar/sidepanel').extend({
+                id: 'mini-calendar',
+                index: 900,
+                draw: function () {
+
+                    if (_.device('smartphone')) return;
+
+                    new DatePicker({ parent: this.closest('#io-ox-core'), showTodayButton: false })
+                        .on('select', function (date) {
+                            app.setDate(date);
+                        })
+                        .listenTo(app.props, 'change:date', function (model, value) {
+                            this.setDate(value, true);
+                        })
+                        .listenTo(app.props, 'change:showMiniCalendar', function (model, value) {
+                            this.$el.toggle(!!value);
+                        })
+                        .render().$el
+                        .toggle(app.props.get('showMiniCalendar'))
+                        .appendTo(this);
+                }
+            });
+        },
+
         /*
          * Folder view support
          */
@@ -465,14 +495,27 @@ define('io.ox/calendar/main', [
          * Default application properties
          */
         'props': function (app) {
+
             var view = settings.get('viewView') || 'week:week';
+
             // introduce shared properties
             app.props = new Backbone.Model({
+                'date': moment().valueOf(),
                 'layout': view,
                 'checkboxes': _.device('smartphone') ? false : app.settings.get('showCheckboxes', false),
                 'colorScheme': app.settings.get('colorScheme', 'custom'),
-                'mobileFolderSelectMode': false
+                'mobileFolderSelectMode': false,
+                'showMiniCalendar': app.settings.get('showMiniCalendar', true)
             });
+
+            // convenience functions
+            app.getDate = function () {
+                return moment(app.props.get('date'));
+            };
+
+            app.setDate = function (arg) {
+                app.props.set('date', moment(arg).valueOf());
+            };
 
             // store colorScheme in settings to ensure that 'colorScheme' is not undefined
             app.settings.set('colorScheme', app.props.get('colorScheme'));
@@ -511,6 +554,7 @@ define('io.ox/calendar/main', [
                 app.settings
                     .set('viewView', data.layout)
                     .set('showCheckboxes', data.checkboxes)
+                    .set('showMiniCalendar', data.showMiniCalendar)
                     .set('colorScheme', data.colorScheme)
                     .save();
             }, 500));
@@ -672,7 +716,7 @@ define('io.ox/calendar/main', [
         'show-weekview-mobile': function (app) {
             if (_.device('!smartphone')) return;
             app.pages.getPage('week').on('pageshow', function () {
-                app.pages.getNavbar('week').setLeft(app.refDate.format('MMMM'));
+                app.pages.getNavbar('week').setLeft(app.getDate().format('MMMM'));
                 //app.pages.getPageObject('week').perspective.view.setScrollPos();
             });
         },
@@ -862,7 +906,6 @@ define('io.ox/calendar/main', [
         }));
 
         app.settings = settings;
-        app.refDate = moment();
 
         win.addClass('io-ox-calendar-main');
 
