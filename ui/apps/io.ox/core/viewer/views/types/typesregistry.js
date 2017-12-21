@@ -52,7 +52,7 @@ define('io.ox/core/viewer/views/types/typesregistry', [
 
             var modelType = typesMap[(model.isEncrypted() ? model.getGuardType() : model.getFileType())] || 'defaultview';
 
-            if ((model.isOffice() || model.isPDF()) && !Capabilities.has('document_preview')) {
+            if (modelType === 'documentview' && !Capabilities.has('document_preview')) {
                 modelType = 'defaultview';
             }
 
