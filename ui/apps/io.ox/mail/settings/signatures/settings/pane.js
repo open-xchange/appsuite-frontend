@@ -71,7 +71,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     if (baton.signature.content && !looksLikeHTML(baton.signature.content)) {
                         // convert to html
                         var str = String(baton.signature.content).replace(/[\s\xA0]+$/g, '');
-                        baton.signature = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
+                        baton.signature.content = $('<p>').append(baton.editor.ln2br(str)).prop('outerHTML');
                     }
                     baton.editor.setContent(baton.signature.content);
                 });
