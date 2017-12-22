@@ -87,7 +87,7 @@ define('io.ox/mail/settings/signatures/settings/pane', [
                     if (signature.content && !looksLikeHTML(signature.content)) {
                         // convert to html
                         var str = String(signature.content).replace(/[\s\xA0]+$/g, '');
-                        signature = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
+                        signature.content = $('<p>').append(editor.ln2br(str)).prop('outerHTML');
                     }
                     editor.setContent(signature.content);
                     baton.view.editor = editor;
