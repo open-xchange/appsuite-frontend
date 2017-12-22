@@ -591,13 +591,16 @@ define('io.ox/tasks/actions',
         ref: 'io.ox/tasks/actions/preview-attachment'
     }));
 
-    ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
-        id: 'open',
-        index: 200,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/tasks/actions/open-attachment'
-    }));
+    // see bug 55872
+    if (!_.device('IE')) {
+        ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
+            id: 'open',
+            index: 200,
+            label: gt('Open in browser'),
+            mobile: 'hi',
+            ref: 'io.ox/tasks/actions/open-attachment'
+        }));
+    }
 
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'download',

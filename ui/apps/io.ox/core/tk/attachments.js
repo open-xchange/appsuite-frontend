@@ -464,14 +464,16 @@ define('io.ox/core/tk/attachments',
         ref: 'io.ox/core/tk/attachment/actions/preview-attachment'
     }));
 
-    ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
-        id: 'open',
-        index: 150,
-        label: gt('Open in browser'),
-        mobile: 'hi',
-        ref: 'io.ox/core/tk/attachment/actions/open-attachment'
-    }));
-
+    // see bug 55872
+    if (!_.device('IE')) {
+        ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
+            id: 'open',
+            index: 150,
+            label: gt('Open in browser'),
+            mobile: 'hi',
+            ref: 'io.ox/core/tk/attachment/actions/open-attachment'
+        }));
+    }
     ext.point('io.ox/core/tk/attachments/links').extend(new links.Link({
         id: 'download',
         index: 200,

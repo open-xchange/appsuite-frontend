@@ -1122,13 +1122,17 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
 
-    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'open',
-        index: 300,
-        mobile: 'high',
-        label: gt('Open in browser'),
-        ref: 'io.ox/mail/actions/open-attachment'
-    }));
+    // see bug 55872
+    if (!_.device('IE')) {
+        ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+            id: 'open',
+            enabled: _.device('!IE'),
+            index: 300,
+            mobile: 'high',
+            label: gt('Open in browser'),
+            ref: 'io.ox/mail/actions/open-attachment'
+        }));
+    }
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
