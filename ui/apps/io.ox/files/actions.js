@@ -800,6 +800,7 @@ define('io.ox/files/actions', [
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: 'open',
+        enabled: _.device('!IE'),
         index: index += 100,
         prio: 'lo',
         mobile: 'hi',
