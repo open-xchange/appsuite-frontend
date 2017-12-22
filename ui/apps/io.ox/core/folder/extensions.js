@@ -45,12 +45,10 @@ define('io.ox/core/folder/extensions', [
             list.push(api.get(INBOX));
             // append all-unssen below INBOX
             if (mailSettings.get('features/unseenFolder', false)) list.push(api.get('virtual/all-unseen'));
-            // sent, drafts, spam, trash, archive
-            _(account.getTypes()).each(function (type, folder) {
-                if (type === 'inbox') return;
-                if (!account.isPrimary(folder)) return;
-                // non-default and undefined folders are skipped
-                if (!defaultFolders[type]) return;
+            // ensure fixed order; rely on defaultFolders (see bug 56563)
+            ['sent', 'drafts', 'spam', 'trash', 'archive'].forEach(function (type) {
+                var folder = defaultFolders[type];
+                if (!folder) return;
                 if (type === 'archive' && !capabilities.has('archive_emails')) return;
                 list.push(api.get(folder));
             });

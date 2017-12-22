@@ -572,8 +572,9 @@ define('io.ox/core/api/account', [
                 // remember types (explicit order!)
                 _('drafts sent spam trash archive confirmed_spam'.split(' ')).each(function (type) {
                     // fullname is favored over short name
-                    var short_name = account[type], full_name = account[type + '_fullname'];
-                    typeHash[full_name || short_name] = type;
+                    var short_name = account[type], full_name = account[type + '_fullname'], name = full_name || short_name;
+                    // check to avoid unwanted overrides
+                    if (!typeHash[name]) typeHash[name] = type;
                 });
             });
         });
