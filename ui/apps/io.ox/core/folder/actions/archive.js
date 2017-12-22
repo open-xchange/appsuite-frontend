@@ -15,36 +15,40 @@ define('io.ox/core/folder/actions/archive', [
     'io.ox/mail/api',
     'io.ox/core/tk/dialogs',
     'io.ox/core/yell',
+    'settings!io.ox/mail',
     'gettext!io.ox/core'
-], function (api, dialogs, yell, gt) {
+], function (api, dialogs, yell, settings, gt) {
 
     'use strict';
 
-    var DAYS = 90;
-
-    function handler(id) {
-
-        //#. notification while archiving messages
-        yell('busy', gt('Archiving messages ...'));
-
-        api.archiveFolder(id).then(yell.done, yell);
-    }
-
     return function (id) {
+
+        var days = getDays();
 
         new dialogs.ModalDialog()
         .header(
             $('<h4>').text(gt('Archive messages'))
         )
         .append(
-            $.txt(gt('All messages older than %1$d days will be moved to the archive folder', DAYS) + '.')
+            $.txt(gt('All messages older than %1$d days will be moved to the archive folder', days) + '.')
         )
         //#. Verb: (to) archive messages
         .addPrimaryButton('archive', gt.pgettext('verb', 'Archive'))
         .addButton('cancel', gt('Cancel'))
         .on('archive', function () {
-            handler(id);
+            handler(id, days);
         })
         .show();
     };
+
+    function getDays() {
+        var days = settings.get('archive/days');
+        return _.isNumber(days) && days > 1 ? days : 90;
+    }
+
+    function handler(id, days) {
+        //#. notification while archiving messages
+        yell('busy', gt('Archiving messages ...'));
+        api.archiveFolder(id, { days: days }).then(yell.done, yell);
+    }
 });

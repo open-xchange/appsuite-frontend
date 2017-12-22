@@ -560,11 +560,13 @@ define('io.ox/mail/api', [
     //
     // Archive all messages inside a folder which are older than 90 days
     //
-    api.archiveFolder = function (id) {
+    api.archiveFolder = function (id, options) {
+
+        options = _.extend({ action: 'archive_folder', folder: id, days: 90 }, options);
 
         return http.PUT({
             module: 'mail',
-            params: { action: 'archive_folder', folder: id, days: 90 },
+            params: options,
             appendColumns: false
         })
         .done(function () {
