@@ -863,6 +863,7 @@ define('io.ox/mail/actions', [
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
+        enabled: _.device('!IE'),
         index: 300,
         mobile: 'high',
         label: gt('Open in browser'),

@@ -84,6 +84,10 @@ define('io.ox/core/pim/actions', [
 
     // and let's define all points right now
     var index = 0;
+
+    // see bug 55872
+    if (_.device('IE')) { delete extensions.open; }
+
     _(extensions).each(function (extension, id) {
 
         // define action
