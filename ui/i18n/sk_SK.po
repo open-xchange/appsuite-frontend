@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Open-Xchange 6\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-03 13:49+0200\n"
+"PO-Revision-Date: 2017-12-22 11:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: x\n"
 "Language: sk\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -238,13 +238,6 @@ msgstr ""
 "Použite klávesy šípok na zmenu dátumu. Stlačte pri tom Ctrl, ak chcete "
 "zmeniť rok alebo Shift ak chcete zmeniť mesiac. Stlačením klávesu ESC "
 "zatvoríte výber dátumu."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Použite šípky nahor a nadol na zmenu času. Výber ukončite stlačením klávesu "
-"ESC."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -993,6 +986,14 @@ msgstr "Umiestnenie"
 msgid "Starts on"
 msgstr "začína"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr "Čas začiatku"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1560,6 +1561,15 @@ msgstr "Predošlé"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Ďalší"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2373,6 +2383,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Vybrať"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Odstrániť"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2381,6 +2396,10 @@ msgstr[0] "%1$d položka vybraná"
 msgstr[1] "%1$d položky vybrané"
 msgstr[2] "%1$d položiek vybraných"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
@@ -2388,6 +2407,14 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d správa vybraná"
 msgstr[1] "%1$d správy vybrané"
 msgstr[2] "%1$d správ vybraných"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Vymazať výber"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3168,6 +3195,20 @@ msgstr "Uložená príloha kontaktu"
 msgid "Saved attachment"
 msgstr "Uložiť prílohu"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3249,6 +3290,31 @@ msgid "You need to use iOS %n or higher."
 msgstr "Musíte použiť iOS %n alebo vyšší."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"Podpora začína v nasledovných verziách prehliadačov: Chrome %1$d, Firefox "
+"%2$d, IE %3$d a Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Váš operačný systém nie je podporovaný."
 
@@ -3286,6 +3352,10 @@ msgstr "Režime offline"
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr "Funkcia cookies vášho prehliadača je vypnutá. Prosím, zapnite ju."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3339,8 +3409,8 @@ msgstr "Zatvoriť prémiové funkcie"
 msgid "Try now!"
 msgstr "Vyskúšať teraz!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Skúsiť znova"
@@ -3596,6 +3666,14 @@ msgstr "Nový adresár kontaktov"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "Nový priečinok"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4077,11 +4155,6 @@ msgstr "Žiadne údaje o úlohách neboli k dispozícii na importovanie"
 msgid "There was no appointment data to import"
 msgstr "Nie sú žiadne údaje schôdzok na import"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Riadok %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Prosím, vyberte súbor, ktorý chcete importovať"
@@ -4200,6 +4273,22 @@ msgstr "Automatické odhlásenie"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Odhlásiť sa teraz"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Ste si istý?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5395,7 +5484,8 @@ msgstr "Pridať popis"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Veľkosť"
@@ -6190,6 +6280,16 @@ msgstr "Kvóta súborov"
 msgid "Need more space?"
 msgstr "Potrebujete viac miesta?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6382,10 +6482,6 @@ msgstr "Rola správcu"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Používateľ"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Odstrániť"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7840,6 +7936,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "Email od %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Chyba: Nepodarilo sa načítať obsah správy"
 
@@ -7987,8 +8087,8 @@ msgstr "pokračovať ak sú splnené všetky tieto podmienky"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8106,11 +8206,6 @@ msgstr "Poštová konferencia"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Veľkosť (bajtov)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Je väčší ako"
 
@@ -8145,11 +8240,6 @@ msgstr "Znovu odoslané od"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Znovu odoslané komu"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Hlavička existuje"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8207,6 +8297,16 @@ msgstr "reg. výraz"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nezodpovedá regulárnemu výrazu"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Existuje"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8623,12 +8723,6 @@ msgstr "Zafarbiť citované riadky"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Používať proporcionálne písmo pre text emailov"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Skrášliť čisto textové emaily"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9163,6 +9257,11 @@ msgid "Install"
 msgstr "Nainštalovať"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Prémiové funkcie"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Pripojte svoje zariadenie"
 
@@ -9180,10 +9279,6 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "späť"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Prémiové funkcie"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11231,8 +11326,27 @@ msgstr "Pozvať na %s"
 msgid "Add on %s"
 msgstr "Pridať na %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Vymazať výber"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Použite šípky nahor a nadol na zmenu času. Výber ukončite stlačením "
+#~ "klávesu ESC."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Riadok %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "pokračovať ak je splnená ktorákoľvek z týchto podmienok"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Veľkosť (bajtov)"
+
+#~ msgid "Header exists"
+#~ msgstr "Hlavička existuje"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Skrášliť čisto textové emaily"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Nastaviť %1$s"
@@ -11275,9 +11389,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Pravidlo použije „not“ do"
-
-#~ msgid "Exists"
-#~ msgstr "Existuje"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Použiť pravidlo, ak je akékoľvek podmienka splnená."
@@ -11933,9 +12044,6 @@ msgstr "Pridať na %s"
 #~ msgstr ""
 #~ "Ste si istý, že chcete trvale zmazať všetky emaily z tohto priečinka? "
 #~ "Zmazané emaily budú nenávratne stratené."
-
-#~ msgid "Are you sure?"
-#~ msgstr "Ste si istý?"
 
 #~ msgid "Armenia"
 #~ msgstr "Arménsko"
@@ -16156,9 +16264,6 @@ msgstr "Pridať na %s"
 
 #~ msgid "Start the presentation"
 #~ msgstr "Spustiť prezentáciu"
-
-#~ msgid "Start time"
-#~ msgstr "Čas začiatku"
 
 #~ msgid "Start:"
 #~ msgstr "Začiatok:"

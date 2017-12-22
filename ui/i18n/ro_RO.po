@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-14 23:24+0200\n"
+"PO-Revision-Date: 2017-12-22 11:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: Romanian <ro@bureau-cornavin.com>\n"
 "Language: ro_RO\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -237,13 +237,6 @@ msgstr ""
 "Utilizați tastele cursor pentru a modifica data. Apăsați tasta Ctrl în "
 "același timp pentru a modifica anul sau tasta Shift pentru a modifica luna. "
 "Închideți selectorul de dată apăsând tasta Esc."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Utilizați săgețile sus și jos pentru a modifica ora. Închideți selecția "
-"apăsând tasta ESC."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -992,6 +985,14 @@ msgstr "Loc"
 msgid "Starts on"
 msgstr "Începe în data de"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr "Ora de început"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1559,6 +1560,15 @@ msgstr "Precedent"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Următorul"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2377,6 +2387,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Selectează"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Elimină"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2385,6 +2400,10 @@ msgstr[0] "%1$d element selectat"
 msgstr[1] "%1$d elemente selectate"
 msgstr[2] "%1$d de elemente selectate"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
@@ -2392,6 +2411,14 @@ msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adresă selectată"
 msgstr[1] "%1$d adrese selectate"
 msgstr[2] "%1$d de adrese selectate"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Golește selecția"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3172,6 +3199,20 @@ msgstr "Fișier atașat contactului salvat "
 msgid "Saved attachment"
 msgstr "Fișier atașat salvat"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3254,6 +3295,29 @@ msgid "You need to use iOS %n or higher."
 msgstr "Trebuie să utilizați  iOS %n sau o versiune mai recentă."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr "Suportul începe cu Chrome %1$d, Firefox %2$d, IE %3$d și Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Sistemul dumneavoastră de operare nu este suportat."
 
@@ -3292,6 +3356,10 @@ msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Funcționalitatea pentru cookie-uri a navigatorului dumneavoastră este "
 "dezactivată. Vă rugăm să o activați."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3346,8 +3414,8 @@ msgstr "Închide funcționalitățile premium"
 msgid "Try now!"
 msgstr "Încercați acum!"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Încearcă din nou"
@@ -3603,6 +3671,14 @@ msgstr "Agendă de contacte nouă"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "Dosar nou"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4084,11 +4160,6 @@ msgstr "Nu s-a găsit nicio dată despre sarcini de importat"
 msgid "There was no appointment data to import"
 msgstr "Nu s-a găsit nicio dată despre întâlniri de importat"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Linia %1$d: %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Selectați fișierul care trebuie importat"
@@ -4207,6 +4278,22 @@ msgstr "Deconectare automată"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Deconectează acum"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "Sigur?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5402,7 +5489,8 @@ msgstr "Adaugă o descriere"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Dimensiune"
@@ -6204,6 +6292,16 @@ msgstr "Cotă de fișier"
 msgid "Need more space?"
 msgstr "Necesitați mai mult spațiu?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6396,10 +6494,6 @@ msgstr "Rol administrativ"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Utilizator"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Elimină"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7859,6 +7953,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "Mesaj de la %1$s: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Eroare: Încărcarea conținutului mesajelor a eșuat"
 
@@ -8006,8 +8104,8 @@ msgstr "continuă dacă toate aceste condiții sunt adevărate"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "continuă dacă una dintre condiții e adevărată"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8125,11 +8223,6 @@ msgstr "Listă de discuții"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Dimensiune (bytes)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Este mai mare decât"
 
@@ -8164,11 +8257,6 @@ msgstr "Retrimite de la"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Retrimite către"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "Antetul există"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8226,6 +8314,16 @@ msgstr "Expresie regulată"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Nu este expresie regulată"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Există"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8641,12 +8739,6 @@ msgstr "Colorează liniile citate"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Utilizează un font de lățime fixă pentru mesajele text"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Înfrumusețează mesajele doar text"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9179,6 +9271,11 @@ msgid "Install"
 msgstr "Instalare"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Conectare dispozitiv"
 
@@ -9196,10 +9293,6 @@ msgstr ""
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "inapoi"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11254,8 +11347,27 @@ msgstr "Invită la %s"
 msgid "Add on %s"
 msgstr "Adaugă pe %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Golește selecția"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Utilizați săgețile sus și jos pentru a modifica ora. Închideți selecția "
+#~ "apăsând tasta ESC."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Linia %1$d: %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "continuă dacă una dintre condiții e adevărată"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Dimensiune (bytes)"
+
+#~ msgid "Header exists"
+#~ msgstr "Antetul există"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Înfrumusețează mesajele doar text"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Configurează %1$s"
@@ -11298,9 +11410,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "Regula nu se aplică până"
-
-#~ msgid "Exists"
-#~ msgstr "Există"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Aplică regula dacă oricare din condiții este respectată."
@@ -11970,9 +12079,6 @@ msgstr "Adaugă pe %s"
 #~ msgstr ""
 #~ "Sigur doriți să ștergeți definitiv toate mesajele din acest dosar? "
 #~ "Mesajele șterse vor fi pierdute în mod irevocabil."
-
-#~ msgid "Are you sure?"
-#~ msgstr "Sigur?"
 
 #~ msgid "Armenia"
 #~ msgstr "Armenia"
@@ -16249,9 +16355,6 @@ msgstr "Adaugă pe %s"
 
 #~ msgid "Start the presentation"
 #~ msgstr "Pornește prezentarea"
-
-#~ msgid "Start time"
-#~ msgstr "Ora de început"
 
 #~ msgid "Start:"
 #~ msgstr "Începe:"

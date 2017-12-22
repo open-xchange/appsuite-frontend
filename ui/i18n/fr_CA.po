@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: oxappsuite\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-05-14 11:30+0900\n"
+"PO-Revision-Date: 2017-12-22 11:15+0100\n"
 "Last-Translator: Sandrine <sandrine@workshop-chapina.com>\n"
 "Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr_CA\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.8.9\n"
 
 #: apps/io.ox/backbone/basicModel.js module:io.ox/core
 #: apps/io.ox/backbone/extendedModel.js
@@ -239,13 +239,6 @@ msgstr ""
 "Utilisez les touches curseur pour modifier la date. Appuyez sur la touche "
 "Ctrl en même temps pour changer l'année ou la touche Maj pour changer le "
 "mois. Fermez le sélecteur de date en appuyant sur Échap."
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"Utilisez les flèches haut et bas pour modifier l'heure. Fermez la sélection "
-"en appuyant sur ESC."
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -1005,6 +998,14 @@ msgstr "Lieu"
 msgid "Starts on"
 msgstr "Commence le"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr ""
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1579,6 +1580,15 @@ msgstr "Précédent"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "Suivant"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -2388,6 +2398,11 @@ msgctxt "select-contacts"
 msgid "Select"
 msgstr "Tout sélectionner"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+#: apps/io.ox/files/share/permissions.js module:io.ox/core
+msgid "Remove"
+msgstr "Supprimer"
+
 #. %1$d is number of selected items (addresses/groups) in the list
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d item selected"
@@ -2395,12 +2410,24 @@ msgid_plural "%1$d items selected"
 msgstr[0] "%1$d élément sélectionné"
 msgstr[1] "%1$d éléments sélectionnés"
 
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected items. Press Backspace or Delete to remove."
+msgstr ""
+
 #. %1$d is number of selected addresses
 #: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
 msgid "%1$d address selected"
 msgid_plural "%1$d addresses selected"
 msgstr[0] "%1$d adresse sélectionnée"
 msgstr[1] "%1$d adresses sélectionnées"
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "The selected addresses. Press Backspace or Delete to remove."
+msgstr ""
+
+#: apps/io.ox/contacts/addressbook/popup.js module:io.ox/contacts
+msgid "Clear selection"
+msgstr "Réinitialiser la sélection"
 
 #: apps/io.ox/contacts/detail/main.js module:io.ox/contacts
 msgid "Distribution List Details"
@@ -3180,6 +3207,20 @@ msgstr "Pièce jointe au contact enregistrée"
 msgid "Saved attachment"
 msgstr "Pièce jointe enregistrée"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3260,6 +3301,31 @@ msgid "You need to use iOS %n or higher."
 msgstr "Vous devez utiliser la version %n d'iOS ou une version supérieure."
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"La prise en charge démarre à partir de Chrome %1$d, Firefox %2$d, IE %3$d, "
+"et Safari %4$d."
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "Votre système d'exploitation n'est pas pris en charge."
 
@@ -3298,6 +3364,10 @@ msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "Les témoins ont été désactivés dans votre navigateur. Veuillez réactiver "
 "cette fonctionnalité."
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3351,8 +3421,8 @@ msgstr "Fermer les fonctions Premium"
 msgid "Try now!"
 msgstr "Essayer maintenant !"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "Réessayer"
@@ -3601,6 +3671,14 @@ msgid "New folder"
 msgstr "Nouveau dossier"
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
 #: module:io.ox/settings
 msgid "Folder name"
@@ -3736,9 +3814,8 @@ msgid ""
 "trash folder or this might be a special folder that cannot be deleted."
 msgstr ""
 "Impossible de supprimer le dossier. Ceci peut être dû à des droits "
-"insuffisants "
-"dans votre dossier de corbeille, ou le dossier peut être un dossier spécial "
-"ne pouvant être supprimé."
+"insuffisants dans votre dossier de corbeille, ou le dossier peut être un "
+"dossier spécial ne pouvant être supprimé."
 
 #: apps/io.ox/core/folder/actions/remove.js module:io.ox/core
 msgid "Do you really want to delete folder \"%s\"?"
@@ -4085,11 +4162,6 @@ msgstr "Pas de données de tâches à importer"
 msgid "There was no appointment data to import"
 msgstr "Pas de données de rendez-vous à importer"
 
-#. %1$d is line number, %2$s is an error message
-#: apps/io.ox/core/import/import.js module:io.ox/core
-msgid "Line %1$d: %2$s"
-msgstr "Ligne %1$d : %2$s"
-
 #: apps/io.ox/core/import/import.js module:io.ox/core
 msgid "Please select a file to import"
 msgstr "Choisissez un fichier à importer"
@@ -4211,6 +4283,22 @@ msgstr "Déconnexion automatique"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "Se déconnecter maintenant"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "En êtes-vous sûr ?"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5415,7 +5503,8 @@ msgstr "Ajouter une description"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "Taille"
@@ -6214,6 +6303,16 @@ msgstr "Quota de fichiers"
 msgid "Need more space?"
 msgstr "Besoin de davantage d'espace ?"
 
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
+
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
 msgid "Files options"
@@ -6407,10 +6506,6 @@ msgstr "Rôle administratif"
 #: module:io.ox/mailfilter
 msgid "User"
 msgstr "Utilisateur"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
-msgid "Remove"
-msgstr "Supprimer"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
 #: apps/io.ox/files/share/toolbar.js module:io.ox/files
@@ -7871,6 +7966,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "Courrier électronique de %1$s : %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "Erreur : échec lors du chargement du contenu du message"
 
@@ -8018,8 +8117,8 @@ msgstr "poursuivre si l'ensemble de ces conditions sont vérifiées"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "continue if any of these condition is met"
-msgstr "poursuivre si l'une au moins de ces conditions est vérifiée"
+msgid "continue if any of these conditions are met"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
@@ -8137,11 +8236,6 @@ msgstr "Liste de distribution"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "Taille (octets)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "Est plus grand que"
 
@@ -8176,11 +8270,6 @@ msgstr "Réexpédié-De"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "Réexpédié-À"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "L'en-tête existe"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8238,6 +8327,16 @@ msgstr "Expression rationnelle"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "Expression non rationnelle"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "Existe"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8659,12 +8758,6 @@ msgstr "Colorer les lignes citées"
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Use fixed-width font for text mails"
 msgstr "Utiliser une police à chasse fixe pour les courriels de texte"
-
-#. prettify or beautify
-#. technically plain text is parsed and turned into HTML to have nicer lists or blockquotes, for example
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
-msgid "Prettify plain text mails"
-msgstr "Enjoliver les courriels en texte brut"
 
 #: apps/io.ox/mail/settings/pane.js module:io.ox/mail
 msgid "Show requests for read receipts"
@@ -9205,6 +9298,11 @@ msgid "Install"
 msgstr "Installer"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "Premium"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "Connecter votre appareil"
 
@@ -9220,10 +9318,6 @@ msgstr "Emportez %1$s avec vous ! Restez à jour sur vos appareils favoris."
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "retour"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "Premium"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11285,8 +11379,27 @@ msgstr "Inviter à %s"
 msgid "Add on %s"
 msgstr "Ajouter à %s"
 
-#~ msgid "Clear selection"
-#~ msgstr "Réinitialiser la sélection"
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "Utilisez les flèches haut et bas pour modifier l'heure. Fermez la "
+#~ "sélection en appuyant sur ESC."
+
+#~ msgid "Line %1$d: %2$s"
+#~ msgstr "Ligne %1$d : %2$s"
+
+#~ msgid "continue if any of these condition is met"
+#~ msgstr "poursuivre si l'une au moins de ces conditions est vérifiée"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "Taille (octets)"
+
+#~ msgid "Header exists"
+#~ msgstr "L'en-tête existe"
+
+#~ msgid "Prettify plain text mails"
+#~ msgstr "Enjoliver les courriels en texte brut"
 
 #~ msgid "Configure %1$s"
 #~ msgstr "Configurer %1$s"
@@ -11329,9 +11442,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "Rule applies not until"
 #~ msgstr "La règle ne s'applique pas avant le"
-
-#~ msgid "Exists"
-#~ msgstr "Existe"
 
 #~ msgid "Apply rule if any condition is met."
 #~ msgstr "Appliquer la règle si au moins une condition est respectée"
@@ -11709,9 +11819,6 @@ msgstr "Ajouter à %s"
 
 #~ msgid "April"
 #~ msgstr "Avril"
-
-#~ msgid "Are you sure?"
-#~ msgstr "En êtes-vous sûr ?"
 
 #~ msgid "Ask for return receipt"
 #~ msgstr "Demander un accusé de réception"

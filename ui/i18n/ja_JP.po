@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.ja_JP\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-06-29 09:18+0200\n"
+"PO-Revision-Date: 2017-12-22 11:11+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: ja_JP\n"
@@ -237,13 +237,6 @@ msgstr ""
 "日付を変更するには、カーソルキーを使用してください。カーソルキーと Ctrl キー"
 "と同時に押すと年を、また、カーソルキーと Shift キーを同時に押すと月を変更でき"
 "ます。日付の選択ウィンドウを閉じるには、Esc キーを押してください。"
-
-#: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
-msgid ""
-"Use up and down keys to change the time. Close selection by pressing ESC key."
-msgstr ""
-"上方向キーと下方向キーを使用し、時間を変更します。選択画面を閉じるには、ESC "
-"キーを押します。"
 
 #: apps/io.ox/backbone/mini-views/datepicker.js module:io.ox/core
 msgid "Time"
@@ -993,6 +986,14 @@ msgstr "場所"
 msgid "Starts on"
 msgstr "開始日時"
 
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "Start time"
+msgstr "開始時刻"
+
+#: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
+msgid "End time"
+msgstr ""
+
 #. %1$s timezone abbreviation of the appointment
 #. %2$s default user timezone
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
@@ -1559,6 +1560,15 @@ msgstr "前"
 #: apps/io.ox/wizards/upsell.js module:io.ox/wizards
 msgid "Next"
 msgstr "次へ"
+
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Empty table cell"
+msgstr ""
+
+#. %1$s is a date: october 12th 2017 for example
+#: apps/io.ox/calendar/month/view.js module:io.ox/calendar
+msgid "Selected - %1$s"
+msgstr ""
 
 #. add confirmation status behind appointment title
 #. %1$s = apppintment title
@@ -3142,6 +3152,20 @@ msgstr "保存された連絡先の添付ファイル"
 msgid "Saved attachment"
 msgstr "保存された添付ファイル"
 
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving \"%1$s\""
+msgstr ""
+
+#. %1$s: Folder name
+#: apps/io.ox/core/api/jobs.js module:io.ox/core
+msgid "Moving folder"
+msgstr ""
+
+#: apps/io.ox/core/attachments/view.js module:io.ox/core
+msgid "Toggle preview"
+msgstr ""
+
 #: apps/io.ox/core/attachments/view.js module:io.ox/core
 msgid "%1$d attachment"
 msgid_plural "%1$d attachments"
@@ -3221,6 +3245,30 @@ msgid "You need to use iOS %n or higher."
 msgstr "iOS %n 以上を使用する必要があります。"
 
 #: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Your platform is not supported!"
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "This platform is currently not supported."
+msgstr ""
+
+#. all variables are version strings of the browsers, like 52 in Chrome 52
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid ""
+"Support starts with Chrome %1$d, Firefox %2$d, IE %3$d, and Safari %4$d."
+msgstr ""
+"サポートをChrome %1$d、Firefox %2$d、IE %3$d、Safari %4$d で開始します。"
+
+#. 'Google Chrome' is a brand and should not be translated
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "For best results we recommend using Google Chrome for Android."
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Get the latest version from the "
+msgstr ""
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
 msgid "Your operating system is not supported."
 msgstr "ご利用のブラウザはサポートされていません。"
 
@@ -3258,6 +3306,10 @@ msgstr "オフラインモード"
 msgid "Your browser's cookie functionality is disabled. Please turn it on."
 msgstr ""
 "ご利用のブラウザの Cookie 機能が無効になっています。有効にしてください。"
+
+#: apps/io.ox/core/boot/i18n.js module:io.ox/core/boot
+msgid "Connection timed out. Please try reloading the page."
+msgstr ""
 
 #: apps/io.ox/core/boot/warning.js module:io.ox/core/boot
 msgid "Warning!"
@@ -3309,8 +3361,8 @@ msgstr "プレミアム機能を閉じます"
 msgid "Try now!"
 msgstr "購入！"
 
-#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/mail/detail/view.js
-#: module:io.ox/mail apps/io.ox/mail/listview.js
+#: apps/io.ox/core/commons.js module:io.ox/core apps/io.ox/core/main.js
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail apps/io.ox/mail/listview.js
 #: apps/plugins/portal/twitter/register.js module:plugins/portal
 msgid "Retry"
 msgstr "再試行"
@@ -3546,6 +3598,14 @@ msgstr "新規アドレス帳"
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 msgid "New folder"
 msgstr "フォルダを表示"
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Calendar name"
+msgstr ""
+
+#: apps/io.ox/core/folder/actions/add.js module:io.ox/core
+msgid "Address book name"
+msgstr ""
 
 #: apps/io.ox/core/folder/actions/add.js module:io.ox/core
 #: apps/io.ox/core/folder/actions/rename.js apps/io.ox/oauth/settings.js
@@ -4140,6 +4200,22 @@ msgstr "自動サインアウト"
 #: apps/io.ox/core/main.js module:io.ox/core
 msgid "Sign out now"
 msgstr "サインアウトしてください。"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Are you sure?"
+msgstr "続行しますか？"
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Forcing logout may cause data loss."
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Force sign out"
+msgstr ""
+
+#: apps/io.ox/core/main.js module:io.ox/core
+msgid "Logout failed."
+msgstr ""
 
 #. %1$s is app title/name
 #: apps/io.ox/core/main.js module:io.ox/core
@@ -5315,7 +5391,8 @@ msgstr "説明を追加"
 
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
 #: module:io.ox/core/viewer apps/io.ox/files/view-options.js module:io.ox/files
-#: apps/io.ox/mail/settings/pane.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
+#: module:io.ox/mailfilter apps/io.ox/mail/settings/pane.js module:io.ox/mail
 #: apps/io.ox/mail/view-options.js
 msgid "Size"
 msgstr "サイズ"
@@ -6095,6 +6172,16 @@ msgstr "ファイル割当量"
 #: module:io.ox/mail
 msgid "Need more space?"
 msgstr "容量が必要ですか？"
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Moving folder \"%1$s\" takes longer to finish"
+msgstr ""
+
+#. %1$s: folder name
+#: apps/io.ox/files/main.js module:io.ox/files
+msgid " Finished moving folder \"%1$s\""
+msgstr ""
 
 #. toolbar with 'select all' and 'sort by'
 #: apps/io.ox/files/main.js module:io.ox/files
@@ -7703,6 +7790,10 @@ msgid "Email from %1$s: %2$s"
 msgstr "%1$s からのメール: %2$s"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
+msgid "Show entire message including all external images"
+msgstr ""
+
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Error: Failed to load message content"
 msgstr "エラー：メッセージの内容を読み込めませんでした。"
 
@@ -7971,11 +8062,6 @@ msgstr "メーリングリスト"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
 #: module:io.ox/mailfilter
-msgid "Size (bytes)"
-msgstr "サイズ (バイト)"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
 msgid "Is bigger than"
 msgstr "次の数より大きい"
 
@@ -8010,11 +8096,6 @@ msgstr "から再送信"
 #: module:io.ox/mailfilter
 msgid "Resent-To"
 msgstr "に再送信"
-
-#: apps/io.ox/mail/mailfilter/settings/filter/tests/register.js
-#: module:io.ox/mailfilter
-msgid "Header exists"
-msgstr "ヘッダが存在"
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -8072,6 +8153,16 @@ msgstr "次の文字列と一致 (正規表現)"
 #: module:io.ox/mailfilter
 msgid "Not Regex"
 msgstr "次の文字列と不一致 (正規表現)"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Exists"
+msgstr "存在"
+
+#: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
+#: module:io.ox/mailfilter
+msgid "Does not exist"
+msgstr ""
 
 #: apps/io.ox/mail/mailfilter/settings/filter/tests/util.js
 #: module:io.ox/mailfilter
@@ -9014,6 +9105,11 @@ msgid "Install"
 msgstr "インストール"
 
 #: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
+#: apps/io.ox/onboarding/clients/wizard.js
+msgid "Premium"
+msgstr "プレミアム"
+
+#: apps/io.ox/onboarding/clients/view-mobile.js module:io.ox/core/onboarding
 msgid "Connect your device"
 msgstr "デバイスの接続"
 
@@ -9029,10 +9125,6 @@ msgstr "%1$s をいつも一緒に！お気に入りデバイスをいつも最�
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
 msgid "back"
 msgstr "戻る"
-
-#: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
-msgid "Premium"
-msgstr "プレミアム"
 
 #. user can choose between windows, android, apple (usually)
 #: apps/io.ox/onboarding/clients/wizard.js module:io.ox/core/onboarding
@@ -11049,6 +11141,19 @@ msgstr "%s に出席依頼"
 msgid "Add on %s"
 msgstr "%s に追加"
 
+#~ msgid ""
+#~ "Use up and down keys to change the time. Close selection by pressing ESC "
+#~ "key."
+#~ msgstr ""
+#~ "上方向キーと下方向キーを使用し、時間を変更します。選択画面を閉じるには、"
+#~ "ESC キーを押します。"
+
+#~ msgid "Size (bytes)"
+#~ msgstr "サイズ (バイト)"
+
+#~ msgid "Header exists"
+#~ msgstr "ヘッダが存在"
+
 #, fuzzy
 #~| msgid "close for %1$s"
 #~ msgid "Close for %1$s"
@@ -12086,9 +12191,6 @@ msgstr "%s に追加"
 #~ msgstr ""
 #~ "このフォルダからすべてのメールを完全に削除しますか？削除されたメールは復元"
 #~ "できなくなります。"
-
-#~ msgid "Are you sure?"
-#~ msgstr "続行しますか？"
 
 #~ msgid "Armenia"
 #~ msgstr "アルメニア"
@@ -14039,9 +14141,6 @@ msgstr "%s に追加"
 
 #~ msgid "Existing shares"
 #~ msgstr "既存の共有ファイル"
-
-#~ msgid "Exists"
-#~ msgstr "存在"
 
 #~ msgid "Exit Fullscreen"
 #~ msgstr "全画面表示を終了"
@@ -17143,9 +17242,6 @@ msgstr "%s に追加"
 
 #~ msgid "Start the presentation"
 #~ msgstr "プレゼンテーションを開始"
-
-#~ msgid "Start time"
-#~ msgstr "開始時刻"
 
 #~ msgid "Start time:"
 #~ msgstr "開始時刻:"
