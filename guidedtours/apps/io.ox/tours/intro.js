@@ -98,7 +98,7 @@ define('io.ox/tours/intro', [
         .step()
             .title(gt('The toolbar'))
             .content(gt('Depending on the app, the toolbar contains various functions for creating, editing and organizing objects.'))
-            .spotlight('.classic-toolbar')
+            .spotlight('.classic-toolbar-container > .classic-toolbar')
             .end()
         .step()
             .title(gt('The folder tree'))
