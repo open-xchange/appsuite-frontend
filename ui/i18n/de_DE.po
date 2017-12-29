@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ox.de_DE\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2017-11-29 11:27+0100\n"
+"PO-Revision-Date: 2017-12-29 10:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-de@kde.org>\n"
 "Language: de_DE\n"
@@ -336,7 +336,6 @@ msgid "100%"
 msgstr "100%"
 
 #: apps/io.ox/backbone/mini-views/settings-list-view.js module:io.ox/core
-#, fuzzy
 msgid "Drag to reorder items"
 msgstr "Zum Neusortieren der Elemente ziehen"
 
@@ -528,8 +527,9 @@ msgstr "Schließen"
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
 #: apps/io.ox/mail/accounts/view-form.js module:io.ox/settings
 #: apps/io.ox/mail/actions/attachmentEmpty.js module:io.ox/mail
-#: apps/io.ox/mail/actions/reminder.js apps/io.ox/mail/categories/edit.js
-#: apps/io.ox/mail/compose/checks.js apps/io.ox/mail/compose/extensions.js
+#: apps/io.ox/mail/actions/delete.js apps/io.ox/mail/actions/reminder.js
+#: apps/io.ox/mail/categories/edit.js apps/io.ox/mail/compose/checks.js
+#: apps/io.ox/mail/compose/extensions.js
 #: apps/io.ox/mail/compose/inline-images.js apps/io.ox/mail/compose/names.js
 #: apps/io.ox/mail/compose/view.js apps/io.ox/mail/inplace-reply.js
 #: apps/io.ox/mail/mailfilter/settings/filter.js apps/io.ox/mail/main.js
@@ -677,6 +677,10 @@ msgstr "Vor"
 #: module:plugins/portal
 msgid "Search"
 msgstr "Suchen"
+
+#: apps/io.ox/backbone/views/window.js module:io.ox/core
+msgid "Minimize"
+msgstr "Minimieren"
 
 #: apps/io.ox/calendar/actions.js module:io.ox/calendar
 msgid "Do you want the appointments printed in detail or as a compact list?"
@@ -909,7 +913,7 @@ msgstr "Organisator"
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/calendar/edit/extensions.js module:io.ox/calendar/edit/main
 msgid "Shown as"
-msgstr "Anzeigen als"
+msgstr "Angezeigt als"
 
 #: apps/io.ox/calendar/common-extensions.js module:io.ox/calendar
 #: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
@@ -3297,13 +3301,11 @@ msgstr "Anhang wurde gespeichert"
 
 #. %1$s: Folder name
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
 msgid "Moving \"%1$s\""
 msgstr "\"%1$s\" wird verschoben"
 
 #. %1$s: Folder name
 #: apps/io.ox/core/api/jobs.js module:io.ox/core
-#, fuzzy
 msgid "Moving folder"
 msgstr "Ordner wird verschoben"
 
@@ -3698,11 +3700,6 @@ msgstr ""
 "können, müssen Sie entsprechende Berechtigungen an dem öffentlichen Ordner "
 "erteilen."
 
-#. notification while archiving messages
-#: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
-msgid "Archiving messages ..."
-msgstr "Nachrichten werden archiviert ..."
-
 #: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
 msgid "Archive messages"
 msgstr "Nachrichten archivieren"
@@ -3720,6 +3717,11 @@ msgstr ""
 msgctxt "verb"
 msgid "Archive"
 msgstr "Archivieren"
+
+#. notification while archiving messages
+#: apps/io.ox/core/folder/actions/archive.js module:io.ox/core
+msgid "Archiving messages ..."
+msgstr "Nachrichten werden archiviert ..."
 
 #: apps/io.ox/core/folder/actions/common.js module:io.ox/core
 msgid "Move all"
@@ -3859,6 +3861,7 @@ msgid "All my appointments"
 msgstr "Alle meine Termine"
 
 #: apps/io.ox/core/folder/api.js module:io.ox/core
+#: apps/io.ox/mail/categories/tabs.js module:io.ox/mail
 msgid "Unread messages"
 msgstr "Ungelesene Nachrichten"
 
@@ -5169,8 +5172,7 @@ msgid "An error occurred. There is no valid token available."
 msgstr "Es trat ein Fehler auf. Es ist kein gültiges Token verfügbar."
 
 #: apps/io.ox/core/tk/list-dnd.js module:io.ox/core
-#: apps/io.ox/core/tk/selection.js
-#: apps/io.ox/core/viewer/views/sidebar/fileinfoview.js
+#: apps/io.ox/core/tk/selection.js apps/io.ox/core/viewer/util.js
 #: module:io.ox/core/viewer
 msgid "1 item"
 msgid_plural "%1$d items"
@@ -5678,8 +5680,28 @@ msgstr "Zum Abspielen der Audio-Datei bitte klicken"
 msgid "Your browser does not support the audio format of this file."
 msgstr "Ihr Browser unterstützt das Audio-Format dieser Datei nicht."
 
+#: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
+#, fuzzy
+msgid ""
+"\n"
+" Please download the file using the button below."
+msgstr ""
+"\n"
+" Bitte laden Sie die Datei über den Button unten."
+
+#: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
+#, fuzzy
+msgid "Download%1$s"
+msgstr "%1$s herunterladen"
+
+#: apps/io.ox/core/viewer/views/types/baseview.js module:io.ox/core
+#, fuzzy
+msgid "Downlad"
+msgstr "Herunterladen"
+
 #: apps/io.ox/core/viewer/views/types/defaultview.js module:io.ox/core
-msgid "There is no preview for this file type"
+#, fuzzy
+msgid "There is no preview for this file type."
 msgstr "Für diesen Dateityp ist keine Voransicht möglich"
 
 #: apps/io.ox/core/viewer/views/types/documentview.js module:io.ox/core
@@ -5746,6 +5768,8 @@ msgstr "Erfolg"
 
 #: apps/io.ox/core/yell.js module:io.ox/core
 #: apps/io.ox/mail/accounts/settings.js module:io.ox/mail/accounts/settings
+#: apps/io.ox/mail/mailfilter/autoforward/indicator.js module:io.ox/mail
+#: apps/io.ox/mail/mailfilter/vacationnotice/indicator.js
 msgid "Warning"
 msgstr "Warnhinweis"
 
@@ -5916,6 +5940,11 @@ msgstr "Datei wurde kopiert"
 #: apps/io.ox/files/actions.js module:io.ox/files
 msgid "Files have been copied"
 msgstr "Dateien wurden kopiert"
+
+#: apps/io.ox/files/actions.js module:io.ox/files
+#: apps/io.ox/files/share/toolbar.js
+msgid "Revoked access."
+msgstr "Zugriff widerrufen."
 
 #: apps/io.ox/files/actions.js module:io.ox/files
 #: apps/io.ox/mail/compose/extensions.js module:io.ox/mail
@@ -6117,6 +6146,25 @@ msgstr "Größe"
 #: apps/io.ox/files/common-extensions.js module:io.ox/files
 msgid "Locked"
 msgstr "Gesperrt"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+msgid "Add folder"
+msgstr "Ordner hinzufügen"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/share/toolbar.js module:io.ox/files
+msgid "Edit share"
+msgstr "Freigabe bearbeiten"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+msgid "Show in Drive"
+msgstr "In Drive anzeigen"
+
+#: apps/io.ox/files/contextmenu.js module:io.ox/core
+#: apps/io.ox/files/share/permissions.js apps/io.ox/files/share/toolbar.js
+#: module:io.ox/files
+msgid "Revoke access"
+msgstr "Zugriff widerrufen"
 
 #: apps/io.ox/files/detail/main.js module:io.ox/files
 msgid "File Details"
@@ -6462,11 +6510,6 @@ msgid "User"
 msgstr "Benutzer"
 
 #: apps/io.ox/files/share/permissions.js module:io.ox/core
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Revoke access"
-msgstr "Zugriff widerrufen"
-
-#: apps/io.ox/files/share/permissions.js module:io.ox/core
 msgid "Resend invitation"
 msgstr "Einladung erneut senden"
 
@@ -6512,14 +6555,6 @@ msgid ""
 msgstr ""
 "Persönliche Nachricht (optional). Diese Nachricht wird an alle neu "
 "eingeladenen Personen gesendet."
-
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Edit share"
-msgstr "Freigabe bearbeiten"
-
-#: apps/io.ox/files/share/toolbar.js module:io.ox/files
-msgid "Revoked access."
-msgstr "Zugriff widerrufen."
 
 #: apps/io.ox/files/share/wizard.js module:io.ox/files
 msgid ""
@@ -7177,8 +7212,8 @@ msgid "Add to calendar"
 msgstr "Zum Kalender hinzufügen"
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
-msgid "View attachment"
-msgstr "Anhang anzeigen"
+msgid "View kack"
+msgstr ""
 
 #: apps/io.ox/mail/actions.js module:io.ox/mail
 msgid "Drop here to import this mail"
@@ -7369,6 +7404,10 @@ msgstr ""
 "Netzwerkverbindung. Bitte versuchen Sie es in ein paar Minuten erneut."
 
 #: apps/io.ox/mail/categories/edit.js module:io.ox/mail
+msgid "Category name"
+msgstr "Kategorienname"
+
+#: apps/io.ox/mail/categories/edit.js module:io.ox/mail
 msgid "Configure categories"
 msgstr "Kategorien konfigurieren"
 
@@ -7507,6 +7546,7 @@ msgstr ""
 #. Please use this as a template for english. There could be more or less phrases in other languages, there is no maximum or minimum length, as
 #. long as you use the "|" delimiter to seperate each phrase. Also: Detection is case-insensitive so we don't need case variants.
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
+#, fuzzy
 msgid ""
 "see attached|see attachment|see included|is attached|attached is|are "
 "attached|attached are|attached to this email|attached to this message|I'm "
@@ -7514,6 +7554,14 @@ msgid ""
 "find attached|find the attached|find included|find the included|attached "
 "file|see the attached|see attachments|attached files|see the attachment"
 msgstr ""
+"angehängt, siehe|siehe Anhang|siehe beigefügt|ist angehängt|angehängt ist|"
+"sind angehängt|angehängt sind|angehängt an diese E-Mail|angehängt an diese "
+"email|angehängt an diese Nachricht|Ich hänge an|Ich habe angehängt|siehe die "
+"angehängte Datei|siehe angehängte Datei|siehe angehängte Dateien|siehe die "
+"angehängten Dateien|siehe Anhänge|beigefügte Dateien|Ich habe beigefügt|"
+"beigefügt, siehe|dieser E-Mail beigefügt|dieser email beigefügt|siehe "
+"beigefügte Dateien|siehe beigefügte Datei|sind beigefügt|beigefügt sind|"
+"siehe Anlage|siehe Anlagen|dieser Nachricht beigefügt"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
 msgid "Forgot attachment?"
@@ -7528,7 +7576,6 @@ msgid "Add attachment"
 msgstr "Anhang hinzufügen"
 
 #: apps/io.ox/mail/compose/actions/extensions.js module:io.ox/mail
-#, fuzzy
 msgid "It appears as if you forgot to attach a file."
 msgstr "Sie haben möglicherweise vergessen, eine Datei anzuhängen."
 
@@ -7928,6 +7975,12 @@ msgstr "Gesamte Nachricht anzeigen"
 #: apps/io.ox/mail/detail/view.js
 msgid "Email from %1$s: %2$s"
 msgstr "E-Mail von %1$s: %2$s"
+
+#. Works as a label for a sender address. Like "Sent via". If you have no good translation, use "Sender".
+#: apps/io.ox/mail/detail/view.js module:io.ox/mail
+#, fuzzy
+msgid "Via"
+msgstr "Absender"
 
 #: apps/io.ox/mail/detail/view.js module:io.ox/mail
 msgid "Email content"
@@ -8675,6 +8728,10 @@ msgstr ""
 msgid "Thread"
 msgstr "Konversation"
 
+#: apps/io.ox/mail/main.js module:io.ox/mail
+msgid "Account is being created"
+msgstr "Der Account wird eingerichtet"
+
 #. Quota means a general quota for mail and files
 #: apps/io.ox/mail/main.js module:io.ox/mail
 #: apps/plugins/portal/quota/register.js module:plugins/portal
@@ -9085,11 +9142,6 @@ msgstr "Nachrichtengröße"
 #: apps/io.ox/mail/toolbar.js module:io.ox/mail
 msgid "Statistics"
 msgstr "Statistiken"
-
-#. (From) email1 via email2. Appears in email detail view.
-#: apps/io.ox/mail/util.js module:io.ox/core
-msgid "via"
-msgstr "über"
 
 #: apps/io.ox/mail/util.js module:io.ox/core
 msgid "Unknown sender"
@@ -9518,6 +9570,15 @@ msgstr "Willkommen bei %s"
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "Add your %1$s account"
 msgstr "Fügen Sie Ihren %1$s-Account hinzu"
+
+#: apps/io.ox/portal/main.js module:io.ox/portal
+#, fuzzy
+msgid ""
+"The widget \"%s\" was disabled as the account seems to be removed or is no "
+"longer available."
+msgstr ""
+"Das Widget \"%s\" wurde deaktiviert, da das Konto anscheinend entfernt wurde "
+"oder nicht mehr verfügbar ist."
 
 #: apps/io.ox/portal/main.js module:io.ox/portal
 msgid "An error occurred."
@@ -11187,11 +11248,6 @@ msgstr "Minimale Passwortlänge ist %1$d."
 msgid "Your current password"
 msgstr "Ihr aktuelles Passwort"
 
-#. Hint to leave an input field empty if the user does not already have a password
-#: apps/plugins/portal/userSettings/register.js module:io.ox/core
-msgid "Leave empty if you have none"
-msgstr "Leer lassen, wenn Sie keines haben"
-
 #: apps/plugins/portal/userSettings/register.js module:io.ox/core
 msgid "New password"
 msgstr "Neues Passwort"
@@ -11418,6 +11474,18 @@ msgstr "Einladen zu %s"
 #: apps/plugins/xing/main.js module:plugins/portal
 msgid "Add on %s"
 msgstr "Zu %s hinzufügen"
+
+#~ msgid "View attachment"
+#~ msgstr "Anhang anzeigen"
+
+#~ msgid "Leave empty if you have none"
+#~ msgstr "Leer lassen, wenn Sie keines haben"
+
+#~ msgid "There is no preview for this file type"
+#~ msgstr "Für diesen Dateityp ist keine Voransicht möglich"
+
+#~ msgid "via"
+#~ msgstr "über"
 
 #~ msgid "Open in browser"
 #~ msgstr "In Browser öffnen"
@@ -11670,9 +11738,6 @@ msgstr "Zu %s hinzufügen"
 
 #~ msgid "Please specify these missing variables: "
 #~ msgstr "Bitte geben Sie diese fehlenden Variablen an:"
-
-#~ msgid "Minimize"
-#~ msgstr "Minimieren"
 
 #~ msgid "Show all images for"
 #~ msgstr "Alle Bilder anzeigen für"
