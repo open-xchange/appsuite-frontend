@@ -77,7 +77,7 @@ define.async('io.ox/core/boot/main', [
 
             // set page title now
             ox.on('language', function (lang, gt) {
-                util.setPageTitle(ox.serverConfig.pageTitle + ' ' + gt.pgettext('word', 'Sign in'));
+                util.setPageTitle((ox.serverConfig.pageTitle || '') + ' ' + gt.pgettext('word', 'Sign in'));
             });
 
             gettext.setLanguage('en_US');
@@ -188,7 +188,7 @@ define.async('io.ox/core/boot/main', [
             config.user().done(function () {
                 // apply session data (again) & page title
                 if (data) session.set(data);
-                util.setPageTitle(ox.serverConfig.pageTitle);
+                util.setPageTitle(ox.serverConfig.pageTitle || '');
                 // load UI
                 exports.loadUI();
             });
