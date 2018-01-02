@@ -694,7 +694,7 @@ define('io.ox/mail/detail/view', [
             this.onChangeSubject();
             this.onChangeAttachments();
             this.onChangeContent();
-            if (data.security || data.security_info) this.onChangeSecurity();
+            if (data && (data.security || data.security_info)) this.onChangeSecurity();
 
             // process unseen flag
             if (unseen) {
