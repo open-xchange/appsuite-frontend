@@ -94,8 +94,8 @@ define('io.ox/calendar/edit/extensions', [
                         // save unchanged dates, so they can be restored on error or when handling conflicts
                         baton.parentView.tempEndDate = baton.model.get('endDate');
                         baton.parentView.tempStartDate = baton.model.get('startDate');
-                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD[T000000]') }, { silent: true });
-                        baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD[T000000]') }, { silent: true });
+                        baton.model.set('endDate', { value: moment(baton.model.get('endDate').value).add(1, 'days').format('YYYYMMDD') }, { silent: true });
+                        baton.model.set('startDate', { value: moment(baton.model.get('startDate').value).format('YYYYMMDD') }, { silent: true });
                     }
                     // make sure alarms are correctly created
                     baton.parentView.alarmsView.updateModel();
