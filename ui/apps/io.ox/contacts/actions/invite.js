@@ -90,7 +90,13 @@ define('io.ox/contacts/actions/invite', [
         def.done(function (participants) {
             require(['io.ox/calendar/edit/main', 'settings!io.ox/core'], function (m, coreSettings) {
                 m.getApp().launch().done(function () {
-                    this.create({ participants: participants, folder_id: coreSettings.get('folder/calendar') });
+                    var refDate = moment().startOf('hour').add(1, 'hours');
+                    this.create({
+                        participants: participants,
+                        folder_id: coreSettings.get('folder/calendar'),
+                        startDate: { value: refDate.format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() },
+                        endDate: { value: refDate.add(1, 'hours').format('YYYYMMDD[T]HHmmss'), tzid: refDate.tz() }
+                    });
                 });
             });
         });
