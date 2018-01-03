@@ -78,10 +78,15 @@ define('io.ox/calendar/api', [
                     // first we must remove the unused attributes (don't use clear method as that kills the id and we cannot override the model again with add)
                     // otherwise attributes that no longer exists are still present after merging (happens if an event has no attachments anymore for example)
                     var model = api.pool.getModel(util.cid(event)),
+                        removeAttributes;
+
+                    if (model) {
                         removeAttributes = _.difference(_(model.attributes).keys(), _(event).keys(), ['index', 'cid']);
-                    removeAttributes.forEach(function (attr) {
-                        event[attr] = undefined;
-                    });
+                        removeAttributes.forEach(function (attr) {
+                            event[attr] = undefined;
+                        });
+                    }
+
                     api.pool.propagateUpdate(event);
                 }
                 api.trigger('update', event);
