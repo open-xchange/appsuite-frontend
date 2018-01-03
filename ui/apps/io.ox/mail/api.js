@@ -1110,7 +1110,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.id,
                 folder: obj.folder || obj.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false);
         } else if ('parent' in obj) {
             // nested message!?
@@ -1119,7 +1120,8 @@ define('io.ox/mail/api', [
                 action: 'get',
                 id: obj.parent.id,
                 folder: obj.parent.folder || obj.parent.folder_id,
-                view: 'html'
+                view: 'html',
+                decrypt: obj.security && obj.security.decrypted
             }, false)
             .pipe(function (data) {
                 return _.chain(data.nested_msgs)
