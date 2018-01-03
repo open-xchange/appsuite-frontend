@@ -164,8 +164,8 @@ define('io.ox/files/actions', [
 
     new Action('io.ox/files/actions/download', {
         requires: function (e) {
-            // no file-system, no download
-            if (_.device('ios < 11')) return false;
+            // no download for oldeer ios devices
+            if (_.device('ios') && _.device('ios < 11')) return false;
 
             function isValid(file) {
                 // locally added but not yet uploaded,   'description only' items
