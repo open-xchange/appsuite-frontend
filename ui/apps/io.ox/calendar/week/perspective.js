@@ -155,11 +155,11 @@ define('io.ox/calendar/week/perspective', [
                                         endDate: { value: endDate.format(format), tzid: masterModel.get('endDate').tzid }
                                     });
                                     util.updateRecurrenceDate(masterModel, oldStartDate);
-                                    apiUpdate(masterModel, _(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                                    apiUpdate(masterModel, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
                                 });
                                 break;
                             case 'appointment':
-                                apiUpdate(model, _(util.getCurrentRangeOptions(), { checkConflicts: true }));
+                                apiUpdate(model, _.extend(util.getCurrentRangeOptions(), { checkConflicts: true }));
                                 break;
                             default:
                                 self.refresh();
