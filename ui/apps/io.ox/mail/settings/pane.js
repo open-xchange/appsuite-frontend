@@ -143,8 +143,8 @@ define('io.ox/mail/settings/pane', [
                     )
                 );
 
-                this.listenTo(settings, 'change:playSound', function (model, value) {
-                    this.$('[name="notificationSoundName"]').prop('disabled', !value);
+                this.listenTo(settings, 'change:playSound', function (value) {
+                    this.$('[name="notificationSoundName"]').prop('disabled', !value ? 'disabled' : '');
                 });
             }
         },
