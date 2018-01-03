@@ -143,16 +143,9 @@ define('io.ox/files/share/listview', [
             var data = list.length === 1 ? list[0] : list;
             var baton = new ext.Baton({ data: data, model: app.mysharesListView.collection.get(app.mysharesListView.selection.get()), models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link });
 
-            this.contextMenu.showContextMenu(event, baton);
+            view.contextMenu.showContextMenu(event, baton);
         }
     });
-
-    // Overrides the onItemKeyDown function in ListView and extends it with the contextLinkAdder
-    var orgListHandler = ListView.prototype.onItemKeydown;
-    MyShareListView.prototype.onItemKeydown = function () {
-        this.linkContextMenu = 'io.ox/core/file/contextmenu/myshares';
-        orgListHandler.apply(this, arguments);
-    };
 
     var getPermissions = function (baton) {
             return _.chain(baton.model.getPermissions())

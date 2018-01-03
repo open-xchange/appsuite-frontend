@@ -32,7 +32,7 @@ define('io.ox/files/listview', [
 
         if (shiftF10 || menuKey) {
             e.preventDefault();
-            onContextMenu.call(this, e);
+            this.onContextMenu(e);
         }
     }
 
@@ -40,8 +40,8 @@ define('io.ox/files/listview', [
 
         var view = this;
         var app = view.app;
-        // the link to render the context menu with it's entries. linkContextMenu could be set by listviews (e.g. share/listviews).
-        var link = view.linkContextMenu || 'io.ox/core/file/contextmenu/default';
+        // the link to render the context menu with it's entries.
+        var link = 'io.ox/core/file/contextmenu/default';
         // context menu when clicked below the list.
         // var linkOutsideList = link + '/outsideList'; Disabled for now
 
@@ -54,7 +54,7 @@ define('io.ox/files/listview', [
         var data = list.length === 1 ? list[0] : list;
         var baton = new ext.Baton({ data: data, models: models, collection: app.listView.collection, app: app, allIds: [], view: view, linkContextMenu: link/*, linkContextMenuOutsideList: linkOutsideList*/ });
 
-        this.contextMenu.showContextMenu(e, baton);
+        view.contextMenu.showContextMenu(e, baton);
     }
 
     //
